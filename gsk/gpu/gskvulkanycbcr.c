@@ -92,6 +92,7 @@ static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
   sizeof (GskVulkanYcbcr),
   "Vulkan Ycbcr",
   FALSE,
+  gsk_gpu_cached_print_no_stats,
   gsk_vulkan_ycbcr_finalize,
   gsk_vulkan_ycbcr_should_collect
 };

@@ -65,6 +65,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
   sizeof (GskGpuCachedAtlas),
   "Atlas",
   FALSE,
+  gsk_gpu_cached_print_no_stats,
   gsk_gpu_cached_atlas_finalize,
   gsk_gpu_cached_atlas_should_collect
 };

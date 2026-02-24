@@ -83,6 +83,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
   sizeof (GskGpuCachedGlyph),
   "Glyph",
   FALSE,
+  gsk_gpu_cached_print_no_stats,
   gsk_gpu_cached_glyph_finalize,
   gsk_gpu_cached_glyph_should_collect
 };

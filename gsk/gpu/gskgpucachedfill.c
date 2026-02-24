@@ -99,6 +99,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_FILL_CLASS =
   sizeof (GskGpuCachedFill),
   "Fill",
   FALSE,
+  gsk_gpu_cached_print_no_stats,
   gsk_gpu_cached_fill_finalize,
   gsk_gpu_cached_fill_should_collect
 };

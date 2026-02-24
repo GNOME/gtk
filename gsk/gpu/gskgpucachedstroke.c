@@ -107,6 +107,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_STROKE_CLASS =
   sizeof (GskGpuCachedStroke),
   "Stroke",
   FALSE,
+  gsk_gpu_cached_print_no_stats,
   gsk_gpu_cached_stroke_finalize,
   gsk_gpu_cached_stroke_should_collect
 };
