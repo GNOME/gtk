@@ -22,21 +22,21 @@ static void
 gsk_gpu_cached_atlas_free (GskGpuCached *cached)
 {
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
-#if 0
-  GskGpuCache *cache = cached->cache;
-  GskGpuCached *c, *next;
+  GskAtlasAllocatorIter iter;
+  gsize pos;
 
-  /* Free all remaining glyphs on this atlas */
-  for (c = cache->first_cached; c != NULL; c = next)
+  gsk_atlas_allocator_iter_init (self->allocator, &iter);
+  for (pos = gsk_atlas_allocator_iter_next (self->allocator, &iter);
+       pos != G_MAXSIZE;
+       pos = gsk_atlas_allocator_iter_next (self->allocator, &iter))
     {
-      next = c->next;
-      if (c->atlas == self)
-        gsk_gpu_cached_free (c);
+      GskGpuCached *item;
+
+      item = gsk_atlas_allocator_get_user_data (self->allocator, pos);
+      gsk_gpu_cached_free (item);
     }
 
-  if (cache->current_atlas == self)
-    cache->current_atlas = NULL;
-#endif
+  g_assert (self->used_pixels == 0);
 
   gsk_atlas_allocator_free (self->allocator);
   g_object_unref (self->image);
