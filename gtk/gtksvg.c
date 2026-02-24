@@ -134,9 +134,10 @@
  *
  * <image src="svg-renderer1.svg">
  *
- * Note that the generated animations assume a `pathLengh` value of 1.
- * Setting `pathLength` in your SVG is therefore going to interfere with
- * generated animations.
+ * Note that the generated animations are implemented using standard
+ * SVG attributes (`visibility`, `stroke-dasharray, `stroke-dashoffset`,
+ * `pathLength` and `filter`). Setting these attributes in your SVG
+ * is therefore going to interfere with generated animations.
  *
  * To connect general SVG animations to the states of the paintable,
  * use the custom `gpa:states(...)` condition in the `begin` and `end`
@@ -17639,6 +17640,10 @@ parse_shape_gpa_attrs (Shape                *shape,
 
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_DASHOFFSET))
         gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "stroke-dashoffset");
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILTER) &&
+          shape->gpa.transition == GPA_TRANSITION_MORPH)
+        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "filter");
     }
 
   create_states (shape,
