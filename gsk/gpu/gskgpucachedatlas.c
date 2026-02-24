@@ -19,26 +19,61 @@ struct _GskGpuCachedAtlas
 };
 
 static void
+string_append_fill_rate (GskGpuCachedAtlas *self,
+                         GString           *string)
+{
+  g_string_append_printf (string, "%zu%%",
+                          (self->used_pixels - self->stale_pixels) * 100 /
+                          ((GskGpuCached *) self)->pixels);
+}
+
+static void
 gsk_gpu_cached_atlas_print_stats (GskGpuCache *cache,
                                   GString     *string)
 {
   GskGpuCachePrivate *priv;
   GList *l;
-  gboolean first;
 
   priv = gsk_gpu_cache_get_private (cache);
 
   g_string_append (string, "filled: ");
-  for (l = g_queue_peek_head_link (&priv->atlas_queue); l; l = l->next)
+  if (g_queue_get_length (&priv->atlas_queue) <= 5)
     {
-      GskGpuCachedAtlas *self = l->data;
+      gboolean first = TRUE;
 
-      if (!first)
-        g_string_append (string, ", ");
-      g_string_append_printf (string, "%zu%%",
-                              (self->used_pixels - self->stale_pixels) * 100 /
-                              ((GskGpuCached *) self)->pixels);
-      first = FALSE;
+      for (l = g_queue_peek_head_link (&priv->atlas_queue); l; l = l->next)
+        {
+          if (!first)
+            g_string_append (string, ", ");
+          string_append_fill_rate (l->data, string);
+          first = FALSE;
+      }
+    }
+  else
+    {
+      gsize used_total = 0;
+      gsize total = 0;
+
+      l = g_queue_peek_head_link (&priv->atlas_queue);
+      string_append_fill_rate (l->data, string);
+      g_string_append (string, ", ");
+      string_append_fill_rate (l->next->data, string);
+      g_string_append (string, " … ");
+
+      for (l = g_queue_peek_head_link (&priv->atlas_queue); l; l = l->next)
+        {
+          GskGpuCachedAtlas *self = l->data;
+
+          used_total += self->used_pixels - self->stale_pixels;
+          total += ((GskGpuCached *) self)->pixels;
+      }
+      g_string_append_printf (string, "%zu%%", used_total * 100 / total);
+
+      g_string_append (string, " … ");
+      l = g_queue_peek_tail_link (&priv->atlas_queue);
+      string_append_fill_rate (l->prev->data, string);
+      g_string_append (string, ", ");
+      string_append_fill_rate (l->data, string);
     }
 }
 
