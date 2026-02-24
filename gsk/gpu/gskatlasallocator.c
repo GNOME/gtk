@@ -644,8 +644,14 @@ gsk_atlas_allocator_iter_next (GskAtlasAllocator     *self,
     }
 
   if (pos >= gsk_atlas_slots_get_size (&self->slots))
-    pos = G_MAXSIZE;
+    {
+      pos = G_MAXSIZE;
+      *iter = GSIZE_TO_POINTER (pos);
+    }
+  else
+    { 
+      *iter = GSIZE_TO_POINTER (pos + 1);
+    }
 
-  *iter = GSIZE_TO_POINTER (pos);
   return pos;
 }
