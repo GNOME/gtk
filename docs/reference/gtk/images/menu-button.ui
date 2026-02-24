@@ -25,7 +25,7 @@
             <property name="valign">center</property>
             <child>
               <object class="GtkMenuButton">
-                <property name="icon-name">emblem-system-symbolic</property>
+                <property name="icon-name">open-menu-symbolic</property>
                 <property name="popover"><object class="GtkPopover"></object></property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>

@@ -324,7 +324,7 @@ do_pickers (GtkWidget *do_widget)
     g_signal_connect (button, "clicked", G_CALLBACK (open_file), label);
     gtk_box_append (GTK_BOX (picker), label);
     gtk_box_append (GTK_BOX (picker), button);
-    app_picker = gtk_button_new_from_icon_name ("emblem-system-symbolic");
+    app_picker = gtk_button_new_from_icon_name ("system-run-symbolic");
     gtk_widget_set_halign (app_picker, GTK_ALIGN_END);
     gtk_accessible_update_property (GTK_ACCESSIBLE (app_picker),
                                     GTK_ACCESSIBLE_PROPERTY_LABEL, "Open File",
