@@ -1369,20 +1369,6 @@ is_key_event (GdkEvent *event)
     }
 }
 
-static inline void
-set_widget_active_state (GtkWidget      *target,
-                         const gboolean  is_active)
-{
-  GtkWidget *w;
-
-  w = target;
-  while (w)
-    {
-      gtk_widget_set_active_state (w, is_active);
-      w = _gtk_widget_get_parent (w);
-    }
-}
-
 static GtkWidget *
 handle_pointing_event (GdkEvent *event)
 {
@@ -1443,7 +1429,6 @@ handle_pointing_event (GdkEvent *event)
             {
               gtk_window_set_pointer_focus_grab (toplevel, device,
                                                  sequence, NULL);
-              set_widget_active_state (grab_widget, FALSE);
             }
         }
 
@@ -1456,7 +1441,6 @@ handle_pointing_event (GdkEvent *event)
       old_target = update_pointer_focus_state (toplevel, event, NULL);
       gtk_window_set_pointer_focus_grab (toplevel, device,
                                          sequence, NULL);
-      set_widget_active_state (old_target, FALSE);
       break;
     case GDK_DRAG_LEAVE:
       {
@@ -1508,7 +1492,6 @@ handle_pointing_event (GdkEvent *event)
       else if (type == GDK_TOUCH_BEGIN)
         {
           gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
-          set_widget_active_state (target, TRUE);
         }
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1558,11 +1541,6 @@ handle_pointing_event (GdkEvent *event)
                                              sequence, target);
         }
 
-      if (type == GDK_BUTTON_PRESS)
-        set_widget_active_state (target, TRUE);
-      else if (has_implicit)
-        set_widget_active_state (target, FALSE);
-
       break;
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:
@@ -1579,7 +1557,6 @@ handle_pointing_event (GdkEvent *event)
             {
               gtk_window_set_pointer_focus_grab (toplevel, device,
                                                  sequence, NULL);
-              set_widget_active_state (target, FALSE);
             }
         }
       break;
