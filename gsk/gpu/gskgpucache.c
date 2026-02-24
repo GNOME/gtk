@@ -44,8 +44,6 @@ struct _GskGpuCache
   GHashTable *ccs_texture_caches[GDK_COLOR_STATE_N_IDS];
   GHashTable *tile_cache;
 
-  GskGpuCachedAtlas *current_atlas;
-
   /* atomic */ gsize dead_textures;
   /* atomic */ gsize dead_texture_pixels;
 };
@@ -118,36 +116,48 @@ gsk_gpu_cached_use (GskGpuCached *cached)
   gsk_gpu_cached_set_stale (cached, FALSE);
 }
 
-static void
-gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
-                            gboolean     recreate)
-{
-  if (self->current_atlas && !recreate)
-    return;
-
-  self->current_atlas = gsk_gpu_cached_atlas_new (self, ATLAS_SIZE, ATLAS_SIZE);
-}
-
 gpointer
 gsk_gpu_cached_new_from_atlas (GskGpuCache             *self,
                                const GskGpuCachedClass *class,
                                gsize                    width,
                                gsize                    height)
 {
+  GskGpuCachePrivate *priv;
+  GskGpuCachedAtlas *atlas;
   GskGpuCached *cached;
 
   if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
     return NULL;
 
-  gsk_gpu_cache_ensure_atlas (self, FALSE);
+  priv = gsk_gpu_cache_get_private (self);
 
-  cached = gsk_gpu_cached_atlas_create (self->current_atlas, class, width, height);
-  if (cached)
-    return cached;
+  atlas = g_queue_peek_head (&priv->atlas_queue);
 
-  gsk_gpu_cache_ensure_atlas (self, TRUE);
+  if (atlas)
+    {
+      /* 1. Try the current atlas */
+      cached = gsk_gpu_cached_atlas_create (atlas, class, width, height);
+      if (cached)
+        return cached;
+      
+      /* 2. It's full, try to see if the oldest atlas
+       * has space again */
+      atlas = g_queue_peek_tail (&priv->atlas_queue);
+      cached = gsk_gpu_cached_atlas_create (atlas, class, width, height);
+      if (cached)
+        {
+          /* It worked, use it as default by moving it to the front of the queue */
+          atlas = g_queue_pop_tail (&priv->atlas_queue);
+          g_queue_push_head (&priv->atlas_queue, atlas);
 
-  return gsk_gpu_cached_atlas_create (self->current_atlas, class, width, height);
+          return cached;
+        }
+    }
+
+  /* 3. Nothing worked so far, try a new atlas
+   * Note: It puts itself into the atlas queue */
+  atlas = gsk_gpu_cached_atlas_new (self, ATLAS_SIZE, ATLAS_SIZE);
+  return gsk_gpu_cached_atlas_create (atlas, class, width, height);
 }
 
 /* }}} */
@@ -683,6 +693,7 @@ gsk_gpu_cache_dispose (GObject *object)
   gsk_vulkan_ycbcr_finish_cache (self);
 #endif
   gsk_gpu_cached_glyph_finish_cache (self);
+  gsk_gpu_cached_atlas_finish_cache (self);
 
   g_clear_pointer (&self->tile_cache, g_hash_table_unref);
   for (int i = 0; i < GDK_COLOR_STATE_N_IDS; i++)
@@ -717,6 +728,7 @@ gsk_gpu_cache_init (GskGpuCache *self)
   self->texture_cache = g_hash_table_new (g_direct_hash,
                                           g_direct_equal);
   
+  gsk_gpu_cached_atlas_init_cache (self);
   gsk_gpu_cached_glyph_init_cache (self);
 #ifdef GDK_RENDERING_VULKAN
   gsk_vulkan_ycbcr_init_cache (self);

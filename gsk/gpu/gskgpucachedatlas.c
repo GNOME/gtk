@@ -23,7 +23,11 @@ gsk_gpu_cached_atlas_finalize (GskGpuCached *cached)
 {
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
   GskAtlasAllocatorIter iter;
+  GskGpuCachePrivate *priv;
   gsize pos;
+
+  priv = gsk_gpu_cache_get_private (cached->cache);
+  g_queue_remove (&priv->atlas_queue, self);
 
   gsk_atlas_allocator_iter_init (self->allocator, &iter);
   for (pos = gsk_atlas_allocator_iter_next (self->allocator, &iter);
@@ -72,6 +76,7 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache,
 {
   GskGpuCachedAtlas *self;
   GskGpuCached *cached;
+  GskGpuCachePrivate *priv;
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS);
   cached = (GskGpuCached *) self;
@@ -80,6 +85,9 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache,
   self->image = gsk_gpu_device_create_atlas_image (gsk_gpu_cache_get_device (cache), width, height);
 
   cached->pixels = width * height;
+
+  priv = gsk_gpu_cache_get_private (cache);
+  g_queue_push_head (&priv->atlas_queue, self);
 
   return self;
 }
@@ -204,3 +212,18 @@ gsk_gpu_cached_atlas_set_item_stale (GskGpuCachedAtlas *self,
   gsk_gpu_cached_use ((GskGpuCached *) self);
 }
 
+void
+gsk_gpu_cached_atlas_init_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  g_queue_init (&priv->atlas_queue);
+}
+
+void
+gsk_gpu_cached_atlas_finish_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  g_queue_clear (&priv->atlas_queue);
+}

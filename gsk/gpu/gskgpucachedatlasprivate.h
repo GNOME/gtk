@@ -6,6 +6,9 @@
 
 G_BEGIN_DECLS
 
+void                    gsk_gpu_cached_atlas_init_cache                 (GskGpuCache                    *cache);
+void                    gsk_gpu_cached_atlas_finish_cache               (GskGpuCache                    *cache);
+
 GskGpuCachedAtlas *     gsk_gpu_cached_atlas_new                        (GskGpuCache                    *cache,
                                                                          gsize                           width,
                                                                          gsize                           height);
