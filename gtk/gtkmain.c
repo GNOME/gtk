@@ -1540,7 +1540,13 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
           update_pointer_focus_state (toplevel, event, new_target);
         }
-      else if (type == GDK_BUTTON_PRESS)
+      else if (type == GDK_BUTTON_PRESS &&
+               !has_implicit &&
+               (modifiers & (GDK_BUTTON1_MASK |
+                             GDK_BUTTON2_MASK |
+                             GDK_BUTTON3_MASK |
+                             GDK_BUTTON4_MASK |
+                             GDK_BUTTON5_MASK)) == 0)
         {
           gtk_window_set_pointer_focus_grab (toplevel, device,
                                              sequence, target);
