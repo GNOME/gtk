@@ -49,7 +49,11 @@ gsk_gpu_cached_atlas_should_collect (GskGpuCached *cached,
                                      gint64        cache_timeout,
                                      gint64        timestamp)
 {
-  //GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+
+  if (gsk_gpu_cached_is_old (cached, cache_timeout, timestamp) &&
+      self->used_pixels == self->stale_pixels)
+    return TRUE;
 
   return FALSE;
 }
