@@ -75,6 +75,9 @@ gsk_gpu_cached_free (GskGpuCached *cached)
 
   if (!class->frees_memory_itself)
     {
+      if (cached->atlas)
+        gsk_gpu_cached_atlas_deallocate (cached->atlas, cached);
+
       g_free (cached);
     }
 }
