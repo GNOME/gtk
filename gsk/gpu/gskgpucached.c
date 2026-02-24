@@ -27,3 +27,10 @@ gsk_gpu_cached_set_stale (GskGpuCached *cached,
   if (cached->atlas)
     gsk_gpu_cached_atlas_set_item_stale (cached->atlas, cached, stale);
 }
+
+void
+gsk_gpu_cached_print_no_stats (GskGpuCache *cache,
+                               GString     *string)
+{
+}
+

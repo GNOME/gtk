@@ -14,6 +14,9 @@ struct _GskGpuCachedClass
   const char *name;
   gboolean frees_memory_itself;
 
+  void                  (* print_stats)                 (GskGpuCache            *cache,
+                                                         GString                *string);
+
   void                  (* finalize)                    (GskGpuCached           *cached);
   gboolean              (* should_collect)              (GskGpuCached           *cached,
                                                          gint64                  cache_timeout,
@@ -59,6 +62,8 @@ gboolean                gsk_gpu_cached_is_old                           (GskGpuC
                                                                          gint64                          cache_timeout,
                                                                          gint64                          timestamp);
 
+void                    gsk_gpu_cached_print_no_stats                   (GskGpuCache                    *cache,
+                                                                         GString                        *string);
 GskGpuImage *           gsk_gpu_cached_get_atlas_image                  (GskGpuCached                   *cached);
 const cairo_rectangle_int_t *
                         gsk_gpu_cached_get_atlas_area                   (GskGpuCached                   *cached);

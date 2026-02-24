@@ -204,6 +204,13 @@ gsk_gpu_cache_get_texture_hash_table (GskGpuCache   *cache,
 }
 
 static void
+gsk_gpu_cached_texture_print_stats (GskGpuCache *cache,
+                                    GString     *string)
+{
+  g_string_append_printf (string, "in hash: %u", g_hash_table_size (cache->texture_cache));
+}
+
+static void
 gsk_gpu_cached_texture_finalize (GskGpuCached *cached)
 {
   GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
@@ -258,6 +265,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
   sizeof (GskGpuCachedTexture),
   "Texture",
   TRUE,
+  gsk_gpu_cached_texture_print_stats,
   gsk_gpu_cached_texture_finalize,
   gsk_gpu_cached_texture_should_collect
 };
@@ -406,6 +414,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TILE_CLASS =
   sizeof (GskGpuCachedTile),
   "Tile",
   TRUE,
+  gsk_gpu_cached_print_no_stats,
   gsk_gpu_cached_tile_finalize,
   gsk_gpu_cached_tile_should_collect
 };
@@ -598,21 +607,19 @@ print_cache_stats (GskGpuCache *self)
   if (g_hash_table_size (classes) == 0)
     g_string_append (message, "\n  none");
   else
-    g_string_append (message, "\n  Class        Items Stale      Pixels       Stale");
+    g_string_append (message, "\n  Class        Items Stale      Pixels       Stale      Info");
   g_hash_table_iter_init (&iter, classes);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       const GskGpuCachedClass *class = key;
       const GskGpuCacheData *cache_data = value;
 
-      g_string_append_printf (message, "\n  %-12s %5u %5u %'11zu %'11zu %3zu%%", 
+      g_string_append_printf (message, "\n  %-12s %5u %5u %'11zu %'11zu %3zu%% ", 
                               class->name,
                               cache_data->n_items, cache_data->n_stale_items,
                               cache_data->n_pixels, cache_data->n_stale_pixels,
                               cache_data->n_stale_pixels * 100 / cache_data->n_pixels);
-
-      if (class == &GSK_GPU_CACHED_TEXTURE_CLASS)
-        g_string_append_printf (message, " (%u in hash)", g_hash_table_size (self->texture_cache));
+      class->print_stats (self, message);
     }
 
   gdk_debug_message ("%s", message->str);
