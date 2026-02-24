@@ -19,6 +19,30 @@ struct _GskGpuCachedAtlas
 };
 
 static void
+gsk_gpu_cached_atlas_print_stats (GskGpuCache *cache,
+                                  GString     *string)
+{
+  GskGpuCachePrivate *priv;
+  GList *l;
+  gboolean first;
+
+  priv = gsk_gpu_cache_get_private (cache);
+
+  g_string_append (string, "filled: ");
+  for (l = g_queue_peek_head_link (&priv->atlas_queue); l; l = l->next)
+    {
+      GskGpuCachedAtlas *self = l->data;
+
+      if (!first)
+        g_string_append (string, ", ");
+      g_string_append_printf (string, "%zu%%",
+                              (self->used_pixels - self->stale_pixels) * 100 /
+                              ((GskGpuCached *) self)->pixels);
+      first = FALSE;
+    }
+}
+
+static void
 gsk_gpu_cached_atlas_finalize (GskGpuCached *cached)
 {
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
@@ -65,7 +89,7 @@ static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
   sizeof (GskGpuCachedAtlas),
   "Atlas",
   FALSE,
-  gsk_gpu_cached_print_no_stats,
+  gsk_gpu_cached_atlas_print_stats,
   gsk_gpu_cached_atlas_finalize,
   gsk_gpu_cached_atlas_should_collect
 };
