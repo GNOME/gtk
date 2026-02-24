@@ -26,7 +26,7 @@ struct _GskGpuCachedGlyph
 };
 
 static void
-gsk_gpu_cached_glyph_free (GskGpuCached *cached)
+gsk_gpu_cached_glyph_finalize (GskGpuCached *cached)
 {
   GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
@@ -35,8 +35,6 @@ gsk_gpu_cached_glyph_free (GskGpuCached *cached)
 
   g_object_unref (self->font);
   g_object_unref (self->image);
-
-  g_free (self);
 }
 
 static gboolean
@@ -84,7 +82,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 {
   sizeof (GskGpuCachedGlyph),
   "Glyph",
-  gsk_gpu_cached_glyph_free,
+  FALSE,
+  gsk_gpu_cached_glyph_finalize,
   gsk_gpu_cached_glyph_should_collect
 };
 

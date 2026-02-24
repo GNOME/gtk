@@ -12,8 +12,9 @@ struct _GskGpuCachedClass
 {
   gsize size;
   const char *name;
+  gboolean frees_memory_itself;
 
-  void                  (* free)                        (GskGpuCached           *cached);
+  void                  (* finalize)                    (GskGpuCached           *cached);
   gboolean              (* should_collect)              (GskGpuCached           *cached,
                                                          gint64                  cache_timeout,
                                                          gint64                  timestamp);
