@@ -621,3 +621,31 @@ gsk_atlas_allocator_get_user_data (GskAtlasAllocator *self,
   return slot->user_data;
 }
 
+void
+gsk_atlas_allocator_iter_init (GskAtlasAllocator     *self,
+                               GskAtlasAllocatorIter *iter)
+{
+  *iter = GSIZE_TO_POINTER (0);
+}
+
+gsize
+gsk_atlas_allocator_iter_next (GskAtlasAllocator     *self,
+                               GskAtlasAllocatorIter *iter)
+{
+  gsize pos;
+
+  for (pos = GPOINTER_TO_SIZE (*iter); pos < gsk_atlas_slots_get_size (&self->slots); pos++)
+    {
+      GskAtlasSlot *slot;
+
+      slot = gsk_atlas_slots_get (&self->slots, pos);
+      if (slot->type == GSK_ATLAS_USED)
+        break;
+    }
+
+  if (pos >= gsk_atlas_slots_get_size (&self->slots))
+    pos = G_MAXSIZE;
+
+  *iter = GSIZE_TO_POINTER (pos);
+  return pos;
+}

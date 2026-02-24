@@ -6,6 +6,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GskAtlasAllocator GskAtlasAllocator;
+typedef gpointer GskAtlasAllocatorIter;
 
 GskAtlasAllocator *     gsk_atlas_allocator_new                         (gsize                   width,
                                                                          gsize                   height);
@@ -26,4 +27,9 @@ void                    gsk_atlas_allocator_set_user_data               (GskAtla
 gpointer                gsk_atlas_allocator_get_user_data               (GskAtlasAllocator      *self,
                                                                          gsize                   pos);
 
+
+void                    gsk_atlas_allocator_iter_init                   (GskAtlasAllocator      *self,
+                                                                         GskAtlasAllocatorIter  *iter);
+gsize                   gsk_atlas_allocator_iter_next                   (GskAtlasAllocator      *self,
+                                                                         GskAtlasAllocatorIter  *iter);
 G_END_DECLS
