@@ -37,6 +37,7 @@ struct _GskGpuCached
 
 struct _GskGpuCachePrivate
 {
+  GQueue atlas_queue;
   GHashTable *glyph_cache;
   GHashTable *fill_cache;
   GHashTable *stroke_cache;
