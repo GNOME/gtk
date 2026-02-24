@@ -130,6 +130,9 @@ gsk_gpu_cached_atlas_deallocate (GskGpuCachedAtlas *self,
     gsk_gpu_cached_use ((GskGpuCached *) self);
 
   gsk_atlas_allocator_deallocate (self->allocator, cached->atlas_slot);
+
+  cached->atlas = NULL;
+  cached->atlas_slot = 0;
 }
 
 gpointer
