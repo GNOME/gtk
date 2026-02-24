@@ -31,7 +31,7 @@
             gpa:status='inactive'
             gpa:computed-simple-duration='indefinite'/>
     <animate
-            id='gpa:transition:fade-in:stroke-dasharray:line1'
+            id='gpa:transition:fade-in:0:stroke-dasharray:line1'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).begin -250ms'
             dur='500ms'
@@ -44,7 +44,7 @@
             calcMode='spline'
             gpa:status='inactive'/>
     <animate
-            id='gpa:transition:fade-out:stroke-dasharray:line1'
+            id='gpa:transition:fade-out:0:stroke-dasharray:line1'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).end -250ms'
             dur='500ms'
@@ -105,7 +105,7 @@
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='0ms'/>
     <animate
-            id='gpa:transition:fade-in:stroke-dasharray:line2'
+            id='gpa:transition:fade-in:0:stroke-dasharray:line2'
             attributeName='stroke-dasharray'
             begin='gpa:states(1).begin -250ms'
             dur='500ms'
@@ -118,7 +118,7 @@
             calcMode='spline'
             gpa:status='inactive'/>
     <animate
-            id='gpa:transition:fade-out:stroke-dasharray:line2'
+            id='gpa:transition:fade-out:0:stroke-dasharray:line2'
             attributeName='stroke-dasharray'
             begin='gpa:states(1).end -250ms'
             dur='500ms'

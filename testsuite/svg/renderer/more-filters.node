@@ -100,41 +100,29 @@ clip {
         }
       }
     }
-    component-transfer {
-      child: rounded-clip {
-        clip: 90 0 20 20 / 10;
-        child: color {
-          bounds: 90 0 20 20;
-          color: rgb(0,0,0);
-        }
-      }
-      alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
-    }
-    component-transfer {
+    color-matrix {
+      matrix: matrix3d(0.54475, 0.26175, 0.204, 0, 0.57675, 0.7645, 0.4005, 0, 0.14175, 0.126, 0.34825, 0, 0, 0, 0, 1);
       child: color-matrix {
-        matrix: matrix3d(0.54475, 0.26175, 0.204, 0, 0.57675, 0.7645, 0.4005, 0, 0.14175, 0.126, 0.34825, 0, 0, 0, 0, 1);
-        child: color-matrix {
-          matrix: matrix3d(0.80315, 0.05315, 0.05315, 0, 0.1788, 0.9288, 0.1788, 0, 0.01805, 0.01805, 0.76805, 0, 0, 0, 0, 1);
-          child: opacity {
-            opacity: 0.75;
+        matrix: matrix3d(0.80315, 0.05315, 0.05315, 0, 0.1788, 0.9288, 0.1788, 0, 0.01805, 0.01805, 0.76805, 0, 0, 0, 0, 1);
+        child: opacity {
+          opacity: 0.75;
+          child: color-matrix {
+            matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+            offset: 0.5 0.5 0.5 0;
             child: color-matrix {
-              matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
-              offset: 0.5 0.5 0.5 0;
+              matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
               child: color-matrix {
-                matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
+                matrix: matrix3d(0.2126, 0.2126, 0.2126, 0, 0.7152, 0.7152, 0.7152, 0, 0.0722, 0.0722, 0.0722, 0, 0, 0, 0, 1);
                 child: color-matrix {
-                  matrix: matrix3d(0.2126, 0.2126, 0.2126, 0, 0.7152, 0.7152, 0.7152, 0, 0.0722, 0.0722, 0.0722, 0, 0, 0, 0, 1);
+                  matrix: matrix3d(1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1);
+                  offset: -0.25 -0.25 -0.25 0;
                   child: color-matrix {
-                    matrix: matrix3d(1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1);
-                    offset: -0.25 -0.25 -0.25 0;
-                    child: color-matrix {
-                      matrix: matrix3d(0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 1);
-                      child: blur {
-                        blur: 10;
-                        child: color {
-                          bounds: 0 20 10 10;
-                          color: rgb(0,0,0);
-                        }
+                    matrix: matrix3d(0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 0.75, 0, 0, 0, 0, 1);
+                    child: blur {
+                      blur: 10;
+                      child: color {
+                        bounds: 0 20 10 10;
+                        color: rgb(0,0,0);
                       }
                     }
                   }
@@ -144,7 +132,6 @@ clip {
           }
         }
       }
-      alpha: discrete(0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
     }
   }
 }

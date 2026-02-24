@@ -21,10 +21,9 @@
             y='-100%'
             width='300%'
             height='300%'>
-      <feGaussianBlur
-              stdDeviation='0'>
+      <feGaussianBlur>
         <animate
-                attributeName='(null)'
+                attributeName='stdDeviation'
                 dur='1000ms'
                 repeatCount='indefinite'
                 values='0; 10; 0'

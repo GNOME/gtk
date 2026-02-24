@@ -24,7 +24,7 @@
       <feGaussianBlur
               stdDeviation='10'>
         <animate
-                attributeName='(null)'
+                attributeName='stdDeviation'
                 dur='1000ms'
                 repeatCount='indefinite'
                 values='0; 10; 0'

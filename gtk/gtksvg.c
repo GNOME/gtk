@@ -103,9 +103,6 @@
  *
  * Among the structural elements, `<a>` and `<view>` are not supported.
  *
- * All filter functions are supported, plus a custom `alpha-level()`
- * function, which implements one particular case of feComponentTransfer.
- *
  * In the `<filter>` element, the following primitives are not
  * supported: feConvolveMatrix, feDiffuseLighting,
  * feMorphology, feSpecularLighting and feTurbulence.
@@ -137,9 +134,10 @@
  *
  * <image src="svg-renderer1.svg">
  *
- * Note that the generated animations assume a `pathLengh` value of 1.
- * Setting `pathLength` in your SVG is therefore going to interfere with
- * generated animations.
+ * Note that the generated animations are implemented using standard
+ * SVG attributes (`visibility`, `stroke-dasharray, `stroke-dashoffset`,
+ * `pathLength` and `filter`). Setting these attributes in your SVG
+ * is therefore going to interfere with generated animations.
  *
  * To connect general SVG animations to the states of the paintable,
  * use the custom `gpa:states(...)` condition in the `begin` and `end`
@@ -2808,10 +2806,16 @@ svg_value_alloc (const SvgValueClass *class,
   return value;
 }
 
+static inline gboolean
+svg_value_is_immortal (SvgValue *value)
+{
+  return value->ref_count == 0;
+}
+
 SvgValue *
 svg_value_ref (SvgValue *value)
 {
-  if (value->ref_count == 0)
+  if (svg_value_is_immortal (value))
     return value;
 
   value->ref_count += 1;
@@ -2821,7 +2825,7 @@ svg_value_ref (SvgValue *value)
 void
 svg_value_unref (SvgValue *value)
 {
-  if (value->ref_count == 0)
+  if (svg_value_is_immortal (value))
     return;
 
   if (value->ref_count > 1)
@@ -6856,7 +6860,6 @@ typedef enum
   FILTER_OPACITY,
   FILTER_SATURATE,
   FILTER_SEPIA,
-  FILTER_ALPHA_LEVEL,
   FILTER_REF,
   FILTER_DROPSHADOW,
 } FilterKind;
@@ -6886,7 +6889,6 @@ static struct {
   { FILTER_OPACITY,     "opacity", 1, CLAMPED|POSITIVE,   css_parser_parse_number_percentage, },
   { FILTER_SATURATE,    "saturate", 1, POSITIVE,          css_parser_parse_number_percentage, },
   { FILTER_SEPIA,       "sepia", 1, CLAMPED|POSITIVE,     css_parser_parse_number_percentage, },
-  { FILTER_ALPHA_LEVEL, "alpha-level", 0.5, POSITIVE,     css_parser_parse_number, },
   /* FILTER_REF and FILTER_DROPSHADOW are handled separately */
 };
 
@@ -6926,17 +6928,21 @@ svg_filter_free (SvgValue *value)
   SvgFilter *f = (SvgFilter *) value;
   for (unsigned int i = 0; i < f->n_functions; i++)
     {
-      if (f->functions[i].kind == FILTER_REF)
-        g_free (f->functions[i].ref.ref);
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      FilterFunction *ff = &f->functions[i];
+
+      if (ff->kind == FILTER_REF)
         {
-          svg_value_unref (f->functions[i].dropshadow.color);
-          svg_value_unref (f->functions[i].dropshadow.dx);
-          svg_value_unref (f->functions[i].dropshadow.dy);
-          svg_value_unref (f->functions[i].dropshadow.std_dev);
+          g_free (ff->ref.ref);
+        }
+      else if (ff->kind == FILTER_DROPSHADOW)
+        {
+          svg_value_unref (ff->dropshadow.color);
+          svg_value_unref (ff->dropshadow.dx);
+          svg_value_unref (ff->dropshadow.dy);
+          svg_value_unref (ff->dropshadow.std_dev);
         }
       else
-        svg_value_unref (f->functions[i].simple);
+        svg_value_unref (ff->simple);
     }
 
   g_free (value);
@@ -6954,20 +6960,24 @@ svg_filter_equal (const SvgValue *value0,
 
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f0->functions[i].kind != f1->functions[i].kind)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+
+      if (ff0->kind != ff1->kind)
         return FALSE;
-      if (f0->functions[i].kind == FILTER_NONE)
+
+      if (ff0->kind == FILTER_NONE)
         return TRUE;
-      else if (f0->functions[i].kind == FILTER_REF)
-        return f0->functions[i].ref.shape == f1->functions[i].ref.shape &&
-               strcmp (f0->functions[i].ref.ref, f1->functions[i].ref.ref) == 0;
-      else if (f0->functions[i].kind == FILTER_DROPSHADOW)
-        return svg_value_equal (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color) &&
-               svg_value_equal (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx) &&
-               svg_value_equal (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy) &&
-               svg_value_equal (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev);
+      else if (ff0->kind == FILTER_REF)
+        return ff0->ref.shape == ff1->ref.shape &&
+               strcmp (ff0->ref.ref, ff1->ref.ref) == 0;
+      else if (ff0->kind == FILTER_DROPSHADOW)
+        return svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) &&
+               svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) &&
+               svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) &&
+               svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev);
       else
-        return svg_value_equal (f0->functions[i].simple, f1->functions[i].simple);
+        return svg_value_equal (ff0->simple, ff1->simple);
     }
 
   return TRUE;
@@ -7036,28 +7046,31 @@ svg_filter_resolve (const SvgValue *value,
 
   for (unsigned int i = 0; i < filter->n_functions; i++)
     {
-      result->functions[i].kind = filter->functions[i].kind;
+      const FilterFunction *ff = &filter->functions[i];
+      FilterFunction *r = &result->functions[i];
 
-      if (filter->functions[i].kind == FILTER_REF)
+      r->kind = ff->kind;
+
+      if (ff->kind == FILTER_REF)
         {
-          result->functions[i].ref.ref = g_strdup (filter->functions[i].ref.ref);
-          result->functions[i].ref.shape = filter->functions[i].ref.shape;
+          r->ref.ref = g_strdup (ff->ref.ref);
+          r->ref.shape = ff->ref.shape;
         }
-      else if (filter->functions[i].kind == FILTER_DROPSHADOW)
+      else if (ff->kind == FILTER_DROPSHADOW)
         {
-          result->functions[i].dropshadow.color = svg_value_resolve (filter->functions[i].dropshadow.color, attr, idx, shape, context);
-          result->functions[i].dropshadow.dx = svg_value_resolve (filter->functions[i].dropshadow.dx, attr, idx, shape, context);
-          result->functions[i].dropshadow.dy = svg_value_resolve (filter->functions[i].dropshadow.dy, attr, idx, shape, context);
-          result->functions[i].dropshadow.std_dev = svg_value_resolve (filter->functions[i].dropshadow.std_dev, attr, idx, shape, context);
+          r->dropshadow.color = svg_value_resolve (ff->dropshadow.color, attr, idx, shape, context);
+          r->dropshadow.dx = svg_value_resolve (ff->dropshadow.dx, attr, idx, shape, context);
+          r->dropshadow.dy = svg_value_resolve (ff->dropshadow.dy, attr, idx, shape, context);
+          r->dropshadow.std_dev = svg_value_resolve (ff->dropshadow.std_dev, attr, idx, shape, context);
         }
       else
         {
-          SvgValue *v = svg_value_resolve (filter->functions[i].simple, attr, idx, shape, context);
+          SvgValue *v = svg_value_resolve (ff->simple, attr, idx, shape, context);
 
-          if (filter_desc[filter->functions[i].kind].flags & CLAMPED)
-            result->functions[i].simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
+          if (filter_desc[ff->kind].flags & CLAMPED)
+            r->simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
           else
-            result->functions[i].simple = svg_value_ref (v);
+            r->simple = svg_value_ref (v);
           svg_value_unref (v);
         }
     }
@@ -7256,39 +7269,39 @@ svg_filter_print (const SvgValue *value,
 
   for (unsigned int i = 0; i < filter->n_functions; i++)
     {
-      const FilterFunction *function = &filter->functions[i];
+      const FilterFunction *f = &filter->functions[i];
 
       if (i > 0)
         g_string_append_c (s, ' ');
 
-      if (function->kind == FILTER_NONE)
+      if (f->kind == FILTER_NONE)
         {
           g_string_append (s, "none");
         }
-      else if (function->kind == FILTER_REF)
+      else if (f->kind == FILTER_REF)
         {
-          g_string_append_printf (s, "url(#%s)", function->ref.ref);
+          g_string_append_printf (s, "url(#%s)", f->ref.ref);
         }
-      else if (function->kind == FILTER_DROPSHADOW)
+      else if (f->kind == FILTER_DROPSHADOW)
         {
           g_string_append (s, "drop-shadow(");
-          if (!svg_color_is_current (function->dropshadow.color))
+          if (!svg_color_is_current (f->dropshadow.color))
             {
-              svg_value_print (function->dropshadow.color, s);
+              svg_value_print (f->dropshadow.color, s);
               g_string_append (s, ", ");
             }
-          svg_value_print (function->dropshadow.dx, s);
+          svg_value_print (f->dropshadow.dx, s);
           g_string_append (s, ", ");
-          svg_value_print (function->dropshadow.dy, s);
+          svg_value_print (f->dropshadow.dy, s);
           g_string_append (s, ", ");
-          svg_value_print (function->dropshadow.std_dev, s);
+          svg_value_print (f->dropshadow.std_dev, s);
           g_string_append_c (s, ')');
         }
       else
         {
-          g_string_append (s, filter_desc[function->kind].name);
+          g_string_append (s, filter_desc[f->kind].name);
           g_string_append_c (s, '(');
-          svg_value_print (function->simple, s);
+          svg_value_print (f->simple, s);
           g_string_append_c (s, ')');
         }
     }
@@ -7302,7 +7315,7 @@ svg_filter_interpolate (const SvgValue *value0,
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  SvgFilter *f;
+  SvgFilter *result;
 
   if (f0->n_functions != f1->n_functions)
     return NULL;
@@ -7310,37 +7323,59 @@ svg_filter_interpolate (const SvgValue *value0,
   /* TODO: filter interpolation wording in the spec */
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      if (f0->functions[i].kind != f1->functions[i].kind)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+
+      if (ff0->kind != ff1->kind)
         return NULL;
-      if (f0->functions[i].kind != FILTER_REF &&
-          ((SvgNumber *) f0->functions[i].simple)->unit != ((SvgNumber *) f1->functions[i].simple)->unit)
+
+      if (ff0->kind == FILTER_REF ||
+          ff0->kind == FILTER_DROPSHADOW)
+        continue;
+
+      if (((SvgNumber *) ff0->simple)->unit != ((SvgNumber *) ff1->simple)->unit)
         return NULL;
     }
 
-  f = svg_filter_alloc (f0->n_functions);
+  result = svg_filter_alloc (f0->n_functions);
 
   for (unsigned int i = 0; i < f0->n_functions; i++)
     {
-      f->functions[i].kind = f0->functions[i].kind;
-      if (f->functions[i].kind == FILTER_NONE)
+      const FilterFunction *ff0 = &f0->functions[i];
+      const FilterFunction *ff1 = &f1->functions[i];
+      FilterFunction *r = &result->functions[i];
+
+      r->kind = ff0->kind;
+
+      if (ff0->kind == FILTER_NONE)
         ;
-      else if (f->functions[i].kind == FILTER_REF)
+      else if (ff0->kind == FILTER_REF)
         {
+          if (t < 0.5)
+            {
+              r->ref.ref = g_strdup (ff0->ref.ref);
+              r->ref.shape = ff0->ref.shape;
+            }
+          else
+            {
+              r->ref.ref = g_strdup (ff1->ref.ref);
+              r->ref.shape = ff1->ref.shape;
+            }
         }
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      else if (ff0->kind == FILTER_DROPSHADOW)
         {
-          f->functions[i].dropshadow.color = svg_value_interpolate (f0->functions[i].dropshadow.color, f1->functions[i].dropshadow.color, context, t);
-          f->functions[i].dropshadow.dx = svg_value_interpolate (f0->functions[i].dropshadow.dx, f1->functions[i].dropshadow.dx, context, t);
-          f->functions[i].dropshadow.dy = svg_value_interpolate (f0->functions[i].dropshadow.dy, f1->functions[i].dropshadow.dy, context, t);
-          f->functions[i].dropshadow.std_dev = svg_value_interpolate (f0->functions[i].dropshadow.std_dev, f1->functions[i].dropshadow.std_dev, context, t);
+          r->dropshadow.color = svg_value_interpolate (ff0->dropshadow.color, ff1->dropshadow.color, context, t);
+          r->dropshadow.dx = svg_value_interpolate (ff0->dropshadow.dx, ff1->dropshadow.dx, context, t);
+          r->dropshadow.dy = svg_value_interpolate (ff0->dropshadow.dy, ff1->dropshadow.dy, context, t);
+          r->dropshadow.std_dev = svg_value_interpolate (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev, context, t);
         }
       else
         {
-          f->functions[i].simple = svg_value_interpolate (f0->functions[i].simple, f1->functions[i].simple, context, t);
+          r->simple = svg_value_interpolate (ff0->simple, ff1->simple, context, t);
         }
     }
 
-  return (SvgValue *) f;
+  return (SvgValue *) result;
 }
 
 static SvgValue *
@@ -7351,37 +7386,41 @@ svg_filter_accumulate (const SvgValue *value0,
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
-  SvgFilter *f;
+  SvgFilter *result;
 
-  f = svg_filter_alloc (f0->n_functions + n * f1->n_functions);
+  result = svg_filter_alloc (f0->n_functions + n * f1->n_functions);
 
   for (unsigned int i = 0; i < n; i++)
-    memcpy (&f->functions[i * f1->n_functions],
+    memcpy (&result->functions[i * f1->n_functions],
             f1->functions,
             f1->n_functions * sizeof (FilterFunction));
 
-  memcpy (&f->functions[f0->n_functions + (n - 1) * f1->n_functions],
+  memcpy (&result->functions[f0->n_functions + (n - 1) * f1->n_functions],
           f0->functions,
           f0->n_functions * sizeof (FilterFunction));
 
-  for (unsigned int i = 0; i < f->n_functions; i++)
+  for (unsigned int i = 0; i < result->n_functions; i++)
     {
-      if (f->functions[i].kind == FILTER_NONE)
+      FilterFunction *r = &result->functions[i];
+
+      if (r->kind == FILTER_NONE)
         ;
-      else if (f->functions[i].kind == FILTER_REF)
-        f->functions[i].ref.ref = g_strdup (f->functions[i].ref.ref);
-      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+      else if (r->kind == FILTER_REF)
         {
-          svg_value_ref (f->functions[i].dropshadow.color);
-          svg_value_ref (f->functions[i].dropshadow.dx);
-          svg_value_ref (f->functions[i].dropshadow.dy);
-          svg_value_ref (f->functions[i].dropshadow.std_dev);
+          r->ref.ref = g_strdup (r->ref.ref);
+        }
+      else if (r->kind == FILTER_DROPSHADOW)
+        {
+          svg_value_ref (r->dropshadow.color);
+          svg_value_ref (r->dropshadow.dx);
+          svg_value_ref (r->dropshadow.dy);
+          svg_value_ref (r->dropshadow.std_dev);
         }
       else
-        svg_value_ref (f->functions[i].simple);
+        svg_value_ref (r->simple);
     }
 
-  return (SvgValue *) f;
+  return (SvgValue *) result;
 }
 
 #define R 0.2126
@@ -7400,7 +7439,6 @@ filter_function_get_color_matrix (FilterKind         kind,
     {
     case FILTER_NONE:
     case FILTER_BLUR:
-    case FILTER_ALPHA_LEVEL:
     case FILTER_REF:
     case FILTER_DROPSHADOW:
       return FALSE;
@@ -10978,7 +11016,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_IN].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
   shape_attrs[SHAPE_ATTR_FE_IN2].initial_value = svg_filter_primitive_ref_new (DEFAULT_SOURCE);
-  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_numbers_new1 (2);
+  shape_attrs[SHAPE_ATTR_FE_STD_DEV].initial_value = svg_numbers_new1 (0);
   shape_attrs[SHAPE_ATTR_FE_BLUR_EDGE_MODE].initial_value = svg_edge_mode_new (EDGE_MODE_NONE);
   shape_attrs[SHAPE_ATTR_FE_BLEND_MODE].initial_value = svg_blend_mode_new (GSK_BLEND_MODE_DEFAULT);
   shape_attrs[SHAPE_ATTR_FE_BLEND_COMPOSITE].initial_value = svg_blend_composite_new (BLEND_COMPOSITE);
@@ -11003,6 +11041,11 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_FE_FUNC_AMPLITUDE].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_FUNC_EXPONENT].initial_value = svg_number_new (1);
   shape_attrs[SHAPE_ATTR_FE_FUNC_OFFSET].initial_value = svg_number_new (0);
+
+#ifndef G_DISABLE_ASSERT
+  for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
+    g_assert (svg_value_is_immortal (shape_attrs[i].initial_value));
+#endif
 }
 
 static SvgValue *
@@ -15035,6 +15078,7 @@ create_path_length (Shape    *shape,
 
 static void
 create_transition (Shape         *shape,
+                   unsigned int   idx,
                    Timeline      *timeline,
                    uint64_t       states,
                    int64_t        duration,
@@ -15050,6 +15094,7 @@ create_transition (Shape         *shape,
   TimeSpec *begin;
 
   a = animation_animate_new ();
+  a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
   a->repeat_count = 1;
@@ -15058,7 +15103,7 @@ create_transition (Shape         *shape,
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
-  a->id = g_strdup_printf ("gpa:transition:fade-in:%s:%s", shape_attr_get_name (attr), shape->id);
+  a->id = g_strdup_printf ("gpa:transition:fade-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, delay));
 
@@ -15083,6 +15128,7 @@ create_transition (Shape         *shape,
   a->gpa.origin = origin;
 
   a = animation_animate_new ();
+  a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
   a->repeat_count = 1;
@@ -15091,7 +15137,7 @@ create_transition (Shape         *shape,
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
-  a->id = g_strdup_printf ("gpa:transition:fade-out:%s:%s", shape_attr_get_name (attr), shape->id);
+  a->id = g_strdup_printf ("gpa:transition:fade-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
   begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (duration + delay)));
 
@@ -15118,12 +15164,13 @@ create_transition (Shape         *shape,
   if (delay > 0)
     {
       a = animation_set_new ();
+      a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
       a->repeat_duration = duration;
       a->repeat_count = 1;
 
-      a->id = g_strdup_printf ("gpa:transition:delay-in:%s:%s", shape_attr_get_name (attr), shape->id);
+      a->id = g_strdup_printf ("gpa:transition:delay-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
       begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
       time_spec_add_animation (begin, a);
 
@@ -15143,12 +15190,13 @@ create_transition (Shape         *shape,
       shape_add_animation (shape, a);
 
       a = animation_set_new ();
+      a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
       a->repeat_duration = duration;
       a->repeat_count = 1;
 
-      a->id = g_strdup_printf ("gpa:transition:delay-out:%s:%s", shape_attr_get_name (attr), shape->id);
+      a->id = g_strdup_printf ("gpa:transition:delay-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
       begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
       time_spec_add_animation (begin, a);
 
@@ -15235,9 +15283,185 @@ create_transition_delay (Shape     *shape,
   svg_value_unref (value);
 }
 
+/* The filter we create here looks roughly like this:
+ *
+ * <feGaussianBlur -> blurred
+ * <feComponentTransfer in=SourceGraphic ... make source alpha solid
+ * <feGaussianBlur
+ * <feComponentTransfer threshold alpha, white-out color -> blobbed
+ * <feComposite ...multiply blurred and blobbed
+ *
+ * The blurs and the second component transfer are animated
+ * from their full effect to identity.
+ */
+static void
+create_morph_filter (Shape      *shape,
+                     Timeline   *timeline,
+                     GHashTable *shapes,
+                     uint64_t    states,
+                     int64_t     duration,
+                     int64_t     delay,
+                     GpaEasing   easing)
+{
+  Shape *parent = NULL;
+  Shape *filter;
+  SvgValue *value;
+  Animation *a;
+  unsigned int idx;
+  char *str;
+  TimeSpec *begin;
+  TimeSpec *end;
+
+  for (unsigned int i = 0; i < shape->parent->shapes->len; i++)
+    {
+      Shape *sh = g_ptr_array_index (shape->parent->shapes, i);
+
+      if (sh == shape)
+        break;
+
+      if (sh->type == SHAPE_DEFS)
+        {
+          parent = sh;
+          break;
+        }
+    }
+
+  if (parent == NULL)
+    {
+      parent = shape_new (shape->parent, SHAPE_DEFS);
+      g_ptr_array_insert (shape->parent->shapes, 0, parent);
+    }
+
+  filter = svg_shape_add (parent, SHAPE_FILTER);
+  filter->id = g_strdup_printf ("gpa:morph-filter:%s", shape->id);
+
+  g_hash_table_insert (shapes, filter->id, filter);
+
+  value = svg_percentage_new (-50);
+  shape_set_base_value (filter, SHAPE_ATTR_X, 0, value);
+  shape_set_base_value (filter, SHAPE_ATTR_Y, 0, value);
+  svg_value_unref (value);
+  value = svg_percentage_new (200);
+  shape_set_base_value (filter, SHAPE_ATTR_WIDTH, 0, value);
+  shape_set_base_value (filter, SHAPE_ATTR_HEIGHT, 0, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_BLUR);
+  str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
+  value = svg_string_new (str);
+  g_free (str);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_RESULT, idx + 1, value);
+  svg_value_unref (value);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_STD_DEV,
+                     svg_numbers_new1 (4),
+                     svg_numbers_new1 (0));
+
+  idx = shape_add_filter (filter, FE_COMPONENT_TRANSFER);
+  value = svg_filter_primitive_ref_new (SOURCE_GRAPHIC);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_IN, idx + 1, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_FUNC_A);
+  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (100);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_SLOPE, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (0);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_INTERCEPT, idx + 1, value);
+  svg_value_unref (value);
+
+  idx = shape_add_filter (filter, FE_BLUR);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_STD_DEV,
+                     svg_numbers_new1 (4),
+                     svg_numbers_new1 (0));
+
+  idx = shape_add_filter (filter, FE_COMPONENT_TRANSFER);
+
+  for (unsigned int func = FE_FUNC_R; func <= FE_FUNC_B; func++)
+    {
+      idx = shape_add_filter (filter, func);
+      value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+      svg_value_unref (value);
+      value = svg_number_new (0);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_SLOPE, idx + 1, value);
+      svg_value_unref (value);
+      value = svg_number_new (1);
+      shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_INTERCEPT, idx + 1, value);
+      svg_value_unref (value);
+    }
+
+  idx = shape_add_filter (filter, FE_FUNC_A);
+  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_FUNC_TYPE, idx + 1, value);
+  svg_value_unref (value);
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_FUNC_SLOPE,
+                     svg_number_new (100),
+                     svg_number_new (1));
+
+  create_transition (filter, idx + 1, timeline, states,
+                     duration, delay, easing,
+                     0, GPA_TRANSITION_MORPH,
+                     SHAPE_ATTR_FE_FUNC_INTERCEPT,
+                     svg_number_new (-20),
+                     svg_number_new (0));
+
+  idx = shape_add_filter (filter, FE_COMPOSITE);
+  value = svg_composite_operator_new (COMPOSITE_OPERATOR_ARITHMETIC);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_COMPOSITE_OPERATOR, idx + 1, value);
+  svg_value_unref (value);
+  value = svg_number_new (1);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_COMPOSITE_K1, idx + 1, value);
+  svg_value_unref (value);
+  str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
+  value = svg_filter_primitive_ref_new_ref (str);
+  g_free (str);
+  shape_set_base_value (filter, SHAPE_ATTR_FE_IN2, idx + 1, value);
+  svg_value_unref (value);
+
+  a = animation_set_new ();
+  a->id = g_strdup_printf ("gpa:set:morph:%s", shape->id);
+  a->attr = SHAPE_ATTR_FILTER;
+
+  begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
+  time_spec_add_animation (begin, a);
+  end = animation_add_end (a, timeline_get_end_of_time (timeline));
+  time_spec_add_animation (end, a);
+
+  a->has_begin = 1;
+  a->has_end = 1;
+
+  a->n_frames = 2;
+  a->frames = g_new0 (Frame, a->n_frames);
+  a->frames[0].time = 0;
+  a->frames[1].time = 1;
+  str = g_strdup_printf ("url(#%s)", filter->id);
+  a->frames[0].value = svg_filter_parse (str);
+  a->frames[1].value = svg_value_ref (a->frames[0].value);
+  g_free (str);
+
+  shape_add_animation (shape, a);
+}
+
 static void
 create_transitions (Shape         *shape,
                     Timeline      *timeline,
+                    GHashTable    *shapes,
+                    GPtrArray     *pending_refs,
                     uint64_t       states,
                     GpaTransition  type,
                     int64_t        duration,
@@ -15250,7 +15474,7 @@ create_transitions (Shape         *shape,
     case GPA_TRANSITION_NONE:
       break;
     case GPA_TRANSITION_ANIMATE:
-      create_transition (shape, timeline, states,
+      create_transition (shape, 0, timeline, states,
                          duration, delay, easing,
                          origin, type,
                          SHAPE_ATTR_STROKE_DASHARRAY,
@@ -15261,23 +15485,20 @@ create_transitions (Shape         *shape,
                                  SHAPE_ATTR_STROKE_DASHOFFSET,
                                  svg_number_new (0.5));
       if (!G_APPROX_VALUE (origin, 0, 0.001))
-        create_transition (shape, timeline, states,
+        create_transition (shape, 0, timeline, states,
                            duration, delay, easing,
-                         origin, type,
+                           origin, type,
                            SHAPE_ATTR_STROKE_DASHOFFSET,
                            svg_number_new (-origin),
                            svg_number_new (0));
       break;
     case GPA_TRANSITION_MORPH:
-      create_transition (shape, timeline, states,
-                         duration, delay, easing,
-                         origin, type,
-                         SHAPE_ATTR_FILTER,
-                         svg_filter_parse ("blur(32) alpha-level(0.2)"),
-                         svg_filter_parse ("blur(0) alpha-level(0.2)"));
+      create_morph_filter (shape, timeline, shapes, states,
+                           duration, delay, easing);
+      g_ptr_array_add (pending_refs, shape);
       break;
     case GPA_TRANSITION_FADE:
-      create_transition (shape, timeline, states,
+      create_transition (shape, 0, timeline, states,
                          duration, delay, easing,
                          origin, type,
                          SHAPE_ATTR_OPACITY,
@@ -17419,6 +17640,10 @@ parse_shape_gpa_attrs (Shape                *shape,
 
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_DASHOFFSET))
         gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "stroke-dashoffset");
+
+      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILTER) &&
+          shape->gpa.transition == GPA_TRANSITION_MORPH)
+        gtk_svg_invalid_attribute (data->svg, context, NULL, "Can't set %s and use gpa features", "filter");
     }
 
   create_states (shape,
@@ -17442,6 +17667,8 @@ parse_shape_gpa_attrs (Shape                *shape,
 
   create_transitions (shape,
                       data->svg->timeline,
+                      data->shapes,
+                      data->pending_refs,
                       states,
                       transition_type,
                       transition_duration,
@@ -19251,9 +19478,17 @@ serialize_base_animation_attrs (GString   *s,
 
   if (a->type != ANIMATION_TYPE_MOTION)
     {
+      const char *name;
+
       indent_for_attr (s, indent);
-      g_string_append_printf (s, "attributeName='%s'",
-                              shape_attr_get_presentation (a->attr, a->shape->type));
+      if (a->shape->type == SHAPE_FILTER && a->idx > 0)
+        {
+          FilterPrimitive *f = g_ptr_array_index (a->shape->filters, a->idx - 1);
+          name = filter_attr_get_presentation (a->attr, f->type);
+        }
+      else
+        name = shape_attr_get_presentation (a->attr, a->shape->type);
+      g_string_append_printf (s, "attributeName='%s'", name);
     }
 
   if (a->has_begin)
@@ -20994,25 +21229,6 @@ apply_filter_functions (SvgValue      *filter,
 
             filter_function_get_color_matrix (ff->kind, svg_number_get (ff->simple, 1), &matrix, &offset);
             result = gsk_color_matrix_node_new (child, &matrix, &offset);
-          }
-          break;
-        case FILTER_ALPHA_LEVEL:
-          {
-            GskComponentTransfer *identity, *alpha;
-            float values[10];
-
-            identity = gsk_component_transfer_new_identity ();
-            for (unsigned int j = 0; j < 10; j++)
-              {
-                if ((j + 1) / 10.0 <= svg_number_get (ff->simple, 1))
-                  values[j] = 0;
-                else
-                  values[j] = 1;
-              }
-            alpha = gsk_component_transfer_new_discrete (10, values);
-            result = gsk_component_transfer_node_new (child, identity, identity, identity, alpha);
-            gsk_component_transfer_free (identity);
-            gsk_component_transfer_free (alpha);
           }
           break;
         case FILTER_DROPSHADOW:

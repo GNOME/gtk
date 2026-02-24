@@ -29,7 +29,7 @@
             gpa:status='done'
             gpa:computed-simple-duration='indefinite'/>
     <animate
-            id='gpa:transition:fade-in:opacity:red'
+            id='gpa:transition:fade-in:0:opacity:red'
             attributeName='opacity'
             begin='gpa:states(0).begin'
             dur='2000ms'
@@ -44,7 +44,7 @@
             gpa:current-start-time='2000ms'
             gpa:current-end-time='4000ms'/>
     <animate
-            id='gpa:transition:fade-out:opacity:red'
+            id='gpa:transition:fade-out:0:opacity:red'
             attributeName='opacity'
             begin='gpa:states(0).end -2000ms'
             dur='2000ms'

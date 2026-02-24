@@ -34,7 +34,7 @@
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='6000ms'/>
     <animate
-            id='gpa:transition:fade-in:stroke-dasharray:red'
+            id='gpa:transition:fade-in:0:stroke-dasharray:red'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).begin'
             dur='2000ms'
@@ -47,7 +47,7 @@
             calcMode='spline'
             gpa:status='done'/>
     <animate
-            id='gpa:transition:fade-out:stroke-dasharray:red'
+            id='gpa:transition:fade-out:0:stroke-dasharray:red'
             attributeName='stroke-dasharray'
             begin='gpa:states(0).end -2000ms'
             dur='2000ms'

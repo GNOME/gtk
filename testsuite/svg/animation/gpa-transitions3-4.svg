@@ -11,12 +11,178 @@
         width='64'
         height='64'
         viewBox='0 0 32 32'>
+  <defs
+          font-size='13.333'
+          font-weight='400'>
+    <filter
+            id='gpa:morph-filter:red'
+            font-size='13.333'
+            font-weight='400'
+            x='-50%'
+            y='-50%'
+            width='200%'
+            height='200%'>
+      <feGaussianBlur
+              result='gpa:morph-filter:red:blurred'
+              stdDeviation='2'>
+        <animate
+                id='gpa:transition:fade-in:1:stdDeviation:gpa:morph-filter:red'
+                attributeName='stdDeviation'
+                begin='gpa:states(0).begin'
+                dur='2000ms'
+                repeatDur='2000ms'
+                fill='freeze'
+                from='4'
+                to='0'
+                keySplines='0 0 1 1'
+                keyTimes='0; 1'
+                calcMode='spline'
+                gpa:status='done'/>
+        <animate
+                id='gpa:transition:fade-out:1:stdDeviation:gpa:morph-filter:red'
+                attributeName='stdDeviation'
+                begin='gpa:states(0).end -2000ms'
+                dur='2000ms'
+                repeatDur='2000ms'
+                fill='freeze'
+                from='0'
+                to='4'
+                keySplines='0 0 1 1'
+                keyTimes='0; 1'
+                calcMode='spline'
+                gpa:status='running'
+                gpa:current-start-time='4000ms'
+                gpa:current-end-time='6000ms'/>
+      </feGaussianBlur>
+      <feComponentTransfer
+              in='SourceGraphic'>
+        <feFuncA
+                type='linear'
+                slope='100'>
+        </feFuncA>
+      </feComponentTransfer>
+      <feGaussianBlur
+              stdDeviation='2'>
+        <animate
+                id='gpa:transition:fade-in:4:stdDeviation:gpa:morph-filter:red'
+                attributeName='stdDeviation'
+                begin='gpa:states(0).begin'
+                dur='2000ms'
+                repeatDur='2000ms'
+                fill='freeze'
+                from='4'
+                to='0'
+                keySplines='0 0 1 1'
+                keyTimes='0; 1'
+                calcMode='spline'
+                gpa:status='done'/>
+        <animate
+                id='gpa:transition:fade-out:4:stdDeviation:gpa:morph-filter:red'
+                attributeName='stdDeviation'
+                begin='gpa:states(0).end -2000ms'
+                dur='2000ms'
+                repeatDur='2000ms'
+                fill='freeze'
+                from='0'
+                to='4'
+                keySplines='0 0 1 1'
+                keyTimes='0; 1'
+                calcMode='spline'
+                gpa:status='running'
+                gpa:current-start-time='4000ms'
+                gpa:current-end-time='6000ms'/>
+      </feGaussianBlur>
+      <feComponentTransfer>
+        <feFuncR
+                type='linear'
+                slope='0'
+                intercept='1'>
+        </feFuncR>
+        <feFuncG
+                type='linear'
+                slope='0'
+                intercept='1'>
+        </feFuncG>
+        <feFuncB
+                type='linear'
+                slope='0'
+                intercept='1'>
+        </feFuncB>
+        <feFuncA
+                type='linear'
+                slope='50.5'
+                intercept='-10'>
+          <animate
+                  id='gpa:transition:fade-in:9:slope:gpa:morph-filter:red'
+                  attributeName='slope'
+                  begin='gpa:states(0).begin'
+                  dur='2000ms'
+                  repeatDur='2000ms'
+                  fill='freeze'
+                  from='100'
+                  to='1'
+                  keySplines='0 0 1 1'
+                  keyTimes='0; 1'
+                  calcMode='spline'
+                  gpa:status='done'/>
+          <animate
+                  id='gpa:transition:fade-out:9:slope:gpa:morph-filter:red'
+                  attributeName='slope'
+                  begin='gpa:states(0).end -2000ms'
+                  dur='2000ms'
+                  repeatDur='2000ms'
+                  fill='freeze'
+                  from='1'
+                  to='100'
+                  keySplines='0 0 1 1'
+                  keyTimes='0; 1'
+                  calcMode='spline'
+                  gpa:status='running'
+                  gpa:current-start-time='4000ms'
+                  gpa:current-end-time='6000ms'/>
+          <animate
+                  id='gpa:transition:fade-in:9:intercept:gpa:morph-filter:red'
+                  attributeName='intercept'
+                  begin='gpa:states(0).begin'
+                  dur='2000ms'
+                  repeatDur='2000ms'
+                  fill='freeze'
+                  from='-20'
+                  to='0'
+                  keySplines='0 0 1 1'
+                  keyTimes='0; 1'
+                  calcMode='spline'
+                  gpa:status='done'/>
+          <animate
+                  id='gpa:transition:fade-out:9:intercept:gpa:morph-filter:red'
+                  attributeName='intercept'
+                  begin='gpa:states(0).end -2000ms'
+                  dur='2000ms'
+                  repeatDur='2000ms'
+                  fill='freeze'
+                  from='0'
+                  to='-20'
+                  keySplines='0 0 1 1'
+                  keyTimes='0; 1'
+                  calcMode='spline'
+                  gpa:status='running'
+                  gpa:current-start-time='4000ms'
+                  gpa:current-end-time='6000ms'/>
+        </feFuncA>
+      </feComponentTransfer>
+      <feComposite
+              in2='gpa:morph-filter:red:blurred'
+              operator='arithmetic'
+              k1='1'>
+      </feComposite>
+    </filter>
+  </defs>
   <circle
           id='red'
           font-size='13.333'
           visibility='hidden'
           font-weight='400'
-          filter='blur(16) alpha-level(0.2)'
+          filter='url(#gpa:morph-filter:red)'
           fill='none'
           stroke='rgb(255,0,0)'
           cx='0'
@@ -32,33 +198,14 @@
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='6000ms'/>
-    <animate
-            id='gpa:transition:fade-in:filter:red'
+    <set
+            id='gpa:set:morph:red'
             attributeName='filter'
-            begin='gpa:states(0).begin'
-            dur='2000ms'
-            repeatDur='2000ms'
-            fill='freeze'
-            from='blur(32) alpha-level(0.2)'
-            to='blur(0) alpha-level(0.2)'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            gpa:status='done'/>
-    <animate
-            id='gpa:transition:fade-out:filter:red'
-            attributeName='filter'
-            begin='gpa:states(0).end -2000ms'
-            dur='2000ms'
-            repeatDur='2000ms'
-            fill='freeze'
-            from='blur(0) alpha-level(0.2)'
-            to='blur(32) alpha-level(0.2)'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
+            begin='0ms'
+            end='indefinite'
+            to='url(#gpa:morph-filter:red)'
             gpa:status='running'
-            gpa:current-start-time='4000ms'
-            gpa:current-end-time='6000ms'/>
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'/>
   </circle>
 </svg>
