@@ -84,20 +84,20 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache,
 static void
 gsk_gpu_cached_atlas_purge_stale (GskGpuCachedAtlas *self)
 {
-  /*
-  gsize i;
+  GskAtlasAllocatorIter iter;
+  gsize pos;
 
-  for (i = 0; i < gsk_gpu_atlas_slots_get_size (&self->slots); i++)
+  gsk_atlas_allocator_iter_init (self->allocator, &iter);
+  for (pos = gsk_atlas_allocator_iter_next (self->allocator, &iter);
+       pos != G_MAXSIZE;
+       pos = gsk_atlas_allocator_iter_next (self->allocator, &iter))
     {
-      GskGpuAtlasSlot *slot = gsk_gpu_atlas_slots_get (&self->slots, i);
+      GskGpuCached *item;
 
-      if (slot->type == GSK_GPU_ATLAS_USED &&
-          slot->owner->stale)
-        {
-          gsk_gpu_cached_free (slot->owner);
-        }
+      item = gsk_atlas_allocator_get_user_data (self->allocator, pos);
+      if (item->stale)
+        gsk_gpu_cached_free (item);
     }
-    */
 }
 
 static gsize 
@@ -147,6 +147,8 @@ gsk_gpu_cached_atlas_create (GskGpuCachedAtlas       *self,
   cached = gsk_gpu_cached_new (((GskGpuCached *) self)->cache, class);
   cached->atlas = self;
   cached->atlas_slot = pos;
+
+  gsk_atlas_allocator_set_user_data (self->allocator, pos, cached);
 
   self->used_pixels += width * height;
   gsk_gpu_cached_use ((GskGpuCached *) self);
