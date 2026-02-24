@@ -41,7 +41,7 @@ struct _GskGpuCachedStroke
 };
 
 static void
-gsk_gpu_cached_stroke_free (GskGpuCached *cached)
+gsk_gpu_cached_stroke_finalize (GskGpuCached *cached)
 {
   GskGpuCachedStroke *self = (GskGpuCachedStroke *) cached;
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
@@ -51,8 +51,6 @@ gsk_gpu_cached_stroke_free (GskGpuCached *cached)
   gsk_path_unref (self->path);
   gsk_stroke_clear (&self->stroke);
   g_object_unref (self->image);
-
-  g_free (self);
 }
 
 static gboolean
@@ -108,7 +106,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_STROKE_CLASS =
 {
   sizeof (GskGpuCachedStroke),
   "Stroke",
-  gsk_gpu_cached_stroke_free,
+  FALSE,
+  gsk_gpu_cached_stroke_finalize,
   gsk_gpu_cached_stroke_should_collect
 };
 

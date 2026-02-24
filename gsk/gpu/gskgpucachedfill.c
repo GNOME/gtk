@@ -38,7 +38,7 @@ struct _GskGpuCachedFill
 };
 
 static void
-gsk_gpu_cached_fill_free (GskGpuCached *cached)
+gsk_gpu_cached_fill_finalize (GskGpuCached *cached)
 {
   GskGpuCachedFill *self = (GskGpuCachedFill *) cached;
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
@@ -47,8 +47,6 @@ gsk_gpu_cached_fill_free (GskGpuCached *cached)
 
   gsk_path_unref (self->path);
   g_object_unref (self->image);
-
-  g_free (self);
 }
 
 static gboolean
@@ -100,7 +98,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_FILL_CLASS =
 {
   sizeof (GskGpuCachedFill),
   "Fill",
-  gsk_gpu_cached_fill_free,
+  FALSE,
+  gsk_gpu_cached_fill_finalize,
   gsk_gpu_cached_fill_should_collect
 };
 

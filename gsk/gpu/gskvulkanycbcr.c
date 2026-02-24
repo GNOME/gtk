@@ -52,7 +52,7 @@ gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
 }
 
 static void
-gsk_vulkan_ycbcr_free (GskGpuCached *cached)
+gsk_vulkan_ycbcr_finalize (GskGpuCached *cached)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
   GskVulkanYcbcr *self = (GskVulkanYcbcr *) cached;
@@ -72,8 +72,6 @@ gsk_vulkan_ycbcr_free (GskGpuCached *cached)
   vkDestroyDescriptorSetLayout (vk_device, self->vk_descriptor_set_layout, NULL);
   vkDestroyPipelineLayout (vk_device, self->vk_pipeline_layouts[0], NULL);
   vkDestroyPipelineLayout (vk_device, self->vk_pipeline_layouts[1], NULL);
-
-  g_free (self);
 }
 
 static gboolean
@@ -93,7 +91,8 @@ static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
 {
   sizeof (GskVulkanYcbcr),
   "Vulkan Ycbcr",
-  gsk_vulkan_ycbcr_free,
+  FALSE,
+  gsk_vulkan_ycbcr_finalize,
   gsk_vulkan_ycbcr_should_collect
 };
 

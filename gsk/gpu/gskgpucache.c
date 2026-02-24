@@ -58,6 +58,7 @@ void
 gsk_gpu_cached_free (GskGpuCached *cached)
 {
   GskGpuCache *self = cached->cache;
+  const GskGpuCachedClass *class = cached->class;
 
   if (cached->next)
     cached->next->prev = cached->prev;
@@ -70,7 +71,12 @@ gsk_gpu_cached_free (GskGpuCached *cached)
 
   gsk_gpu_cached_set_stale (cached, TRUE);
 
-  cached->class->free (cached);
+  class->finalize (cached);
+
+  if (!class->frees_memory_itself)
+    {
+      g_free (cached);
+    }
 }
 
 static gboolean
@@ -185,7 +191,7 @@ gsk_gpu_cache_get_texture_hash_table (GskGpuCache   *cache,
 }
 
 static void
-gsk_gpu_cached_texture_free (GskGpuCached *cached)
+gsk_gpu_cached_texture_finalize (GskGpuCached *cached)
 {
   GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
   GskGpuCache *cache = cached->cache;
@@ -238,7 +244,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
 {
   sizeof (GskGpuCachedTexture),
   "Texture",
-  gsk_gpu_cached_texture_free,
+  TRUE,
+  gsk_gpu_cached_texture_finalize,
   gsk_gpu_cached_texture_should_collect
 };
 
@@ -334,7 +341,7 @@ struct _GskGpuCachedTile
 };
 
 static void
-gsk_gpu_cached_tile_free (GskGpuCached *cached)
+gsk_gpu_cached_tile_finalize (GskGpuCached *cached)
 {
   GskGpuCachedTile *self = (GskGpuCachedTile *) cached;
   GskGpuCache *cache = cached->cache;
@@ -385,7 +392,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TILE_CLASS =
 {
   sizeof (GskGpuCachedTile),
   "Tile",
-  gsk_gpu_cached_tile_free,
+  TRUE,
+  gsk_gpu_cached_tile_finalize,
   gsk_gpu_cached_tile_should_collect
 };
 

@@ -19,7 +19,7 @@ struct _GskGpuCachedAtlas
 };
 
 static void
-gsk_gpu_cached_atlas_free (GskGpuCached *cached)
+gsk_gpu_cached_atlas_finalize (GskGpuCached *cached)
 {
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
   GskAtlasAllocatorIter iter;
@@ -40,8 +40,6 @@ gsk_gpu_cached_atlas_free (GskGpuCached *cached)
 
   gsk_atlas_allocator_free (self->allocator);
   g_object_unref (self->image);
-
-  g_free (self);
 }
 
 static gboolean
@@ -62,7 +60,8 @@ static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
 {
   sizeof (GskGpuCachedAtlas),
   "Atlas",
-  gsk_gpu_cached_atlas_free,
+  FALSE,
+  gsk_gpu_cached_atlas_finalize,
   gsk_gpu_cached_atlas_should_collect
 };
 
