@@ -37,6 +37,8 @@
 #include "gtkactionable.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkaccessible.h"
+#include "gtksvg.h"
+#include "gtkimage.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -181,6 +183,8 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       GtkWidget *button;
       GtkWidget *header;
       GActionGroup *actions;
+      GtkWidget *image;
+      GtkSvg *svg;
 
       actions = G_ACTION_GROUP (g_simple_action_group_new ());
       g_action_map_add_action (G_ACTION_MAP (actions), gtk_font_chooser_widget_get_tweak_action (dialog->fontchooser));
@@ -191,7 +195,10 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "font.tweak");
       gtk_widget_set_focus_on_click (button, FALSE);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
-      gtk_button_set_icon_name (GTK_BUTTON (button), "emblem-system-symbolic");
+      svg = gtk_svg_new_from_resource ("/org/gtk/libgtk/icons/sliders.gpa");
+      image = gtk_image_new_from_paintable (GDK_PAINTABLE (svg));
+      g_object_unref (svg);
+      gtk_button_set_child (GTK_BUTTON (button), image);
       gtk_widget_set_tooltip_text (button, _("Change Font Features"));
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                       GTK_ACCESSIBLE_PROPERTY_LABEL,
