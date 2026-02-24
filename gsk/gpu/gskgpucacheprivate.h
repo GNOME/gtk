@@ -29,8 +29,7 @@ void                    gsk_gpu_cache_set_time                          (GskGpuC
                                                                          gint64                  timestamp);
 
 gboolean                gsk_gpu_cache_gc                                (GskGpuCache            *self,
-                                                                         gint64                  cache_timeout,
-                                                                         gint64                  timestamp);
+                                                                         gint64                  cache_timeout);
 gsize                   gsk_gpu_cache_get_dead_textures                 (GskGpuCache            *self);
 gsize                   gsk_gpu_cache_get_dead_texture_pixels           (GskGpuCache            *self);
 GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuCache            *self,

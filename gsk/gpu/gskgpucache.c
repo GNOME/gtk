@@ -606,8 +606,7 @@ print_cache_stats (GskGpuCache *self)
 /* Returns TRUE if everything was GC'ed */
 gboolean
 gsk_gpu_cache_gc (GskGpuCache *self,
-                  gint64       cache_timeout,
-                  gint64       timestamp)
+                  gint64       cache_timeout)
 {
   GskGpuCached *cached, *prev;
   gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
@@ -619,7 +618,7 @@ gsk_gpu_cache_gc (GskGpuCache *self,
   for (cached = self->last_cached; cached != NULL; cached = prev)
     {
       prev = cached->prev;
-      if (gsk_gpu_cached_should_collect (cached, cache_timeout, timestamp))
+      if (gsk_gpu_cached_should_collect (cached, cache_timeout, self->timestamp))
         gsk_gpu_cached_free (cached);
       else
         is_empty &= cached->stale;
