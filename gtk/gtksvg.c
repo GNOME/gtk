@@ -10142,7 +10142,11 @@ parse_number_optional_number (const char *value)
 {
   SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (value);
 
-  if (numbers->n_values <= 2)
+  if (numbers == NULL)
+    {
+      return NULL;
+    }
+  else if (numbers->n_values <= 2)
     {
       return (SvgValue *) numbers;
     }
