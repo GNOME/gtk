@@ -317,7 +317,8 @@ static void
 finish_print (PortalData        *portal,
               GtkPrinter        *printer,
               GtkPageSetup      *page_setup,
-              GtkPrintSettings  *settings)
+              GtkPrintSettings  *settings,
+              gboolean          is_file_printer)
 {
   GtkPrintOperation *op = portal->op;
   GtkPrintOperationPrivate *priv = op->priv;
@@ -363,16 +364,24 @@ finish_print (PortalData        *portal,
 
       priv->print_pages = gtk_print_job_get_pages (job);
       priv->page_ranges = gtk_print_job_get_page_ranges (job, &priv->num_page_ranges);
-      /* Printers used through portals always have the COPIES capability, so
-      there is no need to make manual copies. */
-      priv->manual_num_copies = 1;
+      /* Printers used through portals always have the COPIES and NUMBER_UP capability, so
+      there is no need to make manual copies, except for print-to-file */
+      if (is_file_printer)
+        {
+          priv->manual_num_copies = gtk_print_job_get_num_copies(job);
+          priv->manual_number_up = gtk_print_job_get_n_up (job);
+        }
+      else
+        {
+          priv->manual_num_copies = 1;
+          priv->manual_number_up = 1;
+        }
+      priv->manual_number_up_layout = gtk_print_job_get_n_up_layout (job);
       priv->manual_collation = gtk_print_job_get_collate (job);
       priv->manual_reverse = gtk_print_job_get_reverse (job);
       priv->manual_page_set = gtk_print_job_get_page_set (job);
       priv->manual_scale = gtk_print_job_get_scale (job);
       priv->manual_orientation = gtk_print_job_get_rotate (job);
-      priv->manual_number_up = gtk_print_job_get_n_up (job);
-      priv->manual_number_up_layout = gtk_print_job_get_n_up_layout (job);
     }
 
 out:
@@ -454,6 +463,7 @@ prepare_print_response (GDBusConnection *connection,
           char *filename;
           int fd;
           char *uri;
+          gboolean is_file_printer = !!gtk_print_settings_get(settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
 
           fd = g_file_open_tmp ("gtkprintXXXXXX", &filename, NULL);
           uri = g_filename_to_uri (filename, NULL, NULL);
@@ -463,7 +473,7 @@ prepare_print_response (GDBusConnection *connection,
 
           portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
-          finish_print (portal, printer, page_setup, settings);
+          finish_print (portal, printer, page_setup, settings, is_file_printer);
           g_free (filename);
         }
       else
