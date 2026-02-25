@@ -902,7 +902,7 @@ strsplit_set (const char *str,
           else if (!strchr (sep, ' '))
             {
               g_ptr_array_free (array, TRUE);
-              return NULL;
+              return g_new0 (char *, 1);
             }
         }
 
@@ -1060,6 +1060,7 @@ parse_numbers (const char   *value,
   GStrv strv;
 
   strv = strsplit_set (value, sep);
+
   *n_values = g_strv_length (strv);
 
   for (unsigned int i = 0; strv[i]; i++)
@@ -3705,6 +3706,7 @@ svg_numbers_parse (const char *value)
   SvgNumbers *p;
 
   strv = strsplit_set (value, ", ");
+
   n = g_strv_length (strv);
 
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
