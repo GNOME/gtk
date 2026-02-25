@@ -6711,14 +6711,15 @@ gtk_window_lookup_pointer_focus_implicit_grab (GtkWindow        *window,
 }
 
 static void
-clear_widget_active_state (GtkWidget *widget,
-                           GtkWidget *topmost)
+set_widget_active_state (GtkWidget *widget,
+                         GtkWidget *topmost,
+                         gboolean   active)
 {
   GtkWidget *w = widget;
 
   while (w)
     {
-      gtk_widget_set_active_state (w, FALSE);
+      gtk_widget_set_active_state (w, active);
       if (w == topmost)
         break;
       w = _gtk_widget_get_parent (w);
@@ -6755,7 +6756,7 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
             {
               if (focus->grab_widget)
                 {
-                  clear_widget_active_state (focus->grab_widget, NULL);
+                  set_widget_active_state (focus->grab_widget, NULL, FALSE);
                   gtk_pointer_focus_set_implicit_grab (focus, NULL);
                 }
 
@@ -6794,7 +6795,7 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
           (focus->grab_widget == widget ||
            gtk_widget_is_ancestor (focus->grab_widget, widget)))
         {
-          clear_widget_active_state (focus->grab_widget, widget);
+          set_widget_active_state (focus->grab_widget, widget, FALSE);
           gtk_pointer_focus_set_implicit_grab (focus,
                                                gtk_widget_get_parent (widget));
         }
@@ -6865,12 +6866,25 @@ gtk_window_set_pointer_focus_grab (GtkWindow        *window,
                                    GtkWidget        *grab_widget)
 {
   GtkPointerFocus *focus;
+  GtkWidget *current;
 
   focus = gtk_window_lookup_pointer_focus (window, device, sequence);
   if (!focus && !grab_widget)
     return;
   g_assert (focus != NULL);
+
+  current = gtk_pointer_focus_get_implicit_grab (focus);
+
+  if (current == grab_widget)
+    return;
+
+  if (current)
+    set_widget_active_state (current, NULL, FALSE);
+
   gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
+
+  if (grab_widget)
+    set_widget_active_state (grab_widget, NULL, TRUE);
 }
 
 static void

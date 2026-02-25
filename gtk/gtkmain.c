@@ -1369,20 +1369,6 @@ is_key_event (GdkEvent *event)
     }
 }
 
-static inline void
-set_widget_active_state (GtkWidget      *target,
-                         const gboolean  is_active)
-{
-  GtkWidget *w;
-
-  w = target;
-  while (w)
-    {
-      gtk_widget_set_active_state (w, is_active);
-      w = _gtk_widget_get_parent (w);
-    }
-}
-
 static GtkWidget *
 handle_pointing_event (GdkEvent *event)
 {
@@ -1440,7 +1426,10 @@ handle_pointing_event (GdkEvent *event)
                                                            device,
                                                            sequence);
           if (grab_widget)
-            set_widget_active_state (grab_widget, FALSE);
+            {
+              gtk_window_set_pointer_focus_grab (toplevel, device,
+                                                 sequence, NULL);
+            }
         }
 
       old_target = update_pointer_focus_state (toplevel, event, NULL);
@@ -1450,7 +1439,8 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
-      set_widget_active_state (old_target, FALSE);
+      gtk_window_set_pointer_focus_grab (toplevel, device,
+                                         sequence, NULL);
       break;
     case GDK_DRAG_LEAVE:
       {
@@ -1502,7 +1492,6 @@ handle_pointing_event (GdkEvent *event)
       else if (type == GDK_TOUCH_BEGIN)
         {
           gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
-          set_widget_active_state (target, TRUE);
         }
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1540,16 +1529,17 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
           update_pointer_focus_state (toplevel, event, new_target);
         }
-      else if (type == GDK_BUTTON_PRESS)
+      else if (type == GDK_BUTTON_PRESS &&
+               !has_implicit &&
+               (modifiers & (GDK_BUTTON1_MASK |
+                             GDK_BUTTON2_MASK |
+                             GDK_BUTTON3_MASK |
+                             GDK_BUTTON4_MASK |
+                             GDK_BUTTON5_MASK)) == 0)
         {
           gtk_window_set_pointer_focus_grab (toplevel, device,
                                              sequence, target);
         }
-
-      if (type == GDK_BUTTON_PRESS)
-        set_widget_active_state (target, TRUE);
-      else if (has_implicit)
-        set_widget_active_state (target, FALSE);
 
       break;
     case GDK_SCROLL:
@@ -1563,7 +1553,11 @@ handle_pointing_event (GdkEvent *event)
           target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
                                                                      device,
                                                                      sequence);
-          set_widget_active_state (target, FALSE);
+          if (target)
+            {
+              gtk_window_set_pointer_focus_grab (toplevel, device,
+                                                 sequence, NULL);
+            }
         }
       break;
     default:
