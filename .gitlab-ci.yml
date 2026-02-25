@@ -527,9 +527,6 @@ android:
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
     - git clone --depth 1 https://github.com/sp1ritCS/mini-studio.git
   script:
-    # This should be included in the repo itself once it's been merged into meson and released
-    - >
-      find demos/ -type f -name 'meson.build' -exec sed -i "s/^executable.*$/\0 android_exe_type: 'application',/" {} \;
     - ./pixiewood/pixiewood prepare --release -s "${ANDROID_HOME}" -a ./mini-studio "build-aux/android/${APPID}.xml"
     - ./pixiewood/pixiewood generate
     - ./pixiewood/pixiewood build

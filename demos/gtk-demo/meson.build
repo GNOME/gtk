@@ -186,6 +186,7 @@ executable('gtk4-demo',
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
   install: true,
+  kwargs: demo_kwargs
 )
 
 executable('gtk4-demo-application',
