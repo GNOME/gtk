@@ -38,6 +38,10 @@ GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuC
                                                                          gsize                  *out_x,
                                                                          gsize                  *out_y);
 GskGpuCachePrivate *    gsk_gpu_cache_get_private                       (GskGpuCache            *self);
+/* next function is threadsafe */
+void                    gsk_gpu_cached_add_dead_pixels                  (GskGpuCache            *self,
+                                                                         gsize                   n_textures,
+                                                                         gsize                   n_pixels);
 
 GskGpuImage *           gsk_gpu_cache_lookup_texture_image              (GskGpuCache            *self,
                                                                          GdkTexture             *texture,

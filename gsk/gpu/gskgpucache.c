@@ -172,9 +172,6 @@ struct _GskGpuCachedTexture
                                * weak ref.
                                */
 
-  gsize *dead_textures_counter;
-  gsize *dead_pixels_counter;
-
   GdkTexture *texture;
   GskGpuImage *image;
   GdkColorState *color_state;  /* no ref because global. May be NULL */
@@ -280,8 +277,9 @@ gsk_gpu_cached_texture_destroy_cb (gpointer data)
 
   if (!gsk_gpu_cached_texture_is_invalid (self))
     {
-      g_atomic_pointer_add (self->dead_textures_counter, 1);
-      g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+      gsk_gpu_cached_add_dead_pixels (((GskGpuCached *) self)->cache,
+                                      1,
+                                      ((GskGpuCached *) self)->pixels);
     }
 
   if (g_atomic_int_dec_and_test (&self->use_count))
@@ -324,8 +322,6 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
   self->image = g_object_ref (image);
   self->color_state = color_state;
   ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
-  self->dead_textures_counter = &cache->dead_textures;
-  self->dead_pixels_counter = &cache->dead_texture_pixels;
   self->use_count = 2;
 
   if (!gdk_texture_set_render_data (texture, cache, self, gsk_gpu_cached_texture_destroy_cb))
@@ -429,8 +425,9 @@ gsk_gpu_cached_tile_destroy_cb (gpointer data)
 
   if (!gsk_gpu_cached_tile_is_invalid (self))
     {
-      g_atomic_pointer_add (self->dead_textures_counter, 1);
-      g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+      gsk_gpu_cached_add_dead_pixels (((GskGpuCached *) self)->cache,
+                                      1,
+                                      ((GskGpuCached *) self)->pixels);
     }
 
   if (g_atomic_int_dec_and_test (&self->use_count))
@@ -658,6 +655,15 @@ gsk_gpu_cache_gc (GskGpuCache *self,
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 
   return is_empty;
+}
+
+void
+gsk_gpu_cached_add_dead_pixels (GskGpuCache *self,
+                                gsize       n_textures,
+                                gsize       n_pixels)
+{
+  g_atomic_pointer_add (&self->dead_textures, n_textures);
+  g_atomic_pointer_add (&self->dead_texture_pixels, n_pixels);
 }
 
 gsize
