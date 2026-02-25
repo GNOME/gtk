@@ -18,6 +18,7 @@ executable('gtk4-node-editor',
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
   install: true,
+  kwargs: demo_kwargs
 )
 
 # icons
