@@ -18283,10 +18283,13 @@ start_element_cb (GMarkupParseContext  *context,
       if (xlink_href_attr && !href_attr)
         href_attr = xlink_href_attr;
 
-      if (href_attr[0] != '#')
-        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
-      else
-        data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
+      if (href_attr != NULL)
+        {
+          if (href_attr[0] != '#')
+            gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
+          else
+            data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
+        }
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
