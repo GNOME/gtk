@@ -18235,7 +18235,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+      if (data->current_shape != NULL &&
+          (a->href == NULL ||
+           g_strcmp0 (a->href, data->current_shape->id) == 0))
         shape_add_animation (data->current_shape, a);
       else
         g_ptr_array_add (data->pending_animations, a);
