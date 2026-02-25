@@ -18152,7 +18152,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       svg_value_unref (value);
 
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+      if (!a->href ||
+          (data->current_shape != NULL &&
+           g_strcmp0 (a->href, data->current_shape->id) == 0))
         shape_add_animation (data->current_shape, a);
       else
         g_ptr_array_add (data->pending_animations, a);
