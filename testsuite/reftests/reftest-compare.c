@@ -341,6 +341,7 @@ reftest_compare_textures (GdkTexture *texture1,
                              w, h);
     }
 
+  gdk_texture_downloader_free (downloader);
   g_free (data1);
   g_free (data2);
 
