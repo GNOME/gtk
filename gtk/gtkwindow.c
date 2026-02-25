@@ -1878,6 +1878,8 @@ gtk_window_init (GtkWindow *window)
   gtk_event_controller_set_static_name (controller, "gtk-window-resize-cursor");
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  g_signal_connect_swapped (controller, "enter",
+                            G_CALLBACK (gtk_window_capture_motion), window);
   g_signal_connect_swapped (controller, "motion",
                             G_CALLBACK (gtk_window_capture_motion), window);
   g_signal_connect_swapped (controller, "leave",
