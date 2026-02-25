@@ -6813,18 +6813,28 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
                gtk_widget_is_ancestor (focus->target, widget))
         {
           GtkWidget *old_target;
+          GtkWidget *new_target;
 
           old_target = g_object_ref (focus->target);
-          gtk_pointer_focus_repick_target (focus);
-          if (gtk_widget_get_native (focus->target) == gtk_widget_get_native (old_target))
+          new_target = gtk_pointer_focus_try_repick_target (focus);
+          if (gtk_widget_get_native (new_target) == gtk_widget_get_native (old_target))
             {
-              gtk_synthesize_crossing_events (GTK_ROOT (window),
-                                              GTK_CROSSING_POINTER,
-                                              old_target, focus->target,
-                                              focus->x, focus->y,
-                                              GDK_CROSSING_NORMAL,
-                                              NULL);
+              gtk_pointer_focus_set_target (focus, new_target);
             }
+          else
+            {
+              new_target = NULL;
+              priv->foci = g_list_remove_link (priv->foci, l);
+              gtk_pointer_focus_unref (focus);
+              g_list_free (l);
+            }
+
+          gtk_synthesize_crossing_events (GTK_ROOT (window),
+                                          GTK_CROSSING_POINTER,
+                                          old_target, new_target,
+                                          focus->x, focus->y,
+                                          GDK_CROSSING_NORMAL,
+                                          NULL);
           g_object_unref (old_target);
         }
 

@@ -54,5 +54,6 @@ GtkWidget *       gtk_pointer_focus_get_implicit_grab (GtkPointerFocus *focus);
 
 GtkWidget *       gtk_pointer_focus_get_effective_target (GtkPointerFocus *focus);
 
+GtkWidget *       gtk_pointer_focus_try_repick_target (GtkPointerFocus *focus);
 void              gtk_pointer_focus_repick_target (GtkPointerFocus *focus);
 
