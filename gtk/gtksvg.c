@@ -8315,20 +8315,24 @@ svg_clip_parse (const char *value)
 
           if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &data))
             {
-              res = svg_clip_new_path (data.string, data.fill_rule);
-              g_free (data.string);
+              if (data.string != NULL)
+                {
+                  res = svg_clip_new_path (data.string, data.fill_rule);
+                  g_free (data.string);
+                }
             }
         }
       else
         {
           char *url = gtk_css_parser_consume_url (parser);
-          if (!url)
-            res = NULL;
-          else if (url[0] == '#')
-            res = svg_clip_new_ref (url + 1);
-          else
-            res = svg_clip_new_ref (url);
-          g_free (url);
+          if (url != NULL)
+            {
+              if (url[0] == '#')
+                res = svg_clip_new_ref (url + 1);
+              else
+                res = svg_clip_new_ref (url);
+              g_free (url);
+           }
         }
 
       gtk_css_parser_unref (parser);
