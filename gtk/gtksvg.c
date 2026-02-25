@@ -7138,6 +7138,9 @@ filter_parser_parse (GtkCssParser *parser)
       if (gtk_css_parser_has_url (parser))
         {
           char *url = gtk_css_parser_consume_url (parser);
+          if (url == NULL)
+            goto fail;
+
           function.kind = FILTER_REF;
           if (url[0] == '#')
             function.ref.ref = g_strdup (url + 1);
