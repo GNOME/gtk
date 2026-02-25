@@ -16664,6 +16664,14 @@ parse_value_animation_attrs (Animation            *a,
           return FALSE;
         }
 
+      if (times->len == 0)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL, "No keyTimes found");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&times, g_array_unref);
+          return FALSE;
+        }
+
       if (g_array_index (times, double, 0) != 0)
         {
           gtk_svg_invalid_attribute (data->svg, context, "keyTimes",
