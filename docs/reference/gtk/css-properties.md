@@ -62,7 +62,7 @@ follows:
 
 ## Custom Properties
 
-GTK supports custom properties as defined in the
+Starting with 4.16, GTK supports custom properties as defined in the
 [CSS Custom Properties for Cascading Variables](https://www.w3.org/TR/css-variables-1)
 spec.
 
@@ -84,6 +84,8 @@ Custom properties can have a fallback for when the referred property is invalid:
 color: var(--prop, green);
 ```
 
+Older GTK builds (e. g., 4.14) do not support that. As for color variables, you have to use [non-CSS color expressions](#non-css-colors). As for other variable types, there is not direct replacement.
+
 ## Colors
 
 ### CSS Colors
@@ -103,17 +105,16 @@ GTK  extends the CSS syntax with several additional ways to specify colors.
 These extensions are deprecated and should be replaced by the equivalent
 standard CSS notions.
 
-The first is a reference to a color defined via a @define-color rule in CSS.
-The syntax for @define-color rules is as follows:
+The first is a reference to a color defined via a `define-color` rule in CSS.
+The syntax for `define-color` rules is as follows:
 
 ```
 @define-color name color
 ```
 
-To refer to the color defined by a @define-color rule, prefix the name with @.
+To refer to the color defined by a `define-color` rule, prefix the name with @.
 
-The standard CSS mechanisms that should be used instead of @define-color are
-custom properties, :root and var().
+There are standard CSS mechanisms that should be used instead of `define-color`: [custom properties](#custom-properties), `:root` selector and `var()` expression. GTK supports them since 4.16 release.
 
 GTK also supports color expressions, which allow colors to be transformed to
 new ones. Color expressions can be nested, providing a rich language to
