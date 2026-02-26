@@ -8796,6 +8796,7 @@ static SvgValue *
 svg_content_fit_parse (const char *value)
 {
   GStrv strv;
+  size_t len;
   Align align_x;
   Align align_y;
   MeetOrSlice meet;
@@ -8804,7 +8805,8 @@ svg_content_fit_parse (const char *value)
     return svg_content_fit_new_none ();
 
   strv = g_strsplit (value, " ", 0);
-  if (g_strv_length (strv) > 2)
+  len = g_strv_length (strv);
+  if (len < 1 || len > 2)
     {
       g_strfreev (strv);
       return NULL;
