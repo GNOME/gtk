@@ -16274,7 +16274,8 @@ parse_base_animation_attrs (Animation            *a,
   if (attr_name_attr && strcmp (attr_name_attr, "xlink:href") == 0)
     attr_name_attr = "href";
 
-  if (current_shape->type == SHAPE_FILTER &&
+  if (current_shape != NULL &&
+      current_shape->type == SHAPE_FILTER &&
       current_shape->filters->len > 0)
     {
       FilterPrimitive *fp;
@@ -16293,13 +16294,17 @@ parse_base_animation_attrs (Animation            *a,
     }
   else if (a->type == ANIMATION_TYPE_TRANSFORM)
     {
-      const char *expected;
+      if (current_shape != NULL)
+        {
+          const char *expected;
 
-      /* FIXME: if href is set, current_shape might be the wrong shape */
-      expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
-      if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName",
-                                   "value must be '%s'", expected);
+          /* FIXME: if href is set, current_shape might be the wrong shape */
+          expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
+          if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
+            gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                       "value must be '%s'", expected);
+        }
+
       a->attr = SHAPE_ATTR_TRANSFORM;
     }
   else if (!attr_name_attr)
@@ -16308,10 +16313,11 @@ parse_base_animation_attrs (Animation            *a,
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
-  else if ((current_shape->type == SHAPE_FILTER &&
-            filter_attr_lookup (filter_type, attr_name_attr, &attr, &deprecated)) ||
-           (current_shape->type != SHAPE_FILTER &&
-            shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated)))
+  else if (current_shape != NULL &&
+           ((current_shape->type == SHAPE_FILTER &&
+             filter_attr_lookup (filter_type, attr_name_attr, &attr, &deprecated)) ||
+            (current_shape->type != SHAPE_FILTER &&
+             shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated))))
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
