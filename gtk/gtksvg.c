@@ -16812,7 +16812,7 @@ parse_value_animation_attrs (Animation            *a,
 
   if (times->len < 2 ||
       (values && times->len != values->len) ||
-      (params && times->len != params->len) ||
+      (params && 4 * (times->len - 1) != params->len) ||
       (points && times->len != points->len))
     {
       gtk_svg_invalid_attribute (data->svg, context, NULL, "invalid value attributes");
@@ -16924,7 +16924,7 @@ parse_motion_animation_attrs (Animation            *a,
       g_clear_pointer (&a->frames, g_free);
       a->n_frames = 0;
 
-      if (a->motion.path)
+      if (a->motion.path && !gsk_path_is_empty (a->motion.path))
         {
           fill_from_path (a, a->motion.path);
         }
