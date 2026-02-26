@@ -1,0 +1,17 @@
+fill {
+  child: linear-gradient "node1" {
+    bounds: -100 -100 300 300;
+    start: -100 -100;
+    end: 200 200;
+    stops: 0 rgb(255,0,0), 1 rgb(255,0,0);
+  }
+  path: "\
+M 0 0 h 20 v 10 h -20 z";
+  fill-rule: winding;
+}
+fill {
+  child: "node1";
+  path: "\
+M 50 50 h 10 v 20 h -10 z";
+  fill-rule: winding;
+}

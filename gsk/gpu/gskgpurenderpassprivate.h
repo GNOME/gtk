@@ -143,6 +143,7 @@ void                    gsk_gpu_render_pass_push_clip_device_rect       (GskGpuR
 void                    gsk_gpu_render_pass_pop_clip_device_rect        (GskGpuRenderPass                 *self,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_push_clip_mask              (GskGpuRenderPass                 *self,
+                                                                         const graphene_rect_t            *clip,
                                                                          GskGpuImage                      *clip_mask,
                                                                          const graphene_rect_t            *clip_mask_rect,
                                                                          gboolean                          clip_mask_has_opacity,
