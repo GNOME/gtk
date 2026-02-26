@@ -201,7 +201,7 @@ gdk_png_get_color_state (png_struct  *png,
       cicp.matrix_coefficients = matrix_coefficients;
       cicp.range = range;
 
-      color_state = gdk_color_state_new_for_cicp (&cicp, error);
+      color_state = gdk_color_state_new_for_cicp (&cicp, &local_error);
 #else
   CICPData *cicp;
 
