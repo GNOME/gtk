@@ -902,7 +902,7 @@ strsplit_set (const char *str,
           else if (!strchr (sep, ' '))
             {
               g_ptr_array_free (array, TRUE);
-              return NULL;
+              return g_new0 (char *, 1);
             }
         }
 
@@ -1060,6 +1060,7 @@ parse_numbers (const char   *value,
   GStrv strv;
 
   strv = strsplit_set (value, sep);
+
   *n_values = g_strv_length (strv);
 
   for (unsigned int i = 0; strv[i]; i++)
@@ -3705,6 +3706,7 @@ svg_numbers_parse (const char *value)
   SvgNumbers *p;
 
   strv = strsplit_set (value, ", ");
+
   n = g_strv_length (strv);
 
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
@@ -5306,7 +5308,7 @@ parse_transform_function (GtkCssParser *self,
 {
   const GtkCssToken *token;
   gboolean result = FALSE;
-  char function_name[64];
+  char func[64];
   guint arg;
   Number *num;
 
@@ -5315,13 +5317,21 @@ parse_transform_function (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
   g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
 
-  g_strlcpy (function_name, gtk_css_token_get_string (token), 64);
+  g_strlcpy (func, gtk_css_token_get_string (token), sizeof (func));
   gtk_css_parser_start_block (self);
 
   arg = 0;
   while (TRUE)
     {
-      guint parse_args = css_parser_parse_number (self, arg, num);
+      guint parse_args;
+
+      if (arg >= max_args)
+        {
+          gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", func);
+          break;
+        }
+
+      parse_args = css_parser_parse_number (self, arg, num);
       if (parse_args == 0)
         break;
       values[arg] = num[arg].value;
@@ -5331,7 +5341,7 @@ parse_transform_function (GtkCssParser *self,
         {
           if (arg < min_args)
             {
-              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", function_name, min_args);
+              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", func, min_args);
               break;
             }
           else
@@ -5344,7 +5354,7 @@ parse_transform_function (GtkCssParser *self,
         {
           if (arg >= max_args)
             {
-              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", function_name);
+              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", func);
               break;
             }
 
@@ -5353,7 +5363,7 @@ parse_transform_function (GtkCssParser *self,
         }
       else if (!gtk_css_parser_has_number (self))
         {
-          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s() argument", function_name);
+          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s()", func);
           break;
         }
     }
@@ -6560,42 +6570,45 @@ svg_paint_parse (const char *value)
     }
   else if (gtk_css_parser_has_url (parser))
     {
-      GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
       char *url;
-      const char *ref;
 
       url = gtk_css_parser_consume_url (parser);
-
-      if (url[0] == '#')
-        ref = url + 1;
-      else
-        ref = url;
-
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+      if (url)
         {
-          paint = svg_paint_new_server (ref);
-        }
-      else if (gtk_css_parser_try_ident (parser, "none") ||
-               gdk_rgba_parser_parse (parser, &fallback))
-        {
+          const char *ref;
+          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
+
+          if (url[0] == '#')
+            ref = url + 1;
+          else
+            ref = url;
+
           gtk_css_parser_skip_whitespace (parser);
           if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
-              GdkColor c;
-              gdk_color_init_from_rgba (&c, &fallback);
-              paint = svg_paint_new_server_with_fallback (ref, &c);
-              gdk_color_finish (&c);
+              paint = svg_paint_new_server (ref);
             }
-        }
-      else if (gtk_css_parser_try_ident (parser, "currentColor"))
-        {
-          gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-            paint = svg_paint_new_server_with_current_color (ref);
-        }
+          else if (gtk_css_parser_try_ident (parser, "none") ||
+                   gdk_rgba_parser_parse (parser, &fallback))
+            {
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                {
+                  GdkColor c;
+                  gdk_color_init_from_rgba (&c, &fallback);
+                  paint = svg_paint_new_server_with_fallback (ref, &c);
+                  gdk_color_finish (&c);
+                }
+            }
+          else if (gtk_css_parser_try_ident (parser, "currentColor"))
+            {
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                paint = svg_paint_new_server_with_current_color (ref);
+            }
 
-      g_free (url);
+          g_free (url);
+        }
     }
 
   gtk_css_parser_unref (parser);
@@ -7136,6 +7149,9 @@ filter_parser_parse (GtkCssParser *parser)
       if (gtk_css_parser_has_url (parser))
         {
           char *url = gtk_css_parser_consume_url (parser);
+          if (url == NULL)
+            goto fail;
+
           function.kind = FILTER_REF;
           if (url[0] == '#')
             function.ref.ref = g_strdup (url + 1);
@@ -8310,20 +8326,24 @@ svg_clip_parse (const char *value)
 
           if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &data))
             {
-              res = svg_clip_new_path (data.string, data.fill_rule);
-              g_free (data.string);
+              if (data.string != NULL)
+                {
+                  res = svg_clip_new_path (data.string, data.fill_rule);
+                  g_free (data.string);
+                }
             }
         }
       else
         {
           char *url = gtk_css_parser_consume_url (parser);
-          if (!url)
-            res = NULL;
-          else if (url[0] == '#')
-            res = svg_clip_new_ref (url + 1);
-          else
-            res = svg_clip_new_ref (url);
-          g_free (url);
+          if (url != NULL)
+            {
+              if (url[0] == '#')
+                res = svg_clip_new_ref (url + 1);
+              else
+                res = svg_clip_new_ref (url);
+              g_free (url);
+           }
         }
 
       gtk_css_parser_unref (parser);
@@ -8784,6 +8804,7 @@ static SvgValue *
 svg_content_fit_parse (const char *value)
 {
   GStrv strv;
+  size_t len;
   Align align_x;
   Align align_y;
   MeetOrSlice meet;
@@ -8792,7 +8813,8 @@ svg_content_fit_parse (const char *value)
     return svg_content_fit_new_none ();
 
   strv = g_strsplit (value, " ", 0);
-  if (g_strv_length (strv) > 2)
+  len = g_strv_length (strv);
+  if (len < 1 || len > 2)
     {
       g_strfreev (strv);
       return NULL;
@@ -10137,7 +10159,11 @@ parse_number_optional_number (const char *value)
 {
   SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (value);
 
-  if (numbers->n_values <= 2)
+  if (numbers == NULL)
+    {
+      return NULL;
+    }
+  else if (numbers->n_values <= 2)
     {
       return (SvgValue *) numbers;
     }
@@ -16261,7 +16287,8 @@ parse_base_animation_attrs (Animation            *a,
   if (attr_name_attr && strcmp (attr_name_attr, "xlink:href") == 0)
     attr_name_attr = "href";
 
-  if (current_shape->type == SHAPE_FILTER &&
+  if (current_shape != NULL &&
+      current_shape->type == SHAPE_FILTER &&
       current_shape->filters->len > 0)
     {
       FilterPrimitive *fp;
@@ -16280,13 +16307,20 @@ parse_base_animation_attrs (Animation            *a,
     }
   else if (a->type == ANIMATION_TYPE_TRANSFORM)
     {
-      const char *expected;
+      if (current_shape != NULL)
+        {
+          const char *expected;
 
-      /* FIXME: if href is set, current_shape might be the wrong shape */
-      expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
-      if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
-        gtk_svg_invalid_attribute (data->svg, context, "attributeName",
-                                   "value must be '%s'", expected);
+          /* FIXME: if href is set, current_shape might be the wrong shape */
+          expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
+          if (expected == NULL)
+            gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                       "no transform attribute");
+          else if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
+            gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                       "value must be '%s'", expected);
+        }
+
       a->attr = SHAPE_ATTR_TRANSFORM;
     }
   else if (!attr_name_attr)
@@ -16295,10 +16329,11 @@ parse_base_animation_attrs (Animation            *a,
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
-  else if ((current_shape->type == SHAPE_FILTER &&
-            filter_attr_lookup (filter_type, attr_name_attr, &attr, &deprecated)) ||
-           (current_shape->type != SHAPE_FILTER &&
-            shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated)))
+  else if (current_shape != NULL &&
+           ((current_shape->type == SHAPE_FILTER &&
+             filter_attr_lookup (filter_type, attr_name_attr, &attr, &deprecated)) ||
+            (current_shape->type != SHAPE_FILTER &&
+             shape_attr_lookup (attr_name_attr, current_shape->type, &attr, &deprecated))))
     {
       a->attr = attr;
       /* FIXME: if href is set, current_shape might be the wrong shape */
@@ -16577,8 +16612,13 @@ parse_value_animation_attrs (Animation            *a,
               SvgTransform *tf = g_ptr_array_index (values, i);
               PrimitiveTransform *f = &tf->transforms[0];
 
-              g_assert (tf->n_transforms == 1);
-              g_assert (f->type == TRANSFORM_TRANSLATE);
+              if (tf->n_transforms != 1 || f->type != TRANSFORM_TRANSLATE)
+                {
+                  gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
+                  g_ptr_array_unref (values);
+                  g_array_unref (points);
+                  return FALSE;
+                }
 
               if (i == 0)
                 {
@@ -16648,6 +16688,7 @@ parse_value_animation_attrs (Animation            *a,
         {
           gtk_svg_invalid_attribute (data->svg, context, "keyTimes", NULL);
           g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
     }
@@ -16661,6 +16702,16 @@ parse_value_animation_attrs (Animation            *a,
                                      "have the same number of items");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
+          return FALSE;
+        }
+
+      if (times->len == 0)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, NULL, "No keyTimes found");
+          g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16670,6 +16721,7 @@ parse_value_animation_attrs (Animation            *a,
                                      "The first keyTimes value must be 0");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16679,6 +16731,7 @@ parse_value_animation_attrs (Animation            *a,
                                      "The last keyTimes value must be 1");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16690,6 +16743,7 @@ parse_value_animation_attrs (Animation            *a,
                                          "The keyTimes values must be increasing");
               g_clear_pointer (&values, g_ptr_array_unref);
               g_clear_pointer (&times, g_array_unref);
+              g_clear_pointer (&points, g_array_unref);
               return FALSE;
             }
         }
@@ -16726,6 +16780,7 @@ parse_value_animation_attrs (Animation            *a,
                   g_clear_pointer (&values, g_ptr_array_unref);
                   g_clear_pointer (&times, g_array_unref);
                   g_clear_pointer (&params, g_array_unref);
+                  g_clear_pointer (&points, g_array_unref);
                   return FALSE;
                 }
 
@@ -16743,6 +16798,7 @@ parse_value_animation_attrs (Animation            *a,
               g_clear_pointer (&values, g_ptr_array_unref);
               g_clear_pointer (&times, g_array_unref);
               g_clear_pointer (&params, g_array_unref);
+              g_clear_pointer (&points, g_array_unref);
               return FALSE;
             }
         }
@@ -16763,6 +16819,19 @@ parse_value_animation_attrs (Animation            *a,
     }
 
   g_assert (times != NULL);
+
+  if (times->len < 2 ||
+      (values && times->len != values->len) ||
+      (params && 4 * (times->len - 1) != params->len) ||
+      (points && times->len != points->len))
+    {
+      gtk_svg_invalid_attribute (data->svg, context, NULL, "invalid value attributes");
+      g_clear_pointer (&values, g_ptr_array_unref);
+      g_clear_pointer (&times, g_array_unref);
+      g_clear_pointer (&params, g_array_unref);
+      g_clear_pointer (&points, g_array_unref);
+      return FALSE;
+    }
 
   fill_from_values (a,
                     (double *) times->data,
@@ -16865,7 +16934,7 @@ parse_motion_animation_attrs (Animation            *a,
       g_clear_pointer (&a->frames, g_free);
       a->n_frames = 0;
 
-      if (a->motion.path)
+      if (a->motion.path && !gsk_path_is_empty (a->motion.path))
         {
           fill_from_path (a, a->motion.path);
         }
@@ -17802,13 +17871,13 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (strcmp (element_name, "stop") == 0)
     {
-      const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
       SvgValue *value;
       const char *style_attr = NULL;
       unsigned int idx;
 
-      if (strcmp (parent, "linearGradient") != 0 &&
-          strcmp (parent, "radialGradient") != 0)
+      if (data->current_shape == NULL ||
+          (!check_ancestors (context, "linearGradient", NULL) &&
+           !check_ancestors (context, "radialGradient", NULL)))
         {
           skip_element (data, context, "<stop> only allowed in <linearGradient> or <radialGradient>");
           return;
@@ -18142,7 +18211,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       svg_value_unref (value);
 
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+      if (!a->href ||
+          (data->current_shape != NULL &&
+           g_strcmp0 (a->href, data->current_shape->id) == 0))
         shape_add_animation (data->current_shape, a);
       else
         g_ptr_array_add (data->pending_animations, a);
@@ -18223,7 +18294,9 @@ start_element_cb (GMarkupParseContext  *context,
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
-      if (!a->href || g_strcmp0 (a->href, data->current_shape->id) == 0)
+      if (data->current_shape != NULL &&
+          (a->href == NULL ||
+           g_strcmp0 (a->href, data->current_shape->id) == 0))
         shape_add_animation (data->current_shape, a);
       else
         g_ptr_array_add (data->pending_animations, a);
@@ -18266,10 +18339,13 @@ start_element_cb (GMarkupParseContext  *context,
       if (xlink_href_attr && !href_attr)
         href_attr = xlink_href_attr;
 
-      if (href_attr[0] != '#')
-        gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
-      else
-        data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
+      if (href_attr != NULL)
+        {
+          if (href_attr[0] != '#')
+            gtk_svg_invalid_attribute (data->svg, context, "href", "Missing '#' in href");
+          else
+            data->current_animation->motion.path_ref = g_strdup (href_attr + 1);
+        }
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 

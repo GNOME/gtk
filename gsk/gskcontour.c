@@ -1029,12 +1029,16 @@ add_measure (const GskCurve *curve,
              float           tolerance,
              float           t1,
              float           l1,
-             GArray         *array)
+             GArray         *array,
+             int             depth)
 {
   GskCurve c;
   float ll, l0;
   float t0;
   CurvePoint *p;
+
+  if (depth > 10)
+    goto done;
 
   /* Check if we can add (t1, length + l1) without further
    * splitting. We check two things:
@@ -1063,8 +1067,8 @@ done:
     }
   else
     {
-      add_measure (curve, idx, length, tolerance, t0, l0, array);
-      add_measure (curve, idx, length, tolerance, t1, l1, array);
+      add_measure (curve, idx, length, tolerance, t0, l0, array, depth + 1);
+      add_measure (curve, idx, length, tolerance, t1, l1, array, depth + 1);
     }
 }
 
@@ -1105,10 +1109,10 @@ add_samples (const GskStandardContour  *self,
   for (int j = 0; j < n; j++)
     {
       float l = gsk_curve_get_length_to (&curve, t[j]);
-      add_measure (&curve, curve_measure->idx, l0, measure->tolerance, t[j], l, measure->points);
+      add_measure (&curve, curve_measure->idx, l0, measure->tolerance, t[j], l, measure->points, 0);
     }
 
-  add_measure (&curve, curve_measure->idx, l0, measure->tolerance, 1, l1 - l0, measure->points);
+  add_measure (&curve, curve_measure->idx, l0, measure->tolerance, 1, l1 - l0, measure->points, 0);
 
   curve_measure->first = first;
   curve_measure->n_samples = measure->points->len - first;

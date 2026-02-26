@@ -118,10 +118,8 @@ _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
     }
   else
     {
-      hue = hsla->hue + 120;
-      while (hue > 360)
-        hue -= 360;
-      while (hue < 0)
+      hue = fmodf (hsla->hue + 120, 360);
+      if (hue < 0)
         hue += 360;
 
       if (hue < 60)
@@ -133,10 +131,8 @@ _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
       else
         rgba->red = m1;
 
-      hue = hsla->hue;
-      while (hue > 360)
-        hue -= 360;
-      while (hue < 0)
+      hue = fmodf (hsla->hue, 360);
+      if (hue < 0)
         hue += 360;
 
       if (hue < 60)
@@ -148,10 +144,8 @@ _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
       else
         rgba->green = m1;
 
-      hue = hsla->hue - 120;
-      while (hue > 360)
-        hue -= 360;
-      while (hue < 0)
+      hue = fmodf (hsla->hue - 120, 360);
+      if (hue < 0)
         hue += 360;
 
       if (hue < 60)
