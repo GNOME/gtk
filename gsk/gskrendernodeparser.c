@@ -5675,6 +5675,9 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   else
     face = hb_face_reference (info->face);
 
+  if (face == NULL)
+    return;
+
   blob = hb_face_reference_blob (face);
   data = hb_blob_get_data (blob, &length);
   bytes = g_bytes_new_static (data, length);

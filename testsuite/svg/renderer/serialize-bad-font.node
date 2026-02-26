@@ -1,0 +1,15 @@
+text {
+  font: "Cantarell 26.665px";
+  glyphs: "Normal";
+  offset: 0 100;
+}
+text {
+  font: "Cantarell Bold 31.999px";
+  glyphs: "Bolder,", 268435488 8, "larger";
+  offset: 0 200;
+}
+text {
+  font: "Cantarell Bold 28.159px";
+  glyphs: "666/88";
+  offset: 0 300;
+}

@@ -116,6 +116,7 @@ test_data = [
   'rounded-rect.svg',
   'rotated-pattern.svg',
   'rotated-pattern2.svg',
+  'serialize-bad-font.svg',
   'size-units.svg',
   'spec-ellipse.svg',
   'spec-opacity.svg',
