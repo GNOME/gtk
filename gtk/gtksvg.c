@@ -25320,7 +25320,10 @@ svg_shape_attr_get_number (Shape                 *shape,
       return svg_number_get (value, 1);
     case SHAPE_ATTR_STROKE_MINWIDTH:
     case SHAPE_ATTR_STROKE_MAXWIDTH:
-      return svg_number_get (value, 1);
+      return svg_number_get (value,
+                             svg_shape_attr_get_number (shape,
+                                                        SHAPE_ATTR_STROKE_WIDTH,
+                                                        viewport));
     default:
       g_assert_not_reached ();
     }
