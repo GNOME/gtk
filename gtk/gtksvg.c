@@ -16303,7 +16303,10 @@ parse_base_animation_attrs (Animation            *a,
 
           /* FIXME: if href is set, current_shape might be the wrong shape */
           expected = shape_attr_get_presentation (SHAPE_ATTR_TRANSFORM, current_shape->type);
-          if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
+          if (expected == NULL)
+            gtk_svg_invalid_attribute (data->svg, context, "attributeName",
+                                       "no transform attribute");
+          else if (attr_name_attr && strcmp (attr_name_attr, expected) != 0)
             gtk_svg_invalid_attribute (data->svg, context, "attributeName",
                                        "value must be '%s'", expected);
         }
