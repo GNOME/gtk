@@ -16596,8 +16596,13 @@ parse_value_animation_attrs (Animation            *a,
               SvgTransform *tf = g_ptr_array_index (values, i);
               PrimitiveTransform *f = &tf->transforms[0];
 
-              g_assert (tf->n_transforms == 1);
-              g_assert (f->type == TRANSFORM_TRANSLATE);
+              if (tf->n_transforms != 1 || f->type != TRANSFORM_TRANSLATE)
+                {
+                  gtk_svg_invalid_attribute (data->svg, context, NULL,  "Don't know how to handle this 'by' value");
+                  g_ptr_array_unref (values);
+                  g_array_unref (points);
+                  return FALSE;
+                }
 
               if (i == 0)
                 {
@@ -16667,6 +16672,7 @@ parse_value_animation_attrs (Animation            *a,
         {
           gtk_svg_invalid_attribute (data->svg, context, "keyTimes", NULL);
           g_clear_pointer (&values, g_ptr_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
     }
@@ -16680,6 +16686,7 @@ parse_value_animation_attrs (Animation            *a,
                                      "have the same number of items");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16688,6 +16695,7 @@ parse_value_animation_attrs (Animation            *a,
           gtk_svg_invalid_attribute (data->svg, context, NULL, "No keyTimes found");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16697,6 +16705,7 @@ parse_value_animation_attrs (Animation            *a,
                                      "The first keyTimes value must be 0");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16706,6 +16715,7 @@ parse_value_animation_attrs (Animation            *a,
                                      "The last keyTimes value must be 1");
           g_clear_pointer (&values, g_ptr_array_unref);
           g_clear_pointer (&times, g_array_unref);
+          g_clear_pointer (&points, g_array_unref);
           return FALSE;
         }
 
@@ -16717,6 +16727,7 @@ parse_value_animation_attrs (Animation            *a,
                                          "The keyTimes values must be increasing");
               g_clear_pointer (&values, g_ptr_array_unref);
               g_clear_pointer (&times, g_array_unref);
+              g_clear_pointer (&points, g_array_unref);
               return FALSE;
             }
         }
@@ -16753,6 +16764,7 @@ parse_value_animation_attrs (Animation            *a,
                   g_clear_pointer (&values, g_ptr_array_unref);
                   g_clear_pointer (&times, g_array_unref);
                   g_clear_pointer (&params, g_array_unref);
+                  g_clear_pointer (&points, g_array_unref);
                   return FALSE;
                 }
 
@@ -16770,6 +16782,7 @@ parse_value_animation_attrs (Animation            *a,
               g_clear_pointer (&values, g_ptr_array_unref);
               g_clear_pointer (&times, g_array_unref);
               g_clear_pointer (&params, g_array_unref);
+              g_clear_pointer (&points, g_array_unref);
               return FALSE;
             }
         }
