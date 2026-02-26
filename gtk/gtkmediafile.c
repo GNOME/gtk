@@ -190,6 +190,12 @@ gtk_media_file_get_extension (void)
   GIOExtension *e;
   GIOExtensionPoint *ep;
 
+  g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
+
+#ifdef HAVE_MEDIA_GSTREAMER
+  g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
+#endif
+
   GTK_DEBUG (MODULES, "Looking up MediaFile extension");
 
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
