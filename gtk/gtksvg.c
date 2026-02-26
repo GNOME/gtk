@@ -17845,13 +17845,13 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (strcmp (element_name, "stop") == 0)
     {
-      const char *parent = g_markup_parse_context_get_element_stack (context)->next->data;
       SvgValue *value;
       const char *style_attr = NULL;
       unsigned int idx;
 
-      if (strcmp (parent, "linearGradient") != 0 &&
-          strcmp (parent, "radialGradient") != 0)
+      if (data->current_shape == NULL ||
+          (!check_ancestors (context, "linearGradient", NULL) &&
+           !check_ancestors (context, "radialGradient", NULL)))
         {
           skip_element (data, context, "<stop> only allowed in <linearGradient> or <radialGradient>");
           return;
