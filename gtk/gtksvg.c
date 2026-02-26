@@ -16810,6 +16810,19 @@ parse_value_animation_attrs (Animation            *a,
 
   g_assert (times != NULL);
 
+  if (times->len < 2 ||
+      (values && times->len != values->len) ||
+      (params && times->len != params->len) ||
+      (points && times->len != points->len))
+    {
+      gtk_svg_invalid_attribute (data->svg, context, NULL, "invalid value attributes");
+      g_clear_pointer (&values, g_ptr_array_unref);
+      g_clear_pointer (&times, g_array_unref);
+      g_clear_pointer (&params, g_array_unref);
+      g_clear_pointer (&points, g_array_unref);
+      return FALSE;
+    }
+
   fill_from_values (a,
                     (double *) times->data,
                     times->len,
