@@ -1,0 +1,15 @@
+color {
+  bounds: 0 0 50 50;
+  color: rgb(0,0,0);
+}
+clip {
+  clip: 2.5 2.5 45 45;
+  child: rounded-clip {
+    clip: 0 0 50 50 / 20;
+    child: border {
+      colors: rgb(255,255,255);
+      outline: 0 0 50 50;
+      widths: 2;
+    }
+  }
+}
