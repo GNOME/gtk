@@ -5308,7 +5308,7 @@ parse_transform_function (GtkCssParser *self,
 {
   const GtkCssToken *token;
   gboolean result = FALSE;
-  char function_name[64];
+  char func[64];
   guint arg;
   Number *num;
 
@@ -5317,13 +5317,21 @@ parse_transform_function (GtkCssParser *self,
   token = gtk_css_parser_get_token (self);
   g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
 
-  g_strlcpy (function_name, gtk_css_token_get_string (token), 64);
+  g_strlcpy (func, gtk_css_token_get_string (token), sizeof (func));
   gtk_css_parser_start_block (self);
 
   arg = 0;
   while (TRUE)
     {
-      guint parse_args = css_parser_parse_number (self, arg, num);
+      guint parse_args;
+
+      if (arg >= max_args)
+        {
+          gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", func);
+          break;
+        }
+
+      parse_args = css_parser_parse_number (self, arg, num);
       if (parse_args == 0)
         break;
       values[arg] = num[arg].value;
@@ -5333,7 +5341,7 @@ parse_transform_function (GtkCssParser *self,
         {
           if (arg < min_args)
             {
-              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", function_name, min_args);
+              gtk_css_parser_error_syntax (self, "%s() requires at least %u arguments", func, min_args);
               break;
             }
           else
@@ -5346,7 +5354,7 @@ parse_transform_function (GtkCssParser *self,
         {
           if (arg >= max_args)
             {
-              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", function_name);
+              gtk_css_parser_error_syntax (self, "Expected ')' at end of %s()", func);
               break;
             }
 
@@ -5355,7 +5363,7 @@ parse_transform_function (GtkCssParser *self,
         }
       else if (!gtk_css_parser_has_number (self))
         {
-          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s() argument", function_name);
+          gtk_css_parser_error_syntax (self, "Unexpected data at end of %s()", func);
           break;
         }
     }
