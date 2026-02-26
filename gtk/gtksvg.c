@@ -18849,13 +18849,18 @@ resolve_refs_for_animation (Animation  *a,
 
   if (a->motion.path_ref)
     {
-      a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
-      if (a->motion.path_shape == NULL)
+      Shape *shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
+      if (shape == NULL)
         gtk_svg_invalid_reference (data->svg,
                                    "No path with ID %s (resolving <mpath>",
                                    a->motion.path_ref);
+      else if ((BIT (shape->type) & SHAPE_SHAPES) == 0)
+        gtk_svg_invalid_reference (data->svg,
+                                   "Element with ID %s is not a shape (resolving <mpath>",
+                                   a->motion.path_ref);
       else
         {
+          a->motion.path_shape = shape;
           add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
           if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
             {
