@@ -1169,6 +1169,74 @@ typedef enum
  *
  * Since: 4.20
  */
+/**
+ * GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 red, 19..10 green
+ * and 9..0 blue.
+ *
+ * The color values are premultiplied with the alpha value.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_A2R10G10B10_LE:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 red, 19..10 green
+ * and 9..0 blue.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_X2R10G10B10_LE:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 are padding, bits 29..20 contain red, 19..10 green
+ * and 9..0 blue.
+ *
+ * The format is opaque.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_A2B10G10G10_LE_PREMULTIPLIED:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 blue, 19..10 green
+ * and 9..0 red.
+ *
+ * The color values are premultiplied with the alpha value.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_A2B10G10R10_LE:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 blue, 19..10 green
+ * and 9..0 red.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_X2B10G10R10_LE:
+ *
+ * 4 bytes per pixel, packed as little endian.
+ *
+ * Bits 31..30 are padding, bits 29..20 contain blue, 19..10 green
+ * and 9..0 red.
+ *
+ * The format is opaque.
+ *
+ * Since: 4.24
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -1235,6 +1303,12 @@ typedef enum {
   GDK_MEMORY_G16_B16_R16_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G16_B16_R16_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G16_B16_R16_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_A2R10G10B10_LE GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_X2R10G10B10_LE GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_A2B10G10R10_LE_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_A2B10G10R10_LE GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_X2B10G10R10_LE GDK_AVAILABLE_ENUMERATOR_IN_4_24,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

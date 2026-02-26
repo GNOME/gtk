@@ -74,6 +74,12 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_X6G10_X6B10_X6R10_420:
     case GDK_MEMORY_X6G10_X6B10_X6R10_422:
     case GDK_MEMORY_X6G10_X6B10_X6R10_444:
+    case GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2R10G10B10_LE:
+    case GDK_MEMORY_X2R10G10B10_LE:
+    case GDK_MEMORY_A2B10G10R10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2B10G10R10_LE:
+    case GDK_MEMORY_X2B10G10R10_LE:
       return CHANNEL_UINT_10;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
@@ -156,6 +162,12 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_G16_B16_R16_420:
     case GDK_MEMORY_G16_B16_R16_422:
     case GDK_MEMORY_G16_B16_R16_444:
+    case GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2R10G10B10_LE:
+    case GDK_MEMORY_X2R10G10B10_LE:
+    case GDK_MEMORY_A2B10G10R10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2B10G10R10_LE:
+    case GDK_MEMORY_X2B10G10R10_LE:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -224,6 +236,24 @@ gdk_memory_pixel_print (const guchar          *data,
     case GDK_MEMORY_X8B8G8R8:
       data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X %02X %02X", data[1], data[2], data[3]);
+      break;
+
+    case GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2R10G10B10_LE:
+    case GDK_MEMORY_A2B10G10R10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2B10G10R10_LE:
+      {
+        guint32 v = *(guint32 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
+        g_string_append_printf (string, "%08X", v);
+      }
+      break;
+
+    case GDK_MEMORY_X2R10G10B10_LE:
+    case GDK_MEMORY_X2B10G10R10_LE:
+      {
+        guint32 v = *(guint32 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
+        g_string_append_printf (string, "%08X", v & 0x3FFFFFFF);
+      }
       break;
 
 
@@ -619,6 +649,34 @@ gdk_memory_pixel_equal (const guchar          *data1,
       return data1[0] == data2[0] &&
              data1[2] == data2[2] &&
              data1[1 + 2 * (y & 1)] == data2[1 + 2 * (y & 1)];
+
+    case GDK_MEMORY_A2R10G10B10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2R10G10B10_LE:
+    case GDK_MEMORY_A2B10G10R10_LE_PREMULTIPLIED:
+    case GDK_MEMORY_A2B10G10R10_LE:
+      if (accurate)
+        {
+          return memcmp (data1 + gdk_memory_layout_offset (layout1, 0, x, y),
+                         data2 + gdk_memory_layout_offset (layout2, 0, x, y),
+                         gdk_memory_format_get_plane_block_bytes (layout1->format, 0)) == 0;
+        }
+      else
+        {
+          guint32 v1 = *(guint32 *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+          guint32 v2 = *(guint32 *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
+          return (v1 & 0xFFCFF3FC) == (v2 & 0xFFCFF3FC);
+        }
+
+    case GDK_MEMORY_X2R10G10B10_LE:
+    case GDK_MEMORY_X2B10G10R10_LE:
+      {
+        guint32 v1 = *(guint32 *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+        guint32 v2 = *(guint32 *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
+        if (accurate)
+          return (v1 & 0x3FFFFFFF) == (v2 & 0x3FFFFFFF);
+        else
+          return (v1 & 0x3FCFF3FC) == (v2 & 0x3FCFF3FC);
+      }
 
     case GDK_MEMORY_N_FORMATS:
     default:

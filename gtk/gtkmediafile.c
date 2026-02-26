@@ -190,6 +190,12 @@ gtk_media_file_get_extension (void)
   GIOExtension *e;
   GIOExtensionPoint *ep;
 
+  g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
+
+#ifdef HAVE_MEDIA_GSTREAMER
+  g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
+#endif
+
   GTK_DEBUG (MODULES, "Looking up MediaFile extension");
 
   ep = g_io_extension_point_lookup (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
@@ -618,12 +624,6 @@ gtk_media_file_extension_init (void)
 
   ep = g_io_extension_point_register (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
   g_io_extension_point_set_required_type (ep, GTK_TYPE_MEDIA_FILE);
-
-  g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
-
-#ifdef HAVE_MEDIA_GSTREAMER
-  g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
-#endif
 
   scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
 
