@@ -6562,42 +6562,45 @@ svg_paint_parse (const char *value)
     }
   else if (gtk_css_parser_has_url (parser))
     {
-      GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
       char *url;
-      const char *ref;
 
       url = gtk_css_parser_consume_url (parser);
-
-      if (url[0] == '#')
-        ref = url + 1;
-      else
-        ref = url;
-
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+      if (url)
         {
-          paint = svg_paint_new_server (ref);
-        }
-      else if (gtk_css_parser_try_ident (parser, "none") ||
-               gdk_rgba_parser_parse (parser, &fallback))
-        {
+          const char *ref;
+          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
+
+          if (url[0] == '#')
+            ref = url + 1;
+          else
+            ref = url;
+
           gtk_css_parser_skip_whitespace (parser);
           if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
             {
-              GdkColor c;
-              gdk_color_init_from_rgba (&c, &fallback);
-              paint = svg_paint_new_server_with_fallback (ref, &c);
-              gdk_color_finish (&c);
+              paint = svg_paint_new_server (ref);
             }
-        }
-      else if (gtk_css_parser_try_ident (parser, "currentColor"))
-        {
-          gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-            paint = svg_paint_new_server_with_current_color (ref);
-        }
+          else if (gtk_css_parser_try_ident (parser, "none") ||
+                   gdk_rgba_parser_parse (parser, &fallback))
+            {
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                {
+                  GdkColor c;
+                  gdk_color_init_from_rgba (&c, &fallback);
+                  paint = svg_paint_new_server_with_fallback (ref, &c);
+                  gdk_color_finish (&c);
+                }
+            }
+          else if (gtk_css_parser_try_ident (parser, "currentColor"))
+            {
+              gtk_css_parser_skip_whitespace (parser);
+              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                paint = svg_paint_new_server_with_current_color (ref);
+            }
 
-      g_free (url);
+          g_free (url);
+        }
     }
 
   gtk_css_parser_unref (parser);
