@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-10 18:27+0000\n"
-"PO-Revision-Date: 2026-02-07 16:18+0100\n"
+"POT-Creation-Date: 2026-02-25 13:51+0000\n"
+"PO-Revision-Date: 2026-02-19 00:44+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -2359,7 +2359,7 @@ msgstr "Soubor s tímto názvem již existuje"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6467 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2582,7 +2582,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Zvuk"
 
-#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1072
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1111
 msgid "Image"
 msgstr "Obrázek"
 
@@ -2713,11 +2713,11 @@ msgstr "Kódování"
 msgid "Line Ending"
 msgstr "Konec řádku"
 
-#: gtk/gtkfilefilter.c:1085
+#: gtk/gtkfilefilter.c:1124
 msgid "Unspecified"
 msgstr "Blíže neurčeno"
 
-#: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
+#: gtk/gtkfontchooserdialog.c:202 gtk/gtkfontchooserdialog.c:205
 msgid "Change Font Features"
 msgstr "Změnit vlastnosti fontu"
 
@@ -2897,7 +2897,7 @@ msgid "Play"
 msgstr "Přehrát"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6468
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -2913,59 +2913,59 @@ msgstr "_Ano"
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: gtk/gtkmountoperation.c:676
+#: gtk/gtkmountoperation.c:678
 msgid "Connect As"
 msgstr "Připojit se jako"
 
-#: gtk/gtkmountoperation.c:685
+#: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
 msgstr "_Anonymní"
 
-#: gtk/gtkmountoperation.c:692
+#: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
 msgstr "Regi_strovaný uživatel"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:704
 msgid "_Username"
 msgstr "_Uživatelské jméno"
 
-#: gtk/gtkmountoperation.c:707
+#: gtk/gtkmountoperation.c:709
 msgid "_Domain"
 msgstr "_Doména"
 
-#: gtk/gtkmountoperation.c:716
+#: gtk/gtkmountoperation.c:718
 msgid "Volume type"
 msgstr "Typ svazku"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:728
 msgid "_Hidden"
 msgstr "_Skrytý"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:731
 msgid "_Windows system"
 msgstr "Systém _Windows"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:734
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:738
+#: gtk/gtkmountoperation.c:740
 msgid "_Password"
 msgstr "_Heslo"
 
-#: gtk/gtkmountoperation.c:761
+#: gtk/gtkmountoperation.c:763
 msgid "Forget password _immediately"
 msgstr "Zapo_menout heslo okamžitě"
 
-#: gtk/gtkmountoperation.c:771
+#: gtk/gtkmountoperation.c:773
 msgid "Remember password until you _logout"
 msgstr "Pamat_ovat si heslo až do odhlášení"
 
-#: gtk/gtkmountoperation.c:782
+#: gtk/gtkmountoperation.c:784
 msgid "Remember _forever"
 msgstr "Pama_tovat si navždy"
 
-#: gtk/gtkmountoperation.c:1252
+#: gtk/gtkmountoperation.c:1256
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Neznámá aplikace (PID %d)"
@@ -2975,12 +2975,12 @@ msgstr "Neznámá aplikace (PID %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1397
+#: gtk/gtkmountoperation.c:1401
 #, c-format
 msgid "Unable to end process"
 msgstr "Není možné ukončit proces"
 
-#: gtk/gtkmountoperation.c:1547
+#: gtk/gtkmountoperation.c:1553
 msgid "_End Process"
 msgstr "Ukončit proc_es"
 
@@ -3033,8 +3033,8 @@ msgstr "Následující karta"
 msgid "Page %u"
 msgstr "Stránka %u"
 
-#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:942
-#: gtk/print/gtkpapersize.c:982
+#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:943
+#: gtk/print/gtkpapersize.c:983
 msgid "Not a valid page setup file"
 msgstr "Neplatný soubor vzhledu stránky"
 
@@ -4138,8 +4138,8 @@ msgstr "Nejpravděpodobnější příčinou je nemožnost vytvoření dočasnéh
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:605
-#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:617
+#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Tisk"
 
@@ -4527,12 +4527,12 @@ msgstr "_Zpět"
 msgid "_Redo"
 msgstr "Zn_ovu"
 
-#: gtk/gtkwindow.c:6454
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Chcete použít Inspectora GTK?"
 
-#: gtk/gtkwindow.c:6456
+#: gtk/gtkwindow.c:6458
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4543,7 +4543,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:6461
+#: gtk/gtkwindow.c:6463
 msgid "Don’t show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -5103,7 +5103,7 @@ msgstr "Zdroj:"
 msgid "Defined At"
 msgstr "Definováno v"
 
-#: gtk/inspector/recorder.c:2180
+#: gtk/inspector/recorder.c:2181
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Uložení RenderNode selhalo"
@@ -5168,7 +5168,7 @@ msgstr "Název:"
 msgid "Type:"
 msgstr "Typ:"
 
-#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:56
+#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:57
 msgid "Size:"
 msgstr "Velikost:"
 
@@ -7675,12 +7675,12 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
-#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:68
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:199 tools/gtk-rendernode-tool-info.c:126
-#: tools/gtk-rendernode-tool-show.c:122
+#: tools/gtk-rendernode-tool-extract.c:200 tools/gtk-rendernode-tool-info.c:119
+#: tools/gtk-rendernode-tool-show.c:123
 msgid "FILE"
 msgstr "SOUBOR"
 
@@ -7712,9 +7712,9 @@ msgid "Use style from CSS file"
 msgstr "Použít styl ze souboru CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:274
-#: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:317 tools/gtk-rendernode-tool-show.c:129
+#: tools/gtk-builder-tool-validate.c:275
+#: tools/gtk-rendernode-tool-benchmark.c:109
+#: tools/gtk-rendernode-tool-render.c:318 tools/gtk-rendernode-tool-show.c:130
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Nezdařilo se inicializovat okenní systém\n"
@@ -7724,7 +7724,7 @@ msgid "Preview the file."
 msgstr "Zobrazí náhled souboru."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:293
+#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:294
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Není určen žádný soubor .ui\n"
@@ -7759,13 +7759,13 @@ msgstr ""
 "Použijte --force pro jeho přepsání.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:250
+#: tools/gtk-rendernode-tool-render.c:251
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Výstup zapsán do %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:254
+#: tools/gtk-rendernode-tool-render.c:255
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Nezdařilo se uložení %s: %s\n"
@@ -7782,11 +7782,11 @@ msgstr "Uložit jako soubor uzlů namísto png"
 msgid "Overwrite existing file"
 msgstr "Přepsat existující soubor"
 
-#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
-#: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
-#: tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:310
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
+#: tools/gtk-rendernode-tool-benchmark.c:100
+#: tools/gtk-rendernode-tool-render.c:311
 msgid "FILE…"
 msgstr "SOUBOR…"
 
@@ -7893,7 +7893,7 @@ msgstr "Zastaralé typy:\n"
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Nepodařilo se vytvořit instanci šablony typu %s\n"
 
-#: tools/gtk-builder-tool-validate.c:282
+#: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
 msgstr "Ověří soubor."
 
@@ -7928,80 +7928,80 @@ msgstr ""
 "  play         Přehrát animaci\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
 msgid "Output file"
 msgstr "Výstupní soubor"
 
-#: tools/gtk-image-tool-compare.c:57
+#: tools/gtk-image-tool-compare.c:58
 msgid "Compare two images"
 msgstr "Porovnat dva obrázky"
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:166
-#: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
-#: tools/gtk-image-tool-show.c:141
+#: tools/gtk-image-tool-compare.c:71 tools/gtk-image-tool-convert.c:167
+#: tools/gtk-image-tool-info.c:102 tools/gtk-image-tool-relabel.c:110
+#: tools/gtk-image-tool-show.c:142
 #, c-format
 msgid "No image file specified\n"
 msgstr "Není určen žádný soubor obrázku\n"
 
-#: tools/gtk-image-tool-compare.c:76
+#: tools/gtk-image-tool-compare.c:77
 #, c-format
 msgid "Can only accept two image files\n"
 msgstr "Je možné přijmout pouze dva soubory obrázků\n"
 
-#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:90 tools/gtk-rendernode-tool-compare.c:123
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "Nezdařilo se uložit obrázek rozdílu do %s\n"
 
-#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "Rozdíly zapsány do %s.\n"
 
-#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
 #, c-format
 msgid "The images are different.\n"
 msgstr "Obrázky se liší.\n"
 
-#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:105 tools/gtk-rendernode-tool-compare.c:138
 #, c-format
 msgid "No differences.\n"
 msgstr "Žádné rozdíly.\n"
 
-#: tools/gtk-image-tool-convert.c:139
+#: tools/gtk-image-tool-convert.c:140
 msgid "Format to use"
 msgstr "Jaký formát použít"
 
-#: tools/gtk-image-tool-convert.c:139
+#: tools/gtk-image-tool-convert.c:140
 msgid "FORMAT"
 msgstr "FORMÁT"
 
-#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use"
 msgstr "Jaký stav barvy použít"
 
-#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "COLORSTATE"
 msgstr "STAVBARVY"
 
-#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "Color state to use, as cicp tuple"
 msgstr "Jaký stav barvy použít, jako n-tice cicp"
 
-#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "CICP"
 msgstr "CICP"
 
-#: tools/gtk-image-tool-convert.c:153
+#: tools/gtk-image-tool-convert.c:154
 msgid "Convert the image to a different format or color state."
 msgstr "Převést obrázek do jiného formátu nebo stavu barvy."
 
-#: tools/gtk-image-tool-convert.c:172 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:173 tools/gtk-image-tool-relabel.c:116
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr "Je možné přijmout pouze jeden soubor obrázku a výstupní soubor\n"
 
-#: tools/gtk-image-tool-convert.c:186
+#: tools/gtk-image-tool-convert.c:187
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -8012,7 +8012,7 @@ msgstr ""
 "Možné hodnoty:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:203
+#: tools/gtk-image-tool-convert.c:204
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8023,40 +8023,40 @@ msgstr ""
 "Možné hodnoty:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:213 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Nelze zadat současně --color-state a --cicp\n"
 
-#: tools/gtk-image-tool-convert.c:221 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Není podporovaná n-tice cicp: %s\n"
 
-#: tools/gtk-image-tool-info.c:57
+#: tools/gtk-image-tool-info.c:58
 msgid "Format:"
 msgstr "Formát:"
 
-#: tools/gtk-image-tool-info.c:63 tools/gtk-image-tool-info.c:65
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:64 tools/gtk-image-tool-info.c:66
+#: tools/gtk-image-tool-info.c:68
 msgid "Color state:"
 msgstr "Stav barvy:"
 
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:68
 msgid "unknown"
 msgstr "neznámé"
 
-#: tools/gtk-image-tool-info.c:88
+#: tools/gtk-image-tool-info.c:89
 msgid "Provide information about the image."
 msgstr "Poskytnout informace o obrázku."
 
-#: tools/gtk-image-tool-info.c:107
+#: tools/gtk-image-tool-info.c:108
 #, c-format
 msgid "Can only accept a single image file\n"
 msgstr "Je možné přijmout pouze jeden soubor obrázku\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:117
-#: tools/gtk-rendernode-tool-show.c:121
+#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Nepřidávat záhlaví okna"
 
@@ -8089,11 +8089,11 @@ msgstr "Zobrazit jednu nebo více animací."
 msgid "No animation file specified\n"
 msgstr "Není určen žádný soubor animace\n"
 
-#: tools/gtk-image-tool-relabel.c:96
+#: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
 msgstr "Změnit stav barvy obrázku bez konverze."
 
-#: tools/gtk-image-tool-relabel.c:130
+#: tools/gtk-image-tool-relabel.c:131
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8102,29 +8102,9 @@ msgstr ""
 "Není stav barvy: %s\n"
 "Možné hodnoty: %s\n"
 
-#: tools/gtk-image-tool-show.c:128
+#: tools/gtk-image-tool-show.c:129
 msgid "Show one or more images."
 msgstr "Zobrazit jeden nebo více obrázků."
-
-#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr "Chyba na %s: %s\n"
-
-#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:73
-#, c-format
-msgid "Failed to load node file: %s\n"
-msgstr "Nezdařilo se načíst soubor uzlů: %s\n"
-
-#: tools/gtk-image-tool-utils.c:89
-#, c-format
-msgid "%s is not a texture node\n"
-msgstr "%s není uzel textury\n"
-
-#: tools/gtk-image-tool-utils.c:315
-#, c-format
-msgid "cicp must be 4 numbers, separated by /\n"
-msgstr "cicp musí být 4 číslice oddělené znakem /\n"
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
@@ -8528,6 +8508,7 @@ msgid ""
 "  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
+"  match        Match pattern in the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
 "\n"
@@ -8543,73 +8524,74 @@ msgstr ""
 "  convert       Převést na uzly\n"
 "  extract       Extrahovat adresy dat\n"
 "  info          Poskytnout informace o uzlu\n"
+"  match         Porovnat vzor v uzlu\n"
 "  show          Zobrazit uzel\n"
 "  render        Pořídit snímek obrazovky uzlu\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Add renderer to benchmark"
 msgstr "Přidat do benchmarku vykreslování"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:307
+#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "RENDERER"
 msgstr "VYKRESLOVÁNÍ"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Number of runs with each renderer"
 msgstr "Počet běhů s každým vykreslováním"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "RUNS"
 msgstr "BĚHY"
 
-#: tools/gtk-rendernode-tool-benchmark.c:98
+#: tools/gtk-rendernode-tool-benchmark.c:99
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Nestahovat výsledek/počkat, až GPU skončí"
 
-#: tools/gtk-rendernode-tool-benchmark.c:116
+#: tools/gtk-rendernode-tool-benchmark.c:117
 msgid "Benchmark rendering of a .node file."
 msgstr "Benchmark vykreslování souboru .node"
 
-#: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:221 tools/gtk-rendernode-tool-info.c:148
-#: tools/gtk-rendernode-tool-render.c:338 tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-benchmark.c:130
+#: tools/gtk-rendernode-tool-extract.c:222 tools/gtk-rendernode-tool-info.c:141
+#: tools/gtk-rendernode-tool-render.c:339 tools/gtk-rendernode-tool-show.c:151
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Není určen žádný soubor .node\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:135
+#: tools/gtk-rendernode-tool-benchmark.c:136
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Je možné spustit benchmark pouze pro jeden soubor .node\n"
 
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:307
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "Renderer to use"
 msgstr "Jaké vykreslování použít"
 
-#: tools/gtk-rendernode-tool-compare.c:70
+#: tools/gtk-rendernode-tool-compare.c:71
 msgid "FILE1 FILE2"
 msgstr "SOUBOR1 SOUBOR2"
 
-#: tools/gtk-rendernode-tool-compare.c:82
+#: tools/gtk-rendernode-tool-compare.c:83
 msgid "Compare .node or .png files."
 msgstr "Porovnat soubory .node nebo .png."
 
-#: tools/gtk-rendernode-tool-compare.c:95
+#: tools/gtk-rendernode-tool-compare.c:96
 #, c-format
 msgid "Must specify two files\n"
 msgstr "Musí být určeny dva soubory\n"
 
-#: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:212
+#: tools/gtk-rendernode-tool-compare.c:103
+#: tools/gtk-rendernode-tool-render.c:213
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Nezdařilo se vytvořit vykreslování: %s\n"
 
-#: tools/gtk-rendernode-tool-compare.c:111
+#: tools/gtk-rendernode-tool-compare.c:112
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "Nezdařilo se načtení %s: %s\n"
@@ -8644,58 +8626,58 @@ msgstr "Není určen žádný soubor .svg\n"
 msgid "Can only accept a single .svg file\n"
 msgstr "Je možné přijmout pouze jeden soubor .svg\n"
 
-#: tools/gtk-rendernode-tool-extract.c:69
-#: tools/gtk-rendernode-tool-extract.c:147
+#: tools/gtk-rendernode-tool-extract.c:70
+#: tools/gtk-rendernode-tool-extract.c:148
 #, c-format
 msgid "Failed to write %s\n"
 msgstr "Nezdařil se zápis %s\n"
 
-#: tools/gtk-rendernode-tool-extract.c:197
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "Directory to use"
 msgstr "Jaký adresář použít"
 
-#: tools/gtk-rendernode-tool-extract.c:197
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "DIRECTORY"
 msgstr "ADRESÁŘ"
 
-#: tools/gtk-rendernode-tool-extract.c:198
+#: tools/gtk-rendernode-tool-extract.c:199
 msgid "Be verbose"
 msgstr "Podrobný výstup"
 
-#: tools/gtk-rendernode-tool-extract.c:208
+#: tools/gtk-rendernode-tool-extract.c:209
 msgid "Extract data urls from the render node."
 msgstr "Extrahovat adresy dat z uzlu vykreslení."
 
-#: tools/gtk-rendernode-tool-extract.c:227 tools/gtk-rendernode-tool-info.c:154
+#: tools/gtk-rendernode-tool-extract.c:228 tools/gtk-rendernode-tool-info.c:147
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Je možné přijmout pouze jeden soubor .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:93
+#: tools/gtk-rendernode-tool-info.c:79 tools/gtk-rendernode-tool-info.c:81
 msgid "Number of nodes:"
 msgstr "Počet uzlů:"
 
-#: tools/gtk-rendernode-tool-info.c:100
+#: tools/gtk-rendernode-tool-info.c:93
 msgid "Depth:"
 msgstr "Hloubka:"
 
-#: tools/gtk-rendernode-tool-info.c:103
+#: tools/gtk-rendernode-tool-info.c:96
 msgid "Bounds:"
 msgstr "Rozměry:"
 
-#: tools/gtk-rendernode-tool-info.c:104
+#: tools/gtk-rendernode-tool-info.c:97
 msgid "Origin:"
 msgstr "Původ:"
 
-#: tools/gtk-rendernode-tool-info.c:108 tools/gtk-rendernode-tool-info.c:114
+#: tools/gtk-rendernode-tool-info.c:101 tools/gtk-rendernode-tool-info.c:107
 msgid "Opaque part:"
 msgstr "Neprůhledná část:"
 
-#: tools/gtk-rendernode-tool-info.c:135
+#: tools/gtk-rendernode-tool-info.c:128
 msgid "Provide information about the render node."
 msgstr "Poskytnout informace o uzlu vykreslení."
 
-#: tools/gtk-rendernode-tool-render.c:172
+#: tools/gtk-rendernode-tool-render.c:173
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8704,51 +8686,71 @@ msgstr ""
 "Soubor %s již existuje.\n"
 "Pokud jej chcete přepsat, zadejte název souboru.\n"
 
-#: tools/gtk-rendernode-tool-render.c:186
-#: tools/gtk-rendernode-tool-render.c:198
+#: tools/gtk-rendernode-tool-render.c:187
+#: tools/gtk-rendernode-tool-render.c:199
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Nepodařilo se vygenerovat SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:308
+#: tools/gtk-rendernode-tool-render.c:309
 msgid "Keep node position unchanged"
 msgstr "Zachovat pozici uzlu beze změny"
 
-#: tools/gtk-rendernode-tool-render.c:309
+#: tools/gtk-rendernode-tool-render.c:310
 msgid "Area to render"
 msgstr "Oblast k vykreslení"
 
-#: tools/gtk-rendernode-tool-render.c:309
+#: tools/gtk-rendernode-tool-render.c:310
 msgid "X,Y,W,H"
 msgstr "X,Y,W,H"
 
-#: tools/gtk-rendernode-tool-render.c:325
+#: tools/gtk-rendernode-tool-render.c:326
 msgid "Render a .node file to an image."
 msgstr "Vykreslit soubor .node jako obrázek."
 
-#: tools/gtk-rendernode-tool-render.c:344
+#: tools/gtk-rendernode-tool-render.c:345
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Je možné vykreslit pouze jeden soubor .node do jednoho výstupního souboru\n"
 
-#: tools/gtk-rendernode-tool-render.c:352
+#: tools/gtk-rendernode-tool-render.c:353
 #, c-format
 msgid "Invalid rectangle given for bounds\n"
 msgstr "Neplatný obdélník zadán pro ohraničení\n"
 
-#: tools/gtk-rendernode-tool-show.c:120
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Put node into offload container"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-show.c:137
+#: tools/gtk-rendernode-tool-show.c:138
 msgid "Show the render node."
 msgstr "Zobrazit uzel vykreslení."
 
-#: tools/gtk-rendernode-tool-show.c:156
+#: tools/gtk-rendernode-tool-show.c:157
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Je možné zobrazit náhled pouze jednoho souboru .node\n"
+
+#: tools/gtk-tool-utils.c:48
+#, c-format
+msgid "Error at %s: %s\n"
+msgstr "Chyba na %s: %s\n"
+
+#: tools/gtk-tool-utils.c:66
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Nezdařilo se načíst soubor uzlů: %s\n"
+
+#: tools/gtk-tool-utils.c:87
+#, c-format
+msgid "%s is not a texture node\n"
+msgstr "%s není uzel textury\n"
+
+#: tools/gtk-tool-utils.c:313
+#, c-format
+msgid "cicp must be 4 numbers, separated by /\n"
+msgstr "cicp musí být 4 číslice oddělené znakem /\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
