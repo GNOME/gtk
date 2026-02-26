@@ -22860,6 +22860,9 @@ stroke_shape (Shape        *shape,
       gtk_snapshot_push_collect (context->snapshot);
       paint_server (paint, &bounds, &paint_bounds, context);
       child = gtk_snapshot_pop_collect (context->snapshot);
+
+      if (!child)
+        child = empty_node ();
       break;
     case PAINT_NONE:
     case PAINT_CURRENT_COLOR:
