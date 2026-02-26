@@ -15996,6 +15996,9 @@ create_attachment_connection (Animation *a,
                               Shape     *sh,
                               Timeline  *timeline)
 {
+  if (sh->animations == NULL)
+    return;
+
   for (unsigned int i = 0; i < sh->animations->len; i++)
     {
       Animation *sha = g_ptr_array_index (sh->animations, i);

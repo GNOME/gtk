@@ -6,6 +6,7 @@ test_renderer = executable('test-svg-renderer',
 )
 
 test_data = [
+  'attach-to-pattern.svg',
   'blend-mode.svg',
   'circle.svg',
   'circular.svg',
@@ -143,6 +144,7 @@ slow_tests = [
 
 # attachments rely on the animations for the initial placement
 test_requires_animation = [
+  'attach-to-pattern.svg',
   'gpa-attachment1.svg',
   'gpa-attachment2.svg',
   'gpa-attachment3.svg',
