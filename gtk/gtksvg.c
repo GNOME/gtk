@@ -15996,6 +15996,9 @@ create_attachment_connection (Animation *a,
                               Shape     *sh,
                               Timeline  *timeline)
 {
+  if (sh->animations == NULL)
+    return;
+
   for (unsigned int i = 0; i < sh->animations->len; i++)
     {
       Animation *sha = g_ptr_array_index (sh->animations, i);
@@ -18849,13 +18852,18 @@ resolve_refs_for_animation (Animation  *a,
 
   if (a->motion.path_ref)
     {
-      a->motion.path_shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
-      if (a->motion.path_shape == NULL)
+      Shape *shape = g_hash_table_lookup (data->shapes, a->motion.path_ref);
+      if (shape == NULL)
         gtk_svg_invalid_reference (data->svg,
                                    "No path with ID %s (resolving <mpath>",
                                    a->motion.path_ref);
+      else if ((BIT (shape->type) & SHAPE_SHAPES) == 0)
+        gtk_svg_invalid_reference (data->svg,
+                                   "Element with ID %s is not a shape (resolving <mpath>",
+                                   a->motion.path_ref);
       else
         {
+          a->motion.path_shape = shape;
           add_dependency_to_common_ancestor (a->shape, a->motion.path_shape);
           if (a->id && g_str_has_prefix (a->id, "gpa:attachment:"))
             {
@@ -20582,6 +20590,16 @@ determine_filter_subregion (FilterPrimitive       *f,
                             GHashTable            *results,
                             graphene_rect_t       *subregion)
 {
+  if (f->type == FE_MERGE_NODE ||
+      f->type == FE_FUNC_R ||
+      f->type == FE_FUNC_G ||
+      f->type == FE_FUNC_B ||
+      f->type == FE_FUNC_A)
+    {
+      g_error ("Can't get subregion for %s\n", filter_types[f->type].name);
+      return FALSE;
+    }
+
   if (f->attrs & (BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)) |
                   BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)) |
                   BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)) |
@@ -20774,6 +20792,36 @@ apply_filter_tree (Shape         *shape,
         {
           graphene_rect_init (&subregion, 0, 0, 0, 0);
           result = gsk_container_node_new (NULL, 0);
+
+          /* Skip dependent filters */
+          if (f->type == FE_MERGE)
+            {
+              for (i++; i < filter->filters->len; i++)
+                {
+                  FilterPrimitive *ff = g_ptr_array_index (filter->filters, i);
+                  if (ff->type != FE_MERGE_NODE)
+                    {
+                      i--;
+                      break;
+                    }
+                }
+            }
+          else if (f->type == FE_COMPONENT_TRANSFER)
+            {
+              for (i++; i < filter->filters->len; i++)
+                {
+                  FilterPrimitive *ff = g_ptr_array_index (filter->filters, i);
+                  if (ff->type != FE_FUNC_R &&
+                      ff->type != FE_FUNC_G &&
+                      ff->type != FE_FUNC_B &&
+                      ff->type != FE_FUNC_A)
+                    {
+                      i--;
+                      break;
+                    }
+                }
+            }
+
           goto got_result;
         }
 
@@ -22852,6 +22900,9 @@ stroke_shape (Shape        *shape,
       gtk_snapshot_push_collect (context->snapshot);
       paint_server (paint, &bounds, &paint_bounds, context);
       child = gtk_snapshot_pop_collect (context->snapshot);
+
+      if (!child)
+        child = empty_node ();
       break;
     case PAINT_NONE:
     case PAINT_CURRENT_COLOR:
@@ -26071,6 +26122,9 @@ gtk_svg_write_to_file (GtkSvg      *self,
  *
  * Sets the weight that is used when rendering.
  *
+ * The weight affects the effective linewidth when stroking
+ * paths.
+ *
  * The default value of -1 means to use the font weight
  * from CSS.
  *
@@ -26114,7 +26168,7 @@ gtk_svg_get_weight (GtkSvg *self)
  * gtk_svg_set_state:
  * @self: an SVG paintable
  * @state: the state to set, as a value between 0 and 63,
- *   or `(unsigned int) -1`
+ *   or `GTK_SVG_STATE_EMPTY`
  *
  * Sets the state of the paintable.
  *

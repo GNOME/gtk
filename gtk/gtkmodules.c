@@ -32,8 +32,6 @@ gtk_trim_string (const char *str)
 {
   int len;
 
-  g_return_val_if_fail (str != NULL, NULL);
-
   while (*str && g_ascii_isspace (*str))
     str++;
 

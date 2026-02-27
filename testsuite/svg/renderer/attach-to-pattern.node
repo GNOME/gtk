@@ -1,0 +1,10 @@
+clip {
+  clip: 0 0 100 100;
+  child: rounded-clip {
+    clip: -5 0 10 10 / 5;
+    child: color {
+      bounds: -5 0 10 10;
+      color: rgb(255,0,0);
+    }
+  }
+}
