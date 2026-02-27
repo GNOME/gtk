@@ -406,7 +406,9 @@ color_make_white (GdkRGBA       *result,
 /* Generate colors so that premultiplying will result in values in steps of 1/15th.
  * Also make sure that an averaged gray value fits in that range. */
 static void
-create_random_color (GdkRGBA *color)
+create_random_color (GdkRGBA  *color,
+                     gboolean  safe_for_10_bit,
+                     gboolean  safe_for_grayscale)
 {
   int r, g, b;
   do
@@ -415,11 +417,25 @@ create_random_color (GdkRGBA *color)
       g = g_test_rand_int_range (0, 4);
       b = g_test_rand_int_range (0, 4);
     }
-  while ((r + g + b) % 3 != 0);
+  while (safe_for_grayscale && (r + g + b) % 3 != 0);
+
   color->red = r / 3.f;
   color->green = g / 3.f;
   color->blue = b / 3.f;
-  color->alpha = g_test_rand_int_range (0, 6) / 5.f;
+
+  if (safe_for_10_bit)
+    {
+      if ((r != 0 && r != 3) || (g != 0 && g != 3) || (b != 0 && b != 3))
+        color->alpha = 1.0;
+      else if (safe_for_grayscale && (r != g || r != b))
+        color->alpha = 1.0;
+      else
+        color->alpha = g_test_rand_int_range (0, 4) / 3.f;
+    }
+  else
+    {
+      color->alpha = g_test_rand_int_range (0, 6) / 5.f;
+    }
 }
 
 static gboolean
@@ -497,7 +513,9 @@ test_download (gconstpointer data,
     {
       GdkRGBA color;
 
-      create_random_color (&color);
+      create_random_color (&color,
+                           gdk_memory_format_get_channel_type (format) == CHANNEL_UINT_10,
+                           gdk_memory_format_n_colors (format) == 1);
 
       /* these methods may premultiply during operation */
       if (color.alpha == 0.f &&
@@ -551,8 +569,11 @@ test_conversion (gconstpointer data,
   GdkRGBA color1, color2;
   gboolean accurate;
   gsize i, block_width, block_height;
+  gboolean safe_for_10_bit;
 
   decode_two_formats (data, &format1, &format2);
+  safe_for_10_bit = gdk_memory_format_get_channel_type (format1) == CHANNEL_UINT_10 ||
+                    gdk_memory_format_get_channel_type (format2) == CHANNEL_UINT_10;
 
   block_width = MAX (gdk_memory_format_get_block_width (format1),
                      gdk_memory_format_get_block_width (format2));
@@ -560,7 +581,7 @@ test_conversion (gconstpointer data,
                      gdk_memory_format_get_block_height (format2));
 
   if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16 ||
-      format1 == GDK_MEMORY_G10X6_B10X6R10X6_420 ||
+      safe_for_10_bit ||
       gdk_memory_format_get_default_shader_op (format1) == GDK_SHADER_3_PLANES_10BIT_LSB)
     accurate = FALSE;
   else
@@ -574,7 +595,7 @@ test_conversion (gconstpointer data,
        */
       do
         {
-          create_random_color (&color1);
+          create_random_color (&color1, safe_for_10_bit, gdk_memory_format_n_colors (format1) == 1);
         }
       while (color1.alpha == 0 &&
              (gdk_memory_format_alpha (format1) == GDK_MEMORY_ALPHA_PREMULTIPLIED) !=

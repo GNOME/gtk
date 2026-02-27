@@ -6,6 +6,7 @@
 
 typedef enum {
   CHANNEL_UINT_8,
+  CHANNEL_UINT_10, /* note: only 2 bit alpha here */
   CHANNEL_UINT_16,
   CHANNEL_FLOAT_16,
   CHANNEL_FLOAT_32,
