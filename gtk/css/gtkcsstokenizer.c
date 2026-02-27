@@ -53,8 +53,8 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      if (token->string.len >= G_N_ELEMENTS (token->string.u.buf))
-        g_free (token->string.u.string);
+      if (token->string.string != token->string.buf)
+        g_free (token->string.string);
       break;
 
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
@@ -507,11 +507,15 @@ gtk_css_token_init_string (GtkCssToken     *token,
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      token->string.len = string->len;
-      if (string->len < G_N_ELEMENTS (token->string.u.buf))
-        g_strlcpy (token->string.u.buf, string->str, G_N_ELEMENTS (token->string.u.buf));
+      if (string->len < G_N_ELEMENTS (token->string.buf))
+        {
+          g_strlcpy (token->string.buf, string->str, G_N_ELEMENTS (token->string.buf));
+          token->string.string = token->string.buf;
+        }
       else
-        token->string.u.string = g_strdup (string->str);
+        {
+          token->string.string = g_strdup (string->str);
+        }
       break;
     default:
       g_assert_not_reached ();
