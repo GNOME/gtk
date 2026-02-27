@@ -125,6 +125,20 @@ create_random_color (GdkRGBA *color)
 }
 
 static void
+create_random_10bit_color (GdkRGBA *color)
+{
+  int r, g, b;
+
+  r = g_test_rand_int_range (0, 4);
+  g = g_test_rand_int_range (0, 4);
+  b = g_test_rand_int_range (0, 4);
+  color->red = r / 3.f;
+  color->green = g / 3.f;
+  color->blue = b / 3.f;
+  color->alpha = 1.0;
+}
+
+static void
 create_random_color_for_format (GdkRGBA *color,
                                 GdkMemoryFormat format)
 {
@@ -134,7 +148,10 @@ create_random_color_for_format (GdkRGBA *color,
    */
   do
     {
-      create_random_color (color);
+      if (gdk_memory_format_get_channel_type (format) == CHANNEL_UINT_10)
+        create_random_10bit_color (color);
+      else
+        create_random_color (color);
     }
   while (color->alpha == 0 &&
          gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
@@ -193,8 +210,25 @@ create_stipple_texture (GdkMemoryFormat  format,
   /* large enough */
   float data[4 * 4 * 4];
   GdkMemoryLayout layout;
+  float adjust_color, adjust_alpha;
 
   *average = (GdkRGBA) { 0, 0, 0, 0 };
+
+  if (gdk_memory_format_get_channel_type (format) == CHANNEL_UINT_10)
+    {
+      adjust_color = scale * 16.f / 31.f;
+      adjust_alpha = 1.f;
+    }
+  else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
+    {
+      adjust_color = scale * 16.f / 17.f;
+      adjust_alpha = 1.f;
+    }
+  else
+    {
+      adjust_color = 1.f;
+      adjust_alpha = scale * 16.f / 17.f;
+    }
 
   for (y = 0; y < 2; y++)
     {
@@ -202,12 +236,12 @@ create_stipple_texture (GdkMemoryFormat  format,
         {
           create_random_color_for_format (&colors[x][y], format);
           if (gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_OPAQUE)
-            colors[x][y].alpha *= scale * 16.f/17.f;
+            colors[x][y].alpha *= adjust_alpha;
           else
             {
-              colors[x][y].red *= scale * 16.f/17.f;
-              colors[x][y].green *= scale * 16.f/17.f;
-              colors[x][y].blue *= scale *16.f/17.f;
+              colors[x][y].red *= adjust_color;
+              colors[x][y].green *= adjust_color;
+              colors[x][y].blue *= adjust_color;
             }
 
           average->red += colors[x][y].red * colors[x][y].alpha;

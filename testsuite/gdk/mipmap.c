@@ -56,6 +56,25 @@ create_random_color (GdkMemoryFormat  format,
         color->alpha = g_test_rand_int_range (0, 6) / 5.0;
       break;
 
+    case CHANNEL_UINT_10:
+      color->red = g_test_rand_int_range (0, 4) / 3.0;
+      if (gdk_memory_format_n_colors (format) > 1)
+        {
+          color->green = g_test_rand_int_range (0, 4) / 3.0;
+          color->blue = g_test_rand_int_range (0, 4) / 3.0;
+        }
+      else
+        {
+          color->green = color->blue = color->red;
+        }
+      if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
+        color->alpha = 1.0;
+      else if (color->red != (int) color->red || color->green != (int) color->green || color->blue != (int) color->blue)
+        color->alpha = 1.0;
+      else
+        color->alpha = g_test_rand_int_range (0, 4) / 3.0;
+      break;
+
     case CHANNEL_FLOAT_16:
     case CHANNEL_FLOAT_32:
       color->red = g_test_rand_int_range (0, 5) / 4.0;
