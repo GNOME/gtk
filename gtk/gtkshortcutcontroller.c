@@ -507,6 +507,21 @@ update_accel (GtkShortcut    *shortcut,
   g_free (accel);
 }
 
+static void
+shortcut_trigger_changed_cb (GtkShortcutController *self,
+                             GParamSpec            *pspec,
+                             GtkShortcut           *shortcut)
+{
+  GtkWidget *widget;
+
+  if ((widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))))
+    {
+      GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+
+      update_accel (shortcut, muxer, TRUE);
+    }
+}
+
 void
 gtk_shortcut_controller_update_accels (GtkShortcutController *self)
 {
@@ -805,6 +820,10 @@ gtk_shortcut_controller_add_shortcut (GtkShortcutController *self,
 
       update_accel (shortcut, muxer, TRUE);
     }
+
+  g_signal_connect_object (shortcut, "notify::trigger",
+                           G_CALLBACK (shortcut_trigger_changed_cb), self,
+                           G_CONNECT_SWAPPED);
 
   g_list_store_append (G_LIST_STORE (self->shortcuts), shortcut);
   g_object_unref (shortcut);
