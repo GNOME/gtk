@@ -7,6 +7,7 @@ test_renderer = executable('test-svg-renderer',
 
 test_data = [
   'attach-to-pattern.svg',
+  'bad-filter.svg',
   'bad-gradient.svg',
   'blend-mode.svg',
   'circle.svg',

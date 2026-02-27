@@ -20590,6 +20590,16 @@ determine_filter_subregion (FilterPrimitive       *f,
                             GHashTable            *results,
                             graphene_rect_t       *subregion)
 {
+  if (f->type == FE_MERGE_NODE ||
+      f->type == FE_FUNC_R ||
+      f->type == FE_FUNC_G ||
+      f->type == FE_FUNC_B ||
+      f->type == FE_FUNC_A)
+    {
+      g_error ("Can't get subregion for %s\n", filter_types[f->type].name);
+      return FALSE;
+    }
+
   if (f->attrs & (BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_X)) |
                   BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_Y)) |
                   BIT (filter_attr_idx (f->type, SHAPE_ATTR_FE_WIDTH)) |
@@ -20782,6 +20792,36 @@ apply_filter_tree (Shape         *shape,
         {
           graphene_rect_init (&subregion, 0, 0, 0, 0);
           result = gsk_container_node_new (NULL, 0);
+
+          /* Skip dependent filters */
+          if (f->type == FE_MERGE)
+            {
+              for (i++; i < filter->filters->len; i++)
+                {
+                  FilterPrimitive *ff = g_ptr_array_index (filter->filters, i);
+                  if (ff->type != FE_MERGE_NODE)
+                    {
+                      i--;
+                      break;
+                    }
+                }
+            }
+          else if (f->type == FE_COMPONENT_TRANSFER)
+            {
+              for (i++; i < filter->filters->len; i++)
+                {
+                  FilterPrimitive *ff = g_ptr_array_index (filter->filters, i);
+                  if (ff->type != FE_FUNC_R &&
+                      ff->type != FE_FUNC_G &&
+                      ff->type != FE_FUNC_B &&
+                      ff->type != FE_FUNC_A)
+                    {
+                      i--;
+                      break;
+                    }
+                }
+            }
+
           goto got_result;
         }
 
