@@ -85,11 +85,14 @@ internal_tests = [
   { 'name': 'memoryformat' },
 ]
 
+internal_test_executables = []
+
 if os_linux
   internal_tests += { 'name': 'dmabufformats' }
   internal_tests += { 'name': 'dmabuftexture', 'suites': 'failing' }
-endif
 
+  internal_test_executables += { 'name': 'waylandsocket' }
+endif
 
 foreach t : internal_tests
   test_name = t.get('name')
@@ -112,4 +115,16 @@ foreach t : internal_tests
     ],
     suite: suites,
   )
+endforeach
+
+test_executables = {}
+foreach t : internal_test_executables
+  test_name = t.get('name')
+  test_executable = executable(test_name,
+    sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
+    c_args: common_cflags + ['-DGTK_COMPILATION'],
+    dependencies: libgtk_static_dep,
+    install: false,
+  )
+  test_executables += {test_name: test_executable}
 endforeach
