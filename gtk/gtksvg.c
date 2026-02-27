@@ -26122,6 +26122,9 @@ gtk_svg_write_to_file (GtkSvg      *self,
  *
  * Sets the weight that is used when rendering.
  *
+ * The weight affects the effective linewidth when stroking
+ * paths.
+ *
  * The default value of -1 means to use the font weight
  * from CSS.
  *
@@ -26165,7 +26168,7 @@ gtk_svg_get_weight (GtkSvg *self)
  * gtk_svg_set_state:
  * @self: an SVG paintable
  * @state: the state to set, as a value between 0 and 63,
- *   or `(unsigned int) -1`
+ *   or `GTK_SVG_STATE_EMPTY`
  *
  * Sets the state of the paintable.
  *
