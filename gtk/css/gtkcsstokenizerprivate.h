@@ -80,7 +80,7 @@ typedef struct _GtkCssDimensionToken GtkCssDimensionToken;
 
 struct _GtkCssStringToken {
   GtkCssTokenType  type;
-  int len;
+  gsize len;
   union {
     char             buf[16];
     char            *string;
