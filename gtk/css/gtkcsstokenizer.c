@@ -53,7 +53,7 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      if (token->string.len >= 16)
+      if (token->string.len >= G_N_ELEMENTS (token->string.u.buf))
         g_free (token->string.u.string);
       break;
 
@@ -508,8 +508,8 @@ gtk_css_token_init_string (GtkCssToken     *token,
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
       token->string.len = string->len;
-      if (string->len < 16)
-        g_strlcpy (token->string.u.buf, string->str, 16);
+      if (string->len < G_N_ELEMENTS (token->string.u.buf))
+        g_strlcpy (token->string.u.buf, string->str, G_N_ELEMENTS (token->string.u.buf));
       else
         token->string.u.string = g_strdup (string->str);
       break;
