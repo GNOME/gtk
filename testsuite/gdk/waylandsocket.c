@@ -109,6 +109,7 @@ main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
   g_setenv ("GTK_MODULES", "", TRUE);
+  g_setenv ("GTK_MEDIA", "help", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
 
