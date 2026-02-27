@@ -447,39 +447,6 @@ gdk_texture_init (GdkTexture *self)
   self->color_state = gdk_color_state_get_srgb ();
 }
 
-static GdkMemoryFormat
-cairo_format_to_memory_format (cairo_format_t format)
-{
-  switch (format)
-  {
-    case CAIRO_FORMAT_ARGB32:
-      return GDK_MEMORY_DEFAULT;
-
-    case CAIRO_FORMAT_RGB24:
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-      return GDK_MEMORY_B8G8R8X8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-      return GDK_MEMORY_X8R8G8B8;
-#else
-#error "Unknown byte order for Cairo format"
-#endif
-    case CAIRO_FORMAT_A8:
-      return GDK_MEMORY_A8;
-    case CAIRO_FORMAT_RGB96F:
-      return GDK_MEMORY_R32G32B32_FLOAT;
-    case CAIRO_FORMAT_RGBA128F:
-      return GDK_MEMORY_R32G32B32A32_FLOAT;
-
-    case CAIRO_FORMAT_RGB16_565:
-    case CAIRO_FORMAT_RGB30:
-    case CAIRO_FORMAT_INVALID:
-    case CAIRO_FORMAT_A1:
-    default:
-      g_assert_not_reached ();
-      return GDK_MEMORY_DEFAULT;
-  }
-}
-
 /*<private>
  * gdk_texture_new_for_surface:
  * @surface: a cairo image surface
@@ -510,7 +477,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
 
   texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
                                     cairo_image_surface_get_height (surface),
-                                    cairo_format_to_memory_format (cairo_image_surface_get_format (surface)),
+                                    gdk_cairo_format_to_memory_format (cairo_image_surface_get_format (surface)),
                                     bytes,
                                     cairo_image_surface_get_stride (surface));
 
