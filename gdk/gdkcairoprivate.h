@@ -80,8 +80,10 @@ gdk_cairo_format_to_memory_format (cairo_format_t format)
     case CAIRO_FORMAT_RGBA128F:
       return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
 
-    case CAIRO_FORMAT_RGB16_565:
     case CAIRO_FORMAT_RGB30:
+      return GDK_MEMORY_X2R10G10B10_LE;
+
+    case CAIRO_FORMAT_RGB16_565:
     case CAIRO_FORMAT_INVALID:
     case CAIRO_FORMAT_A1:
     default:
