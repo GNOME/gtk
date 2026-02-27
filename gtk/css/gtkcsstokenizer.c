@@ -1248,6 +1248,24 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
 
   while (tokenizer->data < tokenizer->end)
     {
+      gsize n_characters = 0;
+      const char *data;
+
+      for (data = tokenizer->data;
+           data < tokenizer->end &&
+           *data != end &&
+           *data != '\\' &&
+           !is_newline (*data);
+           data = g_utf8_next_char (data))
+        {
+          n_characters++;
+        }
+      if (data > tokenizer->data)
+        {
+          g_string_append_len (tokenizer->name_buffer, tokenizer->data, data - tokenizer->data);
+          gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, n_characters);
+        }
+
       if (*tokenizer->data == end)
         {
           gtk_css_tokenizer_consume_ascii (tokenizer);
