@@ -52,6 +52,7 @@
 #include "gdksettings-wayland.h"
 #include "gdkapplaunchcontext-wayland.h"
 #include "gdkeventsource.h"
+#include "gdkwaylandprivate.h"
 
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-v2-client-protocol.h"
@@ -775,10 +776,18 @@ static const struct wl_registry_listener registry_listener = {
 /* }}} */
 /* {{{ GObject implementation */
 
+static int wayland_socket_fd = -1;
+
+void
+gdk_wayland_set_wayland_socket (int fd)
+{
+  wayland_socket_fd = fd;
+}
+
 GdkDisplay *
 _gdk_wayland_display_open (const char *display_name)
 {
-  struct wl_display *wl_display;
+  struct wl_display *wl_display = NULL;
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
 
@@ -786,7 +795,12 @@ _gdk_wayland_display_open (const char *display_name)
 
   wl_log_set_handler_client (log_handler);
 
-  wl_display = wl_display_connect (display_name);
+  if (wayland_socket_fd >= 0)
+    wl_display = wl_display_connect_to_fd (g_steal_fd (&wayland_socket_fd));
+
+  if (!wl_display)
+    wl_display = wl_display_connect (display_name);
+
   if (!wl_display)
     return NULL;
 

@@ -73,6 +73,10 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include "gdk/wayland/gdkwaylandprivate.h"
+#endif
+
 #define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
 #define GDK_ARRAY_TYPE_NAME GtkWidgetStack
 #define GDK_ARRAY_NAME gtk_widget_stack
@@ -507,6 +511,32 @@ _gtk_module_has_mixed_deps (GModule *module_to_check)
   return result;
 }
 
+#ifdef GDK_WINDOWING_WAYLAND
+static void
+prepare_wayland_socket (void)
+{
+  char *wayland_socket;
+
+  wayland_socket = getenv ("WAYLAND_SOCKET");
+  if (wayland_socket && *wayland_socket)
+    {
+      char *end;
+      int wayland_socket_fd;
+
+      errno = 0;
+      wayland_socket_fd = strtol (wayland_socket, &end, 10);
+      if (errno != 0 || wayland_socket == end || *end != '\0')
+        {
+          g_warning ("Invalid WAYLAND_SOCKET");
+          return;
+        }
+
+      unsetenv ("WAYLAND_SOCKET");
+      gdk_wayland_set_wayland_socket (wayland_socket_fd);
+    }
+}
+#endif
+
 static void
 do_pre_parse_initialization (void)
 {
@@ -520,6 +550,10 @@ do_pre_parse_initialization (void)
 
   if (_gtk_module_has_mixed_deps (NULL))
     g_error ("GTK 2/3 symbols detected. Using GTK 2/3 and GTK 4 in the same process is not supported");
+
+#ifdef GDK_WINDOWING_WAYLAND
+  prepare_wayland_socket ();
+#endif
 
   gdk_pre_parse ();
 
