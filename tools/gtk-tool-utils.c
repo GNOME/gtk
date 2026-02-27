@@ -33,7 +33,18 @@ deserialize_error_func (const GskParseLocation *start,
                         const GError           *error,
                         gpointer                user_data)
 {
-  GString *string = g_string_new ("<data>");
+  GFile *file = user_data;
+  GString *string;
+  char *filename;
+
+  string = g_string_new (NULL);
+
+  filename = g_file_get_basename (file);
+  if (g_utf8_validate (filename, -1, NULL))
+    g_string_append (string, filename);
+  else
+    /* translators: invalid UTF8 in filename */
+    g_string_append (string, _("<invalid>"));
 
   g_string_append_printf (string, ":%zu:%zu",
                           start->lines + 1, start->line_chars + 1);
@@ -59,19 +70,24 @@ load_node_file (const char *filename)
   GFile *file;
   GBytes *bytes;
   GError *error = NULL;
+  GskRenderNode *result;
 
   file = g_file_new_for_commandline_arg (filename);
   bytes = g_file_load_bytes (file, NULL, NULL, &error);
-  g_object_unref (file);
 
   if (bytes == NULL)
     {
       g_printerr (_("Failed to load node file: %s\n"), error->message);
       g_clear_error (&error);
+      g_object_unref (file);
       exit (1);
     }
 
-  return gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+  result = gsk_render_node_deserialize (bytes, deserialize_error_func, file);
+
+  g_object_unref (file);
+
+  return result;
 }
 
 GdkTexture *
