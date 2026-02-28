@@ -118,9 +118,7 @@ update_states (StateEditor *self)
   self->updating = TRUE;
 
   for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-    {
-      path_paintable_set_path_states (self->paintable, i, states[i]);
-    }
+    path_paintable_set_path_states (self->paintable, i, states[i]);
 
   self->updating = FALSE;
 
@@ -130,6 +128,9 @@ update_states (StateEditor *self)
 static void
 drop_state (StateEditor *self)
 {
+  if (self->max_state == 0)
+    return;
+
   self->max_state--;
   self->max_state = CLAMP (self->max_state, 0, 63);
 
@@ -139,6 +140,9 @@ drop_state (StateEditor *self)
 static void
 add_state (StateEditor *self)
 {
+  if (self->max_state == 63)
+    return;
+
   self->max_state++;
   self->max_state = CLAMP (self->max_state, 0, 63);
 
@@ -223,7 +227,7 @@ repopulate (StateEditor *self)
 static void
 paths_changed (StateEditor *self)
 {
-  self->max_state = MAX (self->max_state, path_paintable_get_n_states (self->paintable) - 1);
+  self->max_state = MAX (self->max_state, path_paintable_get_max_state (self->paintable));
   self->max_state = CLAMP (self->max_state, 0, 63);
 
   repopulate (self);

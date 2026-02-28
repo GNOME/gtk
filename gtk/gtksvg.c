@@ -74,7 +74,6 @@
  * [method@Gtk.Svg.play] after loading the SVG. The animation can
  * be paused using [method@Gtk.Svg.pause].
  *
- * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
  *
  *
@@ -26163,9 +26162,6 @@ gtk_svg_get_weight (GtkSvg *self)
  *
  * Sets the state of the paintable.
  *
- * Use [method@Gtk.Svg.get_n_states] to find out
- * what states @self has.
- *
  * If the paintable is currently playing, the state change
  * will apply transitions that are defined in the SVG. If
  * the paintable is not playing, the state change will take
@@ -26245,24 +26241,6 @@ gtk_svg_get_state (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), -1);
 
   return self->state;
-}
-
-/**
- * gtk_svg_get_n_states:
- * @self: an SVG paintable
- *
- * Gets the number of states defined in the SVG.
- *
- * Returns: the number of states
- *
- * Since: 4.22
- */
-unsigned int
-gtk_svg_get_n_states (GtkSvg *self)
-{
-  g_return_val_if_fail (GTK_IS_SVG (self), 0);
-
-  return self->max_state + 1;
 }
 
 /**

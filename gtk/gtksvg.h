@@ -75,9 +75,6 @@ GDK_AVAILABLE_IN_4_22
 unsigned int     gtk_svg_get_state         (GtkSvg        *self);
 
 GDK_AVAILABLE_IN_4_22
-unsigned int     gtk_svg_get_n_states      (GtkSvg        *self);
-
-GDK_AVAILABLE_IN_4_22
 void             gtk_svg_set_frame_clock   (GtkSvg        *self,
                                             GdkFrameClock *clock);
 
