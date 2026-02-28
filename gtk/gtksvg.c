@@ -1258,9 +1258,12 @@ compute_viewport_transform (gboolean               none,
 static GdkTexture *
 load_texture (const char  *string,
               gboolean     allow_external,
+              gboolean    *cache_this,
               GError     **error)
 {
   GdkTexture *texture = NULL;
+
+  *cache_this = TRUE;
 
   if (g_str_has_prefix (string, "data:"))
     {
@@ -1271,6 +1274,7 @@ load_texture (const char  *string,
       if (bytes == NULL)
         return NULL;
 
+      *cache_this = FALSE;
       texture = gdk_texture_new_from_bytes (bytes, error);
 
       g_bytes_unref (bytes);
@@ -1297,10 +1301,13 @@ get_texture (GtkSvg      *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
+      gboolean cache_this;
+
       texture = load_texture (string,
                               (svg->features & GTK_SVG_EXTERNAL_RESOURCES) != 0,
+                              &cache_this,
                               error);
-      if (texture)
+      if (texture && cache_this)
         g_hash_table_insert (svg->images, g_strdup (string), texture);
     }
 
