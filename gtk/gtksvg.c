@@ -167,6 +167,20 @@
  *
  * will start a fade-out of path1 300ms before state 0 ends.
  *
+ * A variant of the `gpa:states(...)` condition allows specifying
+ * both before and after states:
+ *
+ *     <animate href='path1'
+ *              attributeName='opacity'
+ *              begin='gpa:states(0, 1 2)'
+ *              dur='300ms'
+ *              fill='freeze'
+ *              from='1'
+ *              to='0'/>
+ *
+ * will start the animation when the state changes from 0 to 1 or
+ * from 0 to 2, but not when it changes from 0 to 3.
+ *
  * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
  * colors can also be specified as a custom paint server reference,
  * like this: `url(gpa:#warning)`. This works in `fill` and `stroke`
@@ -12565,8 +12579,8 @@ typedef struct {
       TimeSpecSide side;
     } sync;
     struct {
-      uint64_t states;
-      TimeSpecSide side;
+      uint64_t from;
+      uint64_t to;
     } states;
   };
   int64_t time;
@@ -12611,8 +12625,8 @@ time_spec_copy (const TimeSpec *orig)
       t->sync.side = orig->sync.side;
       break;
     case TIME_SPEC_TYPE_STATES:
-      t->states.states = orig->states.states;
-      t->states.side = orig->states.side;
+      t->states.from = orig->states.from;
+      t->states.to = orig->states.to;
       break;
     default:
       g_assert_not_reached ();
@@ -12646,8 +12660,8 @@ time_spec_equal (const void *p1,
              t1->offset == t2->offset;
 
     case TIME_SPEC_TYPE_STATES:
-      return t1->states.states == t2->states.states &&
-             t1->states.side == t2->states.side &&
+      return t1->states.from == t2->states.from &&
+             t1->states.to == t2->states.to &&
              t1->offset == t2->offset;
 
     default:
@@ -12705,8 +12719,16 @@ time_spec_parse (TimeSpec   *spec,
           g_free (str);
 
           spec->type = TIME_SPEC_TYPE_STATES;
-          spec->states.side = side;
-          spec->states.states = states;
+          if (side == TIME_SPEC_SIDE_BEGIN)
+            {
+              spec->states.from = ALL_STATES & ~states;
+              spec->states.to = states;
+            }
+          else
+            {
+              spec->states.from = states;
+              spec->states.to = ALL_STATES & ~states;
+            }
         }
       else
         {
@@ -12715,6 +12737,42 @@ time_spec_parse (TimeSpec   *spec,
           spec->sync.base = NULL;
           spec->sync.side = side;
         }
+    }
+  else if (g_str_has_prefix (value, "gpa:states("))
+    {
+      const char *v, *end;
+      char *str;
+      uint64_t from, to;
+
+      v = value + strlen ("gpa:states(");
+      end = strchr (v, ',');
+      if (!end)
+        return FALSE;
+
+      str = g_strndup (v, end - v);
+      if (!parse_states (str, &from))
+        {
+          g_free (str);
+          return FALSE;
+        }
+      g_free (str);
+
+      v = end + 1;
+      end = strchr (v, ')');
+      if (!end)
+        return FALSE;
+
+      str = g_strndup (v, end - v);
+      if (!parse_states (str, &to))
+        {
+          g_free (str);
+          return FALSE;
+        }
+      g_free (str);
+
+      spec->type = TIME_SPEC_TYPE_STATES;
+      spec->states.from = from;
+      spec->states.to = to;
     }
   else if (strlen (value) > 0)
     {
@@ -12749,9 +12807,10 @@ time_spec_print (TimeSpec *spec,
     case TIME_SPEC_TYPE_STATES:
       {
         g_string_append (s, "gpa:states(");
-        print_states (s, spec->states.states);
+        print_states (s, spec->states.from);
+        g_string_append (s, ", ");
+        print_states (s, spec->states.to);
         g_string_append (s, ")");
-        g_string_append_printf (s, "%s", sides[spec->states.side]);
         only_nonzero = TRUE;
       }
       break;
@@ -12841,31 +12900,15 @@ time_spec_update_for_state (TimeSpec     *spec,
 {
   if (spec->type == TIME_SPEC_TYPE_STATES && previous_state != state)
     {
-      gboolean was_in, is_in;
       int64_t time;
 
       time = spec->time;
 
-      was_in = state_match (spec->states.states, previous_state);
-      is_in = state_match (spec->states.states, state);
-
-      if (was_in != is_in)
-        {
-          if (spec->states.side == TIME_SPEC_SIDE_BEGIN)
-            {
-              if (!was_in && is_in)
-                time = state_start_time + spec->offset;
-              else if (was_in && !is_in)
-                time = INDEFINITE;
-            }
-          else if (spec->states.side == TIME_SPEC_SIDE_END)
-            {
-              if (!was_in && is_in)
-                time = INDEFINITE;
-              else if (was_in && !is_in)
-                time = state_start_time + spec->offset;
-            }
-        }
+      if (state_match (spec->states.from & ~spec->states.to, previous_state) &&
+          state_match (spec->states.to & ~spec->states.from, state))
+        time = state_start_time + spec->offset;
+      else
+        time = INDEFINITE;
 
       time_spec_set_time (spec, time);
     }
@@ -12874,8 +12917,7 @@ time_spec_update_for_state (TimeSpec     *spec,
 static int64_t
 time_spec_get_state_change_delay (TimeSpec *spec)
 {
-  if (spec->type == TIME_SPEC_TYPE_STATES &&
-      spec->states.side == TIME_SPEC_SIDE_END)
+  if (spec->type == TIME_SPEC_TYPE_STATES)
     return ABS (spec->offset);
 
   return 0;
@@ -12957,13 +12999,13 @@ timeline_get_sync (Timeline     *timeline,
 }
 
 static TimeSpec *
-timeline_get_states (Timeline     *timeline,
-                     uint64_t      states,
-                     TimeSpecSide  side,
-                     int64_t       offset)
+timeline_get_states (Timeline *timeline,
+                     uint64_t  from,
+                     uint64_t  to,
+                     int64_t   offset)
 {
   TimeSpec spec = { .type = TIME_SPEC_TYPE_STATES,
-                    .states = { .states = states, .side = side },
+                    .states = { .from = from, .to = to },
                     .offset = offset };
   return timeline_get_time_spec (timeline, &spec);
 }
@@ -15017,10 +15059,10 @@ create_visibility_setter (Shape        *shape,
   if (initial_visibility == VISIBILITY_VISIBLE)
     {
       a->id = g_strdup_printf ("gpa:out-of-state:%s", shape->id);
-      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, MAX (0, - delay)));
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, MAX (0, - delay)));
       time_spec_add_animation (begin, a);
 
-      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, - (MAX (0, - delay))));
+      end = animation_add_end (a, timeline_get_states (timeline, ALL_STATES & ~states, states, - (MAX (0, - delay))));
       time_spec_add_animation (end, a);
 
       opposite_visibility = VISIBILITY_HIDDEN;
@@ -15028,10 +15070,10 @@ create_visibility_setter (Shape        *shape,
   else
     {
       a->id = g_strdup_printf ("gpa:in-state:%s", shape->id);
-      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, MAX (0, - delay)));
+      begin = animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, MAX (0, - delay)));
       time_spec_add_animation (begin, a);
 
-      end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (MAX (0, - delay))));
+      end = animation_add_end (a, timeline_get_states (timeline, states, ALL_STATES & ~states, - (MAX (0, - delay))));
       time_spec_add_animation (end, a);
 
       opposite_visibility = VISIBILITY_VISIBLE;
@@ -15066,7 +15108,8 @@ create_states (Shape        *shape,
                int64_t       delay,
                unsigned int  initial)
 {
-  create_visibility_setter (shape, timeline, states, delay, initial);
+  if (states != ALL_STATES)
+    create_visibility_setter (shape, timeline, states, delay, initial);
 }
 
 /* }}} */
@@ -15131,7 +15174,7 @@ create_transition (Shape         *shape,
 
   a->id = g_strdup_printf ("gpa:transition:fade-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, delay));
+  begin = animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, delay));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -15165,7 +15208,7 @@ create_transition (Shape         *shape,
 
   a->id = g_strdup_printf ("gpa:transition:fade-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
 
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, - (duration + delay)));
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, - (duration + delay)));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -15197,7 +15240,7 @@ create_transition (Shape         *shape,
       a->repeat_count = 1;
 
       a->id = g_strdup_printf ("gpa:transition:delay-in:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
-      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+      begin = animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, 0));
       time_spec_add_animation (begin, a);
 
       a->has_begin = 1;
@@ -15223,7 +15266,7 @@ create_transition (Shape         *shape,
       a->repeat_count = 1;
 
       a->id = g_strdup_printf ("gpa:transition:delay-out:%u:%s:%s", idx, shape_attr_get_name (attr), shape->id);
-      begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
+      begin = animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, 0));
       time_spec_add_animation (begin, a);
 
       a->has_begin = 1;
@@ -15265,7 +15308,7 @@ create_transition_delay (Shape     *shape,
 
   a->id = g_strdup_printf ("gpa:transition:fade-in-delay:%s:%s", shape_attr_get_name (attr), shape->id);
 
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+  begin = animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, 0));
 
   a->attr = attr;
   a->n_frames = 2;
@@ -15291,7 +15334,7 @@ create_transition_delay (Shape     *shape,
 
   a->id = g_strdup_printf ("gpa:transition:fade-out-delay:%s:%s", shape_attr_get_name (attr), shape->id);
 
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, -delay));
+  begin = animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, -delay));
 
   a->attr = attr;
   a->n_frames = 2;
@@ -15567,7 +15610,7 @@ create_animation (Shape        *shape,
 
   a->id = g_strdup_printf ("gpa:animation:%s-%s", shape->id, shape_attr_get_name (attr));
 
-  begin = animation_add_begin (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_BEGIN, 0));
+  begin = animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, 0));
   time_spec_add_animation (begin, a);
 
   if (state_match (states, initial))
@@ -15576,7 +15619,7 @@ create_animation (Shape        *shape,
       time_spec_add_animation (begin, a);
     }
 
-  end = animation_add_end (a, timeline_get_states (timeline, states, TIME_SPEC_SIDE_END, 0));
+  end = animation_add_end (a, timeline_get_states (timeline, states, ALL_STATES & ~states, 0));
   time_spec_add_animation (end, a);
 
   a->attr = attr;
@@ -16139,11 +16182,6 @@ parse_base_animation_attrs (Animation            *a,
           begin = animation_add_begin (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (begin, a);
           time_spec_clear (&spec);
-          if (begin->type == TIME_SPEC_TYPE_STATES)
-            {
-              if (begin->states.states != NO_STATES)
-                data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (begin->states.states, -1));
-            }
         }
       g_strfreev (strv);
     }
@@ -16175,11 +16213,6 @@ parse_base_animation_attrs (Animation            *a,
           end = animation_add_end (a, timeline_get_time_spec (data->svg->timeline, &spec));
           time_spec_add_animation (end, a);
           time_spec_clear (&spec);
-          if (end->type == TIME_SPEC_TYPE_STATES)
-            {
-              if (end->states.states != NO_STATES)
-                data->svg->max_state = MAX (data->svg->max_state, g_bit_nth_msf (end->states.states, -1));
-            }
         }
       g_strfreev (strv);
     }
