@@ -1,0 +1,3705 @@
+texture {
+  bounds: 0 0 16 16;
+  texture: memory {
+    format: BGRA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8IjEAWjWz4wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 16 0 16 16;
+  texture: memory {
+    format: BGRA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKR+EoHKEQAOWG17QABAAA\
+");
+  }
+}
+texture {
+  bounds: 0 16 16 16;
+  texture: memory {
+    format: BGRA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4//8/wygexaN4RGIASVZbPAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 16 16 16 16;
+  texture: memory {
+    format: BGRA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 40 0 16 16;
+  texture: memory {
+    format: ARGB8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n4Hh/ygexaN4RGIAgGU8tAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 0 16 16;
+  texture: memory {
+    format: ARGB8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjsJROEIhAD/WWOMABAAA\
+");
+  }
+}
+texture {
+  bounds: 40 16 16 16;
+  texture: memory {
+    format: ARGB8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v//z/D/1E8ikfxiMQALLWwPAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 16 16 16;
+  texture: memory {
+    format: ARGB8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 80 0 16 16;
+  texture: memory {
+    format: RGBA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 96 0 16 16;
+  texture: memory {
+    format: RGBA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKR+EoHKEQAOWG17QABAAA\
+");
+  }
+}
+texture {
+  bounds: 80 16 16 16;
+  texture: memory {
+    format: RGBA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n+H//1E8ikfxiMQAWC+2MAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 96 16 16 16;
+  texture: memory {
+    format: RGBA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8IjEAWjWz4wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 120 0 16 16;
+  texture: memory {
+    format: BGRA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8IjEAWjWz4wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 136 0 16 16;
+  texture: memory {
+    format: BGRA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKR+EoHKEQAOWG17QABAAA\
+");
+  }
+}
+texture {
+  bounds: 120 16 16 16;
+  texture: memory {
+    format: BGRA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4//8/wygexaN4RGIASVZbPAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 136 16 16 16;
+  texture: memory {
+    format: BGRA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 160 0 16 16;
+  texture: memory {
+    format: ARGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n4Hh/ygexaN4RGIAgGU8tAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 176 0 16 16;
+  texture: memory {
+    format: ARGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjsJROEIhAD/WWOMABAAA\
+");
+  }
+}
+texture {
+  bounds: 160 16 16 16;
+  texture: memory {
+    format: ARGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v//z/D/1E8ikfxiMQALLWwPAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 176 16 16 16;
+  texture: memory {
+    format: ARGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 200 0 16 16;
+  texture: memory {
+    format: RGBA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 0 16 16;
+  texture: memory {
+    format: RGBA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKR+EoHKEQAOWG17QABAAA\
+");
+  }
+}
+texture {
+  bounds: 200 16 16 16;
+  texture: memory {
+    format: RGBA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n+H//1E8ikfxiMQAWC+2MAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 16 16 16;
+  texture: memory {
+    format: RGBA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8IjEAWjWz4wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 240 0 16 16;
+  texture: memory {
+    format: ABGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 0 16 16;
+  texture: memory {
+    format: ABGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjsJROEIhAD/WWOMABAAA\
+");
+  }
+}
+texture {
+  bounds: 240 16 16 16;
+  texture: memory {
+    format: ABGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8P///1E8ikfxiMQA55zSZwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 16 16 16;
+  texture: memory {
+    format: ABGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n4Hh/ygexaN4RGIAgGU8tAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 0 16 16;
+  texture: memory {
+    format: RGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPB/FI2ikYoA60Hc0wADAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 0 16 16;
+  texture: memory {
+    format: RGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8AwikbRSEUAJaYlUAADAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 16 16 16;
+  texture: memory {
+    format: RGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n+H/KBpFIxUBANsTWXYAAwAA\
+");
+  }
+}
+texture {
+  bounds: 296 16 16 16;
+  texture: memory {
+    format: RGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+M8wikbRSEUAMq9HegADAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 0 16 16;
+  texture: memory {
+    format: BGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+M8wikbRSEUAMq9HegADAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 0 16 16;
+  texture: memory {
+    format: BGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8AwikbRSEUAJaYlUAADAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 16 16 16;
+  texture: memory {
+    format: BGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4/59hFI2ikYoAAv3C3wADAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 16 16 16;
+  texture: memory {
+    format: BGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 48;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPB/FI2ikYoA60Hc0wADAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 0 16 16;
+  texture: memory {
+    format: RGB16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/nwEI/o+So+QoOUqOkiOMBABFpgP+AAYAAA==\
+");
+  }
+}
+texture {
+  bounds: 376 0 16 16;
+  texture: memory {
+    format: RGB16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fAQhGyVFylBwlR8mRRQIAi766cgAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 16 16 16;
+  texture: memory {
+    format: RGB16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v///9/Bob/o+QoOUqOkqPkCCMBsPml4AAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 376 16 16 16;
+  texture: memory {
+    format: RGB16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYGD4/59hlBwlR8lRcpQcYSQAmhKnpgAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 0 16 16;
+  texture: memory {
+    format: RGBA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAwCoPUv7ewhPCRXKdu2vfID7U3aWQAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 0 16 16;
+  texture: memory {
+    format: RGBA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8ikfxKB7FIwoDAJUcFOMACAAA\
+");
+  }
+}
+texture {
+  bounds: 400 16 16 16;
+  texture: memory {
+    format: RGBA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FQQ0AAAgAIfuXPjdrCB+qZjq2bfvHC0AGsxkACAAA\
+");
+  }
+}
+texture {
+  bounds: 416 16 16 16;
+  texture: memory {
+    format: RGBA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAjAoPUvrfYQHqrmZNu237wHgJuFAAgAAA==\
+");
+  }
+}
+texture {
+  bounds: 440 0 16 16;
+  texture: memory {
+    format: RGBA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAwCoPUv7ewhPCRXKdu2vfID7U3aWQAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 456 0 16 16;
+  texture: memory {
+    format: RGBA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+P+fYRSP4lE8ikfxKB7FIwoDAJUcFOMACAAA\
+");
+  }
+}
+texture {
+  bounds: 440 16 16 16;
+  texture: memory {
+    format: RGBA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FQQ0AAAgAIfuXPjdrCB+qZjq2bfvHC0AGsxkACAAA\
+");
+  }
+}
+texture {
+  bounds: 456 16 16 16;
+  texture: memory {
+    format: RGBA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAjAoPUvrfYQHqrmZNu237wHgJuFAAgAAA==\
+");
+  }
+}
+texture {
+  bounds: 480 0 16 16;
+  texture: memory {
+    format: RGB16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYQCBUXKUHCVHyVFyhJEALNqNQQAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 0 16 16;
+  texture: memory {
+    format: RGB16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYLBhAIFRcpQcJUfJUXJEkQDzgzyxAAYAAA==\
+");
+  }
+}
+texture {
+  bounds: 480 16 16 16;
+  texture: memory {
+    format: RGB16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYbBhYGAYJUfJUXKUHCVHGAkAobitnAAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 16 16 16;
+  texture: memory {
+    format: RGB16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 96;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgAAIbhlFylBwlR8lRcoSRAIEDt3AABgAA\
+");
+  }
+}
+texture {
+  bounds: 520 0 16 16;
+  texture: memory {
+    format: RGBA16fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYQABG4ZRepQepUfpUXqUHqVHDA0Aw53tegAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 0 16 16;
+  texture: memory {
+    format: RGBA16fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYLBhGMWjeBSP4lE8ikfxiMIAA1wm0QAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 520 16 16 16;
+  texture: memory {
+    format: RGBA16fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAzDoAirf10TMnhorVq2bfvNB+tdHxcACAAA\
+");
+  }
+}
+texture {
+  bounds: 536 16 16 16;
+  texture: memory {
+    format: RGBA16fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgAAIbIBylR+lRepQepUfpUXrE0AAXDmv3AAgAAA==\
+");
+  }
+}
+texture {
+  bounds: 560 0 16 16;
+  texture: memory {
+    format: RGBA16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYQABG4ZRepQepUfpUXqUHqVHDA0Aw53tegAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 576 0 16 16;
+  texture: memory {
+    format: RGBA16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYLBhGMWjeBSP4lE8ikfxiMIAA1wm0QAIAAA=\
+");
+  }
+}
+texture {
+  bounds: 560 16 16 16;
+  texture: memory {
+    format: RGBA16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQEAAAzDoAirf10TMnhorVq2bfvNB+tdHxcACAAA\
+");
+  }
+}
+texture {
+  bounds: 576 16 16 16;
+  texture: memory {
+    format: RGBA16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 128;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgAAIbIBylR+lRepQepUfpUXrE0AAXDmv3AAgAAA==\
+");
+  }
+}
+texture {
+  bounds: 0 40 16 16;
+  texture: memory {
+    format: RGB32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 192;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3GMQ0AAAgDsDnDGtL3IYK0V5OdHHd3d3d3//wCkAkObQAMAAA=\
+");
+  }
+}
+texture {
+  bounds: 16 40 16 16;
+  texture: memory {
+    format: RGB32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 192;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3GMQ0AAAgDsDnDGtIJDyJIezVZXTnu7u7u7v71AyqGxxcADAAA\
+");
+  }
+}
+texture {
+  bounds: 0 56 16 16;
+  texture: memory {
+    format: RGB32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 192;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3GAQkAAAgEsW9mNaOLxpAdHCzpyr0xMzMzM/NnDz5GLx0ADAAA\
+");
+  }
+}
+texture {
+  bounds: 16 56 16 16;
+  texture: memory {
+    format: RGB32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 192;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3GMQ0AAAgDsDnDGtJ3YYK0V5OzE3d3d3d3f/0CNloHKwAMAAA=\
+");
+  }
+}
+texture {
+  bounds: 40 40 16 16;
+  texture: memory {
+    format: RGBA32fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HMQ0AAAgEsXeGNaQTFkSQ3nRNunLtMzMzMzMzM/M3D7caY6AAEAAA\
+");
+  }
+}
+texture {
+  bounds: 56 40 16 16;
+  texture: memory {
+    format: RGBA32fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQ0AAAgDsDnDGtIXbJD2aXJ2Ytu2bdu23140F3kyABAAAA==\
+");
+  }
+}
+texture {
+  bounds: 40 56 16 16;
+  texture: memory {
+    format: RGBA32fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HgQkAQAgDsW7maj+6KPwSksJBk7zKNvufmZmZmZmZmS+5AZ6WjL0AEAAA\
+");
+  }
+}
+texture {
+  bounds: 56 56 16 16;
+  texture: memory {
+    format: RGBA32fp;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HsQkAAAgEsd/M1RzdQlxCcnBFkqtrZ2ZmZmZmZuZvHj9pu/sAEAAA\
+");
+  }
+}
+texture {
+  bounds: 80 40 16 16;
+  texture: memory {
+    format: RGBA32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HMQ0AAAgEsXeGNaQTFkSQ3nRNunLtMzMzMzMzM/M3D7caY6AAEAAA\
+");
+  }
+}
+texture {
+  bounds: 96 40 16 16;
+  texture: memory {
+    format: RGBA32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3FMQ0AAAgDsDnDGtIXbJD2aXJ2Ytu2bdu23140F3kyABAAAA==\
+");
+  }
+}
+texture {
+  bounds: 80 56 16 16;
+  texture: memory {
+    format: RGBA32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HgQkAQAgDsW7maj+6KPwSksJBk7zKNvufmZmZmZmZmS+5AZ6WjL0AEAAA\
+");
+  }
+}
+texture {
+  bounds: 96 56 16 16;
+  texture: memory {
+    format: RGBA32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 256;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA+3HsQkAAAgEsd/M1RzdQlxCcnBFkqtrZ2ZmZmZmZuZvHj9pu/sAEAAA\
+");
+  }
+}
+texture {
+  bounds: 120 40 16 16;
+  texture: memory {
+    format: GA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 136 40 16 16;
+  texture: memory {
+    format: GA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 120 56 16 16;
+  texture: memory {
+    format: GA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1v1f9UoHMEQAJ6wp2kAAgAA\
+");
+  }
+}
+texture {
+  bounds: 136 56 16 16;
+  texture: memory {
+    format: GA8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 160 40 16 16;
+  texture: memory {
+    format: GA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 176 40 16 16;
+  texture: memory {
+    format: GA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 160 56 16 16;
+  texture: memory {
+    format: GA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1v1f9UoHMEQAJ6wp2kAAgAA\
+");
+  }
+}
+texture {
+  bounds: 176 56 16 16;
+  texture: memory {
+    format: GA8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwv9HzoKRzAEANwjss8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 200 40 16 16;
+  texture: memory {
+    format: G8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHdkAAI9hg1wAAQAA\
+");
+  }
+}
+texture {
+  bounds: 216 40 16 16;
+  texture: memory {
+    format: G8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHdkAAI9hg1wAAQAA\
+");
+  }
+}
+texture {
+  bounds: 200 56 16 16;
+  texture: memory {
+    format: G8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1u1amQDAPZMva8AAQAA\
+");
+  }
+}
+texture {
+  bounds: 216 56 16 16;
+  texture: memory {
+    format: G8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHdkAAI9hg1wAAQAA\
+");
+  }
+}
+texture {
+  bounds: 240 40 16 16;
+  texture: memory {
+    format: GA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 40 16 16;
+  texture: memory {
+    format: GA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 240 56 16 16;
+  texture: memory {
+    format: GA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1u16v//VaN4FI/iEYkBUURtOAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 56 16 16;
+  texture: memory {
+    format: GA16p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 40 16 16;
+  texture: memory {
+    format: GA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 40 16 16;
+  texture: memory {
+    format: GA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 56 16 16;
+  texture: memory {
+    format: GA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1u16v//VaN4FI/iEYkBUURtOAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 56 16 16;
+  texture: memory {
+    format: GA16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsN/f8/dBSP4lE8IjEA/47kYwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 40 16 16;
+  texture: memory {
+    format: G16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHQUjGQAAGuU1AQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 40 16 16;
+  texture: memory {
+    format: G16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHQUjGQAAGuU1AQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 56 16 16;
+  texture: memory {
+    format: G16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1u1ahSMZAAA/VPkDgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 56 16 16;
+  texture: memory {
+    format: G16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAwsNHQUjGQAAGuU1AQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 40 16 16;
+  texture: memory {
+    format: A8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDACGoqP4AAQAA\
+");
+  }
+}
+texture {
+  bounds: 376 40 16 16;
+  texture: memory {
+    format: A8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDACGoqP4AAQAA\
+");
+  }
+}
+texture {
+  bounds: 360 56 16 16;
+  texture: memory {
+    format: A8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDACGoqP4AAQAA\
+");
+  }
+}
+texture {
+  bounds: 376 56 16 16;
+  texture: memory {
+    format: A8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDACGoqP4AAQAA\
+");
+  }
+}
+texture {
+  bounds: 400 40 16 16;
+  texture: memory {
+    format: A16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZAAAn8N7vQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 40 16 16;
+  texture: memory {
+    format: A16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZAAAn8N7vQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 56 16 16;
+  texture: memory {
+    format: A16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZAAAn8N7vQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 56 16 16;
+  texture: memory {
+    format: A16;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZAAAn8N7vQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 440 40 16 16;
+  texture: memory {
+    format: A16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYRiFIxgCAEr1dNMAAgAA\
+");
+  }
+}
+texture {
+  bounds: 456 40 16 16;
+  texture: memory {
+    format: A16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYRiFIxgCAEr1dNMAAgAA\
+");
+  }
+}
+texture {
+  bounds: 440 56 16 16;
+  texture: memory {
+    format: A16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYRiFIxgCAEr1dNMAAgAA\
+");
+  }
+}
+texture {
+  bounds: 456 56 16 16;
+  texture: memory {
+    format: A16f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2OwYRiFIxgCAEr1dNMAAgAA\
+");
+  }
+}
+texture {
+  bounds: 480 40 16 16;
+  texture: memory {
+    format: A32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgaLBnGMWjeBSPSAwAyXPktAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 40 16 16;
+  texture: memory {
+    format: A32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgaLBnGMWjeBSPSAwAyXPktAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 480 56 16 16;
+  texture: memory {
+    format: A32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgaLBnGMWjeBSPSAwAyXPktAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 56 16 16;
+  texture: memory {
+    format: A32f;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgaLBnGMWjeBSPSAwAyXPktAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 520 40 16 16;
+  texture: memory {
+    format: ABGR8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPD//ygexaN4RGIAS0xe7wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 40 16 16;
+  texture: memory {
+    format: ABGR8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjsJROEIhAD/WWOMABAAA\
+");
+  }
+}
+texture {
+  bounds: 520 56 16 16;
+  texture: memory {
+    format: ABGR8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8P///1E8ikfxiMQA55zSZwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 56 16 16;
+  texture: memory {
+    format: ABGR8p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n4Hh/ygexaN4RGIAgGU8tAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 560 40 16 16;
+  texture: memory {
+    format: BGRX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+N/KwPCfgQFBC6LRo3gUj+JhigHoQ/tMAAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 576 40 16 16;
+  texture: memory {
+    format: BGRX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z/CL4T8DAwOCNkejR/EoHsXDFAMARbmKHwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 560 56 16 16;
+  texture: memory {
+    format: BGRX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4/7+d4f9/BgYEbYtGj+JRPIqHKQYAWYRN6wAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 576 56 16 16;
+  texture: memory {
+    format: BGRX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwOD+n4GBC4h5gTgIiAWgmAGI/0NpZyhtDaVBes5B2S5A3AvEP4CYCYifQc0y\
+AOIwKBukzhOI10HZmUCcC8S6QFwKZZcAcTFUHhvOAeIyIE4iQl0yVA3IHj086kDy+UBcRIS6Ujxq\
+kNWB3FcBNRdZvh5Kp0PlUqHuZBjFo3igMACMqIUYAAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 0 80 16 16;
+  texture: memory {
+    format: XRGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA53QOwrCQBgE4BUsbOwVcgArCzsLFQUROz2C+EBBTcxLPIF6Ag/gEWxVPJI3iPPD\
+BJawjX/xMWF3hpBcM2OqYGDMFBXmDMowgRK0mAPw2OnDHL7wgSnUoA47uLE35G4DPqXs+Bbpbplt\
+ZoO7FSRW787sFHpyv4Q9RPDkfdfRy98vvRfve45ezI6cv5kjRy+AE8/zb88KvQU0YW39c2N9178C\
+5e6g3IXKXaTcxcrdUblLlLtUuXsodxfl7sznH1Q+0FEABAAA\
+");
+  }
+}
+texture {
+  bounds: 16 80 16 16;
+  texture: memory {
+    format: XRGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzNg+M/wAYgNoPQCIGZAokfxKB7FwxcDACRm2k8ABAAA\
+");
+  }
+}
+texture {
+  bounds: 0 96 16 16;
+  texture: memory {
+    format: XRGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzP4/5/hOhAbQOkPQMyARI/iUTyKhy8GAE7XV9IABAAA\
+");
+  }
+}
+texture {
+  bounds: 16 96 16 16;
+  texture: memory {
+    format: XRGB8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzNgYPjfDcQGUDoBiBmQ6FE8ikfx8MUAWaJ9RQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 40 80 16 16;
+  texture: memory {
+    format: RGBX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwOD+n4GBC4h5gTgIiAWgmAGI/0NpZyhtDaVBes5B2S5A3AvEB4CYCYifQc0y\
+AOIIIJ4JVecJxOug7EwgzgViXSAuhbJLgLgYKo8N5wBxGRAnEaEuGaoGZI8eHnUg+XwgLiJCXSke\
+NcjqQO6rgJqLLF8PpdOhcqlQdzKM4lE8UBgA6YoklgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 80 16 16;
+  texture: memory {
+    format: RGBX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zxDN8J+BgQFBi6LRo3gUj+JhigEpC+AqAAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 40 96 16 16;
+  texture: memory {
+    format: RGBX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n+HR//8MDP8RtBUaPYpH8SgephgAC2IUDgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 96 16 16;
+  texture: memory {
+    format: RGBX8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+C/NwPCfgQE3PYpH8SgephgAJBu0KAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 80 80 16 16;
+  texture: memory {
+    format: XBGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA53QOwrCQBgE4BUsbOwVcgArCzsLFQUROz2C+EBBTcxLPIF6Ag/gEWxVPJI3iPPD\
+BJawjX/xMWF3hpBcjcmqYGDMFBXmDMowgRK0mAPw2OnDHL7wgSnUoA47uLE35G4DPqXs+Bbpbplt\
+ZoO7FSRW787sFHpyv4Q9RPDkfdfRy98vvRfve45ezI6cv5kjRy+AE8/zb88KvQU0YW39c2N9178C\
+5e6g3IXKXaTcxcrdUblLlLtUuXsodxfl7sznH58XsgoABAAA\
+");
+  }
+}
+texture {
+  bounds: 96 80 16 16;
+  texture: memory {
+    format: XBGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA52QOwoCMRRFI1jY2Cu4ACsLOwsVhUHsdAniBwWdGecnrkBdgQtwCbYqLskdjPfB\
+FcKQxlccbpJ3DyG5mNxUgQFjplBhzkAZTEAJtJlD0GBnAObgA95gCmqgDnwQsufR24CAZGBn7QN2\
+t8wOs0lvBVKrd2N2Cz2ZL3l/DB6c9xy93/3Se3Led/QSduT8xRw5evLeI8+vzLzQW4AWWFt/bqx3\
+/Uuo9PZKL1J6sdJLlN5B6aVKL1N6d6V3Vnonrr81+Q37AAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 80 96 16 16;
+  texture: memory {
+    format: XBGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA1Ng+P+fE4gVoPQEIGZAokfxKB7FwxcDAIN0260ABAAA\
+");
+  }
+}
+texture {
+  bounds: 96 96 16 16;
+  texture: memory {
+    format: XBGR8;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA7vwn4GhCIgvQOkFQMyARI/iUTyKhy8GAF6wz6YABAAA\
+");
+  }
+}
+texture {
+  bounds: 120 80 16 16;
+  texture: memory {
+    format: NV12;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/8BCAPSFon2AAQAA\
+");
+  }
+}
+texture {
+  bounds: 136 80 16 16;
+  texture: memory {
+    format: NV12;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 120 96 16 16;
+  texture: memory {
+    format: NV12;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgGGAHXKhMGAAQAA\
+");
+  }
+}
+texture {
+  bounds: 136 96 16 16;
+  texture: memory {
+    format: NV12;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wBDACUrJ9qAAQAA\
+");
+  }
+}
+texture {
+  bounds: 160 80 16 16;
+  texture: memory {
+    format: NV21;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wBDACUrJ9qAAQAA\
+");
+  }
+}
+texture {
+  bounds: 176 80 16 16;
+  texture: memory {
+    format: NV21;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 160 96 16 16;
+  texture: memory {
+    format: NV21;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f4QDhoGFAKRkAWaAAQAA\
+");
+  }
+}
+texture {
+  bounds: 176 96 16 16;
+  texture: memory {
+    format: NV21;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/8BCAPSFon2AAQAA\
+");
+  }
+}
+texture {
+  bounds: 200 80 16 16;
+  texture: memory {
+    format: NV16;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/8iGALRbJ9MAAgAA\
+");
+  }
+}
+texture {
+  bounds: 216 80 16 16;
+  texture: memory {
+    format: NV16;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEOAObuRU4AAgAA\
+");
+  }
+}
+texture {
+  bounds: 200 96 16 16;
+  texture: memory {
+    format: NV16;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEOASrAyC8AAgAA\
+");
+  }
+}
+texture {
+  bounds: 216 96 16 16;
+  texture: memory {
+    format: NV16;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wiHAM12GSAAAgAA\
+");
+  }
+}
+texture {
+  bounds: 240 80 16 16;
+  texture: memory {
+    format: NV61;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wiHAM12GSAAAgAA\
+");
+  }
+}
+texture {
+  bounds: 256 80 16 16;
+  texture: memory {
+    format: NV61;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEOAObuRU4AAgAA\
+");
+  }
+}
+texture {
+  bounds: 240 96 16 16;
+  texture: memory {
+    format: NV61;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f4QDhpENAVPt9twAAgAA\
+");
+  }
+}
+texture {
+  bounds: 256 96 16 16;
+  texture: memory {
+    format: NV61;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/8iGALRbJ9MAAgAA\
+");
+  }
+}
+texture {
+  bounds: 280 80 16 16;
+  texture: memory {
+    format: NV24;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/ygcyRAAsNFkXAADAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 80 16 16;
+  texture: memory {
+    format: NV24;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhlEwogEAG/5v9gADAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 96 16 16;
+  texture: memory {
+    format: NV24;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhlE4oiEAvturXwADAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 96 16 16;
+  texture: memory {
+    format: NV24;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/ygc0RAAV2e1UwADAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 80 16 16;
+  texture: memory {
+    format: NV42;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/ygc0RAAV2e1UwADAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 80 16 16;
+  texture: memory {
+    format: NV42;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhlEwogEAG/5v9gADAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 96 16 16;
+  texture: memory {
+    format: NV42;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f4QDhlE4kiEAWW16UAADAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 96 16 16;
+  texture: memory {
+    format: NV42;
+    width: 16;
+    height: 16;
+    offset: 0, 256;
+    stride: 16, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGOHg/ygcyRAAsNFkXAADAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 80 16 16;
+  texture: memory {
+    format: P010;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjG/z/P5IxAJYhieAAAwAA\
+");
+  }
+}
+texture {
+  bounds: 376 80 16 16;
+  texture: memory {
+    format: P010;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwgEAhWWACgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 96 16 16;
+  texture: memory {
+    format: P010;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMDAMLIxAAawqR8AAwAA\
+");
+  }
+}
+texture {
+  bounds: 376 96 16 16;
+  texture: memory {
+    format: P010;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfz/P7IxAO8MtxMAAwAA\
+");
+  }
+}
+texture {
+  bounds: 400 80 16 16;
+  texture: memory {
+    format: P012;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjG/z/P5IxAJYhieAAAwAA\
+");
+  }
+}
+texture {
+  bounds: 416 80 16 16;
+  texture: memory {
+    format: P012;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwgEAhWWACgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 96 16 16;
+  texture: memory {
+    format: P012;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMDAMLIxAAawqR8AAwAA\
+");
+  }
+}
+texture {
+  bounds: 416 96 16 16;
+  texture: memory {
+    format: P012;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfz/P7IxAO8MtxMAAwAA\
+");
+  }
+}
+texture {
+  bounds: 440 80 16 16;
+  texture: memory {
+    format: P016;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjG/z/P5IxAJYhieAAAwAA\
+");
+  }
+}
+texture {
+  bounds: 456 80 16 16;
+  texture: memory {
+    format: P016;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwgEAhWWACgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 440 96 16 16;
+  texture: memory {
+    format: P016;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMDAMLIxAAawqR8AAwAA\
+");
+  }
+}
+texture {
+  bounds: 456 96 16 16;
+  texture: memory {
+    format: P016;
+    width: 16;
+    height: 16;
+    offset: 0, 512;
+    stride: 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfz/P7IxAO8MtxMAAwAA\
+");
+  }
+}
+texture {
+  bounds: 480 80 16 16;
+  texture: memory {
+    format: YUV410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAXI4D8aAAAd5/o4IAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 496 80 16 16;
+  texture: memory {
+    format: YUV410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDBgIAACPriqAgAQAA\
+");
+  }
+}
+texture {
+  bounds: 480 96 16 16;
+  texture: memory {
+    format: YUV410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDBjSALg8AbGaCcyABAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 96 16 16;
+  texture: memory {
+    format: YUV410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngPxpAVwAAuxmc3iABAAA=\
+");
+  }
+}
+texture {
+  bounds: 520 80 16 16;
+  texture: memory {
+    format: YVU410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngPxpAVwAAuxmc3iABAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 80 16 16;
+  texture: memory {
+    format: YVU410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDBgIAACPriqAgAQAA\
+");
+  }
+}
+texture {
+  bounds: 520 96 16 16;
+  texture: memory {
+    format: YVU410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxQgAwY0AADKmOSVIAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 536 96 16 16;
+  texture: memory {
+    format: YVU410;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 272;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAXI4D8aAAAd5/o4IAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 560 80 16 16;
+  texture: memory {
+    format: YUV411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWUgP8UAgDLNVbygAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 576 80 16 16;
+  texture: memory {
+    format: YUV411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 560 96 16 16;
+  texture: memory {
+    format: YUV411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDBgoBpfYDAEp6cE6AAQAA\
+");
+  }
+}
+texture {
+  bounds: 576 96 16 16;
+  texture: memory {
+    format: YUV411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngP4WAUgcAABqb01WAAQAA\
+");
+  }
+}
+texture {
+  bounds: 0 120 16 16;
+  texture: memory {
+    format: YVU411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngP4WAUgcAABqb01WAAQAA\
+");
+  }
+}
+texture {
+  bounds: 16 120 16 16;
+  texture: memory {
+    format: YVU411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 0 136 16 16;
+  texture: memory {
+    format: YVU411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxRQAhgoBACb1PXpgAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 16 136 16 16;
+  texture: memory {
+    format: YVU411;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 4, 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWUgP8UAgDLNVbygAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 40 120 16 16;
+  texture: memory {
+    format: YUV420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWUgP8UAgDLNVbygAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 56 120 16 16;
+  texture: memory {
+    format: YUV420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 40 136 16 16;
+  texture: memory {
+    format: YUV420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDBgoBpfYDAEp6cE6AAQAA\
+");
+  }
+}
+texture {
+  bounds: 56 136 16 16;
+  texture: memory {
+    format: YUV420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngP4WAUgcAABqb01WAAQAA\
+");
+  }
+}
+texture {
+  bounds: 80 120 16 16;
+  texture: memory {
+    format: YVU420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNngP4WAUgcAABqb01WAAQAA\
+");
+  }
+}
+texture {
+  bounds: 96 120 16 16;
+  texture: memory {
+    format: YVU420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGAMaenDSAAQAA\
+");
+  }
+}
+texture {
+  bounds: 80 136 16 16;
+  texture: memory {
+    format: YVU420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxRQAhgoBACb1PXpgAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 96 136 16 16;
+  texture: memory {
+    format: YVU420;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 320;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWUgP8UAgDLNVbygAEAAA==\
+");
+  }
+}
+texture {
+  bounds: 120 120 16 16;
+  texture: memory {
+    format: YUV422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUDCf4PMAAAqdsvFQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 136 120 16 16;
+  texture: memory {
+    format: YUV422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEOAObuRU4AAgAA\
+");
+  }
+}
+texture {
+  bounds: 120 136 16 16;
+  texture: memory {
+    format: YUV422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhgEGA+1/ADdAwOkAAgAA\
+");
+  }
+}
+texture {
+  bounds: 136 136 16 16;
+  texture: memory {
+    format: YUV422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wCDgQ4AAND2EeYAAgAA\
+");
+  }
+}
+texture {
+  bounds: 160 120 16 16;
+  texture: memory {
+    format: YVU422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wCDgQ4AAND2EeYAAgAA\
+");
+  }
+}
+texture {
+  bounds: 176 120 16 16;
+  texture: memory {
+    format: YVU422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEOAObuRU4AAgAA\
+");
+  }
+}
+texture {
+  bounds: 160 136 16 16;
+  texture: memory {
+    format: YVU422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxQMJGAYYAAATm3+GgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 176 136 16 16;
+  texture: memory {
+    format: YVU422;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 384;
+    stride: 16, 8, 8;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUDCf4PMAAAqdsvFQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 200 120 16 16;
+  texture: memory {
+    format: YUV444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfwf4QAAbNmeBgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 120 16 16;
+  texture: memory {
+    format: YUV444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhlEwogEAG/5v9gADAAA=\
+");
+  }
+}
+texture {
+  bounds: 200 136 16 16;
+  texture: memory {
+    format: YUV444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhhEORnj0/wcAYtNRBQADAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 136 16 16;
+  texture: memory {
+    format: YUV444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wgHIzz6GQCLb08JAAMAAA==\
+");
+  }
+}
+texture {
+  bounds: 240 120 16 16;
+  texture: memory {
+    format: YVU444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGNng/wgHIzz6GQCLb08JAAMAAA==\
+");
+  }
+}
+texture {
+  bounds: 256 120 16 16;
+  texture: memory {
+    format: YVU444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/f2QDhlEwogEAG/5v9gADAAA=\
+");
+  }
+}
+texture {
+  bounds: 240 136 16 16;
+  texture: memory {
+    format: YVU444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwgEAhWWACgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 136 16 16;
+  texture: memory {
+    format: YVU444;
+    width: 16;
+    height: 16;
+    offset: 0, 256, 512;
+    stride: 16, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfwf4QAAbNmeBgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 120 16 16;
+  texture: memory {
+    format: YUYV;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYPjPMIpHLAYA1xn1dgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 120 16 16;
+  texture: memory {
+    format: YUYV;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjmAIADrmvxQAAgAA\
+");
+  }
+}
+texture {
+  bounds: 280 136 16 16;
+  texture: memory {
+    format: YUYV;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8P///1E8YjEAlYrg0AACAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 136 16 16;
+  texture: memory {
+    format: YUYV;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8DAMIpHLAYAcjwx3wACAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 120 16 16;
+  texture: memory {
+    format: YVYU;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4z8DAMIpHLAYAcjwx3wACAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 120 16 16;
+  texture: memory {
+    format: YVYU;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP8H8UjmAIADrmvxQAAgAA\
+");
+  }
+}
+texture {
+  bounds: 320 136 16 16;
+  texture: memory {
+    format: YVYU;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v//z/D/1E8YjEAMK8keQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 136 16 16;
+  texture: memory {
+    format: YVYU;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYPjPMIpHLAYA1xn1dgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 120 16 16;
+  texture: memory {
+    format: VYUY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwMDwfxSPWAwALwcSUgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 376 120 16 16;
+  texture: memory {
+    format: VYUY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKRzAEAN1QbhsAAgAA\
+");
+  }
+}
+texture {
+  bounds: 360 136 16 16;
+  texture: memory {
+    format: VYUY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n+H//1E8YjEAiiLW+wACAAA=\
+");
+  }
+}
+texture {
+  bounds: 376 136 16 16;
+  texture: memory {
+    format: VYUY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+M/AMIpHLAYAbZQH9AACAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 120 16 16;
+  texture: memory {
+    format: UYVY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+M/AMIpHLAYAbZQH9AACAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 120 16 16;
+  texture: memory {
+    format: UYVY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4zzAKRzAEAN1QbhsAAgAA\
+");
+  }
+}
+texture {
+  bounds: 400 136 16 16;
+  texture: memory {
+    format: UYVY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4//8/wygesRgAyLHDXQACAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 136 16 16;
+  texture: memory {
+    format: UYVY;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwMDwfxSPWAwALwcSUgACAAA=\
+");
+  }
+}
+texture {
+  bounds: 440 120 16 16;
+  texture: memory {
+    format: S010;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYODAf+aBhQBZRG+4AAMAAA==\
+");
+  }
+}
+texture {
+  bounds: 456 120 16 16;
+  texture: memory {
+    format: S010;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMMIBAMQPhcQAAwAA\
+");
+  }
+}
+texture {
+  bounds: 440 136 16 16;
+  texture: memory {
+    format: S010;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMMBgoP0PAIi/SokAAwAA\
+");
+  }
+}
+texture {
+  bounds: 456 136 16 16;
+  texture: memory {
+    format: S010;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfxnHlg40AEAAN5XmlcAAwAA\
+");
+  }
+}
+texture {
+  bounds: 480 120 16 16;
+  texture: memory {
+    format: S210;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYOSC/8wjGwIAqbxAAAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 496 120 16 16;
+  texture: memory {
+    format: S210;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMApGNAAAHDYmEwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 480 136 16 16;
+  texture: memory {
+    format: S210;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMMLBSI9/AJsl0/wABAAA\
+");
+  }
+}
+texture {
+  bounds: 496 136 16 16;
+  texture: memory {
+    format: S210;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfxnHtlwpCcAAIgnuSEABAAA\
+");
+  }
+}
+texture {
+  bounds: 520 120 16 16;
+  texture: memory {
+    format: S410;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYBSMVPCfeRSOZAgAX3rlTQAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 120 16 16;
+  texture: memory {
+    format: S410;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMApGwSgYsQAAz5kxHAAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 520 136 16 16;
+  texture: memory {
+    format: S410;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/H8UjmDIMApGNBjNASM7/wMA7gLIPQAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 536 136 16 16;
+  texture: memory {
+    format: S410;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfxnHoUjGY7mgJENAEx4j5AABgAA\
+");
+  }
+}
+texture {
+  bounds: 560 120 16 16;
+  texture: memory {
+    format: S012;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYODAf/6BhQDhbCbFAAMAAA==\
+");
+  }
+}
+texture {
+  bounds: 576 120 16 16;
+  texture: memory {
+    format: S012;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMMIBAM7vsuQAAwAA\
+");
+  }
+}
+texture {
+  bounds: 560 136 16 16;
+  texture: memory {
+    format: S012;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMMBgoP0PADp3NNQAAwAA\
+");
+  }
+}
+texture {
+  bounds: 576 136 16 16;
+  texture: memory {
+    format: S012;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfznH1g40AEAAO85ugQAAwAA\
+");
+  }
+}
+texture {
+  bounds: 0 160 16 16;
+  texture: memory {
+    format: S212;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYOSC//wjGwIAIPopLgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 16 160 16 16;
+  texture: memory {
+    format: S212;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMApGNAAA2f36kQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 0 176 16 16;
+  texture: memory {
+    format: S212;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMMLBSI9/ANeoZlAABAAA\
+");
+  }
+}
+texture {
+  bounds: 16 176 16 16;
+  texture: memory {
+    format: S212;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfznH9lwpCcAAE5K830ABAAA\
+");
+  }
+}
+texture {
+  bounds: 40 160 16 16;
+  texture: memory {
+    format: S412;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYBSMVPCffxSOZAgAEFHGPwAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 160 16 16;
+  texture: memory {
+    format: S412;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMApGwSgYsQAAzwgDAQAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 40 176 16 16;
+  texture: memory {
+    format: S412;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vP/38UjmDIMApGNBjNASM7/wMAobjZUgAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 56 176 16 16;
+  texture: memory {
+    format: S412;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfznH4UjGY7mgJENAImzUxIABgAA\
+");
+  }
+}
+texture {
+  bounds: 80 160 16 16;
+  texture: memory {
+    format: S016;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYODA/wEGAMRaJVIAAwAA\
+");
+  }
+}
+texture {
+  bounds: 96 160 16 16;
+  texture: memory {
+    format: S016;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwgEAhWWACgADAAA=\
+");
+  }
+}
+texture {
+  bounds: 80 176 16 16;
+  texture: memory {
+    format: S016;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwGCg/Q8AVMsFrQADAAA=\
+");
+  }
+}
+texture {
+  bounds: 96 176 16 16;
+  texture: memory {
+    format: S016;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 640;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfwfYDDQAQAAvXcboQADAAA=\
+");
+  }
+}
+texture {
+  bounds: 120 160 16 16;
+  texture: memory {
+    format: S216;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYOSC/yMcAABXgoscAAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 136 160 16 16;
+  texture: memory {
+    format: S216;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwCkY0AAATSeu3AAQAAA==\
+");
+  }
+}
+texture {
+  bounds: 120 176 16 16;
+  texture: memory {
+    format: S216;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwwsFIj38AamTVRAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 136 176 16 16;
+  texture: memory {
+    format: S216;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 768;
+    stride: 32, 16, 16;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfwf4WCkJwAAsDRaEwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 160 160 16 16;
+  texture: memory {
+    format: S416;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAWjYBSMVPB/FIxoAACZV81jAAYAAA==\
+");
+  }
+}
+texture {
+  bounds: 176 160 16 16;
+  texture: memory {
+    format: S416;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwCkbBKBixAACOWpF9AAYAAA==\
+");
+  }
+}
+texture {
+  bounds: 160 176 16 16;
+  texture: memory {
+    format: S416;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/fxSMZMAwCkY0GM0BIzv/AwBp7EByAAYAAA==\
+");
+  }
+}
+texture {
+  bounds: 176 176 16 16;
+  texture: memory {
+    format: S416;
+    width: 16;
+    height: 16;
+    offset: 0, 512, 1024;
+    stride: 32, 32, 32;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgGAUjGfwfBSMajOaAkQ0AQwdCNAAGAAA=\
+");
+  }
+}
+texture {
+  bounds: 200 160 16 16;
+  texture: memory {
+    format: ARGB10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+PCfYRSP4lE8IjEACYFrXQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 160 16 16;
+  texture: memory {
+    format: ARGB10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w3+AYRSP4lE8IjEA/kj7IwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 200 176 16 16;
+  texture: memory {
+    format: ARGB10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P48/8/wygexaN4RGIARGwYugAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 216 176 16 16;
+  texture: memory {
+    format: ARGB10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzHDg/ygexaN4RGIAAzaqxgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 240 160 16 16;
+  texture: memory {
+    format: ARGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+PCfYRSP4lE8IjEACYFrXQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 160 16 16;
+  texture: memory {
+    format: ARGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w3+AYRSP4lE8IjEA/kj7IwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 240 176 16 16;
+  texture: memory {
+    format: ARGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P48/8/wygexaN4RGIARGwYugAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 256 176 16 16;
+  texture: memory {
+    format: ARGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzHDg/ygexaN4RGIAAzaqxgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 160 16 16;
+  texture: memory {
+    format: XRGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+GDPMIpH8SgekRgAlItWdgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 160 16 16;
+  texture: memory {
+    format: XRGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w8/AMIpH8SgekRgAY0LGCAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 280 176 16 16;
+  texture: memory {
+    format: XRGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P489+eYRSP4lE8IjEA2WYlkQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 296 176 16 16;
+  texture: memory {
+    format: XRGB10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzMDwfxSP4lE8IjEAnjyX7QAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 160 16 16;
+  texture: memory {
+    format: ABGR10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzHDg/ygexaN4RGIAAzaqxgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 160 16 16;
+  texture: memory {
+    format: ABGR10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w3+AYRSP4lE8IjEA/kj7IwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 320 176 16 16;
+  texture: memory {
+    format: ABGR10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n//A/1E8ikfxiMQATtvZIQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 336 176 16 16;
+  texture: memory {
+    format: ABGR10p;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+PCfYRSP4lE8IjEACYFrXQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 160 16 16;
+  texture: memory {
+    format: ABGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzHDg/ygexaN4RGIAAzaqxgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 376 160 16 16;
+  texture: memory {
+    format: ABGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w3+AYRSP4lE8IjEA/kj7IwAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 360 176 16 16;
+  texture: memory {
+    format: ABGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n//A/1E8ikfxiMQATtvZIQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 376 176 16 16;
+  texture: memory {
+    format: ABGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+PCfYRSP4lE8IjEACYFrXQAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 160 16 16;
+  texture: memory {
+    format: XBGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPzMDwfxSP4lE8IjEAnjyX7QAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 160 16 16;
+  texture: memory {
+    format: XBGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2P4w8/AMIpH8SgekRgAY0LGCAAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 400 176 16 16;
+  texture: memory {
+    format: XBGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/v/n5/h/ygexaN4RGIA09HkCgAEAAA=\
+");
+  }
+}
+texture {
+  bounds: 416 176 16 16;
+  texture: memory {
+    format: XBGR10;
+    width: 16;
+    height: 16;
+    offset: 0;
+    stride: 64;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2Ng+GDPMIpH8SgekRgAlItWdgAEAAA=\
+");
+  }
+}
