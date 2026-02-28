@@ -3,7 +3,7 @@
         height='16'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='empty'
+        gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='2000ms'>
   <path

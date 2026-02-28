@@ -44,16 +44,9 @@ static void
 update_tooltip (GtkWidget    *widget,
                 unsigned int  state)
 {
-  if (state == GTK_SVG_STATE_EMPTY)
-    {
-      gtk_widget_set_tooltip_text (widget, "State: empty");
-    }
-  else
-    {
-      char *text = g_strdup_printf ("State: %u", state);
-      gtk_widget_set_tooltip_text (widget, text);
-      g_free (text);
-    }
+  char *text = g_strdup_printf ("State: %u", state);
+  gtk_widget_set_tooltip_text (widget, text);
+  g_free (text);
 }
 
 static void
@@ -75,8 +68,6 @@ clicked (GtkGestureClick *click,
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click)) == 1)
     {
       if (state + 1 == n_states)
-        state = GTK_SVG_STATE_EMPTY;
-      else if (state == GTK_SVG_STATE_EMPTY)
         state = 0;
       else
         state++;
@@ -84,8 +75,6 @@ clicked (GtkGestureClick *click,
   else
     {
       if (state == 0)
-        state = GTK_SVG_STATE_EMPTY;
-      else if (state == GTK_SVG_STATE_EMPTY)
         state = n_states - 1;
       else
         state--;

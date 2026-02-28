@@ -10,7 +10,7 @@ output: gpa-attachment3-2.svg
 time: 3500
 output: gpa-attachment3-3.svg
 time: 5000
-state: empty
+state: 63
 output: gpa-attachment3-4.svg
 time: 5500
 output: gpa-attachment3-5.svg

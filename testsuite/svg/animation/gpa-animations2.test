@@ -13,7 +13,7 @@ time: 3000
 output: gpa-animations-4.svg
 time: 3500
 output: gpa-animations-5.svg
-state: empty
+state: 63
 time: 4000
 output: gpa-animations-6.svg
 time: 4500

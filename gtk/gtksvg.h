@@ -68,8 +68,6 @@ void             gtk_svg_set_weight        (GtkSvg        *self,
 GDK_AVAILABLE_IN_4_22
 double           gtk_svg_get_weight        (GtkSvg        *self);
 
-#define GTK_SVG_STATE_EMPTY ((unsigned int) -1)
-
 GDK_AVAILABLE_IN_4_22
 void             gtk_svg_set_state         (GtkSvg        *self,
                                             unsigned int   state);

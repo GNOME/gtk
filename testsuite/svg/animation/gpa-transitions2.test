@@ -9,7 +9,7 @@ time: 3000
 output: gpa-transitions2-2.svg
 time: 4000
 output: gpa-transitions2-3.svg
-state: empty
+state: 63
 time: 5000
 output: gpa-transitions2-4.svg
 time: 6000

@@ -1,7 +1,7 @@
 <svg width='64' height='64' viewBox='0 0 32 32'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='empty'>
+        gpa:state='63'>
   <circle id='red'
         cx='0'
         cy='5'

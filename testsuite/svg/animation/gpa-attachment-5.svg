@@ -3,7 +3,7 @@
         xmlns:svg='http://www.w3.org/2000/svg'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='empty'
+        gpa:state='63'
         gpa:state-change-delay='1000ms'
         gpa:time-since-load='2500ms'
         font-size='13.333'
@@ -78,12 +78,13 @@
           pathLength='1'
           cx='0'
           cy='5'
-          r='5'>
+          r='5'
+          gpa:states='0'>
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
-            begin='gpa:states(all).end; 0ms'
-            end='gpa:states(all).begin'
+            begin='gpa:states(0).end; 0ms'
+            end='gpa:states(0).begin'
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
