@@ -25657,12 +25657,12 @@ svg_shape_attr_set (Shape     *shape,
                     ShapeAttr  attr,
                     SvgValue  *value)
 {
-  g_return_if_fail (value != NULL);
-
-  if (_gtk_bitmask_get (shape->attrs, attr))
-    svg_value_unref (shape->base[attr]);
-  shape->base[attr] = value;
-  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, TRUE);
+  svg_value_unref (shape->base[attr]);
+  if (value)
+    shape->base[attr] = value;
+  else
+    shape->base[attr] = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, value != NULL);
 }
 
 Shape *
