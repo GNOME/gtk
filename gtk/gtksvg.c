@@ -1943,7 +1943,7 @@ svg_path_data_print (SvgPathData *p,
           string_append_point (s, "M ", &op->seg.pts[0]);
           break;
         case GSK_PATH_CLOSE:
-          g_string_append_printf (s, "Z");
+          g_string_append (s, "Z");
           break;
         case GSK_PATH_LINE:
           string_append_point (s, "L ", &op->seg.pts[1]);
