@@ -734,6 +734,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   GdkMemoryFormat format;
   GdkColor white;
   GskGpuRenderPassBlendStorage blend_storage;
+  GskGpuClip old_clip;
 
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &bounds) ||
       (new_clip_rect && !gsk_rect_intersection (&bounds, new_clip_rect, &bounds)) ||
@@ -840,16 +841,18 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   gsk_gpu_render_pass_free (other);
 
   /* We can reset things now, the mask does it all */
+  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
   gsk_gpu_clip_init_empty (&self->clip, &self->offset, &bounds);
   if (!gsk_gpu_render_pass_try_push_clip_rect (self, &bounds, storage))
     {
       g_assert_not_reached ();
     }
+  gsk_gpu_clip_init_copy (&storage->clip, &old_clip);
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
   storage->clip_mask_has_opacity = self->clip_mask_has_opacity || self->opacity < 1.0;
   storage->opacity = self->opacity;
-  storage->modified |= GSK_GPU_GLOBAL_MASK;
+  storage->modified |= GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MASK;
 
   self->opacity = 1.0;
   self->clip_mask = image;
@@ -905,6 +908,7 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
 
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &storage->clip, &self->offset, clip))
     {
+      gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
       gsk_gpu_render_pass_draw_clip_mask (self, NULL, clip, NULL, NULL, storage);
       return;
     }

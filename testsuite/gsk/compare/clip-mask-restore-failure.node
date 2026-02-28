@@ -1,0 +1,26 @@
+color {
+  bounds: 0 0 100 100;
+  color: rgb(0,0,0);
+}
+clip {
+  clip: 2.5 2.5 95 95;
+  child: container {
+    rounded-clip {
+      clip: 0 0 100 50 / 25;
+      child: linear-gradient {
+        bounds: 0 0 50 50;
+        start: 0 0;
+        end: 0 50;
+        stops: 0 rgb(255,0,0), 1 rgb(255,0,0);
+      }
+    }
+    color {
+      bounds: 50 50 40 40;
+      color: rgb(0,0,255);
+    }
+  }
+}
+color {
+  bounds: 0 0 100 50;
+  color: rgb(0,0,0);
+}
