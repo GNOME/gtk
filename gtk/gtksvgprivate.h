@@ -76,6 +76,8 @@ struct _GtkSvg
   double weight;
   unsigned int state;
   unsigned int max_state;
+  unsigned int n_state_names;
+  char **state_names;
   int64_t state_change_delay;
   gboolean has_animations;
   GtkSvgFeatures features;
@@ -546,6 +548,9 @@ SvgValue *   svg_filter_parse       (const char       *value);
 Shape *      svg_shape_add          (Shape            *parent,
                                      ShapeType         type);
 void         svg_shape_delete       (Shape            *shape);
+
+gboolean     gtk_svg_set_state_names (GtkSvg      *svg,
+                                      const char **names);
 
 /* --- */
 

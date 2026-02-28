@@ -1,0 +1,15 @@
+<svg width="16" height="16"
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state-names='zero empty'
+        gpa:state='0'>
+  <circle gpa:states='all'/>
+  <circle gpa:states='none'/>
+  <circle gpa:states='zero'/>
+  <circle gpa:states='empty empty'/>
+  <circle gpa:states='0'/>
+  <circle gpa:states='10 zero'/>
+  <circle gpa:states='no-such-state'/>
+  <circle gpa:states='empty -1'/>
+  <circle gpa:states='zero 65'/>
+</svg>
