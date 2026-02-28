@@ -22,7 +22,8 @@
           cx='0'
           cy='5'
           r='5'
-          class='transparent-fill'>
+          class='transparent-fill'
+          gpa:states='0'>
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'

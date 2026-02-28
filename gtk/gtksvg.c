@@ -19441,16 +19441,16 @@ serialize_gpa_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
+  if (shape->gpa.states != ALL_STATES)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "gpa:states='");
+      states_to_string (s, shape->gpa.states);
+      g_string_append_c (s, '\'');
+    }
+
   if ((flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0)
     {
-      if (shape->gpa.states != ALL_STATES)
-        {
-          indent_for_attr (s, indent);
-          g_string_append (s, "gpa:states='");
-          states_to_string (s, shape->gpa.states);
-          g_string_append_c (s, '\'');
-        }
-
       if (shape->gpa.transition != GPA_TRANSITION_NONE)
         {
           const char *names[] = { "none", "animate", "morph", "fade" };
