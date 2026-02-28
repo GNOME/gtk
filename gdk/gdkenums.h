@@ -375,9 +375,28 @@ typedef enum
  * `CAIRO_FORMAT_ARGB32` is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
  *
- * Its naming is modelled after
- * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
- * for details).
+ * # A note on naming
+ *
+ * The format names are roughly modelled after
+ * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat).
+ * A name follows `GDK_MEMORY_<CHANNELS>_<DATA_TYPE>_<SUBSAMPLING> <PREMULTIPLIED>`
+ * where CHANNELS describe how the RGBA channels are layed out in memory, with an
+ * X denoting padding. DATA_TYPE is unsigned normalized integer if not present, or
+ * otherwise FLOAT. The optional SUBSAMPLING defines the subsampling method used.
+ * The optional ENDIAN term describes the endianness if it is not
+ * host-endian. Finally, an optional PREMULTIPLIED term indicates that the color
+ * channels are premultiplied with the alpha value, if it is omitted, the data is
+ * not premultiplied or there is no alpha channel.
+ *
+ * The CHANNELS are given as a list of planes seperated by underscores where
+ * each plane is split into multiple elements describing one or more bytes of memory.
+ * Each element is given as the list of channels folowed by the amount of bits taken
+ * up.
+ *
+ * So the fictional format `RGB565_A8_PREMULTIPLIED` would describe a format with 2
+ * planes where the first plane is an unsigned 16 bit integer containing the RGB
+ * channels with 5, 6, and 5 bits respectively while the 2nd plane contains the
+ * alpha channel as an unisnged 8bit integer.
  */
 /**
  * GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
