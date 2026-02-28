@@ -375,9 +375,17 @@ typedef enum
  * `CAIRO_FORMAT_ARGB32` is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
  *
- * Its naming is modelled after
- * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
- * for details).
+ * # A note on naming
+ *
+ * The format names are roughly modelled after
+ * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat).
+ * A name follows `GDK_MEMORY_<CHANNELS>_<DATA_TYPE>_<ENDIAN>_<PREMULTIPLIED>`
+ * where CHANNELS describe how the RGBA channels are layed out in memory, with an
+ * X denoting padding. DATA_TYPE is unsigned normalized integer if not present, or
+ * otherwise FLOAT. The optional ENDIAN term describes the endianness if it is not
+ * host-endian. Finally, an optional PREMULTIPLIED term indicates that the color
+ * channels are premultiplied with the alpha value, if it is omitted, the data is
+ * not premultiplied or there is no alpha channel.
  */
 /**
  * GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
