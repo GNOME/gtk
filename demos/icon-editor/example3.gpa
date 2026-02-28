@@ -49,7 +49,7 @@
         gpa:stroke='foreground'/>
   <path d='M 10.1852732 4.95939684 C 11.2715759 6.84092855, 11.2715759 9.15907097, 10.1852732 11.0406027'
         id='path3'
-        gpa:states='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'
+        gpa:states='1 2'
         gpa:animation-type='automatic'
         gpa:animation-direction='alternate'
         gpa:animation-duration='70ms'
@@ -68,7 +68,7 @@
         gpa:stroke='foreground'/>
   <path d='M 13.5790482 2.99999976 C 15.3653774 6.09401035, 15.3653774 9.90598965, 13.5790482 13'
         id='path4'
-        gpa:states='2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31'
+        gpa:states='2'
         gpa:animation-type='automatic'
         gpa:animation-direction='alternate'
         gpa:animation-duration='100ms'
