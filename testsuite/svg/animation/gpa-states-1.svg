@@ -18,7 +18,8 @@
           fill='rgb(255,0,0)'
           cx='0'
           cy='5'
-          r='5'>
+          r='5'
+          gpa:states='0'>
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
@@ -36,7 +37,8 @@
           fill='rgb(255,255,0)'
           cx='10'
           cy='5'
-          r='5'>
+          r='5'
+          gpa:states='1'>
     <set
             id='gpa:out-of-state:yellow'
             attributeName='visibility'
@@ -54,7 +56,8 @@
           fill='rgb(0,0,255)'
           cx='20'
           cy='5'
-          r='5'>
+          r='5'
+          gpa:states='0 1'>
     <set
             id='gpa:out-of-state:blue'
             attributeName='visibility'

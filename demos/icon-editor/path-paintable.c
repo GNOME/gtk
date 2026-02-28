@@ -1039,7 +1039,10 @@ path_paintable_serialize (PathPaintable *self,
 GBytes *
 path_paintable_serialize_as_svg (PathPaintable *self)
 {
-  return gtk_svg_serialize (self->svg);
+  return gtk_svg_serialize_full (self->svg,
+                                 NULL, 0,
+                                 GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
+                                 GTK_SVG_SERIALIZE_NO_COMPAT);
 }
 
 const graphene_rect_t *
@@ -1220,7 +1223,7 @@ path_paintable_get_icon_paintable (PathPaintable *self)
     }
 
   ostream = g_io_stream_get_output_stream (iostream);
-  bytes = path_paintable_serialize_as_svg (self);
+  bytes = gtk_svg_serialize (self->svg);
   istream = g_memory_input_stream_new_from_bytes (bytes);
 
   g_output_stream_splice (ostream, istream, 0, NULL, &error);

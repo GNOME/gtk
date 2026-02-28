@@ -39,7 +39,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible" bind-source="expander" bind-property="expanded"/>
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags='sync-create'/>
                     <property name="label" translatable="yes">_License</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">license</property>
@@ -52,7 +52,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="license">
-                    <property name="visible" bind-source="expander" bind-property="expanded"/>
+                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags='sync-create'/>
                     <signal name="activate" handler="license_changed" swapped="yes"/>
                     <layout>
                       <property name="row">1</property>

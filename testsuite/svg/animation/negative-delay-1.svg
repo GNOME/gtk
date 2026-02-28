@@ -21,7 +21,8 @@
           stroke-linejoin='round'
           pathLength='1'
           d='M 0 0 L 100 100'
-          class='transparent-fill'>
+          class='transparent-fill'
+          gpa:states='0'>
     <set
             id='gpa:out-of-state:line1'
             attributeName='visibility'
@@ -94,7 +95,8 @@
           stroke-linejoin='round'
           pathLength='1'
           d='M 100 0 L 0 100'
-          class='transparent-fill'>
+          class='transparent-fill'
+          gpa:states='1'>
     <set
             id='gpa:out-of-state:line2'
             attributeName='visibility'

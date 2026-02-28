@@ -605,7 +605,6 @@ filter_changed (ShapeEditor *self)
 static void
 add_primitive_transform (ShapeEditor *self)
 {
-  g_print ("add primitive\n");
   SvgValue *value = svg_transform_new_none ();
   add_transform_editor (self, value);
   svg_value_unref (value);
@@ -633,8 +632,12 @@ shape_editor_get_path_image (ShapeEditor *self)
                           svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
 
       if (self->shape->type != SHAPE_GROUP)
-        g_ptr_array_add (svg->content->shapes, shape_duplicate (self->shape));
-
+        {
+          Shape *shape = shape_duplicate (self->shape);
+          svg_shape_attr_set (shape, SHAPE_ATTR_VISIBILITY, NULL);
+          svg_shape_attr_set (shape, SHAPE_ATTR_DISPLAY, NULL);
+          g_ptr_array_add (svg->content->shapes, shape);
+        }
       bytes = gtk_svg_serialize (svg);
       g_object_unref (svg);
       svg = gtk_svg_new_from_bytes (bytes);

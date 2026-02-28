@@ -1258,9 +1258,12 @@ compute_viewport_transform (gboolean               none,
 static GdkTexture *
 load_texture (const char  *string,
               gboolean     allow_external,
+              gboolean    *cache_this,
               GError     **error)
 {
   GdkTexture *texture = NULL;
+
+  *cache_this = TRUE;
 
   if (g_str_has_prefix (string, "data:"))
     {
@@ -1271,6 +1274,7 @@ load_texture (const char  *string,
       if (bytes == NULL)
         return NULL;
 
+      *cache_this = FALSE;
       texture = gdk_texture_new_from_bytes (bytes, error);
 
       g_bytes_unref (bytes);
@@ -1297,10 +1301,13 @@ get_texture (GtkSvg      *svg,
   texture = g_hash_table_lookup (svg->images, string);
   if (!texture)
     {
+      gboolean cache_this;
+
       texture = load_texture (string,
                               (svg->features & GTK_SVG_EXTERNAL_RESOURCES) != 0,
+                              &cache_this,
                               error);
-      if (texture)
+      if (texture && cache_this)
         g_hash_table_insert (svg->images, g_strdup (string), texture);
     }
 
@@ -1936,7 +1943,7 @@ svg_path_data_print (SvgPathData *p,
           string_append_point (s, "M ", &op->seg.pts[0]);
           break;
         case GSK_PATH_CLOSE:
-          g_string_append_printf (s, "Z");
+          g_string_append (s, "Z");
           break;
         case GSK_PATH_LINE:
           string_append_point (s, "L ", &op->seg.pts[1]);
@@ -19434,16 +19441,16 @@ serialize_gpa_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
+  if (shape->gpa.states != ALL_STATES)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "gpa:states='");
+      states_to_string (s, shape->gpa.states);
+      g_string_append_c (s, '\'');
+    }
+
   if ((flags & GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS) == 0)
     {
-      if (shape->gpa.states != ALL_STATES)
-        {
-          indent_for_attr (s, indent);
-          g_string_append (s, "gpa:states='");
-          states_to_string (s, shape->gpa.states);
-          g_string_append_c (s, '\'');
-        }
-
       if (shape->gpa.transition != GPA_TRANSITION_NONE)
         {
           const char *names[] = { "none", "animate", "morph", "fade" };
@@ -25657,12 +25664,12 @@ svg_shape_attr_set (Shape     *shape,
                     ShapeAttr  attr,
                     SvgValue  *value)
 {
-  g_return_if_fail (value != NULL);
-
-  if (_gtk_bitmask_get (shape->attrs, attr))
-    svg_value_unref (shape->base[attr]);
-  shape->base[attr] = value;
-  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, TRUE);
+  svg_value_unref (shape->base[attr]);
+  if (value)
+    shape->base[attr] = value;
+  else
+    shape->base[attr] = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
+  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, value != NULL);
 }
 
 Shape *

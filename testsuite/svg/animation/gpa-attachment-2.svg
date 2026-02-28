@@ -18,7 +18,8 @@
           stroke='rgb(0,0,0)'
           stroke-dasharray='0 2'
           pathLength='1'
-          d='M 10 10 L 90 90'>
+          d='M 10 10 L 90 90'
+          gpa:states='0'>
     <set
             id='gpa:out-of-state:line'
             attributeName='visibility'
