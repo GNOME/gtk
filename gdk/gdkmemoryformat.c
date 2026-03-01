@@ -6468,7 +6468,6 @@ gdk_memory_format_get_mipmap_format (GdkMemoryFormat format)
 /*<private>
  * gdk_memory_format_get_depth:
  * @format: a memory format
- * @srgb: whether an SRGB depth should be returned.
  *
  * Gets the depth of the individual channels of the format.
  * See gsk_render_node_prefers_high_depth() for more
@@ -6480,16 +6479,9 @@ gdk_memory_format_get_mipmap_format (GdkMemoryFormat format)
  * Returns: The depth of this format
  **/
 GdkMemoryDepth
-gdk_memory_format_get_depth (GdkMemoryFormat format,
-                             gboolean        srgb)
+gdk_memory_format_get_depth (GdkMemoryFormat format)
 {
-  GdkMemoryDepth depth;
-
-  depth = memory_formats[format].depth;
-  if (depth == GDK_MEMORY_U8 && srgb)
-    depth = GDK_MEMORY_U8_SRGB;
-
-  return depth;
+  return memory_formats[format].depth;
 }
 
 /*<private>
@@ -6655,12 +6647,11 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
                         GdkMemoryDepth depth2)
 {
   static const GdkMemoryDepth merged_depths[GDK_N_DEPTHS][GDK_N_DEPTHS] = {
-                         /*  NONE                U8                  U8_SRGB             FLOAT16             FLOAT32 */
-    [GDK_MEMORY_NONE]    = { GDK_MEMORY_NONE,    GDK_MEMORY_U8,      GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_U8_SRGB] = { GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
-    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+                         /*  NONE                U8                  FLOAT16             FLOAT32 */
+    [GDK_MEMORY_NONE]    = { GDK_MEMORY_NONE,    GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
   };
 
   g_assert (depth1 < GDK_N_DEPTHS);
@@ -6685,7 +6676,6 @@ gdk_memory_depth_get_format (GdkMemoryDepth depth)
     {
       case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
-      case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       case GDK_MEMORY_FLOAT16:
         return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
@@ -6713,36 +6703,11 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
     {
       case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
-      case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_A8;
       case GDK_MEMORY_FLOAT16:
         return GDK_MEMORY_A16_FLOAT;
       case GDK_MEMORY_FLOAT32:
         return GDK_MEMORY_A32_FLOAT;
-      case GDK_N_DEPTHS:
-      default:
-        g_return_val_if_reached (GDK_MEMORY_A8);
-    }
-}
-
-gboolean
-gdk_memory_depth_is_srgb (GdkMemoryDepth depth)
-{
-  /* Putting a switch here instead of a simple check
-   * so the compiler makes us look here
-   * when adding new formats */
-
-  switch (depth)
-    {
-      case GDK_MEMORY_U8_SRGB:
-        return TRUE;
-
-      case GDK_MEMORY_NONE:
-      case GDK_MEMORY_U8:
-      case GDK_MEMORY_FLOAT16:
-      case GDK_MEMORY_FLOAT32:
-        return FALSE;
-
       case GDK_N_DEPTHS:
       default:
         g_return_val_if_reached (GDK_MEMORY_A8);

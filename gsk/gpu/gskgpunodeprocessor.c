@@ -224,7 +224,7 @@ gsk_gpu_node_processor_new_draw (GskGpuFrame            *frame,
   image = create_offscreen_image (frame,
                                   FALSE,
                                   gdk_memory_depth_get_format (depth),
-                                  gdk_memory_depth_is_srgb (depth),
+                                  FALSE,
                                   area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -406,7 +406,7 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
   image = create_offscreen_image (frame,
                                   FALSE,
                                   gdk_memory_depth_get_format (depth),
-                                  gdk_memory_depth_is_srgb (depth),
+                                  FALSE,
                                   area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -484,14 +484,13 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
   flags = gsk_gpu_image_get_flags (image);
-  depth = gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                       gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB);
+  depth = gdk_memory_format_get_depth (gsk_gpu_image_get_format (image));
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (ccs));
 
   copy = create_offscreen_image (frame,
                                  prepare_mipmap,
                                  gdk_memory_depth_get_format (depth),
-                                 gdk_memory_depth_is_srgb (depth),
+                                 FALSE,
                                  width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
@@ -2019,8 +2018,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
                                   blur_radius,
                                   NULL,
                                   image,
-                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                               gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB),
+                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                   &tex_rect);
 
   g_object_unref (image);
@@ -2090,8 +2088,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                           shadow->radius,
                                           &shadow->color,
                                           image,
-                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                                       gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB),
+                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                           &tex_rect);
         }
     }

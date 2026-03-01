@@ -51,7 +51,6 @@ typedef enum {
 typedef enum {
   GDK_MEMORY_NONE,
   GDK_MEMORY_U8,
-  GDK_MEMORY_U8_SRGB,
   GDK_MEMORY_FLOAT16,
   GDK_MEMORY_FLOAT32,
 
@@ -85,8 +84,7 @@ GdkMemoryFormat         gdk_memory_format_get_mipmap_format (GdkMemoryFormat    
 gboolean                gdk_memory_format_get_rgba_format   (GdkMemoryFormat             format,
                                                              GdkMemoryFormat            *out_format,
                                                              GdkSwizzle                 *out_swizzle);
-GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
-                                                             gboolean                    srgb) G_GNUC_CONST;
+GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_n_planes      (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_block_width   (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_block_height  (GdkMemoryFormat             format) G_GNUC_CONST;
@@ -102,7 +100,6 @@ gsize                   gdk_memory_format_get_plane_block_height
 gsize                   gdk_memory_format_get_plane_block_bytes
                                                             (GdkMemoryFormat             format,
                                                              gsize                       plane) G_GNUC_CONST;
-gboolean                gdk_memory_depth_is_srgb            (GdkMemoryDepth              depth) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth              depth1,
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_format         (GdkMemoryDepth              depth) G_GNUC_CONST;

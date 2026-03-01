@@ -258,7 +258,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
 #ifdef HAVE_DMABUF
   image = gsk_vulkan_image_new_dmabuf (self,
                                        gdk_memory_depth_get_format (depth),
-                                       gdk_memory_depth_is_srgb (depth),
+                                       FALSE,
                                        width,
                                        height);
   if (image != NULL)
@@ -268,7 +268,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
   image = gsk_vulkan_image_new_for_offscreen (self,
                                               FALSE,
                                               gdk_memory_depth_get_format (depth),
-                                              gdk_memory_depth_is_srgb (depth),
+                                              FALSE,
                                               width,
                                               height);
 

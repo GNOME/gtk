@@ -111,7 +111,7 @@ gl_native_should_skip_format (GdkMemoryFormat format)
 
   gdk_gl_context_get_version (gl_context, &major, &minor);
 
-  if (gdk_memory_format_get_depth (format, FALSE) != GDK_MEMORY_U8 &&
+  if (gdk_memory_format_get_depth (format) != GDK_MEMORY_U8 &&
       major == 3 && minor < 1)
     {
       g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");

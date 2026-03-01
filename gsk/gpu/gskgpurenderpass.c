@@ -755,7 +755,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   area.width = MAX (1, ceilf (graphene_vec2_get_x (&self->scale) * bounds.size.width - EPSILON));
   area.height = MAX (1, ceilf (graphene_vec2_get_y (&self->scale) * bounds.size.height - EPSILON));
 
-  format = gdk_memory_depth_get_alpha_format (gdk_memory_format_get_depth (gsk_gpu_image_get_format (self->target), FALSE));
+  format = gdk_memory_depth_get_alpha_format (gdk_memory_format_get_depth (gsk_gpu_image_get_format (self->target)));
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
                                                  FALSE,
                                                  format,

@@ -1625,7 +1625,6 @@ gdk_display_get_egl_config (GdkDisplay     *self,
     {
       case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
-      case GDK_MEMORY_U8_SRGB:
         return priv->egl_config;
 
       case GDK_MEMORY_FLOAT16:
