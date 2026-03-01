@@ -117,7 +117,7 @@ enum {
  *
  * A widget that contains one or more links should implement
  * the [iface@Gtk.AccessibleHypertext] interface and return
- * `GtkAccessibleHyperlink] objects for each of the links.
+ * `GtkAccessibleHyperlink` objects for each of the links.
  *
  * Since: 4.22
  */
