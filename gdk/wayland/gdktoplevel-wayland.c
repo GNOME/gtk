@@ -1601,6 +1601,9 @@ gdk_wayland_toplevel_finalize (GObject *object)
   g_clear_pointer (&self->display_server.toplevel_icon, xdg_toplevel_icon_v1_destroy);
   g_list_free_full (self->icons, (GDestroyNotify) wl_buffer_destroy);
 
+  g_clear_pointer (&self->a11y.dbus_name, g_free);
+  g_clear_pointer (&self->a11y.toplevel_object_path, g_free);
+
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
 }
 
