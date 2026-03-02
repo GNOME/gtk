@@ -2689,7 +2689,7 @@ parse_states (const char *text,
 
   *states = 0;
 
-  str = g_strsplit (text, " ", 0);
+  str = strsplit_set (text, " ");
   for (unsigned int i = 0; str[i]; i++)
     {
       unsigned int u;
