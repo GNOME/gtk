@@ -107,7 +107,7 @@
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
-            begin='gpa:states(all).end; 0ms'
+            begin='gpa:states(all).end'
             end='gpa:states(all).begin'
             to='hidden'
             gpa:status='done'

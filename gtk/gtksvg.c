@@ -63,9 +63,8 @@
  *
  * `GtkSvg` fills or strokes paths with symbolic or fixed colors.
  * It can have multiple states, and paths can be included in a subset
- * of the states. The special 'empty' state is always available.
- * States can have animations, and the transition between different
- * states can also be animated.
+ * of the states. States can have animations, and the transition
+ * between different states can also be animated.
  *
  * To show a static SVG image, it is enough to load the
  * the SVG and use it like any other paintable.
@@ -75,7 +74,6 @@
  * [method@Gtk.Svg.play] after loading the SVG. The animation can
  * be paused using [method@Gtk.Svg.pause].
  *
- * To find out what states a `GtkSvg` has, use [method@Gtk.Svg.get_n_states].
  * To set the current state, use [method@Gtk.Svg.set_state].
  *
  *
@@ -2744,9 +2742,6 @@ static gboolean
 state_match (uint64_t     states,
              unsigned int state)
 {
-  if (state == GTK_SVG_STATE_EMPTY)
-    return FALSE;
-
   if ((states & BIT (state)) != 0)
     return TRUE;
 
@@ -14873,9 +14868,7 @@ shape_apply_state (GtkSvg       *self,
     {
       Visibility visibility;
 
-      if (state == GTK_SVG_STATE_EMPTY)
-        visibility = VISIBILITY_HIDDEN;
-      else if (shape->gpa.states & BIT (state))
+      if (shape->gpa.states & BIT (state))
         visibility = VISIBILITY_VISIBLE;
       else
         visibility = VISIBILITY_HIDDEN;
@@ -17419,12 +17412,8 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
     {
       double v;
 
-      if (strcmp (state_attr, "empty") == 0)
-        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
-      else if (!parse_number (state_attr, -1, 63, &v))
+      if (!parse_number (state_attr, -1, 63, &v))
         gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
-      else if (v < 0)
-        gtk_svg_set_state (svg, GTK_SVG_STATE_EMPTY);
       else
         gtk_svg_set_state (svg, (unsigned int) CLAMP (v, 0, 63));
     }
@@ -17625,7 +17614,7 @@ parse_shape_gpa_attrs (Shape                *shape,
         gtk_svg_invalid_attribute (data->svg, context, "gpa:transition-easing", NULL);
     }
 
-  has_animation = 0;
+  has_animation = 1;
   if (animation_type_attr)
     {
       if (!parse_enum (animation_type_attr,
@@ -24371,7 +24360,7 @@ gtk_svg_init (GtkSvg *self)
 {
   self->weight = -1;
   self->overflow = GTK_OVERFLOW_HIDDEN;
-  self->state = GTK_SVG_STATE_EMPTY;
+  self->state = 0;
   self->load_time = INDEFINITE;
   self->state_change_delay = 0;
   self->next_update = INDEFINITE;
@@ -24560,15 +24549,13 @@ gtk_svg_class_init (GtkSvgClass *class)
    *
    * The current state of the renderer.
    *
-   * This can be a number between 0 and 63, or the special value
-   * `(unsigned int) -1` to indicate the 'empty' state in which
-   * nothing is drawn.
+   * This can be a number between 0 and 63.
    *
    * Since: 4.22
    */
   properties[PROP_STATE] =
     g_param_spec_uint ("state", NULL, NULL,
-                       0, G_MAXUINT, GTK_SVG_STATE_EMPTY,
+                       0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -25195,10 +25182,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
       indent_for_attr (s, 0);
       g_string_append_printf (s, "gpa:version='%u'", MAX (self->gpa_version, 1));
       indent_for_attr (s, 0);
-      if (self->state == GTK_SVG_STATE_EMPTY)
-        g_string_append (s, "gpa:state='empty'");
-      else
-        g_string_append_printf (s, "gpa:state='%u'", self->state);
+      g_string_append_printf (s, "gpa:state='%u'", self->state);
     }
 
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
@@ -26174,13 +26158,9 @@ gtk_svg_get_weight (GtkSvg *self)
 /**
  * gtk_svg_set_state:
  * @self: an SVG paintable
- * @state: the state to set, as a value between 0 and 63,
- *   or `GTK_SVG_STATE_EMPTY`
+ * @state: the state to set, as a value between 0 and 63
  *
  * Sets the state of the paintable.
- *
- * Use [method@Gtk.Svg.get_n_states] to find out
- * what states @self has.
  *
  * If the paintable is currently playing, the state change
  * will apply transitions that are defined in the SVG. If
@@ -26196,7 +26176,7 @@ gtk_svg_set_state (GtkSvg       *self,
   unsigned int previous_state;
 
   g_return_if_fail (GTK_IS_SVG (self));
-  g_return_if_fail (state == GTK_SVG_STATE_EMPTY || state <= 63);
+  g_return_if_fail (state <= 63);
 
   if (self->state == state)
     return;
@@ -26261,29 +26241,6 @@ gtk_svg_get_state (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), -1);
 
   return self->state;
-}
-
-/**
- * gtk_svg_get_n_states:
- * @self: an SVG paintable
- *
- * Gets the number of states defined in the SVG.
- *
- * Note that there is always an empty state, which does
- * not count towards this number. If this function returns
- * the value N, the meaningful states of the SVG are
- * 0, 1, ..., N - 1 and `GTK_SVG_STATE_EMPTY`.
- *
- * Returns: the number of states
- *
- * Since: 4.22
- */
-unsigned int
-gtk_svg_get_n_states (GtkSvg *self)
-{
-  g_return_val_if_fail (GTK_IS_SVG (self), 0);
-
-  return self->max_state + 1;
 }
 
 /**

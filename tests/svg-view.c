@@ -32,16 +32,12 @@ clicked (GtkGestureClick *click,
          GtkSvg          *svg)
 {
   unsigned int state;
-  unsigned int n_states;
 
   state = gtk_svg_get_state (svg);
-  n_states = gtk_svg_get_n_states (svg);
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click)) == 1)
     {
-      if (state + 1 == n_states)
-        state = GTK_SVG_STATE_EMPTY;
-      else if (state == GTK_SVG_STATE_EMPTY)
+      if (state == 63)
         state = 0;
       else
         state++;
@@ -49,9 +45,7 @@ clicked (GtkGestureClick *click,
   else
     {
       if (state == 0)
-        state = GTK_SVG_STATE_EMPTY;
-      else if (state == GTK_SVG_STATE_EMPTY)
-        state = n_states - 1;
+        state = 63;
       else
         state--;
     }

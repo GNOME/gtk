@@ -1377,7 +1377,7 @@ row_activated (GtkListBox *box, GtkListBoxRow *row)
 
       paintable = GTK_SVG (gtk_image_get_paintable (image));
       if (gtk_svg_get_state (paintable) == 0)
-        gtk_svg_set_state (paintable, GTK_SVG_STATE_EMPTY);
+        gtk_svg_set_state (paintable, 63);
       else
         gtk_svg_set_state (paintable, 0);
     }

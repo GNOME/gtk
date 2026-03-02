@@ -980,10 +980,35 @@ path_paintable_get_weight (PathPaintable *self)
   return gtk_svg_get_weight (self->svg);
 }
 
-unsigned int
-path_paintable_get_n_states (PathPaintable *self)
+static unsigned int
+shape_get_max_state (Shape *shape)
 {
-  return gtk_svg_get_n_states (GTK_SVG (ensure_render_paintable (self)));
+  if (shape->type == SHAPE_GROUP || shape->type == SHAPE_SVG)
+    {
+      unsigned int state = 0;
+
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          state = MAX (state, shape_get_max_state (sh));
+        }
+
+      return state;
+    }
+  else if (shape->gpa.states == 0)
+    {
+      return 0;
+    }
+  else
+    {
+      return g_bit_nth_msf (shape->gpa.states, -1);
+    }
+}
+
+unsigned int
+path_paintable_get_max_state (PathPaintable *self)
+{
+  return shape_get_max_state (self->svg->content);
 }
 
 gboolean

@@ -193,15 +193,12 @@ parse_test_file (const char *filename)
       if (g_str_has_prefix (strv[i], "state: "))
         {
           char *end;
+
           step.type = STATE;
-          if (strcmp (strv[i] + strlen ("state: "), "empty") == 0)
-            step.state = GTK_SVG_STATE_EMPTY;
-          else
-            {
-              step.state = g_ascii_strtoull (strv[i] + strlen ("state: "), &end, 10);
-              if ((end && *end != '\0') || step.state > 63)
-                g_error ("Can't parse %s.%u (expected a state)\n", filename, i);
-            }
+          step.state = g_ascii_strtoull (strv[i] + strlen ("state: "), &end, 10);
+          if ((end && *end != '\0') || step.state > 63)
+            g_error ("Can't parse %s.%u (expected a state)\n", filename, i);
+
           g_array_append_val (steps, step);
         }
       else if (g_str_has_prefix (strv[i], "time: "))
@@ -257,10 +254,7 @@ set_state (gpointer data)
 {
   StepData *sd = data;
 
-  if (sd->state == GTK_SVG_STATE_EMPTY)
-    g_print ("Step %u: Setting state to empty\n", sd->step);
-  else
-    g_print ("Step %u: Setting state to %u\n", sd->step, sd->state);
+  g_print ("Step %u: Setting state to %u\n", sd->step, sd->state);
   gtk_svg_set_state (sd->svg, sd->state);
   g_free (sd);
 

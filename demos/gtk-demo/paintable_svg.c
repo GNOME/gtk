@@ -15,14 +15,11 @@ image_clicked (GtkGestureClick *click,
 {
   GtkSvg *paintable = GTK_SVG (gtk_image_get_paintable (image));
   guint state = gtk_svg_get_state (paintable);
-  guint n_states = gtk_svg_get_n_states (paintable);
 
-  if (state == GTK_SVG_STATE_EMPTY)
-    gtk_svg_set_state (paintable, 0);
-  else if (state + 1 < n_states)
+  if (state < 63)
     gtk_svg_set_state (paintable, state + 1);
   else
-    gtk_svg_set_state (paintable, GTK_SVG_STATE_EMPTY);
+    gtk_svg_set_state (paintable, 0);
 }
 
 static void

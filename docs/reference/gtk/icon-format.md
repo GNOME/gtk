@@ -9,7 +9,7 @@ This document is an attempt to describe this format.
 
 ## States, transitions and animations
 
-An icon can define a number of states (up to 64). Icons always have an `unset` state, which is used to do draw-in and draw-out animations.
+An icon can define a number of states (up to 64).
 
 Each path can be present in a subset of states (or in all states). When the state changes, the appearance and disappearance of paths can be animated, with a dynamic stroke, a blobby morphing effect, or a fade. There are a number of parameters to influence the transition effects.
 
@@ -124,7 +124,7 @@ GTK defines a small number of attributes in the `gpa` namespace to support state
 The following attributes can be set on the `<svg>` element:
 
 - `gpa:version`: The format version. Must be 1 if specified, currently.
-- `gpa:state`: The initial state, as a number between -1 and 63
+- `gpa:state`: The initial state, as a number between 0 and 63
 
 The following attributes can be set on elements that specify a path:
 
