@@ -12,6 +12,7 @@
 G_BEGIN_DECLS
 
 /* forward declaration */
+typedef struct _GskVulkanPipeline GskVulkanPipeline;
 typedef struct _GskVulkanYcbcr GskVulkanYcbcr;
 typedef struct _GskVulkanYcbcrInfo GskVulkanYcbcrInfo;
 
@@ -52,15 +53,6 @@ VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulk
                                                                          VkAttachmentLoadOp      vk_load_op,
                                                                          VkImageLayout           from_layout,
                                                                          VkImageLayout           to_layout);
-VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulkanDevice        *self,
-                                                                         VkPipelineLayout        layout,
-                                                                         const GskGpuShaderOpClass *op_class,
-                                                                         GskGpuShaderFlags       flags,
-                                                                         GskGpuColorStates       color_states,
-                                                                         guint32                 variation,
-                                                                         GskGpuBlend             blend,
-                                                                         VkFormat                vk_format,
-                                                                         VkRenderPass            render_pass);
 
 GskVulkanAllocator *    gsk_vulkan_device_get_external_allocator        (GskVulkanDevice        *self);
 GskVulkanAllocator *    gsk_vulkan_device_get_allocator                 (GskVulkanDevice        *self,

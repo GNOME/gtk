@@ -193,6 +193,7 @@ if have_vulkan
     'gpu/gskvulkanframe.c',
     'gpu/gskvulkanimage.c',
     'gpu/gskvulkanmemory.c',
+    'gpu/gskvulkanpipeline.c',
     'gpu/gskvulkanycbcr.c',
   ])
 endif # have_vulkan

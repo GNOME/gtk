@@ -12,6 +12,7 @@
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
+#include "gskvulkanpipelineprivate.h"
 #endif
 
 #include "gdkglcontextprivate.h"
@@ -73,6 +74,7 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
   VkPipelineLayout vk_pipeline_layout;
+  GskVulkanPipeline *pipeline;
   gsize i, n_ops, max_ops_per_draw;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
@@ -137,17 +139,18 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
       state->clip_mask = self->clip_mask;
     }
                                
+  pipeline = gsk_vulkan_pipeline_get (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                      vk_pipeline_layout,
+                                      shader_op_class,
+                                      self->flags,
+                                      self->color_states,
+                                      self->variation,
+                                      state->blend,
+                                      state->vk_format,
+                                      state->vk_render_pass);
   vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
-                     gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                        vk_pipeline_layout,
-                                                        shader_op_class,
-                                                        self->flags,
-                                                        self->color_states,
-                                                        self->variation,
-                                                        state->blend,
-                                                        state->vk_format,
-                                                        state->vk_render_pass));
+                     gsk_vulkan_pipeline_get_vk_pipeline (pipeline));
 
   for (i = 0; i < n_ops; i += max_ops_per_draw)
     {

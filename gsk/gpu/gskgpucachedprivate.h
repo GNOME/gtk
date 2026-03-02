@@ -45,6 +45,7 @@ struct _GskGpuCachePrivate
   GHashTable *fill_cache;
   GHashTable *stroke_cache;
   GHashTable *tile_cache;
+  GHashTable *pipeline_cache;
 
   /* Vulkan-specific */
   GHashTable *ycbcr_cache;

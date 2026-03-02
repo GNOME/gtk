@@ -3,7 +3,6 @@
 #include "gskvulkandeviceprivate.h"
 
 #include "gskgpuglobalsopprivate.h"
-#include "gskgpushaderflagsprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
@@ -29,7 +28,6 @@ struct _GskVulkanDevice
   GdkVulkanFeatures features;
 
   GHashTable *render_pass_cache;
-  GHashTable *pipeline_cache;
 
   VkCommandPool vk_command_pool;
   DescriptorPools descriptor_pools;
@@ -80,36 +78,6 @@ struct _RenderPassCacheKey
   VkImageLayout to_layout;
   VkRenderPass render_pass;
 };
-
-static guint
-pipeline_cache_key_hash (gconstpointer data)
-{
-  const PipelineCacheKey *key = data;
-
-  return GPOINTER_TO_UINT (key->op_class) ^
-         key->flags ^
-         (key->color_states << 8) ^
-         (key->variation << 16) ^
-         (key->blend << 24) ^
-         GPOINTER_TO_UINT (key->vk_layout) ^
-         (key->vk_format << 21) ^ (key->vk_format >> 11);
-}
-
-static gboolean
-pipeline_cache_key_equal (gconstpointer a,
-                          gconstpointer b)
-{
-  const PipelineCacheKey *keya = a;
-  const PipelineCacheKey *keyb = b;
-
-  return keya->op_class == keyb->op_class &&
-         keya->flags == keyb->flags &&
-         keya->color_states == keyb->color_states &&
-         keya->variation == keyb->variation &&
-         keya->blend == keyb->blend &&
-         keya->vk_layout == keyb->vk_layout &&
-         keya->vk_format == keyb->vk_format;
-}
 
 static guint
 render_pass_cache_key_hash (gconstpointer data)
@@ -296,16 +264,6 @@ gsk_vulkan_device_finalize (GObject *object)
 
   g_object_steal_data (G_OBJECT (display), "-gsk-vulkan-device");
 
-  g_hash_table_iter_init (&iter, self->pipeline_cache);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      vkDestroyPipeline (vk_device,
-                         ((PipelineCacheKey *)key)->vk_pipeline,
-                         NULL);
-      g_free (key);
-    }
-  g_hash_table_unref (self->pipeline_cache);
-
   g_hash_table_iter_init (&iter, self->render_pass_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -368,7 +326,6 @@ static void
 gsk_vulkan_device_init (GskVulkanDevice *self)
 {
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
-  self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
 
   descriptor_pools_init (&self->descriptor_pools);
 }
@@ -765,313 +722,6 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice    *self,
   g_hash_table_insert (self->render_pass_cache, cached_result, cached_result);
 
   return render_pass;
-}
-
-typedef struct _GskVulkanShaderSpecialization GskVulkanShaderSpecialization;
-struct _GskVulkanShaderSpecialization
-{
-  guint32 flags;
-  guint32 color_states;
-  guint32 variation;
-};
-
-static VkPipelineColorBlendAttachmentState blend_attachment_states[] = {
-  [GSK_GPU_BLEND_NONE] = {
-    .blendEnable = VK_FALSE,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_OVER] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_ADD] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_CLEAR] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ZERO,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_MASK] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ZERO,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_MASK_ONE] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_MASK_ALPHA] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_DST_ALPHA,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_DST_ALPHA,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-  [GSK_GPU_BLEND_MASK_INV_ALPHA] = {
-    .blendEnable = VK_TRUE,
-    .colorBlendOp = VK_BLEND_OP_ADD,
-    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
-    .dstColorBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .alphaBlendOp = VK_BLEND_OP_ADD,
-    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
-    .dstAlphaBlendFactor = VK_BLEND_FACTOR_SRC1_ALPHA,
-    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                    | VK_COLOR_COMPONENT_R_BIT
-                    | VK_COLOR_COMPONENT_G_BIT
-                    | VK_COLOR_COMPONENT_B_BIT
-  },
-};
-
-VkPipeline
-gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
-                                   VkPipelineLayout           vk_layout,
-                                   const GskGpuShaderOpClass *op_class,
-                                   GskGpuShaderFlags          flags,
-                                   GskGpuColorStates          color_states,
-                                   guint32                    variation,
-                                   GskGpuBlend                blend,
-                                   VkFormat                   vk_format,
-                                   VkRenderPass               render_pass)
-{
-  PipelineCacheKey cache_key;
-  PipelineCacheKey *cached_result;
-  VkPipeline vk_pipeline;
-  GdkDisplay *display;
-  char *vertex_shader_name, *fragment_shader_name;
-  G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
-  const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR", "MASK", "MASK-ONE", "MASK-ALPHA", "MASK-INV-ALPHA" };
-
-  cache_key = (PipelineCacheKey) {
-    .vk_layout = vk_layout,
-    .op_class = op_class,
-    .color_states = color_states,
-    .variation = variation,
-    .flags = flags,
-    .blend = blend,
-    .vk_format = vk_format,
-  };
-  cached_result = g_hash_table_lookup (self->pipeline_cache, &cache_key);
-  if (cached_result)
-    return cached_result->vk_pipeline;
-
-  g_assert (blend <= G_N_ELEMENTS (blend_attachment_states));
-
-  display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
-
-  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
-                                    op_class->shader_name,
-                                    ".vert.spv",
-                                    NULL);
-  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
-                                      op_class->shader_name,
-                                      gsk_gpu_shader_flags_has_clip_mask (flags) ? "-clipmask" : "",
-                                      ".frag.spv",
-                                      NULL);
-
-  GSK_VK_CHECK (vkCreateGraphicsPipelines, display->vk_device,
-                                           display->vk_pipeline_cache,
-                                           1,
-                                           &(VkGraphicsPipelineCreateInfo) {
-                                               .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
-                                               .stageCount = 2,
-                                               .pStages = (VkPipelineShaderStageCreateInfo[2]) {
-                                                   {
-                                                       .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                                                       .stage = VK_SHADER_STAGE_VERTEX_BIT,
-                                                       .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
-                                                       .pName = "main",
-                                                       .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 3,
-                                                           .pMapEntries = (VkSpecializationMapEntry[6]) {
-                                                               {
-                                                                   .constantID = 0,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, flags),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                               {
-                                                                   .constantID = 1,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, color_states),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                               {
-                                                                   .constantID = 2,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                           },
-                                                           .dataSize = sizeof (GskVulkanShaderSpecialization),
-                                                           .pData = &(GskVulkanShaderSpecialization) {
-                                                               .flags = flags,
-                                                               .color_states = color_states,
-                                                               .variation = variation,
-                                                           },
-                                                       },
-                                                   },
-                                                   {
-                                                       .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                                                       .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                       .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
-                                                       .pName = "main",
-                                                       .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 3,
-                                                           .pMapEntries = (VkSpecializationMapEntry[6]) {
-                                                               {
-                                                                   .constantID = 0,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, flags),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                               {
-                                                                   .constantID = 1,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, color_states),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                               {
-                                                                   .constantID = 2,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
-                                                                   .size = sizeof (guint32),
-                                                               },
-                                                           },
-                                                           .dataSize = sizeof (GskVulkanShaderSpecialization),
-                                                           .pData = &(GskVulkanShaderSpecialization) {
-                                                               .flags = flags,
-                                                               .color_states = color_states,
-                                                               .variation = variation,
-                                                           },
-                                                       },
-                                                   },
-                                               },
-
-                                               .pVertexInputState = op_class->vertex_input_state,
-                                               .pInputAssemblyState = &(VkPipelineInputAssemblyStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
-                                                   .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-                                                   .primitiveRestartEnable = VK_FALSE,
-                                               },
-                                               .pTessellationState = NULL,
-                                               .pViewportState = &(VkPipelineViewportStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
-                                                   .viewportCount = 1,
-                                                   .scissorCount = 1
-                                               },
-                                               .pRasterizationState = &(VkPipelineRasterizationStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
-                                                   .depthClampEnable = VK_FALSE,
-                                                   .rasterizerDiscardEnable = VK_FALSE,
-                                                   .polygonMode = VK_POLYGON_MODE_FILL,
-                                                   .cullMode = VK_CULL_MODE_NONE,
-                                                   .frontFace = VK_FRONT_FACE_CLOCKWISE,
-                                                   .lineWidth = 1.0f,
-                                               },
-                                               .pMultisampleState = &(VkPipelineMultisampleStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
-                                                   .rasterizationSamples = 1,
-                                               },
-                                               .pDepthStencilState = &(VkPipelineDepthStencilStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
-                                               },
-                                               .pColorBlendState = &(VkPipelineColorBlendStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-                                                   .attachmentCount = 1,
-                                                   .pAttachments = &blend_attachment_states[blend],
-                                               },
-                                               .pDynamicState = &(VkPipelineDynamicStateCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
-                                                   .dynamicStateCount = 2,
-                                                   .pDynamicStates = (VkDynamicState[2]) {
-                                                       VK_DYNAMIC_STATE_VIEWPORT,
-                                                       VK_DYNAMIC_STATE_SCISSOR
-                                                   },
-                                               },
-                                               .layout = vk_layout,
-                                               .renderPass = render_pass,
-                                               .subpass = 0,
-                                               .basePipelineHandle = VK_NULL_HANDLE,
-                                               .basePipelineIndex = -1,
-                                           },
-                                           NULL,
-                                           &vk_pipeline);
-
-  gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline", "%s color states=%u variation=%u clip=%u blend=%s format=%u",
-                          op_class->shader_name,
-                          flags,
-                          color_states, 
-                          variation,
-                          blend >= G_N_ELEMENTS (blend_name) ? "FIX THE BLEND NAMES ARRAY!" : blend_name[blend],
-                          vk_format);
-
-  GSK_DEBUG (SHADERS,
-             "Create Vulkan pipeline (%s, %u/%u/%u/%s/%u)",
-             op_class->shader_name,
-             flags,
-             color_states, 
-             variation,
-             blend >= G_N_ELEMENTS (blend_name) ? "FIX THE BLEND NAMES ARRAY!" : blend_name[blend],
-             vk_format);
-
-  g_free (fragment_shader_name);
-  g_free (vertex_shader_name);
-
-  cached_result = g_memdup2 (&cache_key, sizeof (PipelineCacheKey));
-  cached_result->vk_pipeline = vk_pipeline;
-  g_hash_table_add (self->pipeline_cache, cached_result);
-  gdk_display_vulkan_pipeline_cache_updated (display);
-
-  return vk_pipeline;
 }
 
 GskVulkanAllocator *
