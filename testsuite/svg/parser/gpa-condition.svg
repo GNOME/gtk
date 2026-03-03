@@ -1,0 +1,11 @@
+<svg width="150" height="150" viewBox="0 0 150 150"
+        gpa:version='1'
+        gpa:state='0'>
+  <rect x="10" y="10" width="20" height="20" fill="red">
+    <animate attributeName="x" values="10;20" dur="4s"
+        begin='gpa:states(1).begin'/>
+    <animate attributeName="y" values="10;20" dur="4s"
+        begin='gpa:states(0, 2 3)'
+        end='4000s'/>
+  </rect>
+</svg>

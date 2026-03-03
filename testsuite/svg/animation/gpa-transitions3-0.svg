@@ -27,7 +27,7 @@
         <animate
                 id='gpa:transition:fade-in:1:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='gpa:states(0).begin'
+                begin='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -40,7 +40,7 @@
         <animate
                 id='gpa:transition:fade-out:1:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='gpa:states(0).end -2000ms'
+                begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -62,7 +62,7 @@
         <animate
                 id='gpa:transition:fade-in:4:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='gpa:states(0).begin'
+                begin='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -75,7 +75,7 @@
         <animate
                 id='gpa:transition:fade-out:4:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='gpa:states(0).end -2000ms'
+                begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -107,7 +107,7 @@
           <animate
                   id='gpa:transition:fade-in:9:slope:gpa:morph-filter:red'
                   attributeName='slope'
-                  begin='gpa:states(0).begin'
+                  begin='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -120,7 +120,7 @@
           <animate
                   id='gpa:transition:fade-out:9:slope:gpa:morph-filter:red'
                   attributeName='slope'
-                  begin='gpa:states(0).end -2000ms'
+                  begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -133,7 +133,7 @@
           <animate
                   id='gpa:transition:fade-in:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
-                  begin='gpa:states(0).begin'
+                  begin='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -146,7 +146,7 @@
           <animate
                   id='gpa:transition:fade-out:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
-                  begin='gpa:states(0).end -2000ms'
+                  begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -181,8 +181,8 @@
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
-            begin='gpa:states(0).end; 0ms'
-            end='gpa:states(0).begin'
+            begin='gpa:states(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
+            end='gpa:states(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
