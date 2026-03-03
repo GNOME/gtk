@@ -12917,8 +12917,8 @@ time_spec_update_for_state (TimeSpec     *spec,
 static int64_t
 time_spec_get_state_change_delay (TimeSpec *spec)
 {
-  if (spec->type == TIME_SPEC_TYPE_STATES)
-    return ABS (spec->offset);
+  if (spec->type == TIME_SPEC_TYPE_STATES && spec->offset < 0)
+    return - spec->offset;
 
   return 0;
 }
