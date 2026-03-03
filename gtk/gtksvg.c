@@ -19396,35 +19396,6 @@ serialize_shape_attrs (GString              *s,
 }
 
 static void
-states_to_string (GString  *s,
-                  uint64_t  states)
-{
-  if (states == ALL_STATES)
-    {
-      g_string_append (s, "all");
-    }
-  else if (states == NO_STATES)
-    {
-      g_string_append (s, "none");
-    }
-  else
-    {
-      gboolean first = TRUE;
-
-      for (unsigned int u = 0; u < 64; u++)
-        {
-          if ((states & (G_GUINT64_CONSTANT (1) << u)) != 0)
-            {
-              if (!first)
-                g_string_append_c (s, ' ');
-              g_string_append_printf (s, "%u", u);
-              first = FALSE;
-            }
-        }
-    }
-}
-
-static void
 serialize_gpa_attrs (GString              *s,
                      GtkSvg               *svg,
                      int                   indent,
@@ -19467,7 +19438,7 @@ serialize_gpa_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:states='");
-      states_to_string (s, shape->gpa.states);
+      print_states (s, shape->gpa.states);
       g_string_append_c (s, '\'');
     }
 
