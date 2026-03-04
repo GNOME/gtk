@@ -902,8 +902,9 @@ do_dnd (GtkWidget *do_widget)
 
       n_items = 0;
 
-      x = y = 40;
-      for (i = 0; i < 4; i++)
+      x = 150;
+      y = 100;
+      for (i = 0; i < 3; i++)
         {
           GtkWidget *item;
 
