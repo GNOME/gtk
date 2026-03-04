@@ -1008,7 +1008,30 @@ shape_get_max_state (Shape *shape)
 unsigned int
 path_paintable_get_max_state (PathPaintable *self)
 {
-  return shape_get_max_state (self->svg->content);
+  unsigned int state;
+  unsigned int n_names;
+
+  state = shape_get_max_state (self->svg->content);
+
+  gtk_svg_get_state_names (self->svg, &n_names);
+  if (n_names > 0)
+    return MAX (state, n_names - 1);
+
+  return state;
+}
+
+const char **
+path_paintable_get_state_names (PathPaintable *self,
+                                unsigned int  *length)
+{
+  return gtk_svg_get_state_names (self->svg, length);
+}
+
+gboolean
+path_paintable_set_state_names (PathPaintable  *self,
+                                const char    **names)
+{
+  return gtk_svg_set_state_names (self->svg, names);
 }
 
 gboolean

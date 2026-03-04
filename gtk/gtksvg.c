@@ -877,7 +877,7 @@ string_append_point (GString                *s,
  * If sep contains just a non-space byte,
  * the separator is mandatory. If it contains
  * a space as well, the separator is optional.
- * If a mandatory separators is missing, NULL
+ * If a mandatory separator is missing, NULL
  * is returned.
  */
 static char **
@@ -1262,6 +1262,66 @@ compute_viewport_transform (gboolean               none,
   *scale_y = sy;
   *translate_x = tx;
   *translate_y = ty;
+}
+
+static inline gboolean
+is_state_name_start (char c)
+{
+  return g_ascii_isalpha (c);
+}
+
+static inline gboolean
+is_state_name (char c)
+{
+  return c == '-' || g_ascii_isalnum (c);
+}
+
+static gboolean
+valid_state_name (const char *name)
+{
+  if (strcmp (name, "all") == 0 ||
+      strcmp (name, "none") == 0)
+    return FALSE;
+
+  if (!is_state_name_start (name[0]))
+    return FALSE;
+
+  for (unsigned int i = 0; name[i]; i++)
+    {
+      if (!is_state_name (name[i]))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+find_named_state (GtkSvg       *svg,
+                  const char   *name,
+                  unsigned int *state)
+{
+  for (unsigned int i = 0; i < svg->n_state_names; i++)
+    {
+      if (strcmp (name, svg->state_names[i]) == 0)
+        {
+          *state = i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+strv_unique (GStrv strv)
+{
+  if (strv)
+    for (unsigned int i = 0; strv[i]; i++)
+      for (unsigned int j = i + 1; strv[j]; j++)
+        if (strcmp (strv[i], strv[j]) == 0)
+          return FALSE;
+
+  return TRUE;
 }
 
 /* }}} */
@@ -2684,7 +2744,8 @@ snapshot_push_fill (GtkSnapshot *snapshot,
 #define ALL_STATES G_MAXUINT64
 
 static gboolean
-parse_states (const char *text,
+parse_states (GtkSvg     *svg,
+              const char *text,
               uint64_t   *states)
 {
   GStrv str = NULL;
@@ -2712,9 +2773,12 @@ parse_states (const char *text,
       u = (unsigned int) g_ascii_strtoull (str[i], &end, 10);
       if ((end && *end != '\0') || (u > 63))
         {
-          *states = ALL_STATES;
-          g_strfreev (str);
-          return FALSE;
+          if (!find_named_state (svg, str[i], &u))
+            {
+              *states = NO_STATES;
+              g_strfreev (str);
+              return FALSE;
+            }
         }
 
       *states |= BIT (u);
@@ -2726,6 +2790,7 @@ parse_states (const char *text,
 
 static void
 print_states (GString  *s,
+              GtkSvg   *svg,
               uint64_t  states)
 {
   if (states == ALL_STATES)
@@ -2739,14 +2804,24 @@ print_states (GString  *s,
   else
     {
       gboolean first = TRUE;
+      unsigned int n_state_names = 0;
+      const char **state_names = NULL;
+      if (svg)
+        {
+          n_state_names = svg->n_state_names;
+          state_names = (const char **) svg->state_names;
+        }
       for (unsigned int u = 0; u < 64; u++)
         {
           if ((states & BIT (u)) != 0)
             {
               if (!first)
                 g_string_append_c (s, ' ');
-              g_string_append_printf (s, "%u", u);
               first = FALSE;
+              if (u < n_state_names)
+                g_string_append (s, state_names[u]);
+              else
+                g_string_append_printf (s, "%u", u);
             }
         }
     }
@@ -12670,7 +12745,8 @@ time_spec_equal (const void *p1,
 }
 
 static gboolean
-time_spec_parse (TimeSpec   *spec,
+time_spec_parse (GtkSvg     *svg,
+                 TimeSpec   *spec,
                  const char *value)
 {
   const char *side_str;
@@ -12711,7 +12787,7 @@ time_spec_parse (TimeSpec   *spec,
         {
           uint64_t states;
           str[strlen (str) - 1] = '\0';
-          if (!parse_states (str + strlen ("gpa:states("), &states))
+          if (!parse_states (svg, str + strlen ("gpa:states("), &states))
             {
               g_free (str);
               return FALSE;
@@ -12750,7 +12826,7 @@ time_spec_parse (TimeSpec   *spec,
         return FALSE;
 
       str = g_strndup (v, end - v);
-      if (!parse_states (str, &from))
+      if (!parse_states (svg, str, &from))
         {
           g_free (str);
           return FALSE;
@@ -12763,7 +12839,7 @@ time_spec_parse (TimeSpec   *spec,
         return FALSE;
 
       str = g_strndup (v, end - v);
-      if (!parse_states (str, &to))
+      if (!parse_states (svg, str, &to))
         {
           g_free (str);
           return FALSE;
@@ -12787,6 +12863,7 @@ time_spec_parse (TimeSpec   *spec,
 
 static void
 time_spec_print (TimeSpec *spec,
+                 GtkSvg   *svg,
                  GString  *s)
 {
   gboolean only_nonzero = FALSE;
@@ -12807,9 +12884,9 @@ time_spec_print (TimeSpec *spec,
     case TIME_SPEC_TYPE_STATES:
       {
         g_string_append (s, "gpa:states(");
-        print_states (s, spec->states.from);
+        print_states (s, svg, spec->states.from);
         g_string_append (s, ", ");
-        print_states (s, spec->states.to);
+        print_states (s, svg, spec->states.to);
         g_string_append (s, ")");
         only_nonzero = TRUE;
       }
@@ -12827,6 +12904,7 @@ time_spec_print (TimeSpec *spec,
 
 static void
 time_specs_print (GPtrArray *specs,
+                  GtkSvg    *svg,
                   GString   *s)
 {
   for (unsigned int i = 0; i < specs->len; i++)
@@ -12834,7 +12912,7 @@ time_specs_print (GPtrArray *specs,
       TimeSpec *spec = g_ptr_array_index (specs, i);
       if (i > 0)
         g_string_append (s, "; ");
-      time_spec_print (spec, s);
+      time_spec_print (spec, svg, s);
     }
 }
 
@@ -12917,8 +12995,8 @@ time_spec_update_for_state (TimeSpec     *spec,
 static int64_t
 time_spec_get_state_change_delay (TimeSpec *spec)
 {
-  if (spec->type == TIME_SPEC_TYPE_STATES)
-    return ABS (spec->offset);
+  if (spec->type == TIME_SPEC_TYPE_STATES && spec->offset < 0)
+    return - spec->offset;
 
   return 0;
 }
@@ -16171,7 +16249,7 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *begin;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i]))
+          if (!time_spec_parse (data->svg, &spec, strv[i]))
             {
               gtk_svg_invalid_attribute (data->svg, context, "begin", NULL);
               g_clear_error (&error);
@@ -16203,7 +16281,7 @@ parse_base_animation_attrs (Animation            *a,
           TimeSpec *end;
           GError *error = NULL;
 
-          if (!time_spec_parse (&spec, strv[i]))
+          if (!time_spec_parse (data->svg, &spec, strv[i]))
             {
               gtk_svg_invalid_attribute (data->svg, context, "end", NULL);
               g_clear_error (&error);
@@ -17429,6 +17507,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
                      ParserData           *data,
                      GMarkupParseContext  *context)
 {
+  const char *state_names_attr = NULL;
   const char *state_attr = NULL;
   const char *version_attr = NULL;
   const char *keywords_attr = NULL;
@@ -17436,19 +17515,39 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
                             handled,
+                            "gpa:state-names", &state_names_attr,
                             "gpa:state", &state_attr,
                             "gpa:version", &version_attr,
                             "gpa:keywords", &keywords_attr,
                             NULL);
 
+  if (state_names_attr)
+    {
+      GStrv strv = strsplit_set (state_names_attr, " ");
+
+      if (strv == NULL)
+        {
+          gtk_svg_invalid_attribute (svg, context, "gpa:state-names", "failed to parse state names");
+        }
+      else
+        {
+          if (!gtk_svg_set_state_names (svg, (const char **) strv))
+            gtk_svg_invalid_attribute (svg, context, "gpa:state-names", "failed to parse state names");
+          g_strfreev (strv);
+        }
+    }
+
   if (state_attr)
     {
       double v;
+      unsigned int state;
 
-      if (!parse_number (state_attr, -1, 63, &v))
-        gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
+      if (parse_number (state_attr, 0, 63, &v))
+        gtk_svg_set_state (svg, (unsigned int) v);
+      else if (find_named_state (svg, state_attr, &state))
+        gtk_svg_set_state (svg, state);
       else
-        gtk_svg_set_state (svg, (unsigned int) CLAMP (v, 0, 63));
+        gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
     }
 
   if (version_attr)
@@ -17594,7 +17693,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   states = ALL_STATES;
   if (states_attr)
     {
-      if (!parse_states (states_attr, &states))
+      if (!parse_states (data->svg, states_attr, &states))
         {
           gtk_svg_invalid_attribute (data->svg, context, "gpa:states", NULL);
           states = ALL_STATES;
@@ -19396,35 +19495,6 @@ serialize_shape_attrs (GString              *s,
 }
 
 static void
-states_to_string (GString  *s,
-                  uint64_t  states)
-{
-  if (states == ALL_STATES)
-    {
-      g_string_append (s, "all");
-    }
-  else if (states == NO_STATES)
-    {
-      g_string_append (s, "none");
-    }
-  else
-    {
-      gboolean first = TRUE;
-
-      for (unsigned int u = 0; u < 64; u++)
-        {
-          if ((states & (G_GUINT64_CONSTANT (1) << u)) != 0)
-            {
-              if (!first)
-                g_string_append_c (s, ' ');
-              g_string_append_printf (s, "%u", u);
-              first = FALSE;
-            }
-        }
-    }
-}
-
-static void
 serialize_gpa_attrs (GString              *s,
                      GtkSvg               *svg,
                      int                   indent,
@@ -19467,7 +19537,7 @@ serialize_gpa_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:states='");
-      states_to_string (s, shape->gpa.states);
+      print_states (s, svg, shape->gpa.states);
       g_string_append_c (s, '\'');
     }
 
@@ -19608,7 +19678,7 @@ serialize_base_animation_attrs (GString   *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "begin='");
-      time_specs_print (a->begin, s);
+      time_specs_print (a->begin, svg, s);
       g_string_append (s, "'");
     }
 
@@ -19616,7 +19686,7 @@ serialize_base_animation_attrs (GString   *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "end='");
-      time_specs_print (a->end, s);
+      time_specs_print (a->end, svg, s);
       g_string_append (s, "'");
     }
 
@@ -24430,6 +24500,8 @@ gtk_svg_dispose (GObject *object)
   g_free (self->description);
   g_free (self->keywords);
 
+  g_strfreev (self->state_names);
+
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
 
@@ -24680,7 +24752,7 @@ timeline_dump (Timeline *timeline)
     {
       TimeSpec *spec = g_ptr_array_index (timeline->times, i);
       g_string_append (s, "  ");
-      time_spec_print (spec, s);
+      time_spec_print (spec, NULL, s);
       g_string_append (s, "\n");
     }
   g_print ("%s", s->str);
@@ -25214,6 +25286,19 @@ gtk_svg_serialize_full (GtkSvg               *self,
       g_string_append (s, "xmlns:gpa='https://www.gtk.org/grappa'");
       indent_for_attr (s, 0);
       g_string_append_printf (s, "gpa:version='%u'", MAX (self->gpa_version, 1));
+      if (self->n_state_names > 0)
+        {
+          indent_for_attr (s, 0);
+          g_string_append (s, "gpa:state-names='");
+          for (unsigned int i = 0; i < self->n_state_names; i++)
+            {
+              if (i > 0)
+                g_string_append_c (s, ' ');
+              g_string_append (s, self->state_names[i]);
+            }
+          g_string_append (s, "'");
+        }
+
       indent_for_attr (s, 0);
       g_string_append_printf (s, "gpa:state='%u'", self->state);
     }
@@ -25828,6 +25913,9 @@ gtk_svg_clear_content (GtkSvg *self)
   self->used = 0;
 
   self->gpa_version = 0;
+
+  g_clear_pointer (&self->state_names, g_strfreev);
+  self->n_state_names = 0;
 }
 
 /*< private >
@@ -25956,6 +26044,35 @@ gtk_svg_apply_filter (GtkSvg                *svg,
   g_assert (node == NULL);
 
   return result;
+}
+
+/*< private>
+ * gtk_svg_set_state_names:
+ * @svg: a `GtkSvg`
+ * @names: (array zero-terminated=1): a `NULL`-terminated arrayt
+ *   of strings
+ *
+ * Sets names for states.
+ *
+ * Returns: true if the state names were set successfully
+ */
+gboolean
+gtk_svg_set_state_names (GtkSvg      *svg,
+                         const char **names)
+{
+  for (unsigned int i = 0; names[i]; i++)
+    {
+      if (!valid_state_name (names[i]))
+        return FALSE;
+    }
+
+  if (!strv_unique ((GStrv) names))
+    return FALSE;
+
+  g_strfreev (svg->state_names);
+  svg->state_names = g_strdupv ((char **) names);
+  svg->n_state_names = g_strv_length ((char **) names);
+  return TRUE;
 }
 
 /* }}} */
@@ -26274,6 +26391,32 @@ gtk_svg_get_state (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), -1);
 
   return self->state;
+}
+
+/**
+ * gtk_svg_get_state_names:
+ * @self: an SVG paintable
+ * @length: (out): return location for the number
+ *   of strings that are returned
+ *
+ * Returns a `NULL`-terminated array of
+ * state names, if available.
+ *
+ * Note that the returned array and the strings
+ * contained in it will only be valid until the
+ * `GtkSvg` is cleared or reloaded, is if you
+ * want to keep it around, you should make a copy.
+ *
+ * Returns: (nullable) (transfer none): the state names
+ *
+ * Since: 4.22
+ */
+const char **
+gtk_svg_get_state_names (GtkSvg       *self,
+                         unsigned int *length)
+{
+  *length = self->n_state_names;
+  return (const char **) self->state_names;
 }
 
 /**
