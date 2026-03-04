@@ -183,14 +183,14 @@
  *
  * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
  * colors can also be specified as a custom paint server reference,
- * like this: `url(gpa:#warning)`. This works in `fill` and `stroke`
+ * like this: `url(#gpa:warning)`. This works in `fill` and `stroke`
  * attributes, but also when specifying colors in SVG animation
  * attributes like `to` or `values`.
  *
  * Note that the SVG syntax allows for a fallback RGB color to be
  * specified after the url, for compatibility with other SVG consumers:
  *
- *     fill='url(gpa:#warning) orange'
+ *     fill='url(#gpa:warning) orange'
  *
  * In contrast to SVG 1.1 and 2.0, we allow the `transform` attribute
  * to be animated with `<animate>`.
