@@ -520,6 +520,11 @@ enter_trash (GtkDropTarget *target,
              double         y,
              GtkSvg        *trash_paintable)
 {
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+
+  gtk_svg_set_frame_clock (trash_paintable, gtk_widget_get_frame_clock (widget));
   gtk_svg_set_state (trash_paintable, 1);
   return GDK_ACTION_MOVE;
 }
@@ -902,8 +907,9 @@ do_dnd (GtkWidget *do_widget)
 
       n_items = 0;
 
-      x = y = 40;
-      for (i = 0; i < 4; i++)
+      x = 150;
+      y = 100;
+      for (i = 0; i < 3; i++)
         {
           GtkWidget *item;
 
