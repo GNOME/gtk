@@ -322,7 +322,6 @@ void     gdk_win32_surface_set_session_callbacks (GdkSurface             *surfac
 gboolean gdk_win32_surface_inhibit_logout        (GdkSurface    *surface,
                                                   const wchar_t *reason);
 void     gdk_win32_surface_uninhibit_logout      (GdkSurface *surface);
-gboolean gdk_win32_is_logout_inhibited           (void);
 
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
