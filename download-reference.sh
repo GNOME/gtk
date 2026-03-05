@@ -16,7 +16,16 @@ for PAIR in "${PROJECTS[@]}"; do
         REF="$2"
 	JOB_NAME="$3"
 
-	curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/$PROJECT/-/jobs/artifacts/$REF/download?job=$JOB_NAME" || exit $?
+	project_id=$(curl -s \
+		--header "PRIVATE-TOKEN: ${CI_JOB_TOKEN:-}" \
+		"https://gitlab.gnome.org/api/v4/projects/GNOME%2F${PROJECT}" | \
+		# Do not bother install `jq` when python serves us already
+		python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
+	test "$project_id" -gt 0 || exit $?
+	curl -L --output "$REF-docs.zip" \
+		--header "PRIVATE-TOKEN: ${CI_JOB_TOKEN:-}" \
+		"https://gitlab.gnome.org/api/v4/projects/${project_id}/jobs/artifacts/${REF}/download?job=${JOB_NAME}" \
+		|| exit $?
 	unzip -o -d "main-docs" "$REF-docs.zip" || exit $?
 	rm -f "$REF-docs.zip"
 done
