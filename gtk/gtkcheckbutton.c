@@ -1024,10 +1024,21 @@ gtk_check_button_set_label (GtkCheckButton *self,
       gtk_label_set_label (GTK_LABEL (priv->child), label);
     }
 
-
-  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, label,
-                                  -1);
+  /* Use the processed text from the label widget for accessibility,
+   * which strips mnemonics when use_underline is enabled */
+  if (priv->child_type == LABEL_CHILD && priv->child != NULL)
+    {
+      const char *text = gtk_label_get_text (GTK_LABEL (priv->child));
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                      -1);
+    }
+  else
+    {
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, label,
+                                      -1);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
 
