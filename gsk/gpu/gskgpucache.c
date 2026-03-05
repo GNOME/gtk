@@ -540,18 +540,6 @@ gsk_gpu_cache_class_init (GskGpuCacheClass *klass)
 static void
 gsk_gpu_cache_init (GskGpuCache *self)
 {
-  self->texture_cache = g_hash_table_new (g_direct_hash,
-                                          g_direct_equal);
-  
-  gsk_gpu_cached_atlas_init_cache (self);
-  gsk_gpu_cached_glyph_init_cache (self);
-  gsk_gpu_cached_tile_init_cache (self);
-#ifdef GDK_RENDERING_VULKAN
-  gsk_vulkan_pipeline_init_cache (self);
-  gsk_vulkan_ycbcr_init_cache (self);
-#endif
-  gsk_gpu_cached_fill_init_cache (self);
-  gsk_gpu_cached_stroke_init_cache (self);
 }
 
 GskGpuImage *
@@ -595,6 +583,23 @@ gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
   gsk_gpu_cached_use ((GskGpuCached *) cache);
 }
 
+static void
+gsk_gpu_cache_init_caches (GskGpuCache *self)
+{
+  self->texture_cache = g_hash_table_new (g_direct_hash,
+                                          g_direct_equal);
+  
+  gsk_gpu_cached_atlas_init_cache (self);
+  gsk_gpu_cached_glyph_init_cache (self);
+  gsk_gpu_cached_tile_init_cache (self);
+#ifdef GDK_RENDERING_VULKAN
+  gsk_vulkan_pipeline_init_cache (self);
+  gsk_vulkan_ycbcr_init_cache (self);
+#endif
+  gsk_gpu_cached_fill_init_cache (self);
+  gsk_gpu_cached_stroke_init_cache (self);
+}
+
 GskGpuCache *
 gsk_gpu_cache_new (GskGpuDevice *device)
 {
@@ -602,6 +607,8 @@ gsk_gpu_cache_new (GskGpuDevice *device)
 
   self = g_object_new (GSK_TYPE_GPU_CACHE, NULL);
   self->device = g_object_ref (device);
+
+  gsk_gpu_cache_init_caches (self);
 
   return self;
 }
