@@ -504,8 +504,11 @@ gsk_gpu_cache_dispose (GObject *object)
   gsk_gpu_cached_fill_finish_cache (self);
 
 #ifdef GDK_RENDERING_VULKAN
-  gsk_vulkan_ycbcr_finish_cache (self);
-  gsk_vulkan_pipeline_finish_cache (self);
+  if (GSK_IS_VULKAN_DEVICE (self->device))
+    {
+      gsk_vulkan_ycbcr_finish_cache (self);
+      gsk_vulkan_pipeline_finish_cache (self);
+    }
 #endif
   gsk_gpu_cached_glyph_finish_cache (self);
   gsk_gpu_cached_tile_finish_cache (self);
@@ -593,8 +596,11 @@ gsk_gpu_cache_init_caches (GskGpuCache *self)
   gsk_gpu_cached_glyph_init_cache (self);
   gsk_gpu_cached_tile_init_cache (self);
 #ifdef GDK_RENDERING_VULKAN
-  gsk_vulkan_pipeline_init_cache (self);
-  gsk_vulkan_ycbcr_init_cache (self);
+  if (GSK_IS_VULKAN_DEVICE (self->device))
+    {
+      gsk_vulkan_pipeline_init_cache (self);
+      gsk_vulkan_ycbcr_init_cache (self);
+    }
 #endif
   gsk_gpu_cached_fill_init_cache (self);
   gsk_gpu_cached_stroke_init_cache (self);
