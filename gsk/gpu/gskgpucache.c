@@ -2,6 +2,8 @@
 
 #include "gskgpucacheprivate.h"
 
+#include "gskgldeviceprivate.h"
+#include "gskglpipelineprivate.h"
 #include "gskgpucachedatlasprivate.h"
 #include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedfillprivate.h"
@@ -509,7 +511,12 @@ gsk_gpu_cache_dispose (GObject *object)
       gsk_vulkan_ycbcr_finish_cache (self);
       gsk_vulkan_pipeline_finish_cache (self);
     }
+  else
 #endif
+  if (GSK_IS_GL_DEVICE (self->device))
+    {
+      gsk_gl_pipeline_finish_cache (self);
+    }
   gsk_gpu_cached_glyph_finish_cache (self);
   gsk_gpu_cached_tile_finish_cache (self);
   gsk_gpu_cached_atlas_finish_cache (self);
@@ -601,7 +608,12 @@ gsk_gpu_cache_init_caches (GskGpuCache *self)
       gsk_vulkan_pipeline_init_cache (self);
       gsk_vulkan_ycbcr_init_cache (self);
     }
+  else
 #endif
+  if (GSK_IS_GL_DEVICE (self->device))
+    {
+      gsk_gl_pipeline_init_cache (self);
+    }
   gsk_gpu_cached_fill_init_cache (self);
   gsk_gpu_cached_stroke_init_cache (self);
 }

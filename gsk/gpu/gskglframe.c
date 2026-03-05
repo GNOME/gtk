@@ -9,6 +9,7 @@
 #include "gskglbufferprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglimageprivate.h"
+#include "gskglpipelineprivate.h"
 
 #include "gdkdmabuftextureprivate.h"
 #include "gdkdmabufeglprivate.h"
@@ -373,11 +374,11 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
 {
   GLuint vao;
 
-  gsk_gl_device_use_program (GSK_GL_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self))),
-                             op_class,
-                             flags,
-                             color_states,
-                             variation);
+  gsk_gl_pipeline_use (GSK_GL_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self))),
+                       op_class,
+                       flags,
+                       color_states,
+                       variation);
 
   vao = GPOINTER_TO_UINT (g_hash_table_lookup (self->vaos, op_class));
   if (vao)
