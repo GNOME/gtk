@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-05 05:36+0000\n"
-"PO-Revision-Date: 2026-02-05 09:00+0100\n"
+"POT-Creation-Date: 2026-03-04 18:40+0000\n"
+"PO-Revision-Date: 2026-02-20 11:07+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -47,11 +47,11 @@ msgstr "Дисплеи Broadway не се поддържат: %s"
 msgid "This clipboard cannot store data."
 msgstr "Този буфер за обмен не може да съдържа данни."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:782 gdk/gdkclipboard.c:1073
 msgid "Cannot read from empty clipboard."
 msgstr "Не може да се чете от празен буфер за обмен."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1123 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Няма съвместим формат за пренос на съдържанието на буфера за обмен."
 
@@ -104,7 +104,7 @@ msgstr "Липсва настроен EGL"
 
 #: gdk/gdkdisplay.c:1736
 msgid "Failed to get EGL configurations"
-msgstr "Настройките на EGL не може да бъдат получени"
+msgstr "Настройките на EGL не може да се получат"
 
 #: gdk/gdkdisplay.c:1766
 msgid "No EGL configuration with required features found"
@@ -615,7 +615,7 @@ msgstr "Неуспешно зареждане на данните от файл 
 msgid "Reading data failed at row %d"
 msgstr "Неуспешно четене на ред %d"
 
-#: gdk/macos/gdkmacospasteboard.c:255
+#: gdk/macos/gdkmacospasteboard.c:253
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Неуспешно декодиране на съдържание с вид по MIME „%s“"
@@ -2359,7 +2359,7 @@ msgstr "Вече съществува файл с това име"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6467 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2399,7 +2399,7 @@ msgstr "Въведете името на новата папка"
 
 #: gtk/gtkfilechooserwidget.c:752
 msgid "The folder could not be created"
-msgstr "Папката не може да бъде създадена"
+msgstr "Папката не може да се създаде"
 
 #: gtk/gtkfilechooserwidget.c:765
 msgid "You need to choose a valid filename."
@@ -2434,15 +2434,15 @@ msgstr "Неправилно име на файл"
 
 #: gtk/gtkfilechooserwidget.c:807
 msgid "The folder contents could not be displayed"
-msgstr "Съдържанието на папката не може да бъде показано"
+msgstr "Съдържанието на папката не може да се покаже"
 
 #: gtk/gtkfilechooserwidget.c:815
 msgid "The file could not be deleted"
-msgstr "Файлът не може да бъде изтрит"
+msgstr "Файлът не може да се изтрие"
 
 #: gtk/gtkfilechooserwidget.c:823
 msgid "The file could not be moved to the Trash"
-msgstr "Файлът не може да бъде преместен в кошчето"
+msgstr "Файлът не може да се премести в кошчето"
 
 #: gtk/gtkfilechooserwidget.c:1247
 #, c-format
@@ -2460,11 +2460,11 @@ msgstr "_Изтриване"
 
 #: gtk/gtkfilechooserwidget.c:1367
 msgid "The file could not be renamed"
-msgstr "Файлът не може да бъде преименуван"
+msgstr "Файлът не може да се преименува"
 
 #: gtk/gtkfilechooserwidget.c:1539
 msgid "Could not select file"
-msgstr "Не може да бъде избран файл"
+msgstr "Не може да се избере файл"
 
 #: gtk/gtkfilechooserwidget.c:1759 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
@@ -2584,7 +2584,7 @@ msgstr "Програма"
 msgid "Audio"
 msgstr "Аудио"
 
-#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1072
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1111
 msgid "Image"
 msgstr "Изображение"
 
@@ -2716,11 +2716,11 @@ msgstr "Кодиране"
 msgid "Line Ending"
 msgstr "Край на ред"
 
-#: gtk/gtkfilefilter.c:1085
+#: gtk/gtkfilefilter.c:1124
 msgid "Unspecified"
 msgstr "Неуказано"
 
-#: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
+#: gtk/gtkfontchooserdialog.c:202 gtk/gtkfontchooserdialog.c:205
 msgid "Change Font Features"
 msgstr "Промяна на настройките на шрифт"
 
@@ -2900,7 +2900,7 @@ msgid "Play"
 msgstr "Пускане"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6468
 msgid "_OK"
 msgstr "_Добре"
 
@@ -2916,59 +2916,59 @@ msgstr "_Да"
 msgid "Co_nnect"
 msgstr "_Свързване"
 
-#: gtk/gtkmountoperation.c:676
+#: gtk/gtkmountoperation.c:678
 msgid "Connect As"
 msgstr "Свързване като"
 
-#: gtk/gtkmountoperation.c:685
+#: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
 msgstr "_Анонимен"
 
-#: gtk/gtkmountoperation.c:692
+#: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
 msgstr "_Регистриран потребител"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:704
 msgid "_Username"
 msgstr "_Име на потребител"
 
-#: gtk/gtkmountoperation.c:707
+#: gtk/gtkmountoperation.c:709
 msgid "_Domain"
 msgstr "_Домейн"
 
-#: gtk/gtkmountoperation.c:716
+#: gtk/gtkmountoperation.c:718
 msgid "Volume type"
 msgstr "Вид том"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:728
 msgid "_Hidden"
 msgstr "_Скрит"
 
-#: gtk/gtkmountoperation.c:729
+#: gtk/gtkmountoperation.c:731
 msgid "_Windows system"
 msgstr "_От Windows"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:734
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:738
+#: gtk/gtkmountoperation.c:740
 msgid "_Password"
 msgstr "Па_рола"
 
-#: gtk/gtkmountoperation.c:761
+#: gtk/gtkmountoperation.c:763
 msgid "Forget password _immediately"
 msgstr "_Незабавно забравяне на паролата"
 
-#: gtk/gtkmountoperation.c:771
+#: gtk/gtkmountoperation.c:773
 msgid "Remember password until you _logout"
 msgstr "Запомняне на паролата до _изход от системата"
 
-#: gtk/gtkmountoperation.c:782
+#: gtk/gtkmountoperation.c:784
 msgid "Remember _forever"
 msgstr "_Запомняне завинаги"
 
-#: gtk/gtkmountoperation.c:1252
+#: gtk/gtkmountoperation.c:1256
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Непозната програма (ид. пр. %d)"
@@ -2978,12 +2978,12 @@ msgstr "Непозната програма (ид. пр. %d)"
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
 #.
-#: gtk/gtkmountoperation.c:1397
+#: gtk/gtkmountoperation.c:1401
 #, c-format
 msgid "Unable to end process"
 msgstr "Неуспешно приключване на процес"
 
-#: gtk/gtkmountoperation.c:1547
+#: gtk/gtkmountoperation.c:1553
 msgid "_End Process"
 msgstr "_Приключване на процес"
 
@@ -2991,8 +2991,7 @@ msgstr "_Приключване на процес"
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Процесът с идентификатор %d не може да бъде убит — операцията не е "
-"реализирана."
+"Процесът с идентификатор %d не може да се убие — операцията не е реализирана."
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:990
@@ -3018,7 +3017,7 @@ msgstr "Обвивка zsh"
 #: gtk/gtkmountoperation-x11.c:1094
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr "Процесът с идентификатор %d не може да бъде приключен: %s"
+msgstr "Процесът с идентификатор %d не може да се приключи: %s"
 
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
@@ -3037,8 +3036,8 @@ msgstr "Следващ подпрозорец"
 msgid "Page %u"
 msgstr "Страница %u"
 
-#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:942
-#: gtk/print/gtkpapersize.c:982
+#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:943
+#: gtk/print/gtkpapersize.c:983
 msgid "Not a valid page setup file"
 msgstr "Неправилен файл за настройка на страница"
 
@@ -4144,8 +4143,8 @@ msgstr "Най-вероятната причина е, че не може да �
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:605
-#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:617
+#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Печат"
 
@@ -4241,7 +4240,7 @@ msgstr "Отгоре надолу"
 msgid "Bottom to top"
 msgstr "Отдолу нагоре"
 
-#: gtk/gtkprintdialog.c:1766
+#: gtk/gtkprintdialog.c:1767
 msgid "Failed to create the read file descriptor"
 msgstr "Неуспешно създаване на файловия дескриптор за четене"
 
@@ -4268,7 +4267,7 @@ msgstr "Елементът на адрес „%s“ не може да се пр
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Липсва програма на име „%s“ за обекта на адрес „%s“"
 
-#: gtk/gtksearchentry.c:838
+#: gtk/gtksearchentry.c:861
 msgid "Clear Entry"
 msgstr "Изчистване на елемент"
 
@@ -4532,12 +4531,12 @@ msgstr "_Отмяна"
 msgid "_Redo"
 msgstr "Пов_таряне"
 
-#: gtk/gtkwindow.c:6454
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Желаете ли да използвате „Инспектор на GTK“?"
 
-#: gtk/gtkwindow.c:6456
+#: gtk/gtkwindow.c:6458
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4548,7 +4547,7 @@ msgstr ""
 "ви позволява да изследвате и променяте съдържанието на всяка програма за "
 "GTK. Използването му може да доведе до забиване на програмата."
 
-#: gtk/gtkwindow.c:6461
+#: gtk/gtkwindow.c:6463
 msgid "Don’t show this message again"
 msgstr "Това съобщение да не се показва повече"
 
@@ -5109,7 +5108,7 @@ msgstr "Източник:"
 msgid "Defined At"
 msgstr "Дефиниран на"
 
-#: gtk/inspector/recorder.c:2180
+#: gtk/inspector/recorder.c:2181
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Неуспешно запазване на изобразения възел"
@@ -5176,7 +5175,7 @@ msgstr "Име:"
 msgid "Type:"
 msgstr "Вид:"
 
-#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:56
+#: gtk/inspector/resource-list.ui:180 tools/gtk-image-tool-info.c:57
 msgid "Size:"
 msgstr "Размер:"
 
@@ -7645,12 +7644,12 @@ msgstr "Неправилен размер %s\n"
 #: tools/encodesymbolic.c:107
 #, c-format
 msgid "Can’t load file: %s\n"
-msgstr "Файлът не може да бъде зареден: %s\n"
+msgstr "Файлът не може да се зареди: %s\n"
 
 #: tools/encodesymbolic.c:144
 #, c-format
 msgid "Can’t save file %s: %s\n"
-msgstr "Файлът не може да бъде запазен „%s“: %s\n"
+msgstr "Файлът не може да се запази „%s“: %s\n"
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
@@ -7686,12 +7685,12 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:267
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
-#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:68
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:198 tools/gtk-rendernode-tool-info.c:131
-#: tools/gtk-rendernode-tool-show.c:122
+#: tools/gtk-rendernode-tool-extract.c:200 tools/gtk-rendernode-tool-info.c:119
+#: tools/gtk-rendernode-tool-show.c:123
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -7712,7 +7711,7 @@ msgstr "Няма намерен обект за предварително пр�
 #: tools/gtk-builder-tool-preview.c:136
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
-msgstr "Обекти от вид %s не могат да бъдат предварително прегледани\n"
+msgstr "Обекти от вид %s не може да се прегледат предварително\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
@@ -7723,9 +7722,9 @@ msgid "Use style from CSS file"
 msgstr "Ползване на стил от файла с CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:274
-#: tools/gtk-rendernode-tool-benchmark.c:108
-#: tools/gtk-rendernode-tool-render.c:279 tools/gtk-rendernode-tool-show.c:129
+#: tools/gtk-builder-tool-validate.c:275
+#: tools/gtk-rendernode-tool-benchmark.c:109
+#: tools/gtk-rendernode-tool-render.c:318 tools/gtk-rendernode-tool-show.c:130
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Графичната система не може да се инициализира\n"
@@ -7735,7 +7734,7 @@ msgid "Preview the file."
 msgstr "Преглед на файла."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:293
+#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:294
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Не е указан файл във формат „.ui“\n"
@@ -7753,7 +7752,7 @@ msgstr "Няма намерен обект\n"
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
-msgstr "Обекти от вид %s не могат да бъдат снимани на екрана\n"
+msgstr "Обекти от вид %s не може да се снимат на екрана\n"
 
 #: tools/gtk-builder-tool-screenshot.c:298
 #, c-format
@@ -7770,13 +7769,13 @@ msgstr ""
 "Използвайте „--force“, за да презапишете.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:245
+#: tools/gtk-rendernode-tool-render.c:251
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Изходът е изписан в %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:249
+#: tools/gtk-rendernode-tool-render.c:255
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Неуспешно запазване на %s: %s\n"
@@ -7793,11 +7792,11 @@ msgstr "Запазване на файл с възли вместо png"
 msgid "Overwrite existing file"
 msgstr "Презаписване на съществуващ файл"
 
-#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-play.c:327
-#: tools/gtk-image-tool-relabel.c:86 tools/gtk-image-tool-show.c:119
-#: tools/gtk-rendernode-tool-benchmark.c:99
-#: tools/gtk-rendernode-tool-render.c:272
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
+#: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
+#: tools/gtk-rendernode-tool-benchmark.c:100
+#: tools/gtk-rendernode-tool-render.c:311
 msgid "FILE…"
 msgstr "ФАЙЛ…"
 
@@ -7813,7 +7812,7 @@ msgstr "Може да се изобрази само един файл форм�
 #: tools/gtk-builder-tool-simplify.c:447
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr "%s:%d: Стойността за свойството „%s“ не може да бъде анализирана: %s\n"
+msgstr "%s:%d: Стойността за свойството „%s“ не може да се анализирана: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:666
 #, c-format
@@ -7853,14 +7852,14 @@ msgstr "Неуспешно създаване на временен файл: %s
 #: tools/gtk-builder-tool-simplify.c:2620
 #, c-format
 msgid "Can’t load “%s”: %s\n"
-msgstr "Файлът не може да бъде зареден „%s“: %s\n"
+msgstr "Файлът не може да се зареди „%s“: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2632
 #: tools/gtk-builder-tool-simplify.c:2642
 #: tools/gtk-builder-tool-simplify.c:2651
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
-msgstr "Файлът не може да бъде анализиран „%s“: %s\n"
+msgstr "Файлът не може да се анализира „%s“: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2677
 #, c-format
@@ -7903,7 +7902,7 @@ msgstr "Изоставени видове:\n"
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Създаването на инстанция от шаблон вид %s е неуспешно\n"
 
-#: tools/gtk-builder-tool-validate.c:282
+#: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
 msgstr "Проверка на файла."
 
@@ -7939,80 +7938,80 @@ msgstr ""
 "  show         Показване на изображение\n"
 "  play         Изпълнение на анимация\n"
 
-#: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
 msgid "Output file"
 msgstr "Изходен файл"
 
-#: tools/gtk-image-tool-compare.c:57
+#: tools/gtk-image-tool-compare.c:58
 msgid "Compare two images"
 msgstr "Сравняване на две изображения"
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:166
-#: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
-#: tools/gtk-image-tool-show.c:141
+#: tools/gtk-image-tool-compare.c:71 tools/gtk-image-tool-convert.c:167
+#: tools/gtk-image-tool-info.c:102 tools/gtk-image-tool-relabel.c:110
+#: tools/gtk-image-tool-show.c:142
 #, c-format
 msgid "No image file specified\n"
 msgstr "Не е указан файл с изображение\n"
 
-#: tools/gtk-image-tool-compare.c:76
+#: tools/gtk-image-tool-compare.c:77
 #, c-format
 msgid "Can only accept two image files\n"
 msgstr "Може да приеме два файла с изображение\n"
 
-#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:90 tools/gtk-rendernode-tool-compare.c:123
 #, c-format
 msgid "Could not save diff image to %s\n"
-msgstr "Изображението за разликите не може да бъде запазено в %s\n"
+msgstr "Изображението за разликите не може да се запази в %s\n"
 
-#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "Разликите са запазени в %s.\n"
 
-#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
 #, c-format
 msgid "The images are different.\n"
 msgstr "Изображенията са различни.\n"
 
-#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:105 tools/gtk-rendernode-tool-compare.c:138
 #, c-format
 msgid "No differences.\n"
 msgstr "Няма разлики.\n"
 
-#: tools/gtk-image-tool-convert.c:139
+#: tools/gtk-image-tool-convert.c:140
 msgid "Format to use"
 msgstr "Формат, който да се ползва"
 
-#: tools/gtk-image-tool-convert.c:139
+#: tools/gtk-image-tool-convert.c:140
 msgid "FORMAT"
 msgstr "ФОРМАТ"
 
-#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use"
 msgstr "Цветово състояние, което да се ползва"
 
-#: tools/gtk-image-tool-convert.c:140 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "COLORSTATE"
 msgstr "ЦВЕТОВО_СЪСТОЯНИЕ"
 
-#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "Color state to use, as cicp tuple"
 msgstr "Цветово състояние, което да се ползва за cicp"
 
-#: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "CICP"
 msgstr "CICP"
 
-#: tools/gtk-image-tool-convert.c:153
+#: tools/gtk-image-tool-convert.c:154
 msgid "Convert the image to a different format or color state."
 msgstr "Преобразуване на изображението до друг формат или цветово състояние."
 
-#: tools/gtk-image-tool-convert.c:172 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:173 tools/gtk-image-tool-relabel.c:116
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr "Може приеме само един входен файл с изображение и един изходен файл\n"
 
-#: tools/gtk-image-tool-convert.c:186
+#: tools/gtk-image-tool-convert.c:187
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -8023,7 +8022,7 @@ msgstr ""
 "Поддържани формати:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:203
+#: tools/gtk-image-tool-convert.c:204
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8034,77 +8033,77 @@ msgstr ""
 "Поддържани цветови състояния:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:213 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Опциите „--color-state“ и „--cicp“ са несъвместими\n"
 
-#: tools/gtk-image-tool-convert.c:221 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Неподдържан вариант на cicp: %s\n"
 
-#: tools/gtk-image-tool-info.c:57
+#: tools/gtk-image-tool-info.c:58
 msgid "Format:"
 msgstr "Формат:"
 
-#: tools/gtk-image-tool-info.c:63 tools/gtk-image-tool-info.c:65
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:64 tools/gtk-image-tool-info.c:66
+#: tools/gtk-image-tool-info.c:68
 msgid "Color state:"
 msgstr "Цветово състояние:"
 
-#: tools/gtk-image-tool-info.c:67
+#: tools/gtk-image-tool-info.c:68
 msgid "unknown"
 msgstr "неизвестно"
 
-#: tools/gtk-image-tool-info.c:88
+#: tools/gtk-image-tool-info.c:89
 msgid "Provide information about the image."
 msgstr "Предоставяне на информация за изображението."
 
-#: tools/gtk-image-tool-info.c:107
+#: tools/gtk-image-tool-info.c:108
 #, c-format
 msgid "Can only accept a single image file\n"
 msgstr "Може да приеме само един файл с изображение\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:117
-#: tools/gtk-rendernode-tool-show.c:121
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
+#: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Без добавяне на заглавна лента"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "РАЗМЕР"
 
-#: tools/gtk-image-tool-play.c:323
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
 msgstr "Без анимации"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't use system resources"
 msgstr "Без ползване на системни ресурси"
 
-#: tools/gtk-image-tool-play.c:325
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't load external resources"
 msgstr "Без зареждане на външни ресурси"
 
-#: tools/gtk-image-tool-play.c:326
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't allow gpa extensions"
 msgstr "Без разширения gpa (анимации на GTK по пътека)"
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:324
 msgid "Show one or more animations."
 msgstr "С една или повече анимации."
 
-#: tools/gtk-image-tool-play.c:350
+#: tools/gtk-image-tool-play.c:337
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Не е указан файл с анимации\n"
 
-#: tools/gtk-image-tool-relabel.c:96
+#: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
 msgstr "Смяна на цветовото състояние на изображение без преобразуване."
 
-#: tools/gtk-image-tool-relabel.c:130
+#: tools/gtk-image-tool-relabel.c:131
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8113,29 +8112,9 @@ msgstr ""
 "Не е цветово състояние: %s\n"
 "Възможни стойности: %s\n"
 
-#: tools/gtk-image-tool-show.c:128
+#: tools/gtk-image-tool-show.c:129
 msgid "Show one or more images."
 msgstr "Показване на едно или повече изображения."
-
-#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr "Грешка в %s: %s\n"
-
-#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:73
-#, c-format
-msgid "Failed to load node file: %s\n"
-msgstr "Неуспешно зареждане на файла с възли: %s\n"
-
-#: tools/gtk-image-tool-utils.c:89
-#, c-format
-msgid "%s is not a texture node\n"
-msgstr "%s не е възел за текстура\n"
-
-#: tools/gtk-image-tool-utils.c:315
-#, c-format
-msgid "cicp must be 4 numbers, separated by /\n"
-msgstr "cicp трябва да са 4 числа, разделени с „/“\n"
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
@@ -8544,6 +8523,7 @@ msgid ""
 "  convert      Convert into nodes\n"
 "  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
+"  match        Match pattern in the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
 "\n"
@@ -8559,74 +8539,75 @@ msgstr ""
 "  convert      Преобразуване във възли\n"
 "  extract      Извличане на адресите на данни\n"
 "  info         Предоставяне на информация за възела\n"
+"  match        Напасване на шаблона във възела\n"
 "  show         Показване на възела\n"
 "  render       Снимка на възела\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Add renderer to benchmark"
 msgstr "Добавяне на варианта за изобразяване за тестване на производителността"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "RENDERER"
 msgstr "ВАРИАНТ ЗА ИЗОБРАЗЯВАНЕ"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Number of runs with each renderer"
 msgstr "Брой изпълнения с всеки вариант за изобразяване"
 
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "RUNS"
 msgstr "ИЗПЪЛНЕНИЯ"
 
-#: tools/gtk-rendernode-tool-benchmark.c:98
+#: tools/gtk-rendernode-tool-benchmark.c:99
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Не изтегляй резултата/изчакай видео картата да завърши"
 
-#: tools/gtk-rendernode-tool-benchmark.c:116
+#: tools/gtk-rendernode-tool-benchmark.c:117
 msgid "Benchmark rendering of a .node file."
 msgstr ""
 "Тестване на производителността на изобразяването на файл с разширение "
 "„.node“."
 
-#: tools/gtk-rendernode-tool-benchmark.c:129
-#: tools/gtk-rendernode-tool-extract.c:220 tools/gtk-rendernode-tool-info.c:153
-#: tools/gtk-rendernode-tool-render.c:300 tools/gtk-rendernode-tool-show.c:150
+#: tools/gtk-rendernode-tool-benchmark.c:130
+#: tools/gtk-rendernode-tool-extract.c:222 tools/gtk-rendernode-tool-info.c:141
+#: tools/gtk-rendernode-tool-render.c:339 tools/gtk-rendernode-tool-show.c:151
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Не е указан „.node“ файл\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:135
+#: tools/gtk-rendernode-tool-benchmark.c:136
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Може да се тества производителността на само един „.node“ файл\n"
 
-#: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:270
+#: tools/gtk-rendernode-tool-compare.c:66
+#: tools/gtk-rendernode-tool-render.c:308
 msgid "Renderer to use"
 msgstr "Вариант на изобразяване"
 
-#: tools/gtk-rendernode-tool-compare.c:70
+#: tools/gtk-rendernode-tool-compare.c:71
 msgid "FILE1 FILE2"
 msgstr "ФАЙЛ1 ФАЙЛ2"
 
-#: tools/gtk-rendernode-tool-compare.c:82
+#: tools/gtk-rendernode-tool-compare.c:83
 msgid "Compare .node or .png files."
 msgstr "Сравняване на .node или .png файлове."
 
-#: tools/gtk-rendernode-tool-compare.c:95
+#: tools/gtk-rendernode-tool-compare.c:96
 #, c-format
 msgid "Must specify two files\n"
 msgstr "Трябва да се посочат два файла\n"
 
-#: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-compare.c:103
+#: tools/gtk-rendernode-tool-render.c:213
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Неуспешна създаване на вариант за изобразяване: %s\n"
 
-#: tools/gtk-rendernode-tool-compare.c:111
+#: tools/gtk-rendernode-tool-compare.c:112
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "Неуспешно зареждане на %s: %s\n"
@@ -8661,58 +8642,58 @@ msgstr "Не е указан файл във формат „.svg“\n"
 msgid "Can only accept a single .svg file\n"
 msgstr "Може да приеме само един „.svg“ файл\n"
 
-#: tools/gtk-rendernode-tool-extract.c:69
-#: tools/gtk-rendernode-tool-extract.c:147
+#: tools/gtk-rendernode-tool-extract.c:70
+#: tools/gtk-rendernode-tool-extract.c:148
 #, c-format
 msgid "Failed to write %s\n"
 msgstr "Неуспешно запазване на %s\n"
 
-#: tools/gtk-rendernode-tool-extract.c:196
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "Directory to use"
 msgstr "Коя папка да се ползва"
 
-#: tools/gtk-rendernode-tool-extract.c:196
+#: tools/gtk-rendernode-tool-extract.c:198
 msgid "DIRECTORY"
 msgstr "ПАПКА"
 
-#: tools/gtk-rendernode-tool-extract.c:197
+#: tools/gtk-rendernode-tool-extract.c:199
 msgid "Be verbose"
 msgstr "Подробна информация"
 
-#: tools/gtk-rendernode-tool-extract.c:207
+#: tools/gtk-rendernode-tool-extract.c:209
 msgid "Extract data urls from the render node."
 msgstr "Извличане на адресите за данни от възела за изобразяване."
 
-#: tools/gtk-rendernode-tool-extract.c:226 tools/gtk-rendernode-tool-info.c:159
+#: tools/gtk-rendernode-tool-extract.c:228 tools/gtk-rendernode-tool-info.c:147
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Може да приеме само един „.node“ файл\n"
 
-#: tools/gtk-rendernode-tool-info.c:97
+#: tools/gtk-rendernode-tool-info.c:79 tools/gtk-rendernode-tool-info.c:81
 msgid "Number of nodes:"
 msgstr "Брой възли:"
 
-#: tools/gtk-rendernode-tool-info.c:104
+#: tools/gtk-rendernode-tool-info.c:93
 msgid "Depth:"
 msgstr "Дълбочина:"
 
-#: tools/gtk-rendernode-tool-info.c:107
+#: tools/gtk-rendernode-tool-info.c:96
 msgid "Bounds:"
 msgstr "Граници:"
 
-#: tools/gtk-rendernode-tool-info.c:108
+#: tools/gtk-rendernode-tool-info.c:97
 msgid "Origin:"
 msgstr "Начало:"
 
-#: tools/gtk-rendernode-tool-info.c:112 tools/gtk-rendernode-tool-info.c:118
+#: tools/gtk-rendernode-tool-info.c:101 tools/gtk-rendernode-tool-info.c:107
 msgid "Opaque part:"
 msgstr "Непрозрачна част:"
 
-#: tools/gtk-rendernode-tool-info.c:140
+#: tools/gtk-rendernode-tool-info.c:128
 msgid "Provide information about the render node."
 msgstr "Предоставяне на информация за възела за изобразяване."
 
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:173
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -8721,37 +8702,70 @@ msgstr ""
 "Файлът „%s“ съществува.\n"
 "Ако искате да презапишете, посочете името на файла.\n"
 
-#: tools/gtk-rendernode-tool-render.c:185
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:187
+#: tools/gtk-rendernode-tool-render.c:199
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Неуспешно генериране на SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:271
+#: tools/gtk-rendernode-tool-render.c:309
 msgid "Keep node position unchanged"
 msgstr "Без промяна на местоположението на възела"
 
-#: tools/gtk-rendernode-tool-render.c:287
+#: tools/gtk-rendernode-tool-render.c:310
+msgid "Area to render"
+msgstr "Област за изобразяване"
+
+#: tools/gtk-rendernode-tool-render.c:310
+msgid "X,Y,W,H"
+msgstr "X,Y,W,H"
+
+#: tools/gtk-rendernode-tool-render.c:326
 msgid "Render a .node file to an image."
 msgstr "Изобразяване на „.node“ файл към изображение."
 
-#: tools/gtk-rendernode-tool-render.c:306
+#: tools/gtk-rendernode-tool-render.c:345
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Може да се изобразява само един „.node“ файл в един изходен файл\n"
 
-#: tools/gtk-rendernode-tool-show.c:120
+#: tools/gtk-rendernode-tool-render.c:353
+#, c-format
+msgid "Invalid rectangle given for bounds\n"
+msgstr "Неправилен правоъгълник за границите\n"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Put node into offload container"
 msgstr "Поставяне на възела в контейнер за разтоварване"
 
-#: tools/gtk-rendernode-tool-show.c:137
+#: tools/gtk-rendernode-tool-show.c:138
 msgid "Show the render node."
 msgstr "Показване на възела за изобразяване."
 
-#: tools/gtk-rendernode-tool-show.c:156
+#: tools/gtk-rendernode-tool-show.c:157
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Може да се прегледа само един файл формат „.node“\n"
+
+#: tools/gtk-tool-utils.c:48
+#, c-format
+msgid "Error at %s: %s\n"
+msgstr "Грешка в %s: %s\n"
+
+#: tools/gtk-tool-utils.c:66
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Неуспешно зареждане на файла с възли: %s\n"
+
+#: tools/gtk-tool-utils.c:87
+#, c-format
+msgid "%s is not a texture node\n"
+msgstr "%s не е възел за текстура\n"
+
+#: tools/gtk-tool-utils.c:313
+#, c-format
+msgid "cicp must be 4 numbers, separated by /\n"
+msgstr "cicp трябва да са 4 числа, разделени с „/“\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
