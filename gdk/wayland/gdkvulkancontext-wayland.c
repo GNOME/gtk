@@ -61,6 +61,9 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
   int dx = impl->pending_buffer_offset_x;
   int dy = impl->pending_buffer_offset_y;
 
+  impl->pending_buffer_offset_x = 0;
+  impl->pending_buffer_offset_y = 0;
+
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
