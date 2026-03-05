@@ -13,7 +13,7 @@ reference:
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson
-    - sh -x ./download-reference.sh
+    - bash -x ./download-reference.sh
     - sh -x ./prepare-docs.sh docs
   artifacts:
     paths:
