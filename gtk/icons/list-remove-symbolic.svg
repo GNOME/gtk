@@ -1,23 +1,21 @@
-
-  <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          xmlns:gpa='https://www.gtk.org/grappa'
-          gpa:version='1'
-          gpa:state='0'
-          gpa:keywords='list-remove minus'>
-    <path
-            id='path0'
-            fill='none'
-            stroke='url("#gpa:foreground") rgb(0,0,0)'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            d='M 2 8 L 14 8'
-            class='transparent-fill foreground-stroke'
-            gpa:stroke-width='0.5 2 3'
-            gpa:stroke='foreground'
-            gpa:fill='none'>
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0">
+  <path id="path0" fill="none" stroke="url(&quot;#gpa:foreground&quot;) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 2 8 L 14 8" class="transparent-fill foreground-stroke" gpa:stroke-width="0.5 2 3" gpa:stroke="foreground" gpa:fill="none">
     </path>
-  </svg>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>list-remove minus</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

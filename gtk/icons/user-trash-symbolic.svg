@@ -1,54 +1,27 @@
-
-  <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          xmlns:gpa='https://www.gtk.org/grappa'
-          gpa:version='1'
-          gpa:keywords='trash bin deleted wastebasket user folder'
-          gpa:state='0'>
-    <path
-            d='M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 4'
-            id='path0'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            stroke='rgb(0,0,0)'
-            fill='none'
-            class='foreground-stroke transparent-fill'
-            gpa:stroke='foreground'>
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0">
+  <path d="M 3 4 L 3 13 C 3 14.1045694, 3.89543056 15, 5 15 L 11 15 C 12.1045694 15, 13 14.1045694, 13 13 L 13 4" id="path0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:stroke="foreground">
     </path>
-    <path
-            d='M 15 4 L 1 4'
-            id='path1'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            stroke='rgb(0,0,0)'
-            fill='none'
-            class='foreground-stroke transparent-fill'
-            gpa:stroke='foreground'>
+  <path d="M 15 4 L 1 4" id="path1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:stroke="foreground">
     </path>
-    <path
-            d='M 5 4 L 5 3 C 5 1.89543045, 5.89543056 1, 7 1 L 9 1 C 10.1045694 1, 11 1.89543045, 11 3 L 11 4'
-            id='path2'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            stroke='rgb(0,0,0)'
-            fill='none'
-            class='foreground-stroke transparent-fill'
-            gpa:stroke='foreground'>
+  <path d="M 5 4 L 5 3 C 5 1.89543045, 5.89543056 1, 7 1 L 9 1 C 10.1045694 1, 11 1.89543045, 11 3 L 11 4" id="path2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:stroke="foreground">
     </path>
-    <path
-            d='M 6.5 7 L 6.5 12 M 9.49961376 7 L 9.49961376 12'
-            id='path3'
-            stroke-width='1'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            stroke='rgb(0,0,0)'
-            fill='none'
-            class='foreground-stroke transparent-fill'
-            gpa:stroke='foreground'>
+  <path d="M 6.5 7 L 6.5 12 M 9.49961376 7 L 9.49961376 12" id="path3" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:stroke="foreground">
     </path>
-  </svg>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>trash bin deleted wastebasket user folder</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
