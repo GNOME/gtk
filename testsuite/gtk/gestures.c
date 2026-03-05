@@ -502,10 +502,18 @@ static void
 test_phases (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -557,10 +565,18 @@ static void
 test_mixed (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -619,10 +635,18 @@ static void
 test_early_exit (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -677,10 +701,18 @@ static void
 test_claim_capture (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -737,10 +769,18 @@ static void
 test_claim_target (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -798,10 +838,18 @@ static void
 test_claim_bubble (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -864,11 +912,19 @@ static void
 test_early_claim_capture (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GtkGesture *g;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -929,11 +985,19 @@ static void
 test_late_claim_capture (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GtkGesture *g;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -992,11 +1056,19 @@ static void
 test_group (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   GtkGesture *g1, *g2;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1051,10 +1123,18 @@ G_GNUC_UNUSED static void
 test_gestures_outside_grab (void)
 {
   GtkWidget *A, *B, *C, *D, *E;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1120,10 +1200,18 @@ G_GNUC_UNUSED static void
 test_gestures_inside_grab (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_popover_new ();
   gtk_widget_set_name (B, "B");
@@ -1183,10 +1271,18 @@ G_GNUC_UNUSED static void
 test_multitouch_on_single (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1240,10 +1336,18 @@ G_GNUC_UNUSED static void
 test_multitouch_activation (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1322,11 +1426,19 @@ G_GNUC_UNUSED static void
 test_multitouch_interaction (void)
 {
   GtkWidget *A, *B, *C;
+  GdkDisplay *display;
   GtkGesture *g;
   GString *str;
   graphene_rect_t allocation;
 
   A = gtk_window_new ();
+  display = gtk_widget_get_display (A);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
