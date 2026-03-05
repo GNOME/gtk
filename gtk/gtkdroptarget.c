@@ -542,15 +542,22 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
     }
   else
     {
+      /*
+       * @self is attached to the common ancestor of new_target and old_target.
+       * I.e. not actually crossing out of the drop target's area, so there is
+       * nothing to do.
+       */
+      if (crossing->new_descendent != NULL ||
+          crossing->new_target == widget)
+        return;
+
       if (self->entered)
         {
           self->entered = FALSE;
           g_signal_emit (self, signals[LEAVE], 0);
         }
 
-      if (crossing->new_descendent != NULL ||
-          crossing->new_target == widget ||
-          self->drop == NULL)
+      if (self->drop == NULL)
         return;
 
       if (!self->dropping)
@@ -1169,4 +1176,3 @@ gtk_drop_target_reject (GtkDropTarget *self)
 
   gtk_drop_target_end_drop (self);
 }
-
