@@ -36,7 +36,9 @@ struct _GskGpuClip
   GskRoundedRect       rect;
 };
 
-void                    gsk_gpu_clip_init_empty                         (GskGpuClip          *clip,
+void                    gsk_gpu_clip_init_all_clipped                   (GskGpuClip             *clip);
+void                    gsk_gpu_clip_init_empty                         (GskGpuClip             *clip,
+                                                                         const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect);
 void                    gsk_gpu_clip_init_contained                     (GskGpuClip          *clip,
                                                                          const graphene_rect_t  *rect);
@@ -45,11 +47,15 @@ void                    gsk_gpu_clip_init_copy                          (GskGpuC
 void                    gsk_gpu_clip_init_rect                          (GskGpuClip          *clip,
                                                                          const graphene_rect_t  *rect);
 
-gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+gboolean                gsk_gpu_clip_is_all_clipped                     (GskGpuClip             *clip);
+
+gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
+                                                                         const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
+                                                                         const graphene_point_t *offset,
                                                                          const GskRoundedRect   *rounded) G_GNUC_WARN_UNUSED_RESULT;
 void                    gsk_gpu_clip_scale                              (GskGpuClip             *dest,
                                                                          const GskGpuClip       *src,
@@ -61,15 +67,19 @@ gboolean                gsk_gpu_clip_transform                          (GskGpuC
                                                                          GskTransform           *transform,
                                                                          const graphene_rect_t  *viewport) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean                gsk_gpu_clip_contains_rect                      (const GskGpuClip    *self,
+gboolean                gsk_gpu_clip_contains_rect                      (const GskGpuClip       *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip    *self,
+gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip       *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip    *self,
+GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip       *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect);
+gboolean                gsk_gpu_clip_get_largest_cover                  (const GskGpuClip       *self,
+                                                                         const graphene_point_t *offset,
+                                                                         const graphene_rect_t  *rect,
+                                                                         graphene_rect_t        *result);
 
 G_END_DECLS
 

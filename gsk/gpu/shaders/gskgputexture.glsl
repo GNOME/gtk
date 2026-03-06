@@ -4,14 +4,14 @@ acs_equals_ccs = true;
 acs_premultiplied = true;
 opacity = false;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t tex_rect;
 #endif /* GSK_PREAMBLE */
 
 #include "gskgputextureinstance.glsl"
 
 PASS(0) vec2 _pos;
-PASS_FLAT(1) Rect _rect;
+PASS_FLAT(1) Rect _bounds;
 PASS(2) vec2 _tex_coord;
 
 
@@ -20,12 +20,12 @@ PASS(2) vec2 _tex_coord;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
-  _rect = r;
+  _bounds = b;
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
 }
 
@@ -40,7 +40,7 @@ run (out vec4 color,
      out vec2 position)
 {
   color = texture (GSK_TEXTURE0, _tex_coord) *
-          rect_coverage (_rect, _pos);
+          rect_coverage (_bounds, _pos);
   position = _pos;
 }
 

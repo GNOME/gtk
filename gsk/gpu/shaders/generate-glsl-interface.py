@@ -180,8 +180,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 2,
-    struct_init = '{0}{1}{3}[{4}] = {2}->x + offset->x;\n'
-                  '{0}{1}{3}[{4} + 1] = {2}->y + offset->y;'
+    struct_init = '{0}{1}{3}[{4}] = {2}->x + pass->offset.x;\n'
+                  '{0}{1}{3}[{4} + 1] = {2}->y + pass->offset.y;'
 ),
 Type(
     type = 'graphene_size_t',
@@ -210,14 +210,14 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gsk_gpu_rect_to_float ({2}, offset, {1}{3});'
+    struct_init = '{0}gsk_gpu_rect_to_float ({2}, &pass->offset, {1}{3});'
 ),
 Type(
     type = 'GskRoundedRect',
     pointer = True,
     var_type = VarType.FLOAT,
     size = 12,
-    struct_init = '{0}gsk_rounded_rect_to_float ({2}, offset, {1}{3});'
+    struct_init = '{0}gsk_rounded_rect_to_float ({2}, &pass->offset, {1}{3});'
 ),
 Type(
     type = 'graphene_matrix_t',
@@ -231,8 +231,8 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});'
-                  '{0}{1}{3}[3] *= opacity;'
+    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});\n'
+                  '{0}{1}{3}[3] *= pass->opacity;'
 ),
 ]
 
@@ -492,8 +492,7 @@ def print_c_shader_op_class (file):
 ''')
 
 def print_c_invocation (file, n_attributes, attributes, prototype_only):
-    args = [ FunctionArg ('GskGpuFrame',                 True,  'frame'),
-             FunctionArg ('GskGpuShaderClip',            False, 'clip'),
+    args = [ FunctionArg ('GskGpuRenderPass',            True,  'pass'),
              FunctionArg ('GdkColorState',               True,  'ccs') ]
     if file.ccs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'ccs_premultiplied'))
@@ -501,10 +500,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
         args.append (FunctionArg ('GdkColorState',       True,  'acs'))
     if file.acs_premultiplied == Premultiplied.ARGUMENT:
         args.append (FunctionArg ('gboolean',            False,  'acs_premultiplied'))
-    if file.opacity:
-        args.append (FunctionArg ('float',               False, 'opacity'))
-    args.append (FunctionArg ('const graphene_point_t',  True,  'offset'))
-
+    args.append (FunctionArg ('const graphene_rect_t',   True,  'bounds'))
     for i in range(1, file.n_textures + 1):
         args += [ FunctionArg ('GskGpuImage',             True, 'image' + str (i)),
                   FunctionArg ('GskGpuSampler',           False, 'sampler' + str (i)) ]
@@ -512,7 +508,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     for var in file.variations:
         args.append (FunctionArg (var.type.type, False, 'variation_' + var.name))
     for var in file.variables:
-        if var.name == 'opacity':
+        if var.name == 'opacity' or var.name == 'bounds':
             continue
         args.append (FunctionArg (('const ' if var.type.pointer else '') + var.type.type, var.type.pointer, var.name))
 
@@ -527,7 +523,9 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     print (f'''{{
   {file.struct_name}Instance *instance;
 
-  gsk_gpu_shader_op_alloc (frame,
+  gsk_gpu_render_pass_prepare_shader (pass);
+
+  gsk_gpu_shader_op_alloc (pass->frame,
                            &{file.var_name.upper()}_OP_CLASS,
                            ccs ? gsk_gpu_color_states_create (ccs, {file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {'ccs' if file.acs_equals_ccs else 'acs'}, {file.acs_premultiplied.to_c_code('acs_premultiplied')})
                                : gsk_gpu_color_states_create_equal ({file.ccs_premultiplied.to_c_code('ccs_premultiplied')}, {file.acs_premultiplied.to_c_code('acs_premultiplied')}),''')
@@ -537,7 +535,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
 
     else:
         print (f'''                           0,''')
-    print (f'''                           clip,''')
+    print (f'''                           gsk_gpu_clip_get_shader_clip (&pass->clip, &pass->offset, bounds),''')
     if file.n_textures > 0:
         print (f'''                           (GskGpuImage *[{file.n_textures}]) {{ {', '.join (map (lambda x: 'image' + str(x), range(1, file.n_textures + 1)))} }},
                            (GskGpuSampler[{file.n_textures}]) {{ {', '.join (map (lambda x: 'sampler' + str(x), range(1, file.n_textures + 1)))} }},''')
@@ -549,7 +547,7 @@ def print_c_invocation (file, n_attributes, attributes, prototype_only):
     for attr in attributes:
         size = 0
         for var in attr.inputs:
-            print (var.type.struct_initializer ('  ', 'instance->', var.name, attr.name, size))
+            print (var.type.struct_initializer ('  ', 'instance->', var.name if var.name != 'opacity' else 'pass->opacity', attr.name, size))
             size += var.type.size
 
     print (f'''}}
@@ -643,6 +641,7 @@ def print_source_file (file, n_attributes, attributes):
 
 #include "gskgpu{file.name}opprivate.h"
 
+#include "gskgpurenderpassprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskrectprivate.h"
 #include <graphene.h>

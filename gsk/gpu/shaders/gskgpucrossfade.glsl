@@ -5,7 +5,7 @@ struct_name = "GskGpuCrossFade";
 acs_equals_ccs = true;
 acs_premultiplied = true;
 
-graphene_rect_t rect;
+graphene_rect_t bounds;
 graphene_rect_t start_rect;
 graphene_rect_t end_rect;
 float opacity;
@@ -28,9 +28,9 @@ PASS_FLAT(6) float _end_opacity;
 void
 run (out vec2 pos)
 {
-  Rect r = rect_from_gsk (in_rect);
+  Rect b = rect_from_gsk (in_bounds);
   
-  pos = rect_get_position (r);
+  pos = rect_get_position (b);
 
   _pos = pos;
 
