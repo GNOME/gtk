@@ -5299,8 +5299,9 @@ base64_encode_with_linebreaks (const guchar *data,
 {
   gsize max;
   char *out;
-  int state = 0, outlen;
+  int state = 0;
   int save = 0;
+  gsize outlen;
 
   g_return_val_if_fail (data != NULL || len == 0, NULL);
 

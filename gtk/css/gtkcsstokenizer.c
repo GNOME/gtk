@@ -53,8 +53,8 @@ gtk_css_token_clear (GtkCssToken *token)
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      if (token->string.len >= 16)
-        g_free (token->string.u.string);
+      if (token->string.string != token->string.buf)
+        g_free (token->string.string);
       break;
 
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
@@ -507,11 +507,15 @@ gtk_css_token_init_string (GtkCssToken     *token,
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
-      token->string.len = string->len;
-      if (string->len < 16)
-        g_strlcpy (token->string.u.buf, string->str, 16);
+      if (string->len < G_N_ELEMENTS (token->string.buf))
+        {
+          g_strlcpy (token->string.buf, string->str, G_N_ELEMENTS (token->string.buf));
+          token->string.string = token->string.buf;
+        }
       else
-        token->string.u.string = g_strdup (string->str);
+        {
+          token->string.string = g_strdup (string->str);
+        }
       break;
     default:
       g_assert_not_reached ();
@@ -1244,6 +1248,26 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
 
   while (tokenizer->data < tokenizer->end)
     {
+      gsize n_characters = 0;
+      const char *data;
+
+      for (data = tokenizer->data;
+           data < tokenizer->end &&
+           *data != end &&
+           *data != '\\' &&
+           !is_newline (*data);
+           data = g_utf8_next_char (data))
+        {
+          n_characters++;
+        }
+      if (data > tokenizer->data)
+        {
+          g_string_append_len (tokenizer->name_buffer, tokenizer->data, data - tokenizer->data);
+          gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, n_characters);
+          if (tokenizer->data >= tokenizer->end)
+            break;
+        }
+
       if (*tokenizer->data == end)
         {
           gtk_css_tokenizer_consume_ascii (tokenizer);
