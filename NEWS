@@ -1,5 +1,46 @@
-Overview of Changes in 4.22.0, xx-xx-xxxx
+Overview of Changes in 4.22.0, 06-03-2026
 =========================================
+
+* Bugs fixed:
+  - #8037 Regression: DropTarget's ::leave signal is no longer emitted when a
+    drop is finished (Matthias Clasen)
+  - #8079 Issues in the dnd demo in gtk4-demo (Matthias Clasen)
+  - #8080 Gtk program writes a "foo.png" file to current folder (Marco Trevisan
+    (Treviño))
+  - !9428 demos: Avoid main() from returning due to GApplication.quit (Florian
+    "sp1rit"​)
+  - !9455 win32: Drop the global inhibition counter (g.willems)
+  - !9547 Make WAYLAND_SOCKET handling more reliabe (Jonas Ådahl)
+  - !9553 svg: Allow unsetting values (Matthias Clasen)
+  - !9554 Update Japanese translation
+  - !9555 Update Korean translation
+  - !9556 Update Georgian translation
+  - !9558 accessiblehypertext: Fix doc formatting (Jamie Gravendeel)
+  - !9559 Update Georgian translation
+  - !9560 toplevel-wayland: Free a11y properties on finalize (Maximiliano
+    Sandoval)
+  - !9561 Update Hungarian translation
+  - !9563 svg: drop some api (Matthias Clasen)
+  - !9564 svg: Make the gpa:states condition more flexible (Matthias Clasen)
+  - !9565 svg: Add state names (Matthias Clasen)
+  - !9567 Update Portuguese translation (Hugo Carvalho)
+  - !9568 drop target: Emit the leave signal again (Matthias Clasen)
+  - !9570 Drop accidental files (Matthias Clasen)
+  - !9571 testsuite: Skip gestures if running with no seat (Alessandro Astone)
+  - !9572 droptarget: Fix unconditional leave on cross out (Niklas Wimmer)
+  - !9574 Update Bulgarian translation (Alexander Shopov)
+  - !9575 gtkcheckbutton: Don't use raw label for a11y purposes (Lukáš Tyrychtr)
+  - !9576 icons: Update from devkit (Jakub Steiner)
+  - !9577 wayland: Reset pending offset in Vulkan path (Matthias Clasen)
+
+* Translation updates:
+  - Bulgarian (Alexander Shopov)
+  - Georgian (Ekaterine Papava)
+  - Hungarian (Balázs Úr)
+  - Japanese (Makoto Sakaguchi)
+  - Korean (Changwoo Ryu)
+  - Portuguese (Hugo Carvalho)
+
 
 Overview of Changes in 4.21.6, 27-02-2026
 =========================================
