@@ -129,6 +129,7 @@
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuilderprivate.h"
+#include <gdk/gdkkeysyms.h>
 
 #include <string.h>
 
@@ -823,6 +824,29 @@ gtk_expander_measure (GtkWidget      *widget,
                        minimum_baseline, natural_baseline);
 }
 
+static void
+update_accessible_mnemonic (GtkExpander *expander)
+{
+  if (GTK_IS_LABEL (expander->label_widget) && expander->use_underline)
+    {
+      guint keyval = gtk_label_get_mnemonic_keyval (GTK_LABEL (expander->label_widget));
+      if (keyval != GDK_KEY_VoidSymbol)
+        {
+          const char *name = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+          char *shortcut = g_strdup_printf ("Alt+%s", name);
+          gtk_accessible_update_property (GTK_ACCESSIBLE (expander),
+                                          GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, shortcut,
+                                          -1);
+          g_free (shortcut);
+          return;
+        }
+    }
+
+  /* No mnemonic - clear the property */
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (expander),
+                                 GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
+}
+
 /**
  * gtk_expander_new:
  * @label: (nullable): the text of the label
@@ -1023,6 +1047,8 @@ gtk_expander_set_use_underline (GtkExpander *expander,
       if (GTK_IS_LABEL (expander->label_widget))
         gtk_label_set_use_underline (GTK_LABEL (expander->label_widget), use_underline);
 
+      update_accessible_mnemonic (expander);
+
       g_object_notify (G_OBJECT (expander), "use-underline");
     }
 }
@@ -1123,6 +1149,8 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 
   if (gtk_widget_get_visible (widget))
     gtk_widget_queue_resize (widget);
+
+  update_accessible_mnemonic (expander);
 
   g_object_freeze_notify (G_OBJECT (expander));
   g_object_notify (G_OBJECT (expander), "label-widget");
