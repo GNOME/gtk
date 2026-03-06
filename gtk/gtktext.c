@@ -1752,6 +1752,31 @@ editable_get_text (GtkEditable *editable)
   return gtk_entry_buffer_get_text (get_buffer (GTK_TEXT (editable)));
 }
 
+static char *
+editable_get_complete_text (GtkEditable *editable)
+{
+  GtkText *self = GTK_TEXT (editable);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (priv->editable)
+    {
+      GString *ret = g_string_new (gtk_entry_buffer_get_text (get_buffer (self)));
+      char *preedit_string = NULL;
+      int pos;
+      gtk_im_context_get_preedit_string (priv->im_context,
+                                     &preedit_string, NULL, NULL);
+      pos = g_utf8_offset_to_pointer (ret->str, priv->current_pos) - ret->str;
+      g_string_insert (ret, pos, preedit_string);
+      g_free (preedit_string);
+
+      return g_string_free (ret, FALSE);
+    }
+  else
+    {
+      return g_strdup (editable_get_text (editable));
+    }
+}
+
 static void
 editable_set_selection_bounds (GtkEditable *editable,
                                int          start_pos,
@@ -1774,6 +1799,7 @@ gtk_text_editable_init (GtkEditableInterface *iface)
   iface->insert_text = editable_insert_text;
   iface->delete_text = editable_delete_text;
   iface->get_text = editable_get_text;
+  iface->get_complete_text = editable_get_complete_text;
   iface->set_selection_bounds = editable_set_selection_bounds;
   iface->get_selection_bounds = editable_get_selection_bounds;
 }
@@ -1938,6 +1964,10 @@ gtk_text_get_property (GObject    *object,
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_ENABLE_UNDO:
       g_value_set_boolean (value, priv->enable_undo);
+      break;
+
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_COMPLETE_TEXT:
+      g_value_take_string (value, editable_get_complete_text ((GtkEditable *)self));
       break;
 
     /* GtkText properties */
@@ -3963,6 +3993,7 @@ buffer_notify_text (GtkEntryBuffer *buffer,
   emit_changed (self);
   update_placeholder_visibility (self);
   g_object_notify (G_OBJECT (self), "text");
+  g_object_notify (G_OBJECT (self), "complete-text");
 }
 
 static void
@@ -4562,7 +4593,9 @@ gtk_text_preedit_changed_cb (GtkIMContext *context,
       g_free (preedit_string);
 
       gtk_text_recompute (self);
+      emit_changed (self);
       update_placeholder_visibility (self);
+      g_object_notify (G_OBJECT (self), "complete-text");
     }
 }
 
