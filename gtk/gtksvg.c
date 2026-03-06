@@ -1393,10 +1393,10 @@ static void
 append_base64_with_linebreaks (GString *s,
                                GBytes  *bytes)
 {
-  const guchar *data;
-  gsize len;
-  gsize max;
-  gsize before;
+  const unsigned char *data;
+  size_t len;
+  size_t max;
+  size_t before;
   char *out;
   int state = 0, outlen;
   int save = 0;
@@ -1797,7 +1797,7 @@ typedef struct
 static gboolean
 transform_op (GskPathOperation        op,
               const graphene_point_t *_pts,
-              gsize                   n_pts,
+              size_t                   n_pts,
               float                   weight,
               gpointer                user_data)
 {
@@ -1907,7 +1907,7 @@ add_op (GskPathOperation        op,
         gpointer                user_data)
 {
   SvgPathOps *ops = user_data;
-  gsize size;
+  size_t size;
   SvgPathOp *pop;
 
   if (op == GSK_PATH_CONIC)
@@ -1935,7 +1935,7 @@ add_arc (float    rx,
          gpointer user_data)
 {
   SvgPathOps *ops = user_data;
-  gsize size;
+  size_t size;
   SvgPathOp *pop;
 
   size = svg_path_ops_get_size (ops);
@@ -2886,7 +2886,7 @@ struct _SvgValue
 
 static SvgValue *
 svg_value_alloc (const SvgValueClass *class,
-                 gsize                size)
+                 size_t                size)
 {
   SvgValue *value;
 
@@ -4032,7 +4032,7 @@ svg_string_print (const SvgValue *value,
                   GString        *string)
 {
   const SvgString *s = (const SvgString *)value;
-  gchar *escaped = g_markup_escape_text (s->value, strlen (s->value));
+  char *escaped = g_markup_escape_text (s->value, strlen (s->value));
   g_string_append (string, escaped);
   g_free (escaped);
 }
@@ -4142,7 +4142,7 @@ svg_string_list_print (const SvgValue *value,
 
   for (unsigned int i = 0; i < s->len; i++)
     {
-      gchar *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
+      char *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
       if (i > 0)
         g_string_append_c (string, ' ');
       g_string_append (string, escaped);
@@ -5263,9 +5263,9 @@ svg_transform_new_rotate_and_shift (double angle,
   return (SvgValue *) tf;
 }
 
-static guint
+static unsigned int
 css_parser_parse_number (GtkCssParser *parser,
-                         guint         n,
+                         unsigned int  n,
                          gpointer      data)
 {
   Number *val = data;
@@ -5280,9 +5280,9 @@ css_parser_parse_number (GtkCssParser *parser,
   return 1;
 }
 
-static guint
+static unsigned int
 css_parser_parse_number_length (GtkCssParser *parser,
-                                guint         n,
+                                unsigned int  n,
                                 gpointer      data)
 {
   Number *val = data;
@@ -5320,9 +5320,9 @@ css_parser_parse_number_length (GtkCssParser *parser,
   return 0;
 }
 
-static guint
+static unsigned int
 css_parser_parse_number_angle (GtkCssParser *parser,
-                               guint         n,
+                               unsigned int  n,
                                gpointer      data)
 {
   Number *val = data;
@@ -5360,9 +5360,9 @@ css_parser_parse_number_angle (GtkCssParser *parser,
   return 0;
 }
 
-static guint
+static unsigned int
 css_parser_parse_number_percentage (GtkCssParser *parser,
-                                    guint         n,
+                                    unsigned int  n,
                                     gpointer      data)
 {
   Number *val = data;
@@ -5393,14 +5393,14 @@ css_parser_parse_number_percentage (GtkCssParser *parser,
 
 static gboolean
 parse_transform_function (GtkCssParser *self,
-                          guint         min_args,
-                          guint         max_args,
+                          unsigned int  min_args,
+                          unsigned int  max_args,
                           double       *values)
 {
   const GtkCssToken *token;
   gboolean result = FALSE;
   char func[64];
-  guint arg;
+  unsigned int arg;
   Number *num;
 
   num = g_newa (Number, max_args);
@@ -5414,7 +5414,7 @@ parse_transform_function (GtkCssParser *self,
   arg = 0;
   while (TRUE)
     {
-      guint parse_args;
+      unsigned int parse_args;
 
       if (arg >= max_args)
         {
@@ -6968,7 +6968,7 @@ typedef enum
   FILTER_DROPSHADOW,
 } FilterKind;
 
-typedef guint (* ArgParseFunc) (GtkCssParser *, guint, gpointer);
+typedef unsigned int (* ArgParseFunc) (GtkCssParser *, unsigned int, gpointer);
 
 enum
 {
@@ -7182,9 +7182,9 @@ svg_filter_resolve (const SvgValue *value,
   return (SvgValue *) result;
 }
 
-static guint
+static unsigned int
 parse_drop_shadow_arg (GtkCssParser *parser,
-                       guint         n,
+                       unsigned int  n,
                        gpointer      data)
 {
   SvgValue **vals = data;
@@ -7257,7 +7257,7 @@ filter_parser_parse (GtkCssParser *parser)
           gtk_css_parser_start_block (parser);
           for (i = 0; i < 4; i++)
             {
-              guint parse_args = parse_drop_shadow_arg (parser, i, values);
+              unsigned int parse_args = parse_drop_shadow_arg (parser, i, values);
               if (parse_args == 0)
                 break;
             }
@@ -8367,9 +8367,9 @@ typedef struct
   char *string;
 } ClipPathArgs;
 
-static guint
+static unsigned int
 parse_clip_path_arg (GtkCssParser *parser,
-                     guint         n,
+                     unsigned int  n,
                      gpointer      data)
 {
   ClipPathArgs *args = data;
@@ -9827,7 +9827,7 @@ static FilterTypeInfo filter_types[] = {
   },
 };
 
-static guint
+static unsigned int
 filter_type_hash (gconstpointer v)
 {
   const FilterTypeInfo *t = (const FilterTypeInfo *) v;
@@ -11388,7 +11388,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "offset", BIT (SHAPE_FILTER), FILTER_FUNCS, SHAPE_ATTR_FE_FUNC_OFFSET },
 };
 
-static guint
+static unsigned int
 shape_attr_lookup_hash (gconstpointer v)
 {
   const ShapeAttrLookup *l = (const ShapeAttrLookup *) v;
@@ -11757,7 +11757,7 @@ shape_type_has_text (ShapeType type)
   return type == SHAPE_TEXT || type == SHAPE_TSPAN;
 }
 
-static guint
+static unsigned int
 shape_type_hash (gconstpointer v)
 {
   const ShapeTypeInfo *t = (const ShapeTypeInfo *) v;
@@ -18492,7 +18492,7 @@ start_element_cb (GMarkupParseContext  *context,
 
 static void
 end_element_cb (GMarkupParseContext *context,
-                const gchar         *element_name,
+                const char          *element_name,
                 gpointer             user_data,
                 GError             **gmarkup_error)
 {
@@ -20251,7 +20251,7 @@ serialize_shape (GString              *s,
 
   if (shape_type_has_text (shape->type))
     {
-      for (guint i = 0; i < shape->text->len; i++)
+      for (unsigned int i = 0; i < shape->text->len; i++)
         {
           TextNode *node = &g_array_index (shape->text, TextNode, i);
           switch (node->type)
@@ -23458,7 +23458,7 @@ generate_layouts (Shape           *self,
     }                                               \
 } while(0);
 
-  for (guint i = 0; i < self->text->len; i++)
+  for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
       switch (node->type)
@@ -23501,7 +23501,7 @@ generate_layouts (Shape           *self,
 static void
 clear_layouts (Shape *self)
 {
-  for (guint i = 0; i < self->text->len; i++)
+  for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
       switch (node->type)
@@ -23526,7 +23526,7 @@ fill_text (Shape                 *self,
 {
   g_assert (shape_type_has_text (self->type));
 
-  for (guint i = 0; i < self->text->len; i++)
+  for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
 
@@ -23616,7 +23616,7 @@ stroke_text (Shape                 *self,
 {
   g_assert (shape_type_has_text (self->type));
 
-  for (guint i = 0; i < self->text->len; i++)
+  for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
 
@@ -25175,7 +25175,7 @@ gtk_svg_get_next_update (GtkSvg *self)
 static const GdkRGBA *
 pad_colors (GdkRGBA        col[5],
             const GdkRGBA *colors,
-            guint          n_colors)
+            unsigned int   n_colors)
 {
   GdkRGBA default_colors[5] = {
     [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0.745, 0.745, 0.745, 1.0 },
@@ -25385,7 +25385,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
         {
           const char *file;
           char *data;
-          gsize len;
+          size_t len;
           GBytes *bytes;
 
           file = g_ptr_array_index (self->font_files, i);
@@ -25798,7 +25798,7 @@ void
 svg_shape_delete (Shape *shape)
 {
   if (shape->text)
-    for (guint i = 0; i < shape->text->len; i++)
+    for (unsigned int i = 0; i < shape->text->len; i++)
       {
         TextNode *node = &g_array_index (shape->text, TextNode, i);
         if (node->type == TEXT_NODE_SHAPE && node->shape.shape == shape)
