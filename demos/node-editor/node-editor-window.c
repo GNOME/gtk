@@ -1868,23 +1868,11 @@ zoom_out_cb (GtkButton        *button,
   set_zoom_level (self, self->zoom_level - 1);
 }
 
-static gboolean
-node_editor_window_close_request (GtkWindow *window)
-{
-  GtkApplication *application;
-
-  application = gtk_window_get_application (window);
-  g_application_quit (G_APPLICATION (application));
-
-  return TRUE;
-}
-
 static void
 node_editor_window_class_init (NodeEditorWindowClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkWindowClass *win_class = GTK_WINDOW_CLASS (class);
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
@@ -1893,8 +1881,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   object_class->finalize = node_editor_window_finalize;
   object_class->set_property = node_editor_window_set_property;
   object_class->get_property = node_editor_window_get_property;
-
-  win_class->close_request = node_editor_window_close_request;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/node-editor/node-editor-window.ui");

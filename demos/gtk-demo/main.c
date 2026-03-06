@@ -949,17 +949,6 @@ search_results_update (GObject    *filter_model,
     }
 }
 
-static gboolean
-close_request_cb (GtkWindow *window)
-{
-  GtkApplication *application;
-
-  application = gtk_window_get_application (window);
-  g_application_quit (G_APPLICATION (application));
-
-  return TRUE;
-}
-
 static GtkWindow *
 create_window (GtkApplication *app)
 {
@@ -975,8 +964,6 @@ create_window (GtkApplication *app)
 
   window = (GtkWidget *) gtk_builder_get_object (builder, "window");
 
-  g_signal_connect (window, "close-request", G_CALLBACK (close_request_cb), NULL);
-
   gtk_application_add_window (app, GTK_WINDOW (window));
 
   if (g_strcmp0 (PROFILE, "devel") == 0)
@@ -986,6 +973,7 @@ create_window (GtkApplication *app)
   g_signal_connect (action, "activate", G_CALLBACK (activate_run), window);
   g_action_map_add_action (G_ACTION_MAP (window), G_ACTION (action));
 
+  g_clear_pointer (&current_file, g_free);
   notebook = GTK_WIDGET (gtk_builder_get_object (builder, "notebook"));
 
   info_view = GTK_WIDGET (gtk_builder_get_object (builder, "info-textview"));
