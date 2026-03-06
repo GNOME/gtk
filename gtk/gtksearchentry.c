@@ -775,10 +775,10 @@ static void
 gtk_search_entry_changed (GtkEditable    *editable,
                           GtkSearchEntry *entry)
 {
-  const char *str;
+  char *str;
 
   /* Update the icons first */
-  str = gtk_editable_get_text (GTK_EDITABLE (entry->entry));
+  str = gtk_editable_get_complete_text (GTK_EDITABLE (entry->entry));
 
   if (str == NULL || *str == '\0')
     {
@@ -800,6 +800,8 @@ gtk_search_entry_changed (GtkEditable    *editable,
       /* Queue up the timeout */
       reset_timeout (entry);
     }
+
+  g_free (str);
 }
 
 static void
@@ -931,7 +933,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   entry->content_changed = FALSE;
   entry->search_stopped = FALSE;
-  was_empty = (gtk_text_get_text_length (GTK_TEXT (entry->entry)) == 0);
+  was_empty = (gtk_text_get_complete_text_length (GTK_TEXT (entry->entry)) == 0);
 
   handled = gtk_event_controller_key_forward (controller, entry->entry);
 

@@ -88,20 +88,22 @@ struct _GtkTextClass
   void (* redo)               (GtkText         *self);
 };
 
-char *              gtk_text_get_display_text   (GtkText    *entry,
-                                                 int         start_pos,
-                                                 int         end_pos);
-void                gtk_text_enter_text         (GtkText    *entry,
-                                                 const char *text);
-void                gtk_text_set_positions      (GtkText    *entry,
-                                                 int         current_pos,
-                                                 int         selection_bound);
-PangoLayout *       gtk_text_get_layout         (GtkText    *entry);
-void                gtk_text_get_layout_offsets (GtkText    *entry,
-                                                 int        *x,
-                                                 int        *y);
-void                gtk_text_reset_im_context   (GtkText    *entry);
-GtkEventController *gtk_text_get_key_controller (GtkText    *entry);
+guint16             gtk_text_get_complete_text_length (GtkText    *self);
+
+char *              gtk_text_get_display_text         (GtkText    *entry,
+                                                       int         start_pos,
+                                                       int         end_pos);
+void                gtk_text_enter_text               (GtkText    *entry,
+                                                       const char *text);
+void                gtk_text_set_positions            (GtkText    *entry,
+                                                       int         current_pos,
+                                                       int         selection_bound);
+PangoLayout *       gtk_text_get_layout               (GtkText    *entry);
+void                gtk_text_get_layout_offsets       (GtkText    *entry,
+                                                       int        *x,
+                                                       int        *y);
+void                gtk_text_reset_im_context         (GtkText    *entry);
+GtkEventController *gtk_text_get_key_controller       (GtkText    *entry);
 
 G_END_DECLS
 

@@ -282,6 +282,7 @@ struct _GtkTextPrivate
   float         cursor_alpha;
 
   guint16       preedit_length;              /* length of preedit string, in bytes */
+  guint16       preedit_length_c;            /* length of preedit string, in chars */
   guint16       preedit_cursor;              /* offset of cursor within preedit string, in chars */
 
   gint64        handle_place_time;
@@ -4588,7 +4589,8 @@ gtk_text_preedit_changed_cb (GtkIMContext *context,
                                          &cursor_pos);
       g_signal_emit (self, signals[PREEDIT_CHANGED], 0, preedit_string);
       priv->preedit_length = strlen (preedit_string);
-      cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
+      priv->preedit_length_c = g_utf8_strlen (preedit_string, -1);
+      cursor_pos = CLAMP (cursor_pos, 0, priv->preedit_length_c);
       priv->preedit_cursor = cursor_pos;
       g_free (preedit_string);
 
@@ -5817,6 +5819,7 @@ gtk_text_set_editable (GtkText  *self,
             gtk_im_context_focus_out (priv->im_context);
 
           priv->preedit_length = 0;
+          priv->preedit_length_c = 0;
           priv->preedit_cursor = 0;
 
           gtk_widget_remove_css_class (GTK_WIDGET (self), "read-only");
@@ -6139,6 +6142,28 @@ gtk_text_get_text_length (GtkText *self)
   g_return_val_if_fail (GTK_IS_TEXT (self), 0);
 
   return gtk_entry_buffer_get_length (get_buffer (self));
+}
+
+/*< private >
+ * gtk_text_get_complete_text_length:
+ *
+ * Retrieves the complete length of the contents.
+ *
+ * Unlike [func@Gtk.Text.get_text_length], this method also
+ * includes the length of *pseudo-content*, such as the
+ * preedit buffer.
+ *
+ * Returns: the length of the content & *pseudo-content*
+ */
+guint16
+gtk_text_get_complete_text_length (GtkText *self)
+{
+  GtkTextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TEXT (self), 0);
+
+  priv = gtk_text_get_instance_private (self);
+  return gtk_entry_buffer_get_length (get_buffer (self)) + priv->preedit_length_c;
 }
 
 /**
