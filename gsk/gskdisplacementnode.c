@@ -209,7 +209,6 @@ apply_displacement (GskDisplacementNode *self,
   cairo_surface_unmap_image (d_surface, d_image);
   /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
   cairo_surface_mark_dirty (d_surface);
-  cairo_surface_write_to_png (d_surface, "foo.png");
   cairo_surface_unmap_image (image_surface, i_image);
 }
 
