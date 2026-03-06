@@ -1,27 +1,21 @@
-
-  <svg
-          xmlns='http://www.w3.org/2000/svg'
-          width='16'
-          height='16'
-          xmlns:gpa='https://www.gtk.org/grappa'
-          gpa:version='1'
-          gpa:keywords='window-restore'
-          gpa:state='0'>
-    <style
-            type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
-    <path
-            d='M 6 4 L 10 4 C 11.1079998 4, 12 4.8920002, 12 6 L 12 10 C 12 11.1079998, 11.1079998 12, 10 12 L 6 12 C 4.8920002 12, 4 11.1079998, 4 10 L 4 6 C 4 4.8920002, 4.8920002 4, 6 4 Z'
-            id='window'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            stroke='rgb(0,0,0)'
-            fill='none'
-            class='foreground-stroke transparent-fill'
-            gpa:stroke='foreground'>
-    </path>
-  </svg>
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16">
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>window-maximize small square</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path id="window" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 6 4 L 10 4 C 11.108 4, 12 4.892, 12 6 L 12 10 C 12 11.108, 11.108 12, 10 12 L 6 12 C 4.892 12, 4 11.108, 4 10 L 4 6 C 4 4.892, 4.892 4, 6 4 Z" class="transparent-fill foreground-stroke" gpa:stroke="foreground">
+  </path>
+</svg>
