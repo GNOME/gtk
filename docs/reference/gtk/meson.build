@@ -87,7 +87,6 @@ rst2html5 = find_program('rst2html5', 'rst2html5.py', required: get_option('docu
 rst_files = [
   [ 'gtk4-broadwayd', '1' ],
   [ 'gtk4-builder-tool', '1' ],
-  [ 'gtk4-encode-symbolic-svg', '1', ],
   [ 'gtk4-image-tool', '1' ],
   [ 'gtk4-launch', '1', ],
   [ 'gtk4-query-settings', '1', ],

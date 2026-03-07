@@ -426,7 +426,6 @@ gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
 gtk/ui/gtkvideo.ui
 gtk/ui/gtkvolumebutton.ui
-tools/encodesymbolic.c
 tools/gtk-builder-tool.c
 tools/gtk-builder-tool-enumerate.c
 tools/gtk-builder-tool-preview.c
