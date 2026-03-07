@@ -7,8 +7,7 @@ pacman --noconfirm -Suy
 
 # Install the required packages
 pacman --noconfirm -S --needed \
-    base-devel \
-    git \
+    ${MINGW_PACKAGE_PREFIX}-git \
     ${MINGW_PACKAGE_PREFIX}-cc \
     ${MINGW_PACKAGE_PREFIX}-ccache \
     ${MINGW_PACKAGE_PREFIX}-pkgconf \
