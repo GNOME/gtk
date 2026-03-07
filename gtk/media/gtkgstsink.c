@@ -77,13 +77,7 @@ GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 #define D3D12_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE_WITH_FEATURES (GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY, GST_VIDEO_FORMATS_ALL)
 #endif
 
-#define GL_TEXTURE_CAPS \
-                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), " \
-                     "format = (string) RGBA, " \
-                     "width = " GST_VIDEO_SIZE_RANGE ", " \
-                     "height = " GST_VIDEO_SIZE_RANGE ", " \
-                     "framerate = " GST_VIDEO_FPS_RANGE ", " \
-                     "texture-target = (string) 2D"
+#define GL_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE_WITH_FEATURES (GST_CAPS_FEATURE_MEMORY_GL_MEMORY, "RGBA")
 
 #define DMABUF_TEXTURE_CAPS GST_VIDEO_DMA_DRM_CAPS_MAKE
 
