@@ -215,6 +215,24 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
 }
 
 static GstCaps *
+get_memory_formats (void)
+{
+  GstVideoFormat formats[GDK_MEMORY_N_FORMATS];
+  gsize i, n_formats;
+
+  n_formats = 0;
+
+  for (i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      formats[n_formats] = gdk_memory_format_get_gst_video_format (i);
+      if (formats[n_formats] != GST_VIDEO_FORMAT_UNKNOWN)
+        n_formats++;
+    }
+
+  return gst_video_make_raw_caps (formats, n_formats);
+}
+
+static GstCaps *
 gtk_gst_sink_get_caps (GstBaseSink *bsink,
                        GstCaps     *filter)
 {
@@ -246,7 +264,7 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
       gst_caps_append (unfiltered, tmp);
     }
 
-  tmp = gst_caps_from_string (MEMORY_TEXTURE_CAPS);
+  tmp = get_memory_formats ();
   gst_caps_append (unfiltered, tmp);
 
   GST_DEBUG_OBJECT (self, "advertising own caps %" GST_PTR_FORMAT, unfiltered);
