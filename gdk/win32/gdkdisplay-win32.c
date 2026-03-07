@@ -517,7 +517,11 @@ gdk_win32_display_init_dcomp (GdkWin32Display *self)
   const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D, { 0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 } };
   IDXGIDevice *dxgi_device;
 
-  if (!gdk_has_feature (GDK_FEATURE_DCOMP))
+  /* DComp is opt-in (GDK_DEBUG=dcomp) because it causes issues with the GL and
+   * Vulkan renderers (e.g. black borders). The Cairo renderer works fine with
+   * DComp. Re-enable DComp by default when the D3D12 renderer lands and
+   * becomes the default on Windows. */
+  if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (self), DCOMP))
     return;
   
   hr_warn (ID3D11Device_QueryInterface (self->d3d11_device, &IID_IDXGIDevice, (void **) &dxgi_device));
