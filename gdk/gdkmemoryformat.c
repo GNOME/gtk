@@ -895,8 +895,10 @@ struct _GdkMemoryFormatDescription
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
 #  define GDK_GL_UNSIGNED_BYTE_FLIPPED GL_UNSIGNED_INT_8_8_8_8
+#  define DRM_FORMAT_LE_ONLY(x) x
 #elif G_BYTE_ORDER == G_BIG_ENDIAN
 #  define GDK_GL_UNSIGNED_BYTE_FLIPPED GL_UNSIGNED_INT_8_8_8_8_REV
+#  define DRM_FORMAT_LE_ONLY(x) 0
 #else
 #  error "Define the right GL flags here"
 #endif
@@ -1827,7 +1829,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_to_float,
@@ -1887,7 +1889,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_to_float,
@@ -2006,7 +2008,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_float_to_float,
@@ -2065,7 +2067,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_float_to_float,
@@ -3319,7 +3321,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3329,7 +3331,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3345,7 +3347,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P010,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P010),
     },
     .to_float = p010_to_float,
     .from_float = p010_from_float,
@@ -3392,7 +3394,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3402,7 +3404,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3418,7 +3420,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P012,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P012),
     },
     .to_float = p012_to_float,
     .from_float = p012_from_float,
@@ -3465,7 +3467,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3475,7 +3477,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3491,7 +3493,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P016,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P016),
     },
     .to_float = p016_to_float,
     .from_float = p016_from_float,
@@ -4674,7 +4676,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4684,7 +4686,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4694,7 +4696,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4710,7 +4712,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S010,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S010),
     },
     .to_float = s010_to_float,
     .from_float = s010_from_float,
@@ -4761,7 +4763,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4771,7 +4773,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4781,7 +4783,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4797,7 +4799,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S210,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S210),
     },
     .to_float = s210_to_float,
     .from_float = s210_from_float,
@@ -4848,7 +4850,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4858,7 +4860,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4868,7 +4870,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4884,7 +4886,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S410,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S410),
     },
     .to_float = s410_to_float,
     .from_float = s410_from_float,
@@ -4935,7 +4937,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4945,7 +4947,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4955,7 +4957,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4971,7 +4973,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S012,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S012),
     },
     .to_float = s012_to_float,
     .from_float = s012_from_float,
@@ -5022,7 +5024,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5032,7 +5034,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5042,7 +5044,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5058,7 +5060,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S212,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S212),
     },
     .to_float = s212_to_float,
     .from_float = s212_from_float,
@@ -5109,7 +5111,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5119,7 +5121,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5129,7 +5131,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5145,7 +5147,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S412,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S412),
     },
     .to_float = s412_to_float,
     .from_float = s412_from_float,
@@ -5196,7 +5198,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5206,7 +5208,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5216,7 +5218,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5232,7 +5234,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S016,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S016),
     },
     .to_float = s016_to_float,
     .from_float = s016_from_float,
@@ -5283,7 +5285,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5293,7 +5295,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5303,7 +5305,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5319,7 +5321,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S216,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S216),
     },
     .to_float = s216_to_float,
     .from_float = s216_from_float,
@@ -5370,7 +5372,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5380,7 +5382,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5390,7 +5392,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5406,7 +5408,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S416,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S416),
     },
     .to_float = s416_to_float,
     .from_float = s416_from_float,
