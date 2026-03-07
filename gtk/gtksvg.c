@@ -26404,7 +26404,7 @@ gtk_svg_get_state (GtkSvg *self)
  *
  * Note that the returned array and the strings
  * contained in it will only be valid until the
- * `GtkSvg` is cleared or reloaded, is if you
+ * `GtkSvg` is cleared or reloaded, so if you
  * want to keep it around, you should make a copy.
  *
  * Returns: (nullable) (transfer none): the state names
