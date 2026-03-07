@@ -885,6 +885,7 @@ struct _GdkMemoryFormatDescription
     guint32 rgb_fourcc;
     guint32 yuv_fourcc;
   } dmabuf;
+  cairo_format_t cairo_format;
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar *, const GdkMemoryLayout *, gsize);
   void (* from_float) (guchar *, const GdkMemoryLayout *, const float (*)[4], gsize);
@@ -956,6 +957,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
         .yuv_fourcc = DRM_FORMAT_AYUV,
     },
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+    .cairo_format = CAIRO_FORMAT_ARGB32,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
@@ -1014,6 +1020,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
         .yuv_fourcc = 0,
     },
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+    .cairo_format = CAIRO_FORMAT_ARGB32,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -1071,6 +1082,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
         .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
@@ -1129,6 +1141,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
@@ -1187,6 +1200,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
         .yuv_fourcc = DRM_FORMAT_AYUV,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8A8,
@@ -1245,6 +1259,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_A8R8G8B8,
@@ -1302,6 +1317,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
         .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8A8,
@@ -1360,6 +1376,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_A8B8G8R8,
@@ -1418,6 +1435,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_XRGB8888,
         .yuv_fourcc = DRM_FORMAT_XYUV8888,
     },
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+    .cairo_format = CAIRO_FORMAT_RGB24,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8X8,
@@ -1477,6 +1499,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRX8888,
         .yuv_fourcc = 0,
     },
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+    .cairo_format = CAIRO_FORMAT_RGB24,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_X8R8G8B8,
@@ -1535,6 +1562,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_XBGR8888,
         .yuv_fourcc = DRM_FORMAT_XVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8X8,
@@ -1594,6 +1622,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBX8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_X8B8G8R8,
@@ -1653,6 +1682,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGR888,
         .yuv_fourcc = DRM_FORMAT_VUY888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -1711,6 +1741,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGB888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8,
@@ -1772,6 +1803,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -1832,6 +1864,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -1892,6 +1925,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16,
@@ -1952,6 +1986,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16_FLOAT,
@@ -2011,6 +2046,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
@@ -2070,6 +2106,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -2130,6 +2167,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_RGB96F,
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32_FLOAT,
@@ -2189,6 +2227,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_RGBA128F,
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -2248,6 +2287,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -2306,6 +2346,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_G8A8_PREMULTIPLIED,
@@ -2364,6 +2405,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
     .mipmap_format = GDK_MEMORY_G8A8,
@@ -2422,6 +2464,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_R8,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g8_to_float,
     .from_float = g8_from_float,
     .mipmap_format = GDK_MEMORY_G8,
@@ -2483,6 +2526,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_G16A16_PREMULTIPLIED,
@@ -2544,6 +2588,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
     .mipmap_format = GDK_MEMORY_G16A16,
@@ -2605,6 +2650,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_R16,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = g16_to_float,
     .from_float = g16_from_float,
     .mipmap_format = GDK_MEMORY_G16,
@@ -2663,6 +2709,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_A8,
     .to_float = a8_to_float,
     .from_float = a8_from_float,
     .mipmap_format = GDK_MEMORY_A8,
@@ -2724,6 +2771,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a16_to_float,
     .from_float = a16_from_float,
     .mipmap_format = GDK_MEMORY_A16,
@@ -2784,6 +2832,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
     .mipmap_format = GDK_MEMORY_A16_FLOAT,
@@ -2844,6 +2893,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
     .mipmap_format = GDK_MEMORY_A32_FLOAT,
@@ -2916,6 +2966,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV12,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv12_to_float,
     .from_float = nv12_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -2988,6 +3039,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV21,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv21_to_float,
     .from_float = nv21_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3060,6 +3112,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV16,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv16_to_float,
     .from_float = nv16_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3132,6 +3185,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV61,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv61_to_float,
     .from_float = nv61_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3204,6 +3258,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV24,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv24_to_float,
     .from_float = nv24_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3276,6 +3331,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV42,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = nv42_to_float,
     .from_float = nv42_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3349,6 +3405,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P010),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = p010_to_float,
     .from_float = p010_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3422,6 +3479,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P012),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = p012_to_float,
     .from_float = p012_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3495,6 +3553,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P016),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = p016_to_float,
     .from_float = p016_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3581,6 +3640,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV410,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuv410_to_float,
     .from_float = yuv410_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3667,6 +3727,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU410,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvu410_to_float,
     .from_float = yvu410_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3753,6 +3814,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV411,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuv411_to_float,
     .from_float = yuv411_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3839,6 +3901,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU411,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvu411_to_float,
     .from_float = yvu411_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3925,6 +3988,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV420,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuv420_to_float,
     .from_float = yuv420_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4011,6 +4075,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU420,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvu420_to_float,
     .from_float = yvu420_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4097,6 +4162,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV422,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuv422_to_float,
     .from_float = yuv422_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4183,6 +4249,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU422,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvu422_to_float,
     .from_float = yvu422_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4269,6 +4336,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV444,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuv444_to_float,
     .from_float = yuv444_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4355,6 +4423,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU444,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvu444_to_float,
     .from_float = yvu444_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4423,6 +4492,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUYV,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yuyv_to_float,
     .from_float = yuyv_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4491,6 +4561,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVYU,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = yvyu_to_float,
     .from_float = yvyu_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4559,6 +4630,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_UYVY,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = uyvy_to_float,
     .from_float = uyvy_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4627,6 +4699,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_VYUY,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = vyuy_to_float,
     .from_float = vyuy_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4714,6 +4787,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S010),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s010_to_float,
     .from_float = s010_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4801,6 +4875,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S210),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s210_to_float,
     .from_float = s210_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4888,6 +4963,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S410),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s410_to_float,
     .from_float = s410_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4975,6 +5051,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S012),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s012_to_float,
     .from_float = s012_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5062,6 +5139,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S212),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s212_to_float,
     .from_float = s212_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5149,6 +5227,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S412),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s412_to_float,
     .from_float = s412_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5236,6 +5315,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S016),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s016_to_float,
     .from_float = s016_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5323,6 +5403,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S216),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s216_to_float,
     .from_float = s216_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5410,6 +5491,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S416),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
     .to_float = s416_to_float,
     .from_float = s416_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -6044,6 +6126,50 @@ gdk_memory_format_get_shader_plane (GdkMemoryFormat  format,
     }
 
   return p;
+}
+
+/*<private>
+ * gdk_memory_format_find_by_cairo_format:
+ * @cairo_format: a cairo format
+ * @out_memory_format: (out caller-allocates): Set to the memory format
+ *   on successful return
+ *
+ * Finds the memory format that's an exact match for the given Cairo format.
+ *
+ * Returns: true if a format was found
+ **/
+gboolean
+gdk_memory_format_find_by_cairo_format (cairo_format_t   cairo_format,
+                                        GdkMemoryFormat *out_memory_format)
+{
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (memory_formats); i++)
+    {
+      if (memory_formats[i].cairo_format == cairo_format)
+        {
+          *out_memory_format = i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/*<private>
+ * gdk_memory_format_get_cairo_format:
+ * @format: the memory format
+ *
+ * Returns the Cairo format for the given format or `CAIRO_FORMAT_INVALID` if
+ * none exists. Note that due to Cairo using different endianness semantics,
+ * different values may be returned for the same format on different machines.
+ *
+ * Returns: the Cairo format or `CAIRO_FORMAT_INVALID`.
+ **/
+cairo_format_t
+gdk_memory_format_get_cairo_format (GdkMemoryFormat format)
+{
+  return memory_formats[format].cairo_format;
 }
 
 static void
