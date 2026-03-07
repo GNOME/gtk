@@ -34,34 +34,12 @@ gdk_cairo_format_for_depth (GdkMemoryDepth depth)
 static GdkMemoryFormat
 gdk_cairo_format_to_memory_format (cairo_format_t format)
 {
-  switch (format)
-  {
-    case CAIRO_FORMAT_ARGB32:
-      return GDK_MEMORY_DEFAULT;
+  GdkMemoryFormat result;
 
-    case CAIRO_FORMAT_RGB24:
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-      return GDK_MEMORY_B8G8R8X8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-      return GDK_MEMORY_X8R8G8B8;
-#else
-#error "Unknown byte order for Cairo format"
-#endif
-    case CAIRO_FORMAT_A8:
-      return GDK_MEMORY_A8;
-    case CAIRO_FORMAT_RGB96F:
-      return GDK_MEMORY_R32G32B32_FLOAT;
-    case CAIRO_FORMAT_RGBA128F:
-      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+  if (!gdk_memory_format_find_by_cairo_format (format, &result))
+    result = GDK_MEMORY_DEFAULT;
 
-    case CAIRO_FORMAT_RGB16_565:
-    case CAIRO_FORMAT_RGB30:
-    case CAIRO_FORMAT_INVALID:
-    case CAIRO_FORMAT_A1:
-    default:
-      g_assert_not_reached ();
-      return GDK_MEMORY_DEFAULT;
-  }
+  return result;
 }
 
 static inline cairo_format_t
