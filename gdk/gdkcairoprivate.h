@@ -31,32 +31,6 @@ gdk_cairo_format_for_depth (GdkMemoryDepth depth)
     }
 }
 
-static inline GdkMemoryDepth
-gdk_cairo_depth_for_format (cairo_format_t format)
-{
-  switch (format)
-  {
-    case CAIRO_FORMAT_ARGB32:
-    case CAIRO_FORMAT_RGB24:
-    case CAIRO_FORMAT_RGB16_565:
-    case CAIRO_FORMAT_A1:
-    case CAIRO_FORMAT_A8:
-      return GDK_MEMORY_U8;
-
-    case CAIRO_FORMAT_RGB30:
-      return GDK_MEMORY_FLOAT16;
-
-    case CAIRO_FORMAT_RGB96F:
-    case CAIRO_FORMAT_RGBA128F:
-      return GDK_MEMORY_FLOAT32;
-
-    case CAIRO_FORMAT_INVALID:
-    default:
-      g_assert_not_reached ();
-      return GDK_MEMORY_NONE;
-  }
-}
-
 static GdkMemoryFormat
 gdk_cairo_format_to_memory_format (cairo_format_t format)
 {
