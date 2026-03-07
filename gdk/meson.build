@@ -240,6 +240,7 @@ gdk_deps = [
   png_dep,
   tiff_dep,
   jpeg_dep,
+  gst_deps,
 ]
 
 if profiler_enabled

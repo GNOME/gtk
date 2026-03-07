@@ -504,6 +504,10 @@ else
   gstd3d12_dep = dependency('', required: false)
 endif
 
+if gstplay_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
+  cdata.set('HAVE_GSTREAMER', 1)
+endif
+gst_deps = [ gstplay_dep, gstgl_dep, gstallocators_dep, gstd3d12_dep ]
 
 fontconfig_dep = [] # only used in x11 backend
 

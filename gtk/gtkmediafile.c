@@ -26,7 +26,7 @@
 #include <glib/gi18n-lib.h>
 #include "gtkmodulesprivate.h"
 #include "gtknomediafileprivate.h"
-#ifdef HAVE_MEDIA_GSTREAMER
+#ifdef HAVE_GSTREAMER
 #include "media/gtkgstmediafileprivate.h"
 #endif
 
@@ -194,7 +194,7 @@ gtk_media_file_get_extension (void)
 
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
 
-#ifdef HAVE_MEDIA_GSTREAMER
+#ifdef HAVE_GSTREAMER
   g_type_ensure (GTK_TYPE_GST_MEDIA_FILE);
 #endif
 
