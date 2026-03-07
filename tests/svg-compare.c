@@ -206,7 +206,7 @@ main (int argc, char *argv[])
         {
           GdkPaintable *sym;
 
-          sym = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (child, 16, 1));
+          sym = GDK_PAINTABLE (gtk_icon_paintable_new_for_file (child, size, 1));
           if (sym)
             {
               img = gtk_picture_new_for_paintable (sym);
