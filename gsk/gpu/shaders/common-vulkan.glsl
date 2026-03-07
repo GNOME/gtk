@@ -2,8 +2,11 @@
 
 layout(push_constant) uniform PushConstants {
     mat4 mvp;
-    mat3x4 clip;
     vec2 scale;
+    vec2 color_volume1;
+    vec2 color_volume2;
+    vec4 clip_mask_rect;
+    mat3x4 clip;
 } push;
 
 layout(constant_id=0) const uint GSK_FLAGS = 0;
@@ -40,6 +43,22 @@ layout(location = 0) out vec4 out_color;
 #ifdef GSK_DUAL_BLEND
 layout(location = 0, index = 1) out vec4 out_mask;
 #endif
+
+layout(set = 2, binding = 0) uniform sampler2D GSK_TEXTURE_MASK;
+
+#include "rect.glsl"
+
+float
+gsk_mask_coverage (vec2 pos)
+{
+  if ((GSK_FLAGS & 8u) != 0u)
+    {
+      vec2 coord = rect_get_coord (rect_from_gsk (push.clip_mask_rect), pos);
+      return texture (GSK_TEXTURE_MASK, coord).a;
+    }
+  else
+    return 1.0;
+}
 
 void
 gsk_set_output_color (vec4 color)

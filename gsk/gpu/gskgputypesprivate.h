@@ -64,14 +64,17 @@ typedef enum {
   GSK_GPU_SHADER_CLIP_RECT,
   GSK_GPU_SHADER_CLIP_ROUNDED
 } GskGpuShaderClip;
-#define GSK_GPU_SHADER_CLIP_SHIFT 2
-#define GSK_GPU_SHADER_CLIP_MASK ((1 << GSK_GPU_SHADER_CLIP_SHIFT) - 1)
+/* includes 1 bit for the has_clip_mask flag */
+#define GSK_GPU_SHADER_CLIP_SHIFT 4
+#define GSK_GPU_SHADER_CLIP_MASK ((1 << (GSK_GPU_SHADER_CLIP_SHIFT - 1)) - 1)
 
 typedef enum {
   GSK_GPU_BLEND_NONE,
   GSK_GPU_BLEND_OVER,
   GSK_GPU_BLEND_ADD,
   GSK_GPU_BLEND_CLEAR,
+  GSK_GPU_BLEND_MASK,
+  /* dual blend modes start here */
   GSK_GPU_BLEND_MASK_ONE,
   GSK_GPU_BLEND_MASK_ALPHA,
   GSK_GPU_BLEND_MASK_INV_ALPHA,

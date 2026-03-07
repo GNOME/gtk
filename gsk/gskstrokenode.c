@@ -242,6 +242,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
   node->copy_mode = gsk_render_node_get_copy_mode (child);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
+  node->needs_blending = gsk_render_node_needs_blending (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);

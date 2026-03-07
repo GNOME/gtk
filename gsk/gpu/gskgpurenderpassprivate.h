@@ -16,6 +16,7 @@ typedef enum {
   GSK_GPU_GLOBAL_CLIP    = (1 << 2),
   GSK_GPU_GLOBAL_SCISSOR = (1 << 3),
   GSK_GPU_GLOBAL_BLEND   = (1 << 4),
+  GSK_GPU_GLOBAL_MASK    = (1 << 5),
 } GskGpuGlobals;
 
 struct _GskGpuRenderPass
@@ -24,14 +25,18 @@ struct _GskGpuRenderPass
   GskGpuImage                   *target;
   GdkColorState                 *ccs;
   GskRenderPassType              pass_type;
-  cairo_rectangle_int_t          scissor;
   GskGpuBlend                    blend;
+  float                          opacity;
   graphene_point_t               offset;
   graphene_matrix_t              projection;
   graphene_vec2_t                scale;
   GskTransform                  *modelview;
+  /* clipping */
+  cairo_rectangle_int_t          scissor;
   GskGpuClip                     clip;
-  float                          opacity;
+  GskGpuImage *                  clip_mask;
+  graphene_rect_t                clip_mask_rect;
+  gboolean                       clip_mask_has_opacity;
 
   GskGpuGlobals                  pending_globals;
 };
@@ -49,6 +54,7 @@ typedef struct {
   graphene_vec2_t scale;
   graphene_point_t offset;
   GskGpuClip clip;
+  graphene_rect_t clip_mask_rect;
   GskGpuGlobals modified;
 } GskGpuRenderPassTransformStorage;
 
@@ -59,6 +65,10 @@ typedef struct {
 typedef struct {
   GskGpuClip clip;
   cairo_rectangle_int_t scissor;
+  GskGpuImage *clip_mask;
+  graphene_rect_t clip_mask_rect;
+  gboolean clip_mask_has_opacity;
+  float opacity; /* only used with clip masks */
   guint modified;
 } GskGpuRenderPassClipStorage;
 
@@ -117,12 +127,12 @@ gboolean                gsk_gpu_render_pass_is_all_clipped              (GskGpuR
 gboolean                gsk_gpu_render_pass_get_clip_bounds             (GskGpuRenderPass                 *self,
                                                                          graphene_rect_t                  *out_bounds) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean                gsk_gpu_render_pass_push_clip_rect              (GskGpuRenderPass                 *self,
+void                    gsk_gpu_render_pass_push_clip_rect              (GskGpuRenderPass                 *self,
                                                                          const graphene_rect_t            *clip,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_rect               (GskGpuRenderPass                 *self,
                                                                          GskGpuRenderPassClipStorage      *storage);
-gboolean                gsk_gpu_render_pass_push_clip_rounded           (GskGpuRenderPass                 *self,
+void                    gsk_gpu_render_pass_push_clip_rounded           (GskGpuRenderPass                 *self,
                                                                          const GskRoundedRect             *clip,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_rounded            (GskGpuRenderPass                 *self,
@@ -131,6 +141,14 @@ void                    gsk_gpu_render_pass_push_clip_device_rect       (GskGpuR
                                                                          const cairo_rectangle_int_t      *clip,
                                                                          GskGpuRenderPassClipStorage      *storage);
 void                    gsk_gpu_render_pass_pop_clip_device_rect        (GskGpuRenderPass                 *self,
+                                                                         GskGpuRenderPassClipStorage      *storage);
+void                    gsk_gpu_render_pass_push_clip_mask              (GskGpuRenderPass                 *self,
+                                                                         const graphene_rect_t            *clip,
+                                                                         GskGpuImage                      *clip_mask,
+                                                                         const graphene_rect_t            *clip_mask_rect,
+                                                                         gboolean                          clip_mask_has_opacity,
+                                                                         GskGpuRenderPassClipStorage      *storage);
+void                    gsk_gpu_render_pass_pop_clip_mask               (GskGpuRenderPass                 *self,
                                                                          GskGpuRenderPassClipStorage      *storage);
 
 G_END_DECLS

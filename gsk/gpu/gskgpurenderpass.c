@@ -3,13 +3,24 @@
 #include "gskgpurenderpassprivate.h"
 
 #include "gskgpublendopprivate.h"
+#include "gskgpudeviceprivate.h"
+#include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpurenderpassopprivate.h"
+#include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
+#include "gskgputextureopprivate.h"
 
 #include "gskrectprivate.h"
 #include "gsktransform.h"
+
+#include "gdk/gdkcolorprivate.h"
+
+/* the epsilon we allow pixels to be off due to rounding errors.
+ * Chosen rather randomly.
+ */
+#define EPSILON 0.001
 
 gboolean
 gsk_gpu_render_pass_device_to_user (GskGpuRenderPass            *self,
@@ -137,6 +148,9 @@ gsk_gpu_render_pass_new (GskGpuFrame                 *frame,
                                ));
     }
 
+  self->clip_mask = NULL;
+  self->clip_mask_rect = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  self->clip_mask_has_opacity = FALSE;
   self->modelview = NULL;
   gsk_gpu_image_get_projection_matrix (target, &self->projection);
   graphene_vec2_init (&self->scale,
@@ -173,7 +187,7 @@ gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
   if (self->pending_globals == 0)
     return;
 
-  if (self->pending_globals & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP))
+  if (self->pending_globals & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MASK))
     {
       graphene_matrix_t mvp;
 
@@ -188,6 +202,7 @@ gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
       gsk_gpu_globals_op (self->frame,
                           &self->scale,
                           &mvp,
+                          &self->clip_mask_rect,
                           &self->clip.rect);
     }
 
@@ -247,7 +262,7 @@ gsk_gpu_render_pass_pop_opacity (GskGpuRenderPass               *self,
 gboolean
 gsk_gpu_render_pass_has_opacity (GskGpuRenderPass *self)
 {
-  return self->opacity < 1.0;
+  return self->opacity < 1.0 || self->clip_mask_has_opacity;
 }
 
 void
@@ -346,6 +361,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
   storage->modelview = self->modelview;
   storage->scale = self->scale;
   storage->offset = self->offset;
+  storage->clip_mask_rect = self->clip_mask_rect;
   gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
   storage->modified = 0;
 
@@ -368,6 +384,11 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         graphene_vec2_multiply (&self->scale, &storage->scale, &self->scale);
         self->modelview = gsk_transform_ref (storage->modelview);
         storage->modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+        if (self->clip_mask)
+          {
+            gsk_rect_scale (&storage->clip_mask_rect, 1 / scale_x, 1 / scale_y, &self->clip_mask_rect);
+            storage->modified |= GSK_GPU_GLOBAL_MASK;
+          }
       }
       break;
 
@@ -376,6 +397,10 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
       {
         GdkDihedral dihedral, inverted;
         float xx, xy, yx, yy, dx, dy, scale_x, scale_y, old_scale_x, old_scale_y;
+
+        /* FIXME: find a way to support dihedral-transforming tex rects */
+        if (self->clip_mask)
+          return FALSE;
 
         gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
         inverted = gdk_dihedral_invert (dihedral);
@@ -401,6 +426,9 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
       {
         GskTransform *clip_transform;
+
+        if (self->clip_mask)
+          return FALSE;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
 
@@ -507,6 +535,7 @@ gsk_gpu_render_pass_pop_transform (GskGpuRenderPass                 *self,
   self->scale = storage->scale;
   self->offset = storage->offset;
   gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+  self->clip_mask_rect = storage->clip_mask_rect;
   self->pending_globals |= storage->modified;
 }
 
@@ -613,10 +642,10 @@ gsk_gpu_render_pass_pop_clip_device_rect (GskGpuRenderPass            *self,
   gsk_gpu_render_pass_pop_clip_rect (self, storage);
 }
 
-gboolean
-gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
-                                    const graphene_rect_t       *clip,
-                                    GskGpuRenderPassClipStorage *storage)
+static gboolean
+gsk_gpu_render_pass_try_push_clip_rect (GskGpuRenderPass            *self,
+                                        const graphene_rect_t       *clip,
+                                        GskGpuRenderPassClipStorage *storage)
 {
   cairo_rectangle_int_t scissor;
   graphene_rect_t scissored;
@@ -685,8 +714,164 @@ gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
     }
 
   self->pending_globals |= storage->modified;
-
   return TRUE;
+}
+
+static void
+gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
+                                    const graphene_rect_t       *new_clip_rect,
+                                    const GskRoundedRect        *new_clip_rounded,
+                                    GskGpuImage                 *new_clip_mask,
+                                    const graphene_rect_t       *new_clip_mask_rect,
+                                    GskGpuRenderPassClipStorage *storage)
+
+{
+  GskGpuRenderPass *other;
+  graphene_rect_t bounds;
+  cairo_rectangle_int_t area;
+  GskGpuImage *image;
+  GskDebugProfile *profile;
+  GdkMemoryFormat format;
+  GdkColor white;
+  GskGpuRenderPassBlendStorage blend_storage;
+  GskGpuClip old_clip;
+
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &bounds) ||
+      (new_clip_rect && !gsk_rect_intersection (&bounds, new_clip_rect, &bounds)) ||
+      (new_clip_rounded && !gsk_rect_intersection (&bounds, &new_clip_rounded->bounds, &bounds)) ||
+      (new_clip_mask_rect && !gsk_rect_intersection (&bounds, new_clip_mask_rect, &bounds)) ||
+      !gsk_rect_snap_to_grid (&bounds, &self->scale, &self->offset, &bounds))
+    {
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+      gsk_gpu_clip_init_all_clipped (&self->clip);
+      storage->modified = GSK_GPU_GLOBAL_CLIP;
+      self->pending_globals |= storage->modified;
+      return;
+    }
+
+  area.x = 0;
+  area.y = 0;
+  area.width = MAX (1, ceilf (graphene_vec2_get_x (&self->scale) * bounds.size.width - EPSILON));
+  area.height = MAX (1, ceilf (graphene_vec2_get_y (&self->scale) * bounds.size.height - EPSILON));
+
+  format = gdk_memory_depth_get_alpha_format (gdk_memory_format_get_depth (gsk_gpu_image_get_format (self->target), FALSE));
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
+                                                 FALSE,
+                                                 format,
+                                                 FALSE,
+                                                 area.width,
+                                                 area.height);
+  if (image == NULL)
+    {
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+      gsk_gpu_clip_init_all_clipped (&self->clip);
+      storage->modified = GSK_GPU_GLOBAL_CLIP;
+      self->pending_globals |= storage->modified;
+      return;
+    }
+
+  profile = gsk_gpu_frame_get_profile (self->frame);
+  if (profile)
+    {
+      profile->self.n_offscreens++;
+      profile->self.offscreen_pixels += area.width * area.height;
+    }
+
+  gdk_color_init (&white, self->ccs, ((float[]){ 1, 1, 1, 1 }));
+  other = gsk_gpu_render_pass_new (self->frame,
+                                   image,
+                                   self->ccs,
+                                   GSK_RENDER_PASS_OFFSCREEN,
+                                   GSK_GPU_LOAD_OP_CLEAR,
+                                   (float[4]) { self->opacity, self->opacity, self->opacity, self->opacity },
+                                   &area,
+                                   &bounds);
+  gsk_gpu_render_pass_push_blend (other, GSK_GPU_BLEND_MASK, &blend_storage);
+
+  if (self->clip.type == GSK_GPU_CLIP_ROUNDED)
+    {
+      GskRoundedRect rounded = self->clip.rect;
+
+      rounded.bounds.origin.x -= self->offset.x;
+      rounded.bounds.origin.y -= self->offset.y;
+      gsk_gpu_rounded_color_op (other,
+                                self->ccs,
+                                self->ccs,
+                                &bounds,
+                                &rounded,
+                                &white);
+    }
+
+  if (self->clip_mask)
+    {
+      gsk_gpu_texture_op (other,
+                          self->ccs,
+                          &bounds,
+                          self->clip_mask,
+                          GSK_GPU_SAMPLER_TRANSPARENT,
+                          &GRAPHENE_RECT_INIT (self->clip_mask_rect.origin.x - self->offset.x,
+                                               self->clip_mask_rect.origin.y - self->offset.y,
+                                               self->clip_mask_rect.size.width,
+                                               self->clip_mask_rect.size.height));
+
+    }
+
+  if (new_clip_rounded)
+    {
+      gsk_gpu_rounded_color_op (other,
+                                self->ccs,
+                                self->ccs,
+                                &bounds,
+                                new_clip_rounded,
+                                &white);
+    }
+
+  if (new_clip_mask)
+    {
+      gsk_gpu_texture_op (other,
+                          self->ccs,
+                          &bounds,
+                          new_clip_mask,
+                          GSK_GPU_SAMPLER_TRANSPARENT,
+                          new_clip_mask_rect);
+
+    }
+
+  gsk_gpu_render_pass_pop_blend (other, &blend_storage);
+  gsk_gpu_render_pass_free (other);
+
+  /* We can reset things now, the mask does it all */
+  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+  gsk_gpu_clip_init_empty (&self->clip, &self->offset, &bounds);
+  if (!gsk_gpu_render_pass_try_push_clip_rect (self, &bounds, storage))
+    {
+      g_assert_not_reached ();
+    }
+  gsk_gpu_clip_init_copy (&storage->clip, &old_clip);
+  storage->clip_mask = self->clip_mask;
+  storage->clip_mask_rect = self->clip_mask_rect;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity || self->opacity < 1.0;
+  storage->opacity = self->opacity;
+  storage->modified |= GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MASK;
+
+  self->opacity = 1.0;
+  self->clip_mask = image;
+  gsk_rect_init_offset (&self->clip_mask_rect,
+                        &bounds,
+                        &self->offset);
+  /* We can reset things now, the mask does it all */
+  gsk_gpu_clip_init_empty (&self->clip, &self->offset, &bounds);
+}
+
+void
+gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
+                                    const graphene_rect_t       *clip,
+                                    GskGpuRenderPassClipStorage *storage)
+{
+  if (gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage))
+    return;
+
+  gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, NULL, NULL, storage);
 }
 
 void
@@ -699,10 +884,19 @@ gsk_gpu_render_pass_pop_clip_rect (GskGpuRenderPass            *self,
   if (storage->modified & GSK_GPU_GLOBAL_CLIP)
     gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
 
+  if (storage->modified & GSK_GPU_GLOBAL_MASK)
+    {
+      g_clear_object (&self->clip_mask);
+      self->clip_mask = storage->clip_mask;
+      self->clip_mask_rect = storage->clip_mask_rect;
+      self->clip_mask_has_opacity = storage->clip_mask_has_opacity;
+      self->opacity = storage->opacity;
+    }
+
   self->pending_globals |= storage->modified;
 }
 
-gboolean
+void
 gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
                                        const GskRoundedRect        *clip,
                                        GskGpuRenderPassClipStorage *storage)
@@ -715,7 +909,8 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &storage->clip, &self->offset, clip))
     {
       gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
-      return FALSE;
+      gsk_gpu_render_pass_draw_clip_mask (self, NULL, clip, NULL, NULL, storage);
+      return;
     }
 
   if (gsk_gpu_render_pass_device_to_user (self,
@@ -728,12 +923,52 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
     }
 
   self->pending_globals |= storage->modified;
-  return TRUE;
 }
 
 void
 gsk_gpu_render_pass_pop_clip_rounded (GskGpuRenderPass            *self,
                                       GskGpuRenderPassClipStorage *storage)
+{
+  /* They're identical currently */
+  gsk_gpu_render_pass_pop_clip_rect (self, storage);
+}
+
+void
+gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
+                                    const graphene_rect_t       *clip,
+                                    GskGpuImage                 *clip_mask,
+                                    const graphene_rect_t       *clip_mask_rect,
+                                    gboolean                     has_opacity,
+                                    GskGpuRenderPassClipStorage *storage)
+{
+  if (self->clip_mask != NULL ||
+      !gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage))
+    {
+      gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, clip_mask, clip_mask_rect, storage);
+      storage->clip_mask_has_opacity |= has_opacity;
+      return;
+    }
+
+  g_assert (gsk_gpu_image_get_shader_op (clip_mask) == GDK_SHADER_DEFAULT);
+
+  storage->clip_mask = self->clip_mask;
+  storage->clip_mask_rect = self->clip_mask_rect;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
+  storage->opacity = self->opacity;
+  storage->modified |= GSK_GPU_GLOBAL_MASK;
+
+  self->clip_mask = g_object_ref (clip_mask);
+  gsk_rect_init_offset (&self->clip_mask_rect,
+                        clip_mask_rect,
+                        &self->offset);
+  self->clip_mask_has_opacity = has_opacity;
+
+  self->pending_globals |= storage->modified;
+}
+
+void
+gsk_gpu_render_pass_pop_clip_mask (GskGpuRenderPass            *self,
+                                   GskGpuRenderPassClipStorage *storage)
 {
   /* They're identical currently */
   gsk_gpu_render_pass_pop_clip_rect (self, storage);

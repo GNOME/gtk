@@ -769,33 +769,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
 {
   GskGpuRenderPassClipStorage storage;
 
-  if (!gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage))
-    {
-      GskGpuImage *image;
-      graphene_rect_t bounds, tex_rect;
-
-      if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
-          gsk_rect_intersection (&bounds, clip_bounds, &bounds))
-        image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                          0,
-                                                          &bounds,
-                                                          node,
-                                                          pos,
-                                                          &tex_rect);
-      else
-        image = NULL;
-      if (image)
-        {
-          gsk_gpu_node_processor_image_op (self,
-                                           image,
-                                           self->ccs,
-                                           GSK_GPU_SAMPLER_DEFAULT,
-                                           &bounds,
-                                           &tex_rect);
-          g_object_unref (image);
-        }
-      return;
-    }
+  gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, node, pos);
@@ -811,62 +785,6 @@ gsk_gpu_node_processor_add_clip_node (GskGpuRenderPass *self,
                                            gsk_clip_node_get_child (node),
                                            0,
                                            gsk_clip_node_get_clip (node));
-}
-
-static void
-gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuRenderPass *self,
-                                                        GskRenderNode       *node)
-{
-  GskGpuRenderPass *other;
-  graphene_rect_t clip_bounds, child_rect;
-  GskGpuImage *child_image, *mask_image;
-  GdkColor white;
-
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
-    return;
-
-  child_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                          0,
-                                                          &clip_bounds,
-                                                          gsk_rounded_clip_node_get_child (node),
-                                                          0,
-                                                          &child_rect);
-  if (child_image == NULL)
-    return;
-
-  other = gsk_gpu_node_processor_new_draw (self->frame,
-                                           self->ccs,
-                                           gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
-                                                                   gsk_render_node_get_preferred_depth (node)),
-                                           &self->scale,
-                                           &clip_bounds,
-                                           &mask_image);
-
-  g_return_if_fail (other != NULL);
-
-  gdk_color_init (&white, self->ccs, ((float[]){ 1, 1, 1, 1 }));
-  gsk_gpu_rounded_color_op (other,
-                            self->ccs,
-                            self->ccs,
-                            &node->bounds,
-                            gsk_rounded_clip_node_get_clip (node),
-                            &white);
-  gsk_gpu_render_pass_free (other);
-
-  gsk_gpu_mask_op (self,
-                   self->ccs,
-                   &clip_bounds,
-                   child_image,
-                   GSK_GPU_SAMPLER_DEFAULT,
-                   mask_image,
-                   GSK_GPU_SAMPLER_DEFAULT,
-                   GSK_MASK_MODE_ALPHA,
-                   &child_rect,
-                   &clip_bounds);
-
-  g_object_unref (child_image);
-  g_object_unref (mask_image);
-  gdk_color_finish (&white);
 }
 
 static void
@@ -898,11 +816,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
       return;
     }
 
-  if (!gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage))
-    {
-      gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
-      return;
-    }
+  gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, child, 0);
@@ -1024,6 +938,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       !self->modelview && 
       !gsk_gpu_render_pass_has_opacity (self) &&
+      self->clip_mask == NULL &&
       gdk_color_is_opaque (color) &&
       gsk_gpu_clip_get_largest_cover (&self->clip, &self->offset, &bounds, &cover) &&
       gsk_gpu_render_pass_user_to_device_shrink (self, &cover, &device) &&
@@ -2492,18 +2407,28 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
       return;
     }
 
-  if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
-      mask_mode == GSK_MASK_MODE_ALPHA)
+  if (mask_mode == GSK_MASK_MODE_ALPHA)
     {
-      const GdkColor *color = gsk_color_node_get_gdk_color (source_child);
-      gsk_gpu_colorize_op (self,
-                           self->ccs,
-                           gsk_gpu_color_states_find (self->ccs, color),
-                           &bounds,
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           &mask_rect,
-                           color);
+      if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE)
+        {
+          const GdkColor *color = gsk_color_node_get_gdk_color (source_child);
+          gsk_gpu_colorize_op (self,
+                               self->ccs,
+                               gsk_gpu_color_states_find (self->ccs, color),
+                               &bounds,
+                               mask_image,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               &mask_rect,
+                               color);
+        }
+      else
+        {
+          GskGpuRenderPassClipStorage storage;
+
+          gsk_gpu_render_pass_push_clip_mask (self, &bounds, mask_image, &mask_rect, TRUE, &storage);
+          gsk_gpu_node_processor_add_node (self, source_child, 0);
+          gsk_gpu_render_pass_pop_clip_mask (self, &storage);
+        }
     }
   else
     {
@@ -3019,7 +2944,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
   graphene_rect_t clip_bounds;
   GskGpuImage *mask_image;
   GskRenderNode *child;
-  graphene_rect_t tex_rect;
+  graphene_rect_t mask_rect;
   GskGpuCache *cache;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
@@ -3035,7 +2960,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
                                            &clip_bounds,
                                            gsk_fill_node_get_path (node),
                                            gsk_fill_node_get_fill_rule (node),
-                                           &tex_rect);
+                                           &mask_rect);
   if (mask_image == NULL)
     return;
 
@@ -3049,36 +2974,16 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
                            &clip_bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &tex_rect,
+                           &mask_rect,
                            color);
     }
   else
     {
-      GskGpuImage *source_image;
-      graphene_rect_t source_rect;
+      GskGpuRenderPassClipStorage storage;
 
-      source_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                               0,
-                                                               &clip_bounds,
-                                                               child,
-                                                               0,
-                                                               &source_rect);
-
-      if (source_image != NULL)
-        {
-          gsk_gpu_mask_op (self,
-                           self->ccs,
-                           &clip_bounds,
-                           source_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           GSK_MASK_MODE_ALPHA,
-                           &source_rect,
-                           &tex_rect);
-
-          g_object_unref (source_image);
-        }
+      gsk_gpu_render_pass_push_clip_mask (self, &clip_bounds, mask_image, &mask_rect, FALSE, &storage);
+      gsk_gpu_node_processor_add_node (self, child, 0);
+      gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
 
   g_object_unref (mask_image);
@@ -3091,7 +2996,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
   graphene_rect_t clip_bounds;
   GskGpuImage *mask_image;
   GskRenderNode *child;
-  graphene_rect_t tex_rect;
+  graphene_rect_t mask_rect;
   GskGpuCache *cache;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
@@ -3107,7 +3012,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                                              &clip_bounds,
                                              gsk_stroke_node_get_path (node),
                                              gsk_stroke_node_get_stroke (node),
-                                             &tex_rect);
+                                             &mask_rect);
   if (mask_image == NULL)
     return;
 
@@ -3121,35 +3026,16 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                            &clip_bounds,
                            mask_image,
                            GSK_GPU_SAMPLER_DEFAULT,
-                           &tex_rect,
+                           &mask_rect,
                            color);
     }
   else
     {
-      GskGpuImage *source_image;
-      graphene_rect_t source_rect;
+      GskGpuRenderPassClipStorage storage;
 
-      source_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                               0,
-                                                               &clip_bounds,
-                                                               child,
-                                                               0,
-                                                               &source_rect);
-      if (source_image != NULL)
-        {
-          gsk_gpu_mask_op (self,
-                           self->ccs,
-                           &clip_bounds,
-                           source_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           mask_image,
-                           GSK_GPU_SAMPLER_DEFAULT,
-                           GSK_MASK_MODE_ALPHA,
-                           &source_rect,
-                           &tex_rect);
-
-          g_object_unref (source_image);
-        }
+      gsk_gpu_render_pass_push_clip_mask (self, &clip_bounds, mask_image, &mask_rect, FALSE, &storage);
+      gsk_gpu_node_processor_add_node (self, child, 0);
+      gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
 
   g_object_unref (mask_image);
