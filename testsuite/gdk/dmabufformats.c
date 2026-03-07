@@ -18,14 +18,21 @@ test_dmabuf_formats_basic (void)
 
 #ifdef HAVE_DMABUF
   /* We always have basic linear formats */
-  g_assert_true (gdk_dmabuf_formats_get_n_formats (formats) >= 6);
+  g_assert_true (gdk_dmabuf_formats_get_n_formats (formats) >= 5);
 
   g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ARGB8888, DRM_FORMAT_MOD_LINEAR));
   g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_RGBA8888, DRM_FORMAT_MOD_LINEAR));
   g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_BGRA8888, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ABGR16161616F, DRM_FORMAT_MOD_LINEAR));
   g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_RGB888, DRM_FORMAT_MOD_LINEAR));
   g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_BGR888, DRM_FORMAT_MOD_LINEAR));
+
+  /* Formats with >=2 bytes per component are little endian only */
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ABGR16161616F, DRM_FORMAT_MOD_LINEAR));
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+  g_assert_false (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ABGR16161616F, DRM_FORMAT_MOD_LINEAR));
+#endif
+
 #else
   g_assert_true (gdk_dmabuf_formats_get_n_formats (formats) == 0);
 #endif
