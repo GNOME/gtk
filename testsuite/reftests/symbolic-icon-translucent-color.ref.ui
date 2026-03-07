@@ -5,7 +5,7 @@
     <child>
       <object class="GtkImage" id="image1">
         <property name="name">reference</property>
-        <property name="icon_name">media-playback-stop-symbolic</property>
+        <property name="icon_name">gtk-test-foreground-symbolic</property>
       </object>
     </child>
   </object>

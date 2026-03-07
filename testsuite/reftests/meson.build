@@ -8,6 +8,10 @@ foreach flag: common_cflags
   endif
 endforeach
 
+reftest_resources = gnome.compile_resources('reftest_resources',
+  'reftest.gresource.xml',
+  source_dir: meson.current_source_dir()
+)
 
 libgtkreftestprivate = library('gtkreftestprivate',
   sources: [ 'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c', ],
@@ -41,7 +45,7 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #endforeach
 
 gtk_reftest = executable('gtk-reftest',
-  sources: 'gtk-reftest.c',
+  sources: [ 'gtk-reftest.c', reftest_resources ],
   c_args: common_cflags,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep,

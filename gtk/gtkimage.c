@@ -597,7 +597,6 @@ void
 gtk_image_set_from_file (GtkImage    *image,
                          const char *filename)
 {
-  int scale_factor;
   GdkPaintable *paintable;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
@@ -613,8 +612,7 @@ gtk_image_set_from_file (GtkImage    *image,
       return;
     }
 
-  scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
-  paintable = gdk_paintable_new_from_filename_scaled (filename, scale_factor);
+  paintable = gdk_paintable_new_from_filename (filename, NULL);
 
   if (paintable == NULL)
     {
@@ -675,7 +673,6 @@ void
 gtk_image_set_from_resource (GtkImage   *image,
                              const char *resource_path)
 {
-  int scale_factor;
   GdkPaintable *paintable;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
@@ -697,8 +694,7 @@ gtk_image_set_from_resource (GtkImage   *image,
     }
   else
     {
-      scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
-      paintable = gdk_paintable_new_from_resource_scaled (resource_path, scale_factor);
+      paintable = gdk_paintable_new_from_resource (resource_path);
     }
 
   if (paintable == NULL)

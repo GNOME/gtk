@@ -42,12 +42,9 @@ struct _GtkCssImageRecolor
   GFile *file;
   GtkCssValue *color;
   GtkCssValue *palette;
-  GskRenderNode *node;
+  GdkPaintable *paintable;
   double width;
   double height;
-  gboolean single_path;
-  gboolean has_strokes;
-  gboolean only_fg;
 };
 
 struct _GtkCssImageRecolorClass
