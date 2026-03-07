@@ -171,10 +171,18 @@ static GdkPaintable *
 gdk_paintable_new_from_bytes (GBytes   *bytes,
                               gboolean  is_symbolic)
 {
+  GdkPaintable *paintable;
+
   if (gdk_texture_can_load (bytes))
-    return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+    paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
   else
-    return GDK_PAINTABLE (svg_from_bytes (bytes, is_symbolic));
+    {
+      paintable = GDK_PAINTABLE (svg_from_bytes (bytes, is_symbolic));
+      if (!paintable)
+        paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+    }
+
+  return paintable;
 }
 
 GdkPaintable *
