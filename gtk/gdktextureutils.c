@@ -70,45 +70,31 @@ svg_load_error (GtkSvg       *svg,
                 const GError *error,
                 gpointer      user_data)
 {
-  struct {
-    const char *location;
-    gboolean unsupported;
-  } *data = user_data;
+  char **unsupported = user_data;
 
   if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_NOT_IMPLEMENTED))
     {
-      if (!data->unsupported)
-        GTK_DEBUG (ICONFALLBACK, "Falling back to a texture for %s: %s", data->location, error->message);
-      data->unsupported = TRUE;
+      if (unsupported && !*unsupported)
+        *unsupported = g_strdup (error->message);
     }
 }
 
 static GtkSvg *
 svg_from_bytes (GBytes     *bytes,
-                const char *path,
-                gboolean    is_symbolic)
+                gboolean    is_symbolic,
+                char      **unsupported)
 {
   GtkSvg *svg;
   gulong handler_id;
-  struct {
-    const char *location;
-    gboolean unsupported;
-  } data;
 
   svg = gtk_svg_new ();
 
   if (is_symbolic)
     gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
 
-  data.location = path;
-  data.unsupported = FALSE;
-
-  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), &data);
+  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), unsupported);
   gtk_svg_load_from_bytes (svg, bytes);
   g_signal_handler_disconnect (svg, handler_id);
-
-  if (data.unsupported)
-    g_clear_object (&svg);
 
   return svg;
 }
@@ -150,6 +136,7 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   GBytes *bytes;
   GtkSvg *svg;
   GdkTexture *texture;
+  char *unsupported = NULL;
 
   file = g_file_new_for_path (filename);
   stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
@@ -162,10 +149,14 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   if (!bytes)
     return NULL;
 
-  svg = svg_from_bytes (bytes, filename, FALSE);
+  svg = svg_from_bytes (bytes, FALSE, &unsupported);
   g_bytes_unref (bytes);
-  if (!svg)
-    return NULL;
+  if (unsupported)
+    {
+      g_clear_object (&svg);
+      g_free (unsupported);
+      return NULL;
+    }
 
   texture = svg_to_texture (svg, width, height, NULL, 0);
   g_object_unref (svg);
@@ -195,11 +186,28 @@ gdk_paintable_new_from_bytes (GBytes     *bytes,
     paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
   else
     {
-      paintable = GDK_PAINTABLE (svg_from_bytes (bytes, path, is_symbolic));
-      if (!paintable)
+      GtkSvg *svg;
+      char *unsupported = NULL;
+
+      svg = svg_from_bytes (bytes, is_symbolic, &unsupported);
+      if (unsupported)
         {
           paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+          if (paintable)
+            {
+              GTK_DEBUG (ICONFALLBACK, "Falling back to a texture for %s: %s", path, unsupported);
+              g_clear_object (&svg);
+              g_free (unsupported);
+            }
+          else
+            {
+              GTK_DEBUG (ICONFALLBACK, "Expect misrendering; %s uses unsupported features: %s", path, unsupported);
+              g_free (unsupported);
+              paintable = GDK_PAINTABLE (svg);
+            }
         }
+      else
+        paintable = GDK_PAINTABLE (svg);
     }
 
   return paintable;
