@@ -22,6 +22,7 @@
 #include "gtksnapshot.h"
 #include "gtksvg.h"
 #include "gtksymbolicpaintable.h"
+#include "gtkprivate.h"
 
 /* {{{ svg helpers */
 
@@ -67,30 +68,46 @@ svg_to_texture (GtkSvg  *svg,
 static void
 svg_load_error (GtkSvg       *svg,
                 const GError *error,
-                gpointer      data)
+                gpointer      user_data)
 {
+  struct {
+    const char *location;
+    gboolean unsupported;
+  } *data = user_data;
+
   if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_NOT_IMPLEMENTED))
-    *((gboolean *) data) = TRUE;
+    {
+      if (!data->unsupported)
+        GTK_DEBUG (ICONFALLBACK, "Falling back to a texture for %s: %s", data->location, error->message);
+      data->unsupported = TRUE;
+    }
 }
 
 static GtkSvg *
-svg_from_bytes (GBytes   *bytes,
-                gboolean  is_symbolic)
+svg_from_bytes (GBytes     *bytes,
+                const char *path,
+                gboolean    is_symbolic)
 {
   GtkSvg *svg;
   gulong handler_id;
-  gboolean unsupported = FALSE;
+  struct {
+    const char *location;
+    gboolean unsupported;
+  } data;
 
   svg = gtk_svg_new ();
 
   if (is_symbolic)
     gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
 
-  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), &unsupported);
+  data.location = path;
+  data.unsupported = FALSE;
+
+  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), &data);
   gtk_svg_load_from_bytes (svg, bytes);
   g_signal_handler_disconnect (svg, handler_id);
 
-  if (unsupported)
+  if (data.unsupported)
     g_clear_object (&svg);
 
   return svg;
@@ -145,7 +162,7 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   if (!bytes)
     return NULL;
 
-  svg = svg_from_bytes (bytes, FALSE);
+  svg = svg_from_bytes (bytes, filename, FALSE);
   g_bytes_unref (bytes);
   if (!svg)
     return NULL;
@@ -168,8 +185,9 @@ is_symbolic (const char *path)
 }
 
 static GdkPaintable *
-gdk_paintable_new_from_bytes (GBytes   *bytes,
-                              gboolean  is_symbolic)
+gdk_paintable_new_from_bytes (GBytes     *bytes,
+                              const char *path,
+                              gboolean    is_symbolic)
 {
   GdkPaintable *paintable;
 
@@ -177,9 +195,11 @@ gdk_paintable_new_from_bytes (GBytes   *bytes,
     paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
   else
     {
-      paintable = GDK_PAINTABLE (svg_from_bytes (bytes, is_symbolic));
+      paintable = GDK_PAINTABLE (svg_from_bytes (bytes, path, is_symbolic));
       if (!paintable)
-        paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+        {
+          paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+        }
     }
 
   return paintable;
@@ -198,7 +218,7 @@ gdk_paintable_new_from_filename (const char  *filename,
     return NULL;
 
   bytes = g_bytes_new_take (contents, length);
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (filename));
+  paintable = gdk_paintable_new_from_bytes (bytes, filename, is_symbolic (filename));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -214,7 +234,7 @@ gdk_paintable_new_from_resource (const char *path)
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (path));
+  paintable = gdk_paintable_new_from_bytes (bytes, path, is_symbolic (path));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -233,7 +253,7 @@ gdk_paintable_new_from_file (GFile   *file,
     return NULL;
 
   path = g_file_peek_path (file);
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (path));
+  paintable = gdk_paintable_new_from_bytes (bytes, path, is_symbolic (path));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -251,7 +271,7 @@ gdk_paintable_new_from_stream (GInputStream  *stream,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes (bytes, FALSE);
+  paintable = gdk_paintable_new_from_bytes (bytes, "?", FALSE);
   g_bytes_unref (bytes);
 
   return paintable;
