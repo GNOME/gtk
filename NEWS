@@ -1,6 +1,11 @@
 Overview of Changes in 4.23.0, xx-xx-xxxx
 =========================================
 
+* The gtk4-encode-symbolic tool for producing symbolic
+  png icons has been dropped. If you were using it,
+  ust ship the symbolic svg icons instead
+
+
 Overview of Changes in 4.22.0, 06-03-2026
 =========================================
 
