@@ -36,6 +36,10 @@
 #include <vulkan/vulkan.h>
 #endif
 
+#ifdef HAVE_GSTREAMER
+#include <gst/video/video.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -145,6 +149,13 @@ DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFo
 gboolean                gdk_memory_format_find_by_cairo_format      (cairo_format_t              cairo_format,
                                                                      GdkMemoryFormat            *out_memory_format);
 cairo_format_t          gdk_memory_format_get_cairo_format          (GdkMemoryFormat             format);
+
+#ifdef HAVE_GSTREAMER
+gboolean                gdk_memory_format_find_by_gst_video_format  (GstVideoFormat              gst_format,
+                                                                     gboolean                    premultiplied,
+                                                                     GdkMemoryFormat            *out_memory_format);
+GstVideoFormat          gdk_memory_format_get_gst_video_format      (GdkMemoryFormat             format);
+#endif
 
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
