@@ -407,12 +407,13 @@ gtk_svg_emit_error (GtkSvg       *svg,
   g_signal_emit (svg, error_signal, 0, error);
 }
 
-G_GNUC_PRINTF (5, 6)
+G_GNUC_PRINTF (6, 7)
 static void
-gtk_svg_invalid_element (GtkSvg               *self,
+gtk_svg_skipped_element (GtkSvg               *self,
                          const char           *parent_element,
                          const GtkSvgLocation *start,
                          const GtkSvgLocation *end,
+                         GtkSvgError           code,
                          const char           *format,
                          ...)
 {
@@ -420,9 +421,7 @@ gtk_svg_invalid_element (GtkSvg               *self,
   va_list args;
 
   va_start (args, format);
-  error = g_error_new_valist (GTK_SVG_ERROR,
-                              GTK_SVG_ERROR_INVALID_ELEMENT,
-                              format, args);
+  error = g_error_new_valist (GTK_SVG_ERROR, code, format, args);
   va_end (args);
 
   gtk_svg_error_set_element (error, parent_element);
@@ -16166,6 +16165,7 @@ typedef struct
   struct {
     const GSList *to;
     GtkSvgLocation start;
+    GtkSvgError code;
     char *reason;
     gboolean skip_over_target;
   } skip;
@@ -17890,10 +17890,11 @@ parse_shape_gpa_attrs (Shape                *shape,
 
 /* }}} */
 
-G_GNUC_PRINTF (3, 4)
+G_GNUC_PRINTF (4, 5)
 static void
 skip_element (ParserData          *data,
               GMarkupParseContext *context,
+              GtkSvgError          code,
               const char          *format,
               ...)
 {
@@ -17902,6 +17903,7 @@ skip_element (ParserData          *data,
   gtk_svg_location_init (&data->skip.start, context);
   data->skip.to = g_markup_parse_context_get_element_stack (context);
   data->skip.skip_over_target = TRUE;
+  data->skip.code = code;
 
   va_start (args, format);
   g_vasprintf (&data->skip.reason, format, args);
@@ -17929,6 +17931,7 @@ start_element_cb (GMarkupParseContext  *context,
     {
       gtk_svg_location_init (&data->skip.start, context);
       data->skip.to = g_markup_parse_context_get_element_stack (context)->next;
+      data->skip.code = GTK_SVG_ERROR_LIMITS_EXCEEDED;
       data->skip.reason = g_strdup ("Loading limit exceeded");
       data->skip.skip_over_target = FALSE;
       return;
@@ -17939,7 +17942,7 @@ start_element_cb (GMarkupParseContext  *context,
       if (data->current_shape &&
           !shape_type_has_shapes (data->current_shape->type))
         {
-          skip_element (data, context, "Parent element can't contain shapes");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent element can't contain shapes");
           return;
         }
 
@@ -17948,7 +17951,7 @@ start_element_cb (GMarkupParseContext  *context,
           has_ancestor (context, "clipPath") &&
           shape_type != SHAPE_CLIP_PATH)
         {
-          skip_element (data, context, "<clipPath> can only contain shapes, not %s", element_name);
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<clipPath> can only contain shapes, not %s", element_name);
           return;
         }
 
@@ -18010,7 +18013,7 @@ start_element_cb (GMarkupParseContext  *context,
           (!check_ancestors (context, "linearGradient", NULL) &&
            !check_ancestors (context, "radialGradient", NULL)))
         {
-          skip_element (data, context, "<stop> only allowed in <linearGradient> or <radialGradient>");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<stop> only allowed in <linearGradient> or <radialGradient>");
           return;
         }
 
@@ -18080,7 +18083,7 @@ start_element_cb (GMarkupParseContext  *context,
         {
           if (!check_ancestors (context, "feMerge", "filter", NULL))
             {
-              skip_element (data, context, "<%s> only allowed in <feMerge>", element_name);
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<%s> only allowed in <feMerge>", element_name);
               return;
             }
 
@@ -18092,7 +18095,7 @@ start_element_cb (GMarkupParseContext  *context,
         {
           if (!check_ancestors (context, "feComponentTransfer", "filter", NULL))
             {
-              skip_element (data, context, "<%s> only allowed in <feComponentTransfer>", element_name);
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<%s> only allowed in <feComponentTransfer>", element_name);
               return;
             }
         }
@@ -18100,7 +18103,7 @@ start_element_cb (GMarkupParseContext  *context,
         {
           if (!check_ancestors (context, "filter", NULL))
             {
-              skip_element (data, context, "<%s> only allowed in <filter>", element_name);
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<%s> only allowed in <filter>", element_name);
               return;
             }
         }
@@ -18188,7 +18191,7 @@ start_element_cb (GMarkupParseContext  *context,
       strcmp (element_name, "rdf:li") == 0)
     {
       if (!has_ancestor (context, "metadata"))
-        skip_element (data, context, "Ignoring RDF elements outside <metadata>: <%s>", element_name);
+        skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF elements outside <metadata>: <%s>", element_name);
 
       if (strcmp (element_name, "rdf:li") == 0)
         {
@@ -18199,7 +18202,7 @@ start_element_cb (GMarkupParseContext  *context,
               g_string_set_size (data->text, 0);
             }
           else
-            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
+            skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:description") == 0)
         {
@@ -18209,7 +18212,7 @@ start_element_cb (GMarkupParseContext  *context,
               g_string_set_size (data->text, 0);
             }
           else
-            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
+            skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:title") == 0)
         {
@@ -18219,7 +18222,7 @@ start_element_cb (GMarkupParseContext  *context,
               g_string_set_size (data->text, 0);
             }
           else
-            skip_element (data, context, "Ignoring RDF element in wrong context: <%s>", element_name);
+            skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "cc:license") == 0)
         {
@@ -18259,18 +18262,28 @@ start_element_cb (GMarkupParseContext  *context,
             }
         }
       else
-        skip_element (data, context, "Ignoring font element in the wrong context: <%s>", element_name);
+        skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring font element in the wrong context: <%s>", element_name);
 
       return;
     }
 
   if (strcmp (element_name, "style") == 0 ||
-      strcmp (element_name, "title") == 0 ||
-      strcmp (element_name, "desc") == 0 ||
-      g_str_has_prefix (element_name, "sodipodi:") ||
-      g_str_has_prefix (element_name, "inkscape:"))
+      strcmp (element_name, "textPath") == 0 ||
+      strcmp (element_name, "feConvolveMatrix") == 0 ||
+      strcmp (element_name, "feDiffuseLighting") == 0 ||
+      strcmp (element_name, "feMorphology") == 0 ||
+      strcmp (element_name, "feSpecularLighting") == 0 ||
+      strcmp (element_name, "feTurbulence") == 0)
     {
-      skip_element (data, context, "Ignoring metadata and style elements: <%s>", element_name);
+      skip_element (data, context, GTK_SVG_ERROR_NOT_IMPLEMENTED, "<%s> is not supported", element_name);
+      return;
+    }
+  else if (strcmp (element_name, "title") == 0 ||
+           strcmp (element_name, "desc") == 0 ||
+           g_str_has_prefix (element_name, "sodipodi:") ||
+           g_str_has_prefix (element_name, "inkscape:"))
+    {
+      skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring metadata and non-standard elements: <%s>", element_name);
       return;
     }
 
@@ -18282,13 +18295,13 @@ start_element_cb (GMarkupParseContext  *context,
 
       if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
         {
-          skip_element (data, context, "Animations are disabled");
+          skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Animations are disabled");
           return;
         }
 
       if (data->current_animation)
         {
-          skip_element (data, context, "Nested animation elements are not allowed: <set>");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Nested animation elements are not allowed: <set>");
           return;
         }
 
@@ -18308,7 +18321,7 @@ start_element_cb (GMarkupParseContext  *context,
                                        context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Skipping <%s> - bad attributes", element_name);
           return;
         }
 
@@ -18318,7 +18331,7 @@ start_element_cb (GMarkupParseContext  *context,
         {
           gtk_svg_missing_attribute (data->svg, context, "to", NULL);
           animation_drop_and_free (a);
-          skip_element (data, context, "Dropping <set> without 'to'");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Dropping <set> without 'to'");
           return;
         }
 
@@ -18332,7 +18345,7 @@ start_element_cb (GMarkupParseContext  *context,
         {
           gtk_svg_invalid_attribute (data->svg, context, "to", "Failed to parse: %s", to_attr);
           animation_drop_and_free (a);
-          skip_element (data, context, "Dropping <set> without 'to'");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Dropping <set> without 'to'");
           return;
         }
 
@@ -18365,13 +18378,13 @@ start_element_cb (GMarkupParseContext  *context,
 
       if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
         {
-          skip_element (data, context, "Animations are disabled");
+          skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Animations are disabled");
           return;
         }
 
       if (data->current_animation)
         {
-          skip_element (data, context, "Nested animation elements are not allowed: <%s>", element_name);
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Nested animation elements are not allowed: <%s>", element_name);
           return;
         }
 
@@ -18392,7 +18405,7 @@ start_element_cb (GMarkupParseContext  *context,
                                        context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Skipping <%s> - bad attributes", element_name);
           return;
         }
 
@@ -18404,7 +18417,7 @@ start_element_cb (GMarkupParseContext  *context,
                                         context))
         {
           animation_drop_and_free (a);
-          skip_element (data, context, "Skipping <%s> - bad attributes", element_name);
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Skipping <%s> - bad attributes", element_name);
           return;
         }
 
@@ -18418,7 +18431,7 @@ start_element_cb (GMarkupParseContext  *context,
                                              context))
             {
               animation_drop_and_free (a);
-              skip_element (data, context, "Skipping <%s>: bad attributes", element_name);
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Skipping <%s>: bad attributes", element_name);
               return;
             }
         }
@@ -18449,7 +18462,7 @@ start_element_cb (GMarkupParseContext  *context,
           data->current_animation->type != ANIMATION_TYPE_MOTION ||
           data->current_animation->motion.path_ref != NULL)
         {
-          skip_element (data, context, "<mpath> only allowed in <animateMotion>");
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<mpath> only allowed in <animateMotion>");
           return;
         }
 
@@ -18487,7 +18500,7 @@ start_element_cb (GMarkupParseContext  *context,
     }
 
   /* If we get here, its all over */
-  skip_element (data, context, "Unknown element: <%s>", element_name);
+  skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Unknown element: <%s>", element_name);
 }
 
 static void
@@ -18515,10 +18528,11 @@ end_element_cb (GMarkupParseContext *context,
 
           gtk_svg_location_init (&end, context);
 
-          gtk_svg_invalid_element (data->svg,
+          gtk_svg_skipped_element (data->svg,
                                    parent,
                                    &data->skip.start,
                                    &end,
+                                   data->skip.code,
                                    "%s", data->skip.reason);
           g_clear_pointer (&data->skip.reason, g_free);
           data->skip.to = NULL;
@@ -26567,6 +26581,14 @@ gtk_svg_pause (GtkSvg *self)
  * @GTK_SVG_ERROR_FAILED_UPDATE: An animation could not be updated
  * @GTK_SVG_ERROR_FAILED_RENDERING: Rendering is not according to
  *   expecations
+ * @GTK_SVG_ERROR_IGNORED_ELEMENT: An XML element is ignored,
+ *   but it should not affect rendering (this error code is used
+ *   for metadata and exension elements)
+ * @GTK_SVG_ERROR_NOT_IMPLEMENTED: The SVG uses features that
+ *   are not supported by `GtkSvg`. It may be advisable to use
+ *   a different SVG renderer.
+ * @GTK_SVG_ERROR_LIMITS_EXCEEDED: An implementation limit has
+ *   been hit, such as the number of loaded shapes.
  *
  * Error codes in the `GTK_SVG_ERROR` domain for errors
  * that happen during parsing or rendering of SVG.
