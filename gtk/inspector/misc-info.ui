@@ -682,7 +682,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Paintable Size</property>
+                            <property name="label" translatable="yes">Intrinsic Size</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -707,7 +707,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Paintable Aspect Ratio</property>
+                            <property name="label" translatable="yes">Intrinsic Aspect Ratio</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
@@ -732,7 +732,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Paintable Flags</property>
+                            <property name="label" translatable="yes">GdkPaintable Flags</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
