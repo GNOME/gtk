@@ -64,6 +64,38 @@ svg_to_texture (GtkSvg  *svg,
   return texture;
 }
 
+static void
+svg_load_error (GtkSvg       *svg,
+                const GError *error,
+                gpointer      data)
+{
+  if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_NOT_IMPLEMENTED))
+    *((gboolean *) data) = TRUE;
+}
+
+static GtkSvg *
+svg_from_bytes (GBytes   *bytes,
+                gboolean  is_symbolic)
+{
+  GtkSvg *svg;
+  gulong handler_id;
+  gboolean unsupported = FALSE;
+
+  svg = gtk_svg_new ();
+
+  if (is_symbolic)
+    gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), &unsupported);
+  gtk_svg_load_from_bytes (svg, bytes);
+  g_signal_handler_disconnect (svg, handler_id);
+
+  if (unsupported)
+    g_clear_object (&svg);
+
+  return svg;
+}
+
 /* }}} */
 /* {{{ Texture-from-stream API */
 
@@ -113,8 +145,10 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   if (!bytes)
     return NULL;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = svg_from_bytes (bytes, FALSE);
   g_bytes_unref (bytes);
+  if (!svg)
+    return NULL;
 
   texture = svg_to_texture (svg, width, height, NULL, 0);
   g_object_unref (svg);
@@ -138,23 +172,9 @@ gdk_paintable_new_from_bytes (GBytes   *bytes,
                               gboolean  is_symbolic)
 {
   if (gdk_texture_can_load (bytes))
-    {
-      /* We know these formats can't be scaled */
-      return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
-    }
+    return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
   else
-    {
-      GtkSvg *svg = gtk_svg_new ();
-
-      if (is_symbolic)
-        gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
-
-      gtk_svg_load_from_bytes (svg, bytes);
-
-      return GDK_PAINTABLE (svg);
-    }
-
-  return NULL;
+    return GDK_PAINTABLE (svg_from_bytes (bytes, is_symbolic));
 }
 
 GdkPaintable *
