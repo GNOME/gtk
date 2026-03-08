@@ -3289,7 +3289,6 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GtkIconLookupFlags  flags)
 {
   GtkIconPaintable *paintable = NULL;
-  GdkTexture *texture;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
@@ -3303,15 +3302,15 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   if (GDK_IS_TEXTURE (gicon))
     {
-      texture = GDK_TEXTURE (gicon);
       paintable = gtk_icon_paintable_new_for_texture (GDK_TEXTURE (gicon), size, scale);
     }
   else if (GDK_IS_PIXBUF (gicon))
     {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
-G_GNUC_END_IGNORE_DEPRECATIONS
+      GdkTexture *texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
       paintable = gtk_icon_paintable_new_for_texture (texture, size, scale);
+      g_object_unref (texture);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else if (G_IS_FILE_ICON (gicon))
     {
