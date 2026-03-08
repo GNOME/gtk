@@ -10179,21 +10179,9 @@ parse_any_length (const char *value)
 }
 
 static SvgValue *
-parse_positive_length (const char *value)
-{
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH);
-}
-
-static SvgValue *
 parse_length_percentage (const char *value)
 {
   return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
-}
-
-static SvgValue *
-parse_positive_length_percentage (const char *value)
-{
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
@@ -10267,12 +10255,12 @@ parse_ref_y (const char *value)
 }
 
 static SvgValue *
-parse_positive_length_percentage_or_auto (const char *value)
+parse_length_percentage_or_auto (const char *value)
 {
   if (match_str (value, "auto"))
     return svg_auto_new ();
   else
-    return parse_positive_length_percentage (value);
+    return parse_length_percentage (value);
 }
 
 static SvgValue *
@@ -10421,6 +10409,20 @@ parse_font_family (const char *value)
   return result;
 }
 
+static gboolean
+number_is_positive (SvgValue *value)
+{
+  return value->class == &SVG_NUMBER_CLASS &&
+         ((SvgNumber *) value)->value >= 0;
+}
+
+static gboolean
+number_is_positive_or_auto (SvgValue *value)
+{
+  return svg_value_equal (value, svg_auto_new ()) ||
+         number_is_positive (value);
+}
+
 typedef enum
 {
   SHAPE_ATTR_NONE      = 0,
@@ -10434,8 +10436,8 @@ typedef struct
 {
   ShapeAttrFlags flags;
   unsigned int applies_to;
-  SvgValue * (* parse_value)      (const char *value);
-  SvgValue * (* parse_for_values) (const char *value);
+  SvgValue * (* parse_value)      (const char *string);
+  gboolean   (* is_valid)         (SvgValue   *value);
   SvgValue *initial_value;
 } ShapeAttribute;
 
@@ -10676,8 +10678,8 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_PATH_LENGTH] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_SHAPES,
-    .parse_value = parse_positive_length,
-    .parse_for_values = parse_any_length,
+    .parse_value = parse_any_length,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
@@ -10709,8 +10711,8 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_R] = {
     .applies_to = BIT (SHAPE_CIRCLE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_X] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
@@ -10728,25 +10730,25 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
               BIT (SHAPE_USE) | BIT (SHAPE_FILTER) | BIT (SHAPE_MARKER) |
               BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_HEIGHT] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
               BIT (SHAPE_USE) | BIT (SHAPE_FILTER) | BIT (SHAPE_MARKER) |
               BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_RX] = {
     .applies_to = BIT (SHAPE_RECT) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_RY] = {
     .applies_to = BIT (SHAPE_RECT) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_X1] = {
     .flags = SHAPE_ATTR_NO_CSS,
@@ -10802,8 +10804,8 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FR] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_MASK_TYPE] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -10931,14 +10933,14 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FE_WIDTH] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_FE_HEIGHT] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_FE_RESULT] = {
     .flags = SHAPE_ATTR_NO_CSS,
@@ -11679,19 +11681,26 @@ shape_attr_parse_value (ShapeAttr   attr,
   return shape_attrs[attr].parse_value (value);
 }
 
-static SvgValue *
-shape_attr_parse_for_values (ShapeAttr   attr,
-                             const char *value)
+static gboolean
+shape_attr_value_is_valid (ShapeAttr  attr,
+                           SvgValue  *value)
 {
-  if (match_str (value, "inherit"))
-    return svg_inherit_new ();
-  else if (match_str (value, "initial"))
-    return svg_initial_new ();
+  if (shape_attrs[attr].is_valid)
+    return shape_attrs[attr].is_valid (value);
+  return TRUE;
+}
 
-  if (shape_attrs[attr].parse_for_values)
-    return shape_attrs[attr].parse_for_values (value);
-  else
-    return shape_attrs[attr].parse_value (value);
+static SvgValue *
+shape_attr_parse_and_validate (ShapeAttr   attr,
+                               const char *string)
+{
+  SvgValue *value;
+
+  value = shape_attr_parse_value (attr, string);
+  if (value && !shape_attr_value_is_valid (attr, value))
+    g_clear_pointer (&value, svg_value_unref);
+
+  return value;
 }
 
 static GPtrArray *
@@ -11717,7 +11726,7 @@ shape_attr_parse_values (ShapeAttr      attr,
       if (attr == SHAPE_ATTR_TRANSFORM && transform_type != TRANSFORM_NONE)
         v = primitive_transform_parse (transform_type, s);
       else
-        v = shape_attr_parse_for_values (attr, s);
+        v = shape_attr_parse_value (attr, s);
 
       if (!v)
         {
@@ -17378,7 +17387,7 @@ parse_style_attr (Shape               *shape,
         }
       else
         {
-          value = shape_attr_parse_value (attr, prop_val);
+          value = shape_attr_parse_and_validate (attr, prop_val);
           if (!value)
             {
               gtk_svg_invalid_attribute (data->svg, context,
@@ -17464,7 +17473,7 @@ parse_shape_attrs (Shape                *shape,
                 }
               else
                 {
-                  SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
+                  SvgValue *value = shape_attr_parse_and_validate (attr, attr_values[i]);
                   if (!value)
                     {
                       gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
@@ -18039,7 +18048,7 @@ parse_color_stop_attrs (Shape                *shape,
           SvgValue *value;
 
           *handled |= BIT (i);
-          value = shape_attr_parse_value (attr, attr_values[i]);
+          value = shape_attr_parse_and_validate (attr, attr_values[i]);
           if (value)
             {
               shape_set_base_value (data->current_shape, attr, idx, value);
@@ -18090,7 +18099,7 @@ parse_filter_attrs (Shape                *shape,
             {
               SvgValue *value;
 
-              value = shape_attr_parse_value (attr, attr_values[i]);
+              value = shape_attr_parse_and_validate (attr, attr_values[i]);
               *handled |= BIT (i);
               if (value)
                 {
@@ -18483,7 +18492,7 @@ start_element_cb (GMarkupParseContext  *context,
       a->frames[0].time = 0;
       a->frames[1].time = 1;
 
-      value = shape_attr_parse_value (a->attr, to_attr);
+      value = shape_attr_parse_and_validate (a->attr, to_attr);
       if (!value)
         {
           gtk_svg_invalid_attribute (data->svg, context, "to", "Failed to parse: %s", to_attr);
