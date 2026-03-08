@@ -29,6 +29,7 @@
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkenums.h"
 #include "gtk/gtkbitmaskprivate.h"
+#include "gtkprivate.h"
 
 /* {{{ svg helpers */
 
@@ -71,6 +72,40 @@ svg_to_texture (GtkSvg  *svg,
   return texture;
 }
 
+static void
+svg_load_error (GtkSvg       *svg,
+                const GError *error,
+                gpointer      user_data)
+{
+  char **unsupported = user_data;
+
+  if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_NOT_IMPLEMENTED))
+    {
+      if (unsupported && !*unsupported)
+        *unsupported = g_strdup (error->message);
+    }
+}
+
+static GtkSvg *
+svg_from_bytes (GBytes     *bytes,
+                gboolean    is_symbolic,
+                char      **unsupported)
+{
+  GtkSvg *svg;
+  gulong handler_id;
+
+  svg = gtk_svg_new ();
+
+  if (is_symbolic)
+    gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), unsupported);
+  gtk_svg_load_from_bytes (svg, bytes);
+  g_signal_handler_disconnect (svg, handler_id);
+
+  return svg;
+}
+
 static GdkTexture *
 gdk_texture_new_from_svg_bytes (GBytes  *bytes,
                                 double   scale,
@@ -81,8 +116,15 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
   GtkSvg *svg;
   GdkTexture *texture;
   int width, height;
+  char *unsupported = NULL;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = svg_from_bytes (bytes, FALSE, &unsupported);
+  if (unsupported)
+    {
+      g_clear_object (&svg);
+      g_free (unsupported);
+      return NULL;
+    }
 
   width = gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg));
   height = gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg));
@@ -454,6 +496,7 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   GBytes *bytes;
   GtkSvg *svg;
   GdkTexture *texture;
+  char *unsupported = NULL;
 
   if (only_fg)
     *only_fg = FALSE;
@@ -462,7 +505,23 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   if (!bytes)
     return NULL;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = svg_from_bytes (bytes, FALSE, &unsupported);
+  if (unsupported)
+    {
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      g_bytes_unref (bytes);
+      if (texture)
+        {
+          GTK_DEBUG (ICONFALLBACK, "Falling back to a texture: %s", unsupported);
+          g_clear_object (&svg);
+          g_free (unsupported);
+          return texture;
+        }
+
+      GTK_DEBUG (ICONFALLBACK, "Expect misrendering: %s", unsupported);
+      g_free (unsupported);
+    }
+
   texture = svg_to_texture (svg, width, height, NULL, 0);
 
   g_object_unref (svg);
