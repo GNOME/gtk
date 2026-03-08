@@ -2075,7 +2075,7 @@ gdk_x11_surface_lower (GdkSurface *surface)
  * 
  * Moves the surface to the correct workspace when running under a 
  * window manager that supports multiple workspaces, as described
- * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
+ * in the [Extended Window Manager Hints](https://specifications.freedesktop.org/wm/latest/) specification.
  * Will not do anything if the surface is already on all workspaces.
  *
  * Deprecated: 4.18
@@ -2159,7 +2159,7 @@ gdk_x11_surface_get_desktop (GdkSurface *surface)
  *
  * Moves the surface to the given workspace when running unde a
  * window manager that supports multiple workspaces, as described
- * in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
+ * in the [Extended Window Manager Hints](https://specifications.freedesktop.org/wm/latest/) specification.
  *
  * Deprecated: 4.18
  */
