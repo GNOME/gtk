@@ -22,6 +22,7 @@
 #include "gtksnapshot.h"
 #include "gtksvg.h"
 #include "gtksymbolicpaintable.h"
+#include "gtkprivate.h"
 
 /* {{{ svg helpers */
 
@@ -64,6 +65,40 @@ svg_to_texture (GtkSvg  *svg,
   return texture;
 }
 
+static void
+svg_load_error (GtkSvg       *svg,
+                const GError *error,
+                gpointer      user_data)
+{
+  char **unsupported = user_data;
+
+  if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_NOT_IMPLEMENTED))
+    {
+      if (unsupported && !*unsupported)
+        *unsupported = g_strdup (error->message);
+    }
+}
+
+static GtkSvg *
+svg_from_bytes (GBytes     *bytes,
+                gboolean    is_symbolic,
+                char      **unsupported)
+{
+  GtkSvg *svg;
+  gulong handler_id;
+
+  svg = gtk_svg_new ();
+
+  if (is_symbolic)
+    gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+  handler_id = g_signal_connect (svg, "error", G_CALLBACK (svg_load_error), unsupported);
+  gtk_svg_load_from_bytes (svg, bytes);
+  g_signal_handler_disconnect (svg, handler_id);
+
+  return svg;
+}
+
 /* }}} */
 /* {{{ Texture-from-stream API */
 
@@ -101,6 +136,7 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   GBytes *bytes;
   GtkSvg *svg;
   GdkTexture *texture;
+  char *unsupported = NULL;
 
   file = g_file_new_for_path (filename);
   stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
@@ -113,8 +149,14 @@ gdk_texture_new_from_filename_at_scale (const char  *filename,
   if (!bytes)
     return NULL;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = svg_from_bytes (bytes, FALSE, &unsupported);
   g_bytes_unref (bytes);
+  if (unsupported)
+    {
+      g_clear_object (&svg);
+      g_free (unsupported);
+      return NULL;
+    }
 
   texture = svg_to_texture (svg, width, height, NULL, 0);
   g_object_unref (svg);
@@ -134,27 +176,41 @@ is_symbolic (const char *path)
 }
 
 static GdkPaintable *
-gdk_paintable_new_from_bytes (GBytes   *bytes,
-                              gboolean  is_symbolic)
+gdk_paintable_new_from_bytes (GBytes     *bytes,
+                              const char *path,
+                              gboolean    is_symbolic)
 {
+  GdkPaintable *paintable;
+
   if (gdk_texture_can_load (bytes))
-    {
-      /* We know these formats can't be scaled */
-      return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
-    }
+    paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
   else
     {
-      GtkSvg *svg = gtk_svg_new ();
+      GtkSvg *svg;
+      char *unsupported = NULL;
 
-      if (is_symbolic)
-        gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
-
-      gtk_svg_load_from_bytes (svg, bytes);
-
-      return GDK_PAINTABLE (svg);
+      svg = svg_from_bytes (bytes, is_symbolic, &unsupported);
+      if (unsupported)
+        {
+          paintable = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+          if (paintable)
+            {
+              GTK_DEBUG (ICONFALLBACK, "Falling back to a texture for %s: %s", path, unsupported);
+              g_clear_object (&svg);
+              g_free (unsupported);
+            }
+          else
+            {
+              GTK_DEBUG (ICONFALLBACK, "Expect misrendering; %s uses unsupported features: %s", path, unsupported);
+              g_free (unsupported);
+              paintable = GDK_PAINTABLE (svg);
+            }
+        }
+      else
+        paintable = GDK_PAINTABLE (svg);
     }
 
-  return NULL;
+  return paintable;
 }
 
 GdkPaintable *
@@ -170,7 +226,7 @@ gdk_paintable_new_from_filename (const char  *filename,
     return NULL;
 
   bytes = g_bytes_new_take (contents, length);
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (filename));
+  paintable = gdk_paintable_new_from_bytes (bytes, filename, is_symbolic (filename));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -186,7 +242,7 @@ gdk_paintable_new_from_resource (const char *path)
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (path));
+  paintable = gdk_paintable_new_from_bytes (bytes, path, is_symbolic (path));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -205,7 +261,7 @@ gdk_paintable_new_from_file (GFile   *file,
     return NULL;
 
   path = g_file_peek_path (file);
-  paintable = gdk_paintable_new_from_bytes (bytes, is_symbolic (path));
+  paintable = gdk_paintable_new_from_bytes (bytes, path, is_symbolic (path));
   g_bytes_unref (bytes);
 
   return paintable;
@@ -223,7 +279,7 @@ gdk_paintable_new_from_stream (GInputStream  *stream,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes (bytes, FALSE);
+  paintable = gdk_paintable_new_from_bytes (bytes, "?", FALSE);
   g_bytes_unref (bytes);
 
   return paintable;
