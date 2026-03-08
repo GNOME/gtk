@@ -34,7 +34,7 @@
  * @GTK_CSS_SELECTOR_CATEGORY_SIMPLE: A simple selector
  * @GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL: A simple selector that matches
  *   what change tracking considers a "radical change"
- * @GTK_CSS_SELECTOR_SIBLING: A selector matching siblings
+ * @GTK_CSS_SELECTOR_CATEGORY_SIBLING: A selector matching siblings
  * @GTK_CSS_SELECTOR_CATEGORY_PARENT: A selector matching a parent or other
  *   ancestor
  *
