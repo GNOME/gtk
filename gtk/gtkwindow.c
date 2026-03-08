@@ -5692,7 +5692,7 @@ gtk_window_translate_csd_pos (GtkWindow *window,
  * gdk_screen_height () - window_height)` (note that this
  * example does not take multi-head scenarios into account).
  *
- * The [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec)
+ * The [Extended Window Manager Hints Specification](https://specifications.freedesktop.org/wm/latest/)
  * has a nice table of gravities in the “implementation notes” section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
@@ -10934,7 +10934,7 @@ gtk_window_unfullscreen (GtkWindow *window)
  * on #GtkWidget.
  *
  * Note that, according to the
- * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
+ * [Extended Window Manager Hints Specification](https://specifications.freedesktop.org/wm/latest/),
  * the above state is mainly meant for user preferences and should not
  * be used by applications e.g. for drawing attention to their
  * dialogs.
@@ -10981,7 +10981,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * on #GtkWidget.
  *
  * Note that, according to the
- * [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec),
+ * [Extended Window Manager Hints Specification](https://specifications.freedesktop.org/wm/latest/),
  * the above state is mainly meant for user preferences and should not
  * be used by applications e.g. for drawing attention to their
  * dialogs.
