@@ -458,11 +458,19 @@ def print_c_print_function (file):
     print_c_function ('static void',
                       file.var_name + '_op_print_instance',
                       [ FunctionArg ('GskGpuShaderOp', True,  'shader'),
-                        FunctionArg ('gpointer',       False, 'instance'),
+                        FunctionArg ('gpointer',       False, 'instance_'),
                         FunctionArg ('GString',        True,  'string') ],
                       False)
     print (f'''{{
-  /* FIXME: Implement */
+''')
+    for var in file.variables:
+        if var.name == 'bounds':
+            print (f'''{file.struct_name}Instance *instance = instance_;
+
+  gsk_gpu_print_rect (string, instance->bounds);
+''')
+
+    print (f'''  /* FIXME: Implement */
 }}
 ''')
 
@@ -629,6 +637,7 @@ def print_header_file (file, n_attributes, attributes):
     print (f'''/* This file is auto-generated; changes will not be preserved */
 #pragma once
 
+#include "gskgpuprintprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskgradientprivate.h" /* for GskRepeat */
 #include "gsk/gskroundedrectprivate.h"
