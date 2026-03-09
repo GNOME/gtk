@@ -254,15 +254,16 @@ gdk_paintable_new_from_file (GFile   *file,
 {
   GBytes *bytes;
   GdkPaintable *paintable;
-  const char *path;
+  char *uri;
 
   bytes = g_file_load_bytes (file, NULL, NULL, error);
   if (!bytes)
     return NULL;
 
-  path = g_file_peek_path (file);
-  paintable = gdk_paintable_new_from_bytes (bytes, path, is_symbolic (path));
+  uri = g_file_get_uri (file);
+  paintable = gdk_paintable_new_from_bytes (bytes, uri, is_symbolic (uri));
   g_bytes_unref (bytes);
+  g_free (uri);
 
   return paintable;
 }
