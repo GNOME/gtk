@@ -248,7 +248,6 @@ gdk_android_toplevel_present (GdkToplevel *toplevel, GdkToplevelLayout *layout)
         self->monitor = (GdkAndroidMonitor *) gdk_android_monitor_new (gdk_surface_get_display (surface));
       gdk_android_monitor_add_toplevel (self->monitor);
 
-      g_debug ("Spawning activity for toplevel: (transient %p)", surface->transient_for);
       jobject parent = surface->transient_for ? GDK_ANDROID_TOPLEVEL (surface->transient_for)->activity : NULL;
       if (!parent)
         {
@@ -256,6 +255,7 @@ gdk_android_toplevel_present (GdkToplevel *toplevel, GdkToplevelLayout *layout)
           gboolean is_bound = (*env)->GetLongField (env, parent, gdk_android_get_java_cache ()->toplevel.native_identifier) != 0;
           if (!is_bound)
             {
+              g_debug ("Claiming unbound activity %p for %p", parent, self);
               (*env)->CallVoidMethod (env, parent, gdk_android_get_java_cache ()->toplevel.bind_native,
                                       (jlong)self);
               goto skip_new_activity;
@@ -265,6 +265,7 @@ gdk_android_toplevel_present (GdkToplevel *toplevel, GdkToplevelLayout *layout)
                                       gdk_android_get_java_cache ()->a_intent.flag_activity_new_task | gdk_android_get_java_cache ()->a_intent.flag_activity_multiple_task);
         }
 
+      g_debug ("Spawning activity for toplevel: (transient %p)", surface->transient_for);
       (*env)->CallVoidMethod (env, parent, gdk_android_get_java_cache ()->a_activity.start_activity, self->intent);
 skip_new_activity:
       self->did_spawn_activity = TRUE;
