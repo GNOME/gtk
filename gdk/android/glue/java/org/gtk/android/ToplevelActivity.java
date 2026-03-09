@@ -529,20 +529,6 @@ public class ToplevelActivity extends Activity {
 		GlibContext.runOnMain(() -> notifyActivityResult(requestCode, resultCode, data));
 	}
 
-	@Override
-	public void finish() {
-		/*
-		 * Surfaces that are spawned as a new window (task) thus without any parents
-		 * should have their task dropped after they exited, as the Surface was already
-		 * destroyed on the gdk side and can't be bound anymore, which'd happen if the
-		 * user were able to navigate back to the nonexistent window in their history.
-		 */
-		if (isTaskRoot() && nativeIdentifier != 0)
-			super.finishAndRemoveTask();
-		else
-			super.finish();
-	}
-
 	public void postWindowConfiguration(int color, boolean fullscreen) {
 		runOnUiThread(() -> {
 			Window window = getWindow();
