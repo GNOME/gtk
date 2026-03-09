@@ -154,33 +154,14 @@ _gdk_android_toplevel_on_destroy (JNIEnv *env, jobject this)
   GdkAndroidDisplay *display = gdk_android_display_get_display_instance ();
   GdkAndroidToplevel *self = g_hash_table_lookup (display->surfaces, (gpointer) identifier);
   gdk_android_check_toplevel (self);
-  GdkAndroidSurface *surface_impl = (GdkAndroidSurface *) self;
   GdkSurface *surface = (GdkSurface *) self;
 
   g_debug ("TRACE: On Destroy GdkAndroidToplevel %lx, (%p)", identifier, (gpointer) self);
 
   if (!GDK_SURFACE_DESTROYED (surface))
     {
-      if (!surface_impl->visible)
-        {
-          self->did_spawn_activity = FALSE;
-          return;
-        }
-
-      g_info ("GdkAndroidToplevel (%p): OS destroyed activity", (gpointer) self);
-      // TODO: is there no better way of letting GTK know a surface no longer exits?
-      //  the issue with this is, that if a toplevel with modal is open (grabbed),
-      //  the delete event on any other widget will not be handled (see gtkmain.c,
-      //  the GDK_DELETE branch of the switch in gtk_main_do_event)
-      GdkEvent *event = gdk_delete_event_new (surface);
-      gdk_surface_handle_event (event);
-      gdk_event_unref (event);
-
-      if (!GDK_SURFACE_DESTROYED (surface))
-        {
-          g_warning ("GdkAndroidToplevel (%p): Force destroying activity", (gpointer) self);
-          _gdk_surface_destroy (surface, TRUE);
-        }
+      g_warning ("GdkAndroidToplevel (%p): Destroying surface", (gpointer) self);
+      _gdk_surface_destroy (surface, TRUE);
     }
   else
     {

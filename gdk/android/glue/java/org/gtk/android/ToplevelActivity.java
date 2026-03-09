@@ -519,7 +519,7 @@ public class ToplevelActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		if (isFinishing())
+		if (isFinishing()) // TODO: investigate possibility unconditionally running this
 			GlibContext.runOnMain(this::notifyDestroy);
 		super.onDestroy();
 	}
