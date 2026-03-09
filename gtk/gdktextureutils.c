@@ -121,7 +121,16 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
   svg = svg_from_bytes (bytes, FALSE, &unsupported);
   if (unsupported)
     {
-      g_clear_object (&svg);
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      if (texture)
+        {
+          GTK_DEBUG (ICONFALLBACK, "Falling back to a texture: %s", unsupported);
+          g_clear_object (&svg);
+          g_free (unsupported);
+          return texture;
+        }
+
+      GTK_DEBUG (ICONFALLBACK, "Expect misrendering: %s", unsupported);
       g_free (unsupported);
       return NULL;
     }
@@ -509,11 +518,11 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   if (unsupported)
     {
       texture = gdk_texture_new_from_bytes (bytes, NULL);
-      g_bytes_unref (bytes);
       if (texture)
         {
           GTK_DEBUG (ICONFALLBACK, "Falling back to a texture: %s", unsupported);
           g_clear_object (&svg);
+          g_bytes_unref (bytes);
           g_free (unsupported);
           return texture;
         }
