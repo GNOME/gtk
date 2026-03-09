@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="decorated">0</property>
+    <property name="child">
+      <object class="GtkBox">
+        <style>
+          <class name="opacity"/>
+        </style>
+        <child>
+          <object class="GtkLabel">
+            <style>
+              <class name="shadow"/>
+            </style>
+            <property name="label">█</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
