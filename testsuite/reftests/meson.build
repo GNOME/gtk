@@ -308,6 +308,7 @@ testdata = [
   'default-size-with-titlebar.ref.ui',
   'default-size-without-titlebar.ui',
   'default-size-without-titlebar.ref.ui',
+  'filter-before-opacity.ui',
   'fixed-widget-stacking.ref.ui',
   'fixed-widget-stacking.ui',
   'flipping-icons.ref.ui',
