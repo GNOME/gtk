@@ -220,8 +220,8 @@ make_random_clip (cairo_rectangle_int_t *int_clip,
       g_strfreev (str);
     }
 
-  int_clip->width = g_test_rand_int_range (1, width);
-  int_clip->height = g_test_rand_int_range (1, height);
+  int_clip->width = g_test_rand_int_range (1, MIN (4096, width));
+  int_clip->height = g_test_rand_int_range (1, MIN (4096, height));
 
   int_clip->x = g_test_rand_int_range (0, width - int_clip->width);
   int_clip->y = g_test_rand_int_range (0, height - int_clip->height);
