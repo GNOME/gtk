@@ -1029,6 +1029,22 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
+  g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
+  surface->is_mapped = FALSE;
+  surface->pending_is_mapped = FALSE;
+
+  surface->destroyed = TRUE;
+
+  surface_remove_from_pointer_info (surface, surface->display);
+
+  // Gtk.Window wants to disconnect from the frame clock, so notify before destroying it.
+
+  g_object_ref (surface);
+
+  if (GDK_IS_TOPLEVEL (surface))
+    g_object_notify (G_OBJECT (surface), "state");
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
+
   if (surface->gl_paint_context)
     {
       /* Make sure to destroy if current */
@@ -1046,17 +1062,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   _gdk_surface_clear_update_area (surface);
 
-  g_clear_handle_id (&surface->set_is_mapped_source_id, g_source_remove);
-  surface->is_mapped = FALSE;
-  surface->pending_is_mapped = FALSE;
-
-  surface->destroyed = TRUE;
-
-  surface_remove_from_pointer_info (surface, surface->display);
-
-  if (GDK_IS_TOPLEVEL (surface))
-    g_object_notify (G_OBJECT (surface), "state");
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
+  g_object_unref (surface);
 }
 
 /**

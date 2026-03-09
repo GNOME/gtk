@@ -271,6 +271,7 @@ typedef struct
 
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
+  guint    in_emit_force_close       : 1;
   guint    move_focus                : 1;
   guint    unset_default             : 1;
   guint    in_present                : 1;
@@ -302,6 +303,7 @@ enum {
   KEYS_CHANGED,
   ENABLE_DEBUGGING,
   CLOSE_REQUEST,
+  FORCE_CLOSE,
   LAST_SIGNAL
 };
 
@@ -394,6 +396,7 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
                                            int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
+static void     gtk_window_force_close    (GtkWindow         *window);
 static gboolean gtk_window_handle_focus   (GtkWidget         *widget,
                                            GdkEvent          *event,
                                            double             x,
@@ -869,6 +872,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
   klass->close_request = gtk_window_close_request;
+  klass->force_close = gtk_window_force_close;
 
   /**
    * GtkWindow:title:
@@ -1293,6 +1297,24 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_signal_set_va_marshaller (window_signals[CLOSE_REQUEST],
                               GTK_TYPE_WINDOW,
                               _gtk_marshal_BOOLEAN__VOIDv);
+
+  /**
+   * GtkWindow::force-close:
+   * @window: the window which emitted the signal
+   *
+   * Emitted when the compositor has decided to eliminate a window.
+   *
+   * @window *has* to be in a hidden state after this signal was handled.
+   *
+   * Since: 4.24
+   */
+  window_signals[FORCE_CLOSE] =
+    g_signal_new (I_("force-close"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWindowClass, force_close),
+                  NULL, NULL,
+                  NULL, G_TYPE_NONE, 0);
 
 
   /*
@@ -3884,6 +3906,42 @@ gtk_window_emit_close_request (GtkWindow *window)
 }
 
 static void
+gtk_window_force_close (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->hide_on_close)
+    gtk_widget_set_visible (GTK_WIDGET (window), FALSE);
+  else
+    gtk_window_destroy (window);
+}
+
+static void
+gtk_window_emit_force_close (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  /* Avoid re-entrancy issues when calling gtk_window_close from a
+   * close-request handler */
+  if (priv->in_emit_force_close)
+    return;
+
+  g_object_ref (window);
+
+  priv->in_emit_force_close = TRUE;
+  g_signal_emit (window, window_signals[FORCE_CLOSE], 0);
+  priv->in_emit_force_close = FALSE;
+
+  if (gtk_widget_is_visible (GTK_WIDGET (window)))
+    {
+      g_critical ("Gtk.Window::force-close did not leave window in a hidden state");
+      gtk_window_destroy (window);
+    }
+
+  g_object_unref (window);
+}
+
+static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
@@ -4872,6 +4930,17 @@ surface_state_changed (GtkWidget *widget)
       update_window_style_classes (window);
       update_window_actions (window);
       gtk_widget_queue_resize (widget);
+    }
+
+  if (priv->surface->destroyed)
+    {
+      g_object_ref (widget);
+
+      g_debug ("Unrealizing window %p as its surface (%p) got destroyed", widget, priv->surface);
+      gtk_window_emit_force_close (window);
+      gtk_widget_unrealize (widget);
+
+      g_object_unref (widget);
     }
 }
 
