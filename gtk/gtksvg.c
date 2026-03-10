@@ -19437,14 +19437,18 @@ static void
 indent_for_elt (GString *s,
                 int      indent)
 {
-  g_string_append_printf (s, "\n%*s", indent, " ");
+  if (s->str[s->len - 1] != '\n')
+    g_string_append_c (s, '\n');
+  g_string_append_printf (s, "%*s", indent, " ");
 }
 
 static void
 indent_for_attr (GString *s,
                  int      indent)
 {
-  g_string_append_printf (s, "\n%*s", indent + 8, " ");
+  if (s->str[s->len - 1] != '\n')
+    g_string_append_c (s, '\n');
+  g_string_append_printf (s, "%*s", indent + 8, " ");
 }
 
 static void
