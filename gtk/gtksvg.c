@@ -4068,6 +4068,16 @@ svg_string_new (const char *str)
   return (SvgValue *) result;
 }
 
+static SvgValue *
+svg_string_new_take (char *str)
+{
+  SvgString *result;
+
+  result = (SvgString *) svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
+  result->value = str;
+  return (SvgValue *) result;
+}
+
 /* }}} */
 /* {{{ String Lists */
 
@@ -4180,6 +4190,23 @@ svg_string_list_new (GStrv strv)
   result->len = len;
   for (unsigned int i = 0; i < len; i++)
     result->values[i] = g_strdup (strv[i]);
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_string_list_new_take (GStrv strv)
+{
+  SvgStringList *result;
+  unsigned int len = g_strv_length (strv);
+
+  result = (SvgStringList *) svg_value_alloc (&SVG_STRING_LIST_CLASS, svg_string_list_size (len));
+
+  result->len = len;
+  for (unsigned int i = 0; i < len; i++)
+    result->values[i] = strv[i];
+
+  g_free (strv);
 
   return (SvgValue *) result;
 }
@@ -10113,14 +10140,7 @@ parse_language_list (const char *value)
 static SvgValue *
 parse_string_list (const char *value)
 {
-  GStrv strv;
-  SvgValue *result;
-
-  strv = strsplit_set (value, " ");
-  result = svg_string_list_new (strv);
-  g_strfreev (strv);
-
-  return result;
+  return svg_string_list_new_take (strsplit_set (value, " "));
 }
 
 static SvgValue *
@@ -15494,8 +15514,7 @@ create_morph_filter (Shape      *shape,
 
   idx = shape_add_filter (filter, FE_BLUR);
   str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
-  value = svg_string_new (str);
-  g_free (str);
+  value = svg_string_new_take (str);
   shape_set_base_value (filter, SHAPE_ATTR_FE_RESULT, idx + 1, value);
   svg_value_unref (value);
 
