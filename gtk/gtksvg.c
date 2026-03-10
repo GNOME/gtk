@@ -4068,6 +4068,16 @@ svg_string_new (const char *str)
   return (SvgValue *) result;
 }
 
+static SvgValue *
+svg_string_new_take (char *str)
+{
+  SvgString *result;
+
+  result = (SvgString *) svg_value_alloc (&SVG_STRING_CLASS, sizeof (SvgString));
+  result->value = str;
+  return (SvgValue *) result;
+}
+
 /* }}} */
 /* {{{ String Lists */
 
@@ -4180,6 +4190,23 @@ svg_string_list_new (GStrv strv)
   result->len = len;
   for (unsigned int i = 0; i < len; i++)
     result->values[i] = g_strdup (strv[i]);
+
+  return (SvgValue *) result;
+}
+
+static SvgValue *
+svg_string_list_new_take (GStrv strv)
+{
+  SvgStringList *result;
+  unsigned int len = g_strv_length (strv);
+
+  result = (SvgStringList *) svg_value_alloc (&SVG_STRING_LIST_CLASS, svg_string_list_size (len));
+
+  result->len = len;
+  for (unsigned int i = 0; i < len; i++)
+    result->values[i] = strv[i];
+
+  g_free (strv);
 
   return (SvgValue *) result;
 }
@@ -10113,14 +10140,7 @@ parse_language_list (const char *value)
 static SvgValue *
 parse_string_list (const char *value)
 {
-  GStrv strv;
-  SvgValue *result;
-
-  strv = strsplit_set (value, " ");
-  result = svg_string_list_new (strv);
-  g_strfreev (strv);
-
-  return result;
+  return svg_string_list_new_take (strsplit_set (value, " "));
 }
 
 static SvgValue *
@@ -11229,7 +11249,7 @@ typedef struct {
   ShapeAttr attr;
 } ShapeAttrLookup;
 
-#define ANY_FILTER \
+#define FILTER_ANY \
   (BIT (FE_FLOOD) | BIT (FE_BLUR) | BIT (FE_BLEND) | BIT (FE_COLOR_MATRIX) | \
    BIT (FE_COMPOSITE) | BIT (FE_OFFSET) | BIT (FE_DISPLACEMENT) | \
    BIT (FE_TILE) | BIT (FE_IMAGE) | BIT (FE_MERGE) | \
@@ -11345,19 +11365,19 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "systemLanguage", SHAPE_ANY, 0, SHAPE_ATTR_SYSTEM_LANGUAGE },
   { "gpa:stroke-minwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MINWIDTH },
   { "gpa:stroke-maxwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MAXWIDTH },
-  { "stop-offset", SHAPE_GRADIENTS, 0, SHAPE_ATTR_STOP_OFFSET },
+  { "offset", SHAPE_GRADIENTS, 0, SHAPE_ATTR_STOP_OFFSET },
   { "stop-color", SHAPE_ANY, 0, SHAPE_ATTR_STOP_COLOR },
   { "stop-opacity", SHAPE_ANY, 0, SHAPE_ATTR_STOP_OPACITY },
-  { "x", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_X },
-  { "y", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_Y },
-  { "width", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_WIDTH },
-  { "height", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_HEIGHT },
-  { "result", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_RESULT },
+  { "x", BIT (SHAPE_FILTER), FILTER_ANY, SHAPE_ATTR_FE_X },
+  { "y", BIT (SHAPE_FILTER), FILTER_ANY, SHAPE_ATTR_FE_Y },
+  { "width", BIT (SHAPE_FILTER), FILTER_ANY, SHAPE_ATTR_FE_WIDTH },
+  { "height", BIT (SHAPE_FILTER), FILTER_ANY, SHAPE_ATTR_FE_HEIGHT },
+  { "result", BIT (SHAPE_FILTER), FILTER_ANY, SHAPE_ATTR_FE_RESULT },
   { "flood-color", BIT (SHAPE_FILTER), BIT (FE_FLOOD) | BIT (FE_DROPSHADOW), SHAPE_ATTR_FE_COLOR },
   { "flood-color", SHAPE_ANY, 0, SHAPE_ATTR_FE_COLOR },
   { "flood-opacity", BIT (SHAPE_FILTER), BIT (FE_FLOOD) | BIT (FE_DROPSHADOW), SHAPE_ATTR_FE_OPACITY },
   { "flood-opacity", SHAPE_ANY, 0, SHAPE_ATTR_FE_OPACITY },
-  { "in", BIT (SHAPE_FILTER), (ANY_FILTER | BIT (FE_MERGE_NODE)) & ~(BIT (FE_FLOOD) | BIT (FE_IMAGE) | BIT (FE_MERGE)), SHAPE_ATTR_FE_IN },
+  { "in", BIT (SHAPE_FILTER), (FILTER_ANY | BIT (FE_MERGE_NODE)) & ~(BIT (FE_FLOOD) | BIT (FE_IMAGE) | BIT (FE_MERGE)), SHAPE_ATTR_FE_IN },
   { "in2", BIT (SHAPE_FILTER), BIT (FE_BLEND) | BIT (FE_COMPOSITE) | BIT (FE_DISPLACEMENT), SHAPE_ATTR_FE_IN2 },
   { "stdDeviation", BIT (SHAPE_FILTER), BIT (FE_BLUR) | BIT (FE_DROPSHADOW), SHAPE_ATTR_FE_STD_DEV },
   { "dx", BIT (SHAPE_FILTER), BIT (FE_OFFSET) | BIT (FE_DROPSHADOW), SHAPE_ATTR_FE_DX },
@@ -15494,8 +15514,7 @@ create_morph_filter (Shape      *shape,
 
   idx = shape_add_filter (filter, FE_BLUR);
   str = g_strdup_printf ("gpa:morph-filter:%s:blurred", shape->id);
-  value = svg_string_new (str);
-  g_free (str);
+  value = svg_string_new_take (str);
   shape_set_base_value (filter, SHAPE_ATTR_FE_RESULT, idx + 1, value);
   svg_value_unref (value);
 
@@ -19201,7 +19220,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.collect_text = FALSE;
   data.num_loaded_elements = 0;
 
-  context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
+  context = g_markup_parse_context_new (&parser,
+                                        G_MARKUP_PREFIX_ERROR_POSITION |
+                                        G_MARKUP_TREAT_CDATA_AS_TEXT,
+                                        &data, NULL);
   if (!g_markup_parse_context_parse (context,
                                      g_bytes_get_data (bytes, NULL),
                                      g_bytes_get_size (bytes),
