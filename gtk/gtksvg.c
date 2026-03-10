@@ -19220,7 +19220,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.collect_text = FALSE;
   data.num_loaded_elements = 0;
 
-  context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
+  context = g_markup_parse_context_new (&parser,
+                                        G_MARKUP_PREFIX_ERROR_POSITION |
+                                        G_MARKUP_TREAT_CDATA_AS_TEXT,
+                                        &data, NULL);
   if (!g_markup_parse_context_parse (context,
                                      g_bytes_get_data (bytes, NULL),
                                      g_bytes_get_size (bytes),
