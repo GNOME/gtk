@@ -4089,6 +4089,7 @@ svg_string_new_take (char *str)
 typedef struct
 {
   SvgValue base;
+  char separator;
   unsigned int len;
   char *values[1];
 } SvgStringList;
@@ -4115,7 +4116,8 @@ svg_string_list_equal (const SvgValue *value0,
   const SvgStringList *s0 = (const SvgStringList *)value0;
   const SvgStringList *s1 = (const SvgStringList *)value1;
 
-  if (s0->len != s1->len)
+  if (s0->len != s1->len ||
+      s0->separator != s1->separator)
     return FALSE;
 
   for (unsigned int i = 0; i < s0->len; i++)
@@ -4158,7 +4160,7 @@ svg_string_list_print (const SvgValue *value,
     {
       char *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
       if (i > 0)
-        g_string_append_c (string, ' ');
+        g_string_append_c (string, s->separator);
       g_string_append (string, escaped);
       g_free (escaped);
     }
@@ -4196,6 +4198,8 @@ svg_string_list_new (GStrv strv)
   for (unsigned int i = 0; i < len; i++)
     result->values[i] = g_strdup (strv[i]);
 
+  result->separator = ' ';
+
   return (SvgValue *) result;
 }
 
@@ -4212,6 +4216,8 @@ svg_string_list_new_take (GStrv strv)
     result->values[i] = strv[i];
 
   g_free (strv);
+
+  result->separator = ' ';
 
   return (SvgValue *) result;
 }
