@@ -11485,6 +11485,41 @@ shape_attr_lookup (const char *name,
 }
 
 static gboolean
+color_stop_attr_lookup (const char *name,
+                        ShapeType   type,
+                        ShapeAttr  *attr,
+                        gboolean   *deprecated)
+{
+  ShapeAttrLookup key;
+  ShapeAttrLookup *found;
+
+  key.name = name;
+  key.shapes = BIT (type);
+  key.filters = 0;
+
+  found = g_hash_table_lookup (shape_attr_lookup_table, &key);
+
+  if (!found)
+    return FALSE;
+
+  if (found->attr & DEPRECATED_BIT)
+    {
+      *attr = found->attr & ~DEPRECATED_BIT;
+      *deprecated = TRUE;
+    }
+  else
+    {
+      *attr = found->attr;
+      *deprecated = FALSE;
+    }
+
+  if (*attr < FIRST_STOP_ATTR || *attr > LAST_STOP_ATTR)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
 filter_attr_lookup (FilterPrimitiveType  type,
                     const char          *name,
                     ShapeAttr           *attr,
@@ -17334,9 +17369,6 @@ parse_shape_attrs (Shape                *shape,
           continue;
         }
 
-      /* We handle class and style after the loop to
-       * enforce priority over fill/stroke
-       */
       if (strcmp (attr_names[i], "class") == 0)
         {
           class_attr = attr_values[i];
@@ -17908,6 +17940,105 @@ parse_shape_gpa_attrs (Shape                *shape,
 }
 
 /* }}} */
+/* {{{ Color Stop attributes */
+
+static void
+parse_color_stop_attrs (Shape                *shape,
+                        unsigned int          idx,
+                        ColorStop            *stop,
+                        const char           *element_name,
+                        const char          **attr_names,
+                        const char          **attr_values,
+                        uint64_t             *handled,
+                        ParserData           *data,
+                        GMarkupParseContext  *context)
+{
+  const char *style_attr = NULL;
+
+  for (unsigned int i = 0; attr_names[i]; i++)
+    {
+      ShapeAttr attr;
+      gboolean deprecated;
+
+      if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          style_attr = attr_values[i];
+        }
+      else if (color_stop_attr_lookup (attr_names[i], shape->type, &attr, &deprecated))
+        {
+          SvgValue *value;
+
+          *handled |= BIT (i);
+          value = shape_attr_parse_value (attr, attr_values[i]);
+          if (value)
+            {
+              shape_set_base_value (data->current_shape, attr, idx, value);
+              svg_value_unref (value);
+            }
+          else
+            gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
+        }
+    }
+
+  if (style_attr)
+    parse_style_attr (shape, TRUE, FALSE, style_attr, data, context);
+}
+
+/* }}} */
+/* {{{ Filter attributes */
+
+static void
+parse_filter_attrs (Shape                *shape,
+                    unsigned int          idx,
+                    FilterPrimitive      *f,
+                    const char           *element_name,
+                    const char          **attr_names,
+                    const char          **attr_values,
+                    uint64_t             *handled,
+                    ParserData           *data,
+                    GMarkupParseContext  *context)
+{
+  const char *style_attr = NULL;
+
+  for (unsigned int i = 0; attr_names[i]; i++)
+    {
+      ShapeAttr attr;
+      gboolean deprecated;
+
+      if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          style_attr = attr_values[i];
+        }
+      else if (filter_attr_lookup (f->type, attr_names[i], &attr, &deprecated))
+        {
+          if (deprecated && (f->attrs & BIT (filter_attr_idx (f->type, attr))) != 0)
+            {
+              /* ignore */
+            }
+          else
+            {
+              SvgValue *value;
+
+              value = shape_attr_parse_value (attr, attr_values[i]);
+              *handled |= BIT (i);
+              if (value)
+                {
+                  shape_set_base_value (data->current_shape, attr, idx, value);
+                  svg_value_unref (value);
+                }
+              else
+                gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
+            }
+        }
+    }
+
+  if (style_attr)
+    parse_style_attr (shape, FALSE, TRUE, style_attr, data, context);
+}
+
+/* }}} */
 
 G_GNUC_PRINTF (4, 5)
 static void
@@ -17939,7 +18070,6 @@ start_element_cb (GMarkupParseContext  *context,
 {
   ParserData *data = user_data;
   ShapeType shape_type;
-  Shape *shape = NULL;
   uint64_t handled = 0;
   FilterPrimitiveType filter_type;
 
@@ -17958,6 +18088,8 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (shape_type_lookup (element_name, &shape_type))
     {
+      Shape *shape = NULL;
+
       if (data->current_shape &&
           !shape_type_has_shapes (data->current_shape->type))
         {
@@ -18024,9 +18156,8 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (strcmp (element_name, "stop") == 0)
     {
-      SvgValue *value;
-      const char *style_attr = NULL;
       unsigned int idx;
+      ColorStop *stop;
 
       if (data->current_shape == NULL ||
           (!check_ancestors (context, "linearGradient", NULL) &&
@@ -18036,55 +18167,12 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      shape_add_color_stop (data->current_shape);
-      idx = data->current_shape->color_stops->len - 1;
-      for (unsigned int i = 0; attr_names[i]; i++)
-        {
-          if (strcmp (attr_names[i], "offset") == 0)
-            {
-              handled |= BIT (i);
-              value = shape_attr_parse_value (SHAPE_ATTR_STOP_OFFSET, attr_values[i]);
-              if (value)
-                {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OFFSET, idx + 1, value);
-                  svg_value_unref (value);
-                }
-              else
-                gtk_svg_invalid_attribute (data->svg, context, "offset", NULL);
-            }
-          else if (strcmp (attr_names[i], "stop-color") == 0)
-            {
-              handled |= BIT (i);
-              value = shape_attr_parse_value (SHAPE_ATTR_STOP_COLOR, attr_values[i]);
-              if (value)
-                {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_COLOR, idx + 1, value);
-                  svg_value_unref (value);
-                }
-              else
-                gtk_svg_invalid_attribute (data->svg, context, "stop-color", NULL);
-            }
-          else if (strcmp (attr_names[i], "stop-opacity") == 0)
-            {
-              handled |= BIT (i);
-              value = shape_attr_parse_value (SHAPE_ATTR_STOP_OPACITY, attr_values[i]);
-              if (value)
-                {
-                  shape_set_base_value (data->current_shape, SHAPE_ATTR_STOP_OPACITY, idx + 1, value);
-                  svg_value_unref (value);
-                }
-              else
-                gtk_svg_invalid_attribute (data->svg, context, "stop-opacity", NULL);
-            }
-          else if (strcmp (attr_names[i], "style") == 0)
-            {
-              handled |= BIT (i);
-              style_attr = attr_values[i];
-            }
-        }
+      idx = shape_add_color_stop (data->current_shape);
+      stop = g_ptr_array_index (data->current_shape->color_stops, idx);
 
-      if (style_attr)
-        parse_style_attr (data->current_shape, TRUE, FALSE, style_attr, data, context);
+      parse_color_stop_attrs (data->current_shape, idx + 1, stop,
+                              element_name, attr_names, attr_values,
+                              &handled, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -18093,9 +18181,7 @@ start_element_cb (GMarkupParseContext  *context,
 
   if (filter_type_lookup (element_name, &filter_type))
     {
-      const char *style_attr = NULL;
       unsigned int idx;
-      gboolean values_set = FALSE;
       FilterPrimitive *f;
 
       if (filter_type == FE_MERGE_NODE)
@@ -18130,41 +18216,9 @@ start_element_cb (GMarkupParseContext  *context,
       idx = shape_add_filter (data->current_shape, filter_type);
       f = g_ptr_array_index (data->current_shape->filters, idx);
 
-      for (unsigned int i = 0; attr_names[i]; i++)
-        {
-          ShapeAttr attr;
-          gboolean deprecated;
-
-          if (strcmp (attr_names[i], "style") == 0)
-            {
-              handled |= BIT (i);
-              style_attr = attr_values[i];
-            }
-          else if (filter_attr_lookup (filter_type, attr_names[i], &attr, &deprecated))
-            {
-              if (deprecated && (f->attrs & BIT (filter_attr_idx (filter_type, attr))) != 0)
-                {
-                  /* ignore */
-                }
-              else
-                {
-                  SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
-                  handled |= BIT (i);
-                  if (value)
-                    {
-                      shape_set_base_value (data->current_shape, attr, idx + 1, value);
-                      svg_value_unref (value);
-                    }
-                  else
-                    gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
-                  if (attr == SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)
-                    values_set = TRUE;
-                }
-            }
-        }
-
-      if (style_attr)
-        parse_style_attr (data->current_shape, FALSE, TRUE, style_attr, data, context);
+      parse_filter_attrs (data->current_shape, idx + 1, f,
+                          element_name, attr_names, attr_values,
+                          &handled, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
@@ -18173,13 +18227,14 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (filter_type == FE_COLOR_MATRIX)
         {
-          SvgNumbers *values = (SvgNumbers *) f->base[filter_attr_idx (f->type, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES)];
+          unsigned int pos = filter_attr_idx (f->type, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
+          SvgNumbers *values = (SvgNumbers *) f->base[pos];
           SvgNumbers *initial = (SvgNumbers *) filter_attr_ref_initial_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
 
           if (values->n_values != initial->n_values)
             {
               shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES, idx + 1, (SvgValue *) initial);
-              if (values_set)
+              if ((f->attrs & BIT (pos)) == 0)
                 {
                   /* If this wasn't user-provided, we quietly correct the initial
                    * value to match the type
