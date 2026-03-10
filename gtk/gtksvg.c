@@ -10363,6 +10363,64 @@ parse_transform_origin (const char *value)
   return (SvgValue *) p;
 }
 
+static SvgValue *
+parse_font_family (const char *value)
+{
+  GStrvBuilder *builder;
+  const GtkCssToken *token;
+  SvgValue *result;
+  GBytes *bytes;
+  GtkCssParser *parser;
+
+  bytes = g_bytes_new_static (value, strlen (value));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+  builder = g_strv_builder_new ();
+
+  while (1)
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+        {
+          GString *string = g_string_new (NULL);
+          token = gtk_css_parser_get_token (parser);
+
+          g_string_append (string, gtk_css_token_get_string (token));
+          gtk_css_parser_skip (parser);
+
+          gtk_css_parser_skip_whitespace (parser);
+          while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+            {
+              token = gtk_css_parser_get_token (parser);
+              g_string_append_c (string, ' ');
+              g_string_append (string, gtk_css_token_get_string (token));
+              gtk_css_parser_skip (parser);
+            }
+          g_strv_builder_take (builder, g_string_free (string, FALSE));
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+        {
+          token = gtk_css_parser_get_token (parser);
+          g_strv_builder_add (builder, gtk_css_token_get_string (token));
+          gtk_css_parser_skip (parser);
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        {
+          gtk_css_parser_skip (parser);
+        }
+      else
+        break;
+    }
+
+  result = svg_string_list_new_take (g_strv_builder_unref_to_strv (builder));
+  ((SvgStringList *) result)->separator = ',';
+
+  gtk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return result;
+}
+
 typedef enum
 {
   SHAPE_ATTR_NONE      = 0,
@@ -10489,7 +10547,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FONT_FAMILY] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
     .applies_to = SHAPE_ANY,
-    .parse_value = svg_string_new,
+    .parse_value = parse_font_family,
   },
   [SHAPE_ATTR_FONT_STYLE] = {
     .flags = SHAPE_ATTR_INHERITED,
@@ -11084,7 +11142,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
   shape_attrs[SHAPE_ATTR_MASK].initial_value = svg_mask_new_none ();
-  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new ("");
+  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_list_new (NULL);
   shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
@@ -23375,7 +23433,6 @@ text_create_layout (Shape            *self,
   WritingMode wmode;
   PangoGravity gravity;
   PangoFontDescription *font_desc;
-  const char *font_family;
   PangoLayout *layout;
   PangoAttrList *attr_list;
   PangoAttribute *attr;
@@ -23383,7 +23440,7 @@ text_create_layout (Shape            *self,
   int w,h;
   PangoLayoutIter *iter;
   double offset;
-
+  SvgStringList *font_family;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
@@ -23426,9 +23483,20 @@ text_create_layout (Shape            *self,
 
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
-  font_family = svg_string_get (self->current[SHAPE_ATTR_FONT_FAMILY]);
-  if (font_family && *font_family)
-    pango_font_description_set_family_static (font_desc, font_family);
+  font_family = (SvgStringList *) self->current[SHAPE_ATTR_FONT_FAMILY];
+  if (font_family->len > 0)
+    {
+      GString *s = g_string_new ("");
+
+      for (unsigned int i = 0; i < font_family->len; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ',');
+          g_string_append (s, font_family->values[i]);
+        }
+      pango_font_description_set_family (font_desc, s->str);
+      g_string_free (s, TRUE);
+    }
 
   pango_font_description_set_style (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STYLE]));
   pango_font_description_set_variant (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_VARIANT]));
