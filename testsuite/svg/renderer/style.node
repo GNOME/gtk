@@ -7,12 +7,24 @@ rounded-clip {
 }
 stroke {
   child: color {
-    bounds: 27 27 44.5 46;
+    bounds: 20 20 55 60;
     color: rgb(0,0,0);
   }
   path: "\
 M 70 50 o 0 20, -20 20, 0.707106769 o -20 0, -20 -20, 0.707106769 o 0 -20, 20 -20, 0.707106769 o 20 0, 20 20, 0.707106769 z";
-  line-width: 3;
+  line-width: 10;
   line-cap: butt;
   line-join: miter;
+  dash: 0 10 2 1;
+}
+color {
+  bounds: 0 0 10 10;
+  color: rgb(0,0,255);
+}
+rounded-clip {
+  clip: 70 70 20 20 / 10;
+  child: color {
+    bounds: 70 70 20 20;
+    color: rgb(0,128,0);
+  }
 }
