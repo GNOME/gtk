@@ -11345,7 +11345,7 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "systemLanguage", SHAPE_ANY, 0, SHAPE_ATTR_SYSTEM_LANGUAGE },
   { "gpa:stroke-minwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MINWIDTH },
   { "gpa:stroke-maxwidth", SHAPE_ANY, 0, SHAPE_ATTR_STROKE_MAXWIDTH },
-  { "stop-offset", SHAPE_GRADIENTS, 0, SHAPE_ATTR_STOP_OFFSET },
+  { "offset", SHAPE_GRADIENTS, 0, SHAPE_ATTR_STOP_OFFSET },
   { "stop-color", SHAPE_ANY, 0, SHAPE_ATTR_STOP_COLOR },
   { "stop-opacity", SHAPE_ANY, 0, SHAPE_ATTR_STOP_OPACITY },
   { "x", BIT (SHAPE_FILTER), ANY_FILTER, SHAPE_ATTR_FE_X },
