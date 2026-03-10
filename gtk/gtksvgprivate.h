@@ -22,8 +22,9 @@
 #pragma once
 
 #include "gtksvg.h"
-#include "gtkbitmaskprivate.h"
 #include "gtkenums.h"
+#include "gtkbitmaskprivate.h"
+#include "gtkcssnodeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -351,6 +352,9 @@ struct _Shape
   char *style;
   char **classes;
   size_t line;
+
+  /* For style matching */
+  GtkCssNode *css_node;
 
   /* Dependency order for computing updates */
   Shape *first;

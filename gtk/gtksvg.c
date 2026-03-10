@@ -9792,6 +9792,7 @@ typedef struct
   char *id;
   char *style;
   char **classes;
+  GtkCssNode *css_node;
 } ColorStop;
 
 static void
@@ -9802,6 +9803,7 @@ color_stop_free (gpointer v)
   g_free (stop->id);
   g_free (stop->style);
   g_strfreev (stop->classes);
+  g_object_unref (stop->css_node);
 
   for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
@@ -9819,12 +9821,16 @@ color_stop_attr_idx (ShapeAttr attr)
 }
 
 static ColorStop *
-color_stop_new (void)
+color_stop_new (Shape *parent)
 {
   ColorStop *stop = g_new0 (ColorStop, 1);
 
   for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
     stop->base[color_stop_attr_idx (attr)] = shape_attr_ref_initial_value (attr, SHAPE_LINEAR_GRADIENT, TRUE);
+
+  stop->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (stop->css_node, g_quark_from_static_string ("stop"));
+  gtk_css_node_set_parent (stop->css_node, parent->css_node);
 
   return stop;
 }
@@ -10080,6 +10086,7 @@ typedef struct
   char *id;
   char *style;
   char **classes;
+  GtkCssNode *css_node;
   SvgValue **current;
   SvgValue *base[1];
 } FilterPrimitive;
@@ -10092,6 +10099,7 @@ filter_primitive_free (gpointer v)
   g_free (f->id);
   g_free (f->style);
   g_strfreev (f->classes);
+  g_object_unref (f->css_node);
 
   for (unsigned int i = 0; i < filter_types[f->type].n_attrs; i++)
     {
@@ -10265,7 +10273,8 @@ filter_needs_backdrop (Shape *filter)
 }
 
 static FilterPrimitive *
-filter_primitive_new (FilterPrimitiveType type)
+filter_primitive_new (Shape               *parent,
+                      FilterPrimitiveType  type)
 {
   FilterTypeInfo *ft = &filter_types[type];
   FilterPrimitive *f;
@@ -10277,6 +10286,10 @@ filter_primitive_new (FilterPrimitiveType type)
 
   for (unsigned int i = 0; i < ft->n_attrs; i++)
     f->base[i] = filter_attr_ref_initial_value (f, ft->attrs[i]);
+
+  f->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (f->css_node, g_quark_from_static_string (ft->name));
+  gtk_css_node_set_parent (f->css_node, parent->css_node);
 
   return f;
 }
@@ -12172,6 +12185,7 @@ shape_free (gpointer data)
   g_clear_pointer (&shape->id, g_free);
   g_clear_pointer (&shape->style, g_free);
   g_clear_pointer (&shape->classes, g_strfreev);
+  g_clear_object (&shape->css_node);
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
@@ -12233,6 +12247,11 @@ shape_new (Shape     *parent,
       shape->text = g_array_new (FALSE, FALSE, sizeof (TextNode));
       g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
+
+  shape->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (shape->css_node, g_quark_from_static_string (shape_types[type].name));
+  if (parent)
+    gtk_css_node_set_parent (shape->css_node, parent->css_node);
 
   return shape;
 }
@@ -12942,7 +12961,7 @@ shape_add_color_stop (Shape *shape)
 {
   g_assert (shape_type_has_color_stops (shape->type));
 
-  g_ptr_array_add (shape->color_stops, color_stop_new ());
+  g_ptr_array_add (shape->color_stops, color_stop_new (shape));
 
   return shape->color_stops->len - 1;
 }
@@ -12953,7 +12972,7 @@ shape_add_filter (Shape               *shape,
 {
   g_assert (shape_type_has_filters (shape->type));
 
-  g_ptr_array_add (shape->filters, filter_primitive_new (type));
+  g_ptr_array_add (shape->filters, filter_primitive_new (shape, type));
 
   return shape->filters->len - 1;
 }
@@ -17701,18 +17720,20 @@ parse_shape_attrs (Shape                *shape,
 
       if (strcmp (attr_names[i], "class") == 0)
         {
-          shape->classes = g_strsplit (attr_values[i], " ", 0);
           *handled |= BIT (i);
+          shape->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (shape->css_node, (const char **) shape->classes);
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
-          shape->style = g_strdup (attr_values[i]);
           *handled |= BIT (i);
+          shape->style = g_strdup (attr_values[i]);
         }
       else if (strcmp (attr_names[i], "id") == 0)
         {
-          shape->id = g_strdup (attr_values[i]);
           *handled |= BIT (i);
+          shape->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (shape->css_node, g_quark_from_string (shape->id));
         }
       else if (shape_attr_lookup (attr_names[i], shape->type, &attr, &deprecated) &&
                !shape_attr_only_css (attr))
@@ -18281,6 +18302,7 @@ parse_color_stop_attrs (Shape                *shape,
         {
           *handled |= BIT (i);
           stop->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (stop->css_node, g_quark_from_string (stop->id));
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
@@ -18291,6 +18313,7 @@ parse_color_stop_attrs (Shape                *shape,
         {
           *handled |= BIT (i);
           stop->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (stop->css_node, (const char **) stop->classes);
         }
       else if (color_stop_attr_lookup (attr_names[i], shape->type, &attr, &deprecated))
         {
@@ -18335,6 +18358,7 @@ parse_filter_attrs (Shape                *shape,
         {
           *handled |= BIT (i);
           f->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (f->css_node, g_quark_from_string (f->id));
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
@@ -18345,6 +18369,7 @@ parse_filter_attrs (Shape                *shape,
         {
           *handled |= BIT (i);
           f->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (f->css_node, (const char **) f->classes);
         }
       else if (filter_attr_lookup (f->type, attr_names[i], &attr, &deprecated))
         {
