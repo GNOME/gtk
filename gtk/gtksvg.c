@@ -24356,6 +24356,10 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 {
   GtkSvg *self = GTK_SVG (paintable);
   graphene_rect_t viewport = GRAPHENE_RECT_INIT (0, 0, width, height);
+  const GdkRGBA *used_colors;
+  GdkRGBA solid_colors[5];
+  size_t n_used_colors;
+  float used_opacity;
 
   if (self->width < 0 || self->height < 0)
     return;
@@ -24384,25 +24388,59 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
 
+      /* Traditional symbolics often have overlapping shapes,
+       * causing things to look wrong when using colors with
+       * alpha. To work around that, we always draw them with
+       * solid colors and apply foreground opacity globally.
+       */
+      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+          colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
+        {
+          n_used_colors = MIN (n_colors, 5);
+          used_colors = solid_colors;
+
+          used_opacity = 1;
+          for (unsigned int i = 0; i < n_used_colors; i++)
+            {
+              used_opacity = MIN (used_opacity, colors[i].alpha);
+              solid_colors[i] = colors[i];
+              solid_colors[i].alpha = 1;
+            }
+        }
+      else
+        {
+          used_opacity = 1;
+          used_colors = colors;
+          n_used_colors = n_colors;
+        }
+
       self->current_width = width;
       self->current_height = height;
 
       compute_context.svg = self;
       compute_context.viewport = &viewport;
-      compute_context.colors = colors;
-      compute_context.n_colors = n_colors;
+      compute_context.colors = used_colors;
+      compute_context.n_colors = n_used_colors;
       compute_context.current_time = self->current_time;
       compute_context.parent = NULL;
       compute_context.interpolation = GDK_COLOR_STATE_SRGB;
 
       compute_current_values_for_shape (self->content, &compute_context);
 
+      gtk_snapshot_push_collect (snapshot);
+
+      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+          colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
+        {
+          gtk_snapshot_push_opacity (snapshot, used_opacity);
+        }
+
       paint_context.svg = self;
       paint_context.viewport = &viewport;
       paint_context.viewport_stack = NULL;
       paint_context.snapshot = snapshot;
-      paint_context.colors = colors;
-      paint_context.n_colors = n_colors;
+      paint_context.colors = used_colors;
+      paint_context.n_colors = n_used_colors;
       paint_context.weight = self->weight >= 1 ? self->weight : weight;
       paint_context.op = RENDERING;
       paint_context.op_stack = NULL;
@@ -24411,8 +24449,6 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       paint_context.depth = 0;
       paint_context.transforms = NULL;
       paint_context.instance_count = 0;
-
-      gtk_snapshot_push_collect (snapshot);
 
       if (self->overflow == GTK_OVERFLOW_HIDDEN)
         gtk_snapshot_push_clip (snapshot,
@@ -24429,11 +24465,17 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       g_assert (paint_context.ctx_shape_stack == NULL);
       g_assert (paint_context.transforms == NULL);
 
+      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+          colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
+        {
+          gtk_snapshot_pop (snapshot);
+        }
+
       self->node = gtk_snapshot_pop_collect (snapshot);
 
       self->node_for.width = width;
       self->node_for.height = height;
-      memcpy (self->node_for.colors, colors, MIN (n_colors, 5) * sizeof (GdkRGBA));
+      memcpy (self->node_for.colors, colors, n_colors * sizeof (GdkRGBA));
       self->node_for.n_colors = n_colors;
       self->node_for.weight = weight;
     }
