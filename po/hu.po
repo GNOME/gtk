@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-26 21:54+0000\n"
-"PO-Revision-Date: 2026-03-01 20:14+0100\n"
+"POT-Creation-Date: 2026-03-06 19:34+0000\n"
+"PO-Revision-Date: 2026-03-06 23:22+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -186,7 +186,7 @@ msgstr ""
 "A(z) %s használatának kísérlete, de le van tiltva a GDK_DISABLE beállításon "
 "keresztül"
 
-#: gdk/gdktexture.c:679
+#: gdk/gdktexture.c:646
 msgid "Unknown image format."
 msgstr "Ismeretlen képformátum."
 
@@ -1871,22 +1871,18 @@ msgid "Text may not appear inside <%s>"
 msgstr "Nem jelenhet meg szöveg ezen belül: <%s>"
 
 #: gtk/gtkcalendar.c:612
-#| msgid "Previous tab"
 msgid "Previous Month"
 msgstr "Előző hónap"
 
 #: gtk/gtkcalendar.c:615
-#| msgid "Next tab"
 msgid "Next Month"
 msgstr "Következő hónap"
 
 #: gtk/gtkcalendar.c:620
-#| msgid "Previous tab"
 msgid "Previous Year"
 msgstr "Előző év"
 
 #: gtk/gtkcalendar.c:623
-#| msgid "Next tab"
 msgid "Next Year"
 msgstr "Következő év"
 
@@ -2716,7 +2712,6 @@ msgid "Change Font Features"
 msgstr "Betűkészlet-funkciók megváltoztatása"
 
 #: gtk/gtkfontchooserwidget.c:1335
-#| msgid "Language"
 msgctxt "Search placeholder for font language"
 msgid "Language…"
 msgstr "Nyelv…"
@@ -4586,7 +4581,6 @@ msgid "Object Path"
 msgstr "Objektumútvonal"
 
 #: gtk/inspector/a11y.ui:153
-#| msgid "Surface"
 msgid "Interface"
 msgstr "Felület"
 
@@ -4686,13 +4680,11 @@ msgid "You can type here any CSS rule recognized by GTK."
 msgstr "A GTK által felismert tetszőleges CSS szabályt beírhat ide."
 
 #: gtk/inspector/css-editor.c:142
-#| msgid ""
-#| "You can temporarily disable this custom CSS by clicking on the “Pause” "
-#| "button above."
 msgid ""
 "You can temporarily disable this custom CSS by toggling the switch above."
 msgstr ""
-"Ideiglenesen letilthatja ezt az egyéni CSS-t a fenti kapcsoló átkapcsolásával."
+"Ideiglenesen letilthatja ezt az egyéni CSS-t a fenti kapcsoló "
+"átkapcsolásával."
 
 #: gtk/inspector/css-editor.c:143
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4705,7 +4697,6 @@ msgid "Saving CSS failed"
 msgstr "A CSS mentése sikertelen"
 
 #: gtk/inspector/css-editor.ui:39
-#| msgid "Disable this custom CSS"
 msgid "Enable this custom CSS"
 msgstr "Ezen egyéni CSS engedélyezése"
 
@@ -4992,7 +4983,6 @@ msgid "Child Visible"
 msgstr "Látható gyermek"
 
 #: gtk/inspector/misc-info.ui:685
-#| msgid "Paper Size"
 msgid "Paintable Size"
 msgstr "Festhető méret"
 
@@ -5295,7 +5285,6 @@ msgid "Less"
 msgstr "Kevesebb"
 
 #: gtk/inspector/visual.ui:126
-#| msgid "System Information"
 msgid "System Reduced Motion"
 msgstr "Rendszer által csökkentett mozgás"
 
@@ -7791,7 +7780,7 @@ msgid "Overwrite existing file"
 msgstr "Meglévő fájl felülírása"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -7908,19 +7897,6 @@ msgstr "A fájl ellenőrzése."
 
 #: tools/gtk-image-tool.c:36
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
-#| "\n"
-#| "Perform various tasks on images.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  compare      Show differences between two images\n"
-#| "  convert      Convert the image to a different format or color state\n"
-#| "  info         Show general information about the image\n"
-#| "  relabel      Change the color state of the image without conversion\n"
-#| "  show         Show the image\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
@@ -8077,40 +8053,37 @@ msgstr "Információk szolgáltatása a képről."
 msgid "Can only accept a single image file\n"
 msgstr "Csak egy önálló képfájl fogadható el\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Ne adjon hozzá címsávot"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "MÉRET"
 
-#: tools/gtk-image-tool-play.c:323
-#| msgid "Font Variation Axes"
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
 msgstr "Ne futtasson animációkat"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't use system resources"
 msgstr "Ne használjon rendszererőforrásokat"
 
-#: tools/gtk-image-tool-play.c:325
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't load external resources"
 msgstr "Ne töltsön be külső erőforrásokat"
 
-#: tools/gtk-image-tool-play.c:326
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't allow gpa extensions"
 msgstr "Ne engedélyezzen gpa-kiterjesztéseket"
 
-#: tools/gtk-image-tool-play.c:337
-#| msgid "Show one or more images."
+#: tools/gtk-image-tool-play.c:324
 msgid "Show one or more animations."
 msgstr "Egy vagy több animáció megjelenítése."
 
-#: tools/gtk-image-tool-play.c:350
+#: tools/gtk-image-tool-play.c:337
 #, c-format
-#| msgid "No image file specified\n"
 msgid "No animation file specified\n"
 msgstr "Nincs animációfájl megadva\n"
 
@@ -8521,21 +8494,6 @@ msgstr "Nem sikerült a(z) „%s” feldolgozása számként"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  convert      Convert into nodes\n"
-#| "  extract      Extract data urls\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8773,22 +8731,35 @@ msgstr "A megjelenítő csomópont megjelenítése."
 msgid "Can only preview a single .node file\n"
 msgstr "Csak egy önálló .node-fájl előnézete tekinthető meg\n"
 
-#: tools/gtk-tool-utils.c:48
+#. translators: invalid UTF8 in filename
+#: tools/gtk-tool-utils.c:47
+#| msgctxt "Accelerator"
+#| msgid "Invalid"
+msgid "<invalid>"
+msgstr "<érvénytelen>"
+
+#: tools/gtk-tool-utils.c:60
+#, c-format
+#| msgid "Error at %s: %s\n"
+msgid "Warning at %s: %s\n"
+msgstr "Figyelmeztetés itt: %s: %s\n"
+
+#: tools/gtk-tool-utils.c:62
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Hiba itt: %s: %s\n"
 
-#: tools/gtk-tool-utils.c:66
+#: tools/gtk-tool-utils.c:80
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "Nem sikerült betölteni a csomópontfájlt: %s\n"
 
-#: tools/gtk-tool-utils.c:87
+#: tools/gtk-tool-utils.c:106
 #, c-format
 msgid "%s is not a texture node\n"
 msgstr "A(z) %s nem textúracsomópont\n"
 
-#: tools/gtk-tool-utils.c:313
+#: tools/gtk-tool-utils.c:332
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "A cicp csak 4 szám lehet „/” karakterrel elválasztva\n"
