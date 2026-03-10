@@ -16,6 +16,7 @@
     </circle>
   </marker>
   <rect
+          style='marker:url(#marker1);'
           fill='none'
           stroke='rgb(0,0,255)'
           stroke-width='3'
@@ -30,6 +31,7 @@
           class='transparent-fill'>
   </rect>
   <rect
+          style='marker:url(#marker1);'
           fill='none'
           stroke='rgb(128,0,128)'
           stroke-width='2'
@@ -44,6 +46,7 @@
           class='transparent-fill'>
   </rect>
   <rect
+          style='marker:url(#marker1);'
           fill='none'
           stroke='rgb(255,0,0)'
           stroke-width='1'

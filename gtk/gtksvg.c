@@ -9788,12 +9788,20 @@ typedef struct
   unsigned int attrs;
   SvgValue *base[N_STOP_ATTRS];
   SvgValue *current[N_STOP_ATTRS];
+  size_t line;
+  char *id;
+  char *style;
+  char **classes;
 } ColorStop;
 
 static void
 color_stop_free (gpointer v)
 {
   ColorStop *stop = v;
+
+  g_free (stop->id);
+  g_free (stop->style);
+  g_strfreev (stop->classes);
 
   for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
@@ -10068,6 +10076,10 @@ typedef struct
 {
   FilterPrimitiveType type;
   unsigned int attrs;
+  size_t line;
+  char *id;
+  char *style;
+  char **classes;
   SvgValue **current;
   SvgValue *base[1];
 } FilterPrimitive;
@@ -10076,6 +10088,10 @@ static void
 filter_primitive_free (gpointer v)
 {
   FilterPrimitive *f = v;
+
+  g_free (f->id);
+  g_free (f->style);
+  g_strfreev (f->classes);
 
   for (unsigned int i = 0; i < filter_types[f->type].n_attrs; i++)
     {
@@ -12154,6 +12170,8 @@ shape_free (gpointer data)
   Shape *shape = data;
 
   g_clear_pointer (&shape->id, g_free);
+  g_clear_pointer (&shape->style, g_free);
+  g_clear_pointer (&shape->classes, g_strfreev);
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
@@ -13557,7 +13575,7 @@ struct _Animation
   AnimationStatus status;
   char *id;
   char *href;
-  int line; /* for resolving ties in order */
+  size_t line; /* for resolving ties in order */
 
   /* shape, attr, and idx together identify the attribute
    * that this animation modifies. idx is only relevant
@@ -17664,12 +17682,6 @@ parse_shape_attrs (Shape                *shape,
                    ParserData           *data,
                    GMarkupParseContext  *context)
 {
-  const char *class_attr = NULL;
-  const char *style_attr = NULL;
-
-  if (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC)
-    class_attr = "foreground-fill";
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
@@ -17689,12 +17701,12 @@ parse_shape_attrs (Shape                *shape,
 
       if (strcmp (attr_names[i], "class") == 0)
         {
-          class_attr = attr_values[i];
+          shape->classes = g_strsplit (attr_values[i], " ", 0);
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
-          style_attr = attr_values[i];
+          shape->style = g_strdup (attr_values[i]);
           *handled |= BIT (i);
         }
       else if (strcmp (attr_names[i], "id") == 0)
@@ -17734,28 +17746,26 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (style_attr)
-    parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
-
-  if ((data->svg->features & (GTK_SVG_EXTENSIONS|GTK_SVG_TRADITIONAL_SYMBOLIC)) != 0 &&
-      class_attr && *class_attr)
+  if (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
+      (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes))
     {
-      GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
       gboolean has_stroke;
 
-      if (g_strv_has (classes, "transparent-fill"))
-        value = svg_paint_new_none ();
-      else if (g_strv_has (classes, "foreground-fill"))
+      if (!shape->classes)
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-      else if (g_strv_has (classes, "success") ||
-               g_strv_has (classes, "success-fill"))
+      else if (g_strv_has (shape->classes, "transparent-fill"))
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "foreground-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (shape->classes, "success") ||
+               g_strv_has (shape->classes, "success-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (classes, "warning") ||
-               g_strv_has (classes, "warning-fill"))
+      else if (g_strv_has (shape->classes, "warning") ||
+               g_strv_has (shape->classes, "warning-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (classes, "error") ||
-               g_strv_has (classes, "error-fill"))
+      else if (g_strv_has (shape->classes, "error") ||
+               g_strv_has (shape->classes, "error-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
@@ -17765,13 +17775,15 @@ parse_shape_attrs (Shape                *shape,
         shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
       svg_value_unref (value);
 
-      if (g_strv_has (classes, "success-stroke"))
+      if (!shape->classes)
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "success-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (classes, "warning-stroke"))
+      else if (g_strv_has (shape->classes, "warning-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (classes, "error-stroke"))
+      else if (g_strv_has (shape->classes, "error-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
-      else if (g_strv_has (classes, "foreground-stroke"))
+      else if (g_strv_has (shape->classes, "foreground-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
       else
         value = svg_paint_new_none ();
@@ -17809,8 +17821,6 @@ parse_shape_attrs (Shape                *shape,
               svg_value_unref (value);
             }
         }
-
-      g_strfreev (classes);
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
@@ -18262,17 +18272,25 @@ parse_color_stop_attrs (Shape                *shape,
                         ParserData           *data,
                         GMarkupParseContext  *context)
 {
-  const char *style_attr = NULL;
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
       gboolean deprecated;
 
-      if (strcmp (attr_names[i], "style") == 0)
+      if (strcmp (attr_names[i], "id") == 0)
         {
           *handled |= BIT (i);
-          style_attr = attr_values[i];
+          stop->id = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          stop->style = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "class") == 0)
+        {
+          *handled |= BIT (i);
+          stop->classes = g_strsplit (attr_values[i], " ", 0);
         }
       else if (color_stop_attr_lookup (attr_names[i], shape->type, &attr, &deprecated))
         {
@@ -18290,8 +18308,8 @@ parse_color_stop_attrs (Shape                *shape,
         }
     }
 
-  if (style_attr)
-    parse_style_attr (shape, TRUE, FALSE, style_attr, data, context);
+  if (stop->style)
+    parse_style_attr (shape, TRUE, FALSE, stop->style, data, context);
 }
 
 /* }}} */
@@ -18308,17 +18326,25 @@ parse_filter_attrs (Shape                *shape,
                     ParserData           *data,
                     GMarkupParseContext  *context)
 {
-  const char *style_attr = NULL;
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
       gboolean deprecated;
 
-      if (strcmp (attr_names[i], "style") == 0)
+      if (strcmp (attr_names[i], "id") == 0)
         {
           *handled |= BIT (i);
-          style_attr = attr_values[i];
+          f->id = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          f->style = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "class") == 0)
+        {
+          *handled |= BIT (i);
+          f->classes = g_strsplit (attr_values[i], " ", 0);
         }
       else if (filter_attr_lookup (f->type, attr_names[i], &attr, &deprecated))
         {
@@ -18343,8 +18369,8 @@ parse_filter_attrs (Shape                *shape,
         }
     }
 
-  if (style_attr)
-    parse_style_attr (shape, FALSE, TRUE, style_attr, data, context);
+  if (f->style)
+    parse_style_attr (shape, FALSE, TRUE, f->style, data, context);
 }
 
 /* }}} */
@@ -18381,9 +18407,12 @@ start_element_cb (GMarkupParseContext  *context,
   ShapeType shape_type;
   uint64_t handled = 0;
   FilterPrimitiveType filter_type;
+  int line;
 
   if (data->skip.to)
     return;
+
+  g_markup_parse_context_get_position (context, &line, NULL);
 
   if (data->num_loaded_elements++ > LOADING_LIMIT)
     {
@@ -18416,7 +18445,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       shape = shape_new (data->current_shape, shape_type);
-      g_markup_parse_context_get_position (context, &shape->line, NULL);
+      shape->line = line;
 
       if (data->current_shape == NULL && shape->type == SHAPE_SVG)
         {
@@ -18478,6 +18507,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       idx = shape_add_color_stop (data->current_shape);
       stop = g_ptr_array_index (data->current_shape->color_stops, idx);
+      stop->line = line;
 
       parse_color_stop_attrs (data->current_shape, idx + 1, stop,
                               element_name, attr_names, attr_values,
@@ -18524,6 +18554,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       idx = shape_add_filter (data->current_shape, filter_type);
       f = g_ptr_array_index (data->current_shape->filters, idx);
+      f->line = line;
 
       parse_filter_attrs (data->current_shape, idx + 1, f,
                           element_name, attr_names, attr_values,
@@ -18778,7 +18809,7 @@ start_element_cb (GMarkupParseContext  *context,
       else
         a = animation_motion_new ();
 
-      g_markup_parse_context_get_position (context, &a->line, NULL);
+      a->line = line;
 
       if (!parse_base_animation_attrs (a,
                                        element_name,
@@ -19771,6 +19802,25 @@ serialize_shape_attrs (GString              *s,
       g_string_append_printf (s, "id='%s'", shape->id);
     }
 
+  if (shape->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; shape->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, shape->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (shape->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", shape->style);
+    }
+
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
     {
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
@@ -20487,6 +20537,31 @@ serialize_color_stop (GString              *s,
   indent_for_elt (s, indent);
   g_string_append (s, "<stop");
 
+  if (stop->id)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "id='%s'", stop->id);
+    }
+
+  if (stop->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; stop->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, stop->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (stop->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", stop->style);
+    }
+
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     values = stop->current;
   else
@@ -20530,6 +20605,31 @@ serialize_filter_begin (GString              *s,
 
   indent_for_elt (s, indent);
   g_string_append_printf (s, "<%s", filter_types[f->type].name);
+
+  if (f->id)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "id='%s'", f->id);
+    }
+
+  if (f->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; f->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, f->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (f->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", f->style);
+    }
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     values = f->current;
@@ -22020,9 +22120,9 @@ push_group (Shape        *shape,
   if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
     {
       if (shape->id)
-        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %d", shape_types[shape->type].name, shape->id, shape->line);
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %" G_GSIZE_FORMAT, shape_types[shape->type].name, shape->id, shape->line);
       else
-        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %d", shape_types[shape->type].name, shape->line);
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %" G_GSIZE_FORMAT, shape_types[shape->type].name, shape->line);
     }
 #endif
 

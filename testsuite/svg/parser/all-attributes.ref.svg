@@ -5,6 +5,7 @@
         height='16'>
   <path
           id='path0'
+          class='myclass myotherclass'
           display='inline'
           visibility='visible'
           transform='none'
