@@ -1358,6 +1358,11 @@ load_texture (const char  *string,
     {
       texture = gdk_texture_new_from_filename (string, error);
     }
+  else
+    {
+      g_set_error (error, GTK_SVG_ERROR, GTK_SVG_ERROR_FEATURE_DISABLED,
+                   "Not loading texture from %s: External resources disabled", string);
+    }
 
   return texture;
 }
@@ -18369,7 +18374,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
         {
-          skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Animations are disabled");
+          skip_element (data, context, GTK_SVG_ERROR_FEATURE_DISABLED, "Animations are disabled");
           return;
         }
 
@@ -18854,7 +18859,10 @@ resolve_href_ref (SvgValue   *value,
 
       if (shape->type == SHAPE_IMAGE)
         {
-          gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>): %s", href->ref, error->message);
+          if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_FEATURE_DISABLED))
+            gtk_svg_emit_error (data->svg, error);
+          else
+            gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>): %s", href->ref, error->message);
           g_error_free (error);
           return; /* Image href is always external */
         }
@@ -26661,16 +26669,23 @@ gtk_svg_pause (GtkSvg *self)
  * @GTK_SVG_ERROR_IGNORED_ELEMENT: An XML element is ignored,
  *   but it should not affect rendering (this error code is used
  *   for metadata and exension elements)
+ * @GTK_SVG_ERROR_LIMITS_EXCEEDED: An implementation limit has
+ *   been hit, such as the number of loaded shapes.
  * @GTK_SVG_ERROR_NOT_IMPLEMENTED: The SVG uses features that
  *   are not supported by `GtkSvg`. It may be advisable to use
  *   a different SVG renderer.
- * @GTK_SVG_ERROR_LIMITS_EXCEEDED: An implementation limit has
- *   been hit, such as the number of loaded shapes.
  *
  * Error codes in the `GTK_SVG_ERROR` domain for errors
  * that happen during parsing or rendering of SVG.
  *
  * Since: 4.22
+ */
+
+/* GTK_SVG_ERROR_FEATURE_DISABLED:
+ *
+ * The SVG uses features that have been disabled with `gtk_svg_set_features`.
+ *
+ * Since: 4.24
  */
 
 /**
