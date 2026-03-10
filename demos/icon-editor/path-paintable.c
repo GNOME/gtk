@@ -1031,6 +1031,8 @@ gboolean
 path_paintable_set_state_names (PathPaintable  *self,
                                 const char    **names)
 {
+  g_signal_emit (self, signals[CHANGED], 0);
+
   return gtk_svg_set_state_names (self->svg, names);
 }
 
