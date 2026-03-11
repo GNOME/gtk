@@ -64,6 +64,84 @@ get_origin_location (GskPath          *path,
 /* {{{ GtkSymbolicPaintable implementation */
 
 static void
+snapshot_spines (GtkSnapshot           *snapshot,
+                 graphene_rect_t       *bounds,
+                 PathPaintable         *paintable,
+                 Shape                 *shape,
+                 unsigned int           state,
+                 const graphene_rect_t *viewport,
+                 float                  scale,
+                 const GdkRGBA         *c,
+                 GskStroke             *stroke)
+{
+  switch ((unsigned int) shape->type)
+    {
+    case SHAPE_SVG:
+    case SHAPE_GROUP:
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          snapshot_spines (snapshot, bounds, paintable, sh, state, viewport, scale, c, stroke);
+        }
+      break;
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      {
+        uint64_t states = shape->gpa.states;
+
+        if (states & (G_GUINT64_CONSTANT (1) << state))
+          {
+            GskPath *path = svg_shape_get_path (shape, viewport);
+            double origin = shape->gpa.origin;
+            Shape * attach_to = NULL;
+            double attach_pos;
+
+            graphene_point_t pos;
+            g_autoptr (GskPath) dot = NULL;
+
+            gtk_snapshot_push_stroke (snapshot, path, stroke);
+            gtk_snapshot_append_color (snapshot, c, bounds);
+            gtk_snapshot_pop (snapshot);
+
+            get_origin_location (path, origin, &pos);
+
+            dot = circle_path_new (pos.x, pos.y, 4.f/scale);
+            gtk_snapshot_push_fill (snapshot, dot, GSK_FILL_RULE_WINDING);
+            gtk_snapshot_append_color (snapshot, c, bounds);
+            gtk_snapshot_pop (snapshot);
+
+            path_paintable_get_attach_path_for_shape (paintable, shape, &attach_to, &attach_pos);
+
+            if (attach_to != NULL)
+              {
+                GskPathBuilder *builder;
+                GskPath *arrow;
+
+                builder = gsk_path_builder_new ();
+                gsk_path_builder_move_to (builder, pos.x, pos.y);
+                gsk_path_builder_rel_line_to (builder, 20.f/scale, 0);
+                gsk_path_builder_rel_move_to (builder, -4.f/scale, -3.f/scale);
+                gsk_path_builder_rel_line_to (builder, 4.f/scale, 3.f/scale);
+                gsk_path_builder_rel_line_to (builder, -4.f/scale, 3.f/scale);
+                arrow = gsk_path_builder_free_to_path (builder);
+                gtk_snapshot_push_stroke (snapshot, arrow, stroke);
+                gtk_snapshot_append_color (snapshot, c, bounds);
+                gtk_snapshot_pop (snapshot);
+                gsk_path_unref (arrow);
+              }
+          }
+      }
+      break;
+    default:
+      break;
+    }
+}
+
+static void
 border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                                        GtkSnapshot           *snapshot,
                                        double                 width,
@@ -146,6 +224,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       GdkRGBA c = (GdkRGBA) { 1, 0, 0, 1 };
       g_autoptr (GskStroke) stroke = NULL;
       unsigned int state;
+      const graphene_rect_t *viewport;
 
       stroke = gsk_stroke_new (1.f/scale);
 
@@ -153,56 +232,13 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       gtk_snapshot_scale (snapshot, scale, scale);
 
       state = path_paintable_get_state (self->paintable);
+      viewport = path_paintable_get_viewport (self->paintable);
 
       if (state != STATE_UNSET)
         {
-          for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-            {
-              uint64_t states = path_paintable_get_path_states (self->paintable, i);
+          Shape *shape = path_paintable_get_content (self->paintable);
 
-              if (states & (G_GUINT64_CONSTANT (1) << state))
-                {
-                  GskPath *path = path_paintable_get_path (self->paintable, i);
-                  double origin = path_paintable_get_path_origin (self->paintable, i);
-                  size_t attach_to;
-                  double attach_pos;
-
-                  graphene_point_t pos;
-                  g_autoptr (GskPath) dot = NULL;
-
-                  gtk_snapshot_push_stroke (snapshot, path, stroke);
-                  gtk_snapshot_append_color (snapshot, &c, &bounds);
-                  gtk_snapshot_pop (snapshot);
-
-                  get_origin_location (path, origin, &pos);
-
-                  dot = circle_path_new (pos.x, pos.y, 4.f/scale);
-                  gtk_snapshot_push_fill (snapshot, dot, GSK_FILL_RULE_WINDING);
-                  gtk_snapshot_append_color (snapshot, &c, &bounds);
-                  gtk_snapshot_pop (snapshot);
-
-                  path_paintable_get_attach_path (self->paintable, i, &attach_to, &attach_pos);
-
-                  if (attach_to != (size_t) -1)
-                    {
-                      GskPathBuilder *builder;
-                      GskPath *arrow;
-
-                      builder = gsk_path_builder_new ();
-                      gsk_path_builder_move_to (builder, pos.x, pos.y);
-                      gsk_path_builder_rel_line_to (builder, 20.f/scale, 0);
-                      gsk_path_builder_rel_move_to (builder, -4.f/scale, -3.f/scale);
-                      gsk_path_builder_rel_line_to (builder, 4.f/scale, 3.f/scale);
-                      gsk_path_builder_rel_line_to (builder, -4.f/scale, 3.f/scale);
-                      arrow = gsk_path_builder_free_to_path (builder);
-                      gtk_snapshot_push_stroke (snapshot, arrow, stroke);
-                      gtk_snapshot_append_color (snapshot, &c, &bounds);
-                      gtk_snapshot_pop (snapshot);
-
-                      gsk_path_unref (arrow);
-                    }
-                }
-            }
+          snapshot_spines (snapshot, &bounds, self->paintable, shape, state, viewport, scale, &c, stroke);
         }
 
       gtk_snapshot_restore (snapshot);

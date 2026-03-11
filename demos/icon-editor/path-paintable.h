@@ -114,6 +114,10 @@ void            path_paintable_set_path_states     (PathPaintable   *self,
 uint64_t        path_paintable_get_path_states     (PathPaintable   *self,
                                                     size_t           idx);
 
+void            path_paintable_set_path_states_by_id
+                                                   (PathPaintable   *self,
+                                                    const char      *id,
+                                                    uint64_t         states);
 double          path_paintable_get_path_origin     (PathPaintable   *self,
                                                     size_t           idx);
 
@@ -146,6 +150,12 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
                                                     size_t          *to,
                                                     double          *pos);
 
+void            path_paintable_get_attach_path_for_shape
+                                                   (PathPaintable  *self,
+                                                    Shape          *shape,
+                                                    Shape         **to,
+                                                    double         *pos);
+
 GtkCompatibility
                 path_paintable_get_compatibility   (PathPaintable   *self);
 
@@ -155,6 +165,7 @@ Shape *         path_paintable_get_shape           (PathPaintable   *self,
 Shape *         path_paintable_get_shape_by_id     (PathPaintable   *self,
                                                     const char      *id);
 
+unsigned int    path_paintable_get_shape_count     (PathPaintable   *self);
 Shape *         path_paintable_get_content         (PathPaintable   *self);
 
 const graphene_rect_t *
