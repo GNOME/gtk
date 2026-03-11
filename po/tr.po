@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-25 13:51+0000\n"
-"PO-Revision-Date: 2026-02-26 08:00+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2026-03-09 12:34+0000\n"
+"PO-Revision-Date: 2026-03-11 14:47+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -194,7 +194,7 @@ msgstr ""
 "%s kullanılmaya çalışılıyor ancak GDK_DISABLE aracılığıyla devre dışı "
 "bırakıldı"
 
-#: gdk/gdktexture.c:679
+#: gdk/gdktexture.c:646
 msgid "Unknown image format."
 msgstr "Bilinmeyen resim biçimi."
 
@@ -1096,7 +1096,7 @@ msgstr "Yeni hızlandırıcı…"
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%% %d"
 
 #: gtk/deprecated/gtkcolorbutton.c:186 gtk/deprecated/gtkcolorbutton.c:317
 #: gtk/gtkcolordialog.c:409
@@ -1187,7 +1187,7 @@ msgstr "Tam Ses"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%% %d"
 
 #: gtk/gtkaboutdialog.c:127 gtk/ui/gtkaboutdialog.ui:173
 #: gtk/ui/gtkaboutdialog.ui:192
@@ -4208,7 +4208,7 @@ msgstr "Okuma dosyası tanımlayıcı oluşturulamadı"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr "%% %.0f"
+msgstr "%% %.0f"
 
 #: gtk/gtkrecentmanager.c:1030 gtk/gtkrecentmanager.c:1043
 #: gtk/gtkrecentmanager.c:1181 gtk/gtkrecentmanager.c:1191
@@ -4220,7 +4220,7 @@ msgstr "“%s” URIʼli öge bulunamadı"
 #: gtk/gtkrecentmanager.c:1265
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
-msgstr "“%s” URI’li öge “%s”e taşınamadı"
+msgstr "“%s” URI’li öge “%s” konumuna taşınamadı"
 
 #: gtk/gtkrecentmanager.c:2330
 #, c-format
@@ -4955,16 +4955,16 @@ msgid "Child Visible"
 msgstr "Görünür Çocuk"
 
 #: gtk/inspector/misc-info.ui:685
-msgid "Paintable Size"
-msgstr "Boyanabilir Boyutu"
+msgid "Intrinsic Size"
+msgstr "Özsel Boyut"
 
 #: gtk/inspector/misc-info.ui:710
-msgid "Paintable Aspect Ratio"
-msgstr "Boyanabilir En Boy Oranı"
+msgid "Intrinsic Aspect Ratio"
+msgstr "Özsel En Boy Oranı"
 
 #: gtk/inspector/misc-info.ui:735
-msgid "Paintable Flags"
-msgstr "Boyanabilir Bayraklar"
+msgid "GdkPaintable Flags"
+msgstr "GdkPaintable Bayrakları"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -7589,29 +7589,6 @@ msgstr "Penceredeki kimi ayarlar çakışıyor"
 msgid "Play"
 msgstr "Oynat"
 
-#: tools/encodesymbolic.c:42
-msgid "Output to this directory instead of cwd"
-msgstr "Çıktı cwd yerine bu dizine"
-
-#: tools/encodesymbolic.c:43
-msgid "Generate debug output"
-msgstr "Hata ayıklama çıktısı oluştur"
-
-#: tools/encodesymbolic.c:93
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Geçersiz boyut %s\n"
-
-#: tools/encodesymbolic.c:107
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Dosya yüklenemedi: %s\n"
-
-#: tools/encodesymbolic.c:144
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "%s dosyası kaydedilemedi: %s\n"
-
 #: tools/gtk-builder-tool.c:36
 #, c-format
 msgid ""
@@ -7754,7 +7731,7 @@ msgid "Overwrite existing file"
 msgstr "Var olan dosyanın üstüne yaz"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -8028,36 +8005,36 @@ msgstr "Görüntüyle ilgili bilgi sağla."
 msgid "Can only accept a single image file\n"
 msgstr "Yalnızca tek bir görüntü dosyası kabul edebilir\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Başlık çubuğu ekleme"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "BOYUT"
 
-#: tools/gtk-image-tool-play.c:323
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
 msgstr "Canlandırmaları oynatma"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't use system resources"
 msgstr "Sistem kaynaklarını kullanma"
 
-#: tools/gtk-image-tool-play.c:325
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't load external resources"
 msgstr "Dış kaynakları yükleme"
 
-#: tools/gtk-image-tool-play.c:326
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't allow gpa extensions"
 msgstr "gpa uzantılarına izin verme"
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:324
 msgid "Show one or more animations."
 msgstr "Bir ya da daha çok canlandırma göster."
 
-#: tools/gtk-image-tool-play.c:350
+#: tools/gtk-image-tool-play.c:337
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Canlandırma dosyası belirtilmedi\n"
@@ -8706,22 +8683,32 @@ msgstr "Gerçekleme düğümünü göster."
 msgid "Can only preview a single .node file\n"
 msgstr "Yalnızca tek bir .node dosyasını ön izleyebilir\n"
 
-#: tools/gtk-tool-utils.c:48
+#. translators: invalid UTF8 in filename
+#: tools/gtk-tool-utils.c:47
+msgid "<invalid>"
+msgstr "<geçersiz>"
+
+#: tools/gtk-tool-utils.c:60
+#, c-format
+msgid "Warning at %s: %s\n"
+msgstr "%s. satırda uyarı: %s\n"
+
+#: tools/gtk-tool-utils.c:62
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "%s. satırda hata: %s\n"
 
-#: tools/gtk-tool-utils.c:66
+#: tools/gtk-tool-utils.c:80
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "Düğüm dosyası yüklenemedi: %s\n"
 
-#: tools/gtk-tool-utils.c:87
+#: tools/gtk-tool-utils.c:106
 #, c-format
 msgid "%s is not a texture node\n"
 msgstr "%s doku düğümü değil\n"
 
-#: tools/gtk-tool-utils.c:313
+#: tools/gtk-tool-utils.c:332
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "cicp 4 rakam olmalıdır, / ile ayrılmalıdır\n"
@@ -8833,3 +8820,24 @@ msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
 "Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
 "theme-indexʼi kullanın.\n"
+
+#~ msgid "Paintable Size"
+#~ msgstr "Boyanabilir Boyutu"
+
+#~ msgid "Output to this directory instead of cwd"
+#~ msgstr "Çıktı cwd yerine bu dizine"
+
+#~ msgid "Generate debug output"
+#~ msgstr "Hata ayıklama çıktısı oluştur"
+
+#, c-format
+#~ msgid "Invalid size %s\n"
+#~ msgstr "Geçersiz boyut %s\n"
+
+#, c-format
+#~ msgid "Can’t load file: %s\n"
+#~ msgstr "Dosya yüklenemedi: %s\n"
+
+#, c-format
+#~ msgid "Can’t save file %s: %s\n"
+#~ msgstr "%s dosyası kaydedilemedi: %s\n"
