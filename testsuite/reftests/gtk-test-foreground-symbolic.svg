@@ -6,5 +6,5 @@
           xmlns:gpa='https://www.gtk.org/grappa'
           gpa:version='1'
           gpa-state='0'>
-  <rect x='2' y='2' width='12' height='12' gpa-fill='foreground'/>
+  <rect x='2' y='2' width='12' height='12' gpa:fill='foreground'/>
 </svg>
