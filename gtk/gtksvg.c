@@ -1743,6 +1743,23 @@ apply_transform (GskRenderNode *node,
 }
 
 /* }}} */
+/* {{{ Style utilities */
+
+typedef struct {
+  GBytes *content;
+  GtkSvgLocation location;
+} StyleElt;
+
+static void
+style_elt_free (gpointer p)
+{
+  StyleElt *e = (StyleElt *) p;
+
+  g_bytes_unref (e->content);
+  g_free (e);
+}
+
+/* }}} */
 /* {{{ Text */
 
 static char *
@@ -12193,6 +12210,7 @@ shape_free (gpointer data)
       g_clear_pointer (&shape->current[attr], svg_value_unref);
     }
 
+  g_clear_pointer (&shape->styles, g_ptr_array_unref);
   g_clear_pointer (&shape->shapes, g_ptr_array_unref);
   g_clear_pointer (&shape->animations, g_ptr_array_unref);
   g_clear_pointer (&shape->color_stops, g_ptr_array_unref);
@@ -12247,6 +12265,8 @@ shape_new (Shape     *parent,
       shape->text = g_array_new (FALSE, FALSE, sizeof (TextNode));
       g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
+
+  shape->styles = g_ptr_array_new_with_free_func (style_elt_free);
 
   shape->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (shape->css_node, g_quark_from_static_string (shape_types[type].name));
@@ -16578,8 +16598,11 @@ typedef struct
     char *reason;
     gboolean skip_over_target;
   } skip;
-  gboolean collect_text;
-  GString *text;
+  struct {
+    GtkSvgLocation start;
+    gboolean collect;
+    GString *text;
+  } text;
   uint64_t num_loaded_elements;
 } ParserData;
 
@@ -18421,6 +18444,15 @@ skip_element (ParserData          *data,
 }
 
 static void
+start_collect_text (ParserData          *data,
+                    GMarkupParseContext *context)
+{
+  gtk_svg_location_init (&data->text.start, context);
+  data->text.collect = TRUE;
+  g_string_set_size (data->text.text, 0);
+}
+
+static void
 start_element_cb (GMarkupParseContext  *context,
                   const char           *element_name,
                   const char          **attr_names,
@@ -18636,30 +18668,21 @@ start_element_cb (GMarkupParseContext  *context,
         {
           /* Verify we're in the right place */
           if (check_ancestors (context, "rdf:Bag", "dc:subject", "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:description") == 0)
         {
           if (check_ancestors (context, "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:title") == 0)
         {
           if (check_ancestors (context, "cc:Agent", "dc:creator", "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
@@ -18706,8 +18729,28 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "style") == 0 ||
-      strcmp (element_name, "textPath") == 0 ||
+  if (strcmp (element_name, "style") == 0)
+    {
+      gboolean is_css = TRUE;
+
+      for (unsigned int i = 0; attr_names[i]; i++)
+        {
+          if (strcmp (attr_names[i], "type") == 0)
+            {
+              if (strcmp (attr_values[i], "text/css") != 0)
+                is_css = FALSE;
+              break;
+            }
+        }
+
+      g_string_set_size (data->text.text, 0);
+      if (is_css)
+        start_collect_text (data, context);
+
+      return;
+    }
+
+  if (strcmp (element_name, "textPath") == 0 ||
       strcmp (element_name, "feConvolveMatrix") == 0 ||
       strcmp (element_name, "feDiffuseLighting") == 0 ||
       strcmp (element_name, "feMorphology") == 0 ||
@@ -18717,10 +18760,11 @@ start_element_cb (GMarkupParseContext  *context,
       skip_element (data, context, GTK_SVG_ERROR_NOT_IMPLEMENTED, "<%s> is not supported", element_name);
       return;
     }
-  else if (strcmp (element_name, "title") == 0 ||
-           strcmp (element_name, "desc") == 0 ||
-           g_str_has_prefix (element_name, "sodipodi:") ||
-           g_str_has_prefix (element_name, "inkscape:"))
+
+  if (strcmp (element_name, "title") == 0 ||
+      strcmp (element_name, "desc") == 0 ||
+      g_str_has_prefix (element_name, "sodipodi:") ||
+      g_str_has_prefix (element_name, "inkscape:"))
     {
       skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring metadata and non-standard elements: <%s>", element_name);
       return;
@@ -18951,7 +18995,7 @@ end_element_cb (GMarkupParseContext *context,
   ParserData *data = user_data;
   ShapeType shape_type;
 
-  data->collect_text = FALSE;
+  data->text.collect = FALSE;
 
   if (data->skip.to != NULL)
     {
@@ -18982,17 +19026,31 @@ end_element_cb (GMarkupParseContext *context,
     }
 
 do_target:
-  if (strcmp (element_name, "rdf:li") == 0)
+  if (strcmp (element_name, "style") == 0)
     {
-      g_set_str (&data->svg->keywords, data->text->str);
+      if (data->text.text->len > 0)
+        {
+          char *string;
+          StyleElt *elt;
+
+          string = g_strstrip (g_strdup (data->text.text->str));
+          elt = g_new0 (StyleElt, 1);
+          elt->content = g_bytes_new_take (string, strlen (string));
+          elt->location = data->text.start;
+          g_ptr_array_add (data->current_shape->styles, elt);
+        }
+    }
+  else if (strcmp (element_name, "rdf:li") == 0)
+    {
+      g_set_str (&data->svg->keywords, data->text.text->str);
     }
   else if (strcmp (element_name, "dc:description") == 0)
     {
-      g_set_str (&data->svg->description, data->text->str);
+      g_set_str (&data->svg->description, data->text.text->str);
     }
   else if (strcmp (element_name, "dc:title") == 0)
     {
-      g_set_str (&data->svg->author, data->text->str);
+      g_set_str (&data->svg->author, data->text.text->str);
     }
   else if (shape_type_lookup (element_name, &shape_type))
     {
@@ -19052,10 +19110,10 @@ text_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (!data->collect_text)
+  if (!data->text.collect)
     return;
 
-  g_string_append_len (data->text, text, len);
+  g_string_append_len (data->text.text, text, len);
 }
 
 static void
@@ -19639,8 +19697,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.pending_refs = g_hash_table_new (g_direct_hash, g_direct_equal);
   data.skip.to = NULL;
   data.skip.reason = NULL;
-  data.text = g_string_new ("");
-  data.collect_text = FALSE;
+  data.text.text = g_string_new ("");
+  data.text.collect = FALSE;
   data.num_loaded_elements = 0;
 
   context = g_markup_parse_context_new (&parser,
@@ -19756,7 +19814,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
   g_hash_table_unref (data.pending_refs);
-  g_string_free (data.text, TRUE);
+  g_string_free (data.text.text, TRUE);
 
   if (self->gpa_version > 0 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)
@@ -20720,6 +20778,16 @@ serialize_shape (GString              *s,
       serialize_shape_attrs (s, svg, indent, shape, flags);
       serialize_gpa_attrs (s, svg, indent, shape, flags);
       g_string_append_c (s, '>');
+    }
+
+  for (unsigned int i = 0; i < shape->styles->len; i++)
+    {
+      StyleElt *elt = g_ptr_array_index (shape->styles, i);
+      indent_for_elt (s, indent + 2);
+      g_string_append (s, "<style type='text/css'>\n");
+      g_string_append (s, g_bytes_get_data (elt->content, NULL));
+      indent_for_elt (s, indent + 2);
+      g_string_append (s, "</style>");
     }
 
   if (shape_type_has_color_stops (shape->type))

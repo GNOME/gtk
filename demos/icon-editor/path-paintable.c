@@ -1178,6 +1178,7 @@ shape_duplicate (Shape *shape)
 
   copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
+  copy->styles = g_ptr_array_new ();
 
   copy->gpa.states = shape->gpa.states;
   copy->gpa.transition = shape->gpa.transition;

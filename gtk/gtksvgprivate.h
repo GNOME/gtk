@@ -371,6 +371,7 @@ struct _Shape
   GPtrArray *color_stops;
   GPtrArray *filters;
   GPtrArray *deps;
+  GPtrArray *styles;
 
   GskPath *path;
   GskPathMeasure *measure;
