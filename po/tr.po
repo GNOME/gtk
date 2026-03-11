@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-25 13:51+0000\n"
-"PO-Revision-Date: 2026-02-26 08:00+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2026-03-09 17:00+0000\n"
+"PO-Revision-Date: 2026-03-11 14:37+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1096,7 +1096,7 @@ msgstr "Yeni hızlandırıcı…"
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%% %d"
 
 #: gtk/deprecated/gtkcolorbutton.c:186 gtk/deprecated/gtkcolorbutton.c:317
 #: gtk/gtkcolordialog.c:409
@@ -1187,7 +1187,7 @@ msgstr "Tam Ses"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr "%% %d"
+msgstr "%% %d"
 
 #: gtk/gtkaboutdialog.c:127 gtk/ui/gtkaboutdialog.ui:173
 #: gtk/ui/gtkaboutdialog.ui:192
@@ -4208,7 +4208,7 @@ msgstr "Okuma dosyası tanımlayıcı oluşturulamadı"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr "%% %.0f"
+msgstr "%% %.0f"
 
 #: gtk/gtkrecentmanager.c:1030 gtk/gtkrecentmanager.c:1043
 #: gtk/gtkrecentmanager.c:1181 gtk/gtkrecentmanager.c:1191
@@ -4220,7 +4220,7 @@ msgstr "“%s” URIʼli öge bulunamadı"
 #: gtk/gtkrecentmanager.c:1265
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
-msgstr "“%s” URI’li öge “%s”e taşınamadı"
+msgstr "“%s” URI’li öge “%s” konumuna taşınamadı"
 
 #: gtk/gtkrecentmanager.c:2330
 #, c-format
@@ -4954,15 +4954,18 @@ msgstr "Üst Düzeydir"
 msgid "Child Visible"
 msgstr "Görünür Çocuk"
 
-#: gtk/inspector/misc-info.ui:685
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:686
 msgid "Paintable Size"
 msgstr "Boyanabilir Boyutu"
 
-#: gtk/inspector/misc-info.ui:710
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:712
 msgid "Paintable Aspect Ratio"
 msgstr "Boyanabilir En Boy Oranı"
 
-#: gtk/inspector/misc-info.ui:735
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:738
 msgid "Paintable Flags"
 msgstr "Boyanabilir Bayraklar"
 
@@ -7754,7 +7757,7 @@ msgid "Overwrite existing file"
 msgstr "Var olan dosyanın üstüne yaz"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -8028,36 +8031,36 @@ msgstr "Görüntüyle ilgili bilgi sağla."
 msgid "Can only accept a single image file\n"
 msgstr "Yalnızca tek bir görüntü dosyası kabul edebilir\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Başlık çubuğu ekleme"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "BOYUT"
 
-#: tools/gtk-image-tool-play.c:323
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
 msgstr "Canlandırmaları oynatma"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't use system resources"
 msgstr "Sistem kaynaklarını kullanma"
 
-#: tools/gtk-image-tool-play.c:325
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't load external resources"
 msgstr "Dış kaynakları yükleme"
 
-#: tools/gtk-image-tool-play.c:326
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't allow gpa extensions"
 msgstr "gpa uzantılarına izin verme"
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:324
 msgid "Show one or more animations."
 msgstr "Bir ya da daha çok canlandırma göster."
 
-#: tools/gtk-image-tool-play.c:350
+#: tools/gtk-image-tool-play.c:337
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Canlandırma dosyası belirtilmedi\n"
