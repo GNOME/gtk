@@ -71,7 +71,7 @@ struct _GtkApplicationClass
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gboolean (* save_state)    (GtkApplication   *application,
                               GVariantDict     *state);
@@ -85,7 +85,7 @@ struct _GtkApplicationClass
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gboolean (* restore_state) (GtkApplication   *application,
                               GtkRestoreReason  reason,
@@ -99,7 +99,7 @@ struct _GtkApplicationClass
    *
    * Class closure for the [signal@Application::restore-window] signal.
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   void     (*restore_window) (GtkApplication   *application,
                               GtkRestoreReason  reason,
@@ -176,10 +176,10 @@ GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
                                                                   const char           *id);
 
-GDK_AVAILABLE_IN_4_22
+GDK_AVAILABLE_IN_4_24
 void             gtk_application_save                            (GtkApplication       *application);
 
-GDK_AVAILABLE_IN_4_22
+GDK_AVAILABLE_IN_4_24
 void             gtk_application_forget                          (GtkApplication       *application);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)

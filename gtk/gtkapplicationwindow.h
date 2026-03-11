@@ -64,7 +64,7 @@ struct _GtkApplicationWindowClass
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gboolean     (* save_state)           (GtkApplicationWindow   *window,
                                          GVariantDict           *dict);

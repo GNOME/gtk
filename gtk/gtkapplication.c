@@ -806,7 +806,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * If all windows are closed but the app keeps running, the signal will be
    * emitted the next time a new window is opened.
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_signals[RESTORE_WINDOW] =
     g_signal_new (I_("restore-window"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -834,7 +834,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_signals[SAVE_STATE] =
     g_signal_new (I_("save-state"),
@@ -860,7 +860,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_signals[RESTORE_STATE] =
     g_signal_new (I_("restore-state"),
@@ -929,7 +929,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Set this property to true if the application supports
    * state saving and restoring.
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_props[PROP_SUPPORT_SAVE] =
     g_param_spec_boolean ("support-save", NULL, NULL,
@@ -942,7 +942,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * The number of seconds between automatic state saves. Defaults to 15.
    * A value of 0 will opt out of automatic state saving.
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_props[PROP_AUTOSAVE_INTERVAL] =
     g_param_spec_uint ("autosave-interval", NULL, NULL,
@@ -1640,7 +1640,7 @@ collect_state (GtkApplication *application)
  * calls this function automatically when the application is closed or
  * the session ends.
  *
- * Since: 4.22
+ * Since: 4.24
  */
 void
 gtk_application_save (GtkApplication *application)
@@ -1671,7 +1671,7 @@ gtk_application_save (GtkApplication *application)
  * In order to reenable state saving, call
  * [method@Gtk.Application.save].
  *
- * Since: 4.22
+ * Since: 4.24
  */
 void
 gtk_application_forget (GtkApplication *application)

@@ -2055,7 +2055,7 @@ typedef enum {
  *
  * See [signal@Gtk.Application::restore-state].
  *
- * Since: 4.22
+ * Since: 4.24
  */
 typedef enum
 {

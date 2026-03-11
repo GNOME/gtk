@@ -735,7 +735,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    *
    * Returns: true to stop stop further handlers from running
    *
-   * Since: 4.22
+   * Since: 4.24
    */
   gtk_application_window_signals[SAVE_STATE] =
     g_signal_new (I_("save-state"),
