@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-06 19:34+0000\n"
-"PO-Revision-Date: 2026-03-06 23:22+0100\n"
+"POT-Creation-Date: 2026-03-09 12:34+0000\n"
+"PO-Revision-Date: 2026-03-11 12:13+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -4983,16 +4983,20 @@ msgid "Child Visible"
 msgstr "Látható gyermek"
 
 #: gtk/inspector/misc-info.ui:685
-msgid "Paintable Size"
-msgstr "Festhető méret"
+#| msgctxt "Font variation axis"
+#| msgid "Optical Size"
+msgid "Intrinsic Size"
+msgstr "Valódi méret"
 
 #: gtk/inspector/misc-info.ui:710
-msgid "Paintable Aspect Ratio"
-msgstr "Festhető méretarány"
+#| msgid "Paintable Aspect Ratio"
+msgid "Intrinsic Aspect Ratio"
+msgstr "Valódi méretarány"
 
 #: gtk/inspector/misc-info.ui:735
-msgid "Paintable Flags"
-msgstr "Festhető jelzők"
+#| msgid "Paintable Flags"
+msgid "GdkPaintable Flags"
+msgstr "GdkPaintable jelzők"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -7616,29 +7620,6 @@ msgstr "A párbeszédablak egyes beállításai ütköznek egymással"
 msgid "Play"
 msgstr "Lejátszás"
 
-#: tools/encodesymbolic.c:42
-msgid "Output to this directory instead of cwd"
-msgstr "Kimenet ebbe a könyvtárba a cwd helyett"
-
-#: tools/encodesymbolic.c:43
-msgid "Generate debug output"
-msgstr "Hibakeresési kimenet előállítása"
-
-#: tools/encodesymbolic.c:93
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Érvénytelen méret: %s\n"
-
-#: tools/encodesymbolic.c:107
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Nem lehet betölteni a következő fájlt: %s\n"
-
-#: tools/encodesymbolic.c:144
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "Nem lehet menteni a(z) %s fájlt: %s\n"
-
 #: tools/gtk-builder-tool.c:36
 #, c-format
 msgid ""
@@ -8733,14 +8714,11 @@ msgstr "Csak egy önálló .node-fájl előnézete tekinthető meg\n"
 
 #. translators: invalid UTF8 in filename
 #: tools/gtk-tool-utils.c:47
-#| msgctxt "Accelerator"
-#| msgid "Invalid"
 msgid "<invalid>"
 msgstr "<érvénytelen>"
 
 #: tools/gtk-tool-utils.c:60
 #, c-format
-#| msgid "Error at %s: %s\n"
 msgid "Warning at %s: %s\n"
 msgstr "Figyelmeztetés itt: %s: %s\n"
 
