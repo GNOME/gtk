@@ -26,9 +26,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-06 19:34+0000\n"
-"PO-Revision-Date: 2026-03-05 13:52+0000\n"
-"Last-Translator: Jean-Marc Tissières <jmetissieres@gmail.com>\n"
+"POT-Creation-Date: 2026-03-09 12:34+0000\n"
+"PO-Revision-Date: 2026-03-11 08:24+0100\n"
+"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -5019,16 +5019,16 @@ msgid "Child Visible"
 msgstr "Enfant visible"
 
 #: gtk/inspector/misc-info.ui:685
-msgid "Paintable Size"
-msgstr "Taille de l’objet à dessiner"
+msgid "Intrinsic Size"
+msgstr "Taille intrinsèque"
 
 #: gtk/inspector/misc-info.ui:710
-msgid "Paintable Aspect Ratio"
-msgstr "Format visuel de l’objet à dessiner"
+msgid "Intrinsic Aspect Ratio"
+msgstr "Rapport d’affichage intrinsèque"
 
 #: gtk/inspector/misc-info.ui:735
-msgid "Paintable Flags"
-msgstr "Indicateurs de l’élément dessinable"
+msgid "GdkPaintable Flags"
+msgstr "Indicateurs GdkPaintable"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -7655,29 +7655,6 @@ msgstr "Certains paramètres dans la boîte de dialogue sont en conflit"
 msgid "Play"
 msgstr "Lecture"
 
-#: tools/encodesymbolic.c:42
-msgid "Output to this directory instead of cwd"
-msgstr "Produit le contenu dans ce répertoire à la place du répertoire courant"
-
-#: tools/encodesymbolic.c:43
-msgid "Generate debug output"
-msgstr "Générer la sortie de débogage"
-
-#: tools/encodesymbolic.c:93
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "Taille %s non valide\n"
-
-#: tools/encodesymbolic.c:107
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "Impossible de charge le fichier : %s\n"
-
-#: tools/encodesymbolic.c:144
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "Impossible d’enregistrer le fichier « %s » : %s\n"
-
 #: tools/gtk-builder-tool.c:36
 #, c-format
 msgid ""
@@ -8777,6 +8754,7 @@ msgid "<invalid>"
 msgstr "<invalid>"
 
 #: tools/gtk-tool-utils.c:60
+#, c-format
 msgid "Warning at %s: %s\n"
 msgstr "Avertissement à %s : %s\n"
 
@@ -8907,6 +8885,28 @@ msgstr ""
 "Aucun fichier d’index de thème dans « %s ».\n"
 "Si vous souhaitez vraiment créer un cache d’icônes ici, utilisez --ignore-"
 "theme-index.\n"
+
+#~ msgid "Paintable Size"
+#~ msgstr "Taille de l’objet à dessiner"
+
+#~ msgid "Output to this directory instead of cwd"
+#~ msgstr ""
+#~ "Produit le contenu dans ce répertoire à la place du répertoire courant"
+
+#~ msgid "Generate debug output"
+#~ msgstr "Générer la sortie de débogage"
+
+#, c-format
+#~ msgid "Invalid size %s\n"
+#~ msgstr "Taille %s non valide\n"
+
+#, c-format
+#~ msgid "Can’t load file: %s\n"
+#~ msgstr "Impossible de charge le fichier : %s\n"
+
+#, c-format
+#~ msgid "Can’t save file %s: %s\n"
+#~ msgstr "Impossible d’enregistrer le fichier « %s » : %s\n"
 
 #, c-format
 #~ msgid "cicp: Narrow range or YUV not supported"
