@@ -26537,7 +26537,7 @@ gtk_svg_get_state (GtkSvg *self)
 /**
  * gtk_svg_get_state_names:
  * @self: an SVG paintable
- * @length: (out): return location for the number
+ * @length: (out) (nullable): return location for the number
  *   of strings that are returned
  *
  * Returns a `NULL`-terminated array of
@@ -26556,7 +26556,11 @@ const char **
 gtk_svg_get_state_names (GtkSvg       *self,
                          unsigned int *length)
 {
-  *length = self->n_state_names;
+  g_return_val_if_fail (GTK_IS_SVG (self), NULL);
+
+  if (length)
+    *length = self->n_state_names;
+
   return (const char **) self->state_names;
 }
 
