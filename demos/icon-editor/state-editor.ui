@@ -1,7 +1,7 @@
 <interface>
   <template class="StateEditor" parent="GtkWindow">
     <property name="resizable">0</property>
-    <property name="title" translatable="yes">State Map</property>
+    <property name="title" translatable="yes">States</property>
     <property name="modal">1</property>
     <style><class name="state-editor"/></style>
     <child>

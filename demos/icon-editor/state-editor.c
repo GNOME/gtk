@@ -97,6 +97,25 @@ valid_state_name (const char *name)
   return TRUE;
 }
 
+static unsigned int
+find_max_state (Shape *shape)
+{
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_GROUP)
+    {
+      unsigned int state = 0;
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          state = MAX (state, find_max_state (sh));
+        }
+      return state;
+    }
+  else if (shape->gpa.states == 0 || shape->gpa.states == G_MAXUINT64)
+    return 0;
+  else
+    return g_bit_nth_msf (shape->gpa.states, -1);
+}
+
 static void
 update_state_names (StateEditor *self)
 {
@@ -150,20 +169,20 @@ update_states (StateEditor *self)
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      if (!GTK_IS_CHECK_BUTTON (child))
-        continue;
+      GtkLayoutChild *layout_child;
+      int row, col;
 
-      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (child)))
+      layout_child = gtk_layout_manager_get_layout_child (mgr, child);
+      row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
+      col = gtk_grid_layout_child_get_column (GTK_GRID_LAYOUT_CHILD (layout_child));
+
+      if (GTK_IS_CHECK_BUTTON (child))
         {
-          GtkLayoutChild *layout_child;
-          int row, col;
-
-          layout_child = gtk_layout_manager_get_layout_child (mgr, child);
-          row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
-          col = gtk_grid_layout_child_get_column (GTK_GRID_LAYOUT_CHILD (layout_child));
-
-          if (col <= self->max_state)
-            states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
+          if (gtk_check_button_get_active (GTK_CHECK_BUTTON (child)))
+            {
+              if (col <= self->max_state)
+                states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
+            }
         }
     }
 
@@ -171,7 +190,9 @@ update_states (StateEditor *self)
 
   for (unsigned int i = 0; i < n; i++)
     {
-      GtkWidget *child = gtk_grid_get_child_at (self->grid, -1, i);
+      GtkWidget *child = gtk_grid_get_child_at (self->grid, -2, i);
+      GtkWidget *dropdown = gtk_grid_get_child_at (self->grid, -1, i);
+      unsigned int selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (dropdown));
       const char *id;
 
       if (!GTK_IS_LABEL (child))
@@ -179,7 +200,12 @@ update_states (StateEditor *self)
 
       id = gtk_label_get_label (GTK_LABEL (child));
 
-      path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
+      if (selected == 0)
+        path_paintable_set_path_states_by_id (self->paintable, id, 0);
+      else if (selected == 2)
+        path_paintable_set_path_states_by_id (self->paintable, id, G_MAXUINT64);
+      else
+        path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
     }
 
   self->updating = FALSE;
@@ -245,10 +271,22 @@ create_paths_for_shape (StateEditor  *self,
           child = gtk_image_new_from_paintable (paintable);
           gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
           g_object_unref (paintable);
-          gtk_grid_attach (self->grid, child, -2, *row, 1, 1);
+          gtk_grid_attach (self->grid, child, -3, *row, 1, 1);
 
           child = gtk_label_new (id);
+          gtk_grid_attach (self->grid, child, -2, *row, 1, 1);
+
+          child = gtk_drop_down_new_from_strings ((const char *[]) { "None", "Some", "All", NULL });
           gtk_grid_attach (self->grid, child, -1, *row, 1, 1);
+
+          if (states == 0)
+            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 0);
+          else if (states == G_MAXUINT64)
+            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 2);
+          else
+            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 1);
+
+          g_signal_connect_swapped (child, "notify::selected", G_CALLBACK (update_states), self);
 
           for (unsigned int j = 0; j <= self->max_state; j++)
             {
@@ -260,7 +298,7 @@ create_paths_for_shape (StateEditor  *self,
               gtk_grid_attach (self->grid, child, j, *row, 1, 1);
             }
 
-           (*row)++;
+          (*row)++;
         }
     }
 }
@@ -323,7 +361,7 @@ repopulate (StateEditor *self)
 static void
 paths_changed (StateEditor *self)
 {
-  self->max_state = MAX (self->max_state, path_paintable_get_max_state (self->paintable));
+  self->max_state = MAX (self->max_state, find_max_state (path_paintable_get_content (self->paintable)));
   self->max_state = CLAMP (self->max_state, 0, 63);
 
   repopulate (self);
