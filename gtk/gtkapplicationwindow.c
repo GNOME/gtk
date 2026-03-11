@@ -913,8 +913,8 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
 }
 
 void
-gtk_application_window_save (GtkApplicationWindow *window,
-                             GVariantDict         *state)
+gtk_application_window_save_state (GtkApplicationWindow *window,
+                                   GVariantDict         *state)
 {
   gboolean ret;
 

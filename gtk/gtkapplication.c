@@ -1559,7 +1559,7 @@ collect_window_state (GtkApplication *application,
 
   dict = g_variant_dict_new (NULL);
   if (GTK_IS_APPLICATION_WINDOW (window))
-    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
+    gtk_application_window_save_state (GTK_APPLICATION_WINDOW (window), dict);
 
   state = g_variant_new ("(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
   g_variant_dict_unref (dict);
