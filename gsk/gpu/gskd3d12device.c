@@ -702,6 +702,23 @@ static const D3D12_BLEND_DESC blend_descs[] = {
       },
     }
   },
+  [GSK_GPU_BLEND_MASK] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_ZERO,
+        .DestBlend = D3D12_BLEND_SRC_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_ZERO,
+        .DestBlendAlpha = D3D12_BLEND_SRC_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
   [GSK_GPU_BLEND_MASK_ONE] = {
     .AlphaToCoverageEnable = false,
     .IndependentBlendEnable = false,
