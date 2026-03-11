@@ -150,6 +150,12 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
                                                     size_t          *to,
                                                     double          *pos);
 
+void            path_paintable_get_attach_path_for_shape
+                                                   (PathPaintable  *self,
+                                                    Shape          *shape,
+                                                    Shape         **to,
+                                                    double         *pos);
+
 GtkCompatibility
                 path_paintable_get_compatibility   (PathPaintable   *self);
 

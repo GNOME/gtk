@@ -658,6 +658,38 @@ path_paintable_get_attach_path (PathPaintable *self,
     }
 }
 
+static Shape *
+find_attach_shape (Shape *s,
+                   Shape *from)
+{
+  if (s->type == SHAPE_SVG || s->type == SHAPE_GROUP)
+    {
+      for (unsigned int i = 0; i < s->shapes->len; i++)
+        {
+          Shape *s2 = g_ptr_array_index (s->shapes, i);
+          Shape *to = find_attach_shape (s2, from);
+          if (to != NULL)
+            return to;
+        }
+    }
+  else if (s->gpa.attach.shape == from)
+    {
+      return s;
+    }
+
+  return NULL;
+}
+
+void
+path_paintable_get_attach_path_for_shape (PathPaintable  *self,
+                                          Shape          *shape,
+                                          Shape         **to,
+                                          double         *pos)
+{
+  *pos = shape->gpa.attach.pos;
+  *to = find_attach_shape (self->svg->content, shape);
+}
+
 void
 path_paintable_set_keywords (PathPaintable *self,
                              const char    *keywords)
@@ -1266,19 +1298,21 @@ path_paintable_get_shape_by_id (PathPaintable *self,
 static unsigned int
 shape_count (Shape *shape)
 {
-  unsigned int count = 1;
-
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_GROUP)
     {
+      unsigned int count = 0;
+
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           Shape *sh = g_ptr_array_index (shape->shapes, i);
 
           count += shape_count (sh);
         }
+
+      return count;
     }
 
-  return count;
+  return 1;
 }
 
 unsigned int
