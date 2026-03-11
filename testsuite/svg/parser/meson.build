@@ -81,6 +81,7 @@ test_data = [
   'times.svg',
   'too-many-elements.test',
   'transforms.svg',
+  'units.svg',
   'use.svg',
   'viewbox.svg',
   'viewbox2.svg',
