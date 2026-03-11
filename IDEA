@@ -1,0 +1,12 @@
+Idea: fallback handlers for activate/open/etc should have default implementations that call into the right async
+handlers
+
+Relevant snippet from glib:
+
+  if (!g_signal_has_handler_pending (application,
+                                     g_application_signals[SIGNAL_ACTIVATE],
+                                     0, TRUE) &&
+      G_APPLICATION_GET_CLASS (application)->activate == g_application_real_activate)
+  {
+    g_warning(...)
+  }
