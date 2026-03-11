@@ -273,6 +273,7 @@ gsk_text_node_new2 (PangoFont              *font,
     }
 
   node->needs_blending = n > 1;
+  node->bilevel_opacity = !self->has_color_glyphs && gdk_color_is_opaque (color);
 
   self->glyphs = glyph_infos;
   self->num_glyphs = n;

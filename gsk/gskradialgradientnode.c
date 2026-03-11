@@ -410,6 +410,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
   node->fully_opaque = gsk_gradient_is_opaque (gradient) &&
                        gsk_radial_gradient_fills_plane (start_center, start_radius,
                                                         end_center, end_radius);
+  node->bilevel_opacity = node->fully_opaque;
 
   node->preferred_depth = gdk_color_state_get_depth (gsk_gradient_get_interpolation (gradient));
   node->is_hdr = gdk_color_state_is_hdr (gsk_gradient_get_interpolation (gradient));

@@ -320,7 +320,8 @@ gsk_transform_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_TYPE_TRANSFORM_NODE);
   node = (GskRenderNode *) self;
-  node->fully_opaque = child->fully_opaque && category >= GSK_TRANSFORM_CATEGORY_2D_AFFINE;
+  node->fully_opaque = gsk_render_node_is_fully_opaque (child) && category >= GSK_TRANSFORM_CATEGORY_2D_AFFINE;
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
 
   self->child = gsk_render_node_ref (child);
   self->transform = gsk_transform_ref (transform);

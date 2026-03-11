@@ -284,6 +284,8 @@ gsk_mask_node_new (GskRenderNode *source,
   node->is_hdr = gsk_render_node_is_hdr (source) ||
                  gsk_render_node_is_hdr (mask);
   node->isolates_background = TRUE;
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (source) &&
+                          gsk_render_node_is_bilevel_opacity (mask);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (source) ||
                                    gsk_render_node_contains_subsurface_node (mask);
   node->contains_paste_node = gsk_render_node_contains_paste_node (source) ||

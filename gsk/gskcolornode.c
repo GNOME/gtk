@@ -196,6 +196,7 @@ gsk_color_node_new2 (const GdkColor        *color,
   self = gsk_render_node_alloc (GSK_TYPE_COLOR_NODE);
   node = (GskRenderNode *) self;
   node->fully_opaque = gdk_color_is_opaque (color);
+  node->bilevel_opacity = node->fully_opaque;
   node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = !gdk_color_is_srgb (color);
 

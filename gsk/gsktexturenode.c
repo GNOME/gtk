@@ -275,6 +275,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   self = gsk_render_node_alloc (GSK_TYPE_TEXTURE_NODE);
   node = (GskRenderNode *) self;
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
+  node->bilevel_opacity = node->fully_opaque;
   node->is_hdr = gdk_color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);

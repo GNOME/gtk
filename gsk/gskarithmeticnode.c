@@ -373,6 +373,7 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                        gsk_rect_contains_rect (&first->bounds, bounds) &&
                        gsk_rect_contains_rect (&second->bounds, bounds) &&
                        k1 + k2 + k3 + k4 >= 1;
+  node->bilevel_opacity = node->fully_opaque;
   node->isolates_background = TRUE;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (first) ||
                                    gsk_render_node_contains_subsurface_node (second);

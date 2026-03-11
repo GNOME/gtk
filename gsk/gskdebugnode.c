@@ -168,6 +168,7 @@ gsk_debug_node_new_profile (GskRenderNode             *child,
   self = gsk_render_node_alloc (GSK_TYPE_DEBUG_NODE);
   node = (GskRenderNode *) self;
   node->fully_opaque = child->fully_opaque;
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
 
   self->child = gsk_render_node_ref (child);
   self->message = message;

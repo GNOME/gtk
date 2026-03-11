@@ -71,6 +71,7 @@ compare_render_tests = [
   'color-states',
   'composite-rotated-mask',
   'composite-source-all-opaque-with-complex-mask',
+  'container-bilevel-opacity',
   'copy-paste',
   'copy-paste-transformed',
   'copy-transform-order',

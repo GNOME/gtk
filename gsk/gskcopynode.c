@@ -248,6 +248,7 @@ gsk_copy_node_new (GskRenderNode *child)
   self = gsk_render_node_alloc (GSK_TYPE_COPY_NODE);
   node = (GskRenderNode *) self;
   node->fully_opaque = child->fully_opaque;
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
 
   self->child = gsk_render_node_ref (child);
 
