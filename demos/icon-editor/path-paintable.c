@@ -527,6 +527,21 @@ path_paintable_set_path_states (PathPaintable *self,
   g_signal_emit (self, signals[CHANGED], 0);
 }
 
+void
+path_paintable_set_path_states_by_id (PathPaintable *self,
+                                      const char    *id,
+                                      uint64_t       states)
+{
+  Shape *shape = path_paintable_get_shape_by_id (self, id);
+
+  if (shape->gpa.states == states)
+    return;
+
+  shape->gpa.states = states;
+
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
 const char *
 path_paintable_get_path_id (PathPaintable *self,
                             size_t         idx)
@@ -999,6 +1014,10 @@ shape_get_max_state (Shape *shape)
     {
       return 0;
     }
+  else if (shape->gpa.states == ALL_STATES)
+    {
+      return 63;
+    }
   else
     {
       return g_bit_nth_msf (shape->gpa.states, -1);
@@ -1242,6 +1261,30 @@ path_paintable_get_shape_by_id (PathPaintable *self,
                                 const char    *id)
 {
   return get_shape_by_id (self->svg->content, id);
+}
+
+static unsigned int
+shape_count (Shape *shape)
+{
+  unsigned int count = 1;
+
+  if (shape->type == SHAPE_SVG || shape->type == SHAPE_GROUP)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+
+          count += shape_count (sh);
+        }
+    }
+
+  return count;
+}
+
+unsigned int
+path_paintable_get_shape_count (PathPaintable *self)
+{
+  return shape_count (self->svg->content);
 }
 
 static void

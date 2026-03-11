@@ -140,8 +140,11 @@ update_states (StateEditor *self)
 {
   GtkLayoutManager *mgr = gtk_widget_get_layout_manager (GTK_WIDGET (self->grid));
   uint64_t *states;
+  unsigned int n;
 
-  states = g_newa0 (uint64_t, path_paintable_get_n_paths (self->paintable));
+  n = path_paintable_get_shape_count (self->paintable);
+
+  states = g_newa0 (uint64_t, n);
 
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->grid));
        child != NULL;
@@ -166,8 +169,18 @@ update_states (StateEditor *self)
 
   self->updating = TRUE;
 
-  for (unsigned int i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-    path_paintable_set_path_states (self->paintable, i, states[i]);
+  for (unsigned int i = 0; i < n; i++)
+    {
+      GtkWidget *child = gtk_grid_get_child_at (self->grid, -1, i);
+      const char *id;
+
+      if (!GTK_IS_LABEL (child))
+        break;
+
+      id = gtk_label_get_label (GTK_LABEL (child));
+
+      path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
+    }
 
   self->updating = FALSE;
 
@@ -209,8 +222,9 @@ clear_paths (StateEditor *self)
 }
 
 static void
-create_paths_for_shape (StateEditor *self,
-                        Shape       *shape)
+create_paths_for_shape (StateEditor  *self,
+                        Shape        *shape,
+                        unsigned int *row)
 {
   for (unsigned int i = 0; i < shape->shapes->len; i++)
     {
@@ -218,7 +232,7 @@ create_paths_for_shape (StateEditor *self,
 
       if (sh->type == SHAPE_GROUP)
         {
-          create_paths_for_shape (self, sh);
+          create_paths_for_shape (self, sh, row);
           continue;
         }
       else if (shape_is_graphical (sh))
@@ -231,10 +245,10 @@ create_paths_for_shape (StateEditor *self,
           child = gtk_image_new_from_paintable (paintable);
           gtk_image_set_pixel_size (GTK_IMAGE (child), 20);
           g_object_unref (paintable);
-          gtk_grid_attach (self->grid, child, -2, i, 1, 1);
+          gtk_grid_attach (self->grid, child, -2, *row, 1, 1);
 
           child = gtk_label_new (id);
-          gtk_grid_attach (self->grid, child, -1, i, 1, 1);
+          gtk_grid_attach (self->grid, child, -1, *row, 1, 1);
 
           for (unsigned int j = 0; j <= self->max_state; j++)
             {
@@ -243,8 +257,10 @@ create_paths_for_shape (StateEditor *self,
               gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
                                            (states & ((G_GUINT64_CONSTANT (1) << j))) != 0);
               g_signal_connect_swapped (child, "notify::active", G_CALLBACK (update_states), self);
-              gtk_grid_attach (self->grid, child, j, i, 1, 1);
+              gtk_grid_attach (self->grid, child, j, *row, 1, 1);
             }
+
+           (*row)++;
         }
     }
 }
@@ -271,6 +287,7 @@ create_paths (StateEditor *self)
   GtkWidget *child;
   const char **names;
   unsigned int n_names;
+  unsigned int row;
 
   names = path_paintable_get_state_names (self->paintable, &n_names);
 
@@ -289,7 +306,8 @@ create_paths (StateEditor *self)
       g_signal_connect (child, "notify::editing", G_CALLBACK (state_name_changed), self);
     }
 
-  create_paths_for_shape (self, path_paintable_get_content (self->paintable));
+  row = 0;
+  create_paths_for_shape (self, path_paintable_get_content (self->paintable), &row);
 }
 
 static void
