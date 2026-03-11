@@ -15666,7 +15666,7 @@ static void
 create_transitions (Shape         *shape,
                     Timeline      *timeline,
                     GHashTable    *shapes,
-                    GPtrArray     *pending_refs,
+                    GHashTable    *pending_refs,
                     uint64_t       states,
                     GpaTransition  type,
                     int64_t        duration,
@@ -15700,7 +15700,7 @@ create_transitions (Shape         *shape,
     case GPA_TRANSITION_MORPH:
       create_morph_filter (shape, timeline, shapes, states,
                            duration, delay, easing);
-      g_ptr_array_add (pending_refs, shape);
+      g_hash_table_add (pending_refs, shape);
       break;
     case GPA_TRANSITION_FADE:
       create_transition (shape, 0, timeline, states,
@@ -16220,7 +16220,7 @@ typedef struct
   GHashTable *animations;
   Animation *current_animation;
   GPtrArray *pending_animations;
-  GPtrArray *pending_refs;
+  GHashTable *pending_refs;
   struct {
     const GSList *to;
     GtkSvgLocation start;
@@ -17507,7 +17507,7 @@ parse_shape_attrs (Shape                *shape,
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_START) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_MID) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_END))
-    g_ptr_array_add (data->pending_refs, shape);
+    g_hash_table_add (data->pending_refs, shape);
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
@@ -17521,7 +17521,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (paint_is_server (paint->kind))
         {
-          g_ptr_array_add (data->pending_refs, shape);
+          g_hash_table_add (data->pending_refs, shape);
         }
     }
 
@@ -17538,7 +17538,7 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (paint_is_server (paint->kind))
         {
-          g_ptr_array_add (data->pending_refs, shape);
+          g_hash_table_add (data->pending_refs, shape);
         }
     }
 
@@ -17882,7 +17882,7 @@ parse_shape_gpa_attrs (Shape                *shape,
     return;
 
   if (attach_to_attr)
-    g_ptr_array_add (data->pending_refs, shape);
+    g_hash_table_add (data->pending_refs, shape);
 
   if (shape->gpa.transition != GPA_TRANSITION_NONE ||
       shape->gpa.animation != GPA_ANIMATION_NONE)
@@ -18228,7 +18228,7 @@ start_element_cb (GMarkupParseContext  *context,
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
       if (filter_type == FE_IMAGE)
-        g_ptr_array_add (data->pending_refs, data->current_shape);
+        g_hash_table_add (data->pending_refs, data->current_shape);
 
       if (filter_type == FE_COLOR_MATRIX)
         {
@@ -19276,7 +19276,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.animations = g_hash_table_new (g_str_hash, g_str_equal);
   data.current_animation = NULL;
   data.pending_animations = g_ptr_array_new_with_free_func (animation_free);
-  data.pending_refs = g_ptr_array_new ();
+  data.pending_refs = g_hash_table_new (g_direct_hash, g_direct_equal);
   data.skip.to = NULL;
   data.skip.reason = NULL;
   data.text = g_string_new ("");
@@ -19298,7 +19298,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
       g_clear_pointer (&data.skip.reason, g_free);
 
       g_ptr_array_set_size (data.pending_animations, 0);
-      g_ptr_array_set_size (data.pending_refs, 0);
+      g_hash_table_remove_all (data.pending_refs);
     }
   else
     {
@@ -19376,10 +19376,14 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_set_free_func (data.pending_animations, NULL);
   g_ptr_array_set_size (data.pending_animations, 0);
 
-  for (unsigned int i = 0; i < data.pending_refs->len; i++)
+  if (g_hash_table_size (data.pending_refs) > 0)
     {
-      Shape *sh = g_ptr_array_index (data.pending_refs, i);
-      resolve_shape_refs (sh, &data);
+      GHashTableIter iter;
+      Shape *shape;
+
+      g_hash_table_iter_init (&iter, data.pending_refs);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &shape))
+        resolve_shape_refs (shape, &data);
     }
 
   resolve_animation_refs (self->content, &data);
@@ -19391,7 +19395,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.shapes);
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
-  g_ptr_array_unref (data.pending_refs);
+  g_hash_table_unref (data.pending_refs);
   g_string_free (data.text, TRUE);
 
   if (self->gpa_version > 0 &&
