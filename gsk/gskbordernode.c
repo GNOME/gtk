@@ -417,6 +417,10 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
   else
     self->uniform_color = FALSE;
 
+  node->bilevel_opacity = gdk_color_is_opaque (&border_color[0]) &&
+                          gdk_color_is_opaque (&border_color[1]) &&
+                          gdk_color_is_opaque (&border_color[2]) &&
+                          gdk_color_is_opaque (&border_color[3]);
   gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
   return node;

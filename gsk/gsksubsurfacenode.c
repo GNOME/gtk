@@ -231,7 +231,8 @@ gsk_subsurface_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_TYPE_SUBSURFACE_NODE);
   node = (GskRenderNode *) self;
-  node->fully_opaque = child->fully_opaque;
+  node->fully_opaque = gsk_render_node_is_fully_opaque (child);
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
 
   self->child = gsk_render_node_ref (child);
   if (subsurface)

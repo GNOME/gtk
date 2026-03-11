@@ -39,7 +39,8 @@ struct _GskRenderNode
 
   guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
   guint copy_mode : GSK_COPY_MODE_BITS;
-  guint fully_opaque : 1;
+  guint fully_opaque : 1; /* TRUE if the node is opaque in its bounds */
+  guint bilevel_opacity : 1; /* TRUE if the node is either opaque or fully transparent at every coord */
   guint is_hdr : 1;
   guint isolates_background : 1; /* TRUE if children are drawn to an empty background */
   guint clears_background : 1; /* mostly relevant for tracking opacity */
@@ -144,6 +145,7 @@ void            gsk_render_node_render_opacity          (GskRenderNode          
 GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_is_bilevel_opacity      (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_isolates_background     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_clears_background       (const GskRenderNode         *node) G_GNUC_PURE;
 GskCopyMode     gsk_render_node_get_copy_mode           (const GskRenderNode         *node) G_GNUC_PURE;

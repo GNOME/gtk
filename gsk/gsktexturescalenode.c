@@ -285,6 +285,7 @@ gsk_texture_scale_node_new2 (GdkTexture            *texture,
     gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
     bounds->size.width == floor (bounds->size.width) &&
     bounds->size.height == floor (bounds->size.height);
+  node->bilevel_opacity = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
   node->is_hdr = gdk_color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->snap = snap;

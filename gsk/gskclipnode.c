@@ -225,6 +225,7 @@ gsk_clip_node_new2 (GskRenderNode         *child,
   self = gsk_render_node_alloc (GSK_TYPE_CLIP_NODE);
   node = (GskRenderNode *) self;
   node->fully_opaque = !gsk_rect_snap_can_shrink (snap) && gsk_render_node_is_fully_opaque (child);
+  node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
 
   self->child = gsk_render_node_ref (child);
   gsk_rect_init_from_rect (&self->clip, clip);
