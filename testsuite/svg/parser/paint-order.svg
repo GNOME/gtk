@@ -1,0 +1,42 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 300 200" >
+
+  <!-- Ways to specify paint order -->
+  <marker id="marker1"
+        orient="auto"
+        overflow='visible'
+        markerUnits='userSpaceOnUse'
+        markerWidth='5' markerHeight='5'>
+    <circle cx='0' cy='0' r='5' fill='orange'/>
+  </marker>
+
+  <rect
+        style='marker:url(#marker1);'
+        x="10" y="10" width="20" height="20"
+        stroke='blue' fill='red'
+        stroke-width='4'
+        paint-order='markers fill stroke'>
+  </rect>
+  <rect
+        style='marker:url(#marker1);'
+        x="40" y="10" width="20" height="20"
+        stroke='blue' fill='red'
+        stroke-width='4'
+        paint-order='markers stroke'>
+  </rect>
+  <rect
+        style='marker:url(#marker1);'
+        x="70" y="10" width="20" height="20"
+        stroke='blue' fill='red'
+        stroke-width='4'
+        paint-order='stroke markers fill'>
+  </rect>
+  <rect
+        style='marker:url(#marker1);'
+        x="100" y="10" width="20" height="20"
+        stroke='blue' fill='red'
+        stroke-width='4'
+        paint-order='stroke fill'>
+  </rect>
+</svg>

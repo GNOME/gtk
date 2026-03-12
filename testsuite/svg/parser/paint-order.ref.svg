@@ -1,0 +1,75 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        viewBox='0 0 300 200'>
+  <marker
+          id='marker1'
+          overflow='visible'
+          markerWidth='5'
+          markerHeight='5'
+          markerUnits='userSpaceOnUse'
+          orient='auto'>
+    <circle
+            fill='rgb(255,165,0)'
+            cx='0'
+            cy='0'
+            r='5'>
+    </circle>
+  </marker>
+  <rect
+          style='marker:url(#marker1);'
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,255)'
+          stroke-width='4'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          paint-order='markers fill stroke'
+          x='10'
+          y='10'
+          width='20'
+          height='20'>
+  </rect>
+  <rect
+          style='marker:url(#marker1);'
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,255)'
+          stroke-width='4'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          paint-order='markers stroke fill'
+          x='40'
+          y='10'
+          width='20'
+          height='20'>
+  </rect>
+  <rect
+          style='marker:url(#marker1);'
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,255)'
+          stroke-width='4'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          paint-order='stroke markers fill'
+          x='70'
+          y='10'
+          width='20'
+          height='20'>
+  </rect>
+  <rect
+          style='marker:url(#marker1);'
+          fill='rgb(255,0,0)'
+          stroke='rgb(0,0,255)'
+          stroke-width='4'
+          marker-start='url(#marker1)'
+          marker-mid='url(#marker1)'
+          marker-end='url(#marker1)'
+          paint-order='stroke fill markers'
+          x='100'
+          y='10'
+          width='20'
+          height='20'>
+  </rect>
+</svg>
