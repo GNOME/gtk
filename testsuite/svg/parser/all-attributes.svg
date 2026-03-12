@@ -1,7 +1,7 @@
 <svg width="16" height="16">
   <path d="m0 0 l100 100"
      id='path0'
-     class=''
+     class='myclass myotherclass'
      display='inline'
      pathLength='400'
      visibility='visible'

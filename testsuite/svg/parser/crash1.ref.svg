@@ -120,6 +120,7 @@
   </g>
   <rect
           id='test-frame'
+          class='transparent-fill'
           fill='none'
           stroke='rgb(0,0,0)'
           x='1'

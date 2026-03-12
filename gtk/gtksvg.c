@@ -42,6 +42,7 @@
 #include "gsk/gskcontourprivate.h"
 #include "gsk/gskrectprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+#include "gtk/gtkcssselectorprivate.h"
 #include <glib/gstdio.h>
 
 #include <tgmath.h>
@@ -1740,6 +1741,23 @@ apply_transform (GskRenderNode *node,
     }
   else
     return gsk_render_node_ref (node);
+}
+
+/* }}} */
+/* {{{ Style utilities */
+
+typedef struct {
+  GBytes *content;
+  GtkSvgLocation location;
+} StyleElt;
+
+static void
+style_elt_free (gpointer p)
+{
+  StyleElt *e = (StyleElt *) p;
+
+  g_bytes_unref (e->content);
+  g_free (e);
 }
 
 /* }}} */
@@ -3586,19 +3604,114 @@ svg_number_new_full (SvgUnit unit,
     }
 }
 
+static gboolean
+svg_number_parse2 (GtkCssParser *parser,
+                   double        min,
+                   double        max,
+                   unsigned int  flags,
+                   double       *d,
+                   SvgUnit      *u)
+{
+  const GtkCssToken *token;
+  double number;
+  SvgUnit unit;
+
+  token = gtk_css_parser_get_token (parser);
+
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+    {
+      if ((flags & PERCENTAGE) == 0)
+        return FALSE;
+
+      number = token->number.number;
+      unit = SVG_UNIT_PERCENTAGE;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER))
+    {
+      number = token->number.number;
+
+      if (number == 0)
+        {
+          if (flags & NUMBER)
+            unit = SVG_UNIT_NUMBER;
+          else if (flags & LENGTH)
+            unit = SVG_UNIT_PX;
+          else if (flags & ANGLE)
+            unit = SVG_UNIT_DEG;
+          else
+            unit = SVG_UNIT_PERCENTAGE;
+        }
+      else if (flags & NUMBER)
+        {
+          unit = SVG_UNIT_NUMBER;
+        }
+      else
+        {
+          return FALSE;
+        }
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
+    {
+      guint i;
+
+      number = token->dimension.value;
+
+      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
+        {
+          if (g_ascii_strcasecmp (token->dimension.dimension, unit_names[i]) == 0)
+            break;
+        }
+
+      if (FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
+        {
+          if (flags & LENGTH)
+            unit = i;
+          else
+            return FALSE;
+        }
+      else if (FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
+        {
+          if (flags & ANGLE)
+            unit = i;
+          else
+            return FALSE;
+        }
+      else
+        return FALSE;
+    }
+  else
+    return FALSE;
+
+  if (number < min || number > max)
+    return FALSE;
+
+  *d = number;
+  *u = unit;
+
+  gtk_css_parser_consume_token (parser);
+
+  return TRUE;
+}
+
 static SvgValue *
-svg_number_parse (const char   *value,
+svg_number_parse (GtkCssParser *parser,
                   double        min,
                   double        max,
                   unsigned int  flags)
 {
-  double f;
+  double d;
   SvgUnit unit;
 
-  if (!parse_numeric (value, min, max, flags, &f, &unit))
+  if (svg_number_parse2 (parser, min, max, flags, &d, &unit))
+    return svg_number_new_full (unit, d);
+  else
     return NULL;
-
-  return svg_number_new_full (unit, f);
 }
 
 static double
@@ -3794,33 +3907,43 @@ svg_numbers_new_00 (void)
 }
 
 static SvgValue *
-svg_numbers_parse (const char *value)
+svg_numbers_parse2 (GtkCssParser *parser,
+                    unsigned int  flags)
 {
-  GStrv strv;
-  unsigned int n;
   SvgNumbers *p;
+  GArray *numbers;
+  Number n;
 
-  strv = strsplit_set (value, ", ");
+  numbers = g_array_new (FALSE, FALSE, sizeof (Number));
 
-  n = g_strv_length (strv);
-
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
-  p->n_values = n;
-
-  for (unsigned int i = 0; i < n; i++)
+  while (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, flags, &n.value, &n.unit))
     {
-      if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER,
-                          &p->values[i].value, &p->values[i].unit))
+      g_array_append_val (numbers, n);
 
-        {
-          svg_value_unref ((SvgValue *) p);
-          p = NULL;
-          break;
-        }
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+      gtk_css_parser_skip_whitespace (parser);
     }
-  g_strfreev (strv);
+
+  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS,
+                                      svg_numbers_size (numbers->len));
+  p->n_values = numbers->len;
+
+  for (unsigned int i = 0; i < numbers->len; i++)
+    {
+      p->values[i] = g_array_index (numbers, Number, i);
+    }
+
+  g_array_unref (numbers);
 
   return (SvgValue *) p;
+}
+
+static SvgValue *
+svg_numbers_parse (GtkCssParser *parser)
+{
+  return svg_numbers_parse2 (parser, NUMBER);
 }
 
 static SvgValue *
@@ -3945,39 +4068,18 @@ svg_numbers_resolve (const SvgValue *value,
 /* Points are just like number, with an even number of them */
 
 static SvgValue *
-svg_points_parse (const char *value)
+svg_points_parse (GtkCssParser *parser)
 {
-  if (match_str (value, "none"))
-    {
-      return svg_numbers_new_none ();
-    }
+  if (gtk_css_parser_try_ident (parser, "none"))
+    return svg_numbers_new_none ();
   else
     {
-      GStrv strv;
-      unsigned int n;
       SvgNumbers *p;
 
-      strv = strsplit_set (value, ", ");
-      n = g_strv_length (strv);
+      p = (SvgNumbers *) svg_numbers_parse2 (parser, NUMBER|PERCENTAGE|LENGTH);
 
-      if (n % 2 == 1)
-        n--;
-
-      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n));
-      p->n_values = n;
-
-      for (unsigned int i = 0; i < n; i++)
-        {
-          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
-                              &p->values[i].value, &p->values[i].unit))
-
-            {
-              svg_value_unref ((SvgValue *) p);
-              p = NULL;
-              break;
-            }
-       }
-      g_strfreev (strv);
+      if (p != NULL && p->n_values % 2 == 1)
+        p->n_values--;
 
       return (SvgValue *) p;
     }
@@ -4089,6 +4191,7 @@ svg_string_new_take (char *str)
 typedef struct
 {
   SvgValue base;
+  char separator;
   unsigned int len;
   char *values[1];
 } SvgStringList;
@@ -4116,6 +4219,9 @@ svg_string_list_equal (const SvgValue *value0,
   const SvgStringList *s1 = (const SvgStringList *)value1;
 
   if (s0->len != s1->len)
+    return FALSE;
+
+  if (s0->separator != s1->separator)
     return FALSE;
 
   for (unsigned int i = 0; i < s0->len; i++)
@@ -4158,7 +4264,7 @@ svg_string_list_print (const SvgValue *value,
     {
       char *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
       if (i > 0)
-        g_string_append_c (string, ' ');
+        g_string_append_c (string, s->separator);
       g_string_append (string, escaped);
       g_free (escaped);
     }
@@ -4196,6 +4302,8 @@ svg_string_list_new (GStrv strv)
   for (unsigned int i = 0; i < len; i++)
     result->values[i] = g_strdup (strv[i]);
 
+  result->separator = ' ';
+
   return (SvgValue *) result;
 }
 
@@ -4212,6 +4320,8 @@ svg_string_list_new_take (GStrv strv)
     result->values[i] = strv[i];
 
   g_free (strv);
+
+  result->separator = ' ';
 
   return (SvgValue *) result;
 }
@@ -4276,11 +4386,12 @@ svg_enum_get (const SvgValue *value)
 static SvgValue *
 svg_enum_parse (const SvgEnum  values[],
                 unsigned int   n_values,
-                const char    *string)
+                GtkCssParser  *parser)
 {
   for (unsigned int i = 0; i < n_values; i++)
     {
-      if (values[i].name && match_str_len (string, values[i].name, values[i].len))
+      if (values[i].name &&
+          gtk_css_parser_try_ident (parser, values[i].name))
         return svg_value_ref ((SvgValue *) &values[i]);
     }
   return NULL;
@@ -4322,11 +4433,11 @@ svg_ ## class_name ## _new (EnumType value) \
 
 #define DEF_E_PARSE(class_name) \
 static SvgValue * \
-svg_ ## class_name ## _parse (const char *string) \
+svg_ ## class_name ## _parse (GtkCssParser *parser) \
 { \
   return svg_enum_parse (class_name ## _values, \
                          G_N_ELEMENTS (class_name ## _values), \
-                         string); \
+                         parser); \
 }
 
 #define DEFINE_ENUM_PUBLIC(CLASS_NAME, class_name, EnumType, ...) \
@@ -4382,13 +4493,25 @@ DEFINE_ENUM_NO_PARSE (VISIBILITY, visibility, Visibility,
 
 /* Accept other values too, but treat "collapse" as "hidden" */
 static SvgValue *
-svg_visibility_parse (const char *string)
+svg_visibility_parse (GtkCssParser *parser)
 {
-  if (match_str (string, "hidden") ||
-      match_str (string, "collapse"))
-    return svg_visibility_new (VISIBILITY_HIDDEN);
-  else
-    return svg_visibility_new (VISIBILITY_VISIBLE);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+    {
+      const GtkCssToken *token = gtk_css_parser_get_token (parser);
+      Visibility visibility;
+
+      if (strcmp (gtk_css_token_get_string (token), "hidden") == 0 ||
+          strcmp (gtk_css_token_get_string (token), "collapse") == 0)
+        visibility = VISIBILITY_HIDDEN;
+      else
+        visibility = VISIBILITY_VISIBLE;
+
+      gtk_css_parser_skip (parser);
+
+      return svg_visibility_new (visibility);
+    }
+
+  return NULL;
 }
 
 typedef enum
@@ -4404,12 +4527,24 @@ DEFINE_ENUM_NO_PARSE (DISPLAY, display, SvgDisplay,
 
 /* Accept other values too, but treat them all as "inline" */
 static SvgValue *
-svg_display_parse (const char *string)
+svg_display_parse (GtkCssParser *parser)
 {
-  if (match_str (string, "none"))
-    return svg_display_new (DISPLAY_NONE);
-  else
-    return svg_display_new (DISPLAY_INLINE);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+    {
+      const GtkCssToken *token = gtk_css_parser_get_token (parser);
+      SvgDisplay display;
+
+      if (strcmp (gtk_css_token_get_string (token), "none") == 0)
+        display = DISPLAY_NONE;
+      else
+        display = DISPLAY_INLINE;
+
+      gtk_css_parser_skip (parser);
+
+      return svg_display_new (display);
+    }
+
+  return NULL;
 }
 
 DEFINE_ENUM (SPREAD_METHOD, spread_method, GskRepeat,
@@ -4434,29 +4569,89 @@ DEFINE_ENUM_PUBLIC_NO_PARSE (PAINT_ORDER, paint_order, PaintOrder,
 )
 
 static SvgValue *
-svg_paint_order_parse (const char *string)
+svg_paint_order_parse (GtkCssParser *parser)
 {
-  GStrv strv;
-  char *key;
-
-  if (match_str (string, "normal"))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
 
-  strv = strsplit_set (string, " ");
-  key = g_strjoinv (" ", strv);
-
-  for (unsigned int i = 1; i < G_N_ELEMENTS (paint_order_values); i++)
+  if (gtk_css_parser_try_ident (parser, "fill"))
     {
-      if (g_str_has_prefix (paint_order_values[i].name, key))
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_try_ident (parser, "stroke"))
         {
-          g_strfreev (strv);
-          g_free (key);
-          return svg_paint_order_new (paint_order_values[i].value);
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "markers"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
+            }
+        }
+      else if (gtk_css_parser_try_ident (parser, "markers"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "stroke"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_FILL_MARKERS_STROKE);
+            }
+        }
+      else
+        {
+          return svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
         }
     }
-
-  g_strfreev (strv);
-  g_free (key);
+  else if (gtk_css_parser_try_ident (parser, "stroke"))
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_try_ident (parser, "fill"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "markers"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_STROKE_FILL_MARKERS);
+            }
+        }
+      else if (gtk_css_parser_try_ident (parser, "markers"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "fill"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_STROKE_MARKERS_FILL);
+            }
+        }
+      else
+        {
+          return svg_paint_order_new (PAINT_ORDER_STROKE_FILL_MARKERS);
+        }
+    }
+  else if (gtk_css_parser_try_ident (parser, "markers"))
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_try_ident (parser, "fill"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "stroke"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_MARKERS_FILL_STROKE);
+            }
+        }
+      else if (gtk_css_parser_try_ident (parser, "stroke"))
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_try_ident (parser, "fill"))
+            {
+              return svg_paint_order_new (PAINT_ORDER_MARKERS_STROKE_FILL);
+            }
+        }
+      else
+        {
+          return svg_paint_order_new (PAINT_ORDER_MARKERS_FILL_STROKE);
+        }
+    }
 
   return NULL;
 }
@@ -5067,16 +5262,27 @@ svg_filter_primitive_ref_new_ref (const char *ref)
 }
 
 static SvgValue *
-svg_filter_primitive_ref_parse (const char *value)
+svg_filter_primitive_ref_parse (GtkCssParser *parser)
 {
   for (unsigned int i = 0; i < G_N_ELEMENTS (filter_primitive_ref_values); i++)
     {
       if (filter_primitive_ref_values[i].ref &&
-          strcmp (value, filter_primitive_ref_values[i].ref) == 0)
+          gtk_css_parser_try_ident (parser, filter_primitive_ref_values[i].ref))
         return svg_value_ref ((SvgValue *) &filter_primitive_ref_values[i]);
     }
 
-  return svg_filter_primitive_ref_new_ref (value);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+    {
+      const GtkCssToken *token = gtk_css_parser_get_token (parser);
+      SvgValue *value;
+
+      value = svg_filter_primitive_ref_new_ref (gtk_css_token_get_string (token));
+      gtk_css_parser_skip (parser);
+
+      return value;
+    }
+
+  return NULL;
 }
 
 /* }}} */
@@ -5496,7 +5702,7 @@ parse_transform_function (GtkCssParser *self,
 }
 
 static SvgValue *
-transform_parser_parse (GtkCssParser *parser)
+svg_transform_parse_css (GtkCssParser *parser)
 {
   SvgTransform *tf;
   GArray *array;
@@ -5618,10 +5824,11 @@ svg_transform_parse (const char *value)
   bytes = g_bytes_new_static (value, strlen (value));
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
-  tf = transform_parser_parse (parser);
+  tf = svg_transform_parse_css (parser);
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     g_clear_pointer (&tf, svg_value_unref);
+
   gtk_css_parser_unref (parser);
   g_bytes_unref (bytes);
 
@@ -6251,33 +6458,16 @@ svg_color_is_current (SvgValue *value)
 }
 
 static SvgValue *
-svg_color_parse (const char *value)
+svg_color_parse (GtkCssParser *parser)
 {
   GdkRGBA rgba;
-  GtkCssParser *parser;
-  GBytes *bytes;
-  SvgValue *result = NULL;
-
-  bytes = g_bytes_new_static (value, strlen (value));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
   if (gtk_css_parser_try_ident (parser, "currentColor"))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        result = svg_color_new_current ();
-    }
+    return svg_color_new_current ();
   else if (gdk_rgba_parser_parse (parser, &rgba))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        result = svg_color_new_rgba (&rgba);
-    }
+    return  svg_color_new_rgba (&rgba);
 
-  gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
-
-  return result;
+  return NULL;
 }
 
 static void
@@ -6650,46 +6840,19 @@ svg_paint_new_server_with_current_color (const char *ref)
 }
 
 static SvgValue *
-svg_paint_parse (const char *value)
+svg_paint_parse (GtkCssParser *parser)
 {
   GdkRGBA color;
-  GtkCssParser *parser;
-  GBytes *bytes;
   SvgValue *paint = NULL;
 
-  bytes = g_bytes_new_static (value, strlen (value));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
-
   if (gtk_css_parser_try_ident (parser, "none"))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        paint = svg_paint_new_simple (PAINT_NONE);
-    }
+    paint = svg_paint_new_simple (PAINT_NONE);
   else if (gtk_css_parser_try_ident (parser, "context-fill"))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        paint = svg_paint_new_simple (PAINT_CONTEXT_FILL);
-    }
+    paint = svg_paint_new_simple (PAINT_CONTEXT_FILL);
   else if (gtk_css_parser_try_ident (parser, "context-stroke"))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        paint = svg_paint_new_simple (PAINT_CONTEXT_STROKE);
-    }
+    paint = svg_paint_new_simple (PAINT_CONTEXT_STROKE);
   else if (gtk_css_parser_try_ident (parser, "currentColor"))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        paint = svg_paint_new_simple (PAINT_CURRENT_COLOR);
-    }
-  else if (gdk_rgba_parser_parse (parser, &color))
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        paint = svg_paint_new_rgba (&color);
-    }
+    paint = svg_paint_new_simple (PAINT_CURRENT_COLOR);
   else if (gtk_css_parser_has_url (parser))
     {
       char *url;
@@ -6710,31 +6873,24 @@ svg_paint_parse (const char *value)
             {
               paint = svg_paint_new_server (ref);
             }
+          else if (gtk_css_parser_try_ident (parser, "currentColor"))
+            {
+              paint = svg_paint_new_server_with_current_color (ref);
+            }
           else if (gtk_css_parser_try_ident (parser, "none") ||
                    gdk_rgba_parser_parse (parser, &fallback))
             {
-              gtk_css_parser_skip_whitespace (parser);
-              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                {
-                  GdkColor c;
-                  gdk_color_init_from_rgba (&c, &fallback);
-                  paint = svg_paint_new_server_with_fallback (ref, &c);
-                  gdk_color_finish (&c);
-                }
-            }
-          else if (gtk_css_parser_try_ident (parser, "currentColor"))
-            {
-              gtk_css_parser_skip_whitespace (parser);
-              if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                paint = svg_paint_new_server_with_current_color (ref);
+              GdkColor c;
+              gdk_color_init_from_rgba (&c, &fallback);
+              paint = svg_paint_new_server_with_fallback (ref, &c);
+              gdk_color_finish (&c);
             }
 
           g_free (url);
         }
     }
-
-  gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
+  else if (gdk_rgba_parser_parse (parser, &color))
+    paint = svg_paint_new_rgba (&color);
 
   return paint;
 }
@@ -7251,7 +7407,7 @@ parse_drop_shadow_arg (GtkCssParser *parser,
 }
 
 static SvgValue *
-filter_parser_parse (GtkCssParser *parser)
+svg_filter_parse_css (GtkCssParser *parser)
 {
   SvgFilter *filter;
   GArray *array;
@@ -7383,13 +7539,13 @@ SvgValue *
 svg_filter_parse (const char *value)
 {
   SvgValue *filter;
-  GtkCssParser *parser;
   GBytes *bytes;
+  GtkCssParser *parser;
 
   bytes = g_bytes_new_static (value, strlen (value));
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
-  filter = filter_parser_parse (parser);
+  filter = svg_filter_parse_css (parser);
 
   if (filter && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     g_clear_pointer (&filter, svg_value_unref);
@@ -7864,36 +8020,51 @@ svg_dash_array_new (double       *values,
 }
 
 static SvgValue *
-svg_dash_array_parse (const char *value)
+svg_dash_array_parse (GtkCssParser *parser)
 {
-  if (match_str (value, "none"))
+  if (gtk_css_parser_try_ident (parser, "none"))
     {
       return svg_dash_array_new_none ();
     }
   else
     {
-      GStrv strv;
-      unsigned int n;
+      GArray *array;
       SvgDashArray *dashes;
 
-      strv = strsplit_set (value, ", ");
-      n = g_strv_length (strv);
+      array = g_array_new (FALSE, FALSE, sizeof (Number));
 
-      dashes = svg_dash_array_alloc (n);
+      while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        {
+          Number n;
+
+          gtk_css_parser_skip_whitespace (parser);
+
+          if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
+                                  &n.value, &n.unit))
+            {
+              g_array_unref (array);
+              return NULL;
+            }
+
+          gtk_css_parser_skip_whitespace (parser);
+
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+            gtk_css_parser_skip (parser);
+
+          g_array_append_val (array, n);
+        }
+
+      dashes = svg_dash_array_alloc (array->len);
       dashes->kind = DASH_ARRAY_DASHES;
 
-      for (unsigned int i = 0; strv[i]; i++)
+      for (unsigned int i = 0; i < array->len; i++)
         {
-          if (!parse_numeric (strv[i], -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
-                              &dashes->dashes[i].value, &dashes->dashes[i].unit))
+          Number *n = &g_array_index (array, Number, i);
+          dashes->dashes[i].unit = n->unit;
+          dashes->dashes[i].value = n->value;
+        }
 
-            {
-              svg_value_unref ((SvgValue *) dashes);
-              dashes = NULL;
-              break;
-            }
-       }
-      g_strfreev (strv);
+      g_array_unref (array);
 
       return (SvgValue *) dashes;
     }
@@ -8134,13 +8305,51 @@ svg_path_new (GskPath *path)
   return svg_path_new_from_data (svg_path_data_collect (path));
 }
 
-static SvgValue *
-svg_path_parse (const char *value)
+static guint
+path_arg (GtkCssParser *parser,
+          guint         n,
+          gpointer      data)
 {
-  if (match_str (value, "none"))
+  char **string = data;
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+    return 0;
+
+  *string = gtk_css_parser_consume_string (parser);
+  return 1;
+}
+
+static SvgValue *
+svg_path_parse (GtkCssParser *parser)
+{
+  if (gtk_css_parser_try_ident (parser, "none"))
+    return svg_path_new_none ();
+  else if (gtk_css_parser_has_function (parser, "path"))
+    {
+      char *string = NULL;
+
+      if (gtk_css_parser_consume_function (parser, 1, 1, path_arg, &string))
+        {
+          SvgValue *value;
+
+          value = svg_path_new_from_data (svg_path_data_parse (string));
+
+          g_free (string);
+
+          return value;
+        }
+    }
+
+  return NULL;
+}
+
+static SvgValue *
+svg_path_parse_presentation (const char *string)
+{
+  if (strcmp (string, "none") == 0)
     return svg_path_new_none ();
   else
-    return svg_path_new_from_data (svg_path_data_parse (value));
+    return svg_path_new_from_data (svg_path_data_parse (string));
 }
 
 static GskPath *
@@ -8427,52 +8636,40 @@ parse_clip_path_arg (GtkCssParser *parser,
 }
 
 static SvgValue *
-svg_clip_parse (const char *value)
+svg_clip_parse (GtkCssParser *parser)
 {
-  if (match_str (value, "none"))
+  SvgValue *res = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "none"))
+    return svg_clip_new_none ();
+
+  if (gtk_css_parser_has_function (parser, "path"))
     {
-      return svg_clip_new_none ();
+      ClipPathArgs data = { .fill_rule = FILL_RULE_OMITTED, .string = NULL, };
+
+      if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &data))
+        {
+          if (data.string != NULL)
+            {
+              res = svg_clip_new_path (data.string, data.fill_rule);
+              g_free (data.string);
+            }
+        }
     }
   else
     {
-      GtkCssParser *parser;
-      GBytes *bytes;
-      SvgValue *res = NULL;
-
-      bytes = g_bytes_new_static (value, strlen (value));
-      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
-
-      if (gtk_css_parser_has_function (parser, "path"))
+      char *url = gtk_css_parser_consume_url (parser);
+      if (url != NULL)
         {
-          ClipPathArgs data = { .fill_rule = FILL_RULE_OMITTED, .string = NULL, };
-
-          if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &data))
-            {
-              if (data.string != NULL)
-                {
-                  res = svg_clip_new_path (data.string, data.fill_rule);
-                  g_free (data.string);
-                }
-            }
-        }
-      else
-        {
-          char *url = gtk_css_parser_consume_url (parser);
-          if (url != NULL)
-            {
-              if (url[0] == '#')
-                res = svg_clip_new_ref (url + 1);
-              else
-                res = svg_clip_new_ref (url);
-              g_free (url);
-           }
-        }
-
-      gtk_css_parser_unref (parser);
-      g_bytes_unref (bytes);
-
-      return res;
+          if (url[0] == '#')
+            res = svg_clip_new_ref (url + 1);
+          else
+            res = svg_clip_new_ref (url);
+          g_free (url);
+       }
     }
+
+  return res;
 }
 
 /* }}} */
@@ -8597,21 +8794,14 @@ svg_mask_new_ref (const char *ref)
 }
 
 static SvgValue *
-svg_mask_parse (const char *value)
+svg_mask_parse (GtkCssParser *parser)
 {
-  if (match_str (value, "none"))
-    {
-      return svg_mask_new_none ();
-    }
+  if (gtk_css_parser_try_ident (parser, "none"))
+    return svg_mask_new_none ();
   else
     {
-      GtkCssParser *parser;
-      GBytes *bytes;
       char *url;
       SvgValue *res = NULL;
-
-      bytes = g_bytes_new_static (value, strlen (value));
-      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
       url = gtk_css_parser_consume_url (parser);
       if (!url)
@@ -8622,8 +8812,6 @@ svg_mask_parse (const char *value)
         res = svg_mask_new_ref (url);
 
       g_free (url);
-      gtk_css_parser_unref (parser);
-      g_bytes_unref (bytes);
 
       return res;
     }
@@ -8734,27 +8922,26 @@ svg_view_box_new (const graphene_rect_t *box)
 }
 
 static SvgValue *
-svg_view_box_parse (const char *value)
+svg_view_box_parse (GtkCssParser *parser)
 {
-  GStrv strv;
-  unsigned int n;
-  double x, y, w, h;
-  SvgValue *res = NULL;
+  double v[4];
+  unsigned int i;
 
-  strv = strsplit_set (value, ", ");
-  n = g_strv_length (strv);
-  if (n == 4 &&
-      parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) &&
-      parse_number (strv[1], -DBL_MAX, DBL_MAX, &y) &&
-      parse_number (strv[2], 0, DBL_MAX, &w) &&
-      parse_number (strv[3], 0, DBL_MAX, &h))
+  for (i = 0; i < 4; i++)
     {
-      res = (SvgValue *) svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h));
+      if (!gtk_css_parser_consume_number (parser, &v[i]))
+        break;
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_consume_token (parser);
+      gtk_css_parser_skip_whitespace (parser);
     }
 
-  g_strfreev (strv);
+  if (i < 4 || v[2] < 0 || v[3] < 0)
+    return NULL;
 
-  return res;
+  return (SvgValue *) svg_view_box_new (&GRAPHENE_RECT_INIT (v[0], v[1], v[2], v[3]));
 }
 
 /* }}} */
@@ -8874,94 +9061,78 @@ svg_content_fit_new (Align       align_x,
   return (SvgValue *) v;
 }
 
-static gboolean
-parse_coord_align (const char *value,
-                   Align      *align)
-{
-  if (strncmp (value, "Min", 3) == 0)
-    *align = ALIGN_MIN;
-  else if (strncmp (value, "Mid", 3) == 0)
-    *align = ALIGN_MID;
-  else if (strncmp (value, "Max", 3) == 0)
-    *align = ALIGN_MAX;
-  else
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-parse_align (const char *value,
-             Align      *align_x,
-             Align      *align_y)
-{
-  if (strlen (value) != 8)
-    return FALSE;
-
-  if (value[0] != 'x' || value[4] != 'Y')
-    return FALSE;
-
-  if (!parse_coord_align (value + 1, align_x) ||
-      !parse_coord_align (value + 5, align_y))
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-parse_meet (const char  *value,
-            MeetOrSlice *meet)
-{
-  if (match_str (value, "meet"))
-    *meet = MEET;
-  else if (match_str (value, "slice"))
-    *meet = SLICE;
-  else
-    return FALSE;
-
-  return TRUE;
-}
-
 static SvgValue *
-svg_content_fit_parse (const char *value)
+svg_content_fit_parse (GtkCssParser *parser)
 {
-  GStrv strv;
-  size_t len;
   Align align_x;
   Align align_y;
   MeetOrSlice meet;
 
-  if (match_str (value, "none"))
+  if (gtk_css_parser_try_ident (parser, "none"))
     return svg_content_fit_new_none ();
 
-  strv = g_strsplit (value, " ", 0);
-  len = g_strv_length (strv);
-  if (len < 1 || len > 2)
+  if (gtk_css_parser_try_ident (parser, "xMinYMin"))
     {
-      g_strfreev (strv);
-      return NULL;
+      align_x = ALIGN_MIN;
+      align_y = ALIGN_MIN;
     }
-
-  if (!parse_align (strv[0], &align_x, &align_y))
+  else if (gtk_css_parser_try_ident (parser, "xMinYMid"))
     {
-      g_strfreev (strv);
-      return NULL;
+      align_x = ALIGN_MIN;
+      align_y = ALIGN_MID;
     }
-
-  if (strv[1])
+  else if (gtk_css_parser_try_ident (parser, "xMinYMax"))
     {
-      if (!parse_meet (strv[1], &meet))
-        {
-          g_strfreev (strv);
-          return NULL;
-        }
+      align_x = ALIGN_MIN;
+      align_y = ALIGN_MAX;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMidYMin"))
+    {
+      align_x = ALIGN_MID;
+      align_y = ALIGN_MIN;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMidYMid"))
+    {
+      align_x = ALIGN_MID;
+      align_y = ALIGN_MID;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMidYMax"))
+    {
+      align_x = ALIGN_MID;
+      align_y = ALIGN_MAX;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMaxYMin"))
+    {
+      align_x = ALIGN_MAX;
+      align_y = ALIGN_MIN;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMaxYMid"))
+    {
+      align_x = ALIGN_MAX;
+      align_y = ALIGN_MID;
+    }
+  else if (gtk_css_parser_try_ident (parser, "xMaxYMax"))
+    {
+      align_x = ALIGN_MAX;
+      align_y = ALIGN_MAX;
+    }
+  else
+    return NULL;
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      if (gtk_css_parser_try_ident (parser, "meet"))
+        meet = MEET;
+      else if (gtk_css_parser_try_ident (parser, "slice"))
+        meet = SLICE;
+      else
+        return NULL;
     }
   else
     {
       meet = MEET;
     }
-
-  g_strfreev (strv);
 
   return svg_content_fit_new (align_x, align_y, meet);
 }
@@ -9103,18 +9274,18 @@ svg_orient_new_auto (gboolean start_reverse)
 }
 
 static SvgValue *
-svg_orient_parse (const char *value)
+svg_orient_parse (GtkCssParser *parser)
 {
-  if (match_str (value, "auto"))
+  if (gtk_css_parser_try_ident (parser, "auto"))
     return svg_orient_new_auto (FALSE);
-  else if (match_str (value, "auto-start-reverse"))
+  else if (gtk_css_parser_try_ident (parser, "auto-start-reverse"))
     return svg_orient_new_auto (TRUE);
   else
     {
       double f;
       SvgUnit unit;
 
-      if (!parse_numeric (value, -DBL_MAX, DBL_MAX, NUMBER|ANGLE, &f, &unit))
+      if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, NUMBER|ANGLE, &f, &unit))
         return NULL;
 
       return svg_orient_new_angle (f, unit);
@@ -9390,15 +9561,29 @@ svg_text_decoration_new (TextDecoration decoration)
 }
 
 static SvgValue *
-svg_text_decoration_parse (const char *text)
+svg_text_decoration_parse (GtkCssParser *parser)
 {
   TextDecoration val = TEXT_DECORATION_NONE;
-  char **decorations = g_strsplit (text, " ", 0);
-  for (size_t i = 0; decorations[i]; i++)
-    for (size_t j = 0; j < G_N_ELEMENTS (text_decorations); j++)
-      if (g_strcmp0 (decorations[i], text_decorations[j].name) == 0)
-        val |= text_decorations[j].value;
-  g_strfreev (decorations);
+
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      unsigned int i;
+
+      gtk_css_parser_skip_whitespace (parser);
+
+      for (i = 0; i < G_N_ELEMENTS (text_decorations); i++)
+        {
+          if (gtk_css_parser_try_ident (parser, text_decorations[i].name))
+            {
+              val |= text_decorations[i].value;
+              break;
+            }
+        }
+
+      if (i == G_N_ELEMENTS (text_decorations))
+        return NULL;
+    }
+
   return svg_text_decoration_new (val);
 }
 
@@ -9569,38 +9754,31 @@ svg_href_new_url (const char *ref)
 }
 
 static SvgValue *
-svg_href_parse (const char *value)
+svg_href_parse (const char *string)
 {
-  if (match_str (value, "none"))
+  if (match_str (string, "none"))
     return svg_href_new_none ();
   else
-    return svg_href_new_ref (value);
+    return svg_href_new_ref (string);
 }
 
 static SvgValue *
-svg_href_parse_url (const char *value)
+svg_href_parse_url (GtkCssParser *parser)
 {
-  if (match_str (value, "none"))
+  if (gtk_css_parser_try_ident (parser, "none"))
     {
       return svg_href_new_none ();
     }
   else
     {
-      GtkCssParser *parser;
-      GBytes *bytes;
       char *url;
       SvgValue *res = NULL;
-
-      bytes = g_bytes_new_static (value, strlen (value));
-      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
       url = gtk_css_parser_consume_url (parser);
       if (url)
         res = svg_href_new_url (url);
 
       g_free (url);
-      gtk_css_parser_unref (parser);
-      g_bytes_unref (bytes);
 
       return res;
     }
@@ -9628,12 +9806,22 @@ typedef struct
   unsigned int attrs;
   SvgValue *base[N_STOP_ATTRS];
   SvgValue *current[N_STOP_ATTRS];
+  size_t line;
+  char *id;
+  char *style;
+  char **classes;
+  GtkCssNode *css_node;
 } ColorStop;
 
 static void
 color_stop_free (gpointer v)
 {
   ColorStop *stop = v;
+
+  g_free (stop->id);
+  g_free (stop->style);
+  g_strfreev (stop->classes);
+  g_object_unref (stop->css_node);
 
   for (unsigned int i = 0; i < N_STOP_ATTRS; i++)
     {
@@ -9651,12 +9839,16 @@ color_stop_attr_idx (ShapeAttr attr)
 }
 
 static ColorStop *
-color_stop_new (void)
+color_stop_new (Shape *parent)
 {
   ColorStop *stop = g_new0 (ColorStop, 1);
 
   for (ShapeAttr attr = FIRST_STOP_ATTR; attr <= LAST_STOP_ATTR; attr++)
     stop->base[color_stop_attr_idx (attr)] = shape_attr_ref_initial_value (attr, SHAPE_LINEAR_GRADIENT, TRUE);
+
+  stop->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (stop->css_node, g_quark_from_static_string ("stop"));
+  gtk_css_node_set_parent (stop->css_node, parent->css_node);
 
   return stop;
 }
@@ -9908,6 +10100,11 @@ typedef struct
 {
   FilterPrimitiveType type;
   unsigned int attrs;
+  size_t line;
+  char *id;
+  char *style;
+  char **classes;
+  GtkCssNode *css_node;
   SvgValue **current;
   SvgValue *base[1];
 } FilterPrimitive;
@@ -9916,6 +10113,11 @@ static void
 filter_primitive_free (gpointer v)
 {
   FilterPrimitive *f = v;
+
+  g_free (f->id);
+  g_free (f->style);
+  g_strfreev (f->classes);
+  g_object_unref (f->css_node);
 
   for (unsigned int i = 0; i < filter_types[f->type].n_attrs; i++)
     {
@@ -10089,7 +10291,8 @@ filter_needs_backdrop (Shape *filter)
 }
 
 static FilterPrimitive *
-filter_primitive_new (FilterPrimitiveType type)
+filter_primitive_new (Shape               *parent,
+                      FilterPrimitiveType  type)
 {
   FilterTypeInfo *ft = &filter_types[type];
   FilterPrimitive *f;
@@ -10102,6 +10305,10 @@ filter_primitive_new (FilterPrimitiveType type)
   for (unsigned int i = 0; i < ft->n_attrs; i++)
     f->base[i] = filter_attr_ref_initial_value (f, ft->attrs[i]);
 
+  f->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (f->css_node, g_quark_from_static_string (ft->name));
+  gtk_css_node_set_parent (f->css_node, parent->css_node);
+
   return f;
 }
 
@@ -10109,37 +10316,64 @@ filter_primitive_new (FilterPrimitiveType type)
 /* {{{ Attributes */
 
 static SvgValue *
-parse_language (const char *value)
+parse_language (GtkCssParser *parser)
 {
-  PangoLanguage *lang = pango_language_from_string (value);
-  if (!lang)
-    return NULL;
-  return svg_language_new (lang);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+    {
+      const GtkCssToken *token;
+      PangoLanguage *lang;
+
+      token = gtk_css_parser_get_token (parser);
+      lang = pango_language_from_string (gtk_css_token_get_string (token));
+      gtk_css_parser_skip (parser);
+
+      if (lang)
+        return svg_language_new (lang);
+    }
+
+  return NULL;
 }
 
 static SvgValue *
-parse_language_list (const char *value)
+parse_language_list (GtkCssParser *parser)
 {
-  GStrv strv;
-  unsigned int len;
-  PangoLanguage **langs;
+  GPtrArray *langs;
+  SvgValue *value;
 
-  strv = strsplit_set (value, ", ");
-  len = g_strv_length (strv);
+  langs = g_ptr_array_new ();
 
-  langs = g_newa (PangoLanguage *, len);
-  for (unsigned int i = 0; i < len; i++)
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      langs[i] = pango_language_from_string (strv[i]);
-      if (!langs[i])
+      const GtkCssToken *token;
+      PangoLanguage *lang;
+
+      gtk_css_parser_skip_whitespace (parser);
+
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
-          g_strfreev (strv);
+          g_ptr_array_unref (langs);
           return NULL;
         }
-    }
-  g_strfreev (strv);
 
-  return svg_language_new_list (len, langs);
+      token = gtk_css_parser_get_token (parser);
+      lang = pango_language_from_string (gtk_css_token_get_string (token));
+      gtk_css_parser_skip (parser);
+
+      if (!lang)
+        {
+          g_ptr_array_unref (langs);
+          return NULL;
+        }
+      g_ptr_array_add (langs, lang);
+
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+    }
+
+  value = svg_language_new_list (langs->len, (PangoLanguage **) langs->pdata);
+  g_ptr_array_unref (langs);
+
+  return value;
 }
 
 static SvgValue *
@@ -10149,130 +10383,119 @@ parse_string_list (const char *value)
 }
 
 static SvgValue *
-parse_opacity (const char *value)
+parse_opacity (GtkCssParser *parser)
 {
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
 }
 
 static SvgValue *
-parse_stroke_width (const char *value)
+parse_stroke_width (GtkCssParser *parser)
 {
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
+  return svg_number_parse (parser, 0, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
 }
 
 static SvgValue *
-parse_miterlimit (const char *value)
+parse_miterlimit (GtkCssParser *parser)
 {
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER);
+  return svg_number_parse (parser, 0, DBL_MAX, NUMBER);
 }
 
 static SvgValue *
-parse_any_length (const char *value)
+parse_any_length (GtkCssParser *parser)
 {
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
 }
 
 static SvgValue *
-parse_positive_length (const char *value)
+parse_length_percentage (GtkCssParser *parser)
 {
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
-parse_length_percentage (const char *value)
+parse_any_number (GtkCssParser *parser)
 {
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER);
 }
 
 static SvgValue *
-parse_positive_length_percentage (const char *value)
-{
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
-}
-
-static SvgValue *
-parse_any_number (const char *value)
-{
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER);
-}
-
-static SvgValue *
-parse_font_weight (const char *value)
+parse_font_weight (GtkCssParser *parser)
 {
   SvgValue *v;
 
-  v = svg_font_weight_parse (value);
+  v = svg_font_weight_parse (parser);
   if (v)
     return v;
 
-  return svg_number_parse (value, 1, 1000, NUMBER);
+  return svg_number_parse (parser, 1, 1000, NUMBER);
 }
 
 static SvgValue *
-parse_font_size (const char *value)
+parse_font_size (GtkCssParser *parser)
 {
   SvgValue *v;
 
-  v = svg_font_size_parse (value);
+  v = svg_font_size_parse (parser);
   if (v)
     return v;
 
-  return svg_number_parse (value, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
-parse_letter_spacing (const char *value)
+parse_letter_spacing (GtkCssParser *parser)
 {
-  if (match_str (value, "normal"))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return svg_number_new (0.);
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
+
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
 }
 
 static SvgValue *
-parse_offset (const char *value)
+parse_offset (GtkCssParser *parser)
 {
-  return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
 }
 
 static SvgValue *
-parse_ref_x (const char *value)
+parse_ref_x (GtkCssParser *parser)
 {
-  if (match_str (value, "left"))
+  if (gtk_css_parser_try_ident (parser, "left"))
     return svg_percentage_new (0);
-  else if (match_str (value, "center"))
+  else if (gtk_css_parser_try_ident (parser, "center"))
     return svg_percentage_new (50);
-  else if (match_str (value, "right"))
+  else if (gtk_css_parser_try_ident (parser, "right"))
     return svg_percentage_new (100);
-  else
-    return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
-parse_ref_y (const char *value)
+parse_ref_y (GtkCssParser *parser)
 {
-  if (match_str (value, "top"))
+  if (gtk_css_parser_try_ident (parser, "top"))
     return svg_percentage_new (0);
-  else if (match_str (value, "center"))
+  else if (gtk_css_parser_try_ident (parser, "center"))
     return svg_percentage_new (50);
-  else if (match_str (value, "bottom"))
+  else if (gtk_css_parser_try_ident (parser, "bottom"))
     return svg_percentage_new (100);
-  else
-    return svg_number_parse (value, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
 }
 
 static SvgValue *
-parse_positive_length_percentage_or_auto (const char *value)
+parse_length_percentage_or_auto (GtkCssParser *parser)
 {
-  if (match_str (value, "auto"))
+  if (gtk_css_parser_try_ident (parser, "auto"))
     return svg_auto_new ();
-  else
-    return parse_positive_length_percentage (value);
+
+  return parse_length_percentage (parser);
 }
 
 static SvgValue *
-parse_number_optional_number (const char *value)
+parse_number_optional_number (GtkCssParser *parser)
 {
-  SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (value);
+  SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (parser);
 
   if (numbers == NULL)
     {
@@ -10290,71 +10513,144 @@ parse_number_optional_number (const char *value)
 }
 
 static SvgValue *
-parse_transform_origin (const char *value)
+parse_transform_origin (GtkCssParser *parser)
 {
-  GStrv strv;
-  unsigned int n;
   SvgNumbers *p;
-  const char *h_values[] = { "left", "center", "right" };
-  const char *v_values[] = { "top", "center", "bottom" };
+  double d[2];
+  SvgUnit u[2];
+  enum { HORIZONTAL, VERTICAL, NEUTRAL, };
+  unsigned int set[2];
+  unsigned int i = 0;
 
-  strv = strsplit_set (value, " ");
-  n = g_strv_length (strv);
+  d[0] = d[1] = 50;
+  u[0] = u[1] = SVG_UNIT_PERCENTAGE;
+  set[0] = set[1] = NEUTRAL;
 
-  if (n > 2)
+  for (i = 0; i < 2; i++)
     {
-      g_strfreev (strv);
-      return NULL;
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        break;
+
+      if (gtk_css_parser_try_ident (parser, "left"))
+        {
+          set[i] = HORIZONTAL;
+          d[i] = 0;
+          u[i] = SVG_UNIT_PERCENTAGE;
+        }
+      else if (gtk_css_parser_try_ident (parser, "right"))
+        {
+          set[i] = HORIZONTAL;
+          d[i] = 100;
+          u[i] = SVG_UNIT_PERCENTAGE;
+        }
+      else if (gtk_css_parser_try_ident (parser, "top"))
+        {
+          set[i] = VERTICAL;
+          d[i] = 0;
+          u[i] = SVG_UNIT_PERCENTAGE;
+        }
+      else if (gtk_css_parser_try_ident (parser, "bottom"))
+        {
+          set[i] = VERTICAL;
+          d[i] = 100;
+          u[i] = SVG_UNIT_PERCENTAGE;
+        }
+      else if (gtk_css_parser_try_ident (parser, "center"))
+        {
+          /* nothing to do */
+        }
+      else if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, LENGTH|PERCENTAGE, &d[i], &u[i]))
+        {
+          return NULL;
+        }
     }
+
+  if (set[0] == set[1] && set[0] != NEUTRAL)
+    return NULL;
 
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
   p->n_values = 2;
 
-  if (n == 1)
+  if (set[0] == HORIZONTAL)
     {
-      unsigned int j;
-
-      p->values[0].value = 50;
-      p->values[0].unit = SVG_UNIT_PERCENTAGE;
-      p->values[1].value = 50;
-      p->values[1].unit = SVG_UNIT_PERCENTAGE;
-
-      if (parse_enum (strv[0], h_values, G_N_ELEMENTS (h_values), &j))
-        p->values[0].value = j * 50;
-      else if (parse_enum (strv[0], v_values, G_N_ELEMENTS (v_values), &j))
-        p->values[1].value = j * 50;
-      else if (!parse_numeric (strv[0], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
-                               &p->values[0].value, &p->values[0].unit))
-        g_clear_pointer ((gpointer *)&p, svg_value_unref);
+      p->values[0].value = d[0];
+      p->values[0].unit = u[0];
+      p->values[1].value = d[1];
+      p->values[1].unit = u[1];
     }
   else
     {
-      unsigned int j;
-
-      if (parse_enum (strv[0], h_values, G_N_ELEMENTS (h_values), &j))
-        {
-          p->values[0].value = j * 50;
-          p->values[0].unit = SVG_UNIT_PERCENTAGE;
-        }
-      else if (!parse_numeric (strv[0], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
-                               &p->values[0].value, &p->values[0].unit))
-        g_clear_pointer ((gpointer *)&p, svg_value_unref);
-
-      if (p)
-        {
-          if (parse_enum (strv[1], v_values, G_N_ELEMENTS (v_values), &j))
-            {
-              p->values[1].value = j * 50;
-              p->values[1].unit = SVG_UNIT_PERCENTAGE;
-            }
-          else if (!parse_numeric (strv[1], -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE,
-                                   &p->values[1].value, &p->values[1].unit))
-            g_clear_pointer ((gpointer *)&p, svg_value_unref);
-        }
+      p->values[0].value = d[1];
+      p->values[0].unit = u[1];
+      p->values[1].value = d[0];
+      p->values[1].unit = u[0];
     }
-  g_strfreev (strv);
 
   return (SvgValue *) p;
+}
+
+static SvgValue *
+parse_font_family (GtkCssParser *parser)
+{
+  GStrvBuilder *builder;
+  const GtkCssToken *token;
+  SvgValue *result;
+
+  builder = g_strv_builder_new ();
+
+  while (1)
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+        {
+          GString *string = g_string_new (NULL);
+          token = gtk_css_parser_get_token (parser);
+
+          g_string_append (string, gtk_css_token_get_string (token));
+          gtk_css_parser_skip (parser);
+
+          gtk_css_parser_skip_whitespace (parser);
+          while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+            {
+              token = gtk_css_parser_get_token (parser);
+              g_string_append_c (string, ' ');
+              g_string_append (string, gtk_css_token_get_string (token));
+              gtk_css_parser_skip (parser);
+            }
+          g_strv_builder_take (builder, g_string_free (string, FALSE));
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+        {
+          token = gtk_css_parser_get_token (parser);
+          g_strv_builder_add (builder, gtk_css_token_get_string (token));
+          gtk_css_parser_skip (parser);
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        {
+          gtk_css_parser_skip (parser);
+        }
+      else
+        break;
+    }
+
+  result = svg_string_list_new_take (g_strv_builder_unref_to_strv (builder));
+  ((SvgStringList *) result)->separator = ',';
+
+  return result;
+}
+
+static gboolean
+number_is_positive (SvgValue *value)
+{
+  return value->class == &SVG_NUMBER_CLASS &&
+         ((SvgNumber *) value)->value >= 0;
+}
+
+static gboolean
+number_is_positive_or_auto (SvgValue *value)
+{
+  return svg_value_equal (value, svg_auto_new ()) ||
+         number_is_positive (value);
 }
 
 typedef enum
@@ -10370,8 +10666,9 @@ typedef struct
 {
   ShapeAttrFlags flags;
   unsigned int applies_to;
-  SvgValue * (* parse_value)      (const char *value);
-  SvgValue * (* parse_for_values) (const char *value);
+  SvgValue * (* parse_value)        (GtkCssParser *parser);
+  SvgValue * (* parse_presentation) (const char   *string);
+  gboolean   (* is_valid)           (SvgValue     *value);
   SvgValue *initial_value;
 } ShapeAttribute;
 
@@ -10436,7 +10733,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_TRANSFORM] = {
     .applies_to = (SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN),
-    .parse_value = svg_transform_parse,
+    .parse_value = svg_transform_parse_css,
   },
   [SHAPE_ATTR_TRANSFORM_ORIGIN] = {
     .applies_to = (SHAPE_PAINT_SERVERS | BIT (SHAPE_CLIP_PATH) | SHAPE_RENDERABLE) & ~BIT (SHAPE_TSPAN),
@@ -10483,7 +10780,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FONT_FAMILY] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
     .applies_to = SHAPE_ANY,
-    .parse_value = svg_string_new,
+    .parse_value = parse_font_family,
   },
   [SHAPE_ATTR_FONT_STYLE] = {
     .flags = SHAPE_ATTR_INHERITED,
@@ -10507,7 +10804,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_FILTER] = {
     .applies_to = (SHAPE_CONTAINERS & ~BIT (SHAPE_DEFS)) | SHAPE_GRAPHICS | BIT (SHAPE_USE),
-    .parse_value = svg_filter_parse,
+    .parse_value = svg_filter_parse_css,
   },
   [SHAPE_ATTR_FILL] = {
     .flags = SHAPE_ATTR_INHERITED,
@@ -10612,13 +10909,14 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_PATH_LENGTH] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_SHAPES,
-    .parse_value = parse_positive_length,
-    .parse_for_values = parse_any_length,
+    .parse_value = parse_any_length,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS,
-    .parse_value = svg_href_parse,
+    .parse_value = svg_href_parse_url,
+    .parse_presentation = svg_href_parse,
   },
   [SHAPE_ATTR_OVERFLOW] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -10634,6 +10932,7 @@ static ShapeAttribute shape_attrs[] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_PATH),
     .parse_value = svg_path_parse,
+    .parse_presentation = svg_path_parse_presentation,
   },
   [SHAPE_ATTR_CX] = {
     .applies_to = BIT (SHAPE_CIRCLE) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_RADIAL_GRADIENT),
@@ -10645,8 +10944,8 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_R] = {
     .applies_to = BIT (SHAPE_CIRCLE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_X] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
@@ -10664,25 +10963,25 @@ static ShapeAttribute shape_attrs[] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
               BIT (SHAPE_USE) | BIT (SHAPE_FILTER) | BIT (SHAPE_MARKER) |
               BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_HEIGHT] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
               BIT (SHAPE_USE) | BIT (SHAPE_FILTER) | BIT (SHAPE_MARKER) |
               BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_RX] = {
     .applies_to = BIT (SHAPE_RECT) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_RY] = {
     .applies_to = BIT (SHAPE_RECT) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage_or_auto,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage_or_auto,
+    .is_valid = number_is_positive_or_auto,
   },
   [SHAPE_ATTR_X1] = {
     .flags = SHAPE_ATTR_NO_CSS,
@@ -10738,8 +11037,8 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FR] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_RADIAL_GRADIENT),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_MASK_TYPE] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -10824,7 +11123,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_REQUIRED_EXTENSIONS] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_ANY,
-    .parse_value = parse_string_list,
+    .parse_presentation = parse_string_list,
   },
   [SHAPE_ATTR_SYSTEM_LANGUAGE] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
@@ -10867,19 +11166,19 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FE_WIDTH] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_FE_HEIGHT] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = parse_positive_length_percentage,
-    .parse_for_values = parse_length_percentage,
+    .parse_value = parse_length_percentage,
+    .is_valid = number_is_positive,
   },
   [SHAPE_ATTR_FE_RESULT] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = svg_string_new,
+    .parse_presentation = svg_string_new,
   },
   [SHAPE_ATTR_FE_COLOR] = {
     .applies_to = BIT (SHAPE_FILTER),
@@ -10982,7 +11281,8 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FE_IMAGE_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = svg_href_parse,
+    .parse_value = svg_href_parse_url,
+    .parse_presentation = svg_href_parse,
   },
   [SHAPE_ATTR_FE_IMAGE_CONTENT_FIT] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
@@ -11078,7 +11378,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SHAPE_ATTR_CLIP_PATH].initial_value = svg_clip_new_none ();
   shape_attrs[SHAPE_ATTR_CLIP_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
   shape_attrs[SHAPE_ATTR_MASK].initial_value = svg_mask_new_none ();
-  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_new ("");
+  shape_attrs[SHAPE_ATTR_FONT_FAMILY].initial_value = svg_string_list_new (NULL);
   shape_attrs[SHAPE_ATTR_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SHAPE_ATTR_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
@@ -11490,6 +11790,54 @@ shape_attr_lookup (const char *name,
 }
 
 static gboolean
+shape_attr_lookup_for_css (const char *name,
+                           ShapeAttr  *attr,
+                           gboolean   *deprecated,
+                           gboolean   *is_marker_shorthand)
+{
+  ShapeAttrLookup key;
+  ShapeAttrLookup *found;
+
+  *is_marker_shorthand = FALSE;
+
+  if (strcmp (name, "marker") == 0)
+    {
+      *attr = SHAPE_ATTR_MARKER_START;
+      *deprecated = FALSE;
+      *is_marker_shorthand = TRUE;
+      return TRUE;
+    }
+
+  key.name = name;
+  key.shapes = SHAPE_ANY;
+  key.filters = 0;
+  found = g_hash_table_lookup (shape_attr_lookup_table, &key);
+
+  if (!found)
+    {
+      key.shapes = SHAPE_FILTER;
+      key.filters = FILTER_ANY;
+      found = g_hash_table_lookup (shape_attr_lookup_table, &key);
+    }
+
+  if (!found)
+    return FALSE;
+
+  if (found->attr & DEPRECATED_BIT)
+    {
+      *attr = found->attr & ~DEPRECATED_BIT;
+      *deprecated = TRUE;
+    }
+  else
+    {
+      *attr = found->attr;
+      *deprecated = FALSE;
+    }
+
+  return shape_attr_has_css (*attr);
+}
+
+static gboolean
 color_stop_attr_lookup (const char *name,
                         ShapeType   type,
                         ShapeAttr  *attr,
@@ -11605,29 +11953,82 @@ filter_attr_get_presentation (ShapeAttr           attr,
 
 static SvgValue *
 shape_attr_parse_value (ShapeAttr   attr,
-                        const char *value)
+                        const char *string)
 {
-  if (match_str (value, "inherit"))
+  if (match_str (string, "inherit"))
     return svg_inherit_new ();
-  else if (match_str (value, "initial"))
+  else if (match_str (string, "initial"))
     return svg_initial_new ();
 
-  return shape_attrs[attr].parse_value (value);
+  if (shape_attrs[attr].parse_presentation)
+    return shape_attrs[attr].parse_presentation (string);
+  else
+    {
+      GBytes *bytes;
+      GtkCssParser *parser;
+      SvgValue *value;
+
+      bytes = g_bytes_new_static (string, strlen (string));
+      parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+      gtk_css_parser_skip_whitespace (parser);
+      value = shape_attrs[attr].parse_value (parser);
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        g_clear_pointer (&value, svg_value_unref);
+
+      gtk_css_parser_unref (parser);
+      g_bytes_unref (bytes);
+
+      return value;
+    }
+
+  return NULL;
+}
+
+static gboolean
+shape_attr_value_is_valid (ShapeAttr  attr,
+                           SvgValue  *value)
+{
+  if (shape_attrs[attr].is_valid)
+    return shape_attrs[attr].is_valid (value);
+  return TRUE;
 }
 
 static SvgValue *
-shape_attr_parse_for_values (ShapeAttr   attr,
-                             const char *value)
+shape_attr_parse_and_validate (ShapeAttr   attr,
+                               const char *string)
 {
-  if (match_str (value, "inherit"))
-    return svg_inherit_new ();
-  else if (match_str (value, "initial"))
-    return svg_initial_new ();
+  SvgValue *value;
 
-  if (shape_attrs[attr].parse_for_values)
-    return shape_attrs[attr].parse_for_values (value);
+  value = shape_attr_parse_value (attr, string);
+  if (value && !shape_attr_value_is_valid (attr, value))
+    g_clear_pointer (&value, svg_value_unref);
+
+  return value;
+}
+
+static SvgValue *
+shape_attr_parse_css (ShapeAttr     attr,
+                      GtkCssParser *parser)
+{
+  if (gtk_css_parser_try_ident (parser, "inherit"))
+    return svg_inherit_new ();
+  else if (gtk_css_parser_try_ident (parser, "initial"))
+    return svg_initial_new ();
+  else if (shape_attrs[attr].parse_value)
+    {
+      SvgValue *value;
+
+      value = shape_attrs[attr].parse_value (parser);
+      if (value && !shape_attr_value_is_valid (attr, value))
+        g_clear_pointer (&value, svg_value_unref);
+
+      return value;
+    }
   else
-    return shape_attrs[attr].parse_value (value);
+    return NULL;
 }
 
 static GPtrArray *
@@ -11653,7 +12054,7 @@ shape_attr_parse_values (ShapeAttr      attr,
       if (attr == SHAPE_ATTR_TRANSFORM && transform_type != TRANSFORM_NONE)
         v = primitive_transform_parse (transform_type, s);
       else
-        v = shape_attr_parse_for_values (attr, s);
+        v = shape_attr_parse_value (attr, s);
 
       if (!v)
         {
@@ -11870,6 +12271,9 @@ shape_free (gpointer data)
   Shape *shape = data;
 
   g_clear_pointer (&shape->id, g_free);
+  g_clear_pointer (&shape->style, g_free);
+  g_clear_pointer (&shape->classes, g_strfreev);
+  g_clear_object (&shape->css_node);
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
@@ -11877,6 +12281,7 @@ shape_free (gpointer data)
       g_clear_pointer (&shape->current[attr], svg_value_unref);
     }
 
+  g_clear_pointer (&shape->styles, g_ptr_array_unref);
   g_clear_pointer (&shape->shapes, g_ptr_array_unref);
   g_clear_pointer (&shape->animations, g_ptr_array_unref);
   g_clear_pointer (&shape->color_stops, g_ptr_array_unref);
@@ -11931,6 +12336,13 @@ shape_new (Shape     *parent,
       shape->text = g_array_new (FALSE, FALSE, sizeof (TextNode));
       g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
+
+  shape->styles = g_ptr_array_new_with_free_func (style_elt_free);
+
+  shape->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (shape->css_node, g_quark_from_static_string (shape_types[type].name));
+  if (parent)
+    gtk_css_node_set_parent (shape->css_node, parent->css_node);
 
   return shape;
 }
@@ -12321,7 +12733,6 @@ shape_get_current_path (Shape                 *shape,
   if (!shape->path)
     {
       double rx, ry;
-
       shape->path = shape_get_path (shape, viewport, TRUE);
       shape->valid_bounds = FALSE;
 
@@ -12640,7 +13051,7 @@ shape_add_color_stop (Shape *shape)
 {
   g_assert (shape_type_has_color_stops (shape->type));
 
-  g_ptr_array_add (shape->color_stops, color_stop_new ());
+  g_ptr_array_add (shape->color_stops, color_stop_new (shape));
 
   return shape->color_stops->len - 1;
 }
@@ -12651,7 +13062,7 @@ shape_add_filter (Shape               *shape,
 {
   g_assert (shape_type_has_filters (shape->type));
 
-  g_ptr_array_add (shape->filters, filter_primitive_new (type));
+  g_ptr_array_add (shape->filters, filter_primitive_new (shape, type));
 
   return shape->filters->len - 1;
 }
@@ -13273,7 +13684,7 @@ struct _Animation
   AnimationStatus status;
   char *id;
   char *href;
-  int line; /* for resolving ties in order */
+  size_t line; /* for resolving ties in order */
 
   /* shape, attr, and idx together identify the attribute
    * that this animation modifies. idx is only relevant
@@ -15139,6 +15550,35 @@ apply_state (GtkSvg   *self,
   shape_apply_state (self, self->content, state);
 }
 
+static gboolean
+strokewidth_parse (const char  *value,
+                   SvgValue   **values)
+{
+  GBytes *bytes;
+  GtkCssParser *parser;
+  unsigned int i;
+  gboolean retval = TRUE;
+
+  bytes = g_bytes_new_static (value, strlen (value));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+
+  for (i = 0; i < 3; i++)
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      values[i] = svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
+      if (!values[i])
+        retval = FALSE;
+    }
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    retval = FALSE;
+
+  gtk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return retval;
+}
+
 /* {{{ Weight variation */
 
 static double
@@ -16228,9 +16668,13 @@ typedef struct
     char *reason;
     gboolean skip_over_target;
   } skip;
-  gboolean collect_text;
-  GString *text;
+  struct {
+    GtkSvgLocation start;
+    gboolean collect;
+    GString *text;
+  } text;
   uint64_t num_loaded_elements;
+  GArray *rulesets;
 } ParserData;
 
 /* {{{ Animation attributes */
@@ -16660,7 +17104,7 @@ parse_value_animation_attrs (Animation            *a,
     {
       SvgValue *v;
 
-      v = svg_color_interpolation_parse (color_interpolation_attr);
+      v = shape_attr_parse_value (SHAPE_ATTR_COLOR_INTERPOLATION, color_interpolation_attr);
       if (!v)
         {
           gtk_svg_invalid_attribute (data->svg, context, "color-interpolation", NULL);
@@ -17122,224 +17566,6 @@ parse_motion_animation_attrs (Animation            *a,
 }
 
 /* }}} */
-/* {{{ Style */
-
-/* Priority order for attributes:
- *
- * gpa:... > class > style > presentation attrs
- *
- * class is in here for backwards compat with traditional
- * symbolic icons.
- */
-
-/* We parse the style attribute manually here, since
- * svg_attr_parse_value doesn't use GtkCssParser
- */
-static void
-skip_to_semicolon (const char **p)
-{
-  while (**p && **p != ';')
-    (*p)++;
-}
-
-static void
-skip_past_semicolon (const char **p)
-{
-  skip_to_semicolon (p);
-  if (**p) (*p)++;
-}
-
-static gboolean
-consume_colon (const char **p)
-{
-  skip_whitespace (p);
-  if (**p != ':')
-    return FALSE;
-
-  (*p)++;
-  skip_whitespace (p);
-  return TRUE;
-}
-
-static inline gboolean
-is_multibyte (char c)
-{
-  return c & 0x80;
-}
-
-static inline gboolean
-is_name_start (char c)
-{
-   return is_multibyte (c) || g_ascii_isalpha (c) || c == '_';
-}
-
-static inline gboolean
-is_name (char c)
-{
-  return is_name_start (c) || g_ascii_isdigit (c) || c == '-';
-}
-
-static char *
-consume_ident (const char **p)
-{
-  const char *q;
-  skip_whitespace (p);
-  if (!is_name_start (**p))
-    return NULL;
-  q = *p;
-  do {
-    (*p)++;
-  } while (is_name (**p));
-  return g_strndup (q, *p - q);
-}
-
-static char *
-consume_to_semicolon (const char **p)
-{
-  const char *q;
-  skip_whitespace (p);
-  q = *p;
-  skip_to_semicolon (p);
-  return g_strndup (q, *p - q);
-}
-
-static gboolean
-attr_lookup (const char          *name,
-             gboolean             for_stop,
-             gboolean             for_filter,
-             ShapeType            type,
-             FilterPrimitiveType  filter_type,
-             ShapeAttr           *attr,
-             gboolean            *deprecated)
-{
-  *deprecated = FALSE;
-
-  if (for_filter)
-    return filter_attr_lookup (filter_type, name, attr, deprecated);
-
-  if (!shape_attr_lookup (name, type, attr, deprecated))
-    return FALSE;
-
-  if (for_stop)
-    return FIRST_STOP_ATTR <= *attr && *attr <= LAST_STOP_ATTR;
-
-  return shape_has_attr (type, *attr);
-}
-
-static void
-parse_style_attr (Shape               *shape,
-                  gboolean             for_stop,
-                  gboolean             for_filter,
-                  const char          *style_attr,
-                  ParserData          *data,
-                  GMarkupParseContext *context)
-{
-  const char *p = style_attr;
-  ShapeAttr attr;
-  gboolean deprecated;
-  char *name;
-  char *prop_val;
-  SvgValue *value;
-  unsigned int idx = 0;
-  gboolean is_marker_shorthand;
-  FilterPrimitiveType filter_type = 0;
-
-  if (for_stop)
-    {
-      g_assert (shape->color_stops->len > 0);
-      idx = shape->color_stops->len;
-    }
-  else if (for_filter)
-    {
-      g_assert (shape->filters->len > 0);
-      idx = shape->filters->len;
-      FilterPrimitive *fp = g_ptr_array_index (shape->filters, idx - 1);
-      filter_type = fp->type;
-    }
-
-  while (*p)
-    {
-      is_marker_shorthand = FALSE;
-      skip_whitespace (&p);
-      name = consume_ident (&p);
-
-      if (!name)
-        {
-          gtk_svg_invalid_attribute (data->svg, context,
-                                     "style", "while parsing 'style': expected identifier");
-          skip_past_semicolon (&p);
-          continue;
-        }
-
-      if (strcmp (name, "marker") == 0 &&
-          shape_has_attr (shape->type, SHAPE_ATTR_MARKER_START))
-        {
-          attr = SHAPE_ATTR_MARKER_START;
-          is_marker_shorthand = TRUE;
-          deprecated = FALSE;
-        }
-      else if (!attr_lookup (name, for_stop, for_filter, shape->type, filter_type, &attr, &deprecated) ||
-               !shape_attr_has_css (attr))
-        {
-          gtk_svg_invalid_attribute (data->svg, context,
-                                     "style", "while parsing 'style': unsupported property '%s'",
-                                     name);
-          g_free (name);
-          skip_past_semicolon (&p);
-          continue;
-        }
-
-      g_free (name);
-
-      if (!consume_colon (&p))
-        {
-          gtk_svg_invalid_attribute (data->svg, context,
-                                     "style", "while parsing 'style': expected ':' after '%s'",
-                                     shape_attr_get_presentation (attr, shape->type));
-          skip_past_semicolon (&p);
-          continue;
-        }
-
-      if (!*p)
-        {
-          gtk_svg_invalid_attribute (data->svg, context,
-                                     "style", "while parsing 'style': value expected after ':'");
-          break;
-        }
-
-      prop_val = consume_to_semicolon (&p);
-      if (deprecated && _gtk_bitmask_get (shape->attrs, attr))
-        {
-          /* ignore */
-        }
-      else
-        {
-          value = shape_attr_parse_value (attr, prop_val);
-          if (!value)
-            {
-              gtk_svg_invalid_attribute (data->svg, context,
-                                         "style", "failed to parse '%s' value '%s'",
-                                         shape_attr_get_presentation (attr, shape->type),
-                                         prop_val);
-            }
-          else
-            {
-              shape_set_base_value (shape, attr, idx, value);
-              if (is_marker_shorthand)
-                {
-                  shape_set_base_value (shape, SHAPE_ATTR_MARKER_MID, idx, value);
-                  shape_set_base_value (shape, SHAPE_ATTR_MARKER_END, idx, value);
-                }
-              svg_value_unref (value);
-            }
-        }
-
-      g_free (prop_val);
-      skip_past_semicolon (&p);
-    }
-}
-
-/* }}} */
 /* {{{ Shape attributes */
 
 static void
@@ -17351,12 +17577,6 @@ parse_shape_attrs (Shape                *shape,
                    ParserData           *data,
                    GMarkupParseContext  *context)
 {
-  const char *class_attr = NULL;
-  const char *style_attr = NULL;
-
-  if (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC)
-    class_attr = "foreground-fill";
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
@@ -17376,18 +17596,20 @@ parse_shape_attrs (Shape                *shape,
 
       if (strcmp (attr_names[i], "class") == 0)
         {
-          class_attr = attr_values[i];
           *handled |= BIT (i);
+          shape->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (shape->css_node, (const char **) shape->classes);
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
-          style_attr = attr_values[i];
           *handled |= BIT (i);
+          shape->style = g_strdup (attr_values[i]);
         }
       else if (strcmp (attr_names[i], "id") == 0)
         {
-          shape->id = g_strdup (attr_values[i]);
           *handled |= BIT (i);
+          shape->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (shape->css_node, g_quark_from_string (shape->id));
         }
       else if (shape_attr_lookup (attr_names[i], shape->type, &attr, &deprecated) &&
                !shape_attr_only_css (attr))
@@ -17400,7 +17622,7 @@ parse_shape_attrs (Shape                *shape,
                 }
               else
                 {
-                  SvgValue *value = shape_attr_parse_value (attr, attr_values[i]);
+                  SvgValue *value = shape_attr_parse_and_validate (attr, attr_values[i]);
                   if (!value)
                     {
                       gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
@@ -17421,28 +17643,26 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (style_attr)
-    parse_style_attr (shape, FALSE, FALSE, style_attr, data, context);
-
-  if ((data->svg->features & (GTK_SVG_EXTENSIONS|GTK_SVG_TRADITIONAL_SYMBOLIC)) != 0 &&
-      class_attr && *class_attr)
+  if (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
+      (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes))
     {
-      GStrv classes = g_strsplit (class_attr, " ", 0);
       SvgValue *value;
       gboolean has_stroke;
 
-      if (g_strv_has (classes, "transparent-fill"))
-        value = svg_paint_new_none ();
-      else if (g_strv_has (classes, "foreground-fill"))
+      if (!shape->classes)
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-      else if (g_strv_has (classes, "success") ||
-               g_strv_has (classes, "success-fill"))
+      else if (g_strv_has (shape->classes, "transparent-fill"))
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "foreground-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (shape->classes, "success") ||
+               g_strv_has (shape->classes, "success-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (classes, "warning") ||
-               g_strv_has (classes, "warning-fill"))
+      else if (g_strv_has (shape->classes, "warning") ||
+               g_strv_has (shape->classes, "warning-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (classes, "error") ||
-               g_strv_has (classes, "error-fill"))
+      else if (g_strv_has (shape->classes, "error") ||
+               g_strv_has (shape->classes, "error-fill"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
@@ -17452,13 +17672,15 @@ parse_shape_attrs (Shape                *shape,
         shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
       svg_value_unref (value);
 
-      if (g_strv_has (classes, "success-stroke"))
+      if (!shape->classes)
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "success-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (classes, "warning-stroke"))
+      else if (g_strv_has (shape->classes, "warning-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (classes, "error-stroke"))
+      else if (g_strv_has (shape->classes, "error-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
-      else if (g_strv_has (classes, "foreground-stroke"))
+      else if (g_strv_has (shape->classes, "foreground-stroke"))
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
       else
         value = svg_paint_new_none ();
@@ -17496,8 +17718,6 @@ parse_shape_attrs (Shape                *shape,
               svg_value_unref (value);
             }
         }
-
-      g_strfreev (classes);
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
@@ -17718,18 +17938,10 @@ parse_shape_gpa_attrs (Shape                *shape,
 
   if (strokewidth_attr)
     {
-      GStrv strv;
       SvgValue *values[3] = { NULL, };
 
-      strv = g_strsplit (strokewidth_attr, " ", 0);
-      if (g_strv_length (strv) == 3)
-        {
-          values[0] = svg_number_parse (strv[0], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
-          values[1] = svg_number_parse (strv[1], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
-          values[2] = svg_number_parse (strv[2], 0, DBL_MAX, NUMBER | LENGTH | PERCENTAGE);
-        }
-
-      if (values[0] && values[1] && values[2])
+      if (strokewidth_parse (strokewidth_attr, values) &&
+          values[0] && values[1] && values[2])
         {
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, values[0]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, values[1]);
@@ -17743,7 +17955,6 @@ parse_shape_gpa_attrs (Shape                *shape,
       g_clear_pointer (&values[0], svg_value_unref);
       g_clear_pointer (&values[1], svg_value_unref);
       g_clear_pointer (&values[2], svg_value_unref);
-      g_strfreev (strv);
     }
 
   states = ALL_STATES;
@@ -17958,24 +18169,35 @@ parse_color_stop_attrs (Shape                *shape,
                         ParserData           *data,
                         GMarkupParseContext  *context)
 {
-  const char *style_attr = NULL;
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
       gboolean deprecated;
 
-      if (strcmp (attr_names[i], "style") == 0)
+      if (strcmp (attr_names[i], "id") == 0)
         {
           *handled |= BIT (i);
-          style_attr = attr_values[i];
+          stop->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (stop->css_node, g_quark_from_string (stop->id));
         }
+      else if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          stop->style = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "class") == 0)
+        {
+          *handled |= BIT (i);
+          stop->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (stop->css_node, (const char **) stop->classes);
+        }
+
       else if (color_stop_attr_lookup (attr_names[i], shape->type, &attr, &deprecated))
         {
           SvgValue *value;
 
           *handled |= BIT (i);
-          value = shape_attr_parse_value (attr, attr_values[i]);
+          value = shape_attr_parse_and_validate (attr, attr_values[i]);
           if (value)
             {
               shape_set_base_value (data->current_shape, attr, idx, value);
@@ -17985,9 +18207,6 @@ parse_color_stop_attrs (Shape                *shape,
             gtk_svg_invalid_attribute (data->svg, context, attr_names[i], NULL);
         }
     }
-
-  if (style_attr)
-    parse_style_attr (shape, TRUE, FALSE, style_attr, data, context);
 }
 
 /* }}} */
@@ -18004,17 +18223,27 @@ parse_filter_attrs (Shape                *shape,
                     ParserData           *data,
                     GMarkupParseContext  *context)
 {
-  const char *style_attr = NULL;
-
   for (unsigned int i = 0; attr_names[i]; i++)
     {
       ShapeAttr attr;
       gboolean deprecated;
 
-      if (strcmp (attr_names[i], "style") == 0)
+      if (strcmp (attr_names[i], "id") == 0)
         {
           *handled |= BIT (i);
-          style_attr = attr_values[i];
+          f->id = g_strdup (attr_values[i]);
+          gtk_css_node_set_id (f->css_node, g_quark_from_string (f->id));
+        }
+      else if (strcmp (attr_names[i], "style") == 0)
+        {
+          *handled |= BIT (i);
+          f->style = g_strdup (attr_values[i]);
+        }
+      else if (strcmp (attr_names[i], "class") == 0)
+        {
+          *handled |= BIT (i);
+          f->classes = g_strsplit (attr_values[i], " ", 0);
+          gtk_css_node_set_classes (f->css_node, (const char **) f->classes);
         }
       else if (filter_attr_lookup (f->type, attr_names[i], &attr, &deprecated))
         {
@@ -18026,7 +18255,7 @@ parse_filter_attrs (Shape                *shape,
             {
               SvgValue *value;
 
-              value = shape_attr_parse_value (attr, attr_values[i]);
+              value = shape_attr_parse_and_validate (attr, attr_values[i]);
               *handled |= BIT (i);
               if (value)
                 {
@@ -18038,9 +18267,6 @@ parse_filter_attrs (Shape                *shape,
             }
         }
     }
-
-  if (style_attr)
-    parse_style_attr (shape, FALSE, TRUE, style_attr, data, context);
 }
 
 /* }}} */
@@ -18066,6 +18292,15 @@ skip_element (ParserData          *data,
 }
 
 static void
+start_collect_text (ParserData          *data,
+                    GMarkupParseContext *context)
+{
+  gtk_svg_location_init (&data->text.start, context);
+  data->text.collect = TRUE;
+  g_string_set_size (data->text.text, 0);
+}
+
+static void
 start_element_cb (GMarkupParseContext  *context,
                   const char           *element_name,
                   const char          **attr_names,
@@ -18077,9 +18312,12 @@ start_element_cb (GMarkupParseContext  *context,
   ShapeType shape_type;
   uint64_t handled = 0;
   FilterPrimitiveType filter_type;
+  int line;
 
   if (data->skip.to)
     return;
+
+  g_markup_parse_context_get_position (context, &line, NULL);
 
   if (data->num_loaded_elements++ > LOADING_LIMIT)
     {
@@ -18112,7 +18350,7 @@ start_element_cb (GMarkupParseContext  *context,
         }
 
       shape = shape_new (data->current_shape, shape_type);
-      g_markup_parse_context_get_position (context, &shape->line, NULL);
+      shape->line = line;
 
       if (data->current_shape == NULL && shape->type == SHAPE_SVG)
         {
@@ -18174,6 +18412,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       idx = shape_add_color_stop (data->current_shape);
       stop = g_ptr_array_index (data->current_shape->color_stops, idx);
+      stop->line = line;
 
       parse_color_stop_attrs (data->current_shape, idx + 1, stop,
                               element_name, attr_names, attr_values,
@@ -18220,6 +18459,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       idx = shape_add_filter (data->current_shape, filter_type);
       f = g_ptr_array_index (data->current_shape->filters, idx);
+      f->line = line;
 
       parse_filter_attrs (data->current_shape, idx + 1, f,
                           element_name, attr_names, attr_values,
@@ -18276,30 +18516,21 @@ start_element_cb (GMarkupParseContext  *context,
         {
           /* Verify we're in the right place */
           if (check_ancestors (context, "rdf:Bag", "dc:subject", "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:description") == 0)
         {
           if (check_ancestors (context, "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
       else if (strcmp (element_name, "dc:title") == 0)
         {
           if (check_ancestors (context, "cc:Agent", "dc:creator", "cc:Work", "rdf:RDF", "metadata", NULL))
-            {
-              data->collect_text = TRUE;
-              g_string_set_size (data->text, 0);
-            }
+            start_collect_text (data, context);
           else
             skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring RDF element in wrong context: <%s>", element_name);
         }
@@ -18346,8 +18577,28 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "style") == 0 ||
-      strcmp (element_name, "textPath") == 0 ||
+  if (strcmp (element_name, "style") == 0)
+    {
+      gboolean is_css = TRUE;
+
+      for (unsigned int i = 0; attr_names[i]; i++)
+        {
+          if (strcmp (attr_names[i], "type") == 0)
+            {
+              if (strcmp (attr_values[i], "text/css") != 0)
+                is_css = FALSE;
+              break;
+            }
+        }
+
+      g_string_set_size (data->text.text, 0);
+      if (is_css)
+        start_collect_text (data, context);
+
+      return;
+    }
+
+  if (strcmp (element_name, "textPath") == 0 ||
       strcmp (element_name, "feConvolveMatrix") == 0 ||
       strcmp (element_name, "feDiffuseLighting") == 0 ||
       strcmp (element_name, "feMorphology") == 0 ||
@@ -18357,10 +18608,11 @@ start_element_cb (GMarkupParseContext  *context,
       skip_element (data, context, GTK_SVG_ERROR_NOT_IMPLEMENTED, "<%s> is not supported", element_name);
       return;
     }
-  else if (strcmp (element_name, "title") == 0 ||
-           strcmp (element_name, "desc") == 0 ||
-           g_str_has_prefix (element_name, "sodipodi:") ||
-           g_str_has_prefix (element_name, "inkscape:"))
+
+  if (strcmp (element_name, "title") == 0 ||
+      strcmp (element_name, "desc") == 0 ||
+      g_str_has_prefix (element_name, "sodipodi:") ||
+      g_str_has_prefix (element_name, "inkscape:"))
     {
       skip_element (data, context, GTK_SVG_ERROR_IGNORED_ELEMENT, "Ignoring metadata and non-standard elements: <%s>", element_name);
       return;
@@ -18419,7 +18671,7 @@ start_element_cb (GMarkupParseContext  *context,
       a->frames[0].time = 0;
       a->frames[1].time = 1;
 
-      value = shape_attr_parse_value (a->attr, to_attr);
+      value = shape_attr_parse_and_validate (a->attr, to_attr);
       if (!value)
         {
           gtk_svg_invalid_attribute (data->svg, context, "to", "Failed to parse: %s", to_attr);
@@ -18474,7 +18726,7 @@ start_element_cb (GMarkupParseContext  *context,
       else
         a = animation_motion_new ();
 
-      g_markup_parse_context_get_position (context, &a->line, NULL);
+      a->line = line;
 
       if (!parse_base_animation_attrs (a,
                                        element_name,
@@ -18591,7 +18843,7 @@ end_element_cb (GMarkupParseContext *context,
   ParserData *data = user_data;
   ShapeType shape_type;
 
-  data->collect_text = FALSE;
+  data->text.collect = FALSE;
 
   if (data->skip.to != NULL)
     {
@@ -18622,43 +18874,37 @@ end_element_cb (GMarkupParseContext *context,
     }
 
 do_target:
-  if (strcmp (element_name, "rdf:li") == 0)
+  if (strcmp (element_name, "style") == 0)
     {
-      g_set_str (&data->svg->keywords, data->text->str);
+      if (data->text.text->len > 0)
+        {
+          char *string;
+          StyleElt *elt;
+
+          string = g_strstrip (g_strdup (data->text.text->str));
+          elt = g_new0 (StyleElt, 1);
+          elt->content = g_bytes_new_take (string, strlen (string));
+          elt->location = data->text.start;
+          g_ptr_array_add (data->current_shape->styles, elt);
+        }
+    }
+  else if (strcmp (element_name, "rdf:li") == 0)
+    {
+      g_set_str (&data->svg->keywords, data->text.text->str);
     }
   else if (strcmp (element_name, "dc:description") == 0)
     {
-      g_set_str (&data->svg->description, data->text->str);
+      g_set_str (&data->svg->description, data->text.text->str);
     }
   else if (strcmp (element_name, "dc:title") == 0)
     {
-      g_set_str (&data->svg->author, data->text->str);
+      g_set_str (&data->svg->author, data->text.text->str);
     }
   else if (shape_type_lookup (element_name, &shape_type))
     {
       GSList *tos = data->shape_stack;
-      Shape *shape = data->current_shape;
 
       g_assert (shape_type == data->current_shape->type);
-
-      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
-        {
-          GtkSymbolicColor symbolic;
-
-          if (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE])->kind != PAINT_NONE)
-            data->svg->used |= GTK_SVG_USES_STROKES;
-
-          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_STROKE]), &symbolic))
-            data->svg->used |= BIT (symbolic + 1);
-        }
-
-      if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
-        {
-          GtkSymbolicColor symbolic;
-
-          if (svg_paint_is_symbolic (((SvgPaint *) data->current_shape->base[SHAPE_ATTR_FILL]), &symbolic))
-            data->svg->used |= BIT (symbolic + 1);
-        }
 
       data->current_shape = tos->data;
       data->shape_stack = tos->next;
@@ -18692,10 +18938,10 @@ text_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (!data->collect_text)
+  if (!data->text.collect)
     return;
 
-  g_string_append_len (data->text, text, len);
+  g_string_append_len (data->text.text, text, len);
 }
 
 static void
@@ -19246,6 +19492,763 @@ compute_update_order (Shape  *shape,
 }
 
 /* }}} */
+/* {{{ CSS handling */
+
+/* Most of this is adapted from gtkcssprovider.c */
+
+#define GDK_ARRAY_NAME svg_css_selectors
+#define GDK_ARRAY_TYPE_NAME SvgCssSelectors
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssSelector *
+#define GDK_ARRAY_PREALLOC 64
+#include "gdk/gdkarrayimpl.c"
+
+typedef struct _PropertyValue PropertyValue;
+struct _PropertyValue {
+  ShapeAttr attr;
+  SvgValue *value;
+  gboolean deprecated;
+};
+
+typedef struct _SvgCssRuleset SvgCssRuleset;
+struct _SvgCssRuleset
+{
+  GtkCssSelector *selector;
+  PropertyValue *styles;
+  guint n_styles;
+  guint owns_styles;
+};
+
+static void
+svg_css_ruleset_init_copy (SvgCssRuleset  *new,
+                           SvgCssRuleset  *ruleset,
+                           GtkCssSelector *selector)
+{
+  memcpy (new, ruleset, sizeof (SvgCssRuleset));
+
+  new->selector = selector;
+  if (ruleset->owns_styles)
+    ruleset->owns_styles = FALSE;
+}
+
+static void
+svg_css_ruleset_clear (SvgCssRuleset *ruleset)
+{
+  if (ruleset->owns_styles)
+    {
+      guint i;
+
+      for (i = 0; i < ruleset->n_styles; i++)
+        {
+          svg_value_unref (ruleset->styles[i].value);
+          ruleset->styles[i].value = NULL;
+        }
+      g_free (ruleset->styles);
+    }
+
+  if (ruleset->selector)
+    _gtk_css_selector_free (ruleset->selector);
+
+  memset (ruleset, 0, sizeof (SvgCssRuleset));
+}
+
+static void
+svg_css_ruleset_add (SvgCssRuleset *ruleset,
+                     ShapeAttr      attr,
+                     SvgValue      *value,
+                     gboolean       deprecated)
+{
+  guint i;
+
+  g_return_if_fail (ruleset->owns_styles || ruleset->n_styles == 0);
+
+  ruleset->owns_styles = TRUE;
+
+  for (i = 0; i < ruleset->n_styles; i++)
+    {
+      if (ruleset->styles[i].attr == attr)
+        {
+          svg_value_unref (ruleset->styles[i].value);
+          ruleset->styles[i].value = NULL;
+          break;
+        }
+    }
+
+  if (i == ruleset->n_styles)
+    {
+      ruleset->n_styles++;
+      ruleset->styles = g_realloc (ruleset->styles, ruleset->n_styles * sizeof (PropertyValue));
+      ruleset->styles[i].attr = attr;
+    }
+
+  ruleset->styles[i].value = value;
+  ruleset->styles[i].deprecated = deprecated;
+}
+
+typedef struct _SvgCssScanner SvgCssScanner;
+struct _SvgCssScanner
+{
+  ParserData *data;
+  GtkCssParser *parser;
+  SvgCssScanner *parent;
+};
+
+static void
+svg_css_scanner_parser_error (GtkCssParser         *parser,
+                              const GtkCssLocation *css_start,
+                              const GtkCssLocation *css_end,
+                              const GError         *css_error,
+                              gpointer              user_data)
+{
+  ParserData *data = user_data;
+  if (css_error->domain == GTK_CSS_PARSER_ERROR)
+    {
+      GError *error;
+      GtkSvgLocation start, end;
+
+      error = g_error_new_literal (GTK_SVG_ERROR,
+                                   GTK_SVG_ERROR_INVALID_SYNTAX,
+                                   css_error->message);
+
+      if (data->current_shape)
+        {
+          gtk_svg_error_set_element (error, shape_types[data->current_shape->type].name);
+          gtk_svg_error_set_attribute (error, "style");
+        }
+
+      start = data->text.start;
+      end = data->text.start;
+
+      start.bytes += css_start->bytes;
+      start.lines += css_start->lines;
+      if (css_start->lines == 0)
+        start.line_chars += css_start->line_chars;
+      else
+        start.line_chars = css_start->line_chars;
+
+      end.bytes += css_end->bytes;
+      end.lines += css_end->lines;
+      if (css_end->lines == 0)
+        end.line_chars += css_end->line_chars;
+      else
+        end.line_chars = css_end->line_chars;
+
+      gtk_svg_error_set_location (error, &start, &end);
+
+      gtk_svg_emit_error (data->svg, error);
+      g_clear_error (&error);
+    }
+}
+
+
+static SvgCssScanner *
+svg_css_scanner_new (ParserData    *data,
+                     SvgCssScanner *parent,
+                     GFile         *file,
+                     GBytes        *bytes)
+{
+  SvgCssScanner *scanner = g_new0 (SvgCssScanner, 1);
+
+  scanner->data = data;
+  scanner->parent = parent;
+  scanner->parser = gtk_css_parser_new_for_bytes (bytes, file, svg_css_scanner_parser_error, data, NULL);
+
+  return scanner;
+}
+
+static void
+svg_css_scanner_destroy (SvgCssScanner *scanner)
+{
+  gtk_css_parser_unref (scanner->parser);
+  g_free (scanner);
+}
+
+static int
+svg_css_compare_rule (gconstpointer a_,
+                      gconstpointer b_)
+{
+  const SvgCssRuleset *a = (const SvgCssRuleset *) a_;
+  const SvgCssRuleset *b = (const SvgCssRuleset *) b_;
+  int compare;
+
+  compare = _gtk_css_selector_compare (a->selector, b->selector);
+  if (compare != 0)
+    return compare;
+
+  return 0;
+}
+
+static void
+postprocess_styles (ParserData *data)
+{
+  g_array_sort (data->rulesets, svg_css_compare_rule);
+}
+
+static void load_internal (ParserData    *data,
+                           SvgCssScanner *scanner,
+                           GFile         *file,
+                           GBytes        *bytes);
+
+static gboolean
+svg_css_scanner_would_recurse (SvgCssScanner *scanner,
+                               GFile         *file)
+{
+  while (scanner)
+    {
+      GFile *parser_file = gtk_css_parser_get_file (scanner->parser);
+      if (parser_file && g_file_equal (parser_file, file))
+        return TRUE;
+
+      scanner = scanner->parent;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+parse_import (SvgCssScanner *scanner)
+{
+  GFile *file;
+
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "import"))
+    return FALSE;
+
+  if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_STRING))
+    {
+      char *url;
+
+      url = gtk_css_parser_consume_string (scanner->parser);
+      if (url)
+        {
+          if (gtk_css_parser_get_file (scanner->parser))
+            file = gtk_css_parser_resolve_url (scanner->parser, url);
+          else
+            file = g_file_new_for_path (url);
+          if (file == NULL)
+            {
+              gtk_css_parser_error_import (scanner->parser,
+                                           "Could not resolve \"%s\" to a valid URL",
+                                           url);
+            }
+          g_free (url);
+        }
+      else
+        file = NULL;
+    }
+  else
+    {
+      char *url = gtk_css_parser_consume_url (scanner->parser);
+      if (url)
+        {
+          if (gtk_css_parser_get_file (scanner->parser))
+            file = gtk_css_parser_resolve_url (scanner->parser, url);
+          else
+            file = g_file_new_for_uri (url);
+          g_free (url);
+        }
+      else
+        file = NULL;
+    }
+
+  if (file == NULL)
+    {
+      /* nothing to do; */
+    }
+  else if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_error_syntax (scanner->parser, "Expected ';'");
+    }
+  else if ((scanner->data->svg->features & GTK_SVG_EXTERNAL_RESOURCES) == 0)
+    {
+      /* Not allowed; TODO: emit an error */
+    }
+  else if (svg_css_scanner_would_recurse (scanner, file))
+    {
+       char *path = g_file_get_path (file);
+       gtk_css_parser_error (scanner->parser,
+                             GTK_CSS_PARSER_ERROR_IMPORT,
+                             gtk_css_parser_get_block_location (scanner->parser),
+                             gtk_css_parser_get_end_location (scanner->parser),
+                             "Loading '%s' would recurse",
+                             path);
+       g_free (path);
+    }
+  else
+    {
+      GError *load_error = NULL;
+
+      GBytes *bytes = g_file_load_bytes (file, NULL, NULL, &load_error);
+
+      if (bytes == NULL)
+        {
+          gtk_css_parser_error (scanner->parser,
+                                GTK_CSS_PARSER_ERROR_IMPORT,
+                                gtk_css_parser_get_block_location (scanner->parser),
+                                gtk_css_parser_get_end_location (scanner->parser),
+                                "Failed to import: %s",
+                                load_error->message);
+          g_error_free (load_error);
+        }
+      else
+        {
+          load_internal (scanner->data, scanner, file, bytes);
+          g_bytes_unref (bytes);
+        }
+    }
+
+  g_clear_object (&file);
+
+  return TRUE;
+}
+
+
+static void
+parse_at_keyword (SvgCssScanner *scanner)
+{
+  gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
+  if (!parse_import (scanner))
+    gtk_css_parser_error_syntax (scanner->parser, "Unknown @ rule");
+  gtk_css_parser_end_block (scanner->parser);
+}
+
+static void
+clear_selectors (SvgCssSelectors *selectors)
+{
+  for (int i = 0; i < svg_css_selectors_get_size (selectors); i++)
+    _gtk_css_selector_free (svg_css_selectors_get (selectors, i));
+}
+
+static void
+parse_selector_list (SvgCssScanner   *scanner,
+                     SvgCssSelectors *selectors)
+{
+  do
+    {
+      GtkCssSelector *selector = _gtk_css_selector_parse (scanner->parser);
+
+      if (selector == NULL)
+        {
+          clear_selectors (selectors);
+          svg_css_selectors_clear (selectors);
+          return;
+        }
+
+      svg_css_selectors_append (selectors, selector);
+    }
+  while (gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COMMA));
+}
+
+static void
+parse_declaration (SvgCssScanner *scanner,
+                   SvgCssRuleset *ruleset)
+{
+  char *name;
+  ShapeAttr attr;
+  gboolean deprecated;
+  gboolean is_marker_shorthand;
+
+  /* advance the location over whitespace */
+  gtk_css_parser_get_token (scanner->parser);
+  gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_EOF);
+
+  if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_warn_syntax (scanner->parser, "Empty declaration");
+      gtk_css_parser_end_block (scanner->parser);
+      return;
+    }
+
+  name = gtk_css_parser_consume_ident (scanner->parser);
+  if (name == NULL)
+    goto out;
+
+  if (shape_attr_lookup_for_css (name, &attr, &deprecated, &is_marker_shorthand))
+    {
+      SvgValue *value;
+
+      if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
+        {
+          gtk_css_parser_error_syntax (scanner->parser, "Expected ':'");
+          goto out;
+        }
+
+      value = shape_attr_parse_css (attr, scanner->parser);
+
+      if (value == NULL)
+        goto out;
+
+      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+        {
+          gtk_css_parser_error_syntax (scanner->parser, "Junk at end of value for %s", name);
+          svg_value_unref (value);
+          goto out;
+        }
+
+      svg_css_ruleset_add (ruleset, attr, value, deprecated);
+      if (is_marker_shorthand)
+        {
+          svg_css_ruleset_add (ruleset, SHAPE_ATTR_MARKER_MID, svg_value_ref (value), deprecated);
+          svg_css_ruleset_add (ruleset, SHAPE_ATTR_MARKER_END, svg_value_ref (value), deprecated);
+        }
+    }
+  else
+    {
+      gtk_css_parser_error_value (scanner->parser, "No property named \"%s\"", name);
+    }
+
+out:
+  g_free (name);
+
+  gtk_css_parser_end_block (scanner->parser);
+}
+
+static void
+parse_declarations (SvgCssScanner *scanner,
+                    SvgCssRuleset *ruleset)
+{
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    {
+      parse_declaration (scanner, ruleset);
+    }
+}
+
+static void
+parse_style_into_ruleset (SvgCssRuleset *ruleset,
+                          const char    *style,
+                          ParserData    *data)
+{
+  GBytes *bytes;
+  SvgCssScanner *scanner;
+
+  bytes = g_bytes_new_static (style, strlen (style));
+  scanner = svg_css_scanner_new (data, NULL, NULL, bytes);
+  parse_declarations (scanner, ruleset);
+  svg_css_scanner_destroy (scanner);
+  g_bytes_unref (bytes);
+}
+
+static void
+commit_ruleset (ParserData      *data,
+                SvgCssSelectors *selectors,
+                SvgCssRuleset   *ruleset)
+{
+  if (ruleset->styles == NULL)
+    {
+      clear_selectors (selectors);
+      return;
+    }
+
+  for (unsigned int i = 0; i < svg_css_selectors_get_size (selectors); i++)
+    {
+      SvgCssRuleset *new;
+
+      g_array_set_size (data->rulesets, data->rulesets->len + 1);
+      new = &g_array_index (data->rulesets, SvgCssRuleset, data->rulesets->len - 1);
+      svg_css_ruleset_init_copy (new, ruleset, svg_css_selectors_get (selectors, i));
+    }
+
+}
+
+static void
+parse_ruleset (SvgCssScanner *scanner)
+{
+  SvgCssSelectors selectors;
+  SvgCssRuleset ruleset = { 0, };
+
+  svg_css_selectors_init (&selectors);
+
+  parse_selector_list (scanner, &selectors);
+  if (svg_css_selectors_get_size (&selectors) == 0)
+    {
+      gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
+      gtk_css_parser_skip (scanner->parser);
+      goto out;
+    }
+
+  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
+    {
+      gtk_css_parser_error_syntax (scanner->parser, "Expected '{' after selectors");
+      clear_selectors (&selectors);
+      gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
+      gtk_css_parser_skip (scanner->parser);
+      goto out;
+    }
+
+  gtk_css_parser_start_block (scanner->parser);
+  parse_declarations (scanner, &ruleset);
+  gtk_css_parser_end_block (scanner->parser);
+  commit_ruleset (scanner->data, &selectors, &ruleset);
+  svg_css_ruleset_clear (&ruleset);
+
+out:
+  svg_css_selectors_clear (&selectors);
+}
+
+static void
+parse_statement (SvgCssScanner *scanner)
+{
+  if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_AT_KEYWORD))
+    parse_at_keyword (scanner);
+  else
+    parse_ruleset (scanner);
+}
+
+static void
+parse_stylesheet (SvgCssScanner *scanner)
+{
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    {
+      if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CDO) ||
+          gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CDC))
+        {
+          gtk_css_parser_consume_token (scanner->parser);
+          continue;
+        }
+
+      parse_statement (scanner);
+    }
+}
+
+static void
+load_internal (ParserData    *data,
+               SvgCssScanner *parent,
+               GFile         *file,
+               GBytes        *bytes)
+{
+  SvgCssScanner *scanner;
+
+  scanner = svg_css_scanner_new (data, parent, NULL, bytes);
+
+  parse_stylesheet (scanner);
+
+  if (parent == NULL)
+    postprocess_styles (data);
+
+  svg_css_scanner_destroy (scanner);
+}
+
+static void
+load_styles_for_shape (Shape      *shape,
+                       ParserData *data)
+{
+  for (unsigned int i = 0; i < shape->styles->len; i++)
+    {
+      StyleElt *elt = g_ptr_array_index (shape->styles, i);
+      data->text.start = elt->location;
+      load_internal (data, NULL, NULL, elt->content);
+    }
+
+  if (shape_type_has_shapes (shape->type))
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          load_styles_for_shape (sh, data);
+        }
+    }
+}
+
+static void
+load_styles (ParserData *data)
+{
+  data->current_shape = NULL;
+  load_styles_for_shape (data->svg->content, data);
+}
+
+#if 0
+static void
+dump_styles (ParserData *data)
+{
+  GString *s = g_string_new ("");
+
+  for (unsigned int i = 0; i < data->rulesets->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (data->rulesets, SvgCssRuleset, i);
+
+      _gtk_css_selector_print (r->selector, s);
+      g_string_append (s, " {\n");
+      for (unsigned int j = 0; j < r->n_styles; j++)
+        {
+          PropertyValue *p = &r->styles[j];
+          g_string_append (s, "  ");
+          g_string_append (s, shape_attr_get_name (p->attr));
+          g_string_append (s, ": ");
+          svg_value_print (p->value, s);
+          g_string_append (s, ";");
+          if (p->deprecated)
+            g_string_append (s, " /* deprecated */");
+          g_string_append (s, "\n");
+        }
+      g_string_append (s, "}\n");
+    }
+
+  g_print ("%s\n", s->str);
+  g_string_free (s, TRUE);
+}
+#endif
+
+static void
+apply_ruleset_to_shape (SvgCssRuleset *r,
+                        Shape         *shape,
+                        unsigned int   idx,
+                        GtkBitmask    *set,
+                        ParserData    *data)
+{
+  for (unsigned int j = 0; j < r->n_styles; j++)
+    {
+      PropertyValue *p = &r->styles[j];
+
+      if (set && _gtk_bitmask_get (set, p->attr))
+        continue;
+
+      if (_gtk_bitmask_get (shape->attrs, p->attr) &&
+          p->deprecated)
+        continue;
+
+      if (shape_has_attr (shape->type, p->attr))
+        {
+          shape_set_base_value (shape, p->attr, idx, p->value);
+
+          if (p->attr == SHAPE_ATTR_CLIP_PATH ||
+              p->attr == SHAPE_ATTR_MASK ||
+              p->attr == SHAPE_ATTR_HREF ||
+              p->attr == SHAPE_ATTR_FILTER ||
+              p->attr == SHAPE_ATTR_MARKER_START ||
+              p->attr == SHAPE_ATTR_MARKER_MID ||
+              p->attr == SHAPE_ATTR_MARKER_END ||
+              p->attr == SHAPE_ATTR_FILL ||
+              p->attr == SHAPE_ATTR_STROKE)
+            {
+              g_hash_table_add (data->pending_refs, shape);
+            }
+        }
+
+      if (set)
+        set = _gtk_bitmask_set (set, p->attr, TRUE);
+    }
+}
+
+static void
+apply_styles_here (Shape        *shape,
+                   unsigned int  idx,
+                   ParserData   *data)
+{
+  GtkCssNode *node;
+  GtkCssNode *freeme = NULL;
+  GtkBitmask *set;
+  const char *style = NULL;
+  size_t line;
+
+  if (idx > 0)
+    {
+      if (shape_type_has_color_stops (shape->type))
+        {
+          ColorStop *stop = g_ptr_array_index (shape->color_stops, idx - 1);
+          node = stop->css_node;
+          style = stop->style;
+          line = stop->line;
+        }
+      else
+        {
+          FilterPrimitive *ff = g_ptr_array_index (shape->filters, idx - 1);
+          node = ff->css_node;
+          style = ff->style;
+          line = ff->line;
+        }
+    }
+  else if (shape->css_node)
+    {
+      node = shape->css_node;
+      style = shape->style;
+      line = shape->line;
+    }
+  else
+    {
+      freeme = node = gtk_css_node_new ();
+      style = NULL;
+      line = 0;
+    }
+
+  set = _gtk_bitmask_new ();
+
+  for (unsigned int i = data->rulesets->len; i > 0; i--)
+    {
+      SvgCssRuleset *r = &g_array_index (data->rulesets, SvgCssRuleset, i - 1);
+      if (gtk_css_selector_matches (r->selector, node))
+        apply_ruleset_to_shape (r, shape, idx, set, data);
+    }
+
+  _gtk_bitmask_free (set);
+  g_clear_object (&freeme);
+
+  if (style)
+    {
+      SvgCssRuleset r = { 0, };
+
+      data->text.start.lines = line;
+      data->text.start.bytes = 0;
+      data->text.start.line_chars = 0;
+      data->current_shape = shape;
+      parse_style_into_ruleset (&r, style, data);
+      apply_ruleset_to_shape (&r, shape, idx, NULL, data);
+      svg_css_ruleset_clear (&r);
+    }
+}
+
+static void
+apply_styles_to_shape (Shape      *shape,
+                       ParserData *data)
+{
+  apply_styles_here (shape, 0, data);
+
+  if (shape_type_has_shapes (shape->type))
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          apply_styles_to_shape (sh, data);
+        }
+    }
+
+  if (shape_type_has_color_stops (shape->type))
+    {
+      for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
+        apply_styles_here (shape, idx + 1, data);
+    }
+
+  if (shape_type_has_filters (shape->type))
+    {
+      for (unsigned int idx = 0; idx < shape->filters->len; idx++)
+        apply_styles_here (shape, idx + 1, data);
+    }
+
+  /* Now that styles have been applied, we can determine this */
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
+    {
+      GtkSymbolicColor symbolic;
+
+      if (((SvgPaint *) shape->base[SHAPE_ATTR_STROKE])->kind != PAINT_NONE)
+        data->svg->used |= GTK_SVG_USES_STROKES;
+
+      if (svg_paint_is_symbolic (((SvgPaint *) shape->base[SHAPE_ATTR_STROKE]), &symbolic))
+        data->svg->used |= BIT (symbolic + 1);
+    }
+
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
+    {
+      GtkSymbolicColor symbolic;
+
+      if (svg_paint_is_symbolic (((SvgPaint *) shape->base[SHAPE_ATTR_FILL]), &symbolic))
+        data->svg->used |= BIT (symbolic + 1);
+    }
+}
+
+static void
+apply_styles (ParserData *data)
+{
+  apply_styles_to_shape (data->svg->content, data);
+}
+
+/* }}} */
 
 static void
 gtk_svg_init_from_bytes (GtkSvg *self,
@@ -19279,9 +20282,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.pending_refs = g_hash_table_new (g_direct_hash, g_direct_equal);
   data.skip.to = NULL;
   data.skip.reason = NULL;
-  data.text = g_string_new ("");
-  data.collect_text = FALSE;
+  data.text.text = g_string_new ("");
+  data.text.collect = FALSE;
   data.num_loaded_elements = 0;
+  data.rulesets = g_array_new (FALSE, FALSE, sizeof (SvgCssRuleset));
 
   context = g_markup_parse_context_new (&parser,
                                         G_MARKUP_PREFIX_ERROR_POSITION |
@@ -19313,6 +20317,12 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (self->content == NULL)
     self->content = shape_new (NULL, SHAPE_SVG);
+
+  load_styles (&data);
+#if 0
+  dump_styles (&data);
+#endif
+  apply_styles (&data);
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_VIEW_BOX))
     {
@@ -19396,7 +20406,10 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
   g_hash_table_unref (data.pending_refs);
-  g_string_free (data.text, TRUE);
+  g_string_free (data.text.text, TRUE);
+  for (unsigned int i = 0; i < data.rulesets->len; i++)
+    svg_css_ruleset_clear (&g_array_index (data.rulesets, SvgCssRuleset, i));
+  g_array_unref (data.rulesets);
 
   if (self->gpa_version > 0 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)
@@ -19437,14 +20450,18 @@ static void
 indent_for_elt (GString *s,
                 int      indent)
 {
-  g_string_append_printf (s, "\n%*s", indent, " ");
+  if (s->str[s->len - 1] != '\n')
+    g_string_append_c (s, '\n');
+  g_string_append_printf (s, "%*s", indent, " ");
 }
 
 static void
 indent_for_attr (GString *s,
                  int      indent)
 {
-  g_string_append_printf (s, "\n%*s", indent + 8, " ");
+  if (s->str[s->len - 1] != '\n')
+    g_string_append_c (s, '\n');
+  g_string_append_printf (s, "%*s", indent + 8, " ");
 }
 
 static void
@@ -19461,6 +20478,25 @@ serialize_shape_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append_printf (s, "id='%s'", shape->id);
+    }
+
+  if (shape->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; shape->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, shape->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (shape->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", shape->style);
     }
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
@@ -20179,6 +21215,31 @@ serialize_color_stop (GString              *s,
   indent_for_elt (s, indent);
   g_string_append (s, "<stop");
 
+  if (stop->id)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "id='%s'", stop->id);
+    }
+
+  if (stop->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; stop->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, stop->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (stop->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", stop->style);
+    }
+
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     values = stop->current;
   else
@@ -20222,6 +21283,31 @@ serialize_filter_begin (GString              *s,
 
   indent_for_elt (s, indent);
   g_string_append_printf (s, "<%s", filter_types[f->type].name);
+
+  if (f->id)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "id='%s'", f->id);
+    }
+
+  if (f->classes)
+    {
+      indent_for_attr (s, indent);
+      g_string_append (s, "class='");
+      for (unsigned int i = 0; f->classes[i]; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ' ');
+          g_string_append (s, f->classes[i]);
+        }
+      g_string_append_c (s, '\'');
+    }
+
+  if (f->style)
+    {
+      indent_for_attr (s, indent);
+      g_string_append_printf (s, "style='%s'", f->style);
+    }
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     values = f->current;
@@ -20287,6 +21373,16 @@ serialize_shape (GString              *s,
       serialize_shape_attrs (s, svg, indent, shape, flags);
       serialize_gpa_attrs (s, svg, indent, shape, flags);
       g_string_append_c (s, '>');
+    }
+
+  for (unsigned int i = 0; i < shape->styles->len; i++)
+    {
+      StyleElt *elt = g_ptr_array_index (shape->styles, i);
+      indent_for_elt (s, indent + 2);
+      g_string_append (s, "<style type='text/css'>\n");
+      g_string_append (s, g_bytes_get_data (elt->content, NULL));
+      indent_for_elt (s, indent + 2);
+      g_string_append (s, "</style>");
     }
 
   if (shape_type_has_color_stops (shape->type))
@@ -21712,9 +22808,9 @@ push_group (Shape        *shape,
   if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
     {
       if (shape->id)
-        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %d", shape_types[shape->type].name, shape->id, shape->line);
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s id='%s'> at line %" G_GSIZE_FORMAT, shape_types[shape->type].name, shape->id, shape->line);
       else
-        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %d", shape_types[shape->type].name, shape->line);
+        gtk_snapshot_push_debug (context->snapshot, "Group for <%s> at line %" G_GSIZE_FORMAT, shape_types[shape->type].name, shape->line);
     }
 #endif
 
@@ -23365,7 +24461,6 @@ text_create_layout (Shape            *self,
   WritingMode wmode;
   PangoGravity gravity;
   PangoFontDescription *font_desc;
-  const char *font_family;
   PangoLayout *layout;
   PangoAttrList *attr_list;
   PangoAttribute *attr;
@@ -23373,7 +24468,7 @@ text_create_layout (Shape            *self,
   int w,h;
   PangoLayoutIter *iter;
   double offset;
-
+  SvgStringList *font_family;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
@@ -23416,9 +24511,20 @@ text_create_layout (Shape            *self,
 
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
-  font_family = svg_string_get (self->current[SHAPE_ATTR_FONT_FAMILY]);
-  if (font_family && *font_family)
-    pango_font_description_set_family_static (font_desc, font_family);
+  font_family = (SvgStringList *) self->current[SHAPE_ATTR_FONT_FAMILY];
+  if (font_family->len > 0)
+    {
+      GString *s = g_string_new ("");
+
+      for (unsigned int i = 0; i < font_family->len; i++)
+        {
+          if (i > 0)
+            g_string_append_c (s, ',');
+          g_string_append (s, font_family->values[i]);
+        }
+      pango_font_description_set_family (font_desc, s->str);
+      g_string_free (s, TRUE);
+    }
 
   pango_font_description_set_style (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_STYLE]));
   pango_font_description_set_variant (font_desc, svg_enum_get (self->current[SHAPE_ATTR_FONT_VARIANT]));

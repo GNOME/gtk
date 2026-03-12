@@ -9,6 +9,11 @@
           id='test-body-content'
           font-size='18'
           font-family='SVGFreeSansASCII,sans-serif'>
+    <style type='text/css'>
+@font-face {
+      font-family: Blocky;
+      src: url(woffs/Blocky.woff) format("woff");
+    </style>
     <g
             transform='scale(1, 1.5)'>
       <linearGradient
