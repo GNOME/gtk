@@ -12,6 +12,7 @@
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
 
+#include "gskdebugprivate.h"
 #include "gskrectprivate.h"
 #include "gsktransform.h"
 
@@ -872,6 +873,7 @@ gsk_gpu_render_pass_push_clip_rect (GskGpuRenderPass            *self,
   if (gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage))
     return;
 
+  GSK_DEBUG (FALLBACK, "push_clip_rect() needs clip mask");
   gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, NULL, NULL, storage);
 }
 
@@ -910,6 +912,7 @@ gsk_gpu_render_pass_push_clip_rounded (GskGpuRenderPass            *self,
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &storage->clip, &self->offset, clip))
     {
       gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
+      GSK_DEBUG (FALLBACK, "push_clip_rounded() needs clip mask");
       gsk_gpu_render_pass_draw_clip_mask (self, NULL, clip, NULL, NULL, storage);
       return;
     }
@@ -945,6 +948,7 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
   if (self->clip_mask != NULL ||
       !gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage))
     {
+      GSK_DEBUG (FALLBACK, "push_clip_mask() needs to draw clip mask");
       gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, clip_mask, clip_mask_rect, storage);
       storage->clip_mask_has_opacity |= has_opacity;
       return;
