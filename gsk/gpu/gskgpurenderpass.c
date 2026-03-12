@@ -850,12 +850,13 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   gsk_gpu_clip_init_copy (&storage->clip, &old_clip);
   storage->clip_mask = self->clip_mask;
   storage->clip_mask_rect = self->clip_mask_rect;
-  storage->clip_mask_has_opacity = self->clip_mask_has_opacity || self->opacity < 1.0;
+  storage->clip_mask_has_opacity = self->clip_mask_has_opacity;
   storage->opacity = self->opacity;
   storage->modified |= GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MASK;
 
-  self->opacity = 1.0;
   self->clip_mask = image;
+  self->clip_mask_has_opacity |= self->opacity < 1.0;
+  self->opacity = 1.0;
   gsk_rect_init_offset (&self->clip_mask_rect,
                         &bounds,
                         &self->offset);

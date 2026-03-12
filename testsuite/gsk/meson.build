@@ -53,6 +53,7 @@ compare_render_tests = [
   'clip-intersection-background',
   'clip-intersection-fail-opacity',
   'clip-mask-clip',
+  'clip-mask-opacity-tracking',
   'clip-mask-restore-failure',
   'clip-mask-wrap-mode',
   'clip-nested1',

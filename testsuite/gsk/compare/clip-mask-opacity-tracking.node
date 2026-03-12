@@ -1,0 +1,31 @@
+stroke {
+  child: opacity {
+    opacity: 0.6;
+    child: fill {
+      child: container {
+        color {
+          bounds: 0 0 40 40;
+          color: rgb(255,0,0);
+        }
+        color {
+          bounds: 10 10 40 40;
+          color: rgb(0,0,255);
+        }
+      }
+      path: "\
+M 0 0\
+L 25 0\
+L 25 50\
+L 50 50\
+L 50 25\
+L 0 25\
+Z";
+      fill-rule: winding;
+    }
+  }
+  path: "\
+M 10 10 h 30 v 30 h -30 z";
+  line-width: 20;
+  line-cap: butt;
+  line-join: miter;
+}
