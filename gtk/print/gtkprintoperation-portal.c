@@ -114,6 +114,7 @@ portal_data_free (gpointer data)
 typedef struct {
   GDBusProxy *proxy;
   GtkPrintJob *job;
+  GtkPrinter *printer;
   guint32 token;
   cairo_surface_t *surface;
   GMainLoop *loop;
@@ -123,8 +124,13 @@ typedef struct {
 static void
 op_portal_free (GtkPrintOperationPortal *op_portal)
 {
+  GtkPrintBackend *backend;
+
+  backend = gtk_printer_get_backend (op_portal->printer);
   g_clear_object (&op_portal->proxy);
   g_clear_object (&op_portal->job);
+  gtk_print_backend_destroy (backend);
+  g_clear_object (&op_portal->printer);
   if (op_portal->loop)
     g_main_loop_unref (op_portal->loop);
   g_free (op_portal);
@@ -346,6 +352,7 @@ finish_print (PortalData        *portal,
 
       job = gtk_print_job_new (priv->job_name, printer, settings, page_setup);
       op_portal->job = job;
+      op_portal->printer = printer;
 
       op_portal->proxy = g_object_ref (portal->proxy);
       op_portal->token = portal->token;
@@ -403,15 +410,17 @@ find_file_printer (void)
       GtkPrintBackend *backend = l->data;
 
       /* FIXME: this needs changes for cpdb */
-      if (strcmp (G_OBJECT_TYPE_NAME (backend), "GtkPrintBackendFileBuiltin") == 0)
+      if (!printer && strcmp (G_OBJECT_TYPE_NAME (backend), "GtkPrintBackendFileBuiltin") == 0)
         {
           printers = gtk_print_backend_get_printer_list (backend);
-          printer = printers->data;
+          printer = g_object_ref (printers->data);
           g_list_free (printers);
-          break;
+          continue;
         }
+
+      gtk_print_backend_destroy (backend);
     }
-  g_list_free (backends);
+  g_list_free_full (backends, g_object_unref);
 
   return printer;
 }
