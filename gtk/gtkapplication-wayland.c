@@ -222,7 +222,8 @@ gtk_application_impl_wayland_window_forget (GtkApplicationImpl *impl,
   GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_forget (impl, window);
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
-  gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
+  if (GDK_IS_WAYLAND_TOPLEVEL (surface))
+    gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
 }
 
 static guint
