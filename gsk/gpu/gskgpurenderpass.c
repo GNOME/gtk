@@ -950,7 +950,7 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
     {
       GSK_DEBUG (FALLBACK, "push_clip_mask() needs to draw clip mask");
       gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, clip_mask, clip_mask_rect, storage);
-      storage->clip_mask_has_opacity |= has_opacity;
+      self->clip_mask_has_opacity |= has_opacity;
       return;
     }
 
