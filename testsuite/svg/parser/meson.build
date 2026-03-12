@@ -60,6 +60,7 @@ test_data = [
   'non-svg-toplevel.svg',
   'paint.svg',
   'paint-server-fallback.svg',
+  'path.svg',
   'pattern.svg',
   'percentage.svg',
   'polygon.svg',
