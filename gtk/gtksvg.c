@@ -10929,7 +10929,6 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = svg_vector_effect_parse,
   },
   [SHAPE_ATTR_PATH] = {
-    .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_PATH),
     .parse_value = svg_path_parse,
     .parse_presentation = svg_path_parse_presentation,
