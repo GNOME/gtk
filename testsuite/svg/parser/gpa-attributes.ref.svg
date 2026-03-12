@@ -19,4 +19,11 @@
           gpa:stroke='foreground'
           gpa:fill='accent'>
   </path>
+  <rect
+          x='0'
+          y='5'
+          width='10'
+          height='10'
+          gpa:states='zero 2'>
+  </rect>
 </svg>
