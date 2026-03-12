@@ -399,6 +399,7 @@ gsk_vulkan_debug_frame_start_node (GskGpuFrame   *frame,
                                          .first_child = NO_ITEM,
                                        });
             }
+          cur = gsk_vulkan_debug_get (&self->debug, self->debug_current);
         }
 
       self->debug_current = cur->first_child + pos;
