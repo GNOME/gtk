@@ -3,7 +3,6 @@
         xmlns:svg='http://www.w3.org/2000/svg'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state-names='zero empty'
         gpa:state='0'
         width='16'
         height='16'>
@@ -13,18 +12,14 @@
           visibility='hidden'
           gpa:states='none'>
   </circle>
-  <circle
-          gpa:states='zero'>
+  <circle>
+  </circle>
+  <circle>
   </circle>
   <circle
-          visibility='hidden'
-          gpa:states='empty'>
+          gpa:states='0'>
   </circle>
-  <circle
-          gpa:states='zero'>
-  </circle>
-  <circle
-          gpa:states='zero 10'>
+  <circle>
   </circle>
   <circle>
   </circle>

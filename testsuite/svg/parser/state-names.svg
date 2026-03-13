@@ -1,7 +1,7 @@
 <svg width="16" height="16"
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state-names='zero empty'
+        gpa:state-names='zero empty 0no all not#either'
         gpa:state='0'>
   <circle gpa:states='all'/>
   <circle gpa:states='none'/>

@@ -10929,7 +10929,6 @@ static ShapeAttribute shape_attrs[] = {
     .parse_value = svg_vector_effect_parse,
   },
   [SHAPE_ATTR_PATH] = {
-    .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_PATH),
     .parse_value = svg_path_parse,
     .parse_presentation = svg_path_parse_presentation,
@@ -25506,13 +25505,11 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
+          used_opacity = colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha;
           n_used_colors = MIN (n_colors, 5);
           used_colors = solid_colors;
-
-          used_opacity = 1;
           for (unsigned int i = 0; i < n_used_colors; i++)
             {
-              used_opacity = MIN (used_opacity, colors[i].alpha);
               solid_colors[i] = colors[i];
               solid_colors[i].alpha = 1;
             }
