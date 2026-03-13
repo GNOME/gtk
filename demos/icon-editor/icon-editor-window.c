@@ -630,10 +630,18 @@ static void
 save_to_file (IconEditorWindow *self,
               GFile            *file)
 {
+  GtkSvg *svg;
+  unsigned int state;
+
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
-  bytes = path_paintable_serialize (self->paintable, self->initial_state);
+  svg = path_paintable_get_svg (self->paintable);
+  state = svg->state;
+  svg->state = self->initial_state;
+  bytes = gtk_svg_serialize (svg);
+  svg->state = state;
+
   if (!g_file_replace_contents (file,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),

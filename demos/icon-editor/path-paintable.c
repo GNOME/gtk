@@ -67,7 +67,7 @@ ensure_render_paintable (PathPaintable *self)
     {
       g_autoptr (GBytes) bytes = NULL;
 
-      bytes = path_paintable_serialize (self, gtk_svg_get_state (self->svg));
+      bytes = gtk_svg_serialize (self->svg);
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
@@ -815,7 +815,7 @@ path_paintable_copy (PathPaintable *self)
   g_autoptr (GBytes) bytes = NULL;
   PathPaintable *other;
 
-  bytes = path_paintable_serialize (self, self->svg->state);
+  bytes = gtk_svg_serialize (self->svg);
   other = path_paintable_new_from_bytes (bytes, NULL);
 
   return other;
@@ -1121,20 +1121,6 @@ path_paintable_new_from_resource (const char *resource)
     g_error ("Failed to parse %s: %s", resource, error ? error->message : "");
 
   return res;
-}
-
-GBytes *
-path_paintable_serialize (PathPaintable *self,
-                          unsigned int   initial_state)
-{
-  GBytes *bytes;
-  unsigned int state = self->svg->state;
-
-  self->svg->state = initial_state;
-  bytes = gtk_svg_serialize (self->svg);
-  self->svg->state = state;
-
-  return bytes;
 }
 
 const graphene_rect_t *

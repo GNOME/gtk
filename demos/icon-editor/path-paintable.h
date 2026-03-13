@@ -46,9 +46,6 @@ PathPaintable * path_paintable_new_from_bytes      (GBytes         *bytes,
                                                     GError        **error);
 PathPaintable * path_paintable_new_from_resource   (const char     *resource);
 
-GBytes *        path_paintable_serialize           (PathPaintable  *self,
-                                                    unsigned int    initial_state);
-
 PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
 gboolean        path_paintable_equal               (PathPaintable   *self,
