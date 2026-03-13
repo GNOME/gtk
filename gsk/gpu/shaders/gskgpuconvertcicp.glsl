@@ -305,7 +305,7 @@ hlg_eotf (float v)
   if (abs (v) <= 0.5)
     return sign (v) * ((v * v) / 3.0);
   else
-    return sign (v) * (exp (((abs (v) - c) / a) + b) / 12.0);
+    return sign (v) * ((exp ((abs (v) - c) / a) + b) / 12.0);
 }
 
 float
