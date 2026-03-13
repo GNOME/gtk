@@ -1403,5 +1403,11 @@ path_paintable_set_frame_clock (PathPaintable *self,
     gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), clock);
 }
 
+GtkSvg *
+path_paintable_get_svg (PathPaintable *self)
+{
+  return self->svg;
+}
+
 /* }}} */
 /* vim:set foldmethod=marker: */

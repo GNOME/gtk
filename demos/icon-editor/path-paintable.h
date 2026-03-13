@@ -186,3 +186,5 @@ gboolean        path_paintable_get_playing         (PathPaintable *self);
 
 void            path_paintable_set_frame_clock     (PathPaintable *self,
                                                     GdkFrameClock *clock);
+
+GtkSvg *        path_paintable_get_svg             (PathPaintable *self);
