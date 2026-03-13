@@ -45,6 +45,7 @@ struct _IconEditorWindow
   gboolean show_grid;
   gboolean invert_colors;
   gboolean playing;
+  gboolean compat_classes;
   float weight;
   unsigned int state;
   unsigned int initial_state;
@@ -90,6 +91,7 @@ enum
   PROP_STATE,
   PROP_INITIAL_STATE,
   PROP_PLAYING,
+  PROP_COMPAT_CLASSES,
   NUM_PROPERTIES,
 };
 
@@ -276,6 +278,20 @@ icon_editor_window_set_playing (IconEditorWindow *self,
   self->playing = playing;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
+}
+
+static void
+icon_editor_window_set_compat_classes (IconEditorWindow *self,
+                                       gboolean          compat_classes)
+{
+  if (self->compat_classes == compat_classes)
+    return;
+
+  self->compat_classes = compat_classes;
+
+  icon_editor_window_set_changed (self, TRUE);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COMPAT_CLASSES]);
 }
 
 /* }}} */
@@ -620,6 +636,109 @@ show_open_filechooser (IconEditorWindow *self)
 /* {{{ Saving/Exporting */
 
 static void
+set_compat (Shape    *shape,
+            gpointer  data)
+{
+  IconEditorWindow *self = data;
+
+  if (!shape_is_graphical (shape))
+    return;
+
+  g_clear_pointer (&shape->classes, g_strfreev);
+
+  if (self->compat_classes)
+    {
+      GStrvBuilder *builder;
+      unsigned int symbolic;
+      GdkRGBA rgba;
+
+      builder = g_strv_builder_new ();
+
+      switch ((unsigned int) svg_shape_attr_get_paint (shape, SHAPE_ATTR_FILL, &symbolic, &rgba))
+        {
+        case PAINT_SYMBOLIC:
+          switch (symbolic)
+            {
+            case GTK_SYMBOLIC_COLOR_FOREGROUND:
+              g_strv_builder_add_many (builder, "foreground", "foreground-fill", NULL);
+              break;
+            case GTK_SYMBOLIC_COLOR_ERROR:
+              g_strv_builder_add_many (builder, "error", "error-fill", NULL);
+              break;
+            case GTK_SYMBOLIC_COLOR_WARNING:
+              g_strv_builder_add_many (builder, "warning", "warning-fill", NULL);
+              break;
+            case GTK_SYMBOLIC_COLOR_SUCCESS:
+              g_strv_builder_add_many (builder, "success", "success-fill", NULL);
+              break;
+            default:
+              break;
+            }
+          break;
+        case PAINT_NONE:
+          g_strv_builder_add (builder, "transparent-fill");
+          break;
+        default:
+          break;
+        }
+
+      switch ((unsigned int) svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, &symbolic, &rgba))
+        {
+        case PAINT_SYMBOLIC:
+          switch (symbolic)
+            {
+            case GTK_SYMBOLIC_COLOR_FOREGROUND:
+              g_strv_builder_add (builder, "foreground-stroke");
+              break;
+            case GTK_SYMBOLIC_COLOR_ERROR:
+              g_strv_builder_add (builder, "error-stroke");
+              break;
+            case GTK_SYMBOLIC_COLOR_WARNING:
+              g_strv_builder_add (builder, "warning-stroke");
+              break;
+            case GTK_SYMBOLIC_COLOR_SUCCESS:
+              g_strv_builder_add (builder, "success-stroke");
+              break;
+            default:
+              break;
+            }
+          break;
+        default:
+          break;
+        }
+
+      shape->classes = g_strv_builder_end (builder);
+    }
+}
+
+typedef void (* ShapeCallback) (Shape    *shape,
+                                gpointer  user_data);
+
+static void
+foreach_shape (Shape         *shape,
+               ShapeCallback  callback,
+               gpointer       user_data)
+{
+  callback (shape, user_data);
+
+  if (shape->shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          foreach_shape (sh, callback, user_data);
+        }
+    }
+}
+
+static void
+apply_compat_classes (IconEditorWindow *window,
+                      GtkSvg           *svg)
+{
+  foreach_shape (svg->content, set_compat, window);
+}
+
+static void
 save_error (IconEditorWindow *self,
             const char       *message)
 {
@@ -639,6 +758,7 @@ save_to_file (IconEditorWindow *self,
   svg = path_paintable_get_svg (self->paintable);
   state = svg->state;
   svg->state = self->initial_state;
+  apply_compat_classes (self, svg);
   bytes = gtk_svg_serialize (svg);
   svg->state = state;
 
@@ -709,10 +829,13 @@ static void
 export_to_file (IconEditorWindow *self,
                 GFile            *file)
 {
+  GtkSvg *svg;
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
-  bytes = gtk_svg_serialize_full (path_paintable_get_svg (self->paintable),
+  svg = path_paintable_get_svg (self->paintable);
+  apply_compat_classes (self, svg);
+  bytes = gtk_svg_serialize_full (svg,
                                   NULL, 0,
                                   GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
                                   GTK_SVG_SERIALIZE_NO_COMPAT);
@@ -1039,6 +1162,7 @@ icon_editor_window_init (IconEditorWindow *self)
   self->weight = 400;
   self->state = 0;
   self->playing = TRUE;
+  self->compat_classes = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -1120,6 +1244,10 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_playing (self, g_value_get_boolean (value));
       break;
 
+    case PROP_COMPAT_CLASSES:
+      icon_editor_window_set_compat_classes (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1178,6 +1306,10 @@ icon_editor_window_get_property (GObject      *object,
 
     case PROP_PLAYING:
       g_value_set_boolean (value, self->playing);
+      break;
+
+    case PROP_COMPAT_CLASSES:
+      g_value_set_boolean (value, self->compat_classes);
       break;
 
     default:
@@ -1308,6 +1440,11 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
 
   properties[PROP_PLAYING] =
     g_param_spec_boolean ("playing", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  properties[PROP_COMPAT_CLASSES] =
+    g_param_spec_boolean ("compat-classes", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
