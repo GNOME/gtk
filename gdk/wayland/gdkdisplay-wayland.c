@@ -130,7 +130,11 @@
 #define XDG_WM_DIALOG_VERSION           1
 #define XDG_TOPLEVEL_ICON_VERSION       1
 #define XDG_WM_BASE_VERSION             7
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+#define WL_FIXES_VERSION                2
+#else
 #define WL_FIXES_VERSION                1
+#endif
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
@@ -747,7 +751,7 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->wl_fixes =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &wl_fixes_interface, WL_FIXES_VERSION);
+                          &wl_fixes_interface, MIN (version, WL_FIXES_VERSION));
     }
 #endif
 
@@ -770,6 +774,11 @@ gdk_registry_handle_global_remove (void               *data,
   g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
 
   /* FIXME: the object needs to be destroyed here, we're leaking */
+
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  if (display_wayland->wl_fixes && wl_fixes_get_version (display_wayland->wl_fixes) >= WL_FIXES_ACK_GLOBAL_REMOVE_SINCE_VERSION)
+    wl_fixes_ack_global_remove (display_wayland->wl_fixes, registry, id);
+#endif
 }
 
 static const struct wl_registry_listener registry_listener = {
