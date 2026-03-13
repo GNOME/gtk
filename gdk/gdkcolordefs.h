@@ -159,6 +159,12 @@ hlg_eotf (float v[3])
       else
         v[i] = sign (v[i]) * (expf ((fabsf (v[i]) - c) / a) + b) / 12.0;
     }
+
+  float Ys = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
+  float scale = (1000.f / 203.f) * powf (MAX (Ys, 0.0f), 0.2f);
+  v[0] *= scale;
+  v[1] *= scale;
+  v[2] *= scale;
 }
 
 static inline void
@@ -167,6 +173,16 @@ hlg_oetf (float v[3])
   const float a = 0.17883277;
   const float b = 0.28466892;
   const float c = 0.55991073;
+
+  float Yd = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
+  if (Yd > 0.0f)
+    {
+      float scale = powf (203.f / 1000.f, 1.f / 1.2f)
+                   * powf (Yd, 1.f / 1.2f - 1.f);
+      v[0] *= scale;
+      v[1] *= scale;
+      v[2] *= scale;
+    }
 
   for (int i = 0; i < 3; i++)
     {

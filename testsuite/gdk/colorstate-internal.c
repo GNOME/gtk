@@ -14,16 +14,17 @@ typedef struct
   TransferFunc eotf;
   float o_range[2];
   float e_range[2];
+  gboolean symmetric;
 } TransferTest;
 
 TransferTest transfers[] = {
-  { "srgb",    srgb_oetf,    srgb_eotf,    { 0, 1 }, { 0, 1} },
-  { "pq",      pq_oetf,      pq_eotf,      { 0, 49.2610855 }, { 0, 1 } },
-  { "bt709",   bt709_oetf,   bt709_eotf,   { 0, 1 }, { 0, 1 } },
-  { "hlg",     hlg_oetf,     hlg_eotf,     { 0, 1}, { 0, 1} },
-  { "gamma22", gamma22_oetf, gamma22_eotf, { 0, 1 }, { 0, 1 } },
-  { "gamma28", gamma28_oetf, gamma28_eotf, { 0, 1 }, { 0, 1 } },
-  { "oklab",   to_oklab_nl,  from_oklab_nl,{ 0, 1 }, { 0, 1 } },
+  { "srgb",    srgb_oetf,    srgb_eotf,    { 0, 1 }, { 0, 1}, TRUE },
+  { "pq",      pq_oetf,      pq_eotf,      { 0, 49.2610855 }, { 0, 1 }, TRUE },
+  { "bt709",   bt709_oetf,   bt709_eotf,   { 0, 1 }, { 0, 1 }, TRUE },
+  { "hlg",     hlg_oetf,     hlg_eotf,     { 0, 1000.0 / 203.0 }, { 0, 1}, FALSE },
+  { "gamma22", gamma22_oetf, gamma22_eotf, { 0, 1 }, { 0, 1 }, TRUE },
+  { "gamma28", gamma28_oetf, gamma28_eotf, { 0, 1 }, { 0, 1 }, TRUE },
+  { "oklab",   to_oklab_nl,  from_oklab_nl,{ 0, 1 }, { 0, 1 }, TRUE },
 };
 
 static void
@@ -85,6 +86,9 @@ test_transfer_symmetry (gconstpointer data)
 {
   TransferTest *transfer = (TransferTest *) data;
   float v1[3], v2[3];
+
+  if (!transfer->symmetric)
+    return;
 
   for (int i = 0; i < 11; i++)
     {

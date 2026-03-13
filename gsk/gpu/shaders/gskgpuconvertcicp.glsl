@@ -302,7 +302,12 @@ hlg_eotf (vec3 v)
 
   vec3 lo = sign (v) * ((v * v) / 3.0);
   vec3 hi = sign (v) * ((exp ((abs (v) - c) / a) + b) / 12.0);
-  return mix (hi, lo, lessThanEqual (abs (v), vec3 (0.5)));
+  v = mix (hi, lo, lessThanEqual (abs (v), vec3 (0.5)));
+
+  float Ys = dot (vec3 (0.2627, 0.6780, 0.0593), v);
+  v *= (1000.0 / 203.0) * pow (max (Ys, 0.0), 0.2);
+
+  return v;
 }
 
 vec3
@@ -311,6 +316,10 @@ hlg_oetf (vec3 v)
   const float a = 0.17883277;
   const float b = 0.28466892;
   const float c = 0.55991073;
+
+  float Yd = dot (vec3 (0.2627, 0.6780, 0.0593), v);
+  if (Yd > 0.0)
+    v *= pow (203.0 / 1000.0, 1.0 / 1.2) * pow (Yd, 1.0 / 1.2 - 1.0);
 
   vec3 lo = sign (v) * sqrt (3.0 * abs (v));
   vec3 hi = sign (v) * (a * log (12.0 * abs (v) - b) + c);
