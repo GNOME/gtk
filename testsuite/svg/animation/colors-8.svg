@@ -22,8 +22,7 @@
             fill='none'
             cx='10'
             cy='10'
-            r='10'
-            class='transparent-fill'>
+            r='10'>
       <animate
               id='fill'
               attributeName='fill'

@@ -67,7 +67,7 @@ ensure_render_paintable (PathPaintable *self)
     {
       g_autoptr (GBytes) bytes = NULL;
 
-      bytes = path_paintable_serialize (self, gtk_svg_get_state (self->svg));
+      bytes = gtk_svg_serialize (self->svg);
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
@@ -815,7 +815,7 @@ path_paintable_copy (PathPaintable *self)
   g_autoptr (GBytes) bytes = NULL;
   PathPaintable *other;
 
-  bytes = path_paintable_serialize (self, self->svg->state);
+  bytes = gtk_svg_serialize (self->svg);
   other = path_paintable_new_from_bytes (bytes, NULL);
 
   return other;
@@ -1123,29 +1123,6 @@ path_paintable_new_from_resource (const char *resource)
   return res;
 }
 
-GBytes *
-path_paintable_serialize (PathPaintable *self,
-                          unsigned int   initial_state)
-{
-  GBytes *bytes;
-  unsigned int state = self->svg->state;
-
-  self->svg->state = initial_state;
-  bytes = gtk_svg_serialize (self->svg);
-  self->svg->state = state;
-
-  return bytes;
-}
-
-GBytes *
-path_paintable_serialize_as_svg (PathPaintable *self)
-{
-  return gtk_svg_serialize_full (self->svg,
-                                 NULL, 0,
-                                 GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
-                                 GTK_SVG_SERIALIZE_NO_COMPAT);
-}
-
 const graphene_rect_t *
 path_paintable_get_viewport (PathPaintable *self)
 {
@@ -1401,6 +1378,12 @@ path_paintable_set_frame_clock (PathPaintable *self,
 
   if (self->render_paintable)
     gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), clock);
+}
+
+GtkSvg *
+path_paintable_get_svg (PathPaintable *self)
+{
+  return self->svg;
 }
 
 /* }}} */

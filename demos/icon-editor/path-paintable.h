@@ -46,11 +46,6 @@ PathPaintable * path_paintable_new_from_bytes      (GBytes         *bytes,
                                                     GError        **error);
 PathPaintable * path_paintable_new_from_resource   (const char     *resource);
 
-GBytes *        path_paintable_serialize           (PathPaintable  *self,
-                                                    unsigned int    initial_state);
-
-GBytes *        path_paintable_serialize_as_svg    (PathPaintable  *self);
-
 PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
 gboolean        path_paintable_equal               (PathPaintable   *self,
@@ -186,3 +181,5 @@ gboolean        path_paintable_get_playing         (PathPaintable *self);
 
 void            path_paintable_set_frame_clock     (PathPaintable *self,
                                                     GdkFrameClock *clock);
+
+GtkSvg *        path_paintable_get_svg             (PathPaintable *self);

@@ -201,8 +201,7 @@
             stroke-dasharray='none'
             cx='500'
             cy='500'
-            r='200'
-            class='transparent-fill'>
+            r='200'>
     </circle>
     <circle
             id='circle2'
@@ -215,8 +214,7 @@
             stroke-dasharray='none'
             cx='500'
             cy='1500'
-            r='200'
-            class='transparent-fill'>
+            r='200'>
     </circle>
     <circle
             id='circle2_2'
@@ -229,8 +227,7 @@
             stroke-dasharray='none'
             cx='600'
             cy='1600'
-            r='1'
-            class='transparent-fill'>
+            r='1'>
     </circle>
     <circle
             id='circle3'
@@ -243,8 +240,7 @@
             stroke-dasharray='none'
             cx='500'
             cy='2500'
-            r='200'
-            class='transparent-fill'>
+            r='200'>
     </circle>
     <circle
             id='circle3_2'
@@ -257,8 +253,7 @@
             stroke-dasharray='none'
             cx='800'
             cy='2500'
-            r='1'
-            class='transparent-fill'>
+            r='1'>
     </circle>
     <circle
             id='circle4'
@@ -271,8 +266,7 @@
             stroke-dasharray='none'
             cx='500'
             cy='3500'
-            r='200'
-            class='transparent-fill'>
+            r='200'>
     </circle>
     <circle
             id='circle4_2'
@@ -285,8 +279,7 @@
             stroke-dasharray='none'
             cx='600'
             cy='3600'
-            r='50'
-            class='transparent-fill'>
+            r='50'>
     </circle>
     <circle
             id='circle5'
@@ -299,8 +292,7 @@
             stroke-dasharray='none'
             cx='500'
             cy='4500'
-            r='200'
-            class='transparent-fill'>
+            r='200'>
     </circle>
     <circle
             id='circle5_2'
@@ -313,8 +305,7 @@
             stroke-dasharray='none'
             cx='800'
             cy='4500'
-            r='50'
-            class='transparent-fill'>
+            r='50'>
     </circle>
   </g>
 </svg>

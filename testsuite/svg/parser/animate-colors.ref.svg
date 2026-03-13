@@ -60,8 +60,7 @@
           fill='none'
           stroke='rgb(0,0,0)'
           stroke-width='2'
-          d='M 90 10 L 110 10 L 100 30 Z'
-          class='transparent-fill'>
+          d='M 90 10 L 110 10 L 100 30 Z'>
     <animate
             attributeName='stroke'
             dur='4000ms'

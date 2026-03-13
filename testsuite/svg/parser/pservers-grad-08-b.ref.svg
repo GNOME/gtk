@@ -47,8 +47,7 @@
               stroke='url(#Gradient)'
               stroke-width='3'
               x='20'
-              y='160'
-              class='transparent-fill'>Gradient on stroke</text>
+              y='160'>Gradient on stroke</text>
     </g>
     <g
             font-size='28'
@@ -78,7 +77,6 @@
           x='1'
           y='1'
           width='478'
-          height='358'
-          class='transparent-fill'>
+          height='358'>
   </rect>
 </svg>

@@ -27,8 +27,7 @@
           x='40'
           y='40'
           width='125'
-          height='75'
-          class='transparent-fill'>
+          height='75'>
   </rect>
   <rect
           style='marker:url(#marker1);'
@@ -42,8 +41,7 @@
           x='60'
           y='50'
           width='85'
-          height='55'
-          class='transparent-fill'>
+          height='55'>
   </rect>
   <rect
           style='marker:url(#marker1);'
@@ -57,7 +55,6 @@
           x='80'
           y='60'
           width='45'
-          height='35'
-          class='transparent-fill'>
+          height='35'>
   </rect>
 </svg>

@@ -66,8 +66,7 @@
             x='250'
             y='30'
             width='170'
-            height='100'
-            class='transparent-fill'>
+            height='100'>
     </rect>
     <text
             font-size='12'
@@ -130,8 +129,7 @@
             stroke='url(#Grad4)'
             stroke-width='2'
             x='10'
-            y='270'
-            class='transparent-fill'>Gradient on text stroke</text>
+            y='270'>Gradient on text stroke</text>
     <text
             font-size='12'
             font-family='Arial'
@@ -155,7 +153,6 @@
           x='1'
           y='1'
           width='478'
-          height='358'
-          class='transparent-fill'>
+          height='358'>
   </rect>
 </svg>

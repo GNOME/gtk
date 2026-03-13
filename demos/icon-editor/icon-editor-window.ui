@@ -944,6 +944,7 @@
                       <object class="PaintableEditor" id="paintable_editor">
                         <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>
                         <property name="initial-state" bind-source="IconEditorWindow" bind-property="initial-state" bind-flags="sync-create | bidirectional"/>
+                        <property name="compat-classes" bind-source="IconEditorWindow" bind-property="compat-classes" bind-flags="sync-create | bidirectional"/>
                       </object>
                     </property>
                   </object>

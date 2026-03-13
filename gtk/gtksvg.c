@@ -20470,9 +20470,6 @@ serialize_shape_attrs (GString              *s,
                        Shape                *shape,
                        GtkSvgSerializeFlags  flags)
 {
-  GString *classes = g_string_new ("");
-  GString *style = g_string_new ("");
-
   if (shape->id)
     {
       indent_for_attr (s, indent);
@@ -20534,102 +20531,12 @@ serialize_shape_attrs (GString              *s,
                   svg_value_print (value, s);
                   g_string_append_c (s, '\'');
                 }
-              else
-                {
-                  if (style->len > 0)
-                    g_string_append (style, "; ");
-                  g_string_append_printf (style, "%s: ", shape_attr_get_presentation (attr, shape->type));
-                  svg_value_print (value, style);
-                }
             }
 
           svg_value_unref (initial);
-
-          if (attr == SHAPE_ATTR_FILL)
-            {
-              SvgPaint *paint = (SvgPaint *) value;
-              GtkSymbolicColor symbolic;
-
-              if (paint->kind == PAINT_NONE)
-                {
-                  g_string_append_printf (classes, "%stransparent-fill",
-                                          classes->len > 0 ? " " : "");
-                }
-              else if (paint->kind == PAINT_SYMBOLIC)
-                {
-                  /* Accent color doesn't work with matrix recoloring */
-                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
-                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-                  else
-                    symbolic = paint->symbolic;
-
-                  g_string_append_printf (classes, "%s%s %s-fill",
-                                          classes->len > 0 ? " " : "",
-                                          symbolic_colors[symbolic],
-                                          symbolic_colors[symbolic]);
-                }
-              else if (paint_is_server (paint->kind) &&
-                       g_str_has_prefix (paint->server.ref, "gpa:") &&
-                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
-               {
-                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
-                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-
-                  g_string_append_printf (classes, "%s%s %s-fill",
-                                          classes->len > 0 ? " " : "",
-                                          symbolic_colors[symbolic],
-                                          symbolic_colors[symbolic]);
-               }
-            }
-
-          if (attr == SHAPE_ATTR_STROKE)
-            {
-              SvgPaint *paint = (SvgPaint *) value;
-              GtkSymbolicColor symbolic;
-
-              if (paint->kind == PAINT_SYMBOLIC)
-                {
-                  if (paint->symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
-                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-                  else
-                    symbolic = paint->symbolic;
-
-                  g_string_append_printf (classes, "%s%s-stroke",
-                                          classes->len > 0 ? " " : "",
-                                          symbolic_colors[symbolic]);
-                }
-              else if (paint_is_server (paint->kind) &&
-                       g_str_has_prefix (paint->server.ref, "gpa:") &&
-                       parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
-                {
-                  if (symbolic == GTK_SYMBOLIC_COLOR_ACCENT)
-                    symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND;
-
-                  g_string_append_printf (classes, "%s%s-stroke",
-                                          classes->len > 0 ? " " : "",
-                                          symbolic_colors[symbolic]);
-                }
-            }
-
           svg_value_unref (value);
         }
     }
-
-  if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
-      classes->len > 0)
-    {
-      indent_for_attr (s, indent);
-      g_string_append_printf (s, "class='%s'", classes->str);
-    }
-
-  if (style->len > 0)
-    {
-      indent_for_attr (s, indent);
-      g_string_append_printf (s, "style='%s'", style->str);
-    }
-
-  g_string_free (classes, TRUE);
-  g_string_free (style, TRUE);
 }
 
 static void
