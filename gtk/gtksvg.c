@@ -25505,13 +25505,11 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
+          used_opacity = colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha;
           n_used_colors = MIN (n_colors, 5);
           used_colors = solid_colors;
-
-          used_opacity = 1;
           for (unsigned int i = 0; i < n_used_colors; i++)
             {
-              used_opacity = MIN (used_opacity, colors[i].alpha);
               solid_colors[i] = colors[i];
               solid_colors[i].alpha = 1;
             }
