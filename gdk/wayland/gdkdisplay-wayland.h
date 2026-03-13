@@ -110,6 +110,9 @@ struct _GdkWaylandDisplay
   struct xdg_activation_v1 *xdg_activation;
 #endif
   struct wp_cursor_shape_manager_v1 *cursor_shape;
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  struct wl_fixes *wl_fixes;
+#endif
 
   GList *async_roundtrips;
 

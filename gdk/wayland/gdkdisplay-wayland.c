@@ -95,6 +95,9 @@
 #ifdef HAVE_XDG_ACTIVATION
 #define XDG_ACTIVATION_VERSION   1
 #endif
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+#define WL_FIXES_VERSION         2
+#endif
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -559,6 +562,14 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_cursor_shape_manager_v1_interface, 1);
     }
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  else if (strcmp (interface, wl_fixes_interface.name) == 0)
+    {
+      display_wayland->wl_fixes =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wl_fixes_interface, MIN (version, WL_FIXES_VERSION));
+    }
+#endif
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -575,6 +586,11 @@ gdk_registry_handle_global_remove (void               *data,
   GDK_NOTE (MISC, g_message ("remove global %u", id));
   _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
   _gdk_wayland_screen_remove_output (display_wayland->screen, id);
+
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  if (display_wayland->wl_fixes && wl_fixes_get_version (display_wayland->wl_fixes) >= WL_FIXES_ACK_GLOBAL_REMOVE_SINCE_VERSION)
+    wl_fixes_ack_global_remove (display_wayland->wl_fixes, registry, id);
+#endif
 
   g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
 
