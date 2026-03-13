@@ -25,7 +25,6 @@
           x='150'
           y='100'
           width='125'
-          height='75'
-          class='transparent-fill'>
+          height='75'>
   </rect>
 </svg>

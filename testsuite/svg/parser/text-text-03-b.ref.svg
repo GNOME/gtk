@@ -54,8 +54,7 @@
               x='50'
               y='225'
               width='380'
-              height='64'
-              class='transparent-fill'>
+              height='64'>
       </rect>
       <g
               font-family='SVGFreeSansASCII,sans-serif'>
@@ -94,7 +93,6 @@
           x='1'
           y='1'
           width='478'
-          height='358'
-          class='transparent-fill'>
+          height='358'>
   </rect>
 </svg>

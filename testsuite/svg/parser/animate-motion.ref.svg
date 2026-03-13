@@ -9,16 +9,14 @@
           fill='none'
           stroke='rgb(128,128,128)'
           stroke-width='1'
-          d='M 20 20 Q 50 100, 180 20'
-          class='transparent-fill'>
+          d='M 20 20 Q 50 100, 180 20'>
   </path>
   <path
           id='motionPath2'
           fill='none'
           stroke='rgb(128,128,128)'
           stroke-width='1'
-          d='M 20 130 L 180 130 L 180 50 L 20 50 Z'
-          class='transparent-fill'>
+          d='M 20 130 L 180 130 L 180 50 L 20 50 Z'>
   </path>
   <circle
           fill='rgb(255,0,0)'

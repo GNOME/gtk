@@ -23,7 +23,6 @@
           x1='50'
           y1='50'
           x2='200'
-          y2='150'
-          class='transparent-fill'>
+          y2='150'>
   </line>
 </svg>
