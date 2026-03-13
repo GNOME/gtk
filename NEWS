@@ -1,5 +1,42 @@
-Overview of Changes in 4.22.1, xx-xx-xxxx
+Overview of Changes in 4.22.2, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.22.1, 13-03-2026
+=========================================
+
+* Bugs fixed:
+  - #8081 po/README.translators should be updated or removed (Matthias Clasen)
+  - #8082 How Paintable should be translated in these strings? (Matthias Clasen)
+  - #8084 SVG image rendered as grey shape (Matthias Clasen)
+  - #8087 Drop Shadows Make Transparent Textures Significantly Darker (Benjamin
+    Otte)
+  - #8092 Shaper: changing state name doesn't mark file as "changed" (Matthias
+    Clasen)
+  - !9587 Stable backports (luming zh, Victoria, Urtsi Santsi)
+  - !9595 Backport the svg fallback changes (Matthias Clasen)
+  - !9606 testsuite: Limit size of clip test to 4096x4096 (Benjamin Otte)
+  - !9607 widget: Filter is applied before opacity (Benjamin Otte)
+  - !9608 testsuite: Limit size of clip test to 4096x4096 (Benjamin Otte)
+  - !9610 More svg fallback (Matthias Clasen)
+  - !9618 icon editor: Consider state names for unsaved (Matthias Clasen)
+  - !9627 application8: Don't use space in meson generated filename (Zoltán
+    Böszörményi)
+  - !9642 vulkan: Fix invalid read by requerying variable (Benjamin Otte)
+
+* Translation updates:
+  - Chinese (China) (luming zh)
+  - Danish (Ask Hjorth Larsen)
+  - English (United Kingdom) (Bruce Cowan)
+  - French (Guillaume Bernard)
+  - Galician (Francisco Diéguez Souto)
+  - Greek, Modern (1453-) (Efstathios Iosifidis)
+  - Kazakh (Baurzhan Muftakhidinov)
+  - Occitan (post 1500) (Quentin PAGÈS)
+  - Polish (Victoria)
+  - Portuguese (Brazil) (Rafael Fontenelle)
+  - Romanian (Antonio Marin)
+  - Turkish (Emin Tufan Çetin)
+
 
 Overview of Changes in 4.22.0, 06-03-2026
 =========================================
