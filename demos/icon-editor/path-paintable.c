@@ -1137,15 +1137,6 @@ path_paintable_serialize (PathPaintable *self,
   return bytes;
 }
 
-GBytes *
-path_paintable_serialize_as_svg (PathPaintable *self)
-{
-  return gtk_svg_serialize_full (self->svg,
-                                 NULL, 0,
-                                 GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
-                                 GTK_SVG_SERIALIZE_NO_COMPAT);
-}
-
 const graphene_rect_t *
 path_paintable_get_viewport (PathPaintable *self)
 {

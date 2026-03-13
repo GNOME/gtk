@@ -704,7 +704,10 @@ export_to_file (IconEditorWindow *self,
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
-  bytes = path_paintable_serialize_as_svg (self->paintable);
+  bytes = gtk_svg_serialize_full (path_paintable_get_svg (self->paintable),
+                                  NULL, 0,
+                                  GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
+                                  GTK_SVG_SERIALIZE_NO_COMPAT);
   if (!g_file_replace_contents (file,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
