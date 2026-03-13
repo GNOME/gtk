@@ -25918,6 +25918,23 @@ timeline_dump (Timeline *timeline)
 /* }}} */
 /* {{{ Private API */
 
+void
+svg_foreach_shape (Shape         *shape,
+                   ShapeCallback  callback,
+                   gpointer       user_data)
+{
+  callback (shape, user_data);
+
+  if (shape->shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          svg_foreach_shape (sh, callback, user_data);
+        }
+    }
+}
+
 GtkSvg *
 gtk_svg_copy (GtkSvg *orig)
 {

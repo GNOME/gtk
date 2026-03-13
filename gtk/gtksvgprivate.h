@@ -563,6 +563,13 @@ gboolean     svg_shape_has_attr     (Shape     *shape,
 gboolean     gtk_svg_set_state_names (GtkSvg      *svg,
                                       const char **names);
 
+typedef void (* ShapeCallback) (Shape    *shape,
+                                gpointer  user_data);
+
+void         svg_foreach_shape (Shape         *shape,
+                                ShapeCallback  callback,
+                                gpointer       user_data);
+
 /* --- */
 
 GtkSvg *       gtk_svg_copy            (GtkSvg                *orig);
