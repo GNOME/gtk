@@ -623,31 +623,8 @@ static GdkPaintable *
 shape_editor_get_path_image (ShapeEditor *self)
 {
   if (!self->path_image)
-    {
-      GtkSvg *orig = path_paintable_get_svg (self->paintable);
-      GtkSvg *svg = gtk_svg_new ();
-      g_autoptr (GBytes) bytes = NULL;
-
-      svg->width = orig->width;
-      svg->height = orig->width;
-
-      svg_shape_attr_set (svg->content, SHAPE_ATTR_WIDTH, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
-      svg_shape_attr_set (svg->content, SHAPE_ATTR_HEIGHT, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
-      svg_shape_attr_set (svg->content, SHAPE_ATTR_VIEW_BOX, svg_value_ref (orig->content->base[SHAPE_ATTR_VIEW_BOX]));
-
-      if (shape_is_graphical (self->shape))
-        {
-          Shape *shape = shape_duplicate (self->shape, svg->content);
-          svg_shape_attr_set (shape, SHAPE_ATTR_VISIBILITY, NULL);
-          svg_shape_attr_set (shape, SHAPE_ATTR_DISPLAY, NULL);
-          g_ptr_array_add (svg->content->shapes, shape);
-        }
-      bytes = gtk_svg_serialize (svg);
-      g_object_unref (svg);
-      svg = gtk_svg_new_from_bytes (bytes);
-      gtk_svg_play (svg);
-      self->path_image = GDK_PAINTABLE (svg);
-    }
+    self->path_image = shape_get_path_image (self->shape,
+                                             path_paintable_get_svg (self->paintable));
 
   return self->path_image;
 }

@@ -173,6 +173,9 @@ Shape *         shape_duplicate                    (Shape *shape,
                                                     Shape *parent);
 gboolean        shape_is_graphical                 (Shape *shape);
 
+GdkPaintable *  shape_get_path_image               (Shape  *shape,
+                                                    GtkSvg *svg);
+
 GtkIconPaintable *
                 path_paintable_get_icon_paintable  (PathPaintable *self);
 

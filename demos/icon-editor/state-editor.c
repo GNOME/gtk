@@ -57,33 +57,7 @@ static GdkPaintable *
 get_paintable_for_shape (StateEditor *self,
                          Shape       *shape)
 {
-  GtkSvg *svg = gtk_svg_new ();
-  g_autoptr (GBytes) bytes = NULL;
-  Shape *sh;
-
-  svg->width = path_paintable_get_width (self->paintable);
-  svg->height = path_paintable_get_height (self->paintable);
-
-  svg_shape_attr_set (svg->content,
-                      SHAPE_ATTR_WIDTH,
-                      svg_number_new (svg->width));
-  svg_shape_attr_set (svg->content,
-                      SHAPE_ATTR_HEIGHT,
-                      svg_number_new (svg->height));
-  svg_shape_attr_set (svg->content,
-                      SHAPE_ATTR_VIEW_BOX,
-                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
-
-  sh = shape_duplicate (shape, svg->content);
-  svg_shape_attr_set (sh, SHAPE_ATTR_VISIBILITY, NULL);
-  svg_shape_attr_set (sh, SHAPE_ATTR_DISPLAY, NULL);
-  g_ptr_array_add (svg->content->shapes, sh);
-
-  bytes = gtk_svg_serialize (svg);
-  g_object_unref (svg);
-  svg = gtk_svg_new_from_bytes (bytes);
-  gtk_svg_play (svg);
-  return GDK_PAINTABLE (svg);
+  return shape_get_path_image (shape, path_paintable_get_svg (self->paintable));
 }
 
 static gboolean

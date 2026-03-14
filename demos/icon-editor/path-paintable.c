@@ -1246,6 +1246,36 @@ shape_is_group (Shape *shape)
       g_assert_not_reached ();
     }
 }
+
+GdkPaintable *
+shape_get_path_image (Shape  *shape,
+                      GtkSvg *orig)
+{
+  GtkSvg *svg = gtk_svg_new ();
+  g_autoptr (GBytes) bytes = NULL;
+
+  svg->width = orig->width;
+  svg->height = orig->width;
+
+  svg_shape_attr_set (svg->content, SHAPE_ATTR_WIDTH, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
+  svg_shape_attr_set (svg->content, SHAPE_ATTR_HEIGHT, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
+  svg_shape_attr_set (svg->content, SHAPE_ATTR_VIEW_BOX, svg_value_ref (orig->content->base[SHAPE_ATTR_VIEW_BOX]));
+
+  if (shape_is_graphical (shape))
+    {
+      Shape *clone = shape_duplicate (shape, svg->content);
+      svg_shape_attr_set (clone, SHAPE_ATTR_VISIBILITY, NULL);
+      svg_shape_attr_set (clone, SHAPE_ATTR_DISPLAY, NULL);
+      g_ptr_array_add (svg->content->shapes, clone);
+    }
+  bytes = gtk_svg_serialize (svg);
+  g_object_unref (svg);
+  svg = gtk_svg_new_from_bytes (bytes);
+  gtk_svg_play (svg);
+
+  return GDK_PAINTABLE (svg);
+}
+
 static Shape *
 get_shape_by_id (Shape      *shape,
                  const char *id)
