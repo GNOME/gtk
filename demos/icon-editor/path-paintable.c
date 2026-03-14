@@ -1142,12 +1142,13 @@ path_paintable_paths_changed (PathPaintable *self)
 }
 
 Shape *
-shape_duplicate (Shape *shape)
+shape_duplicate (Shape *shape,
+                 Shape *parent)
 {
   Shape *copy = g_new0 (Shape, 1);
 
   copy->type = shape->type;
-  copy->parent = shape->parent;
+  copy->parent = parent;
   copy->attrs = _gtk_bitmask_copy (shape->attrs);
   copy->id = NULL;
   for (unsigned int i = FIRST_SHAPE_ATTR; i <= LAST_FILTER_ATTR; i++)

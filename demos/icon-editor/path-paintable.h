@@ -169,7 +169,8 @@ const graphene_rect_t *
 void            path_paintable_changed             (PathPaintable   *self);
 void            path_paintable_paths_changed       (PathPaintable   *self);
 
-Shape *         shape_duplicate                    (Shape *shape);
+Shape *         shape_duplicate                    (Shape *shape,
+                                                    Shape *parent);
 gboolean        shape_is_graphical                 (Shape *shape);
 
 GtkIconPaintable *

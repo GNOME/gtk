@@ -624,25 +624,20 @@ shape_editor_get_path_image (ShapeEditor *self)
 {
   if (!self->path_image)
     {
+      GtkSvg *orig = path_paintable_get_svg (self->paintable);
       GtkSvg *svg = gtk_svg_new ();
       g_autoptr (GBytes) bytes = NULL;
 
-      svg->width = path_paintable_get_width (self->paintable);
-      svg->height = path_paintable_get_height (self->paintable);
+      svg->width = orig->width;
+      svg->height = orig->width;
 
-      svg_shape_attr_set (svg->content,
-                          SHAPE_ATTR_WIDTH,
-                          svg_number_new (svg->width));
-      svg_shape_attr_set (svg->content,
-                          SHAPE_ATTR_HEIGHT,
-                          svg_number_new (svg->height));
-      svg_shape_attr_set (svg->content,
-                          SHAPE_ATTR_VIEW_BOX,
-                          svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
+      svg_shape_attr_set (svg->content, SHAPE_ATTR_WIDTH, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
+      svg_shape_attr_set (svg->content, SHAPE_ATTR_HEIGHT, svg_value_ref (orig->content->base[SHAPE_ATTR_WIDTH]));
+      svg_shape_attr_set (svg->content, SHAPE_ATTR_VIEW_BOX, svg_value_ref (orig->content->base[SHAPE_ATTR_VIEW_BOX]));
 
-      if (self->shape->type != SHAPE_GROUP)
+      if (shape_is_graphical (self->shape))
         {
-          Shape *shape = shape_duplicate (self->shape);
+          Shape *shape = shape_duplicate (self->shape, svg->content);
           svg_shape_attr_set (shape, SHAPE_ATTR_VISIBILITY, NULL);
           svg_shape_attr_set (shape, SHAPE_ATTR_DISPLAY, NULL);
           g_ptr_array_add (svg->content->shapes, shape);
@@ -1047,7 +1042,7 @@ move_path_down (ShapeEditor *self)
 static void
 duplicate_path (ShapeEditor *self)
 {
-  g_ptr_array_add (self->shape->parent->shapes, shape_duplicate (self->shape));
+  g_ptr_array_add (self->shape->parent->shapes, shape_duplicate (self->shape, self->shape->parent));
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);
 }

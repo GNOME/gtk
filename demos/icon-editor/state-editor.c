@@ -74,7 +74,7 @@ get_paintable_for_shape (StateEditor *self,
                       SHAPE_ATTR_VIEW_BOX,
                       svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, svg->width, svg->height)));
 
-  sh = shape_duplicate (shape);
+  sh = shape_duplicate (shape, svg->content);
   svg_shape_attr_set (sh, SHAPE_ATTR_VISIBILITY, NULL);
   svg_shape_attr_set (sh, SHAPE_ATTR_DISPLAY, NULL);
   g_ptr_array_add (svg->content->shapes, sh);
