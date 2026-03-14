@@ -89,8 +89,11 @@ append_shape_editor (PaintableEditor *self,
   ShapeEditor *pe;
 
   pe = shape_editor_new (self->paintable, shape);
-  gtk_box_append (self->path_elts, GTK_WIDGET (pe));
-  gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  if (pe)
+    {
+      gtk_box_append (self->path_elts, GTK_WIDGET (pe));
+      gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+    }
 }
 
 static void
@@ -104,11 +107,6 @@ create_shape_editors (PaintableEditor *self)
   for (unsigned int i = 0; i < content->shapes->len; i++)
     {
       Shape *shape = g_ptr_array_index (content->shapes, i);
-
-      if (!shape_is_graphical (shape) &&
-          shape->type != SHAPE_GROUP)
-        continue;
-
       append_shape_editor (self, shape);
     }
 }

@@ -1571,11 +1571,52 @@ shape_editor_class_init (ShapeEditorClass *class)
 /* }}} */
 /* {{{ Public API */
 
+static gboolean
+can_handle_shape (Shape *shape)
+{
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+    case SHAPE_GROUP:
+    case SHAPE_DEFS:
+      return TRUE;
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+    case SHAPE_USE:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_PATTERN:
+    case SHAPE_MARKER:
+    case SHAPE_TEXT:
+    case SHAPE_TSPAN:
+    case SHAPE_SVG:
+    case SHAPE_IMAGE:
+    case SHAPE_FILTER:
+    case SHAPE_SYMBOL:
+    case SHAPE_SWITCH:
+      g_warning ("Sorry, don't know how to edit a <%s>", svg_shape_get_name (shape->type));
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 ShapeEditor *
 shape_editor_new (PathPaintable *paintable,
                   Shape         *shape)
 {
-  ShapeEditor *self = g_object_new (SHAPE_EDITOR_TYPE, NULL);
+  ShapeEditor *self;
+
+  if (!can_handle_shape (shape))
+    return NULL;
+
+  self = g_object_new (SHAPE_EDITOR_TYPE, NULL);
   self->paintable = g_object_ref (paintable);
   g_signal_connect_swapped (paintable, "paths-changed", G_CALLBACK (paths_changed), self);
   self->shape = shape;
