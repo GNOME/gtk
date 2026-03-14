@@ -481,6 +481,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
       path_paintable_set_frame_clock (self->paintable, gtk_widget_get_frame_clock (GTK_WIDGET (self)));
       icon_editor_window_set_state (self, path_paintable_get_state (paintable));
       icon_editor_window_set_initial_state (self, path_paintable_get_state (paintable));
+      path_paintable_set_weight (self->paintable, self->weight);
 
       g_signal_connect_swapped (self->paintable, "changed",
                                 G_CALLBACK (paintable_changed), self);
