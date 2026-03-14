@@ -453,7 +453,11 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
     history = gdk_event_get_history (event, &n_coords);
 
   if (!history)
-    return FALSE;
+    {
+      *backlog = NULL;
+      *n_elems = 0;
+      return FALSE;
+    }
 
   native = gtk_widget_get_native (gtk_get_event_widget (event));
   gtk_native_get_surface_transform (native, &surf_x, &surf_y);
