@@ -12336,6 +12336,11 @@ shape_new (Shape     *parent,
       g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
 
+  if (shape_type_has_gpa_attrs (type))
+    {
+      shape->gpa.states = ALL_STATES;
+    }
+
   shape->styles = g_ptr_array_new_with_free_func (style_elt_free);
 
   shape->css_node = gtk_css_node_new ();
