@@ -26929,6 +26929,13 @@ svg_shape_attr_set (Shape     *shape,
   shape->attrs = _gtk_bitmask_set (shape->attrs, attr, value != NULL);
 }
 
+gboolean
+svg_shape_has_attr (Shape     *shape,
+                    ShapeAttr  attr)
+{
+  return shape_has_attr (shape->type, attr);
+}
+
 Shape *
 svg_shape_add (Shape     *parent,
                ShapeType  type)
@@ -26964,6 +26971,12 @@ svg_shape_delete (Shape *shape)
       }
 
   g_ptr_array_remove (shape->parent->shapes, shape);
+}
+
+const char *
+svg_shape_get_name (ShapeType type)
+{
+  return shape_types[type].name;
 }
 
 /* }}} */
