@@ -139,6 +139,24 @@ update_states (StateEditor *self)
 
   states = g_newa0 (uint64_t, n);
 
+  for (unsigned int i = 0; i < n; i++)
+    {
+      GtkLayoutChild *layout_child;
+      int row;
+
+      GtkWidget *child = gtk_grid_get_child_at (self->grid, -2, i);
+      GtkWidget *toggle = gtk_grid_get_child_at (self->grid, -1, i);
+
+      if (!GTK_IS_LABEL (child))
+        break;
+
+      layout_child = gtk_layout_manager_get_layout_child (mgr, child);
+      row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
+
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle)))
+        states[row] = G_MAXUINT64;
+    }
+
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->grid));
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
@@ -153,10 +171,9 @@ update_states (StateEditor *self)
       if (GTK_IS_CHECK_BUTTON (child))
         {
           if (gtk_check_button_get_active (GTK_CHECK_BUTTON (child)))
-            {
-              if (col <= self->max_state)
-                states[row] |= (G_GUINT64_CONSTANT (1) << (unsigned int) col);
-            }
+            states[row] |= G_GUINT64_CONSTANT (1) << (unsigned int) col;
+          else
+            states[row] &= ~(G_GUINT64_CONSTANT (1) << (unsigned int) col);
         }
     }
 
@@ -165,23 +182,83 @@ update_states (StateEditor *self)
   for (unsigned int i = 0; i < n; i++)
     {
       GtkWidget *child = gtk_grid_get_child_at (self->grid, -2, i);
-      GtkWidget *dropdown = gtk_grid_get_child_at (self->grid, -1, i);
-      unsigned int selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (dropdown));
       const char *id;
 
       if (!GTK_IS_LABEL (child))
         break;
 
       id = gtk_label_get_label (GTK_LABEL (child));
-
-      if (selected == 0)
-        path_paintable_set_path_states_by_id (self->paintable, id, 0);
-      else if (selected == 2)
-        path_paintable_set_path_states_by_id (self->paintable, id, G_MAXUINT64);
-      else
-        path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
+      path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
     }
 
+  self->updating = FALSE;
+
+  repopulate (self);
+}
+
+static void
+update_one (GtkWidget   *check,
+            GParamSpec  *pspec,
+            StateEditor *self)
+{
+  GtkLayoutManager *mgr;
+  GtkLayoutChild *layout_child;
+  int row;
+  GtkWidget *label;
+  const char *id;
+  uint64_t states;
+
+  mgr = gtk_widget_get_layout_manager (GTK_WIDGET (self->grid));
+  layout_child = gtk_layout_manager_get_layout_child (mgr, check);
+  row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
+
+  label = gtk_grid_get_child_at (self->grid, -2, row);
+  id = gtk_label_get_label (GTK_LABEL (label));
+
+  states = 0;
+  for (unsigned int i = 0; i < self->max_state; i++)
+    {
+      GtkWidget *child;
+
+      child = gtk_grid_get_child_at (self->grid, i, row);
+      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (child)))
+        states |= (G_GUINT64_CONSTANT (1) << (unsigned int) i);
+    }
+
+  self->updating = TRUE;
+  path_paintable_set_path_states_by_id (self->paintable, id, states);
+  self->updating = FALSE;
+
+  if (!gtk_check_button_get_active (GTK_CHECK_BUTTON (check)))
+    {
+      GtkWidget *toggle = gtk_grid_get_child_at (self->grid, -1, row);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), FALSE);
+    }
+}
+
+static void
+update_all (GtkWidget   *toggle,
+            GParamSpec  *pspec,
+            StateEditor *self)
+{
+  GtkLayoutManager *mgr;
+  GtkLayoutChild *layout_child;
+  int row;
+  GtkWidget *label;
+  const char *id;
+
+  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle)))
+    return;
+
+  mgr = gtk_widget_get_layout_manager (GTK_WIDGET (self->grid));
+  layout_child = gtk_layout_manager_get_layout_child (mgr, toggle);
+  row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
+
+  label = gtk_grid_get_child_at (self->grid, -2, row);
+  id = gtk_label_get_label (GTK_LABEL (label));
+
+  self->updating = TRUE;
+  path_paintable_set_path_states_by_id (self->paintable, id, G_MAXUINT64);
   self->updating = FALSE;
 
   repopulate (self);
@@ -250,17 +327,12 @@ create_paths_for_shape (StateEditor  *self,
           child = gtk_label_new (id);
           gtk_grid_attach (self->grid, child, -2, *row, 1, 1);
 
-          child = gtk_drop_down_new_from_strings ((const char *[]) { "None", "Some", "All", NULL });
+          child = gtk_toggle_button_new_with_label ("All");
           gtk_grid_attach (self->grid, child, -1, *row, 1, 1);
 
-          if (states == 0)
-            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 0);
-          else if (states == G_MAXUINT64)
-            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 2);
-          else
-            gtk_drop_down_set_selected (GTK_DROP_DOWN (child), 1);
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (child), states == G_MAXUINT64);
 
-          g_signal_connect_swapped (child, "notify::selected", G_CALLBACK (update_states), self);
+          g_signal_connect (child, "notify::active", G_CALLBACK (update_all), self);
 
           for (unsigned int j = 0; j <= self->max_state; j++)
             {
@@ -268,7 +340,7 @@ create_paths_for_shape (StateEditor  *self,
               gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
               gtk_check_button_set_active (GTK_CHECK_BUTTON (child),
                                            (states & ((G_GUINT64_CONSTANT (1) << j))) != 0);
-              g_signal_connect_swapped (child, "notify::active", G_CALLBACK (update_states), self);
+              g_signal_connect (child, "notify::active", G_CALLBACK (update_one), self);
               gtk_grid_attach (self->grid, child, j, *row, 1, 1);
             }
 
