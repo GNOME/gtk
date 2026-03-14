@@ -123,6 +123,7 @@ enum
   POLYGON,
   PATH,
   GROUP,
+  DEFS,
 };
 
 static gboolean
@@ -305,7 +306,15 @@ shape_changed (ShapeEditor *self)
       }
       break;
     case PATH:
+      // handled in shape_editor_update_path
+      break;
     case GROUP:
+      self->shape->type = SHAPE_GROUP;
+      path_paintable_changed (self->paintable);
+      break;
+    case DEFS:
+      self->shape->type = SHAPE_DEFS;
+      path_paintable_changed (self->paintable);
       break;
     default:
       g_assert_not_reached ();

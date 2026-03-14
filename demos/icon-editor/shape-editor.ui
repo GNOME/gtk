@@ -139,6 +139,7 @@
                   <item>Polygon</item>
                   <item>Path</item>
                   <item>Group</item>
+                  <item>Defs</item>
                 </items>
               </object>
             </property>
