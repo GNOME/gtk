@@ -122,6 +122,34 @@ update_size (PaintableEditor *self)
   gtk_editable_set_text (GTK_EDITABLE (self->height), text);
 }
 
+typedef struct
+{
+  unsigned int all;
+  unsigned int graphical;
+  unsigned int current;
+
+  unsigned int state;
+} ShapeCountData;
+
+static void
+count_shapes (Shape    *shape,
+              gpointer  data)
+{
+  ShapeCountData *d = data;
+
+  d->all++;
+
+  if (!shape_is_graphical (shape))
+    return;
+
+  d->graphical++;
+
+  if ((shape->gpa.states & (G_GUINT64_CONSTANT (1) << d->state)) == 0)
+    return;
+
+  d->current++;
+}
+
 static void
 update_summary (PaintableEditor *self)
 {
@@ -130,27 +158,14 @@ update_summary (PaintableEditor *self)
       unsigned int state = path_paintable_get_state (self->paintable);
       g_autofree char *summary1 = NULL;
       g_autofree char *summary2 = NULL;
-      unsigned int n;
+      ShapeCountData counts;
 
+      counts.state = state;
+      counts.all = counts.graphical = counts.current = 0;
+      svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, count_shapes, &counts);
 
-      n = 0;
-      for (size_t i = 0; i < path_paintable_get_n_paths (self->paintable); i++)
-        {
-          uint64_t states = path_paintable_get_path_states (self->paintable, i);
-          if (states & (1ul << state))
-            n++;
-        }
-
-      if (state == STATE_UNSET)
-        {
-          summary1 = g_strdup ("Current state: -1");
-          summary2 = g_strdup_printf ("%" G_GSIZE_FORMAT " path elements", path_paintable_get_n_paths (self->paintable));
-        }
-      else
-        {
-          summary1 = g_strdup_printf ("Current state: %u", state);
-          summary2 = g_strdup_printf ("%" G_GSIZE_FORMAT " path elements, %u in current state", path_paintable_get_n_paths (self->paintable), n);
-        }
+      summary1 = g_strdup_printf ("Current state: %u", state);
+      summary2 = g_strdup_printf ("%u graphical shapes, %u in current state", counts.graphical, counts.current);
 
       gtk_label_set_label (self->summary1, summary1);
       gtk_label_set_label (self->summary2, summary2);
