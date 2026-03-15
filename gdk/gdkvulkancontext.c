@@ -682,8 +682,8 @@ physical_device_check_features (VkPhysicalDevice device)
   if (physical_device_supports_extension (device, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT;
 
-  if (swapchain_maintenance1_features.swapchainMaintenance1 ||
-      physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
+  if (physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME) &&
+      swapchain_maintenance1_features.swapchainMaintenance1)
     features |= GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE;
 
 #ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
