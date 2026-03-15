@@ -139,6 +139,7 @@
                   <item>Polygon</item>
                   <item>Path</item>
                   <item>Group</item>
+                  <item>Defs</item>
                 </items>
               </object>
             </property>
@@ -694,11 +695,9 @@
         <child>
           <object class="GtkLabel" id="origin_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">shape_expander</lookup>
-                <lookup name="selected">shape_dropdown</lookup>
-                <constant type='guint'>7</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Origin</property>
@@ -714,7 +713,7 @@
         <child>
           <object class="GtkScale" id="origin">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">shape_expander</lookup>
                 <lookup name="selected">shape_dropdown</lookup>
@@ -744,11 +743,12 @@
         <child>
           <object class="GtkBox" id="children">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool_and_uint_equal">
+              <closure type="gboolean" function="bool_and_bool_and_uint_one_of_two">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">shape_expander</lookup>
                 <lookup name="selected">shape_dropdown</lookup>
                 <constant type='guint'>7</constant>
+                <constant type='guint'>8</constant>
               </closure>
             </binding>
             <property name="orientation">vertical</property>
@@ -763,6 +763,12 @@
 
         <child>
           <object class="GtkExpander" id="transition_expander">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
@@ -784,7 +790,12 @@
         </child>
         <child>
           <object class="GtkDropDown" id="transition_type">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <signal name="notify::selected" handler="transition_changed" swapped="yes"/>
             <property name="model">
               <object class="GtkStringList">
@@ -806,7 +817,7 @@
         <child>
           <object class="GtkLabel" id="transition_duration_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -824,7 +835,7 @@
         <child>
           <object class="GtkSpinButton" id="transition_duration">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -849,7 +860,7 @@
         <child>
           <object class="GtkLabel" id="transition_delay_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -867,7 +878,7 @@
         <child>
           <object class="GtkSpinButton" id="transition_delay">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -892,7 +903,7 @@
         <child>
           <object class="GtkLabel" id="transition_easing_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -910,7 +921,7 @@
         <child>
           <object class="GtkBox">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transition_expander</lookup>
               </closure>
@@ -956,7 +967,12 @@
 
         <child>
           <object class="GtkExpander" id="animation_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
             <property name="margin-start">10</property>
@@ -977,7 +993,12 @@
         </child>
         <child>
           <object class="GtkDropDown" id="animation_direction">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <signal name="notify::selected" handler="animation_changed" swapped="yes"/>
             <property name="model">
               <object class="GtkStringList">
@@ -1005,7 +1026,7 @@
         <child>
           <object class="GtkLabel" id="animation_duration_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1023,7 +1044,7 @@
         <child>
           <object class="GtkSpinButton" id="animation_duration">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1048,7 +1069,7 @@
         <child>
           <object class="GtkLabel" id="animation_repeat_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1066,7 +1087,7 @@
         <child>
           <object class="GtkBox">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1104,7 +1125,7 @@
         <child>
           <object class="GtkLabel" id="animation_easing_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1122,7 +1143,7 @@
         <child>
           <object class="GtkBox">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1168,7 +1189,7 @@
         <child>
           <object class="GtkLabel" id="animation_segment_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1186,7 +1207,7 @@
         <child>
           <object class="GtkSpinButton" id="animation_segment">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">animation_expander</lookup>
               </closure>
@@ -1210,7 +1231,12 @@
 
         <child>
           <object class="GtkExpander" id="attach_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
             <property name="margin-start">10</property>
@@ -1231,7 +1257,12 @@
         </child>
         <child>
           <object class="GtkDropDown" id="attach_to">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+              </closure>
+            </binding>
             <signal name="notify::selected" handler="attach_changed" swapped="yes"/>
             <layout>
               <property name="row">25</property>
@@ -1243,7 +1274,7 @@
         <child>
           <object class="GtkLabel" id="attach_at_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">attach_expander</lookup>
               </closure>
@@ -1261,7 +1292,7 @@
         <child>
           <object class="GtkScale" id="attach_at">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_is_graphical">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">attach_expander</lookup>
               </closure>
@@ -1288,7 +1319,13 @@
 
         <child>
           <object class="GtkLabel" id="clip_path_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">clip-path</constant>
+              </closure>
+            </binding>
             <property name="label" translatable="yes">_Clip Path</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">clip_path_editor</property>
@@ -1301,7 +1338,13 @@
         </child>
         <child>
           <object class="PathEditor" id="clip_path_editor">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">clip-path</constant>
+              </closure>
+            </binding>
             <layout>
               <property name="row">27</property>
               <property name="column">1</property>
@@ -1312,7 +1355,13 @@
 
         <child>
           <object class="GtkExpander" id="transform_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">transform</constant>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
             <property name="margin-start">10</property>
@@ -1333,7 +1382,13 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">transform</constant>
+              </closure>
+            </binding>
             <child>
               <object class="GtkEntry" id="transform">
                 <property name="hexpand">1</property>
@@ -1343,9 +1398,10 @@
             <child>
               <object class="GtkButton">
                 <binding name="visible">
-                  <closure type="gboolean" function="bool_and_bool">
+                  <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
                     <lookup name="expanded">expander</lookup>
                     <lookup name="expanded">transform_expander</lookup>
+                    <constant type="gchararray">transform</constant>
                   </closure>
                 </binding>
                 <style>
@@ -1367,9 +1423,10 @@
         <child>
           <object class="GtkBox" id="transform_box">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">transform_expander</lookup>
+                <constant type="gchararray">transform</constant>
               </closure>
             </binding>
             <property name="orientation">vertical</property>
@@ -1382,7 +1439,13 @@
 
         <child>
           <object class="GtkLabel" id="filter_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">filter</constant>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">_Filter</property>
@@ -1396,7 +1459,13 @@
         </child>
         <child>
           <object class="GtkEntry" id="filter">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_shape_has_attr">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <constant type="gchararray">filter</constant>
+              </closure>
+            </binding>
             <signal name="activate" handler="filter_changed" swapped="yes"/>
             <layout>
               <property name="row">34</property>
@@ -1407,7 +1476,14 @@
 
         <child>
           <object class="GtkLabel" id="opacity_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">_Opacity</property>
@@ -1422,7 +1498,14 @@
 
         <child>
           <object class="AlphaEditor" id="opacity">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <layout>
               <property name="row">35</property>
               <property name="column">1</property>
@@ -1433,7 +1516,14 @@
 
         <child>
           <object class="GtkLabel" id="paint_order_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">_Paint order</property>
@@ -1448,7 +1538,14 @@
 
         <child>
           <object class="GtkDropDown" id="paint_order">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <signal name="notify::selected" handler="paint_order_changed" swapped="yes"/>
             <property name="model">
               <object class="GtkStringList">
@@ -1471,7 +1568,14 @@
 
         <child>
           <object class="GtkExpander" id="fill_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
             <property name="margin-start">10</property>
@@ -1492,7 +1596,14 @@
         </child>
         <child>
           <object class="ColorEditor" id="fill_paint">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <layout>
               <property name="row">37</property>
@@ -1506,9 +1617,11 @@
         <child>
           <object class="GtkLabel" id="fill_rule_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">fill_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Rule</property>
@@ -1524,9 +1637,11 @@
         <child>
           <object class="GtkDropDown" id="fill_rule">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">fill_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="model">
@@ -1547,7 +1662,14 @@
 
         <child>
           <object class="GtkExpander" id="stroke_expander">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <property name="valign">center</property>
             <property name="margin-start">10</property>
@@ -1568,7 +1690,14 @@
         </child>
         <child>
           <object class="ColorEditor" id="stroke_paint">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
+              </closure>
+            </binding>
             <property name="hexpand">0</property>
             <layout>
               <property name="row">39</property>
@@ -1582,9 +1711,11 @@
         <child>
           <object class="GtkExpander" id="width_expander">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="hexpand">0</property>
@@ -1609,9 +1740,11 @@
         <child>
           <object class="GtkSpinButton" id="line_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="numeric">1</property>
@@ -1637,10 +1770,12 @@
         <child>
           <object class="GtkLabel" id="line_min_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
+              <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
                 <lookup name="expanded">width_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Min</property>
@@ -1657,10 +1792,12 @@
         <child>
           <object class="GtkSpinButton" id="min_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
+              <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
                 <lookup name="expanded">width_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="numeric">1</property>
@@ -1685,10 +1822,12 @@
         <child>
           <object class="GtkLabel" id="line_max_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
+              <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
                 <lookup name="expanded">width_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">Ma_x</property>
@@ -1705,10 +1844,12 @@
         <child>
           <object class="GtkSpinButton" id="max_width">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_and">
+              <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
                 <lookup name="expanded">width_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="numeric">1</property>
@@ -1733,9 +1874,11 @@
         <child>
           <object class="GtkLabel" id="line_join_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Join</property>
@@ -1751,9 +1894,11 @@
         <child>
           <object class="GtkDropDown" id="line_join">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="model">
@@ -1776,9 +1921,11 @@
         <child>
           <object class="GtkLabel" id="line_cap_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Cap</property>
@@ -1794,9 +1941,11 @@
         <child>
           <object class="GtkDropDown" id="line_cap">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="model">
@@ -1819,9 +1968,11 @@
         <child>
           <object class="GtkLabel" id="miter_limit_label">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="label" translatable="yes">_Miter limit</property>
@@ -1837,9 +1988,11 @@
         <child>
           <object class="GtkScale" id="miter_limit">
             <binding name="visible">
-              <closure type="gboolean" function="bool_and_bool">
+              <closure type="gboolean" function="bool_and_bool_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
                 <lookup name="expanded">stroke_expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type="guint">8</constant>
               </closure>
             </binding>
             <property name="adjustment">

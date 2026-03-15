@@ -308,6 +308,8 @@ content_images = [
   "images/svg-renderer2.svg",
   "images/switch.png",
   "images/switch-dark.png",
+  "images/switch-state.png",
+  "images/switch-state-dark.png",
   "images/toggle-button.png",
   "images/toggle-button-dark.png",
   "images/toolbar.png",

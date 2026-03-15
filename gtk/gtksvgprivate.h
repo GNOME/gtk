@@ -556,8 +556,19 @@ Shape *      svg_shape_add          (Shape            *parent,
                                      ShapeType         type);
 void         svg_shape_delete       (Shape            *shape);
 
+const char * svg_shape_get_name     (ShapeType  type);
+gboolean     svg_shape_has_attr     (Shape     *shape,
+                                     ShapeAttr  attr);
+
 gboolean     gtk_svg_set_state_names (GtkSvg      *svg,
                                       const char **names);
+
+typedef void (* ShapeCallback) (Shape    *shape,
+                                gpointer  user_data);
+
+void         svg_foreach_shape (Shape         *shape,
+                                ShapeCallback  callback,
+                                gpointer       user_data);
 
 /* --- */
 

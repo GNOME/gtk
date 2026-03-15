@@ -12336,6 +12336,11 @@ shape_new (Shape     *parent,
       g_array_set_clear_func (shape->text, (GDestroyNotify) text_node_clear);
     }
 
+  if (shape_type_has_gpa_attrs (type))
+    {
+      shape->gpa.states = ALL_STATES;
+    }
+
   shape->styles = g_ptr_array_new_with_free_func (style_elt_free);
 
   shape->css_node = gtk_css_node_new ();
@@ -25918,6 +25923,23 @@ timeline_dump (Timeline *timeline)
 /* }}} */
 /* {{{ Private API */
 
+void
+svg_foreach_shape (Shape         *shape,
+                   ShapeCallback  callback,
+                   gpointer       user_data)
+{
+  callback (shape, user_data);
+
+  if (shape->shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          svg_foreach_shape (sh, callback, user_data);
+        }
+    }
+}
+
 GtkSvg *
 gtk_svg_copy (GtkSvg *orig)
 {
@@ -26929,6 +26951,13 @@ svg_shape_attr_set (Shape     *shape,
   shape->attrs = _gtk_bitmask_set (shape->attrs, attr, value != NULL);
 }
 
+gboolean
+svg_shape_has_attr (Shape     *shape,
+                    ShapeAttr  attr)
+{
+  return shape_has_attr (shape->type, attr);
+}
+
 Shape *
 svg_shape_add (Shape     *parent,
                ShapeType  type)
@@ -26964,6 +26993,12 @@ svg_shape_delete (Shape *shape)
       }
 
   g_ptr_array_remove (shape->parent->shapes, shape);
+}
+
+const char *
+svg_shape_get_name (ShapeType type)
+{
+  return shape_types[type].name;
 }
 
 /* }}} */

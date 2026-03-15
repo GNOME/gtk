@@ -481,6 +481,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
       path_paintable_set_frame_clock (self->paintable, gtk_widget_get_frame_clock (GTK_WIDGET (self)));
       icon_editor_window_set_state (self, path_paintable_get_state (paintable));
       icon_editor_window_set_initial_state (self, path_paintable_get_state (paintable));
+      path_paintable_set_weight (self->paintable, self->weight);
 
       g_signal_connect_swapped (self->paintable, "changed",
                                 G_CALLBACK (paintable_changed), self);
@@ -491,7 +492,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
 
       set_random_icons (self);
 
-      if (path_paintable_get_n_paths (self->paintable) > 0)
+      if (path_paintable_get_svg (self->paintable)->content->shapes->len > 0)
         icon_editor_window_set_show_controls (self, TRUE);
     }
 
@@ -711,31 +712,11 @@ set_compat (Shape    *shape,
     }
 }
 
-typedef void (* ShapeCallback) (Shape    *shape,
-                                gpointer  user_data);
-
-static void
-foreach_shape (Shape         *shape,
-               ShapeCallback  callback,
-               gpointer       user_data)
-{
-  callback (shape, user_data);
-
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          Shape *sh = g_ptr_array_index (shape->shapes, i);
-          foreach_shape (sh, callback, user_data);
-        }
-    }
-}
-
 static void
 apply_compat_classes (IconEditorWindow *window,
                       GtkSvg           *svg)
 {
-  foreach_shape (svg->content, set_compat, window);
+  svg_foreach_shape (svg->content, set_compat, window);
 }
 
 static void
