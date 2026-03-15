@@ -273,7 +273,7 @@
                 <property name="hexpand">0</property>
                 <child>
                   <object class="GtkButton" id="add_path">
-                    <property name="label" translatable="yes">Add path</property>
+                    <property name="label" translatable="yes">Add shape</property>
                     <property name="hexpand">1</property>
                     <property name="action-name">win.add-path</property>
                   </object>

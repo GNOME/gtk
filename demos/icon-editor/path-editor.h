@@ -33,6 +33,12 @@ PathEditor *    path_editor_new         (GskPath    *path,
                                          double      width,
                                          double      height);
 
+void            path_editor_set_paintable (PathEditor *self,
+                                           PathPaintable *paintable);
 void            path_editor_set_path    (PathEditor *self,
                                          GskPath    *path);
 GskPath *       path_editor_get_path    (PathEditor *self);
+
+void            path_editor_set_id      (PathEditor *self,
+                                         const char *id);
+const char *    path_editor_get_id      (PathEditor *editor);

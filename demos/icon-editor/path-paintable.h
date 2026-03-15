@@ -172,6 +172,11 @@ void            path_paintable_paths_changed       (PathPaintable   *self);
 Shape *         shape_duplicate                    (Shape *shape,
                                                     Shape *parent);
 gboolean        shape_is_graphical                 (Shape *shape);
+gboolean        shape_has_children                 (Shape *shape);
+gboolean        shape_has_gpa                      (Shape *shape);
+void            shape_set_default_attrs            (Shape *shape);
+gboolean        shape_has_ancestor                 (Shape *shape,
+                                                    Shape *ancestor);
 
 GdkPaintable *  shape_get_path_image               (Shape  *shape,
                                                     GtkSvg *svg);
@@ -187,3 +192,6 @@ void            path_paintable_set_frame_clock     (PathPaintable *self,
                                                     GdkFrameClock *clock);
 
 GtkSvg *        path_paintable_get_svg             (PathPaintable *self);
+
+char *          path_paintable_find_unused_id      (PathPaintable *self,
+                                                    const char    *prefix);

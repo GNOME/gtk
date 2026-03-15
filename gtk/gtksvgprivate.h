@@ -499,7 +499,10 @@ double *     svg_shape_attr_get_points    (Shape                 *shape,
                                            unsigned int          *n_params);
 ClipKind     svg_shape_attr_get_clip      (Shape                 *shape,
                                            ShapeAttr              attr,
-                                           GskPath              **path);
+                                           GskPath              **path,
+                                           const char           **ref);
+const char * svg_shape_attr_get_mask      (Shape                 *shape,
+                                           ShapeAttr              attr);
 char *       svg_shape_attr_get_transform (Shape                 *shape,
                                            ShapeAttr              attr);
 char *       svg_shape_attr_get_filter    (Shape                 *shape,
@@ -522,6 +525,7 @@ SvgValue *   svg_linecap_new        (GskLineCap        value);
 SvgValue *   svg_linejoin_new       (GskLineJoin       value);
 SvgValue *   svg_fill_rule_new      (GskFillRule       rule);
 SvgValue *   svg_paint_order_new    (PaintOrder        order);
+SvgValue *   svg_mask_type_new      (GskMaskMode       mode);
 SvgValue *   svg_paint_new_none     (void);
 SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
 SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
@@ -532,6 +536,9 @@ SvgValue *   svg_path_new           (GskPath *path);
 SvgValue *   svg_clip_new_none      (void);
 SvgValue *   svg_clip_new_path      (const char *string,
                                      unsigned int fill_rule);
+SvgValue *   svg_clip_new_ref       (const char *string);
+SvgValue *   svg_mask_new_none      (void);
+SvgValue *   svg_mask_new_ref       (const char *string);
 SvgValue *   svg_transform_parse    (const char       *value);
 unsigned int svg_transform_get_n_transforms (const SvgValue *value);
 SvgValue *   svg_transform_get_transform    (const SvgValue *value,

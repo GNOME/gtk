@@ -522,6 +522,7 @@ paintable_editor_add_path (PaintableEditor *self)
   char buffer[128];
   Shape *content;
   size_t idx;
+  Shape *shape;
 
   if (path_paintable_get_n_paths (self->paintable) == 0)
     path_paintable_set_size (self->paintable, 100.f, 100.f);
@@ -537,19 +538,8 @@ paintable_editor_add_path (PaintableEditor *self)
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
   idx = path_paintable_add_path (self->paintable, path);
 
-  for (unsigned int i = 1; i < 100; i++)
-    {
-      char id[64];
-      g_snprintf (id, sizeof (id), "path%u", i);
-      if (path_paintable_get_shape_by_id (self->paintable, id) == NULL)
-        {
-          Shape *shape;
-
-          shape = path_paintable_get_shape (self->paintable, idx);
-          g_set_str (&shape->id, id);
-          break;
-        }
-    }
+  shape = path_paintable_get_shape (self->paintable, idx);
+  shape->id = path_paintable_find_unused_id (self->paintable, "path");
 
   content = path_paintable_get_content (self->paintable);
   append_shape_editor (self, g_ptr_array_index (content->shapes, content->shapes->len - 1));
