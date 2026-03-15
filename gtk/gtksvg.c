@@ -17647,8 +17647,9 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
-      (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes))
+  if (data->svg->gpa_version == 0 &&
+      (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
+       (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes)))
     {
       SvgValue *value;
       gboolean has_stroke;
@@ -25414,7 +25415,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
        * alpha. To work around that, we always draw them with
        * solid colors and apply foreground opacity globally.
        */
-      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+      if (self->gpa_version == 0 &&
+          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
           used_opacity = colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha;
@@ -25448,7 +25450,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       gtk_snapshot_push_collect (snapshot);
 
-      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+      if (self->gpa_version == 0 &&
+          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
           gtk_snapshot_push_opacity (snapshot, used_opacity);
