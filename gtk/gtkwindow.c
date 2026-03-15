@@ -4512,6 +4512,11 @@ gtk_window_realize (GtkWidget *widget)
       else
         priv->use_client_shadow = FALSE;
     }
+  else
+    {
+      // unrealize() always sets use_client_shadow to FALSE, thus restore it here
+      priv->use_client_shadow = priv->client_decorated && gtk_window_supports_client_shadow (window);
+    }
 
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget));
   priv->surface = surface;
