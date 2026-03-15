@@ -20482,7 +20482,7 @@ serialize_shape_attrs (GString              *s,
       g_string_append_printf (s, "id='%s'", shape->id);
     }
 
-  if (shape->classes)
+  if (shape->classes && shape->classes[0])
     {
       indent_for_attr (s, indent);
       g_string_append (s, "class='");
