@@ -418,8 +418,8 @@ path_paintable_get_shape (PathPaintable *self,
   return (Shape *) g_ptr_array_index (self->svg->content->shapes, path);
 }
 
-static void
-set_default_shape_attrs (Shape *shape)
+void
+shape_set_default_attrs (Shape *shape)
 {
   shape->gpa.states = ALL_STATES;
 
@@ -451,7 +451,7 @@ path_paintable_add_path (PathPaintable *self,
   Shape *shape;
 
   shape = svg_shape_add (self->svg->content, SHAPE_PATH);
-  set_default_shape_attrs (shape);
+  shape_set_default_attrs (shape);
   svg_shape_attr_set (shape, SHAPE_ATTR_PATH, svg_path_new (path));
 
   g_signal_emit (self, signals[CHANGED], 0);
@@ -469,7 +469,7 @@ path_paintable_add_shape (PathPaintable *self,
   Shape *shape;
 
   shape = svg_shape_add (self->svg->content, shape_type);
-  set_default_shape_attrs (shape);
+  shape_set_default_attrs (shape);
 
   switch ((unsigned int) shape_type)
     {
@@ -851,6 +851,7 @@ path_paintable_get_compatibility (PathPaintable *self)
   double miterlimit;
   ClipKind clip_kind;
   GskPath *clip_path;
+  const char *ref;
   char *str;
 
   for (size_t i = 0; i < self->svg->content->shapes->len; i++)
@@ -913,7 +914,7 @@ path_paintable_get_compatibility (PathPaintable *self)
       if (miterlimit != 4)
         compat = MAX (compat, GTK_4_22);
 
-      clip_kind = svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &clip_path);
+      clip_kind = svg_shape_attr_get_clip (shape, SHAPE_ATTR_CLIP_PATH, &clip_path, &ref);
       if (clip_kind != CLIP_NONE)
         compat = MAX (compat, GTK_4_22);
 
@@ -1211,8 +1212,8 @@ shape_is_graphical (Shape *shape)
     }
 }
 
-static gboolean
-shape_is_group (Shape *shape)
+gboolean
+shape_has_children (Shape *shape)
 {
   switch (shape->type)
     {
@@ -1245,6 +1246,52 @@ shape_is_group (Shape *shape)
     default:
       g_assert_not_reached ();
     }
+}
+
+gboolean
+shape_has_gpa (Shape *shape)
+{
+  switch (shape->type)
+    {
+    case SHAPE_LINE:
+    case SHAPE_POLYLINE:
+    case SHAPE_POLYGON:
+    case SHAPE_RECT:
+    case SHAPE_CIRCLE:
+    case SHAPE_ELLIPSE:
+    case SHAPE_PATH:
+      return TRUE;
+    case SHAPE_GROUP:
+    case SHAPE_CLIP_PATH:
+    case SHAPE_MASK:
+    case SHAPE_DEFS:
+    case SHAPE_MARKER:
+    case SHAPE_TEXT:
+    case SHAPE_TSPAN:
+    case SHAPE_SVG:
+    case SHAPE_SYMBOL:
+    case SHAPE_SWITCH:
+    case SHAPE_USE:
+    case SHAPE_LINEAR_GRADIENT:
+    case SHAPE_RADIAL_GRADIENT:
+    case SHAPE_PATTERN:
+    case SHAPE_IMAGE:
+    case SHAPE_FILTER:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+gboolean
+shape_has_ancestor (Shape *shape,
+                    Shape *ancestor)
+{
+  for (Shape *p = shape->parent; p; p = p->parent)
+    if (p == ancestor)
+      return TRUE;
+
+  return FALSE;
 }
 
 GdkPaintable *
@@ -1286,7 +1333,7 @@ get_shape_by_id (Shape      *shape,
 
       if (g_strcmp0 (sh->id, id) == 0)
         return sh;
-      else if (shape_is_group (sh))
+      else if (shape_has_children (sh))
         {
           Shape *sh2 = get_shape_by_id (sh, id);
           if (sh2)

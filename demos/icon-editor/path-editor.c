@@ -29,10 +29,13 @@ struct _PathEditor
   double width;
   double height;
   GskPath *path;
+  PathPaintable *paintable;
 
   GtkStack *path_cmds_stack;
   GtkLabel *path_cmds_label;
   GtkEntry *path_cmds_entry;
+  GtkButton *external_edit_button;
+  GtkMenuButton *id_dropdown;
 };
 
 enum
@@ -40,6 +43,7 @@ enum
   PROP_PATH = 1,
   PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_ID,
   NUM_PROPERTIES,
 };
 
@@ -111,8 +115,38 @@ path_to_svg_path (GskPath *path)
 /* {{{ Callbacks */
 
 static void
+collect_ids (Shape    *shape,
+             gpointer  data)
+{
+  GMenu *menu = data;
+
+  if (shape->type == SHAPE_CLIP_PATH && shape->id != NULL)
+    {
+      g_autoptr (GMenuItem) item = NULL;
+
+      item = g_menu_item_new (shape->id, NULL);
+      g_menu_item_set_action_and_target (item, "set_id", "s", shape->id);
+      g_menu_append_item (menu, item);
+    }
+}
+
+static void
 path_cmds_clicked (PathEditor *self)
 {
+  if (self->paintable)
+    {
+      g_autoptr (GMenu) menu = g_menu_new ();
+      g_autoptr (GMenuItem) item = NULL;
+
+      item = g_menu_item_new ("None", NULL);
+      g_menu_item_set_action_and_target (item, "set_id", "s", "");
+      g_menu_append_item (menu, item);
+
+      svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, collect_ids, menu);
+
+      gtk_menu_button_set_menu_model (self->id_dropdown, G_MENU_MODEL (menu));
+    }
+
   gtk_stack_set_visible_child_name (self->path_cmds_stack, "entry");
 
   gtk_entry_grab_focus_without_selecting (self->path_cmds_entry);
@@ -145,11 +179,19 @@ path_cmds_activated (PathEditor *self)
 {
   const char *text;
   g_autoptr (GskPath) path = NULL;
+  const char *id = NULL;
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->path_cmds_entry));
   path = gsk_path_parse (text);
 
-  if (!path)
+  if (self->paintable)
+    {
+      Shape *shape = path_paintable_get_shape_by_id (self->paintable, text);
+      if (shape && shape->type == SHAPE_CLIP_PATH)
+        id = text;
+    }
+
+  if (!path && !id)
     {
       gtk_widget_error_bell (GTK_WIDGET (self->path_cmds_entry));
       gtk_widget_add_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
@@ -158,17 +200,24 @@ path_cmds_activated (PathEditor *self)
                                    -1);
       return;
     }
-  else
-    {
-      gtk_widget_remove_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (self->path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
-      gtk_label_set_label (self->path_cmds_label, text);
-      gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
-    }
 
-  gsk_path_unref (self->path);
-  self->path = gsk_path_ref (path);
+  gtk_widget_remove_css_class (GTK_WIDGET (self->path_cmds_entry), "error");
+  gtk_accessible_reset_state (GTK_ACCESSIBLE (self->path_cmds_entry), GTK_ACCESSIBLE_STATE_INVALID);
+
+  if (strcmp (text, "") == 0)
+    gtk_label_set_label (self->path_cmds_label, "—");
+  else
+    gtk_label_set_label (self->path_cmds_label, text);
+  gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
+
+  g_clear_pointer (&self->path, gsk_path_unref);
+  if (path)
+    self->path = gsk_path_ref (path);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->external_edit_button), path != NULL);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
 }
 
 static void
@@ -246,6 +295,12 @@ edit_path_externally (PathEditor *self)
   g_autoptr (GskPath) path = NULL;
   g_autoptr(GtkFileLauncher) launcher = NULL;
   GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
+
+  if (!self->path)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self));
+      return;
+    }
 
   path = path_to_svg_path (self->path);
 
@@ -349,6 +404,10 @@ path_editor_set_property (GObject      *object,
       self->height = g_value_get_double (value);
       break;
 
+    case PROP_ID:
+      path_editor_set_id (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -377,6 +436,10 @@ path_editor_get_property (GObject      *object,
       g_value_set_double (value, self->height);
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, gtk_label_get_label (self->path_cmds_label));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -386,7 +449,11 @@ path_editor_get_property (GObject      *object,
 static void
 path_editor_dispose (GObject *object)
 {
+  PathEditor *self = PATH_EDITOR (object);
+
   gtk_widget_dispose_template (GTK_WIDGET (object), PATH_EDITOR_TYPE);
+
+  g_clear_object (&self->paintable);
 
   G_OBJECT_CLASS (path_editor_parent_class)->dispose (object);
 }
@@ -399,6 +466,25 @@ path_editor_finalize (GObject *object)
   g_clear_pointer (&self->path, gsk_path_unref);
 
   G_OBJECT_CLASS (path_editor_parent_class)->finalize (object);
+}
+
+static void
+set_id (GtkWidget  *widget,
+        const char *action_name,
+        GVariant   *parameter)
+{
+  PathEditor *self = PATH_EDITOR (widget);
+  const char *id = g_variant_get_string (parameter, NULL);
+
+  if (strcmp (id, "") == 0)
+    {
+      g_autoptr (GskPath) path = gsk_path_parse ("");
+      path_editor_set_path (self, path);
+    }
+  else
+    path_editor_set_id (self, id);
+
+  gtk_stack_set_visible_child_name (self->path_cmds_stack, "label");
 }
 
 static void
@@ -427,6 +513,11 @@ path_editor_class_init (PathEditorClass *class)
                          0, DBL_MAX, 0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
+  properties[PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/Shaper/path-editor.ui");
@@ -434,6 +525,8 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_stack);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_label);
   gtk_widget_class_bind_template_child (widget_class, PathEditor, path_cmds_entry);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, external_edit_button);
+  gtk_widget_class_bind_template_child (widget_class, PathEditor, id_dropdown);
 
   gtk_widget_class_bind_template_callback (widget_class, path_cmds_clicked);
   gtk_widget_class_bind_template_callback (widget_class, path_cmds_activated);
@@ -441,6 +534,8 @@ path_editor_class_init (PathEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, edit_path);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+
+  gtk_widget_class_install_action (widget_class, "set_id", "s", set_id);
 }
 
 /* }}} */
@@ -490,6 +585,39 @@ path_editor_set_path (PathEditor *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
+}
+
+void
+path_editor_set_id (PathEditor *self,
+                    const char *id)
+{
+  g_return_if_fail (self->paintable != NULL);
+
+  g_clear_pointer (&self->path, gsk_path_unref);
+  gtk_label_set_label (self->path_cmds_label, id);
+  gtk_editable_set_text (GTK_EDITABLE (self->path_cmds_entry), id);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
+}
+
+const char *
+path_editor_get_id (PathEditor *self)
+{
+  if (self->paintable == NULL)
+    return NULL;
+
+  return gtk_editable_get_text (GTK_EDITABLE (self->path_cmds_entry));
+}
+
+void
+path_editor_set_paintable (PathEditor *self,
+                           PathPaintable *paintable)
+{
+  g_clear_object (&self->paintable);
+  self->paintable = g_object_ref (paintable);
+  gtk_widget_set_visible (GTK_WIDGET (self->id_dropdown), TRUE);
 }
 
 /* }}} */
