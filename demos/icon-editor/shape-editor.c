@@ -111,13 +111,6 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 /* {{{ Callbacks */
 
-static void
-shape_attr_unset (Shape     *shape,
-                  ShapeAttr  attr)
-{
-  shape->attrs = _gtk_bitmask_set (shape->attrs, attr, FALSE);
-}
-
 static gboolean
 get_number_from_entry (GtkEntry *entry,
                        double   *value)
@@ -150,36 +143,36 @@ shape_changed (ShapeEditor *self)
   switch ((unsigned int) self->shape->type)
     {
     case SHAPE_LINE:
-      shape_attr_unset (self->shape, SHAPE_ATTR_X1);
-      shape_attr_unset (self->shape, SHAPE_ATTR_Y1);
-      shape_attr_unset (self->shape, SHAPE_ATTR_X2);
-      shape_attr_unset (self->shape, SHAPE_ATTR_Y2);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_X1, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y1, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_X2, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y2, NULL);
       break;
     case SHAPE_CIRCLE:
-      shape_attr_unset (self->shape, SHAPE_ATTR_CX);
-      shape_attr_unset (self->shape, SHAPE_ATTR_CY);
-      shape_attr_unset (self->shape, SHAPE_ATTR_R);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_R, NULL);
       break;
     case SHAPE_ELLIPSE:
-      shape_attr_unset (self->shape, SHAPE_ATTR_CX);
-      shape_attr_unset (self->shape, SHAPE_ATTR_CY);
-      shape_attr_unset (self->shape, SHAPE_ATTR_RX);
-      shape_attr_unset (self->shape, SHAPE_ATTR_RY);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, NULL);
       break;
     case SHAPE_RECT:
-      shape_attr_unset (self->shape, SHAPE_ATTR_X);
-      shape_attr_unset (self->shape, SHAPE_ATTR_Y);
-      shape_attr_unset (self->shape, SHAPE_ATTR_WIDTH);
-      shape_attr_unset (self->shape, SHAPE_ATTR_HEIGHT);
-      shape_attr_unset (self->shape, SHAPE_ATTR_RX);
-      shape_attr_unset (self->shape, SHAPE_ATTR_RY);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_X, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_WIDTH, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_HEIGHT, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, NULL);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, NULL);
       break;
     case SHAPE_POLYLINE:
     case SHAPE_POLYGON:
-      shape_attr_unset (self->shape, SHAPE_ATTR_POINTS);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_POINTS, NULL);
       break;
     case SHAPE_PATH:
-      shape_attr_unset (self->shape, SHAPE_ATTR_PATH);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, NULL);
       break;
     default:
       break;
@@ -400,8 +393,7 @@ shape_editor_update_clip_path (ShapeEditor *self,
   if ((path == NULL || gsk_path_is_empty (path)) &&
       (id == NULL || *id == '\0'))
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_none ());
-      shape_attr_unset (self->shape, SHAPE_ATTR_CLIP_PATH);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, NULL);
     }
   else if (path && !gsk_path_is_empty (path))
     {
@@ -438,26 +430,21 @@ set_transform (ShapeEditor *self,
 static void
 mask_changed (ShapeEditor *self)
 {
-  unsigned int selected;
-  SvgValue *value;
-
   if (self->updating)
     return;
 
-  selected = gtk_drop_down_get_selected (self->mask_dropdown);
-  if (selected == 0)
+  if (gtk_drop_down_get_selected (self->mask_dropdown) == 0)
     {
-      value = svg_mask_new_none ();
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, NULL);
     }
   else
     {
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      value = svg_mask_new_ref (id);
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_ref (id));
     }
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, value);
   path_paintable_changed (self->paintable);
 }
 
@@ -1228,13 +1215,9 @@ collect_masks (Shape    *shape,
   if (d->skip)
     {
       if (shape == d->skip || shape_has_ancestor (shape, d->skip))
-        {
-          g_print ("skipping %s for masks of %s\n", shape->id, d->skip->id);
-          return;
-        }
+        return;
     }
 
-  g_print ("adding %s for masks of %s\n", shape->id, d->skip->id);
   gtk_string_list_append (d->model, shape->id);
 }
 
