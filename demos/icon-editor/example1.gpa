@@ -4,11 +4,6 @@
      gpa:state='0'
      gpa:version='1'
      gpa:keywords='add done animation checkmark plus new'>
-  <style type='text/css'>
-    .not-initial-state {
-      display: none;
-    }
-  </style>
   <circle cx='8' cy='8' r='7'
         id='path0'
         gpa:states='plus check'
@@ -21,7 +16,6 @@
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
         fill='none'
-        class='foreground-stroke transparent-fill'
         gpa:stroke='foreground'/>
   <path d='M 11 8 L 5 8 M 8 5 L 8 11'
         id='path1'
@@ -35,7 +29,6 @@
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
         fill='none'
-        class='foreground-stroke transparent-fill'
         gpa:stroke='foreground'/>
   <path d='M 5.5 8 L 7.5 10 L 10.5 6'
         id='path2'
@@ -50,6 +43,5 @@
         stroke-linejoin='round'
         stroke='rgb(0,0,0)'
         fill='none'
-        class='foreground-stroke transparent-fill not-initial-state'
         gpa:stroke='foreground'/>
 </svg>
