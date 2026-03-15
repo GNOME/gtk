@@ -1192,6 +1192,7 @@ add_shape (ShapeEditor *self)
 
   shape = svg_shape_add (self->shape, SHAPE_PATH);
   shape_set_default_attrs (shape);
+  shape->id = path_paintable_find_unused_id (self->paintable, "path");
 
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);

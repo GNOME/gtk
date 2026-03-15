@@ -192,3 +192,6 @@ void            path_paintable_set_frame_clock     (PathPaintable *self,
                                                     GdkFrameClock *clock);
 
 GtkSvg *        path_paintable_get_svg             (PathPaintable *self);
+
+char *          path_paintable_find_unused_id      (PathPaintable *self,
+                                                    const char    *prefix);

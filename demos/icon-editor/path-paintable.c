@@ -1464,5 +1464,20 @@ path_paintable_get_svg (PathPaintable *self)
   return self->svg;
 }
 
+char *
+path_paintable_find_unused_id (PathPaintable *self,
+                               const char    *prefix)
+{
+  for (unsigned int i = 1; i < 256; i++)
+    {
+      char id[64];
+      g_snprintf (id, sizeof (id), "%s%u", prefix, i);
+      if (path_paintable_get_shape_by_id (self, id) == NULL)
+        return g_strdup (id);
+    }
+
+  return NULL;
+}
+
 /* }}} */
 /* vim:set foldmethod=marker: */
