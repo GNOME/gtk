@@ -1,5 +1,5 @@
 testutils_lib = static_library('testutils', 'testutils.c', 'diff/diffreg.c',
-  c_args: common_cflags,
+  c_args: common_cflags + ['-DGDK_STATIC_COMPILATION'],
   include_directories: include_directories('..'),
   dependencies: [
     glib_dep,
