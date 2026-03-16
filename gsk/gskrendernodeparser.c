@@ -5622,7 +5622,6 @@ append_texture_param (Printer    *p,
       switch (gdk_texture_get_depth (texture))
         {
         case GDK_MEMORY_U8:
-        case GDK_MEMORY_U8_SRGB:
           bytes = gdk_texture_save_to_png_bytes (texture);
           append_bytes_url (p, bytes, "image/png");
           g_bytes_unref (bytes);

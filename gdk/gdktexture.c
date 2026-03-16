@@ -959,9 +959,6 @@ gdk_texture_download_surface (GdkTexture    *texture,
   /* disabled for performance reasons. Enjoy living with some banding. */
   if (!gdk_color_state_equal (texture->color_state, color_state))
     depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
-#else
-  if (depth == GDK_MEMORY_U8_SRGB)
-    depth = GDK_MEMORY_U8;
 #endif
 
   surface_format = gdk_cairo_format_for_depth (depth);
@@ -1069,8 +1066,7 @@ gdk_texture_get_format (GdkTexture *self)
 GdkMemoryDepth
 gdk_texture_get_depth (GdkTexture *self)
 {
-  return gdk_memory_format_get_depth (self->format,
-                                      gdk_color_state_get_no_srgb_tf (self->color_state) != NULL);
+  return gdk_memory_format_get_depth (self->format);
 }
 
 gboolean

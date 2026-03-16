@@ -20,7 +20,6 @@ gdk_cairo_format_for_depth (GdkMemoryDepth depth)
       case GDK_MEMORY_U8:
         return CAIRO_FORMAT_ARGB32;
 
-      case GDK_MEMORY_U8_SRGB:
       case GDK_MEMORY_FLOAT16:
       case GDK_MEMORY_FLOAT32:
         return CAIRO_FORMAT_RGBA128F;
