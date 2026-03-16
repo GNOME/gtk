@@ -1329,23 +1329,29 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                     requirements.memoryRequirements.alignment,
                     &self->allocation);
 
-  GSK_VK_CHECK (vkAllocateMemory, vk_device,
-                                  &(VkMemoryAllocateInfo) {
-                                      .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-                                      .allocationSize = requirements.memoryRequirements.size,
-                                      .memoryTypeIndex = memory_index,
-                                      .pNext = &(VkImportMemoryFdInfoKHR) {
-                                          .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR,
-                                          .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
-                                          .fd = fd,
-                                          .pNext = &(VkMemoryDedicatedAllocateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
-                                              .image = self->vk_image,
-                                          }
-                                      }
-                                  },
-                                  NULL,
-                                  &self->allocation.vk_memory);
+  res = vkAllocateMemory (vk_device,
+                          &(VkMemoryAllocateInfo) {
+                              .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                              .allocationSize = requirements.memoryRequirements.size,
+                              .memoryTypeIndex = memory_index,
+                              .pNext = &(VkImportMemoryFdInfoKHR) {
+                                  .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR,
+                                  .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                  .fd = fd,
+                                  .pNext = &(VkMemoryDedicatedAllocateInfo) {
+                                      .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+                                      .image = self->vk_image,
+                                  }
+                              }
+                          },
+                          NULL,
+                          &self->allocation.vk_memory);
+  if (res != VK_SUCCESS)
+    {
+      GDK_DEBUG (DMABUF, "vkAllocateMemory() failed: %s", gdk_vulkan_strerror (res));
+      g_object_unref (self);
+      return NULL;
+    }
 
   GSK_VK_CHECK (vkBindImageMemory2, gsk_vulkan_device_get_vk_device (self->device),
                                     1,
