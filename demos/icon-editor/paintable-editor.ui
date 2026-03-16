@@ -107,14 +107,22 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">_Size</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">width</property>
-                    <property name="xalign">1</property>
+                  <object class="GtkExpander" id="size_expander">
+                    <property name="hexpand">0</property>
+                    <property name="valign">center</property>
+                    <property name="label-widget">
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">_Size</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">fill</property>
+                        <property name="use-underline">1</property>
+                        <property name="mnemonic-widget">width</property>
+                        <property name="xalign">1</property>
                         <accessibility>
                           <property name="label" translatable="yes">Width</property>
                         </accessibility>
+                      </object>
+                    </property>
                     <layout>
                       <property name="row">4</property>
                       <property name="column">0</property>
@@ -149,12 +157,54 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
+                    <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
+                    <property name="label" translatable="yes">_View box</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">viewbox_x</property>
+                    <property name="xalign">1</property>
+                    <layout>
+                      <property name="row">5</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
+                    <child>
+                      <object class="GtkEntry" id="viewbox_x">
+                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="viewbox_y">
+                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="viewbox_w">
+                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="viewbox_h">
+                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="row">5</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
                     <property name="label" translatable="yes">_Initial state</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">initial_state</property>
                     <property name="xalign">1</property>
                     <layout>
-                      <property name="row">5</property>
+                      <property name="row">6</property>
                       <property name="column">0</property>
                     </layout>
                   </object>
@@ -173,7 +223,7 @@
                       </object>
                     </property>
                     <layout>
-                      <property name="row">5</property>
+                      <property name="row">6</property>
                       <property name="column">1</property>
                     </layout>
                   </object>
@@ -185,7 +235,7 @@
                     <property name="mnemonic-widget">compat</property>
                     <property name="xalign">1</property>
                     <layout>
-                      <property name="row">6</property>
+                      <property name="row">7</property>
                       <property name="column">0</property>
                     </layout>
                   </object>
@@ -195,7 +245,7 @@
                     <property name="xalign">0</property>
                     <property name="selectable">1</property>
                     <layout>
-                      <property name="row">6</property>
+                      <property name="row">7</property>
                       <property name="column">1</property>
                     </layout>
                   </object>
@@ -205,7 +255,7 @@
                     <property name="label" translatable="yes">Include compat classes</property>
                     <property name="active" bind-source="PaintableEditor" bind-property="compat-classes" bind-flags="bidirectional|sync-create"/>
                     <layout>
-                      <property name="row">7</property>
+                      <property name="row">8</property>
                       <property name="column">1</property>
                     </layout>
                   </object>
@@ -215,7 +265,7 @@
                     <property name="label" translatable="yes">Rendering</property>
                     <property name="xalign">1</property>
                     <layout>
-                      <property name="row">8</property>
+                      <property name="row">9</property>
                       <property name="column">0</property>
                     </layout>
                   </object>
@@ -239,7 +289,7 @@
                       </object>
                     </child>
                     <layout>
-                      <property name="row">8</property>
+                      <property name="row">9</property>
                       <property name="column">1</property>
                     </layout>
                   </object>
