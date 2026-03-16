@@ -112,8 +112,7 @@
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `min` and `max` attributes are not supported.
  *
- * Lastly, there is only minimal CSS support (the style attribute,
- * but not `<style>`), and no interactivity.
+ * Lastly, there is no interactivity.
  *
  *
  * ## SVG Extensions
@@ -20476,6 +20475,15 @@ indent_for_attr (GString *s,
 }
 
 static void
+g_markup_append (GString    *s,
+                 const char *text)
+{
+  char *escaped = g_markup_escape_text (text, strlen (text));
+  g_string_append (s, escaped);
+  g_free (escaped);
+}
+
+static void
 serialize_shape_attrs (GString              *s,
                        GtkSvg               *svg,
                        int                   indent,
@@ -20485,7 +20493,9 @@ serialize_shape_attrs (GString              *s,
   if (shape->id)
     {
       indent_for_attr (s, indent);
-      g_string_append_printf (s, "id='%s'", shape->id);
+      g_string_append (s, "id='");
+      g_markup_append (s, shape->id);
+      g_string_append_c (s, '\'');
     }
 
   if (shape->classes && shape->classes[0])
@@ -20496,7 +20506,7 @@ serialize_shape_attrs (GString              *s,
         {
           if (i > 0)
             g_string_append_c (s, ' ');
-          g_string_append (s, shape->classes[i]);
+          g_markup_append (s, shape->classes[i]);
         }
       g_string_append_c (s, '\'');
     }
@@ -20504,7 +20514,9 @@ serialize_shape_attrs (GString              *s,
   if (shape->style)
     {
       indent_for_attr (s, indent);
-      g_string_append_printf (s, "style='%s'", shape->style);
+      g_string_append (s, "style='");
+      g_markup_append (s, shape->style);
+      g_string_append_c (s, '\'');
     }
 
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_SHAPE_ATTR; attr++)
@@ -20524,7 +20536,7 @@ serialize_shape_attrs (GString              *s,
           if ((shape->gpa.states & BIT (state)) == 0)
             {
               indent_for_attr (s, indent);
-              g_string_append_printf (s, "visibility='hidden'");
+              g_string_append (s, "visibility='hidden'");
               continue;
             }
         }
