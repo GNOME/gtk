@@ -17,7 +17,7 @@
             </child>
             <child>
               <object class="GtkBox">
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <style><class name="buttons"/></style>
                 <child>
                   <object class="GtkButton">
@@ -29,6 +29,34 @@
                   <object class="GtkButton">
                     <property name="label">Drop State</property>
                     <signal name="clicked" handler="drop_state" swapped="yes"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">start</property>
+                <style><class name="buttons"/></style>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">_Initial state</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">initial_state</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="initial_state">
+                    <property name="numeric">1</property>
+                    <property name="digits">0</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0</property>
+                        <property name="upper">63</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">1</property>
+                        <signal name="value-changed" handler="initial_state_changed" swapped="yes"/>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

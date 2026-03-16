@@ -24,8 +24,6 @@
 #include "path-paintable.h"
 
 static void size_changed (PaintableEditor *self);
-static void paintable_editor_set_initial_state (PaintableEditor *self,
-                                                unsigned int     state);
 static void paintable_editor_set_compat_classes (PaintableEditor *self,
                                                  gboolean         compat_classes);
 
@@ -51,7 +49,6 @@ struct _PaintableEditor
   GtkLabel *compat;
   GtkLabel *summary1;
   GtkLabel *summary2;
-  GtkSpinButton *initial_state;
   GtkImage *icon_image;
   GtkCheckButton *compat_check;
 
@@ -380,10 +377,6 @@ paintable_editor_set_property (GObject      *object,
       paintable_editor_set_paintable (self, g_value_get_object (value));
       break;
 
-    case PROP_INITIAL_STATE:
-      paintable_editor_set_initial_state (self, g_value_get_uint (value));
-      break;
-
     case PROP_COMPAT_CLASSES:
       paintable_editor_set_compat_classes (self, g_value_get_boolean (value));
       break;
@@ -492,7 +485,6 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary1);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary2);
-  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, initial_state);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, icon_image);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat_check);
@@ -563,20 +555,6 @@ paintable_editor_set_paintable (PaintableEditor *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
-}
-
-static void
-paintable_editor_set_initial_state (PaintableEditor *self,
-                                    unsigned int     state)
-{
-  g_return_if_fail (PAINTABLE_IS_EDITOR (self));
-
-  if (self->state == state)
-    return;
-
-  self->state = state;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
 }
 
 static void

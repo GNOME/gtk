@@ -71,6 +71,7 @@ ensure_render_paintable (PathPaintable *self)
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
+      gtk_svg_set_state (GTK_SVG (self->render_paintable), gtk_svg_get_state (self->svg));
 
       gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), self->clock);
 
