@@ -75,6 +75,7 @@ struct _GtkSvg
   double width, height; /* Intrinsic size */
 
   double weight;
+  unsigned int initial_state;
   unsigned int state;
   unsigned int max_state;
   unsigned int n_state_names;
@@ -509,6 +510,10 @@ char *       svg_shape_attr_get_filter    (Shape                 *shape,
                                            ShapeAttr              attr);
 GskPath *    svg_shape_get_path           (Shape                 *shape,
                                            const graphene_rect_t *viewport);
+gboolean     svg_shape_attr_get_viewbox   (Shape                 *shape,
+                                           ShapeAttr              attr,
+                                           graphene_rect_t       *rect);
+
 void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);

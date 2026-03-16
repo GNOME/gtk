@@ -71,6 +71,7 @@ ensure_render_paintable (PathPaintable *self)
 
       self->render_paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
       gtk_svg_set_weight (GTK_SVG (self->render_paintable), gtk_svg_get_weight (self->svg));
+      gtk_svg_set_state (GTK_SVG (self->render_paintable), gtk_svg_get_state (self->svg));
 
       gtk_svg_set_frame_clock (GTK_SVG (self->render_paintable), self->clock);
 
@@ -386,12 +387,8 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->width = width;
   self->svg->height = height;
 
-  svg_shape_attr_set (self->svg->content,
-                      SHAPE_ATTR_WIDTH,
-                      svg_number_new (width));
-  svg_shape_attr_set (self->svg->content,
-                      SHAPE_ATTR_HEIGHT,
-                      svg_number_new (height));
+  svg_shape_attr_set (self->svg->content, SHAPE_ATTR_WIDTH, svg_number_new (width));
+  svg_shape_attr_set (self->svg->content, SHAPE_ATTR_HEIGHT, svg_number_new (height));
   svg_shape_attr_set (self->svg->content,
                       SHAPE_ATTR_VIEW_BOX,
                       svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));

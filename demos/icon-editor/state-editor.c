@@ -28,6 +28,7 @@ struct _StateEditor
   GtkWindow parent_instance;
 
   GtkGrid *grid;
+  GtkSpinButton *initial_state;
   PathPaintable *paintable;
   unsigned int max_state;
 
@@ -49,7 +50,7 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (StateEditor, state_editor, GTK_TYPE_WINDOW)
 
-/* {{{ Utilities, callbacks */
+/* {{{ Utilities, callbacks */ 
 
 static void repopulate (StateEditor *self);
 
@@ -413,6 +414,14 @@ paths_changed (StateEditor *self)
   repopulate (self);
 }
 
+static void
+initial_state_changed (StateEditor *self)
+{
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  svg->initial_state = (unsigned int) gtk_spin_button_get_value_as_int (self->initial_state);
+  path_paintable_changed (self->paintable);
+}
+
 /* }}} */
 /* {{{ GObject boilerplate */
 
@@ -507,8 +516,10 @@ state_editor_class_init (StateEditorClass *class)
                                                "/org/gtk/Shaper/state-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, StateEditor, grid);
+  gtk_widget_class_bind_template_child (widget_class, StateEditor, initial_state);
   gtk_widget_class_bind_template_callback (widget_class, drop_state);
   gtk_widget_class_bind_template_callback (widget_class, add_state);
+  gtk_widget_class_bind_template_callback (widget_class, initial_state_changed);
 }
 
 /* }}} */
@@ -549,6 +560,7 @@ state_editor_set_paintable (StateEditor *self,
       g_signal_connect_swapped (paintable, "paths-changed",
                                 G_CALLBACK (paths_changed), self);
       paths_changed (self);
+      gtk_spin_button_set_value (self->initial_state, path_paintable_get_svg (paintable)->initial_state);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);

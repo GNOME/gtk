@@ -48,7 +48,6 @@ struct _IconEditorWindow
   gboolean compat_classes;
   float weight;
   unsigned int state;
-  unsigned int initial_state;
   GtkStack *main_stack;
   GtkImage *empty_logo;
   union {
@@ -252,20 +251,6 @@ icon_editor_window_set_changed (IconEditorWindow *self,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), changed);
   action = g_action_map_lookup_action (G_ACTION_MAP (self), "revert");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), changed);
-}
-
-static void
-icon_editor_window_set_initial_state (IconEditorWindow *self,
-                                      unsigned int      initial_state)
-{
-  if (self->initial_state == initial_state)
-    return;
-
-  self->initial_state = initial_state;
-
-  icon_editor_window_set_changed (self, TRUE);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_STATE]);
 }
 
 static void
@@ -480,7 +465,6 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
     {
       path_paintable_set_frame_clock (self->paintable, gtk_widget_get_frame_clock (GTK_WIDGET (self)));
       icon_editor_window_set_state (self, path_paintable_get_state (paintable));
-      icon_editor_window_set_initial_state (self, path_paintable_get_state (paintable));
       path_paintable_set_weight (self->paintable, self->weight);
 
       g_signal_connect_swapped (self->paintable, "changed",
@@ -731,17 +715,13 @@ save_to_file (IconEditorWindow *self,
               GFile            *file)
 {
   GtkSvg *svg;
-  unsigned int state;
 
   g_autoptr (GBytes) bytes = NULL;
   g_autoptr (GError) error = NULL;
 
   svg = path_paintable_get_svg (self->paintable);
-  state = svg->state;
-  svg->state = self->initial_state;
   apply_compat_classes (self, svg);
   bytes = gtk_svg_serialize (svg);
-  svg->state = state;
 
   if (!g_file_replace_contents (file,
                                 g_bytes_get_data (bytes, NULL),
@@ -1217,10 +1197,6 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_state (self, g_value_get_uint (value));
       break;
 
-    case PROP_INITIAL_STATE:
-      icon_editor_window_set_initial_state (self, g_value_get_uint (value));
-      break;
-
     case PROP_PLAYING:
       icon_editor_window_set_playing (self, g_value_get_boolean (value));
       break;
@@ -1279,10 +1255,6 @@ icon_editor_window_get_property (GObject      *object,
 
     case PROP_STATE:
       g_value_set_uint (value, self->state);
-      break;
-
-    case PROP_INITIAL_STATE:
-      g_value_set_uint (value, self->initial_state);
       break;
 
     case PROP_PLAYING:
