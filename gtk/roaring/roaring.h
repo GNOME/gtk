@@ -462,13 +462,7 @@ static inline int roaring_hamming(uint64_t x) {
     __has_include(              \
         <byteswap.h>)  && (defined(__linux__) || defined(__FreeBSD__))  // CROARING_IS_BIG_ENDIAN
 #include <byteswap.h>
-#if defined(__linux__)
 #define croaring_htobe64(x) bswap_64(x)
-#elif defined(__FreeBSD__)
-#define croaring_htobe64(x) bswap64(x)
-#else
-#warning "Unknown platform, report as an error"
-#endif
 
 #else  // CROARING_IS_BIG_ENDIAN
 // Gets compiled to bswap or equivalent on most compilers.
