@@ -110,7 +110,6 @@
                                 </child>
                                 <child>
                               	  <object class="GtkFrame" id="language_frame">
-				    <property name="margin-start">12</property>
 				    <property name="sensitive" bind-source="language_button" bind-property="active" bind-flags="default"/>
 				    <property name="child">
 				      <object class="GtkBox">
