@@ -110,6 +110,15 @@ foreach shader: gsk_private_gpu_shaders
           '-I'+meson.current_build_dir(),
         ]
       ],
+      [ fs.name (fs.replace_suffix (shader, '')) + '-clipmask.frag.spv',
+        [ '--target-env=vulkan1.0',
+          '-fshader-stage=fragment',
+          '-DGSK_FRAGMENT_SHADER=1',
+          '-DGSK_VULKAN_HAS_CLIP_MASK',
+          '-I'+meson.current_source_dir(),
+          '-I'+meson.current_build_dir(),
+        ]
+      ],
     ]
     foreach option: glslc_options
       target = custom_target(option.get(0),

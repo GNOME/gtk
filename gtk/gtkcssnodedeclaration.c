@@ -92,14 +92,14 @@ GtkCssNodeDeclaration *
 gtk_css_node_declaration_new (void)
 {
   static GtkCssNodeDeclaration empty = {
-    1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
+    1,
     0,
     0,
     0,
     0
   };
 
-  return gtk_css_node_declaration_ref (&empty);
+  return g_memdup2 (&empty, sizeof_this_node (&empty));
 }
 
 GtkCssNodeDeclaration *
