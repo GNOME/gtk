@@ -75,6 +75,7 @@ struct _GtkSvg
   double width, height; /* Intrinsic size */
 
   double weight;
+  unsigned int initial_state;
   unsigned int state;
   unsigned int max_state;
   unsigned int n_state_names;

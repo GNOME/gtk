@@ -17824,9 +17824,15 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
       unsigned int state;
 
       if (parse_number (state_attr, 0, 63, &v))
-        gtk_svg_set_state (svg, (unsigned int) v);
+        {
+          svg->initial_state = (unsigned int) v;
+          gtk_svg_set_state (svg, (unsigned int) v);
+        }
       else if (find_named_state (svg, state_attr, &state))
-        gtk_svg_set_state (svg, state);
+        {
+          svg->initial_state = state;
+          gtk_svg_set_state (svg, state);
+        }
       else
         gtk_svg_invalid_attribute (svg, context, "gpa:state", NULL);
     }
@@ -20508,7 +20514,14 @@ serialize_shape_attrs (GString              *s,
           shape_type_has_gpa_attrs (shape->type) &&
           attr == SHAPE_ATTR_VISIBILITY)
         {
-          if ((shape->gpa.states & BIT (svg->state)) == 0)
+          unsigned int state;
+
+          if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
+            state = svg->state;
+          else
+            state = svg->initial_state;
+
+          if ((shape->gpa.states & BIT (state)) == 0)
             {
               indent_for_attr (s, indent);
               g_string_append_printf (s, "visibility='hidden'");
@@ -25626,6 +25639,7 @@ gtk_svg_init (GtkSvg *self)
 {
   self->weight = -1;
   self->overflow = GTK_OVERFLOW_HIDDEN;
+  self->initial_state = 0;
   self->state = 0;
   self->load_time = INDEFINITE;
   self->state_change_delay = 0;
@@ -26480,7 +26494,10 @@ gtk_svg_serialize_full (GtkSvg               *self,
         }
 
       indent_for_attr (s, 0);
-      g_string_append_printf (s, "gpa:state='%u'", self->state);
+      if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
+        g_string_append_printf (s, "gpa:state='%u'", self->state);
+      else
+        g_string_append_printf (s, "gpa:state='%u'", self->initial_state);
     }
 
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
@@ -27158,6 +27175,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->height = 0;
   self->current_width = 0;
   self->current_height = 0;
+  self->initial_state = 0;
   self->state = 0;
   self->max_state = 0;
   self->state_change_delay = 0;
