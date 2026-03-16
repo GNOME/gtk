@@ -112,8 +112,7 @@
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `min` and `max` attributes are not supported.
  *
- * Lastly, there is only minimal CSS support (the style attribute,
- * but not `<style>`), and no interactivity.
+ * Lastly, there is no interactivity.
  *
  *
  * ## SVG Extensions
