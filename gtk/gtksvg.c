@@ -26977,6 +26977,28 @@ svg_shape_attr_get_mask (Shape     *shape,
   return ref;
 }
 
+gboolean
+svg_shape_attr_get_viewbox (Shape           *shape,
+                            ShapeAttr        attr,
+                            graphene_rect_t *rect)
+{
+  g_return_val_if_fail (shape_has_attr (shape->type, attr), FALSE);
+  SvgViewBox *viewbox;
+  gboolean result;
+
+  if (_gtk_bitmask_get (shape->attrs, attr))
+    viewbox = (SvgViewBox *) shape_ref_base_value (shape, NULL, attr, 0);
+  else
+    viewbox = (SvgViewBox *) shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
+
+  result = !viewbox->unset;
+  graphene_rect_init_from_rect (rect, &viewbox->view_box);
+
+  svg_value_unref ((SvgValue *) viewbox);
+
+  return result;
+}
+
 void
 svg_shape_attr_set (Shape     *shape,
                     ShapeAttr  attr,
