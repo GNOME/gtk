@@ -1016,6 +1016,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   if (res != VK_SUCCESS)
     {
       gsk_vulkan_handle_result (res, "vkCreateImage");
+      g_object_unref (self);
       return NULL;
     }
 
@@ -1219,6 +1220,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   if (res != VK_SUCCESS)
     {
       GDK_DEBUG (DMABUF, "vkCreateImage() failed: %s", gdk_vulkan_strerror (res));
+      g_object_unref (self);
       return NULL;
     }
 
