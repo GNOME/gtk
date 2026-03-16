@@ -377,7 +377,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
 
   properties[PROP_INITIAL_STATE] =
     g_param_spec_uint ("initial-state", NULL, NULL,
-                       0, G_MAXUINT, 0,
+                       0, 64, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_COMPAT_CLASSES] =
