@@ -219,6 +219,13 @@ print_file_done (GObject *source,
   ret = g_dbus_proxy_call_finish (op_portal->proxy,
                                   result,
                                   &error);
+
+  // TODO: Delay GTK_PRINT_STATUS_FINISHED to org.freedesktop.portal.Request::Response ?
+  _gtk_print_operation_set_status (op,
+                                   ret == NULL ? GTK_PRINT_STATUS_FINISHED_ABORTED :
+                                                 GTK_PRINT_STATUS_FINISHED,
+                                   NULL);
+
   if (ret == NULL)
     {
       if (op->priv->error == NULL)
@@ -257,6 +264,7 @@ portal_job_complete (GtkPrintJob  *job,
     }
 
   op_portal->file_written = TRUE;
+  _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_SENDING_DATA, NULL);
 
   settings = gtk_print_job_get_settings (job);
   uri = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI);
