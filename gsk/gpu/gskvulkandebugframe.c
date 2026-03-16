@@ -131,11 +131,14 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                self->vk_timestamp_pool,
                                self->n_ops * 2);
           entry = gsk_vulkan_debug_get (&self->debug, op->node_id);
+/* silence the warning about g_get_monotonic_time_ns() not existing yet, we actually check the version */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           entry->profile.self.cpu_submit_ns -= g_get_monotonic_time_ns ();
 
           op = gsk_gpu_op_vk_command (op, GSK_GPU_FRAME (frame), state);
 
           entry->profile.self.cpu_submit_ns += g_get_monotonic_time_ns ();
+G_GNUC_END_IGNORE_DEPRECATIONS
 
           vkCmdWriteTimestamp (state->vk_command_buffer,
                                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
