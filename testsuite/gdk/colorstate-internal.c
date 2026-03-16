@@ -5,7 +5,7 @@
 
 #include "gdkcolordefs.h"
 
-typedef float (* TransferFunc) (float v);
+typedef void (* TransferFunc) (float v[3]);
 
 typedef struct
 {
@@ -14,54 +14,70 @@ typedef struct
   TransferFunc eotf;
   float o_range[2];
   float e_range[2];
+  gboolean symmetric;
 } TransferTest;
 
 TransferTest transfers[] = {
-  { "srgb",    srgb_oetf,    srgb_eotf,    { 0, 1 }, { 0, 1} },
-  { "pq",      pq_oetf,      pq_eotf,      { 0, 49.2610855 }, { 0, 1 } },
-  { "bt709",   bt709_oetf,   bt709_eotf,   { 0, 1 }, { 0, 1 } },
-  { "hlg",     hlg_oetf,     hlg_eotf,     { 0, 1}, { 0, 1} },
-  { "gamma22", gamma22_oetf, gamma22_eotf, { 0, 1 }, { 0, 1 } },
-  { "gamma28", gamma28_oetf, gamma28_eotf, { 0, 1 }, { 0, 1 } },
-  { "oklab",   to_oklab_nl,  from_oklab_nl,{ 0, 1 }, { 0, 1 } },
+  { "srgb",    srgb_oetf,    srgb_eotf,    { 0, 1 }, { 0, 1}, TRUE },
+  { "pq",      pq_oetf,      pq_eotf,      { 0, 49.2610855 }, { 0, 1 }, TRUE },
+  { "bt709",   bt709_oetf,   bt709_eotf,   { 0, 1 }, { 0, 1 }, TRUE },
+  { "hlg",     hlg_oetf,     hlg_eotf,     { 0, 1000.0 / 203.0 }, { 0, 1}, FALSE },
+  { "gamma22", gamma22_oetf, gamma22_eotf, { 0, 1 }, { 0, 1 }, TRUE },
+  { "gamma28", gamma28_oetf, gamma28_eotf, { 0, 1 }, { 0, 1 }, TRUE },
+  { "oklab",   to_oklab_nl,  from_oklab_nl,{ 0, 1 }, { 0, 1 }, TRUE },
 };
 
-#define LERP(t, a, b) ((a) + (t) * ((b) - (a)))
+static void
+lerp (float v[3], float t, float a, float b)
+{
+  v[0] = a + t * (b - a);
+  v[1] = a + t * (b - a);
+  v[2] = a + t * (b - a);
+}
 
 #define ASSERT_IN_RANGE(v, a, b, epsilon) \
-  g_assert_cmpfloat_with_epsilon (MIN(v,a), a, epsilon); \
-  g_assert_cmpfloat_with_epsilon (MAX(v,b), b, epsilon); \
+  for (int c = 0; c < 3; c++) \
+    { \
+      g_assert_cmpfloat_with_epsilon (MIN(v[c],a), a, epsilon); \
+      g_assert_cmpfloat_with_epsilon (MAX(v[c],b), b, epsilon); \
+    }
 
 static void
 test_transfer (gconstpointer data)
 {
   TransferTest *transfer = (TransferTest *) data;
-  float v, v1, v2;
+  float v[3], v1[3], v2[3];
 
   for (int i = 0; i < 1001; i++)
     {
-      v = LERP (i/1000.0, transfer->e_range[0], transfer->e_range[1]);
+      lerp (v, i/1000.0, transfer->e_range[0], transfer->e_range[1]);
 
-      v1 = transfer->eotf (v);
+      memcpy (v1, v, sizeof (v1));
+      transfer->eotf (v1);
 
       ASSERT_IN_RANGE (v1, transfer->o_range[0], transfer->o_range[1], 0.0001);
 
-      v2 = transfer->oetf (v1);
+      memcpy (v2, v1, sizeof (v2));
+      transfer->oetf (v2);
 
-      g_assert_cmpfloat_with_epsilon (v, v2, 0.05);
+      for (int c = 0; c < 3; c++)
+        g_assert_cmpfloat_with_epsilon (v[c], v2[c], 0.05);
     }
 
   for (int i = 0; i < 1001; i++)
     {
-      v = LERP (i/1000.0, transfer->o_range[0], transfer->o_range[1]);
+      lerp (v, i/1000.0, transfer->o_range[0], transfer->o_range[1]);
 
-      v1 = transfer->oetf (v);
+      memcpy (v1, v, sizeof (v1));
+      transfer->oetf (v1);
 
       ASSERT_IN_RANGE (v1, transfer->e_range[0], transfer->e_range[1], 0.0001);
 
-      v2 = transfer->eotf (v1);
+      memcpy (v2, v1, sizeof (v2));
+      transfer->eotf (v2);
 
-      g_assert_cmpfloat_with_epsilon (v, v2, 0.05);
+      for (int c = 0; c < 3; c++)
+        g_assert_cmpfloat_with_epsilon (v[c], v2[c], 0.05);
     }
 }
 
@@ -69,26 +85,37 @@ static void
 test_transfer_symmetry (gconstpointer data)
 {
   TransferTest *transfer = (TransferTest *) data;
-  float v, v1, v2;
+  float v1[3], v2[3];
+
+  if (!transfer->symmetric)
+    return;
 
   for (int i = 0; i < 11; i++)
     {
-      v = LERP (i/10.0, transfer->e_range[0], transfer->e_range[1]);
+      float t = i / 10.0;
 
-      v1 = transfer->eotf (v);
-      v2 = -transfer->eotf (-v);
+      lerp (v1, t, transfer->e_range[0], transfer->e_range[1]);
+      transfer->eotf (v1);
 
-      g_assert_cmpfloat_with_epsilon (v1, v2, 0.05);
+      lerp (v2, t, -transfer->e_range[0], -transfer->e_range[1]);
+      transfer->eotf (v2);
+
+      for (int c = 0; c < 3; c++)
+        g_assert_cmpfloat_with_epsilon (v1[c], -v2[c], 0.05);
    }
 
   for (int i = 0; i < 11; i++)
     {
-      v = LERP (i/10.0, transfer->o_range[0], transfer->o_range[1]);
+      float t = i / 10.0;
 
-      v1 = transfer->oetf (v);
-      v2 = -transfer->oetf (-v);
+      lerp (v1, t, transfer->o_range[0], transfer->o_range[1]);
+      transfer->oetf (v1);
 
-      g_assert_cmpfloat_with_epsilon (v1, v2, 0.05);
+      lerp (v2, t, -transfer->o_range[0], -transfer->o_range[1]);
+      transfer->oetf (v2);
+
+      for (int c = 0; c < 3; c++)
+        g_assert_cmpfloat_with_epsilon (v1[c], -v2[c], 0.05);
     }
 }
 typedef struct

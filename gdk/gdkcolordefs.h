@@ -29,50 +29,60 @@ sign (float v)
   return v < 0 ? -1 : 1;
 }
 
-static inline float
-srgb_oetf (float v)
+static inline void
+srgb_oetf (float v[3])
 {
-  if (fabsf (v) > 0.0031308f)
-    return sign (v) * (1.055f * powf (fabsf (v), 1.f / 2.4f) - 0.055f);
-  else
-    return 12.92f * v;
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) > 0.0031308f)
+        v[i] = sign (v[i]) * (1.055f * powf (fabsf (v[i]), 1.f / 2.4f) - 0.055f);
+      else
+        v[i] = 12.92f * v[i];
+    }
 }
 
-static inline float
-srgb_eotf (float v)
+static inline void
+srgb_eotf (float v[3])
 {
-  if (fabsf (v) >= 0.04045f)
-    return sign (v) * powf (((fabsf (v) + 0.055f) / (1.f + 0.055f)), 2.4f);
-  else
-    return v / 12.92f;
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) >= 0.04045f)
+        v[i] = sign (v[i]) * powf (((fabsf (v[i]) + 0.055f) / (1.f + 0.055f)), 2.4f);
+      else
+        v[i] = v[i] / 12.92f;
+    }
 }
 
-static inline float
-gamma22_oetf (float v)
+static inline void
+gamma22_oetf (float v[3])
 {
-  return sign (v) * powf (fabsf (v), 1.f / 2.2f);
+  for (int i = 0; i < 3; i++)
+    v[i] = sign (v[i]) * powf (fabsf (v[i]), 1.f / 2.2f);
 }
 
-static inline float
-gamma22_eotf (float v)
+static inline void
+gamma22_eotf (float v[3])
 {
-  return sign (v) * powf (fabsf (v), 2.2f);
+  for (int i = 0; i < 3; i++)
+    v[i] = sign (v[i]) * powf (fabsf (v[i]), 2.2f);
 }
 
-static inline float
-gamma28_oetf (float v)
+static inline void
+gamma28_oetf (float v[3])
 {
-  return sign (v) * powf (fabsf (v), 1.f / 2.8f);
+  for (int i = 0; i < 3; i++)
+    v[i] = sign (v[i]) * powf (fabsf (v[i]), 1.f / 2.8f);
 }
 
-static inline float
-gamma28_eotf (float v)
+static inline void
+gamma28_eotf (float v[3])
 {
-  return sign (v) * powf (fabsf (v), 2.8f);
+  for (int i = 0; i < 3; i++)
+    v[i] = sign (v[i]) * powf (fabsf (v[i]), 2.8f);
 }
 
-static inline float
-pq_eotf (float v)
+static inline void
+pq_eotf (float v[3])
 {
   float ninv = (1 << 14) / 2610.0;
   float minv = (1 << 5) / 2523.0;
@@ -80,74 +90,107 @@ pq_eotf (float v)
   float c2 = 2413.0 / (1 << 7);
   float c3 = 2392.0 / (1 << 7);
 
-  float x = powf (fabsf (v), minv);
-  x = powf (MAX ((x - c1), 0) / (c2 - (c3 * x)), ninv);
-
-  return sign (v) * x * 10000 / 203.0;
+  for (int i = 0; i < 3; i++)
+    {
+      float x = powf (fabsf (v[i]), minv);
+      x = powf (MAX ((x - c1), 0) / (c2 - (c3 * x)), ninv);
+      v[i] = sign (v[i]) * x * 10000 / 203.0;
+    }
 }
 
-static inline float
-pq_oetf (float v)
+static inline void
+pq_oetf (float v[3])
 {
-  float x = v * 203.0 / 10000.0;
   float n = 2610.0 / (1 << 14);
   float m = 2523.0 / (1 << 5);
   float c1 = 3424.0 / (1 << 12);
   float c2 = 2413.0 / (1 << 7);
   float c3 = 2392.0 / (1 << 7);
 
-  x = powf (fabsf (x), n);
-  return sign (v) * powf (((c1 + (c2 * x)) / (1 + (c3 * x))), m);
+  for (int i = 0; i < 3; i++)
+    {
+      float x = v[i] * 203.0 / 10000.0;
+      x = powf (fabsf (x), n);
+      v[i] = sign (v[i]) * powf (((c1 + (c2 * x)) / (1 + (c3 * x))), m);
+    }
 }
 
-static inline float
-bt709_eotf (float v)
+static inline void
+bt709_eotf (float v[3])
 {
   const float a = 1.099;
   const float d = 0.0812;
 
-  if (fabsf (v) < d)
-    return  v / 4.5f;
-  else
-    return sign (v) * powf ((fabsf (v) + (a - 1)) / a, 1 / 0.45f);
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) < d)
+        v[i] = v[i] / 4.5f;
+      else
+        v[i] = sign (v[i]) * powf ((fabsf (v[i]) + (a - 1)) / a, 1 / 0.45f);
+    }
 }
 
-static inline float
-bt709_oetf (float v)
+static inline void
+bt709_oetf (float v[3])
 {
   const float a = 1.099;
   const float b = 0.018;
 
-  if (fabsf (v) < b)
-    return v * 4.5f;
-  else
-    return sign (v) * (a * powf (fabsf (v), 0.45f) - (a - 1));
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) < b)
+        v[i] = v[i] * 4.5f;
+      else
+        v[i] = sign (v[i]) * (a * powf (fabsf (v[i]), 0.45f) - (a - 1));
+    }
 }
 
-static inline float
-hlg_eotf (float v)
+static inline void
+hlg_eotf (float v[3])
 {
   const float a = 0.17883277;
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (fabsf (v) <= 0.5)
-    return sign (v) * (v * v) / 3;
-  else
-    return sign (v) * (expf ((fabsf (v) - c) / a) + b) / 12.0;
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) <= 0.5)
+        v[i] = sign (v[i]) * (v[i] * v[i]) / 3;
+      else
+        v[i] = sign (v[i]) * (expf ((fabsf (v[i]) - c) / a) + b) / 12.0;
+    }
+
+  float Ys = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
+  float scale = (1000.f / 203.f) * powf (MAX (Ys, 0.0f), 0.2f);
+  v[0] *= scale;
+  v[1] *= scale;
+  v[2] *= scale;
 }
 
-static inline float
-hlg_oetf (float v)
+static inline void
+hlg_oetf (float v[3])
 {
   const float a = 0.17883277;
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (fabsf (v) <= 1/12.0)
-    return sign (v) * sqrtf (3 * fabsf (v));
-  else
-    return sign (v) * (a * logf (12 * fabsf (v) - b) + c);
+  float Yd = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
+  if (Yd > 0.0f)
+    {
+      float scale = powf (203.f / 1000.f, 1.f / 1.2f)
+                   * powf (Yd, 1.f / 1.2f - 1.f);
+      v[0] *= scale;
+      v[1] *= scale;
+      v[2] *= scale;
+    }
+
+  for (int i = 0; i < 3; i++)
+    {
+      if (fabsf (v[i]) <= 1/12.0)
+        v[i] = sign (v[i]) * sqrtf (3 * fabsf (v[i]));
+      else
+        v[i] = sign (v[i]) * (a * logf (12 * fabsf (v[i]) - b) + c);
+    }
 }
 
 /* See http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
@@ -236,16 +279,18 @@ static const float srgb_to_rec2020[9] = {
 
 /* oklab conversion */
 
-static float
-from_oklab_nl (float v)
+static inline void
+from_oklab_nl (float v[3])
 {
-  return v * v * v;
+  for (int i = 0; i < 3; i++)
+    v[i] = v[i] * v[i] * v[i];
 }
 
-static float
-to_oklab_nl (float v)
+static inline void
+to_oklab_nl (float v[3])
 {
-  return cbrtf (v);
+  for (int i = 0; i < 3; i++)
+    v[i] = cbrtf (v[i]);
 }
 
 static const float oklab_to_lms[9] = {

@@ -278,9 +278,9 @@ gdk_color_state_create_cicp_params (GdkColorState *self)
 /* }}} */
 /* {{{ Conversion functions */
 
-typedef float (* GdkTransferFunc) (float v);
-typedef void  (* GdkConvertFunc)  (GdkColorState *self,
-                                   float          values[4]);
+typedef void (* GdkTransferFunc) (float v[3]);
+typedef void (* GdkConvertFunc)  (GdkColorState *self,
+                                  float          values[4]);
 typedef const float GdkColorMatrix[9];
 
 #define IDENTITY ((float*)0)
@@ -304,11 +304,7 @@ name (GdkColorState  *self, \
       float           values[4]) \
 { \
   if (eotf != NONE) \
-    { \
-      values[0] = eotf (values[0]); \
-      values[1] = eotf (values[1]); \
-      values[2] = eotf (values[2]); \
-    } \
+    eotf (values); \
   if (matrix != IDENTITY) \
     { \
       float res[3]; \
@@ -320,11 +316,7 @@ name (GdkColorState  *self, \
       values[2] = res[2]; \
     } \
   if (nonlinear != NONE) \
-    { \
-      values[0] = nonlinear (values[0]); \
-      values[1] = nonlinear (values[1]); \
-      values[2] = nonlinear (values[2]); \
-    } \
+    nonlinear (values); \
   if (matrix2 != IDENTITY) \
     { \
       float res[3]; \
@@ -336,11 +328,7 @@ name (GdkColorState  *self, \
       values[2] = res[2]; \
     } \
   if (oetf != NONE) \
-    { \
-      values[0] = oetf (values[0]); \
-      values[1] = oetf (values[1]); \
-      values[2] = oetf (values[2]); \
-    } \
+    oetf (values); \
 } \
 CONVERT_FUNC (name)
 
@@ -614,7 +602,7 @@ gdk_builtin_color_state_get_name (GdkColorState *color_state)
  *
  * Checks if the color state has a hue channel and returns it if
  * there is one.
- * 
+ *
  * Unlike other channels, hue channels are periodic, so they may
  * need different treatment in various places.
  *
@@ -794,11 +782,7 @@ transform_from_cicp (GdkCicpColorState *self,
           values[i][2] = res[2];
         }
       if (self->eotf != NONE)
-        {
-          values[i][0] = self->eotf (values[i][0]);
-          values[i][1] = self->eotf (values[i][1]);
-          values[i][2] = self->eotf (values[i][2]);
-        }
+        self->eotf (values[i]);
       if (matrix != IDENTITY)
         {
           float res[3];
@@ -810,11 +794,7 @@ transform_from_cicp (GdkCicpColorState *self,
           values[i][2] = res[2];
         }
       if (oetf != NONE)
-        {
-          values[i][0] = oetf (values[i][0]);
-          values[i][1] = oetf (values[i][1]);
-          values[i][2] = oetf (values[i][2]);
-        }
+        oetf (values[i]);
     }
 }
 
@@ -839,11 +819,7 @@ transform_to_cicp (GdkCicpColorState *self,
   for (gsize i = 0; i < n_values; i++)
     {
       if (eotf != NONE)
-        {
-          values[i][0] = eotf (values[i][0]);
-          values[i][1] = eotf (values[i][1]);
-          values[i][2] = eotf (values[i][2]);
-        }
+        eotf (values[i]);
       if (matrix != IDENTITY)
         {
           float res[3];
@@ -862,11 +838,7 @@ transform_to_cicp (GdkCicpColorState *self,
           values[i][1] = tmp;
         }
       if (self->oetf != NONE)
-        {
-          values[i][0] = self->oetf (values[i][0]);
-          values[i][1] = self->oetf (values[i][1]);
-          values[i][2] = self->oetf (values[i][2]);
-        }
+        self->oetf (values[i]);
       if (self->to_yuv)
         {
           float res[3];

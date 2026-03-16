@@ -50,26 +50,24 @@ output_color_alpha (vec4  color,
     return vec4 (color.rgb, color.a * alpha);
 }
 
-float
-srgb_eotf (float v)
+vec3
+srgb_eotf (vec3 v)
 {
-  if (abs (v) >= 0.04045)
-    return sign (v) * pow (((abs (v) + 0.055) / (1.0 + 0.055)), 2.4);
-  else
-    return v / 12.92;
+  vec3 lo = v / 12.92;
+  vec3 hi = sign (v) * pow (((abs (v) + 0.055) / (1.0 + 0.055)), vec3 (2.4));
+  return mix (lo, hi, greaterThanEqual (abs (v), vec3 (0.04045)));
 }
 
-float
-srgb_oetf (float v)
+vec3
+srgb_oetf (vec3 v)
 {
-  if (abs (v) > 0.0031308)
-    return sign (v) * (1.055 * pow (abs (v), 1.0 / 2.4) - 0.055);
-  else
-    return 12.92 * v;
+  vec3 lo = 12.92 * v;
+  vec3 hi = sign (v) * (1.055 * pow (abs (v), vec3 (1.0 / 2.4)) - 0.055);
+  return mix (lo, hi, greaterThan (abs (v), vec3 (0.0031308)));
 }
 
-float
-pq_eotf (float v)
+vec3
+pq_eotf (vec3 v)
 {
   const float ninv = 16384.0 / 2610.0;
   const float minv = 32.0 / 2523.0;
@@ -77,14 +75,14 @@ pq_eotf (float v)
   const float c2 = 2413.0 / 128.0;
   const float c3 = 2392.0 / 128.0;
 
-  float x = pow (abs (v), minv);
-  x = pow (max (x - c1, 0.0) / (c2 - (c3 * x)), ninv);
+  vec3 x = pow (abs (v), vec3 (minv));
+  x = pow (max (x - c1, 0.0) / (c2 - (c3 * x)), vec3 (ninv));
 
   return sign (v) * x * 10000.0 / 203.0;
 }
 
-float
-pq_oetf (float v)
+vec3
+pq_oetf (vec3 v)
 {
   const float n = 2610.0 / 16384.0;
   const float m = 2523.0 / 32.0;
@@ -92,9 +90,9 @@ pq_oetf (float v)
   const float c2 = 2413.0 / 128.0;
   const float c3 = 2392.0 / 128.0;
 
-  float x = pow (abs (v) * 203.0 / 10000.0, n);
+  vec3 x = pow (abs (v) * 203.0 / 10000.0, vec3 (n));
 
-  return sign (v) * pow (((c1 + (c2 * x)) / (1.0 + (c3 * x))), m);
+  return sign (v) * pow (((c1 + (c2 * x)) / (1.0 + (c3 * x))), vec3 (m));
 }
 
 /* Note that these matrices are transposed from the C version */
@@ -118,14 +116,10 @@ apply_eotf (vec3 color,
   switch (cs)
     {
     case GDK_COLOR_STATE_ID_SRGB:
-      return vec3 (srgb_eotf (color.r),
-                   srgb_eotf (color.g),
-                   srgb_eotf (color.b));
+      return srgb_eotf (color);
 
     case GDK_COLOR_STATE_ID_REC2100_PQ:
-      return vec3 (pq_eotf (color.r),
-                   pq_eotf (color.g),
-                   pq_eotf (color.b));
+      return pq_eotf (color);
 
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
@@ -143,14 +137,10 @@ apply_oetf (vec3 color,
   switch (cs)
     {
     case GDK_COLOR_STATE_ID_SRGB:
-      return vec3 (srgb_oetf (color.r),
-                   srgb_oetf (color.g),
-                   srgb_oetf (color.b));
+      return srgb_oetf (color);
 
     case GDK_COLOR_STATE_ID_REC2100_PQ:
-      return vec3 (pq_oetf (color.r),
-                   pq_oetf (color.g),
-                   pq_oetf (color.b));
+      return pq_oetf (color);
 
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
