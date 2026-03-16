@@ -413,26 +413,42 @@ dump_pango (GdkDisplay *display,
 /* }}} */
 /* {{{ Media */
 
-static const char *
-get_media_backend_kind (void)
+static char *
+get_media_backend_description (void)
 {
   GIOExtension *e;
+  const char *name;
 
   e = gtk_media_file_get_extension ();
-  return g_io_extension_get_name (e);
+  name = g_io_extension_get_name (e);
+
+#ifdef HAVE_GSTREAMER
+  if (g_str_equal (name, "gstreamer"))
+    {
+      return gst_version_string ();
+    }
+  else
+#endif
+    {
+      return g_strdup (name);
+    }
 }
 
 static void
 init_media (GtkInspectorGeneral *gen)
 {
-  gtk_label_set_label (GTK_LABEL (gen->media_backend), get_media_backend_kind ());
+  char *backend = get_media_backend_description ();
+  gtk_label_set_label (GTK_LABEL (gen->media_backend), backend);
+  g_free (backend);
 }
 
 static void
 dump_media (GdkDisplay *display,
             GString    *string)
 {
-  g_string_append_printf (string, "| Media Backend | %s |\n", get_media_backend_kind ());
+  char *backend = get_media_backend_description ();
+  g_string_append_printf (string, "| Media Backend | %s |\n", backend);
+  g_free (backend);
 }
 
 /* }}} */
