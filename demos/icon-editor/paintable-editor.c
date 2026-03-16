@@ -155,16 +155,26 @@ update_summary (PaintableEditor *self)
 {
   if (self->paintable)
     {
-      unsigned int state = path_paintable_get_state (self->paintable);
+      GtkSvg *svg = path_paintable_get_svg (self->paintable);
+      unsigned int state, n_names;
+      const char **names;
+      const char *name;
       g_autofree char *summary1 = NULL;
       g_autofree char *summary2 = NULL;
       ShapeCountData counts;
 
+      state = gtk_svg_get_state (svg);
+      names = gtk_svg_get_state_names (svg, &n_names);
+
       counts.state = state;
       counts.all = counts.graphical = counts.current = 0;
-      svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, count_shapes, &counts);
+      svg_foreach_shape (svg->content, count_shapes, &counts);
 
-      summary1 = g_strdup_printf ("Current state: %u", state);
+      if (state < n_names)
+        summary1 = g_strdup_printf ("Current state: %u (%s)", state, names[state]);
+      else
+        summary1 = g_strdup_printf ("Current state: %u", state);
+
       summary2 = g_strdup_printf ("%u graphical shapes, %u in current state", counts.graphical, counts.current);
 
       gtk_label_set_label (self->summary1, summary1);
