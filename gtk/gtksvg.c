@@ -25512,7 +25512,8 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       g_assert (paint_context.ctx_shape_stack == NULL);
       g_assert (paint_context.transforms == NULL);
 
-      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+      if (self->gpa_version == 0 &&
+          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
           gtk_snapshot_pop (snapshot);
