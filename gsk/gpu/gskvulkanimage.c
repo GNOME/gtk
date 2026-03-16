@@ -1264,14 +1264,13 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                        format,
                        width, height);
 
-  self->allocator = gsk_vulkan_device_get_external_allocator (device);
-  gsk_vulkan_allocator_ref (self->allocator);
-
   fd = fcntl (dmabuf->planes[0].fd, F_DUPFD_CLOEXEC, (int) 3);
   if (fd < 0)
     {
       GDK_DEBUG (DMABUF, "Vulkan failed to dup() fd: %s", g_strerror (errno));
       vkDestroyImage (vk_device, self->vk_image, NULL);
+      self->vk_image = NULL;
+      g_object_unref (self);
       return NULL;
     }
 
@@ -1317,10 +1316,13 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                                    fd_props.memoryTypeBits,
                                                    0,
                                                    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+  self->allocator = gsk_vulkan_device_get_external_allocator (device);
+  gsk_vulkan_allocator_ref (self->allocator);
   gsk_vulkan_alloc (self->allocator,
                     requirements.memoryRequirements.size,
                     requirements.memoryRequirements.alignment,
                     &self->allocation);
+
   GSK_VK_CHECK (vkAllocateMemory, vk_device,
                                   &(VkMemoryAllocateInfo) {
                                       .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
