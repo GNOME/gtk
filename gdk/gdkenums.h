@@ -375,9 +375,28 @@ typedef enum
  * `CAIRO_FORMAT_ARGB32` is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
  *
- * Its naming is modelled after
- * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
- * for details).
+ * # A note on naming
+ *
+ * The format names are roughly modelled after
+ * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat).
+ * A name follows `GDK_MEMORY_<CHANNELS>_<DATA_TYPE>_<SUBSAMPLING> <PREMULTIPLIED>`
+ * where CHANNELS describe how the RGBA channels are layed out in memory, with an
+ * X denoting padding. DATA_TYPE is unsigned normalized integer if not present, or
+ * otherwise FLOAT. The optional SUBSAMPLING defines the subsampling method used.
+ * The optional ENDIAN term describes the endianness if it is not
+ * host-endian. Finally, an optional PREMULTIPLIED term indicates that the color
+ * channels are premultiplied with the alpha value, if it is omitted, the data is
+ * not premultiplied or there is no alpha channel.
+ *
+ * The CHANNELS are given as a list of planes seperated by underscores where
+ * each plane is split into multiple elements describing one or more bytes of memory.
+ * Each element is given as the list of channels folowed by the amount of bits taken
+ * up.
+ *
+ * So the fictional format `RGB565_A8_PREMULTIPLIED` would describe a format with 2
+ * planes where the first plane is an unsigned 16 bit integer containing the RGB
+ * channels with 5, 6, and 5 bits respectively while the 2nd plane contains the
+ * alpha channel as an unisnged 8bit integer.
  */
 /**
  * GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
@@ -1161,6 +1180,74 @@ typedef enum
  *
  * Since: 4.20
  */
+/**
+ * GDK_MEMORY_ARGB2101010_PREMULTIPLIED:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 red, 19..10 green
+ * and 9..0 blue.
+ *
+ * The color values are premultiplied with the alpha value.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_ARGB2101010:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 red, 19..10 green
+ * and 9..0 blue.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_XRGB2101010:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 are padding, bits 29..20 contain red, 19..10 green
+ * and 9..0 blue.
+ *
+ * The format is opaque.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_A2B10G10G10_LE_PREMULTIPLIED:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 blue, 19..10 green
+ * and 9..0 red.
+ *
+ * The color values are premultiplied with the alpha value.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_ABGR2101010:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 blue, 19..10 green
+ * and 9..0 red.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_MEMORY_XBGR2101010:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 are padding, bits 29..20 contain blue, 19..10 green
+ * and 9..0 red.
+ *
+ * The format is opaque.
+ *
+ * Since: 4.24
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -1227,6 +1314,12 @@ typedef enum {
   GDK_MEMORY_G16_B16_R16_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G16_B16_R16_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G16_B16_R16_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_ARGB2101010_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_ARGB2101010 GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_XRGB2101010 GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_ABGR2101010_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_ABGR2101010 GDK_AVAILABLE_ENUMERATOR_IN_4_24,
+  GDK_MEMORY_XBGR2101010 GDK_AVAILABLE_ENUMERATOR_IN_4_24,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

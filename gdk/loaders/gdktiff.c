@@ -299,6 +299,12 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_G16_B16_R16_420]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_G16_B16_R16_422]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_G16_B16_R16_444]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_ARGB2101010_PREMULTIPLIED]        = { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_ARGB2101010]                      = { GDK_MEMORY_R16G16B16A16,                     16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_XRGB2101010]                      = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_ABGR2101010_PREMULTIPLIED]        = { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_ABGR2101010]                      = { GDK_MEMORY_R16G16B16A16,                     16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_XBGR2101010]                      = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
 };
 
 /* if this fails, somebody forgot to add formats above */

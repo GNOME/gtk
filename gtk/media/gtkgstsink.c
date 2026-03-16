@@ -24,6 +24,8 @@
 
 #include "gtkgstpaintableprivate.h"
 
+#include "gdk/gdkmemoryformatprivate.h"
+
 #if GST_GL_HAVE_WINDOW_X11 && (GST_GL_HAVE_PLATFORM_GLX || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_X11)
 #define HAVE_GST_X11_SUPPORT
 #include <gdk/x11/gdkx.h>
@@ -69,34 +71,13 @@ enum {
 GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 #define GST_CAT_DEFAULT gtk_debug_gst_sink
 
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-#define ENDIAN_FORMATS "P010_10LE, P012_LE, P016_LE, I420_10LE, I422_10LE, Y444_10LE, I420_12LE, I422_12LE, Y444_12LE, Y444_16_LE"
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-#define ENDIAN_FORMATS "P010_10BE, P012_BE, P016_BE, I420_10BE, I422_10BE, Y444_10BE, I420_12BE, I422_12BE, Y444_12BE, Y444_16_BE"
-#else
-#define ENDIAN_FORMATS ""
-#endif
-#define FORMATS "{ BGRA, ARGB, RGBA, ABGR, RGB, BGR, NV12, NV21, NV16, NV61, NV24, " ENDIAN_FORMATS ", YUV9, YVU9, Y41B, I420, YV12, Y42B, Y444, YUY2, UYVY, YVYU, VYUY }"
-
-#define MEMORY_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
+#define MEMORY_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE (GST_VIDEO_FORMATS_ALL)
 
 #ifdef GDK_WINDOWING_WIN32
-#define D3D12_TEXTURE_CAPS \
-                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY "), " \
-                     "width = " GST_VIDEO_SIZE_RANGE ", " \
-                     "height = " GST_VIDEO_SIZE_RANGE ", " \
-                     "framerate = " GST_VIDEO_FPS_RANGE "; "
-#else
-#define D3D12_TEXTURE_CAPS ""
+#define D3D12_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE_WITH_FEATURES (GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY, GST_VIDEO_FORMATS_ALL)
 #endif
 
-#define GL_TEXTURE_CAPS \
-                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), " \
-                     "format = (string) RGBA, " \
-                     "width = " GST_VIDEO_SIZE_RANGE ", " \
-                     "height = " GST_VIDEO_SIZE_RANGE ", " \
-                     "framerate = " GST_VIDEO_FPS_RANGE ", " \
-                     "texture-target = (string) 2D"
+#define GL_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE_WITH_FEATURES (GST_CAPS_FEATURE_MEMORY_GL_MEMORY, "RGBA")
 
 #define DMABUF_TEXTURE_CAPS GST_VIDEO_DMA_DRM_CAPS_MAKE
 
@@ -105,7 +86,9 @@ GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
     GST_STATIC_CAPS(DMABUF_TEXTURE_CAPS "; "
-                    D3D12_TEXTURE_CAPS
+#ifdef GDK_WINDOWING_WIN32
+                    D3D12_TEXTURE_CAPS "; "
+#endif
                     GL_TEXTURE_CAPS "; "
                     MEMORY_TEXTURE_CAPS)
     );
@@ -222,6 +205,24 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
 }
 
 static GstCaps *
+get_memory_formats (void)
+{
+  GstVideoFormat formats[GDK_MEMORY_N_FORMATS];
+  gsize i, n_formats;
+
+  n_formats = 0;
+
+  for (i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      formats[n_formats] = gdk_memory_format_get_gst_video_format (i);
+      if (formats[n_formats] != GST_VIDEO_FORMAT_UNKNOWN)
+        n_formats++;
+    }
+
+  return gst_video_make_raw_caps (formats, n_formats);
+}
+
+static GstCaps *
 gtk_gst_sink_get_caps (GstBaseSink *bsink,
                        GstCaps     *filter)
 {
@@ -253,7 +254,7 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
       gst_caps_append (unfiltered, tmp);
     }
 
-  tmp = gst_caps_from_string (MEMORY_TEXTURE_CAPS);
+  tmp = get_memory_formats ();
   gst_caps_append (unfiltered, tmp);
 
   GST_DEBUG_OBJECT (self, "advertising own caps %" GST_PTR_FORMAT, unfiltered);
@@ -468,83 +469,24 @@ gtk_gst_sink_event (GstBaseSink * bsink, GstEvent * event)
 static GdkMemoryFormat
 gtk_gst_memory_format_from_video_info (GstVideoInfo *info)
 {
-#define IS_PREMULTIPLIED(_info) (GST_VIDEO_INFO_FLAGS (_info) & GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA)
-  switch ((guint) GST_VIDEO_INFO_FORMAT (info))
-  {
-    case GST_VIDEO_FORMAT_BGRA:
-      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_B8G8R8A8_PREMULTIPLIED : GDK_MEMORY_B8G8R8A8;
-    case GST_VIDEO_FORMAT_ARGB:
-      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
-    case GST_VIDEO_FORMAT_RGBA:
-      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
-    case GST_VIDEO_FORMAT_ABGR:
-      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_A8B8G8R8_PREMULTIPLIED : GDK_MEMORY_A8B8G8R8;
-    case GST_VIDEO_FORMAT_RGB:
-      return GDK_MEMORY_R8G8B8;
-    case GST_VIDEO_FORMAT_BGR:
-      return GDK_MEMORY_B8G8R8;
-    case GST_VIDEO_FORMAT_NV12:
-      return GDK_MEMORY_G8_B8R8_420;
-    case GST_VIDEO_FORMAT_NV21:
-      return GDK_MEMORY_G8_R8B8_420;
-    case GST_VIDEO_FORMAT_NV16:
-      return GDK_MEMORY_G8_B8R8_422;
-    case GST_VIDEO_FORMAT_NV61:
-      return GDK_MEMORY_G8_R8B8_422;
-    case GST_VIDEO_FORMAT_NV24:
-      return GDK_MEMORY_G8_B8R8_444;
-    case GST_VIDEO_FORMAT_P010_10LE:
-    case GST_VIDEO_FORMAT_P010_10BE:
-      return GDK_MEMORY_G10X6_B10X6R10X6_420;
-    case GST_VIDEO_FORMAT_P012_LE:
-    case GST_VIDEO_FORMAT_P012_BE:
-      return GDK_MEMORY_G12X4_B12X4R12X4_420;
-    case GST_VIDEO_FORMAT_P016_LE:
-    case GST_VIDEO_FORMAT_P016_BE:
-      return GDK_MEMORY_G16_B16R16_420;
-    case GST_VIDEO_FORMAT_YUV9:
-      return GDK_MEMORY_G8_B8_R8_410;
-    case GST_VIDEO_FORMAT_YVU9:
-      return GDK_MEMORY_G8_R8_B8_410;
-    case GST_VIDEO_FORMAT_Y41B:
-      return GDK_MEMORY_G8_B8_R8_411;
-    case GST_VIDEO_FORMAT_I420:
-      return GDK_MEMORY_G8_B8_R8_420;
-    case GST_VIDEO_FORMAT_YV12:
-      return GDK_MEMORY_G8_R8_B8_420;
-    case GST_VIDEO_FORMAT_Y42B:
-      return GDK_MEMORY_G8_B8_R8_422;
-    case GST_VIDEO_FORMAT_Y444:
-      return GDK_MEMORY_G8_B8_R8_444;
-    case GST_VIDEO_FORMAT_YUY2:
-      return GDK_MEMORY_G8B8G8R8_422;
-    case GST_VIDEO_FORMAT_YVYU:
-      return GDK_MEMORY_G8R8G8B8_422;
-    case GST_VIDEO_FORMAT_UYVY:
-      return GDK_MEMORY_B8G8R8G8_422;
-    case GST_VIDEO_FORMAT_VYUY:
-      return GDK_MEMORY_R8G8B8G8_422;
-    case GST_VIDEO_FORMAT_I420_10LE:
-      return GDK_MEMORY_X6G10_X6B10_X6R10_420;
-    case GST_VIDEO_FORMAT_I422_10LE:
-      return GDK_MEMORY_X6G10_X6B10_X6R10_422;
-    case GST_VIDEO_FORMAT_Y444_10LE:
-      return GDK_MEMORY_X6G10_X6B10_X6R10_444;
-    case GST_VIDEO_FORMAT_I420_12LE:
-      return GDK_MEMORY_X4G12_X4B12_X4R12_420;
-    case GST_VIDEO_FORMAT_I422_12LE:
-      return GDK_MEMORY_X4G12_X4B12_X4R12_422;
-    case GST_VIDEO_FORMAT_Y444_12LE:
-      return GDK_MEMORY_X4G12_X4B12_X4R12_444;
-    case GST_VIDEO_FORMAT_Y444_16LE:
-      return GDK_MEMORY_G16_B16_R16_444;
-    default:
-      if (GST_VIDEO_INFO_HAS_ALPHA (info))
-        return IS_PREMULTIPLIED (info) ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
+  GdkMemoryFormat result;
+  gboolean premultiplied;
+
+  premultiplied = GST_VIDEO_INFO_FLAGS (info) & GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA;
+
+  if (!gdk_memory_format_find_by_gst_video_format (GST_VIDEO_INFO_FORMAT (info),
+                                                   premultiplied,
+                                                   &result))
+    {
+      if (!GST_VIDEO_INFO_HAS_ALPHA (info))
+        result = GDK_MEMORY_R8G8B8;
+      else if (premultiplied)
+        result = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       else
-        return GDK_MEMORY_R8G8B8;
-  }
-#undef IS_PREMULTIPLIED
+        result = GDK_MEMORY_R8G8B8A8;
+    }
+
+  return result;
 }
 
 static void

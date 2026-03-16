@@ -12,10 +12,6 @@ struct {
   GskRenderer *renderer;
 } renderers[] = {
   {
-    "cairo",
-    gsk_cairo_renderer_new,
-  },
-  {
     "vulkan",
     gsk_vulkan_renderer_new,
   },
@@ -125,6 +121,20 @@ create_random_color (GdkRGBA *color)
 }
 
 static void
+create_random_10bit_color (GdkRGBA *color)
+{
+  int r, g, b;
+
+  r = g_test_rand_int_range (0, 4);
+  g = g_test_rand_int_range (0, 4);
+  b = g_test_rand_int_range (0, 4);
+  color->red = r / 3.f;
+  color->green = g / 3.f;
+  color->blue = b / 3.f;
+  color->alpha = 1.0;
+}
+
+static void
 create_random_color_for_format (GdkRGBA *color,
                                 GdkMemoryFormat format)
 {
@@ -134,7 +144,10 @@ create_random_color_for_format (GdkRGBA *color,
    */
   do
     {
-      create_random_color (color);
+      if (gdk_memory_format_get_channel_type (format) == CHANNEL_UINT_10)
+        create_random_10bit_color (color);
+      else
+        create_random_color (color);
     }
   while (color->alpha == 0 &&
          gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
@@ -183,7 +196,6 @@ static GdkTexture *
 create_stipple_texture (GdkMemoryFormat  format,
                         gsize            width,
                         gsize            height,
-                        float            scale,
                         GdkRGBA          colors[2][2],
                         GdkRGBA         *average)
 {
@@ -193,8 +205,25 @@ create_stipple_texture (GdkMemoryFormat  format,
   /* large enough */
   float data[4 * 4 * 4];
   GdkMemoryLayout layout;
+  float adjust_color, adjust_alpha;
 
   *average = (GdkRGBA) { 0, 0, 0, 0 };
+
+  if (gdk_memory_format_get_channel_type (format) == CHANNEL_UINT_10)
+    {
+      adjust_color = 16.f / 31.f;
+      adjust_alpha = 1.f;
+    }
+  else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
+    {
+      adjust_color = 16.f / 17.f;
+      adjust_alpha = 1.f;
+    }
+  else
+    {
+      adjust_color = 1.f;
+      adjust_alpha = 16.f / 17.f;
+    }
 
   for (y = 0; y < 2; y++)
     {
@@ -202,12 +231,12 @@ create_stipple_texture (GdkMemoryFormat  format,
         {
           create_random_color_for_format (&colors[x][y], format);
           if (gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_OPAQUE)
-            colors[x][y].alpha *= scale * 16.f/17.f;
+            colors[x][y].alpha *= adjust_alpha;
           else
             {
-              colors[x][y].red *= scale * 16.f/17.f;
-              colors[x][y].green *= scale * 16.f/17.f;
-              colors[x][y].blue *= scale *16.f/17.f;
+              colors[x][y].red *= adjust_color;
+              colors[x][y].green *= adjust_color;
+              colors[x][y].blue *= adjust_color;
             }
 
           average->red += colors[x][y].red * colors[x][y].alpha;
@@ -300,15 +329,13 @@ test_linear_filtering (gconstpointer data,
   GskRenderNode *node;
   GdkRGBA colors[2][2];
   GdkRGBA average_color;
-  gboolean cant_math;
 
   decode_renderer_format (data, &renderer, &format);
 
   width = MAX (width, gdk_memory_format_get_block_width (format));
   height = MAX (height, gdk_memory_format_get_block_height (format));
 
-  cant_math = GSK_IS_CAIRO_RENDERER (renderer);
-  input = create_stipple_texture (format, width, height, cant_math ? 0.5 : 1, colors, &average_color);
+  input = create_stipple_texture (format, width, height, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, width / 2, height / 2), GSK_SCALING_FILTER_LINEAR);
   output = gsk_renderer_render_texture (renderer, node, NULL);
   expected = create_solid_color_texture (gdk_texture_get_format (output), width / 2, height / 2, &average_color);
@@ -340,7 +367,7 @@ test_mipmaps (gconstpointer data)
   width = MAX (2, gdk_memory_format_get_block_width (format));
   height = MAX (2, gdk_memory_format_get_block_height (format));
 
-  input = create_stipple_texture (format, width, height, 1.0, colors, &average_color);
+  input = create_stipple_texture (format, width, height, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, 1, 1), GSK_SCALING_FILTER_TRILINEAR);
   output = gsk_renderer_render_texture (renderer, node, NULL);
   expected = create_solid_color_texture (gdk_texture_get_format (output), 1, 1, &average_color);

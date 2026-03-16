@@ -112,6 +112,77 @@ name ## _from_float (guchar                *dest_data, \
     } \
 }
 
+#define TYPED_PACKED_FUNCS(name, T, R_SHIFT, R_BITS, G_SHIFT, G_BITS, B_SHIFT, B_BITS, A_SHIFT, A_BITS) \
+static void \
+name ## _to_float (float                (*dest)[4], \
+                   const guchar          *src_data, \
+                   const GdkMemoryLayout *src_layout, \
+                   gsize                  y) \
+{ \
+  const T *src = (const T *) (src_data + gdk_memory_layout_offset (src_layout, 0, 0, y)); \
+  for (gsize i = 0; i < src_layout->width; i++) \
+    { \
+      T val = src[i]; \
+      dest[i][0] = (float) ((val >> R_SHIFT) & ((1 << R_BITS) - 1)) / ((1 << R_BITS) - 1); \
+      dest[i][1] = (float) ((val >> G_SHIFT) & ((1 << G_BITS) - 1)) / ((1 << G_BITS) - 1); \
+      dest[i][2] = (float) ((val >> B_SHIFT) & ((1 << B_BITS) - 1)) / ((1 << B_BITS) - 1); \
+      dest[i][3] = (A_BITS > 0) ? (float) ((val >> A_SHIFT) & ((1 << A_BITS) - 1)) / ((1 << A_BITS) - 1) : 1.0; \
+    } \
+} \
+\
+static void \
+name ## _from_float (guchar                *dest_data, \
+                     const GdkMemoryLayout *dest_layout, \
+                     const float          (*src)[4], \
+                     gsize                  y) \
+{ \
+  T *dest = (T *) (dest_data + gdk_memory_layout_offset (dest_layout, 0, 0, y)); \
+  for (gsize i = 0; i < dest_layout->width; i++) \
+    { \
+      T val = (((T) CLAMP (src[i][0] * ((1 << R_BITS) - 1) + 0.5, 0, ((1 << R_BITS) - 1))) << R_SHIFT) | \
+              (((T) CLAMP (src[i][1] * ((1 << G_BITS) - 1) + 0.5, 0, ((1 << G_BITS) - 1))) << G_SHIFT) | \
+              (((T) CLAMP (src[i][2] * ((1 << G_BITS) - 1) + 0.5, 0, ((1 << B_BITS) - 1))) << B_SHIFT); \
+      if (A_BITS > 0) \
+        val |= (((T) CLAMP (src[i][3] * ((1 << A_BITS) - 1) + 0.5, 0, ((1 << A_BITS) - 1))) << A_SHIFT); \
+      dest[i] = val; \
+    } \
+} \
+\
+static void \
+name ## _mipmap_linear (guchar                *dest, \
+                        const guchar          *src, \
+                        const GdkMemoryLayout *src_layout,\
+                        gsize                  y_start,\
+                        guint                  lod_level) \
+{ \
+  gsize x_start, x, y; \
+  gsize n = 1 << lod_level; \
+  T *dest_data = (T *) dest; \
+  for (x_start = 0; x_start < src_layout->width; x_start += n) \
+    { \
+      T r = 0, g = 0, b = 0, a = 0; \
+\
+      for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
+        { \
+          const T *src_data = (const T *) (src + gdk_memory_layout_offset (src_layout, 0, x_start, y + y_start));\
+          for (x = 0; x < MIN (n, src_layout->width - x_start); x++) \
+            { \
+              T val = src_data[x]; \
+              r += (val >> R_SHIFT) & ((1 << R_BITS) - 1); \
+              g += (val >> G_SHIFT) & ((1 << G_BITS) - 1); \
+              b += (val >> B_SHIFT) & ((1 << B_BITS) - 1); \
+              a += (val >> A_SHIFT) & ((1 << A_BITS) - 1); \
+            } \
+        } \
+\
+      *dest_data++ = ((r / (x * y)) << R_SHIFT) | \
+                     ((g / (x * y)) << G_SHIFT) | \
+                     ((b / (x * y)) << B_SHIFT) | \
+                     ((a / (x * y)) << A_SHIFT); \
+    } \
+} \
+
+
 #define NV12_FUNCS(name, T, shift, scale, uv_swapped, x_subsample, y_subsample) \
 static void \
 name ## _to_float (float                (*dest)[4], \
@@ -473,6 +544,11 @@ TYPED_GRAY_FUNCS (g16a16, guint16, 0, 1, 4, 65535)
 TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
 TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
+TYPED_PACKED_FUNCS (a2r10g10b10, guint32, 20, 10, 10, 10,  0, 10, 30, 2)
+TYPED_PACKED_FUNCS (x2r10g10b10, guint32, 20, 10, 10, 10,  0, 10,  0, 0)
+TYPED_PACKED_FUNCS (a2b10g10r10, guint32, 0, 10, 10, 10, 20, 10, 30, 2)
+TYPED_PACKED_FUNCS (x2b10g10r10, guint32, 0, 10, 10, 10, 20, 10,  0, 0)
+
 #ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable : 4333)
@@ -775,7 +851,7 @@ gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar                *dest
     } \
 } \
 \
-static void \
+static void G_GNUC_UNUSED \
 gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar                *dest, \
                                                     const guchar          *src, \
                                                     const GdkMemoryLayout *src_layout,\
@@ -817,6 +893,7 @@ MIPMAP_FUNC(guint32, guint16, 1)
 MIPMAP_FUNC(guint32, guint16, 2)
 MIPMAP_FUNC(guint32, guint16, 3)
 MIPMAP_FUNC(guint32, guint16, 4)
+MIPMAP_FUNC(guint64, guint32, 1)
 MIPMAP_FUNC(float, float, 1)
 MIPMAP_FUNC(float, float, 3)
 MIPMAP_FUNC(float, float, 4)
@@ -885,6 +962,13 @@ struct _GdkMemoryFormatDescription
     guint32 rgb_fourcc;
     guint32 yuv_fourcc;
   } dmabuf;
+  cairo_format_t cairo_format;
+#ifdef HAVE_GSTREAMER
+  struct {
+    GstVideoFormat video_format_le;
+    GstVideoFormat video_format_be;
+  } gstreamer;
+#endif
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar *, const GdkMemoryLayout *, gsize);
   void (* from_float) (guchar *, const GdkMemoryLayout *, const float (*)[4], gsize);
@@ -895,8 +979,10 @@ struct _GdkMemoryFormatDescription
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
 #  define GDK_GL_UNSIGNED_BYTE_FLIPPED GL_UNSIGNED_INT_8_8_8_8
+#  define DRM_FORMAT_LE_ONLY(x) x
 #elif G_BYTE_ORDER == G_BIG_ENDIAN
 #  define GDK_GL_UNSIGNED_BYTE_FLIPPED GL_UNSIGNED_INT_8_8_8_8_REV
+#  define DRM_FORMAT_LE_ONLY(x) 0
 #else
 #  error "Define the right GL flags here"
 #endif
@@ -954,6 +1040,17 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
         .yuv_fourcc = DRM_FORMAT_AYUV,
     },
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+    .cairo_format = CAIRO_FORMAT_ARGB32,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_BGRA,
+        .video_format_be = GST_VIDEO_FORMAT_BGRA,
+    },
+#endif
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
@@ -1012,6 +1109,17 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
         .yuv_fourcc = 0,
     },
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+    .cairo_format = CAIRO_FORMAT_ARGB32,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_ARGB,
+        .video_format_be = GST_VIDEO_FORMAT_ARGB,
+    },
+#endif
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -1069,6 +1177,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
         .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGBA,
+        .video_format_be = GST_VIDEO_FORMAT_RGBA,
+    },
+#endif
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
@@ -1127,6 +1242,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_ABGR,
+        .video_format_be = GST_VIDEO_FORMAT_ABGR,
+    },
+#endif
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
@@ -1185,6 +1307,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
         .yuv_fourcc = DRM_FORMAT_AYUV,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_BGRA,
+        .video_format_be = GST_VIDEO_FORMAT_BGRA,
+    },
+#endif
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8A8,
@@ -1243,6 +1372,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_ARGB,
+        .video_format_be = GST_VIDEO_FORMAT_ARGB,
+    },
+#endif
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_A8R8G8B8,
@@ -1300,6 +1436,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
         .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGBA,
+        .video_format_be = GST_VIDEO_FORMAT_RGBA,
+    },
+#endif
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8A8,
@@ -1358,6 +1501,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_ABGR,
+        .video_format_be = GST_VIDEO_FORMAT_ABGR,
+    },
+#endif
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_A8B8G8R8,
@@ -1416,6 +1566,17 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_XRGB8888,
         .yuv_fourcc = DRM_FORMAT_XYUV8888,
     },
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+    .cairo_format = CAIRO_FORMAT_RGB24,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8X8,
@@ -1475,6 +1636,17 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGRX8888,
         .yuv_fourcc = 0,
     },
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+    .cairo_format = CAIRO_FORMAT_RGB24,
+#else
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#endif
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_xRGB,
+        .video_format_be = GST_VIDEO_FORMAT_xRGB,
+    },
+#endif
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_X8R8G8B8,
@@ -1533,6 +1705,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_XBGR8888,
         .yuv_fourcc = DRM_FORMAT_XVUY8888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGBx,
+        .video_format_be = GST_VIDEO_FORMAT_RGBx,
+    },
+#endif
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8X8,
@@ -1592,6 +1771,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGBX8888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_xBGR,
+        .video_format_be = GST_VIDEO_FORMAT_xBGR,
+    },
+#endif
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_X8B8G8R8,
@@ -1651,6 +1837,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_BGR888,
         .yuv_fourcc = DRM_FORMAT_VUY888,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGB,
+        .video_format_be = GST_VIDEO_FORMAT_RGB,
+    },
+#endif
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -1709,6 +1902,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_RGB888,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_BGR,
+        .video_format_be = GST_VIDEO_FORMAT_BGR,
+    },
+#endif
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
     .mipmap_format = GDK_MEMORY_B8G8R8,
@@ -1770,6 +1970,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -1827,9 +2034,16 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGBA64_LE,
+        .video_format_be = GST_VIDEO_FORMAT_RGBA64_BE,
+    },
+#endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
@@ -1887,9 +2101,16 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGBA64_LE,
+        .video_format_be = GST_VIDEO_FORMAT_RGBA64_BE,
+    },
+#endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16,
@@ -1950,6 +2171,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16_FLOAT,
@@ -2006,9 +2234,16 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
@@ -2065,9 +2300,16 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
-        .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR16161616F),
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -2128,6 +2370,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_RGB96F,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32_FLOAT,
@@ -2187,6 +2436,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_RGBA128F,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
@@ -2246,6 +2502,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
     .mipmap_format = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -2304,6 +2567,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_G8A8_PREMULTIPLIED,
@@ -2362,6 +2632,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
     .mipmap_format = GDK_MEMORY_G8A8,
@@ -2420,6 +2697,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_R8,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_GRAY8,
+        .video_format_be = GST_VIDEO_FORMAT_GRAY8,
+    },
+#endif
     .to_float = g8_to_float,
     .from_float = g8_from_float,
     .mipmap_format = GDK_MEMORY_G8,
@@ -2481,6 +2765,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
     .mipmap_format = GDK_MEMORY_G16A16_PREMULTIPLIED,
@@ -2542,6 +2833,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
     .mipmap_format = GDK_MEMORY_G16A16,
@@ -2603,6 +2901,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = DRM_FORMAT_R16,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_GRAY16_LE,
+        .video_format_be = GST_VIDEO_FORMAT_GRAY16_BE,
+    },
+#endif
     .to_float = g16_to_float,
     .from_float = g16_from_float,
     .mipmap_format = GDK_MEMORY_G16,
@@ -2661,6 +2966,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_A8,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = a8_to_float,
     .from_float = a8_from_float,
     .mipmap_format = GDK_MEMORY_A8,
@@ -2722,6 +3034,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = a16_to_float,
     .from_float = a16_from_float,
     .mipmap_format = GDK_MEMORY_A16,
@@ -2782,6 +3101,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
     .mipmap_format = GDK_MEMORY_A16_FLOAT,
@@ -2842,6 +3168,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = 0,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
     .mipmap_format = GDK_MEMORY_A32_FLOAT,
@@ -2914,6 +3247,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV12,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_NV12,
+        .video_format_be = GST_VIDEO_FORMAT_NV12,
+    },
+#endif
     .to_float = nv12_to_float,
     .from_float = nv12_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -2986,6 +3326,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV21,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_NV21,
+        .video_format_be = GST_VIDEO_FORMAT_NV21,
+    },
+#endif
     .to_float = nv21_to_float,
     .from_float = nv21_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3058,6 +3405,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV16,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_NV16,
+        .video_format_be = GST_VIDEO_FORMAT_NV16,
+    },
+#endif
     .to_float = nv16_to_float,
     .from_float = nv16_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3130,6 +3484,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV61,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_NV61,
+        .video_format_be = GST_VIDEO_FORMAT_NV61,
+    },
+#endif
     .to_float = nv61_to_float,
     .from_float = nv61_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3202,6 +3563,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV24,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_NV24,
+        .video_format_be = GST_VIDEO_FORMAT_NV24,
+    },
+#endif
     .to_float = nv24_to_float,
     .from_float = nv24_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3274,6 +3642,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_NV42,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = nv42_to_float,
     .from_float = nv42_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3319,7 +3694,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3329,7 +3704,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3345,8 +3720,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P010,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P010),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_P010_10LE,
+        .video_format_be = GST_VIDEO_FORMAT_P010_10BE,
+    },
+#endif
     .to_float = p010_to_float,
     .from_float = p010_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3392,7 +3774,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3402,7 +3784,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3418,8 +3800,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P012,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P012),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_P012_LE,
+        .video_format_be = GST_VIDEO_FORMAT_P012_BE,
+    },
+#endif
     .to_float = p012_to_float,
     .from_float = p012_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3465,7 +3854,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -3475,7 +3864,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RG,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_GR1616,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_GR1616),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -3491,8 +3880,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_P016,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_P016),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_P016_LE,
+        .video_format_be = GST_VIDEO_FORMAT_P016_BE,
+    },
+#endif
     .to_float = p016_to_float,
     .from_float = p016_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -3579,6 +3975,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV410,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_YUV9,
+        .video_format_be = GST_VIDEO_FORMAT_YUV9,
+    },
+#endif
     .to_float = yuv410_to_float,
     .from_float = yuv410_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3665,6 +4068,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU410,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_YVU9,
+        .video_format_be = GST_VIDEO_FORMAT_YVU9,
+    },
+#endif
     .to_float = yvu410_to_float,
     .from_float = yvu410_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3751,6 +4161,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV411,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y41B,
+        .video_format_be = GST_VIDEO_FORMAT_Y41B,
+    },
+#endif
     .to_float = yuv411_to_float,
     .from_float = yuv411_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3837,6 +4254,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU411,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = yvu411_to_float,
     .from_float = yvu411_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -3923,6 +4347,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV420,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_I420,
+        .video_format_be = GST_VIDEO_FORMAT_I420,
+    },
+#endif
     .to_float = yuv420_to_float,
     .from_float = yuv420_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4009,6 +4440,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU420,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_YV12,
+        .video_format_be = GST_VIDEO_FORMAT_YV12,
+    },
+#endif
     .to_float = yvu420_to_float,
     .from_float = yvu420_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4095,6 +4533,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV422,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y42B,
+        .video_format_be = GST_VIDEO_FORMAT_Y42B,
+    },
+#endif
     .to_float = yuv422_to_float,
     .from_float = yuv422_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4181,6 +4626,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU422,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = yvu422_to_float,
     .from_float = yvu422_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4267,6 +4719,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUV444,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y444,
+        .video_format_be = GST_VIDEO_FORMAT_Y444,
+    },
+#endif
     .to_float = yuv444_to_float,
     .from_float = yuv444_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4353,6 +4812,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVU444,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = yvu444_to_float,
     .from_float = yvu444_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4421,6 +4887,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YUYV,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_YUY2,
+        .video_format_be = GST_VIDEO_FORMAT_YUY2,
+    },
+#endif
     .to_float = yuyv_to_float,
     .from_float = yuyv_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4489,6 +4962,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_YVYU,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_YVYU,
+        .video_format_be = GST_VIDEO_FORMAT_YVYU,
+    },
+#endif
     .to_float = yvyu_to_float,
     .from_float = yvyu_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4557,6 +5037,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_UYVY,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UYVY,
+        .video_format_be = GST_VIDEO_FORMAT_UYVY,
+    },
+#endif
     .to_float = uyvy_to_float,
     .from_float = uyvy_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4625,6 +5112,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .rgb_fourcc = 0,
         .yuv_fourcc = DRM_FORMAT_VYUY,
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_VYUY,
+        .video_format_be = GST_VIDEO_FORMAT_VYUY,
+    },
+#endif
     .to_float = vyuy_to_float,
     .from_float = vyuy_from_float,
     .mipmap_format = GDK_MEMORY_R8G8B8,
@@ -4674,7 +5168,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4684,7 +5178,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4694,7 +5188,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4710,8 +5204,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S010,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S010),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_I420_10LE,
+        .video_format_be = GST_VIDEO_FORMAT_I420_10BE,
+    },
+#endif
     .to_float = s010_to_float,
     .from_float = s010_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4761,7 +5262,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4771,7 +5272,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4781,7 +5282,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4797,8 +5298,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S210,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S210),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_I422_10LE,
+        .video_format_be = GST_VIDEO_FORMAT_I422_10BE,
+    },
+#endif
     .to_float = s210_to_float,
     .from_float = s210_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4848,7 +5356,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4858,7 +5366,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4868,7 +5376,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4884,8 +5392,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S410,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S410),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y444_10LE,
+        .video_format_be = GST_VIDEO_FORMAT_Y444_10BE,
+    },
+#endif
     .to_float = s410_to_float,
     .from_float = s410_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -4935,7 +5450,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -4945,7 +5460,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -4955,7 +5470,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -4971,8 +5486,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S012,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S012),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_I420_12LE,
+        .video_format_be = GST_VIDEO_FORMAT_I420_12BE,
+    },
+#endif
     .to_float = s012_to_float,
     .from_float = s012_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5022,7 +5544,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5032,7 +5554,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5042,7 +5564,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5058,8 +5580,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S212,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S212),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_I422_12LE,
+        .video_format_be = GST_VIDEO_FORMAT_I422_12BE,
+    },
+#endif
     .to_float = s212_to_float,
     .from_float = s212_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5109,7 +5638,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5119,7 +5648,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5129,7 +5658,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5145,8 +5674,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S412,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S412),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y444_12LE,
+        .video_format_be = GST_VIDEO_FORMAT_Y444_12BE,
+    },
+#endif
     .to_float = s412_to_float,
     .from_float = s412_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5196,7 +5732,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5206,7 +5742,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5216,7 +5752,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5232,8 +5768,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S016,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S016),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = s016_to_float,
     .from_float = s016_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5283,7 +5826,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5293,7 +5836,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5303,7 +5846,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5319,8 +5862,15 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S216,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S216),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
     .to_float = s216_to_float,
     .from_float = s216_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
@@ -5370,7 +5920,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 1,
@@ -5380,7 +5930,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
         {
             .plane = 2,
@@ -5390,7 +5940,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
                 .format = GL_RED,
                 .type = GL_UNSIGNED_SHORT
             },
-            .dmabuf_fourcc = DRM_FORMAT_R16,
+            .dmabuf_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_R16),
         },
     },
 #ifdef GDK_RENDERING_VULKAN
@@ -5406,13 +5956,426 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .dmabuf = {
         .rgb_fourcc = 0,
-        .yuv_fourcc = DRM_FORMAT_S416,
+        .yuv_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_S416),
     },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_Y444_16LE,
+        .video_format_be = GST_VIDEO_FORMAT_Y444_16BE,
+    },
+#endif
     .to_float = s416_to_float,
     .from_float = s416_from_float,
     .mipmap_format = GDK_MEMORY_R16G16B16,
     .mipmap_nearest = s416_mipmap_nearest,
     .mipmap_linear = s416_mipmap_linear,
+  },
+  [GDK_MEMORY_ARGB2101010_PREMULTIPLIED] = {
+    .name = "ARGB10p",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_ARGB2101010_PREMULTIPLIED,
+    .straight = GDK_MEMORY_ARGB2101010,
+    .rgba = {
+        .format = GDK_MEMORY_ABGR2101010_PREMULTIPLIED,
+        .swizzle = GDK_SWIZZLE (B, G, R, A)
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_DEFAULT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_BGRA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ARGB2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGB10A2_LE,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
+    .to_float = a2r10g10b10_to_float,
+    .from_float = a2r10g10b10_from_float,
+    .mipmap_format = GDK_MEMORY_ARGB2101010_PREMULTIPLIED,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = a2r10g10b10_mipmap_linear,
+  },
+  [GDK_MEMORY_ARGB2101010] = {
+    .name = "ARGB10",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_ARGB2101010_PREMULTIPLIED,
+    .straight = GDK_MEMORY_ARGB2101010,
+    .rgba = {
+        .format = GDK_MEMORY_ABGR2101010,
+        .swizzle = GDK_SWIZZLE (B, G, R, A)
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_BGRA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ARGB2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_RGB10A2_LE,
+        .video_format_be = GST_VIDEO_FORMAT_RGB10A2_LE,
+    },
+#endif
+    .to_float = a2r10g10b10_to_float,
+    .from_float = a2r10g10b10_from_float,
+    .mipmap_format = GDK_MEMORY_ARGB2101010,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = a2r10g10b10_mipmap_linear,
+  },
+  [GDK_MEMORY_XRGB2101010] = {
+    .name = "XRGB10",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_XRGB2101010,
+    .straight = GDK_MEMORY_XRGB2101010,
+    .rgba = {
+        .format = GDK_MEMORY_XBGR2101010,
+        .swizzle = GDK_SWIZZLE (B, G, R, 1)
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_ARGB2101010_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_DEFAULT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE (R, G, B, 1),
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_BGRA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_XRGB2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_RGB30,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+#if GST_CHECK_VERSION (1, 28, 0)
+        .video_format_le = GST_VIDEO_FORMAT_RGB10x2_LE,
+#else
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+#endif
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
+    .to_float = x2r10g10b10_to_float,
+    .from_float = x2r10g10b10_from_float,
+    .mipmap_format = GDK_MEMORY_XRGB2101010,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = x2r10g10b10_mipmap_linear,
+  },
+  [GDK_MEMORY_ABGR2101010_PREMULTIPLIED] = {
+    .name = "ABGR10p",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_ABGR2101010_PREMULTIPLIED,
+    .straight = GDK_MEMORY_ABGR2101010,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_DEFAULT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_RGBA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_R10G10B10A2_UNORM,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_BGR10A2_LE,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
+    .to_float = a2b10g10r10_to_float,
+    .from_float = a2b10g10r10_from_float,
+    .mipmap_format = GDK_MEMORY_ABGR2101010_PREMULTIPLIED,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = a2b10g10r10_mipmap_linear,
+  },
+  [GDK_MEMORY_ABGR2101010] = {
+    .name = "ABGR10",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_ABGR2101010_PREMULTIPLIED,
+    .straight = GDK_MEMORY_ABGR2101010,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE_IDENTITY,
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_RGBA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_R10G10B10A2_UNORM,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_ABGR2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+        .video_format_le = GST_VIDEO_FORMAT_BGR10A2_LE,
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
+    .to_float = a2b10g10r10_to_float,
+    .from_float = a2b10g10r10_from_float,
+    .mipmap_format = GDK_MEMORY_ABGR2101010,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = a2b10g10r10_mipmap_linear,
+  },
+  [GDK_MEMORY_XBGR2101010] = {
+    .name = "XBGR10",
+    .n_planes = 1,
+    .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_XBGR2101010,
+    .straight = GDK_MEMORY_XBGR2101010,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
+    .alignment = G_ALIGNOF (guint32),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_ABGR2101010_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .default_shader_op = GDK_SHADER_DEFAULT,
+    .shader = {
+        {
+            .plane = 0,
+            .swizzle = GDK_SWIZZLE (R, G, B, 1),
+            .gl = {
+                .internal_format = GL_RGB10_A2,
+                .internal_srgb_format = -1,
+                .format = GL_RGBA,
+                .type = GL_UNSIGNED_INT_2_10_10_10_REV,
+            },
+            .dmabuf_fourcc = 0,
+        }
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .ycbcr_swizzle = -1,
+    },
+#endif
+    .win32 = {
+        .dxgi_format = DXGI_FORMAT_R10G10B10A2_UNORM,
+        .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+    },
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_LE_ONLY (DRM_FORMAT_XBGR2101010),
+        .yuv_fourcc = 0,
+    },
+    .cairo_format = CAIRO_FORMAT_INVALID,
+#ifdef HAVE_GSTREAMER
+    .gstreamer = {
+#if GST_CHECK_VERSION (1, 28, 0)
+        .video_format_le = GST_VIDEO_FORMAT_BGR10x2_LE,
+#else
+        .video_format_le = GST_VIDEO_FORMAT_UNKNOWN,
+#endif
+        .video_format_be = GST_VIDEO_FORMAT_UNKNOWN,
+    },
+#endif
+    .to_float = x2b10g10r10_to_float,
+    .from_float = x2b10g10r10_from_float,
+    .mipmap_format = GDK_MEMORY_XBGR2101010,
+    .mipmap_nearest = gdk_mipmap_guint32_1_nearest,
+    .mipmap_linear = x2b10g10r10_mipmap_linear,
   },
 };
 
@@ -6043,6 +7006,114 @@ gdk_memory_format_get_shader_plane (GdkMemoryFormat  format,
 
   return p;
 }
+
+/*<private>
+ * gdk_memory_format_find_by_cairo_format:
+ * @cairo_format: a cairo format
+ * @out_memory_format: (out caller-allocates): Set to the memory format
+ *   on successful return
+ *
+ * Finds the memory format that's an exact match for the given Cairo format.
+ *
+ * Returns: true if a format was found
+ **/
+gboolean
+gdk_memory_format_find_by_cairo_format (cairo_format_t   cairo_format,
+                                        GdkMemoryFormat *out_memory_format)
+{
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (memory_formats); i++)
+    {
+      if (memory_formats[i].cairo_format == cairo_format)
+        {
+          *out_memory_format = i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/*<private>
+ * gdk_memory_format_get_cairo_format:
+ * @format: the memory format
+ *
+ * Returns the Cairo format for the given format or `CAIRO_FORMAT_INVALID` if
+ * none exists. Note that due to Cairo using different endianness semantics,
+ * different values may be returned for the same format on different machines.
+ *
+ * Returns: the Cairo format or `CAIRO_FORMAT_INVALID`.
+ **/
+cairo_format_t
+gdk_memory_format_get_cairo_format (GdkMemoryFormat format)
+{
+  return memory_formats[format].cairo_format;
+}
+
+#ifdef HAVE_GSTREAMER
+/*<private>
+ * gdk_memory_format_find_by_gst_video_format:
+ * @gst_format: A GStreamer video format
+ * @premultiplied: if the data is premultiplied or not.
+ *   This value is ignored for opaque formats
+ * @out_memory_format: (out caller-allocates): Set to the
+ *   memory format on successful return
+ *
+ * Finds a matching GDK memory format for a given GStreamer format.
+ *
+ * Returns: true if a format was found
+ **/
+gboolean
+gdk_memory_format_find_by_gst_video_format (GstVideoFormat   gst_format,
+                                            gboolean         premultiplied,
+                                            GdkMemoryFormat *out_memory_format)
+{
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (memory_formats); i++)
+    {
+      GstVideoFormat match_format = gdk_memory_format_get_gst_video_format (i);
+
+      if ((premultiplied && gdk_memory_format_alpha (i) == GDK_MEMORY_ALPHA_STRAIGHT) ||
+          (!premultiplied && gdk_memory_format_alpha (i) == GDK_MEMORY_ALPHA_PREMULTIPLIED))
+        continue;
+
+      if (match_format == gst_format)
+        {
+          *out_memory_format = i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/*<private>
+ * gdk_memory_format_get_gst_video_format:
+ * @format: a memory format 
+ *
+ * Gets the exactly matching `GstVideoFormat` for a given memory format or
+ * `GST_VIDEO_FORMAT_UNKNOWN` if no format exists.
+ *
+ * Note that GStreamer video formats do not encode premultiplied vs straight
+ * alpha, so different memory formats can return the same GStreamer video
+ * format.
+ *
+ * Returns: the video format or `GST_VIDEO_FORMAT_UNKNOWN`
+ **/
+GstVideoFormat
+gdk_memory_format_get_gst_video_format (GdkMemoryFormat format)
+{
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  return memory_formats[format].gstreamer.video_format_le;
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+  return memory_formats[format].gstreamer.video_format_be;
+#else
+  return GST_VIDEO_FORMAT_UNKNOWN;
+#endif
+}
+#endif
 
 static void
 premultiply (float (*rgba)[4],

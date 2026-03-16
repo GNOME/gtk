@@ -36,6 +36,10 @@
 #include <vulkan/vulkan.h>
 #endif
 
+#ifdef HAVE_GSTREAMER
+#include <gst/video/video.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -125,6 +129,7 @@ VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat    
                                                              gboolean                   *needs_ycbcr_conversion);
 VkFormat                gdk_memory_format_vk_srgb_format    (GdkMemoryFormat             format);
 #endif
+
 gboolean                gdk_memory_format_find_by_dmabuf_fourcc     (guint32                     fourcc,
                                                                      gboolean                    premultiplied,
                                                                      GdkMemoryFormat            *out_format,
@@ -140,6 +145,18 @@ gboolean                gdk_memory_format_find_by_dxgi_format       (DXGI_FORMAT
 DXGI_FORMAT             gdk_memory_format_get_dxgi_format           (GdkMemoryFormat             format,
                                                                      guint                      *out_shader_4_component_mapping);
 DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFormat             format);
+
+gboolean                gdk_memory_format_find_by_cairo_format      (cairo_format_t              cairo_format,
+                                                                     GdkMemoryFormat            *out_memory_format);
+cairo_format_t          gdk_memory_format_get_cairo_format          (GdkMemoryFormat             format);
+
+#ifdef HAVE_GSTREAMER
+gboolean                gdk_memory_format_find_by_gst_video_format  (GstVideoFormat              gst_format,
+                                                                     gboolean                    premultiplied,
+                                                                     GdkMemoryFormat            *out_memory_format);
+GstVideoFormat          gdk_memory_format_get_gst_video_format      (GdkMemoryFormat             format);
+#endif
+
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
