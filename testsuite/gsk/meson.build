@@ -274,6 +274,16 @@ compare_render_tests = [
   'zero-length-path-stroke',
 ]
 
+# These tests use dmabufs and fail in testrunners that have
+# dmabuf support but no access to /dev/udmabuf.
+# For that purpose we add them to the 'needs-udmabuf' suite
+# with this list
+needs_udmabuf = [
+  'yuv-matrix-dmabuf-nv12',
+  'yuv-matrix-dmabuf-rgba',
+  'yuv-matrix-dmabuf-yuyv',
+]
+
 # These tests are either slow or need lots of memory.
 # So we don't run them in parallel with other such tests to not
 # cause CI failures
@@ -384,6 +394,9 @@ foreach renderer : renderers
         extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
         if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clip')
           extra_suites += ['failing']
+        endif
+        if needs_udmabuf.contains(testname)
+          extra_suites += ['needs-udmabuf']
         endif
         test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
           protocol: 'tap',
