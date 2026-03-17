@@ -518,7 +518,7 @@ init_randr15 (GdkX11Screen *x11_screen)
               if (xmode->id == crtc->mode)
                 {
                   if (xmode->hTotal != 0 && xmode->vTotal != 0)
-                    refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal * xmode->vTotal);
+                    refresh_rate = (1000ULL * xmode->dotClock) / (xmode->hTotal * xmode->vTotal);
                   break;
                 }
             }
@@ -732,7 +732,7 @@ init_randr13 (GdkX11Screen *x11_screen)
               if (xmode->id == crtc->mode)
                 {
                   if (xmode->hTotal != 0 && xmode->vTotal != 0)
-                    refresh_rate = (1000 * xmode->dotClock) / (xmode->hTotal * xmode->vTotal);
+                    refresh_rate = (1000ULL * xmode->dotClock) / (xmode->hTotal * xmode->vTotal);
                   break;
                 }
             }
