@@ -35,7 +35,7 @@ struct _GskGpuRenderPass
   cairo_rectangle_int_t          scissor;
   GskGpuClip                     clip;
   GskGpuImage *                  clip_mask;
-  graphene_rect_t                clip_mask_rect;
+  graphene_rect_t                clip_mask_rect; /* in bbox space */
   gboolean                       clip_mask_has_opacity;
 
   GskGpuGlobals                  pending_globals;

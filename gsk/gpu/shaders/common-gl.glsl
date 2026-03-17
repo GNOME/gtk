@@ -69,14 +69,14 @@ uniform sampler2D GSK_TEXTURE1_2;
 uniform sampler2D GSK_TEXTURE_MASK;
 
 float
-gsk_mask_coverage (vec2 pos)
+gsk_clip_mask_coverage (void)
 {
-  vec2 coord = rect_get_coord (rect_from_gsk (push.clip_mask_rect), pos);
+  vec2 coord = rect_get_coord (rect_new_size (push.clip_mask_rect), gl_FragCoord.xy);
   return texture (GSK_TEXTURE_MASK, coord).a;
 }
 #else
 float
-gsk_mask_coverage (vec2 pos)
+gsk_clip_mask_coverage (void)
 {
   return 1.0;
 }

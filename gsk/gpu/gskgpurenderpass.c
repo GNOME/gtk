@@ -2,6 +2,7 @@
 
 #include "gskgpurenderpassprivate.h"
 
+#include "gskglimageprivate.h"
 #include "gskgpublendopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -117,6 +118,39 @@ gsk_gpu_render_pass_compute_mvp (GskGpuRenderPass  *self,
     graphene_matrix_init_from_matrix (out_mvp, &self->projection);
 }
 
+static void
+gsk_gpu_render_pass_user_to_device_bounds (GskGpuRenderPass      *self,
+                                           const graphene_rect_t *user,
+                                           graphene_rect_t       *device)
+{
+  graphene_rect_t tmp;
+  graphene_matrix_t mvp;
+  float scale_x, scale_y;
+
+  /* 1. transform to ccordinate space of MVP */
+  scale_x = graphene_vec2_get_x (&self->scale);
+  scale_y = graphene_vec2_get_y (&self->scale);
+  tmp = GRAPHENE_RECT_INIT ((user->origin.x + self->offset.x) * scale_x,
+                            (user->origin.y + self->offset.y) * scale_y,
+                             user->size.width * scale_x,
+                             user->size.height * scale_y);
+
+  /* 2. apply MVP to move to normalized device coordinates (NDC) and project
+   *    back into 2D space */
+  gsk_gpu_render_pass_compute_mvp (self, &mvp);
+  graphene_matrix_transform_bounds (&mvp, &tmp, &tmp);
+
+  /* 3. go back from NDC into device space
+   *    This is a little hack that's faster than multiplying by the matrix) */
+  scale_x = graphene_matrix_get_x_scale (&self->projection);
+  scale_y = graphene_matrix_get_y_scale (&self->projection);
+  *device = GRAPHENE_RECT_INIT ((tmp.origin.x - graphene_matrix_get_x_translation (&self->projection)) / scale_x,
+                                (tmp.origin.y - graphene_matrix_get_y_translation (&self->projection)) / scale_y,
+                                tmp.size.width / scale_x,
+                                tmp.size.height / scale_y);
+  gsk_rect_normalize (device);
+}
+
 GskGpuRenderPass *
 gsk_gpu_render_pass_new (GskGpuFrame                 *frame,
                          GskGpuImage                 *target,
@@ -207,11 +241,30 @@ gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
 
       gsk_gpu_render_pass_compute_mvp (self, &mvp);
 
-      gsk_gpu_globals_op (self->frame,
-                          &self->scale,
-                          &mvp,
-                          &self->clip_mask_rect,
-                          &self->clip.rect);
+      /* gl_FragCoord is origin bottom left and no way to change in GLES,
+       * so we have to mess up the variable */
+      if (GSK_IS_GL_IMAGE (self->target) &&
+          gsk_gl_image_is_flipped (GSK_GL_IMAGE (self->target)) &&
+          self->clip_mask_rect.size.height > 0)
+        {
+          float size = gsk_gpu_image_get_height (self->target);
+          gsk_gpu_globals_op (self->frame,
+                              &self->scale,
+                              &mvp,
+                              &GRAPHENE_RECT_INIT (self->clip_mask_rect.origin.x,
+                                                   size - self->clip_mask_rect.origin.y,
+                                                   self->clip_mask_rect.size.width,
+                                                   - self->clip_mask_rect.size.height),
+                              &self->clip.rect);
+        }
+      else
+        {
+          gsk_gpu_globals_op (self->frame,
+                              &self->scale,
+                              &mvp,
+                              &self->clip_mask_rect,
+                              &self->clip.rect);
+        }
     }
 
   if (self->pending_globals & GSK_GPU_GLOBAL_SCISSOR)
@@ -735,20 +788,31 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
 
 {
   GskGpuRenderPass *other;
-  graphene_rect_t bounds;
+  graphene_rect_t bounds, device;
   cairo_rectangle_int_t area;
   GskGpuImage *image;
   GskDebugProfile *profile;
   GdkMemoryFormat format;
   GdkColor white;
   GskGpuRenderPassBlendStorage blend_storage;
+  GskGpuRenderPassTransformStorage transform_storage;
   GskGpuClip old_clip;
 
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &bounds) ||
       (new_clip_rect && !gsk_rect_intersection (&bounds, new_clip_rect, &bounds)) ||
       (new_clip_rounded && !gsk_rect_intersection (&bounds, &new_clip_rounded->bounds, &bounds)) ||
-      (new_clip_mask_rect && !gsk_rect_intersection (&bounds, new_clip_mask_rect, &bounds)) ||
-      !gsk_rect_snap_to_grid (&bounds, &self->scale, &self->offset, &bounds))
+      (new_clip_mask_rect && !gsk_rect_intersection (&bounds, new_clip_mask_rect, &bounds)))
+    {
+      gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
+      gsk_gpu_clip_init_all_clipped (&self->clip);
+      storage->modified = GSK_GPU_GLOBAL_CLIP;
+      self->pending_globals |= storage->modified;
+      return;
+    }
+
+  gsk_gpu_render_pass_user_to_device_bounds (self, &bounds, &device);
+
+  if (!gsk_rect_snap_to_grid (&device, graphene_vec2_one (), graphene_point_zero (), &device))
     {
       gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
       gsk_gpu_clip_init_all_clipped (&self->clip);
@@ -759,8 +823,8 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
 
   area.x = 0;
   area.y = 0;
-  area.width = MAX (1, ceilf (graphene_vec2_get_x (&self->scale) * bounds.size.width - EPSILON));
-  area.height = MAX (1, ceilf (graphene_vec2_get_y (&self->scale) * bounds.size.height - EPSILON));
+  area.width = MAX (1, device.size.width - EPSILON);
+  area.height = MAX (1, device.size.height - EPSILON);
 
   format = gdk_memory_depth_get_alpha_format (gdk_memory_format_get_depth (gsk_gpu_image_get_format (self->target)));
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
@@ -793,8 +857,23 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
                                    GSK_GPU_LOAD_OP_CLEAR,
                                    (float[4]) { self->opacity, self->opacity, self->opacity, self->opacity },
                                    &area,
-                                   &bounds);
+                                   &device);
   gsk_gpu_render_pass_push_blend (other, GSK_GPU_BLEND_MASK, &blend_storage);
+
+  if (self->clip_mask)
+    {
+      graphene_rect_t rect;
+
+      gsk_gpu_texture_op (other,
+                          self->ccs,
+                          &bounds,
+                          self->clip_mask,
+                          GSK_GPU_SAMPLER_TRANSPARENT,
+                          &rect);
+    }
+
+  if (self->modelview)
+    gsk_gpu_render_pass_push_transform (other, self->modelview, NULL, NULL, &transform_storage);
 
   if (self->clip.type == GSK_GPU_CLIP_ROUNDED)
     {
@@ -808,20 +887,6 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
                                 &bounds,
                                 &rounded,
                                 &white);
-    }
-
-  if (self->clip_mask)
-    {
-      gsk_gpu_texture_op (other,
-                          self->ccs,
-                          &bounds,
-                          self->clip_mask,
-                          GSK_GPU_SAMPLER_TRANSPARENT,
-                          &GRAPHENE_RECT_INIT (self->clip_mask_rect.origin.x - self->offset.x,
-                                               self->clip_mask_rect.origin.y - self->offset.y,
-                                               self->clip_mask_rect.size.width,
-                                               self->clip_mask_rect.size.height));
-
     }
 
   if (new_clip_rounded)
@@ -845,6 +910,8 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
 
     }
 
+  if (self->modelview)
+    gsk_gpu_render_pass_pop_transform (other, &transform_storage);
   gsk_gpu_render_pass_pop_blend (other, &blend_storage);
   gsk_gpu_render_pass_free (other);
 
@@ -865,9 +932,7 @@ gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
   self->clip_mask = image;
   self->clip_mask_has_opacity |= self->opacity < 1.0;
   self->opacity = 1.0;
-  gsk_rect_init_offset (&self->clip_mask_rect,
-                        &bounds,
-                        &self->offset);
+  self->clip_mask_rect = device;
   /* We can reset things now, the mask does it all */
   gsk_gpu_clip_init_empty (&self->clip, &self->offset, &bounds);
 }
@@ -952,8 +1017,11 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
                                     gboolean                     has_opacity,
                                     GskGpuRenderPassClipStorage *storage)
 {
+  graphene_rect_t device;
+
   if (self->clip_mask != NULL ||
-      !gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage))
+      !gsk_gpu_render_pass_try_push_clip_rect (self, clip, storage) ||
+      !gsk_gpu_render_pass_user_to_device (self, clip_mask_rect, &device))
     {
       GSK_DEBUG (FALLBACK, "push_clip_mask() needs to draw clip mask");
       gsk_gpu_render_pass_draw_clip_mask (self, clip, NULL, clip_mask, clip_mask_rect, storage);
@@ -970,9 +1038,7 @@ gsk_gpu_render_pass_push_clip_mask (GskGpuRenderPass            *self,
   storage->modified |= GSK_GPU_GLOBAL_MASK;
 
   self->clip_mask = g_object_ref (clip_mask);
-  gsk_rect_init_offset (&self->clip_mask_rect,
-                        clip_mask_rect,
-                        &self->offset);
+  self->clip_mask_rect = device;
   self->clip_mask_has_opacity = has_opacity;
 
   self->pending_globals |= storage->modified;
