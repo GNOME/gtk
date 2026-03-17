@@ -146,14 +146,6 @@ slow_tests = [
   'pattern-billion-laughs.test',
 ]
 
-# attachments rely on the animations for the initial placement
-test_requires_animation = [
-  'attach-to-pattern.svg',
-  'gpa-attachment1.svg',
-  'gpa-attachment2.svg',
-  'gpa-attachment3.svg',
-]
-
 foreach testname : test_data
   suites = [ 'svg', 'svg renderer' ]
   if testname in slow_tests
@@ -173,21 +165,4 @@ foreach testname : test_data
              ],
         suite: suites
   )
-  if not (testname in test_requires_animation)
-    test('svg renderer (no animation) ' + testname, test_renderer,
-          args: [ '--tap',
-                  '--verbose',
-                  '--no-animations',
-                  '-k',
-                  '--output', meson.current_build_dir(),
-                  join_paths(meson.current_source_dir(), testname),
-                ],
-          protocol: 'tap',
-          env: [
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-               ],
-          suite: suites
-    )
-  endif
 endforeach

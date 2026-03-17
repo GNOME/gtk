@@ -1,2 +1,3 @@
-[reference]
-compressed = true
+[test]
+input=nested-use.svg
+reference=nested-use.node.gz

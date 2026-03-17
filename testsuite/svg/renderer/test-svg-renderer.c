@@ -24,21 +24,42 @@
 #include "gtk/gtksvgprivate.h"
 #include "testsuite/testutils.h"
 
-typedef enum {
-  TEST_FLAG_NONE              = 0,
-  TEST_FLAG_GENERATE          = 1 << 0,
-  TEST_FLAG_COMPRESSED_TEST   = 1 << 1,
-  TEST_FLAG_COMPRESSED_REF    = 1 << 2,
-  TEST_FLAG_COMPRESSED_ERR    = 1 << 3,
-  TEST_FLAG_REPLACE_EXPECTED  = 1 << 4,
-} TestFlags;
+typedef struct
+{
+  GFile *input;
+  GFile *reference;
+  GtkSvgFeatures features;
+  GdkRGBA colors[5];
+  size_t n_colors;
+  double weight;
 
-static gboolean arg_no_animations = FALSE;
+  gboolean generate;
+} TestData;
+
+static void
+init_test_data (TestData *data)
+{
+  data->input = NULL;
+  data->reference = NULL;
+  data->features = GTK_SVG_EXTERNAL_RESOURCES |
+                   GTK_SVG_EXTENSIONS |
+                   GTK_SVG_ANIMATIONS;
+  data->n_colors = 0;
+  data->weight = -1;
+  data->generate = FALSE;
+}
+
+static void
+clear_test_data (TestData *data)
+{
+  g_object_unref (data->input);
+  g_object_unref (data->reference);
+}
 
 static char *
-file_replace_extension (const char *old_file,
-                        const char *old_ext,
-                        const char *new_ext)
+filename_replace_extension (const char *old_file,
+                             const char *old_ext,
+                             const char *new_ext)
 {
   GString *file = g_string_new (NULL);
 
@@ -52,12 +73,23 @@ file_replace_extension (const char *old_file,
   return g_string_free (file, FALSE);
 }
 
+static GFile *
+file_replace_extension (GFile      *file,
+                        const char *old_ext,
+                        const char *new_ext)
+{
+  char *path = filename_replace_extension (g_file_peek_path (file), old_ext, new_ext);
+  GFile *new_file = g_file_new_for_path (path);
+  g_free (path);
+  return new_file;
+}
+
 static char *
 test_get_sibling_file (const char *file, const char *fext, const char *sext)
 {
   char *sfile;
 
-  sfile = file_replace_extension (file, fext, sext);
+  sfile = filename_replace_extension (file, fext, sext);
 
   if (!g_file_test (sfile, G_FILE_TEST_EXISTS))
     {
@@ -66,6 +98,16 @@ test_get_sibling_file (const char *file, const char *fext, const char *sext)
     }
 
   return sfile;
+}
+
+static GFile *
+test_get_sibling (GFile      *file,
+                  const char *name)
+{
+  GFile *dir = g_file_get_parent (file);
+  GFile *sibling = g_file_get_child (dir, name);
+  g_object_unref (dir);
+  return sibling;
 }
 
 static const char *arg_output_dir;
@@ -120,7 +162,7 @@ get_output_file (const char *file,
 
   dir = get_output_dir ();
   base = g_path_get_basename (file);
-  name = file_replace_extension (base, fext, extension);
+  name = filename_replace_extension (base, fext, extension);
   result = g_strconcat (dir, G_DIR_SEPARATOR_S, name, is_compressed ? ".gz" : NULL, NULL);
 
   g_free (base);
@@ -226,12 +268,13 @@ error_cb (GtkSvg       *svg,
 }
 
 static void
-render_svg_file (GFile *file, TestFlags flags)
+render_svg_file (TestData *data)
 {
+  gboolean compressed;
+  gboolean compressed_ref;
   GtkSvg *svg;
   char *svg_file;
   const char *file_ext;
-  char *reference_file;
   char *errors_file;
   char *contents;
   size_t length;
@@ -244,22 +287,27 @@ render_svg_file (GFile *file, TestFlags flags)
 
   errors = g_string_new ("");
 
-  svg_file = g_file_get_path (file);
-  file_ext = (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg";
-  g_assert_true (g_str_has_suffix (svg_file, file_ext));
+  svg_file = g_file_get_path (data->input);
+  compressed = g_str_has_suffix (svg_file, ".gz");
+  if (compressed)
+    file_ext = ".svg.gz";
+  else
+    file_ext = ".svg";
+
+  compressed_ref = g_str_has_suffix (g_file_peek_path (data->reference), ".gz");
 
   if (!g_file_get_contents (svg_file, &contents, &length, &error))
     g_error ("%s", error->message);
 
-  if (flags & TEST_FLAG_COMPRESSED_TEST)
+  if (compressed)
     {
+      GBytes *tmp;
       GConverter *decompressor;
-      GBytes *compressed;
       decompressor = G_CONVERTER (g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP));
-      compressed = g_bytes_new_take (contents, length);
-      bytes = g_converter_convert_bytes (decompressor, compressed, &error);
+      tmp = g_bytes_new_take (contents, length);
+      bytes = g_converter_convert_bytes (decompressor, tmp, &error);
       g_object_unref (decompressor);
-      g_bytes_unref (compressed);
+      g_bytes_unref (tmp);
       if (error)
         g_error ("%s", error->message);
     }
@@ -271,10 +319,8 @@ render_svg_file (GFile *file, TestFlags flags)
   svg = gtk_svg_new ();
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), errors);
 
-  /* No system fonts, please */
-  gtk_svg_set_features (svg,
-                        GTK_SVG_DEFAULT_FEATURES & ~GTK_SVG_SYSTEM_RESOURCES
-                                                 & ~(arg_no_animations ? GTK_SVG_ANIMATIONS : 0));
+  gtk_svg_set_features (svg, data->features);
+  gtk_svg_set_weight (svg, data->weight);
 
   gtk_svg_load_from_bytes (svg, bytes);
   g_clear_pointer (&bytes, g_bytes_unref);
@@ -282,9 +328,18 @@ render_svg_file (GFile *file, TestFlags flags)
   gtk_svg_play (svg);
 
   snapshot = gtk_snapshot_new ();
-  gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot,
-                          gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
-                          gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)));
+
+  if (data->n_colors > 0)
+    gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (svg), snapshot,
+                                              gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
+                                              gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)),
+                                              data->colors,
+                                              data->n_colors);
+  else
+    gdk_paintable_snapshot (GDK_PAINTABLE (svg), snapshot,
+                            gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (svg)),
+                            gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (svg)));
+
   node = gtk_snapshot_free_to_node (snapshot);
 
   if (node)
@@ -292,43 +347,23 @@ render_svg_file (GFile *file, TestFlags flags)
   else
     bytes = g_bytes_new_static ("", 0);
 
-  if (flags & TEST_FLAG_GENERATE)
+  if (data->generate)
     {
-      if (flags & TEST_FLAG_REPLACE_EXPECTED)
-        {
-          reference_file = test_get_sibling_file (svg_file,
-                                                  (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
-                                                  (flags & TEST_FLAG_COMPRESSED_REF) ? ".node.gz" : ".node");
-          g_assert_nonnull (reference_file);
-          g_file_set_contents (reference_file,
-                               g_bytes_get_data (bytes, NULL),
-                               g_bytes_get_size (bytes),
-                               NULL);
-          g_free (reference_file);
+      g_file_set_contents (g_file_peek_path (data->reference),
+                           g_bytes_get_data (bytes, NULL),
+                           g_bytes_get_size (bytes),
+                           NULL);
 
-          if (errors->len > 0)
-            {
-              errors_file = file_replace_extension (svg_file,
-                                                   (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
-                                                   (flags & TEST_FLAG_COMPRESSED_ERR) ? ".errors.gz" : ".errors");
-              g_file_set_contents (errors_file,
-                                   errors->str,
-                                   errors->len,
-                                   NULL);
-              g_free (errors_file);
-            }
+      if (errors->len > 0)
+        {
+          errors_file = filename_replace_extension (svg_file, file_ext, ".errors");
+          g_file_set_contents (errors_file, errors->str, errors->len, NULL);
+          g_free (errors_file);
         }
-      else
-        g_print ("%s", (const char *) g_bytes_get_data (bytes, NULL));
       goto out;
     }
 
-  reference_file = test_get_sibling_file (svg_file,
-                                          (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
-                                          (flags & TEST_FLAG_COMPRESSED_REF) ? ".node.gz" : ".node");
-  g_assert_nonnull (reference_file);
-
-  diff = diff_node_with_file (reference_file, node, &error);
+  diff = diff_node_with_file (g_file_peek_path (data->reference), node, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])
@@ -338,16 +373,13 @@ render_svg_file (GFile *file, TestFlags flags)
     }
 
   if (diff || g_test_verbose ())
-    save_output (g_bytes_get_data (bytes, NULL), svg_file, file_ext, ".out.node", (flags & TEST_FLAG_COMPRESSED_REF) != 0);
+    save_output (g_bytes_get_data (bytes, NULL), svg_file, file_ext, ".out.node", compressed_ref);
   if (diff)
     save_output (diff, svg_file, file_ext, ".node.diff", FALSE);
 
-  g_free (reference_file);
   g_clear_pointer (&diff, g_free);
 
-  errors_file = test_get_sibling_file (svg_file,
-                                       (flags & TEST_FLAG_COMPRESSED_TEST) ? ".svg.gz" : ".svg",
-                                       (flags & TEST_FLAG_COMPRESSED_ERR) ? ".errors.gz" : ".errors");
+  errors_file = test_get_sibling_file (svg_file, file_ext, ".errors");
   if (errors_file == NULL)
     errors_file = g_strdup ("/dev/null");
 
@@ -363,7 +395,7 @@ render_svg_file (GFile *file, TestFlags flags)
         }
 
       if (diff || g_test_verbose ())
-        save_output (errors->str, svg_file, file_ext, ".out.errors", (flags & TEST_FLAG_COMPRESSED_ERR) != 0);
+        save_output (errors->str, svg_file, file_ext, ".out.errors", FALSE);
       if (diff)
         save_output (diff, svg_file, file_ext, ".errors.diff", FALSE);
 
@@ -383,70 +415,98 @@ out:
 }
 
 static void
-do_test_file (GFile *file)
+read_test_data (GFile    *file,
+                TestData *data)
 {
-  TestFlags flags = TEST_FLAG_NONE;
   GError *err = NULL;
   GKeyFile *args;
-  gboolean compressed_test, compressed_ref, compressed_err;
-  gchar *test_filepath;
-  GFile *test_file;
+  char *input;
+  char *reference;
+  gboolean animations;
+  gboolean symbolic;
+  char *string;
+
+  animations = TRUE;
+  symbolic = FALSE;
 
   args = g_key_file_new ();
   g_key_file_load_from_file (args, g_file_peek_path (file), G_KEY_FILE_NONE, &err);
   g_assert_no_error (err);
 
-  compressed_test = g_key_file_get_boolean (args, "testcase", "compressed", &err);
-  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND) ||
-      g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    {
-      compressed_test = FALSE;
-      g_clear_error (&err);
-    }
+  input = g_key_file_get_string (args, "test", "input", &err);
   g_assert_no_error (err);
+  data->input = test_get_sibling (file, input);
 
-  compressed_ref = g_key_file_get_boolean (args, "reference", "compressed", &err);
-  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND) ||
-      g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    {
-      compressed_ref = FALSE;
-      g_clear_error (&err);
-    }
+  reference = g_key_file_get_string (args, "test", "reference", &err);
   g_assert_no_error (err);
+  data->reference = test_get_sibling (file, reference);
 
-  compressed_err = g_key_file_get_boolean (args, "errors", "compressed", &err);
-  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND) ||
-      g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+  animations = g_key_file_get_boolean (args, "test", "animations", &err);
+  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    g_clear_error (&err);
+
+  symbolic = g_key_file_get_boolean (args, "test", "symbolic", &err);
+  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    g_clear_error (&err);
+
+  string = g_key_file_get_string (args, "test", "colors", &err);
+  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    g_clear_error (&err);
+  else
     {
-      compressed_err = FALSE;
-      g_clear_error (&err);
+      GStrv strv = g_strsplit (string, ",", 0);
+      data->n_colors = g_strv_length (strv);
+      for (unsigned int i = 0; i < data->n_colors; i++)
+        {
+          if (!gdk_rgba_parse (&data->colors[i], strv[i]))
+            {
+              data->n_colors = 0;
+              break;
+            }
+        }
+      g_strfreev (strv);
     }
-  g_assert_no_error (err);
+
+  data->weight = g_key_file_get_double (args, "test", "weight", &err);
+  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    g_clear_error (&err);
 
   g_key_file_unref (args);
 
-  if (compressed_test)
-    flags |= TEST_FLAG_COMPRESSED_TEST;
-  if (compressed_ref)
-    flags |= TEST_FLAG_COMPRESSED_REF;
-  if (compressed_err)
-    flags |= TEST_FLAG_COMPRESSED_ERR;
+  data->features = GTK_SVG_EXTERNAL_RESOURCES |
+                   GTK_SVG_EXTENSIONS |
+                   (animations ? GTK_SVG_ANIMATIONS : 0) |
+                   (symbolic ? GTK_SVG_TRADITIONAL_SYMBOLIC : 0);
 
-  test_filepath = test_get_sibling_file (g_file_peek_path (file), ".test", compressed_test ? ".svg.gz" : ".svg");
-  g_assert_nonnull (test_filepath);
-  test_file = g_file_new_for_path (test_filepath);
-  g_free (test_filepath);
-  render_svg_file (test_file, flags);
-  g_object_unref (test_file);
+  g_free (input);
+  g_free (reference);
+  g_free (string);
+}
+
+static void
+test_data_for_svg (GFile *file, TestData *data)
+{
+  data->input = g_object_ref (file);
+  data->reference = file_replace_extension (file, ".svg", ".node");
 }
 
 static void
 test_file (GFile *file)
 {
+  TestData data;
+
+  init_test_data (&data);
+
   if (g_str_has_suffix (g_file_peek_path (file), ".test"))
-    do_test_file (file);
+    read_test_data (file, &data);
   else
-    render_svg_file (file, TEST_FLAG_NONE);
+    test_data_for_svg (file, &data);
+
+  data.generate = FALSE;
+
+  render_svg_file (&data);
+
+  clear_test_data (&data);
 }
 
 static void
@@ -466,103 +526,19 @@ add_test_for_file (GFile *file)
   g_free (path);
 }
 
-static int
-compare_files (gconstpointer a, gconstpointer b)
-{
-  GFile *file1 = G_FILE (a);
-  GFile *file2 = G_FILE (b);
-  char *path1, *path2;
-  int result;
-
-  path1 = g_file_get_path (file1);
-  path2 = g_file_get_path (file2);
-
-  result = strcmp (path1, path2);
-
-  g_free (path1);
-  g_free (path2);
-
-  return result;
-}
-
-static void
-add_tests_for_files_in_directory (GFile *dir)
-{
-  GFileEnumerator *enumerator;
-  GFileInfo *info;
-  GList *files;
-  GError *error = NULL;
-
-  enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
-  g_assert_no_error (error);
-  files = NULL;
-
-  while ((info = g_file_enumerator_next_file (enumerator, NULL, &error)))
-    {
-      const char *filename;
-
-      filename = g_file_info_get_name (info);
-
-      if ((!g_str_has_suffix (filename, ".svg") && !g_str_has_suffix (filename, ".test")) ||
-          g_str_has_suffix (filename, ".out.svg") ||
-          g_str_has_suffix (filename, ".ref.svg"))
-        {
-          g_object_unref (info);
-          continue;
-        }
-
-      files = g_list_prepend (files, g_file_get_child (dir, filename));
-
-      g_object_unref (info);
-    }
-
-  g_assert_no_error (error);
-  g_object_unref (enumerator);
-
-  files = g_list_sort (files, compare_files);
-  g_list_foreach (files, (GFunc) add_test_for_file, NULL);
-  g_list_free_full (files, g_object_unref);
-}
-
 int
 main (int argc, char **argv)
 {
+  char *generate = NULL;
   GOptionEntry options[] = {
     { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
-    { "no-animations", 0, 0, G_OPTION_ARG_NONE, &arg_no_animations, "Disable animations", NULL },
+    { "generate", 0, 0, G_OPTION_ARG_FILENAME, &generate, "Generate", "FILE" },
     { NULL }
   };
   GOptionContext *context;
   GError *error = NULL;
 
   g_setenv ("GSK_SUBSET_FONTS", "1", TRUE);
-
-  if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
-    {
-      GFile *file;
-
-      gtk_init ();
-
-      file = g_file_new_for_commandline_arg (argv[2]);
-      render_svg_file (file, TEST_FLAG_GENERATE);
-      g_object_unref (file);
-
-      return 0;
-    }
-  else if (argc >= 2 && strcmp (argv[1], "--regenerate") == 0)
-    {
-      GFile *file;
-
-      gtk_init ();
-
-      file = g_file_new_for_commandline_arg (argv[2]);
-      render_svg_file (file, TEST_FLAG_GENERATE|TEST_FLAG_REPLACE_EXPECTED);
-      g_object_unref (file);
-
-      return 0;
-    }
-
-  gtk_test_init (&argc, &argv);
 
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, options, NULL);
@@ -573,36 +549,43 @@ main (int argc, char **argv)
       g_error ("Option parsing failed: %s\n", error->message);
       return 1;
     }
-  else if (argc != 3 && argc != 2)
-    {
-      char *help = g_option_context_get_help (context, TRUE, NULL);
-      g_print ("%s", help);
-      return 1;
-    }
 
   g_option_context_free (context);
 
-  if (argc < 2)
+  if (generate)
     {
-      const char *basedir;
-      GFile *dir;
+      GFile *file;
+      TestData data;
 
-      basedir = g_test_get_dir (G_TEST_DIST);
-      dir = g_file_new_for_path (basedir);
-      add_tests_for_files_in_directory (dir);
+      gtk_init ();
 
-      g_object_unref (dir);
+      file = g_file_new_for_commandline_arg (generate);
+
+      init_test_data (&data);
+
+      if (g_str_has_suffix (g_file_peek_path (file), ".test"))
+        read_test_data (file, &data);
+      else
+        test_data_for_svg (file, &data);
+
+      data.generate = TRUE;
+
+      render_svg_file (&data);
+
+      g_object_unref (file);
+
+      return 0;
     }
-  else
-    {
-      for (guint i = 1; i < argc; i++)
-        {
-          GFile *file;
 
-          file = g_file_new_for_commandline_arg (argv[i]);
-          add_test_for_file (file);
-          g_object_unref (file);
-        }
+  gtk_test_init (&argc, &argv);
+
+  for (guint i = 1; i < argc; i++)
+    {
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (argv[i]);
+      add_test_for_file (file);
+      g_object_unref (file);
     }
 
   return g_test_run ();
