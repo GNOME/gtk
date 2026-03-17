@@ -17646,84 +17646,6 @@ parse_shape_attrs (Shape                *shape,
         }
     }
 
-  if (data->svg->gpa_version == 0 &&
-      (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
-       (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes)))
-    {
-      SvgValue *value;
-      gboolean has_stroke;
-
-      if (!shape->classes)
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-      else if (g_strv_has (shape->classes, "transparent-fill"))
-        value = svg_paint_new_none ();
-      else if (g_strv_has (shape->classes, "foreground-fill"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-      else if (g_strv_has (shape->classes, "success") ||
-               g_strv_has (shape->classes, "success-fill"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (shape->classes, "warning") ||
-               g_strv_has (shape->classes, "warning-fill"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (shape->classes, "error") ||
-               g_strv_has (shape->classes, "error-fill"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
-      else
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) ||
-          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-        shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
-      svg_value_unref (value);
-
-      if (!shape->classes)
-        value = svg_paint_new_none ();
-      else if (g_strv_has (shape->classes, "success-stroke"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
-      else if (g_strv_has (shape->classes, "warning-stroke"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
-      else if (g_strv_has (shape->classes, "error-stroke"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
-      else if (g_strv_has (shape->classes, "foreground-stroke"))
-        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
-      else
-        value = svg_paint_new_none ();
-
-      has_stroke = !svg_value_equal (value, svg_paint_new_none ());
-
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) ||
-          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-        shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
-      svg_value_unref (value);
-
-      if (has_stroke)
-        {
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_number_new (2);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
-              svg_value_unref (value);
-            }
-
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
-              svg_value_unref (value);
-            }
-
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_linecap_new (GSK_LINE_CAP_ROUND);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
-              svg_value_unref (value);
-            }
-        }
-    }
-
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_CLIP_PATH) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MASK) ||
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_HREF) ||
@@ -20229,6 +20151,87 @@ apply_styles_to_shape (Shape      *shape,
     {
       for (unsigned int idx = 0; idx < shape->filters->len; idx++)
         apply_styles_here (shape, idx + 1, data);
+    }
+
+  /* Apply traditional symbolic heuristics *after*
+   * CSS and styles, so that these take precedence.
+   */
+  if (data->svg->gpa_version == 0 &&
+      (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
+       (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes)))
+    {
+      SvgValue *value;
+      gboolean has_stroke;
+
+      if (!shape->classes)
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (shape->classes, "transparent-fill"))
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "foreground-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else if (g_strv_has (shape->classes, "success") ||
+               g_strv_has (shape->classes, "success-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (shape->classes, "warning") ||
+               g_strv_has (shape->classes, "warning-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (shape->classes, "error") ||
+               g_strv_has (shape->classes, "error-fill"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) ||
+          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
+        shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+      svg_value_unref (value);
+
+      if (!shape->classes)
+        value = svg_paint_new_none ();
+      else if (g_strv_has (shape->classes, "success-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_SUCCESS);
+      else if (g_strv_has (shape->classes, "warning-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_WARNING);
+      else if (g_strv_has (shape->classes, "error-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_ERROR);
+      else if (g_strv_has (shape->classes, "foreground-stroke"))
+        value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
+      else
+        value = svg_paint_new_none ();
+
+      has_stroke = !svg_value_equal (value, svg_paint_new_none ());
+
+      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) ||
+          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+      svg_value_unref (value);
+
+      if (has_stroke)
+        {
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
+            {
+              value = svg_number_new (2);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
+              svg_value_unref (value);
+            }
+
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
+            {
+              value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
+              svg_value_unref (value);
+            }
+
+          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP) ||
+              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
+            {
+              value = svg_linecap_new (GSK_LINE_CAP_ROUND);
+              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
+              svg_value_unref (value);
+            }
+        }
     }
 
   /* Now that styles have been applied, we can determine this */
