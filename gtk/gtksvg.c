@@ -25651,6 +25651,7 @@ enum
   PROP_PLAYING,
   PROP_WEIGHT,
   PROP_STATE,
+  PROP_OVERFLOW,
   NUM_PROPERTIES,
 };
 
@@ -25741,6 +25742,10 @@ gtk_svg_get_property (GObject      *object,
       g_value_set_uint (value, self->state);
       break;
 
+    case PROP_OVERFLOW:
+      g_value_set_enum (value, self->overflow);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -25775,6 +25780,10 @@ gtk_svg_set_property (GObject      *object,
 
     case PROP_WEIGHT:
       gtk_svg_set_weight (self, g_value_get_double (value));
+      break;
+
+    case PROP_OVERFLOW:
+      gtk_svg_set_overflow (self, g_value_get_enum (value));
       break;
 
     default:
@@ -25867,6 +25876,18 @@ gtk_svg_class_init (GtkSvgClass *class)
   properties[PROP_STATE] =
     g_param_spec_uint ("state", NULL, NULL,
                        0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSvg:overflow:
+   *
+   * Whether the rendering will be clipped to the bounds.
+   *
+   * Since: 4.24
+   */
+  properties[PROP_OVERFLOW] =
+    g_param_spec_enum ("overflow", NULL, NULL,
+                       GTK_TYPE_OVERFLOW, GTK_OVERFLOW_HIDDEN,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -27216,7 +27237,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->n_state_names = 0;
 }
 
-/*< private >
+/**
  * gtk_svg_set_overflow:
  * @self: an SVG paintable
  * @overflow: the new overflow value
@@ -27224,9 +27245,11 @@ gtk_svg_clear_content (GtkSvg *self)
  * Sets whether the rendering will be clipped
  * to the bounds.
  *
- * Clipping is expected for [interface@Gdk.Paintable]
+ * Clipping is expected for [iface@Gdk.Paintable]
  * semantics, so this property should not be
  * changed when using a `GtkSvg` as a paintable.
+ *
+ * Since: 4.24
  */
 void
 gtk_svg_set_overflow (GtkSvg      *self,
@@ -27239,15 +27262,19 @@ gtk_svg_set_overflow (GtkSvg      *self,
 
   self->overflow = overflow;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OVERFLOW]);
 }
 
-/*< private >
+/**
  * gtk_svg_get_overflow:
  * @self: an SVG paintable
  *
  * Gets the current overflow value.
  *
  * Returns: the current overflow value
+ *
+ * Since: 4.24
  */
 GtkOverflow
 gtk_svg_get_overflow (GtkSvg *self)
@@ -27999,3 +28026,4 @@ gtk_svg_error_get_end (const GError *error)
 /* }}} */
 
 /* vim:set foldmethod=marker: */
+

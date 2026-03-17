@@ -601,10 +601,6 @@ void           gtk_svg_set_playing     (GtkSvg                *self,
 
 void           gtk_svg_clear_content   (GtkSvg                *self);
 
-void           gtk_svg_set_overflow    (GtkSvg                *self,
-                                        GtkOverflow            overflow);
-GtkOverflow    gtk_svg_get_overflow    (GtkSvg                *self);
-
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
 
