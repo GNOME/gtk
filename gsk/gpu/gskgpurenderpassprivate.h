@@ -54,7 +54,6 @@ typedef struct {
   graphene_vec2_t scale;
   graphene_point_t offset;
   GskGpuClip clip;
-  graphene_rect_t clip_mask_rect;
   GskGpuGlobals modified;
 } GskGpuRenderPassTransformStorage;
 
