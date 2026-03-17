@@ -158,6 +158,7 @@
                       <item>Filter</item>
                       <item>Symbol</item>
                       <item>Switch</item>
+                      <item>Link</item>
                     </items>
                   </object>
                 </property>

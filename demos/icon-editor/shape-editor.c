@@ -297,6 +297,7 @@ shape_changed (ShapeEditor *self)
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       if (self->shape->shapes == NULL)
         self->shape->shapes = g_ptr_array_new ();  // FIXME: shape_free
       path_paintable_changed (self->paintable);
@@ -1017,6 +1018,7 @@ can_edit_shape (Shape *shape)
     case SHAPE_FILTER:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       return FALSE;
     default:
       g_assert_not_reached ();

@@ -11,4 +11,8 @@
     <g systemLanguage='en'/>
     <path requiredExtensions='http://www.gtk.org/grappa'/>
   </switch>
+  <a href="test">
+    <circle r='10'/>
+    <text>click this circle</text>
+  </a>
 </svg>

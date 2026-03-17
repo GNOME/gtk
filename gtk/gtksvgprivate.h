@@ -151,6 +151,7 @@ typedef enum
   SHAPE_FILTER,
   SHAPE_SYMBOL,
   SHAPE_SWITCH,
+  SHAPE_LINK,
 } ShapeType;
 
 typedef enum

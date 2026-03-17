@@ -52,4 +52,11 @@
             requiredExtensions='http://www.gtk.org/grappa'>
     </path>
   </switch>
+  <a
+          href='test'>
+    <circle
+            r='10'>
+    </circle>
+    <text>click this circle</text>
+  </a>
 </svg>
