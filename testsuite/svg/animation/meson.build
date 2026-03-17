@@ -25,6 +25,7 @@ test_data = [
   'masks.test',
   'negative-delay.test',
   'paths.test',
+  'paths2.test',
   'priority.test',
   'states.test',
   'symbolics.test',
