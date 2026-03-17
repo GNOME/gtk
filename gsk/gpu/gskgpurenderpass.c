@@ -104,6 +104,19 @@ gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_render_pass_compute_mvp (GskGpuRenderPass  *self,
+                                 graphene_matrix_t *out_mvp)
+{
+  if (self->modelview)
+    {
+      gsk_transform_to_matrix (self->modelview, out_mvp);
+      graphene_matrix_multiply (out_mvp, &self->projection, out_mvp);
+    }
+  else
+    graphene_matrix_init_from_matrix (out_mvp, &self->projection);
+}
+
 GskGpuRenderPass *
 gsk_gpu_render_pass_new (GskGpuFrame                 *frame,
                          GskGpuImage                 *target,
@@ -192,13 +205,7 @@ gsk_gpu_render_pass_prepare_shader (GskGpuRenderPass *self)
     {
       graphene_matrix_t mvp;
 
-      if (self->modelview)
-        {
-          gsk_transform_to_matrix (self->modelview, &mvp);
-          graphene_matrix_multiply (&mvp, &self->projection, &mvp);
-        }
-      else
-        graphene_matrix_init_from_matrix (&mvp, &self->projection);
+      gsk_gpu_render_pass_compute_mvp (self, &mvp);
 
       gsk_gpu_globals_op (self->frame,
                           &self->scale,
