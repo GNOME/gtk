@@ -2,25 +2,27 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import re
-import os
 from collections import *
+
 
 def add_quotes(s):
     return "\"" + s.lower() + "\""
 
+
 def wordify(s):
     return s.strip().rstrip(".,;:")
 
+
 def is_keyword(s):
     if s == "GTK":
-      return False
+        return False
     elif s.startswith(("Gtk", "Gdk", "Pango")):
         return True
     elif s.startswith("G") and s[1].isupper():
         return True
     else:
         return False
+
 
 out_file = sys.argv[1]
 in_files = sys.argv[2:]
@@ -82,6 +84,10 @@ for demo in demos:
         parent_index = parent_index + 1
 
 
+# Sort demos by title
+demos = sorted(demos, key=lambda x: x[1])
+
+
 # For every child with a parent, generate a list of child demos
 i = 0
 for parent in parents:
@@ -91,14 +97,11 @@ for parent in parents:
     for child in demos:
         if child[1].startswith(parent + "/"):
             title = child[1][child[1].rfind('/') + 1:]
-            file_output += "  { \"" + child[0] + "\", \"" + title + "\", " + "(const char*[]) {" + ", ".join(list(map(add_quotes, child[2])) + ["NULL"]) + " }, \"" + child[3] + "\", " + child[4] + ", NULL },\n"
+            file_output += "  { \"" + child[0] + "\", \"" + title + "\", " + "(const char*[]) {" + ", ".join(list(map(add_quotes, sorted(child[2]))) + ["NULL"]) + " }, \"" + child[3] + "\", " + child[4] + ", NULL },\n"
 
     file_output += "  { NULL }\n};\n"
     i = i + 1
 
-
-# Sort demos by title
-demos = sorted(demos, key=lambda x: x[1])
 
 file_output += "\nDemoData gtk_demos[] = {\n"
 for demo in demos:
@@ -118,10 +121,10 @@ for demo in demos:
 
         if demo[5] != -1:
             child_array = "child" + str(demo[5])
-        file_output += "  { " + name + ", " + title + ", " + "(const char*[]) {" + ", ".join(list(map(add_quotes, keywords)) + ["NULL"]) + " }, " + file + ", " + demo[4] + ", " + child_array + " },\n"
+        file_output += "  { " + name + ", " + title + ", " + "(const char*[]) {" + ", ".join(list(map(add_quotes, sorted(keywords))) + ["NULL"]) + " }, " + file + ", " + demo[4] + ", " + child_array + " },\n"
+
 
 file_output += "  { NULL }\n};\n"
-
 ofile = open(out_file, "w")
 ofile.write(file_output)
 ofile.close()
