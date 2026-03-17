@@ -25477,7 +25477,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       if (self->gpa_version == 0 &&
           (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
-          colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
+          used_opacity < 1)
         {
           gtk_snapshot_push_opacity (snapshot, used_opacity);
         }
@@ -25514,7 +25514,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       if (self->gpa_version == 0 &&
           (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
-          colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
+          used_opacity < 1)
         {
           gtk_snapshot_pop (snapshot);
         }
