@@ -193,7 +193,7 @@ gdk_app_launch_context_get_display (GdkAppLaunchContext *context)
  *
  * This only works when running under a window manager that
  * supports multiple workspaces, as described in the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec).
+ * [Extended Window Manager Hints](https://specifications.freedesktop.org/wm/latest/).
  * Specifically this sets the `_NET_WM_DESKTOP` property described
  * in that spec.
  *
