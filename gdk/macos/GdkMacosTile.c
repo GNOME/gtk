@@ -54,6 +54,8 @@
       [self setWantsExtendedDynamicRangeContent:enabled];
       if (enabled)
         [self setContentsFormat:kCAContentsFormatRGBA16Float];
+      else
+        [self setContentsFormat:kCAContentsFormatRGBA8Uint];
     }
 }
 

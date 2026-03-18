@@ -165,15 +165,24 @@ _gdk_macos_buffer_new (int      width,
   /* Tag the IOSurface with an extended colorspace so that macOS
    * interprets pixel values > 1.0 as EDR (Extended Dynamic Range)
    * rather than clipping them to SDR.
+   *
+   * The colorspace must be serialized as ICC profile data — passing
+   * a raw CGColorSpaceRef to IOSurfaceSetValue is not the documented
+   * pattern and may be silently ignored by the compositor.
    */
   if (self->surface != NULL && hdr)
     {
       CGColorSpaceRef cs = CGColorSpaceCreateWithName (kCGColorSpaceExtendedLinearDisplayP3);
       if (cs)
         {
-          IOSurfaceSetValue (self->surface,
-                             CFSTR ("IOSurfaceColorSpace"),
-                             cs);
+          CFDataRef icc = CGColorSpaceCopyICCData (cs);
+          if (icc)
+            {
+              IOSurfaceSetValue (self->surface,
+                                 CFSTR ("IOSurfaceColorSpace"),
+                                 icc);
+              CFRelease (icc);
+            }
           CGColorSpaceRelease (cs);
         }
     }
