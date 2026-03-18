@@ -378,6 +378,7 @@ fromCGRect (const CGRect rect)
         area.origin.y = info->area.origin.y / height;
 
       [info->tile swapBuffer:ioSurface withRect:area];
+      [info->tile setEDREnabled:_gdk_macos_buffer_get_hdr (buffer)];
     }
 }
 

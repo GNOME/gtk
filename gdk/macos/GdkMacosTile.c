@@ -47,4 +47,14 @@
     self.contentsRect = rect;
 }
 
+-(void)setEDREnabled:(BOOL)enabled
+{
+  if ([self respondsToSelector:@selector(setWantsExtendedDynamicRangeContent:)])
+    {
+      [self setWantsExtendedDynamicRangeContent:enabled];
+      if (enabled)
+        [self setContentsFormat:kCAContentsFormatRGBA16Float];
+    }
+}
+
 @end

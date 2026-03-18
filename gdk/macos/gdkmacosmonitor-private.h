@@ -42,6 +42,7 @@ void               _gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor   *
                                                              GdkMacosSurface   *surface);
 void               _gdk_macos_monitor_clamp                 (GdkMacosMonitor   *self,
                                                              GdkRectangle      *area);
+double             _gdk_macos_monitor_get_edr_headroom       (GdkMacosMonitor   *self);
 
 G_END_DECLS
 

@@ -39,6 +39,7 @@ struct _GdkMacosBuffer
   guint            stride;
   double           device_scale;
   guint            flipped : 1;
+  guint            hdr : 1;
 };
 
 G_DEFINE_TYPE (GdkMacosBuffer, gdk_macos_buffer, G_TYPE_OBJECT)
@@ -91,6 +92,7 @@ static IOSurfaceRef
 create_surface (int   width,
                 int   height,
                 int   bytes_per_element,
+                int   pixel_format,
                 guint *stride)
 {
   CFMutableDictionaryRef props;
@@ -112,7 +114,7 @@ create_surface (int   width,
   add_int (props, kIOSurfaceBytesPerElement, bytes_per_element);
   add_int (props, kIOSurfaceBytesPerRow, bytes_per_row);
   add_int (props, kIOSurfaceHeight, height);
-  add_int (props, kIOSurfacePixelFormat, (int)'BGRA');
+  add_int (props, kIOSurfacePixelFormat, pixel_format);
   add_int (props, kIOSurfaceWidth, width);
 
   ret = IOSurfaceCreate (props);
@@ -125,25 +127,56 @@ create_surface (int   width,
 }
 
 GdkMacosBuffer *
-_gdk_macos_buffer_new (int    width,
-                       int    height,
-                       double device_scale,
-                       int    bytes_per_element,
-                       int    bits_per_pixel)
+_gdk_macos_buffer_new (int      width,
+                       int      height,
+                       double   device_scale,
+                       int      bytes_per_element,
+                       int      bits_per_pixel,
+                       gboolean hdr)
 {
   GdkMacosBuffer *self;
+  int pixel_format;
 
   g_return_val_if_fail (width > 0, NULL);
   g_return_val_if_fail (height > 0, NULL);
 
+  if (hdr)
+    {
+      /* kCVPixelFormatType_64RGBAHalf = 'RGhA' */
+      bytes_per_element = 8;
+      bits_per_pixel = 64;
+      pixel_format = 'RGhA';
+    }
+  else
+    {
+      pixel_format = 'BGRA';
+    }
+
   self = g_object_new (GDK_TYPE_MACOS_BUFFER, NULL);
   self->bytes_per_element = bytes_per_element;
   self->bits_per_pixel = bits_per_pixel;
-  self->surface = create_surface (width, height, bytes_per_element, &self->stride);
+  self->hdr = !!hdr;
+  self->surface = create_surface (width, height, bytes_per_element, pixel_format, &self->stride);
   self->width = width;
   self->height = height;
   self->device_scale = device_scale;
   self->lock_count = 0;
+
+  /* Tag the IOSurface with an extended colorspace so that macOS
+   * interprets pixel values > 1.0 as EDR (Extended Dynamic Range)
+   * rather than clipping them to SDR.
+   */
+  if (self->surface != NULL && hdr)
+    {
+      CGColorSpaceRef cs = CGColorSpaceCreateWithName (kCGColorSpaceExtendedLinearDisplayP3);
+      if (cs)
+        {
+          IOSurfaceSetValue (self->surface,
+                             CFSTR ("IOSurfaceColorSpace"),
+                             cs);
+          CGColorSpaceRelease (cs);
+        }
+    }
 
   if (self->surface == NULL)
     g_clear_object (&self);
@@ -314,4 +347,12 @@ _gdk_macos_buffer_set_flipped (GdkMacosBuffer *self,
   g_return_if_fail (GDK_IS_MACOS_BUFFER (self));
 
   self->flipped = !!flipped;
+}
+
+gboolean
+_gdk_macos_buffer_get_hdr (GdkMacosBuffer *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_BUFFER (self), FALSE);
+
+  return self->hdr;
 }

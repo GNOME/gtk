@@ -1113,7 +1113,7 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
       guint width = GDK_SURFACE (self)->width * scale;
       guint height = GDK_SURFACE (self)->height * scale;
 
-      self->buffer = _gdk_macos_buffer_new (width, height, scale, 4, 32);
+      self->buffer = _gdk_macos_buffer_new (width, height, scale, 4, 32, FALSE);
     }
 
   return self->buffer;

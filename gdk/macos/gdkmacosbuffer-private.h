@@ -36,7 +36,8 @@ GdkMacosBuffer       *_gdk_macos_buffer_new              (int              width
                                                           int              height,
                                                           double           device_scale,
                                                           int              bytes_per_element,
-                                                          int              bits_per_pixel);
+                                                          int              bits_per_pixel,
+                                                          gboolean         hdr);
 IOSurfaceRef          _gdk_macos_buffer_get_native       (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_lock             (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_unlock           (GdkMacosBuffer  *self);
@@ -53,6 +54,7 @@ gpointer              _gdk_macos_buffer_get_data         (GdkMacosBuffer  *self)
 gboolean              _gdk_macos_buffer_get_flipped      (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_set_flipped      (GdkMacosBuffer  *self,
                                                           gboolean         flipped);
+gboolean              _gdk_macos_buffer_get_hdr          (GdkMacosBuffer  *self);
 
 G_END_DECLS
 

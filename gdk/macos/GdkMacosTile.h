@@ -33,5 +33,6 @@
 };
 
 -(void)swapBuffer:(IOSurfaceRef)buffer withRect:(CGRect)rect;
+-(void)setEDREnabled:(BOOL)enabled;
 
 @end

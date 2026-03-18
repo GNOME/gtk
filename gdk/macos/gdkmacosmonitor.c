@@ -36,6 +36,7 @@ struct _GdkMacosMonitor
   NSRect                workarea;
   GQueue                awaiting_frames;
   guint                 has_opengl : 1;
+  guint                 has_edr : 1;
   guint                 in_frame : 1;
 };
 
@@ -338,6 +339,7 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
    * an emulator such as QEMU.
    */
   self->has_opengl = !!has_opengl;
+  self->has_edr = (_gdk_macos_monitor_get_edr_headroom (self) > 1.0);
 
   /* Create a new display link to receive feedback about when to render */
   _gdk_macos_monitor_reset_display_link (self, mode);
@@ -424,6 +426,23 @@ _gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor *self,
       if (!self->in_frame && self->awaiting_frames.length == 0)
         gdk_display_link_source_pause (self->display_link);
     }
+}
+
+double
+_gdk_macos_monitor_get_edr_headroom (GdkMacosMonitor *self)
+{
+  NSScreen *screen;
+
+  g_return_val_if_fail (GDK_IS_MACOS_MONITOR (self), 1.0);
+
+  screen = find_screen (self->screen_id);
+  if (screen == nil)
+    return 1.0;
+
+  if ([screen respondsToSelector:@selector(maximumPotentialExtendedDynamicRangeColorComponentValue)])
+    return [screen maximumPotentialExtendedDynamicRangeColorComponentValue];
+
+  return 1.0;
 }
 
 void
