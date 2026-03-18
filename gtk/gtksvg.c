@@ -18328,15 +18328,27 @@ start_element_cb (GMarkupParseContext  *context,
 
       data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
 
-      if (data->current_shape &&
-          shape_type_has_text (data->current_shape->type) &&
-          shape->type == SHAPE_TSPAN)
+
+      if (shape->type == SHAPE_TSPAN)
         {
-          TextNode node = {
-            .type = TEXT_NODE_SHAPE,
-            .shape = { .shape = shape },
-          };
-          g_array_append_val (data->current_shape->text, node);
+          Shape *text_parent = NULL;
+
+          if (data->current_shape &&
+              shape_type_has_text (data->current_shape->type))
+            text_parent = data->current_shape;
+          else if (data->current_shape && data->current_shape->parent &&
+                   data->current_shape->type == SHAPE_LINK &&
+                   shape_type_has_text (data->current_shape->parent->type))
+            text_parent = data->current_shape->parent;
+
+          if (text_parent)
+            {
+              TextNode node = {
+                .type = TEXT_NODE_SHAPE,
+                .shape = { .shape = shape },
+              };
+              g_array_append_val (text_parent->text, node);
+            }
         }
 
       data->current_shape = shape;
@@ -18877,14 +18889,25 @@ text_cb (GMarkupParseContext  *context,
          GError              **error)
 {
   ParserData *data = user_data;
+  Shape *text_parent = NULL;
 
-  if (data->current_shape && shape_type_has_text (data->current_shape->type))
+  if (!data->current_shape)
+    return;
+
+  if (shape_type_has_text (data->current_shape->type))
+    text_parent = data->current_shape;
+  else if (data->current_shape->parent &&
+           data->current_shape->type == SHAPE_LINK &&
+           shape_type_has_text (data->current_shape->parent->type))
+    text_parent = data->current_shape->parent;
+
+  if (text_parent)
     {
       TextNode node = {
         .type = TEXT_NODE_CHARACTERS,
         .characters = { .text = g_strndup (text, len) }
       };
-      g_array_append_val (data->current_shape->text, node);
+      g_array_append_val (text_parent->text, node);
       return;
     }
 
@@ -27094,13 +27117,25 @@ svg_shape_add (Shape     *parent,
 
   g_ptr_array_add (parent->shapes, shape);
 
-  if (shape_type_has_text (parent->type) && type == SHAPE_TSPAN)
+  if (type == SHAPE_TSPAN)
     {
-      TextNode node = {
-        .type = TEXT_NODE_SHAPE,
-        .shape = { .shape = shape }
-      };
-      g_array_append_val (parent->text, node);
+      Shape *text_parent = NULL;
+
+      if (shape_type_has_text (parent->type))
+        text_parent = parent;
+      else if (parent->parent &&
+               parent->type == SHAPE_LINK &&
+               shape_type_has_text (parent->parent->type))
+        text_parent = parent->parent;
+
+      if (text_parent)
+        {
+          TextNode node = {
+            .type = TEXT_NODE_SHAPE,
+            .shape = { .shape = shape }
+          };
+          g_array_append_val (parent->text, node);
+        }
     }
 
   return shape;
