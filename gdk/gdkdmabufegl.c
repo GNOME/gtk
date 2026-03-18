@@ -314,8 +314,11 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
         attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
         attribs[i++] = dmabuf->modifier >> 32; \
       } \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
-    attribs[i++] = dmabuf->planes[plane].fd; \
+    if (dmabuf->planes[plane].fd != -1) \
+      { \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
+        attribs[i++] = dmabuf->planes[plane].fd; \
+      } \
     attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
     attribs[i++] = dmabuf->planes[plane].stride; \
     attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_OFFSET_EXT; \

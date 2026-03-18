@@ -698,6 +698,7 @@ parse_dmabuf_texture (GtkCssParser *parser,
   /* deduce number of planes from given amount of strides */
   while (dmabuf.n_planes < GDK_DMABUF_MAX_PLANES && strides[dmabuf.n_planes] > 0)
     {
+      dmabuf.planes[dmabuf.n_planes].fd = -1;
       dmabuf.planes[dmabuf.n_planes].offset = offsets[dmabuf.n_planes];
       dmabuf.planes[dmabuf.n_planes].stride = strides[dmabuf.n_planes];
       dmabuf.n_planes++;
@@ -755,10 +756,8 @@ parse_dmabuf_texture (GtkCssParser *parser,
   if (dmabuf_fd >= 0)
     {
       GdkDmabufTextureBuilder *builder = gdk_dmabuf_texture_builder_new ();
-      gsize i;
 
-      for (i = 0; i < dmabuf.n_planes; i++)
-        dmabuf.planes[i].fd = dmabuf_fd;
+      dmabuf.planes[0].fd = dmabuf_fd;
 
       gdk_dmabuf_texture_builder_set_dmabuf (builder, &dmabuf);
       gdk_dmabuf_texture_builder_set_premultiplied (builder, premultiplied);
