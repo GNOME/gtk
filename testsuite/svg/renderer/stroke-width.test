@@ -1,0 +1,4 @@
+[test]
+input=stroke-width.svg
+reference=stroke-width.node
+weight=1000

@@ -1,0 +1,4 @@
+color {
+  bounds: 0 0 100 100;
+  color: rgb(0,0,255);
+}

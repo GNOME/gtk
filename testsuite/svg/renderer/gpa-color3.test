@@ -1,0 +1,5 @@
+# gpa attr > style > CSS
+[test]
+input=gpa-color3.svg
+reference=gpa-color3.node
+colors=red

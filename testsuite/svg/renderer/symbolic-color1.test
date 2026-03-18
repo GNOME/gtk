@@ -1,0 +1,6 @@
+# if no class is set -> foreground fill
+[test]
+input=symbolic-color1.svg
+reference=symbolic-color1.node
+symbolic=true
+colors=blue,red,green,white

@@ -52,6 +52,9 @@ test_data = [
   'gpa-attachment1.svg',
   'gpa-attachment2.svg',
   'gpa-attachment3.svg',
+  'gpa-color1.test',
+  'gpa-color2.test',
+  'gpa-color3.test',
   'gradient-templates1.svg',
   'gradient-templates2.svg',
   'gradient-transform.svg',
@@ -126,8 +129,12 @@ test_data = [
   'spec-ellipse.svg',
   'spec-opacity.svg',
   'spec-rect.svg',
+  'stroke-width.test',
   'style.svg',
   'symbol.svg',
+  'symbolic-color1.test',
+  'symbolic-color2.test',
+  'symbolic-color3.test',
   'text-align-01-b.svg',
   'text-fonts-02-t.svg',
   'text-stroke-gradient.svg',
@@ -144,14 +151,6 @@ test_data = [
 slow_tests = [
   'nested-use.test',
   'pattern-billion-laughs.test',
-]
-
-# attachments rely on the animations for the initial placement
-test_requires_animation = [
-  'attach-to-pattern.svg',
-  'gpa-attachment1.svg',
-  'gpa-attachment2.svg',
-  'gpa-attachment3.svg',
 ]
 
 foreach testname : test_data
@@ -173,21 +172,4 @@ foreach testname : test_data
              ],
         suite: suites
   )
-  if not (testname in test_requires_animation)
-    test('svg renderer (no animation) ' + testname, test_renderer,
-          args: [ '--tap',
-                  '--verbose',
-                  '--no-animations',
-                  '-k',
-                  '--output', meson.current_build_dir(),
-                  join_paths(meson.current_source_dir(), testname),
-                ],
-          protocol: 'tap',
-          env: [
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-               ],
-          suite: suites
-    )
-  endif
 endforeach

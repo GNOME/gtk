@@ -1,0 +1,12 @@
+<svg width='100' height='100' gpa:version='1'>
+  <rect x='10' y='10' width='80' height='80'
+        fill='none' stroke='black'
+        stroke-width='2'
+        gpa:stroke-minwidth='1'
+        gpa:stroke-maxwidth='3'/>
+  <rect x='20' y='20' width='60' height='60'
+        fill='none' stroke='black'
+        stroke-width='2'
+        gpa:stroke-minwidth='2'
+        gpa:stroke-maxwidth='2'/>
+</svg>

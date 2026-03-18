@@ -1,0 +1,6 @@
+# class wins over style
+[test]
+input=symbolic-color3.svg
+reference=symbolic-color3.node
+symbolic=true
+colors=blue,red,green,white

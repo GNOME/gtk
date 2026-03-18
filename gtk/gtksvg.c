@@ -12294,6 +12294,9 @@ shape_free (gpointer data)
   if (shape->type == SHAPE_POLYLINE || shape->type == SHAPE_POLYGON)
     g_clear_pointer (&shape->path_for.polyline.points, svg_value_unref);
 
+  g_clear_pointer (&shape->gpa.fill, svg_value_unref);
+  g_clear_pointer (&shape->gpa.stroke, svg_value_unref);
+  g_clear_pointer (&shape->gpa.width, svg_value_unref);
   g_free (shape->gpa.attach.ref);
 
   _gtk_bitmask_free (shape->attrs);
@@ -17846,6 +17849,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       if (value)
         {
           shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+          shape->gpa.stroke = svg_value_ref (value);
           svg_value_unref (value);
         }
       else
@@ -17860,6 +17864,7 @@ parse_shape_gpa_attrs (Shape                *shape,
       if (value)
         {
           shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+          shape->gpa.fill = svg_value_ref (value);
           svg_value_unref (value);
         }
       else
@@ -17878,6 +17883,7 @@ parse_shape_gpa_attrs (Shape                *shape,
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MINWIDTH, 0, values[0]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, values[1]);
           shape_set_base_value (shape, SHAPE_ATTR_STROKE_MAXWIDTH, 0, values[2]);
+          shape->gpa.width = svg_value_ref (values[1]);
         }
       else
         {
@@ -20157,8 +20163,7 @@ apply_styles_to_shape (Shape      *shape,
    * CSS and styles, so that these take precedence.
    */
   if (data->svg->gpa_version == 0 &&
-      (((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0) ||
-       (((data->svg->features & GTK_SVG_EXTENSIONS) != 0) && shape->classes)))
+      ((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0))
     {
       SvgValue *value;
       gboolean has_stroke;
@@ -20181,9 +20186,7 @@ apply_styles_to_shape (Shape      *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) ||
-          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-        shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+      shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
       svg_value_unref (value);
 
       if (!shape->classes)
@@ -20200,38 +20203,36 @@ apply_styles_to_shape (Shape      *shape,
         value = svg_paint_new_none ();
 
       has_stroke = !svg_value_equal (value, svg_paint_new_none ());
-
-      if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) ||
-          (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-        shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+      shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
       svg_value_unref (value);
 
       if (has_stroke)
         {
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_WIDTH) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_number_new (2);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
-              svg_value_unref (value);
-            }
+          value = svg_number_new (2);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, value);
+          svg_value_unref (value);
 
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINEJOIN) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
-              svg_value_unref (value);
-            }
+          value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINEJOIN, 0, value);
+          svg_value_unref (value);
 
-          if (!_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE_LINECAP) ||
-              (data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC))
-            {
-              value = svg_linecap_new (GSK_LINE_CAP_ROUND);
-              shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
-              svg_value_unref (value);
-            }
+          value = svg_linecap_new (GSK_LINE_CAP_ROUND);
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE_LINECAP, 0, value);
+          svg_value_unref (value);
         }
+    }
+
+  /* gpa attrs are supported to have higher priority than
+   * style and CSS, so re-set them here
+   */
+  if (data->svg->gpa_version > 0)
+    {
+      if (shape->gpa.fill)
+        shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, shape->gpa.fill);
+      if (shape->gpa.stroke)
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, shape->gpa.stroke);
+      if (shape->gpa.width)
+        shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, shape->gpa.width);
     }
 
   /* Now that styles have been applied, we can determine this */

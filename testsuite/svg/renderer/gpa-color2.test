@@ -1,0 +1,5 @@
+# style > css > presentation
+[test]
+input=gpa-color2.svg
+reference=gpa-color2.node
+colors=red
