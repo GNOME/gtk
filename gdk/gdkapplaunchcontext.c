@@ -241,7 +241,7 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
  * Sets the workspace on which applications will be launched when
  * using this context when running under a window manager that
  * supports multiple workspaces, as described in the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec).
+ * [Extended Window Manager Hints](https://specifications.freedesktop.org/wm/latest/).
  *
  * When the workspace is not specified or @desktop is set to -1,
  * it is up to the window manager to pick one, typically it will

@@ -228,7 +228,7 @@ typedef enum
  * Defines the reference point of a window and the meaning of coordinates
  * passed to gtk_window_move(). See gtk_window_move() and the "implementation
  * notes" section of the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
+ * [Extended Window Manager Hints](https://specifications.freedesktop.org/wm/latest/)
  * specification for more details.
  */
 typedef enum
