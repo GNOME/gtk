@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-07 17:14+0000\n"
-"PO-Revision-Date: 2026-03-06 09:20+0100\n"
+"POT-Creation-Date: 2026-03-15 13:10+0000\n"
+"PO-Revision-Date: 2026-03-18 07:56+0100\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -34,7 +34,7 @@ msgstr ""
 "X-DL-Module: gtk\n"
 "X-DL-State: None\n"
 "X-DL-Team: gl\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
@@ -197,7 +197,7 @@ msgstr "Tentando usar %s, pero %s xa está en uso"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Tentando usar %s, pero está desactivado mediante GDK_DISABLE"
 
-#: gdk/gdktexture.c:646
+#: gdk/gdktexture.c:679
 msgid "Unknown image format."
 msgstr "O formato de imaxe é descoñecido."
 
@@ -4999,24 +4999,20 @@ msgstr "É de nivel superior"
 msgid "Child Visible"
 msgstr "Fillo visíbel"
 
-#: gtk/inspector/misc-info.ui:685
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Optical Size"
-msgid "Intrinsic Size"
-msgstr "Tamaño óptico"
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:686
+msgid "Paintable Size"
+msgstr "Tamaño pintábel"
 
-#: gtk/inspector/misc-info.ui:710
-#, fuzzy
-#| msgid "Paintable Aspect Ratio"
-msgid "Intrinsic Aspect Ratio"
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:712
+msgid "Paintable Aspect Ratio"
 msgstr "Taxa de aspecto pintábel"
 
-#: gtk/inspector/misc-info.ui:735
-#, fuzzy
-#| msgid "Paintable Flags"
-msgid "GdkPaintable Flags"
-msgstr "Banderias imprimíbeis"
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:738
+msgid "Paintable Flags"
+msgstr "Bandeiras imprimíbeis"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -7639,6 +7635,29 @@ msgstr "Algunhas das configuracións do diálogo están en conflito"
 msgid "Play"
 msgstr "Reproducir"
 
+#: tools/encodesymbolic.c:42
+msgid "Output to this directory instead of cwd"
+msgstr "Saída a este directorio no lugar de cwd"
+
+#: tools/encodesymbolic.c:43
+msgid "Generate debug output"
+msgstr "Xerar a saída de depuración"
+
+#: tools/encodesymbolic.c:93
+#, c-format
+msgid "Invalid size %s\n"
+msgstr "Tamaño non válido «%s»\n"
+
+#: tools/encodesymbolic.c:107
+#, c-format
+msgid "Can’t load file: %s\n"
+msgstr "Non foi posíbel cargar o ficheiro: %s\n"
+
+#: tools/encodesymbolic.c:144
+#, c-format
+msgid "Can’t save file %s: %s\n"
+msgstr "Produciuse un erro ao gardar o ficheiro %s: %s\n"
+
 #: tools/gtk-builder-tool.c:36
 #, c-format
 msgid ""
@@ -8739,36 +8758,22 @@ msgstr "Mostrar o nodo renderizado."
 msgid "Can only preview a single .node file\n"
 msgstr "Só se pode previsualizar un único ficheiro .node\n"
 
-#. translators: invalid UTF8 in filename
-#: tools/gtk-tool-utils.c:47
-#, fuzzy
-#| msgctxt "Accelerator"
-#| msgid "Invalid"
-msgid "<invalid>"
-msgstr "Non válido"
-
-#: tools/gtk-tool-utils.c:60
-#, fuzzy, c-format
-#| msgid "Error at %s: %s\n"
-msgid "Warning at %s: %s\n"
-msgstr "Erro en %s: %s\n"
-
-#: tools/gtk-tool-utils.c:62
+#: tools/gtk-tool-utils.c:48
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Erro en %s: %s\n"
 
-#: tools/gtk-tool-utils.c:80
+#: tools/gtk-tool-utils.c:66
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "Produciuse un fallo ao cargar un ficheiro de nodo: %s\n"
 
-#: tools/gtk-tool-utils.c:106
+#: tools/gtk-tool-utils.c:87
 #, c-format
 msgid "%s is not a texture node\n"
 msgstr "%s non é un nodo de textura\n"
 
-#: tools/gtk-tool-utils.c:332
+#: tools/gtk-tool-utils.c:313
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "cicp deben ser 4 números, separados por /\n"
@@ -8881,26 +8886,22 @@ msgstr ""
 "Se está seguro de que quere crear unha caché de iconas aquí, use --ignore-"
 "theme-index.\n"
 
-#~ msgid "Paintable Size"
-#~ msgstr "Tamaño pintábel"
+#, fuzzy
+#~| msgctxt "Font variation axis"
+#~| msgid "Optical Size"
+#~ msgid "Intrinsic Size"
+#~ msgstr "Tamaño óptico"
 
-#~ msgid "Output to this directory instead of cwd"
-#~ msgstr "Saída a este directorio no lugar de cwd"
+#, fuzzy
+#~| msgctxt "Accelerator"
+#~| msgid "Invalid"
+#~ msgid "<invalid>"
+#~ msgstr "Non válido"
 
-#~ msgid "Generate debug output"
-#~ msgstr "Xerar a saída de depuración"
-
-#, c-format
-#~ msgid "Invalid size %s\n"
-#~ msgstr "Tamaño non válido «%s»\n"
-
-#, c-format
-#~ msgid "Can’t load file: %s\n"
-#~ msgstr "Non foi posíbel cargar o ficheiro: %s\n"
-
-#, c-format
-#~ msgid "Can’t save file %s: %s\n"
-#~ msgstr "Produciuse un erro ao gardar o ficheiro %s: %s\n"
+#, fuzzy, c-format
+#~| msgid "Error at %s: %s\n"
+#~ msgid "Warning at %s: %s\n"
+#~ msgstr "Erro en %s: %s\n"
 
 #~ msgid "Dark Variant"
 #~ msgstr "Variante escura"
