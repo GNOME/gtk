@@ -26,6 +26,7 @@
 
 #import "GdkMacosLayer.h"
 
+#include "gdkcolorstateprivate.h"
 #include "gdkmacosbuffer-private.h"
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacossurface-private.h"
@@ -197,20 +198,24 @@ create_texture (CGLContextObj cgl_context,
                 GLuint        target,
                 IOSurfaceRef  io_surface,
                 guint         width,
-                guint         height)
+                guint         height,
+                gboolean      hdr)
 {
   GLuint texture = 0;
+  GLenum internal_format = hdr ? GL_RGBA16F : GL_RGBA;
+  GLenum format          = hdr ? GL_RGBA    : GL_BGRA;
+  GLenum type            = hdr ? GL_HALF_FLOAT : GL_UNSIGNED_INT_8_8_8_8_REV;
 
   if (!CHECK_GL (NULL, glActiveTexture (GL_TEXTURE0)) ||
       !CHECK_GL (NULL, glGenTextures (1, &texture)) ||
       !CHECK_GL (NULL, glBindTexture (target, texture)) ||
       !CHECK (NULL, CGLTexImageIOSurface2D (cgl_context,
                                             target,
-                                            GL_RGBA,
+                                            internal_format,
                                             width,
                                             height,
-                                            GL_BGRA,
-                                            GL_UNSIGNED_INT_8_8_8_8_REV,
+                                            format,
+                                            type,
                                             io_surface,
                                             0)) ||
       !CHECK_GL (NULL, glTexParameteri (target, GL_TEXTURE_BASE_LEVEL, 0)) ||
@@ -275,7 +280,8 @@ gdk_macos_gl_context_allocate (GdkMacosGLContext *self)
        */
       CGLSetCurrentContext (self->cgl_context);
 
-      if (!(texture = create_texture (self->cgl_context, self->target, io_surface, width, height)) ||
+      if (!(texture = create_texture (self->cgl_context, self->target, io_surface, width, height,
+                                       _gdk_macos_buffer_get_hdr (buffer))) ||
           !CHECK_GL (NULL, glGenFramebuffers (1, &fbo)) ||
           !CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, fbo)) ||
           !CHECK_GL (NULL, glBindTexture (self->target, texture)) ||
@@ -504,6 +510,19 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext  *context,
   gdk_macos_gl_context_allocate (self);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, context_data, depth, region, out_color_state, out_depth);
+
+  /* The parent begin_frame (without EGL) defaults to sRGB/U8. Override
+   * with the surface's actual color state so HDR color states (rec2100-pq,
+   * rec2100-linear) propagate through to the GPU renderer, which will then
+   * render into our RGBA16F framebuffer with values > 1.0 for EDR.
+   */
+  {
+    GdkColorState *cs = gdk_surface_get_color_state (surface);
+    GdkMemoryDepth cs_depth = gdk_color_state_get_depth (cs);
+
+    *out_color_state = cs;
+    *out_depth = gdk_memory_depth_merge (depth, cs_depth);
+  }
 
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, self->fbo));

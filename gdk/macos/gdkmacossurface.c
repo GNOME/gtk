@@ -33,6 +33,7 @@
 #include "gdkeventsprivate.h"
 #include "gdkframeclockprivate.h"
 #include "gdkseatprivate.h"
+#include "gdkcolorstateprivate.h"
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdevice.h"
@@ -1104,16 +1105,18 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
 
   if (self->buffer == NULL)
     {
-      /* Create replacement buffer. We always use 4-byte and 32-bit BGRA for
-       * our surface as that can work with both Cairo and GL. The GdkMacosTile
-       * handles opaque regions for the compositor, so using 3-byte/24-bit is
-       * not a necessary optimization.
-       */
       double scale = gdk_surface_get_scale_factor (GDK_SURFACE (self));
       guint width = GDK_SURFACE (self)->width * scale;
       guint height = GDK_SURFACE (self)->height * scale;
 
-      self->buffer = _gdk_macos_buffer_new (width, height, scale, 4, 32, FALSE);
+      /* Check if the surface's color state requires HDR (float16) buffers.
+       * REC2100_PQ and REC2100_LINEAR use GDK_MEMORY_FLOAT16 depth and need
+       * a float16 IOSurface to carry values > 1.0 for EDR rendering.
+       */
+      GdkColorState *cs = gdk_surface_get_color_state (GDK_SURFACE (self));
+      gboolean hdr = (gdk_color_state_get_depth (cs) > GDK_MEMORY_U8);
+
+      self->buffer = _gdk_macos_buffer_new (width, height, scale, 4, 32, hdr);
     }
 
   return self->buffer;
