@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-09 12:34+0000\n"
-"PO-Revision-Date: 2026-03-11 23:01+0100\n"
+"POT-Creation-Date: 2026-03-13 01:18+0000\n"
+"PO-Revision-Date: 2026-03-13 10:33+0100\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -4975,7 +4975,7 @@ msgstr "Primul nivel"
 
 #: gtk/inspector/misc-info.ui:659
 msgid "Child Visible"
-msgstr "Inferior vizibil"
+msgstr "Copil vizibil"
 
 #: gtk/inspector/misc-info.ui:685
 msgid "Intrinsic Size"
@@ -7758,7 +7758,7 @@ msgid "Overwrite existing file"
 msgstr "Suprascrie fișierul existent"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:316
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -8036,36 +8036,40 @@ msgstr "Furnizează informații despre imagine."
 msgid "Can only accept a single image file\n"
 msgstr "Se poate accepta doar un singur fișier imagine\n"
 
-#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:309 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Nu adăuga o bară de titlu"
 
-#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:310 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "MĂRIME"
 
-#: tools/gtk-image-tool-play.c:310
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't run animations"
 msgstr "Nu reda animațiile"
 
-#: tools/gtk-image-tool-play.c:311
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't use system resources"
 msgstr "Nu folosi resursele sistemului"
 
-#: tools/gtk-image-tool-play.c:312
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't load external resources"
 msgstr "Nu încărca resurse externe"
 
-#: tools/gtk-image-tool-play.c:313
+#: tools/gtk-image-tool-play.c:314
 msgid "Don't allow gpa extensions"
 msgstr "Nu permite extensiile gpa"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:315
+msgid "Traditional symbolic icon"
+msgstr "Simbol simplu tradițional"
+
+#: tools/gtk-image-tool-play.c:326
 msgid "Show one or more animations."
 msgstr "Arată una sau mai multe animații."
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:339
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Nicio animație specificată\n"
