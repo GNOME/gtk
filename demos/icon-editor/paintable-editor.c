@@ -179,6 +179,20 @@ count_shapes (Shape    *shape,
 }
 
 static void
+update_metadata (PaintableEditor *self)
+{
+  if (self->paintable)
+    {
+      GtkSvg *svg = path_paintable_get_svg (self->paintable);
+
+      gtk_editable_set_text (GTK_EDITABLE (self->author), svg->author ? svg->author : "");
+      gtk_editable_set_text (GTK_EDITABLE (self->license), svg->license ? svg->license : "");
+      gtk_editable_set_text (GTK_EDITABLE (self->description), svg->description ? svg->description : "");
+      gtk_editable_set_text (GTK_EDITABLE (self->keywords), svg->keywords ? svg->keywords : "");
+    }
+}
+
+static void
 update_summary (PaintableEditor *self)
 {
   if (self->paintable)
@@ -258,6 +272,7 @@ changed (PaintableEditor *self)
   update_compat (self);
   update_size (self);
   update_viewbox (self);
+  update_metadata (self);
   update_summary (self);
   update_icon_paintable (self);
 }
@@ -548,6 +563,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
 
       create_shape_editors (self);
       update_summary (self);
+      update_metadata (self);
       update_size (self);
       update_viewbox (self);
       update_compat (self);
