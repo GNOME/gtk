@@ -659,7 +659,9 @@ static Shape *
 find_attach_shape (Shape *s,
                    Shape *from)
 {
-  if (s->type == SHAPE_SVG || s->type == SHAPE_GROUP)
+  if (s->type == SHAPE_SVG ||
+      s->type == SHAPE_GROUP ||
+      s->type == SHAPE_LINK)
     {
       for (unsigned int i = 0; i < s->shapes->len; i++)
         {
@@ -884,6 +886,7 @@ path_paintable_get_compatibility (PathPaintable *self)
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
         case SHAPE_SWITCH:
+        case SHAPE_LINK:
           compat = MAX (compat, GTK_4_22);
           continue;
         default:
@@ -968,6 +971,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
         case SHAPE_SWITCH:
+        case SHAPE_LINK:
           break;
         default:
           g_assert_not_reached ();
@@ -1028,7 +1032,9 @@ path_paintable_get_weight (PathPaintable *self)
 static unsigned int
 shape_get_max_state (Shape *shape)
 {
-  if (shape->type == SHAPE_GROUP || shape->type == SHAPE_SVG)
+  if (shape->type == SHAPE_GROUP ||
+      shape->type == SHAPE_LINK ||
+      shape->type == SHAPE_SVG)
     {
       unsigned int state = 0;
 
@@ -1203,6 +1209,7 @@ shape_is_graphical (Shape *shape)
     case SHAPE_FILTER:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -1232,6 +1239,7 @@ shape_has_children (Shape *shape)
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       return TRUE;
     case SHAPE_USE:
     case SHAPE_LINEAR_GRADIENT:
@@ -1274,6 +1282,7 @@ shape_has_gpa (Shape *shape)
     case SHAPE_PATTERN:
     case SHAPE_IMAGE:
     case SHAPE_FILTER:
+    case SHAPE_LINK:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -1351,7 +1360,9 @@ path_paintable_get_shape_by_id (PathPaintable *self,
 static unsigned int
 shape_count (Shape *shape)
 {
-  if (shape->type == SHAPE_SVG || shape->type == SHAPE_GROUP)
+  if (shape->type == SHAPE_SVG ||
+      shape->type == SHAPE_GROUP ||
+      shape->type == SHAPE_LINK)
     {
       unsigned int count = 0;
 

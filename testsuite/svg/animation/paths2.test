@@ -1,0 +1,8 @@
+# morphing a path with A and C
+input: paths2.svg
+time: 0
+output: paths2-0.svg
+time: 5000
+output: paths2-1.svg
+time: 10000
+output: paths2-2.svg

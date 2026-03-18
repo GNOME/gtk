@@ -141,9 +141,11 @@ test_data = [
   'text-text-03-b.svg',
   'text-text-10-t.svg',
   'transform-rotate.svg',
+  'transform-skew.svg',
   'use.svg',
   'use2.svg',
   'viewbox.svg',
+  'viewport.svg',
   'viewports.svg',
   'zero-length-path-stroke.svg',
 ]

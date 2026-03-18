@@ -10,3 +10,17 @@ color {
   bounds: 0 60 100 40;
   color: rgb(255,192,203);
 }
+clip {
+  clip: 0 105 100 33.3333;
+  child: color {
+    bounds: 0 105 100 33.3333;
+    color: rgb(255,192,203);
+  }
+}
+clip {
+  clip: 0 140 100 15.9996;
+  child: color {
+    bounds: 0 140 100 15.9996;
+    color: rgb(255,192,203);
+  }
+}

@@ -1,26 +1,29 @@
 clip {
   clip: 0 0 100 100;
-  child: transform {
-    transform: translate(0, 25) scale(0.25);
-    child: container {
-      stroke {
+  child: container {
+    transform {
+      transform: skewX(45);
+      child: stroke {
         child: color {
-          bounds: -0.5 -0.5 401 201;
+          bounds: 9.5 9.5 51 31;
           color: rgb(0,0,0);
         }
         path: "\
-M 0 0 h 400 v 200 h -400 z";
+M 10 10 h 50 v 30 h -50 z";
         line-width: 1;
         line-cap: butt;
         line-join: miter;
       }
-      stroke {
+    }
+    transform {
+      transform: skewY(30);
+      child: stroke {
         child: color {
-          bounds: 39.5 19.5 321 161;
+          bounds: 9.5 9.5 51 31;
           color: rgb(255,0,0);
         }
         path: "\
-M 40 20 h 320 v 160 h -320 z";
+M 10 10 h 50 v 30 h -50 z";
         line-width: 1;
         line-cap: butt;
         line-join: miter;

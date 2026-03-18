@@ -100,7 +100,7 @@
  * Among the graphical elements, `<textPath>` and `<foreignObject>`
  * are not supported.
  *
- * Among the structural elements, `<a>` and `<view>` are not supported.
+ * Among the structural elements, `<view>` is not supported.
  *
  * In the `<filter>` element, the following primitives are not
  * supported: feConvolveMatrix, feDiffuseLighting,
@@ -112,7 +112,8 @@
  * In animation elements, the parsing of `begin` and `end` attributes
  * is limited, and the `min` and `max` attributes are not supported.
  *
- * Lastly, there is no interactivity.
+ * Lastly, there is no interactivity, so links can't be activated
+ * and pseudo-classes like :hover have no effect in CSS.
  *
  *
  * ## SVG Extensions
@@ -4971,7 +4972,7 @@ DEFINE_ENUM_CUSTOM_RESOLVE (FONT_SIZE, font_size, FontSize, svg_font_size_resolv
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_SMALL,  "x-small"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_SMALL,    "small"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_MEDIUM,   "medium"),
-  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE,    "larger"),
+  DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_LARGE,    "large"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_X_LARGE,  "x-large"),
   DEFINE_ENUM_VALUE (FONT_SIZE, FONT_SIZE_XX_LARGE, "xx-large")
 )
@@ -10680,7 +10681,8 @@ typedef struct
    BIT (SHAPE_MARKER) | BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN) | \
    BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL) | \
    BIT (SHAPE_LINEAR_GRADIENT) | BIT (SHAPE_RADIAL_GRADIENT) | \
-   BIT (SHAPE_FILTER) | BIT (SHAPE_USE) | BIT (SHAPE_SWITCH))
+   BIT (SHAPE_FILTER) | BIT (SHAPE_USE) | BIT (SHAPE_SWITCH) | \
+   BIT (SHAPE_LINK))
 
 #define SHAPE_SHAPES \
   (BIT (SHAPE_CIRCLE) | BIT (SHAPE_ELLIPSE) | BIT (SHAPE_LINE) | \
@@ -10696,7 +10698,8 @@ typedef struct
 #define SHAPE_CONTAINERS \
   (BIT (SHAPE_CLIP_PATH) | BIT (SHAPE_DEFS) | BIT (SHAPE_GROUP) | \
    BIT (SHAPE_MARKER) | BIT (SHAPE_MASK) | BIT (SHAPE_PATTERN) | \
-   BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL) | BIT (SHAPE_SWITCH))
+   BIT (SHAPE_SVG) | BIT (SHAPE_SYMBOL) | BIT (SHAPE_SWITCH) | \
+   BIT (SHAPE_LINK))
 
 #define SHAPE_NEVER_RENDERED \
   (BIT (SHAPE_CLIP_PATH) | BIT (SHAPE_DEFS) | BIT (SHAPE_LINEAR_GRADIENT) | \
@@ -10913,7 +10916,7 @@ static ShapeAttribute shape_attrs[] = {
   },
   [SHAPE_ATTR_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
-    .applies_to = SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS,
+    .applies_to = SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS | BIT (SHAPE_LINK),
     .parse_value = svg_href_parse_url,
     .parse_presentation = svg_href_parse,
   },
@@ -11606,8 +11609,8 @@ static ShapeAttrLookup shape_attr_lookups[] = {
   { "mix-blend-mode", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRAPHICS_REF, 0, SHAPE_ATTR_BLEND_MODE },
   { "isolation", SHAPE_CONTAINERS | SHAPE_GRAPHICS | SHAPE_GRAPHICS_REF, 0, SHAPE_ATTR_ISOLATION },
   { "pathLength", SHAPE_SHAPES, 0, SHAPE_ATTR_PATH_LENGTH },
-  { "href", SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS, 0, SHAPE_ATTR_HREF },
-  { "xlink:href", SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS, 0, SHAPE_ATTR_HREF | DEPRECATED_BIT },
+  { "href", SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS | BIT (SHAPE_LINK), 0, SHAPE_ATTR_HREF },
+  { "xlink:href", SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS | BIT (SHAPE_LINK), 0, SHAPE_ATTR_HREF | DEPRECATED_BIT },
   { "overflow", SHAPE_ANY, 0, SHAPE_ATTR_OVERFLOW },
   { "vector-effect", SHAPE_GRAPHICS | BIT (SHAPE_USE), 0, SHAPE_ATTR_VECTOR_EFFECT },
   { "d", BIT (SHAPE_PATH), 0, SHAPE_ATTR_PATH },
@@ -12177,6 +12180,10 @@ static ShapeTypeInfo shape_types[] = {
     .name = "switch",
     .flags = SHAPE_TYPE_HAS_SHAPES,
   },
+  [SHAPE_LINK] = {
+    .name = "a",
+    .flags = SHAPE_TYPE_HAS_SHAPES,
+  },
 };
 
 static inline gboolean
@@ -12629,6 +12636,7 @@ shape_get_path (Shape                 *shape,
     case SHAPE_FILTER:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
       break;
     default:
@@ -12729,6 +12737,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
         case SHAPE_SWITCH:
+        case SHAPE_LINK:
           g_error ("Attempt to get the path of a %s", shape_types[shape->type].name);
           break;
         default:
@@ -12800,6 +12809,7 @@ shape_get_current_path (Shape                 *shape,
         case SHAPE_FILTER:
         case SHAPE_SYMBOL:
         case SHAPE_SWITCH:
+        case SHAPE_LINK:
         default:
           g_assert_not_reached ();
         }
@@ -12870,6 +12880,7 @@ shape_get_current_bounds (Shape                 *shape,
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       has_any = FALSE;
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -12991,6 +13002,7 @@ shape_get_current_stroke_bounds (Shape                 *shape,
     case SHAPE_SVG:
     case SHAPE_SYMBOL:
     case SHAPE_SWITCH:
+    case SHAPE_LINK:
       has_any = FALSE;
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -25639,6 +25651,7 @@ enum
   PROP_PLAYING,
   PROP_WEIGHT,
   PROP_STATE,
+  PROP_OVERFLOW,
   NUM_PROPERTIES,
 };
 
@@ -25729,6 +25742,10 @@ gtk_svg_get_property (GObject      *object,
       g_value_set_uint (value, self->state);
       break;
 
+    case PROP_OVERFLOW:
+      g_value_set_enum (value, self->overflow);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -25763,6 +25780,10 @@ gtk_svg_set_property (GObject      *object,
 
     case PROP_WEIGHT:
       gtk_svg_set_weight (self, g_value_get_double (value));
+      break;
+
+    case PROP_OVERFLOW:
+      gtk_svg_set_overflow (self, g_value_get_enum (value));
       break;
 
     default:
@@ -25855,6 +25876,18 @@ gtk_svg_class_init (GtkSvgClass *class)
   properties[PROP_STATE] =
     g_param_spec_uint ("state", NULL, NULL,
                        0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSvg:overflow:
+   *
+   * Whether the rendering will be clipped to the bounds.
+   *
+   * Since: 4.24
+   */
+  properties[PROP_OVERFLOW] =
+    g_param_spec_enum ("overflow", NULL, NULL,
+                       GTK_TYPE_OVERFLOW, GTK_OVERFLOW_HIDDEN,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
@@ -27204,7 +27237,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->n_state_names = 0;
 }
 
-/*< private >
+/**
  * gtk_svg_set_overflow:
  * @self: an SVG paintable
  * @overflow: the new overflow value
@@ -27212,9 +27245,11 @@ gtk_svg_clear_content (GtkSvg *self)
  * Sets whether the rendering will be clipped
  * to the bounds.
  *
- * Clipping is expected for [interface@Gdk.Paintable]
+ * Clipping is expected for [iface@Gdk.Paintable]
  * semantics, so this property should not be
  * changed when using a `GtkSvg` as a paintable.
+ *
+ * Since: 4.24
  */
 void
 gtk_svg_set_overflow (GtkSvg      *self,
@@ -27227,15 +27262,19 @@ gtk_svg_set_overflow (GtkSvg      *self,
 
   self->overflow = overflow;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OVERFLOW]);
 }
 
-/*< private >
+/**
  * gtk_svg_get_overflow:
  * @self: an SVG paintable
  *
  * Gets the current overflow value.
  *
  * Returns: the current overflow value
+ *
+ * Since: 4.24
  */
 GtkOverflow
 gtk_svg_get_overflow (GtkSvg *self)
@@ -27987,3 +28026,4 @@ gtk_svg_error_get_end (const GError *error)
 /* }}} */
 
 /* vim:set foldmethod=marker: */
+

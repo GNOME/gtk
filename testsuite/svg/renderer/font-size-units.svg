@@ -10,5 +10,9 @@
   </defs>
     <use href='#demo' x='0' y='0' font-size='20px'/>
     <use href='#demo' x='0' y='25' font-size='30px'/>
-    <use href='#demo' x='0' y='60' font-size='40px'/>
+    <g font-size='40px'>
+      <use href='#demo' x='0' y='60'/>
+      <use href='#demo' x='0' y='105' font-size='smaller' font-weight='lighter'/>
+    </g>
+    <use href='#demo' x='0' y='140' font-size='large'/>
 </svg>
