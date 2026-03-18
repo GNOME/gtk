@@ -149,6 +149,14 @@ gdk_dmabuf_do_download_mmap (GdkTexture            *texture,
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
+      if (dmabuf->planes[i].fd == -1)
+        {
+          g_assert (i > 0);
+          src_data[i] = src_data[0];
+          sizes[i] = sizes[0];
+          continue;
+        }
+
       for (j = 0; j < i; j++)
         {
           if (dmabuf->planes[i].fd == dmabuf->planes[j].fd)
@@ -380,7 +388,6 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 2;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = dest->planes[0].stride * 2;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
           }
@@ -391,10 +398,8 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 3;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = (dest->planes[0].stride + 3) / 4;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
-            dest->planes[2].fd = dest->planes[1].fd;
             dest->planes[2].stride = dest->planes[1].stride;
             dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * ((height + 3) / 4);
           }
@@ -405,10 +410,8 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 3;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = (dest->planes[0].stride + 3) / 4;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
-            dest->planes[2].fd = dest->planes[1].fd;
             dest->planes[2].stride = dest->planes[1].stride;
             dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
           }
@@ -419,10 +422,8 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 3;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = (dest->planes[0].stride + 1) / 2;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
-            dest->planes[2].fd = dest->planes[1].fd;
             dest->planes[2].stride = dest->planes[1].stride;
             dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * ((height + 1) / 2);
           }
@@ -433,10 +434,8 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 3;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = (dest->planes[0].stride + 1) / 2;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
-            dest->planes[2].fd = dest->planes[1].fd;
             dest->planes[2].stride = dest->planes[1].stride;
             dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
           }
@@ -447,10 +446,8 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
         if (dest->n_planes == 1)
           {
             dest->n_planes = 3;
-            dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = dest->planes[0].stride;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
-            dest->planes[2].fd = dest->planes[1].fd;
             dest->planes[2].stride = dest->planes[1].stride;
             dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
           }
@@ -484,6 +481,9 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
 
   for (i = 1; i < dmabuf->n_planes; i++)
     {
+      if (dmabuf->planes[i].fd == -1)
+        continue;
+
       if (dmabuf->planes[0].fd != dmabuf->planes[i].fd)
         break;
     }
@@ -499,6 +499,9 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
   for (i = 1; i < dmabuf->n_planes; i++)
     {
       struct stat plane_stat;
+
+      if (dmabuf->planes[i].fd == -1)
+        continue;
 
       if (fstat (dmabuf->planes[i].fd, &plane_stat) != 0)
         return TRUE;
@@ -648,6 +651,9 @@ gdk_dmabuf_close_fds (GdkDmabuf *dmabuf)
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
+      if (dmabuf->planes[i].fd == -1)
+        continue;
+
       for (j = 0; j < i; j++)
         {
           if (dmabuf->planes[i].fd == dmabuf->planes[j].fd)
