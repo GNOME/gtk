@@ -20143,9 +20143,9 @@ apply_styles_here (Shape        *shape,
 
   set = _gtk_bitmask_new ();
 
-  for (unsigned int i = data->rulesets->len; i > 0; i--)
+  for (unsigned int i = 0; i < data->rulesets->len; i++)
     {
-      SvgCssRuleset *r = &g_array_index (data->rulesets, SvgCssRuleset, i - 1);
+      SvgCssRuleset *r = &g_array_index (data->rulesets, SvgCssRuleset, i);
       if (gtk_css_selector_matches (r->selector, node))
         apply_ruleset_to_shape (r, shape, idx, set, data);
     }
