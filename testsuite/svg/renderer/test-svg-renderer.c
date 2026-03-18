@@ -426,9 +426,6 @@ read_test_data (GFile    *file,
   gboolean symbolic;
   char *string;
 
-  animations = TRUE;
-  symbolic = FALSE;
-
   args = g_key_file_new ();
   g_key_file_load_from_file (args, g_file_peek_path (file), G_KEY_FILE_NONE, &err);
   g_assert_no_error (err);
@@ -443,15 +440,24 @@ read_test_data (GFile    *file,
 
   animations = g_key_file_get_boolean (args, "test", "animations", &err);
   if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    g_clear_error (&err);
+    {
+      animations = TRUE;
+      g_clear_error (&err);
+    }
 
   symbolic = g_key_file_get_boolean (args, "test", "symbolic", &err);
   if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    g_clear_error (&err);
+    {
+      symbolic = FALSE;
+      g_clear_error (&err);
+    }
 
   string = g_key_file_get_string (args, "test", "colors", &err);
   if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    g_clear_error (&err);
+    {
+      data->n_colors = 0;
+      g_clear_error (&err);
+    }
   else
     {
       GStrv strv = g_strsplit (string, ",", 0);
@@ -469,7 +475,10 @@ read_test_data (GFile    *file,
 
   data->weight = g_key_file_get_double (args, "test", "weight", &err);
   if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-    g_clear_error (&err);
+    {
+      data->weight = -1;
+      g_clear_error (&err);
+    }
 
   g_key_file_unref (args);
 

@@ -1,0 +1,5 @@
+# just a gpa attribute
+[test]
+input=gpa-color1.svg
+reference=gpa-color1.node
+colors=red

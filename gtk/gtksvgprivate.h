@@ -399,6 +399,9 @@ struct _Shape
   GArray *text;
 
   struct {
+    SvgValue *fill;
+    SvgValue *stroke;
+    SvgValue *width;
     uint64_t states;
     GpaTransition transition;
     GpaEasing transition_easing;

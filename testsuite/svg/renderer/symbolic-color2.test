@@ -1,0 +1,6 @@
+# class wins over presentation attrs
+[test]
+input=symbolic-color2.svg
+reference=symbolic-color2.node
+symbolic=true
+colors=blue,red,green,white
