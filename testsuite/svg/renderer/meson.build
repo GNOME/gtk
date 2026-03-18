@@ -129,6 +129,7 @@ test_data = [
   'spec-ellipse.svg',
   'spec-opacity.svg',
   'spec-rect.svg',
+  'stroke-width.test',
   'style.svg',
   'symbol.svg',
   'symbolic-color1.test',

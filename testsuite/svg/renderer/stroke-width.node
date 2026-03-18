@@ -1,0 +1,22 @@
+stroke {
+  child: color {
+    bounds: 8.5 8.5 83 83;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 10 10 h 80 v 80 h -80 z";
+  line-width: 3;
+  line-cap: butt;
+  line-join: miter;
+}
+stroke {
+  child: color {
+    bounds: 19 19 62 62;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 20 20 h 60 v 60 h -60 z";
+  line-width: 2;
+  line-cap: butt;
+  line-join: miter;
+}
