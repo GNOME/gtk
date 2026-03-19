@@ -13468,17 +13468,9 @@ time_spec_update_for_state (TimeSpec     *spec,
 {
   if (spec->type == TIME_SPEC_TYPE_STATES && previous_state != state)
     {
-      int64_t time;
-
-      time = spec->time;
-
       if (state_match (spec->states.from & ~spec->states.to, previous_state) &&
           state_match (spec->states.to & ~spec->states.from, state))
-        time = state_start_time + spec->offset;
-      else
-        time = INDEFINITE;
-
-      time_spec_set_time (spec, time);
+        time_spec_set_time (spec, state_start_time + spec->offset);
     }
 }
 
@@ -14713,7 +14705,7 @@ animation_update_for_spec (Animation *a,
 
           if (a->current.begin != time)
             {
-              dbg_print ("times", "Current start time of %s now %s\n", a->id, format_time (time));
+              dbg_print ("times", "current start time of %s now %s\n", a->id, format_time (time));
               a->current.begin = time;
               changed = TRUE;
 
@@ -15721,7 +15713,7 @@ create_path_length (Shape    *shape,
 
   a->attr = SHAPE_ATTR_PATH_LENGTH;
 
-  a->id = g_strdup_printf ("gpa:path-length");
+  a->id = g_strdup_printf ("gpa:path-length:%s", shape->id);
   begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
   end = animation_add_end (a, timeline_get_end_of_time (timeline));
   time_spec_add_animation (begin, a);

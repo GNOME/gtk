@@ -64,7 +64,9 @@
             dur='-250ms'
             repeatDur='-250ms'
             to='0.5'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:current-start-time='500ms'
+            gpa:current-end-time='250ms'/>
     <set
             id='gpa:transition:fade-in-delay:stroke-dashoffset:line1'
             attributeName='stroke-dashoffset'
@@ -76,7 +78,7 @@
             gpa:current-start-time='750ms'
             gpa:current-end-time='500ms'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line1'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
@@ -141,7 +143,9 @@
             dur='-250ms'
             repeatDur='-250ms'
             to='0.5'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:current-start-time='250ms'
+            gpa:current-end-time='0ms'/>
     <set
             id='gpa:transition:fade-out-delay:stroke-dashoffset:line2'
             attributeName='stroke-dashoffset'
@@ -153,7 +157,7 @@
             gpa:current-start-time='1000ms'
             gpa:current-end-time='750ms'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line2'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'

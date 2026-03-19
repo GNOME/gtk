@@ -82,7 +82,7 @@
             calcMode='spline'
             gpa:status='inactive'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
@@ -154,7 +154,7 @@
       <mpath href='line'/>
     </animateMotion>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:red'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
