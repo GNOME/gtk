@@ -126,6 +126,7 @@ test_data = [
   'serialize-bad-font.svg',
   'simple-shapes.svg',
   'size-units.svg',
+  'specificity.svg',
   'spec-ellipse.svg',
   'spec-opacity.svg',
   'spec-rect.svg',
