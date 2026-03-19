@@ -44,7 +44,7 @@
             gpa:status='running'
             gpa:current-start-time='0ms'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:red'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'

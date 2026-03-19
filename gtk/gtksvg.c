@@ -15721,7 +15721,7 @@ create_path_length (Shape    *shape,
 
   a->attr = SHAPE_ATTR_PATH_LENGTH;
 
-  a->id = g_strdup_printf ("gpa:path-length");
+  a->id = g_strdup_printf ("gpa:path-length:%s", shape->id);
   begin = animation_add_begin (a, timeline_get_start_of_time (timeline));
   end = animation_add_end (a, timeline_get_end_of_time (timeline));
   time_spec_add_animation (begin, a);

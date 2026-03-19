@@ -78,7 +78,7 @@
             to='0.5'
             gpa:status='inactive'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line1'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
@@ -153,7 +153,7 @@
             to='0.5'
             gpa:status='inactive'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line2'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'

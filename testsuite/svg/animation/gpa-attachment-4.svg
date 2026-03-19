@@ -59,7 +59,7 @@
             gpa:current-start-time='2000ms'
             gpa:current-end-time='3000ms'/>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:line'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
@@ -133,7 +133,7 @@
       <mpath href='line'/>
     </animateMotion>
     <set
-            id='gpa:path-length'
+            id='gpa:path-length:red'
             attributeName='pathLength'
             begin='0ms'
             end='indefinite'
