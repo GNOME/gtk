@@ -54,8 +54,8 @@
  *
  * `GtkEmojiChooser` supports the following keyboard shortcuts:
  *
- * - <kbd>Ctrl</kbd>+<kbd>N</kbd> scrolls th the next section.
- * - <kbd>Ctrl</kbd>+<kbd>P</kbd> scrolls th the previous section.
+ * - <kbd>Ctrl</kbd>+<kbd>N</kbd> scrolls to the next section.
+ * - <kbd>Ctrl</kbd>+<kbd>P</kbd> scrolls to the previous section.
  *
  * # Actions
  *
