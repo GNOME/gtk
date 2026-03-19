@@ -327,7 +327,9 @@ gtk_svg_location_init (GtkSvgLocation      *location,
   location->lines = lines;
   location->line_chars = chars;
 #if GLIB_CHECK_VERSION (2, 88, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   location->bytes = g_markup_parse_context_get_offset (context);
+G_GNUC_END_IGNORE_DEPRECATIONS
 #else
   location->bytes = 0;
 #endif
