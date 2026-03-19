@@ -1,0 +1,19 @@
+color {
+  bounds: 0 0 100 200;
+  color: rgb(0,0,0);
+}
+transform {
+  transform: translate(50, 50) scale(2) rotate(45);
+  child: rounded-clip {
+    clip: 0 36 50 50;
+    child: transform {
+      transform: rotate(315);
+      child: linear-gradient {
+        bounds: 0 0 50 50;
+        start: 0 0;
+        end: 0 50;
+        stops: 0 color(srgb 0.667 1 0), 1 rgb(255,0,204);
+      }
+    }
+  }
+}
