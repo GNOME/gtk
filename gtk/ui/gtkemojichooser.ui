@@ -17,6 +17,7 @@
                 <property name="hexpand">1</property>
                 <signal name="search-changed" handler="search_changed"/>
                 <signal name="stop-search" handler="stop_search"/>
+                <signal name="activate" handler="activate_search" object="GtkEmojiChooser" swapped="yes"/>
               </object>
             </child>
           </object>
