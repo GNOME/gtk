@@ -893,7 +893,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   GdkDisplay *display;
   char *vertex_shader_name, *fragment_shader_name;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
-  const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR" };
+  const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR", "MASK", "MASK-ONE", "MASK-ALPHA", "MASK-INV-ALPHA" };
 
   cache_key = (PipelineCacheKey) {
     .vk_layout = vk_layout,
@@ -1051,7 +1051,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                           flags,
                           color_states, 
                           variation,
-                          blend_name[blend],
+                          blend >= G_N_ELEMENTS (blend_name) ? "FIX THE BLEND NAMES ARRAY!" : blend_name[blend],
                           vk_format);
 
   GSK_DEBUG (SHADERS,
@@ -1060,7 +1060,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
              flags,
              color_states, 
              variation,
-             blend_name[blend],
+             blend >= G_N_ELEMENTS (blend_name) ? "FIX THE BLEND NAMES ARRAY!" : blend_name[blend],
              vk_format);
 
   g_free (fragment_shader_name);
