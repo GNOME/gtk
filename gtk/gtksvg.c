@@ -13468,17 +13468,9 @@ time_spec_update_for_state (TimeSpec     *spec,
 {
   if (spec->type == TIME_SPEC_TYPE_STATES && previous_state != state)
     {
-      int64_t time;
-
-      time = spec->time;
-
       if (state_match (spec->states.from & ~spec->states.to, previous_state) &&
           state_match (spec->states.to & ~spec->states.from, state))
-        time = state_start_time + spec->offset;
-      else
-        time = INDEFINITE;
-
-      time_spec_set_time (spec, time);
+        time_spec_set_time (spec, state_start_time + spec->offset);
     }
 }
 
