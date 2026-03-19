@@ -56,6 +56,7 @@
  *
  * - <kbd>Ctrl</kbd>+<kbd>N</kbd> scrolls to the next section.
  * - <kbd>Ctrl</kbd>+<kbd>P</kbd> scrolls to the previous section.
+ * - <kbd>Enter</kbd> to select the first emoji result.
  *
  * # Actions
  *
@@ -269,6 +270,26 @@ gtk_emoji_chooser_dispose (GObject *object)
   gtk_widget_dispose_template (GTK_WIDGET (object), GTK_TYPE_EMOJI_CHOOSER);
 
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->dispose (object);
+}
+
+static void
+activate_first_result (GtkEmojiChooser *chooser,
+                       GtkFlowBox      *flow_box)
+{
+  GtkFlowBoxChild *emoji_child;
+  guint i;
+
+  i = 0;
+  while ((emoji_child = gtk_flow_box_get_child_at_index (flow_box, i)) != NULL)
+    {
+      if (gtk_widget_get_mapped (GTK_WIDGET (emoji_child)))
+        {
+          gtk_widget_grab_focus (GTK_WIDGET (emoji_child));
+          gtk_widget_activate_action (GTK_WIDGET (flow_box), "default.activate", NULL);
+          return;
+        }
+      i++;
+    }
 }
 
 static void
@@ -995,6 +1016,42 @@ stop_search (GtkEntry *entry,
   gtk_popover_popdown (GTK_POPOVER (data));
 }
 
+
+
+static void
+activate_search (GtkEmojiChooser *chooser,
+                 GtkEntry        *entry,
+                 gpointer         data)
+{
+  if (chooser->recent.empty && chooser->people.empty &&
+      chooser->body.empty && chooser->nature.empty &&
+      chooser->food.empty && chooser->travel.empty &&
+      chooser->activities.empty && chooser->objects.empty &&
+      chooser->symbols.empty && chooser->flags.empty)
+    return;
+
+  if (!chooser->recent.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->recent.box));
+  else if (!chooser->people.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->people.box));
+  else if (!chooser->body.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->body.box));
+  else if (!chooser->nature.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->nature.box));
+  else if (!chooser->food.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->food.box));
+  else if (!chooser->travel.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->travel.box));
+  else if (!chooser->activities.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->activities.box));
+  else if (!chooser->objects.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->objects.box));
+  else if (!chooser->symbols.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->symbols.box));
+  else if (!chooser->flags.empty)
+    activate_first_result (chooser, GTK_FLOW_BOX (chooser->flags.box));
+}
+
 static void
 setup_section (GtkEmojiChooser *chooser,
                EmojiSection    *section,
@@ -1376,6 +1433,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, emoji_activated);
   gtk_widget_class_bind_template_callback (widget_class, search_changed);
   gtk_widget_class_bind_template_callback (widget_class, stop_search);
+  gtk_widget_class_bind_template_callback (widget_class, activate_search);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, keynav_failed);
