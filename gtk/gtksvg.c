@@ -14713,7 +14713,7 @@ animation_update_for_spec (Animation *a,
 
           if (a->current.begin != time)
             {
-              dbg_print ("times", "Current start time of %s now %s\n", a->id, format_time (time));
+              dbg_print ("times", "current start time of %s now %s\n", a->id, format_time (time));
               a->current.begin = time;
               changed = TRUE;
 
