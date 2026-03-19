@@ -372,10 +372,6 @@ update_filter_language_idle (gpointer user_data)
           const char *lang_str = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
           gtk_font_chooser_widget_set_language (self, lang_str);
         }
-      else
-        {
-          _gtk_font_filter_set_language (self->user_filter, NULL);
-        }
     }
 
   g_object_unref (self);
@@ -787,14 +783,55 @@ update_key_capture (GtkWidget *chooser)
 static void
 gtk_font_chooser_widget_map (GtkWidget *widget)
 {
-  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);   
-  gtk_widget_set_sensitive (GTK_WIDGET (fontchooser->language_frame), FALSE);
-  gtk_check_button_set_active (fontchooser->language_button, FALSE);
-  gtk_single_selection_set_selected (fontchooser->language_selection, GTK_INVALID_LIST_POSITION);
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
+  PangoLanguage *language;
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->map (widget);
+
+  language = _gtk_font_filter_get_language (fontchooser->user_filter);
+
+  if (language)
+    {
+      GListModel *model;
+      guint n_items, i;
+      const char *lang_str;
+
+      if (!g_hash_table_contains (fontchooser->language_table, language))
+        {
+          g_hash_table_add (fontchooser->language_table, language);
+          gtk_string_list_append (fontchooser->languages, pango_language_to_string (language));
+        }
+      
+      gtk_widget_set_sensitive (GTK_WIDGET (fontchooser->language_frame), TRUE);
+      gtk_check_button_set_active (fontchooser->language_button, TRUE);
+
+      model = gtk_single_selection_get_model (fontchooser->language_selection);
+      n_items = g_list_model_get_n_items (model);
+      lang_str = pango_language_to_string (language);
+
+      for (i = 0; i < n_items; i++)
+        {
+          GtkStringObject *obj = g_list_model_get_item (model, i);
+          const char *str = gtk_string_object_get_string (obj);
+          if (g_strcmp0 (str, lang_str) == 0)
+            {
+              gtk_single_selection_set_selected (fontchooser->language_selection, i);
+              g_object_unref (obj);
+              break;
+            }
+          g_object_unref (obj);
+        }
+    }
+  else
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (fontchooser->language_frame), FALSE);
+      gtk_check_button_set_active (fontchooser->language_button, FALSE);
+      gtk_single_selection_set_selected (fontchooser->language_selection, GTK_INVALID_LIST_POSITION);
+    }
+
   gtk_editable_set_text (GTK_EDITABLE (fontchooser->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->stack), "list");
   g_simple_action_set_state (G_SIMPLE_ACTION (fontchooser->tweak_action), g_variant_new_boolean (FALSE));
-  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->map (widget);
   update_key_capture (widget);
 }
 
@@ -1025,7 +1062,7 @@ add_languages_from_font (GtkFontChooserWidget *self,
   PangoFont *font;
   PangoContext *context;
   GtkSelectionModel *model = gtk_list_view_get_model (GTK_LIST_VIEW (self->language_list));
-  PangoLanguage *default_lang = pango_language_get_default ();
+  PangoLanguage *default_lang = self->language;
   PangoLanguage **langs;
   int i;
 
@@ -3030,6 +3067,28 @@ gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
   g_object_notify (G_OBJECT (fontchooser), "language");
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
+  
+  if (fontchooser->language_selection)
+    {
+      guint i, n_items;
+      
+      n_items = g_list_model_get_n_items (G_LIST_MODEL (fontchooser->language_filtered_model));
+      for (i = 0; i < n_items; i++)
+        {
+          GtkStringObject *obj = g_list_model_get_item (G_LIST_MODEL (fontchooser->language_filtered_model), i);
+          if (obj)
+            {
+              const char *code = gtk_string_object_get_string (obj);
+              if (g_strcmp0 (code, language) == 0)
+                {
+                  gtk_single_selection_set_selected (fontchooser->language_selection, i);
+                  g_object_unref (obj);
+                  break;
+                }
+              g_object_unref (obj);
+            }
+        }
+    }
 }
 
 static void
