@@ -858,36 +858,14 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
       {
         GskGpuRenderPassTransformStorage storage;
 
-        if (!gsk_gpu_render_pass_push_transform (self,
-                                                 transform,
-                                                 &node->bounds,
-                                                 &child->bounds,
-                                                 &storage))
-          {
-            GskGpuImage *image;
-            graphene_rect_t tex_rect;
-            /* This cannot loop because the next time we'll hit the branch above */
-            image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
-                                                                        0,
-                                                                        NULL,
-                                                                        node,
-                                                                        &tex_rect);
-            if (image != NULL)
-              {
-                gsk_gpu_node_processor_image_op (self,
-                                                 image,
-                                                 self->ccs,
-                                                 GSK_GPU_SAMPLER_DEFAULT,
-                                                 &node->bounds,
-                                                 &tex_rect);
-                g_object_unref (image);
-              }
-            return;
-          }
-
-          if (!gsk_gpu_render_pass_is_all_clipped (self))
-            gsk_gpu_node_processor_add_node (self, child, 0);
-          gsk_gpu_render_pass_pop_transform (self, &storage);
+        gsk_gpu_render_pass_push_transform (self,
+                                            transform,
+                                            &node->bounds,
+                                            &child->bounds,
+                                            &storage);
+        if (!gsk_gpu_render_pass_is_all_clipped (self))
+          gsk_gpu_node_processor_add_node (self, child, 0);
+        gsk_gpu_render_pass_pop_transform (self, &storage);
       }
       break;
 

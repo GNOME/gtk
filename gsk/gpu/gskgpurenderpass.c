@@ -412,7 +412,15 @@ extract_scale_from_transform (GskTransform *transform,
     }
 }
 
-gboolean
+static void
+gsk_gpu_render_pass_draw_clip_mask (GskGpuRenderPass            *self,
+                                    const graphene_rect_t       *new_clip_rect,
+                                    const GskRoundedRect        *new_clip_rounded,
+                                    GskGpuImage                 *new_clip_mask,
+                                    const graphene_rect_t       *new_clip_mask_rect,
+                                    GskGpuRenderPassClipStorage *storage);
+
+void
 gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                                     GskTransform                     *transform,
                                     const graphene_rect_t            *bounds,
@@ -422,8 +430,8 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
   storage->modelview = self->modelview;
   storage->scale = self->scale;
   storage->offset = self->offset;
-  gsk_gpu_clip_init_copy (&storage->clip, &self->clip);
-  storage->modified = 0;
+  gsk_gpu_clip_init_copy (&storage->clip.clip, &self->clip);
+  storage->clip.modified = 0;
 
   switch (gsk_transform_get_fine_category (transform))
     {
@@ -437,13 +445,13 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         float dx, dy, scale_x, scale_y;
 
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        gsk_gpu_clip_scale (&self->clip, &storage->clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
+        gsk_gpu_clip_scale (&self->clip, &storage->clip.clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
         graphene_vec2_init (&self->scale, scale_x, scale_y);
         graphene_vec2_multiply (&self->scale, &storage->scale, &self->scale);
         self->modelview = gsk_transform_ref (storage->modelview);
-        storage->modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+        storage->clip.modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
       }
       break;
 
@@ -456,7 +464,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
         inverted = gdk_dihedral_invert (dihedral);
         gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
-        gsk_gpu_clip_scale (&self->clip, &storage->clip, inverted, scale_x, scale_y);
+        gsk_gpu_clip_scale (&self->clip, &storage->clip.clip, inverted, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
         self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
@@ -467,7 +475,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                             fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
                             fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
         self->modelview = gsk_transform_dihedral (gsk_transform_ref (storage->modelview), dihedral);
-        storage->modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MATRIX;
+        storage->clip.modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MATRIX;
       }
       break;
 
@@ -484,19 +492,24 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
           {
             gsk_gpu_clip_init_contained (&self->clip, child_bounds);
           }
-        else if (storage->clip.type == GSK_GPU_CLIP_NONE)
+        else 
           {
             GskTransform *inverse;
             graphene_rect_t new_bounds;
-            inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
-            gsk_transform_transform_bounds (inverse, &storage->clip.rect.bounds, &new_bounds);
-            gsk_transform_unref (inverse);
-            gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &new_bounds);
-          }
-        else if (!gsk_gpu_clip_transform (&self->clip, &storage->clip, clip_transform, child_bounds))
-          {
-            gsk_transform_unref (clip_transform);
-            return FALSE;
+
+            if (storage->clip.clip.type != GSK_GPU_CLIP_NONE)
+              {
+                gsk_gpu_render_pass_draw_clip_mask (self, NULL, NULL, NULL, NULL, &storage->clip);
+              }
+            if (!gsk_gpu_clip_is_all_clipped (&self->clip))
+              {
+                /* after drawing a clip mask, the clip is either empty or everything is clipped */
+                g_assert (self->clip.type == GSK_GPU_CLIP_NONE);
+                inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
+                gsk_transform_transform_bounds (inverse, &storage->clip.clip.rect.bounds, &new_bounds);
+                gsk_transform_unref (inverse);
+                gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &new_bounds);
+              }
           }
 
         self->modelview = gsk_transform_scale (gsk_transform_ref (storage->modelview),
@@ -525,17 +538,20 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                                 fabs (scale_x * xy + scale_y * yy));
             g_clear_pointer (&self->modelview, gsk_transform_unref);
             self->modelview = gsk_transform_dihedral (NULL, dihedral);
-            self->clip.rect.bounds.origin.x += self->offset.x;
-            self->clip.rect.bounds.origin.y += self->offset.y;
-
-            /* We can now check the clip against the scissor rect again */
-            if (!gsk_gpu_render_pass_device_to_user (self, &self->scissor, &scissor_rect))
+            if (!gsk_gpu_clip_is_all_clipped (&self->clip))
               {
-                /* Only happens with more complex transforms */
-                g_assert_not_reached ();
+                self->clip.rect.bounds.origin.x += self->offset.x;
+                self->clip.rect.bounds.origin.y += self->offset.y;
+
+                /* We can now check the clip against the scissor rect again */
+                if (!gsk_gpu_render_pass_device_to_user (self, &self->scissor, &scissor_rect))
+                  {
+                    /* Only happens with more complex transforms */
+                    g_assert_not_reached ();
+                  }
+                if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &self->offset, &scissor_rect))
+                  gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
               }
-            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &self->offset, &scissor_rect))
-              gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
           }
         else
           {
@@ -543,8 +559,8 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
 
             extract_scale_from_transform (self->modelview, &scale_x, &scale_y);
 
-            old_pixels = MAX (graphene_vec2_get_x (&storage->scale) * storage->clip.rect.bounds.size.width,
-                              graphene_vec2_get_y (&storage->scale) * storage->clip.rect.bounds.size.height);
+            old_pixels = MAX (graphene_vec2_get_x (&storage->scale) * storage->clip.clip.rect.bounds.size.width,
+                              graphene_vec2_get_y (&storage->scale) * storage->clip.clip.rect.bounds.size.height);
             new_pixels = MAX (scale_x * self->clip.rect.bounds.size.width,
                               scale_y * self->clip.rect.bounds.size.height);
 
@@ -560,7 +576,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
             graphene_vec2_init (&self->scale, scale_x, scale_y);
             self->offset = GRAPHENE_POINT_INIT (0, 0);
           }
-        storage->modified = GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MATRIX;
+        storage->clip.modified |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_MATRIX;
       }
       break;
 
@@ -569,21 +585,18 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
       break;
     }
 
-  self->pending_globals |= storage->modified;
-
-  return TRUE;
+  self->pending_globals |= storage->clip.modified;
 }
 
 void
 gsk_gpu_render_pass_pop_transform (GskGpuRenderPass                 *self,
                                    GskGpuRenderPassTransformStorage *storage)
 {
+  gsk_gpu_render_pass_pop_clip_rect (self, &storage->clip);
   g_clear_pointer (&self->modelview, gsk_transform_unref);
   self->modelview = storage->modelview;
   self->scale = storage->scale;
   self->offset = storage->offset;
-  gsk_gpu_clip_init_copy (&self->clip, &storage->clip);
-  self->pending_globals |= storage->modified;
 }
 
 void
