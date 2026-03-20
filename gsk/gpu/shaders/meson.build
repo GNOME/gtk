@@ -125,7 +125,10 @@ foreach shader: gsk_private_gpu_shaders
           '-DGSK_VULKAN_HAS_CLIP_MASK',
           '-I'+meson.current_source_dir(),
           '-I'+meson.current_build_dir(),
-        ]
+        ],
+        fs.name (fs.replace_suffix (shader, '')) + '-clipmask.frag.hlsl',
+        [ '--stage', 'frag',
+        ],
       ],
     ]
     foreach option: shader_options
