@@ -193,6 +193,10 @@
  *
  *     fill='url(#gpa:warning) orange'
  *
+ * GtkSvg also allows to refer to symbolic colors like system colors
+ * in CSS, with names like SymbolicForeground, SymbolicSuccess, etc.
+ * These can be used whenever a color is required.
+ *
  * In contrast to SVG 1.1 and 2.0, we allow the `transform` attribute
  * to be animated with `<animate>`.
  *
@@ -6347,10 +6351,18 @@ svg_transform_distance (const SvgValue *value0,
 /* }}} */
 /* {{{ Color */
 
+typedef enum
+{
+  COLOR_CURRENT,
+  COLOR_SYMBOLIC,
+  COLOR_PLAIN,
+} ColorKind;
+
 typedef struct
 {
   SvgValue base;
-  gboolean current;
+  ColorKind kind;
+  GtkSymbolicColor symbolic;
   GdkColor color;
 } SvgColor;
 
@@ -6361,8 +6373,20 @@ svg_color_equal (const SvgValue *value0,
   const SvgColor *c0 = (const SvgColor *) value0;
   const SvgColor *c1 = (const SvgColor *) value1;
 
-  return c0->current == c1->current &&
-         gdk_color_equal (&c0->color, &c1->color);
+  if (c0->kind != c1->kind)
+    return FALSE;
+
+  switch (c0->kind)
+    {
+    case COLOR_CURRENT:
+      return TRUE;
+    case COLOR_SYMBOLIC:
+      return c0->symbolic == c1->symbolic;
+    case COLOR_PLAIN:
+      return gdk_color_equal (&c0->color, &c1->color);
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static SvgValue *svg_color_interpolate (const SvgValue *v0,
@@ -6387,8 +6411,8 @@ static void
 svg_color_free (SvgValue *value)
 {
   SvgColor *color = (SvgColor *) value;
-
-  gdk_color_finish (&color->color);
+  if (color->kind == COLOR_PLAIN)
+    gdk_color_finish (&color->color);
   g_free (color);
 }
 
@@ -6403,13 +6427,39 @@ static const SvgValueClass SVG_COLOR_CLASS = {
   svg_color_resolve,
 };
 
-static SvgColor black_color_value =
-  { { &SVG_COLOR_CLASS, 0 }, .current = 0, { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } };
+static SvgColor static_color_values[] = {
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_CURRENT, },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_PLAIN, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } },
+  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_PLAIN, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
+};
+
+static SvgValue *
+svg_color_new_symbolic (GtkSymbolicColor symbolic)
+{
+  return (SvgValue *) &static_color_values[symbolic];
+}
+
+static SvgValue *
+svg_color_new_current (void)
+{
+  return (SvgValue *) &static_color_values[5];
+}
 
 static SvgValue *
 svg_color_new_black (void)
 {
-  return (SvgValue *) &black_color_value;
+  return (SvgValue *) &static_color_values[6];
+}
+
+static SvgValue *
+svg_color_new_transparent (void)
+{
+  return (SvgValue *) &static_color_values[7];
 }
 
 static SvgValue *
@@ -6417,11 +6467,11 @@ svg_color_new_color (const GdkColor *color)
 {
   SvgColor *res;
 
-  if (gdk_color_equal (&black_color_value.color, color))
-    return (SvgValue *) &black_color_value;
+  if (gdk_color_equal (&static_color_values[6].color, color))
+    return (SvgValue *) &static_color_values[6];
 
   res = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
-  res->current = FALSE;
+  res->kind = COLOR_PLAIN;
   gdk_color_init_copy (&res->color, color);
 
   return (SvgValue *) res;
@@ -6440,24 +6490,20 @@ svg_color_new_rgba (const GdkRGBA *rgba)
   return result;
 }
 
-static SvgValue *
-svg_color_new_current (void)
-{
-  SvgColor *res;
-
-  res = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
-
-  res->current = TRUE;
-  res->color = GDK_COLOR_SRGB (0, 0, 0, 1);
-
-  return (SvgValue *) res;
-}
-
 static gboolean
 svg_color_is_current (SvgValue *value)
 {
-   return ((SvgColor *) value)->current;
+   return ((SvgColor *) value)->kind == COLOR_CURRENT;
 }
+
+static const char *
+symbolic_system_color[] = {
+  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "SymbolicForeground",
+  [GTK_SYMBOLIC_COLOR_ERROR] = "SymbolicError",
+  [GTK_SYMBOLIC_COLOR_WARNING] = "SymbolicWarning",
+  [GTK_SYMBOLIC_COLOR_SUCCESS] = "SymbolicSuccess",
+  [GTK_SYMBOLIC_COLOR_ACCENT] = "SymbolicAccent",
+};
 
 static SvgValue *
 svg_color_parse (GtkCssParser *parser)
@@ -6466,7 +6512,12 @@ svg_color_parse (GtkCssParser *parser)
 
   if (gtk_css_parser_try_ident (parser, "currentColor"))
     return svg_color_new_current ();
-  else if (gdk_rgba_parser_parse (parser, &rgba))
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (symbolic_system_color); i++)
+    if (gtk_css_parser_try_ident (parser, symbolic_system_color[i]))
+      return svg_color_new_symbolic (i);
+
+  if (gdk_rgba_parser_parse (parser, &rgba))
     return  svg_color_new_rgba (&rgba);
 
   return NULL;
@@ -6478,18 +6529,28 @@ svg_color_print (const SvgValue *value,
 {
   const SvgColor *color = (const SvgColor *) value;
 
-  if (color->current)
-    g_string_append (s, "currentColor");
-  else
+  switch (color->kind)
     {
-      GdkColor c;
+    case COLOR_CURRENT:
+      g_string_append (s, "currentColor");
+      break;
+    case COLOR_SYMBOLIC:
+      g_string_append (s, symbolic_system_color[color->symbolic]);
+      break;
+    case COLOR_PLAIN:
+      {
+        GdkColor c;
 
-      /* Don't use gdk_color_print here until we parse
-       * modern css color syntax.
-       */
-      gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &color->color);
-      gdk_rgba_print ((const GdkRGBA *) c.values, s);
-      gdk_color_finish (&c);
+        /* Don't use gdk_color_print here until we parse
+         * modern css color syntax.
+         */
+        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &color->color);
+        gdk_rgba_print ((const GdkRGBA *) c.values, s);
+        gdk_color_finish (&c);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -6500,10 +6561,34 @@ svg_color_resolve (const SvgValue *value,
                    Shape          *shape,
                    ComputeContext *context)
 {
-  if (((SvgColor *) value)->current)
-    return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
-  else
-    return svg_value_ref ((SvgValue *) value);
+  SvgColor *color = (SvgColor *) value;
+
+  switch (color->kind)
+    {
+    case COLOR_CURRENT:
+      if (idx > 0)
+        return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
+      else if (context->parent)
+        return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
+      else
+        return svg_color_new_black ();
+    case COLOR_SYMBOLIC:
+      if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
+        {
+          if (color->symbolic < context->n_colors)
+            return svg_color_new_rgba (&context->colors[color->symbolic]);
+          else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
+            return svg_color_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+          else
+            return svg_color_new_black ();
+        }
+      else
+        return svg_color_new_transparent ();
+    case COLOR_PLAIN:
+      return svg_value_ref ((SvgValue *) value);
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static SvgValue *
@@ -6515,7 +6600,8 @@ svg_color_interpolate (const SvgValue *value0,
   const SvgColor *c0 = (const SvgColor *) value0;
   const SvgColor *c1 = (const SvgColor *) value1;
 
-  if (!c0->current && !c1->current)
+  if (c0->kind == c1->kind &&
+      c0->kind == COLOR_PLAIN)
     {
       GdkColor c;
       SvgValue *res;
@@ -6542,10 +6628,10 @@ svg_color_accumulate (const SvgValue *value0,
   const SvgColor *c0 = (const SvgColor *) value0;
   const SvgColor *c1 = (const SvgColor *) value1;
 
-  if (c0->current != c1->current)
+  if (c0->kind != c1->kind)
     return NULL;
 
-  if (!c0->current)
+  if (c0->kind == COLOR_PLAIN)
     {
       GdkColor c;
       SvgValue *res;
@@ -6567,15 +6653,17 @@ svg_color_distance (const SvgValue *v0,
   const SvgColor *c0 = (const SvgColor *) v0;
   const SvgColor *c1 = (const SvgColor *) v1;
 
-  if (c0->current != c1->current)
+  if (c0->kind != c1->kind)
     {
       g_warning ("Can't measure distance between "
                  "different kinds of color");
       return 1;
     }
 
-  if (c0->current)
+  if (c0->kind == COLOR_CURRENT)
     return 0;
+  else if (c0->kind == COLOR_SYMBOLIC)
+    return 1;
   else
     return color_distance (&c0->color, &c1->color);
 }
@@ -6845,19 +6933,27 @@ static SvgValue *
 svg_paint_parse (GtkCssParser *parser)
 {
   GdkRGBA color;
-  SvgValue *paint = NULL;
 
   if (gtk_css_parser_try_ident (parser, "none"))
-    paint = svg_paint_new_simple (PAINT_NONE);
-  else if (gtk_css_parser_try_ident (parser, "context-fill"))
-    paint = svg_paint_new_simple (PAINT_CONTEXT_FILL);
-  else if (gtk_css_parser_try_ident (parser, "context-stroke"))
-    paint = svg_paint_new_simple (PAINT_CONTEXT_STROKE);
-  else if (gtk_css_parser_try_ident (parser, "currentColor"))
-    paint = svg_paint_new_simple (PAINT_CURRENT_COLOR);
-  else if (gtk_css_parser_has_url (parser))
+    return svg_paint_new_simple (PAINT_NONE);
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (symbolic_system_color); i++)
+    if (gtk_css_parser_try_ident (parser, symbolic_system_color[i]))
+      return svg_paint_new_symbolic (i);
+
+  if (gtk_css_parser_try_ident (parser, "context-fill"))
+    return svg_paint_new_simple (PAINT_CONTEXT_FILL);
+
+  if (gtk_css_parser_try_ident (parser, "context-stroke"))
+    return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
+
+  if (gtk_css_parser_try_ident (parser, "currentColor"))
+    return svg_paint_new_simple (PAINT_CURRENT_COLOR);
+
+  if (gtk_css_parser_has_url (parser))
     {
       char *url;
+      SvgValue *paint = NULL;
 
       url = gtk_css_parser_consume_url (parser);
       if (url)
@@ -6890,11 +6986,14 @@ svg_paint_parse (GtkCssParser *parser)
 
           g_free (url);
         }
-    }
-  else if (gdk_rgba_parser_parse (parser, &color))
-    paint = svg_paint_new_rgba (&color);
 
-  return paint;
+      return paint;
+    }
+
+  if (gdk_rgba_parser_parse (parser, &color))
+    return svg_paint_new_rgba (&color);
+
+  return NULL;
 }
 
 static SvgValue *
@@ -7033,7 +7132,12 @@ svg_paint_resolve (const SvgValue *value,
   if (paint->kind == PAINT_CURRENT_COLOR)
     {
       SvgColor *color = (SvgColor *) shape->current[SHAPE_ATTR_COLOR];
-      return svg_paint_new_color (&color->color);
+      if (color->kind == COLOR_PLAIN)
+        return svg_paint_new_color (&color->color);
+      else if (color->kind == COLOR_SYMBOLIC)
+        return svg_paint_new_symbolic (color->symbolic);
+      else if (color->kind == COLOR_CURRENT)
+        return svg_paint_new_black ();
     }
 
   if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
@@ -20229,6 +20333,23 @@ apply_styles_to_shape (Shape      *shape,
         shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, shape->gpa.stroke);
       if (shape->gpa.width)
         shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, shape->gpa.width);
+    }
+
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_COLOR))
+    {
+      SvgColor *color = (SvgColor *) shape->base[SHAPE_ATTR_COLOR];
+
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          color->kind == COLOR_SYMBOLIC)
+        {
+          SvgValue *value = svg_color_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_COLOR, 0, value);
+          svg_value_unref (value);
+          color = (SvgColor *) shape->base[SHAPE_ATTR_COLOR];
+        }
+
+      if (color->kind == COLOR_SYMBOLIC)
+        data->svg->used |= BIT (color->symbolic + 1);
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))

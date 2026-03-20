@@ -1,0 +1,4 @@
+[test]
+input=symbolic-color4.svg
+reference=symbolic-color4.node
+colors=black,green,yellow,red,blue

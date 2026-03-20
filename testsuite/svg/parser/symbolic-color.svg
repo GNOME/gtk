@@ -1,0 +1,12 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='16'
+        height='16'>
+  <path id='path0' color='SymbolicForeground' fill='SymbolicForeground' d='M 0 0 L 100 100'/>
+  <path id='path0' color='SymbolicError' fill='SymbolicError' d='M 0 0 L 100 100'/>
+  <path id='path0' color='SymbolicWarning' fill='SymbolicWarning' d='M 0 0 L 100 100'/>
+  <path id='path0' color='SymbolicSuccess' fill='SymbolicSuccess' d='M 0 0 L 100 100'/>
+  <path id='path0' color='SymbolicAccent' fill='SymbolicAccent' d='M 0 0 L 100 100'/>
+  <path id='path0' color='Fantasy' fill='Fantasy' d='M 0 0 L 100 100'/>
+</svg>

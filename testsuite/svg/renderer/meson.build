@@ -136,6 +136,7 @@ test_data = [
   'symbolic-color1.test',
   'symbolic-color2.test',
   'symbolic-color3.test',
+  'symbolic-color4.test',
   'text-align-01-b.svg',
   'text-fonts-02-t.svg',
   'text-stroke-gradient.svg',
