@@ -1469,6 +1469,8 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
   gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
   gdk_dmabuf_texture_builder_set_color_state (builder, color_state);
   
+  gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
+
   for (plane = 0; plane < n_planes; plane++)
     {
       static const VkImageAspectFlagBits aspect[GDK_DMABUF_MAX_PLANES] = {
@@ -1485,7 +1487,6 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
                                        .arrayLayer = 0
                                    },
                                    &layout);
-      gdk_dmabuf_texture_builder_set_fd (builder, plane, fd);
       gdk_dmabuf_texture_builder_set_stride (builder, plane, layout.rowPitch);
       gdk_dmabuf_texture_builder_set_offset (builder, plane, layout.offset);
     }

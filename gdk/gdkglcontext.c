@@ -2393,15 +2393,6 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
       goto out;
     }
 
-  for (i = 0; i < n_planes; i++)
-    {
-      if (fds[i] == -1)
-        {
-          g_warning ("dmabuf plane %d has no file descriptor", i);
-          goto out;
-        }
-    }
-
   dmabuf->fourcc = (guint32)fourcc;
   dmabuf->modifier = modifiers[0];
   dmabuf->n_planes = n_planes;

@@ -79,8 +79,10 @@ struct _GdkDmabufTextureBuilderClass
  * multiple planes, by specifying offsets from the beginning of the data.
  *
  * DMA buffers are exposed to user-space as file descriptors allowing to pass them
- * between processes. If a DMA buffer has multiple planes, there is one file
- * descriptor per plane.
+ * between processes. If a DMA buffer has multiple planes, more than one file
+ * descriptor may be present, up to the number of planes. If the number of file
+ * descriptors is less than the number of planes, the remaining ones should be set to
+ * -1.
  *
  * The format of the data (for graphics data, essentially its colorspace) is described
  * by a 32-bit integer. These format identifiers are defined in the header file `drm_fourcc.h`
@@ -748,7 +750,7 @@ gdk_dmabuf_texture_builder_set_n_planes (GdkDmabufTextureBuilder *self,
  * @self: a `GdkDmabufTextureBuilder`
  * @plane: the plane to get the fd for
  *
- * Gets the file descriptor for a plane.
+ * Gets the file descriptor for a plane or -1 if none.
  *
  * Returns: the file descriptor
  *
@@ -770,7 +772,7 @@ gdk_dmabuf_texture_builder_get_fd (GdkDmabufTextureBuilder *self,
  * @plane: the plane to set the fd for
  * @fd: the file descriptor
  *
- * Sets the file descriptor for a plane.
+ * Sets the file descriptor for a plane or to -1 to unset it.
  *
  * Since: 4.14
  */
@@ -1061,17 +1063,12 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
                                   gpointer                 data,
                                   GError                 **error)
 {
-  unsigned i;
-
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), NULL);
   g_return_val_if_fail (destroy == NULL || data != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->dmabuf.fourcc != 0, NULL);
-
-  for (i = 0; i < self->dmabuf.n_planes; i++)
-    g_return_val_if_fail (self->dmabuf.planes[i].fd != -1, NULL);
 
   if (!gdk_has_feature (GDK_FEATURE_DMABUF))
     {
