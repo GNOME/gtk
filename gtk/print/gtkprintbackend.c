@@ -476,18 +476,18 @@ gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
   
   g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), NULL);
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (backend->priv->printers)); i++)
-    {
-      GtkPrinter *printer = g_list_model_get_item (G_LIST_MODEL (backend->priv->printers), i);
-      result = g_list_prepend (result, printer);
-      g_object_unref (printer);
-    }
-
   if (!backend->priv->printer_list_requested)
     {
       if (GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list)
 	GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list (backend);
       backend->priv->printer_list_requested = TRUE;
+    }
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (backend->priv->printers)); i++)
+    {
+      GtkPrinter *printer = g_list_model_get_item (G_LIST_MODEL (backend->priv->printers), i);
+      result = g_list_prepend (result, printer);
+      g_object_unref (printer);
     }
 
   return result;
