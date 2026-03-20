@@ -17664,39 +17664,6 @@ parse_shape_attrs (Shape                *shape,
       _gtk_bitmask_get (shape->attrs, SHAPE_ATTR_MARKER_END))
     g_hash_table_add (data->pending_refs, shape);
 
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
-    {
-      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
-      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
-          paint->kind == PAINT_SYMBOLIC)
-        {
-          SvgValue *value = svg_paint_new_black ();
-          shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
-          svg_value_unref (value);
-        }
-      else if (paint_is_server (paint->kind))
-        {
-          g_hash_table_add (data->pending_refs, shape);
-        }
-    }
-
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
-    {
-      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
-
-      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
-          paint->kind == PAINT_SYMBOLIC)
-        {
-          SvgValue *value = svg_paint_new_black ();
-          shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
-          svg_value_unref (value);
-        }
-      else if (paint_is_server (paint->kind))
-        {
-          g_hash_table_add (data->pending_refs, shape);
-        }
-    }
-
   if (shape_has_attr (shape->type, SHAPE_ATTR_FX) &&
       shape_has_attr (shape->type, SHAPE_ATTR_FY))
     {
@@ -20264,24 +20231,49 @@ apply_styles_to_shape (Shape      *shape,
         shape_set_base_value (shape, SHAPE_ATTR_STROKE_WIDTH, 0, shape->gpa.width);
     }
 
-  /* Now that styles have been applied, we can determine this */
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
+      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
       GtkSymbolicColor symbolic;
 
-      if (((SvgPaint *) shape->base[SHAPE_ATTR_STROKE])->kind != PAINT_NONE)
-        data->svg->used |= GTK_SVG_USES_STROKES;
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
+          svg_value_unref (value);
+          paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
+        }
 
-      if (svg_paint_is_symbolic (((SvgPaint *) shape->base[SHAPE_ATTR_STROKE]), &symbolic))
+      if (paint_is_server (paint->kind))
+        g_hash_table_add (data->pending_refs, shape);
+
+      if (svg_paint_is_symbolic (paint, &symbolic))
         data->svg->used |= BIT (symbolic + 1);
     }
 
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
+  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
+      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
       GtkSymbolicColor symbolic;
 
-      if (svg_paint_is_symbolic (((SvgPaint *) shape->base[SHAPE_ATTR_FILL]), &symbolic))
+      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+          paint->kind == PAINT_SYMBOLIC)
+        {
+          SvgValue *value = svg_paint_new_black ();
+          shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
+          svg_value_unref (value);
+          paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
+        }
+
+      if (paint_is_server (paint->kind))
+        g_hash_table_add (data->pending_refs, shape);
+
+      if (svg_paint_is_symbolic (paint, &symbolic))
         data->svg->used |= BIT (symbolic + 1);
+
+      if (paint->kind != PAINT_NONE)
+        data->svg->used |= GTK_SVG_USES_STROKES;
     }
 }
 
