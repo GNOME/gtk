@@ -61,7 +61,7 @@ PaintableEditor {
   background: var(--sidebar-bg);
 }
 
-PaintableEditor > scrolledwindow > viewport {
+PaintableEditor scrolledwindow > viewport {
   padding: 10px;
 }
 
@@ -171,4 +171,13 @@ AlphaEditor > scale {
 
 grid.tight {
   border-spacing: 0;
+}
+
+textview.editor {
+  color: rgb(192, 197, 206);
+  caret-color: currentColor;
+}
+
+textview.editor > text {
+  background-color: rgb(43, 48, 59);
 }

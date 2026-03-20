@@ -1,310 +1,392 @@
+<?xml version="1.0"?>
 <interface>
   <template class="PaintableEditor" parent="GtkWidget">
     <child>
-      <object class="GtkScrolledWindow" id="swin">
-        <property name="hscrollbar-policy">never</property>
+      <object class="GtkOverlay">
         <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
+          <object class="GtkStack" id="stack">
+            <property name="hhomogeneous">0</property>
             <child>
-              <object class="GtkGrid">
-                <child>
-                  <object class="GtkExpander" id="expander">
-                    <property name="hexpand">0</property>
-                    <property name="valign">center</property>
-                    <property name="label-widget">
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">_Author</property>
-                        <property name="hexpand">1</property>
-                        <property name="halign">fill</property>
-                        <property name="use-underline">1</property>
-                        <property name="mnemonic-widget">author</property>
-                        <property name="xalign">1</property>
-                      </object>
-                    </property>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="author">
-                    <signal name="activate" handler="author_changed" swapped="yes"/>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags='sync-create'/>
-                    <property name="label" translatable="yes">_License</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">license</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">1</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="license">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags='sync-create'/>
-                    <signal name="activate" handler="license_changed" swapped="yes"/>
-                    <layout>
-                      <property name="row">1</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <property name="label" translatable="yes">_Description</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">description</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">2</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="description">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <signal name="activate" handler="description_changed" swapped="yes"/>
-                    <layout>
-                      <property name="row">2</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <property name="label" translatable="yes">_Keywords</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">keywords</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">3</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="keywords">
-                    <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <signal name="activate" handler="keywords_changed" swapped="yes"/>
-                    <layout>
-                      <property name="row">3</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkExpander" id="size_expander">
-                    <property name="hexpand">0</property>
-                    <property name="valign">center</property>
-                    <property name="label-widget">
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">_Size</property>
-                        <property name="hexpand">1</property>
-                        <property name="halign">fill</property>
-                        <property name="use-underline">1</property>
-                        <property name="mnemonic-widget">width</property>
-                        <property name="xalign">1</property>
-                        <accessibility>
-                          <property name="label" translatable="yes">Width</property>
-                        </accessibility>
-                      </object>
-                    </property>
-                    <layout>
-                      <property name="row">4</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
+              <object class="GtkStackPage">
+                <property name="name">controls</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow" id="swin">
+                    <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkEntry" id="width">
-                        <signal name="activate" handler="size_changed" swapped="yes"/>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkGrid">
+                            <child>
+                              <object class="GtkExpander" id="expander">
+                                <property name="hexpand">0</property>
+                                <property name="valign">center</property>
+                                <property name="label-widget">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">_Author</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="halign">fill</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="mnemonic-widget">author</property>
+                                    <property name="xalign">1</property>
+                                  </object>
+                                </property>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="author">
+                                <signal name="activate" handler="author_changed" swapped="yes"/>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <property name="label" translatable="yes">_License</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">license</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">1</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="license">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <signal name="activate" handler="license_changed" swapped="yes"/>
+                                <layout>
+                                  <property name="row">1</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <property name="label" translatable="yes">_Description</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">description</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">2</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="description">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <signal name="activate" handler="description_changed" swapped="yes"/>
+                                <layout>
+                                  <property name="row">2</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <property name="label" translatable="yes">_Keywords</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">keywords</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">3</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="keywords">
+                                <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <signal name="activate" handler="keywords_changed" swapped="yes"/>
+                                <layout>
+                                  <property name="row">3</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkExpander" id="size_expander">
+                                <property name="hexpand">0</property>
+                                <property name="valign">center</property>
+                                <property name="label-widget">
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="yes">_Size</property>
+                                    <property name="hexpand">1</property>
+                                    <property name="halign">fill</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="mnemonic-widget">width</property>
+                                    <property name="xalign">1</property>
+                                    <accessibility>
+                                      <property name="label" translatable="yes">Width</property>
+                                    </accessibility>
+                                  </object>
+                                </property>
+                                <layout>
+                                  <property name="row">4</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <child>
+                                  <object class="GtkEntry" id="width">
+                                    <signal name="activate" handler="size_changed" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">&#x2715;</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="height">
+                                    <signal name="activate" handler="size_changed" swapped="yes"/>
+                                    <accessibility>
+                                      <property name="label" translatable="yes">Height</property>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                                <layout>
+                                  <property name="row">4</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <property name="label" translatable="yes">_View box</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">viewbox_x</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">5</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
+                                <child>
+                                  <object class="GtkEntry" id="viewbox_x">
+                                    <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="viewbox_y">
+                                    <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="viewbox_w">
+                                    <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="viewbox_h">
+                                    <signal name="activate" handler="viewbox_changed" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <layout>
+                                  <property name="row">5</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">_Compatibility</property>
+                                <property name="use-underline">1</property>
+                                <property name="mnemonic-widget">compat</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">7</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="compat">
+                                <property name="xalign">0</property>
+                                <property name="selectable">1</property>
+                                <layout>
+                                  <property name="row">7</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="compat_check">
+                                <property name="label" translatable="yes">Include compat classes</property>
+                                <property name="active" bind-source="PaintableEditor" bind-property="compat-classes" bind-flags="bidirectional|sync-create"/>
+                                <layout>
+                                  <property name="row">8</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Rendering</property>
+                                <property name="xalign">1</property>
+                                <layout>
+                                  <property name="row">9</property>
+                                  <property name="column">0</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="tooltip-text">GtkSvg</property>
+                                    <property name="pixel-size">24</property>
+                                    <property name="paintable" bind-source="PaintableEditor" bind-property="paintable"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkImage" id="icon_image">
+                                    <style>
+                                      <class name="icon-paintable-preview"/>
+                                    </style>
+                                    <property name="tooltip-text">GtkIconPaintable</property>
+                                    <property name="pixel-size">24</property>
+                                  </object>
+                                </child>
+                                <layout>
+                                  <property name="row">9</property>
+                                  <property name="column">1</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel" id="summary1">
+                                <property name="selectable">1</property>
+                                <property name="xalign">0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="summary2">
+                                <property name="selectable">1</property>
+                                <property name="xalign">0</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="path_elts">
+                            <property name="orientation">vertical</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="hexpand">0</property>
+                            <child>
+                              <object class="GtkButton">
+                                <property name="label" translatable="yes">Add path</property>
+                                <property name="hexpand">1</property>
+                                <property name="action-name">win.add-path</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton">
+                                <property name="label" translatable="yes">States&#x2026;</property>
+                                <property name="action-name">win.edit-states</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label">✕</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="height">
-                        <signal name="activate" handler="size_changed" swapped="yes"/>
-                        <accessibility>
-                          <property name="label" translatable="yes">Height</property>
-                        </accessibility>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="row">4</property>
-                      <property name="column">1</property>
-                    </layout>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <property name="label" translatable="yes">_View box</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">viewbox_x</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">5</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible" bind-source="size_expander" bind-property="expanded" bind-flags="sync-create"/>
-                    <child>
-                      <object class="GtkEntry" id="viewbox_x">
-                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="viewbox_y">
-                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="viewbox_w">
-                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="viewbox_h">
-                        <signal name="activate" handler="viewbox_changed" swapped="yes"/>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="row">5</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">_Compatibility</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">compat</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">7</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="compat">
-                    <property name="xalign">0</property>
-                    <property name="selectable">1</property>
-                    <layout>
-                      <property name="row">7</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="compat_check">
-                    <property name="label" translatable="yes">Include compat classes</property>
-                    <property name="active" bind-source="PaintableEditor" bind-property="compat-classes" bind-flags="bidirectional|sync-create"/>
-                    <layout>
-                      <property name="row">8</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Rendering</property>
-                    <property name="xalign">1</property>
-                    <layout>
-                      <property name="row">9</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <child>
-                      <object class="GtkImage">
-                        <property name="tooltip-text">GtkSvg</property>
-                        <property name="pixel-size">24</property>
-                        <property name="paintable" bind-source="PaintableEditor" bind-property="paintable"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="icon_image">
-                        <style>
-                          <class name="icon-paintable-preview"/>
-                        </style>
-                        <property name="tooltip-text">GtkIconPaintable</property>
-                        <property name="pixel-size">24</property>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="row">9</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="summary1">
-                    <property name="selectable">1</property>
-                    <property name="xalign">0</property>
+              <object class="GtkStackPage">
+                <property name="name">xml</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow">
+                    <property name="min-content-width">400</property>
+                    <child>
+                      <object class="GtkTextView" id="xml_view">
+                        <style><class name="editor"/></style>
+                        <property name="buffer">
+                          <object class="GtkTextBuffer" id="xml_buffer">
+                            <property name="tag-table">
+                              <object class="GtkTextTagTable">
+                                <child type="tag">
+                                  <object class="GtkTextTag">
+                                    <property name="name">unimplemented</property>
+                                    <property name="underline">single</property>
+                                    <property name="underline-rgba">darkorange</property>
+                                  </object>
+                                </child>
+                                <child type="tag">
+                                  <object class="GtkTextTag">
+                                    <property name="name">ignored</property>
+                                    <property name="underline">single</property>
+                                    <property name="underline-rgba">blue</property>
+                                  </object>
+                                </child>
+                                <child type="tag">
+                                  <object class="GtkTextTag">
+                                    <property name="name">error</property>
+                                    <property name="underline">error</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                            <signal name="changed" handler="xml_changed" swapped="yes"/>
+                          </object>
+                        </property>
+                        <property name="wrap-mode">none</property>
+                        <property name="monospace">1</property>
+                        <property name="left-margin">6</property>
+                        <property name="right-margin">6</property>
+                        <property name="top-margin">6</property>
+                        <property name="bottom-margin">6</property>
+                        <property name="has-tooltip">1</property>
+                        <signal name="query-tooltip" handler="query_tooltip_cb"/>
+                      </object>
+                    </child>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="summary2">
-                    <property name="selectable">1</property>
-                    <property name="xalign">0</property>
-                  </object>
-                </child>
+                </property>
               </object>
             </child>
-            <child>
-              <object class="GtkBox" id="path_elts">
-                <property name="orientation">vertical</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="hexpand">0</property>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Add path</property>
-                    <property name="hexpand">1</property>
-                    <property name="action-name">win.add-path</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">States…</property>
-                    <property name="action-name">win.edit-states</property>
-                  </object>
-                </child>
-              </object>
-            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkToggleButton" id="xml_toggle">
+            <style>
+              <class name="circular"/>
+              <class name="flat"/>
+            </style>
+            <property name="tooltip-text" translatable="yes">View XML</property>
+            <property name="halign">end</property>
+            <property name="valign">end</property>
+            <property name="margin-bottom">10</property>
+            <property name="margin-end">10</property>
+            <property name="icon-name">view-reveal-symbolic</property>
+            <signal name="notify::active" handler="xml_toggled" swapped="yes"/>
           </object>
         </child>
       </object>

@@ -1442,6 +1442,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, show_open_filechooser);
   gtk_widget_class_bind_template_callback (widget_class, toggle_controls);
   gtk_widget_class_bind_template_callback (widget_class, file_drop);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_widget_activate);
 }
 
 /* }}} */
