@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-09 12:34+0000\n"
-"PO-Revision-Date: 2026-03-11 14:47+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"POT-Creation-Date: 2026-03-20 16:55+0000\n"
+"PO-Revision-Date: 2026-03-21 00:00+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -62,22 +62,22 @@ msgstr "Boş panodan okunamaz."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Pano içeriklerini aktarmak için uyumlu biçim yok."
 
-#: gdk/gdkcolorstate.c:1050
+#: gdk/gdkcolorstate.c:1022
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: Belirtilmemiş parametreler desteklenmiyor"
 
-#: gdk/gdkcolorstate.c:1096
+#: gdk/gdkcolorstate.c:1068
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: %u aktarım biçimi desteklenmiyor"
 
-#: gdk/gdkcolorstate.c:1127
+#: gdk/gdkcolorstate.c:1099
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: %u renk birincilleri desteklenmiyor"
 
-#: gdk/gdkcolorstate.c:1154
+#: gdk/gdkcolorstate.c:1126
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: Katsayılar matrisi %u, %s desteklenmiyor"
@@ -97,7 +97,7 @@ msgstr "İçerikler %s olarak sağlanamıyor"
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1966
+#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1941
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Vulkan desteği GDK_DISABLE yoluyla devre dışı bırakıldı"
 
@@ -105,46 +105,46 @@ msgstr "Vulkan desteği GDK_DISABLE yoluyla devre dışı bırakıldı"
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "OpenGL desteği GDK_DISABLE yoluyla devre dışı bırakıldı"
 
-#: gdk/gdkdisplay.c:1728
+#: gdk/gdkdisplay.c:1727
 msgid "No EGL configuration available"
 msgstr "Kullanılabilir EGL yapılandırması yok"
 
-#: gdk/gdkdisplay.c:1736
+#: gdk/gdkdisplay.c:1735
 msgid "Failed to get EGL configurations"
 msgstr "EGL yapılandırmaları alınamadı"
 
-#: gdk/gdkdisplay.c:1766
+#: gdk/gdkdisplay.c:1765
 msgid "No EGL configuration with required features found"
 msgstr "Gerekli özellikleri olan EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1773
+#: gdk/gdkdisplay.c:1772
 msgid "No perfect EGL configuration found"
 msgstr "Kusursuz EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1815
+#: gdk/gdkdisplay.c:1814
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL uygulamasında %2$d eksik uzantı: %1$s"
 
 # https://twitter.com/mserdark/status/932936929213079559
-#: gdk/gdkdisplay.c:1864
+#: gdk/gdkdisplay.c:1863
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL bu kum havuzunda kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1865
+#: gdk/gdkdisplay.c:1864
 msgid "libEGL not available"
 msgstr "libEGL kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1875
+#: gdk/gdkdisplay.c:1874
 msgid "Failed to create EGL display"
 msgstr "EGL ekranı oluşturulamadı"
 
-#: gdk/gdkdisplay.c:1884
+#: gdk/gdkdisplay.c:1883
 msgid "Could not initialize EGL display"
 msgstr "EGL ekranı ilklendirilemedi"
 
-#: gdk/gdkdisplay.c:1894
+#: gdk/gdkdisplay.c:1893
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL sürümü %d.%d çok eski. GTK, %d.%d gerektiriyor"
@@ -166,15 +166,15 @@ msgstr "İzin verilen GP API yok."
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
-#: gdk/gdkglcontext.c:1440
+#: gdk/gdkglcontext.c:1436
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "OpenGL ES API, GDK_DISABLE aracılığıyla devre dışı bırakıldı"
 
-#: gdk/gdkglcontext.c:1452
+#: gdk/gdkglcontext.c:1448
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "OpenGL API, GDK_DISABLE aracılığıyla devre dışı bırakıldı"
 
-#: gdk/gdkglcontext.c:1463
+#: gdk/gdkglcontext.c:1459
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Uygulama %s APIsini desteklemiyor"
@@ -182,12 +182,12 @@ msgstr "Uygulama %s APIsini desteklemiyor"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2259
+#: gdk/gdkglcontext.c:2258
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 
-#: gdk/gdkglcontext.c:2270
+#: gdk/gdkglcontext.c:2269
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr ""
@@ -585,7 +585,7 @@ msgstr "JPEG resim dosyası yorumlanırken hata (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Desteklenmeyen JPEG renk uzayı (%d)"
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:500
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:506
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "%ux%u resim boyutu için yeterli bellek yok"
@@ -610,15 +610,15 @@ msgstr "Png resminde desteklenmeyen %u renk türü"
 msgid "Image stride too large for image size %ux%u"
 msgstr "%ux%u görüntü boyutu için görüntü adımı çok büyük"
 
-#: gdk/loaders/gdktiff.c:391
+#: gdk/loaders/gdktiff.c:397
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF dosyasından RGB verisi yüklenemedi"
 
-#: gdk/loaders/gdktiff.c:433
+#: gdk/loaders/gdktiff.c:439
 msgid "Could not load TIFF data"
 msgstr "TIFF verisi yüklenemedi"
 
-#: gdk/loaders/gdktiff.c:514
+#: gdk/loaders/gdktiff.c:520
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Veri okunurken %d. satırda hata"
@@ -2640,7 +2640,7 @@ msgid "Name"
 msgstr "Ad"
 
 #: gtk/gtkfilechooserwidget.c:7474 gtk/inspector/resource-list.ui:98
-#: gtk/ui/gtkfontchooserwidget.ui:229 gtk/ui/gtkfontchooserwidget.ui:395
+#: gtk/ui/gtkfontchooserwidget.ui:228 gtk/ui/gtkfontchooserwidget.ui:394
 #: tools/gtk-rendernode-tool-convert.c:97
 msgid "Size"
 msgstr "Boyut"
@@ -4304,12 +4304,12 @@ msgstr "Kısayollar"
 msgid "Search Results"
 msgstr "Arama Sonuçları"
 
-#: gtk/deprecated/gtkshortcutswindow.c:1047 gtk/ui/gtkemojichooser.ui:352
+#: gtk/deprecated/gtkshortcutswindow.c:1047 gtk/ui/gtkemojichooser.ui:353
 #: gtk/ui/gtkfilechooserwidget.ui:253
 msgid "No Results Found"
 msgstr "Hiçbir Sonuç Bulunamadı"
 
-#: gtk/deprecated/gtkshortcutswindow.c:1058 gtk/ui/gtkemojichooser.ui:362
+#: gtk/deprecated/gtkshortcutswindow.c:1058 gtk/ui/gtkemojichooser.ui:363
 #: gtk/ui/gtkfilechooserwidget.ui:263 gtk/ui/gtkplacesview.ui:207
 msgid "Try a different search"
 msgstr "Başka arama deneyin"
@@ -4693,21 +4693,21 @@ msgstr "Biçem Sınıfları"
 msgid "CSS Property"
 msgstr "CSS Özelliği"
 
-#: gtk/inspector/general.c:470
+#: gtk/inspector/general.c:486
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM Bağlamı GTK_IM_MODULE tarafından kodlanmış"
 
-#: gtk/inspector/general.c:645
+#: gtk/inspector/general.c:661
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:742
+#: gtk/inspector/general.c:758
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: gtk/inspector/general.c:996 gtk/inspector/general.c:1035
+#: gtk/inspector/general.c:1012 gtk/inspector/general.c:1051
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Hiçbiri"
@@ -7173,52 +7173,52 @@ msgstr "(Yok)"
 msgid "Search…"
 msgstr "Arama…"
 
-#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
+#: gtk/ui/gtkemojichooser.ui:71 gtk/ui/gtkemojichooser.ui:241
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Gülen Yüzler ve İnsanlar"
 
-#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
+#: gtk/ui/gtkemojichooser.ui:96 gtk/ui/gtkemojichooser.ui:250
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Vücut ve Giyim"
 
-#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
+#: gtk/ui/gtkemojichooser.ui:121 gtk/ui/gtkemojichooser.ui:259
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Hayvanlar ve Doğa"
 
-#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:135 gtk/ui/gtkemojichooser.ui:268
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Yeme ve İçme"
 
-#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
+#: gtk/ui/gtkemojichooser.ui:149 gtk/ui/gtkemojichooser.ui:277
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Seyahat ve Yerler"
 
-#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
+#: gtk/ui/gtkemojichooser.ui:163 gtk/ui/gtkemojichooser.ui:286
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Etkinlikler"
 
-#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
+#: gtk/ui/gtkemojichooser.ui:177 gtk/ui/gtkemojichooser.ui:295
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Nesneler"
 
-#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
+#: gtk/ui/gtkemojichooser.ui:191 gtk/ui/gtkemojichooser.ui:304
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Simgeler"
 
-#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
+#: gtk/ui/gtkemojichooser.ui:205 gtk/ui/gtkemojichooser.ui:313
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Bayraklar"
 
-#: gtk/ui/gtkemojichooser.ui:231
+#: gtk/ui/gtkemojichooser.ui:232
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Son"
@@ -7267,24 +7267,24 @@ msgstr "Eş aralıklı"
 msgid "Language"
 msgstr "Dil"
 
-#: gtk/ui/gtkfontchooserwidget.ui:210 gtk/ui/gtkfontchooserwidget.ui:212
-#: gtk/ui/gtkfontchooserwidget.ui:362 gtk/ui/gtkfontchooserwidget.ui:366
+#: gtk/ui/gtkfontchooserwidget.ui:209 gtk/ui/gtkfontchooserwidget.ui:211
+#: gtk/ui/gtkfontchooserwidget.ui:361 gtk/ui/gtkfontchooserwidget.ui:365
 msgid "Preview Font"
 msgstr "Yazı Tipi Ön İzle"
 
-#: gtk/ui/gtkfontchooserwidget.ui:308
+#: gtk/ui/gtkfontchooserwidget.ui:307
 msgid "No Fonts Found"
 msgstr "Yazı Tipi Bulunamadı"
 
-#: gtk/ui/gtkfontchooserwidget.ui:346
+#: gtk/ui/gtkfontchooserwidget.ui:345
 msgid "Font Name"
 msgstr "Yazı Tipi Adı"
 
-#: gtk/ui/gtkfontchooserwidget.ui:391
+#: gtk/ui/gtkfontchooserwidget.ui:390
 msgid "Font Variation Axes"
 msgstr "Yazı Tipi Değişke Eksenleri"
 
-#: gtk/ui/gtkfontchooserwidget.ui:439
+#: gtk/ui/gtkfontchooserwidget.ui:438
 msgid "Font Features"
 msgstr "Yazı Tipi Özellikleri"
 
@@ -7731,7 +7731,7 @@ msgid "Overwrite existing file"
 msgstr "Var olan dosyanın üstüne yaz"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:316
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -7874,7 +7874,7 @@ msgstr ""
 "  info         Görüntüyle ilgili genel bilgi göster\n"
 "  relabel      Görüntünün renk durumunu dönüştürmeden değiştir\n"
 "  show         Görüntüyü göster\n"
-"  play         Canlandırmayı oynat\r\n"
+"  play         Canlandırmayı oynat\n"
 "\n"
 
 #: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
@@ -8005,36 +8005,40 @@ msgstr "Görüntüyle ilgili bilgi sağla."
 msgid "Can only accept a single image file\n"
 msgstr "Yalnızca tek bir görüntü dosyası kabul edebilir\n"
 
-#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:309 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Başlık çubuğu ekleme"
 
-#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:310 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "BOYUT"
 
-#: tools/gtk-image-tool-play.c:310
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't run animations"
 msgstr "Canlandırmaları oynatma"
 
-#: tools/gtk-image-tool-play.c:311
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't use system resources"
 msgstr "Sistem kaynaklarını kullanma"
 
-#: tools/gtk-image-tool-play.c:312
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't load external resources"
 msgstr "Dış kaynakları yükleme"
 
-#: tools/gtk-image-tool-play.c:313
+#: tools/gtk-image-tool-play.c:314
 msgid "Don't allow gpa extensions"
 msgstr "gpa uzantılarına izin verme"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:315
+msgid "Traditional symbolic icon"
+msgstr "Geleneksel sembolik simge"
+
+#: tools/gtk-image-tool-play.c:326
 msgid "Show one or more animations."
 msgstr "Bir ya da daha çok canlandırma göster."
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:339
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Canlandırma dosyası belirtilmedi\n"
