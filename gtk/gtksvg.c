@@ -506,7 +506,7 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
 
   markup_context_get_tag_range (context, &start, &end);
 
-#if GLIB_CHECK_VERSION (2, 90, 0)
+#if GLIB_CHECK_VERSION (2, 89, 0)
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (attr_names && attr_name)
     {
@@ -19000,7 +19000,7 @@ do_target:
           char *string;
           StyleElt *elt;
 
-          string = g_strstrip (g_strdup (data->text.text->str));
+          string = g_strdup (data->text.text->str);
           elt = g_new0 (StyleElt, 1);
           elt->content = g_bytes_new_take (string, strlen (string));
           elt->location = data->text.start;
@@ -21554,9 +21554,8 @@ serialize_shape (GString              *s,
     {
       StyleElt *elt = g_ptr_array_index (shape->styles, i);
       indent_for_elt (s, indent + 2);
-      g_string_append (s, "<style type='text/css'>\n");
+      g_string_append (s, "<style type='text/css'>");
       g_string_append (s, g_bytes_get_data (elt->content, NULL));
-      indent_for_elt (s, indent + 2);
       g_string_append (s, "</style>");
     }
 

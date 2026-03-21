@@ -10,10 +10,10 @@
           font-size='18'
           font-family='SVGFreeSansASCII,sans-serif'>
     <style type='text/css'>
-@font-face {
+    @font-face {
       font-family: Blocky;
       src: url(woffs/Blocky.woff) format("woff");
-    </style>
+  </style>
     <g
             transform='scale(1, 1.5)'>
       <linearGradient

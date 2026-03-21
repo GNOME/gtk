@@ -5,7 +5,7 @@
         height='100'
         viewBox='0 0 100 100'>
   <style type='text/css'>
-circle { fli: red; }
+    circle { fli: red; }
     rect { fill: not-a-color; }
   </style>
   <circle
