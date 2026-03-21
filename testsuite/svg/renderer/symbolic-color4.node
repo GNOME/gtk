@@ -1,0 +1,35 @@
+rounded-clip {
+  clip: 0 0 40 40 / 20;
+  child: color {
+    bounds: 0 0 40 40;
+    color: rgb(0,0,0);
+  }
+}
+rounded-clip {
+  clip: 60 0 40 40 / 20;
+  child: color {
+    bounds: 60 0 40 40;
+    color: rgb(255,0,0);
+  }
+}
+rounded-clip {
+  clip: 60 60 40 40 / 20;
+  child: color {
+    bounds: 60 60 40 40;
+    color: rgb(255,255,0);
+  }
+}
+rounded-clip {
+  clip: 0 60 40 40 / 20;
+  child: color {
+    bounds: 0 60 40 40;
+    color: rgb(0,128,0);
+  }
+}
+rounded-clip {
+  clip: 30 30 40 40 / 20;
+  child: color {
+    bounds: 30 30 40 40;
+    color: rgb(0,0,255);
+  }
+}
