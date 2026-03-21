@@ -25,32 +25,33 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GDK_DEBUG_MISC            = 1 <<  0,
-  GDK_DEBUG_EVENTS          = 1 <<  1,
-  GDK_DEBUG_DND             = 1 <<  2,
-  GDK_DEBUG_INPUT           = 1 <<  3,
-  GDK_DEBUG_EVENTLOOP       = 1 <<  4,
-  GDK_DEBUG_FRAMES          = 1 <<  5,
-  GDK_DEBUG_SETTINGS        = 1 <<  6,
-  GDK_DEBUG_OPENGL          = 1 <<  7,
-  GDK_DEBUG_VULKAN          = 1 <<  8,
-  GDK_DEBUG_SELECTION       = 1 <<  9,
-  GDK_DEBUG_CLIPBOARD       = 1 << 10,
-  GDK_DEBUG_DMABUF          = 1 << 11,
-  GDK_DEBUG_D3D12           = 1 << 12,
-  GDK_DEBUG_OFFLOAD         = 1 << 13,
-  GDK_DEBUG_LINEAR          = 1 << 14,
-  GDK_DEBUG_HDR             = 1 << 15,
-  GDK_DEBUG_PORTALS         = 1 << 16,
-  GDK_DEBUG_NO_PORTALS      = 1 << 17,
-  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 18,
-  GDK_DEBUG_GL_PREFER_GL    = 1 << 19,
-  GDK_DEBUG_GL_DEBUG        = 1 << 20,
-  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21,
-  GDK_DEBUG_HIGH_DEPTH      = 1 << 22,
-  GDK_DEBUG_NO_VSYNC        = 1 << 23,
-  GDK_DEBUG_COLOR_MANAGEMENT= 1 << 24,
-  GDK_DEBUG_SESSION_MANAGEMENT= 1 << 25,
+  GDK_DEBUG_MISC               = 1 <<  0,
+  GDK_DEBUG_EVENTS             = 1 <<  1,
+  GDK_DEBUG_DND                = 1 <<  2,
+  GDK_DEBUG_INPUT              = 1 <<  3,
+  GDK_DEBUG_EVENTLOOP          = 1 <<  4,
+  GDK_DEBUG_FRAMES             = 1 <<  5,
+  GDK_DEBUG_SETTINGS           = 1 <<  6,
+  GDK_DEBUG_OPENGL             = 1 <<  7,
+  GDK_DEBUG_VULKAN             = 1 <<  8,
+  GDK_DEBUG_SELECTION          = 1 <<  9,
+  GDK_DEBUG_CLIPBOARD          = 1 << 10,
+  GDK_DEBUG_DMABUF             = 1 << 11,
+  GDK_DEBUG_D3D12              = 1 << 12,
+  GDK_DEBUG_OFFLOAD            = 1 << 13,
+  GDK_DEBUG_LINEAR             = 1 << 14,
+  GDK_DEBUG_HDR                = 1 << 15,
+  GDK_DEBUG_PORTALS            = 1 << 16,
+  GDK_DEBUG_NO_PORTALS         = 1 << 17,
+  GDK_DEBUG_FORCE_OFFLOAD      = 1 << 18,
+  GDK_DEBUG_GL_PREFER_GL       = 1 << 19,
+  GDK_DEBUG_GL_DEBUG           = 1 << 20,
+  GDK_DEBUG_DEFAULT_SETTINGS   = 1 << 21,
+  GDK_DEBUG_HIGH_DEPTH         = 1 << 22,
+  GDK_DEBUG_NO_VSYNC           = 1 << 23,
+  GDK_DEBUG_COLOR_MANAGEMENT   = 1 << 24,
+  GDK_DEBUG_SESSION_MANAGEMENT = 1 << 25,
+  GDK_DEBUG_DCOMP              = 1 << 26,
 } GdkDebugFlags;
 
 typedef enum {
@@ -64,13 +65,12 @@ typedef enum {
   GDK_FEATURE_DMABUF           = 1 << 7,
   GDK_FEATURE_D3D11            = 1 << 8,
   GDK_FEATURE_D3D12            = 1 << 9,
-  GDK_FEATURE_DCOMP            = 1 << 10,
-  GDK_FEATURE_OFFLOAD          = 1 << 11,
-  GDK_FEATURE_THREADS          = 1 << 12,
-  GDK_FEATURE_ICON_NODES       = 1 << 13,
+  GDK_FEATURE_OFFLOAD          = 1 << 10,
+  GDK_FEATURE_THREADS          = 1 << 11,
+  GDK_FEATURE_ICON_NODES       = 1 << 12,
 } GdkFeatures;
 
-#define GDK_ALL_FEATURES ((1 << 14) - 1)
+#define GDK_ALL_FEATURES ((1 << 13) - 1)
 
 extern guint _gdk_debug_flags;
 
