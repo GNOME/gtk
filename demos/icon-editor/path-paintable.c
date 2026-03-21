@@ -95,6 +95,24 @@ ensure_render_paintable (PathPaintable *self)
 /* }}} */
 /* {{{ Parser */
 
+void
+path_paintable_set_svg (PathPaintable *self,
+                        GtkSvg        *svg)
+{
+  gboolean playing = FALSE;
+
+  if (self->svg)
+    g_object_get (self->svg, "playing", &playing, NULL);
+
+  g_set_object (&self->svg, svg);
+
+  g_object_set (self->svg, "playing", playing, NULL);
+
+  graphene_rect_init (&self->viewport, 0, 0, svg->width, svg->height);
+  g_clear_object (&self->render_paintable);
+  g_signal_emit (self, signals[CHANGED], 0);
+}
+
 static gboolean
 parse_symbolic_svg (PathPaintable  *paintable,
                     GBytes         *bytes,
@@ -102,10 +120,7 @@ parse_symbolic_svg (PathPaintable  *paintable,
 {
   g_autoptr (GtkSvg) svg = gtk_svg_new_from_bytes (bytes);
 
-  g_set_object (&paintable->svg, svg);
-  graphene_rect_init (&paintable->viewport, 0, 0,
-                      svg->width,
-                      svg->height);
+  path_paintable_set_svg (paintable, svg);
 
   return TRUE;
 }

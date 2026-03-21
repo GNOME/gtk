@@ -51,6 +51,13 @@ struct _PaintableEditor
   GtkLabel *summary2;
   GtkImage *icon_image;
   GtkCheckButton *compat_check;
+  GtkStack *stack;
+  GtkToggleButton *xml_toggle;
+  GtkTextView *xml_view;
+  GtkTextBuffer *xml_buffer;
+
+  guint timeout;
+  GList *errors;
 
   GtkBox *path_elts;
 };
@@ -257,6 +264,134 @@ update_icon_paintable (PaintableEditor *self)
   g_object_unref (paintable);
 }
 
+typedef struct
+{
+  GError *error;
+  GtkTextIter start;
+  GtkTextIter end;
+} SvgError;
+
+static void
+svg_error_free (gpointer data)
+{
+  SvgError *error = data;
+
+  g_error_free (error->error);
+  g_free (error);
+}
+
+typedef struct
+{
+  PaintableEditor *self;
+  const char *text;
+} ErrorData;
+
+static void
+error_cb (GtkSvg   *svg,
+          GError   *error,
+          gpointer  data)
+{
+/* Without GLib 2.88, we don't get usable location
+ * information from GMarkup, so don't try to highlight
+ * errors
+ */
+#if GLIB_CHECK_VERSION (2, 88, 0)
+  ErrorData *d = data;
+  PaintableEditor *self = d->self;
+  SvgError *svg_error;
+  size_t offset;
+  const GtkSvgLocation *start, *end;
+  const char *tag;
+
+  if (error->domain != GTK_SVG_ERROR)
+    return;
+
+  start = gtk_svg_error_get_start (error);
+  end = gtk_svg_error_get_end (error);
+
+  svg_error = g_new (SvgError, 1);
+  svg_error->error = g_error_copy (error);
+
+  offset = g_utf8_pointer_to_offset (d->text, d->text + start->bytes);
+  gtk_text_buffer_get_iter_at_offset (self->xml_buffer, &svg_error->start, offset);
+  offset = g_utf8_pointer_to_offset (d->text, d->text + end->bytes);
+  gtk_text_buffer_get_iter_at_offset (self->xml_buffer, &svg_error->end, offset);
+
+  self->errors = g_list_append (self->errors, svg_error);
+
+  if (gtk_text_iter_equal (&svg_error->start, &svg_error->end))
+    gtk_text_iter_forward_chars (&svg_error->end, 1);
+
+  if (error->code == GTK_SVG_ERROR_IGNORED_ELEMENT)
+    tag = "ignored";
+  else if (error->code == GTK_SVG_ERROR_NOT_IMPLEMENTED)
+    tag = "unimplemented";
+  else
+    tag = "error";
+
+  gtk_text_buffer_apply_tag_by_name (self->xml_buffer,
+                                     tag,
+                                     &svg_error->start,
+                                     &svg_error->end);
+#endif
+}
+
+static void
+update_timeout (gpointer data)
+{
+  PaintableEditor *self = data;
+  GtkTextIter start, end;
+  char *text;
+  g_autoptr (GBytes) bytes = NULL;
+  g_autoptr (GtkSvg) svg = NULL;
+  gulong handler;
+  ErrorData d;
+
+  gtk_text_buffer_get_bounds (self->xml_buffer, &start, &end);
+  gtk_text_buffer_remove_all_tags (self->xml_buffer, &start, &end);
+
+  text = gtk_text_buffer_get_text (self->xml_buffer, &start, &end, FALSE);
+  bytes = g_bytes_new_take (text, strlen (text));
+
+  svg = gtk_svg_new ();
+
+  g_list_free_full (self->errors, svg_error_free);
+  self->errors = NULL;
+
+  d.self = self;
+  d.text = text;
+
+  handler = g_signal_connect (svg, "error", G_CALLBACK (error_cb), &d);
+  gtk_svg_load_from_bytes (svg, bytes);
+  g_signal_handler_disconnect (svg, handler);
+
+  path_paintable_set_svg (self->paintable, svg);
+
+  self->timeout = 0;
+}
+
+static void
+xml_changed (PaintableEditor *self)
+{
+  if (self->timeout != 0)
+    g_source_remove (self->timeout);
+  self->timeout = g_timeout_add_once (100, update_timeout, self);
+}
+
+/* }}} */
+
+static void
+update_xml (PaintableEditor *self)
+{
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  g_autoptr (GBytes) xml = gtk_svg_serialize (svg);
+
+  g_signal_handlers_block_by_func (self->xml_buffer, xml_changed, self);
+  gtk_text_buffer_set_text (self->xml_buffer, g_bytes_get_data (xml, NULL), g_bytes_get_size (xml));
+  update_timeout (self);
+  g_signal_handlers_unblock_by_func (self->xml_buffer, xml_changed, self);
+}
+
 static void
 paths_changed (PaintableEditor *self)
 {
@@ -368,7 +503,66 @@ keywords_changed (PaintableEditor *self)
   path_paintable_set_keywords (self->paintable, text);
 }
 
-/* }}} */
+static void
+xml_toggled (PaintableEditor *self)
+{
+  if (gtk_toggle_button_get_active (self->xml_toggle))
+    {
+      update_xml (self);
+      gtk_stack_set_visible_child_name (self->stack, "xml");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self->xml_toggle), "View Controls");
+    }
+  else
+    {
+      gtk_stack_set_visible_child_name (self->stack, "controls");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self->xml_toggle), "View XML");
+    }
+}
+
+static gboolean
+query_tooltip_cb (GtkWidget       *widget,
+                  int              x,
+                  int              y,
+                  gboolean         keyboard_tip,
+                  GtkTooltip      *tooltip,
+                  PaintableEditor *self)
+{
+  GtkTextIter iter;
+
+  if (!gtk_toggle_button_get_active (self->xml_toggle))
+    return FALSE;
+
+  if (keyboard_tip)
+    {
+      int offset;
+
+      g_object_get (self->xml_view, "cursor-position", &offset, NULL);
+      gtk_text_buffer_get_iter_at_offset (self->xml_buffer, &iter, offset);
+    }
+  else
+    {
+      int bx, by, trailing;
+
+      gtk_text_view_window_to_buffer_coords (self->xml_view,
+                                             GTK_TEXT_WINDOW_TEXT,
+                                             x, y, &bx, &by);
+      gtk_text_view_get_iter_at_position (self->xml_view, &iter, &trailing, bx, by);
+    }
+
+  for (GList *l = self->errors; l; l = l->next)
+    {
+      SvgError *error = l->data;
+
+      if (gtk_text_iter_in_range (&iter, &error->start, &error->end))
+        {
+          gtk_tooltip_set_text (tooltip, error->error->message);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 /* {{{ GObject boilerplate */
 
 static void
@@ -434,6 +628,15 @@ static void
 paintable_editor_dispose (GObject *object)
 {
   PaintableEditor *self = PAINTABLE_EDITOR (object);
+
+  g_list_free_full (self->errors, svg_error_free);
+  self->errors = NULL;
+
+  if (self->timeout)
+    {
+      g_source_remove (self->timeout);
+      self->timeout = 0;
+    }
 
   if (self->paintable)
     g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
@@ -503,6 +706,10 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, icon_image);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat_check);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, stack);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_toggle);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_view);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_buffer);
 
   gtk_widget_class_bind_template_callback (widget_class, size_changed);
   gtk_widget_class_bind_template_callback (widget_class, viewbox_changed);
@@ -510,6 +717,9 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, license_changed);
   gtk_widget_class_bind_template_callback (widget_class, description_changed);
   gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
+  gtk_widget_class_bind_template_callback (widget_class, xml_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, xml_changed);
+  gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "PaintableEditor");
@@ -568,6 +778,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
       update_viewbox (self);
       update_compat (self);
       update_icon_paintable (self);
+      update_xml (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);

@@ -45,6 +45,8 @@ PathPaintable * path_paintable_new                 (void);
 PathPaintable * path_paintable_new_from_bytes      (GBytes         *bytes,
                                                     GError        **error);
 PathPaintable * path_paintable_new_from_resource   (const char     *resource);
+void            path_paintable_set_svg             (PathPaintable  *self,
+                                                    GtkSvg         *svg);
 
 PathPaintable * path_paintable_copy                (PathPaintable   *self);
 
