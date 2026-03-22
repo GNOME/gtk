@@ -125,7 +125,7 @@
             keyPoints='0.5; 0.5'
             rotate='auto'
             gpa:status='done'>
-      <mpath href='line'/>
+      <mpath href='#line'/>
     </animateMotion>
     <animateMotion
             id='gpa:attachment-transition:fade-in:red'
@@ -139,7 +139,7 @@
             keyPoints='1; 0.5'
             rotate='auto'
             gpa:status='done'>
-      <mpath href='line'/>
+      <mpath href='#line'/>
     </animateMotion>
     <animateMotion
             id='gpa:attachment-transition:fade-out:red'
@@ -153,7 +153,7 @@
             keyPoints='0.5; 1'
             rotate='auto'
             gpa:status='done'>
-      <mpath href='line'/>
+      <mpath href='#line'/>
     </animateMotion>
     <set
             id='gpa:path-length:red'

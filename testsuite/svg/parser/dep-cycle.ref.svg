@@ -10,7 +10,7 @@
             keyTimes='0; 1'
             calcMode='linear'
             keyPoints='0; 1'>
-      <mpath href='rect'/>
+      <mpath href='#rect'/>
     </animateMotion>
   </circle>
   <g

@@ -11,4 +11,10 @@
     />
  <rect x='0' y='5' width='10' height='10'
     gpa:states='zero 2'/>
+ <circle
+    gpa:fill=' #ffaabb '
+    gpa:stroke=' warning '
+    gpa:stroke-minwidth=' 4 '
+    gpa:states=' all '
+    />
 </svg>

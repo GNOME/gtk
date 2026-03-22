@@ -27,7 +27,7 @@
             keyTimes='0; 1'
             calcMode='linear'
             keyPoints='0; 1'>
-      <mpath href='motionPath1'/>
+      <mpath href='#motionPath1'/>
     </animateMotion>
   </circle>
   <rect
@@ -51,7 +51,7 @@
             keyTimes='0; 0.8; 1'
             calcMode='linear'
             keyPoints='0; 0.5; 1'>
-      <mpath href='motionPath2'/>
+      <mpath href='#motionPath2'/>
     </animateMotion>
   </circle>
   <circle
@@ -63,7 +63,7 @@
             keyTimes='0; 0.8; 1'
             calcMode='linear'
             keyPoints='0; 0.5; 1'>
-      <mpath href='motionPath2'/>
+      <mpath href='#motionPath2'/>
     </animateMotion>
   </circle>
 </svg>
