@@ -17802,8 +17802,18 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
+          size_t dummy;
+
           *handled |= BIT (i);
           shape->style = g_strdup (attr_values[i]);
+
+#if GLIB_CHECK_VERSION (2, 89, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          g_markup_parse_context_get_attr_location (context, i,
+                                                    &shape->style_loc.lines, &shape->style_loc.line_chars, &shape->style_loc.bytes,
+                                                    &dummy, &dummy, &dummy);
+G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
         }
       else if (strcmp (attr_names[i], "id") == 0)
         {
@@ -20266,7 +20276,7 @@ apply_styles_here (Shape        *shape,
   GtkCssNode *freeme = NULL;
   GtkBitmask *set;
   const char *style = NULL;
-  size_t line;
+  GtkSvgLocation loc;
 
   if (idx > 0)
     {
@@ -20275,27 +20285,33 @@ apply_styles_here (Shape        *shape,
           ColorStop *stop = g_ptr_array_index (shape->color_stops, idx - 1);
           node = stop->css_node;
           style = stop->style;
-          line = stop->line;
+          loc.lines = stop->line;
+          loc.line_chars = 0;
+          loc.bytes = 0;
         }
       else
         {
           FilterPrimitive *ff = g_ptr_array_index (shape->filters, idx - 1);
           node = ff->css_node;
           style = ff->style;
-          line = ff->line;
+          loc.lines = ff->line;
+          loc.line_chars = 0;
+          loc.bytes = 0;
         }
     }
   else if (shape->css_node)
     {
       node = shape->css_node;
       style = shape->style;
-      line = shape->line;
+      loc = shape->style_loc;
     }
   else
     {
       freeme = node = gtk_css_node_new ();
       style = NULL;
-      line = 0;
+      loc.lines = 0;
+      loc.line_chars = 0;
+      loc.bytes = 0;
     }
 
   set = _gtk_bitmask_new ();
@@ -20314,9 +20330,9 @@ apply_styles_here (Shape        *shape,
     {
       SvgCssRuleset r = { 0, };
 
-      data->text.start.lines = line;
-      data->text.start.bytes = 0;
-      data->text.start.line_chars = 0;
+      data->text.start = loc;
+      data->text.start.line_chars += strlen ("style='");
+      data->text.start.bytes += strlen ("style='");
       data->current_shape = shape;
       parse_style_into_ruleset (&r, style, data);
       apply_ruleset_to_shape (&r, shape, idx, NULL, data);

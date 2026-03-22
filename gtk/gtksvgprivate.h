@@ -354,6 +354,7 @@ struct _Shape
   char *style;
   char **classes;
   size_t line;
+  GtkSvgLocation style_loc;
 
   /* For style matching */
   GtkCssNode *css_node;
