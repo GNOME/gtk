@@ -21405,7 +21405,7 @@ serialize_animation_motion (GString              *s,
     {
       g_string_append (s, ">");
       indent_for_elt (s, indent + 2);
-      g_string_append_printf (s, "<mpath href='%s'/>", a->motion.path_shape->id);
+      g_string_append_printf (s, "<mpath href='#%s'/>", a->motion.path_shape->id);
       indent_for_elt (s, indent);
       g_string_append (s, "</animateMotion>");
     }
