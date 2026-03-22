@@ -79,6 +79,7 @@ gsk_private_sources = files([
   'gpu/gskgpucache.c',
   'gpu/gskgpucachedfill.c',
   'gpu/gskgpucachedglyph.c',
+  'gpu/gskgpucachedglyphy.c',
   'gpu/gskgpucachedstroke.c',
   'gpu/gskgpuclearop.c',
   'gpu/gskgpuclip.c',
@@ -240,6 +241,7 @@ gsk_deps = [
   cairo_dep,
   cairo_csi_dep,
   libgdk_dep,
+  libglyphy_dep,
 ]
 
 libgsk_f16c = static_library('gsk_f16c',

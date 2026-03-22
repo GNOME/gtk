@@ -16,6 +16,8 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
   { "cairo", GSK_DEBUG_CAIRO, "Overlay error pattern over Cairo drawing (finds fallbacks)" },
   { "profile", GSK_DEBUG_PROFILE, "Enable profiling (Vulkan only)" },
+  { "glyphy", GSK_DEBUG_GLYPHY, "Force glyphy text rendering when possible" },
+  { "glyphy-raster", GSK_DEBUG_GLYPHY_RASTER, "Force raster text rendering (disable glyphy)" },
 };
 
 static guint gsk_debug_flags;

@@ -34,6 +34,7 @@ sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 gstreamer_req      = '>= 1.24.0'
 gi_req             = '>= 1.84'
+libglyphy_req      = '>= 1.0.0'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -467,6 +468,8 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             default_options: harfbuzz_fallback_options)
 hb_subset_dep  = dependency('harfbuzz-subset', version: harfbuzz_req)
+libglyphy_dep  = dependency('glyphy', version: libglyphy_req,
+                            fallback: ['glyphy', 'libglyphy_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 pangoft_dep    = dependency('pangoft2', version: pango_req,

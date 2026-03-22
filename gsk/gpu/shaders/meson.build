@@ -6,6 +6,8 @@ gsk_private_gpu_include_shaders = files([
   'common-vulkan.glsl',
   'ellipse.glsl',
   'enums.glsl',
+  'glyphy-fragment.glsl',
+  'glyphy-vertex.glsl',
   'rect.glsl',
   'roundedrect.glsl',
 ])
@@ -27,6 +29,7 @@ gsk_private_gpu_shaders = files([
   'gskgpuconvertcicp.glsl',
   'gskgpucrossfade.glsl',
   'gskgpudisplacement.glsl',
+  'gskgpuglyphy.glsl',
   'gskgpulineargradient.glsl',
   'gskgpumask.glsl',
   'gskgpuradialgradient.glsl',
@@ -137,4 +140,3 @@ foreach shader: gsk_private_gpu_shaders
     endforeach
   endif
 endforeach
-

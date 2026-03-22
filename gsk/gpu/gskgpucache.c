@@ -3,6 +3,7 @@
 #include "gskgpucacheprivate.h"
 
 #include "gskgpucachedglyphprivate.h"
+#include "gskgpucachedglyphyprivate.h"
 #include "gskgpucachedfillprivate.h"
 #include "gskgpucachedstrokeprivate.h"
 #include "gskgpucachedprivate.h"
@@ -87,7 +88,7 @@ gsk_gpu_cached_should_collect (GskGpuCached *cached,
   return cached->class->should_collect (cached, cache_timeout, timestamp);
 }
 
-static gpointer
+gpointer
 gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
                                const GskGpuCachedClass *class,
                                GskGpuCachedAtlas       *atlas)
@@ -866,6 +867,20 @@ gsk_gpu_cache_clear_cache (GskGpuCache *self)
   g_assert (self->last_cached == NULL);
 }
 
+void
+gsk_gpu_cache_free_atlas_items (GskGpuCache       *self,
+                                GskGpuCachedAtlas *atlas)
+{
+  GskGpuCached *cached, *next;
+
+  for (cached = self->first_cached; cached != NULL; cached = next)
+    {
+      next = cached->next;
+      if (cached->atlas == atlas)
+        gsk_gpu_cached_free (cached);
+    }
+}
+
 static void
 gsk_gpu_cache_dispose (GObject *object)
 {
@@ -875,6 +890,7 @@ gsk_gpu_cache_dispose (GObject *object)
 
   gsk_gpu_cached_stroke_finish_cache (self);
   gsk_gpu_cached_fill_finish_cache (self);
+  gsk_gpu_cached_glyphy_finish_cache (self);
 
 #ifdef GDK_RENDERING_VULKAN
   gsk_vulkan_ycbcr_finish_cache (self);
@@ -915,6 +931,7 @@ gsk_gpu_cache_init (GskGpuCache *self)
                                           g_direct_equal);
   
   gsk_gpu_cached_glyph_init_cache (self);
+  gsk_gpu_cached_glyphy_init_cache (self);
 #ifdef GDK_RENDERING_VULKAN
   gsk_vulkan_ycbcr_init_cache (self);
 #endif

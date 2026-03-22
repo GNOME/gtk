@@ -19,6 +19,8 @@
 #include "gdk/gdktextureprivate.h"
 #include "gsk/gskdebugprivate.h"
 
+#include <string.h>
+
 static GskGpuOp *
 gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
                                         GskGpuFrame                 *frame,
@@ -624,4 +626,147 @@ gsk_gpu_upload_cairo_into_op (GskGpuFrame                 *frame,
   self->print_func = print_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
+}
+
+typedef struct _GskGpuUploadDataOp GskGpuUploadDataOp;
+
+struct _GskGpuUploadDataOp
+{
+  GskGpuOp op;
+
+  GskGpuImage *image;
+  cairo_rectangle_int_t area;
+  GdkMemoryFormat format;
+  gsize width;
+  gsize height;
+  gsize stride;
+  guchar *data;
+  GDestroyNotify data_destroy;
+
+  GskGpuBuffer *buffer;
+};
+
+static void
+gsk_gpu_upload_data_op_finish (GskGpuOp *op)
+{
+  GskGpuUploadDataOp *self = (GskGpuUploadDataOp *) op;
+
+  g_object_unref (self->image);
+  if (self->data_destroy)
+    self->data_destroy (self->data);
+  g_clear_object (&self->buffer);
+}
+
+static void
+gsk_gpu_upload_data_op_print (GskGpuOp    *op,
+                              GskGpuFrame *frame,
+                              GString     *string,
+                              guint        indent)
+{
+  GskGpuUploadDataOp *self = (GskGpuUploadDataOp *) op;
+
+  gsk_gpu_print_op (string, indent, "upload-data");
+  gsk_gpu_print_int_rect (string, &self->area);
+  gsk_gpu_print_image (string, self->image);
+  gsk_gpu_print_newline (string);
+}
+
+static void
+gsk_gpu_upload_data_op_draw (GskGpuOp              *op,
+                             guchar                *dest_data,
+                             const GdkMemoryLayout *layout)
+{
+  GskGpuUploadDataOp *self = (GskGpuUploadDataOp *) op;
+  gsize bpp;
+  gsize dest_stride;
+  gsize row_bytes;
+
+  g_assert (layout->format == self->format);
+  g_assert (layout->width == self->width);
+  g_assert (layout->height == self->height);
+  g_assert (gdk_memory_format_get_n_planes (layout->format) == 1);
+
+  bpp = gdk_memory_format_get_plane_block_bytes (layout->format, 0);
+  dest_stride = layout->planes[0].stride;
+  row_bytes = self->width * bpp;
+
+  for (gsize y = 0; y < self->height; y++)
+    memcpy (dest_data + y * dest_stride,
+            self->data + y * self->stride,
+            row_bytes);
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static GskGpuOp *
+gsk_gpu_upload_data_op_vk_command (GskGpuOp              *op,
+                                   GskGpuFrame           *frame,
+                                   GskVulkanCommandState *state)
+{
+  GskGpuUploadDataOp *self = (GskGpuUploadDataOp *) op;
+
+  return gsk_gpu_upload_op_vk_command_with_area (op,
+                                                 frame,
+                                                 state,
+                                                 GSK_VULKAN_IMAGE (self->image),
+                                                 &self->area,
+                                                 gsk_gpu_upload_data_op_draw,
+                                                 &self->buffer);
+}
+#endif
+
+static GskGpuOp *
+gsk_gpu_upload_data_op_gl_command (GskGpuOp          *op,
+                                   GskGpuFrame       *frame,
+                                   GskGLCommandState *state)
+{
+  GskGpuUploadDataOp *self = (GskGpuUploadDataOp *) op;
+
+  return gsk_gpu_upload_op_gl_command_with_area (op,
+                                                 frame,
+                                                 self->image,
+                                                 &self->area,
+                                                 gsk_gpu_upload_data_op_draw);
+}
+
+static const GskGpuOpClass GSK_GPU_UPLOAD_DATA_OP_CLASS = {
+  GSK_GPU_OP_SIZE (GskGpuUploadDataOp),
+  GSK_GPU_STAGE_UPLOAD,
+  gsk_gpu_upload_data_op_finish,
+  gsk_gpu_upload_data_op_print,
+#ifdef GDK_RENDERING_VULKAN
+  gsk_gpu_upload_data_op_vk_command,
+#endif
+  gsk_gpu_upload_data_op_gl_command
+};
+
+void
+gsk_gpu_upload_data_into_op (GskGpuFrame                 *frame,
+                             GskGpuImage                 *image,
+                             const cairo_rectangle_int_t *area,
+                             GdkMemoryFormat              format,
+                             gsize                        width,
+                             gsize                        height,
+                             gsize                        stride,
+                             gpointer                     data,
+                             GDestroyNotify               data_destroy)
+{
+  GskGpuUploadDataOp *self;
+  GskDebugProfile *profile;
+
+  self = (GskGpuUploadDataOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_UPLOAD_DATA_OP_CLASS);
+  profile = gsk_gpu_frame_get_profile (frame);
+  if (profile)
+    {
+      profile->self.n_uploads++;
+      profile->self.upload_pixels += area->width * area->height;
+    }
+
+  self->image = g_object_ref (image);
+  self->area = *area;
+  self->format = format;
+  self->width = width;
+  self->height = height;
+  self->stride = stride;
+  self->data = data;
+  self->data_destroy = data_destroy;
 }

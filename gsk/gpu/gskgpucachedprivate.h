@@ -36,8 +36,11 @@ struct _GskGpuCached
 struct _GskGpuCachePrivate
 {
   GHashTable *glyph_cache;
+  GHashTable *glyphy_cache;
   GHashTable *fill_cache;
   GHashTable *stroke_cache;
+  gpointer glyphy_context;
+  gpointer glyphy_atlas;
 
   /* Vulkan-specific */
   GHashTable *ycbcr_cache;
@@ -45,6 +48,9 @@ struct _GskGpuCachePrivate
 
 gpointer                gsk_gpu_cached_new                              (GskGpuCache                    *cache,
                                                                          const GskGpuCachedClass        *class);
+gpointer                gsk_gpu_cached_new_from_atlas                   (GskGpuCache                    *cache,
+                                                                         const GskGpuCachedClass        *class,
+                                                                         GskGpuCachedAtlas              *atlas);
 gpointer                gsk_gpu_cached_new_from_current_atlas           (GskGpuCache                    *cache,
                                                                          const GskGpuCachedClass        *class);
 

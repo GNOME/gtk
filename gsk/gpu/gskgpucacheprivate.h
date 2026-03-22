@@ -6,6 +6,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
+
 #define GSK_TYPE_GPU_CACHE         (gsk_gpu_cache_get_type ())
 #define GSK_GPU_CACHE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GSK_TYPE_GPU_CACHE, GskGpuCache))
 #define GSK_GPU_CACHE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GSK_TYPE_GPU_CACHE, GskGpuCacheClass))
@@ -39,6 +41,8 @@ GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuC
                                                                          gsize                  *out_x,
                                                                          gsize                  *out_y);
 GskGpuCachePrivate *    gsk_gpu_cache_get_private                       (GskGpuCache            *self);
+void                    gsk_gpu_cache_free_atlas_items                  (GskGpuCache            *self,
+                                                                         GskGpuCachedAtlas      *atlas);
 
 GskGpuImage *           gsk_gpu_cache_lookup_texture_image              (GskGpuCache            *self,
                                                                          GdkTexture             *texture,

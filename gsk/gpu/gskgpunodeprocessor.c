@@ -11,6 +11,7 @@
 #include "gskgpubluropprivate.h"
 #include "gskgpucacheprivate.h"
 #include "gskgpucachedglyphprivate.h"
+#include "gskgpucachedglyphyprivate.h"
 #include "gskgpucachedfillprivate.h"
 #include "gskgpucachedstrokeprivate.h"
 #include "gskgpuclearopprivate.h"
@@ -25,6 +26,7 @@
 #include "gskgpuconvertopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
 #include "gskgpudisplacementopprivate.h"
+#include "gskgpuglyphyopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -2456,6 +2458,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
   const GdkColor *color;
   GdkColorState *acs;
   GdkColor color2;
+  gboolean use_glyphy;
 
   if (gsk_gpu_render_pass_has_opacity (self) &&
       gsk_text_node_has_color_glyphs (node))
@@ -2489,60 +2492,177 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
       flags_mask = 15;
     }
 
-  for (guint i = 0; i < num_glyphs; i++)
+  use_glyphy = !gsk_text_node_has_color_glyphs (node) &&
+               !GSK_DEBUG_CHECK (GLYPHY_RASTER);
+
+  if (GSK_DEBUG_CHECK (GLYPHY))
+    use_glyphy = !gsk_text_node_has_color_glyphs (node);
+
+  if (use_glyphy)
     {
-      GskGpuImage *image;
-      graphene_rect_t glyph_bounds, glyph_tex_rect;
-      graphene_point_t glyph_offset, glyph_origin;
-      GskGpuGlyphLookupFlags flags;
+      for (guint i = 0; i < num_glyphs; i++)
+        {
+          GskGpuImage *image;
+          const GskGpuGlyphyValue *glyphy_value;
+          graphene_point_t glyph_origin;
+          GskGpuGlyphLookupFlags flags;
+          PangoRectangle ink_rect = { 0 };
+          float font_scale = 1.0f;
 
-      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale,
-                                          offset.y + glyphs[i].geometry.y_offset / pango_scale);
+          glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale,
+                                              offset.y + glyphs[i].geometry.y_offset / pango_scale);
 
-      glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
-      glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
-      flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
-      glyph_origin.x /= align_scale_x;
-      glyph_origin.y /= align_scale_y;
+          glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
+          glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
+          flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
+          glyph_origin.x /= align_scale_x;
+          glyph_origin.y /= align_scale_y;
 
-      image = gsk_gpu_cached_glyph_lookup (cache,
-                                           self->frame,
-                                           font,
-                                           glyphs[i].glyph,
-                                           flags,
-                                           scale,
-                                           &glyph_bounds,
-                                           &glyph_offset);
+          image = gsk_gpu_cached_glyphy_lookup (cache,
+                                                self->frame,
+                                                font,
+                                                glyphs[i].glyph,
+                                                &glyphy_value);
+          if (image != NULL)
+            {
+              float extents_w = glyphy_value->max_x - glyphy_value->min_x;
+              float extents_h = glyphy_value->max_y - glyphy_value->min_y;
+              float scale_x = 0.0f;
+              float scale_y = 0.0f;
 
-      glyph_origin.x -= glyph_offset.x / scale;
-      glyph_origin.y -= glyph_offset.y / scale;
-      glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
-                                           glyph_origin.y - glyph_bounds.origin.y / scale,
-                                           gsk_gpu_image_get_width (image) / scale,
-                                           gsk_gpu_image_get_height (image) / scale);
-      glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
-                                         glyph_origin.y,
-                                         glyph_bounds.size.width / scale,
-                                         glyph_bounds.size.height / scale);
+              pango_font_get_glyph_extents (font, glyphs[i].glyph, &ink_rect, NULL);
+              if (extents_w > 0.0f)
+                scale_x = (ink_rect.width / pango_scale) / extents_w;
+              if (extents_h > 0.0f)
+                scale_y = (ink_rect.height / pango_scale) / extents_h;
+              font_scale = scale_y > 0.0f ? scale_y : scale_x;
+              if (font_scale == 0.0f)
+                font_scale = scale_x > 0.0f ? scale_x : 1.0f;
 
-      if (glyphs[i].attr.is_color)
-        gsk_gpu_texture_op (self,
-                            self->ccs,
-                            &glyph_bounds,
-                            image,
-                            GSK_GPU_SAMPLER_DEFAULT,
-                            &glyph_tex_rect);
-      else
-        gsk_gpu_colorize_op (self,
-                             self->ccs,
-                             acs,
-                             &glyph_bounds,
-                             image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             &glyph_tex_rect,
-                             &color2);
+              float min_x = glyph_origin.x + font_scale * glyphy_value->min_x;
+              float max_x = glyph_origin.x + font_scale * glyphy_value->max_x;
+              float min_y = glyph_origin.y - font_scale * glyphy_value->max_y;
+              float max_y = glyph_origin.y - font_scale * glyphy_value->min_y;
+              graphene_rect_t glyph_bounds = GRAPHENE_RECT_INIT (min_x,
+                                                                 min_y,
+                                                                 max_x - min_x,
+                                                                 max_y - min_y);
+              graphene_vec4_t extents;
+              graphene_vec4_t atlas_info;
 
-      offset.x += glyphs[i].geometry.width / pango_scale;
+              gsk_gpu_glyphy_op (self,
+                                 self->ccs,
+                                 acs,
+                                 &glyph_bounds,
+                                 image,
+                                 GSK_GPU_SAMPLER_NEAREST,
+                                 graphene_vec4_init (&extents,
+                                                     glyphy_value->min_x,
+                                                     glyphy_value->min_y,
+                                                     glyphy_value->max_x,
+                                                     glyphy_value->max_y),
+                                 graphene_vec4_init (&atlas_info,
+                                                     glyphy_value->atlas_x,
+                                                     glyphy_value->atlas_y,
+                                                     64.0f,
+                                                     0.0f),
+                                 &color2);
+            }
+          else
+            {
+              graphene_rect_t glyph_bounds, glyph_tex_rect;
+              graphene_point_t glyph_offset;
+
+              image = gsk_gpu_cached_glyph_lookup (cache,
+                                                   self->frame,
+                                                   font,
+                                                   glyphs[i].glyph,
+                                                   flags,
+                                                   scale,
+                                                   &glyph_bounds,
+                                                   &glyph_offset);
+
+              glyph_origin.x -= glyph_offset.x / scale;
+              glyph_origin.y -= glyph_offset.y / scale;
+              glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
+                                                   glyph_origin.y - glyph_bounds.origin.y / scale,
+                                                   gsk_gpu_image_get_width (image) / scale,
+                                                   gsk_gpu_image_get_height (image) / scale);
+              glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
+                                                 glyph_origin.y,
+                                                 glyph_bounds.size.width / scale,
+                                                 glyph_bounds.size.height / scale);
+
+              gsk_gpu_colorize_op (self,
+                                   self->ccs,
+                                   acs,
+                                   &glyph_bounds,
+                                   image,
+                                   GSK_GPU_SAMPLER_DEFAULT,
+                                   &glyph_tex_rect,
+                                   &color2);
+            }
+
+          offset.x += glyphs[i].geometry.width / pango_scale;
+        }
+    }
+  else
+    {
+      for (guint i = 0; i < num_glyphs; i++)
+        {
+          GskGpuImage *image;
+          graphene_rect_t glyph_bounds, glyph_tex_rect;
+          graphene_point_t glyph_offset, glyph_origin;
+          GskGpuGlyphLookupFlags flags;
+
+          glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale,
+                                              offset.y + glyphs[i].geometry.y_offset / pango_scale);
+
+          glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
+          glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
+          flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
+          glyph_origin.x /= align_scale_x;
+          glyph_origin.y /= align_scale_y;
+
+          image = gsk_gpu_cached_glyph_lookup (cache,
+                                               self->frame,
+                                               font,
+                                               glyphs[i].glyph,
+                                               flags,
+                                               scale,
+                                               &glyph_bounds,
+                                               &glyph_offset);
+
+          glyph_origin.x -= glyph_offset.x / scale;
+          glyph_origin.y -= glyph_offset.y / scale;
+          glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
+                                               glyph_origin.y - glyph_bounds.origin.y / scale,
+                                               gsk_gpu_image_get_width (image) / scale,
+                                               gsk_gpu_image_get_height (image) / scale);
+          glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
+                                             glyph_origin.y,
+                                             glyph_bounds.size.width / scale,
+                                             glyph_bounds.size.height / scale);
+
+          if (glyphs[i].attr.is_color)
+            gsk_gpu_texture_op (self,
+                                self->ccs,
+                                &glyph_bounds,
+                                image,
+                                GSK_GPU_SAMPLER_DEFAULT,
+                                &glyph_tex_rect);
+          else
+            gsk_gpu_colorize_op (self,
+                                 self->ccs,
+                                 acs,
+                                 &glyph_bounds,
+                                 image,
+                                 GSK_GPU_SAMPLER_DEFAULT,
+                                 &glyph_tex_rect,
+                                 &color2);
+
+          offset.x += glyphs[i].geometry.width / pango_scale;
+        }
     }
 
   gdk_color_finish (&color2);
@@ -3986,4 +4106,3 @@ gsk_container_node_occlusion (GskRenderNode   *node,
 
   return result;
 }
-

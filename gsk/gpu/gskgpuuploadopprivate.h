@@ -33,6 +33,15 @@ void                    gsk_gpu_upload_cairo_into_op                    (GskGpuF
                                                                          gpointer                        user_data,
                                                                          GDestroyNotify                  user_destroy);
 
+void                    gsk_gpu_upload_data_into_op                     (GskGpuFrame                    *frame,
+                                                                         GskGpuImage                    *image,
+                                                                         const cairo_rectangle_int_t    *area,
+                                                                         GdkMemoryFormat                 format,
+                                                                         gsize                           width,
+                                                                         gsize                           height,
+                                                                         gsize                           stride,
+                                                                         gpointer                        data,
+                                                                         GDestroyNotify                  data_destroy);
+
 
 G_END_DECLS
-

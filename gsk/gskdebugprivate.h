@@ -19,9 +19,11 @@ typedef enum {
   GSK_DEBUG_STAGING               = 1 <<  9,
   GSK_DEBUG_CAIRO                 = 1 << 10,
   GSK_DEBUG_PROFILE               = 1 << 11,
+  GSK_DEBUG_GLYPHY                = 1 << 12,
+  GSK_DEBUG_GLYPHY_RASTER         = 1 << 13,
 } GskDebugFlags;
 
-#define GSK_DEBUG_ANY ((1 << 12) - 1)
+#define GSK_DEBUG_ANY ((1 << 14) - 1)
 
 GskDebugFlags gsk_get_debug_flags (void);
 void          gsk_set_debug_flags (GskDebugFlags flags);
@@ -45,4 +47,3 @@ gboolean gsk_check_debug_flags (GskDebugFlags flags);
     } G_STMT_END
 
 G_END_DECLS
-
