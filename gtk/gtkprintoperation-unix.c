@@ -258,7 +258,6 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   GdkAppLaunchContext *context;
   gchar *cmd;
   gchar *preview_cmd;
-  GtkSettings *settings;
   GtkPrintSettings *print_settings = NULL;
   GtkPageSetup *page_setup;
   GKeyFile *key_file = NULL;
