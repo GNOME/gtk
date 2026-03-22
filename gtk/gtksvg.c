@@ -10553,6 +10553,33 @@ parse_language (GtkCssParser *parser)
 }
 
 static SvgValue *
+parse_custom_ident (GtkCssParser *parser)
+{
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+    {
+      const GtkCssToken *token = gtk_css_parser_get_token (parser);
+      const char *string = gtk_css_token_get_string (token);
+      SvgValue *value;
+
+      if (strcmp (string, "initial") == 0 ||
+          strcmp (string, "inherited") == 0)
+        {
+          gtk_css_parser_error_value (parser, "Can't use %s here", string);
+          return NULL;
+        }
+
+      value = svg_string_new (string);
+
+      gtk_css_parser_skip (parser);
+
+      return value;
+    }
+
+  gtk_css_parser_error_syntax (parser, "Expected an identifier");
+  return NULL;
+}
+
+static SvgValue *
 parse_language_list (GtkCssParser *parser)
 {
   GPtrArray *langs;
@@ -11397,7 +11424,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FE_RESULT] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_presentation = svg_string_new,
+    .parse_value = parse_custom_ident,
   },
   [SHAPE_ATTR_FE_COLOR] = {
     .applies_to = BIT (SHAPE_FILTER),
