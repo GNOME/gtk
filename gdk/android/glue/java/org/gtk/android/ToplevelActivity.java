@@ -19,6 +19,7 @@
 
 package org.gtk.android;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
@@ -47,6 +48,7 @@ import android.view.WindowInsetsController;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.window.OnBackInvokedCallback;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
@@ -422,6 +424,8 @@ public class ToplevelActivity extends Activity {
 	private ToplevelView view;
 	private boolean fullscreenState;
 
+	private OnBackInvokedCallback defaultBack;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		this.fullscreenState = false;
@@ -429,6 +433,16 @@ public class ToplevelActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 		getWindow().setDecorFitsSystemWindows(false);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			this.defaultBack = new OnBackInvokedCallback() {
+				@Override
+				public void onBackInvoked() {
+					GlibContext.runOnMain(ToplevelActivity.this::notifyOnBackPress);
+				}
+			};
+			getOnBackInvokedDispatcher().registerOnBackInvokedCallback(0, this.defaultBack);
+		}
 
 		this.view = new ToplevelView();
 		setContentView(this.view);
@@ -478,6 +492,12 @@ public class ToplevelActivity extends Activity {
 		GlibContext.runOnMain(() -> notifyStateChange(has_focus, is_fullscreen));
 	}
 
+	@SuppressLint("GestureBackNavigation")
+	@SuppressWarnings("deprecation")
+	/*
+	 * Legacy code for SDK < 33, newer versions call the callback
+	 * registered with the BackInvokedDispatcher.
+	 */
 	@Override
 	public void onBackPressed() {
 		GlibContext.runOnMain(this::notifyOnBackPress);
