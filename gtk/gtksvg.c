@@ -5358,6 +5358,7 @@ svg_filter_primitive_ref_parse (GtkCssParser *parser)
       return value;
     }
 
+  gtk_css_parser_error_syntax (parser, "Expected a filter primitive ref value");
   return NULL;
 }
 
@@ -5887,6 +5888,7 @@ svg_transform_parse_css (GtkCssParser *parser)
 
 fail:
   g_array_free (array, TRUE);
+  gtk_css_parser_error_syntax (parser, "Expected a transform");
   return NULL;
 }
 
@@ -6590,6 +6592,7 @@ svg_color_parse (GtkCssParser *parser)
   if (gdk_rgba_parser_parse (parser, &rgba))
     return svg_color_new_rgba (&rgba);
 
+  /* gdk_rgba_parser_parse already throws an error */
   return NULL;
 }
 
@@ -7057,13 +7060,14 @@ svg_paint_parse (GtkCssParser *parser)
           g_free (url);
         }
 
+      /* gdk_rgba_parser_parse already throws an error */
       return paint;
     }
 
   if (gdk_rgba_parser_parse (parser, &color))
     return svg_paint_new_rgba (&color);
 
-  gtk_css_parser_error_syntax (parser, "Expected a paint value");
+  /* gdk_rgba_parser_parse already throws an error */
   return NULL;
 }
 
