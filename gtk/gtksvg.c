@@ -9959,13 +9959,13 @@ svg_href_new_ref (const char *ref)
 }
 
 static SvgValue *
-svg_href_new_url (const char *ref)
+svg_href_new_url_take (const char *ref)
 {
   SvgHref *result;
 
   result = (SvgHref *) svg_value_alloc (&SVG_HREF_CLASS, sizeof (SvgHref));
   result->kind = HREF_URL;
-  result->ref = g_strdup (ref);
+  result->ref = (char *) ref;
   result->shape = NULL;
 
   return (SvgValue *) result;
@@ -9974,32 +9974,7 @@ svg_href_new_url (const char *ref)
 static SvgValue *
 svg_href_parse (const char *string)
 {
-  if (match_str (string, "none"))
-    return svg_href_new_none ();
-  else
-    return svg_href_new_ref (string);
-}
-
-static SvgValue *
-svg_href_parse_url (GtkCssParser *parser)
-{
-  if (gtk_css_parser_try_ident (parser, "none"))
-    {
-      return svg_href_new_none ();
-    }
-  else
-    {
-      char *url;
-      SvgValue *res = NULL;
-
-      url = gtk_css_parser_consume_url (parser);
-      if (url)
-        res = svg_href_new_url (url);
-
-      g_free (url);
-
-      return res;
-    }
+   return svg_href_new_ref (string);
 }
 
 static const char *
@@ -10884,6 +10859,25 @@ parse_font_family (GtkCssParser *parser)
   return result;
 }
 
+static SvgValue *
+marker_ref_parse (GtkCssParser *parser)
+{
+  if (gtk_css_parser_try_ident (parser, "none"))
+    {
+      return svg_href_new_none ();
+    }
+  else
+    {
+      char *url = gtk_css_parser_consume_url (parser);
+
+      if (url)
+        return svg_href_new_url_take (url);
+    }
+
+  gtk_css_parser_error_syntax (parser, "Expected a marker reference");
+  return NULL;
+}
+
 static gboolean
 number_is_positive (SvgValue *value)
 {
@@ -11111,17 +11105,17 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_MARKER_START] = {
     .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_SHAPES,
-    .parse_value = svg_href_parse_url,
+    .parse_value = marker_ref_parse,
   },
   [SHAPE_ATTR_MARKER_MID] = {
     .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_SHAPES,
-    .parse_value = svg_href_parse_url,
+    .parse_value = marker_ref_parse,
   },
   [SHAPE_ATTR_MARKER_END] = {
     .flags = SHAPE_ATTR_INHERITED,
     .applies_to = SHAPE_SHAPES,
-    .parse_value = svg_href_parse_url,
+    .parse_value = marker_ref_parse,
   },
   [SHAPE_ATTR_PAINT_ORDER] = {
     .flags = SHAPE_ATTR_INHERITED | SHAPE_ATTR_DISCRETE,
@@ -11162,7 +11156,6 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_GRAPHICS_REF | SHAPE_PAINT_SERVERS | BIT (SHAPE_LINK),
-    .parse_value = svg_href_parse_url,
     .parse_presentation = svg_href_parse,
   },
   [SHAPE_ATTR_OVERFLOW] = {
@@ -11527,7 +11520,6 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_FE_IMAGE_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
-    .parse_value = svg_href_parse_url,
     .parse_presentation = svg_href_parse,
   },
   [SHAPE_ATTR_FE_IMAGE_CONTENT_FIT] = {
