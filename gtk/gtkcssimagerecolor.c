@@ -62,6 +62,8 @@ gtk_css_image_recolor_dispose (GObject *object)
       recolor->palette = NULL;
     }
 
+  g_clear_object (&recolor->info);
+
   G_OBJECT_CLASS (_gtk_css_image_recolor_parent_class)->dispose (object);
 }
 
@@ -106,17 +108,23 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
                             GError             **gerror)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (recolor);
-  GtkIconInfo *info;
   GdkRGBA fg, success, warning, error;
   GdkPixbuf *pixbuf;
   GtkCssImage *image;
   GError *local_error = NULL;
 
+  if (scale != recolor->info_scale)
+    {
+      recolor->info_scale = scale;
+      g_clear_object (&recolor->info);
+    }
+
+  if (!recolor->info)
+    recolor->info = gtk_icon_info_new_for_file (url->file, 0, scale);
+
   lookup_symbolic_colors (style, palette, &fg, &success, &warning, &error);
 
-  info = gtk_icon_info_new_for_file (url->file, 0, scale);
-  pixbuf = gtk_icon_info_load_symbolic (info, &fg, &success, &warning, &error, NULL, &local_error);
-  g_object_unref (info);
+  pixbuf = gtk_icon_info_load_symbolic (recolor->info, &fg, &success, &warning, &error, NULL, &local_error);
 
   if (pixbuf == NULL)
     {
