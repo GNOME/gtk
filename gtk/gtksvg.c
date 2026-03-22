@@ -366,12 +366,29 @@ gtk_svg_location_init_tag_end (GtkSvgLocation      *location,
 }
 
 static void
-markup_context_get_tag_range (GMarkupParseContext *context,
-                              GtkSvgLocation      *start,
-                              GtkSvgLocation      *end)
+gtk_svg_location_init_tag_range (GtkSvgLocation      *start,
+                                 GtkSvgLocation      *end,
+                                 GMarkupParseContext *context)
 {
   gtk_svg_location_init_tag_start (start, context);
   gtk_svg_location_init_tag_end (end, context);
+}
+
+static void
+gtk_svg_location_init_attr_range (GtkSvgLocation      *start,
+                                  GtkSvgLocation      *end,
+                                  GMarkupParseContext *context,
+                                  unsigned int         attr)
+{
+#if GLIB_CHECK_VERSION (2, 89, 0)
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  g_markup_parse_context_get_attr_location (context, attr,
+                                            &start->lines, &start->line_chars, &start->bytes,
+                                            &end->lines, &end->line_chars, &end->bytes);
+G_GNUC_END_IGNORE_DEPRECATIONS
+#else
+  gtk_svg_location_init_tag_range (start, end, context);
+#endif
 }
 
 typedef struct
@@ -503,26 +520,19 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
 
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
   gtk_svg_error_set_attribute (error, attr_name);
+  gtk_svg_location_init_tag_range (&start, &end, context);
 
-  markup_context_get_tag_range (context, &start, &end);
-
-#if GLIB_CHECK_VERSION (2, 89, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (attr_names && attr_name)
     {
       for (unsigned int i = 0; attr_names[i]; i++)
         {
           if (strcmp (attr_names[i], attr_name) == 0)
             {
-              g_markup_parse_context_get_attr_location (context, i,
-                                                        &start.lines, &start.line_chars, &start.bytes,
-                                                        &end.lines, &end.line_chars, &end.bytes);
+              gtk_svg_location_init_attr_range (&start, &end, context, i);
               break;
             }
         }
     }
-G_GNUC_END_IGNORE_DEPRECATIONS
-#endif
 
   gtk_svg_error_set_location (error, &start, &end);
 
@@ -543,7 +553,7 @@ gtk_svg_markup_error (GtkSvg              *self,
                                markup_error->message);
 
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
-  markup_context_get_tag_range (context, &start, &end);
+  gtk_svg_location_init_tag_range (&start, &end, context);
   gtk_svg_error_set_location (error, &start, &end);
 
   gtk_svg_emit_error (self, error);
@@ -579,7 +589,7 @@ gtk_svg_missing_attribute (GtkSvg               *self,
 
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
   gtk_svg_error_set_attribute (error, attr_name);
-  markup_context_get_tag_range (context, &start, &end);
+  gtk_svg_location_init_tag_range (&start, &end, context);
   gtk_svg_error_set_location (error, &start, &end);
 
   gtk_svg_emit_error (self, error);
@@ -17944,18 +17954,11 @@ parse_shape_attrs (Shape                *shape,
         }
       else if (strcmp (attr_names[i], "style") == 0)
         {
-          size_t dummy;
+          GtkSvgLocation end;
 
+          gtk_svg_location_init_attr_range (&shape->style_loc, &end, context, i);
           *handled |= BIT (i);
           shape->style = g_strdup (attr_values[i]);
-
-#if GLIB_CHECK_VERSION (2, 89, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          g_markup_parse_context_get_attr_location (context, i,
-                                                    &shape->style_loc.lines, &shape->style_loc.line_chars, &shape->style_loc.bytes,
-                                                    &dummy, &dummy, &dummy);
-G_GNUC_END_IGNORE_DEPRECATIONS
-#endif
         }
       else if (strcmp (attr_names[i], "id") == 0)
         {
