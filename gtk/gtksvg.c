@@ -11704,7 +11704,12 @@ shape_attrs_init_default_values (void)
 
 #ifndef G_DISABLE_ASSERT
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
-    g_assert (svg_value_is_immortal (shape_attrs[i].initial_value));
+    {
+      g_assert (svg_value_is_immortal (shape_attrs[i].initial_value));
+      g_assert (shape_attrs[i].parse_value != NULL ||
+                ((shape_attrs[i].flags & SHAPE_ATTR_NO_CSS) != 0 &&
+                 shape_attrs[i].parse_presentation != NULL));
+    }
 #endif
 }
 
@@ -12236,7 +12241,7 @@ shape_attr_parse_css (ShapeAttr     attr,
     return svg_inherit_new ();
   else if (gtk_css_parser_try_ident (parser, "initial"))
     return svg_initial_new ();
-  else if (shape_attrs[attr].parse_value)
+  else
     {
       SvgValue *value;
 
@@ -12246,8 +12251,6 @@ shape_attr_parse_css (ShapeAttr     attr,
 
       return value;
     }
-  else
-    return NULL;
 }
 
 static GPtrArray *
