@@ -17897,13 +17897,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   else
                     {
                       shape_set_base_value (shape, attr, 0, value);
-                       svg_value_unref (value);
+                      svg_value_unref (value);
                     }
                 }
             }
           else
             {
-              gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], NULL);
+              gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], "Unknown attribute: %s", attr_names[i]);
             }
 
           *handled |= BIT (i);
@@ -18376,6 +18376,8 @@ parse_color_stop_attrs (Shape                *shape,
           else
             gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], NULL);
         }
+      else
+        gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], "Unknown attribute: %s", attr_names[i]);
     }
 }
 
@@ -18436,6 +18438,8 @@ parse_filter_attrs (Shape                *shape,
                 gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], NULL);
             }
         }
+      else
+        gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], "Unknown attribute: %s", attr_names[i]);
     }
 }
 
