@@ -17586,8 +17586,8 @@ parse_value_animation_attrs (Animation            *a,
       if (values == NULL)
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, NULL,
-                                     "Either 'values' or 'from'/'to'/'by' "
-                                     "must be given");
+                                     "Either 'values' or 'from', 'to' or "
+                                     "'by' must be given");
           return FALSE;
         }
     }
