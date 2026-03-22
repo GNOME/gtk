@@ -1,0 +1,20 @@
+color {
+  bounds: -50 -50 100 100;
+  color: rgb(0,0,0);
+}
+rounded-clip {
+  clip: -50 -50 100 100 / 100 0 100 0;
+  child: transform {
+    transform: rotate(45);
+    child: clip {
+      clip: -25 -25 100 100;
+      child: transform {
+        transform: rotate(315);
+        child: color {
+          bounds: 25 25 100 100;
+          color: rgb(255,0,0);
+        }
+      }
+    }
+  }
+}

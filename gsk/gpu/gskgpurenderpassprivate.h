@@ -35,7 +35,7 @@ struct _GskGpuRenderPass
   cairo_rectangle_int_t          scissor;
   GskGpuClip                     clip;
   GskGpuImage *                  clip_mask;
-  graphene_rect_t                clip_mask_rect;
+  graphene_rect_t                clip_mask_rect; /* in bbox space */
   gboolean                       clip_mask_has_opacity;
 
   GskGpuGlobals                  pending_globals;
@@ -50,15 +50,6 @@ typedef struct {
 } GskGpuRenderPassOpacityStorage;
 
 typedef struct {
-  GskTransform *modelview;
-  graphene_vec2_t scale;
-  graphene_point_t offset;
-  GskGpuClip clip;
-  graphene_rect_t clip_mask_rect;
-  GskGpuGlobals modified;
-} GskGpuRenderPassTransformStorage;
-
-typedef struct {
   graphene_point_t offset;
 } GskGpuRenderPassTranslateStorage;
 
@@ -71,6 +62,13 @@ typedef struct {
   float opacity; /* only used with clip masks */
   guint modified;
 } GskGpuRenderPassClipStorage;
+
+typedef struct {
+  GskTransform *modelview;
+  graphene_vec2_t scale;
+  graphene_point_t offset;
+  GskGpuRenderPassClipStorage clip;
+} GskGpuRenderPassTransformStorage;
 
 GskGpuRenderPass *      gsk_gpu_render_pass_new                         (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
@@ -110,7 +108,7 @@ gboolean                gsk_gpu_render_pass_has_opacity                 (GskGpuR
 
 void                    gsk_gpu_render_pass_set_transform               (GskGpuRenderPass               *self,
                                                                          GskGpuTransform                *transform);
-gboolean                gsk_gpu_render_pass_push_transform              (GskGpuRenderPass               *self,
+void                    gsk_gpu_render_pass_push_transform              (GskGpuRenderPass               *self,
                                                                          GskTransform                   *transform,
                                                                          const graphene_rect_t          *bounds,
                                                                          const graphene_rect_t          *child_bounds,

@@ -55,6 +55,9 @@ compare_render_tests = [
   'clip-mask-clip',
   'clip-mask-opacity-tracking',
   'clip-mask-restore-failure',
+  'clip-mask-rotations',
+  'clip-mask-with-clip-mask',
+  'clip-mask-with-contained-clip',
   'clip-mask-wrap-mode',
   'clip-nested1',
   'clip-translate-offscreen',
@@ -338,6 +341,7 @@ compare_xfails = {
     'big-checkerboard': ['clipped'], # 6444
     'blur-child-bounds-oversize': ['clip'], # 6450
     'cairo-coordinates': ['serialize'],
+    'clip-mask-rotations': ['replay'], # changes transform order causing rotated offscreen
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
     'yuv-matrix-dmabuf-nv12': ['serialize'],
     'yuv-matrix-dmabuf-yuyv': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
@@ -346,6 +350,7 @@ compare_xfails = {
     'big-checkerboard': ['clip'], # 6444
     'blur-child-bounds-oversize': ['clip'], # 6450
     'cairo-coordinates': ['serialize'],
+    'clip-mask-rotations': ['replay'], # changes transform order causing rotated offscreen
     'repeat-repeats-nested': ['clip'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflip'],
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'], # 6532
@@ -354,6 +359,7 @@ compare_xfails = {
   },
   'cairo': {
     'cairo-coordinates': ['serialize'],
+    'clip-mask-rotations': ['replay'], # changes transform order causing rotated offscreen
     'inter-hinting': ['flip', 'rotate'],
     'inter-optical-scaling': ['flip', 'rotate'],
     'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],

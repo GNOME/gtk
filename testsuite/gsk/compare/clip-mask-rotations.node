@@ -1,0 +1,97 @@
+rounded-clip {
+  clip: -50 -50 100 100 / 30;
+  child: container {
+    color {
+      bounds: -50 -50 100 100;
+      color: rgb(0,0,0);
+    }
+    transform {
+      transform: rotate(60);
+      child: clip {
+        clip: -45 -45 90 90;
+        child: transform {
+          transform: rotate(120);
+          child: composite {
+            child: color {
+              bounds: 0 0 50 50;
+              color: rgb(255,0,204);
+            }
+            mask: color {
+              bounds: -45 -45 90 90;
+              color: rgb(255,0,204);
+            }
+            operator: clear;
+          }
+        }
+      }
+    }
+  }
+}
+fill {
+  child: color {
+    bounds: -50 -50 100 100;
+    color: rgb(255,0,204);
+  }
+  path: "\
+M -45 -50\
+L 45 -50\
+L 45 -45\
+L 50 -45\
+L 50 45\
+L 45 45\
+L 45 50\
+L -45 50\
+L -45 45\
+L -50 45\
+L -50 -45\
+L -45 -45\
+L -45 -50\
+Z\
+M -45 -25\
+L -38 -25\
+L -38 -29\
+L -31 -29\
+L -31 -33\
+L -24 -33\
+L -24 -37\
+L -17 -37\
+L -17 -41\
+L -10 -41\
+L -10 -45\
+L 25 -45\
+L 25 -38\
+L 29 -38\
+L 29 -31\
+L 33 -31\
+L 33 -24\
+L 37 -24\
+L 37 -17\
+L 41 -17\
+L 41 -10\
+L 45 -10\
+L 45 25\
+L 38 25\
+L 38 29\
+L 31 29\
+L 31 33\
+L 24 33\
+L 24 37\
+L 17 37\
+L 17 41\
+L 10 41\
+L 10 45\
+L -25 45\
+L -25 38\
+L -29 38\
+L -29 31\
+L -33 31\
+L -33 24\
+L -37 24\
+L -37 17\
+L -41 17\
+L -41 10\
+L -45 10\
+L -45 -25\
+Z";
+  fill-rule: even-odd;
+}
