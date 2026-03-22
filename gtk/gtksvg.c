@@ -17814,14 +17814,28 @@ parse_motion_animation_attrs (Animation            *a,
 
   if (path_attr)
     {
-      g_clear_pointer (&a->motion.path, gsk_path_unref);
-      a->motion.path = gsk_path_parse (path_attr);
+      SvgValue *value;
+      GError *error = NULL;
 
-      if (a->motion.path == NULL)
+      value = parse_path (path_attr, &error);
+      if (error)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "path", "%s", error->message);
+          g_error_free (error);
+        }
+      else if (!value)
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "path", NULL);
-          return FALSE;
         }
+
+      if (value)
+        {
+          g_clear_pointer (&a->motion.path, gsk_path_unref);
+          a->motion.path = gsk_path_ref (svg_path_get_gsk (value));
+          svg_value_unref (value);
+        }
+      else
+        return FALSE;
     }
 
   a->motion.rotate = ROTATE_FIXED;
@@ -17885,7 +17899,7 @@ parse_motion_animation_attrs (Animation            *a,
       else
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "calcMode",
-                                     "Paced animation with <mpath> is not implemented");
+                                     "Paced animation without explicit path is not implemented");
           return FALSE;
         }
     }
