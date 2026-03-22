@@ -4667,20 +4667,14 @@ svg_paint_order_parse (GtkCssParser *parser)
       if (gtk_css_parser_try_ident (parser, "stroke"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "markers"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
-            }
+          gtk_css_parser_try_ident (parser, "markers");
+          return svg_paint_order_new (PAINT_ORDER_FILL_STROKE_MARKERS);
         }
       else if (gtk_css_parser_try_ident (parser, "markers"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "stroke"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_FILL_MARKERS_STROKE);
-            }
+          gtk_css_parser_try_ident (parser, "stroke");
+          return svg_paint_order_new (PAINT_ORDER_FILL_MARKERS_STROKE);
         }
       else
         {
@@ -4693,20 +4687,14 @@ svg_paint_order_parse (GtkCssParser *parser)
       if (gtk_css_parser_try_ident (parser, "fill"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "markers"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_STROKE_FILL_MARKERS);
-            }
+          gtk_css_parser_try_ident (parser, "markers");
+          return svg_paint_order_new (PAINT_ORDER_STROKE_FILL_MARKERS);
         }
       else if (gtk_css_parser_try_ident (parser, "markers"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "fill"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_STROKE_MARKERS_FILL);
-            }
+          gtk_css_parser_try_ident (parser, "fill");
+          return svg_paint_order_new (PAINT_ORDER_STROKE_MARKERS_FILL);
         }
       else
         {
@@ -4719,20 +4707,14 @@ svg_paint_order_parse (GtkCssParser *parser)
       if (gtk_css_parser_try_ident (parser, "fill"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "stroke"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_MARKERS_FILL_STROKE);
-            }
+          gtk_css_parser_try_ident (parser, "stroke");
+          return svg_paint_order_new (PAINT_ORDER_MARKERS_FILL_STROKE);
         }
       else if (gtk_css_parser_try_ident (parser, "stroke"))
         {
           gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-              gtk_css_parser_try_ident (parser, "fill"))
-            {
-              return svg_paint_order_new (PAINT_ORDER_MARKERS_STROKE_FILL);
-            }
+          gtk_css_parser_try_ident (parser, "fill");
+          return svg_paint_order_new (PAINT_ORDER_MARKERS_STROKE_FILL);
         }
       else
         {
@@ -4740,6 +4722,7 @@ svg_paint_order_parse (GtkCssParser *parser)
         }
     }
 
+  gtk_css_parser_error_syntax (parser, "Expected a paint order value");
   return NULL;
 }
 
