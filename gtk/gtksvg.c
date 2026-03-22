@@ -20839,6 +20839,11 @@ serialize_shape_attrs (GString              *s,
         {
           unsigned int state;
 
+          if (svg->gpa_version == 0 &&
+              (attr == SHAPE_ATTR_STROKE_MINWIDTH ||
+               attr == SHAPE_ATTR_STROKE_MAXWIDTH))
+            continue;
+
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
             state = svg->state;
           else
@@ -20888,35 +20893,22 @@ serialize_gpa_attrs (GString              *s,
                      Shape                *shape,
                      GtkSvgSerializeFlags  flags)
 {
-  SvgValue **values;
-  SvgPaint *paint;
-  GtkSymbolicColor symbolic;
-
   if (svg->gpa_version == 0 || !shape_type_has_gpa_attrs (shape->type))
     return;
 
-  if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-    values = shape->current;
-  else
-    values = shape->base;
-
-  paint = (SvgPaint *) values[SHAPE_ATTR_STROKE];
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE) &&
-      svg_paint_is_symbolic (paint, &symbolic))
+  if (shape->gpa.stroke)
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke='");
-      g_string_append (s, symbolic_colors[symbolic]);
+      svg_value_print (shape->gpa.stroke, s);
       g_string_append_c (s, '\'');
     }
 
-  paint = (SvgPaint *) values[SHAPE_ATTR_FILL];
-  if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL) &&
-      svg_paint_is_symbolic (paint, &symbolic))
+  if (shape->gpa.fill)
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:fill='");
-      g_string_append (s, symbolic_colors[symbolic]);
+      svg_value_print (shape->gpa.fill, s);
       g_string_append_c (s, '\'');
     }
 
