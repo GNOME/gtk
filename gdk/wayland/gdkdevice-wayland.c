@@ -485,7 +485,7 @@ gdk_wayland_device_update_window_cursor (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
-  struct wl_buffer *buffer;
+  struct wl_buffer *buffer = NULL;
   int x, y, w, h, scale;
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
