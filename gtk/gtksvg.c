@@ -4471,9 +4471,9 @@ svg_enum_get (const SvgValue *value)
 }
 
 static SvgValue *
-svg_enum_parse (const SvgEnum  values[],
-                unsigned int   n_values,
-                GtkCssParser  *parser)
+svg_enum_try_parse (const SvgEnum  values[],
+                    unsigned int   n_values,
+                    GtkCssParser  *parser)
 {
   for (unsigned int i = 0; i < n_values; i++)
     {
@@ -4491,7 +4491,7 @@ svg_enum_parse (const SvgEnum  values[],
 #define DEFINE_ENUM_VALUE_NO_NAME(CLASS_NAME, value) \
   { { & SVG_ ## CLASS_NAME ## _CLASS, 0 }, value, NULL, 0, }
 
-#define DEF_E(kw,CLASS_NAME, class_name, EnumType, resolve, ...) \
+#define DEF_E(kw, CLASS_NAME, class_name, EnumType, resolve, ...) \
 static const SvgValueClass SVG_ ## CLASS_NAME ## _CLASS = { \
   #CLASS_NAME, \
   svg_value_default_free, \
@@ -4522,9 +4522,15 @@ svg_ ## class_name ## _new (EnumType value) \
 static SvgValue * \
 svg_ ## class_name ## _parse (GtkCssParser *parser) \
 { \
-  return svg_enum_parse (class_name ## _values, \
-                         G_N_ELEMENTS (class_name ## _values), \
-                         parser); \
+  SvgValue *value; \
+\
+  value = svg_enum_try_parse (class_name ## _values, \
+                              G_N_ELEMENTS (class_name ## _values), \
+                              parser); \
+  if (value == NULL) \
+    gtk_css_parser_error_syntax (parser, "Unknown #EnumType value"); \
+\
+  return value; \
 }
 
 #define DEFINE_ENUM_PUBLIC(CLASS_NAME, class_name, EnumType, ...) \
