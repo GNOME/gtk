@@ -1231,7 +1231,7 @@ match_str_len (const char *value,
 
   skip_whitespace (&p);
 
-  if (strncmp (value, str, len) != 0)
+  if (strncmp (p, str, len) != 0)
     return FALSE;
 
   p += len;
