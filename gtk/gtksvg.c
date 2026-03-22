@@ -2037,8 +2037,9 @@ add_arc (float    rx,
   return TRUE;
 }
 
-static SvgPathData *
-svg_path_data_parse (const char *string)
+static gboolean
+svg_path_data_parse_full (const char   *string,
+                          SvgPathData **path_data)
 {
   GskPathParser parser = {
     add_op, add_arc, NULL, NULL, NULL,
@@ -2046,18 +2047,25 @@ svg_path_data_parse (const char *string)
   SvgPathOps ops;
   size_t size;
   SvgPathOp *data;
+  gboolean ret;
 
   svg_path_ops_init (&ops);
 
-  if (!gsk_path_parse_full (string, &parser, &ops))
-    {
-      /* TODO: emit an error */
-    }
+  ret = gsk_path_parse_full (string, &parser, &ops);
 
   size = svg_path_ops_get_size (&ops);
   data = svg_path_ops_steal (&ops);
+  *path_data = svg_path_data_new (size, data);
 
-  return svg_path_data_new (size, data);
+  return ret;
+}
+
+static SvgPathData *
+svg_path_data_parse (const char *string)
+{
+  SvgPathData *data = NULL;
+  svg_path_data_parse_full (string, &data);
+  return data;
 }
 
 static SvgPathData *
@@ -3682,7 +3690,10 @@ svg_number_parse2 (GtkCssParser *parser,
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
     {
       if ((flags & PERCENTAGE) == 0)
-        return FALSE;
+        {
+          gtk_css_parser_error_value (parser, "Percentages are not allowed here");
+          return FALSE;
+        }
 
       number = token->number.number;
       unit = SVG_UNIT_PERCENTAGE;
@@ -3711,6 +3722,7 @@ svg_number_parse2 (GtkCssParser *parser,
         }
       else
         {
+          gtk_css_parser_error_syntax (parser, "Unit is missing");
           return FALSE;
         }
     }
@@ -3734,29 +3746,43 @@ svg_number_parse2 (GtkCssParser *parser,
           if (flags & LENGTH)
             unit = i;
           else
-            return FALSE;
+            {
+              gtk_css_parser_error_value (parser, "Lengths are not allowed here");
+              return FALSE;
+            }
         }
       else if (FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
         {
           if (flags & ANGLE)
             unit = i;
           else
-            return FALSE;
+            {
+              gtk_css_parser_error_value (parser, "Angles are not allowed here");
+              return FALSE;
+            }
         }
       else
-        return FALSE;
+        {
+          gtk_css_parser_error_syntax (parser, "'%s' is not a valid unit", token->dimension.dimension);
+          return FALSE;
+        }
     }
   else
-    return FALSE;
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a number");
+      return FALSE;
+    }
 
   if (number < min || number > max)
-    return FALSE;
+    {
+      gtk_css_parser_error_value (parser, "Out of range");
+      return FALSE;
+    }
 
   *d = number;
   *u = unit;
 
   gtk_css_parser_consume_token (parser);
-
   return TRUE;
 }
 
@@ -6573,7 +6599,7 @@ svg_color_parse (GtkCssParser *parser)
       return svg_color_new_symbolic (i);
 
   if (gdk_rgba_parser_parse (parser, &rgba))
-    return  svg_color_new_rgba (&rgba);
+    return svg_color_new_rgba (&rgba);
 
   return NULL;
 }
@@ -7048,6 +7074,7 @@ svg_paint_parse (GtkCssParser *parser)
   if (gdk_rgba_parser_parse (parser, &color))
     return svg_paint_new_rgba (&color);
 
+  gtk_css_parser_error_syntax (parser, "Expected a paint value");
   return NULL;
 }
 
@@ -8488,12 +8515,29 @@ svg_path_parse (GtkCssParser *parser)
   else if (gtk_css_parser_has_function (parser, "path"))
     {
       char *string = NULL;
+      GtkCssLocation start;
 
+      start = *gtk_css_parser_get_start_location (parser);
       if (gtk_css_parser_consume_function (parser, 1, 1, path_arg, &string))
         {
           SvgValue *value;
+          SvgPathData *data = NULL;
 
-          value = svg_path_new_from_data (svg_path_data_parse (string));
+          if (!svg_path_data_parse_full (string, &data))
+            {
+              GError *error;
+
+              error = g_error_new_literal (GTK_CSS_PARSER_ERROR,
+                                           GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                           "Path data is invalid");
+              gtk_css_parser_emit_error (parser,
+                                         &start,
+                                         gtk_css_parser_get_end_location (parser),
+                                         error);
+              g_error_free (error);
+            }
+
+          value = svg_path_new_from_data (data);
 
           g_free (string);
 
@@ -8501,6 +8545,7 @@ svg_path_parse (GtkCssParser *parser)
         }
     }
 
+  gtk_css_parser_error_syntax (parser, "Expected a path");
   return NULL;
 }
 
@@ -8799,22 +8844,38 @@ parse_clip_path_arg (GtkCssParser *parser,
 static SvgValue *
 svg_clip_parse (GtkCssParser *parser)
 {
-  SvgValue *res = NULL;
+  SvgValue *value = NULL;
 
   if (gtk_css_parser_try_ident (parser, "none"))
     return svg_clip_new_none ();
 
   if (gtk_css_parser_has_function (parser, "path"))
     {
-      ClipPathArgs data = { .fill_rule = FILL_RULE_OMITTED, .string = NULL, };
+      ClipPathArgs args = { .fill_rule = FILL_RULE_OMITTED, .string = NULL, };
+      GtkCssLocation start;
 
-      if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &data))
+      start = *gtk_css_parser_get_start_location (parser);
+      if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &args))
         {
-          if (data.string != NULL)
+          SvgPathData *data = NULL;
+
+          if (!svg_path_data_parse_full (args.string, &data))
             {
-              res = svg_clip_new_path (data.string, data.fill_rule);
-              g_free (data.string);
+              GError *error;
+
+              error = g_error_new_literal (GTK_CSS_PARSER_ERROR,
+                                           GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                           "Path data is invalid");
+
+              gtk_css_parser_emit_error (parser,
+                                         &start,
+                                         gtk_css_parser_get_end_location (parser),
+                                         error);
+              g_error_free (error);
             }
+
+          value = svg_clip_new_from_data (data, args.fill_rule);
+          g_free (args.string);
         }
     }
   else
@@ -8823,14 +8884,17 @@ svg_clip_parse (GtkCssParser *parser)
       if (url != NULL)
         {
           if (url[0] == '#')
-            res = svg_clip_new_ref (url + 1);
+            value = svg_clip_new_ref (url + 1);
           else
-            res = svg_clip_new_ref (url);
+            value = svg_clip_new_ref (url);
           g_free (url);
        }
     }
 
-  return res;
+  if (value == NULL)
+    gtk_css_parser_error_syntax (parser, "Expected a path");
+
+  return value;
 }
 
 /* }}} */
