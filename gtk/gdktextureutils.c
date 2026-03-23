@@ -20,7 +20,7 @@
 #include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 #include "gtksnapshot.h"
-#include "gtk/gtksvg.h"
+#include "gtk/gtksvgprivate.h"
 #include "gtk/gtksymbolicpaintable.h"
 
 #include "gdk/gdktextureprivate.h"
@@ -268,22 +268,6 @@ keep_alpha (GdkTexture *src)
   return res;
 }
 
-static gboolean
-svg_has_symbolic_classes (GBytes *bytes)
-{
-#ifdef HAVE_MEMMEM
-  const char *data;
-  gsize len;
-
-  data = g_bytes_get_data (bytes, &len);
-
-  /* Not super precise, but good enough */
-  return memmem (data, len, "class=\"", strlen ("class=\"")) != NULL;
-#else
-  return TRUE;
-#endif
-}
-
 static GdkTexture *
 gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                      int        width,
@@ -300,7 +284,11 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
   GBytes *data_bytes;
   GdkTexture *texture;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = gtk_svg_new ();
+
+  gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+  gtk_svg_load_from_bytes (svg, bytes);
 
   if (width == 0 && height == 0)
     {
@@ -315,7 +303,11 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
         }
     }
 
-  if (!svg_has_symbolic_classes (bytes))
+  only_fg = (svg->used & (GTK_SVG_USES_SYMBOLIC_ERROR |
+                          GTK_SVG_USES_SYMBOLIC_WARNING |
+                          GTK_SVG_USES_SYMBOLIC_SUCCESS)) == 0;
+
+  if (only_fg)
     {
       texture = svg_to_texture (svg, width, height, NULL, 0);
 
@@ -330,7 +322,6 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
       return texture;
     }
 
-  only_fg = TRUE;
   texture = NULL;
 
   data = NULL;
