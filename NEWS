@@ -1,5 +1,66 @@
-Overview of Changes in GTK+ 3.24.52, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.52, 22-03-2026
 ===============================================
+
+Note: We are going to decrease the frequency of GTK3
+releases and limit changes to important bug and crash
+fixes, going forward. The next GTK3 release is expected
+in March 2027.
+
+* Bugs fixed:
+  - #6306 [GTK3] Zlib required when broadway is enabled. (Dmytro Meleshko)
+  - #7796 [GTK 3] Invalid a11y events when calling `gtk_tree_view_set_cursor` on
+    an unfocused GtkTreeView (Michael Weghorn)
+  - #7976 Firefox crashes at gdk_wayland_drag_context_manage_dnd() when missing
+    toplevel wl_surface (Matthias Clasen)
+  - #8103 gtk3 refresh_rate calculation overflows on 32-bit targets (Alberto
+    Garcia)
+  - #8114 Images for recolored icons are constantly being reloaded (Sebastian
+    Keller)
+  - GNOME/gimp#14901 Wild strobing in multi window mode (Lukas Oberhuber)
+  - GNOME/gimp#15480 GIMP does not focus on dialogue boxes on Mac (Lukas
+    Oberhuber)
+  - !7332 quartz: add automagic uti<->mime conversion for clipboard (Friedrich
+    Beckmann)
+  - !8216 Fix position of child tooltips in GTK3 custom windows (Ingo Brückl)
+  - !9005 a11y: Don't send focus-related events for unfocused treeview
+  - !9012 quartz: gtkwindow - fix windows fighting focus (Lukas Oberhuber)
+  - !9022 gtkmenu: Await more motion events before deactivating on release
+    (Carlos Garnacho)
+  - !9044 wayland: Handle XKB initialization failures gracefully
+  - !9067 gdk/win32: Add missing EGL conditional compilation guard (Dan Yeaw)
+  - !9098 gdk: do not run gdk_wayland_window_export_handle() callback when
+    window is already destroyed. (Jehan)
+  - !9119 Declare an explicit dependency on zlib when broadway is enabled
+    (Dmytro Meleshko)
+  - !9141 [GTK 3] wayland: Try to open the display even if XDG_RUNTIME_DIR is
+    unset (Ludovico de Nittis)
+  - !9155 [gtk3] emoji: Update data to CLDR 48 (Jeremy Bícha)
+  - !9214 display/wayland: Gracefully handle dispose being called twice (Jonas
+    Ådahl)
+  - !9284 gdk/wayland: Map stylus buttons for BTN_BACK and BTN_FORWARD (Peter
+    Hutterer)
+  - !9322 [Quartz] Fix dialog keyboard focus while preventing focus fighting
+    (Lukas Oberhuber)
+  - !9344 Fix a couple of leaks (Jonas Ådahl)
+  - !9394 gdk/wayland: Map stylus buttons for BTN_BACK and BTN_FORWARD
+  - !9397 wayland: Avoid a crash (Matthias Clasen)
+  - !9600 Replace outdated freedesktop.org Window Manager spec links (balooii
+    balooii)
+  - !9676 x11: fix overflow in refresh_rate calculation on 32-bit systems
+    (Alberto Garcia)
+  - !9706 cssimage: Store and reuse icon info for recolored images (Sebastian
+    Keller)
+  - !9707 wayland: Fix uninitialized value when no cursor (Robert Ancell)
+  - !9708 fontchooser: Fix signedness of axes count (Robert Ancell)
+  - !9709 fontchooser: Remove const on float return values (Robert Ancell)
+  - !9710 print: Remove unused variable (Robert Ancell)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Bokmål, Norwegian (Kjartan Maraas)
+  - Occitan (post 1500) (Quentin PAGÈS)
+  - Uighur (Abduqadir Abliz)
+
 
 Overview of Changes in GTK+ 3.24.51, 29-09-2025
 ===============================================
