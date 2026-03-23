@@ -2,7 +2,12 @@
 
 #include "gskgpudeviceprivate.h"
 
+#include "gdk/gdkglcontextprivate.h"
+
 G_BEGIN_DECLS
+
+/* forward declaration */
+typedef struct _GskGLPipeline GskGLPipeline;
 
 #define GSK_TYPE_GL_DEVICE (gsk_gl_device_get_type ())
 
@@ -11,12 +16,10 @@ G_DECLARE_FINAL_TYPE (GskGLDevice, gsk_gl_device, GSK, GL_DEVICE, GskGpuDevice)
 GskGpuDevice *          gsk_gl_device_get_for_display                   (GdkDisplay             *display,
                                                                          GError                **error);
 
-void                    gsk_gl_device_use_program                       (GskGLDevice            *self,
-                                                                         const GskGpuShaderOpClass *op_class,
-                                                                         GskGpuShaderFlags       flags,
-                                                                         GskGpuColorStates       color_states,
-                                                                         guint32                 variation);
-
+gboolean                gsk_gl_device_has_gl_feature                    (GskGLDevice            *self,
+                                                                         GdkGLFeatures           feature);
+const char *            gsk_gl_device_get_version_string                (GskGLDevice            *self);
+GdkGLAPI                gsk_gl_device_get_gl_api                        (GskGLDevice            *self);
 GLuint                  gsk_gl_device_get_sampler_id                    (GskGLDevice            *self,
                                                                          GskGpuSampler           sampler);
 

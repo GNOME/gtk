@@ -13,6 +13,7 @@
 #include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedfillprivate.h"
 #include "gskgpucachedstrokeprivate.h"
+#include "gskgpucachedtileprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucolormatrixopprivate.h"

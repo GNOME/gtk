@@ -40,9 +40,10 @@ gsk_gpu_device_gc (GskGpuDevice *self,
 
   gsk_gpu_device_make_current (self);
 
+  gsk_gpu_cache_set_time (priv->cache, timestamp);
+
   result = gsk_gpu_cache_gc (priv->cache,
-                             priv->cache_timeout >= 0 ? priv->cache_timeout * G_TIME_SPAN_SECOND : -1,
-                             timestamp);
+                             priv->cache_timeout >= 0 ? priv->cache_timeout * G_TIME_SPAN_SECOND : -1);
   if (result)
     g_clear_object (&priv->cache);
 
@@ -76,7 +77,8 @@ cache_gc_cb (gpointer data)
 }
 
 void
-gsk_gpu_device_maybe_gc (GskGpuDevice *self)
+gsk_gpu_device_maybe_gc (GskGpuDevice *self,
+                         gint64        timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   gsize dead_texture_pixels, dead_textures;
@@ -94,7 +96,7 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self)
     {
       GSK_DEBUG (CACHE, "Pre-frame GC (%" G_GSIZE_FORMAT " dead textures, %" G_GSIZE_FORMAT " dead pixels)",
                  dead_textures, dead_texture_pixels);
-      gsk_gpu_device_gc (self, g_get_monotonic_time ());
+      gsk_gpu_device_gc (self, timestamp);
     }
 }
 

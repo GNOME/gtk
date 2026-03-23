@@ -29,8 +29,7 @@ void                    gsk_gpu_cache_set_time                          (GskGpuC
                                                                          gint64                  timestamp);
 
 gboolean                gsk_gpu_cache_gc                                (GskGpuCache            *self,
-                                                                         gint64                  cache_timeout,
-                                                                         gint64                  timestamp);
+                                                                         gint64                  cache_timeout);
 gsize                   gsk_gpu_cache_get_dead_textures                 (GskGpuCache            *self);
 gsize                   gsk_gpu_cache_get_dead_texture_pixels           (GskGpuCache            *self);
 GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuCache            *self,
@@ -39,25 +38,16 @@ GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuC
                                                                          gsize                  *out_x,
                                                                          gsize                  *out_y);
 GskGpuCachePrivate *    gsk_gpu_cache_get_private                       (GskGpuCache            *self);
+/* next function is threadsafe */
+void                    gsk_gpu_cached_add_dead_pixels                  (GskGpuCache            *self,
+                                                                         gsize                   n_textures,
+                                                                         gsize                   n_pixels);
 
 GskGpuImage *           gsk_gpu_cache_lookup_texture_image              (GskGpuCache            *self,
                                                                          GdkTexture             *texture,
                                                                          GdkColorState          *color_state);
 void                    gsk_gpu_cache_cache_texture_image               (GskGpuCache            *self,
                                                                          GdkTexture             *texture,
-                                                                         GskGpuImage            *image,
-                                                                         GdkColorState          *color_state);
-GskGpuImage *           gsk_gpu_cache_lookup_tile                       (GskGpuCache            *self,
-                                                                         GdkTexture             *texture,
-                                                                         guint                   lod_level,
-                                                                         GskScalingFilter        lod_filter,
-                                                                         gsize                   tile_id,
-                                                                         GdkColorState         **out_color_state);
-void                    gsk_gpu_cache_cache_tile                        (GskGpuCache            *self,
-                                                                         GdkTexture             *texture,
-                                                                         guint                   lod_level,
-                                                                         GskScalingFilter        lod_filter,
-                                                                         gsize                   tile_id,
                                                                          GskGpuImage            *image,
                                                                          GdkColorState          *color_state);
 
