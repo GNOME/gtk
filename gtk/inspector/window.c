@@ -44,6 +44,7 @@
 #include "misc-info.h"
 #include "magnifier.h"
 #include "recorder.h"
+#include "svg.h"
 #include "tree-data.h"
 #include "visual.h"
 #include "general.h"
@@ -115,6 +116,7 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_inspector_controllers_set_object (GTK_INSPECTOR_CONTROLLERS (iw->controllers), selected);
   gtk_inspector_magnifier_set_object (GTK_INSPECTOR_MAGNIFIER (iw->magnifier), selected);
   gtk_inspector_a11y_set_object (GTK_INSPECTOR_A11Y (iw->a11y), selected);
+  gtk_inspector_svg_set_object (GTK_INSPECTOR_SVG (iw->svg), selected);
 
   for (l = iw->extra_pages; l != NULL; l = l->next)
     g_object_set (l->data, "object", selected, NULL);
@@ -672,6 +674,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, a11y);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, svg);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, css_editor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, visual);

@@ -44,6 +44,7 @@ inspector_sources = files(
   'statistics.c',
   'strv-editor.c',
   'subsurfaceoverlay.c',
+  'svg.c',
   'tree-data.c',
   'type-info.c',
   'updatesoverlay.c',

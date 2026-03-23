@@ -598,6 +598,16 @@
                                         </property>
                                       </object>
                                     </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">svg</property>
+                                        <property name="title" translatable="yes">SVG</property>
+                                        <property name="child">
+                                          <object class="GtkInspectorSvg" id="svg">
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
