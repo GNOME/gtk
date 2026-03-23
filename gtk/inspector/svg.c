@@ -21,7 +21,10 @@
 #include "svg.h"
 #include "window.h"
 
+#include "gtkalertdialog.h"
 #include "gtkbinlayout.h"
+#include "gtkdialogerror.h"
+#include "gtkfiledialog.h"
 #include "gtkstack.h"
 #include "gtksvgprivate.h"
 #include "gtktooltip.h"
@@ -173,6 +176,100 @@ update_xml (GtkInspectorSvg *self)
   g_bytes_unref (xml);
 }
 
+static void
+save_to_file (GtkInspectorSvg *self,
+              GFile           *file)
+{
+  GtkTextIter start, end;
+  char *text;
+  GError *error = NULL;
+
+  gtk_text_buffer_get_bounds (self->xml_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (self->xml_buffer, &start, &end, FALSE);
+
+  if (!g_file_replace_contents (file,
+                                text, strlen (text),
+                                NULL,
+                                FALSE,
+                                0,
+                                NULL,
+                                NULL,
+                                &error))
+    {
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new ("This did not work");
+      gtk_alert_dialog_set_detail (alert, error->message);
+      gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))));
+      g_object_unref (alert);
+      g_error_free (error);
+    }
+
+  g_free (text);
+}
+
+static void
+save_cb (GObject      *source,
+         GAsyncResult *result,
+         gpointer      data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GtkInspectorSvg *self = data;
+  GError *error = NULL;
+  GFile *file;
+
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (!file)
+    {
+      if (g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED))
+        g_print ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  save_to_file (self, file);
+
+  g_object_unref (file);
+}
+
+static void
+save_as (GtkWidget  *widget,
+         const char *action_name,
+         GVariant   *parameter)
+{
+  GtkFileDialog *dialog;
+
+  dialog = gtk_file_dialog_new ();
+
+  gtk_file_dialog_set_title (dialog, "Save SVG");
+  gtk_file_dialog_set_modal (dialog, TRUE);
+  gtk_file_dialog_set_initial_name (dialog, "saved.svg");
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (widget)),
+                        NULL,
+                        save_cb,
+                        widget);
+  g_object_unref (dialog);
+}
+
+static void
+copy_clipboard (GtkWidget  *widget,
+                const char *action_name,
+                GVariant   *parameter)
+{
+  GtkInspectorSvg *self = GTK_INSPECTOR_SVG (widget);
+  GdkClipboard *clipboard;
+  GtkTextIter start, end;
+  char *text;
+
+  gtk_text_buffer_get_bounds (self->xml_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (self->xml_buffer, &start, &end, FALSE);
+
+  clipboard = gtk_widget_get_clipboard (widget);
+  gdk_clipboard_set_text (clipboard, text);
+  g_free (text);
+}
+
 static gboolean
 query_tooltip_cb (GtkWidget       *widget,
                   int              x,
@@ -282,6 +379,9 @@ gtk_inspector_svg_class_init (GtkInspectorSvgClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+
+  gtk_widget_class_install_action (widget_class, "widget.save-as", NULL, save_as);
+  gtk_widget_class_install_action (widget_class, "widget.copy-clipboard", NULL, copy_clipboard);
 }
 
 // vim: set et sw=2 ts=2:

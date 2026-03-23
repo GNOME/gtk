@@ -2,46 +2,82 @@
 <interface domain="gtk40">
   <template class="GtkInspectorSvg" parent="GtkWidget">
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkOverlay">
         <child>
-          <object class="GtkTextView" id="xml_view">
-            <property name="buffer">
-              <object class="GtkTextBuffer" id="xml_buffer">
-                <property name="tag-table">
-                  <object class="GtkTextTagTable">
-                    <child type="tag">
-                      <object class="GtkTextTag">
-                        <property name="name">unimplemented</property>
-                        <property name="underline">single</property>
-                        <property name="underline-rgba">darkorange</property>
+          <object class="GtkScrolledWindow">
+            <child>
+              <object class="GtkTextView" id="xml_view">
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="xml_buffer">
+                    <property name="tag-table">
+                      <object class="GtkTextTagTable">
+                        <child type="tag">
+                          <object class="GtkTextTag">
+                            <property name="name">unimplemented</property>
+                            <property name="underline">single</property>
+                            <property name="underline-rgba">darkorange</property>
+                          </object>
+                        </child>
+                        <child type="tag">
+                          <object class="GtkTextTag">
+                            <property name="name">ignored</property>
+                            <property name="underline">single</property>
+                            <property name="underline-rgba">blue</property>
+                          </object>
+                        </child>
+                        <child type="tag">
+                          <object class="GtkTextTag">
+                            <property name="name">error</property>
+                            <property name="underline">error</property>
+                          </object>
+                        </child>
                       </object>
-                    </child>
-                    <child type="tag">
-                      <object class="GtkTextTag">
-                        <property name="name">ignored</property>
-                        <property name="underline">single</property>
-                        <property name="underline-rgba">blue</property>
-                      </object>
-                    </child>
-                    <child type="tag">
-                      <object class="GtkTextTag">
-                        <property name="name">error</property>
-                        <property name="underline">error</property>
-                      </object>
-                    </child>
+                    </property>
+                    <signal name="changed" handler="xml_changed" swapped="yes"/>
                   </object>
+                </property
+    >
+                <property name="wrap-mode">none</property>
+                <property name="monospace">1</property>
+                <property name="left-margin">6</property>
+                <property name="right-margin">6</property>
+                <property name="top-margin">6</property>
+                <property name="bottom-margin">6</property>
+                <property name="has-tooltip">1</property>
+                <property name="extra-menu">
+                  <menu>
+                    <item>
+                      <attribute name="label" translatable="yes">Save As…</attribute>
+                      <attribute name="action">widget.save-as</attribute>
+                    </item>
+                  </menu>
                 </property>
-                <signal name="changed" handler="xml_changed" swapped="yes"/>
+                <signal name="query-tooltip" handler="query_tooltip_cb"/>
               </object>
-            </property>
-            <property name="wrap-mode">none</property>
-            <property name="monospace">1</property>
-            <property name="left-margin">6</property>
-            <property name="right-margin">6</property>
-            <property name="top-margin">6</property>
-            <property name="bottom-margin">6</property>
-            <property name="has-tooltip">1</property>
-            <signal name="query-tooltip" handler="query_tooltip_cb"/>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkBox">
+            <property name="halign">end</property>
+            <property name="valign">end</property>
+            <property name="margin-bottom">10</property>
+            <property name="margin-end">10</property>
+            <style><class name="linked"/></style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">document-save-as-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Save to file</property>
+                <property name="action-name">widget.save-as</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                <property name="action-name">widget.copy-clipboard</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
