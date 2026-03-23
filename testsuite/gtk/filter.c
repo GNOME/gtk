@@ -393,6 +393,31 @@ test_every_dispose (void)
   g_object_unref (filter2);
 }
 
+static void
+test_enum_simple (void)
+{
+  GtkExpression *expression = gtk_property_expression_new (GTK_TYPE_BOX, NULL, "orientation");
+  GtkEnumFilter *filter = gtk_enum_filter_new (GTK_TYPE_ORIENTATION, expression);
+  GtkLayoutManager *layout = gtk_box_layout_new (GTK_ORIENTATION_VERTICAL);
+
+  g_assert_true (gtk_filter_match (GTK_FILTER (filter), layout));
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_HORIZONTAL);
+  g_assert_true (gtk_filter_match (GTK_FILTER (filter), layout));
+
+  gtk_enum_filter_set_value (filter, GTK_ORIENTATION_VERTICAL);
+  g_assert_false (gtk_filter_match (GTK_FILTER (filter), layout));
+
+  gtk_enum_filter_set_value (filter, GTK_ORIENTATION_HORIZONTAL);
+  g_assert_true (gtk_filter_match (GTK_FILTER (filter), layout));
+
+  gtk_enum_filter_set_value (filter, G_MAXLONG);
+  g_assert_true (gtk_filter_match (GTK_FILTER (filter), layout));
+
+  g_object_unref (filter);
+  g_object_unref (layout);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -407,6 +432,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filter/string/properties", test_string_properties);
   g_test_add_func ("/filter/bool/simple", test_bool_simple);
   g_test_add_func ("/filter/every/dispose", test_every_dispose);
+  g_test_add_func ("/filter/enum/simple", test_enum_simple);
 
   return g_test_run ();
 }

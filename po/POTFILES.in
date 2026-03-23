@@ -171,6 +171,7 @@ gtk/gtkemojichooser.c
 gtk/gtkemojicompletion.c
 gtk/gtkentrybuffer.c
 gtk/gtkentry.c
+gtk/gtkenumfilter.c
 gtk/gtkeventcontroller.c
 gtk/gtkeventcontrollerfocus.c
 gtk/gtkeventcontrollerkey.c
