@@ -22,6 +22,7 @@
 
 #include "gtk/gtkcssimageurlprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
+#include "gtk/gtkiconthemeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -40,6 +41,8 @@ struct _GtkCssImageRecolor
   GtkCssImageUrl parent;
 
   GtkCssValue *palette;
+  GtkIconInfo *info;
+  gint info_scale;
 };
 
 struct _GtkCssImageRecolorClass
