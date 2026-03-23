@@ -1,5 +1,7 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['movingtext'],
+  ['bigfont'],
   ['svg-view'],
   ['imagednd'],
   ['testcursor'],
