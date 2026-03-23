@@ -300,7 +300,11 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
   GBytes *data_bytes;
   GdkTexture *texture;
 
-  svg = gtk_svg_new_from_bytes (bytes);
+  svg = gtk_svg_new ();
+
+  gtk_svg_set_features (svg, GTK_SVG_DEFAULT_FEATURES | GTK_SVG_TRADITIONAL_SYMBOLIC);
+
+  gtk_svg_load_from_bytes (svg, bytes);
 
   if (width == 0 && height == 0)
     {
@@ -330,7 +334,7 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
       return texture;
     }
 
-  only_fg = TRUE;
+  only_fg = FALSE;
   texture = NULL;
 
   data = NULL;
