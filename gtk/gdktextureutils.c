@@ -906,6 +906,7 @@ start_element_cb (GMarkupParseContext  *context,
   const char *opacity_attr = NULL;
   const char *class_attr = NULL;
   const char *visibility_attr = NULL;
+  const char *viewbox_attr = NULL;
   GskPath *path = NULL;
   GskStroke *stroke = NULL;
   GskFillRule fill_rule;
@@ -930,6 +931,7 @@ start_element_cb (GMarkupParseContext  *context,
                                 NULL,
                                 "width", &width_attr,
                                 "height", &height_attr,
+                                "viewBox", &viewbox_attr,
                                 NULL);
 
       if (width_attr == NULL)
@@ -956,6 +958,36 @@ start_element_cb (GMarkupParseContext  *context,
         {
           set_attribute_error (error, "height", height_attr);
           return;
+        }
+
+      if (viewbox_attr)
+        {
+          GStrv strv;
+
+          strv = g_strsplit (viewbox_attr, " ", 0);
+          if (g_strv_length (strv) == 4)
+            {
+              double d[4];
+              char *endp[4];
+
+              for (unsigned int i = 0; i < 4; i++)
+                d[i] = g_ascii_strtod (strv[i], &endp[i]);
+
+              if (d[0] != 0 || d[1] != 0 ||
+                  d[2] != data->width ||
+                  d[3] != data->height ||
+                 (endp[0] && *(endp[0])) ||
+                 (endp[1] && *(endp[1])) ||
+                 (endp[2] && *(endp[2])) ||
+                 (endp[3] && *(endp[3])))
+                {
+                  g_strfreev (strv);
+                  set_attribute_error (error, "viewBox", viewbox_attr);
+                  return;
+                }
+
+              g_strfreev (strv);
+            }
         }
 
       gtk_snapshot_push_clip (data->snapshot, &GRAPHENE_RECT_INIT (0, 0, data->width, data->height));
