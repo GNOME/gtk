@@ -224,6 +224,24 @@ process_pending_idles ()
 }
 
 static void
+on_window_focus (GObject *obj,
+                 GParamSpec *pspec,
+                 gpointer data)
+{
+  GMainLoop *loop = data;
+  g_main_loop_quit (loop);
+}
+
+
+static void
+wait_window_focus (GtkWidget *window)
+{
+  GMainLoop *loop = g_main_loop_new (NULL, FALSE);
+  g_signal_connect (window, "notify::is-active", G_CALLBACK (on_window_focus), loop);
+  g_main_loop_run (loop);
+}
+
+static void
 test_a11y_tree_focus (void)
 {
   GtkBuilder *builder;
@@ -243,13 +261,15 @@ test_a11y_tree_focus (void)
   window = builder_get_toplevel (builder);
   g_assert (window);
 
-  populate_tree (builder);
+  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
+  wait_window_focus (window);
 
+  populate_tree (builder);
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   gtk_tree_view_expand_all (tv);
 
-  gtk_widget_show (window);
-
+  gtk_widget_grab_focus (GTK_WIDGET (tv));
   gtk_tree_view_get_cursor (tv, &path, &focus_column);
   gtk_tree_path_down (path);
   data.count = 0;
