@@ -1791,7 +1791,7 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   unsigned int n_coords;
   hb_ot_var_axis_info_t *axes;
 
-  int num_axes, i;
+  unsigned int num_axes, i;
 #endif
 
   gboolean has_axis = FALSE;
