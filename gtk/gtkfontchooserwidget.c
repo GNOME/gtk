@@ -1633,25 +1633,25 @@ get_font_name (FT_Face      face,
   g_strlcpy (buffer, ax->name, buffer_len);
 }
 
-static const float
+static float
 get_float_value (FT_Fixed value)
 {
   return FixedToFloat (value);
 }
 
-static const float
+static float
 get_axis_float_max (FT_Var_Axis *ax)
 {
   return FixedToFloat (ax->maximum);
 }
 
-static const float
+static float
 get_axis_float_min (FT_Var_Axis *ax)
 {
   return FixedToFloat (ax->minimum);
 }
 
-static const float
+static float
 get_axis_float_default (FT_Var_Axis *ax)
 {
   return FixedToFloat (ax->def);
@@ -1673,19 +1673,19 @@ get_font_name (hb_face_t             *face,
 
 #define get_float_value(x) x
 
-static const float
+static float
 get_axis_float_max (hb_ot_var_axis_info_t *ax)
 {
   return ax->max_value;
 }
 
-static const float
+static float
 get_axis_float_min (hb_ot_var_axis_info_t *ax)
 {
   return ax->min_value;
 }
 
-static const float
+static float
 get_axis_float_default (hb_ot_var_axis_info_t *ax)
 {
   return ax->default_value;
