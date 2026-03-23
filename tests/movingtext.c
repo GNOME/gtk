@@ -11,10 +11,10 @@ struct _DemoWidget
   guint64 start_time;
   guint64 stop_time;
 
-  char *text;
-
   float angle;
-  float size;
+  float scale;
+
+  PangoLayout *layout;
 };
 
 struct _DemoWidgetClass
@@ -38,7 +38,7 @@ tick_cb (GtkWidget     *widget,
     self->start_time = now;
 
   self->angle = 360 * (now - self->start_time) / (double)(G_TIME_SPAN_SECOND * 10);
-  self->size = 150 + 130 * sin (2 * G_PI * (now - self->start_time) / (double)(G_TIME_SPAN_SECOND * 5));
+  self->scale = 0.5 + 20 * (1 + sin (2 * G_PI * (now - self->start_time) / (double)(G_TIME_SPAN_SECOND * 5)));
 
   gtk_widget_queue_draw (widget);
 
@@ -73,15 +73,25 @@ pressed_cb (GtkEventController *controller,
           self->start_time += now - self->stop_time;
           self->tick_cb = gtk_widget_add_tick_callback (GTK_WIDGET (self), tick_cb, NULL, NULL);
         }
+      return TRUE;
     }
 
-  return TRUE;
+  return FALSE;
+}
+
+static void
+demo_widget_set_text (DemoWidget *self,
+                      const char *text,
+                      size_t      length)
+{
+  pango_layout_set_text (self->layout, text, length);
 }
 
 static void
 demo_widget_init (DemoWidget *self)
 {
   GtkEventController *controller;
+  PangoFontDescription *desc;
 
   self->start_time = 0;
   self->tick_cb = gtk_widget_add_tick_callback (GTK_WIDGET (self), tick_cb, NULL, NULL);
@@ -90,6 +100,16 @@ demo_widget_init (DemoWidget *self)
   g_signal_connect (controller, "key-pressed", G_CALLBACK (pressed_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+
+  desc = pango_font_description_new ();
+  pango_font_description_set_family (desc, "Cantarell");
+  pango_font_description_set_weight (desc, 520);
+  pango_font_description_set_size (desc, 11 * PANGO_SCALE);
+
+  self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "");
+  pango_layout_set_font_description (self->layout, desc);
+
+  pango_font_description_free (desc);
 }
 
 static void
@@ -97,10 +117,8 @@ demo_widget_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   DemoWidget *self = DEMO_WIDGET (widget);
-  PangoLayout *layout;
   int width, height;
   int pwidth, pheight;
-  PangoFontDescription *desc;
   GdkRGBA color;
 
   width = gtk_widget_get_width (widget);
@@ -108,26 +126,18 @@ demo_widget_snapshot (GtkWidget   *widget,
 
   gtk_widget_get_color (widget, &color);
 
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), self->text);
-  desc = pango_font_description_new ();
-  pango_font_description_set_family (desc, "Cantarell");
-  pango_font_description_set_weight (desc, 520);
-  pango_font_description_set_size (desc, self->size * PANGO_SCALE);
-  pango_layout_set_font_description (layout, desc);
-  pango_font_description_free (desc);
-  pango_layout_get_pixel_size (layout, &pwidth, &pheight);
+  pango_layout_get_pixel_size (self->layout, &pwidth, &pheight);
 
   gtk_snapshot_save (snapshot);
 
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0.5 * width, 0.5 * height));
   gtk_snapshot_rotate (snapshot, self->angle);
+  gtk_snapshot_scale (snapshot, self->scale, self->scale);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- 0.5 * pwidth, - 0.5 * pheight));
 
-  gtk_snapshot_append_layout (snapshot, layout, &color);
+  gtk_snapshot_append_layout (snapshot, self->layout, &color);
 
   gtk_snapshot_restore (snapshot);
-
-  g_object_unref (layout);
 }
 
 static void
@@ -135,7 +145,7 @@ demo_widget_dispose (GObject *object)
 {
   DemoWidget *self = DEMO_WIDGET (object);
 
-  g_free (self->text);
+  g_clear_object (&self->layout);
 
   G_OBJECT_CLASS (demo_widget_parent_class)->dispose (object);
 }
@@ -152,14 +162,11 @@ demo_widget_class_init (DemoWidgetClass *class)
 }
 
 static GtkWidget *
-demo_widget_new (const char *text,
-                 gsize       length)
+demo_widget_new (void)
 {
   DemoWidget *demo;
 
   demo = g_object_new (DEMO_TYPE_WIDGET, NULL);
-
-  demo->text = g_strndup (text, length);
 
   return GTK_WIDGET (demo);
 }
@@ -170,11 +177,12 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *demo;
   char *text = NULL;
-  gsize length;
+  size_t length;
 
   gtk_init ();
 
   window = gtk_window_new ();
+  gtk_window_set_default_size (GTK_WINDOW (window), 1024, 768);
 
   if (argc > 1)
     {
@@ -194,7 +202,8 @@ main (int argc, char *argv[])
       length = strlen (text);
     }
 
-  demo = demo_widget_new (text, length);
+  demo = demo_widget_new ();
+  demo_widget_set_text (DEMO_WIDGET (demo), text, length);
   gtk_window_set_child (GTK_WINDOW (window), demo);
 
   g_free (text);
