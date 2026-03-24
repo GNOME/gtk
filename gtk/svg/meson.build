@@ -9,6 +9,7 @@ gtk_svg_public_sources = files([
   'gtksvgstring.c',
   'gtksvgstringlist.c',
   'gtksvgenum.c',
+  'gtksvgfilterprimitiveref.c',
 ])
 
 gtk_svg_public_headers = files([

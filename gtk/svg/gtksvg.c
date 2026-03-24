@@ -54,6 +54,7 @@
 #include "gtksvgstringprivate.h"
 #include "gtksvgstringlistprivate.h"
 #include "gtksvgenumprivate.h"
+#include "gtksvgfilterprimitiverefprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2489,158 +2490,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ Filter primitive references */
-
-typedef enum
-{
-  DEFAULT_SOURCE,
-  SOURCE_GRAPHIC,
-  SOURCE_ALPHA,
-  BACKGROUND_IMAGE,
-  BACKGROUND_ALPHA,
-  FILL_PAINT,
-  STROKE_PAINT,
-  PRIMITIVE_REF,
-} SvgFilterPrimitiveRefType;
-
-typedef struct
-{
-  SvgValue base;
-  SvgFilterPrimitiveRefType type;
-  const char *ref;
-} SvgFilterPrimitiveRef;
-
-static void
-svg_filter_primitive_ref_free (SvgValue *value)
-{
-  SvgFilterPrimitiveRef *f = (SvgFilterPrimitiveRef *) value;
-
-  if (f->type == PRIMITIVE_REF)
-    g_free ((gpointer) f->ref);
-
-  g_free (f);
-}
-
-static gboolean
-svg_filter_primitive_ref_equal (const SvgValue *value0,
-                                const SvgValue *value1)
-{
-  const SvgFilterPrimitiveRef *f0 = (SvgFilterPrimitiveRef *) value0;
-  const SvgFilterPrimitiveRef *f1 = (SvgFilterPrimitiveRef *) value1;
-
-  if (f0->type != f1->type)
-    return FALSE;
-
-  if (f0->type == PRIMITIVE_REF)
-    return strcmp (f0->ref, f1->ref) == 0;
-
-  return TRUE;
-}
-
-static SvgValue *
-svg_filter_primitive_ref_interpolate (const SvgValue    *value0,
-                                      const SvgValue    *value1,
-                                      SvgComputeContext *context,
-                                      double             t)
-{
-  const SvgFilterPrimitiveRef *f0 = (const SvgFilterPrimitiveRef *) value0;
-  const SvgFilterPrimitiveRef *f1 = (const SvgFilterPrimitiveRef *) value1;
-
-  if (f0->type != f1->type)
-    return NULL;
-
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_filter_primitive_ref_accumulate (const SvgValue    *value0,
-                                     const SvgValue    *value1,
-                                     SvgComputeContext *context,
-                                     int                n)
-{
-  return NULL;
-}
-
-static void
-svg_filter_primitive_ref_print (const SvgValue *value,
-                                GString        *string)
-{
-  const SvgFilterPrimitiveRef *f = (const SvgFilterPrimitiveRef *) value;
-
-  if (f->type != DEFAULT_SOURCE)
-    g_string_append (string, f->ref);
-}
-
-static const SvgValueClass SVG_FILTER_PRIMITIVE_REF_CLASS = {
-  "SvgPrimitiveRef",
-  svg_filter_primitive_ref_free,
-  svg_filter_primitive_ref_equal,
-  svg_filter_primitive_ref_interpolate,
-  svg_filter_primitive_ref_accumulate,
-  svg_filter_primitive_ref_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-static SvgFilterPrimitiveRef filter_primitive_ref_values[] = {
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = DEFAULT_SOURCE, .ref = NULL, },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = SOURCE_GRAPHIC, .ref = "SourceGraphic", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = SOURCE_ALPHA, .ref = "SourceAlpha", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = BACKGROUND_IMAGE, .ref = "BackgroundImage", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = BACKGROUND_ALPHA, .ref = "BackgroundAlpha", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = FILL_PAINT, .ref = "FillPaint", },
-     { { &SVG_FILTER_PRIMITIVE_REF_CLASS, 0 }, .type = STROKE_PAINT, .ref = "StrokePaint", },
-  };
-
-static SvgValue *
-svg_filter_primitive_ref_new (SvgFilterPrimitiveRefType type)
-{
-  g_assert (type < PRIMITIVE_REF);
-
-  return svg_value_ref ((SvgValue *) &filter_primitive_ref_values[type]);
-}
-
-static SvgValue *
-svg_filter_primitive_ref_new_ref (const char *ref)
-{
-  SvgFilterPrimitiveRef *f = (SvgFilterPrimitiveRef *) svg_value_alloc (&SVG_FILTER_PRIMITIVE_REF_CLASS,
-                                                                        sizeof (SvgFilterPrimitiveRef));
-
-  f->type = PRIMITIVE_REF;
-  f->ref = g_strdup (ref);
-
-  return (SvgValue *) f;
-}
-
-static SvgValue *
-svg_filter_primitive_ref_parse (GtkCssParser *parser)
-{
-  for (unsigned int i = 0; i < G_N_ELEMENTS (filter_primitive_ref_values); i++)
-    {
-      if (filter_primitive_ref_values[i].ref &&
-          gtk_css_parser_try_ident (parser, filter_primitive_ref_values[i].ref))
-        return svg_value_ref ((SvgValue *) &filter_primitive_ref_values[i]);
-    }
-
-  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
-    {
-      const GtkCssToken *token = gtk_css_parser_get_token (parser);
-      SvgValue *value;
-
-      value = svg_filter_primitive_ref_new_ref (gtk_css_token_get_string (token));
-      gtk_css_parser_skip (parser);
-
-      return value;
-    }
-
-  gtk_css_parser_error_syntax (parser, "Expected a filter primitive ref value");
-  return NULL;
 }
 
 /* }}} */
@@ -7781,9 +7630,10 @@ filter_primitive_needs_backdrop (FilterPrimitive *f)
 
       if (idx != -1)
         {
-          SvgFilterPrimitiveRef *ref = (SvgFilterPrimitiveRef *) f->current[idx];
+          SvgFilterPrimitiveRefType type;
 
-          if (ref->type == BACKGROUND_IMAGE || ref->type == BACKGROUND_ALPHA)
+          type = svg_filter_primitive_ref_get_type (f->current[idx]);
+          if (type == BACKGROUND_IMAGE || type == BACKGROUND_ALPHA)
             return TRUE;
         }
     }
@@ -19445,11 +19295,10 @@ get_input_for_ref (SvgValue              *in,
                    GskRenderNode         *source,
                    GHashTable            *results)
 {
-  SvgFilterPrimitiveRef *ref = (SvgFilterPrimitiveRef *) in;
   GskRenderNode *node;
   FilterResult *res;
 
-  switch (ref->type)
+  switch (svg_filter_primitive_ref_get_type (in))
     {
     case DEFAULT_SOURCE:
       return filter_result_ref (g_hash_table_lookup (results, ""));
@@ -19471,7 +19320,7 @@ get_input_for_ref (SvgValue              *in,
       res->node = apply_alpha_only (res->node);
       return res;
     case PRIMITIVE_REF:
-      res = g_hash_table_lookup (results, ref->ref);
+      res = g_hash_table_lookup (results, svg_filter_primitive_ref_get_ref (in));
       if (res)
         return filter_result_ref (res);
       else
@@ -19484,7 +19333,7 @@ get_input_for_ref (SvgValue              *in,
         SvgPaint *paint;
         double opacity;
 
-        if (ref->type == FILL_PAINT)
+        if (svg_filter_primitive_ref_get_type (in))
           {
             paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
             opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
@@ -19520,7 +19369,7 @@ get_input_for_ref (SvgValue              *in,
 }
 
 static void
-determine_filter_subregion_from_refs (SvgFilterPrimitiveRef **refs,
+determine_filter_subregion_from_refs (SvgValue              **refs,
                                       unsigned int            n_refs,
                                       gboolean                is_first,
                                       const graphene_rect_t  *filter_region,
@@ -19529,12 +19378,12 @@ determine_filter_subregion_from_refs (SvgFilterPrimitiveRef **refs,
 {
   for (unsigned int i = 0; i < n_refs; i++)
     {
-      SvgFilterPrimitiveRef *ref = refs[i];
+      SvgFilterPrimitiveRefType type = svg_filter_primitive_ref_get_type (refs[i]);
 
-      if (ref->type == SOURCE_GRAPHIC || ref->type == SOURCE_ALPHA ||
-          ref->type == BACKGROUND_IMAGE || ref->type == BACKGROUND_ALPHA ||
-          ref->type == FILL_PAINT || ref->type == STROKE_PAINT ||
-          (ref->type == DEFAULT_SOURCE && is_first))
+      if (type == SOURCE_GRAPHIC || type == SOURCE_ALPHA ||
+          type == BACKGROUND_IMAGE || type == BACKGROUND_ALPHA ||
+          type == FILL_PAINT || type == STROKE_PAINT ||
+          (type == DEFAULT_SOURCE && is_first))
         {
           if (i == 0)
             graphene_rect_init_from_rect (subregion, filter_region);
@@ -19545,10 +19394,10 @@ determine_filter_subregion_from_refs (SvgFilterPrimitiveRef **refs,
         {
           FilterResult *res;
 
-          if (ref->type == DEFAULT_SOURCE)
+          if (type == DEFAULT_SOURCE)
             res = g_hash_table_lookup (results, "");
-          else if (ref->type == PRIMITIVE_REF)
-            res = g_hash_table_lookup (results, ref->ref);
+          else if (type == PRIMITIVE_REF)
+            res = g_hash_table_lookup (results, svg_filter_primitive_ref_get_ref (refs[i]));
           else
             g_assert_not_reached ();
 
@@ -19661,7 +19510,7 @@ determine_filter_subregion (FilterPrimitive       *f,
         case FE_DROPSHADOW:
         case FE_OFFSET:
           {
-            SvgFilterPrimitiveRef *ref = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN);
+            SvgValue *ref = filter_get_current_value (f, SHAPE_ATTR_FE_IN);
 
             determine_filter_subregion_from_refs (&ref, 1, is_first, filter_region, results, subregion);
           }
@@ -19671,10 +19520,10 @@ determine_filter_subregion (FilterPrimitive       *f,
         case FE_COMPOSITE:
         case FE_DISPLACEMENT:
           {
-            SvgFilterPrimitiveRef *refs[2];
+            SvgValue *refs[2];
 
-            refs[0] = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN);
-            refs[1] = (SvgFilterPrimitiveRef *) filter_get_current_value (f, SHAPE_ATTR_FE_IN2);
+            refs[0] = filter_get_current_value (f, SHAPE_ATTR_FE_IN);
+            refs[1] = filter_get_current_value (f, SHAPE_ATTR_FE_IN2);
 
             determine_filter_subregion_from_refs (refs, 2, is_first, filter_region, results, subregion);
           }
@@ -19682,10 +19531,10 @@ determine_filter_subregion (FilterPrimitive       *f,
 
         case FE_MERGE:
           {
-            SvgFilterPrimitiveRef **refs;
+            SvgValue **refs;
             unsigned int n_refs;
 
-            refs = g_newa (SvgFilterPrimitiveRef *, filter->filters->len);
+            refs = g_newa (SvgValue *, filter->filters->len);
             n_refs = 0;
             for (idx++; idx < filter->filters->len; idx++)
               {
@@ -19694,7 +19543,7 @@ determine_filter_subregion (FilterPrimitive       *f,
                 if (ff->type != FE_MERGE_NODE)
                   break;
 
-                refs[n_refs] = (SvgFilterPrimitiveRef *) filter_get_current_value (ff, SHAPE_ATTR_FE_IN);
+                refs[n_refs] = filter_get_current_value (ff, SHAPE_ATTR_FE_IN);
                 n_refs++;
               }
 
