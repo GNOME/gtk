@@ -19,7 +19,7 @@
           cx='0'
           cy='5'
           r='5'
-          gpa:fill='url(#gpa:foreground) rgb(0,0,0)'>
+          gpa:fill='foreground'>
   </circle>
   <circle
           id='warning'
@@ -29,7 +29,7 @@
           cx='10'
           cy='5'
           r='5'
-          gpa:fill='url(#gpa:warning) rgb(245,121,0)'>
+          gpa:fill='warning'>
   </circle>
   <circle
           id='blue'

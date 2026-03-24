@@ -7193,6 +7193,51 @@ svg_paint_print (const SvgValue *value,
     }
 }
 
+static void
+svg_paint_print_gpa (const SvgValue *value,
+                     GString        *s)
+{
+  const SvgPaint *paint = (const SvgPaint *) value;
+
+  switch (paint->kind)
+    {
+    case PAINT_CONTEXT_FILL:
+      g_string_append (s, "context-fill");
+      break;
+
+    case PAINT_CONTEXT_STROKE:
+      g_string_append (s, "context-stroke");
+      break;
+
+    case PAINT_CURRENT_COLOR:
+      g_string_append (s, "currentColor");
+      break;
+
+    case PAINT_COLOR:
+      {
+        GdkColor c;
+        /* Don't use gdk_color_print here until we parse
+         * modern css color syntax.
+         */
+        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->color);
+        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
+        gdk_color_finish (&c);
+      }
+      break;
+
+    case PAINT_SYMBOLIC:
+      g_string_append_printf (s, "%s", symbolic_colors[paint->symbolic]);
+      break;
+
+    case PAINT_NONE:
+    case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
+    case PAINT_SERVER_WITH_CURRENT_COLOR:
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 svg_paint_is_symbolic (const SvgPaint   *paint,
                        GtkSymbolicColor *symbolic)
@@ -21032,7 +21077,7 @@ serialize_gpa_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:stroke='");
-      svg_value_print (shape->gpa.stroke, s);
+      svg_paint_print_gpa (shape->gpa.stroke, s);
       g_string_append_c (s, '\'');
     }
 
@@ -21040,7 +21085,7 @@ serialize_gpa_attrs (GString              *s,
     {
       indent_for_attr (s, indent);
       g_string_append (s, "gpa:fill='");
-      svg_value_print (shape->gpa.fill, s);
+      svg_paint_print_gpa (shape->gpa.fill, s);
       g_string_append_c (s, '\'');
     }
 

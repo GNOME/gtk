@@ -15,8 +15,8 @@
           d='M 0 0 L 100 100'
           gpa:stroke-minwidth='1'
           gpa:stroke-maxwidth='3'
-          gpa:stroke='url(#gpa:foreground) rgb(0,0,0)'
-          gpa:fill='url(#gpa:accent) rgb(0,34,255)'>
+          gpa:stroke='foreground'
+          gpa:fill='accent'>
   </path>
   <rect
           x='0'
@@ -29,7 +29,7 @@
           fill='rgb(255,170,187)'
           stroke='url(#gpa:warning) rgb(245,121,0)'
           gpa:stroke-minwidth='4'
-          gpa:stroke='url(#gpa:warning) rgb(245,121,0)'
+          gpa:stroke='warning'
           gpa:fill='rgb(255,170,187)'>
   </circle>
 </svg>
