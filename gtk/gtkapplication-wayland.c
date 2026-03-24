@@ -31,6 +31,7 @@
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
 #include "a11y/gtkatspicontextprivate.h"
+#include "gtkatcontextprivate.h"
 
 typedef struct
 {
@@ -124,6 +125,7 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   char *window_path;
   GVariant *state;
   char *id = NULL;
+  GtkATContext *at_context = NULL;
 
   GTK_DEBUG (SESSION, "Handle window realize");
 
@@ -164,7 +166,12 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   gdk_wayland_toplevel_restore_from_session (GDK_TOPLEVEL (gdk_surface));
   g_free (id);
 
-  set_a11y_properties (window);
+  at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+  if (gtk_at_context_is_realized (at_context))
+    set_a11y_properties (window);
+  else
+    g_signal_connect_object (at_context, "notify::realized", (GCallback) set_a11y_properties, window, G_CONNECT_SWAPPED);
+  g_clear_object (&at_context);
 
   impl_class->handle_window_realize (impl, window);
 }
