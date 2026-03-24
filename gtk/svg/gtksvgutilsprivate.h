@@ -8,8 +8,6 @@
 
 #define DEFAULT_FONT_SIZE 13.333
 
-unsigned int svg_enum_get (const SvgValue *value);
-
 static inline void
 _sincos (double x, double *_sin, double *_cos)
 {

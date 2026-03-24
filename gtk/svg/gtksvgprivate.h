@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 
 #define INDEFINITE G_MAXINT64
 #define REPEAT_FOREVER INFINITY
+#define DEFAULT_FONT_SIZE 13.333
 
 struct _GtkSvg
 {
@@ -425,11 +426,6 @@ void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);
 
-SvgValue *   svg_linecap_new        (GskLineCap        value);
-SvgValue *   svg_linejoin_new       (GskLineJoin       value);
-SvgValue *   svg_fill_rule_new      (GskFillRule       rule);
-SvgValue *   svg_paint_order_new    (PaintOrder        order);
-SvgValue *   svg_mask_type_new      (GskMaskMode       mode);
 SvgValue *   svg_paint_new_none     (void);
 SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
 SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);

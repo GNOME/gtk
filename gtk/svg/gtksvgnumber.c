@@ -25,6 +25,7 @@
 #include "gtksvgnumberprivate.h"
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
+#include "gtksvgenumprivate.h"
 
 static const char * unit_names[] = {
   [SVG_UNIT_NUMBER] = "",
