@@ -79,9 +79,6 @@ void                    gdk_display_destroy_vulkan_instance             (GdkDisp
 
 void                    gdk_vulkan_init_dmabuf                          (GdkDisplay            *display);
 
-VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisplay            *display,
-                                                                         const char            *resource_name);
-
 void                    gdk_display_vulkan_pipeline_cache_updated       (GdkDisplay            *display);
 
 VkInstance              gdk_vulkan_context_get_instance                 (GdkVulkanContext      *context);

@@ -2224,50 +2224,6 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
 #endif
 }
 
-VkShaderModule
-gdk_display_get_vk_shader_module (GdkDisplay *self,
-                                  const char *resource_name)
-{
-  VkShaderModule *shader;
-  GError *error = NULL;
-  GBytes *bytes;
-
-  shader = g_hash_table_lookup (self->vk_shader_modules, resource_name);
-  if (shader)
-    return *shader;
-
-  bytes = g_resources_lookup_data (resource_name, 0, &error);
-  if (bytes == NULL)
-    {
-      GDK_DEBUG (VULKAN, "Error loading shader data: %s", error->message);
-      g_clear_error (&error);
-      return VK_NULL_HANDLE;
-    }
-
-  shader = g_new0 (VkShaderModule, 1);
-  if (GDK_VK_CHECK (vkCreateShaderModule, self->vk_device,
-                                          &(VkShaderModuleCreateInfo) {
-                                              .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-                                              .codeSize = g_bytes_get_size (bytes),
-                                              .pCode = (uint32_t *) g_bytes_get_data (bytes, NULL),
-                                          },
-                                          NULL,
-                                          shader) == VK_SUCCESS)
-    {
-      g_hash_table_insert (self->vk_shader_modules, g_strdup (resource_name), shader);
-    }
-  else
-    {
-      g_free (shader);
-
-      return VK_NULL_HANDLE;
-    }
-
-  g_bytes_unref (bytes);
-
-  return *shader;
-}
-
 #else /* GDK_RENDERING_VULKAN */
 
 static void
