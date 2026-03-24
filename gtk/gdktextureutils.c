@@ -20,7 +20,7 @@
 #include "gdktextureutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gtksnapshot.h"
-#include "gtksvg.h"
+#include "svg/gtksvg.h"
 #include "gtksymbolicpaintable.h"
 #include "gtkprivate.h"
 

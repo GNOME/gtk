@@ -26,7 +26,7 @@
 #include "gtkdialogerror.h"
 #include "gtkfiledialog.h"
 #include "gtkstack.h"
-#include "gtksvgprivate.h"
+#include "svg/gtksvgprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtktextview.h"

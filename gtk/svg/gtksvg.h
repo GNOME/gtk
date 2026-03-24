@@ -29,6 +29,7 @@
 #include <gsk/gsk.h>
 #include <gtk/gtksnapshot.h>
 #include <gtk/gtkenums.h>
+#include <gtk/svg/gtksvgenumtypes.h>
 
 G_BEGIN_DECLS
 

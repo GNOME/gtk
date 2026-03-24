@@ -44,6 +44,7 @@
 #include "gsk/gskroundedrectprivate.h"
 #include "gtk/gtkcssselectorprivate.h"
 #include <glib/gstdio.h>
+#include "gtksvgenumtypes.h"
 
 #include <tgmath.h>
 #include <stdint.h>

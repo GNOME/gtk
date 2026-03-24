@@ -25,7 +25,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gdktextureutilsprivate.h"
-#include "gtksvg.h"
+#include "svg/gtksvg.h"
 #include "gtksymbolicpaintable.h"
 
 #include "gtkstyleproviderprivate.h"

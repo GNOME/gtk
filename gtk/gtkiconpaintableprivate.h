@@ -2,7 +2,7 @@
 
 #include "gtkicontheme.h"
 #include "gtkiconpaintable.h"
-#include "gtksvg.h"
+#include "gtk/svg/gtksvg.h"
 #include "gsk/gsktypes.h"
 
 typedef struct {
