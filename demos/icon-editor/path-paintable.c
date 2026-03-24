@@ -21,6 +21,7 @@
 
 #include "path-paintable.h"
 #include "gtk/svg/gtksvgvalueprivate.h"
+#include "svg/gtksvgnumberprivate.h"
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 

@@ -49,6 +49,7 @@
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgvalueprivate.h"
 #include "gtksvgkeywordprivate.h"
+#include "gtksvgnumberprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -242,8 +243,6 @@
  * [billion laughs attack]: https://bitbucket.org/tiran/defusedxml
  */
 #define DRAWING_LIMIT 150000
-
-#define DEFAULT_FONT_SIZE 13.333
 
 #ifndef _MSC_VER
 #define DEBUG
@@ -857,26 +856,6 @@ strsplit_set (const char *str,
   return (char **) g_ptr_array_free (array, FALSE);
 }
 
-static const char * unit_names[] = {
-  [SVG_UNIT_NUMBER] = "",
-  [SVG_UNIT_PERCENTAGE] = "%",
-  [SVG_UNIT_PX] = "px",
-  [SVG_UNIT_PT] = "pt",
-  [SVG_UNIT_IN] = "in",
-  [SVG_UNIT_CM] = "cm",
-  [SVG_UNIT_MM] = "mm",
-  [SVG_UNIT_VW] = "vw",
-  [SVG_UNIT_VH] = "vh",
-  [SVG_UNIT_VMIN] = "vmin",
-  [SVG_UNIT_VMAX] = "vmax",
-  [SVG_UNIT_EM] = "em",
-  [SVG_UNIT_EX] = "ex",
-  [SVG_UNIT_DEG] = "deg",
-  [SVG_UNIT_RAD] = "rad",
-  [SVG_UNIT_GRAD] = "grad",
-  [SVG_UNIT_TURN] = "turn",
-};
-
 static gboolean
 parse_numeric (const char   *value,
                double        min,
@@ -902,9 +881,9 @@ parse_numeric (const char   *value,
           return (flags & PERCENTAGE) != 0;
         }
 
-      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
+      for (i = 0; i <= LAST_ANGLE_UNIT; i++)
         {
-          if (strcmp (endp, unit_names[i]) == 0)
+          if (strcmp (endp, svg_unit_name (i)) == 0)
             {
               if ((flags & LENGTH) != 0 &&
                   FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
@@ -921,7 +900,7 @@ parse_numeric (const char   *value,
             }
         }
 
-      if (i == G_N_ELEMENTS (unit_names))
+      if (i > LAST_ANGLE_UNIT)
         return FALSE;
 
       if (*f < min || *f > max)
@@ -2739,551 +2718,6 @@ state_match (uint64_t     states,
 }
 
 /* }}} */
-/* {{{ Numbers */
-
-typedef struct
-{
-  SvgValue base;
-  SvgUnit unit;
-  double value;
-} SvgNumber;
-
-static gboolean
-svg_number_equal (const SvgValue *value0,
-                  const SvgValue *value1)
-{
-  const SvgNumber *n0 = (const SvgNumber *) value0;
-  const SvgNumber *n1 = (const SvgNumber *) value1;
-
-  return n0->unit == n1->unit && n0->value == n1->value;
-}
-
-static SvgValue * svg_number_new_full (SvgUnit unit,
-                                       double  value);
-
-static SvgValue *
-svg_number_interpolate (const SvgValue    *value0,
-                        const SvgValue    *value1,
-                        SvgComputeContext *context,
-                        double             t)
-{
-  const SvgNumber *n0 = (const SvgNumber *) value0;
-  const SvgNumber *n1 = (const SvgNumber *) value1;
-
-  if (n0->unit != n1->unit)
-    return NULL;
-
-  return svg_number_new_full (n0->unit, lerp (t, n0->value, n1->value));
-}
-
-static SvgValue *
-svg_number_accumulate (const SvgValue    *value0,
-                       const SvgValue    *value1,
-                       SvgComputeContext *context,
-                       int                n)
-{
-  const SvgNumber *n0 = (const SvgNumber *) value0;
-  const SvgNumber *n1 = (const SvgNumber *) value1;
-
-  if (n0->unit != n1->unit)
-    return NULL;
-
-  return svg_number_new_full (n0->unit, accumulate (n0->value, n1->value, n));
-}
-
-static void
-svg_number_print (const SvgValue *value,
-                  GString        *string)
-{
-  const SvgNumber *n = (const SvgNumber *) value;
-  string_append_double (string, "", n->value);
-  g_string_append (string, unit_names[n->unit]);
-}
-
-static double
-svg_number_distance (const SvgValue *value0,
-                     const SvgValue *value1)
-{
-  const SvgNumber *n0 = (const SvgNumber *) value0;
-  const SvgNumber *n1 = (const SvgNumber *) value1;
-
-  if (n0->unit != n1->unit)
-    return 1;
-
-  return fabs (n0->value - n1->value);
-}
-
-static gboolean
-is_absolute_length (SvgUnit unit)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_PX:
-    case SVG_UNIT_PT:
-    case SVG_UNIT_IN:
-    case SVG_UNIT_CM:
-    case SVG_UNIT_MM:
-      return TRUE;
-    default:
-      return FALSE;
-    }
-}
-
-static double
-absolute_length_to_px (double  value,
-                       SvgUnit unit)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_PX: return value;
-    case SVG_UNIT_PT: return value * 96 / 72;
-    case SVG_UNIT_IN: return value * 96;
-    case SVG_UNIT_CM: return value * 96 / 2.54;
-    case SVG_UNIT_MM: return value * 96 / 25.4;
-    default: g_assert_not_reached ();
-    }
-}
-
-#if 0
-static gboolean
-is_angle (SvgUnit unit)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_DEG:
-    case SVG_UNIT_RAD:
-    case SVG_UNIT_GRAD:
-    case SVG_UNIT_TURN:
-      return TRUE;
-    default:
-      return FALSE;
-    }
-}
-#endif
-
-static double
-angle_to_deg (double  value,
-              SvgUnit unit)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_DEG: return value;
-    case SVG_UNIT_RAD: return value * 180.0 / M_PI;
-    case SVG_UNIT_GRAD: return value * 360.0 / 400.0;
-    case SVG_UNIT_TURN: return value * 360.0;
-    default: g_assert_not_reached ();
-    }
-}
-
-#if 0
-static gboolean
-is_viewport_relative (SvgUnit unit)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_VW:
-    case SVG_UNIT_VH:
-    case SVG_UNIT_VMIN:
-    case SVG_UNIT_VMAX:
-      return TRUE;
-    default:
-      return FALSE;
-    }
-}
-#endif
-
-static double
-viewport_relative_to_px (double                 value,
-                         SvgUnit                unit,
-                         const graphene_rect_t *viewport)
-{
-  switch ((unsigned int) unit)
-    {
-    case SVG_UNIT_VW: return value * viewport->size.width / 100;
-    case SVG_UNIT_VH: return value * viewport->size.height / 100;
-    case SVG_UNIT_VMIN: return value * MIN (viewport->size.width,
-                                            viewport->size.height) / 100;
-    case SVG_UNIT_VMAX: return value * MAX (viewport->size.width,
-                                            viewport->size.height) / 100;
-    default: g_assert_not_reached ();
-    }
-}
-
-static double
-shape_get_current_font_size (Shape             *shape,
-                             ShapeAttr          attr,
-                             SvgComputeContext *context)
-{
-  /* FIXME: units */
-  if (attr != SHAPE_ATTR_FONT_SIZE)
-    return ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
-  else if (context->parent)
-    return ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
-  else
-    return DEFAULT_FONT_SIZE;
-}
-
-static SvgValue *
-svg_number_resolve (const SvgValue    *value,
-                    ShapeAttr          attr,
-                    unsigned int       idx,
-                    Shape             *shape,
-                    SvgComputeContext *context)
-{
-  const SvgNumber *n = (const SvgNumber *) value;
-
-  switch (n->unit)
-    {
-    case SVG_UNIT_NUMBER:
-    case SVG_UNIT_PX:
-      switch ((unsigned int) attr)
-        {
-        case SHAPE_ATTR_OPACITY:
-        case SHAPE_ATTR_FILL_OPACITY:
-        case SHAPE_ATTR_STROKE_OPACITY:
-        case SHAPE_ATTR_STOP_OFFSET:
-          return svg_number_new (CLAMP (n->value, 0, 1));
-        default:
-          return svg_value_ref ((SvgValue *) value);
-        }
-      break;
-    case SVG_UNIT_PERCENTAGE:
-      switch ((unsigned int) attr)
-        {
-        case SHAPE_ATTR_FONT_SIZE:
-          {
-            double parent_size;
-
-            if (context->parent)
-              parent_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
-            else
-              parent_size = DEFAULT_FONT_SIZE;
-
-            return svg_number_new (n->value * parent_size / 100);
-          }
-          break;
-        case SHAPE_ATTR_OPACITY:
-        case SHAPE_ATTR_FILL_OPACITY:
-        case SHAPE_ATTR_STROKE_OPACITY:
-        case SHAPE_ATTR_STOP_OFFSET:
-          return svg_number_new (CLAMP (n->value / 100, 0, 1));
-        case SHAPE_ATTR_FILTER:
-          return svg_number_new (n->value / 100);
-        case SHAPE_ATTR_STROKE_WIDTH:
-        case SHAPE_ATTR_R:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (context->viewport) / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_CX:
-        case SHAPE_ATTR_RX:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_CY:
-        case SHAPE_ATTR_RY:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_Y:
-        case SHAPE_ATTR_HEIGHT:
-          if (shape->type != SHAPE_FILTER &&
-              shape->type != SHAPE_PATTERN &&
-              (shape->type != SHAPE_MASK ||
-               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_X:
-        case SHAPE_ATTR_WIDTH:
-          if (shape->type != SHAPE_FILTER &&
-              shape->type != SHAPE_PATTERN &&
-              (shape->type != SHAPE_MASK ||
-               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_X1:
-        case SHAPE_ATTR_X2:
-          if (shape->type == SHAPE_LINE)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_Y1:
-        case SHAPE_ATTR_Y2:
-          if (shape->type == SHAPE_LINE)
-            return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
-          else
-            return svg_value_ref ((SvgValue *) value);
-        default:
-          return svg_value_ref ((SvgValue *) value);
-        }
-      break;
-    case SVG_UNIT_PT:
-    case SVG_UNIT_IN:
-    case SVG_UNIT_CM:
-    case SVG_UNIT_MM:
-      return svg_number_new_full (SVG_UNIT_PX, absolute_length_to_px (n->value, n->unit));
-
-    case SVG_UNIT_VW:
-    case SVG_UNIT_VH:
-    case SVG_UNIT_VMIN:
-    case SVG_UNIT_VMAX:
-      return svg_number_new_full (SVG_UNIT_PX, viewport_relative_to_px (n->value,
-                                                                        n->unit,
-                                                                        context->viewport));
-
-    case SVG_UNIT_EM:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * shape_get_current_font_size (shape, attr, context));
-
-    case SVG_UNIT_EX:
-      return svg_number_new_full (SVG_UNIT_PX, n->value * 0.5 * shape_get_current_font_size (shape, attr, context));
-
-    case SVG_UNIT_RAD:
-    case SVG_UNIT_DEG:
-    case SVG_UNIT_GRAD:
-    case SVG_UNIT_TURN:
-      return svg_number_new_full (SVG_UNIT_DEG, angle_to_deg (n->value, n->unit));
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static const SvgValueClass SVG_NUMBER_CLASS = {
-  "SvgNumber",
-  svg_value_default_free,
-  svg_number_equal,
-  svg_number_interpolate,
-  svg_number_accumulate,
-  svg_number_print,
-  svg_number_distance,
-  svg_number_resolve,
-};
-
-SvgValue *
-svg_number_new (double value)
-{
-  static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 1 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 2 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = 4 }, /* default miter limit */
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = DEFAULT_FONT_SIZE },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = PANGO_WEIGHT_NORMAL },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_NUMBER, .value = -1 }, /* unset path length */
-  };
-  SvgValue *result;
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
-    {
-      if (value == singletons[i].value)
-        return (SvgValue *) &singletons[i];
-    }
-
-  result = svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  ((SvgNumber *) result)->unit = SVG_UNIT_NUMBER;
-  ((SvgNumber *) result)->value = value;
-
-  return result;
-}
-
-static SvgValue *
-svg_percentage_new (double value)
-{
-  static SvgNumber singletons[] = {
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = -10 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 0 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 25 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 50 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 100 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 120 },
-    { { &SVG_NUMBER_CLASS, 0 }, .unit = SVG_UNIT_PERCENTAGE, .value = 150 },
-  };
-  SvgValue *result;
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
-    {
-      if (value == singletons[i].value)
-        return (SvgValue *) &singletons[i];
-    }
-
-  result = svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-  ((SvgNumber *) result)->unit = SVG_UNIT_PERCENTAGE;
-  ((SvgNumber *) result)->value = value;
-
-  return result;
-}
-
-static SvgValue *
-svg_number_new_full (SvgUnit unit,
-                     double  value)
-{
-  if (unit == SVG_UNIT_NUMBER)
-    {
-      return svg_number_new (value);
-    }
-  else if (unit == SVG_UNIT_PERCENTAGE)
-    {
-      return svg_percentage_new (value);
-    }
-  else
-    {
-      SvgNumber *result;
-
-      result = (SvgNumber *) svg_value_alloc (&SVG_NUMBER_CLASS, sizeof (SvgNumber));
-      result->value = value;
-      result->unit = unit;
-
-      return (SvgValue *) result;
-    }
-}
-
-static gboolean
-svg_number_parse2 (GtkCssParser *parser,
-                   double        min,
-                   double        max,
-                   unsigned int  flags,
-                   double       *d,
-                   SvgUnit      *u)
-{
-  const GtkCssToken *token;
-  double number;
-  SvgUnit unit;
-
-  token = gtk_css_parser_get_token (parser);
-
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
-    {
-      if ((flags & PERCENTAGE) == 0)
-        {
-          gtk_css_parser_error_value (parser, "Percentages are not allowed here");
-          return FALSE;
-        }
-
-      number = token->number.number;
-      unit = SVG_UNIT_PERCENTAGE;
-    }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER))
-    {
-      number = token->number.number;
-
-      if (number == 0)
-        {
-          if (flags & NUMBER)
-            unit = SVG_UNIT_NUMBER;
-          else if (flags & LENGTH)
-            unit = SVG_UNIT_PX;
-          else if (flags & ANGLE)
-            unit = SVG_UNIT_DEG;
-          else
-            unit = SVG_UNIT_PERCENTAGE;
-        }
-      else if (flags & NUMBER)
-        {
-          unit = SVG_UNIT_NUMBER;
-        }
-      else
-        {
-          gtk_css_parser_error_syntax (parser, "Unit is missing");
-          return FALSE;
-        }
-    }
-  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
-    {
-      guint i;
-
-      number = token->dimension.value;
-
-      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
-        {
-          if (g_ascii_strcasecmp (token->dimension.dimension, unit_names[i]) == 0)
-            break;
-        }
-
-      if (FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
-        {
-          if (flags & LENGTH)
-            unit = i;
-          else
-            {
-              gtk_css_parser_error_value (parser, "Lengths are not allowed here");
-              return FALSE;
-            }
-        }
-      else if (FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
-        {
-          if (flags & ANGLE)
-            unit = i;
-          else
-            {
-              gtk_css_parser_error_value (parser, "Angles are not allowed here");
-              return FALSE;
-            }
-        }
-      else
-        {
-          gtk_css_parser_error_syntax (parser, "'%s' is not a valid unit", token->dimension.dimension);
-          return FALSE;
-        }
-    }
-  else
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a number");
-      return FALSE;
-    }
-
-  if (number < min || number > max)
-    {
-      gtk_css_parser_error_value (parser, "Out of range");
-      return FALSE;
-    }
-
-  *d = number;
-  *u = unit;
-
-  gtk_css_parser_consume_token (parser);
-  return TRUE;
-}
-
-static SvgValue *
-svg_number_parse (GtkCssParser *parser,
-                  double        min,
-                  double        max,
-                  unsigned int  flags)
-{
-  double d;
-  SvgUnit unit;
-
-  if (svg_number_parse2 (parser, min, max, flags, &d, &unit))
-    return svg_number_new_full (unit, d);
-  else
-    return NULL;
-}
-
-static double
-svg_number_get (const SvgValue *value,
-                double          one_hundred_percent)
-{
-  const SvgNumber *n = (const SvgNumber *)value;
-
-  g_assert (value->class == &SVG_NUMBER_CLASS);
-
-  if (n->unit == SVG_UNIT_PERCENTAGE)
-    return n->value / 100 * one_hundred_percent;
-  else
-    return n->value;
-}
-
-/* }}} */
 /* {{{ Number sequences */
 
 typedef struct
@@ -3351,7 +2785,7 @@ svg_numbers_print (const SvgValue *value,
       if (i > 0)
         g_string_append_c (string, ' ');
       string_append_double (string, "", p->values[i].value);
-      g_string_append (string, unit_names[p->values[i].unit]);
+      g_string_append (string, svg_unit_name (p->values[i].unit));
     }
 }
 
@@ -4506,7 +3940,7 @@ svg_font_size_resolve (const SvgValue    *value,
       double parent_size;
 
       if (context->parent)
-        parent_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+        parent_size = svg_number_get (context->parent->current[SHAPE_ATTR_FONT_SIZE], 100);
       else
         parent_size = DEFAULT_FONT_SIZE;
 
@@ -4558,7 +3992,7 @@ svg_font_weight_resolve (const SvgValue    *value,
       double parent_weight;
 
       if (context->parent)
-        parent_weight = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_WEIGHT])->value;
+        parent_weight = svg_number_get (context->parent->current[SHAPE_ATTR_FONT_WEIGHT], 100);
       else
         parent_weight = PANGO_WEIGHT_NORMAL;
 
@@ -5099,7 +4533,7 @@ css_parser_parse_number_length (GtkCssParser *parser,
     {
       for (unsigned int i = FIRST_LENGTH_UNIT; i <= LAST_LENGTH_UNIT; i++)
         {
-          if (strcmp (unit_names[i], ((const GtkCssDimensionToken *) token)->dimension) == 0)
+          if (strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
             {
               val[n].value = ((const GtkCssDimensionToken *) token)->value;
               val[n].unit = i;
@@ -5139,7 +4573,7 @@ css_parser_parse_number_angle (GtkCssParser *parser,
     {
       for (unsigned int i = FIRST_ANGLE_UNIT; i <= LAST_ANGLE_UNIT; i++)
         {
-          if (strcmp (unit_names[i], ((const GtkCssDimensionToken *) token)->dimension) == 0)
+          if (strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
             {
               val[n].value = ((const GtkCssDimensionToken *) token)->value;
               val[n].unit = i;
@@ -7063,7 +6497,8 @@ svg_filter_resolve (const SvgValue    *value,
           SvgValue *v = svg_value_resolve (ff->simple, attr, idx, shape, context);
 
           if (filter_desc[ff->kind].flags & CLAMPED)
-            r->simple = svg_number_new_full (((SvgNumber *) v)->unit, CLAMP (((SvgNumber *) v)->value, 0, 1));
+            r->simple = svg_number_new_full (svg_number_get_unit (v),
+                                             CLAMP (svg_number_get (v, 100), 0, 1));
           else
             r->simple = svg_value_ref (v);
           svg_value_unref (v);
@@ -7331,7 +6766,7 @@ svg_filter_interpolate (const SvgValue    *value0,
           ff0->kind == FILTER_DROPSHADOW)
         continue;
 
-      if (((SvgNumber *) ff0->simple)->unit != ((SvgNumber *) ff1->simple)->unit)
+      if (svg_number_get_unit (ff0->simple) != svg_number_get_unit (ff1->simple))
         return NULL;
     }
 
@@ -7791,7 +7226,7 @@ svg_dash_array_print (const SvgValue *value,
           if (i > 0)
             g_string_append_c (s, ' ');
           string_append_double (s, "", dashes->dashes[i].value);
-          g_string_append (s, unit_names[dashes->dashes[i].unit]);
+          g_string_append (s, svg_unit_name (dashes->dashes[i].unit));
         }
     }
 }
@@ -8944,7 +8379,7 @@ svg_orient_print (const SvgValue *value,
   if (v->kind == ORIENT_ANGLE)
     {
       string_append_double (string, "", v->angle);
-      g_string_append (string, unit_names[v->unit]);
+      g_string_append (string, svg_unit_name (v->unit));
     }
   else if (v->start_reverse)
     {
@@ -10414,17 +9849,10 @@ marker_ref_parse (GtkCssParser *parser)
 }
 
 static gboolean
-number_is_positive (SvgValue *value)
-{
-  return value->class == &SVG_NUMBER_CLASS &&
-         ((SvgNumber *) value)->value >= 0;
-}
-
-static gboolean
-number_is_positive_or_auto (SvgValue *value)
+number_is_positive_or_auto (const SvgValue *value)
 {
   return svg_value_equal (value, svg_auto_new ()) ||
-         number_is_positive (value);
+         svg_value_is_positive_number (value);
 }
 
 typedef enum
@@ -10440,10 +9868,10 @@ typedef struct
 {
   ShapeAttrFlags flags;
   unsigned int applies_to;
-  SvgValue * (* parse_value)        (GtkCssParser  *parser);
-  SvgValue * (* parse_presentation) (const char    *string,
-                                     GError       **error);
-  gboolean   (* is_valid)           (SvgValue      *value);
+  SvgValue * (* parse_value)        (GtkCssParser    *parser);
+  SvgValue * (* parse_presentation) (const char      *string,
+                                     GError         **error);
+  gboolean   (* is_valid)           (const SvgValue  *value);
   SvgValue *initial_value;
 } ShapeAttribute;
 
@@ -10687,7 +10115,7 @@ static ShapeAttribute shape_attrs[] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = SHAPE_SHAPES,
     .parse_value = parse_any_length,
-    .is_valid = number_is_positive,
+    .is_valid = svg_value_is_positive_number,
   },
   [SHAPE_ATTR_HREF] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
@@ -10720,7 +10148,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_R] = {
     .applies_to = BIT (SHAPE_CIRCLE) | BIT (SHAPE_RADIAL_GRADIENT),
     .parse_value = parse_length_percentage,
-    .is_valid = number_is_positive,
+    .is_valid = svg_value_is_positive_number,
   },
   [SHAPE_ATTR_X] = {
     .applies_to = BIT (SHAPE_SVG) | BIT (SHAPE_RECT) | BIT (SHAPE_IMAGE) |
@@ -10813,7 +10241,7 @@ static ShapeAttribute shape_attrs[] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_RADIAL_GRADIENT),
     .parse_value = parse_length_percentage,
-    .is_valid = number_is_positive,
+    .is_valid = svg_value_is_positive_number,
   },
   [SHAPE_ATTR_MASK_TYPE] = {
     .flags = SHAPE_ATTR_DISCRETE,
@@ -10942,13 +10370,13 @@ static ShapeAttribute shape_attrs[] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
     .parse_value = parse_length_percentage,
-    .is_valid = number_is_positive,
+    .is_valid = svg_value_is_positive_number,
   },
   [SHAPE_ATTR_FE_HEIGHT] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_FILTER),
     .parse_value = parse_length_percentage,
-    .is_valid = number_is_positive,
+    .is_valid = svg_value_is_positive_number,
   },
   [SHAPE_ATTR_FE_RESULT] = {
     .flags = SHAPE_ATTR_NO_CSS,
@@ -17029,8 +16457,8 @@ parse_value_animation_attrs (Animation            *a,
         }
 
       by = g_ptr_array_index (values, 0);
-      if (by->class == &SVG_NUMBER_CLASS)
-        from = svg_number_new_full (((SvgNumber *)by)->unit, 0);
+      if (svg_value_is_number (by))
+        from = svg_number_new_full (svg_number_get_unit (by), 0);
       else if (by->class == &SVG_TRANSFORM_CLASS)
         from = svg_transform_new_none ();
       else if (by->class == &SVG_PAINT_CLASS &&
@@ -20289,22 +19717,24 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
     {
-      SvgNumber *n = (SvgNumber *) self->content->base[SHAPE_ATTR_WIDTH];
+      SvgUnit unit = svg_number_get_unit (self->content->base[SHAPE_ATTR_WIDTH]);
+      double value = svg_number_get (self->content->base[SHAPE_ATTR_WIDTH], 100);
 
-      if (is_absolute_length (n->unit))
-        self->width = absolute_length_to_px (n->value, n->unit);
-      else if (n->unit != SVG_UNIT_PERCENTAGE)
-        self->width = n->value;
+      if (is_absolute_length (unit))
+        self->width = absolute_length_to_px (value, unit);
+      else if (unit != SVG_UNIT_PERCENTAGE)
+        self->width = value;
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_HEIGHT))
     {
-      SvgNumber *n = (SvgNumber *) self->content->base[SHAPE_ATTR_HEIGHT];
+      SvgUnit unit = svg_number_get_unit (self->content->base[SHAPE_ATTR_HEIGHT]);
+      double value = svg_number_get (self->content->base[SHAPE_ATTR_HEIGHT], 100);
 
-      if (is_absolute_length (n->unit))
-        self->height = absolute_length_to_px (n->value, n->unit);
-      else if (n->unit != SVG_UNIT_PERCENTAGE)
-        self->height = n->value;
+      if (is_absolute_length (unit))
+        self->height = absolute_length_to_px (value, unit);
+      else if (unit != SVG_UNIT_PERCENTAGE)
+        self->height = value;
     }
 
   if (!_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_VIEW_BOX) &&
@@ -24159,7 +23589,7 @@ paint_marker (Shape              *shape,
   SvgValue *overflow;
   double sx, sy, tx, ty;
   graphene_rect_t view_box;
-  SvgNumber *n;
+  SvgValue *v;
   GskTransform *transform = NULL;
 
   gsk_path_point_get_position (point, path, &vertex);
@@ -24213,21 +23643,21 @@ paint_marker (Shape              *shape,
   if (width == 0 || height == 0)
     return;
 
-  n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_X];
-  if (n->unit == SVG_UNIT_PERCENTAGE)
-    x = n->value / 100 * width;
+  v = marker->current[SHAPE_ATTR_REF_X];
+  if (svg_number_get_unit (v) == SVG_UNIT_PERCENTAGE)
+    x = svg_number_get (v, width);
   else if (!vb->unset)
-    x = n->value / vb->view_box.size.width * width;
+    x = svg_number_get (v, 100) / vb->view_box.size.width * width;
   else
-    x = n->value;
+    x = svg_number_get (v, 100);
 
-  n = (SvgNumber *) marker->current[SHAPE_ATTR_REF_Y];
-  if (n->unit == SVG_UNIT_PERCENTAGE)
-    y = n->value / 100 * height;
+  v = marker->current[SHAPE_ATTR_REF_Y];
+  if (svg_number_get_unit (v) == SVG_UNIT_PERCENTAGE)
+    y = svg_number_get (v, height);
   else if (!vb->unset)
-    y = n->value / vb->view_box.size.height * height;
+    y = svg_number_get (v, 100) / vb->view_box.size.height * height;
   else
-    y = n->value;
+    y = svg_number_get (v, 100);
 
   width *= scale;
   height *= scale;

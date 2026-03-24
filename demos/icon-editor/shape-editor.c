@@ -27,6 +27,8 @@
 #include "path-editor.h"
 #include "transform-editor.h"
 #include "gtk/svg/gtksvgvalueprivate.h"
+#include "gtk/svg/gtksvgnumberprivate.h"
+
 
 struct _ShapeEditor
 {

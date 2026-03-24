@@ -3,6 +3,7 @@ gtk_svg_public_sources = files([
   'gtksvgstringutils.c',
   'gtksvgvalue.c',
   'gtksvgkeyword.c',
+  'gtksvgnumber.c',
 ])
 
 gtk_svg_public_headers = files([

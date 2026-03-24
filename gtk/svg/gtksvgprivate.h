@@ -425,7 +425,6 @@ void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);
 
-SvgValue *   svg_number_new         (double            value);
 SvgValue *   svg_linecap_new        (GskLineCap        value);
 SvgValue *   svg_linejoin_new       (GskLineJoin       value);
 SvgValue *   svg_fill_rule_new      (GskFillRule       rule);
