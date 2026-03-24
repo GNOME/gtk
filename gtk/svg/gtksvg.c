@@ -52,6 +52,7 @@
 #include "gtksvgnumberprivate.h"
 #include "gtksvgnumbersprivate.h"
 #include "gtksvgstringprivate.h"
+#include "gtksvgstringlistprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2459,147 +2460,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ String Lists */
-
-typedef struct
-{
-  SvgValue base;
-  char separator;
-  unsigned int len;
-  char *values[1];
-} SvgStringList;
-
-static unsigned int
-svg_string_list_size (unsigned int n)
-{
-  return sizeof (SvgStringList) + MAX (n - 1, 0) * sizeof (char *);
-}
-
-static void
-svg_string_list_free (SvgValue *value)
-{
-  SvgStringList *s = (SvgStringList *)value;
-  for (size_t i = 0; i < s->len; i++)
-    g_free (s->values[i]);
-  g_free (s);
-}
-
-static gboolean
-svg_string_list_equal (const SvgValue *value0,
-                       const SvgValue *value1)
-{
-  const SvgStringList *s0 = (const SvgStringList *)value0;
-  const SvgStringList *s1 = (const SvgStringList *)value1;
-
-  if (s0->len != s1->len)
-    return FALSE;
-
-  if (s0->separator != s1->separator)
-    return FALSE;
-
-  for (unsigned int i = 0; i < s0->len; i++)
-    {
-      if (strcmp (s0->values[i], s1->values[i]) != 0)
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static SvgValue *
-svg_string_list_interpolate (const SvgValue    *value0,
-                             const SvgValue    *value1,
-                             SvgComputeContext *context,
-                             double             t)
-{
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_string_list_accumulate (const SvgValue    *value0,
-                            const SvgValue    *value1,
-                            SvgComputeContext *context,
-                            int                n)
-{
-  return svg_value_ref ((SvgValue *)value0);
-}
-
-static void
-svg_string_list_print (const SvgValue *value,
-                       GString        *string)
-{
-  const SvgStringList *s = (const SvgStringList *)value;
-
-  for (unsigned int i = 0; i < s->len; i++)
-    {
-      char *escaped = g_markup_escape_text (s->values[i], strlen (s->values[i]));
-      if (i > 0)
-        g_string_append_c (string, s->separator);
-      g_string_append (string, escaped);
-      g_free (escaped);
-    }
-}
-
-static const SvgValueClass SVG_STRING_LIST_CLASS = {
-  "SvgStringList",
-  svg_string_list_free,
-  svg_string_list_equal,
-  svg_string_list_interpolate,
-  svg_string_list_accumulate,
-  svg_string_list_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-static SvgValue *
-svg_string_list_new (GStrv strv)
-{
-  static SvgStringList empty = { { &SVG_STRING_LIST_CLASS, 0 }, .len = 0, .values[0] = NULL, };
-  SvgStringList *result;
-  unsigned int len;
-
-  if (strv)
-    len = g_strv_length (strv);
-  else
-    len = 0;
-
-  if (len == 0)
-    return svg_value_ref ((SvgValue *) &empty);
-
-  result = (SvgStringList *) svg_value_alloc (&SVG_STRING_LIST_CLASS, svg_string_list_size (len));
-
-  result->len = len;
-  for (unsigned int i = 0; i < len; i++)
-    result->values[i] = g_strdup (strv[i]);
-
-  result->separator = ' ';
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_string_list_new_take (GStrv strv)
-{
-  SvgStringList *result;
-  unsigned int len = g_strv_length (strv);
-
-  result = (SvgStringList *) svg_value_alloc (&SVG_STRING_LIST_CLASS, svg_string_list_size (len));
-
-  result->len = len;
-  for (unsigned int i = 0; i < len; i++)
-    result->values[i] = strv[i];
-
-  g_free (strv);
-
-  result->separator = ' ';
-
-  return (SvgValue *) result;
 }
 
 /* }}} */
@@ -8875,7 +8735,7 @@ static SvgValue *
 parse_string_list (const char  *value,
                    GError     **error)
 {
-  return svg_string_list_new_take (strsplit_set (value, " "));
+  return svg_string_list_new_take (strsplit_set (value, " "), ' ');
 }
 
 static SvgValue *
@@ -9115,8 +8975,7 @@ parse_font_family (GtkCssParser *parser)
         break;
     }
 
-  result = svg_string_list_new_take (g_strv_builder_unref_to_strv (builder));
-  ((SvgStringList *) result)->separator = ',';
+  result = svg_string_list_new_take (g_strv_builder_unref_to_strv (builder), ',');
 
   return result;
 }
@@ -10898,20 +10757,20 @@ static gboolean
 shape_conditionally_excluded (Shape  *shape,
                               GtkSvg *svg)
 {
-  SvgStringList *required_extensions = (SvgStringList *) shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
+  SvgValue *required_extensions = shape->current[SHAPE_ATTR_REQUIRED_EXTENSIONS];
   SvgLanguage *system_language = (SvgLanguage *) shape->current[SHAPE_ATTR_SYSTEM_LANGUAGE];
   PangoLanguage *lang;
 
-  if (svg_value_equal ((SvgValue *) required_extensions, svg_string_list_new (NULL)) &&
+  if (svg_value_equal (required_extensions, svg_string_list_new (NULL)) &&
       svg_value_equal ((SvgValue *) system_language, svg_language_new_list (0, NULL)))
     return FALSE;
 
-  for (unsigned int i = 0; i < required_extensions->len; i++)
+  for (unsigned int i = 0; i < svg_string_list_get_length (required_extensions); i++)
     {
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0)
         return TRUE;
 
-      if (strcmp (required_extensions->values[i], "http://www.gtk.org/grappa") != 0)
+      if (strcmp (svg_string_list_get (required_extensions, i), "http://www.gtk.org/grappa") != 0)
         return TRUE;
     }
 
@@ -23048,7 +22907,7 @@ text_create_layout (Shape            *self,
   int w,h;
   PangoLayoutIter *iter;
   double offset;
-  SvgStringList *font_family;
+  SvgValue *font_family;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SHAPE_ATTR_LANG]));
@@ -23091,16 +22950,16 @@ text_create_layout (Shape            *self,
 
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
-  font_family = (SvgStringList *) self->current[SHAPE_ATTR_FONT_FAMILY];
-  if (font_family->len > 0)
+  font_family = self->current[SHAPE_ATTR_FONT_FAMILY];
+  if (svg_string_list_get_length (font_family) > 0)
     {
       GString *s = g_string_new ("");
 
-      for (unsigned int i = 0; i < font_family->len; i++)
+      for (unsigned int i = 0; i < svg_string_list_get_length (font_family); i++)
         {
           if (i > 0)
             g_string_append_c (s, ',');
-          g_string_append (s, font_family->values[i]);
+          g_string_append (s, svg_string_list_get (font_family, i));
         }
       pango_font_description_set_family (font_desc, s->str);
       g_string_free (s, TRUE);
