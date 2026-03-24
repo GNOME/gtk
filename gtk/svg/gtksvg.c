@@ -47,6 +47,7 @@
 #include "gtksvgenumtypes.h"
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
+#include "gtksvgvalueprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2737,208 +2738,6 @@ state_match (uint64_t     states,
 }
 
 /* }}} */
-/* {{{ Values */
-
-typedef struct {
-  GtkSvg *svg;
-  const graphene_rect_t *viewport;
-  Shape *parent; /* Can be different from the actual parent, for <use> */
-  int64_t current_time;
-  const GdkRGBA *colors;
-  size_t n_colors;
-  GdkColorState *interpolation;
-} ComputeContext;
-
-typedef struct _SvgValueClass SvgValueClass;
-
-struct _SvgValueClass
-{
-  const char *name;
-
-  void       (* free)        (SvgValue              *value);
-  gboolean   (* equal)       (const SvgValue        *value0,
-                              const SvgValue        *value1);
-  SvgValue * (* interpolate) (const SvgValue        *value0,
-                              const SvgValue        *value1,
-                              ComputeContext        *context,
-                              double                 t);
-  SvgValue * (* accumulate)  (const SvgValue        *value0,
-                              const SvgValue        *value1,
-                              ComputeContext        *context,
-                              int                    n);
-  void       (* print)       (const SvgValue        *value,
-                              GString               *string);
-  double     (* distance)    (const SvgValue        *value0,
-                              const SvgValue        *value1);
-  SvgValue * (* resolve)     (const SvgValue        *value,
-                              ShapeAttr              attr,
-                              unsigned int           idx,
-                              Shape                 *shape,
-                              ComputeContext        *context);
-};
-
-struct _SvgValue
-{
-  const SvgValueClass *class;
-  int ref_count;
-};
-
-static SvgValue *
-svg_value_alloc (const SvgValueClass *class,
-                 size_t                size)
-{
-  SvgValue *value;
-
-  value = g_malloc0 (size);
-
-  value->class = class;
-  value->ref_count = 1;
-
-  return value;
-}
-
-static inline gboolean
-svg_value_is_immortal (SvgValue *value)
-{
-  return value->ref_count == 0;
-}
-
-SvgValue *
-svg_value_ref (SvgValue *value)
-{
-  if (svg_value_is_immortal (value))
-    return value;
-
-  value->ref_count += 1;
-  return value;
-}
-
-void
-svg_value_unref (SvgValue *value)
-{
-  if (svg_value_is_immortal (value))
-    return;
-
-  if (value->ref_count > 1)
-    {
-      value->ref_count -= 1;
-      return;
-    }
-
-  value->class->free (value);
-}
-
-G_DEFINE_BOXED_TYPE (SvgValue, svg_value, svg_value_ref, svg_value_unref)
-
-gboolean
-svg_value_equal (const SvgValue *value0,
-                 const SvgValue *value1)
-{
-  if (value0 == value1)
-    return TRUE;
-
-  if (value0->class != value1->class)
-    return FALSE;
-
-  return value0->class->equal (value0, value1);
-}
-
-/* Compute v = t * a + (1 - t) * b */
-static SvgValue *
-svg_value_interpolate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       double          t)
-{
-  g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
-
-  if (t == 0)
-    return svg_value_ref ((SvgValue *) value0);
-
-  if (t == 1)
-    return svg_value_ref ((SvgValue *) value1);
-
-  if (value0 == value1)
-    return svg_value_ref ((SvgValue *) value0);
-
-  return value1->class->interpolate (value0, value1, context, t);
-}
-
-/* Compute v = n * b + a */
-static SvgValue *
-svg_value_accumulate (const SvgValue *value0,
-                      const SvgValue *value1,
-                       ComputeContext *context,
-                      int             n)
-{
-  g_return_val_if_fail (value0->class == value1->class, svg_value_ref ((SvgValue *) value0));
-
-  if (n == 0)
-    return svg_value_ref ((SvgValue *) value0);
-
-  return value0->class->accumulate (value0, value1, context, n);
-}
-
-static void
-svg_value_print (const SvgValue *value,
-                 GString        *string)
-{
-  value->class->print (value, string);
-}
-
-char *
-svg_value_to_string (const SvgValue *value)
-{
-  GString *s = g_string_new ("");
-  svg_value_print (value, s);
-  return g_string_free (s, FALSE);
-}
-
-static void
-svg_value_default_free (SvgValue *value)
-{
-  g_free (value);
-}
-
-static double
-svg_value_default_distance (const SvgValue *value0,
-                            const SvgValue *value1)
-{
-  g_warning ("Can't determine distance between %s values",
-             value0->class->name);
-  return 1;
-}
-
-static double
-svg_value_distance (const SvgValue *value0,
-                    const SvgValue *value1)
-{
-  g_return_val_if_fail (value0->class == value1->class, 1);
-
-  return value0->class->distance (value0, value1);
-}
-
-static SvgValue *
-svg_value_default_resolve (const SvgValue  *value,
-                           ShapeAttr        attr,
-                           unsigned int     idx,
-                           Shape           *shape,
-                           ComputeContext  *context)
-{
-  return svg_value_ref ((SvgValue *) value);
-}
-
-static SvgValue *
-svg_value_resolve (const SvgValue  *value,
-                   ShapeAttr        attr,
-                   unsigned int     idx,
-                   Shape           *shape,
-                   ComputeContext  *context)
-{
-  return value->class->resolve (value, attr, idx, shape, context);
-}
-
-/* }}} */
 /* {{{ Keyword values */
 
 enum
@@ -2965,19 +2764,19 @@ svg_keyword_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_keyword_interpolate (const SvgValue *value0,
-                         const SvgValue *value1,
-                         ComputeContext *context,
-                         double          t)
+svg_keyword_interpolate (const SvgValue    *value0,
+                         const SvgValue    *value1,
+                         SvgComputeContext *context,
+                         double             t)
 {
   return NULL;
 }
 
 static SvgValue *
-svg_keyword_accumulate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        int             n)
+svg_keyword_accumulate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        int                n)
 {
   return NULL;
 }
@@ -3102,10 +2901,10 @@ static SvgValue * svg_number_new_full (SvgUnit unit,
                                        double  value);
 
 static SvgValue *
-svg_number_interpolate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        double          t)
+svg_number_interpolate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        double             t)
 {
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
@@ -3117,10 +2916,10 @@ svg_number_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_number_accumulate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       int             n)
+svg_number_accumulate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       int                n)
 {
   const SvgNumber *n0 = (const SvgNumber *) value0;
   const SvgNumber *n1 = (const SvgNumber *) value1;
@@ -3250,9 +3049,9 @@ viewport_relative_to_px (double                 value,
 }
 
 static double
-shape_get_current_font_size (Shape          *shape,
-                             ShapeAttr       attr,
-                             ComputeContext *context)
+shape_get_current_font_size (Shape             *shape,
+                             ShapeAttr          attr,
+                             SvgComputeContext *context)
 {
   /* FIXME: units */
   if (attr != SHAPE_ATTR_FONT_SIZE)
@@ -3264,11 +3063,11 @@ shape_get_current_font_size (Shape          *shape,
 }
 
 static SvgValue *
-svg_number_resolve (const SvgValue *value,
-                    ShapeAttr       attr,
-                    unsigned int    idx,
-                    Shape          *shape,
-                    ComputeContext *context)
+svg_number_resolve (const SvgValue    *value,
+                    ShapeAttr          attr,
+                    unsigned int       idx,
+                    Shape             *shape,
+                    SvgComputeContext *context)
 {
   const SvgNumber *n = (const SvgNumber *) value;
 
@@ -3672,10 +3471,10 @@ svg_numbers_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_numbers_accumulate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        int             n)
+svg_numbers_accumulate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        int                n)
 {
   return NULL;
 }
@@ -3695,16 +3494,16 @@ svg_numbers_print (const SvgValue *value,
     }
 }
 
-static SvgValue * svg_numbers_interpolate (const SvgValue *value0,
-                                           const SvgValue *value1,
-                                           ComputeContext *context,
-                                           double          t);
+static SvgValue * svg_numbers_interpolate (const SvgValue    *value0,
+                                           const SvgValue    *value1,
+                                           SvgComputeContext *context,
+                                           double             t);
 
-static SvgValue * svg_numbers_resolve (const SvgValue *value,
-                                       ShapeAttr       attr,
-                                       unsigned int    idx,
-                                       Shape          *shape,
-                                       ComputeContext *context);
+static SvgValue * svg_numbers_resolve (const SvgValue    *value,
+                                       ShapeAttr          attr,
+                                       unsigned int       idx,
+                                       Shape             *shape,
+                                       SvgComputeContext *context);
 
 static const SvgValueClass SVG_NUMBERS_CLASS = {
   "SvgNumbers",
@@ -3849,10 +3648,10 @@ svg_numbers_parse (GtkCssParser *parser)
 }
 
 static SvgValue *
-svg_numbers_interpolate (const SvgValue *value0,
-                         const SvgValue *value1,
-                         ComputeContext *context,
-                         double          t)
+svg_numbers_interpolate (const SvgValue    *value0,
+                         const SvgValue    *value1,
+                         SvgComputeContext *context,
+                         double             t)
 {
   const SvgNumbers *p0 = (const SvgNumbers *) value0;
   const SvgNumbers *p1 = (const SvgNumbers *) value1;
@@ -3880,11 +3679,11 @@ svg_numbers_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_numbers_resolve (const SvgValue *value,
-                     ShapeAttr       attr,
-                     unsigned int    idx,
-                     Shape          *shape,
-                     ComputeContext *context)
+svg_numbers_resolve (const SvgValue    *value,
+                     ShapeAttr          attr,
+                     unsigned int       idx,
+                     Shape             *shape,
+                     SvgComputeContext *context)
 {
   SvgNumbers *orig = (SvgNumbers *) value;
   SvgNumbers *p;
@@ -4018,10 +3817,10 @@ svg_string_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_string_interpolate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        double          t)
+svg_string_interpolate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -4030,10 +3829,10 @@ svg_string_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_string_accumulate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       int             n)
+svg_string_accumulate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       int                n)
 {
   return svg_value_ref ((SvgValue *)value0);
 }
@@ -4139,10 +3938,10 @@ svg_string_list_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_string_list_interpolate (const SvgValue *value0,
-                             const SvgValue *value1,
-                             ComputeContext *context,
-                             double          t)
+svg_string_list_interpolate (const SvgValue    *value0,
+                             const SvgValue    *value1,
+                             SvgComputeContext *context,
+                             double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -4151,10 +3950,10 @@ svg_string_list_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_string_list_accumulate (const SvgValue *value0,
-                            const SvgValue *value1,
-                            ComputeContext *context,
-                            int             n)
+svg_string_list_accumulate (const SvgValue    *value0,
+                            const SvgValue    *value1,
+                            SvgComputeContext *context,
+                            int                n)
 {
   return svg_value_ref ((SvgValue *)value0);
 }
@@ -4253,10 +4052,10 @@ svg_enum_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_enum_interpolate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      double          t)
+svg_enum_interpolate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -4265,10 +4064,10 @@ svg_enum_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_enum_accumulate (const SvgValue *value0,
-                     const SvgValue *value1,
-                     ComputeContext *context,
-                     int             n)
+svg_enum_accumulate (const SvgValue    *value0,
+                     const SvgValue    *value1,
+                     SvgComputeContext *context,
+                     int                n)
 {
   return svg_value_ref ((SvgValue *) value0);
 }
@@ -4817,11 +4616,11 @@ typedef enum
 } FontSize;
 
 static SvgValue *
-svg_font_size_resolve (const SvgValue *value,
-                       ShapeAttr       attr,
-                       unsigned int    idx,
-                       Shape          *shape,
-                       ComputeContext *context)
+svg_font_size_resolve (const SvgValue    *value,
+                       ShapeAttr          attr,
+                       unsigned int       idx,
+                       Shape             *shape,
+                       SvgComputeContext *context)
 {
   const SvgEnum *font_size = (const SvgEnum *) value;
 
@@ -4879,11 +4678,11 @@ typedef enum {
 } FontWeight;
 
 static SvgValue *
-svg_font_weight_resolve (const SvgValue *value,
-                         ShapeAttr       attr,
-                         unsigned int    idx,
-                         Shape          *shape,
-                         ComputeContext *context)
+svg_font_weight_resolve (const SvgValue    *value,
+                         ShapeAttr          attr,
+                         unsigned int       idx,
+                         Shape             *shape,
+                         SvgComputeContext *context)
 {
   const SvgEnum *font_weight = (const SvgEnum *) value;
 
@@ -4943,11 +4742,11 @@ typedef enum
   COLOR_INTERPOLATION_LINEAR,
 } ColorInterpolation;
 
-static SvgValue * svg_color_interpolation_resolve (const SvgValue *value,
-                                                   ShapeAttr       attr,
-                                                   unsigned int    idx,
-                                                   Shape          *shape,
-                                                   ComputeContext *context);
+static SvgValue * svg_color_interpolation_resolve (const SvgValue    *value,
+                                                   ShapeAttr          attr,
+                                                   unsigned int       idx,
+                                                   Shape             *shape,
+                                                   SvgComputeContext *context);
 
 DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInterpolation, svg_color_interpolation_resolve,
   DEFINE_ENUM_VALUE (COLOR_INTERPOLATION, COLOR_INTERPOLATION_AUTO,   "auto"),
@@ -4956,11 +4755,11 @@ DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInter
 )
 
 static SvgValue *
-svg_color_interpolation_resolve (const SvgValue *value,
-                                 ShapeAttr       attr,
-                                 unsigned int    idx,
-                                 Shape          *shape,
-                                 ComputeContext *context)
+svg_color_interpolation_resolve (const SvgValue    *value,
+                                 ShapeAttr          attr,
+                                 unsigned int       idx,
+                                 Shape             *shape,
+                                 SvgComputeContext *context)
 {
   if (svg_enum_get (value) == COLOR_INTERPOLATION_AUTO)
     return svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
@@ -5078,10 +4877,10 @@ svg_filter_primitive_ref_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_filter_primitive_ref_interpolate (const SvgValue *value0,
-                                      const SvgValue *value1,
-                                      ComputeContext *context,
-                                      double          t)
+svg_filter_primitive_ref_interpolate (const SvgValue    *value0,
+                                      const SvgValue    *value1,
+                                      SvgComputeContext *context,
+                                      double             t)
 {
   const SvgFilterPrimitiveRef *f0 = (const SvgFilterPrimitiveRef *) value0;
   const SvgFilterPrimitiveRef *f1 = (const SvgFilterPrimitiveRef *) value1;
@@ -5096,10 +4895,10 @@ svg_filter_primitive_ref_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_filter_primitive_ref_accumulate (const SvgValue *value0,
-                                     const SvgValue *value1,
-                                     ComputeContext *context,
-                                     int             n)
+svg_filter_primitive_ref_accumulate (const SvgValue    *value0,
+                                     const SvgValue    *value1,
+                                     SvgComputeContext *context,
+                                     int                n)
 {
   return NULL;
 }
@@ -5275,18 +5074,18 @@ svg_transform_equal (const SvgValue *value0,
   return TRUE;
 }
 
-static SvgValue *svg_transform_interpolate (const SvgValue *v0,
-                                            const SvgValue *v1,
-                                            ComputeContext *context,
-                                            double          t);
-static SvgValue *svg_transform_accumulate  (const SvgValue *v0,
-                                            const SvgValue *v1,
-                                            ComputeContext *context,
-                                            int             n);
-static void      svg_transform_print       (const SvgValue *v,
-                                            GString        *string);
-static double    svg_transform_distance    (const SvgValue *v0,
-                                            const SvgValue *v1);
+static SvgValue *svg_transform_interpolate (const SvgValue    *v0,
+                                            const SvgValue    *v1,
+                                            SvgComputeContext *context,
+                                            double             t);
+static SvgValue *svg_transform_accumulate  (const SvgValue    *v0,
+                                            const SvgValue    *v1,
+                                            SvgComputeContext *context,
+                                            int                n);
+static void      svg_transform_print       (const SvgValue    *v,
+                                            GString           *string);
+static double    svg_transform_distance    (const SvgValue    *v0,
+                                            const SvgValue    *v1);
 
 
 static const SvgValueClass SVG_TRANSFORM_CLASS = {
@@ -5995,10 +5794,10 @@ primitive_transform_apply (const PrimitiveTransform *transform,
 }
 
 static SvgValue *
-svg_transform_interpolate (const SvgValue *value0,
-                           const SvgValue *value1,
-                           ComputeContext *context,
-                           double          t)
+svg_transform_interpolate (const SvgValue    *value0,
+                           const SvgValue    *value1,
+                           SvgComputeContext *context,
+                           double             t)
 {
   static const PrimitiveTransform identity[] = {
     { .type = TRANSFORM_TRANSLATE, .translate = { 0, 0 } },
@@ -6095,10 +5894,10 @@ svg_transform_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_transform_accumulate (const SvgValue *value0,
-                          const SvgValue *value1,
-                          ComputeContext *context,
-                          int             n)
+svg_transform_accumulate (const SvgValue    *value0,
+                          const SvgValue    *value1,
+                          SvgComputeContext *context,
+                          int                n)
 {
   const SvgTransform *tf0 = (const SvgTransform *) value0;
   const SvgTransform *tf1 = (const SvgTransform *) value1;
@@ -6279,23 +6078,23 @@ svg_color_equal (const SvgValue *value0,
     }
 }
 
-static SvgValue *svg_color_interpolate (const SvgValue *v0,
-                                        const SvgValue *v1,
-                                        ComputeContext *context,
-                                        double          t);
-static SvgValue *svg_color_accumulate  (const SvgValue *v0,
-                                        const SvgValue *v1,
-                                        ComputeContext *context,
-                                        int             n);
-static void      svg_color_print       (const SvgValue *v0,
-                                        GString        *string);
-static double    svg_color_distance    (const SvgValue *v0,
-                                        const SvgValue *v1);
-static SvgValue * svg_color_resolve    (const SvgValue *value,
-                                        ShapeAttr       attr,
-                                        unsigned int    idx,
-                                        Shape          *shape,
-                                        ComputeContext *context);
+static SvgValue *svg_color_interpolate (const    SvgValue *v0,
+                                        const    SvgValue *v1,
+                                        SvgComputeContext *context,
+                                        double             t);
+static SvgValue *svg_color_accumulate  (const SvgValue    *v0,
+                                        const SvgValue    *v1,
+                                        SvgComputeContext *context,
+                                        int                n);
+static void      svg_color_print       (const SvgValue    *v0,
+                                        GString           *string);
+static double    svg_color_distance    (const SvgValue    *v0,
+                                        const SvgValue    *v1);
+static SvgValue * svg_color_resolve    (const SvgValue    *value,
+                                        ShapeAttr          attr,
+                                        unsigned int       idx,
+                                        Shape             *shape,
+                                        SvgComputeContext *context);
 
 static void
 svg_color_free (SvgValue *value)
@@ -6446,11 +6245,11 @@ svg_color_print (const SvgValue *value,
 }
 
 static SvgValue *
-svg_color_resolve (const SvgValue *value,
-                   ShapeAttr       attr,
-                   unsigned int    idx,
-                   Shape          *shape,
-                   ComputeContext *context)
+svg_color_resolve (const SvgValue    *value,
+                   ShapeAttr          attr,
+                   unsigned int       idx,
+                   Shape             *shape,
+                   SvgComputeContext *context)
 {
   SvgColor *color = (SvgColor *) value;
 
@@ -6483,10 +6282,10 @@ svg_color_resolve (const SvgValue *value,
 }
 
 static SvgValue *
-svg_color_interpolate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       double          t)
+svg_color_interpolate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       double             t)
 {
   const SvgColor *c0 = (const SvgColor *) value0;
   const SvgColor *c1 = (const SvgColor *) value1;
@@ -6511,10 +6310,10 @@ svg_color_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_color_accumulate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      int             n)
+svg_color_accumulate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      int                n)
 {
   const SvgColor *c0 = (const SvgColor *) value0;
   const SvgColor *c1 = (const SvgColor *) value1;
@@ -6638,23 +6437,23 @@ svg_paint_equal (const SvgValue *value0,
     }
 }
 
-static SvgValue *svg_paint_interpolate (const SvgValue *v0,
-                                        const SvgValue *v1,
-                                        ComputeContext *context,
-                                        double          t);
-static SvgValue *svg_paint_accumulate  (const SvgValue *v0,
-                                        const SvgValue *v1,
-                                        ComputeContext *context,
-                                        int             n);
-static void      svg_paint_print       (const SvgValue *v0,
-                                        GString        *string);
-static double    svg_paint_distance    (const SvgValue *v0,
-                                        const SvgValue *v1);
-static SvgValue * svg_paint_resolve    (const SvgValue *value,
-                                        ShapeAttr       attr,
-                                        unsigned int    idx,
-                                        Shape          *shape,
-                                        ComputeContext *context);
+static SvgValue *svg_paint_interpolate (const SvgValue    *v0,
+                                        const SvgValue    *v1,
+                                        SvgComputeContext *context,
+                                        double             t);
+static SvgValue *svg_paint_accumulate  (const SvgValue    *v0,
+                                        const SvgValue    *v1,
+                                        SvgComputeContext *context,
+                                        int                n);
+static void      svg_paint_print       (const SvgValue    *v0,
+                                        GString           *string);
+static double    svg_paint_distance    (const SvgValue    *v0,
+                                        const SvgValue    *v1);
+static SvgValue * svg_paint_resolve    (const SvgValue    *value,
+                                        ShapeAttr          attr,
+                                        unsigned int       idx,
+                                        Shape             *shape,
+                                        SvgComputeContext *context);
 
 static const SvgValueClass SVG_PAINT_CLASS = {
   "SvgPaint",
@@ -7056,11 +6855,11 @@ svg_paint_is_symbolic (const SvgPaint   *paint,
 }
 
 static SvgValue *
-svg_paint_resolve (const SvgValue *value,
-                   ShapeAttr       attr,
-                   unsigned int    idx,
-                   Shape          *shape,
-                   ComputeContext *context)
+svg_paint_resolve (const SvgValue    *value,
+                   ShapeAttr          attr,
+                   unsigned int       idx,
+                   Shape             *shape,
+                   SvgComputeContext *context)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
   GtkSymbolicColor symbolic;
@@ -7106,10 +6905,10 @@ svg_paint_resolve (const SvgValue *value,
 }
 
 static SvgValue *
-svg_paint_interpolate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       double          t)
+svg_paint_interpolate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       double             t)
 {
   const SvgPaint *p0 = (const SvgPaint *) value0;
   const SvgPaint *p1 = (const SvgPaint *) value1;
@@ -7133,10 +6932,10 @@ svg_paint_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_paint_accumulate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      int             n)
+svg_paint_accumulate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      int                n)
 {
   const SvgPaint *p0 = (const SvgPaint *) value0;
   const SvgPaint *p1 = (const SvgPaint *) value1;
@@ -7318,22 +7117,22 @@ svg_filter_equal (const SvgValue *value0,
   return TRUE;
 }
 
-static SvgValue *svg_filter_interpolate (const SvgValue *v0,
-                                         const SvgValue *v1,
-                                         ComputeContext *context,
-                                         double          t);
-static SvgValue *svg_filter_accumulate  (const SvgValue *v0,
-                                         const SvgValue *v1,
-                                         ComputeContext *context,
-                                         int             n);
-static void      svg_filter_print       (const SvgValue *v0,
-                                         GString        *string);
+static SvgValue *svg_filter_interpolate (const SvgValue    *v0,
+                                         const SvgValue    *v1,
+                                         SvgComputeContext *context,
+                                         double             t);
+static SvgValue *svg_filter_accumulate  (const SvgValue    *v0,
+                                         const SvgValue    *v1,
+                                         SvgComputeContext *context,
+                                         int                n);
+static void      svg_filter_print       (const SvgValue    *v0,
+                                         GString           *string);
 
-static SvgValue * svg_filter_resolve    (const SvgValue *value,
-                                         ShapeAttr       attr,
-                                         unsigned int    idx,
-                                         Shape          *shape,
-                                         ComputeContext *context);
+static SvgValue * svg_filter_resolve    (const SvgValue    *value,
+                                         ShapeAttr          attr,
+                                         unsigned int       idx,
+                                         Shape             *shape,
+                                         SvgComputeContext *context);
 
 static const SvgValueClass SVG_FILTER_CLASS = {
   "SvgFilter",
@@ -7365,11 +7164,11 @@ svg_filter_new_none (void)
 }
 
 static SvgValue *
-svg_filter_resolve (const SvgValue *value,
-                    ShapeAttr       attr,
-                    unsigned int    idx,
-                    Shape          *shape,
-                    ComputeContext *context)
+svg_filter_resolve (const SvgValue    *value,
+                    ShapeAttr          attr,
+                    unsigned int       idx,
+                    Shape             *shape,
+                    SvgComputeContext *context)
 {
   const SvgFilter *filter = (const SvgFilter *) value;
   SvgFilter *result;
@@ -7646,10 +7445,10 @@ svg_filter_print (const SvgValue *value,
 }
 
 static SvgValue *
-svg_filter_interpolate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        double          t)
+svg_filter_interpolate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        double             t)
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
@@ -7717,10 +7516,10 @@ svg_filter_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_filter_accumulate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       int             n)
+svg_filter_accumulate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       int                n)
 {
   const SvgFilter *f0 = (const SvgFilter *) value0;
   const SvgFilter *f1 = (const SvgFilter *) value1;
@@ -7986,23 +7785,23 @@ svg_dash_array_equal (const SvgValue *value0,
   return TRUE;
 }
 
-static SvgValue * svg_dash_array_interpolate (const SvgValue *value0,
-                                              const SvgValue *value1,
-                                              ComputeContext *context,
-                                              double          t);
+static SvgValue * svg_dash_array_interpolate (const SvgValue    *value0,
+                                              const SvgValue    *value1,
+                                              SvgComputeContext *context,
+                                              double             t);
 
 static void svg_dash_array_print (const SvgValue *value,
                                   GString        *s);
 
-static SvgValue * svg_dash_array_accumulate (const SvgValue *value0,
-                                             const SvgValue *value1,
-                                             ComputeContext *context,
-                                             int             n);
-static SvgValue * svg_dash_array_resolve    (const SvgValue *value,
-                                             ShapeAttr       attr,
-                                             unsigned int    idx,
-                                             Shape          *shape,
-                                             ComputeContext *context);
+static SvgValue * svg_dash_array_accumulate (const SvgValue    *value0,
+                                             const SvgValue    *value1,
+                                             SvgComputeContext *context,
+                                             int                n);
+static SvgValue * svg_dash_array_resolve    (const SvgValue    *value,
+                                             ShapeAttr          attr,
+                                             unsigned int       idx,
+                                             Shape             *shape,
+                                             SvgComputeContext *context);
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
   "SvgFilter",
@@ -8137,10 +7936,10 @@ svg_dash_array_print (const SvgValue *value,
 }
 
 static SvgValue *
-svg_dash_array_interpolate (const SvgValue *value0,
-                            const SvgValue *value1,
-                            ComputeContext *context,
-                            double          t)
+svg_dash_array_interpolate (const SvgValue    *value0,
+                            const SvgValue    *value1,
+                            SvgComputeContext *context,
+                            double             t)
 {
   const SvgDashArray *a0 = (const SvgDashArray *) value0;
   const SvgDashArray *a1 = (const SvgDashArray *) value1;
@@ -8182,20 +7981,20 @@ out:
 }
 
 static SvgValue *
-svg_dash_array_accumulate (const SvgValue *value0,
-                           const SvgValue *value1,
-                           ComputeContext *context,
-                           int             n)
+svg_dash_array_accumulate (const SvgValue    *value0,
+                           const SvgValue    *value1,
+                           SvgComputeContext *context,
+                           int                n)
 {
   return NULL;
 }
 
 static SvgValue *
-svg_dash_array_resolve (const SvgValue *value,
-                        ShapeAttr       attr,
-                        unsigned int    idx,
-                        Shape          *shape,
-                        ComputeContext *context)
+svg_dash_array_resolve (const SvgValue    *value,
+                        ShapeAttr          attr,
+                        unsigned int       idx,
+                        Shape             *shape,
+                        SvgComputeContext *context)
 {
   SvgDashArray *orig = (SvgDashArray *) value;
   SvgDashArray *a;
@@ -8284,10 +8083,10 @@ svg_path_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_path_accumulate (const SvgValue *value0,
-                     const SvgValue *value1,
-                     ComputeContext *context,
-                     int             n)
+svg_path_accumulate (const SvgValue    *value0,
+                     const SvgValue    *value1,
+                     SvgComputeContext *context,
+                     int                n)
 {
   return NULL;
 }
@@ -8304,10 +8103,10 @@ svg_path_print (const SvgValue *value,
     g_string_append (string, "none");
 }
 
-static SvgValue * svg_path_interpolate (const SvgValue *value1,
-                                        const SvgValue *value2,
-                                        ComputeContext *context,
-                                        double          t);
+static SvgValue * svg_path_interpolate (const SvgValue    *value1,
+                                        const SvgValue    *value2,
+                                        SvgComputeContext *context,
+                                        double             t);
 
 static const SvgValueClass SVG_PATH_CLASS = {
   "SvgPath",
@@ -8416,10 +8215,10 @@ svg_path_get_gsk (const SvgValue *value)
 }
 
 static SvgValue *
-svg_path_interpolate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      double          t)
+svg_path_interpolate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      double             t)
 {
   const SvgPath *p0 = (const SvgPath *) value0;
   const SvgPath *p1 = (const SvgPath *) value1;
@@ -8499,16 +8298,16 @@ svg_clip_equal (const SvgValue *value0,
     }
 }
 
-static SvgValue * svg_clip_interpolate (const SvgValue *value0,
-                                        const SvgValue *value1,
-                                        ComputeContext *context,
-                                        double          t);
+static SvgValue * svg_clip_interpolate (const SvgValue    *value0,
+                                        const SvgValue    *value1,
+                                        SvgComputeContext *context,
+                                        double             t);
 
 static SvgValue *
-svg_clip_accumulate (const SvgValue *value0,
-                     const SvgValue *value1,
-                     ComputeContext *context,
-                     int             n)
+svg_clip_accumulate (const SvgValue    *value0,
+                     const SvgValue    *value1,
+                     SvgComputeContext *context,
+                     int                n)
 {
   return NULL;
 }
@@ -8605,10 +8404,10 @@ svg_clip_new_ref (const char *ref)
 }
 
 static SvgValue *
-svg_clip_interpolate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      double          t)
+svg_clip_interpolate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      double             t)
 {
   const SvgClip *c0 = (const SvgClip *) value0;
   const SvgClip *c1 = (const SvgClip *) value1;
@@ -8795,10 +8594,10 @@ svg_mask_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_mask_interpolate (const SvgValue *value0,
-                      const SvgValue *value1,
-                      ComputeContext *context,
-                      double          t)
+svg_mask_interpolate (const SvgValue    *value0,
+                      const SvgValue    *value1,
+                      SvgComputeContext *context,
+                      double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -8807,10 +8606,10 @@ svg_mask_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_mask_accumulate (const SvgValue *value0,
-                     const SvgValue *value1,
-                     ComputeContext *context,
-                     int             n)
+svg_mask_accumulate (const SvgValue    *value0,
+                     const SvgValue    *value1,
+                     SvgComputeContext *context,
+                     int                n)
 {
   return NULL;
 }
@@ -8916,10 +8715,10 @@ svg_view_box_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_view_box_interpolate (const SvgValue *value0,
-                          const SvgValue *value1,
-                          ComputeContext *context,
-                          double          t)
+svg_view_box_interpolate (const SvgValue    *value0,
+                          const SvgValue    *value1,
+                          SvgComputeContext *context,
+                          double             t)
 {
   const SvgViewBox *v0 = (const SvgViewBox *) value0;
   const SvgViewBox *v1 = (const SvgViewBox *) value1;
@@ -8939,10 +8738,10 @@ svg_view_box_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_view_box_accumulate (const SvgValue *value0,
-                         const SvgValue *value1,
-                         ComputeContext *context,
-                         int             n)
+svg_view_box_accumulate (const SvgValue    *value0,
+                         const SvgValue    *value1,
+                         SvgComputeContext *context,
+                         int                n)
 {
   return NULL;
 }
@@ -9044,10 +8843,10 @@ svg_content_fit_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_content_fit_interpolate (const SvgValue *value0,
-                             const SvgValue *value1,
-                             ComputeContext *context,
-                             double          t)
+svg_content_fit_interpolate (const SvgValue    *value0,
+                             const SvgValue    *value1,
+                             SvgComputeContext *context,
+                             double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -9056,10 +8855,10 @@ svg_content_fit_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_content_fit_accumulate (const SvgValue *value0,
-                            const SvgValue *value1,
-                            ComputeContext *context,
-                            int             n)
+svg_content_fit_accumulate (const SvgValue    *value0,
+                            const SvgValue    *value1,
+                            SvgComputeContext *context,
+                            int                n)
 {
   return NULL;
 }
@@ -9247,10 +9046,10 @@ static SvgValue *svg_orient_new_angle (double  angle,
                                        SvgUnit unit);
 
 static SvgValue *
-svg_orient_interpolate (const SvgValue *value0,
-                        const SvgValue *value1,
-                        ComputeContext *context,
-                        double          t)
+svg_orient_interpolate (const SvgValue    *value0,
+                        const SvgValue    *value1,
+                        SvgComputeContext *context,
+                        double             t)
 {
   const SvgOrient *v0 = (const SvgOrient *) value0;
   const SvgOrient *v1 = (const SvgOrient *) value1;
@@ -9267,10 +9066,10 @@ svg_orient_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_orient_accumulate (const SvgValue *value0,
-                       const SvgValue *value1,
-                       ComputeContext *context,
-                       int             n)
+svg_orient_accumulate (const SvgValue    *value0,
+                       const SvgValue    *value1,
+                       SvgComputeContext *context,
+                       int                n)
 {
   return NULL;
 }
@@ -9296,11 +9095,11 @@ svg_orient_print (const SvgValue *value,
     }
 }
 
-static SvgValue * svg_orient_resolve (const SvgValue  *value,
-                                      ShapeAttr        attr,
-                                      unsigned int     idx,
-                                      Shape           *shape,
-                                      ComputeContext  *context);
+static SvgValue * svg_orient_resolve (const SvgValue    *value,
+                                      ShapeAttr          attr,
+                                      unsigned int       idx,
+                                      Shape             *shape,
+                                      SvgComputeContext *context);
 
 static const SvgValueClass SVG_ORIENT_CLASS = {
   "SvgOrient",
@@ -9365,11 +9164,11 @@ svg_orient_parse (GtkCssParser *parser)
 }
 
 static SvgValue *
-svg_orient_resolve (const SvgValue  *value,
-                    ShapeAttr        attr,
-                    unsigned int     idx,
-                    Shape           *shape,
-                    ComputeContext  *context)
+svg_orient_resolve (const SvgValue     *value,
+                    ShapeAttr           attr,
+                    unsigned int        idx,
+                    Shape              *shape,
+                    SvgComputeContext  *context)
 {
   const SvgOrient *v = (const SvgOrient *) value;
 
@@ -9431,10 +9230,10 @@ svg_language_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_language_interpolate (const SvgValue *value0,
-                          const SvgValue *value1,
-                          ComputeContext *context,
-                          double          t)
+svg_language_interpolate (const SvgValue    *value0,
+                          const SvgValue    *value1,
+                          SvgComputeContext *context,
+                          double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -9443,10 +9242,10 @@ svg_language_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_language_accumulate (const SvgValue *value0,
-                         const SvgValue *value1,
-                         ComputeContext *context,
-                         int             n)
+svg_language_accumulate (const SvgValue    *value0,
+                         const SvgValue    *value1,
+                         SvgComputeContext *context,
+                         int                n)
 {
   return svg_value_ref ((SvgValue *)value0);
 }
@@ -9558,10 +9357,10 @@ svg_text_decoration_equal (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_text_decoration_interpolate (const SvgValue *value0,
-                                 const SvgValue *value1,
-                                 ComputeContext *context,
-                                 double          t)
+svg_text_decoration_interpolate (const SvgValue    *value0,
+                                 const SvgValue    *value1,
+                                 SvgComputeContext *context,
+                                 double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value0);
@@ -9570,10 +9369,10 @@ svg_text_decoration_interpolate (const SvgValue *value0,
 }
 
 static SvgValue *
-svg_text_decoration_accumulate (const SvgValue *value0,
-                                const SvgValue *value1,
-                                ComputeContext *context,
-                                int             n)
+svg_text_decoration_accumulate (const SvgValue    *value0,
+                                const SvgValue    *value1,
+                                SvgComputeContext *context,
+                                int                n)
 {
   return svg_value_ref ((SvgValue *)value0);
 }
@@ -9601,11 +9400,11 @@ svg_text_decoration_get (const SvgValue *value)
   return d->value;
 }
 
-static SvgValue * svg_text_decoration_resolve (const SvgValue *value,
-                                               ShapeAttr       attr,
-                                               unsigned int    idx,
-                                               Shape          *shape,
-                                               ComputeContext *context);
+static SvgValue * svg_text_decoration_resolve (const SvgValue    *value,
+                                               ShapeAttr          attr,
+                                               unsigned int       idx,
+                                               Shape             *shape,
+                                               SvgComputeContext *context);
 
 static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
   "SvgTextDecoration",
@@ -9660,11 +9459,11 @@ svg_text_decoration_parse (GtkCssParser *parser)
 }
 
 static SvgValue *
-svg_text_decoration_resolve (const SvgValue *value,
-                             ShapeAttr       attr,
-                             unsigned int    idx,
-                             Shape          *shape,
-                             ComputeContext *context)
+svg_text_decoration_resolve (const SvgValue    *value,
+                             ShapeAttr          attr,
+                             unsigned int       idx,
+                             Shape             *shape,
+                             SvgComputeContext *context)
 {
   TextDecoration ret;
 
@@ -9739,10 +9538,10 @@ svg_href_equal (const SvgValue *value1,
 }
 
 static SvgValue *
-svg_href_interpolate (const SvgValue *value1,
-                      const SvgValue *value2,
-                      ComputeContext *context,
-                      double          t)
+svg_href_interpolate (const SvgValue    *value1,
+                      const SvgValue    *value2,
+                      SvgComputeContext *context,
+                      double             t)
 {
   if (t < 0.5)
     return svg_value_ref ((SvgValue *) value1);
@@ -9751,10 +9550,10 @@ svg_href_interpolate (const SvgValue *value1,
 }
 
 static SvgValue *
-svg_href_accumulate (const SvgValue *value1,
-                     const SvgValue *value2,
-                     ComputeContext *context,
-                     int             n)
+svg_href_accumulate (const SvgValue    *value1,
+                     const SvgValue    *value2,
+                     SvgComputeContext *context,
+                     int                n)
 {
   return NULL;
 }
@@ -15014,11 +14813,11 @@ get_transform_data_for_motion (GskPathMeasure   *measure,
 }
 
 static SvgValue *
-resolve_value (Shape           *shape,
-               ComputeContext  *context,
-               ShapeAttr       attr,
-               unsigned int    idx,
-               SvgValue       *value)
+resolve_value (Shape             *shape,
+               SvgComputeContext *context,
+               ShapeAttr          attr,
+               unsigned int       idx,
+               SvgValue          *value)
 {
   if (svg_value_is_initial (value))
     {
@@ -15107,11 +14906,11 @@ resolve_value (Shape           *shape,
 }
 
 static SvgValue *
-compute_animation_motion_value (Animation      *a,
-                                unsigned int    rep,
-                                unsigned int    frame,
-                                double          frame_t,
-                                ComputeContext *context)
+compute_animation_motion_value (Animation         *a,
+                                unsigned int       rep,
+                                unsigned int       frame,
+                                double             frame_t,
+                                SvgComputeContext *context)
 {
   double angle;
   graphene_point_t orig_pos, final_pos;
@@ -15201,8 +15000,8 @@ compute_animation_motion_value (Animation      *a,
 }
 
 static SvgValue *
-compute_value_at_time (Animation      *a,
-                       ComputeContext *context)
+compute_value_at_time (Animation         *a,
+                       SvgComputeContext *context)
 {
   int rep;
   unsigned int frame;
@@ -15286,8 +15085,8 @@ compute_value_at_time (Animation      *a,
 }
 
 static SvgValue *
-compute_value_for_animation (Animation      *a,
-                             ComputeContext *context)
+compute_value_for_animation (Animation         *a,
+                             SvgComputeContext *context)
 {
   GdkColorState *previous = context->interpolation;
   SvgValue *value = NULL;
@@ -15403,8 +15202,8 @@ compare_anim (gconstpointer a,
 }
 
 static void
-shape_init_current_values (Shape          *shape,
-                           ComputeContext *context)
+shape_init_current_values (Shape             *shape,
+                           SvgComputeContext *context)
 {
   for (ShapeAttr attr = FIRST_SHAPE_ATTR; attr <= LAST_FILTER_ATTR; attr++)
     {
@@ -15475,8 +15274,8 @@ mark_as_computed_for_use (Shape    *shape,
 }
 
 static void
-compute_current_values_for_shape (Shape          *shape,
-                                  ComputeContext *context)
+compute_current_values_for_shape (Shape             *shape,
+                                  SvgComputeContext *context)
 {
   const graphene_rect_t *old_viewport = context->viewport;
   graphene_rect_t viewport;
@@ -17313,7 +17112,7 @@ parse_value_animation_attrs (Animation            *a,
       SvgValue *from;
       SvgValue *by;
       SvgValue *to;
-      ComputeContext ctx = { 0, };
+      SvgComputeContext ctx = { 0, };
 
       values = shape_attr_parse_values (a->attr, transform_type, from_attr);
 
@@ -25208,7 +25007,7 @@ recompute_current_values (Shape        *shape,
                           Shape        *parent,
                           PaintContext *context)
 {
-  ComputeContext ctx;
+  SvgComputeContext ctx;
 
   ctx.svg = context->svg;
   ctx.viewport = context->viewport;
@@ -25707,7 +25506,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
   if (!can_reuse_node (self, width, height, colors, n_colors, weight))
     {
-      ComputeContext compute_context;
+      SvgComputeContext compute_context;
       PaintContext paint_context;
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
@@ -26755,7 +26554,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
           n_col = 5;
         }
 
-      ComputeContext context;
+      SvgComputeContext context;
       context.svg = self;
       context.viewport = NULL;
       context.current_time = self->current_time;

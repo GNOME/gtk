@@ -20,6 +20,7 @@
  */
 
 #include "transform-editor.h"
+#include "gtk/svg/gtksvgvalueprivate.h"
 
 struct _TransformEditor
 {

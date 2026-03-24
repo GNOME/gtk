@@ -425,13 +425,6 @@ void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);
 
-SvgValue *   svg_value_ref          (SvgValue         *value);
-void         svg_value_unref        (SvgValue         *value);
-GType        svg_value_get_type     (void) G_GNUC_CONST;
-gboolean     svg_value_equal        (const SvgValue   *self,
-                                     const SvgValue   *other);
-char *       svg_value_to_string    (const SvgValue   *self);
-
 SvgValue *   svg_number_new         (double            value);
 SvgValue *   svg_linecap_new        (GskLineCap        value);
 SvgValue *   svg_linejoin_new       (GskLineJoin       value);

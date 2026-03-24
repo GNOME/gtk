@@ -26,7 +26,7 @@
 #include "mini-graph.h"
 #include "path-editor.h"
 #include "transform-editor.h"
-
+#include "gtk/svg/gtksvgvalueprivate.h"
 
 struct _ShapeEditor
 {
