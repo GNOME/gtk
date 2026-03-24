@@ -17,6 +17,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   SIMPLE_ITEMS = 0,
   FOCUS_ITEMS,

@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define INITIAL_HALIGN          GTK_ALIGN_START
 #define INITIAL_VALIGN          GTK_ALIGN_START
 

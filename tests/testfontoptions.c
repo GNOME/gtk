@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *antialias;
 static GtkWidget *subpixel;
 static GtkWidget *hintstyle;

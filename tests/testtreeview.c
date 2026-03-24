@@ -20,6 +20,8 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* Don't copy this bad example; inline RGB data is always a better
  * idea than inline XPMs.
  */

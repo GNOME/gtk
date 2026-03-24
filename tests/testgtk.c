@@ -47,6 +47,8 @@
 
 #include "test.xpm"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 gboolean
 file_exists (const char *filename)
 {
