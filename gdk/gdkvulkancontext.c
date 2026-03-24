@@ -2061,8 +2061,6 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 
   gdk_display_create_pipeline_cache (display);
 
-  display->vk_shader_modules = g_hash_table_new (g_str_hash, g_str_equal);
-
   gdk_profiler_end_mark (start_time, "Create Vulkan instance", NULL);
 
   return TRUE;
@@ -2071,25 +2069,12 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
 void
 gdk_display_destroy_vulkan_instance (GdkDisplay *display)
 {
-  GHashTableIter iter;
-  gpointer key, value;
-
   g_assert (GDK_IS_DISPLAY (display));
   g_assert (display->vk_instance != NULL);
 
   GDK_DEBUG (VULKAN, "Destroy Vulkan instance");
   display->vulkan_features = 0;
   g_clear_pointer (&display->vk_dmabuf_formats, gdk_dmabuf_formats_unref);
-  g_hash_table_iter_init (&iter, display->vk_shader_modules);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      g_free (key);
-      vkDestroyShaderModule (display->vk_device,
-                             *((VkShaderModule *)value),
-                             NULL);
-      g_free (value);
-    }
-  g_hash_table_unref (display->vk_shader_modules);
 
   if (display->vk_save_pipeline_cache_source)
     {

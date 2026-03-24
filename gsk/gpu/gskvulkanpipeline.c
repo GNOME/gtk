@@ -22,6 +22,9 @@ struct _GskVulkanPipeline
   GskGpuBlend blend;
   VkFormat vk_format;
   VkPipelineLayout vk_layout;
+
+  VkShaderModule vk_vertex_shader;
+  VkShaderModule vk_fragment_shader;
   VkPipeline vk_pipeline;
 };
 
@@ -149,6 +152,12 @@ gsk_vulkan_pipeline_finalize (GskGpuCached *cached)
   vkDestroyPipeline (vk_device,
                      self->vk_pipeline,
                      NULL);
+  vkDestroyShaderModule (vk_device,
+                         self->vk_vertex_shader,
+                         NULL);
+  vkDestroyShaderModule (vk_device,
+                         self->vk_fragment_shader,
+                         NULL);
 }
 
 static gboolean
@@ -217,16 +226,12 @@ gsk_vulkan_pipeline_finish_cache (GskGpuCache *cache)
 }
 
 static VkShaderModule
-gsk_vulkan_pipeline_get_vk_shader_module (GdkDisplay *display,
-                                          const char *resource_name)
+gsk_vulkan_pipeline_create_vk_shader_module (GdkDisplay *display,
+                                             const char *resource_name)
 {
-  VkShaderModule *shader;
+  VkShaderModule shader;
   GError *error = NULL;
   GBytes *bytes;
-
-  shader = g_hash_table_lookup (display->vk_shader_modules, resource_name);
-  if (shader)
-    return *shader;
 
   bytes = g_resources_lookup_data (resource_name, 0, &error);
   if (bytes == NULL)
@@ -236,28 +241,21 @@ gsk_vulkan_pipeline_get_vk_shader_module (GdkDisplay *display,
       return VK_NULL_HANDLE;
     }
 
-  shader = g_new0 (VkShaderModule, 1);
-  if (GDK_VK_CHECK (vkCreateShaderModule, display->vk_device,
+  if (GSK_VK_CHECK (vkCreateShaderModule, display->vk_device,
                                           &(VkShaderModuleCreateInfo) {
                                               .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
                                               .codeSize = g_bytes_get_size (bytes),
                                               .pCode = (uint32_t *) g_bytes_get_data (bytes, NULL),
                                           },
                                           NULL,
-                                          shader) == VK_SUCCESS)
+                                          &shader) != VK_SUCCESS)
     {
-      g_hash_table_insert (display->vk_shader_modules, g_strdup (resource_name), shader);
-    }
-  else
-    {
-      g_free (shader);
-
-      return VK_NULL_HANDLE;
+      shader = VK_NULL_HANDLE;
     }
 
   g_bytes_unref (bytes);
 
-  return *shader;
+  return shader;
 }
 
 GskVulkanPipeline *
@@ -318,6 +316,9 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
   result->blend = blend,
   result->vk_format = vk_format,
 
+  result->vk_vertex_shader = gsk_vulkan_pipeline_create_vk_shader_module (display, vertex_shader_name);
+  result->vk_fragment_shader = gsk_vulkan_pipeline_create_vk_shader_module (display, fragment_shader_name);
+
   GSK_VK_CHECK (vkCreateGraphicsPipelines, display->vk_device,
                                            display->vk_pipeline_cache,
                                            1,
@@ -328,7 +329,7 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
                                                    {
                                                        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                                        .stage = VK_SHADER_STAGE_VERTEX_BIT,
-                                                       .module = gsk_vulkan_pipeline_get_vk_shader_module (display, vertex_shader_name),
+                                                       .module = result->vk_vertex_shader,
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
                                                            .mapEntryCount = 3,
@@ -360,7 +361,7 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
                                                    {
                                                        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                                                        .stage = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                       .module = gsk_vulkan_pipeline_get_vk_shader_module (display, fragment_shader_name),
+                                                       .module = result->vk_fragment_shader,
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
                                                            .mapEntryCount = 3,
