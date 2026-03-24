@@ -433,8 +433,6 @@ SvgValue *   svg_mask_type_new      (GskMaskMode       mode);
 SvgValue *   svg_paint_new_none     (void);
 SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
 SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
-SvgValue *   svg_numbers_new        (double           *values,
-                                     unsigned int      n_values);
 SvgValue *   svg_view_box_new       (const graphene_rect_t *box);
 SvgValue *   svg_path_new           (GskPath *path);
 SvgValue *   svg_clip_new_none      (void);

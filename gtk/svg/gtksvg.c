@@ -50,6 +50,7 @@
 #include "gtksvgvalueprivate.h"
 #include "gtksvgkeywordprivate.h"
 #include "gtksvgnumberprivate.h"
+#include "gtksvgnumbersprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2460,373 +2461,6 @@ state_match (uint64_t     states,
 }
 
 /* }}} */
-/* {{{ Number sequences */
-
-typedef struct
-{
-  SvgUnit unit;
-  double value;
-} Number;
-
-static inline gboolean
-number_equal (const Number *n0,
-              const Number *n1)
-{
-  return n0->unit == n1->unit && n0->value == n1->value;
-}
-
-typedef struct
-{
-  SvgValue base;
-  unsigned int n_values;
-  Number values[1];
-} SvgNumbers;
-
-static unsigned int
-svg_numbers_size (unsigned int n)
-{
-  return sizeof (SvgNumbers) + (n > 0 ? n - 1 : 0) * sizeof (Number);
-}
-
-static gboolean
-svg_numbers_equal (const SvgValue *value0,
-                   const SvgValue *value1)
-{
-  const SvgNumbers *p0 = (const SvgNumbers *) value0;
-  const SvgNumbers *p1 = (const SvgNumbers *) value1;
-
-  if (p0->n_values != p1->n_values)
-    return FALSE;
-
-  for (unsigned int i = 0; i < p0->n_values; i++)
-    {
-      if (!number_equal (&p0->values[i], &p1->values[i]))
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static SvgValue *
-svg_numbers_accumulate (const SvgValue    *value0,
-                        const SvgValue    *value1,
-                        SvgComputeContext *context,
-                        int                n)
-{
-  return NULL;
-}
-
-static void
-svg_numbers_print (const SvgValue *value,
-                   GString        *string)
-{
-  const SvgNumbers *p = (const SvgNumbers *) value;
-
-  for (unsigned int i = 0; i < p->n_values; i++)
-    {
-      if (i > 0)
-        g_string_append_c (string, ' ');
-      string_append_double (string, "", p->values[i].value);
-      g_string_append (string, svg_unit_name (p->values[i].unit));
-    }
-}
-
-static SvgValue * svg_numbers_interpolate (const SvgValue    *value0,
-                                           const SvgValue    *value1,
-                                           SvgComputeContext *context,
-                                           double             t);
-
-static SvgValue * svg_numbers_resolve (const SvgValue    *value,
-                                       ShapeAttr          attr,
-                                       unsigned int       idx,
-                                       Shape             *shape,
-                                       SvgComputeContext *context);
-
-static const SvgValueClass SVG_NUMBERS_CLASS = {
-  "SvgNumbers",
-  svg_value_default_free,
-  svg_numbers_equal,
-  svg_numbers_interpolate,
-  svg_numbers_accumulate,
-  svg_numbers_print,
-  svg_value_default_distance,
-  svg_numbers_resolve,
-};
-
-SvgValue *
-svg_numbers_new (double       *values,
-                 unsigned int  n_values)
-{
-  SvgNumbers *result;
-
-  result = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n_values));
-  result->n_values = n_values;
-
-  for (unsigned int i = 0; i < n_values; i++)
-    {
-      result->values[i].unit = SVG_UNIT_NUMBER;
-      result->values[i].value = values[i];
-    }
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_numbers_new_identity_matrix (void)
-{
-  static SvgValue *id;
-
-  if (id == NULL)
-    {
-      id = svg_numbers_new ((double []) { 1, 0, 0, 0, 0,
-                                          0, 1, 0, 0, 0,
-                                          0, 0, 1, 0, 0,
-                                          0, 0, 0, 1, 0 }, 20);
-      id->ref_count = 0;
-    }
-
-  return id;
-}
-
-static SvgValue *
-svg_numbers_new_none (void)
-{
-  static SvgNumbers none = { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 0, .values[0] = { SVG_UNIT_NUMBER, 0 } };
-
-  return (SvgValue *) &none;
-}
-
-static SvgValue *
-svg_numbers_new1 (double value)
-{
-  static SvgNumbers singletons[] = {
-    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 0 } },
-    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 1 } },
-    { { &SVG_NUMBERS_CLASS, 0 }, .n_values = 1, .values[0] = { SVG_UNIT_NUMBER, 2 } },
-  };
-  SvgNumbers *p;
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (singletons); i++)
-    {
-      if (singletons[i].values[0].value == value)
-        return (SvgValue *) &singletons[i];
-    }
-
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (1));
-
-  p->n_values = 1;
-  p->values[0].unit = SVG_UNIT_NUMBER;
-  p->values[0].value = value;
-
-  return (SvgValue *) p;
-}
-
-static SvgValue *
-svg_numbers_new_00 (void)
-{
-  static SvgNumbers *value = NULL;
-
-  if (value == NULL)
-    {
-      value = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
-      ((SvgValue *) value)->ref_count = 0;
-      value->values[0].value = value->values[1].value = 0;
-      value->values[0].unit = value->values[1].unit = SVG_UNIT_NUMBER;
-    }
-
-  return (SvgValue *) value;
-}
-
-static SvgValue *
-svg_numbers_parse2 (GtkCssParser *parser,
-                    unsigned int  flags)
-{
-  SvgNumbers *p;
-  GArray *numbers;
-  Number n;
-
-  numbers = g_array_new (FALSE, FALSE, sizeof (Number));
-
-  while (1)
-    {
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        break;
-
-      if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, flags, &n.value, &n.unit))
-        {
-          g_array_unref (numbers);
-          return NULL;
-        }
-
-      g_array_append_val (numbers, n);
-
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
-    }
-
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS,
-                                      svg_numbers_size (numbers->len));
-  p->n_values = numbers->len;
-
-  for (unsigned int i = 0; i < numbers->len; i++)
-    p->values[i] = g_array_index (numbers, Number, i);
-
-  g_array_unref (numbers);
-
-  return (SvgValue *) p;
-}
-
-static SvgValue *
-svg_numbers_parse (GtkCssParser *parser)
-{
-  return svg_numbers_parse2 (parser, NUMBER);
-}
-
-static SvgValue *
-svg_numbers_interpolate (const SvgValue    *value0,
-                         const SvgValue    *value1,
-                         SvgComputeContext *context,
-                         double             t)
-{
-  const SvgNumbers *p0 = (const SvgNumbers *) value0;
-  const SvgNumbers *p1 = (const SvgNumbers *) value1;
-  SvgNumbers *p;
-
-  if (p0->n_values != p1->n_values)
-    {
-      if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value0);
-      else
-        return svg_value_ref ((SvgValue *) value1);
-    }
-
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (p0->n_values));
-  p->n_values = p0->n_values;
-
-  for (unsigned int i = 0; i < p0->n_values; i++)
-    {
-      g_assert (p0->values[i].unit != SVG_UNIT_PERCENTAGE);
-      p->values[i].unit = SVG_UNIT_NUMBER;
-      p->values[i].value = lerp (t, p0->values[i].value, p1->values[i].value);
-    }
-
-  return (SvgValue *) p;
-}
-
-static SvgValue *
-svg_numbers_resolve (const SvgValue    *value,
-                     ShapeAttr          attr,
-                     unsigned int       idx,
-                     Shape             *shape,
-                     SvgComputeContext *context)
-{
-  SvgNumbers *orig = (SvgNumbers *) value;
-  SvgNumbers *p;
-  double size;
-
-  if (orig->n_values == 0)
-    return svg_value_ref ((SvgValue *) orig);
-
-  if (attr == SHAPE_ATTR_TRANSFORM_ORIGIN)
-    {
-      double font_size;
-
-      if (value == svg_numbers_new_00 ())
-        return svg_value_ref ((SvgValue *) value);
-
-      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
-      memcpy (p->values, orig->values, sizeof (Number) * 2);
-
-      font_size = shape_get_current_font_size (shape, attr, context);
-
-      for (unsigned int i = 0; i < 2; i++)
-        {
-          switch ((unsigned int) p->values[i].unit)
-            {
-            case SVG_UNIT_NUMBER:
-            case SVG_UNIT_PERCENTAGE:
-              break;
-
-            case SVG_UNIT_PX:
-            case SVG_UNIT_PT:
-            case SVG_UNIT_IN:
-            case SVG_UNIT_CM:
-            case SVG_UNIT_MM:
-              p->values[i].value = absolute_length_to_px (p->values[i].value, p->values[i].unit);
-              p->values[i].unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_VW:
-            case SVG_UNIT_VH:
-            case SVG_UNIT_VMIN:
-            case SVG_UNIT_VMAX:
-              p->values[i].value = viewport_relative_to_px (p->values[i].value, p->values[i].unit, context->viewport);
-              p->values[i].unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_EM:
-              p->values[i].value = p->values[i].value * font_size;
-              p->values[i].unit = SVG_UNIT_PX;
-              break;
-            case SVG_UNIT_EX:
-              p->values[i].value = p->values[i].value * 0.5 * font_size;
-              p->values[i].unit = SVG_UNIT_PX;
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
-
-      return (SvgValue *) p;
-    }
-
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (orig->n_values));
-  p->n_values = orig->n_values;
-
-  size = normalized_diagonal (context->viewport);
-  for (unsigned int i = 0; i < orig->n_values; i++)
-    {
-      if (orig->values[i].unit == SVG_UNIT_PERCENTAGE)
-        {
-          p->values[i].unit = SVG_UNIT_NUMBER;
-          p->values[i].value = orig->values[i].value * size / 100;
-        }
-      else
-        {
-          p->values[i].value = orig->values[i].value;
-        }
-    }
-
-  return (SvgValue *) p;
-}
-
-/* }}} */
-/* {{{ Points */
-
-/* Points are just like number, with an even number of them */
-
-static SvgValue *
-svg_points_parse (GtkCssParser *parser)
-{
-  if (gtk_css_parser_try_ident (parser, "none"))
-    return svg_numbers_new_none ();
-  else
-    {
-      SvgNumbers *p;
-
-      p = (SvgNumbers *) svg_numbers_parse2 (parser, NUMBER|PERCENTAGE|LENGTH);
-
-      if (p != NULL && p->n_values % 2 == 1)
-        {
-          gtk_css_parser_error_syntax (parser, "Odd number of coordinates");
-          p->n_values--;
-        }
-
-      return (SvgValue *) p;
-    }
-}
-
-/* }}} */
 /* {{{ Strings */
 
 typedef struct
@@ -4231,12 +3865,17 @@ svg_transform_new_rotate_and_shift (double angle,
   return (SvgValue *) tf;
 }
 
+typedef struct {
+  double value;
+  SvgUnit unit;
+} ParserNumber;
+
 static unsigned int
 css_parser_parse_number (GtkCssParser *parser,
                          unsigned int  n,
                          gpointer      data)
 {
-  Number *val = data;
+  ParserNumber *val = data;
   double d;
 
   if (!gtk_css_parser_consume_number (parser, &d))
@@ -4253,7 +3892,7 @@ css_parser_parse_number_length (GtkCssParser *parser,
                                 unsigned int  n,
                                 gpointer      data)
 {
-  Number *val = data;
+  ParserNumber *val = data;
   const GtkCssToken *token;
 
   token = gtk_css_parser_get_token (parser);
@@ -4293,7 +3932,7 @@ css_parser_parse_number_angle (GtkCssParser *parser,
                                unsigned int  n,
                                gpointer      data)
 {
-  Number *val = data;
+  ParserNumber *val = data;
   const GtkCssToken *token;
 
   token = gtk_css_parser_get_token (parser);
@@ -4333,7 +3972,7 @@ css_parser_parse_number_percentage (GtkCssParser *parser,
                                     unsigned int  n,
                                     gpointer      data)
 {
-  Number *val = data;
+  ParserNumber *val = data;
   const GtkCssToken *token;
 
   token = gtk_css_parser_get_token (parser);
@@ -4369,9 +4008,9 @@ parse_transform_function (GtkCssParser *self,
   gboolean result = FALSE;
   char func[64];
   unsigned int arg;
-  Number *num;
+  ParserNumber *num;
 
-  num = g_newa (Number, max_args);
+  num = g_newa (ParserNumber, max_args);
 
   token = gtk_css_parser_get_token (self);
   g_return_val_if_fail (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION), FALSE);
@@ -6256,7 +5895,7 @@ parse_drop_shadow_arg (GtkCssParser *parser,
                        gpointer      data)
 {
   SvgValue **vals = data;
-  Number num;
+  ParserNumber num;
   unsigned int i;
 
   if (vals[0] == NULL)
@@ -6378,7 +6017,7 @@ svg_filter_parse_css (GtkCssParser *parser)
             {
               if (gtk_css_parser_has_function (parser, filter_desc[i].name))
                 {
-                  Number n;
+                  ParserNumber n;
 
                   n.value = filter_desc[i].default_value;
                   n.unit = SVG_UNIT_NUMBER;
@@ -6696,8 +6335,6 @@ color_matrix_type_get_color_matrix (ColorMatrixType    type,
                                     graphene_matrix_t *matrix,
                                     graphene_vec4_t   *offset)
 {
-  Number *numbers = ((SvgNumbers *) values)->values;
-
   switch (type)
     {
     case COLOR_MATRIX_TYPE_MATRIX:
@@ -6706,22 +6343,22 @@ color_matrix_type_get_color_matrix (ColorMatrixType    type,
         float o[4];
 
         for (unsigned int j = 0; j < 4; j++)
-          o[j] = numbers[5*j + 4].value;
+          o[j] = svg_numbers_get (values, 5* j + 4, 100);
 
         graphene_vec4_init_from_float (offset, o);
 
         for (unsigned int i = 0; i < 4; i++)
           for (unsigned int j = 0; j < 4; j++)
-            m[4*i+j] = numbers[5 * j + i].value;
+            m[4*i+j] = svg_numbers_get (values, 5 * j + i, 100);
 
         graphene_matrix_init_from_float (matrix, m);
       }
       break;
     case COLOR_MATRIX_TYPE_SATURATE:
-      filter_function_get_color_matrix (FILTER_SATURATE, numbers[0].value, matrix, offset);
+      filter_function_get_color_matrix (FILTER_SATURATE, svg_numbers_get (values, 0, 100), matrix, offset);
       break;
     case COLOR_MATRIX_TYPE_HUE_ROTATE:
-      filter_function_get_color_matrix (FILTER_HUE_ROTATE, numbers[0].value, matrix, offset);
+      filter_function_get_color_matrix (FILTER_HUE_ROTATE, svg_numbers_get (values, 0, 100), matrix, offset);
       break;
     case COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA:
         graphene_vec4_init (offset, 0, 0, 0, 0);
@@ -6784,16 +6421,22 @@ typedef enum
 
 typedef struct
 {
+  SvgUnit unit;
+  double value;
+} Dash;
+
+typedef struct
+{
   SvgValue base;
   DashArrayKind kind;
   unsigned int n_dashes;
-  Number dashes[2];
+  Dash dashes[2];
 } SvgDashArray;
 
 static unsigned int
 svg_dash_array_size (unsigned int n)
 {
-  return sizeof (SvgDashArray) + (n > 1 ? n - 2 : 0) * sizeof (Number);
+  return sizeof (SvgDashArray) + (n > 1 ? n - 2 : 0) * sizeof (Dash);
 }
 
 static gboolean
@@ -6912,11 +6555,11 @@ svg_dash_array_parse (GtkCssParser *parser)
       GArray *array;
       SvgDashArray *dashes;
 
-      array = g_array_new (FALSE, FALSE, sizeof (Number));
+      array = g_array_new (FALSE, FALSE, sizeof (Dash));
 
       while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
         {
-          Number n;
+          Dash n;
 
           gtk_css_parser_skip_whitespace (parser);
 
@@ -6940,7 +6583,7 @@ svg_dash_array_parse (GtkCssParser *parser)
 
       for (unsigned int i = 0; i < array->len; i++)
         {
-          Number *n = &g_array_index (array, Number, i);
+          Dash *n = &g_array_index (array, Dash, i);
           dashes->dashes[i].unit = n->unit;
           dashes->dashes[i].value = n->value;
         }
@@ -9100,19 +8743,20 @@ filter_get_component_transfer (FilterPrimitive *filter)
     case COMPONENT_TRANSFER_TABLE:
     case COMPONENT_TRANSFER_DISCRETE:
       {
-        SvgNumbers *numbers = (SvgNumbers *) filter->current [filter_attr_idx (filter->type, SHAPE_ATTR_FE_FUNC_VALUES)];
-        float *values = g_newa (float, numbers->n_values);
+        SvgValue *v = filter->current [filter_attr_idx (filter->type, SHAPE_ATTR_FE_FUNC_VALUES)];
+        unsigned int n_values = svg_numbers_get_length (v);
+        float *values = g_newa (float, n_values);
 
-        if (numbers->n_values == 0)
+        if (n_values == 0)
           return gsk_component_transfer_new_identity ();
 
-        for (unsigned int i = 0; i < numbers->n_values; i++)
-          values[i] = numbers->values[i].value;
+        for (unsigned int i = 0; i < n_values; i++)
+          values[i] = svg_numbers_get (v, i, 100);
 
         if (type == COMPONENT_TRANSFER_TABLE)
-          return gsk_component_transfer_new_table (numbers->n_values, values);
+          return gsk_component_transfer_new_table (n_values, values);
         else
-          return gsk_component_transfer_new_discrete (numbers->n_values, values);
+          return gsk_component_transfer_new_discrete (n_values, values);
       }
     case COMPONENT_TRANSFER_LINEAR:
       {
@@ -9192,6 +8836,25 @@ filter_primitive_new (Shape               *parent,
 
 /* }}} */
 /* {{{ Attributes */
+
+static SvgValue *
+parse_points (GtkCssParser *parser)
+{
+  if (gtk_css_parser_try_ident (parser, "none"))
+    return svg_numbers_new_none ();
+  else
+    {
+      SvgValue *p = svg_numbers_parse2 (parser, NUMBER|PERCENTAGE|LENGTH);
+
+      if (p != NULL && svg_numbers_get_length (p) % 2 == 1)
+        {
+          gtk_css_parser_error_syntax (parser, "Odd number of coordinates");
+          p = svg_numbers_drop_last (p);
+        }
+
+      return p;
+    }
+}
 
 static SvgValue *
 parse_language (GtkCssParser *parser)
@@ -9427,19 +9090,21 @@ parse_length_percentage_or_auto (GtkCssParser *parser)
 static SvgValue *
 parse_number_optional_number (GtkCssParser *parser)
 {
-  SvgNumbers *numbers = (SvgNumbers *) svg_numbers_parse (parser);
+  SvgValue *values;
 
-  if (numbers == NULL)
+  values = svg_numbers_parse (parser);
+
+  if (values == NULL)
     {
       return NULL;
     }
-  else if (numbers->n_values <= 2)
+  else if (svg_numbers_get_length (values) <= 2)
     {
-      return (SvgValue *) numbers;
+      return values;
     }
   else
     {
-      svg_value_unref ((SvgValue *) numbers);
+      svg_value_unref (values);
       return NULL;
     }
 }
@@ -9447,7 +9112,6 @@ parse_number_optional_number (GtkCssParser *parser)
 static SvgValue *
 parse_transform_origin (GtkCssParser *parser)
 {
-  SvgNumbers *p;
   double d[2];
   SvgUnit u[2];
   enum { HORIZONTAL, VERTICAL, NEUTRAL, };
@@ -9500,25 +9164,10 @@ parse_transform_origin (GtkCssParser *parser)
   if (set[0] == set[1] && set[0] != NEUTRAL)
     return NULL;
 
-  p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
-  p->n_values = 2;
-
   if (set[0] == HORIZONTAL)
-    {
-      p->values[0].value = d[0];
-      p->values[0].unit = u[0];
-      p->values[1].value = d[1];
-      p->values[1].unit = u[1];
-    }
+    return svg_numbers_new2 (d[0], u[0], d[1], u[1]);
   else
-    {
-      p->values[0].value = d[1];
-      p->values[0].unit = u[1];
-      p->values[1].value = d[0];
-      p->values[1].unit = u[0];
-    }
-
-  return (SvgValue *) p;
+    return svg_numbers_new2 (d[1], u[1], d[0], u[0]);
 }
 
 static SvgValue *
@@ -9951,7 +9600,7 @@ static ShapeAttribute shape_attrs[] = {
   [SHAPE_ATTR_POINTS] = {
     .flags = SHAPE_ATTR_NO_CSS,
     .applies_to = BIT (SHAPE_POLYGON) | BIT (SHAPE_POLYLINE),
-    .parse_value = svg_points_parse,
+    .parse_value = parse_points,
   },
   [SHAPE_ATTR_SPREAD_METHOD] = {
     .flags = SHAPE_ATTR_DISCRETE | SHAPE_ATTR_NO_CSS,
@@ -11493,19 +11142,24 @@ shape_get_path (Shape                 *shape,
       builder = gsk_path_builder_new ();
       if (values[SHAPE_ATTR_POINTS])
         {
-          SvgNumbers *numbers = (SvgNumbers *) values[SHAPE_ATTR_POINTS];
-          if (numbers->n_values > 0)
+          SvgValue *v = values[SHAPE_ATTR_POINTS];
+          if (svg_numbers_get_length (v) > 0)
             {
-              g_assert (numbers->values[0].unit != SVG_UNIT_PERCENTAGE);
-              g_assert (numbers->values[1].unit != SVG_UNIT_PERCENTAGE);
+              g_assert (svg_numbers_get_unit (v, 0) != SVG_UNIT_PERCENTAGE);
+              g_assert (svg_numbers_get_unit (v, 1) != SVG_UNIT_PERCENTAGE);
+
               gsk_path_builder_move_to (builder,
-                                        numbers->values[0].value, numbers->values[1].value);
-              for (unsigned int i = 2; i < numbers->n_values; i += 2)
+                                        svg_numbers_get (v, 0, 1),
+                                        svg_numbers_get (v, 1, 1));
+
+              for (unsigned int i = 2; i + 1 < svg_numbers_get_length (v); i += 2)
                 {
-                  g_assert (numbers->values[i].unit != SVG_UNIT_PERCENTAGE);
-                  g_assert (numbers->values[i+1].unit != SVG_UNIT_PERCENTAGE);
+                  g_assert (svg_numbers_get_unit (v, i) != SVG_UNIT_PERCENTAGE);
+                  g_assert (svg_numbers_get_unit (v, i + 1) != SVG_UNIT_PERCENTAGE);
+
                   gsk_path_builder_line_to (builder,
-                                            numbers->values[i].value, numbers->values[i + 1].value);
+                                            svg_numbers_get (v, i, 1),
+                                            svg_numbers_get (v, i + 1, 1));
                 }
               if (shape->type == SHAPE_POLYGON)
                 gsk_path_builder_close (builder);
@@ -17450,12 +17104,12 @@ start_element_cb (GMarkupParseContext  *context,
       if (filter_type == FE_COLOR_MATRIX)
         {
           unsigned int pos = filter_attr_idx (f->type, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
-          SvgNumbers *values = (SvgNumbers *) f->base[pos];
-          SvgNumbers *initial = (SvgNumbers *) filter_attr_ref_initial_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
+          SvgValue *values = f->base[pos];
+          SvgValue *initial = filter_attr_ref_initial_value (f, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES);
 
-          if (values->n_values != initial->n_values)
+          if (svg_numbers_get_length (values) != svg_numbers_get_length (initial))
             {
-              shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES, idx + 1, (SvgValue *) initial);
+              shape_set_base_value (data->current_shape, SHAPE_ATTR_FE_COLOR_MATRIX_VALUES, idx + 1, initial);
               if ((f->attrs & BIT (pos)) == 0)
                 {
                   /* If this wasn't user-provided, we quietly correct the initial
@@ -17464,7 +17118,7 @@ start_element_cb (GMarkupParseContext  *context,
                   gtk_svg_invalid_attribute (data->svg, context, attr_names, "values", NULL);
                 }
             }
-          svg_value_unref ((SvgValue *) initial);
+          svg_value_unref (initial);
         }
 
       return;
@@ -21177,16 +20831,16 @@ apply_filter_tree (Shape         *shape,
             double std_dev;
             EdgeMode edge_mode;
             GskRenderNode *child;
-            SvgNumbers *num;
+            SvgValue *num;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
 
-            num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
-            if (num->n_values == 2 &&
-                num->values[0].value != num->values[1].value)
+            num = filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
+            if (svg_numbers_get_length (num) == 2 &&
+                svg_numbers_get (num, 0, 1) != svg_numbers_get (num, 1, 1))
               gtk_svg_rendering_error (context->svg,
                                        "Separate x/y values for stdDeviation not supported");
-            std_dev = num->values[0].value;
+            std_dev = svg_numbers_get (num, 0, 1);
 
             edge_mode = svg_enum_get (filter_get_current_value (f, SHAPE_ATTR_FE_BLUR_EDGE_MODE));
 
@@ -21482,15 +21136,15 @@ apply_filter_tree (Shape         *shape,
             SvgColor *color;
             SvgValue *alpha;
             GskShadowEntry shadow;
-            SvgNumbers *num;
+            SvgValue *num;
 
             in = get_input_for_ref (filter_get_current_value (f, SHAPE_ATTR_FE_IN), &subregion, shape, context, source, results);
-            num = (SvgNumbers *) filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
-            if (num->n_values == 2 &&
-                num->values[0].value != num->values[1].value)
+            num = filter_get_current_value (f, SHAPE_ATTR_FE_STD_DEV);
+            if (svg_numbers_get_length (num) == 2 &&
+                svg_numbers_get (num, 0, 1) != svg_numbers_get (num, 1, 1))
               gtk_svg_rendering_error (context->svg,
                                        "Separate x/y values for stdDeviation not supported");
-            std_dev = num->values[0].value;
+            std_dev = svg_numbers_get (num, 0, 1);
 
             if (svg_enum_get (filter->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
               {
@@ -21946,7 +21600,7 @@ push_group (Shape        *shape,
 
       if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
         {
-          SvgNumbers *tfo = (SvgNumbers *) shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+          SvgValue *tfo = shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
           SvgValue *tfb = shape->current[SHAPE_ATTR_TRANSFORM_BOX];
           graphene_rect_t bounds;
           double x, y;
@@ -21968,15 +21622,8 @@ push_group (Shape        *shape,
               g_assert_not_reached ();
             }
 
-          if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
-            x = bounds.size.width * tfo->values[0].value / 100;
-          else
-            x = tfo->values[0].value;
-
-          if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
-            y = bounds.size.height * tfo->values[1].value / 100;
-          else
-            y = tfo->values[1].value;
+          x = svg_numbers_get (tfo, 0, bounds.size.width);
+          y = svg_numbers_get (tfo, 1, bounds.size.height);
 
           transform = gsk_transform_translate (
                           gsk_transform_transform (
@@ -22112,7 +21759,7 @@ push_group (Shape        *shape,
 
                   if (_gtk_bitmask_get (clip->ref.shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
                     {
-                      SvgNumbers *tfo = (SvgNumbers *) clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+                      SvgValue *tfo = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
                       SvgValue *tfb = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_BOX];
                       graphene_rect_t bounds;
                       double x, y;
@@ -22134,15 +21781,8 @@ push_group (Shape        *shape,
                           g_assert_not_reached ();
                         }
 
-                      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
-                        x = bounds.size.width * tfo->values[0].value / 100;
-                      else
-                        x = tfo->values[0].value;
-
-                      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
-                        y = bounds.size.height * tfo->values[1].value / 100;
-                      else
-                        y = tfo->values[1].value;
+                      x = svg_numbers_get (tfo, 0, bounds.size.width);
+                      y = svg_numbers_get (tfo, 1, bounds.size.width);
 
                       transform = gsk_transform_translate (
                                       gsk_transform_transform (
@@ -22743,18 +22383,18 @@ paint_radial_gradient (Shape                 *gradient,
 
   if (_gtk_bitmask_get (gradient->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
     {
-      SvgNumbers *tfo = (SvgNumbers *) gradient->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+      SvgValue *tfo = gradient->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
       double x, y;
 
-      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
-        x = bounds->origin.x + bounds->size.width * tfo->values[0].value / 100;
+      if (svg_numbers_get_unit (tfo, 0) == SVG_UNIT_PERCENTAGE)
+        x = bounds->origin.x + svg_numbers_get (tfo, 0, bounds->size.width);
       else
-        x = tfo->values[0].value;
+        x = svg_numbers_get (tfo, 0, 1);
 
-      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
-        y = bounds->origin.y + bounds->size.height * tfo->values[1].value / 100;
+      if (svg_numbers_get_unit (tfo, 1) == SVG_UNIT_PERCENTAGE)
+        y = bounds->origin.y + svg_numbers_get (tfo, 1, bounds->size.width);
       else
-        y = tfo->values[1].value;
+        y = svg_numbers_get (tfo, 1, 1);
 
       gradient_transform = gsk_transform_translate (
                       gsk_transform_transform (
@@ -22885,18 +22525,11 @@ paint_pattern (Shape                 *pattern,
 
   if (_gtk_bitmask_get (pattern->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
     {
-      SvgNumbers *tfo = (SvgNumbers *) pattern->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+      SvgValue *tfo = pattern->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
       double xx, yy;
 
-      if (tfo->values[0].unit == SVG_UNIT_PERCENTAGE)
-        xx = child_bounds.size.width * tfo->values[0].value / 100;
-      else
-        xx = tfo->values[0].value;
-
-      if (tfo->values[1].unit == SVG_UNIT_PERCENTAGE)
-        yy = child_bounds.size.height * tfo->values[1].value / 100;
-      else
-        yy = tfo->values[1].value;
+      xx = svg_numbers_get (tfo, 0, child_bounds.size.width);
+      yy = svg_numbers_get (tfo, 1, child_bounds.size.width);
 
       transform = gsk_transform_translate (
                       gsk_transform_transform (
@@ -23039,7 +22672,7 @@ shape_create_stroke (Shape        *shape,
   dasharray = (SvgDashArray *) shape->current[SHAPE_ATTR_STROKE_DASHARRAY];
   if (dasharray->kind != DASH_ARRAY_NONE)
     {
-      Number *dashes = dasharray->dashes;
+      Dash *dashes = dasharray->dashes;
       unsigned int len = dasharray->n_dashes;
       double path_length;
       double length;
@@ -26005,7 +25638,6 @@ svg_shape_attr_get_points (Shape        *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
   SvgValue *value;
-  SvgNumbers *numbers;
   double *ret;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
@@ -26013,16 +25645,14 @@ svg_shape_attr_get_points (Shape        *shape,
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  numbers = (SvgNumbers *) value;
+  *n_params = svg_numbers_get_length (value);
 
-  *n_params = numbers->n_values;
+  ret = g_new0 (double, *n_params);
 
-  ret = g_new0 (double, numbers->n_values);
-
-  for (unsigned int i = 0; i < numbers->n_values; i++)
+  for (unsigned int i = 0; i < *n_params; i++)
     {
       /* FIXME: What about the dimension ? */
-      ret[i] = numbers->values[i].value;
+      ret[i] = svg_numbers_get (value, i, 1);
     }
 
   svg_value_unref (value);
