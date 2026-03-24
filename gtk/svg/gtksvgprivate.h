@@ -437,24 +437,6 @@ SvgValue *   svg_clip_new_path      (const char *string,
 SvgValue *   svg_clip_new_ref       (const char *string);
 SvgValue *   svg_mask_new_none      (void);
 SvgValue *   svg_mask_new_ref       (const char *string);
-SvgValue *   svg_transform_parse    (const char       *value);
-unsigned int svg_transform_get_n_transforms (const SvgValue *value);
-SvgValue *   svg_transform_get_transform    (const SvgValue *value,
-                                             unsigned int    pos);
-TransformType svg_transform_get_primitive (const SvgValue *value,
-                                           unsigned int    pos,
-                                           double          params[6]);
-SvgValue *   svg_transform_new_none (void);
-SvgValue *   svg_transform_new_translate (double x,
-                                          double y);
-SvgValue *   svg_transform_new_scale     (double x,
-                                          double y);
-SvgValue *   svg_transform_new_rotate    (double angle,
-                                          double x,
-                                          double y);
-SvgValue *   svg_transform_new_skew_x    (double angle);
-SvgValue *   svg_transform_new_skew_y    (double angle);
-SvgValue *   svg_transform_new_matrix    (double params[6]);
 SvgValue *   svg_filter_parse       (const char       *value);
 
 Shape *      svg_shape_add          (Shape            *parent,

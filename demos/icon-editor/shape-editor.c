@@ -30,6 +30,7 @@
 #include "gtk/svg/gtksvgnumberprivate.h"
 #include "gtk/svg/gtksvgnumbersprivate.h"
 #include "gtk/svg/gtksvgenumprivate.h"
+#include "gtk/svg/gtksvgtransformprivate.h"
 
 
 struct _ShapeEditor
@@ -580,7 +581,7 @@ populate_transform (ShapeEditor *self,
   if (!tf)
     return;
 
-  n = svg_transform_get_n_transforms (tf);
+  n = svg_transform_get_length (tf);
 
   for (unsigned int i = 0; i < n; i++)
     {
