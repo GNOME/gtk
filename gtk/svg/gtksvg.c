@@ -65,6 +65,7 @@
 #include "gtksvgclipprivate.h"
 #include "gtksvgmaskprivate.h"
 #include "gtksvgviewboxprivate.h"
+#include "gtksvgcontentfitprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2174,199 +2175,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ ContentFit */
-
-typedef struct
-{
-  SvgValue base;
-  gboolean is_none;
-  Align align_x;
-  Align align_y;
-  MeetOrSlice meet;
-} SvgContentFit;
-
-static gboolean
-svg_content_fit_equal (const SvgValue *value0,
-                       const SvgValue *value1)
-{
-  const SvgContentFit *v0 = (const SvgContentFit *) value0;
-  const SvgContentFit *v1 = (const SvgContentFit *) value1;
-
-  if (v0->is_none || v1->is_none)
-    return v0->is_none == v1->is_none;
-
-  return v0->align_x == v1->align_x &&
-         v0->align_y == v1->align_y &&
-         v0->meet == v1->meet;
-}
-
-static SvgValue *
-svg_content_fit_interpolate (const SvgValue    *value0,
-                             const SvgValue    *value1,
-                             SvgComputeContext *context,
-                             double             t)
-{
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_content_fit_accumulate (const SvgValue    *value0,
-                            const SvgValue    *value1,
-                            SvgComputeContext *context,
-                            int                n)
-{
-  return NULL;
-}
-
-static void
-svg_content_fit_print (const SvgValue *value,
-                       GString        *string)
-{
-  const SvgContentFit *v = (const SvgContentFit *) value;
-
-  if (v->is_none)
-    {
-      g_string_append (string, "none");
-    }
-  else
-    {
-      const char *align[] = { "Min", "Mid", "Max" };
-
-      g_string_append_c (string, 'x');
-      g_string_append (string, align[v->align_x]);
-      g_string_append_c (string, 'Y');
-      g_string_append (string, align[v->align_y]);
-    }
-
-  if (v->meet != MEET)
-    {
-      const char *meet[] = { "meet", "slice" };
-
-      g_string_append_c (string, ' ');
-      g_string_append (string, meet[v->meet]);
-    }
-}
-
-static const SvgValueClass SVG_CONTENT_FIT_CLASS = {
-  "SvgContentFit",
-  svg_value_default_free,
-  svg_content_fit_equal,
-  svg_content_fit_interpolate,
-  svg_content_fit_accumulate,
-  svg_content_fit_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-static SvgValue *
-svg_content_fit_new_none (void)
-{
-  static SvgContentFit none = { { &SVG_CONTENT_FIT_CLASS, 0 }, 1, 0, 0, 0 };
-
-  return (SvgValue *) &none;
-}
-
-static SvgValue *
-svg_content_fit_new (Align       align_x,
-                     Align       align_y,
-                     MeetOrSlice meet)
-{
-  static SvgContentFit def = { { &SVG_CONTENT_FIT_CLASS, 0 }, 0, ALIGN_MID, ALIGN_MID, MEET };
-  SvgContentFit *v;
-
-  if (align_x == ALIGN_MID && align_y == ALIGN_MID && meet == MEET)
-    return svg_value_ref ((SvgValue *) &def);
-
-  v = (SvgContentFit *) svg_value_alloc (&SVG_CONTENT_FIT_CLASS, sizeof (SvgContentFit));
-
-  v->is_none = FALSE;
-  v->align_x = align_x;
-  v->align_y = align_y;
-  v->meet = meet;
-
-  return (SvgValue *) v;
-}
-
-static SvgValue *
-svg_content_fit_parse (GtkCssParser *parser)
-{
-  Align align_x;
-  Align align_y;
-  MeetOrSlice meet;
-
-  if (gtk_css_parser_try_ident (parser, "none"))
-    return svg_content_fit_new_none ();
-
-  if (gtk_css_parser_try_ident (parser, "xMinYMin"))
-    {
-      align_x = ALIGN_MIN;
-      align_y = ALIGN_MIN;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMinYMid"))
-    {
-      align_x = ALIGN_MIN;
-      align_y = ALIGN_MID;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMinYMax"))
-    {
-      align_x = ALIGN_MIN;
-      align_y = ALIGN_MAX;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMidYMin"))
-    {
-      align_x = ALIGN_MID;
-      align_y = ALIGN_MIN;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMidYMid"))
-    {
-      align_x = ALIGN_MID;
-      align_y = ALIGN_MID;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMidYMax"))
-    {
-      align_x = ALIGN_MID;
-      align_y = ALIGN_MAX;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMaxYMin"))
-    {
-      align_x = ALIGN_MAX;
-      align_y = ALIGN_MIN;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMaxYMid"))
-    {
-      align_x = ALIGN_MAX;
-      align_y = ALIGN_MID;
-    }
-  else if (gtk_css_parser_try_ident (parser, "xMaxYMax"))
-    {
-      align_x = ALIGN_MAX;
-      align_y = ALIGN_MAX;
-    }
-  else
-    return NULL;
-
-  gtk_css_parser_skip_whitespace (parser);
-  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-    {
-      if (gtk_css_parser_try_ident (parser, "meet"))
-        meet = MEET;
-      else if (gtk_css_parser_try_ident (parser, "slice"))
-        meet = SLICE;
-      else
-        return NULL;
-    }
-  else
-    {
-      meet = MEET;
-    }
-
-  return svg_content_fit_new (align_x, align_y, meet);
 }
 
 /* }}} */
@@ -15853,7 +15661,7 @@ apply_filter_tree (Shape         *shape,
         case FE_IMAGE:
           {
             SvgHref *href = (SvgHref *) filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_HREF);
-            SvgContentFit *cf = (SvgContentFit *) filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_CONTENT_FIT);
+            SvgValue *cf = filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_CONTENT_FIT);
             GskTransform *transform;
             GskRenderNode *node;
 
@@ -15871,10 +15679,10 @@ apply_filter_tree (Shape         *shape,
                                     gdk_texture_get_width (href->texture),
                                     gdk_texture_get_height (href->texture));
 
-                compute_viewport_transform (cf->is_none,
-                                            cf->align_x,
-                                            cf->align_y,
-                                            cf->meet,
+                compute_viewport_transform (svg_content_fit_is_none (cf),
+                                            svg_content_fit_get_align_x (cf),
+                                            svg_content_fit_get_align_y (cf),
+                                            svg_content_fit_get_meet (cf),
                                             &vb,
                                             subregion.origin.x, subregion.origin.y,
                                             subregion.size.width, subregion.size.height,
@@ -16191,7 +15999,7 @@ push_group (Shape        *shape,
 
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
-      SvgContentFit *cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+      SvgValue *cf = shape->current[SHAPE_ATTR_CONTENT_FIT];
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
       double x, y, width, height;
       double sx, sy, tx, ty;
@@ -16246,10 +16054,10 @@ push_group (Shape        *shape,
       viewport = g_new (graphene_rect_t, 1);
       graphene_rect_init_from_rect (viewport, &view_box);
 
-      compute_viewport_transform (cf->is_none,
-                                  cf->align_x,
-                                  cf->align_y,
-                                  cf->meet,
+      compute_viewport_transform (svg_content_fit_is_none (cf),
+                                  svg_content_fit_get_align_x (cf),
+                                  svg_content_fit_get_align_y (cf),
+                                  svg_content_fit_get_meet (cf),
                                   &view_box,
                                   x, y, width, height,
                                   &sx, &sy, &tx, &ty);
@@ -17136,7 +16944,7 @@ paint_pattern (Shape                 *pattern,
   SvgValue *height = paint_server_get_current_value (pattern, SHAPE_ATTR_HEIGHT, context);
   SvgValue *tf = paint_server_get_current_value (pattern, SHAPE_ATTR_TRANSFORM, context);
   SvgValue *vb = paint_server_get_current_value (pattern, SHAPE_ATTR_VIEW_BOX, context);
-  SvgContentFit *cf = (SvgContentFit *) paint_server_get_current_value (pattern, SHAPE_ATTR_CONTENT_FIT, context);
+  SvgValue *cf = paint_server_get_current_value (pattern, SHAPE_ATTR_CONTENT_FIT, context);
   GPtrArray *shapes;
   graphene_rect_t view_box;
 
@@ -17161,10 +16969,10 @@ paint_pattern (Shape                 *pattern,
 
   if (svg_view_box_get (vb, &view_box))
     {
-      compute_viewport_transform (cf->is_none,
-                                  cf->align_x,
-                                  cf->align_y,
-                                  cf->meet,
+      compute_viewport_transform (svg_content_fit_is_none (cf),
+                                  svg_content_fit_get_align_x (cf),
+                                  svg_content_fit_get_align_y (cf),
+                                  svg_content_fit_get_meet (cf),
                                   &view_box,
                                   child_bounds.origin.x, child_bounds.origin.y,
                                   child_bounds.size.width, child_bounds.size.height,
@@ -17634,7 +17442,7 @@ paint_marker (Shape              *shape,
   double angle;
   double x, y, width, height;
   SvgValue *vb;
-  SvgContentFit *cf;
+  SvgValue *cf;
   SvgValue *overflow;
   double sx, sy, tx, ty;
   graphene_rect_t view_box;
@@ -17683,7 +17491,7 @@ paint_marker (Shape              *shape,
     }
 
   vb = marker->current[SHAPE_ATTR_VIEW_BOX];
-  cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
+  cf = marker->current[SHAPE_ATTR_CONTENT_FIT];
   overflow = marker->current[SHAPE_ATTR_OVERFLOW];
 
   width = svg_number_get (marker->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
@@ -17716,10 +17524,10 @@ paint_marker (Shape              *shape,
   if (!svg_view_box_get (vb, &view_box))
     graphene_rect_init (&view_box, 0, 0, width, height);
 
-  compute_viewport_transform (cf->is_none,
-                              cf->align_x,
-                              cf->align_y,
-                              cf->meet,
+  compute_viewport_transform (svg_content_fit_is_none (cf),
+                              svg_content_fit_get_align_x (cf),
+                              svg_content_fit_get_align_y (cf),
+                              svg_content_fit_get_meet (cf),
                               &view_box,
                               0, 0, width, height,
                               &sx, &sy, &tx, &ty);
@@ -18268,7 +18076,7 @@ render_image (Shape        *shape,
               PaintContext *context)
 {
   SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
-  SvgContentFit *content_fit = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
+  SvgValue *cf = shape->current[SHAPE_ATTR_CONTENT_FIT];
   SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
   graphene_rect_t vb;
   double sx, sy, tx, ty;
@@ -18291,10 +18099,10 @@ render_image (Shape        *shape,
   width = svg_number_get (shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
   height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
 
-  compute_viewport_transform (content_fit->is_none,
-                              content_fit->align_x,
-                              content_fit->align_y,
-                              content_fit->meet,
+  compute_viewport_transform (svg_content_fit_is_none (cf),
+                              svg_content_fit_get_align_x (cf),
+                              svg_content_fit_get_align_y (cf),
+                              svg_content_fit_get_meet (cf),
                               &vb,
                               x, y, width, height,
                               &sx, &sy, &tx, &ty);
