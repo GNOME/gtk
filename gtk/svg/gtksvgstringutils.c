@@ -61,3 +61,33 @@ string_append_base64 (GString *string,
   out[outlen] = '\0';
   string->len = before + outlen;
 }
+
+void
+string_append_escaped (GString    *string,
+                       const char *text)
+{
+  char *escaped = g_markup_escape_text (text, strlen (text));
+  g_string_append (string, escaped);
+  g_free (escaped);
+}
+
+void
+string_append_strv (GString *string,
+                    GStrv    strv)
+{
+  for (unsigned int i = 0; strv[i]; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      string_append_escaped (string, strv[i]);
+    }
+}
+
+void
+string_indent (GString *string,
+               int      indent)
+{
+  if (string->str[string->len - 1] != '\n')
+    g_string_append_c (string, '\n');
+  g_string_append_printf (string, "%*s", indent, " ");
+}
