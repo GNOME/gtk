@@ -243,39 +243,14 @@
  */
 #define LOADING_LIMIT 50000
 
-/* This is a mitigation for the security-related bugs:
- * https://gitlab.gnome.org/GNOME/librsvg/issues/323
- * https://gitlab.gnome.org/GNOME/librsvg/issues/515
- *
- * Imagine the XML [billion laughs attack], but done in SVG's terms:
- *
- * - #323 above creates deeply nested groups of `<use>` elements.
- * The first one references the second one ten times, the second one
- * references the third one ten times, and so on.  In the file given,
- * this causes 10^17 objects to be rendered.  While this does not
- * exhaust memory, it would take a really long time.
- *
- * - #515 has deeply nested references of `<pattern>` elements.  Each
- * object inside each pattern has an attribute
- * fill="url(#next_pattern)", so the number of final rendered objects
- * grows exponentially.
- *
- * We deal with both cases by placing a limit on how many references
- * will be resolved during the SVG rendering process, that is,
- * how many `url(#foo)` will be resolved.
- *
- * [billion laughs attack]: https://bitbucket.org/tiran/defusedxml
+/* This is a mitigation for SVG files which create deeply nested
+ * <use> elements or deeply nested references of patterns.
  */
 #define DRAWING_LIMIT 150000
 
 #ifndef _MSC_VER
 #define DEBUG
 #endif /* _MSC_VER */
-
-#define ALIGN_XY(x,y) ((x) | ((y) << 2))
-
-#define ALIGN_GET_X(x) ((x) & 3)
-#define ALIGN_GET_Y(x) ((x) >> 2)
 
 typedef struct _Animation Animation;
 
@@ -13296,7 +13271,7 @@ serialize_shape (GString              *s,
  * paint_shape (shape, context);
  * pop_group (shape, context);
  *
- * This process is highly recursive. For example obtaining
+ * This process is highly recursive. For example, obtaining
  * the clip path or mask may require rendering a different
  * part of the shape tree (in a special mode).
  */
@@ -17135,19 +17110,19 @@ can_reuse_node (GtkSvg        *self,
 
   if (self->state != self->node_for.state)
     {
-      dbg_print ("cache", "Can't reuse rendernode: state change");
+      dbg_print ("cache", "Can't reuse rendernode: %s", "state change");
       return FALSE;
     }
 
   if (self->current_time != self->node_for.time)
     {
-      dbg_print ("cache", "Can't reuse rendernode: current_time change");
+      dbg_print ("cache", "Can't reuse rendernode: %s", "current_time change");
       return FALSE;
     }
 
   if ((width != self->node_for.width || height != self->node_for.height))
     {
-      dbg_print ("cache", "Can't reuse rendernode: size change");
+      dbg_print ("cache", "Can't reuse rendernode: %s", "size change");
       return FALSE;
     }
 
@@ -17155,7 +17130,7 @@ can_reuse_node (GtkSvg        *self,
       self->weight < 1 &&
       weight != self->node_for.weight)
     {
-      dbg_print ("cache", "Can't reuse rendernode: stroke weight change");
+      dbg_print ("cache", "Can't reuse rendernode: %s", "stroke weight change");
       return FALSE;
     }
 
@@ -17167,7 +17142,7 @@ can_reuse_node (GtkSvg        *self,
            !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
                             &colors[GTK_SYMBOLIC_COLOR_FOREGROUND]))
         {
-          dbg_print ("cache", "Can't reuse rendernode: symbolic foreground change");
+          dbg_print ("cache", "Can't reuse rendernode: %s", "symbolic foreground change");
           return FALSE;
         }
 
@@ -17177,7 +17152,7 @@ can_reuse_node (GtkSvg        *self,
           !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_ERROR],
                           &colors[GTK_SYMBOLIC_COLOR_ERROR]))
         {
-          dbg_print ("cache", "Can't reuse rendernode: symbolic error change");
+          dbg_print ("cache", "Can't reuse rendernode: %s", "symbolic error change");
           return FALSE;
         }
 
@@ -17187,7 +17162,7 @@ can_reuse_node (GtkSvg        *self,
           !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_WARNING],
                           &colors[GTK_SYMBOLIC_COLOR_WARNING]))
         {
-          dbg_print ("cache", "Can't reuse rendernode: symbolic warning change");
+          dbg_print ("cache", "Can't reuse rendernode: %s", "symbolic warning change");
           return FALSE;
         }
 
@@ -17197,7 +17172,7 @@ can_reuse_node (GtkSvg        *self,
           !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_SUCCESS],
                           &colors[GTK_SYMBOLIC_COLOR_SUCCESS]))
         {
-          dbg_print ("cache", "Can't reuse rendernode: symbolic success change");
+          dbg_print ("cache", "Can't reuse rendernode: %s", "symbolic success change");
           return FALSE;
         }
 
@@ -17207,7 +17182,7 @@ can_reuse_node (GtkSvg        *self,
           !gdk_rgba_equal (&self->node_for.colors[GTK_SYMBOLIC_COLOR_ACCENT],
                           &colors[GTK_SYMBOLIC_COLOR_ACCENT]))
         {
-          dbg_print ("cache", "Can't reuse rendernode: symbolic accent change");
+          dbg_print ("cache", "Can't reuse rendernode: %s", "symbolic accent change");
           return FALSE;
         }
     }
@@ -17254,7 +17229,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       int64_t current_time;
 
       /* If we get here and load_time is still INDEFINITE, we are
-       * rendering an animation properly, we just do a snapshot.
+       * not rendering an animation properly, we just do a snapshot.
        *
        * But we still need to get initial animation state applied.
        */
@@ -17277,6 +17252,9 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
        * causing things to look wrong when using colors with
        * alpha. To work around that, we always draw them with
        * solid colors and apply foreground opacity globally.
+       *
+       * Non-symbolic icons are responsible for dealing with
+       * overlaps themselves, using the full svg machinery.
        */
       if (self->gpa_version == 0 &&
           (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
