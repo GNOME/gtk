@@ -304,4 +304,10 @@ typedef enum
   MASK_URL,
 } MaskKind;
 
+typedef enum
+{
+  ORIENT_AUTO,
+  ORIENT_ANGLE,
+} OrientKind;
+
 G_END_DECLS

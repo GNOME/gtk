@@ -66,6 +66,7 @@
 #include "gtksvgmaskprivate.h"
 #include "gtksvgviewboxprivate.h"
 #include "gtksvgcontentfitprivate.h"
+#include "gtksvgorientprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2175,192 +2176,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ Orient */
-
-typedef enum {
-  ORIENT_AUTO,
-  ORIENT_ANGLE,
-} OrientKind;
-
-typedef struct
-{
-  SvgValue base;
-  OrientKind kind;
-  gboolean start_reverse;
-  double angle;
-  SvgUnit unit;
-} SvgOrient;
-
-static gboolean
-svg_orient_equal (const SvgValue *value0,
-                  const SvgValue *value1)
-{
-  const SvgOrient *v0 = (const SvgOrient *) value0;
-  const SvgOrient *v1 = (const SvgOrient *) value1;
-
-  if (v0->kind != v1->kind)
-    return FALSE;
-
-  if (v0->kind == ORIENT_AUTO)
-    return v0->start_reverse == v1->start_reverse;
-  else
-    return v0->angle == v1->angle &&
-           v0->unit == v1->unit;
-}
-
-static SvgValue *svg_orient_new_angle (double  angle,
-                                       SvgUnit unit);
-
-static SvgValue *
-svg_orient_interpolate (const SvgValue    *value0,
-                        const SvgValue    *value1,
-                        SvgComputeContext *context,
-                        double             t)
-{
-  const SvgOrient *v0 = (const SvgOrient *) value0;
-  const SvgOrient *v1 = (const SvgOrient *) value1;
-
-  if (v0->kind == v1->kind &&
-      v0->kind == ORIENT_ANGLE &&
-      v0->unit == v1->unit)
-    return svg_orient_new_angle (lerp (v0->angle, v1->angle, t), v0->unit);
-
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_orient_accumulate (const SvgValue    *value0,
-                       const SvgValue    *value1,
-                       SvgComputeContext *context,
-                       int                n)
-{
-  return NULL;
-}
-
-static void
-svg_orient_print (const SvgValue *value,
-                  GString        *string)
-{
-  const SvgOrient *v = (const SvgOrient *) value;
-
-  if (v->kind == ORIENT_ANGLE)
-    {
-      string_append_double (string, "", v->angle);
-      g_string_append (string, svg_unit_name (v->unit));
-    }
-  else if (v->start_reverse)
-    {
-      g_string_append (string, "auto-start-reverse");
-    }
-  else
-    {
-      g_string_append (string, "auto");
-    }
-}
-
-static SvgValue * svg_orient_resolve (const SvgValue    *value,
-                                      ShapeAttr          attr,
-                                      unsigned int       idx,
-                                      Shape             *shape,
-                                      SvgComputeContext *context);
-
-static const SvgValueClass SVG_ORIENT_CLASS = {
-  "SvgOrient",
-  svg_value_default_free,
-  svg_orient_equal,
-  svg_orient_interpolate,
-  svg_orient_accumulate,
-  svg_orient_print,
-  svg_value_default_distance,
-  svg_orient_resolve,
-};
-
-static SvgValue *
-svg_orient_new_angle (double  angle,
-                      SvgUnit unit)
-{
-  static SvgOrient def = { { &SVG_ORIENT_CLASS, 0 }, .kind = ORIENT_ANGLE, .angle = 0, .unit = SVG_UNIT_NUMBER };
-  SvgOrient *v;
-
-  if (angle == 0 && unit == SVG_UNIT_NUMBER)
-    return (SvgValue *) &def;
-
-  v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
-
-  v->kind = ORIENT_ANGLE;
-  v->angle = angle;
-  v->unit = unit;
-
-  return (SvgValue *) v;
-}
-
-static SvgValue *
-svg_orient_new_auto (gboolean start_reverse)
-{
-  SvgOrient *v;
-
-  v = (SvgOrient *) svg_value_alloc (&SVG_ORIENT_CLASS, sizeof (SvgOrient));
-
-  v->kind = ORIENT_AUTO;
-  v->start_reverse = start_reverse;
-
-  return (SvgValue *) v;
-}
-
-static SvgValue *
-svg_orient_parse (GtkCssParser *parser)
-{
-  if (gtk_css_parser_try_ident (parser, "auto"))
-    return svg_orient_new_auto (FALSE);
-  else if (gtk_css_parser_try_ident (parser, "auto-start-reverse"))
-    return svg_orient_new_auto (TRUE);
-  else
-    {
-      double f;
-      SvgUnit unit;
-
-      if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, NUMBER|ANGLE, &f, &unit))
-        return NULL;
-
-      return svg_orient_new_angle (f, unit);
-    }
-}
-
-static SvgValue *
-svg_orient_resolve (const SvgValue     *value,
-                    ShapeAttr           attr,
-                    unsigned int        idx,
-                    Shape              *shape,
-                    SvgComputeContext  *context)
-{
-  const SvgOrient *v = (const SvgOrient *) value;
-
-  if (v->kind == ORIENT_ANGLE)
-    {
-      switch ((unsigned int) v->unit)
-        {
-        case SVG_UNIT_NUMBER:
-          return svg_value_ref ((SvgValue *) value);
-        case SVG_UNIT_RAD:
-          return svg_orient_new_angle (v->angle * 180.0 / M_PI, SVG_UNIT_NUMBER);
-        case SVG_UNIT_DEG:
-          return svg_orient_new_angle (v->angle, SVG_UNIT_NUMBER);
-        case SVG_UNIT_GRAD:
-          return svg_orient_new_angle (v->angle * 360.0 / 400.0, SVG_UNIT_NUMBER);
-        case SVG_UNIT_TURN:
-          return svg_orient_new_angle (v->angle * 360.0, SVG_UNIT_NUMBER);
-        default:
-          g_assert_not_reached ();
-        }
-    }
-  else
-    return svg_value_ref ((SvgValue *) value);
 }
 
 /* }}} */
@@ -17434,7 +17249,7 @@ paint_marker (Shape              *shape,
 {
   ShapeAttr attrs[] = { SHAPE_ATTR_MARKER_START, SHAPE_ATTR_MARKER_MID, SHAPE_ATTR_MARKER_END };
   SvgHref *href;
-  SvgOrient *orient;
+  SvgValue *orient;
   SvgValue *units;
   Shape *marker;
   double scale;
@@ -17459,7 +17274,7 @@ paint_marker (Shape              *shape,
   if (!marker)
     return;
 
-  orient = (SvgOrient *) marker->current[SHAPE_ATTR_MARKER_ORIENT];
+  orient = marker->current[SHAPE_ATTR_MARKER_ORIENT];
   units = marker->current[SHAPE_ATTR_MARKER_UNITS];
 
   if (svg_enum_get (units) == MARKER_UNITS_STROKE_WIDTH)
@@ -17467,12 +17282,12 @@ paint_marker (Shape              *shape,
   else
     scale = 1;
 
-  if (orient->kind == ORIENT_AUTO)
+  if (svg_orient_get_kind (orient) == ORIENT_AUTO)
     {
       if (kind == VERTEX_START)
         {
           angle = gsk_path_point_get_rotation (point, path, GSK_PATH_TO_END);
-          if (orient->start_reverse)
+          if (svg_orient_get_start_reverse (orient))
             angle += 180;
         }
       else if (kind == VERTEX_END)
@@ -17487,7 +17302,7 @@ paint_marker (Shape              *shape,
     }
   else
     {
-      angle = orient->angle;
+      angle = svg_orient_get_angle (orient);
     }
 
   vb = marker->current[SHAPE_ATTR_VIEW_BOX];
