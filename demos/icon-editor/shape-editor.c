@@ -34,6 +34,7 @@
 #include "gtk/svg/gtksvgpaintprivate.h"
 #include "gtk/svg/gtksvgfilterprivate.h"
 #include "gtk/svg/gtksvgpathprivate.h"
+#include "gtk/svg/gtksvgclipprivate.h"
 
 struct _ShapeEditor
 {
@@ -411,7 +412,7 @@ shape_editor_update_clip_path (ShapeEditor *self,
     }
   else
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_ref (id));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);

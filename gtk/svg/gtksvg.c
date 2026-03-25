@@ -62,6 +62,7 @@
 #include "gtksvgdasharrayprivate.h"
 #include "gtksvgpathprivate.h"
 #include "gtksvgpathdataprivate.h"
+#include "gtksvgclipprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2171,314 +2172,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ Clips */
-
-typedef struct
-{
-  SvgValue base;
-  ClipKind kind;
-
-  union {
-    struct {
-      SvgPathData *pdata;
-      GskPath *path;
-      unsigned int fill_rule;
-    } path;
-    struct {
-      char *ref;
-      Shape *shape;
-    } ref;
-  };
-} SvgClip;
-
-static void
-svg_clip_free (SvgValue *value)
-{
-  SvgClip *clip = (SvgClip *) value;
-
-  if (clip->kind == CLIP_PATH)
-    {
-      gsk_path_unref (clip->path.path);
-      svg_path_data_free (clip->path.pdata);
-    }
-  else if (clip->kind == CLIP_REF)
-    {
-      g_free (clip->ref.ref);
-    }
-
-  g_free (value);
-}
-
-static gboolean
-svg_clip_equal (const SvgValue *value0,
-                const SvgValue *value1)
-{
-  const SvgClip *c0 = (const SvgClip *) value0;
-  const SvgClip *c1 = (const SvgClip *) value1;
-
-  if (c0->kind != c1->kind)
-    return FALSE;
-
-  switch (c0->kind)
-    {
-    case CLIP_NONE:
-      return TRUE;
-    case CLIP_PATH:
-      return c0->path.fill_rule == c1->path.fill_rule &&
-             gsk_path_equal (c0->path.path, c1->path.path);
-    case CLIP_REF:
-      return c0->ref.shape == c1->ref.shape;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue * svg_clip_interpolate (const SvgValue    *value0,
-                                        const SvgValue    *value1,
-                                        SvgComputeContext *context,
-                                        double             t);
-
-static SvgValue *
-svg_clip_accumulate (const SvgValue    *value0,
-                     const SvgValue    *value1,
-                     SvgComputeContext *context,
-                     int                n)
-{
-  return NULL;
-}
-
-static void
-svg_clip_print (const SvgValue *value,
-                GString        *string)
-{
-  const SvgClip *c = (const SvgClip *) value;
-
-  switch (c->kind)
-    {
-    case CLIP_NONE:
-      g_string_append (string, "none");
-      break;
-    case CLIP_PATH:
-      g_string_append (string, "path(");
-      switch (c->path.fill_rule)
-        {
-        case GSK_FILL_RULE_WINDING:
-          g_string_append (string, "nonzero, ");
-          break;
-        case GSK_FILL_RULE_EVEN_ODD:
-          g_string_append (string, "evenodd, ");
-          break;
-        default:
-          break;
-        }
-      g_string_append (string, "\"");
-      svg_path_data_print (c->path.pdata, string);
-      g_string_append (string, "\")");
-      break;
-    case CLIP_REF:
-      g_string_append_printf (string, "url(#%s)", c->ref.ref);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static const SvgValueClass SVG_CLIP_CLASS = {
-  "SvgClip",
-  svg_clip_free,
-  svg_clip_equal,
-  svg_clip_interpolate,
-  svg_clip_accumulate,
-  svg_clip_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-SvgValue *
-svg_clip_new_none (void)
-{
-  static SvgClip none = { { &SVG_CLIP_CLASS, 0 }, CLIP_NONE };
-  return (SvgValue *) &none;
-}
-
-static SvgValue *
-svg_clip_new_from_data (SvgPathData  *pdata,
-                        unsigned int  fill_rule)
-{
-  SvgClip *result;
-
-  if (pdata == NULL)
-    return NULL;
-
-  result = (SvgClip *) svg_value_alloc (&SVG_CLIP_CLASS, sizeof (SvgClip));
-  result->kind = CLIP_PATH;
-  result->path.pdata = pdata;
-  result->path.path = svg_path_data_to_gsk (pdata);
-  result->path.fill_rule = fill_rule;
-  return (SvgValue *) result;
-}
-
-SvgValue *
-svg_clip_new_path (const char   *string,
-                   unsigned int  fill_rule)
-{
-  return svg_clip_new_from_data (svg_path_data_parse (string), fill_rule);
-}
-
-SvgValue *
-svg_clip_new_ref (const char *ref)
-{
-  SvgClip *result;
-
-  result = (SvgClip *) svg_value_alloc (&SVG_CLIP_CLASS, sizeof (SvgClip));
-  result->kind = CLIP_REF;
-  result->ref.ref = g_strdup (ref);
-  result->ref.shape = NULL;
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_clip_interpolate (const SvgValue    *value0,
-                      const SvgValue    *value1,
-                      SvgComputeContext *context,
-                      double             t)
-{
-  const SvgClip *c0 = (const SvgClip *) value0;
-  const SvgClip *c1 = (const SvgClip *) value1;
-
-  if (c0->kind == c1->kind)
-    {
-      switch (c0->kind)
-        {
-        case CLIP_NONE:
-          return svg_clip_new_none ();
-
-        case CLIP_PATH:
-          {
-            SvgPathData *p;
-            unsigned int fill_rule;
-
-            p = svg_path_data_interpolate (c0->path.pdata,
-                                           c1->path.pdata,
-                                           t);
-
-            if (t < 0.5)
-              fill_rule = c0->path.fill_rule;
-            else
-              fill_rule = c1->path.fill_rule;
-
-            if (p)
-              return svg_clip_new_from_data (p, fill_rule);
-          }
-          break;
-
-        case CLIP_REF:
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-    }
-
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-#define FILL_RULE_OMITTED 0xffff
-typedef struct
-{
-  unsigned int fill_rule;
-  char *string;
-} ClipPathArgs;
-
-static unsigned int
-parse_clip_path_arg (GtkCssParser *parser,
-                     unsigned int  n,
-                     gpointer      data)
-{
-  ClipPathArgs *args = data;
-
-  if (n == 0)
-    {
-      if (gtk_css_parser_try_ident (parser, "nonzero"))
-        {
-          args->fill_rule = GSK_FILL_RULE_WINDING;
-          return 1;
-        }
-      else if (gtk_css_parser_try_ident (parser, "evenodd"))
-        {
-          args->fill_rule = GSK_FILL_RULE_EVEN_ODD;
-          return 1;
-        }
-    }
-
-  args->string = gtk_css_parser_consume_string (parser);
-  if (!args->string)
-    return 0;
-
-  return 1;
-}
-
-static SvgValue *
-svg_clip_parse (GtkCssParser *parser)
-{
-  SvgValue *value = NULL;
-
-  if (gtk_css_parser_try_ident (parser, "none"))
-    return svg_clip_new_none ();
-
-  if (gtk_css_parser_has_function (parser, "path"))
-    {
-      ClipPathArgs args = { .fill_rule = FILL_RULE_OMITTED, .string = NULL, };
-      GtkCssLocation start;
-
-      start = *gtk_css_parser_get_start_location (parser);
-      if (gtk_css_parser_consume_function (parser, 1, 2, parse_clip_path_arg, &args))
-        {
-          SvgPathData *data = NULL;
-
-          if (!svg_path_data_parse_full (args.string, &data))
-            {
-              GError *error;
-
-              error = g_error_new_literal (GTK_CSS_PARSER_ERROR,
-                                           GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                                           "Path data is invalid");
-
-              gtk_css_parser_emit_error (parser,
-                                         &start,
-                                         gtk_css_parser_get_end_location (parser),
-                                         error);
-              g_error_free (error);
-            }
-
-          value = svg_clip_new_from_data (data, args.fill_rule);
-          g_free (args.string);
-        }
-    }
-  else
-    {
-      char *url = gtk_css_parser_consume_url (parser);
-      if (url != NULL)
-        {
-          if (url[0] == '#')
-            value = svg_clip_new_ref (url + 1);
-          else
-            value = svg_clip_new_ref (url);
-          g_free (url);
-       }
-    }
-
-  if (value == NULL)
-    gtk_css_parser_error_syntax (parser, "Expected a path");
-
-  return value;
 }
 
 /* }}} */
@@ -12952,22 +12645,22 @@ resolve_clip_ref (SvgValue   *value,
                   Shape      *shape,
                   ParserData *data)
 {
-  SvgClip *clip = (SvgClip *) value;
-
-  if (clip->kind == CLIP_REF && clip->ref.shape == NULL)
+  if (svg_clip_get_kind (value) == CLIP_URL &&
+      svg_clip_get_shape (value) == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, clip->ref.ref);
+      const char *ref = svg_clip_get_id (value);
+      Shape *target = g_hash_table_lookup (data->shapes, ref);
       if (!target)
         gtk_svg_invalid_reference (data->svg,
                                    "No path with ID %s (resolving clip-path)",
-                                   clip->ref.ref);
+                                   ref);
       else if (target->type != SHAPE_CLIP_PATH)
         gtk_svg_invalid_reference (data->svg,
                                    "Shape with ID %s not a <clipPath> (resolving clip-path)",
-                                   clip->ref.ref);
+                                   ref);
       else
         {
-          clip->ref.shape = target;
+          svg_clip_set_shape (value, target);
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -16755,7 +16448,7 @@ push_group (Shape        *shape,
 {
   SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
-  SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
+  SvgValue *clip = shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgValue *tf = shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
@@ -16941,21 +16634,21 @@ push_group (Shape        *shape,
         }
     }
 
-  if (clip->kind == CLIP_PATH ||
-      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
+  if (svg_clip_get_kind (clip) == CLIP_PATH ||
+      (svg_clip_get_kind (clip) == CLIP_URL && svg_clip_get_shape (clip) != NULL))
     {
       push_op (context, CLIPPING);
 
       /* Clip mask - see language in the spec about 'raw geometry' */
-      if (clip->kind == CLIP_PATH)
+      if (svg_clip_get_kind (clip) == CLIP_PATH)
         {
           GskFillRule rule;
 
-          switch (clip->path.fill_rule)
+          switch (svg_clip_get_fill_rule (clip))
             {
             case GSK_FILL_RULE_WINDING:
             case GSK_FILL_RULE_EVEN_ODD:
-              rule = clip->path.fill_rule;
+              rule = svg_clip_get_fill_rule (clip);
               break;
             default:
               rule = svg_enum_get (fill_rule);
@@ -16966,7 +16659,7 @@ push_group (Shape        *shape,
           if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
             gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
 #endif
-          snapshot_push_fill (context->snapshot, clip->path.path, rule);
+          snapshot_push_fill (context->snapshot, svg_clip_get_path (clip), rule);
         }
       else
         {
@@ -16974,19 +16667,20 @@ push_group (Shape        *shape,
            * We special-case a single shape in the <clipPath> without
            * transforms and translate them to a clip or a fill.
            */
-          SvgValue *ctf = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM];
+          Shape *clip_shape = svg_clip_get_shape (clip);
+          SvgValue *ctf = clip_shape->current[SHAPE_ATTR_TRANSFORM];
           Shape *child = NULL;
 
-          if (clip->ref.shape->shapes->len > 0)
-            child = g_ptr_array_index (clip->ref.shape->shapes, 0);
+          if (clip_shape->shapes->len > 0)
+            child = g_ptr_array_index (clip_shape->shapes, 0);
 
           if (svg_transform_is_none (ctf) &&
-              svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_USER_SPACE_ON_USE &&
-              clip->ref.shape->shapes->len == 1 &&
+              svg_enum_get (clip_shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_USER_SPACE_ON_USE &&
+              clip_shape->shapes->len == 1 &&
               (child->type == SHAPE_PATH || child->type == SHAPE_RECT || child->type == SHAPE_CIRCLE) &&
               svg_enum_get (child->current[SHAPE_ATTR_VISIBILITY]) != VISIBILITY_HIDDEN &&
               svg_enum_get (child->current[SHAPE_ATTR_DISPLAY]) != DISPLAY_NONE &&
-              ((SvgClip *) child->current[SHAPE_ATTR_CLIP_PATH])->kind == CLIP_NONE &&
+              svg_clip_get_kind (child->current[SHAPE_ATTR_CLIP_PATH]) == CLIP_NONE &&
               svg_transform_is_none (child->current[SHAPE_ATTR_TRANSFORM]))
             {
               GskPath *path;
@@ -17011,10 +16705,10 @@ push_group (Shape        *shape,
                 {
                   GskTransform *transform = svg_transform_get_gsk (ctf);
 
-                  if (_gtk_bitmask_get (clip->ref.shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
+                  if (_gtk_bitmask_get (clip_shape->attrs, SHAPE_ATTR_TRANSFORM_ORIGIN))
                     {
-                      SvgValue *tfo = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
-                      SvgValue *tfb = clip->ref.shape->current[SHAPE_ATTR_TRANSFORM_BOX];
+                      SvgValue *tfo = clip_shape->current[SHAPE_ATTR_TRANSFORM_ORIGIN];
+                      SvgValue *tfb = clip_shape->current[SHAPE_ATTR_TRANSFORM_BOX];
                       graphene_rect_t bounds;
                       double x, y;
 
@@ -17051,7 +16745,7 @@ push_group (Shape        *shape,
                   gsk_transform_unref (transform);
                 }
 
-              if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+              if (svg_enum_get (clip_shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
                 {
                   graphene_rect_t bounds;
 
@@ -17069,9 +16763,9 @@ push_group (Shape        *shape,
                   gsk_transform_unref (transform);
                 }
 
-              render_shape (clip->ref.shape, context);
+              render_shape (clip_shape, context);
 
-              if (svg_enum_get (clip->ref.shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+              if (svg_enum_get (clip_shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
                 {
                   pop_transform (context);
                   gtk_snapshot_restore (context->snapshot);
@@ -17186,7 +16880,7 @@ pop_group (Shape        *shape,
 {
   SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
-  SvgClip *clip = (SvgClip *) shape->current[SHAPE_ATTR_CLIP_PATH];
+  SvgValue *clip = shape->current[SHAPE_ATTR_CLIP_PATH];
   SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
   SvgValue *tf = shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
@@ -17223,8 +16917,8 @@ pop_group (Shape        *shape,
 #endif
     }
 
-  if (clip->kind == CLIP_PATH ||
-      (clip->kind == CLIP_REF && clip->ref.shape != NULL))
+  if (svg_clip_get_kind (clip) == CLIP_PATH ||
+      (svg_clip_get_kind (clip) == CLIP_URL && svg_clip_get_shape (clip) != NULL))
     {
       gtk_snapshot_pop (context->snapshot);
 #ifdef DEBUG
@@ -20847,27 +20541,25 @@ svg_shape_attr_get_clip (Shape       *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), CLIP_NONE);
   SvgValue *value;
-  SvgClip *clip;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_ref_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  clip = (SvgClip *) value;
-  switch (clip->kind)
+  switch (svg_clip_get_kind (value))
     {
     case CLIP_NONE:
       *path = NULL;
       *ref = NULL;
       break;
     case CLIP_PATH:
-      *path = clip->path.path;
+      *path = svg_clip_get_path (value);
       *ref = NULL;
       break;
-    case CLIP_REF:
+    case CLIP_URL:
       *path = NULL;
-      *ref = clip->ref.ref;
+      *ref = svg_clip_get_id (value);
       break;
     default:
       g_assert_not_reached ();
@@ -20875,7 +20567,7 @@ svg_shape_attr_get_clip (Shape       *shape,
 
   svg_value_unref (value);
 
-  return clip->kind;
+  return svg_clip_get_kind (value);
 }
 
 char *

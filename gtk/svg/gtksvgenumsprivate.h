@@ -84,7 +84,7 @@ typedef enum
 {
   CLIP_NONE,
   CLIP_PATH,
-  CLIP_REF,
+  CLIP_URL,
 } ClipKind;
 
 typedef enum
