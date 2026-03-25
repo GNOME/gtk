@@ -71,6 +71,7 @@
 #include "gtksvghrefprivate.h"
 #include "gtksvgtextdecorationprivate.h"
 #include "gtksvgpathutilsprivate.h"
+#include "gtksvgcolorutilsprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -1214,29 +1215,6 @@ add_font_from_url (GtkSvg               *svg,
 
   g_bytes_unref (bytes);
   return TRUE;
-}
-
-/* }}} */
-/* {{{ Color utilities */
-
-static void
-apply_color_matrix (GdkColorState           *color_state,
-                    const graphene_matrix_t *matrix,
-                    const graphene_vec4_t   *offset,
-                    const GdkColor          *color,
-                    GdkColor                *new_color)
-{
-  GdkColor c;
-  graphene_vec4_t p;
-  float v[4];
-
-  gdk_color_convert (&c, color_state, color);
-  graphene_vec4_init (&p, c.r, c.g, c.b, c.a);
-  graphene_matrix_transform_vec4 (matrix, &p, &p);
-  graphene_vec4_add (&p, offset, &p);
-  graphene_vec4_to_float (&p, v);
-  gdk_color_init (new_color, color_state, v);
-  gdk_color_finish (&c);
 }
 
 /* }}} */
@@ -14326,7 +14304,7 @@ apply_filter_tree (Shape         *shape,
                 const GdkColor *color = gsk_color_node_get_gdk_color (node);
                 GdkColor new_color;
 
-                apply_color_matrix (color_state, &matrix, &offset,  color, &new_color);
+                color_apply_color_matrix (color, color_state, &matrix, &offset,  &new_color);
                 result = gsk_color_node_new2 (&new_color, &node->bounds);
                 gdk_color_finish (&new_color);
               }
