@@ -68,6 +68,7 @@
 #include "gtksvgcontentfitprivate.h"
 #include "gtksvgorientprivate.h"
 #include "gtksvglanguageprivate.h"
+#include "gtksvghrefprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2337,166 +2338,6 @@ svg_text_decoration_resolve (const SvgValue    *value,
   return svg_text_decoration_new (ret);
 }
 /* }}} */
-/* {{{ References */
-
-/* The difference between HREF_REF and HREF_URL is about
- * the accepted syntax: plain fragment vs url()
- */
-
-typedef enum
-{
-  HREF_NONE,
-  HREF_REF,
-  HREF_URL,
-} HrefKind;
-
-typedef struct
-{
-  SvgValue base;
-  HrefKind kind;
-
-  char *ref;
-  Shape *shape;
-  GdkTexture *texture;
-} SvgHref;
-
-static void
-svg_href_free (SvgValue *value)
-{
-  const SvgHref *r = (const SvgHref *) value;
-
-  if (r->kind != HREF_NONE)
-    g_free (r->ref);
-
-  g_free (value);
-}
-
-static gboolean
-svg_href_equal (const SvgValue *value1,
-                const SvgValue *value2)
-{
-  const SvgHref *r1 = (const SvgHref *) value1;
-  const SvgHref *r2 = (const SvgHref *) value2;
-
-  if (r1->kind != r2->kind)
-    return FALSE;
-
-  switch (r1->kind)
-    {
-    case HREF_NONE:
-      return TRUE;
-    case HREF_REF:
-    case HREF_URL:
-      return r1->shape == r2->shape &&
-             r1->texture == r2->texture &&
-             g_strcmp0 (r1->ref, r2->ref) == 0;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *
-svg_href_interpolate (const SvgValue    *value1,
-                      const SvgValue    *value2,
-                      SvgComputeContext *context,
-                      double             t)
-{
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value1);
-  else
-    return svg_value_ref ((SvgValue *) value2);
-}
-
-static SvgValue *
-svg_href_accumulate (const SvgValue    *value1,
-                     const SvgValue    *value2,
-                     SvgComputeContext *context,
-                     int                n)
-{
-  return NULL;
-}
-
-static void
-svg_href_print (const SvgValue *value,
-                GString        *string)
-{
-  const SvgHref *r = (const SvgHref *) value;
-
-  switch (r->kind)
-    {
-    case HREF_NONE:
-      g_string_append (string, "none");
-      break;
-    case HREF_REF:
-      g_string_append_printf (string, "%s", r->ref);
-      break;
-    case HREF_URL:
-      g_string_append_printf (string, "url(%s)", r->ref);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static const SvgValueClass SVG_HREF_CLASS = {
-  "SvgHref",
-  svg_href_free,
-  svg_href_equal,
-  svg_href_interpolate,
-  svg_href_accumulate,
-  svg_href_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-static SvgValue *
-svg_href_new_none (void)
-{
-  static SvgHref none = { { &SVG_HREF_CLASS, 0 }, HREF_NONE };
-  return (SvgValue *) &none;
-}
-
-static SvgValue *
-svg_href_new_ref (const char *ref)
-{
-  SvgHref *result;
-
-  result = (SvgHref *) svg_value_alloc (&SVG_HREF_CLASS, sizeof (SvgHref));
-  result->kind = HREF_REF;
-  result->ref = g_strdup (ref);
-  result->shape = NULL;
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_href_new_url_take (const char *ref)
-{
-  SvgHref *result;
-
-  result = (SvgHref *) svg_value_alloc (&SVG_HREF_CLASS, sizeof (SvgHref));
-  result->kind = HREF_URL;
-  result->ref = (char *) ref;
-  result->shape = NULL;
-
-  return (SvgValue *) result;
-}
-
-static const char *
-svg_href_get_id (SvgHref *href)
-{
-  g_assert (((SvgValue *) href)->class == &SVG_HREF_CLASS);
-
-  if (href->kind == HREF_NONE)
-    return NULL;
-
-  if (href->ref[0] == '#')
-    return href->ref + 1;
-  else
-    return href->ref;
-}
-
-/* }}} */
 /* {{{ Color stops */
 
 typedef struct
@@ -3145,7 +2986,7 @@ static SvgValue *
 parse_href (const char  *string,
             GError     **error)
 {
-   return svg_href_new_ref (string);
+   return svg_href_new_plain (string);
 }
 
 static SvgValue *
@@ -5411,7 +5252,7 @@ shape_get_path (Shape                 *shape,
 
     case SHAPE_USE:
       {
-        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        Shape *use_shape = svg_href_get_shape (shape->current[SHAPE_ATTR_HREF]);
         if (use_shape)
           {
             return shape_get_path (use_shape, viewport, current);
@@ -5667,7 +5508,7 @@ shape_get_current_bounds (Shape                 *shape,
       break;
     case SHAPE_USE:
       {
-        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        Shape *use_shape = svg_href_get_shape (shape->current[SHAPE_ATTR_HREF]);
         if (use_shape)
           ret = shape_get_current_bounds (use_shape, viewport, svg, &b);
         ret = TRUE;
@@ -5788,7 +5629,7 @@ shape_get_current_stroke_bounds (Shape                 *shape,
       break;
     case SHAPE_USE:
       {
-        Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+        Shape *use_shape = svg_href_get_shape (shape->current[SHAPE_ATTR_HREF]);
         if (use_shape)
           ret = shape_get_current_stroke_bounds (use_shape, viewport, svg, &b);
         ret = TRUE;
@@ -7737,14 +7578,14 @@ resolve_value (Shape             *shape,
             }
           else if (shape->type == SHAPE_IMAGE)
             {
-              SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+              GdkTexture *texture = svg_href_get_texture (shape->current[SHAPE_ATTR_HREF]);
 
-              if (!href->texture)
+              if (!texture)
                 return svg_number_new (0);
               else if (attr == SHAPE_ATTR_WIDTH)
-                return svg_number_new (gdk_texture_get_width (href->texture));
+                return svg_number_new (gdk_texture_get_width (texture));
               else
-                return svg_number_new (gdk_texture_get_height (href->texture));
+                return svg_number_new (gdk_texture_get_height (texture));
             }
           else
             {
@@ -11917,18 +11758,20 @@ resolve_href_ref (SvgValue   *value,
                   Shape      *shape,
                   ParserData *data)
 {
-  SvgHref *href = (SvgHref *) value;
+  const char *ref;
 
-  if (href->kind == HREF_NONE)
+  if (svg_href_get_kind (value) == HREF_NONE)
     return;
 
+  ref = svg_href_get_id (value);
   if (shape->type == SHAPE_IMAGE || shape->type == SHAPE_FILTER)
     {
       GError *error = NULL;
+      GdkTexture *texture;
 
-      href->texture = get_texture (data->svg, href->ref, &error);
-
-      if (href->texture != NULL)
+      texture = get_texture (data->svg, ref, &error);
+      svg_href_set_texture (value, texture);
+      if (texture != NULL)
         return;
 
       if (shape->type == SHAPE_IMAGE)
@@ -11936,21 +11779,21 @@ resolve_href_ref (SvgValue   *value,
           if (g_error_matches (error, GTK_SVG_ERROR, GTK_SVG_ERROR_FEATURE_DISABLED))
             gtk_svg_emit_error (data->svg, error);
           else
-            gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>): %s", href->ref, error->message);
+            gtk_svg_invalid_reference (data->svg, "Failed to load %s (resolving <image>): %s", ref, error->message);
           g_error_free (error);
           return; /* Image href is always external */
         }
       g_error_free (error);
     }
 
-  if (href->shape == NULL)
+  if (svg_href_get_shape (value) == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
+      Shape *target = g_hash_table_lookup (data->shapes, ref);
       if (!target)
         {
           gtk_svg_invalid_reference (data->svg,
                                      "No shape with ID %s (resolving href in <%s>)",
-                                     svg_href_get_id (href),
+                                     ref,
                                      shape_types[shape->type].name);
         }
       else if (shape->type == SHAPE_USE &&
@@ -11963,7 +11806,7 @@ resolve_href_ref (SvgValue   *value,
         }
       else
         {
-          href->shape = target;
+          svg_href_set_shape (value, target);
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -11974,24 +11817,23 @@ resolve_marker_ref (SvgValue   *value,
                     Shape      *shape,
                     ParserData *data)
 {
-  SvgHref *href = (SvgHref *) value;
-
-  if (href->kind != HREF_NONE && href->shape == NULL)
+  if (svg_href_get_kind (value) != HREF_NONE && svg_href_get_shape (value) == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, svg_href_get_id (href));
+      const char *ref = svg_href_get_id (value);
+      Shape *target = g_hash_table_lookup (data->shapes, ref);
       if (!target)
         {
-          gtk_svg_invalid_reference (data->svg, "No shape with ID %s", href->ref);
+          gtk_svg_invalid_reference (data->svg, "No shape with ID %s", ref);
         }
       else if (target->type != SHAPE_MARKER)
         {
           gtk_svg_invalid_reference (data->svg,
                                      "Shape with ID %s not a <marker>",
-                                     href->ref);
+                                     ref);
         }
       else
         {
-          href->shape = target;
+          svg_href_set_shape (value, target);
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -15349,24 +15191,24 @@ apply_filter_tree (Shape         *shape,
 
         case FE_IMAGE:
           {
-            SvgHref *href = (SvgHref *) filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_HREF);
+            SvgValue *href = filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_HREF);
             SvgValue *cf = filter_get_current_value (f, SHAPE_ATTR_FE_IMAGE_CONTENT_FIT);
             GskTransform *transform;
             GskRenderNode *node;
 
-            if (href->kind == HREF_NONE)
+            if (svg_href_get_kind (href) == HREF_NONE)
               {
                 result = empty_node ();
               }
-            else if (href->texture != NULL)
+            else if (svg_href_get_texture (href) != NULL)
               {
                 graphene_rect_t vb;
                 double sx, sy, tx, ty;
 
                 graphene_rect_init (&vb,
                                     0, 0,
-                                    gdk_texture_get_width (href->texture),
-                                    gdk_texture_get_height (href->texture));
+                                    gdk_texture_get_width (svg_href_get_texture (href)),
+                                    gdk_texture_get_height (svg_href_get_texture (href)));
 
                 compute_viewport_transform (svg_content_fit_is_none (cf),
                                             svg_content_fit_get_align_x (cf),
@@ -15380,14 +15222,14 @@ apply_filter_tree (Shape         *shape,
                 transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
                 transform = gsk_transform_scale (transform, sx, sy);
 
-                node = gsk_texture_node_new (href->texture, &vb);
+                node = gsk_texture_node_new (svg_href_get_texture (href), &vb);
                 result = apply_transform (node, transform);
                 gsk_render_node_unref (node);
               }
-            else if (href->shape != NULL)
+            else if (svg_href_get_shape (href) != NULL)
               {
                 gtk_snapshot_push_collect (context->snapshot);
-                render_shape (href->shape, context);
+                render_shape (svg_href_get_shape (href), context);
                 node = gtk_snapshot_pop_collect (context->snapshot);
                 if (node)
                   {
@@ -15658,7 +15500,7 @@ shape_is_use_target (Shape        *shape,
       Shape *ctx_shape = context->ctx_shape_stack->data;
 
       return ctx_shape->type == SHAPE_USE &&
-             ((SvgHref *) ctx_shape->current[SHAPE_ATTR_HREF])->shape == shape;
+             svg_href_get_shape (ctx_shape->current[SHAPE_ATTR_HREF]) == shape;
     }
 
   return FALSE;
@@ -16234,25 +16076,27 @@ paint_server_get_template_value (Shape        *shape,
 {
   if (!_gtk_bitmask_get (shape->attrs, attr))
     {
-      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+      SvgValue *href = shape->current[SHAPE_ATTR_HREF];
+      const char *ref = svg_href_get_id (href);
 
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
                                    "excessive rendering depth (> %d) while resolving href %s, aborting",
                                    NESTING_LIMIT,
-                                   href->ref);
+                                   ref);
           goto fail;
         }
 
-      if (href->shape)
+      if (svg_href_get_shape (href))
         {
-          if (template_type_compatible (href->shape->type, shape->type))
+          Shape *template = svg_href_get_shape (href);
+          if (template_type_compatible (template->type, shape->type))
             {
               SvgValue *ret;
 
               context->depth++;
-              ret = paint_server_get_template_value (href->shape, attr, context);
+              ret = paint_server_get_template_value (template, attr, context);
               context->depth--;
 
               return ret;
@@ -16261,8 +16105,8 @@ paint_server_get_template_value (Shape        *shape,
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while resolving href %s)",
                                      shape_types[shape->type].name,
-                                     shape_types[href->shape->type].name,
-                                     href->ref);
+                                     shape_types[template->type].name,
+                                     ref);
         }
 
       return NULL;
@@ -16295,24 +16139,26 @@ gradient_get_color_stops (Shape        *shape,
 {
   if (shape->color_stops->len == 0)
     {
-      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+      SvgValue *href = shape->current[SHAPE_ATTR_HREF];
+      const char *ref = svg_href_get_id (href);
 
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
                                    "excessive rendering depth (> %d) while resolving href %s, aborting",
                                    NESTING_LIMIT,
-                                   href->ref);
+                                   ref);
           goto fail;
         }
 
-      if (href->shape)
+      if (svg_href_get_shape (href))
         {
-          if (template_type_compatible (href->shape->type, shape->type))
+          Shape *template = svg_href_get_shape (href);
+          if (template_type_compatible (template->type, shape->type))
             {
               GPtrArray *ret;
               context->depth++;
-              ret = gradient_get_color_stops (href->shape, context);
+              ret = gradient_get_color_stops (template, context);
               context->depth--;
               return ret;
             }
@@ -16320,7 +16166,7 @@ gradient_get_color_stops (Shape        *shape,
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while collecting color stops)",
                                      shape_types[shape->type].name,
-                                     shape_types[href->shape->type].name);
+                                     shape_types[template->type].name);
         }
     }
 
@@ -16374,25 +16220,27 @@ pattern_get_shapes (Shape        *shape,
 {
   if (shape->shapes->len == 0)
     {
-      SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+      SvgValue *href = shape->current[SHAPE_ATTR_HREF];
+      const char *ref = svg_href_get_id (href);
 
       if (context->depth > NESTING_LIMIT)
         {
           gtk_svg_rendering_error (context->svg,
                                    "excessive rendering depth (> %d) while resolving href %s, aborting",
                                    NESTING_LIMIT,
-                                   href->ref);
+                                   ref);
 
           goto fail;
         }
 
-      if (href->shape)
+      if (svg_href_get_shape (href))
         {
-          if (template_type_compatible (href->shape->type, shape->type))
+          Shape *template = svg_href_get_shape (href);
+          if (template_type_compatible (template->type, shape->type))
             {
               GPtrArray *ret;
               context->depth++;
-              ret = pattern_get_shapes (href->shape, context);
+              ret = pattern_get_shapes (template, context);
               context->depth--;
               return ret;
             }
@@ -16400,7 +16248,7 @@ pattern_get_shapes (Shape        *shape,
           gtk_svg_invalid_reference (context->svg,
                                      "<%s> can not use a <%s> as template (while collecting pattern content)",
                                      shape_types[shape->type].name,
-                                     shape_types[href->shape->type].name);
+                                     shape_types[template->type].name);
         }
     }
 
@@ -17122,7 +16970,7 @@ paint_marker (Shape              *shape,
               VertexKind          kind)
 {
   ShapeAttr attrs[] = { SHAPE_ATTR_MARKER_START, SHAPE_ATTR_MARKER_MID, SHAPE_ATTR_MARKER_END };
-  SvgHref *href;
+  SvgValue *href;
   SvgValue *orient;
   SvgValue *units;
   Shape *marker;
@@ -17140,11 +16988,11 @@ paint_marker (Shape              *shape,
 
   gsk_path_point_get_position (point, path, &vertex);
 
-  href = (SvgHref *) shape->current[attrs[kind]];
-  if (href->kind == HREF_NONE)
+  href = shape->current[attrs[kind]];
+  if (svg_href_get_kind (href) == HREF_NONE)
     return;
 
-  marker = href->shape;
+  marker = svg_href_get_shape (href);
   if (!marker)
     return;
 
@@ -17255,9 +17103,9 @@ paint_markers (Shape        *shape,
   if (gsk_path_is_empty (path))
     return;
 
-  if (((SvgHref *) shape->current[SHAPE_ATTR_MARKER_START])->kind == HREF_NONE &&
-      ((SvgHref *) shape->current[SHAPE_ATTR_MARKER_MID])->kind == HREF_NONE &&
-      ((SvgHref *) shape->current[SHAPE_ATTR_MARKER_END])->kind == HREF_NONE)
+  if (svg_href_get_kind (shape->current[SHAPE_ATTR_MARKER_START]) == HREF_NONE &&
+      svg_href_get_kind (shape->current[SHAPE_ATTR_MARKER_MID]) == HREF_NONE &&
+      svg_href_get_kind (shape->current[SHAPE_ATTR_MARKER_END]) == HREF_NONE)
     return;
 
   if (!gsk_path_get_start_point (path, &point))
@@ -17764,24 +17612,26 @@ static void
 render_image (Shape        *shape,
               PaintContext *context)
 {
-  SvgHref *href = (SvgHref *) shape->current[SHAPE_ATTR_HREF];
+  SvgValue *href = shape->current[SHAPE_ATTR_HREF];
   SvgValue *cf = shape->current[SHAPE_ATTR_CONTENT_FIT];
   SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
   graphene_rect_t vb;
   double sx, sy, tx, ty;
   double x, y, width, height;
+  GdkTexture *texture;
 
-  if (!href->texture)
+  if (svg_href_get_texture (href) == NULL)
     {
       gtk_svg_rendering_error (context->svg,
                                "No content for <image>");
       return;
     }
 
+  texture = svg_href_get_texture (href);
   graphene_rect_init (&vb,
                       0, 0,
-                      gdk_texture_get_width (href->texture),
-                      gdk_texture_get_height (href->texture));
+                      gdk_texture_get_width (texture),
+                      gdk_texture_get_height (texture));
 
   x = context->viewport->origin.x + svg_number_get (shape->current[SHAPE_ATTR_X], context->viewport->size.width);
   y = context->viewport->origin.y + svg_number_get (shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
@@ -17809,7 +17659,7 @@ render_image (Shape        *shape,
   push_transform (context, transform);
   gsk_transform_unref (transform);
 
-  gtk_snapshot_append_texture (context->snapshot, href->texture, &vb);
+  gtk_snapshot_append_texture (context->snapshot, texture, &vb);
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
@@ -17874,9 +17724,9 @@ paint_shape (Shape        *shape,
 
   if (shape->type == SHAPE_USE)
     {
-      if (((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape != NULL)
+      if (svg_href_get_shape (shape->current[SHAPE_ATTR_HREF]) != NULL)
         {
-          Shape *use_shape = ((SvgHref *) shape->current[SHAPE_ATTR_HREF])->shape;
+          Shape *use_shape = svg_href_get_shape (shape->current[SHAPE_ATTR_HREF]);
 
           if (shape_is_ancestor (use_shape, shape))
             {

@@ -310,4 +310,11 @@ typedef enum
   ORIENT_ANGLE,
 } OrientKind;
 
+typedef enum
+{
+  HREF_NONE,
+  HREF_PLAIN,
+  HREF_URL,
+} HrefKind;
+
 G_END_DECLS
