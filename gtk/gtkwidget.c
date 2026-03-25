@@ -95,6 +95,29 @@
  *
  * It manages the widget lifecycle, layout, states and style.
  *
+ * ### Minimum and natural size
+ *
+ * In order to understand geometry management of widgets in GTK, it is
+ * helpful to understand the different terminology surrounding sizing of
+ * widgets.
+ *
+ * The two primary terms are: *minimum size* and *natural size*.
+ *
+ * As a general rule: the *minimum size* is the size required to display
+ * the minimum amount of content in a widget. A widget cannot be
+ * allocated less than the minimum size it requires.
+ *
+ * The *natural size* is the amount of content that a widget prefers to
+ * display in normal conditions.
+ *
+ * A widget may be allocated more than the natural size it prefers, or
+ * less, depending on the layout management of its parent container.
+ * What to do when the widget is allocated a different size than
+ * the one it prefers is entirely left to the widget implementation:
+ * some widgets decide to add extra room, other widgets may disclose
+ * additional content, other widgets may decide to hide content, or show
+ * a different layout entirely.
+ *
  * ### Height-for-width Geometry Management
  *
  * GTK uses a height-for-width (and width-for-height) geometry management
