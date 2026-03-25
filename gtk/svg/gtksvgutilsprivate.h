@@ -3,6 +3,7 @@
 #include <tgmath.h>
 #include <graphene.h>
 #include "gdk/gdkcolorprivate.h"
+#include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
 
 #define DEFAULT_FONT_SIZE 13.333
@@ -126,3 +127,35 @@ color_distance (const GdkColor *c0,
                (c0->blue - c1->blue)   * (c0->blue - c1->blue) +
                (c0->alpha - c1->alpha) * (c0->alpha - c1->alpha));
 }
+
+char ** strsplit_set (const char *str,
+                      const char *sep);
+
+GArray * parse_numbers2 (const char *value,
+                         const char *sep,
+                         double      min,
+                         double      max);
+
+gboolean parse_numbers (const char   *value,
+                        const char   *sep,
+                        double        min,
+                        double        max,
+                        double       *values,
+                        unsigned int  length,
+                        unsigned int *n_values);
+
+gboolean parse_number (const char *value,
+                       double      min,
+                       double      max,
+                       double     *f);
+
+gboolean match_str_len (const char *value,
+                        const char *str,
+                        size_t      len);
+
+#define match_str(value, str) match_str_len (value, str, strlen (str))
+
+gboolean parse_enum (const char    *value,
+                     const char   **values,
+                     size_t         n_values,
+                     unsigned int  *result);
