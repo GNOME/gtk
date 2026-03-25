@@ -427,7 +427,6 @@ void         svg_shape_attr_set           (Shape                 *shape,
                                            SvgValue              *value);
 
 SvgValue *   svg_view_box_new       (const graphene_rect_t *box);
-SvgValue *   svg_path_new           (GskPath *path);
 SvgValue *   svg_clip_new_none      (void);
 SvgValue *   svg_clip_new_path      (const char *string,
                                      unsigned int fill_rule);

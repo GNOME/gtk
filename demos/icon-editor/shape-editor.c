@@ -33,6 +33,7 @@
 #include "gtk/svg/gtksvgtransformprivate.h"
 #include "gtk/svg/gtksvgpaintprivate.h"
 #include "gtk/svg/gtksvgfilterprivate.h"
+#include "gtk/svg/gtksvgpathprivate.h"
 
 struct _ShapeEditor
 {
