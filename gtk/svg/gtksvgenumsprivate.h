@@ -98,4 +98,18 @@ typedef enum
   TRANSFORM_MATRIX,
 } TransformType;
 
+enum
+{
+  NUMBER     = 1 << 0,
+  PERCENTAGE = 1 << 1,
+  LENGTH     = 1 << 2,
+  ANGLE      = 1 << 3,
+};
+
+typedef enum
+{
+  COORD_UNITS_USER_SPACE_ON_USE,
+  COORD_UNITS_OBJECT_BOUNDING_BOX,
+} CoordUnits;
+
 G_END_DECLS
