@@ -14,6 +14,7 @@ gtk_svg_public_sources = files([
   'gtksvgcolor.c',
   'gtksvgpaint.c',
   'gtksvgfilter.c',
+  'gtksvgdasharray.c',
 ])
 
 gtk_svg_public_headers = files([

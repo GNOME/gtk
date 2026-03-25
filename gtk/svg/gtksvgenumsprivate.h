@@ -292,4 +292,10 @@ typedef enum
   FILTER_DROPSHADOW,
 } FilterKind;
 
+typedef enum
+{
+  DASH_ARRAY_NONE,
+  DASH_ARRAY_DASHES,
+} DashArrayKind;
+
 G_END_DECLS
