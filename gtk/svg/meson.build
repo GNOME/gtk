@@ -22,6 +22,7 @@ gtk_svg_public_sources = files([
   'gtksvgviewbox.c',
   'gtksvgcontentfit.c',
   'gtksvgorient.c',
+  'gtksvglanguage.c',
 ])
 
 gtk_svg_public_headers = files([
