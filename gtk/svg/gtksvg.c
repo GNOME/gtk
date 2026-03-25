@@ -46,6 +46,7 @@
 #include <glib/gstdio.h>
 #include "gtksvgenumtypes.h"
 #include "gtksvgutilsprivate.h"
+#include "gtksvgstringutilsprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -796,27 +797,6 @@ markup_filter_attributes (const char *element_name,
   va_end (ap);
 }
 
-static void
-string_append_double (GString    *s,
-                      const char *prefix,
-                      double      value)
-{
-  char buf[64];
-
-  g_ascii_formatd (buf, sizeof (buf), "%g", value);
-  g_string_append (s, prefix);
-  g_string_append (s, buf);
-}
-
-static void
-string_append_point (GString                *s,
-                     const char             *prefix,
-                     const graphene_point_t *p)
-{
-  string_append_double (s, prefix, p->x);
-  string_append_double (s, " ", p->y);
-}
-
 /* Break str into tokens that are separated
  * by whitespace and the given separator.
  * If sep contains just a non-space byte,
@@ -1330,56 +1310,6 @@ get_texture (GtkSvg      *svg,
 
 /* }}} */
 /* {{{ Font handling */
-
-static void
-append_base64_with_linebreaks (GString *s,
-                               GBytes  *bytes)
-{
-  const unsigned char *data;
-  size_t len;
-  size_t max;
-  size_t before;
-  char *out;
-  int state = 0, outlen;
-  int save = 0;
-
-  data = g_bytes_get_data (bytes, &len);
-
-  /* We can use a smaller limit here, since we know the saved state is 0,
-     +1 is needed for trailing \0, also check for unlikely integer overflow */
-  g_return_if_fail (len < ((G_MAXSIZE - 1 - s->len) / 4 - 1) * 3);
-
-  /* The glib docs say:
-   *
-   * The output buffer must be large enough to fit all the data that will
-   * be written to it. Due to the way base64 encodes you will need
-   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
-   * non-zero state). If you enable line-breaking you will need at least:
-   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
-   */
-  max = (len / 3 + 1) * 4;
-  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
-  /* and the null byte */
-  max += 1;
-
-  before = s->len;
-  g_string_set_size (s, s->len + max);
-  out = s->str + before;
-
-  outlen = g_base64_encode_step (data, len, TRUE, out, &state, &save);
-  outlen += g_base64_encode_close (TRUE, out + outlen, &state, &save);
-  out[outlen] = '\0';
-  s->len = before + outlen;
-}
-
-static void
-append_bytes_href (GString    *s,
-                   GBytes     *bytes,
-                   const char *mime_type)
-{
-  g_string_append_printf (s, "data:%s;base64,\\\n", mime_type ? mime_type : "");
-  append_base64_with_linebreaks (s, bytes);
-}
 
 static void
 delete_file (gpointer data)
@@ -26980,8 +26910,8 @@ gtk_svg_serialize_full (GtkSvg               *self,
           indent_for_elt (s, 6);
           g_string_append (s, "<font-face-uri");
           indent_for_attr (s, 6);
-          g_string_append (s, "href='");
-          append_bytes_href (s, bytes, "font/ttf");
+          g_string_append (s, "href='data:font/ttf;base64,\\\n");
+          string_append_base64 (s, bytes);
           g_string_append (s, "'/>");
           indent_for_elt (s, 4);
           g_string_append (s, "</font-face-src>");
