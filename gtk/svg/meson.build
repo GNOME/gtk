@@ -26,6 +26,7 @@ gtk_svg_public_sources = files([
   'gtksvghref.c',
   'gtksvgtextdecoration.c',
   'gtksvgpathutils.c',
+  'gtksvgpangoutils.c',
 ])
 
 gtk_svg_public_headers = files([
