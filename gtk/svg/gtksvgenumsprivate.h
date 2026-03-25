@@ -317,4 +317,12 @@ typedef enum
   HREF_URL,
 } HrefKind;
 
+typedef enum
+{
+  TEXT_DECORATION_NONE        = 0,
+  TEXT_DECORATION_UNDERLINE   = 1 << 0,
+  TEXT_DECORATION_OVERLINE    = 1 << 1,
+  TEXT_DECORATION_LINE_TROUGH = 1 << 2,
+} TextDecoration;
+
 G_END_DECLS
