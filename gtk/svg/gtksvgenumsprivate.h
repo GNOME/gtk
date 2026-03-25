@@ -298,4 +298,10 @@ typedef enum
   DASH_ARRAY_DASHES,
 } DashArrayKind;
 
+typedef enum
+{
+  MASK_NONE,
+  MASK_URL,
+} MaskKind;
+
 G_END_DECLS

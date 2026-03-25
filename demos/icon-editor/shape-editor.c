@@ -35,6 +35,7 @@
 #include "gtk/svg/gtksvgfilterprivate.h"
 #include "gtk/svg/gtksvgpathprivate.h"
 #include "gtk/svg/gtksvgclipprivate.h"
+#include "gtk/svg/gtksvgmaskprivate.h"
 
 struct _ShapeEditor
 {
@@ -451,7 +452,7 @@ mask_changed (ShapeEditor *self)
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_ref (id));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);

@@ -426,10 +426,6 @@ void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);
 
-SvgValue *   svg_view_box_new       (const graphene_rect_t *box);
-SvgValue *   svg_mask_new_none      (void);
-SvgValue *   svg_mask_new_ref       (const char *string);
-
 Shape *      svg_shape_add          (Shape            *parent,
                                      ShapeType         type);
 void         svg_shape_delete       (Shape            *shape);

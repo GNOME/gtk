@@ -63,6 +63,8 @@
 #include "gtksvgpathprivate.h"
 #include "gtksvgpathdataprivate.h"
 #include "gtksvgclipprivate.h"
+#include "gtksvgmaskprivate.h"
+#include "gtksvgviewboxprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2172,278 +2174,6 @@ state_match (uint64_t     states,
     return TRUE;
 
   return FALSE;
-}
-
-/* }}} */
-/* {{{ Masks */
-
-typedef enum
-{
-  MASK_NONE,
-  MASK_REF,
-} MaskKind;
-
-typedef struct
-{
-  SvgValue base;
-  MaskKind kind;
-
-  char *ref;
-  Shape *shape;
-} SvgMask;
-
-static void
-svg_mask_free (SvgValue *value)
-{
-  const SvgMask *m = (const SvgMask *) value;
-
-  if (m->kind == MASK_REF)
-    g_free (m->ref);
-
-  g_free (value);
-}
-
-static gboolean
-svg_mask_equal (const SvgValue *value0,
-                const SvgValue *value1)
-{
-  const SvgMask *m0 = (const SvgMask *) value0;
-  const SvgMask *m1 = (const SvgMask *) value1;
-
-  if (m0->kind != m1->kind)
-    return FALSE;
-
-  switch (m0->kind)
-    {
-    case MASK_NONE:
-      return TRUE;
-    case MASK_REF:
-      return m0->shape == m1->shape;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *
-svg_mask_interpolate (const SvgValue    *value0,
-                      const SvgValue    *value1,
-                      SvgComputeContext *context,
-                      double             t)
-{
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_mask_accumulate (const SvgValue    *value0,
-                     const SvgValue    *value1,
-                     SvgComputeContext *context,
-                     int                n)
-{
-  return NULL;
-}
-
-static void
-svg_mask_print (const SvgValue *value,
-                GString        *string)
-{
-  const SvgMask *m = (const SvgMask *) value;
-
-  switch (m->kind)
-    {
-    case MASK_NONE:
-      g_string_append (string, "none");
-      break;
-    case MASK_REF:
-      g_string_append_printf (string, "url(#%s)", m->ref);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static const SvgValueClass SVG_MASK_CLASS = {
-  "SvgMask",
-  svg_mask_free,
-  svg_mask_equal,
-  svg_mask_interpolate,
-  svg_mask_accumulate,
-  svg_mask_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-SvgValue *
-svg_mask_new_none (void)
-{
-  static SvgMask none = { { &SVG_MASK_CLASS, 0 }, MASK_NONE };
-  return (SvgValue *) &none;
-}
-
-SvgValue *
-svg_mask_new_ref (const char *ref)
-{
-  SvgMask *result;
-
-  result = (SvgMask *) svg_value_alloc (&SVG_MASK_CLASS, sizeof (SvgMask));
-  result->kind = MASK_REF;
-  result->ref = g_strdup (ref);
-  result->shape = NULL;
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_mask_parse (GtkCssParser *parser)
-{
-  if (gtk_css_parser_try_ident (parser, "none"))
-    return svg_mask_new_none ();
-  else
-    {
-      char *url;
-      SvgValue *res = NULL;
-
-      url = gtk_css_parser_consume_url (parser);
-      if (!url)
-        res = NULL;
-      else if (url[0] == '#')
-        res = svg_mask_new_ref (url + 1);
-      else
-        res = svg_mask_new_ref (url);
-
-      g_free (url);
-
-      return res;
-    }
-}
-
-/* }}} */
-/* {{{ Viewbox */
-
-typedef struct
-{
-  SvgValue base;
-  gboolean unset;
-  graphene_rect_t view_box;
-} SvgViewBox;
-
-static gboolean
-svg_view_box_equal (const SvgValue *value0,
-                    const SvgValue *value1)
-{
-  const SvgViewBox *v0 = (const SvgViewBox *) value0;
-  const SvgViewBox *v1 = (const SvgViewBox *) value1;
-
-  if (v0->unset != v1->unset)
-    return FALSE;
-
-  if (v0->unset)
-    return TRUE;
-
-  return graphene_rect_equal (&v0->view_box, &v1->view_box);
-}
-
-static SvgValue *
-svg_view_box_interpolate (const SvgValue    *value0,
-                          const SvgValue    *value1,
-                          SvgComputeContext *context,
-                          double             t)
-{
-  const SvgViewBox *v0 = (const SvgViewBox *) value0;
-  const SvgViewBox *v1 = (const SvgViewBox *) value1;
-  graphene_rect_t b;
-
-  if (v0->unset || v1->unset)
-    {
-      if (t < 0.5)
-        return svg_value_ref ((SvgValue *) value0);
-      else
-        return svg_value_ref ((SvgValue *) value1);
-    }
-
-  graphene_rect_interpolate (&v0->view_box, &v1->view_box, t, &b);
-
-  return svg_view_box_new (&b);
-}
-
-static SvgValue *
-svg_view_box_accumulate (const SvgValue    *value0,
-                         const SvgValue    *value1,
-                         SvgComputeContext *context,
-                         int                n)
-{
-  return NULL;
-}
-
-static void
-svg_view_box_print (const SvgValue *value,
-                    GString        *string)
-{
-  const SvgViewBox *v = (const SvgViewBox *) value;
-
-  if (v->unset)
-    return;
-
-  string_append_double (string, "", v->view_box.origin.x);
-  string_append_double (string, " ", v->view_box.origin.y);
-  string_append_double (string, " ", v->view_box.size.width);
-  string_append_double (string, " ", v->view_box.size.height);
-}
-
-static const SvgValueClass SVG_VIEW_BOX_CLASS = {
-  "SvgViewBox",
-  svg_value_default_free,
-  svg_view_box_equal,
-  svg_view_box_interpolate,
-  svg_view_box_accumulate,
-  svg_view_box_print,
-  svg_value_default_distance,
-  svg_value_default_resolve,
-};
-
-static SvgValue *
-svg_view_box_new_unset (void)
-{
-  static SvgViewBox unset = { { &SVG_VIEW_BOX_CLASS, 0 }, TRUE, { { 0, 0 }, { 0, 0 } } };
-
-  return (SvgValue *) &unset;
-}
-
-SvgValue *
-svg_view_box_new (const graphene_rect_t *box)
-{
-  SvgViewBox *result;
-
-  result = (SvgViewBox *) svg_value_alloc (&SVG_VIEW_BOX_CLASS, sizeof (SvgViewBox));
-  result->unset = FALSE;
-  graphene_rect_init_from_rect (&result->view_box, box);
-
-  return (SvgValue *) result;
-}
-
-static SvgValue *
-svg_view_box_parse (GtkCssParser *parser)
-{
-  double v[4];
-  unsigned int i;
-
-  for (i = 0; i < 4; i++)
-    {
-      if (!gtk_css_parser_consume_number (parser, &v[i]))
-        break;
-
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_consume_token (parser);
-      gtk_css_parser_skip_whitespace (parser);
-    }
-
-  if (i < 4 || v[2] < 0 || v[3] < 0)
-    return NULL;
-
-  return (SvgValue *) svg_view_box_new (&GRAPHENE_RECT_INIT (v[0], v[1], v[2], v[3]));
 }
 
 /* }}} */
@@ -8918,7 +8648,7 @@ compute_current_values_for_shape (Shape             *shape,
 
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
-      SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
+      SvgValue *vb = shape->current[SHAPE_ATTR_VIEW_BOX];
       double width, height;
 
       if (shape->parent == NULL)
@@ -8936,10 +8666,8 @@ compute_current_values_for_shape (Shape             *shape,
           height = svg_number_get (shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
         }
 
-      if (vb->unset)
+      if (!svg_view_box_get (vb, &viewport))
         graphene_rect_init (&viewport, 0, 0, width, height);
-      else
-        graphene_rect_init_from_rect (&viewport, &vb->view_box);
 
       context->viewport = &viewport;
     }
@@ -12671,22 +12399,17 @@ resolve_mask_ref (SvgValue   *value,
                   Shape      *shape,
                   ParserData *data)
 {
-  SvgMask *mask = (SvgMask *) value;
-
-  if (mask->kind == MASK_REF && mask->shape == NULL)
+  if (svg_mask_get_kind (value) == MASK_URL && svg_mask_get_shape (value) == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, mask->ref);
+      const char *id = svg_mask_get_id (value);
+      Shape *target = g_hash_table_lookup (data->shapes, id);
       if (!target)
-        gtk_svg_invalid_reference (data->svg,
-                                   "No shape with ID %s (resolving mask)",
-                                   mask->ref);
+        gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving mask)", id);
       else if (target->type != SHAPE_MASK)
-        gtk_svg_invalid_reference (data->svg,
-                                   "Shape with ID %s not a <mask> (resolving mask)",
-                                   mask->ref);
+        gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a <mask> (resolving mask)", id);
       else
         {
-          mask->shape = target;
+          svg_mask_set_shape (value, target);
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -14059,9 +13782,11 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_VIEW_BOX))
     {
-      SvgViewBox *vb = (SvgViewBox *) self->content->base[SHAPE_ATTR_VIEW_BOX];
-      self->width = vb->view_box.size.width;
-      self->height = vb->view_box.size.height;
+      graphene_rect_t vb;
+
+      svg_view_box_get (self->content->base[SHAPE_ATTR_VIEW_BOX], &vb);
+      self->width = vb.size.width;
+      self->height = vb.size.height;
     }
 
   if (_gtk_bitmask_get (self->content->attrs, SHAPE_ATTR_WIDTH))
@@ -16449,7 +16174,7 @@ push_group (Shape        *shape,
   SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
   SvgValue *clip = shape->current[SHAPE_ATTR_CLIP_PATH];
-  SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
+  SvgValue *mask = shape->current[SHAPE_ATTR_MASK];
   SvgValue *tf = shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
   SvgValue *fill_rule = shape->current[SHAPE_ATTR_FILL_RULE];
@@ -16466,7 +16191,6 @@ push_group (Shape        *shape,
 
   if (shape->type == SHAPE_SVG || shape->type == SHAPE_SYMBOL)
     {
-      SvgViewBox *vb = (SvgViewBox *) shape->current[SHAPE_ATTR_VIEW_BOX];
       SvgContentFit *cf = (SvgContentFit *) shape->current[SHAPE_ATTR_CONTENT_FIT];
       SvgValue *overflow = shape->current[SHAPE_ATTR_OVERFLOW];
       double x, y, width, height;
@@ -16516,10 +16240,8 @@ push_group (Shape        *shape,
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (x, y, width, height));
 
-      if (vb->unset)
+      if (!svg_view_box_get (shape->current[SHAPE_ATTR_VIEW_BOX], &view_box))
         graphene_rect_init (&view_box, 0, 0, w, h);
-      else
-        graphene_rect_init_from_rect (&view_box, &vb->view_box);
 
       viewport = g_new (graphene_rect_t, 1);
       graphene_rect_init_from_rect (viewport, &view_box);
@@ -16784,9 +16506,11 @@ push_group (Shape        *shape,
       pop_op (context);
     }
 
-  if (mask->kind != MASK_NONE && mask->shape != NULL &&
+  if (svg_mask_get_kind (mask) != MASK_NONE &&
+      svg_mask_get_shape (mask) != NULL &&
       context->op != CLIPPING)
     {
+      Shape *mask_shape = svg_mask_get_shape (mask);
       gboolean has_clip = FALSE;
 
       push_op (context, MASKING);
@@ -16795,34 +16519,34 @@ push_group (Shape        *shape,
       if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
         gtk_snapshot_push_debug (context->snapshot, "mask for masking");
 #endif
-      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (mask->shape->current[SHAPE_ATTR_MASK_TYPE]));
+      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (mask_shape->current[SHAPE_ATTR_MASK_TYPE]));
 
-      if (_gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_X) ||
-          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_Y) ||
-          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_WIDTH) ||
-          _gtk_bitmask_get (mask->shape->attrs, SHAPE_ATTR_HEIGHT))
+      if (_gtk_bitmask_get (mask_shape->attrs, SHAPE_ATTR_X) ||
+          _gtk_bitmask_get (mask_shape->attrs, SHAPE_ATTR_Y) ||
+          _gtk_bitmask_get (mask_shape->attrs, SHAPE_ATTR_WIDTH) ||
+          _gtk_bitmask_get (mask_shape->attrs, SHAPE_ATTR_HEIGHT))
         {
            graphene_rect_t mask_clip;
 
-          if (svg_enum_get (mask->shape->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+          if (svg_enum_get (mask_shape->current[SHAPE_ATTR_BOUND_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
             {
               graphene_rect_t bounds;
 
               if (shape_get_current_bounds (shape, context->viewport, context->svg, &bounds))
                 {
-                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask->shape->current[SHAPE_ATTR_X], 1) * bounds.size.width;
-                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask->shape->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
-                  mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], 1) * bounds.size.width;
-                  mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], 1) * bounds.size.height;
+                  mask_clip.origin.x = bounds.origin.x + svg_number_get (mask_shape->current[SHAPE_ATTR_X], 1) * bounds.size.width;
+                  mask_clip.origin.y = bounds.origin.y + svg_number_get (mask_shape->current[SHAPE_ATTR_Y], 1) * bounds.size.height;
+                  mask_clip.size.width = svg_number_get (mask_shape->current[SHAPE_ATTR_WIDTH], 1) * bounds.size.width;
+                  mask_clip.size.height = svg_number_get (mask_shape->current[SHAPE_ATTR_HEIGHT], 1) * bounds.size.height;
                   has_clip = TRUE;
                 }
             }
           else
             {
-              mask_clip.origin.x = svg_number_get (mask->shape->current[SHAPE_ATTR_X], context->viewport->size.width);
-              mask_clip.origin.y = svg_number_get (mask->shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
-              mask_clip.size.width = svg_number_get (mask->shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
-              mask_clip.size.height = svg_number_get (mask->shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
+              mask_clip.origin.x = svg_number_get (mask_shape->current[SHAPE_ATTR_X], context->viewport->size.width);
+              mask_clip.origin.y = svg_number_get (mask_shape->current[SHAPE_ATTR_Y], context->viewport->size.height);
+              mask_clip.size.width = svg_number_get (mask_shape->current[SHAPE_ATTR_WIDTH], context->viewport->size.width);
+              mask_clip.size.height = svg_number_get (mask_shape->current[SHAPE_ATTR_HEIGHT], context->viewport->size.height);
               has_clip = TRUE;
             }
 
@@ -16830,7 +16554,7 @@ push_group (Shape        *shape,
             gtk_snapshot_push_clip (context->snapshot, &mask_clip);
         }
 
-      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (svg_enum_get (mask_shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           graphene_rect_t bounds;
           GskTransform *transform = NULL;
@@ -16848,9 +16572,9 @@ push_group (Shape        *shape,
           gsk_transform_unref (transform);
         }
 
-      render_shape (mask->shape, context);
+      render_shape (mask_shape, context);
 
-      if (svg_enum_get (mask->shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
+      if (svg_enum_get (mask_shape->current[SHAPE_ATTR_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
         {
           pop_transform (context);
           gtk_snapshot_restore (context->snapshot);
@@ -16881,7 +16605,7 @@ pop_group (Shape        *shape,
   SvgValue *filter = shape->current[SHAPE_ATTR_FILTER];
   SvgValue *opacity = shape->current[SHAPE_ATTR_OPACITY];
   SvgValue *clip = shape->current[SHAPE_ATTR_CLIP_PATH];
-  SvgMask *mask = (SvgMask *) shape->current[SHAPE_ATTR_MASK];
+  SvgValue *mask = shape->current[SHAPE_ATTR_MASK];
   SvgValue *tf = shape->current[SHAPE_ATTR_TRANSFORM];
   SvgValue *blend = shape->current[SHAPE_ATTR_BLEND_MODE];
 
@@ -16907,7 +16631,8 @@ pop_group (Shape        *shape,
         gtk_snapshot_pop (context->snapshot);
     }
 
-  if (mask->kind != MASK_NONE && mask->shape != NULL &&
+  if (svg_mask_get_kind (mask) != MASK_NONE &&
+      svg_mask_get_shape (mask) != NULL &&
       context->op != CLIPPING)
     {
       gtk_snapshot_pop (context->snapshot);
@@ -17410,9 +17135,10 @@ paint_pattern (Shape                 *pattern,
   SvgValue *width = paint_server_get_current_value (pattern, SHAPE_ATTR_WIDTH, context);
   SvgValue *height = paint_server_get_current_value (pattern, SHAPE_ATTR_HEIGHT, context);
   SvgValue *tf = paint_server_get_current_value (pattern, SHAPE_ATTR_TRANSFORM, context);
-  SvgViewBox *vb = (SvgViewBox *) paint_server_get_current_value (pattern, SHAPE_ATTR_VIEW_BOX, context);
+  SvgValue *vb = paint_server_get_current_value (pattern, SHAPE_ATTR_VIEW_BOX, context);
   SvgContentFit *cf = (SvgContentFit *) paint_server_get_current_value (pattern, SHAPE_ATTR_CONTENT_FIT, context);
   GPtrArray *shapes;
+  graphene_rect_t view_box;
 
   if (svg_enum_get (bound_units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
     {
@@ -17433,13 +17159,13 @@ paint_pattern (Shape                 *pattern,
       child_bounds.size.height = svg_number_get (height, context->viewport->size.height);
     }
 
-  if (!vb->unset)
+  if (svg_view_box_get (vb, &view_box))
     {
       compute_viewport_transform (cf->is_none,
                                   cf->align_x,
                                   cf->align_y,
                                   cf->meet,
-                                  &vb->view_box,
+                                  &view_box,
                                   child_bounds.origin.x, child_bounds.origin.y,
                                   child_bounds.size.width, child_bounds.size.height,
                                   &sx, &sy, &tx, &ty);
@@ -17907,7 +17633,7 @@ paint_marker (Shape              *shape,
   graphene_point_t vertex;
   double angle;
   double x, y, width, height;
-  SvgViewBox *vb;
+  SvgValue *vb;
   SvgContentFit *cf;
   SvgValue *overflow;
   double sx, sy, tx, ty;
@@ -17956,7 +17682,7 @@ paint_marker (Shape              *shape,
       angle = orient->angle;
     }
 
-  vb = (SvgViewBox *) marker->current[SHAPE_ATTR_VIEW_BOX];
+  vb = marker->current[SHAPE_ATTR_VIEW_BOX];
   cf = (SvgContentFit *) marker->current[SHAPE_ATTR_CONTENT_FIT];
   overflow = marker->current[SHAPE_ATTR_OVERFLOW];
 
@@ -17969,16 +17695,16 @@ paint_marker (Shape              *shape,
   v = marker->current[SHAPE_ATTR_REF_X];
   if (svg_number_get_unit (v) == SVG_UNIT_PERCENTAGE)
     x = svg_number_get (v, width);
-  else if (!vb->unset)
-    x = svg_number_get (v, 100) / vb->view_box.size.width * width;
+  else if (svg_view_box_get (vb, &view_box))
+    x = svg_number_get (v, 100) / view_box.size.width * width;
   else
     x = svg_number_get (v, 100);
 
   v = marker->current[SHAPE_ATTR_REF_Y];
   if (svg_number_get_unit (v) == SVG_UNIT_PERCENTAGE)
     y = svg_number_get (v, height);
-  else if (!vb->unset)
-    y = svg_number_get (v, 100) / vb->view_box.size.height * height;
+  else if (svg_view_box_get (vb, &view_box))
+    y = svg_number_get (v, 100) / view_box.size.height * height;
   else
     y = svg_number_get (v, 100);
 
@@ -17987,10 +17713,8 @@ paint_marker (Shape              *shape,
   x *= scale;
   y *= scale;
 
-  if (vb->unset)
+  if (!svg_view_box_get (vb, &view_box))
     graphene_rect_init (&view_box, 0, 0, width, height);
-  else
-    view_box = vb->view_box;
 
   compute_viewport_transform (cf->is_none,
                               cf->align_x,
@@ -19286,16 +19010,17 @@ static double
 gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkSvg *self = GTK_SVG (paintable);
-  SvgViewBox *vb;
+  SvgValue *vb;
+  graphene_rect_t view_box;
 
   if (self->width > 0 && self->height > 0)
     return self->width / self->height;
 
-  vb = (SvgViewBox *) self->content->current[SHAPE_ATTR_VIEW_BOX];
-  if (!vb->unset)
+  vb = self->content->current[SHAPE_ATTR_VIEW_BOX];
+  if (svg_view_box_get (vb, &view_box))
     {
-      if (vb->view_box.size.width > 0 && vb->view_box.size.height > 0)
-        return vb->view_box.size.width / vb->view_box.size.height;
+      if (view_box.size.width > 0 && view_box.size.height > 0)
+        return view_box.size.width / view_box.size.height;
     }
 
   return 0;
@@ -20613,22 +20338,22 @@ svg_shape_attr_get_mask (Shape     *shape,
                          ShapeAttr  attr)
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), NULL);
-  SvgMask *mask;
-  const char *ref;
+  SvgValue *mask;
+  const char *id;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    mask = (SvgMask *) shape_ref_base_value (shape, NULL, attr, 0);
+    mask = shape_ref_base_value (shape, NULL, attr, 0);
   else
-    mask = (SvgMask *) shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
+    mask = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  if (mask->kind == MASK_NONE)
-    ref = NULL;
+  if (svg_mask_get_kind (mask) == MASK_NONE)
+    id = NULL;
   else
-    ref = mask->ref;
+    id = svg_mask_get_id (mask);
 
-  svg_value_unref ((SvgValue *) mask);
+  svg_value_unref (mask);
 
-  return ref;
+  return id;
 }
 
 gboolean
@@ -20637,18 +20362,16 @@ svg_shape_attr_get_viewbox (Shape           *shape,
                             graphene_rect_t *rect)
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), FALSE);
-  SvgViewBox *viewbox;
+  SvgValue *vb;
   gboolean result;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
-    viewbox = (SvgViewBox *) shape_ref_base_value (shape, NULL, attr, 0);
+    vb = shape_ref_base_value (shape, NULL, attr, 0);
   else
-    viewbox = (SvgViewBox *) shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
+    vb = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  result = !viewbox->unset;
-  graphene_rect_init_from_rect (rect, &viewbox->view_box);
-
-  svg_value_unref ((SvgValue *) viewbox);
+  result = svg_view_box_get (vb, rect);
+  svg_value_unref (vb);
 
   return result;
 }

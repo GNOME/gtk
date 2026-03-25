@@ -23,6 +23,8 @@
 #include "shape-editor.h"
 #include "path-paintable.h"
 #include "gtk/svg/gtksvgnumberprivate.h"
+#include "gtk/svg/gtksvgviewboxprivate.h"
+
 
 static void size_changed (PaintableEditor *self);
 static void paintable_editor_set_compat_classes (PaintableEditor *self,
