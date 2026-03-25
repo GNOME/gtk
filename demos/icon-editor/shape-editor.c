@@ -32,7 +32,7 @@
 #include "gtk/svg/gtksvgenumprivate.h"
 #include "gtk/svg/gtksvgtransformprivate.h"
 #include "gtk/svg/gtksvgpaintprivate.h"
-
+#include "gtk/svg/gtksvgfilterprivate.h"
 
 struct _ShapeEditor
 {

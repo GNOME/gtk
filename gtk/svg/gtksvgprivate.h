@@ -434,7 +434,6 @@ SvgValue *   svg_clip_new_path      (const char *string,
 SvgValue *   svg_clip_new_ref       (const char *string);
 SvgValue *   svg_mask_new_none      (void);
 SvgValue *   svg_mask_new_ref       (const char *string);
-SvgValue *   svg_filter_parse       (const char       *value);
 
 Shape *      svg_shape_add          (Shape            *parent,
                                      ShapeType         type);
