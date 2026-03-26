@@ -84,6 +84,16 @@ G_DEFINE_TYPE_WITH_CODE (GtkGstBin, gtk_gst_bin, GST_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GST_TYPE_URI_HANDLER, gtk_gst_uri_handler_iface_init))
 
 static void
+gtk_gst_bin_finalize (GObject *object)
+{
+  GtkGstBin *self = GTK_GST_BIN (object);
+
+  g_free (self->uri);
+
+  G_OBJECT_CLASS (gtk_gst_bin_parent_class)->finalize (object);
+}
+
+static void
 gtk_gst_bin_init (GtkGstBin *self)
 {
   GstPadTemplate *templ;
@@ -102,6 +112,10 @@ gtk_gst_bin_init (GtkGstBin *self)
 static void
 gtk_gst_bin_class_init (GtkGstBinClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_gst_bin_finalize;
+
   gst_element_class_set_static_metadata (GST_ELEMENT_CLASS (class),
                                          "GtkGstBin",
                                          "Source", "Handles GtkMediaFile sources",
