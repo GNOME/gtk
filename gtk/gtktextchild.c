@@ -181,6 +181,10 @@ _gtk_paintable_segment_new (GdkPaintable *paintable)
      for limited types and the additional space is not needed.  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#ifdef __MINGW64__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Walloc-size"
+#endif
   GtkTextLineSegment *seg;
   guint flags;
 
@@ -216,6 +220,9 @@ _gtk_paintable_segment_new (GdkPaintable *paintable)
   g_object_ref (paintable);
 
   return seg;
+#ifdef __MINGW64__
+#pragma clang diagnostic pop
+#endif
 #pragma GCC diagnostic pop
 }
 
@@ -296,6 +303,10 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
      for limited types and the additional space is not needed.  */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#ifdef __MINGW64__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Walloc-size"
+#endif
   GtkTextLineSegment *seg;
   GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
 
@@ -317,6 +328,9 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
   g_object_ref (anchor);
 
   return seg;
+#ifdef __MINGW64__
+#pragma clang diagnostic pop
+#endif
 #pragma GCC diagnostic pop
 }
 
