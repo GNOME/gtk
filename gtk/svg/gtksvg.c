@@ -56,6 +56,8 @@
 #include "gtksvgenumprivate.h"
 #include "gtksvgfilterprimitiverefprivate.h"
 #include "gtksvgtransformprivate.h"
+#include "gtksvgcolorprivate.h"
+#include "gtksvgpaintprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -829,21 +831,6 @@ parse_duration (const char *value,
     *f = (int64_t) round (v * G_TIME_SPAN_SECOND);
 
   return TRUE;
-}
-
-static gboolean
-rgba_parse (GdkRGBA    *rgba,
-            const char *value)
-{
-  char *copy, *p;
-  gboolean ret;
-
-  p = copy = g_strdup (value);
-  g_strstrip (p);
-  ret = gdk_rgba_parse (rgba, p);
-  g_free (copy);
-
-  return ret;
 }
 
 static void
@@ -2494,948 +2481,6 @@ state_match (uint64_t     states,
 }
 
 /* }}} */
-/* {{{ Color */
-
-typedef enum
-{
-  COLOR_CURRENT,
-  COLOR_SYMBOLIC,
-  COLOR_PLAIN,
-} ColorKind;
-
-typedef struct
-{
-  SvgValue base;
-  ColorKind kind;
-  GtkSymbolicColor symbolic;
-  GdkColor color;
-} SvgColor;
-
-static gboolean
-svg_color_equal (const SvgValue *value0,
-                 const SvgValue *value1)
-{
-  const SvgColor *c0 = (const SvgColor *) value0;
-  const SvgColor *c1 = (const SvgColor *) value1;
-
-  if (c0->kind != c1->kind)
-    return FALSE;
-
-  switch (c0->kind)
-    {
-    case COLOR_CURRENT:
-      return TRUE;
-    case COLOR_SYMBOLIC:
-      return c0->symbolic == c1->symbolic;
-    case COLOR_PLAIN:
-      return gdk_color_equal (&c0->color, &c1->color);
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *svg_color_interpolate (const    SvgValue *v0,
-                                        const    SvgValue *v1,
-                                        SvgComputeContext *context,
-                                        double             t);
-static SvgValue *svg_color_accumulate  (const SvgValue    *v0,
-                                        const SvgValue    *v1,
-                                        SvgComputeContext *context,
-                                        int                n);
-static void      svg_color_print       (const SvgValue    *v0,
-                                        GString           *string);
-static double    svg_color_distance    (const SvgValue    *v0,
-                                        const SvgValue    *v1);
-static SvgValue * svg_color_resolve    (const SvgValue    *value,
-                                        ShapeAttr          attr,
-                                        unsigned int       idx,
-                                        Shape             *shape,
-                                        SvgComputeContext *context);
-
-static void
-svg_color_free (SvgValue *value)
-{
-  SvgColor *color = (SvgColor *) value;
-  if (color->kind == COLOR_PLAIN)
-    gdk_color_finish (&color->color);
-  g_free (color);
-}
-
-static const SvgValueClass SVG_COLOR_CLASS = {
-  "SvgColor",
-  svg_color_free,
-  svg_color_equal,
-  svg_color_interpolate,
-  svg_color_accumulate,
-  svg_color_print,
-  svg_color_distance,
-  svg_color_resolve,
-};
-
-static SvgColor static_color_values[] = {
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_CURRENT, },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_PLAIN, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } },
-  { { &SVG_COLOR_CLASS, 0 }, .kind = COLOR_PLAIN, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-};
-
-static SvgValue *
-svg_color_new_symbolic (GtkSymbolicColor symbolic)
-{
-  return (SvgValue *) &static_color_values[symbolic];
-}
-
-static SvgValue *
-svg_color_new_current (void)
-{
-  return (SvgValue *) &static_color_values[5];
-}
-
-static SvgValue *
-svg_color_new_black (void)
-{
-  return (SvgValue *) &static_color_values[6];
-}
-
-static SvgValue *
-svg_color_new_transparent (void)
-{
-  return (SvgValue *) &static_color_values[7];
-}
-
-static SvgValue *
-svg_color_new_color (const GdkColor *color)
-{
-  SvgColor *res;
-
-  if (gdk_color_equal (&static_color_values[6].color, color))
-    return (SvgValue *) &static_color_values[6];
-
-  res = (SvgColor *) svg_value_alloc (&SVG_COLOR_CLASS, sizeof (SvgColor));
-  res->kind = COLOR_PLAIN;
-  gdk_color_init_copy (&res->color, color);
-
-  return (SvgValue *) res;
-}
-
-static SvgValue *
-svg_color_new_rgba (const GdkRGBA *rgba)
-{
-  GdkColor color;
-  SvgValue *result;
-
-  gdk_color_init_from_rgba (&color, rgba);
-  result = svg_color_new_color (&color);
-  gdk_color_finish (&color);
-
-  return result;
-}
-
-static gboolean
-svg_color_is_current (SvgValue *value)
-{
-   return ((SvgColor *) value)->kind == COLOR_CURRENT;
-}
-
-static const char *
-symbolic_system_color[] = {
-  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "SymbolicForeground",
-  [GTK_SYMBOLIC_COLOR_ERROR] = "SymbolicError",
-  [GTK_SYMBOLIC_COLOR_WARNING] = "SymbolicWarning",
-  [GTK_SYMBOLIC_COLOR_SUCCESS] = "SymbolicSuccess",
-  [GTK_SYMBOLIC_COLOR_ACCENT] = "SymbolicAccent",
-};
-
-static SvgValue *
-svg_color_parse (GtkCssParser *parser)
-{
-  GdkRGBA rgba;
-
-  if (gtk_css_parser_try_ident (parser, "currentColor"))
-    return svg_color_new_current ();
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (symbolic_system_color); i++)
-    if (gtk_css_parser_try_ident (parser, symbolic_system_color[i]))
-      return svg_color_new_symbolic (i);
-
-  if (gdk_rgba_parser_parse (parser, &rgba))
-    return svg_color_new_rgba (&rgba);
-
-  /* gdk_rgba_parser_parse already throws an error */
-  return NULL;
-}
-
-static void
-svg_color_print (const SvgValue *value,
-                 GString        *s)
-{
-  const SvgColor *color = (const SvgColor *) value;
-
-  switch (color->kind)
-    {
-    case COLOR_CURRENT:
-      g_string_append (s, "currentColor");
-      break;
-    case COLOR_SYMBOLIC:
-      g_string_append (s, symbolic_system_color[color->symbolic]);
-      break;
-    case COLOR_PLAIN:
-      {
-        GdkColor c;
-
-        /* Don't use gdk_color_print here until we parse
-         * modern css color syntax.
-         */
-        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &color->color);
-        gdk_rgba_print ((const GdkRGBA *) c.values, s);
-        gdk_color_finish (&c);
-      }
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *
-svg_color_resolve (const SvgValue    *value,
-                   ShapeAttr          attr,
-                   unsigned int       idx,
-                   Shape             *shape,
-                   SvgComputeContext *context)
-{
-  SvgColor *color = (SvgColor *) value;
-
-  switch (color->kind)
-    {
-    case COLOR_CURRENT:
-      if (idx > 0)
-        return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
-      else if (context->parent)
-        return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
-      else
-        return svg_color_new_black ();
-    case COLOR_SYMBOLIC:
-      if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
-        {
-          if (color->symbolic < context->n_colors)
-            return svg_color_new_rgba (&context->colors[color->symbolic]);
-          else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
-            return svg_color_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
-          else
-            return svg_color_new_black ();
-        }
-      else
-        return svg_color_new_transparent ();
-    case COLOR_PLAIN:
-      return svg_value_ref ((SvgValue *) value);
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *
-svg_color_interpolate (const SvgValue    *value0,
-                       const SvgValue    *value1,
-                       SvgComputeContext *context,
-                       double             t)
-{
-  const SvgColor *c0 = (const SvgColor *) value0;
-  const SvgColor *c1 = (const SvgColor *) value1;
-
-  if (c0->kind == c1->kind &&
-      c0->kind == COLOR_PLAIN)
-    {
-      GdkColor c;
-      SvgValue *res;
-
-      lerp_color (t, &c0->color, &c1->color, context->interpolation, &c);
-      res = svg_color_new_color (&c);
-      gdk_color_finish (&c);
-
-      return res;
-    }
-
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_color_accumulate (const SvgValue    *value0,
-                      const SvgValue    *value1,
-                      SvgComputeContext *context,
-                      int                n)
-{
-  const SvgColor *c0 = (const SvgColor *) value0;
-  const SvgColor *c1 = (const SvgColor *) value1;
-
-  if (c0->kind != c1->kind)
-    return NULL;
-
-  if (c0->kind == COLOR_PLAIN)
-    {
-      GdkColor c;
-      SvgValue *res;
-
-      accumulate_color (&c0->color, &c1->color, n, context->interpolation, &c);
-      res = svg_color_new_color (&c);
-      gdk_color_finish (&c);
-
-      return res;
-    }
-
-  return svg_value_ref ((SvgValue *) value0);
-}
-
-static double
-svg_color_distance (const SvgValue *v0,
-                    const SvgValue *v1)
-{
-  const SvgColor *c0 = (const SvgColor *) v0;
-  const SvgColor *c1 = (const SvgColor *) v1;
-
-  if (c0->kind != c1->kind)
-    {
-      g_warning ("Can't measure distance between "
-                 "different kinds of color");
-      return 1;
-    }
-
-  if (c0->kind == COLOR_CURRENT)
-    return 0;
-  else if (c0->kind == COLOR_SYMBOLIC)
-    return 1;
-  else
-    return color_distance (&c0->color, &c1->color);
-}
-
-/* }}} */
-/* {{{ Paint */
-
-static gboolean
-paint_is_server (PaintKind kind)
-{
-  return kind == PAINT_SERVER ||
-         kind == PAINT_SERVER_WITH_FALLBACK ||
-         kind == PAINT_SERVER_WITH_CURRENT_COLOR;
-}
-
-typedef struct
-{
-  SvgValue base;
-  PaintKind kind;
-  union {
-    GtkSymbolicColor symbolic;
-    GdkColor color;
-    struct {
-      char *ref;
-      Shape *shape;
-      GdkColor fallback;
-    } server;
-  };
-} SvgPaint;
-
-static void
-svg_paint_free (SvgValue *value)
-{
-  SvgPaint *paint = (SvgPaint *) value;
-
-  if (paint->kind == PAINT_COLOR)
-    {
-      gdk_color_finish (&paint->color);
-    }
-  else if (paint->kind == PAINT_SERVER ||
-           paint->kind == PAINT_SERVER_WITH_FALLBACK)
-    {
-      g_free (paint->server.ref);
-      gdk_color_finish (&paint->server.fallback);
-    }
-
-  g_free (value);
-}
-
-static gboolean
-svg_paint_equal (const SvgValue *value0,
-                 const SvgValue *value1)
-{
-  const SvgPaint *paint0 = (const SvgPaint *) value0;
-  const SvgPaint *paint1 = (const SvgPaint *) value1;
-
-  if (paint0->kind != paint1->kind)
-    return FALSE;
-
-  switch (paint0->kind)
-    {
-    case PAINT_NONE:
-    case PAINT_CONTEXT_FILL:
-    case PAINT_CONTEXT_STROKE:
-    case PAINT_CURRENT_COLOR:
-      return TRUE;
-    case PAINT_SYMBOLIC:
-      return paint0->symbolic == paint1->symbolic;
-    case PAINT_COLOR:
-      return gdk_color_equal (&paint0->color, &paint1->color);
-    case PAINT_SERVER:
-    case PAINT_SERVER_WITH_CURRENT_COLOR:
-      return paint0->server.shape == paint1->server.shape &&
-             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0;
-    case PAINT_SERVER_WITH_FALLBACK:
-      return paint0->server.shape == paint1->server.shape &&
-             g_strcmp0 (paint0->server.ref, paint1->server.ref) == 0 &&
-             gdk_color_equal (&paint0->server.fallback, &paint1->server.fallback);
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static SvgValue *svg_paint_interpolate (const SvgValue    *v0,
-                                        const SvgValue    *v1,
-                                        SvgComputeContext *context,
-                                        double             t);
-static SvgValue *svg_paint_accumulate  (const SvgValue    *v0,
-                                        const SvgValue    *v1,
-                                        SvgComputeContext *context,
-                                        int                n);
-static void      svg_paint_print       (const SvgValue    *v0,
-                                        GString           *string);
-static double    svg_paint_distance    (const SvgValue    *v0,
-                                        const SvgValue    *v1);
-static SvgValue * svg_paint_resolve    (const SvgValue    *value,
-                                        ShapeAttr          attr,
-                                        unsigned int       idx,
-                                        Shape             *shape,
-                                        SvgComputeContext *context);
-
-static const SvgValueClass SVG_PAINT_CLASS = {
-  "SvgPaint",
-  svg_paint_free,
-  svg_paint_equal,
-  svg_paint_interpolate,
-  svg_paint_accumulate,
-  svg_paint_print,
-  svg_paint_distance,
-  svg_paint_resolve,
-};
-
-static const char *symbolic_colors[] = {
-  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "foreground",
-  [GTK_SYMBOLIC_COLOR_ERROR] = "error",
-  [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
-  [GTK_SYMBOLIC_COLOR_SUCCESS] = "success",
-  [GTK_SYMBOLIC_COLOR_ACCENT] = "accent",
-};
-
-static const char *symbolic_fallbacks[] = {
-  [GTK_SYMBOLIC_COLOR_FOREGROUND] = "rgb(0,0,0)",
-  [GTK_SYMBOLIC_COLOR_ERROR] = "rgb(204,0,0)",
-  [GTK_SYMBOLIC_COLOR_WARNING] = "rgb(245,121,0)",
-  [GTK_SYMBOLIC_COLOR_SUCCESS] = "rgb(51,209,122)",
-  [GTK_SYMBOLIC_COLOR_ACCENT] = "rgb(0,34,255)",
-};
-
-static gboolean
-parse_symbolic_color (const char       *value,
-                      GtkSymbolicColor *symbolic)
-{
-  unsigned int u = 0;
-
-  if (!parse_enum (value, symbolic_colors, G_N_ELEMENTS (symbolic_colors), &u))
-    return FALSE;
-
-  *symbolic = u;
-  return TRUE;
-}
-
-static SvgValue *
-svg_paint_new_simple (PaintKind kind)
-{
-  static SvgPaint paint_values[] = {
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_NONE,           .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_FILL,   .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CONTEXT_STROKE, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_CURRENT_COLOR,  .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-  };
-
-  g_assert (kind < G_N_ELEMENTS (paint_values));
-
-  return (SvgValue *) &paint_values[kind];
-}
-
-SvgValue *
-svg_paint_new_none (void)
-{
-  return svg_paint_new_simple (PAINT_NONE);
-}
-
-SvgValue *
-svg_paint_new_symbolic (GtkSymbolicColor symbolic)
-{
-  static SvgPaint sym[] = {
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_FOREGROUND },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ERROR },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_WARNING },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_SUCCESS },
-    { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_SYMBOLIC, .symbolic = GTK_SYMBOLIC_COLOR_ACCENT },
-  };
-
-  return (SvgValue *) &sym[symbolic];
-}
-
-static SvgPaint default_color[] = {
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 1 } },
-  { { &SVG_PAINT_CLASS, 0 }, .kind = PAINT_COLOR, .color = { .color_state = GDK_COLOR_STATE_SRGB, .r = 0, .g = 0, .b = 0, .a = 0 } },
-};
-
-static SvgValue *
-svg_paint_new_color (const GdkColor *color)
-{
-  SvgValue *value;
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (default_color); i++)
-    {
-      if (gdk_color_equal (color, &default_color[i].color))
-        return (SvgValue *) &default_color[i];
-    }
-
-  value = svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
-  ((SvgPaint *) value)->kind = PAINT_COLOR;
-  gdk_color_init_copy (&((SvgPaint *) value)->color, color);
-
-  return value;
-}
-
-SvgValue *
-svg_paint_new_rgba (const GdkRGBA *rgba)
-{
-  GdkColor c;
-  SvgValue *ret;
-
-  gdk_color_init_from_rgba (&c, rgba);
-  ret = svg_paint_new_color (&c);
-  gdk_color_finish (&c);
-
-  return ret;
-}
-
-static SvgValue *
-svg_paint_new_black (void)
-{
-  return (SvgValue *) &default_color[0];
-}
-
-static SvgValue *
-svg_paint_new_transparent (void)
-{
-  return (SvgValue *) &default_color[1];
-}
-
-static SvgValue *
-svg_paint_new_server (const char *ref)
-{
-  SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
-                                                  sizeof (SvgPaint));
-  paint->kind = PAINT_SERVER;
-
-  paint->server.fallback = GDK_COLOR_SRGB (0, 0, 0, 0);
-  paint->server.shape = NULL;
-  paint->server.ref = g_strdup (ref);
-
-  return (SvgValue *) paint;
-}
-
-static SvgValue *
-svg_paint_new_server_with_fallback (const char     *ref,
-                                    const GdkColor *fallback)
-{
-  SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
-                                                  sizeof (SvgPaint));
-  paint->kind = PAINT_SERVER_WITH_FALLBACK;
-  gdk_color_init_copy (&paint->server.fallback, fallback);
-  paint->server.shape = NULL;
-  paint->server.ref = g_strdup (ref);
-
-  return (SvgValue *) paint;
-}
-
-static SvgValue *
-svg_paint_new_server_with_current_color (const char *ref)
-{
-  SvgPaint *paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS,
-                                                  sizeof (SvgPaint));
-  paint->kind = PAINT_SERVER_WITH_CURRENT_COLOR;
-  paint->server.fallback = GDK_COLOR_SRGB (0, 0, 0, 1);
-  paint->server.shape = NULL;
-  paint->server.ref = g_strdup (ref);
-
-  return (SvgValue *) paint;
-}
-
-static SvgValue *
-svg_paint_parse (GtkCssParser *parser)
-{
-  GdkRGBA color;
-
-  if (gtk_css_parser_try_ident (parser, "none"))
-    return svg_paint_new_simple (PAINT_NONE);
-
-  for (unsigned int i = 0; i < G_N_ELEMENTS (symbolic_system_color); i++)
-    if (gtk_css_parser_try_ident (parser, symbolic_system_color[i]))
-      return svg_paint_new_symbolic (i);
-
-  if (gtk_css_parser_try_ident (parser, "context-fill"))
-    return svg_paint_new_simple (PAINT_CONTEXT_FILL);
-
-  if (gtk_css_parser_try_ident (parser, "context-stroke"))
-    return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
-
-  if (gtk_css_parser_try_ident (parser, "currentColor"))
-    return svg_paint_new_simple (PAINT_CURRENT_COLOR);
-
-  if (gtk_css_parser_has_url (parser))
-    {
-      char *url;
-      SvgValue *paint = NULL;
-
-      url = gtk_css_parser_consume_url (parser);
-      if (url)
-        {
-          const char *ref;
-          GdkRGBA fallback = GDK_RGBA_TRANSPARENT;
-
-          if (url[0] == '#')
-            ref = url + 1;
-          else
-            ref = url;
-
-          gtk_css_parser_skip_whitespace (parser);
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-            {
-              paint = svg_paint_new_server (ref);
-            }
-          else if (gtk_css_parser_try_ident (parser, "currentColor"))
-            {
-              paint = svg_paint_new_server_with_current_color (ref);
-            }
-          else if (gtk_css_parser_try_ident (parser, "none") ||
-                   gdk_rgba_parser_parse (parser, &fallback))
-            {
-              GdkColor c;
-              gdk_color_init_from_rgba (&c, &fallback);
-              paint = svg_paint_new_server_with_fallback (ref, &c);
-              gdk_color_finish (&c);
-            }
-
-          g_free (url);
-        }
-
-      /* gdk_rgba_parser_parse already throws an error */
-      return paint;
-    }
-
-  if (gdk_rgba_parser_parse (parser, &color))
-    return svg_paint_new_rgba (&color);
-
-  /* gdk_rgba_parser_parse already throws an error */
-  return NULL;
-}
-
-static SvgValue *
-svg_paint_parse_gpa (const char *value)
-{
-  GtkSymbolicColor symbolic;
-  GdkRGBA rgba;
-
-  if (match_str (value, "none"))
-    return svg_paint_new_none ();
-  else if (match_str (value, "context-fill"))
-    return svg_paint_new_simple (PAINT_CONTEXT_FILL);
-  else if (match_str (value, "context-stroke"))
-    return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
-  else if (match_str (value, "currentColor"))
-    return svg_paint_new_simple (PAINT_CURRENT_COLOR);
-  else if (parse_symbolic_color (value, &symbolic))
-    return svg_paint_new_symbolic (symbolic);
-  else if (rgba_parse (&rgba, value))
-    return svg_paint_new_rgba (&rgba);
-
-  return NULL;
-}
-
-static void
-svg_paint_print (const SvgValue *value,
-                 GString        *s)
-{
-  const SvgPaint *paint = (const SvgPaint *) value;
-
-  switch (paint->kind)
-    {
-    case PAINT_NONE:
-      g_string_append (s, "none");
-      break;
-
-    case PAINT_CONTEXT_FILL:
-      g_string_append (s, "context-fill");
-      break;
-
-    case PAINT_CONTEXT_STROKE:
-      g_string_append (s, "context-stroke");
-      break;
-
-    case PAINT_CURRENT_COLOR:
-      g_string_append (s, "currentColor");
-      break;
-
-    case PAINT_COLOR:
-      {
-        GdkColor c;
-        /* Don't use gdk_color_print here until we parse
-         * modern css color syntax.
-         */
-        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->color);
-        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
-        gdk_color_finish (&c);
-      }
-      break;
-
-    case PAINT_SYMBOLIC:
-      g_string_append_printf (s, "url(#gpa:%s) %s",
-                              symbolic_colors[paint->symbolic],
-                              symbolic_fallbacks[paint->symbolic]);
-      break;
-
-    case PAINT_SERVER:
-      {
-        GtkSymbolicColor symbolic;
-
-        g_string_append_printf (s, "url(#%s)", paint->server.ref);
-        if (g_str_has_prefix (paint->server.ref, "gpa:") &&
-            parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
-          {
-            g_string_append_c (s, ' ');
-            g_string_append (s, symbolic_fallbacks[symbolic]);
-          }
-        }
-      break;
-
-    case PAINT_SERVER_WITH_FALLBACK:
-      {
-        GdkColor c;
-
-        g_string_append_printf (s, "url(#%s) ", paint->server.ref);
-
-        /* Don't use gdk_color_print here until we parse
-         * modern css color syntax.
-         */
-        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->server.fallback);
-        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
-        gdk_color_finish (&c);
-      }
-      break;
-
-    case PAINT_SERVER_WITH_CURRENT_COLOR:
-      g_string_append_printf (s, "url(#%s) currentColor", paint->server.ref);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static void
-svg_paint_print_gpa (const SvgValue *value,
-                     GString        *s)
-{
-  const SvgPaint *paint = (const SvgPaint *) value;
-
-  switch (paint->kind)
-    {
-    case PAINT_CONTEXT_FILL:
-      g_string_append (s, "context-fill");
-      break;
-
-    case PAINT_CONTEXT_STROKE:
-      g_string_append (s, "context-stroke");
-      break;
-
-    case PAINT_CURRENT_COLOR:
-      g_string_append (s, "currentColor");
-      break;
-
-    case PAINT_COLOR:
-      {
-        GdkColor c;
-        /* Don't use gdk_color_print here until we parse
-         * modern css color syntax.
-         */
-        gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, &paint->color);
-        gdk_rgba_print ((const GdkRGBA *) &c.values, s);
-        gdk_color_finish (&c);
-      }
-      break;
-
-    case PAINT_SYMBOLIC:
-      g_string_append_printf (s, "%s", symbolic_colors[paint->symbolic]);
-      break;
-
-    case PAINT_NONE:
-    case PAINT_SERVER:
-    case PAINT_SERVER_WITH_FALLBACK:
-    case PAINT_SERVER_WITH_CURRENT_COLOR:
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static gboolean
-svg_paint_is_symbolic (const SvgPaint   *paint,
-                       GtkSymbolicColor *symbolic)
-{
-  if (paint->kind == PAINT_SYMBOLIC)
-    {
-      *symbolic = paint->symbolic;
-      return TRUE;
-    }
-  else if (paint_is_server (paint->kind))
-    {
-      if (g_str_has_prefix (paint->server.ref, "gpa:") &&
-          parse_symbolic_color (paint->server.ref + strlen ("gpa:"), symbolic))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-static SvgValue *
-svg_paint_resolve (const SvgValue    *value,
-                   ShapeAttr          attr,
-                   unsigned int       idx,
-                   Shape             *shape,
-                   SvgComputeContext *context)
-{
-  const SvgPaint *paint = (const SvgPaint *) value;
-  GtkSymbolicColor symbolic;
-
-  g_assert (value->class == &SVG_PAINT_CLASS);
-
-  if (paint->kind == PAINT_CURRENT_COLOR)
-    {
-      SvgColor *color = (SvgColor *) shape->current[SHAPE_ATTR_COLOR];
-      if (color->kind == COLOR_PLAIN)
-        return svg_paint_new_color (&color->color);
-      else if (color->kind == COLOR_SYMBOLIC)
-        return svg_paint_new_symbolic (color->symbolic);
-      else if (color->kind == COLOR_CURRENT)
-        return svg_paint_new_black ();
-    }
-
-  if ((context->svg->features & GTK_SVG_EXTENSIONS) != 0)
-    {
-      if (svg_paint_is_symbolic (paint, &symbolic))
-        {
-          if (symbolic < context->n_colors)
-            return svg_paint_new_rgba (&context->colors[symbolic]);
-          else if (GTK_SYMBOLIC_COLOR_FOREGROUND < context->n_colors)
-            return svg_paint_new_rgba (&context->colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
-          else
-            return svg_paint_new_black ();
-        }
-    }
-  else
-    {
-      if (paint->kind == PAINT_SYMBOLIC)
-        return svg_paint_new_transparent ();
-    }
-
-  if (paint->kind == PAINT_SERVER_WITH_CURRENT_COLOR)
-    {
-      SvgColor *color = (SvgColor *) shape->current[SHAPE_ATTR_COLOR];
-      return svg_paint_new_server_with_fallback (paint->server.ref, &color->color);
-    }
-
-  return svg_value_ref ((SvgValue *) value);
-}
-
-static SvgValue *
-svg_paint_interpolate (const SvgValue    *value0,
-                       const SvgValue    *value1,
-                       SvgComputeContext *context,
-                       double             t)
-{
-  const SvgPaint *p0 = (const SvgPaint *) value0;
-  const SvgPaint *p1 = (const SvgPaint *) value1;
-
-  if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
-    {
-      GdkColor c;
-      SvgValue *ret;
-
-      lerp_color (t, &p0->color, &p1->color, context->interpolation, &c);
-      ret = svg_paint_new_color (&c);
-      gdk_color_finish (&c);
-
-      return ret;
-    }
-
-  if (t < 0.5)
-    return svg_value_ref ((SvgValue *) value0);
-  else
-    return svg_value_ref ((SvgValue *) value1);
-}
-
-static SvgValue *
-svg_paint_accumulate (const SvgValue    *value0,
-                      const SvgValue    *value1,
-                      SvgComputeContext *context,
-                      int                n)
-{
-  const SvgPaint *p0 = (const SvgPaint *) value0;
-  const SvgPaint *p1 = (const SvgPaint *) value1;
-  SvgPaint *paint;
-
-  if (p0->kind != p1->kind)
-    return NULL;
-
-  if (p0->kind == PAINT_COLOR)
-    {
-      paint = (SvgPaint *) svg_value_alloc (&SVG_PAINT_CLASS, sizeof (SvgPaint));
-
-      paint->kind = PAINT_COLOR;
-      accumulate_color (&p0->color, &p1->color, n, context->interpolation, &paint->color);
-
-      return (SvgValue *) paint;
-    }
-
-  return svg_value_ref ((SvgValue *) value0);
-}
-
-static double
-svg_paint_distance (const SvgValue *v0,
-                    const SvgValue *v1)
-{
-  const SvgPaint *p0 = (const SvgPaint *) v0;
-  const SvgPaint *p1 = (const SvgPaint *) v1;
-
-  if (p0->kind == p1->kind)
-    {
-      if (p0->kind == PAINT_COLOR)
-        return color_distance (&p0->color, &p1->color);
-      else if (p0->kind == PAINT_NONE ||
-               p0->kind == PAINT_CONTEXT_FILL ||
-               p0->kind == PAINT_CONTEXT_STROKE ||
-               p0->kind == PAINT_CURRENT_COLOR)
-        return 0;
-    }
-
-  g_warning ("Can't measure distance between these paint values");
-  return 1;
-}
-
-/* }}} */
 /* {{{ Filter functions */
 
 typedef enum
@@ -3879,7 +2924,7 @@ svg_filter_print (const SvgValue *value,
       else if (f->kind == FILTER_DROPSHADOW)
         {
           g_string_append (s, "drop-shadow(");
-          if (!svg_color_is_current (f->dropshadow.color))
+          if (svg_color_get_kind (f->dropshadow.color) != COLOR_CURRENT)
             {
               svg_value_print (f->dropshadow.color, s);
               g_string_append (s, ", ");
@@ -13636,8 +12681,8 @@ parse_value_animation_attrs (Animation            *a,
         from = svg_number_new_full (svg_number_get_unit (by), 0);
       else if (svg_value_is_transform (by))
         from = svg_transform_new_none ();
-      else if (by->class == &SVG_PAINT_CLASS &&
-               ((SvgPaint *) by)->kind == PAINT_COLOR)
+      else if (svg_value_is_paint (by) &&
+               svg_paint_get_kind (by) == PAINT_COLOR)
         from = svg_paint_new_transparent ();
       else
         {
@@ -15612,32 +14657,34 @@ resolve_paint_ref (SvgValue   *value,
                    Shape      *shape,
                    ParserData *data)
 {
-  SvgPaint *paint = (SvgPaint *) value;
+  SvgValue *paint = value;
 
-  if (paint_is_server (paint->kind) && paint->server.shape == NULL)
+  if (paint_is_server (svg_paint_get_kind (paint)) &&
+      svg_paint_get_server_shape (paint) == NULL)
     {
-      Shape *target = g_hash_table_lookup (data->shapes, paint->server.ref);
+      const char *ref = svg_paint_get_server_ref (paint);
+      Shape *target = g_hash_table_lookup (data->shapes, ref);
 
       if (!target)
         {
           GtkSymbolicColor symbolic;
 
           if ((data->svg->features & GTK_SVG_EXTENSIONS) != 0 &&
-              g_str_has_prefix (paint->server.ref, "gpa:") &&
-              parse_symbolic_color (paint->server.ref + strlen ("gpa:"), &symbolic))
+              g_str_has_prefix (ref, "gpa:") &&
+              parse_symbolic_color (ref + strlen ("gpa:"), &symbolic))
             return; /* Handled later */
 
-          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", paint->server.ref);
+          gtk_svg_invalid_reference (data->svg, "No shape with ID %s (resolving fill or stroke)", ref);
         }
       else if (target->type != SHAPE_LINEAR_GRADIENT &&
                target->type != SHAPE_RADIAL_GRADIENT &&
                target->type != SHAPE_PATTERN)
         {
-          gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", paint->server.ref);
+          gtk_svg_invalid_reference (data->svg, "Shape with ID %s not a paint server (resolving fill or stroke)", ref);
         }
       else
         {
-          paint->server.shape = target;
+          svg_paint_set_server_shape (paint, target);
           add_dependency_to_common_ancestor (shape, target);
         }
     }
@@ -16743,36 +15790,36 @@ apply_styles_to_shape (Shape      *shape,
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_COLOR))
     {
-      SvgColor *color = (SvgColor *) shape->base[SHAPE_ATTR_COLOR];
+      SvgValue *color = shape->base[SHAPE_ATTR_COLOR];
 
       if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
-          color->kind == COLOR_SYMBOLIC)
+          svg_color_get_kind (color) == COLOR_SYMBOLIC)
         {
           SvgValue *value = svg_color_new_black ();
           shape_set_base_value (shape, SHAPE_ATTR_COLOR, 0, value);
           svg_value_unref (value);
-          color = (SvgColor *) shape->base[SHAPE_ATTR_COLOR];
+          color = shape->base[SHAPE_ATTR_COLOR];
         }
 
-      if (color->kind == COLOR_SYMBOLIC)
-        data->svg->used |= BIT (color->symbolic + 1);
+      if (svg_color_get_kind (color) == COLOR_SYMBOLIC)
+        data->svg->used |= BIT (svg_color_get_symbolic (color) + 1);
     }
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_FILL))
     {
-      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
+      SvgValue *paint = shape->base[SHAPE_ATTR_FILL];
       GtkSymbolicColor symbolic;
 
       if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
-          paint->kind == PAINT_SYMBOLIC)
+          svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
           shape_set_base_value (shape, SHAPE_ATTR_FILL, 0, value);
           svg_value_unref (value);
-          paint = (SvgPaint *) shape->base[SHAPE_ATTR_FILL];
+          paint = shape->base[SHAPE_ATTR_FILL];
         }
 
-      if (paint_is_server (paint->kind))
+      if (paint_is_server (svg_paint_get_kind (paint)))
         g_hash_table_add (data->pending_refs, shape);
 
       if (svg_paint_is_symbolic (paint, &symbolic))
@@ -16781,25 +15828,25 @@ apply_styles_to_shape (Shape      *shape,
 
   if (_gtk_bitmask_get (shape->attrs, SHAPE_ATTR_STROKE))
     {
-      SvgPaint *paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
+      SvgValue *paint = shape->base[SHAPE_ATTR_STROKE];
       GtkSymbolicColor symbolic;
 
       if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
-          paint->kind == PAINT_SYMBOLIC)
+          svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
           shape_set_base_value (shape, SHAPE_ATTR_STROKE, 0, value);
           svg_value_unref (value);
-          paint = (SvgPaint *) shape->base[SHAPE_ATTR_STROKE];
+          paint = shape->base[SHAPE_ATTR_STROKE];
         }
 
-      if (paint_is_server (paint->kind))
+      if (paint_is_server (svg_paint_get_kind (paint)))
         g_hash_table_add (data->pending_refs, shape);
 
       if (svg_paint_is_symbolic (paint, &symbolic))
         data->svg->used |= BIT (symbolic + 1);
 
-      if (paint->kind != PAINT_NONE)
+      if (svg_paint_get_kind (paint) != PAINT_NONE)
         data->svg->used |= GTK_SVG_USES_STROKES;
     }
 }
@@ -18146,7 +17193,7 @@ static void render_shape (Shape        *shape,
                           PaintContext *context);
 static void fill_shape   (Shape        *shape,
                           GskPath      *path,
-                          SvgPaint     *paint,
+                          SvgValue     *paint,
                           double        opacity,
                           PaintContext *context);
 
@@ -18269,17 +17316,17 @@ get_input_for_ref (SvgValue              *in,
       {
         GskPath *path;
         GskPathBuilder *builder;
-        SvgPaint *paint;
+        SvgValue *paint;
         double opacity;
 
         if (svg_filter_primitive_ref_get_type (in))
           {
-            paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+            paint = shape->current[SHAPE_ATTR_FILL];
             opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
           }
         else
           {
-            paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
+            paint = shape->current[SHAPE_ATTR_STROKE];
             opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
           }
 
@@ -18654,11 +17701,11 @@ apply_filter_tree (Shape         *shape,
 
         case FE_FLOOD:
           {
-            SvgColor *color = (SvgColor *) filter_get_current_value (f, SHAPE_ATTR_FE_COLOR);
+            SvgValue *color = filter_get_current_value (f, SHAPE_ATTR_FE_COLOR);
             SvgValue *alpha = filter_get_current_value (f, SHAPE_ATTR_FE_OPACITY);
             GdkColor c;
 
-            gdk_color_init_copy (&c, &color->color);
+            gdk_color_init_copy (&c, svg_color_get_color (color));
             c.alpha *= svg_number_get (alpha, 1);
             result = gsk_color_node_new2 (&c, &subregion);
             gdk_color_finish (&c);
@@ -18913,7 +17960,7 @@ apply_filter_tree (Shape         *shape,
             FilterResult *in;
             double std_dev;
             double dx, dy;
-            SvgColor *color;
+            SvgValue *color;
             SvgValue *alpha;
             GskShadowEntry shadow;
             SvgValue *num;
@@ -18937,10 +17984,10 @@ apply_filter_tree (Shape         *shape,
                 dy = svg_number_get (filter_get_current_value (f, SHAPE_ATTR_FE_DY), 1);
               }
 
-            color = (SvgColor *) filter_get_current_value (f, SHAPE_ATTR_FE_COLOR);
+            color = filter_get_current_value (f, SHAPE_ATTR_FE_COLOR);
             alpha = filter_get_current_value (f, SHAPE_ATTR_FE_OPACITY);
 
-            gdk_color_init_copy (&shadow.color, &color->color);
+            gdk_color_init_copy (&shadow.color, svg_color_get_color (color));
             shadow.color.alpha *= svg_number_get (alpha, 1);
             shadow.offset.x = dx;
             shadow.offset.y = dy;
@@ -19137,7 +18184,7 @@ apply_filter_functions (SvgValue      *filter,
           {
             GskShadowEntry shadow;
 
-            gdk_color_init_copy (&shadow.color, &((SvgColor *) ff->dropshadow.color)->color);
+            gdk_color_init_copy (&shadow.color, svg_color_get_color (ff->dropshadow.color));
             shadow.offset.x = svg_number_get (ff->dropshadow.dx, 1);
             shadow.offset.y = svg_number_get (ff->dropshadow.dy, 1);
             shadow.radius = 2 * svg_number_get (ff->dropshadow.std_dev, 1);
@@ -19952,11 +18999,11 @@ gradient_get_gsk_gradient (Shape        *gradient,
   for (unsigned int i = 0; i < color_stops->len; i++)
     {
       ColorStop *cs = g_ptr_array_index (color_stops, i);
-      SvgColor *stop_color = (SvgColor *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
+      SvgValue *stop_color = cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
       GdkColor color;
 
       offset = MAX (svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OFFSET)], 1), offset);
-      gdk_color_init_copy (&color, &stop_color->color);
+      gdk_color_init_copy (&color, svg_color_get_color (stop_color));
       color.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
       gsk_gradient_add_stop (g, offset, 0.5, &color);
       gdk_color_finish (&color);
@@ -20360,18 +19407,18 @@ paint_pattern (Shape                 *pattern,
 }
 
 static void
-paint_server (SvgPaint              *paint,
+paint_server (SvgValue              *paint,
               const graphene_rect_t *bounds,
               const graphene_rect_t *paint_bounds,
               PaintContext          *context)
 {
-  Shape *server = paint->server.shape;
+  Shape *server = svg_paint_get_server_shape (paint);
 
   if (server == NULL ||
       paint_server_is_skipped (server, bounds, context))
     {
       gtk_snapshot_add_color (context->snapshot,
-                              &paint->server.fallback,
+                              svg_paint_get_server_fallback (paint),
                               paint_bounds);
     }
   else if (server->type == SHAPE_LINEAR_GRADIENT ||
@@ -20387,10 +19434,10 @@ paint_server (SvgPaint              *paint,
       if (color_stops->len == 1)
         {
           ColorStop *cs = g_ptr_array_index (color_stops, 0);
-          SvgColor *stop_color = (SvgColor *) cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
+          SvgValue *stop_color = cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_COLOR)];
           GdkColor c;
 
-          gdk_color_init_copy (&c, &stop_color->color);
+          gdk_color_init_copy (&c, svg_color_get_color (stop_color));
           c.alpha *= svg_number_get (cs->current[color_stop_attr_idx (SHAPE_ATTR_STOP_OPACITY)], 1);
           gtk_snapshot_add_color (context->snapshot, &c, paint_bounds);
           gdk_color_finish (&c);
@@ -20508,11 +19555,11 @@ shape_create_stroke (Shape        *shape,
   return stroke;
 }
 
-static SvgPaint *
-get_context_paint (SvgPaint *paint,
+static SvgValue *
+get_context_paint (SvgValue *paint,
                    GSList   *ctx_stack)
 {
-  switch (paint->kind)
+  switch (svg_paint_get_kind (paint))
     {
     case PAINT_NONE:
     case PAINT_CURRENT_COLOR:
@@ -20529,10 +19576,10 @@ get_context_paint (SvgPaint *paint,
         {
           Shape *shape = ctx_stack->data;
 
-          if (paint->kind == PAINT_CONTEXT_FILL)
-            paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+          if (svg_paint_get_kind (paint) == PAINT_CONTEXT_FILL)
+            paint = shape->current[SHAPE_ATTR_FILL];
           else
-            paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
+            paint = shape->current[SHAPE_ATTR_STROKE];
 
           return get_context_paint (paint, ctx_stack->next);
         }
@@ -20541,8 +19588,8 @@ get_context_paint (SvgPaint *paint,
       g_assert_not_reached ();
     }
 
-  paint = (SvgPaint *) svg_paint_new_none ();
-  svg_value_unref ((SvgValue *) paint);
+  paint = svg_paint_new_none ();
+  svg_value_unref (paint);
 
   return paint;
 }
@@ -20550,7 +19597,7 @@ get_context_paint (SvgPaint *paint,
 static void
 fill_shape (Shape        *shape,
             GskPath      *path,
-            SvgPaint     *paint,
+            SvgValue     *paint,
             double        opacity,
             PaintContext *context)
 {
@@ -20558,7 +19605,7 @@ fill_shape (Shape        *shape,
   GskFillRule fill_rule;
 
   paint = get_context_paint (paint, context->ctx_shape_stack);
-  if (paint->kind == PAINT_NONE)
+  if (svg_paint_get_kind (paint) == PAINT_NONE)
     return;
 
   if (!gsk_path_get_bounds (path, &bounds))
@@ -20566,7 +19613,7 @@ fill_shape (Shape        *shape,
 
   fill_rule = svg_enum_get (shape->current[SHAPE_ATTR_FILL_RULE]);
 
-  switch (paint->kind)
+  switch (svg_paint_get_kind (paint))
     {
     case PAINT_NONE:
       break;
@@ -20574,7 +19621,7 @@ fill_shape (Shape        *shape,
       {
         GdkColor color;
 
-        gdk_color_init_copy (&color, &paint->color);
+        gdk_color_init_copy (&color, svg_paint_get_color (paint));
         color.alpha *= opacity;
         snapshot_push_fill (context->snapshot, path, fill_rule);
         gtk_snapshot_add_color (context->snapshot, &color, &bounds);
@@ -20611,7 +19658,7 @@ stroke_shape (Shape        *shape,
               GskPath      *path,
               PaintContext *context)
 {
-  SvgPaint *paint;
+  SvgValue *paint;
   GskStroke *stroke;
   graphene_rect_t bounds;
   graphene_rect_t paint_bounds;
@@ -20620,9 +19667,9 @@ stroke_shape (Shape        *shape,
   GskRenderNode *child;
   GskRenderNode *node;
 
-  paint = (SvgPaint *) shape->current[SHAPE_ATTR_STROKE];
+  paint = shape->current[SHAPE_ATTR_STROKE];
   paint = get_context_paint (paint, context->ctx_shape_stack);
-  if (paint->kind == PAINT_NONE)
+  if (svg_paint_get_kind (paint) == PAINT_NONE)
     return;
 
   if (!gsk_path_get_bounds (path, &bounds))
@@ -20635,12 +19682,12 @@ stroke_shape (Shape        *shape,
   opacity = svg_number_get (shape->current[SHAPE_ATTR_STROKE_OPACITY], 1);
   effect = svg_enum_get (shape->current[SHAPE_ATTR_VECTOR_EFFECT]);
 
-  switch (paint->kind)
+  switch (svg_paint_get_kind (paint))
     {
     case PAINT_COLOR:
       {
         GdkColor color;
-        gdk_color_init_copy (&color, &paint->color);
+        gdk_color_init_copy (&color, svg_paint_get_color (paint));
         color.alpha *= opacity;
         opacity = 1;
         child = gsk_color_node_new2 (&color, &paint_bounds);
@@ -21185,7 +20232,7 @@ clear_layouts (Shape *self)
 static void
 fill_text (Shape                 *self,
            PaintContext          *context,
-           SvgPaint              *paint,
+           SvgValue              *paint,
            const graphene_rect_t *bounds)
 {
   g_assert (shape_type_has_text (self->type));
@@ -21198,7 +20245,7 @@ fill_text (Shape                 *self,
         {
         case TEXT_NODE_SHAPE:
           {
-            SvgPaint *cpaint = paint;
+            SvgValue *cpaint = paint;
             const graphene_rect_t *cbounds = bounds;
 
             if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
@@ -21209,7 +20256,7 @@ fill_text (Shape                 *self,
 
             if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_FILL))
               {
-                cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_FILL];
+                cpaint = node->shape.shape->current[SHAPE_ATTR_FILL];
                 if (node->shape.has_bounds)
                   cbounds = &node->shape.bounds;
               }
@@ -21220,7 +20267,7 @@ fill_text (Shape                 *self,
           {
             double opacity;
 
-            if (paint->kind == PAINT_NONE)
+            if (svg_paint_get_kind (paint) == PAINT_NONE)
               goto skip;
 
 #if 0
@@ -21233,17 +20280,17 @@ fill_text (Shape                 *self,
             gtk_snapshot_save (context->snapshot);
 
             opacity = svg_number_get (self->current[SHAPE_ATTR_FILL_OPACITY], 1);
-            if (paint->kind == PAINT_COLOR)
+            if (svg_paint_get_kind (paint) == PAINT_COLOR)
               {
                 GdkColor color;
 
-                gdk_color_init_copy (&color, &paint->color);
+                gdk_color_init_copy (&color, svg_paint_get_color (paint));
                 color.alpha *= opacity;
                 gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
                 gtk_snapshot_rotate (context->snapshot, node->characters.r);
                 gtk_snapshot_add_layout (context->snapshot, node->characters.layout, &color);
               }
-            else if (paint_is_server (paint->kind))
+            else if (paint_is_server (svg_paint_get_kind (paint)))
               {
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -21274,7 +20321,7 @@ skip: ;
 static void
 stroke_text (Shape                 *self,
              PaintContext          *context,
-             SvgPaint              *paint,
+             SvgValue              *paint,
              GskStroke             *stroke,
              const graphene_rect_t *bounds)
 {
@@ -21288,7 +20335,7 @@ stroke_text (Shape                 *self,
         {
         case TEXT_NODE_SHAPE:
           {
-            SvgPaint *cpaint = paint;
+            SvgValue *cpaint = paint;
             const graphene_rect_t *cbounds = bounds;
 
             if (svg_enum_get (node->shape.shape->current[SHAPE_ATTR_DISPLAY]) == DISPLAY_NONE)
@@ -21299,7 +20346,7 @@ stroke_text (Shape                 *self,
 
             if (_gtk_bitmask_get (node->shape.shape->attrs, SHAPE_ATTR_STROKE))
               {
-                cpaint = (SvgPaint *) node->shape.shape->current[SHAPE_ATTR_STROKE];
+                cpaint = node->shape.shape->current[SHAPE_ATTR_STROKE];
                 if (node->shape.has_bounds)
                   cbounds = &node->shape.bounds;
               }
@@ -21311,16 +20358,16 @@ stroke_text (Shape                 *self,
             GskPath *path;
             double opacity;
 
-            if (paint->kind == PAINT_NONE)
+            if (svg_paint_get_kind (paint) == PAINT_NONE)
               goto skip;
 
             gtk_snapshot_save (context->snapshot);
             opacity = svg_number_get (self->current[SHAPE_ATTR_STROKE_OPACITY], 1);
-            if (paint->kind == PAINT_COLOR)
+            if (svg_paint_get_kind (paint) == PAINT_COLOR)
               {
                 GdkColor color;
 
-                gdk_color_init_copy (&color, &paint->color);
+                gdk_color_init_copy (&color, svg_paint_get_color (paint));
                 color.alpha *= opacity;
 
                 gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
@@ -21335,7 +20382,7 @@ stroke_text (Shape                 *self,
                 gsk_path_unref (path);
                 gdk_color_finish (&color);
               }
-            else if (paint_is_server (paint->kind))
+            else if (paint_is_server (svg_paint_get_kind (paint)))
               {
                 if (opacity < 1)
                   gtk_snapshot_push_opacity (context->snapshot, opacity);
@@ -21564,7 +20611,7 @@ paint_shape (Shape        *shape,
       if (context->op == CLIPPING)
         {
           SvgValue *paint = svg_paint_new_black ();
-          fill_text (shape, context, (SvgPaint *) paint, &bounds);
+          fill_text (shape, context, paint, &bounds);
           svg_value_unref (paint);
         }
       else
@@ -21576,12 +20623,12 @@ paint_shape (Shape        *shape,
             case PAINT_ORDER_FILL_STROKE_MARKERS:
             case PAINT_ORDER_FILL_MARKERS_STROKE:
             case PAINT_ORDER_MARKERS_FILL_STROKE:
-              fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+              fill_text (shape, context, shape->current[SHAPE_ATTR_FILL], &bounds);
               break;
             case PAINT_ORDER_STROKE_FILL_MARKERS:
             case PAINT_ORDER_STROKE_MARKERS_FILL:
             case PAINT_ORDER_MARKERS_STROKE_FILL:
-              stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+              stroke_text (shape, context, shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
               break;
             default:
               g_assert_not_reached ();
@@ -21592,12 +20639,12 @@ paint_shape (Shape        *shape,
             case PAINT_ORDER_FILL_STROKE_MARKERS:
             case PAINT_ORDER_FILL_MARKERS_STROKE:
             case PAINT_ORDER_MARKERS_FILL_STROKE:
-              stroke_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
+              stroke_text (shape, context, shape->current[SHAPE_ATTR_STROKE], stroke, &bounds);
               break;
             case PAINT_ORDER_STROKE_FILL_MARKERS:
             case PAINT_ORDER_STROKE_MARKERS_FILL:
             case PAINT_ORDER_MARKERS_STROKE_FILL:
-              fill_text (shape, context, (SvgPaint *) shape->current[SHAPE_ATTR_FILL], &bounds);
+              fill_text (shape, context, shape->current[SHAPE_ATTR_FILL], &bounds);
               break;
             default:
               g_assert_not_reached ();
@@ -21668,7 +20715,7 @@ paint_shape (Shape        *shape,
     }
   else
     {
-      SvgPaint *paint = (SvgPaint *) shape->current[SHAPE_ATTR_FILL];
+      SvgValue *paint = shape->current[SHAPE_ATTR_FILL];
       double opacity = svg_number_get (shape->current[SHAPE_ATTR_FILL_OPACITY], 1);
 
       switch (svg_enum_get (shape->current[SHAPE_ATTR_PAINT_ORDER]))
@@ -23291,19 +22338,16 @@ svg_shape_attr_get_paint (Shape            *shape,
 {
   g_return_val_if_fail (shape_has_attr (shape->type, attr), PAINT_NONE);
   SvgValue *value;
-  SvgPaint *paint;
 
   if (_gtk_bitmask_get (shape->attrs, attr))
     value = shape_ref_base_value (shape, NULL, attr, 0);
   else
     value = shape_attr_ref_initial_value (attr, shape->type, shape->parent != NULL);
 
-  paint = (SvgPaint *) value;
-
   *symbolic = 0xffff;
   *color = (GdkRGBA) { 0, 0, 0, 1 };
 
-  switch (paint->kind)
+  switch (svg_paint_get_kind (value))
     {
     case PAINT_NONE:
     case PAINT_CONTEXT_FILL:
@@ -23314,10 +22358,10 @@ svg_shape_attr_get_paint (Shape            *shape,
     case PAINT_SERVER_WITH_CURRENT_COLOR:
       break;
     case PAINT_SYMBOLIC:
-      *symbolic = paint->symbolic;
+      *symbolic = svg_paint_get_symbolic (value);
       break;
     case PAINT_COLOR:
-      *color = *(const GdkRGBA *) paint->color.values;
+      *color = *(const GdkRGBA *) &(svg_paint_get_color (value)->values);
       break;
     default:
       g_assert_not_reached ();
@@ -23325,7 +22369,7 @@ svg_shape_attr_get_paint (Shape            *shape,
 
   svg_value_unref (value);
 
-  return paint->kind;
+  return svg_paint_get_kind (value);
 }
 
 double *

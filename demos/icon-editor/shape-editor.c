@@ -31,6 +31,7 @@
 #include "gtk/svg/gtksvgnumbersprivate.h"
 #include "gtk/svg/gtksvgenumprivate.h"
 #include "gtk/svg/gtksvgtransformprivate.h"
+#include "gtk/svg/gtksvgpaintprivate.h"
 
 
 struct _ShapeEditor

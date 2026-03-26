@@ -24,6 +24,7 @@
 #include "svg/gtksvgnumberprivate.h"
 #include "svg/gtksvgnumbersprivate.h"
 #include "svg/gtksvgenumprivate.h"
+#include "svg/gtksvgpaintprivate.h"
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 
