@@ -281,3 +281,13 @@ parse_number_list (const char *string,
   gtk_css_parser_unref (parser);
   return data.array;
 }
+
+void
+skip_whitespace_and_optional_comma (GtkCssParser *parser)
+{
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+    gtk_css_parser_skip (parser);
+  gtk_css_parser_skip_whitespace (parser);
+}
+

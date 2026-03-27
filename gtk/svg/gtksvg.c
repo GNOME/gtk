@@ -1945,8 +1945,7 @@ parse_language_list (GtkCssParser *parser)
         }
       g_ptr_array_add (langs, lang);
 
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
+      skip_whitespace_and_optional_comma (parser);
     }
 
   value = svg_language_new_list (langs->len, (PangoLanguage **) langs->pdata);
@@ -8686,9 +8685,7 @@ parse_spline (GtkCssParser *parser,
 
       g_array_append_val (array, v);
 
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
+      skip_whitespace_and_optional_comma (parser);
     }
 
   return TRUE;

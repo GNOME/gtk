@@ -224,9 +224,7 @@ svg_numbers_parse2 (GtkCssParser *parser,
 
       g_array_append_val (numbers, n);
 
-      gtk_css_parser_skip_whitespace (parser);
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
+      skip_whitespace_and_optional_comma (parser);
     }
 
   p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS,

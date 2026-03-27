@@ -172,3 +172,4 @@ gboolean parse_enum (const char    *string,
                      size_t         n_values,
                      unsigned int  *result);
 
+void skip_whitespace_and_optional_comma (GtkCssParser *parser);
