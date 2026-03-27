@@ -4889,20 +4889,6 @@ parse_states_arg (GtkCssParser *parser,
 }
 
 static gboolean
-parser_has_namespaced_function (GtkCssParser *parser,
-                                const char   *prefix,
-                                const char   *function)
-{
-  if (!gtk_css_parser_try_ident (parser, prefix))
-    return FALSE;
-
-  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
-    return FALSE;
-
-  return gtk_css_parser_has_function (parser, function);
-}
-
-static gboolean
 time_spec_parse (GtkCssParser *parser,
                  GtkSvg       *svg,
                  TimeSpec     *spec)
@@ -4918,73 +4904,89 @@ time_spec_parse (GtkCssParser *parser,
     {
       spec->type = TIME_SPEC_TYPE_OFFSET;
     }
-  else if (parser_has_namespaced_function (parser, "gpa", "states"))
+  else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     {
-      ParseStatesArg arg = {
-        .svg = svg,
-        .states = { NO_STATES, NO_STATES },
-        .set = { FALSE, FALSE },
-      };
+      char *id = gtk_css_parser_consume_ident (parser);
 
-      if (gtk_css_parser_consume_function (parser, 1, 2, parse_states_arg, &arg))
+      if (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON) &&
+          strcmp (id, "gpa") == 0)
         {
-          spec->type = TIME_SPEC_TYPE_STATES;
+          g_free (id);
 
-          if (!arg.set[1])
+          if (gtk_css_parser_has_function (parser, "states"))
             {
-              TimeSpecSide side;
+              ParseStatesArg arg = {
+                .svg = svg,
+                .states = { NO_STATES, NO_STATES },
+                .set = { FALSE, FALSE },
+              };
 
-              if (!gtk_css_parser_try_delim (parser, '.'))
-                return FALSE;
-              if (gtk_css_parser_try_ident (parser, "begin"))
-                side = TIME_SPEC_SIDE_BEGIN;
-              else if (gtk_css_parser_try_ident (parser, "end"))
-                side = TIME_SPEC_SIDE_END;
-              else
-                return FALSE;
+              if (gtk_css_parser_consume_function (parser, 1, 2, parse_states_arg, &arg))
+                {
+                  spec->type = TIME_SPEC_TYPE_STATES;
 
-              if (side == TIME_SPEC_SIDE_BEGIN)
-                {
-                  spec->states.from = ALL_STATES & ~arg.states[0];
-                  spec->states.to = arg.states[0];
-                }
-              else
-                {
-                  spec->states.from = arg.states[0];
-                  spec->states.to = ALL_STATES & ~arg.states[0];
+                  if (!arg.set[1])
+                    {
+                      TimeSpecSide side;
+
+                      if (!gtk_css_parser_try_delim (parser, '.'))
+                        return FALSE;
+                      if (gtk_css_parser_try_ident (parser, "begin"))
+                        side = TIME_SPEC_SIDE_BEGIN;
+                      else if (gtk_css_parser_try_ident (parser, "end"))
+                        side = TIME_SPEC_SIDE_END;
+                      else
+                        return FALSE;
+
+                      if (side == TIME_SPEC_SIDE_BEGIN)
+                        {
+                          spec->states.from = ALL_STATES & ~arg.states[0];
+                          spec->states.to = arg.states[0];
+                        }
+                      else
+                        {
+                          spec->states.from = arg.states[0];
+                          spec->states.to = ALL_STATES & ~arg.states[0];
+                        }
+                    }
+                  else
+                    {
+                      spec->states.from = arg.states[0];
+                      spec->states.to = arg.states[1];
+                    }
+
+                  gtk_css_parser_skip_whitespace (parser);
+                  parser_try_duration (parser, &spec->offset);
                 }
             }
           else
+            return FALSE;
+        }
+      else if (gtk_css_parser_try_delim (parser, '.'))
+        {
+          TimeSpecSide side;
+
+          spec->type = TIME_SPEC_TYPE_SYNC;
+
+          if (gtk_css_parser_try_ident (parser, "begin"))
+            side = TIME_SPEC_SIDE_BEGIN;
+          else if (gtk_css_parser_try_ident (parser, "end"))
+            side = TIME_SPEC_SIDE_END;
+          else
             {
-              spec->type = TIME_SPEC_TYPE_STATES;
-              spec->states.from = arg.states[0];
-              spec->states.to = arg.states[1];
+              g_free (id);
+              return FALSE;
             }
+
+          spec->sync.side = side;
+          spec->sync.ref = id;
+          spec->sync.base = NULL;
 
           gtk_css_parser_skip_whitespace (parser);
           parser_try_duration (parser, &spec->offset);
         }
       else
         return FALSE;
-    }
-  else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
-    {
-      spec->type = TIME_SPEC_TYPE_SYNC;
-      spec->sync.ref = gtk_css_parser_consume_ident (parser);
-      spec->sync.base = NULL;
-
-      if (!gtk_css_parser_try_delim (parser, '.'))
-        return FALSE;
-
-      if (gtk_css_parser_try_ident (parser, "begin"))
-        spec->sync.side = TIME_SPEC_SIDE_BEGIN;
-      else if (gtk_css_parser_try_ident (parser, "end"))
-        spec->sync.side = TIME_SPEC_SIDE_END;
-      else
-        return FALSE;
-
-      gtk_css_parser_skip_whitespace (parser);
-      parser_try_duration (parser, &spec->offset);
     }
   else
     return FALSE;
