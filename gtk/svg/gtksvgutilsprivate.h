@@ -127,8 +127,7 @@ color_distance (const GdkColor *c0,
                (c0->alpha - c1->alpha) * (c0->alpha - c1->alpha));
 }
 
-char ** strsplit_set (const char *str,
-                      const char *sep);
+GStrv parse_strv (const char *string);
 
 GtkCssParser * parser_new_for_string (const char *string);
 

@@ -1984,7 +1984,7 @@ static SvgValue *
 parse_string_list (const char  *value,
                    GError     **error)
 {
-  return svg_string_list_new_take (strsplit_set (value, " "), ' ');
+  return svg_string_list_new_take (parse_strv (value), ' ');
 }
 
 static SvgValue *
@@ -9442,7 +9442,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
 
   if (state_names_attr)
     {
-      GStrv strv = strsplit_set (state_names_attr, " ");
+      GStrv strv = parse_strv (state_names_attr);
 
       if (strv == NULL)
         {

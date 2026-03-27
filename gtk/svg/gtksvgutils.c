@@ -2,22 +2,14 @@
 #include "gtksvgprivate.h"
 #include "gtksvgnumberprivate.h"
 
-/* Break str into tokens that are separated
- * by whitespace and the given separator.
- * If sep contains just a non-space byte,
- * the separator is mandatory. If it contains
- * a space as well, the separator is optional.
- * If a mandatory separator is missing, NULL
- * is returned.
- */
-char **
-strsplit_set (const char *str,
-              const char *sep)
+/* Break string into tokens that are separated by whitespace */
+GStrv
+parse_strv (const char *string)
 {
   const char *p, *p0;
-  GPtrArray *array = g_ptr_array_new ();
+  GStrvBuilder *builder = g_strv_builder_new ();
 
-  p = str;
+  p = string;
   while (*p)
     {
       while (*p == ' ')
@@ -26,38 +18,14 @@ strsplit_set (const char *str,
       if (!*p)
         break;
 
-      if (array->len > 0)
-        {
-          if (strchr (sep, *p))
-            {
-              p++;
-
-              if (!*p)
-                break;
-
-              while (*p == ' ')
-                p++;
-
-              if (!*p)
-                break;
-            }
-          else if (!strchr (sep, ' '))
-            {
-              g_ptr_array_free (array, TRUE);
-              return g_new0 (char *, 1);
-            }
-        }
-
       p0 = p;
-      while (!strchr (sep, *p) && *p != ' ')
+      while (*p && *p != ' ')
         p++;
 
-      g_ptr_array_add (array, g_strndup (p0, p - p0));
+      g_strv_builder_take (builder, g_strndup (p0, p - p0));
     }
 
-  g_ptr_array_add (array, NULL);
-
-  return (char **) g_ptr_array_free (array, FALSE);
+  return g_strv_builder_unref_to_strv (builder);
 }
 
 GtkCssParser *
