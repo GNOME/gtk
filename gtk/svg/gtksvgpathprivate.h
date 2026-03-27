@@ -24,6 +24,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtksvgenumsprivate.h"
 #include "gtksvgtypesprivate.h"
+#include "gsk/gskpath.h"
 
 G_BEGIN_DECLS
 
