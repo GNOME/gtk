@@ -60,6 +60,19 @@ strsplit_set (const char *str,
   return (char **) g_ptr_array_free (array, FALSE);
 }
 
+GtkCssParser *
+parser_new_for_string (const char *string)
+{
+  GBytes *bytes;
+  GtkCssParser *parser;
+
+  bytes = g_bytes_new_static (string, strlen (string));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
+  gtk_css_parser_skip_whitespace (parser);
+
+  return parser;
+}
+
 static gboolean
 parse_numeric (const char   *value,
                double        min,

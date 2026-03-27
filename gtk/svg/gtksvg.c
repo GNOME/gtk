@@ -7191,13 +7191,9 @@ static gboolean
 strokewidth_parse (const char  *value,
                    SvgValue   **values)
 {
-  GBytes *bytes;
-  GtkCssParser *parser;
+  GtkCssParser *parser = parser_new_for_string (value);
   unsigned int i;
   gboolean retval = TRUE;
-
-  bytes = g_bytes_new_static (value, strlen (value));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
   for (i = 0; i < 3; i++)
     {
@@ -7211,7 +7207,6 @@ strokewidth_parse (const char  *value,
     retval = FALSE;
 
   gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
 
   return retval;
 }

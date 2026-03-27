@@ -443,19 +443,14 @@ fail:
 SvgValue *
 svg_filter_parse (const char *value)
 {
+  GtkCssParser *parser = parser_new_for_string (value);
   SvgValue *filter;
-  GBytes *bytes;
-  GtkCssParser *parser;
-
-  bytes = g_bytes_new_static (value, strlen (value));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
   filter = svg_filter_parse_css (parser);
 
   if (filter && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     g_clear_pointer (&filter, svg_value_unref);
   gtk_css_parser_unref (parser);
-  g_bytes_unref (bytes);
 
   return filter;
 }

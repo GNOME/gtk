@@ -5,6 +5,7 @@
 #include "gdk/gdkcolorprivate.h"
 #include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 
 #define DEFAULT_FONT_SIZE 13.333
 
@@ -128,6 +129,8 @@ color_distance (const GdkColor *c0,
 
 char ** strsplit_set (const char *str,
                       const char *sep);
+
+GtkCssParser * parser_new_for_string (const char *string);
 
 GArray * parse_numbers2 (const char *value,
                          const char *sep,
