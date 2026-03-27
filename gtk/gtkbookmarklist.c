@@ -32,9 +32,9 @@
  * It presents a `GListModel` and fills it asynchronously with the
  * `GFileInfo`s returned from that function.
  *
- * The `GFileInfo`s in the list have some attributes in the recent
- * namespace added: `recent::private` (boolean) and `recent:applications`
- * (stringv).
+ * The `GFileInfo`s in the list have some attributes in the recent namespace
+ * added: `recent::private` (boolean) and `recent:applications` (stringv). They
+ * also have the `GFile` referred by the URI in `standard::file` attribute.
  */
 
 enum {
