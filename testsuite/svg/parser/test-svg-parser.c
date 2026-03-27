@@ -21,7 +21,8 @@
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk/gtksvgprivate.h"
+#include "gtk/svg/gtksvgprivate.h"
+#include "gtk/svg/gtksvgpaintprivate.h"
 #include "testsuite/testutils.h"
 
 typedef enum {

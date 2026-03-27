@@ -27,6 +27,7 @@
 #define __GTK_H_INSIDE__
 
 #include <gtk/css/gtkcss.h>
+#include <gtk/svg/gtksvg.h>
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
 
@@ -269,7 +270,6 @@
 #include <gtk/gtkstringsorter.h>
 #include <gtk/deprecated/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
-#include <gtk/gtksvg.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymbolicpaintable.h>
 #include <gtk/gtktext.h>

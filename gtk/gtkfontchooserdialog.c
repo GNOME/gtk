@@ -37,7 +37,7 @@
 #include "gtkactionable.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkaccessible.h"
-#include "gtksvg.h"
+#include "svg/gtksvg.h"
 #include "gtkimage.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

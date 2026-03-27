@@ -25,8 +25,8 @@
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
-#include "gtk/css/gtkcssdataurlprivate.h"
-#include "gtksvgprivate.h"
+#include "css/gtkcssdataurlprivate.h"
+#include "svg/gtksvgprivate.h"
 #include "gtksnapshotprivate.h"
 
 #include "gsk/gskcairoblurprivate.h"

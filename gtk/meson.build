@@ -373,7 +373,6 @@ gtk_public_sources = files([
   'gtkstringlist.c',
   'gtkstringsorter.c',
   'gtkstyleprovider.c',
-  'gtksvg.c',
   'gtkswitch.c',
   'gtksymbolicpaintable.c',
   'gtktestatcontext.c',
@@ -608,7 +607,6 @@ gtk_public_headers = files([
   'gtkstringlist.h',
   'gtkstringsorter.h',
   'gtkstyleprovider.h',
-  'gtksvg.h',
   'gtkswitch.h',
   'gtksymbolicpaintable.h',
   'gtktestatcontext.h',
@@ -1053,20 +1051,23 @@ darwin_versions = [
   '@0@.@1@'.format(1 + '@0@'.format(gtk_binary_age - gtk_interface_age).to_int(), gtk_interface_age),
 ]
 
+# this needs to happen after mkenums (since the svg code uses gtk enum types)
+subdir('svg')
+
 # Library
 libgtk_static = static_library('gtk',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h, xdp_dbus_generated],
   c_args: gtk_cargs + print_backend_cflags + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep, media_deps, print_backend_deps],
-  link_with: [libgtk_css, libgdk, libgsk ],
+  dependencies: gtk_deps + [libgtk_css_dep, libgtk_svg_dep, libgdk_dep, libgsk_dep, media_deps, print_backend_deps],
+  link_with: [libgtk_css, libgtk_svg, libgdk, libgsk ],
 )
 
 libgtk = shared_library('gtk-4',
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-  link_whole: [libgtk_static, libgtk_css, libgdk, libgsk ],
+  dependencies: gtk_deps + [libgtk_css_dep, libgtk_svg_dep, libgdk_dep, libgsk_dep],
+  link_whole: [libgtk_static, libgtk_css, libgtk_svg, libgdk, libgsk ],
   link_args: common_ldflags,
   soversion: gtk_soversion,
   version: gtk_library_version,
@@ -1218,6 +1219,9 @@ if build_gir
     gtk_print_headers,
     gtk_css_public_headers,
     gtk_css_public_sources,
+    gtk_svg_enum_h,
+    gtk_svg_public_headers,
+    gtk_svg_public_sources,
     gtk_deprecated_headers,
     gtk_deprecated_sources,
     gtktypebuiltins_h,
@@ -1252,14 +1256,14 @@ endif
 
 libgtk_dep = declare_dependency(sources: gtk_dep_sources,
   include_directories: [confinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  dependencies: gtk_deps + [libgtk_css_dep, libgtk_svg_dep, libgdk_dep, libgsk_dep],
   link_with: libgtk,
   link_args: common_ldflags,
 )
 
 libgtk_static_dep = declare_dependency(sources: gtk_dep_sources,
   include_directories: [confinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  dependencies: gtk_deps + [libgtk_css_dep, libgtk_svg_dep, libgdk_dep, libgsk_dep],
   link_with: [libgtk_static, libgtk_css, libgdk, libgsk ],
   link_args: common_ldflags,
 )

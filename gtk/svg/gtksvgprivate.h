@@ -25,45 +25,14 @@
 #include "gtkenums.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtk/svg/gtksvgtypesprivate.h"
+#include "gtk/svg/gtksvgenumsprivate.h"
 
 G_BEGIN_DECLS
 
 #define INDEFINITE G_MAXINT64
 #define REPEAT_FOREVER INFINITY
-
-typedef struct _SvgValue SvgValue;
-typedef struct _Shape Shape;
-typedef struct _Timeline Timeline;
-
-typedef enum
-{
-  ALIGN_MIN,
-  ALIGN_MID,
-  ALIGN_MAX,
-} Align;
-
-typedef enum
-{
-  MEET,
-  SLICE,
-} MeetOrSlice;
-
-typedef enum
-{
-  GTK_SVG_RUN_MODE_STOPPED,
-  GTK_SVG_RUN_MODE_DISCRETE,
-  GTK_SVG_RUN_MODE_CONTINUOUS,
-} GtkSvgRunMode;
-
-typedef enum
-{
-  GTK_SVG_USES_STROKES             = 1 << 0,
-  GTK_SVG_USES_SYMBOLIC_FOREGROUND = 1 << 1,
-  GTK_SVG_USES_SYMBOLIC_ERROR      = 1 << 2,
-  GTK_SVG_USES_SYMBOLIC_WARNING    = 1 << 3,
-  GTK_SVG_USES_SYMBOLIC_SUCCESS    = 1 << 4,
-  GTK_SVG_USES_SYMBOLIC_ACCENT     = 1 << 5,
-} GtkSvgUses;
+#define DEFAULT_FONT_SIZE 13.333
 
 struct _GtkSvg
 {
@@ -423,72 +392,6 @@ struct _Shape
   } gpa;
 };
 
-typedef enum
-{
-  SVG_UNIT_NUMBER,
-  SVG_UNIT_PERCENTAGE,
-  SVG_UNIT_PX,
-  FIRST_LENGTH_UNIT = SVG_UNIT_PX,
-  SVG_UNIT_PT,
-  SVG_UNIT_IN,
-  SVG_UNIT_CM,
-  SVG_UNIT_MM,
-  SVG_UNIT_VW,
-  SVG_UNIT_VH,
-  SVG_UNIT_VMIN,
-  SVG_UNIT_VMAX,
-  SVG_UNIT_EM,
-  SVG_UNIT_EX,
-  LAST_LENGTH_UNIT = SVG_UNIT_EX,
-  SVG_UNIT_DEG,
-  FIRST_ANGLE_UNIT = SVG_UNIT_DEG,
-  SVG_UNIT_RAD,
-  SVG_UNIT_GRAD,
-  SVG_UNIT_TURN,
-  LAST_ANGLE_UNIT = SVG_UNIT_TURN,
-} SvgUnit;
-
-typedef enum
-{
-  PAINT_NONE,
-  PAINT_CONTEXT_FILL,
-  PAINT_CONTEXT_STROKE,
-  PAINT_CURRENT_COLOR,
-  PAINT_COLOR,
-  PAINT_SYMBOLIC,
-  PAINT_SERVER,
-  PAINT_SERVER_WITH_FALLBACK,
-  PAINT_SERVER_WITH_CURRENT_COLOR,
-} PaintKind;
-
-typedef enum
-{
-  PAINT_ORDER_FILL_STROKE_MARKERS,
-  PAINT_ORDER_FILL_MARKERS_STROKE,
-  PAINT_ORDER_STROKE_FILL_MARKERS,
-  PAINT_ORDER_STROKE_MARKERS_FILL,
-  PAINT_ORDER_MARKERS_FILL_STROKE,
-  PAINT_ORDER_MARKERS_STROKE_FILL,
-} PaintOrder;
-
-typedef enum
-{
-  CLIP_NONE,
-  CLIP_PATH,
-  CLIP_REF,
-} ClipKind;
-
-typedef enum
-{
-  TRANSFORM_NONE,
-  TRANSFORM_TRANSLATE,
-  TRANSFORM_SCALE,
-  TRANSFORM_ROTATE,
-  TRANSFORM_SKEW_X,
-  TRANSFORM_SKEW_Y,
-  TRANSFORM_MATRIX,
-} TransformType;
-
 double       svg_shape_attr_get_number    (Shape                 *shape,
                                            ShapeAttr              attr,
                                            const graphene_rect_t *viewport);
@@ -522,52 +425,6 @@ gboolean     svg_shape_attr_get_viewbox   (Shape                 *shape,
 void         svg_shape_attr_set           (Shape                 *shape,
                                            ShapeAttr              attr,
                                            SvgValue              *value);
-
-SvgValue *   svg_value_ref          (SvgValue         *value);
-void         svg_value_unref        (SvgValue         *value);
-GType        svg_value_get_type     (void) G_GNUC_CONST;
-gboolean     svg_value_equal        (const SvgValue   *self,
-                                     const SvgValue   *other);
-char *       svg_value_to_string    (const SvgValue   *self);
-
-SvgValue *   svg_number_new         (double            value);
-SvgValue *   svg_linecap_new        (GskLineCap        value);
-SvgValue *   svg_linejoin_new       (GskLineJoin       value);
-SvgValue *   svg_fill_rule_new      (GskFillRule       rule);
-SvgValue *   svg_paint_order_new    (PaintOrder        order);
-SvgValue *   svg_mask_type_new      (GskMaskMode       mode);
-SvgValue *   svg_paint_new_none     (void);
-SvgValue *   svg_paint_new_symbolic (GtkSymbolicColor  symbolic);
-SvgValue *   svg_paint_new_rgba     (const GdkRGBA    *rgba);
-SvgValue *   svg_numbers_new        (double           *values,
-                                     unsigned int      n_values);
-SvgValue *   svg_view_box_new       (const graphene_rect_t *box);
-SvgValue *   svg_path_new           (GskPath *path);
-SvgValue *   svg_clip_new_none      (void);
-SvgValue *   svg_clip_new_path      (const char *string,
-                                     unsigned int fill_rule);
-SvgValue *   svg_clip_new_ref       (const char *string);
-SvgValue *   svg_mask_new_none      (void);
-SvgValue *   svg_mask_new_ref       (const char *string);
-SvgValue *   svg_transform_parse    (const char       *value);
-unsigned int svg_transform_get_n_transforms (const SvgValue *value);
-SvgValue *   svg_transform_get_transform    (const SvgValue *value,
-                                             unsigned int    pos);
-TransformType svg_transform_get_primitive (const SvgValue *value,
-                                           unsigned int    pos,
-                                           double          params[6]);
-SvgValue *   svg_transform_new_none (void);
-SvgValue *   svg_transform_new_translate (double x,
-                                          double y);
-SvgValue *   svg_transform_new_scale     (double x,
-                                          double y);
-SvgValue *   svg_transform_new_rotate    (double angle,
-                                          double x,
-                                          double y);
-SvgValue *   svg_transform_new_skew_x    (double angle);
-SvgValue *   svg_transform_new_skew_y    (double angle);
-SvgValue *   svg_transform_new_matrix    (double params[6]);
-SvgValue *   svg_filter_parse       (const char       *value);
 
 Shape *      svg_shape_add          (Shape            *parent,
                                      ShapeType         type);

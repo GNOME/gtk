@@ -26,7 +26,16 @@
 #include "mini-graph.h"
 #include "path-editor.h"
 #include "transform-editor.h"
-
+#include "gtk/svg/gtksvgvalueprivate.h"
+#include "gtk/svg/gtksvgnumberprivate.h"
+#include "gtk/svg/gtksvgnumbersprivate.h"
+#include "gtk/svg/gtksvgenumprivate.h"
+#include "gtk/svg/gtksvgtransformprivate.h"
+#include "gtk/svg/gtksvgpaintprivate.h"
+#include "gtk/svg/gtksvgfilterprivate.h"
+#include "gtk/svg/gtksvgpathprivate.h"
+#include "gtk/svg/gtksvgclipprivate.h"
+#include "gtk/svg/gtksvgmaskprivate.h"
 
 struct _ShapeEditor
 {
@@ -404,7 +413,7 @@ shape_editor_update_clip_path (ShapeEditor *self,
     }
   else
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_ref (id));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -443,7 +452,7 @@ mask_changed (ShapeEditor *self)
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_ref (id));
+      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -576,7 +585,7 @@ populate_transform (ShapeEditor *self,
   if (!tf)
     return;
 
-  n = svg_transform_get_n_transforms (tf);
+  n = svg_transform_get_length (tf);
 
   for (unsigned int i = 0; i < n; i++)
     {

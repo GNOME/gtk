@@ -22,7 +22,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "gtksvgprivate.h"
+#include "gtk/svg/gtksvgprivate.h"
 
 
 G_DECLARE_FINAL_TYPE (TransformEditor, transform_editor, TRANSFORM, EDITOR, GtkWidget)

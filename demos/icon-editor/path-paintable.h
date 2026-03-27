@@ -22,7 +22,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
-#include "gtk/gtksvgprivate.h"
+#include "gtk/svg/gtksvgprivate.h"
 #include <stdint.h>
 
 typedef enum
