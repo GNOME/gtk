@@ -171,48 +171,35 @@
  * is therefore going to interfere with generated animations.
  *
  * To connect general SVG animations to the states of the paintable,
- * use the custom `gpa:states(...)` condition in the `begin` and `end`
+ * use the custom `StateChange(...)` condition in the `begin` and `end`
  * attributes of SVG animation elements. For example,
  *
  *     <animate href='path1'
  *              attributeName='fill'
- *              begin='gpa:states(0).begin'
+ *              begin='StateChange(1 2 3, 0)'
  *              dur='300ms'
  *              fill='freeze'
  *              from='black'
  *              to='magenta'/>
  *
  * will make the fill color of path1 transition from black to
- * magenta when the renderer enters state 0.
+ * magenta when the renderer enters state 0 from states 1, 2, or 3.
  *
  * <image src="svg-renderer2.svg">
  *
- * The `gpa:states(...)` condition triggers for upcoming state changes
+ * The `StateChange(...)` condition triggers for upcoming state changes
  * as well, to support fade-out transitions. For example,
  *
  *     <animate href='path1'
  *              attributeName='opacity'
- *              begin='gpa:states(0).end -300ms'
+ *              begin='StateChange(0, 1 2 3) -300ms'
  *              dur='300ms'
  *              fill='freeze'
  *              from='1'
  *              to='0'/>
  *
- * will start a fade-out of path1 300ms before state 0 ends.
- *
- * A variant of the `gpa:states(...)` condition allows specifying
- * both before and after states:
- *
- *     <animate href='path1'
- *              attributeName='opacity'
- *              begin='gpa:states(0, 1 2)'
- *              dur='300ms'
- *              fill='freeze'
- *              from='1'
- *              to='0'/>
- *
- * will start the animation when the state changes from 0 to 1 or
- * from 0 to 2, but not when it changes from 0 to 3.
+ * will start a fade-out of path1 300ms before a transition from state
+ * 0 to 1, 2 or 3.
  *
  * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
  * colors can also be specified as a custom paint server reference,
@@ -4889,9 +4876,10 @@ parse_states_arg (GtkCssParser *parser,
 }
 
 static gboolean
-time_spec_parse (GtkCssParser *parser,
-                 GtkSvg       *svg,
-                 TimeSpec     *spec)
+time_spec_parse (GtkCssParser  *parser,
+                 GtkSvg        *svg,
+                 TimeSpec      *spec,
+                 GError       **error)
 {
   memset (spec, 0, sizeof (TimeSpec));
 
@@ -4903,6 +4891,26 @@ time_spec_parse (GtkCssParser *parser,
   else if (parser_try_duration (parser, &spec->offset))
     {
       spec->type = TIME_SPEC_TYPE_OFFSET;
+    }
+  else if (gtk_css_parser_has_function (parser, "StateChange"))
+    {
+      ParseStatesArg arg = {
+        .svg = svg,
+        .states = { NO_STATES, NO_STATES },
+        .set = { FALSE, FALSE },
+      };
+
+      if (gtk_css_parser_consume_function (parser, 2, 2, parse_states_arg, &arg))
+        {
+          spec->type = TIME_SPEC_TYPE_STATES;
+          spec->states.from = arg.states[0];
+          spec->states.to = arg.states[1];
+
+          gtk_css_parser_skip_whitespace (parser);
+          parser_try_duration (parser, &spec->offset);
+        }
+      else
+        return FALSE;
     }
   else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     {
@@ -4958,6 +4966,11 @@ time_spec_parse (GtkCssParser *parser,
                   gtk_css_parser_skip_whitespace (parser);
                   parser_try_duration (parser, &spec->offset);
                 }
+
+              if (*error == NULL)
+                g_set_error (error,
+                             GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_SYNTAX,
+                             "gpa:states() is deprecated. Use StateChange()");
             }
           else
             return FALSE;
@@ -5016,7 +5029,7 @@ time_spec_print (TimeSpec *spec,
       break;
     case TIME_SPEC_TYPE_STATES:
       {
-        g_string_append (s, "gpa:states(");
+        g_string_append (s, "StateChange(");
         print_states (s, svg, spec->states.from);
         g_string_append (s, ", ");
         print_states (s, svg, spec->states.to);
@@ -8331,6 +8344,7 @@ typedef struct
 {
   GtkSvg *svg;
   GArray *array;
+  GError *error;
 } Specs;
 
 static gboolean
@@ -8343,7 +8357,7 @@ time_spec_parse_one (GtkCssParser *parser,
   g_array_set_size (specs->array, specs->array->len + 1);
   spec = &g_array_index (specs->array, TimeSpec, specs->array->len - 1);
 
-  return time_spec_parse (parser, specs->svg, spec);
+  return time_spec_parse (parser, specs->svg, spec, &specs->error);
 }
 
 static gboolean
@@ -8416,7 +8430,7 @@ parse_base_animation_attrs (Animation            *a,
   if (begin_attr)
     {
       GtkCssParser *parser = parser_new_for_string (begin_attr);
-      Specs specs;
+      Specs specs = { 0, };
 
       specs.svg = data->svg;
       specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
@@ -8441,6 +8455,12 @@ parse_base_animation_attrs (Animation            *a,
 
       gtk_css_parser_unref (parser);
       g_array_unref (specs.array);
+
+      if (specs.error)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "begin", "%s", specs.error->message);
+          g_error_free (specs.error);
+        }
     }
   else
     {
@@ -8452,7 +8472,7 @@ parse_base_animation_attrs (Animation            *a,
   if (end_attr)
     {
       GtkCssParser *parser = parser_new_for_string (end_attr);
-      Specs specs;
+      Specs specs = { 0, };
 
       specs.svg = data->svg;
       specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
@@ -8477,6 +8497,12 @@ parse_base_animation_attrs (Animation            *a,
 
       gtk_css_parser_unref (parser);
       g_array_unref (specs.array);
+
+      if (specs.error)
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "end", "%s", specs.error->message);
+          g_error_free (specs.error);
+        }
     }
   else
     {
