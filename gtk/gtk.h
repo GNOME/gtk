@@ -257,6 +257,7 @@
 #include <gtk/gtksorter.h>
 #include <gtk/gtksortlistmodel.h>
 #include <gtk/gtkstacksidebar.h>
+#include <gtk/gtksizeclamp.h>
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksizerequest.h>
 #include <gtk/gtkspinbutton.h>
