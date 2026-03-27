@@ -417,12 +417,12 @@ svg_number_new_full (SvgUnit unit,
 }
 
 gboolean
-svg_number_parse2 (GtkCssParser *parser,
-                   double        min,
-                   double        max,
-                   unsigned int  flags,
-                   double       *d,
-                   SvgUnit      *u)
+svg_number_parse2 (GtkCssParser        *parser,
+                   double               min,
+                   double               max,
+                   SvgNumberParseFlags  flags,
+                   double              *d,
+                   SvgUnit             *u)
 {
   const GtkCssToken *token;
   double number;
@@ -432,7 +432,7 @@ svg_number_parse2 (GtkCssParser *parser,
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
     {
-      if ((flags & PERCENTAGE) == 0)
+      if ((flags & SVG_PARSE_PERCENTAGE) == 0)
         {
           gtk_css_parser_error_value (parser, "Percentages are not allowed here");
           return FALSE;
@@ -450,16 +450,16 @@ svg_number_parse2 (GtkCssParser *parser,
 
       if (number == 0)
         {
-          if (flags & NUMBER)
+          if (flags & SVG_PARSE_NUMBER)
             unit = SVG_UNIT_NUMBER;
-          else if (flags & LENGTH)
+          else if (flags & SVG_PARSE_LENGTH)
             unit = SVG_UNIT_PX;
-          else if (flags & ANGLE)
+          else if (flags & SVG_PARSE_ANGLE)
             unit = SVG_UNIT_DEG;
           else
             unit = SVG_UNIT_PERCENTAGE;
         }
-      else if (flags & NUMBER)
+      else if (flags & SVG_PARSE_NUMBER)
         {
           unit = SVG_UNIT_NUMBER;
         }
@@ -486,7 +486,7 @@ svg_number_parse2 (GtkCssParser *parser,
 
       if (FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
         {
-          if (flags & LENGTH)
+          if (flags & SVG_PARSE_LENGTH)
             unit = i;
           else
             {
@@ -496,7 +496,7 @@ svg_number_parse2 (GtkCssParser *parser,
         }
       else if (FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
         {
-          if (flags & ANGLE)
+          if (flags & SVG_PARSE_ANGLE)
             unit = i;
           else
             {
@@ -530,10 +530,10 @@ svg_number_parse2 (GtkCssParser *parser,
 }
 
 SvgValue *
-svg_number_parse (GtkCssParser *parser,
-                  double        min,
-                  double        max,
-                  unsigned int  flags)
+svg_number_parse (GtkCssParser        *parser,
+                  double               min,
+                  double               max,
+                  SvgNumberParseFlags  flags)
 {
   double d;
   SvgUnit unit;

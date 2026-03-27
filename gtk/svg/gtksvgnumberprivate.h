@@ -7,28 +7,37 @@
 
 G_BEGIN_DECLS
 
-SvgValue * svg_number_new               (double          value);
-SvgValue * svg_number_new_full          (SvgUnit         unit,
-                                         double          value);
+typedef enum
+{
+  SVG_PARSE_NUMBER     = 1 << 0,
+  SVG_PARSE_PERCENTAGE = 1 << 1,
+  SVG_PARSE_LENGTH     = 1 << 2,
+  SVG_PARSE_ANGLE      = 1 << 3,
+} SvgNumberParseFlags;
 
-SvgValue * svg_percentage_new           (double          value);
-gboolean   svg_number_parse2            (GtkCssParser   *parser,
-                                         double          min,
-                                         double          max,
-                                         unsigned int    flags,
-                                         double         *d,
-                                         SvgUnit        *u);
+SvgValue * svg_number_new               (double               value);
+SvgValue * svg_number_new_full          (SvgUnit              unit,
+                                         double               value);
 
-SvgValue * svg_number_parse             (GtkCssParser   *parser,
-                                         double          min,
-                                         double          max,
-                                         unsigned int    flags);
+SvgValue * svg_percentage_new           (double               value);
+gboolean   svg_number_parse2            (GtkCssParser        *parser,
+                                         double               min,
+                                         double               max,
+                                         SvgNumberParseFlags  flags,
+                                         double              *d,
+                                         SvgUnit             *u);
 
-SvgUnit    svg_number_get_unit          (const SvgValue *value);
-double     svg_number_get               (const SvgValue *value,
-                                         double          one_hundred_percent);
-gboolean   svg_value_is_number          (const SvgValue *value);
-gboolean   svg_value_is_positive_number (const SvgValue *value);
+SvgValue * svg_number_parse             (GtkCssParser        *parser,
+                                         double               min,
+                                         double               max,
+                                         SvgNumberParseFlags  flags);
+
+SvgUnit    svg_number_get_unit          (const SvgValue      *value);
+double     svg_number_get               (const SvgValue      *value,
+                                         double               one_hundred_percent);
+gboolean   svg_value_is_number          (const SvgValue      *value);
+gboolean   svg_value_is_positive_number (const SvgValue      *value);
+
 
 const char *svg_unit_name (SvgUnit unit);
 

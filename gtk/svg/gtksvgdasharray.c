@@ -147,7 +147,7 @@ svg_dash_array_parse (GtkCssParser *parser)
 
           gtk_css_parser_skip_whitespace (parser);
 
-          if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH,
+          if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH,
                                   &n.value, &n.unit))
             {
               g_array_unref (array);

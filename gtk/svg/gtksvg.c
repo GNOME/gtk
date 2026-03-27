@@ -1851,7 +1851,7 @@ parse_points (GtkCssParser *parser)
     return svg_numbers_new_none ();
   else
     {
-      SvgValue *p = svg_numbers_parse2 (parser, NUMBER|PERCENTAGE|LENGTH);
+      SvgValue *p = svg_numbers_parse2 (parser, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
 
       if (p != NULL && svg_numbers_get_length (p) % 2 == 1)
         {
@@ -1987,37 +1987,37 @@ parse_string_list (const char  *value,
 static SvgValue *
 parse_opacity (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE);
 }
 
 static SvgValue *
 parse_stroke_width (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, 0, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
+  return svg_number_parse (parser, 0, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_LENGTH|SVG_PARSE_PERCENTAGE);
 }
 
 static SvgValue *
 parse_miterlimit (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, 0, DBL_MAX, NUMBER);
+  return svg_number_parse (parser, 0, DBL_MAX, SVG_PARSE_NUMBER);
 }
 
 static SvgValue *
 parse_any_length (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
 parse_length_percentage (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
 parse_any_number (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER);
 }
 
 static SvgValue *
@@ -2029,7 +2029,7 @@ parse_font_weight (GtkCssParser *parser)
   if (v)
     return v;
 
-  return svg_number_parse (parser, 1, 1000, NUMBER);
+  return svg_number_parse (parser, 1, 1000, SVG_PARSE_NUMBER);
 }
 
 static SvgValue *
@@ -2041,7 +2041,7 @@ parse_font_size (GtkCssParser *parser)
   if (v)
     return v;
 
-  return svg_number_parse (parser, 0, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, 0, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
@@ -2050,13 +2050,13 @@ parse_letter_spacing (GtkCssParser *parser)
   if (gtk_css_parser_try_ident (parser, "normal"))
     return svg_number_new (0.);
 
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
 parse_offset (GtkCssParser *parser)
 {
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE);
 }
 
 static SvgValue *
@@ -2069,7 +2069,7 @@ parse_ref_x (GtkCssParser *parser)
   else if (gtk_css_parser_try_ident (parser, "right"))
     return svg_percentage_new (100);
 
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
@@ -2082,7 +2082,7 @@ parse_ref_y (GtkCssParser *parser)
   else if (gtk_css_parser_try_ident (parser, "bottom"))
     return svg_percentage_new (100);
 
-  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|PERCENTAGE|LENGTH);
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
 }
 
 static SvgValue *
@@ -2162,7 +2162,7 @@ parse_transform_origin (GtkCssParser *parser)
         {
           /* nothing to do */
         }
-      else if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, LENGTH|PERCENTAGE, &d[i], &u[i]))
+      else if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_LENGTH|SVG_PARSE_PERCENTAGE, &d[i], &u[i]))
         {
           return NULL;
         }
@@ -7202,7 +7202,7 @@ strokewidth_parse (const char  *value,
   for (i = 0; i < 3; i++)
     {
       gtk_css_parser_skip_whitespace (parser);
-      values[i] = svg_number_parse (parser, -DBL_MAX, DBL_MAX, NUMBER|LENGTH|PERCENTAGE);
+      values[i] = svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_LENGTH|SVG_PARSE_PERCENTAGE);
       if (!values[i])
         retval = FALSE;
     }

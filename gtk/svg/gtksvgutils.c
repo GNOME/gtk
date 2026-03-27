@@ -82,20 +82,20 @@ parse_numeric (const char   *value,
       if (*endp == '%')
         {
           *unit = SVG_UNIT_PERCENTAGE;
-          return (flags & PERCENTAGE) != 0;
+          return (flags & SVG_PARSE_PERCENTAGE) != 0;
         }
 
       for (i = 0; i <= LAST_ANGLE_UNIT; i++)
         {
           if (strcmp (endp, svg_unit_name (i)) == 0)
             {
-              if ((flags & LENGTH) != 0 &&
+              if ((flags & SVG_PARSE_LENGTH) != 0 &&
                   FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
                 {
                   *unit = i;
                   break;
                 }
-              if ((flags & ANGLE) != 0 &&
+              if ((flags & SVG_PARSE_ANGLE) != 0 &&
                   FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
                 {
                   *unit = i;
@@ -113,7 +113,7 @@ parse_numeric (const char   *value,
     }
   else
     {
-      if (flags & NUMBER)
+      if (flags & SVG_PARSE_NUMBER)
         *unit = SVG_UNIT_NUMBER;
       else
         return FALSE;
@@ -147,7 +147,7 @@ parse_numbers2 (const char *value,
       if (*s == '\0' && strv[i] == NULL)
         break;
 
-      if (!parse_numeric (s, min, max, NUMBER, &v, &unit))
+      if (!parse_numeric (s, min, max, SVG_PARSE_NUMBER, &v, &unit))
         {
           g_array_unref (array);
           g_strfreev (strv);
@@ -193,7 +193,7 @@ parse_numbers (const char   *value,
           return FALSE;
         }
 
-      if (!parse_numeric (s, min, max, NUMBER, &values[i], &unit))
+      if (!parse_numeric (s, min, max, SVG_PARSE_NUMBER, &values[i], &unit))
         {
           g_strfreev (strv);
           return FALSE;
@@ -212,7 +212,7 @@ parse_number (const char *value,
 {
   SvgUnit unit;
 
-  return parse_numeric (value, min, max, NUMBER, f, &unit);
+  return parse_numeric (value, min, max, SVG_PARSE_NUMBER, f, &unit);
 }
 
 static void

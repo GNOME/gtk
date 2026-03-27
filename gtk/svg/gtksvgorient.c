@@ -141,7 +141,7 @@ svg_orient_parse (GtkCssParser *parser)
       double f;
       SvgUnit unit;
 
-      if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, NUMBER|ANGLE, &f, &unit))
+      if (!svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_ANGLE, &f, &unit))
         return NULL;
 
       return svg_orient_new_angle (f, unit);

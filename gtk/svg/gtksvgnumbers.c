@@ -244,7 +244,7 @@ svg_numbers_parse2 (GtkCssParser *parser,
 SvgValue *
 svg_numbers_parse (GtkCssParser *parser)
 {
-  return svg_numbers_parse2 (parser, NUMBER);
+  return svg_numbers_parse2 (parser, SVG_PARSE_NUMBER);
 }
 
 static SvgValue *
