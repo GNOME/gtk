@@ -1205,48 +1205,79 @@ text_node_clear (TextNode *self)
 #define ALL_STATES G_MAXUINT64
 
 static gboolean
-parse_states (GtkSvg     *svg,
-              const char *text,
-              uint64_t   *states)
+parse_states_css (GtkCssParser *parser,
+                  GtkSvg       *svg,
+                  uint64_t     *states)
 {
-  GStrv str = NULL;
+  gtk_css_parser_skip_whitespace (parser);
 
-  if (strcmp (text, "all") == 0)
+  if (gtk_css_parser_try_ident (parser, "all"))
     {
       *states = ALL_STATES;
       return TRUE;
     }
-
-  if (strcmp (text, "none") == 0)
+  else if (gtk_css_parser_try_ident (parser, "none"))
     {
       *states = NO_STATES;
       return TRUE;
     }
 
-  *states = 0;
-
-  str = strsplit_set (text, " ");
-  for (unsigned int i = 0; str[i]; i++)
+  *states = NO_STATES;
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      unsigned int u;
-      char *end;
-
-      u = (unsigned int) g_ascii_strtoull (str[i], &end, 10);
-      if ((end && *end != '\0') || (u > 63))
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
-          if (!find_named_state (svg, str[i], &u))
+          char *id = gtk_css_parser_consume_ident (parser);
+          unsigned int u;
+
+          if (!find_named_state (svg, id, &u))
             {
               *states = NO_STATES;
-              g_strfreev (str);
+              g_free (id);
               return FALSE;
             }
-        }
 
-      *states |= BIT (u);
+          *states |= BIT (u);
+        }
+      else if (gtk_css_parser_has_integer (parser))
+        {
+          int i;
+
+          gtk_css_parser_consume_integer (parser, &i);
+          if (i < 0 || i > 63)
+            {
+              *states = NO_STATES;
+              return FALSE;
+            }
+
+          *states |= BIT ((unsigned int) i);
+        }
+      else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        return TRUE;
+      else
+        return FALSE;
     }
 
-  g_strfreev (str);
   return TRUE;
+}
+
+static gboolean
+parse_states (GtkSvg     *svg,
+              const char *text,
+              uint64_t   *states)
+{
+  GtkCssParser *parser = parser_new_for_string (text);
+  gboolean ret;
+
+  gtk_css_parser_skip_whitespace (parser);
+  ret = parse_states_css (parser, svg, states);
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    ret = FALSE;
+  gtk_css_parser_unref (parser);
+
+  return ret;
 }
 
 static void
@@ -3545,41 +3576,42 @@ shape_attr_parse_value (ShapeAttr    attr,
                         const char  *string,
                         GError     **error)
 {
-  if (match_str (string, "inherit"))
-    return svg_inherit_new ();
-  else if (match_str (string, "initial"))
-    return svg_initial_new ();
+  GBytes *bytes;
+  GtkCssParser *parser;
+  SvgValue *value = NULL;
 
-  if (shape_attrs[attr].parse_presentation)
+  bytes = g_bytes_new_static (string, strlen (string));
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, parse_value_error, error, NULL);
+  g_bytes_unref (bytes);
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_try_ident (parser, "inherit"))
+    value = svg_inherit_new ();
+  else if (gtk_css_parser_try_ident (parser, "initial"))
+    value = svg_initial_new ();
+
+  if (!value)
     {
-      return shape_attrs[attr].parse_presentation (string, error);
-    }
-  else
-    {
-      GBytes *bytes;
-      GtkCssParser *parser;
-      SvgValue *value;
-
-      bytes = g_bytes_new_static (string, strlen (string));
-      parser = gtk_css_parser_new_for_bytes (bytes, NULL, parse_value_error, error, NULL);
-
-      gtk_css_parser_skip_whitespace (parser);
-      value = shape_attrs[attr].parse_value (parser);
-
-      gtk_css_parser_skip_whitespace (parser);
-      if (value && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+      if (shape_attrs[attr].parse_presentation)
         {
-          g_clear_pointer (&value, svg_value_unref);
-          g_clear_error (error);
-          g_set_error (error, GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_SYNTAX,
-                       "Junk at end of value");
+          value = shape_attrs[attr].parse_presentation (string, error);
+          gtk_css_parser_unref (parser);
+          return value;
         }
-
-      gtk_css_parser_unref (parser);
-      g_bytes_unref (bytes);
-
-      return value;
+      else
+        value = shape_attrs[attr].parse_value (parser);
     }
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (value && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      g_clear_pointer (&value, svg_value_unref);
+      g_clear_error (error);
+      g_set_error (error, GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_SYNTAX, "Junk at end of value");
+    }
+
+  gtk_css_parser_unref (parser);
+  return value;
 }
 
 static gboolean
