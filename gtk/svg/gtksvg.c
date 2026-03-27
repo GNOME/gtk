@@ -4866,119 +4866,129 @@ time_spec_equal (const void *p1,
     }
 }
 
-static gboolean
-time_spec_parse (GtkSvg     *svg,
-                 TimeSpec   *spec,
-                 const char *value)
+typedef struct
 {
-  const char *side_str;
-  const char *offset_str;
-  TimeSpecSide side;
+  GtkSvg *svg;
+  uint64_t states[2];
+  gboolean set[2];
+} ParseStatesArg;
 
-  spec->offset = 0;
+static unsigned int
+parse_states_arg (GtkCssParser *parser,
+                  unsigned int  n,
+                  gpointer      data)
+{
+  ParseStatesArg *arg = data;
+  uint64_t states;
 
-  if (match_str (value, "indefinite"))
+  if (!parse_states_css (parser, arg->svg, &states))
+    return 0;
+
+  arg->states[n] = states;
+  arg->set[n] = TRUE;
+  return 1;
+}
+
+static gboolean
+parser_has_namespaced_function (GtkCssParser *parser,
+                                const char   *prefix,
+                                const char   *function)
+{
+  if (!gtk_css_parser_try_ident (parser, prefix))
+    return FALSE;
+
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
+    return FALSE;
+
+  return gtk_css_parser_has_function (parser, function);
+}
+
+static gboolean
+time_spec_parse (GtkCssParser *parser,
+                 GtkSvg       *svg,
+                 TimeSpec     *spec)
+{
+  memset (spec, 0, sizeof (TimeSpec));
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_try_ident (parser, "indefinite"))
     {
       spec->type = TIME_SPEC_TYPE_INDEFINITE;
     }
-  else if ((side_str = strstr (value, ".begin")) != NULL ||
-           (side_str = strstr (value, ".end")) != NULL)
+  else if (parser_try_duration (parser, &spec->offset))
     {
-      char *str;
+      spec->type = TIME_SPEC_TYPE_OFFSET;
+    }
+  else if (parser_has_namespaced_function (parser, "gpa", "states"))
+    {
+      ParseStatesArg arg = {
+        .svg = svg,
+        .states = { NO_STATES, NO_STATES },
+        .set = { FALSE, FALSE },
+      };
 
-      if (g_str_has_prefix (side_str, ".begin"))
+      if (gtk_css_parser_consume_function (parser, 1, 2, parse_states_arg, &arg))
         {
-          side = TIME_SPEC_SIDE_BEGIN;
-          offset_str = side_str + strlen (".begin");
-        }
-      else
-        {
-          side = TIME_SPEC_SIDE_END;
-          offset_str = side_str + strlen (".end");
-        }
-
-      if (strlen (offset_str) > 0)
-        {
-          if (!parse_duration (offset_str, FALSE, &spec->offset))
-            return FALSE;
-        }
-
-      str = g_strndup (value, side_str - value);
-      if (g_str_has_prefix (str, "gpa:states(") &&
-          g_str_has_suffix (str, ")"))
-        {
-          uint64_t states;
-          str[strlen (str) - 1] = '\0';
-          if (!parse_states (svg, str + strlen ("gpa:states("), &states))
-            {
-              g_free (str);
-              return FALSE;
-            }
-          g_free (str);
-
           spec->type = TIME_SPEC_TYPE_STATES;
-          if (side == TIME_SPEC_SIDE_BEGIN)
+
+          if (!arg.set[1])
             {
-              spec->states.from = ALL_STATES & ~states;
-              spec->states.to = states;
+              TimeSpecSide side;
+
+              if (!gtk_css_parser_try_delim (parser, '.'))
+                return FALSE;
+              if (gtk_css_parser_try_ident (parser, "begin"))
+                side = TIME_SPEC_SIDE_BEGIN;
+              else if (gtk_css_parser_try_ident (parser, "end"))
+                side = TIME_SPEC_SIDE_END;
+              else
+                return FALSE;
+
+              if (side == TIME_SPEC_SIDE_BEGIN)
+                {
+                  spec->states.from = ALL_STATES & ~arg.states[0];
+                  spec->states.to = arg.states[0];
+                }
+              else
+                {
+                  spec->states.from = arg.states[0];
+                  spec->states.to = ALL_STATES & ~arg.states[0];
+                }
             }
           else
             {
-              spec->states.from = states;
-              spec->states.to = ALL_STATES & ~states;
+              spec->type = TIME_SPEC_TYPE_STATES;
+              spec->states.from = arg.states[0];
+              spec->states.to = arg.states[1];
             }
+
+          gtk_css_parser_skip_whitespace (parser);
+          parser_try_duration (parser, &spec->offset);
         }
       else
-        {
-          spec->type = TIME_SPEC_TYPE_SYNC;
-          spec->sync.ref = str;
-          spec->sync.base = NULL;
-          spec->sync.side = side;
-        }
+        return FALSE;
     }
-  else if (g_str_has_prefix (value, "gpa:states("))
+  else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     {
-      const char *v, *end;
-      char *str;
-      uint64_t from, to;
+      spec->type = TIME_SPEC_TYPE_SYNC;
+      spec->sync.ref = gtk_css_parser_consume_ident (parser);
+      spec->sync.base = NULL;
 
-      v = value + strlen ("gpa:states(");
-      end = strchr (v, ',');
-      if (!end)
+      if (!gtk_css_parser_try_delim (parser, '.'))
         return FALSE;
 
-      str = g_strndup (v, end - v);
-      if (!parse_states (svg, str, &from))
-        {
-          g_free (str);
-          return FALSE;
-        }
-      g_free (str);
-
-      v = end + 1;
-      end = strchr (v, ')');
-      if (!end)
+      if (gtk_css_parser_try_ident (parser, "begin"))
+        spec->sync.side = TIME_SPEC_SIDE_BEGIN;
+      else if (gtk_css_parser_try_ident (parser, "end"))
+        spec->sync.side = TIME_SPEC_SIDE_END;
+      else
         return FALSE;
 
-      str = g_strndup (v, end - v);
-      if (!parse_states (svg, str, &to))
-        {
-          g_free (str);
-          return FALSE;
-        }
-      g_free (str);
-
-      spec->type = TIME_SPEC_TYPE_STATES;
-      spec->states.from = from;
-      spec->states.to = to;
+      gtk_css_parser_skip_whitespace (parser);
+      parser_try_duration (parser, &spec->offset);
     }
-  else if (strlen (value) > 0)
-    {
-      if (!parse_duration (value, FALSE, &spec->offset))
-        return FALSE;
-
-      spec->type = TIME_SPEC_TYPE_OFFSET;
-    }
+  else
+    return FALSE;
 
   return TRUE;
 }
@@ -8316,6 +8326,25 @@ typedef struct
 
 /* {{{ Animation attributes */
 
+typedef struct
+{
+  GtkSvg *svg;
+  GArray *array;
+} Specs;
+
+static gboolean
+time_spec_parse_one (GtkCssParser *parser,
+                     gpointer      user_data)
+{
+  Specs *specs = user_data;
+  TimeSpec *spec;
+
+  g_array_set_size (specs->array, specs->array->len + 1);
+  spec = &g_array_index (specs->array, TimeSpec, specs->array->len - 1);
+
+  return time_spec_parse (parser, specs->svg, spec);
+}
+
 static gboolean
 parse_base_animation_attrs (Animation            *a,
                             const char           *element_name,
@@ -8385,28 +8414,32 @@ parse_base_animation_attrs (Animation            *a,
 
   if (begin_attr)
     {
-      GStrv strv;
+      GtkCssParser *parser = parser_new_for_string (begin_attr);
+      Specs specs;
 
-      strv = g_strsplit (begin_attr, ";", 0);
-      for (unsigned int i = 0; strv[i]; i++)
+      specs.svg = data->svg;
+      specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
+      g_array_set_clear_func (specs.array, (GDestroyNotify) time_spec_clear);
+
+      if (parser_parse_list (parser, time_spec_parse_one, &specs))
         {
-          TimeSpec spec = { 0, };
-          TimeSpec *begin;
-          GError *error = NULL;
-
-          if (!time_spec_parse (data->svg, &spec, strv[i]))
+          for (unsigned int i = 0; i < specs.array->len; i++)
             {
-              gtk_svg_invalid_attribute (data->svg, context, attr_names, "begin", NULL);
-              g_clear_error (&error);
-              continue;
-            }
+              TimeSpec *spec = &g_array_index (specs.array, TimeSpec, i);
+              TimeSpec *begin;
 
-          a->has_begin = 1;
-          begin = animation_add_begin (a, timeline_get_time_spec (data->svg->timeline, &spec));
-          time_spec_add_animation (begin, a);
-          time_spec_clear (&spec);
+              a->has_begin = 1;
+              begin = animation_add_begin (a, timeline_get_time_spec (data->svg->timeline, spec));
+              time_spec_add_animation (begin, a);
+            }
         }
-      g_strfreev (strv);
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "begin", NULL);
+        }
+
+      gtk_css_parser_unref (parser);
+      g_array_unref (specs.array);
     }
   else
     {
@@ -8417,27 +8450,32 @@ parse_base_animation_attrs (Animation            *a,
 
   if (end_attr)
     {
-      GStrv strv;
+      GtkCssParser *parser = parser_new_for_string (end_attr);
+      Specs specs;
 
-      strv = g_strsplit (end_attr, ";", 0);
-      for (unsigned int i = 0; strv[i]; i++)
+      specs.svg = data->svg;
+      specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
+      g_array_set_clear_func (specs.array, (GDestroyNotify) time_spec_clear);
+
+      if (parser_parse_list (parser, time_spec_parse_one, &specs))
         {
-          TimeSpec spec = { 0, };
-          TimeSpec *end;
-          GError *error = NULL;
-
-          if (!time_spec_parse (data->svg, &spec, strv[i]))
+          for (unsigned int i = 0; i < specs.array->len; i++)
             {
-              gtk_svg_invalid_attribute (data->svg, context, attr_names, "end", NULL);
-              g_clear_error (&error);
-              continue;
+              TimeSpec *spec = &g_array_index (specs.array, TimeSpec, i);
+              TimeSpec *end;
+
+              a->has_end = 1;
+              end = animation_add_end (a, timeline_get_time_spec (data->svg->timeline, spec));
+              time_spec_add_animation (end, a);
             }
-          a->has_end = 1;
-          end = animation_add_end (a, timeline_get_time_spec (data->svg->timeline, &spec));
-          time_spec_add_animation (end, a);
-          time_spec_clear (&spec);
         }
-      g_strfreev (strv);
+      else
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "end", NULL);
+        }
+
+      gtk_css_parser_unref (parser);
+      g_array_unref (specs.array);
     }
   else
     {
@@ -19427,4 +19465,3 @@ gtk_svg_pause (GtkSvg *self)
 /* }}} */
 
 /* vim:set foldmethod=marker: */
-

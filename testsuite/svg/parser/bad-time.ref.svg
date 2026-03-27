@@ -4,7 +4,6 @@
   <g>
     <animate
             attributeName='fill'
-            begin='0ms'
             from='rgb(255,0,0)'
             to='rgb(0,128,0)'
             keyTimes='0; 1'/>
