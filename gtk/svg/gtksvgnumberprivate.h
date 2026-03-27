@@ -41,7 +41,7 @@ gboolean   svg_value_is_positive_number (const SvgValue      *value);
 
 
 const char *svg_unit_name (SvgUnit unit);
-
+SvgDimension svg_unit_dimension (SvgUnit unit);
 
 gboolean is_absolute_length          (SvgUnit                unit);
 

@@ -259,9 +259,10 @@ css_parser_parse_number_length (GtkCssParser *parser,
       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
     {
-      for (unsigned int i = FIRST_LENGTH_UNIT; i <= LAST_LENGTH_UNIT; i++)
+      for (unsigned int i = 0; i < SVG_UNIT_TURN; i++)
         {
-          if (strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
+          if (svg_unit_dimension (i) == SVG_DIMENSION_LENGTH &&
+              strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
             {
               val[n].value = ((const GtkCssDimensionToken *) token)->value;
               val[n].unit = i;
@@ -299,9 +300,10 @@ css_parser_parse_number_angle (GtkCssParser *parser,
       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
       gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
     {
-      for (unsigned int i = FIRST_ANGLE_UNIT; i <= LAST_ANGLE_UNIT; i++)
+      for (unsigned int i = 0; i <= SVG_UNIT_TURN; i++)
         {
-          if (strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
+          if (svg_unit_dimension (i) == SVG_DIMENSION_ANGLE &&
+              strcmp (svg_unit_name (i), ((const GtkCssDimensionToken *) token)->dimension) == 0)
             {
               val[n].value = ((const GtkCssDimensionToken *) token)->value;
               val[n].unit = i;

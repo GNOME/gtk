@@ -27,32 +27,41 @@
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgenumprivate.h"
 
-static const char * unit_names[] = {
-  [SVG_UNIT_NUMBER] = "",
-  [SVG_UNIT_PERCENTAGE] = "%",
-  [SVG_UNIT_PX] = "px",
-  [SVG_UNIT_PT] = "pt",
-  [SVG_UNIT_IN] = "in",
-  [SVG_UNIT_CM] = "cm",
-  [SVG_UNIT_MM] = "mm",
-  [SVG_UNIT_VW] = "vw",
-  [SVG_UNIT_VH] = "vh",
-  [SVG_UNIT_VMIN] = "vmin",
-  [SVG_UNIT_VMAX] = "vmax",
-  [SVG_UNIT_EM] = "em",
-  [SVG_UNIT_EX] = "ex",
-  [SVG_UNIT_S] = "s",
-  [SVG_UNIT_MS] = "ms",
-  [SVG_UNIT_DEG] = "deg",
-  [SVG_UNIT_RAD] = "rad",
-  [SVG_UNIT_GRAD] = "grad",
-  [SVG_UNIT_TURN] = "turn",
+static struct {
+  const char *name;
+  SvgDimension dimension;
+} units[] = {
+  [SVG_UNIT_NUMBER] = { "", SVG_DIMENSION_NUMBER },
+  [SVG_UNIT_PERCENTAGE] = { "%", SVG_DIMENSION_NUMBER },
+  [SVG_UNIT_PX] = { "px", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_PT] = { "pt", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_IN] = { "in", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_CM] = { "cm", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_MM] = { "mm", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_VW] = { "vw", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_VH] = { "vh", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_VMIN] = { "vmin", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_VMAX] = { "vmax", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_EM] = { "em", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_EX] = { "ex", SVG_DIMENSION_LENGTH },
+  [SVG_UNIT_S] = { "s", SVG_DIMENSION_TIME },
+  [SVG_UNIT_MS] = { "ms", SVG_DIMENSION_TIME },
+  [SVG_UNIT_DEG] = { "deg", SVG_DIMENSION_ANGLE },
+  [SVG_UNIT_RAD] = { "rad", SVG_DIMENSION_ANGLE },
+  [SVG_UNIT_GRAD] = { "grad", SVG_DIMENSION_ANGLE },
+  [SVG_UNIT_TURN] = { "turn", SVG_DIMENSION_ANGLE },
 };
 
 const char *
 svg_unit_name (SvgUnit unit)
 {
-  return unit_names[unit];
+  return units[unit].name;
+}
+
+SvgDimension
+svg_unit_dimension (SvgUnit unit)
+{
+  return units[unit].dimension;
 }
 
 typedef struct
@@ -108,7 +117,7 @@ svg_number_print (const SvgValue *value,
 {
   const SvgNumber *n = (const SvgNumber *) value;
   string_append_double (string, "", n->value);
-  g_string_append (string, unit_names[n->unit]);
+  g_string_append (string, svg_unit_name (n->unit));
 }
 
 static double
@@ -484,13 +493,13 @@ svg_number_parse2 (GtkCssParser        *parser,
 
       number = token->dimension.value;
 
-      for (i = 0; i < G_N_ELEMENTS (unit_names); i++)
+      for (i = 0; i < SVG_UNIT_TURN; i++)
         {
-          if (g_ascii_strcasecmp (token->dimension.dimension, unit_names[i]) == 0)
+          if (g_ascii_strcasecmp (token->dimension.dimension, svg_unit_name (i)) == 0)
             break;
         }
 
-      if (FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
+      if (svg_unit_dimension (i) == SVG_DIMENSION_LENGTH)
         {
           if (flags & SVG_PARSE_LENGTH)
             unit = i;
@@ -500,7 +509,7 @@ svg_number_parse2 (GtkCssParser        *parser,
               return FALSE;
             }
         }
-      else if (FIRST_TIME_UNIT <= i && i <= LAST_TIME_UNIT)
+      else if (svg_unit_dimension (i) == SVG_DIMENSION_TIME)
         {
           if (flags & SVG_PARSE_TIME)
             unit = i;
@@ -510,7 +519,7 @@ svg_number_parse2 (GtkCssParser        *parser,
               return FALSE;
             }
         }
-      else if (FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
+      else if (svg_unit_dimension (i) == SVG_DIMENSION_ANGLE)
         {
           if (flags & SVG_PARSE_ANGLE)
             unit = i;

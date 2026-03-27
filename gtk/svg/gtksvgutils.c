@@ -85,25 +85,26 @@ parse_numeric (const char   *value,
           return (flags & SVG_PARSE_PERCENTAGE) != 0;
         }
 
-      for (i = 0; i <= LAST_ANGLE_UNIT; i++)
+      for (i = SVG_UNIT_NUMBER; i <= SVG_UNIT_TURN; i++)
         {
           if (strcmp (endp, svg_unit_name (i)) == 0)
             {
               if ((flags & SVG_PARSE_LENGTH) != 0 &&
-                  FIRST_LENGTH_UNIT <= i && i <= LAST_LENGTH_UNIT)
+                  svg_unit_dimension (i) == SVG_DIMENSION_LENGTH)
                 {
                   *unit = i;
                   break;
                 }
               if ((flags & SVG_PARSE_ANGLE) != 0 &&
-                  FIRST_ANGLE_UNIT <= i && i <= LAST_ANGLE_UNIT)
+                  svg_unit_dimension (i) == SVG_DIMENSION_ANGLE)
                 {
                   *unit = i;
                   break;
                 }
             }
         }
-      if (i > LAST_ANGLE_UNIT)
+
+      if (i > SVG_UNIT_TURN)
         return FALSE;
 
       if (*f < min || *f > max)
