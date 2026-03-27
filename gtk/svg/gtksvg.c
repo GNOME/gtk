@@ -8458,9 +8458,7 @@ parse_base_animation_attrs (Animation            *a,
   if (repeat_count_attr)
     {
       a->has_repeat_count = 1;
-      if (match_str (repeat_count_attr, "indefinite"))
-        a->repeat_count = REPEAT_FOREVER;
-      else if (!parse_number (repeat_count_attr, 0, DBL_MAX, &a->repeat_count))
+      if (!parse_number_or_named (repeat_count_attr, 0, DBL_MAX, "indefinite", REPEAT_FOREVER, &a->repeat_count))
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "repeatCount", NULL);
           a->has_repeat_count = 0;
@@ -9639,9 +9637,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   animation_repeat = REPEAT_FOREVER;
   if (animation_repeat_attr)
     {
-      if (match_str (animation_repeat_attr, "indefinite"))
-        animation_repeat = REPEAT_FOREVER;
-      else if (!parse_number (animation_repeat_attr, 0, DBL_MAX, &animation_repeat))
+      if (!parse_number_or_named (animation_repeat_attr, 0, DBL_MAX, "indefinite", REPEAT_FOREVER, &animation_repeat))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "gpa:animation-repeat", NULL);
     }
 

@@ -219,14 +219,49 @@ parse_numbers (const char   *value,
 }
 
 gboolean
-parse_number (const char *value,
+parse_number_or_named (const char *string,
+                       double      min,
+                       double      max,
+                       const char *name,
+                       double      named_value,
+                       double     *result)
+{
+  GtkCssParser *parser = parser_new_for_string (string);
+  gboolean ret = FALSE;
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (name && gtk_css_parser_try_ident (parser, name))
+    {
+      *result = named_value;
+      ret = TRUE;
+    }
+  else
+    {
+      double d;
+      SvgUnit u;
+
+      if (svg_number_parse2 (parser, min, max, SVG_PARSE_NUMBER, &d, &u))
+        {
+          *result = d;
+          ret = TRUE;
+        }
+    }
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    ret = FALSE;
+
+  gtk_css_parser_unref (parser);
+
+  return ret;
+}
+
+gboolean
+parse_number (const char *string,
               double      min,
               double      max,
-              double     *f)
+              double     *result)
 {
-  SvgUnit unit;
-
-  return parse_numeric (value, min, max, SVG_PARSE_NUMBER, f, &unit);
+  return parse_number_or_named (string, min, max, NULL, 0, result);
 }
 
 static void

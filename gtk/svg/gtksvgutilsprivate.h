@@ -145,10 +145,17 @@ gboolean parse_numbers (const char   *value,
                         unsigned int  length,
                         unsigned int *n_values);
 
-gboolean parse_number (const char *value,
+gboolean parse_number_or_named (const char *string,
+                                double      min,
+                                double      max,
+                                const char *name,
+                                double      named_value,
+                                double     *result);
+
+gboolean parse_number (const char *string,
                        double      min,
                        double      max,
-                       double     *f);
+                       double     *result);
 
 gboolean match_str_len (const char *value,
                         const char *str,
