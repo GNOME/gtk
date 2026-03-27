@@ -662,33 +662,6 @@ markup_filter_attributes (const char *element_name,
   va_end (ap);
 }
 
-static gboolean
-parse_duration (const char *value,
-                int64_t    *f)
-{
-  double v;
-  char *endp = NULL;
-
-  v = g_ascii_strtod (value, &endp);
-
-  if (endp == value)
-    return FALSE;
-
-  if (endp && *endp != '\0')
-    {
-      if (strcmp (endp, "ms") == 0)
-        *f = (int64_t) round (v * G_TIME_SPAN_MILLISECOND);
-      else if (strcmp (endp, "s") == 0)
-        *f = (int64_t) round (v * G_TIME_SPAN_SECOND);
-      else
-        return FALSE;
-    }
-  else
-    *f = (int64_t) round (v * G_TIME_SPAN_SECOND);
-
-  return TRUE;
-}
-
 static void
 path_builder_add_ellipse (GskPathBuilder *builder,
                           double cx, double cy,
@@ -4894,7 +4867,7 @@ time_spec_parse (GtkSvg     *svg,
 
       if (strlen (offset_str) > 0)
         {
-          if (!parse_duration (offset_str, &spec->offset))
+          if (!parse_duration (offset_str, FALSE, &spec->offset))
             return FALSE;
         }
 
@@ -4969,7 +4942,7 @@ time_spec_parse (GtkSvg     *svg,
     }
   else if (strlen (value) > 0)
     {
-      if (!parse_duration (value, &spec->offset))
+      if (!parse_duration (value, FALSE, &spec->offset))
         return FALSE;
 
       spec->type = TIME_SPEC_TYPE_OFFSET;
@@ -8445,9 +8418,7 @@ parse_base_animation_attrs (Animation            *a,
   if (dur_attr)
     {
       a->has_simple_duration = 1;
-      if (match_str (dur_attr, "indefinite"))
-        a->simple_duration = INDEFINITE;
-      else if (!parse_duration (dur_attr, &a->simple_duration))
+      if (!parse_duration (dur_attr, TRUE, &a->simple_duration))
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "dur", NULL);
           a->has_simple_duration = 0;
@@ -8469,9 +8440,7 @@ parse_base_animation_attrs (Animation            *a,
   if (repeat_dur_attr)
     {
       a->has_repeat_duration = 1;
-      if (match_str (repeat_dur_attr, "indefinite"))
-        a->repeat_duration = INDEFINITE;
-      else if (!parse_duration (repeat_dur_attr, &a->repeat_duration))
+      if (!parse_duration (repeat_dur_attr, TRUE, &a->repeat_duration))
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "repeatDur", NULL);
           a->has_repeat_duration = 0;
@@ -9584,14 +9553,14 @@ parse_shape_gpa_attrs (Shape                *shape,
   transition_duration = 0;
   if (transition_duration_attr)
     {
-      if (!parse_duration (transition_duration_attr, &transition_duration))
+      if (!parse_duration (transition_duration_attr, FALSE, &transition_duration))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "gpa:transition-duration", NULL);
     }
 
   transition_delay = 0;
   if (transition_delay_attr)
     {
-      if (!parse_duration (transition_delay_attr, &transition_delay))
+      if (!parse_duration (transition_delay_attr, FALSE, &transition_delay))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "gpa:transition-delay", NULL);
     }
 
@@ -9630,7 +9599,7 @@ parse_shape_gpa_attrs (Shape                *shape,
   animation_duration = 0;
   if (animation_duration_attr)
     {
-      if (!parse_duration (animation_duration_attr, &animation_duration))
+      if (!parse_duration (animation_duration_attr, FALSE, &animation_duration))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "gpa:animation-duration", NULL);
     }
 

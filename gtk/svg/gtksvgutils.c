@@ -288,6 +288,33 @@ parser_try_duration (GtkCssParser *parser,
   return FALSE;
 }
 
+gboolean
+parse_duration (const char *string,
+                gboolean    allow_indefinite,
+                int64_t    *result)
+{
+  GtkCssParser *parser = parser_new_for_string (string);
+  gboolean ret = FALSE;
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (allow_indefinite && gtk_css_parser_try_ident (parser, "indefinite"))
+    {
+      *result = INDEFINITE;
+      ret = TRUE;
+    }
+  else if (parser_try_duration (parser, result))
+    {
+      ret = TRUE;
+    }
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    ret = FALSE;
+
+  gtk_css_parser_unref (parser);
+  return ret;
+}
+
 static void
 skip_whitespace (const char **p)
 {

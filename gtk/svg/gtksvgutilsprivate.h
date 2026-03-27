@@ -160,6 +160,10 @@ gboolean parse_number (const char *string,
 gboolean parser_try_duration (GtkCssParser *parser,
                               int64_t      *result);
 
+gboolean parse_duration (const char *string,
+                         gboolean    allow_indefinite,
+                         int64_t    *result);
+
 gboolean match_str_len (const char *value,
                         const char *str,
                         size_t      len);
