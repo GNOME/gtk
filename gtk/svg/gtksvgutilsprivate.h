@@ -132,19 +132,6 @@ char ** strsplit_set (const char *str,
 
 GtkCssParser * parser_new_for_string (const char *string);
 
-GArray * parse_numbers2 (const char *value,
-                         const char *sep,
-                         double      min,
-                         double      max);
-
-gboolean parse_numbers (const char   *value,
-                        const char   *sep,
-                        double        min,
-                        double        max,
-                        double       *values,
-                        unsigned int  length,
-                        unsigned int *n_values);
-
 typedef gboolean (* ItemParseFunc) (GtkCssParser *parser,
                                     gpointer      data);
 
@@ -175,12 +162,6 @@ gboolean parse_duration (const char *string,
                          gboolean    allow_indefinite,
                          int64_t    *result);
 
-gboolean match_str_len (const char *value,
-                        const char *str,
-                        size_t      len);
-
-#define match_str(value, str) match_str_len (value, str, strlen (str))
-
 gboolean parser_try_enum (GtkCssParser  *parser,
                           const char   **values,
                           size_t         n_values,
@@ -190,3 +171,4 @@ gboolean parse_enum (const char    *string,
                      const char   **values,
                      size_t         n_values,
                      unsigned int  *result);
+
