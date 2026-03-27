@@ -41,6 +41,8 @@ static const char * unit_names[] = {
   [SVG_UNIT_VMAX] = "vmax",
   [SVG_UNIT_EM] = "em",
   [SVG_UNIT_EX] = "ex",
+  [SVG_UNIT_S] = "s",
+  [SVG_UNIT_MS] = "ms",
   [SVG_UNIT_DEG] = "deg",
   [SVG_UNIT_RAD] = "rad",
   [SVG_UNIT_GRAD] = "grad",
@@ -322,6 +324,8 @@ svg_number_resolve (const SvgValue    *value,
     case SVG_UNIT_TURN:
       return svg_number_new_full (SVG_UNIT_DEG, angle_to_deg (n->value, n->unit));
 
+    case SVG_UNIT_S:
+    case SVG_UNIT_MS:
     default:
       g_assert_not_reached ();
     }
@@ -454,6 +458,8 @@ svg_number_parse2 (GtkCssParser        *parser,
             unit = SVG_UNIT_NUMBER;
           else if (flags & SVG_PARSE_LENGTH)
             unit = SVG_UNIT_PX;
+          else if (flags & SVG_PARSE_TIME)
+            unit = SVG_UNIT_S;
           else if (flags & SVG_PARSE_ANGLE)
             unit = SVG_UNIT_DEG;
           else
@@ -491,6 +497,16 @@ svg_number_parse2 (GtkCssParser        *parser,
           else
             {
               gtk_css_parser_error_value (parser, "Lengths are not allowed here");
+              return FALSE;
+            }
+        }
+      else if (FIRST_TIME_UNIT <= i && i <= LAST_TIME_UNIT)
+        {
+          if (flags & SVG_PARSE_TIME)
+            unit = i;
+          else
+            {
+              gtk_css_parser_error_value (parser, "Times are not allowed here");
               return FALSE;
             }
         }

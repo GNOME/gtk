@@ -12,7 +12,8 @@ typedef enum
   SVG_PARSE_NUMBER     = 1 << 0,
   SVG_PARSE_PERCENTAGE = 1 << 1,
   SVG_PARSE_LENGTH     = 1 << 2,
-  SVG_PARSE_ANGLE      = 1 << 3,
+  SVG_PARSE_TIME       = 1 << 3,
+  SVG_PARSE_ANGLE      = 1 << 4,
 } SvgNumberParseFlags;
 
 SvgValue * svg_number_new               (double               value);
