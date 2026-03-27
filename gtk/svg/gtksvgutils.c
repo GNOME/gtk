@@ -264,6 +264,30 @@ parse_number (const char *string,
   return parse_number_or_named (string, min, max, NULL, 0, result);
 }
 
+gboolean
+parser_try_duration (GtkCssParser *parser,
+                     int64_t      *result)
+{
+  double v;
+  SvgUnit unit;
+
+  if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_TIME, &v, &unit))
+    {
+      if (unit == SVG_UNIT_NUMBER)
+        *result = (int64_t) round (v * G_TIME_SPAN_SECOND);
+      else if (unit == SVG_UNIT_MS)
+        *result = (int64_t) round (v * G_TIME_SPAN_MILLISECOND);
+      else if (unit == SVG_UNIT_S)
+        *result = (int64_t) round (v * G_TIME_SPAN_SECOND);
+      else
+        return FALSE;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 skip_whitespace (const char **p)
 {

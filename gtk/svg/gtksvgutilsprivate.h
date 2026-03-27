@@ -157,6 +157,9 @@ gboolean parse_number (const char *string,
                        double      max,
                        double     *result);
 
+gboolean parser_try_duration (GtkCssParser *parser,
+                              int64_t      *result);
+
 gboolean match_str_len (const char *value,
                         const char *str,
                         size_t      len);
