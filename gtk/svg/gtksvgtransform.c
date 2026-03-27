@@ -552,101 +552,73 @@ svg_transform_parse (const char *value)
 
 SvgValue *
 primitive_transform_parse (TransformType  type,
-                           const char    *value)
+                           const char    *string)
 {
-  GStrv strv;
-  unsigned int n;
+  GtkCssParser *parser = parser_new_for_string (string);
+  double angle, x, y;
+  SvgUnit u;
+  SvgValue *value = NULL;
 
-  strv = strsplit_set (value, ", ");
-  n = g_strv_length (strv);
-
+  gtk_css_parser_skip_whitespace (parser);
   switch (type)
     {
     case TRANSFORM_TRANSLATE:
-      {
-        double x, y;
-
-        if (n < 1 || n > 2 ||
-            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-            ((n == 2) && !parse_number (strv[1], -DBL_MAX, DBL_MAX, &y)))
-          {
-            g_strfreev (strv);
-            return NULL;
-          }
-
-        g_strfreev (strv);
-        return svg_transform_new_translate (x, n == 2 ? y : 0);
-      }
+      if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &x, &u))
+        {
+          skip_whitespace_and_optional_comma (parser);
+          if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &y, &u))
+            value = svg_transform_new_translate (x, y);
+          else
+            value = svg_transform_new_translate (x, 0);
+        }
+      break;
 
     case TRANSFORM_SCALE:
-      {
-        double x, y;
-
-        if (n < 1 || n > 2 ||
-            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &x) ||
-            ((n == 2) && !parse_number (strv[1], -DBL_MAX, DBL_MAX, &y)))
-          {
-            g_strfreev (strv);
-            return NULL;
-          }
-
-        g_strfreev (strv);
-        return svg_transform_new_scale (x, n == 2 ? y : x);
-      }
+      if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &x, &u))
+        {
+          skip_whitespace_and_optional_comma (parser);
+          if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &y, &u))
+            value = svg_transform_new_scale (x, y);
+          else
+            value = svg_transform_new_scale (x, x);
+        }
+      break;
 
     case TRANSFORM_ROTATE:
-      {
-        double angle, x, y;
-
-        if ((n != 1 && n != 3) ||
-            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle) ||
-            ((n == 3) &&
-             (!parse_number (strv[1], -DBL_MAX, DBL_MAX, &x) ||
-              !parse_number (strv[2], -DBL_MAX, DBL_MAX, &y))))
-          {
-            g_strfreev (strv);
-            return NULL;
-          }
-
-        g_strfreev (strv);
-        return svg_transform_new_rotate (angle, n == 3 ? x : 0, n == 3 ? y : 0);
-      }
+      if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &angle, &u))
+        {
+          skip_whitespace_and_optional_comma (parser);
+          if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &x, &u))
+            {
+              skip_whitespace_and_optional_comma (parser);
+              if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &y, &u))
+                value = svg_transform_new_rotate (angle, x, y);
+              else
+                value = svg_transform_new_rotate (angle, x, 0);
+            }
+          else
+            value = svg_transform_new_rotate (angle, 0, 0);
+        }
+      break;
 
     case TRANSFORM_SKEW_X:
-      {
-        double angle;
-
-        if (n != 1 ||
-            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle))
-          {
-            g_strfreev (strv);
-            return NULL;
-          }
-
-        g_strfreev (strv);
-        return svg_transform_new_skew_x (angle);
-      }
+      if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &angle, &u))
+        value = svg_transform_new_skew_x (angle);
+      break;
 
     case TRANSFORM_SKEW_Y:
-      {
-        double angle;
-
-        if (n != 1 ||
-            !parse_number (strv[0], -DBL_MAX, DBL_MAX, &angle))
-          {
-            g_strfreev (strv);
-            return NULL;
-          }
-
-        g_strfreev (strv);
-        return svg_transform_new_skew_y (angle);
-      }
+      if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &angle, &u))
+        value = svg_transform_new_skew_y (angle);
+      break;
 
     case TRANSFORM_NONE:
     case TRANSFORM_MATRIX:
     default:
       g_assert_not_reached ();
     }
+
+  gtk_css_parser_unref (parser);
+  return value;
 }
 
 void
