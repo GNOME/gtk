@@ -341,18 +341,37 @@ match_str_len (const char *value,
 }
 
 gboolean
-parse_enum (const char    *value,
-            const char   **values,
-            size_t         n_values,
-            unsigned int  *result)
+parser_try_enum (GtkCssParser  *parser,
+                 const char   **values,
+                 size_t         n_values,
+                 unsigned int  *result)
 {
   for (unsigned int i = 0; i < n_values; i++)
     {
-      if (values[i] && match_str (value, values[i]))
+      if (gtk_css_parser_try_ident (parser, values[i]))
         {
           *result = i;
           return TRUE;
         }
     }
+
   return FALSE;
+}
+
+gboolean
+parse_enum (const char    *string,
+            const char   **values,
+            size_t         n_values,
+            unsigned int  *result)
+{
+  GtkCssParser *parser = parser_new_for_string (string);
+  gboolean ret;
+
+  gtk_css_parser_skip_whitespace (parser);
+  ret = parser_try_enum (parser, values, n_values, result);
+  gtk_css_parser_skip_whitespace (parser);
+  ret = gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF);
+  gtk_css_parser_unref (parser);
+
+  return ret;
 }

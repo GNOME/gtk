@@ -9147,17 +9147,30 @@ parse_motion_animation_attrs (Animation            *a,
   a->motion.angle = 0;
   if (rotate_attr)
     {
-      unsigned int value;
-      double fixed_value;
+      GtkCssParser *parser = parser_new_for_string (rotate_attr);
+      SvgValue *value;
 
-      if (parse_number (rotate_attr, 0, 360, &fixed_value))
-        a->motion.angle = fixed_value;
-      else if (parse_enum (rotate_attr,
-                           (const char *[]) { "auto", "auto-reverse" }, 2,
-                           &value))
-        a->motion.rotate = (AnimationRotate) value;
-      else
-        gtk_svg_invalid_attribute (data->svg, context, attr_names, "rotate", NULL);
+      gtk_css_parser_skip_whitespace (parser);
+      value = svg_number_parse (parser, -DBL_MAX, DBL_MAX, 0);
+      if (value)
+        {
+          a->motion.angle = svg_number_get (value, 100);
+          a->motion.rotate = ROTATE_FIXED;
+          svg_value_unref (value);
+        }
+      else if (!parser_try_enum (parser,
+                                 (const char *[]) { "auto", "auto-reverse" }, 2,
+                                 (unsigned int *) &a->motion.rotate))
+        {
+          gtk_svg_invalid_attribute (data->svg, context, attr_names, "rotate", NULL);
+        }
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        gtk_svg_invalid_attribute (data->svg, context, attr_names, "rotate",
+                                   "Junk at end of value");
+
+      gtk_css_parser_unref (parser);
     }
 
   if (a->calc_mode != CALC_MODE_PACED)

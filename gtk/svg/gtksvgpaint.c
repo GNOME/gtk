@@ -335,41 +335,38 @@ svg_paint_parse (GtkCssParser *parser)
   return NULL;
 }
 
-static gboolean
-rgba_parse (GdkRGBA    *rgba,
-            const char *value)
-{
-  char *copy, *p;
-  gboolean ret;
-
-  p = copy = g_strdup (value);
-  g_strstrip (p);
-  ret = gdk_rgba_parse (rgba, p);
-  g_free (copy);
-
-  return ret;
-}
-
 SvgValue *
-svg_paint_parse_gpa (const char *value)
+svg_paint_parse_gpa (const char *string)
 {
+  GtkCssParser *parser = parser_new_for_string (string);
   GtkSymbolicColor symbolic;
   GdkRGBA rgba;
+  SvgValue *value;
 
-  if (match_str (value, "none"))
-    return svg_paint_new_none ();
-  else if (match_str (value, "context-fill"))
-    return svg_paint_new_simple (PAINT_CONTEXT_FILL);
-  else if (match_str (value, "context-stroke"))
-    return svg_paint_new_simple (PAINT_CONTEXT_STROKE);
-  else if (match_str (value, "currentColor"))
-    return svg_paint_new_simple (PAINT_CURRENT_COLOR);
-  else if (parse_symbolic_color (value, &symbolic))
-    return svg_paint_new_symbolic (symbolic);
-  else if (rgba_parse (&rgba, value))
-    return svg_paint_new_rgba (&rgba);
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_try_ident (parser, "none"))
+    value = svg_paint_new_none ();
+  else if (gtk_css_parser_try_ident (parser, "context-fill"))
+    value = svg_paint_new_simple (PAINT_CONTEXT_FILL);
+  else if (gtk_css_parser_try_ident (parser, "context-stroke"))
+    value = svg_paint_new_simple (PAINT_CONTEXT_STROKE);
+  else if (gtk_css_parser_try_ident (parser, "currentColor"))
+    value = svg_paint_new_simple (PAINT_CURRENT_COLOR);
+  else if (parser_try_enum (parser,
+                            symbolic_colors, G_N_ELEMENTS (symbolic_colors),
+                            (unsigned int *) &symbolic))
+    value = svg_paint_new_symbolic (symbolic);
+  else if (gdk_rgba_parser_parse (parser, &rgba))
+    value = svg_paint_new_rgba (&rgba);
+  else
+    value = NULL;
 
-  return NULL;
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    g_clear_pointer (&value, svg_value_unref);
+  gtk_css_parser_unref (parser);
+
+  return value;
 }
 
 static void

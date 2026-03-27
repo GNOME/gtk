@@ -170,7 +170,12 @@ gboolean match_str_len (const char *value,
 
 #define match_str(value, str) match_str_len (value, str, strlen (str))
 
-gboolean parse_enum (const char    *value,
+gboolean parser_try_enum (GtkCssParser  *parser,
+                          const char   **values,
+                          size_t         n_values,
+                          unsigned int  *result);
+
+gboolean parse_enum (const char    *string,
                      const char   **values,
                      size_t         n_values,
                      unsigned int  *result);
