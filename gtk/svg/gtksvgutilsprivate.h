@@ -145,6 +145,17 @@ gboolean parse_numbers (const char   *value,
                         unsigned int  length,
                         unsigned int *n_values);
 
+typedef gboolean (* ItemParseFunc) (GtkCssParser *parser,
+                                    gpointer      data);
+
+gboolean parser_parse_list (GtkCssParser  *parser,
+                            ItemParseFunc  func,
+                            gpointer       data);
+
+GArray * parse_number_list (const char *string,
+                            double      min,
+                            double      max);
+
 gboolean parse_number_or_named (const char *string,
                                 double      min,
                                 double      max,

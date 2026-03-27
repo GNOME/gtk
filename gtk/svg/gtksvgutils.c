@@ -375,3 +375,79 @@ parse_enum (const char    *string,
 
   return ret;
 }
+
+gboolean
+parser_parse_list (GtkCssParser  *parser,
+                   ItemParseFunc  func,
+                   gpointer       data)
+{
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_EOF);
+
+      if (!func (parser, data))
+        {
+          gtk_css_parser_end_block (parser);
+          return FALSE;
+        }
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        {
+          gtk_css_parser_error_syntax (parser, "Junk at end of value");
+          gtk_css_parser_end_block (parser);
+          return FALSE;
+        }
+
+      gtk_css_parser_end_block (parser);
+    }
+
+  return TRUE;
+}
+
+typedef struct
+{
+  double min, max;
+  GArray *array;
+} NumData;
+
+static gboolean
+parse_one_number (GtkCssParser *parser,
+                  gpointer      data)
+{
+  NumData *d = data;
+  double v;
+
+  if (!gtk_css_parser_consume_number (parser, &v))
+    return FALSE;
+
+  if (v < d->min || d->max < v)
+    return FALSE;
+
+  g_array_append_val (d->array, v);
+  return TRUE;
+}
+
+GArray *
+parse_number_list (const char *string,
+                   double      min,
+                   double      max)
+{
+  GtkCssParser *parser = parser_new_for_string (string);
+  NumData data;
+
+  data.min = min;
+  data.max = max;
+  data.array = g_array_new (FALSE, TRUE, sizeof (double));
+
+  if (!parser_parse_list (parser, parse_one_number, &data))
+    g_clear_pointer (&data.array, g_array_unref);
+
+  gtk_css_parser_skip_whitespace (parser);
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    g_clear_pointer (&data.array, g_array_unref);
+
+  gtk_css_parser_unref (parser);
+  return data.array;
+}

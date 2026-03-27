@@ -8597,6 +8597,34 @@ create_default_times (CalcMode      calc_mode,
 }
 
 static gboolean
+parse_spline (GtkCssParser *parser,
+              gpointer      user_data)
+{
+  GArray *array = user_data;
+
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      double v;
+
+      gtk_css_parser_skip_whitespace (parser);
+
+      if (!gtk_css_parser_consume_number (parser, &v))
+        return FALSE;
+
+      if (v < 0 || v > 1)
+        return FALSE;
+
+      g_array_append_val (array, v);
+
+      gtk_css_parser_skip_whitespace (parser);
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_value_animation_attrs (Animation            *a,
                              const char           *element_name,
                              const char          **attr_names,
@@ -8928,7 +8956,7 @@ parse_value_animation_attrs (Animation            *a,
     }
   else if (key_times_attr)
     {
-      times = parse_numbers2 (key_times_attr, ";", 0, 1);
+      times = parse_number_list (key_times_attr, 0, 1);
       if (!times)
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "keyTimes", NULL);
@@ -8997,43 +9025,26 @@ parse_value_animation_attrs (Animation            *a,
 
   if (a->calc_mode != CALC_MODE_PACED)
     {
-      params = 0;
+      params = NULL;
       if (splines_attr)
         {
-          GStrv strv;
+          GtkCssParser *parser = parser_new_for_string (splines_attr);
           unsigned int n;
 
-          params = g_array_new (FALSE, FALSE, sizeof (double));
-
-          strv = g_strsplit (splines_attr, ";", 0);
-          n = g_strv_length (strv);
-          for (unsigned int i = 0; i < n; i++)
+          params = g_array_new (FALSE, TRUE, sizeof (double));
+          if (!parser_parse_list (parser, parse_spline, params))
             {
-              double spline[4];
-              unsigned int m;
-              char *s = g_strstrip (strv[i]);
-
-              if (*s == '\0' && strv[i+1] == NULL)
-                {
-                  n -= 1;
-                  break;
-                }
-
-              if (!parse_numbers (s, ", ", 0, 1, spline, 4, &m) ||
-                  m != 4)
-                {
-                  gtk_svg_invalid_attribute (data->svg, context, attr_names, "keySplines", NULL);
-                  g_clear_pointer (&values, g_ptr_array_unref);
-                  g_clear_pointer (&times, g_array_unref);
-                  g_clear_pointer (&params, g_array_unref);
-                  g_clear_pointer (&points, g_array_unref);
-                  return FALSE;
-                }
-
-              g_array_append_vals (params, spline, 4);
+              gtk_css_parser_unref (parser);
+              gtk_svg_invalid_attribute (data->svg, context, attr_names, "keySplines", NULL);
+              g_clear_pointer (&values, g_ptr_array_unref);
+              g_clear_pointer (&times, g_array_unref);
+              g_clear_pointer (&params, g_array_unref);
+              g_clear_pointer (&points, g_array_unref);
+              return FALSE;
             }
+          gtk_css_parser_unref (parser);
 
-          g_strfreev (strv);
+          n = params->len / 4;
 
           if (times == NULL)
             times = create_default_times (a->calc_mode, n + 1);
@@ -9177,7 +9188,7 @@ parse_motion_animation_attrs (Animation            *a,
     {
       if (key_points_attr)
         {
-          GArray *points = parse_numbers2 (key_points_attr, ";", 0, 1);
+          GArray *points = parse_number_list (key_points_attr, 0, 1);
           if (!points)
             {
               gtk_svg_invalid_attribute (data->svg, context, attr_names, "keyPoints", NULL);
