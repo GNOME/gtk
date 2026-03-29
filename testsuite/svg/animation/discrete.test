@@ -1,0 +1,8 @@
+# test discrete updates
+input: discrete.svg
+time: 0
+output: discrete-0.svg
+time: 750
+output: discrete-1.svg
+time: 1500
+output: discrete-2.svg
