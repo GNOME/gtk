@@ -11021,7 +11021,8 @@ resolve_refs_for_animation (Animation  *a,
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_mask_ref (a->frames[j].value, a->shape, data);
     }
-  else if (a->attr == SHAPE_ATTR_HREF)
+  else if (a->attr == SHAPE_ATTR_HREF ||
+           a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
     {
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_href_ref (a->frames[j].value, a->shape, data);
@@ -11043,11 +11044,6 @@ resolve_refs_for_animation (Animation  *a,
     {
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_filter_ref (a->frames[j].value, a->shape, data);
-    }
-  else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
-    {
-      for (unsigned int j = first; j < a->n_frames; j++)
-        resolve_href_ref (a->frames[j].value, a->shape, data);
     }
 
   if (a->motion.path_ref)
