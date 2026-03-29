@@ -982,6 +982,18 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 
   XDG_SHELL_CALL (xdg_toplevel, create_resources, wayland_toplevel, wayland_toplevel);
 
+  if (!wayland_toplevel->display_server.xdg_toplevel ||
+      xdg_toplevel_get_version (wayland_toplevel->display_server.xdg_toplevel) <
+      XDG_TOPLEVEL_WM_CAPABILITIES_SINCE_VERSION)
+    {
+      wayland_toplevel->capabilities |=
+        (GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU |
+         GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+         GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+         GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
+      g_object_notify (G_OBJECT (wayland_toplevel), "capabilities");
+    }
+
   gdk_wayland_toplevel_sync_parent (wayland_toplevel);
   gdk_wayland_toplevel_sync_parent_of_imported (wayland_toplevel);
   gdk_wayland_toplevel_sync_title (wayland_toplevel);
