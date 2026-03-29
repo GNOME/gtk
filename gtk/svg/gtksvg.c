@@ -17924,7 +17924,19 @@ invalidate_for_next_update (GtkSvg *self)
 {
   if (self->next_update <= self->current_time ||
       self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
-    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    {
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    }
+#ifdef DEBUG
+  else
+    {
+      GString *s = g_string_new ("not invalidating (");
+      g_string_append_printf (s, "%s", format_time (self->next_update));
+      g_string_append_printf (s, " > %s)", format_time (self->current_time));
+      dbg_print ("run", "%s", s->str);
+      g_string_free (s, TRUE);
+    }
+#endif
 }
 
 static void
@@ -18777,6 +18789,9 @@ gtk_svg_set_playing (GtkSvg   *self,
             self->current_time = current_time;
 
           self->load_time += duration;
+#ifdef DEBUG
+          time_base = self->load_time;
+#endif
 
           animations_update_for_pause (self->content, duration);
           timeline_update_for_pause (self->timeline, duration);
