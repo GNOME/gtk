@@ -6409,20 +6409,12 @@ advance_later (gpointer data)
 static void
 schedule_next_update (GtkSvg *self)
 {
-  GtkSvgRunMode run_mode;
-
   if (self->clock == NULL || !self->playing)
     return;
 
   g_clear_handle_id (&self->pending_advance, g_source_remove);
 
-  run_mode = self->run_mode;
-#ifdef DEBUG
-  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
-    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-#endif
-
-  if (run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
+  if (self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
     {
       frame_clock_connect (self);
       return;
@@ -17915,6 +17907,11 @@ collect_next_update (GtkSvg *self)
   int64_t next_update = INDEFINITE;
 
   collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
+
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
+    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
+#endif
 
   self->run_mode = run_mode;
   self->next_update = next_update;
