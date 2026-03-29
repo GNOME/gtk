@@ -93,7 +93,7 @@ size_t          path_paintable_get_n_paths         (PathPaintable   *self);
 size_t          path_paintable_add_path            (PathPaintable   *self,
                                                     GskPath         *path);
 size_t          path_paintable_add_shape           (PathPaintable   *self,
-                                                    ShapeType        shape_type,
+                                                    SvgElementType   type,
                                                     double          *params,
                                                     unsigned int     n_params);
 GskPath *       path_paintable_get_path            (PathPaintable   *self,
@@ -149,21 +149,21 @@ void            path_paintable_get_attach_path     (PathPaintable   *self,
 
 void            path_paintable_get_attach_path_for_shape
                                                    (PathPaintable  *self,
-                                                    Shape          *shape,
-                                                    Shape         **to,
+                                                    SvgElement          *shape,
+                                                    SvgElement         **to,
                                                     double         *pos);
 
 GtkCompatibility
                 path_paintable_get_compatibility   (PathPaintable   *self);
 
-Shape *         path_paintable_get_shape           (PathPaintable   *self,
+SvgElement *         path_paintable_get_shape           (PathPaintable   *self,
                                                     size_t           idx);
 
-Shape *         path_paintable_get_shape_by_id     (PathPaintable   *self,
+SvgElement *         path_paintable_get_shape_by_id     (PathPaintable   *self,
                                                     const char      *id);
 
 unsigned int    path_paintable_get_shape_count     (PathPaintable   *self);
-Shape *         path_paintable_get_content         (PathPaintable   *self);
+SvgElement *         path_paintable_get_content         (PathPaintable   *self);
 
 const graphene_rect_t *
                 path_paintable_get_viewport        (PathPaintable   *self);
@@ -171,16 +171,14 @@ const graphene_rect_t *
 void            path_paintable_changed             (PathPaintable   *self);
 void            path_paintable_paths_changed       (PathPaintable   *self);
 
-Shape *         shape_duplicate                    (Shape *shape,
-                                                    Shape *parent);
-gboolean        shape_is_graphical                 (Shape *shape);
-gboolean        shape_has_children                 (Shape *shape);
-gboolean        shape_has_gpa                      (Shape *shape);
-void            shape_set_default_attrs            (Shape *shape);
-gboolean        shape_has_ancestor                 (Shape *shape,
-                                                    Shape *ancestor);
+gboolean        shape_is_graphical                 (SvgElement *shape);
+gboolean        shape_has_children                 (SvgElement *shape);
+gboolean        shape_has_gpa                      (SvgElement *shape);
+void            shape_set_default_attrs            (SvgElement *shape);
+gboolean        shape_has_ancestor                 (SvgElement *shape,
+                                                    SvgElement *ancestor);
 
-GdkPaintable *  shape_get_path_image               (Shape  *shape,
+GdkPaintable *  shape_get_path_image               (SvgElement  *shape,
                                                     GtkSvg *svg);
 
 GtkIconPaintable *

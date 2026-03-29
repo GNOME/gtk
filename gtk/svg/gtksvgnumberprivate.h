@@ -23,7 +23,7 @@
 
 #include "gtksvgvalueprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
-#include "gtksvgprivate.h"
+#include "gtksvgunitprivate.h"
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -61,16 +61,13 @@ gboolean   svg_value_is_number          (const SvgValue      *value);
 gboolean   svg_value_is_positive_number (const SvgValue      *value);
 
 
-const char *svg_unit_name (SvgUnit unit);
-SvgDimension svg_unit_dimension (SvgUnit unit);
-
 gboolean is_absolute_length          (SvgUnit                unit);
 
 double   absolute_length_to_px       (double                 value,
                                       SvgUnit                unit);
 
-double   shape_get_current_font_size (Shape                 *shape,
-                                      ShapeAttr              attr,
+double   shape_get_current_font_size (SvgElement            *shape,
+                                      SvgProperty            attr,
                                       SvgComputeContext     *context);
 double   angle_to_deg                (double                 value,
                                       SvgUnit                unit);

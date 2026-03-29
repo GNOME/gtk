@@ -27,17 +27,18 @@
 #include "gtkcssnodeprivate.h"
 #include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
+#include "gtk/svg/gtksvgelementtypeprivate.h"
+#include "gtk/svg/gtksvgfiltertypeprivate.h"
+#include "gtk/svg/gtksvgpropertyprivate.h"
 
 G_BEGIN_DECLS
 
-#define INDEFINITE G_MAXINT64
-#define REPEAT_FOREVER INFINITY
 #define DEFAULT_FONT_SIZE 13.333
 
 struct _GtkSvg
 {
   GObject parent_instance;
-  Shape *content;
+  SvgElement *content;
 
   double current_width, current_height; /* Last snapshot size */
 
@@ -95,354 +96,50 @@ struct _GtkSvg
   } node_for;
 };
 
-typedef enum
-{
-  SHAPE_LINE,
-  SHAPE_POLYLINE,
-  SHAPE_POLYGON,
-  SHAPE_RECT,
-  SHAPE_CIRCLE,
-  SHAPE_ELLIPSE,
-  SHAPE_PATH,
-  SHAPE_GROUP,
-  SHAPE_CLIP_PATH,
-  SHAPE_MASK,
-  SHAPE_DEFS,
-  SHAPE_USE,
-  SHAPE_LINEAR_GRADIENT,
-  SHAPE_RADIAL_GRADIENT,
-  SHAPE_PATTERN,
-  SHAPE_MARKER,
-  SHAPE_TEXT,
-  SHAPE_TSPAN,
-  SHAPE_SVG,
-  SHAPE_IMAGE,
-  SHAPE_FILTER,
-  SHAPE_SYMBOL,
-  SHAPE_SWITCH,
-  SHAPE_LINK,
-} ShapeType;
-
-typedef enum
-{
-  SHAPE_ATTR_DISPLAY,
-  FIRST_SHAPE_ATTR = SHAPE_ATTR_DISPLAY,
-  SHAPE_ATTR_FONT_SIZE, /* must come before lengths */
-  SHAPE_ATTR_VISIBILITY,
-  SHAPE_ATTR_TRANSFORM,
-  SHAPE_ATTR_TRANSFORM_ORIGIN,
-  SHAPE_ATTR_TRANSFORM_BOX,
-  SHAPE_ATTR_OPACITY,
-  SHAPE_ATTR_COLOR,
-  SHAPE_ATTR_COLOR_INTERPOLATION,
-  SHAPE_ATTR_COLOR_INTERPOLATION_FILTERS,
-  SHAPE_ATTR_CLIP_PATH,
-  SHAPE_ATTR_CLIP_RULE,
-  SHAPE_ATTR_MASK,
-  SHAPE_ATTR_FONT_FAMILY,
-  SHAPE_ATTR_FONT_STYLE,
-  SHAPE_ATTR_FONT_VARIANT,
-  SHAPE_ATTR_FONT_WEIGHT,
-  SHAPE_ATTR_FONT_STRETCH,
-  SHAPE_ATTR_FILTER,
-  SHAPE_ATTR_FILL,
-  SHAPE_ATTR_FILL_OPACITY,
-  SHAPE_ATTR_FILL_RULE,
-  SHAPE_ATTR_STROKE,
-  SHAPE_ATTR_STROKE_OPACITY,
-  SHAPE_ATTR_STROKE_WIDTH,
-  SHAPE_ATTR_STROKE_LINECAP,
-  SHAPE_ATTR_STROKE_LINEJOIN,
-  SHAPE_ATTR_STROKE_MITERLIMIT,
-  SHAPE_ATTR_STROKE_DASHARRAY,
-  SHAPE_ATTR_STROKE_DASHOFFSET,
-  SHAPE_ATTR_MARKER_START,
-  SHAPE_ATTR_MARKER_MID,
-  SHAPE_ATTR_MARKER_END,
-  SHAPE_ATTR_PAINT_ORDER,
-  SHAPE_ATTR_SHAPE_RENDERING,
-  SHAPE_ATTR_TEXT_RENDERING,
-  SHAPE_ATTR_IMAGE_RENDERING,
-  SHAPE_ATTR_BLEND_MODE,
-  SHAPE_ATTR_ISOLATION,
-  SHAPE_ATTR_PATH_LENGTH,
-  SHAPE_ATTR_HREF,
-  SHAPE_ATTR_OVERFLOW,
-  SHAPE_ATTR_VECTOR_EFFECT,
-  SHAPE_ATTR_CONTENT_UNITS,
-  SHAPE_ATTR_BOUND_UNITS,
-  SHAPE_ATTR_PATH,
-  SHAPE_ATTR_CX,
-  SHAPE_ATTR_CY,
-  SHAPE_ATTR_R,
-  SHAPE_ATTR_X,
-  SHAPE_ATTR_Y,
-  SHAPE_ATTR_WIDTH,
-  SHAPE_ATTR_HEIGHT,
-  SHAPE_ATTR_RX,
-  SHAPE_ATTR_RY,
-  SHAPE_ATTR_X1,
-  SHAPE_ATTR_Y1,
-  SHAPE_ATTR_X2,
-  SHAPE_ATTR_Y2,
-  SHAPE_ATTR_POINTS,
-  SHAPE_ATTR_SPREAD_METHOD,
-  SHAPE_ATTR_FX,
-  SHAPE_ATTR_FY,
-  SHAPE_ATTR_FR,
-  SHAPE_ATTR_MASK_TYPE,
-  SHAPE_ATTR_VIEW_BOX,
-  SHAPE_ATTR_CONTENT_FIT,
-  SHAPE_ATTR_REF_X,
-  SHAPE_ATTR_REF_Y,
-  SHAPE_ATTR_MARKER_UNITS,
-  SHAPE_ATTR_MARKER_ORIENT,
-  SHAPE_ATTR_LANG,
-  SHAPE_ATTR_TEXT_ANCHOR,
-  SHAPE_ATTR_DX,
-  SHAPE_ATTR_DY,
-  SHAPE_ATTR_UNICODE_BIDI,
-  SHAPE_ATTR_DIRECTION,
-  SHAPE_ATTR_WRITING_MODE,
-  SHAPE_ATTR_LETTER_SPACING,
-  SHAPE_ATTR_TEXT_DECORATION,
-  SHAPE_ATTR_REQUIRED_EXTENSIONS,
-  SHAPE_ATTR_SYSTEM_LANGUAGE,
-  SHAPE_ATTR_STROKE_MINWIDTH,
-  SHAPE_ATTR_STROKE_MAXWIDTH,
-  LAST_SHAPE_ATTR = SHAPE_ATTR_STROKE_MAXWIDTH,
-  SHAPE_ATTR_STOP_OFFSET,
-  FIRST_STOP_ATTR = SHAPE_ATTR_STOP_OFFSET,
-  SHAPE_ATTR_STOP_COLOR,
-  SHAPE_ATTR_STOP_OPACITY,
-  LAST_STOP_ATTR = SHAPE_ATTR_STOP_OPACITY,
-  SHAPE_ATTR_FE_X,
-  FIRST_FILTER_ATTR = SHAPE_ATTR_FE_X,
-  SHAPE_ATTR_FE_Y,
-  SHAPE_ATTR_FE_WIDTH,
-  SHAPE_ATTR_FE_HEIGHT,
-  SHAPE_ATTR_FE_RESULT,
-  SHAPE_ATTR_FE_COLOR,
-  SHAPE_ATTR_FE_OPACITY,
-  SHAPE_ATTR_FE_IN,
-  SHAPE_ATTR_FE_IN2,
-  SHAPE_ATTR_FE_STD_DEV,
-  SHAPE_ATTR_FE_DX,
-  SHAPE_ATTR_FE_DY,
-  SHAPE_ATTR_FE_BLUR_EDGE_MODE,
-  SHAPE_ATTR_FE_BLEND_MODE,
-  SHAPE_ATTR_FE_BLEND_COMPOSITE,
-  SHAPE_ATTR_FE_COLOR_MATRIX_TYPE,
-  SHAPE_ATTR_FE_COLOR_MATRIX_VALUES,
-  SHAPE_ATTR_FE_COMPOSITE_OPERATOR,
-  SHAPE_ATTR_FE_COMPOSITE_K1,
-  SHAPE_ATTR_FE_COMPOSITE_K2,
-  SHAPE_ATTR_FE_COMPOSITE_K3,
-  SHAPE_ATTR_FE_COMPOSITE_K4,
-  SHAPE_ATTR_FE_DISPLACEMENT_SCALE,
-  SHAPE_ATTR_FE_DISPLACEMENT_X,
-  SHAPE_ATTR_FE_DISPLACEMENT_Y,
-  SHAPE_ATTR_FE_IMAGE_HREF,
-  SHAPE_ATTR_FE_IMAGE_CONTENT_FIT,
-  SHAPE_ATTR_FE_FUNC_TYPE,
-  SHAPE_ATTR_FE_FUNC_VALUES,
-  SHAPE_ATTR_FE_FUNC_SLOPE,
-  SHAPE_ATTR_FE_FUNC_INTERCEPT,
-  SHAPE_ATTR_FE_FUNC_AMPLITUDE,
-  SHAPE_ATTR_FE_FUNC_EXPONENT,
-  SHAPE_ATTR_FE_FUNC_OFFSET,
-  LAST_FILTER_ATTR = SHAPE_ATTR_FE_FUNC_OFFSET,
-} ShapeAttr;
-
-#define N_SHAPE_ATTRS (LAST_SHAPE_ATTR + 1 - FIRST_SHAPE_ATTR)
-#define N_STOP_ATTRS (LAST_STOP_ATTR + 1 - FIRST_STOP_ATTR)
-#define N_FILTER_ATTRS (LAST_FILTER_ATTR + 1 - FIRST_FILTER_ATTR)
-
-#define N_ATTRS (LAST_FILTER_ATTR + 1 - FIRST_SHAPE_ATTR)
-
-typedef enum
-{
-  GPA_TRANSITION_NONE,
-  GPA_TRANSITION_ANIMATE,
-  GPA_TRANSITION_MORPH,
-  GPA_TRANSITION_FADE,
-} GpaTransition;
-
-typedef enum
-{
-  GPA_ANIMATION_NONE,
-  GPA_ANIMATION_NORMAL,
-  GPA_ANIMATION_ALTERNATE,
-  GPA_ANIMATION_REVERSE,
-  GPA_ANIMATION_REVERSE_ALTERNATE,
-  GPA_ANIMATION_IN_OUT,
-  GPA_ANIMATION_IN_OUT_ALTERNATE,
-  GPA_ANIMATION_IN_OUT_REVERSE,
-  GPA_ANIMATION_SEGMENT,
-  GPA_ANIMATION_SEGMENT_ALTERNATE,
-} GpaAnimation;
-
-typedef enum
-{
-  GPA_EASING_LINEAR,
-  GPA_EASING_EASE_IN_OUT,
-  GPA_EASING_EASE_IN,
-  GPA_EASING_EASE_OUT,
-  GPA_EASING_EASE,
-} GpaEasing;
-
-typedef enum
-{
-  TEXT_NODE_SHAPE,
-  TEXT_NODE_CHARACTERS
-} TextNodeType;
-
-typedef struct
-{
-  TextNodeType type;
-  union {
-    struct {
-      Shape *shape;
-      gboolean has_bounds; // FALSE for text nodes without any character children
-      graphene_rect_t bounds;
-    } shape;
-    struct {
-      char *text;
-      PangoLayout *layout;
-      double x, y, r;
-    } characters;
-  };
-} TextNode;
-
-struct _Shape
-{
-  ShapeType type;
-  Shape *parent;
-  GtkBitmask *attrs;
-  char *id;
-  char *style;
-  char **classes;
-  size_t line;
-  GtkSvgLocation style_loc;
-
-  /* For style matching */
-  GtkCssNode *css_node;
-
-  /* Dependency order for computing updates */
-  Shape *first;
-  Shape *next;
-
-  gboolean computed_for_use;
-  gboolean valid_bounds;
-
-  SvgValue *base[N_ATTRS];
-  SvgValue *current[N_ATTRS];
-
-  GPtrArray *shapes;
-  GPtrArray *animations;
-  GPtrArray *color_stops;
-  GPtrArray *filters;
-  GPtrArray *deps;
-  GPtrArray *styles;
-
-  GskPath *path;
-  GskPathMeasure *measure;
-  graphene_rect_t bounds;
-  union {
-    struct {
-      double cx, cy, r;
-    } circle;
-    struct {
-      double cx, cy, rx, ry;
-    } ellipse;
-    struct {
-      double x, y, w, h, rx, ry;
-    } rect;
-    struct {
-      double x1, y1, x2, y2;
-    } line;
-    struct {
-      SvgValue *points;
-    } polyline;
-  } path_for;
-
-  // GArray<TextNode>
-  GArray *text;
-
-  struct {
-    SvgValue *fill;
-    SvgValue *stroke;
-    SvgValue *width;
-    uint64_t states;
-    GpaTransition transition;
-    GpaEasing transition_easing;
-    int64_t transition_duration;
-    int64_t transition_delay;
-    GpaAnimation animation;
-    GpaEasing animation_easing;
-    int64_t animation_duration;
-    double animation_repeat;
-    double animation_segment;
-    double origin;
-    struct {
-      char *ref;
-      Shape *shape;
-      double pos;
-    } attach;
-  } gpa;
-};
-
-double       svg_shape_attr_get_number    (Shape                 *shape,
-                                           ShapeAttr              attr,
+double       svg_shape_attr_get_number    (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            const graphene_rect_t *viewport);
-GskPath *    svg_shape_attr_get_path      (Shape                 *shape,
-                                           ShapeAttr              attr);
-unsigned int svg_shape_attr_get_enum      (Shape                 *shape,
-                                           ShapeAttr              attr);
-PaintKind    svg_shape_attr_get_paint     (Shape                 *shape,
-                                           ShapeAttr              attr,
+GskPath *    svg_shape_attr_get_path      (SvgElement                 *shape,
+                                           SvgProperty            attr);
+unsigned int svg_shape_attr_get_enum      (SvgElement                 *shape,
+                                           SvgProperty            attr);
+PaintKind    svg_shape_attr_get_paint     (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            GtkSymbolicColor      *symbolic,
                                            GdkRGBA               *color);
-double *     svg_shape_attr_get_points    (Shape                 *shape,
-                                           ShapeAttr              attr,
+double *     svg_shape_attr_get_points    (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            unsigned int          *n_params);
-ClipKind     svg_shape_attr_get_clip      (Shape                 *shape,
-                                           ShapeAttr              attr,
+ClipKind     svg_shape_attr_get_clip      (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            GskPath              **path,
                                            const char           **ref);
-const char * svg_shape_attr_get_mask      (Shape                 *shape,
-                                           ShapeAttr              attr);
-char *       svg_shape_attr_get_transform (Shape                 *shape,
-                                           ShapeAttr              attr);
-char *       svg_shape_attr_get_filter    (Shape                 *shape,
-                                           ShapeAttr              attr);
-GskPath *    svg_shape_get_path           (Shape                 *shape,
+const char * svg_shape_attr_get_mask      (SvgElement                 *shape,
+                                           SvgProperty            attr);
+char *       svg_shape_attr_get_transform (SvgElement                 *shape,
+                                           SvgProperty            attr);
+char *       svg_shape_attr_get_filter    (SvgElement                 *shape,
+                                           SvgProperty            attr);
+GskPath *    svg_shape_get_path           (SvgElement                 *shape,
                                            const graphene_rect_t *viewport);
-gboolean     svg_shape_attr_get_viewbox   (Shape                 *shape,
-                                           ShapeAttr              attr,
+gboolean     svg_shape_attr_get_viewbox   (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            graphene_rect_t       *rect);
 
-void         svg_shape_attr_set           (Shape                 *shape,
-                                           ShapeAttr              attr,
+void         svg_shape_attr_set           (SvgElement                 *shape,
+                                           SvgProperty            attr,
                                            SvgValue              *value);
 
-Shape *      svg_shape_add          (Shape            *parent,
-                                     ShapeType         type);
-void         svg_shape_delete       (Shape            *shape);
+SvgElement *      svg_shape_add          (SvgElement            *parent,
+                                     SvgElementType    type);
+void         svg_shape_delete       (SvgElement            *shape);
 
-const char * svg_shape_get_name     (ShapeType  type);
-gboolean     svg_shape_has_attr     (Shape     *shape,
-                                     ShapeAttr  attr);
+const char * svg_shape_get_name     (SvgElementType  type);
+gboolean     svg_shape_has_attr     (SvgElement          *shape,
+                                     SvgProperty     attr);
 
 gboolean     gtk_svg_set_state_names (GtkSvg      *svg,
                                       const char **names);
-
-typedef void (* ShapeCallback) (Shape    *shape,
-                                gpointer  user_data);
-
-void         svg_foreach_shape (Shape         *shape,
-                                ShapeCallback  callback,
-                                gpointer       user_data);
 
 /* --- */
 

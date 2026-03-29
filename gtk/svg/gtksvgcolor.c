@@ -25,6 +25,7 @@
 #include "gtksvgvalueprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gtksvgutilsprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -57,8 +58,8 @@ svg_color_equal (const SvgValue *value0,
     }
 }
 
-static SvgValue *svg_color_interpolate (const    SvgValue *v0,
-                                        const    SvgValue *v1,
+static SvgValue *svg_color_interpolate (const SvgValue    *v0,
+                                        const SvgValue    *v1,
                                         SvgComputeContext *context,
                                         double             t);
 static SvgValue *svg_color_accumulate  (const SvgValue    *v0,
@@ -70,9 +71,9 @@ static void      svg_color_print       (const SvgValue    *v0,
 static double    svg_color_distance    (const SvgValue    *v0,
                                         const SvgValue    *v1);
 static SvgValue * svg_color_resolve    (const SvgValue    *value,
-                                        ShapeAttr          attr,
+                                        SvgProperty        attr,
                                         unsigned int       idx,
-                                        Shape             *shape,
+                                        SvgElement        *shape,
                                         SvgComputeContext *context);
 
 static void
@@ -256,9 +257,9 @@ svg_color_print (const SvgValue *value,
 
 static SvgValue *
 svg_color_resolve (const SvgValue    *value,
-                   ShapeAttr          attr,
+                   SvgProperty        attr,
                    unsigned int       idx,
-                   Shape             *shape,
+                   SvgElement        *shape,
                    SvgComputeContext *context)
 {
   SvgColor *color = (SvgColor *) value;
@@ -267,9 +268,9 @@ svg_color_resolve (const SvgValue    *value,
     {
     case COLOR_CURRENT:
       if (idx > 0)
-        return svg_value_ref (shape->current[SHAPE_ATTR_COLOR]);
+        return svg_value_ref (svg_element_get_current_value (shape, SVG_PROPERTY_COLOR));
       else if (context->parent)
-        return svg_value_ref (context->parent->current[SHAPE_ATTR_COLOR]);
+        return svg_value_ref (svg_element_get_current_value (context->parent, SVG_PROPERTY_COLOR));
       else
         return svg_color_new_black ();
     case COLOR_SYMBOLIC:

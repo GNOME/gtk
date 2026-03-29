@@ -1,6 +1,8 @@
 /*
  * Copyright © 2025 Red Hat, Inc
  *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -14,20 +16,47 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include "path-paintable.h"
+G_BEGIN_DECLS
+
+typedef enum
+{
+  SVG_UNIT_NUMBER,
+  SVG_UNIT_PERCENTAGE,
+  SVG_UNIT_PX,
+  SVG_UNIT_PT,
+  SVG_UNIT_IN,
+  SVG_UNIT_CM,
+  SVG_UNIT_MM,
+  SVG_UNIT_VW,
+  SVG_UNIT_VH,
+  SVG_UNIT_VMIN,
+  SVG_UNIT_VMAX,
+  SVG_UNIT_EM,
+  SVG_UNIT_EX,
+  SVG_UNIT_S,
+  SVG_UNIT_MS,
+  SVG_UNIT_DEG,
+  SVG_UNIT_RAD,
+  SVG_UNIT_GRAD,
+  SVG_UNIT_TURN,
+} SvgUnit;
+
+typedef enum
+{
+  SVG_DIMENSION_NUMBER,
+  SVG_DIMENSION_LENGTH,
+  SVG_DIMENSION_TIME,
+  SVG_DIMENSION_ANGLE,
+} SvgDimension;
 
 
-#define SHAPE_EDITOR_TYPE (shape_editor_get_type ())
-G_DECLARE_FINAL_TYPE (ShapeEditor, shape_editor, SHAPE, EDITOR, GtkWidget)
+unsigned int  svg_units_get_length (void);
+const char   *svg_unit_name        (SvgUnit unit);
+SvgDimension  svg_unit_dimension   (SvgUnit unit);
 
-
-ShapeEditor *    shape_editor_new          (PathPaintable *paintable,
-                                            SvgElement         *shape);
+G_END_DECLS

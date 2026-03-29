@@ -24,6 +24,7 @@
 #include "gtksvgenumprivate.h"
 #include "gtksvgvalueprivate.h"
 #include "gtksvgnumberprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -464,14 +465,14 @@ DEFINE_ENUM (VECTOR_EFFECT, vector_effect, VectorEffect,
 
 static SvgValue *
 svg_font_size_resolve (const SvgValue    *value,
-                       ShapeAttr          attr,
+                       SvgProperty        attr,
                        unsigned int       idx,
-                       Shape             *shape,
+                       SvgElement        *shape,
                        SvgComputeContext *context)
 {
   const SvgEnum *font_size = (const SvgEnum *) value;
 
-  g_assert (attr == SHAPE_ATTR_FONT_SIZE);
+  g_assert (attr == SVG_PROPERTY_FONT_SIZE);
 
   if (font_size->value == FONT_SIZE_XX_SMALL)
     return svg_number_new (DEFAULT_FONT_SIZE * 3. / 5.);
@@ -492,7 +493,7 @@ svg_font_size_resolve (const SvgValue    *value,
       double parent_size;
 
       if (context->parent)
-        parent_size = svg_number_get (context->parent->current[SHAPE_ATTR_FONT_SIZE], 100);
+        parent_size = svg_number_get (context->parent->current[SVG_PROPERTY_FONT_SIZE], 100);
       else
         parent_size = DEFAULT_FONT_SIZE;
 
@@ -519,14 +520,14 @@ DEFINE_ENUM_CUSTOM_RESOLVE (FONT_SIZE, font_size, FontSize, svg_font_size_resolv
 
 static SvgValue *
 svg_font_weight_resolve (const SvgValue    *value,
-                         ShapeAttr          attr,
+                         SvgProperty        attr,
                          unsigned int       idx,
-                         Shape             *shape,
+                         SvgElement        *shape,
                          SvgComputeContext *context)
 {
   const SvgEnum *font_weight = (const SvgEnum *) value;
 
-  g_assert (attr == SHAPE_ATTR_FONT_WEIGHT);
+  g_assert (attr == SVG_PROPERTY_FONT_WEIGHT);
 
   if (font_weight->value == FONT_WEIGHT_NORMAL)
     return svg_number_new (PANGO_WEIGHT_NORMAL);
@@ -537,7 +538,7 @@ svg_font_weight_resolve (const SvgValue    *value,
       double parent_weight;
 
       if (context->parent)
-        parent_weight = svg_number_get (context->parent->current[SHAPE_ATTR_FONT_WEIGHT], 100);
+        parent_weight = svg_number_get (context->parent->current[SVG_PROPERTY_FONT_WEIGHT], 100);
       else
         parent_weight = PANGO_WEIGHT_NORMAL;
 
@@ -576,9 +577,9 @@ DEFINE_ENUM_CUSTOM_RESOLVE (FONT_WEIGHT, font_weight, FontWeight, svg_font_weigh
 )
 
 static SvgValue * svg_color_interpolation_resolve (const SvgValue    *value,
-                                                   ShapeAttr          attr,
+                                                   SvgProperty        attr,
                                                    unsigned int       idx,
-                                                   Shape             *shape,
+                                                   SvgElement        *shape,
                                                    SvgComputeContext *context);
 
 DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInterpolation, svg_color_interpolation_resolve,
@@ -589,9 +590,9 @@ DEFINE_ENUM_CUSTOM_RESOLVE (COLOR_INTERPOLATION, color_interpolation, ColorInter
 
 static SvgValue *
 svg_color_interpolation_resolve (const SvgValue    *value,
-                                 ShapeAttr          attr,
+                                 SvgProperty        attr,
                                  unsigned int       idx,
-                                 Shape             *shape,
+                                 SvgElement        *shape,
                                  SvgComputeContext *context)
 {
   if (svg_enum_get (value) == COLOR_INTERPOLATION_AUTO)

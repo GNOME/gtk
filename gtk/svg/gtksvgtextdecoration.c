@@ -23,6 +23,7 @@
 
 #include "gtksvgtextdecorationprivate.h"
 #include "gtksvgvalueprivate.h"
+#include "gtksvgelementinternal.h"
 
 static const struct {
   const char *name;
@@ -87,9 +88,9 @@ svg_text_decoration_print (const SvgValue *value,
 }
 
 static SvgValue * svg_text_decoration_resolve (const SvgValue    *value,
-                                               ShapeAttr          attr,
+                                               SvgProperty        attr,
                                                unsigned int       idx,
-                                               Shape             *shape,
+                                               SvgElement        *shape,
                                                SvgComputeContext *context);
 
 static const SvgValueClass SVG_TEXT_DECORATION_CLASS = {
@@ -146,9 +147,9 @@ svg_text_decoration_parse (GtkCssParser *parser)
 
 static SvgValue *
 svg_text_decoration_resolve (const SvgValue    *value,
-                             ShapeAttr          attr,
+                             SvgProperty        attr,
                              unsigned int       idx,
-                             Shape             *shape,
+                             SvgElement        *shape,
                              SvgComputeContext *context)
 {
   TextDecoration ret;

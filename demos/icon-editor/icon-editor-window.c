@@ -25,6 +25,7 @@
 #include "path-paintable.h"
 #include "border-paintable.h"
 #include "state-editor.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 #include <glib/gstdio.h>
 
@@ -476,7 +477,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
 
       set_random_icons (self);
 
-      if (path_paintable_get_svg (self->paintable)->content->shapes->len > 0)
+      if (svg_element_get_n_children (path_paintable_get_svg (self->paintable)->content) > 0)
         icon_editor_window_set_show_controls (self, TRUE);
     }
 
@@ -621,15 +622,15 @@ show_open_filechooser (IconEditorWindow *self)
 /* {{{ Saving/Exporting */
 
 static void
-set_compat (Shape    *shape,
-            gpointer  data)
+set_compat (SvgElement *shape,
+            gpointer    data)
 {
   IconEditorWindow *self = data;
 
   if (!shape_is_graphical (shape))
     return;
 
-  g_clear_pointer (&shape->classes, g_strfreev);
+  svg_element_parse_classes (shape, NULL);
 
   if (self->compat_classes)
     {
@@ -639,7 +640,7 @@ set_compat (Shape    *shape,
 
       builder = g_strv_builder_new ();
 
-      switch ((unsigned int) svg_shape_attr_get_paint (shape, SHAPE_ATTR_FILL, &symbolic, &rgba))
+      switch ((unsigned int) svg_shape_attr_get_paint (shape, SVG_PROPERTY_FILL, &symbolic, &rgba))
         {
         case PAINT_SYMBOLIC:
           switch (symbolic)
@@ -667,7 +668,7 @@ set_compat (Shape    *shape,
           break;
         }
 
-      switch ((unsigned int) svg_shape_attr_get_paint (shape, SHAPE_ATTR_STROKE, &symbolic, &rgba))
+      switch ((unsigned int) svg_shape_attr_get_paint (shape, SVG_PROPERTY_STROKE, &symbolic, &rgba))
         {
         case PAINT_SYMBOLIC:
           switch (symbolic)
@@ -692,7 +693,7 @@ set_compat (Shape    *shape,
           break;
         }
 
-      shape->classes = g_strv_builder_end (builder);
+      svg_element_take_classes (shape, g_strv_builder_end (builder));
     }
 }
 
@@ -700,7 +701,7 @@ static void
 apply_compat_classes (IconEditorWindow *window,
                       GtkSvg           *svg)
 {
-  svg_foreach_shape (svg->content, set_compat, window);
+  svg_element_foreach (svg->content, set_compat, window);
 }
 
 static void

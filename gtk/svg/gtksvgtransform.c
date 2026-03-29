@@ -222,7 +222,7 @@ svg_transform_new_matrix (double params[6])
 }
 
 SvgValue *
-svg_transform_new_rotate_and_shift (double angle,
+svg_transform_new_rotate_and_shift (double            angle,
                                     graphene_point_t *orig,
                                     graphene_point_t *final)
 {

@@ -26,6 +26,7 @@
 #include "gtksvgnumberprivate.h"
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgutilsprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -102,9 +103,9 @@ static SvgValue * svg_numbers_interpolate (const SvgValue    *value0,
                                            double             t);
 
 static SvgValue * svg_numbers_resolve (const SvgValue    *value,
-                                       ShapeAttr          attr,
+                                       SvgProperty        attr,
                                        unsigned int       idx,
-                                       Shape             *shape,
+                                       SvgElement        *shape,
                                        SvgComputeContext *context);
 
 static const SvgValueClass SVG_NUMBERS_CLASS = {
@@ -301,9 +302,9 @@ svg_numbers_interpolate (const SvgValue    *value0,
 
 static SvgValue *
 svg_numbers_resolve (const SvgValue    *value,
-                     ShapeAttr          attr,
+                     SvgProperty        attr,
                      unsigned int       idx,
-                     Shape             *shape,
+                     SvgElement        *shape,
                      SvgComputeContext *context)
 {
   SvgNumbers *orig = (SvgNumbers *) value;
@@ -313,7 +314,7 @@ svg_numbers_resolve (const SvgValue    *value,
   if (orig->n_values == 0)
     return svg_value_ref ((SvgValue *) orig);
 
-  if (attr == SHAPE_ATTR_TRANSFORM_ORIGIN)
+  if (attr == SVG_PROPERTY_TRANSFORM_ORIGIN)
     {
       double font_size;
 

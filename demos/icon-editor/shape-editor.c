@@ -32,22 +32,23 @@
 #include "gtk/svg/gtksvgenumprivate.h"
 #include "gtk/svg/gtksvgtransformprivate.h"
 #include "gtk/svg/gtksvgpaintprivate.h"
-#include "gtk/svg/gtksvgfilterprivate.h"
+#include "gtk/svg/gtksvgfilterfunctionsprivate.h"
 #include "gtk/svg/gtksvgpathprivate.h"
 #include "gtk/svg/gtksvgclipprivate.h"
 #include "gtk/svg/gtksvgmaskprivate.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 struct _ShapeEditor
 {
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
-  Shape *shape;
+  SvgElement *shape;
   GdkPaintable *path_image;
 
   gboolean updating;
   gboolean deleted;
-  ShapeAttr externally_editing;
+  SvgProperty externally_editing;
   int update_counter;
 
   GtkGrid *grid;
@@ -144,55 +145,55 @@ get_number_from_entry (GtkEntry *entry,
 static void
 shape_changed (ShapeEditor *self)
 {
-  unsigned int old_type;
+  unsigned int old_type, type;
 
   if (self->updating)
     return;
 
-  switch ((unsigned int) self->shape->type)
+  old_type = svg_element_get_type (self->shape);
+  switch (old_type)
     {
-    case SHAPE_LINE:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_X1, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y1, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_X2, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y2, NULL);
+    case SVG_ELEMENT_LINE:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, NULL);
       break;
-    case SHAPE_CIRCLE:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_R, NULL);
+    case SVG_ELEMENT_CIRCLE:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_R, NULL);
       break;
-    case SHAPE_ELLIPSE:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, NULL);
+    case SVG_ELEMENT_ELLIPSE:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, NULL);
       break;
-    case SHAPE_RECT:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_X, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_Y, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_WIDTH, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_HEIGHT, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, NULL);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, NULL);
+    case SVG_ELEMENT_RECT:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_X, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, NULL);
       break;
-    case SHAPE_POLYLINE:
-    case SHAPE_POLYGON:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_POINTS, NULL);
+    case SVG_ELEMENT_POLYLINE:
+    case SVG_ELEMENT_POLYGON:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, NULL);
       break;
-    case SHAPE_PATH:
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, NULL);
+    case SVG_ELEMENT_PATH:
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_PATH, NULL);
       break;
     default:
       break;
     }
 
-  old_type = self->shape->type;
-
-  self->shape->type = gtk_drop_down_get_selected (self->shape_dropdown);
-  switch (self->shape->type)
+  type = gtk_drop_down_get_selected (self->shape_dropdown);
+  svg_element_set_type (self->shape, (SvgElementType) type);
+  switch (type)
     {
-    case SHAPE_LINE:
+    case SVG_ELEMENT_LINE:
       {
         double x1, y1, x2, y2;
 
@@ -202,14 +203,14 @@ shape_changed (ShapeEditor *self)
             !get_number_from_entry (self->line_y2, &y2))
           return;
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_X1, svg_number_new (x1));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_Y1, svg_number_new (y1));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_X2, svg_number_new (x2));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_Y2, svg_number_new (y2));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, svg_number_new (x1));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, svg_number_new (y1));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, svg_number_new (x2));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, svg_number_new (y2));
         path_paintable_changed (self->paintable);
       }
       break;
-    case SHAPE_CIRCLE:
+    case SVG_ELEMENT_CIRCLE:
       {
         double cx, cy, r;
 
@@ -218,13 +219,13 @@ shape_changed (ShapeEditor *self)
             !get_number_from_entry (self->circle_r, &r))
           return;
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, svg_number_new (cx));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, svg_number_new (cy));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_R, svg_number_new (r));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new (cx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new (cy));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_R, svg_number_new (r));
         path_paintable_changed (self->paintable);
       }
       break;
-    case SHAPE_ELLIPSE:
+    case SVG_ELEMENT_ELLIPSE:
       {
         double cx, cy, rx, ry;
 
@@ -234,14 +235,14 @@ shape_changed (ShapeEditor *self)
             !get_number_from_entry (self->ellipse_ry, &ry))
           return;
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_CX, svg_number_new (cx));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_CY, svg_number_new (cy));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, svg_number_new (rx));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, svg_number_new (ry));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new (cx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new (cy));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new (rx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new (ry));
         path_paintable_changed (self->paintable);
       }
       break;
-    case SHAPE_RECT:
+    case SVG_ELEMENT_RECT:
       {
         double x, y, width, height, rx, ry;
 
@@ -253,17 +254,17 @@ shape_changed (ShapeEditor *self)
             !get_number_from_entry (self->rect_ry, &ry))
           return;
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_X, svg_number_new (x));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_Y, svg_number_new (y));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_WIDTH, svg_number_new (width));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_HEIGHT, svg_number_new (height));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_RX, svg_number_new (rx));
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_RY, svg_number_new (ry));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X, svg_number_new (x));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, svg_number_new (y));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, svg_number_new (width));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, svg_number_new (height));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new (rx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new (ry));
         path_paintable_changed (self->paintable);
       }
       break;
-    case SHAPE_POLYLINE:
-    case SHAPE_POLYGON:
+    case SVG_ELEMENT_POLYLINE:
+    case SVG_ELEMENT_POLYGON:
       {
         unsigned int n_rows = 0;
         double *parms;
@@ -286,47 +287,35 @@ shape_changed (ShapeEditor *self)
               return;
           }
 
-        svg_shape_attr_set (self->shape, SHAPE_ATTR_POINTS, svg_numbers_new (parms, 2 * n_rows));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, svg_numbers_new (parms, 2 * n_rows));
         path_paintable_changed (self->paintable);
       }
       break;
-    case SHAPE_PATH: // handled in shape_editor_update_path
-    case SHAPE_IMAGE:
-      path_paintable_changed (self->paintable);
-      break;
-    case SHAPE_GROUP:
-    case SHAPE_CLIP_PATH:
-    case SHAPE_MASK:
-    case SHAPE_DEFS:
-    case SHAPE_USE:
-    case SHAPE_PATTERN:
-    case SHAPE_MARKER:
-    case SHAPE_TEXT:
-    case SHAPE_TSPAN:
-    case SHAPE_SVG:
-    case SHAPE_SYMBOL:
-    case SHAPE_SWITCH:
-    case SHAPE_LINK:
-      if (self->shape->shapes == NULL)
-        self->shape->shapes = g_ptr_array_new ();  // FIXME: shape_free
-      path_paintable_changed (self->paintable);
-      break;
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-      if (self->shape->shapes == NULL)
-        self->shape->color_stops = g_ptr_array_new ();  // FIXME: color_stop_free
-      path_paintable_changed (self->paintable);
-      break;
-    case SHAPE_FILTER:
-      if (self->shape->shapes == NULL)
-        self->shape->filters = g_ptr_array_new ();  // FIXME: filter_free
+    case SVG_ELEMENT_PATH: // handled in shape_editor_update_path
+    case SVG_ELEMENT_IMAGE:
+    case SVG_ELEMENT_GROUP:
+    case SVG_ELEMENT_CLIP_PATH:
+    case SVG_ELEMENT_MASK:
+    case SVG_ELEMENT_DEFS:
+    case SVG_ELEMENT_USE:
+    case SVG_ELEMENT_PATTERN:
+    case SVG_ELEMENT_MARKER:
+    case SVG_ELEMENT_TEXT:
+    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_SVG:
+    case SVG_ELEMENT_SYMBOL:
+    case SVG_ELEMENT_SWITCH:
+    case SVG_ELEMENT_LINK:
+    case SVG_ELEMENT_LINEAR_GRADIENT:
+    case SVG_ELEMENT_RADIAL_GRADIENT:
+    case SVG_ELEMENT_FILTER:
       path_paintable_changed (self->paintable);
       break;
     default:
       g_assert_not_reached ();
     }
 
-  if (old_type != self->shape->type)
+  if (type != old_type)
     path_paintable_paths_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -375,8 +364,8 @@ shape_editor_update_path (ShapeEditor *self,
   if (self->updating)
     return;
 
-  self->shape->type = SHAPE_PATH;
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_PATH, svg_path_new (path));
+  svg_element_set_type (self->shape, SVG_ELEMENT_PATH);
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -403,17 +392,17 @@ shape_editor_update_clip_path (ShapeEditor *self,
   if ((path == NULL || gsk_path_is_empty (path)) &&
       (id == NULL || *id == '\0'))
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, NULL);
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
     }
   else if (path && !gsk_path_is_empty (path))
     {
       char *s = gsk_path_to_string (path);
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_path (s, 0xffff));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_path (s, 0xffff));
       g_free (s);
     }
   else
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -431,7 +420,7 @@ static void
 set_transform (ShapeEditor *self,
                SvgValue    *tf)
 {
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_TRANSFORM, tf);
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_TRANSFORM, tf);
   path_paintable_changed (self->paintable);
   gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
   gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
@@ -445,14 +434,14 @@ mask_changed (ShapeEditor *self)
 
   if (gtk_drop_down_get_selected (self->mask_dropdown) == 0)
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, NULL);
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_MASK, NULL);
     }
   else
     {
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -628,13 +617,13 @@ filter_changed (ShapeEditor *self)
   SvgValue *value;
 
   if (text && *text)
-    value = svg_filter_parse (text);
+    value = svg_filter_functions_parse (text);
   else
-    value = svg_filter_parse ("none");
+    value = svg_filter_functions_parse ("none");
 
   if (value)
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_FILTER, value);
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILTER, value);
       path_paintable_changed (self->paintable);
       gtk_widget_remove_css_class (GTK_WIDGET (self->filter), "error");
       gtk_accessible_reset_state (GTK_ACCESSIBLE (self->filter), GTK_ACCESSIBLE_STATE_INVALID);
@@ -670,16 +659,17 @@ shape_editor_get_path_image (ShapeEditor *self)
 static void
 animation_changed (ShapeEditor *self)
 {
-  GpaAnimation direction;
+  GpaAnimation animation, old_animation;
   double duration;
-  double repeat;
-  GpaEasing easing;
-  double segment;
+  int64_t old_duration;
+  double repeat, old_repeat;
+  GpaEasing easing, old_easing;
+  double segment, old_segment;
 
   if (self->updating)
     return;
 
-  direction = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
+  animation = (GpaAnimation) gtk_drop_down_get_selected (self->animation_direction);
   duration = gtk_spin_button_get_value (self->animation_duration);
   if (gtk_check_button_get_active (self->infty_check))
     repeat = REPEAT_FOREVER;
@@ -688,19 +678,15 @@ animation_changed (ShapeEditor *self)
   segment = gtk_spin_button_get_value (self->animation_segment);
   easing = (GpaEasing) gtk_drop_down_get_selected (self->animation_easing);
 
-  if (self->shape->gpa.animation == direction &&
-      self->shape->gpa.animation_duration == duration * G_TIME_SPAN_MILLISECOND &&
-      self->shape->gpa.animation_repeat == repeat &&
-      self->shape->gpa.animation_easing == easing &&
-      self->shape->gpa.animation_segment == segment)
+  svg_element_get_gpa_animation (self->shape, &old_animation, &old_easing, &old_duration, &old_repeat, &old_segment);
+  if (old_animation == animation &&
+      old_duration == duration * G_TIME_SPAN_MILLISECOND &&
+      old_repeat == repeat &&
+      old_easing == easing &&
+      old_segment == segment)
     return;
 
-  self->shape->gpa.animation = direction;
-  self->shape->gpa.animation_duration = duration * G_TIME_SPAN_MILLISECOND;
-  self->shape->gpa.animation_repeat = repeat;
-  self->shape->gpa.animation_easing = easing;
-  self->shape->gpa.animation_segment = segment;
-
+  svg_element_set_gpa_animation (self->shape, animation, easing, duration * G_TIME_SPAN_MILLISECOND, repeat, segment);
   path_paintable_changed (self->paintable);
 
   mini_graph_set_easing (self->mini_graph, easing);
@@ -709,30 +695,29 @@ animation_changed (ShapeEditor *self)
 static void
 transition_changed (ShapeEditor *self)
 {
-  GpaTransition type;
+  GpaTransition transition, old_transition;
   double duration;
+  int64_t old_duration;
   double delay;
-  GpaEasing easing;
+  int64_t old_delay;
+  GpaEasing easing, old_easing;
 
   if (self->updating)
     return;
 
-  type = (GpaTransition) gtk_drop_down_get_selected (self->transition_type);
+  transition = (GpaTransition) gtk_drop_down_get_selected (self->transition_type);
   duration = gtk_spin_button_get_value (self->transition_duration);
   delay = gtk_spin_button_get_value (self->transition_delay);
   easing = (GpaEasing) gtk_drop_down_get_selected (self->transition_easing);
 
-  if (self->shape->gpa.transition == type &&
-      self->shape->gpa.transition_duration == duration * G_TIME_SPAN_MILLISECOND &&
-      self->shape->gpa.transition_delay == delay * G_TIME_SPAN_MILLISECOND &&
-      self->shape->gpa.transition_easing == easing)
+  svg_element_get_gpa_transition (self->shape, &old_transition, &old_easing, &old_duration, &old_delay);
+  if (old_transition == transition &&
+      old_duration == duration * G_TIME_SPAN_MILLISECOND &&
+      old_delay == delay * G_TIME_SPAN_MILLISECOND &&
+      old_easing == easing)
     return;
 
-  self->shape->gpa.transition = type;
-  self->shape->gpa.transition_duration = duration * G_TIME_SPAN_MILLISECOND;
-  self->shape->gpa.transition_delay = delay * G_TIME_SPAN_MILLISECOND;
-  self->shape->gpa.transition_easing = easing;
-
+  svg_element_set_gpa_transition (self->shape, transition, easing, duration * G_TIME_SPAN_MILLISECOND, delay * G_TIME_SPAN_MILLISECOND);
   path_paintable_changed (self->paintable);
 }
 
@@ -745,10 +730,10 @@ origin_changed (ShapeEditor *self)
     return;
 
   origin = gtk_range_get_value (GTK_RANGE (self->origin));
-  if (self->shape->gpa.origin == origin)
+  if (svg_element_get_gpa_origin (self->shape) == origin)
     return;
 
-  self->shape->gpa.origin = origin;
+  svg_element_set_gpa_origin (self->shape, origin);
   path_paintable_changed (self->paintable);
 }
 
@@ -761,10 +746,8 @@ id_changed (ShapeEditor *self)
     return;
 
   id = gtk_editable_get_text (GTK_EDITABLE (self->id_label));
-  if (g_set_str (&self->shape->id, id))
-    path_paintable_changed (self->paintable);
-  else
-    gtk_widget_error_bell (GTK_WIDGET (self->id_label));
+  svg_element_set_id (self->shape, id);
+  path_paintable_changed (self->paintable);
 }
 
 static void
@@ -775,7 +758,7 @@ paint_order_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_PAINT_ORDER, svg_paint_order_new (value));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_PAINT_ORDER, svg_paint_order_new (value));
   path_paintable_changed (self->paintable);
 }
 
@@ -787,7 +770,7 @@ opacity_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_OPACITY, svg_number_new (value));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_OPACITY, svg_number_new (value));
   path_paintable_changed (self->paintable);
 }
 
@@ -839,13 +822,13 @@ stroke_changed (ShapeEditor *self)
 
   color = color_editor_get_color (self->stroke_paint);
 
-  kind = svg_shape_attr_get_paint (self->shape, SHAPE_ATTR_STROKE, &stroke_symbolic, &stroke_color);
-  stroke_width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_WIDTH, viewport);
-  stroke_min = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MINWIDTH, viewport);
-  stroke_max = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MAXWIDTH, viewport);
-  linecap = svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINEJOIN);
-  linejoin = svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINEJOIN);
-  miterlimit = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MITERLIMIT, viewport);
+  kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_STROKE, &stroke_symbolic, &stroke_color);
+  stroke_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_WIDTH, viewport);
+  stroke_min = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, viewport);
+  stroke_max = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, viewport);
+  linecap = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN);
+  linejoin = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN);
+  miterlimit = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, viewport);
 
   if (do_stroke == (kind != PAINT_NONE) &&
       width == stroke_width &&
@@ -860,21 +843,21 @@ stroke_changed (ShapeEditor *self)
     return;
 
   if (!do_stroke)
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_none ());
+    svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
   else if (symbolic != 0xffff)
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_symbolic (symbolic));
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_OPACITY, svg_number_new (color->alpha));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE, svg_paint_new_rgba (color));
+    svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_WIDTH, svg_number_new (width));
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_MINWIDTH, svg_number_new (min));
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_MAXWIDTH, svg_number_new (max));
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_LINECAP, svg_linecap_new (line_cap));
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_LINEJOIN, svg_linejoin_new (line_join));
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_MITERLIMIT, svg_number_new (miter_limit));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new (width));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new (min));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new (max));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -916,8 +899,8 @@ fill_changed (ShapeEditor *self)
 
   color = color_editor_get_color (self->fill_paint);
 
-  kind = svg_shape_attr_get_paint (self->shape, SHAPE_ATTR_FILL, &fill_symbolic, &fill_color);
-  rule = svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_FILL_RULE);
+  kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_FILL, &fill_symbolic, &fill_color);
+  rule = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_FILL_RULE);
 
   if (do_fill == (kind != PAINT_NONE) &&
       fill_rule == rule &&
@@ -926,16 +909,16 @@ fill_changed (ShapeEditor *self)
        gdk_rgba_equal (&fill_color, color)))
     return;
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL_RULE, svg_fill_rule_new (fill_rule));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (fill_rule));
   if (!do_fill)
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_none ());
+    svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
   else if (symbolic != 0xffff)
     {
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_symbolic (symbolic));
-      svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL_OPACITY, svg_number_new (color->alpha));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
+      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_shape_attr_set (self->shape, SHAPE_ATTR_FILL, svg_paint_new_rgba (color));
+    svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
 
   path_paintable_changed (self->paintable);
 
@@ -946,7 +929,6 @@ fill_changed (ShapeEditor *self)
 static void
 attach_changed (ShapeEditor *self)
 {
-  const char *id;
   size_t selected;
   double pos;
 
@@ -957,17 +939,16 @@ attach_changed (ShapeEditor *self)
   pos = gtk_range_get_value (GTK_RANGE (self->attach_at));
 
   if (selected == 0)
-    {
-      g_clear_pointer (&self->shape->gpa.attach.ref, g_free);
-      self->shape->gpa.attach.shape = NULL;
-      self->shape->gpa.attach.pos = pos;
-    }
+    svg_element_set_gpa_attachment (self->shape, NULL, pos, NULL);
   else
     {
+      const char *id;
+      SvgElement *sh;
+
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->attach_to)));
-      g_set_str (&self->shape->gpa.attach.ref, id);
-      self->shape->gpa.attach.shape = path_paintable_get_shape_by_id (self->paintable, id);
-      self->shape->gpa.attach.pos = pos;
+      sh = path_paintable_get_shape_by_id (self->paintable, id);
+
+      svg_element_set_gpa_attachment (self->shape, id, pos, sh);
     }
 
   path_paintable_changed (self->paintable);
@@ -993,41 +974,41 @@ mask_type_changed (ShapeEditor *self)
       g_assert_not_reached ();
     }
 
-  svg_shape_attr_set (self->shape, SHAPE_ATTR_STROKE_LINECAP, svg_mask_type_new (mode));
+  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_mask_type_new (mode));
 
   path_paintable_changed (self->paintable);
 }
 
 static gboolean
-can_edit_shape (Shape *shape)
+can_edit_shape (SvgElement *shape)
 {
-  switch (shape->type)
+  switch (svg_element_get_type (shape))
     {
-    case SHAPE_LINE:
-    case SHAPE_POLYLINE:
-    case SHAPE_POLYGON:
-    case SHAPE_RECT:
-    case SHAPE_CIRCLE:
-    case SHAPE_ELLIPSE:
-    case SHAPE_PATH:
-    case SHAPE_GROUP:
-    case SHAPE_DEFS:
-    case SHAPE_CLIP_PATH:
-    case SHAPE_MASK:
+    case SVG_ELEMENT_LINE:
+    case SVG_ELEMENT_POLYLINE:
+    case SVG_ELEMENT_POLYGON:
+    case SVG_ELEMENT_RECT:
+    case SVG_ELEMENT_CIRCLE:
+    case SVG_ELEMENT_ELLIPSE:
+    case SVG_ELEMENT_PATH:
+    case SVG_ELEMENT_GROUP:
+    case SVG_ELEMENT_DEFS:
+    case SVG_ELEMENT_CLIP_PATH:
+    case SVG_ELEMENT_MASK:
       return TRUE;
-    case SHAPE_USE:
-    case SHAPE_LINEAR_GRADIENT:
-    case SHAPE_RADIAL_GRADIENT:
-    case SHAPE_PATTERN:
-    case SHAPE_MARKER:
-    case SHAPE_TEXT:
-    case SHAPE_TSPAN:
-    case SHAPE_SVG:
-    case SHAPE_IMAGE:
-    case SHAPE_FILTER:
-    case SHAPE_SYMBOL:
-    case SHAPE_SWITCH:
-    case SHAPE_LINK:
+    case SVG_ELEMENT_USE:
+    case SVG_ELEMENT_LINEAR_GRADIENT:
+    case SVG_ELEMENT_RADIAL_GRADIENT:
+    case SVG_ELEMENT_PATTERN:
+    case SVG_ELEMENT_MARKER:
+    case SVG_ELEMENT_TEXT:
+    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_SVG:
+    case SVG_ELEMENT_IMAGE:
+    case SVG_ELEMENT_FILTER:
+    case SVG_ELEMENT_SYMBOL:
+    case SVG_ELEMENT_SWITCH:
+    case SVG_ELEMENT_LINK:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -1127,16 +1108,16 @@ bb_and_shape_has_attr (GObject    *object,
                        int       dummy)
 {
   ShapeEditor *self = SHAPE_EDITOR (object);
-  ShapeAttr attr;
+  SvgProperty attr;
 
   if (strcmp (name, "clip-path") == 0)
-    attr = SHAPE_ATTR_CLIP_PATH;
+    attr = SVG_PROPERTY_CLIP_PATH;
   else if (strcmp (name, "transform") == 0)
-    attr = SHAPE_ATTR_TRANSFORM;
+    attr = SVG_PROPERTY_TRANSFORM;
   else if (strcmp (name, "filter") == 0)
-    attr = SHAPE_ATTR_FILTER;
+    attr = SVG_PROPERTY_FILTER;
   else if (strcmp (name, "mask") == 0)
-    attr = SHAPE_ATTR_MASK;
+    attr = SVG_PROPERTY_MASK;
   else
     g_assert_not_reached ();
 
@@ -1156,12 +1137,9 @@ bool_and_no_edit (GObject  *object,
 static void
 move_shape_down (ShapeEditor *self)
 {
-  Shape *parent = self->shape->parent;
-  unsigned int idx;
+  SvgElement *parent = svg_element_get_parent (self->shape);
 
-  g_ptr_array_find (parent->shapes, self->shape, &idx);
-  g_ptr_array_steal_index (parent->shapes, idx);
-  g_ptr_array_insert (parent->shapes, idx + 1, self->shape);
+  svg_element_move_child_down (parent, self->shape);
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);
 }
@@ -1169,7 +1147,8 @@ move_shape_down (ShapeEditor *self)
 static void
 duplicate_shape (ShapeEditor *self)
 {
-  g_ptr_array_add (self->shape->parent->shapes, shape_duplicate (self->shape, self->shape->parent));
+  SvgElement *parent = svg_element_get_parent (self->shape);
+  svg_element_add_child (parent, svg_element_duplicate (self->shape, parent));
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);
 }
@@ -1178,7 +1157,7 @@ static void
 delete_shape (ShapeEditor *self)
 {
   self->deleted = TRUE;
-  svg_shape_delete (self->shape);
+  svg_element_delete (self->shape);
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);
 }
@@ -1186,11 +1165,14 @@ delete_shape (ShapeEditor *self)
 static void
 add_shape (ShapeEditor *self)
 {
-  Shape *shape;
+  SvgElement *shape;
+  char *id;
 
-  shape = svg_shape_add (self->shape, SHAPE_PATH);
+  shape = svg_shape_add (self->shape, SVG_ELEMENT_PATH);
   shape_set_default_attrs (shape);
-  shape->id = path_paintable_find_unused_id (self->paintable, "path");
+  id = path_paintable_find_unused_id (self->paintable, "path");
+  svg_element_set_id (shape, id);
+  g_free (id);
 
   path_paintable_changed (self->paintable);
   path_paintable_paths_changed (self->paintable);
@@ -1199,28 +1181,29 @@ add_shape (ShapeEditor *self)
 typedef struct
 {
   GtkStringList *model;
-  Shape *skip;
+  SvgElement *skip;
 } CollectData;
 
 static void
-collect_graphical (Shape    *shape,
+collect_graphical (SvgElement    *shape,
                    gpointer  data)
 {
   CollectData *d = data;
 
   if (shape_is_graphical (shape) &&
       shape != d->skip &&
-      shape->id != NULL)
-    gtk_string_list_append (d->model, shape->id);
+      svg_element_get_id (shape) != NULL)
+    gtk_string_list_append (d->model, svg_element_get_id (shape));
 }
 
 static void
-collect_masks (Shape    *shape,
+collect_masks (SvgElement    *shape,
                gpointer  data)
 {
   CollectData *d = data;
 
-  if (shape->type != SHAPE_MASK || shape->id == NULL)
+  if (svg_element_get_type (shape) != SVG_ELEMENT_MASK ||
+      svg_element_get_id (shape) == NULL)
     return;
 
   if (d->skip)
@@ -1229,7 +1212,7 @@ collect_masks (Shape    *shape,
         return;
     }
 
-  gtk_string_list_append (d->model, shape->id);
+  gtk_string_list_append (d->model, svg_element_get_id (shape));
 }
 
 static void
@@ -1243,7 +1226,7 @@ repopulate_attach_to (ShapeEditor *self)
 
   data.model = model;
   data.skip = self->shape;
-  svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, collect_graphical, &data);
+  svg_element_foreach (path_paintable_get_svg (self->paintable)->content, collect_graphical, &data);
   gtk_drop_down_set_model (self->attach_to, G_LIST_MODEL (model));
 }
 
@@ -1258,7 +1241,7 @@ repopulate_mask (ShapeEditor *self)
 
   data.model = model;
   data.skip = self->shape;
-  svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, collect_masks, &data);
+  svg_element_foreach (path_paintable_get_svg (self->paintable)->content, collect_masks, &data);
   gtk_drop_down_set_model (self->mask_dropdown, G_LIST_MODEL (model));
 }
 
@@ -1271,13 +1254,13 @@ paths_changed (ShapeEditor *self)
   if (shape_is_graphical (self->shape))
     repopulate_attach_to (self);
 
-  if (svg_shape_has_attr (self->shape, SHAPE_ATTR_MASK))
+  if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
     repopulate_mask (self);
 }
 
 static void
 append_shape_editor (ShapeEditor *self,
-                     Shape       *shape)
+                     SvgElement       *shape)
 {
   ShapeEditor *pe;
 
@@ -1289,9 +1272,9 @@ append_shape_editor (ShapeEditor *self,
 static void
 populate_children (ShapeEditor *self)
 {
-  for (unsigned int i = 0; i < self->shape->shapes->len; i++)
+  for (unsigned int i = 0; i < svg_element_get_n_children (self->shape); i++)
     {
-      Shape *shape = g_ptr_array_index (self->shape->shapes, i);
+      SvgElement *shape = svg_element_get_child (self->shape, i);
       append_shape_editor (self, shape);
     }
 }
@@ -1311,14 +1294,19 @@ shape_editor_update (ShapeEditor *self)
       const graphene_rect_t *viewport;
       PaintKind kind;
       unsigned int idx;
+      const char *id;
+      SvgElementType type;
 
-      gtk_editable_set_text (GTK_EDITABLE (self->id_label), self->shape->id ? self->shape->id : "");
+      id = svg_element_get_id (self->shape);
+      type = svg_element_get_type (self->shape);
+
+      gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
 
       self->updating = TRUE;
 
       if (!can_edit_shape (self->shape))
         {
-          gtk_drop_down_set_selected (self->shape_dropdown, self->shape->type);
+          gtk_drop_down_set_selected (self->shape_dropdown, svg_element_get_type (self->shape));
 
           self->updating = FALSE;
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_COUNTER]);
@@ -1357,17 +1345,17 @@ shape_editor_update (ShapeEditor *self)
       gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), "0");
       gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), "0");
 
-      gtk_drop_down_set_selected (self->shape_dropdown, self->shape->type);
-      switch ((unsigned int) self->shape->type)
+      gtk_drop_down_set_selected (self->shape_dropdown, type);
+      switch ((unsigned int) type)
         {
-        case SHAPE_LINE:
+        case SVG_ELEMENT_LINE:
           {
             double x1, y1, x2, y2;
 
-            x1 = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_X1, viewport);
-            y1 = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_Y1, viewport);
-            x2 = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_X2, viewport);
-            y2 = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_Y2, viewport);
+            x1 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X1, viewport);
+            y1 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y1, viewport);
+            x2 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X2, viewport);
+            y2 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y2, viewport);
 
             gtk_editable_set_text (GTK_EDITABLE (self->line_x1), g_ascii_formatd (buffer, sizeof (buffer), "%g", x1));
             gtk_editable_set_text (GTK_EDITABLE (self->line_y1), g_ascii_formatd (buffer, sizeof (buffer), "%g", y1));
@@ -1376,13 +1364,13 @@ shape_editor_update (ShapeEditor *self)
           }
           break;
 
-        case SHAPE_CIRCLE:
+        case SVG_ELEMENT_CIRCLE:
           {
             double cx, cy, r;
 
-            cx = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_CX, viewport);
-            cy = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_CY, viewport);
-            r = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_R, viewport);
+            cx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CX, viewport);
+            cy = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CY, viewport);
+            r = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_R, viewport);
 
             gtk_editable_set_text (GTK_EDITABLE (self->circle_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", cx));
             gtk_editable_set_text (GTK_EDITABLE (self->circle_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", cy));
@@ -1390,14 +1378,14 @@ shape_editor_update (ShapeEditor *self)
           }
           break;
 
-        case SHAPE_ELLIPSE:
+        case SVG_ELEMENT_ELLIPSE:
           {
             double cx, cy, rx, ry;
 
-            cx = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_CX, viewport);
-            cy = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_CY, viewport);
-            rx = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_RX, viewport);
-            ry = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_RY, viewport);
+            cx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CX, viewport);
+            cy = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CY, viewport);
+            rx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RX, viewport);
+            ry = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RY, viewport);
 
             gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", cx));
             gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", cy));
@@ -1406,16 +1394,16 @@ shape_editor_update (ShapeEditor *self)
           }
           break;
 
-        case SHAPE_RECT:
+        case SVG_ELEMENT_RECT:
           {
             double x, y, width, height, rx, ry;
 
-            x = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_X, viewport);
-            y = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_Y, viewport);
-            width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_WIDTH, viewport);
-            height = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_HEIGHT, viewport);
-            rx = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_RX, viewport);
-            ry = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_RY, viewport);
+            x = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X, viewport);
+            y = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y, viewport);
+            width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_WIDTH, viewport);
+            height = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_HEIGHT, viewport);
+            rx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RX, viewport);
+            ry = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RY, viewport);
 
             gtk_editable_set_text (GTK_EDITABLE (self->rect_x), g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
             gtk_editable_set_text (GTK_EDITABLE (self->rect_y), g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
@@ -1426,43 +1414,47 @@ shape_editor_update (ShapeEditor *self)
           }
           break;
 
-        case SHAPE_PATH:
-        case SHAPE_POLYLINE:
-        case SHAPE_POLYGON:
+        case SVG_ELEMENT_PATH:
+        case SVG_ELEMENT_POLYLINE:
+        case SVG_ELEMENT_POLYGON:
           break;
 
-        case SHAPE_GROUP:
-        case SHAPE_DEFS:
-        case SHAPE_CLIP_PATH:
-        case SHAPE_MASK:
+        case SVG_ELEMENT_GROUP:
+        case SVG_ELEMENT_DEFS:
+        case SVG_ELEMENT_CLIP_PATH:
+        case SVG_ELEMENT_MASK:
           populate_children (self);
           break;
         default:
           g_assert_not_reached ();
         }
 
-      gtk_editable_set_text (GTK_EDITABLE (self->id_label), self->shape->id ? self->shape->id : "");
+      gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
 
       if (shape_is_graphical (self->shape))
         {
-          gtk_drop_down_set_selected (self->transition_type, self->shape->gpa.transition);
+          GpaTransition transition;
+          GpaEasing easing;
+          int64_t duration;
+          int64_t delay;
+          GpaAnimation animation;
+          double repeat;
+          double segment;
 
-          gtk_spin_button_set_value (self->transition_duration,
-                                     self->shape->gpa.transition_duration / (double) G_TIME_SPAN_MILLISECOND);
+          svg_element_get_gpa_transition (self->shape, &transition, &easing, &duration, &delay);
 
-          gtk_spin_button_set_value (self->transition_delay,
-                                     self->shape->gpa.transition_delay / (double) G_TIME_SPAN_MILLISECOND);
+          gtk_drop_down_set_selected (self->transition_type, transition);
 
-          gtk_drop_down_set_selected (self->transition_easing, self->shape->gpa.transition_easing);
+          gtk_drop_down_set_selected (self->transition_easing, easing);
+          gtk_spin_button_set_value (self->transition_duration, duration / (double) G_TIME_SPAN_MILLISECOND);
+          gtk_spin_button_set_value (self->transition_delay, delay / (double) G_TIME_SPAN_MILLISECOND);
 
-          gtk_range_set_value (GTK_RANGE (self->origin), self->shape->gpa.origin);
+          gtk_range_set_value (GTK_RANGE (self->origin), svg_element_get_gpa_origin (self->shape));
+          svg_element_get_gpa_animation (self->shape, &animation, &easing, &duration, &repeat, &segment);
+          gtk_drop_down_set_selected (self->animation_direction, animation);
 
-          gtk_drop_down_set_selected (self->animation_direction, self->shape->gpa.animation);
-
-          gtk_spin_button_set_value (self->animation_duration,
-                                     self->shape->gpa.animation_duration / (double) G_TIME_SPAN_MILLISECOND);
-
-          if (self->shape->gpa.animation_repeat == REPEAT_FOREVER)
+          gtk_spin_button_set_value (self->animation_duration, duration / (double) G_TIME_SPAN_MILLISECOND);
+          if (repeat == REPEAT_FOREVER)
             {
               gtk_check_button_set_active (self->infty_check, TRUE);
               gtk_spin_button_set_value (self->animation_repeat, 1);
@@ -1470,17 +1462,17 @@ shape_editor_update (ShapeEditor *self)
           else
             {
               gtk_check_button_set_active (self->infty_check, FALSE);
-              gtk_spin_button_set_value (self->animation_repeat, self->shape->gpa.animation_repeat);
+              gtk_spin_button_set_value (self->animation_repeat, repeat);
             }
 
-          gtk_drop_down_set_selected (self->animation_easing, self->shape->gpa.animation_easing);
+          gtk_drop_down_set_selected (self->animation_easing, easing);
 
-          mini_graph_set_easing (self->mini_graph, self->shape->gpa.animation_easing);
+          mini_graph_set_easing (self->mini_graph, easing);
 
-          gtk_spin_button_set_value (self->animation_segment, self->shape->gpa.animation_segment);
+          gtk_spin_button_set_value (self->animation_segment, segment);
         }
 
-      kind = svg_shape_attr_get_paint (self->shape, SHAPE_ATTR_STROKE, &symbolic, &color);
+      kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_STROKE, &symbolic, &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->stroke_paint, 0);
@@ -1491,19 +1483,19 @@ shape_editor_update (ShapeEditor *self)
 
       color_editor_set_color (self->stroke_paint, &color);
 
-      line_width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_WIDTH, viewport);
-      min_width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MINWIDTH, viewport);
-      max_width = svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MAXWIDTH, viewport);
+      line_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_WIDTH, viewport);
+      min_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, viewport);
+      max_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, viewport);
 
       gtk_spin_button_set_value (self->min_width, min_width);
       gtk_spin_button_set_value (self->line_width, line_width);
       gtk_spin_button_set_value (self->max_width, max_width);
 
-      gtk_drop_down_set_selected (self->line_join, svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINEJOIN));
-      gtk_drop_down_set_selected (self->line_cap, svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_STROKE_LINECAP));
-      gtk_range_set_value (GTK_RANGE (self->miter_limit), svg_shape_attr_get_number (self->shape, SHAPE_ATTR_STROKE_MITERLIMIT, viewport));
+      gtk_drop_down_set_selected (self->line_join, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
+      gtk_drop_down_set_selected (self->line_cap, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINECAP));
+      gtk_range_set_value (GTK_RANGE (self->miter_limit), svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, viewport));
 
-      kind = svg_shape_attr_get_paint (self->shape, SHAPE_ATTR_FILL, &symbolic, &color);
+      kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_FILL, &symbolic, &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->fill_paint, 0);
@@ -1514,12 +1506,15 @@ shape_editor_update (ShapeEditor *self)
 
       color_editor_set_color (self->fill_paint, &color);
 
-      gtk_drop_down_set_selected (self->fill_rule, svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_FILL_RULE));
+      gtk_drop_down_set_selected (self->fill_rule, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_FILL_RULE));
 
       if (shape_is_graphical (self->shape))
         {
+          double pos;
+
           repopulate_attach_to (self);
 
+          svg_element_get_gpa_attachment (self->shape, NULL, &pos, NULL);
 #if 0
           if (self->shape->gpa.attach.shape == NULL)
             gtk_drop_down_set_selected (self->attach_to, 0);
@@ -1529,25 +1524,29 @@ shape_editor_update (ShapeEditor *self)
             gtk_drop_down_set_selected (self->attach_to, to);
 #endif
 
-          gtk_range_set_value (GTK_RANGE (self->attach_at), self->shape->gpa.attach.pos);
+          gtk_range_set_value (GTK_RANGE (self->attach_at), pos);
         }
 
-      g_ptr_array_find (self->shape->parent->shapes, self->shape, &idx);
-      if (idx + 1 == self->shape->parent->shapes->len)
+      for (idx = 0; idx < svg_element_get_n_children (svg_element_get_parent (self->shape)); idx++)
+        {
+          if (svg_element_get_child (svg_element_get_parent (self->shape), idx) == self->shape)
+            break;
+        }
+      if (idx + 1 == svg_element_get_n_children (svg_element_get_parent (self->shape)))
         gtk_widget_set_sensitive (GTK_WIDGET (self->move_down), FALSE);
 
       gtk_drop_down_set_selected (self->paint_order,
-                                  svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_PAINT_ORDER));
+                                  svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_PAINT_ORDER));
 
       alpha_editor_set_alpha (self->opacity,
-                              svg_shape_attr_get_number (self->shape, SHAPE_ATTR_OPACITY, viewport));
+                              svg_shape_attr_get_number (self->shape, SVG_PROPERTY_OPACITY, viewport));
 
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_CLIP_PATH))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_CLIP_PATH))
         {
           GskPath *path = NULL;
           const char *ref = NULL;
 
-          svg_shape_attr_get_clip (self->shape, SHAPE_ATTR_CLIP_PATH, &path, &ref);
+          svg_shape_attr_get_clip (self->shape, SVG_PROPERTY_CLIP_PATH, &path, &ref);
           if (path)
             path_editor_set_path (self->clip_path_editor, path);
           else if (ref)
@@ -1565,13 +1564,13 @@ shape_editor_update (ShapeEditor *self)
                         NULL);
         }
 
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_MASK))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
         {
           const char *ref = NULL;
           unsigned int pos = 0;
 
           repopulate_mask (self);
-          ref = svg_shape_attr_get_mask (self->shape, SHAPE_ATTR_MASK);
+          ref = svg_shape_attr_get_mask (self->shape, SVG_PROPERTY_MASK);
           if (ref)
             {
               GListModel *model;
@@ -1585,9 +1584,9 @@ shape_editor_update (ShapeEditor *self)
           gtk_drop_down_set_selected (self->mask_dropdown, pos);
         }
 
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_TRANSFORM))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_TRANSFORM))
         {
-          text = svg_shape_attr_get_transform (self->shape, SHAPE_ATTR_TRANSFORM);
+          text = svg_shape_attr_get_transform (self->shape, SVG_PROPERTY_TRANSFORM);
           if (g_strcmp0 (text, "none") == 0)
             gtk_editable_set_text (GTK_EDITABLE (self->transform), "");
           else
@@ -1600,9 +1599,9 @@ shape_editor_update (ShapeEditor *self)
           g_clear_pointer (&text, g_free);
         }
 
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_FILTER))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_FILTER))
         {
-          text = svg_shape_attr_get_filter (self->shape, SHAPE_ATTR_FILTER);
+          text = svg_shape_attr_get_filter (self->shape, SVG_PROPERTY_FILTER);
           if (g_strcmp0 (text, "none") == 0)
             gtk_editable_set_text (GTK_EDITABLE (self->filter), "");
           else
@@ -1610,12 +1609,12 @@ shape_editor_update (ShapeEditor *self)
           g_clear_pointer (&text, g_free);
         }
 
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_MASK))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
         {
         }
-      if (svg_shape_has_attr (self->shape, SHAPE_ATTR_MASK_TYPE))
+      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK_TYPE))
         {
-          switch (svg_shape_attr_get_enum (self->shape, SHAPE_ATTR_MASK_TYPE))
+          switch (svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_MASK_TYPE))
             {
             case GSK_MASK_MODE_LUMINANCE:
               gtk_drop_down_set_selected (self->mask_type, 0);
@@ -1834,7 +1833,7 @@ shape_editor_class_init (ShapeEditorClass *class)
 
 ShapeEditor *
 shape_editor_new (PathPaintable *paintable,
-                  Shape         *shape)
+                  SvgElement    *shape)
 {
   ShapeEditor *self;
 

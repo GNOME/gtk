@@ -25,6 +25,7 @@
 #include "gtksvgvalueprivate.h"
 #include "gtksvgutilsprivate.h"
 #include "gtksvgcolorprivate.h"
+#include "gtksvgelementinternal.h"
 #include "gdk/gdkrgbaprivate.h"
 
 gboolean
@@ -44,7 +45,7 @@ typedef struct
     GdkColor color;
     struct {
       char *ref;
-      Shape *shape;
+      SvgElement *shape;
       GdkColor fallback;
     } server;
   };
@@ -116,9 +117,9 @@ static void      svg_paint_print       (const SvgValue    *v0,
 static double    svg_paint_distance    (const SvgValue    *v0,
                                         const SvgValue    *v1);
 static SvgValue * svg_paint_resolve    (const SvgValue    *value,
-                                        ShapeAttr          attr,
+                                        SvgProperty        attr,
                                         unsigned int       idx,
-                                        Shape             *shape,
+                                        SvgElement        *shape,
                                         SvgComputeContext *context);
 
 static const SvgValueClass SVG_PAINT_CLASS = {
@@ -589,7 +590,7 @@ svg_paint_get_server_ref (const SvgValue *value)
   return paint->server.ref;
 }
 
-Shape *
+SvgElement *
 svg_paint_get_server_shape (const SvgValue *value)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
@@ -613,9 +614,9 @@ svg_paint_get_server_fallback (const SvgValue *value)
 
 static SvgValue *
 svg_paint_resolve (const SvgValue    *value,
-                   ShapeAttr          attr,
+                   SvgProperty        attr,
                    unsigned int       idx,
-                   Shape             *shape,
+                   SvgElement        *shape,
                    SvgComputeContext *context)
 {
   const SvgPaint *paint = (const SvgPaint *) value;
@@ -625,12 +626,13 @@ svg_paint_resolve (const SvgValue    *value,
 
   if (paint->kind == PAINT_CURRENT_COLOR)
     {
-      switch (svg_color_get_kind (shape->current[SHAPE_ATTR_COLOR]))
+      SvgValue *color = svg_element_get_current_value (shape, SVG_PROPERTY_COLOR);
+      switch (svg_color_get_kind (color))
         {
         case COLOR_PLAIN:
-          return svg_paint_new_color (svg_color_get_color (shape->current[SHAPE_ATTR_COLOR]));
+          return svg_paint_new_color (svg_color_get_color (color));
         case COLOR_SYMBOLIC:
-          return svg_paint_new_symbolic (svg_color_get_symbolic (shape->current[SHAPE_ATTR_COLOR]));
+          return svg_paint_new_symbolic (svg_color_get_symbolic (color));
         case COLOR_CURRENT:
           return svg_paint_new_black ();
         default:
@@ -658,7 +660,7 @@ svg_paint_resolve (const SvgValue    *value,
 
   if (paint->kind == PAINT_SERVER_WITH_CURRENT_COLOR)
     {
-      const GdkColor *color = svg_color_get_color (shape->current[SHAPE_ATTR_COLOR]);
+      const GdkColor *color = svg_color_get_color (svg_element_get_current_value (shape, SVG_PROPERTY_COLOR));
       return svg_paint_new_server_with_fallback (paint->server.ref, color);
     }
 
@@ -741,8 +743,8 @@ svg_paint_distance (const SvgValue *v0,
 }
 
 void
-svg_paint_set_server_shape (SvgValue *value,
-                            Shape    *shape)
+svg_paint_set_server_shape (SvgValue   *value,
+                            SvgElement *shape)
 {
   SvgPaint *paint = (SvgPaint *) value;
 

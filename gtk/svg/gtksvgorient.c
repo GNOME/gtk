@@ -26,6 +26,7 @@
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgnumberprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -104,9 +105,9 @@ svg_orient_print (const SvgValue *value,
 }
 
 static SvgValue * svg_orient_resolve (const SvgValue    *value,
-                                      ShapeAttr          attr,
+                                      SvgProperty        attr,
                                       unsigned int       idx,
-                                      Shape             *shape,
+                                      SvgElement        *shape,
                                       SvgComputeContext *context);
 
 static const SvgValueClass SVG_ORIENT_CLASS = {
@@ -172,11 +173,11 @@ svg_orient_parse (GtkCssParser *parser)
 }
 
 static SvgValue *
-svg_orient_resolve (const SvgValue     *value,
-                    ShapeAttr           attr,
-                    unsigned int        idx,
-                    Shape              *shape,
-                    SvgComputeContext  *context)
+svg_orient_resolve (const SvgValue    *value,
+                    SvgProperty        attr,
+                    unsigned int       idx,
+                    SvgElement        *shape,
+                    SvgComputeContext *context)
 {
   const SvgOrient *v = (const SvgOrient *) value;
 

@@ -25,6 +25,7 @@
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgnumberprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -86,9 +87,9 @@ static SvgValue * svg_dash_array_accumulate (const SvgValue    *value0,
                                              SvgComputeContext *context,
                                              int                n);
 static SvgValue * svg_dash_array_resolve    (const SvgValue    *value,
-                                             ShapeAttr          attr,
+                                             SvgProperty        attr,
                                              unsigned int       idx,
-                                             Shape             *shape,
+                                             SvgElement        *shape,
                                              SvgComputeContext *context);
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
@@ -279,9 +280,9 @@ svg_dash_array_accumulate (const SvgValue    *value0,
 
 static SvgValue *
 svg_dash_array_resolve (const SvgValue    *value,
-                        ShapeAttr          attr,
+                        SvgProperty        attr,
                         unsigned int       idx,
-                        Shape             *shape,
+                        SvgElement        *shape,
                         SvgComputeContext *context)
 {
   SvgDashArray *orig = (SvgDashArray *) value;
@@ -382,4 +383,3 @@ svg_dash_array_get_length (const SvgValue *value)
 
   return da->n_dashes;
 }
-

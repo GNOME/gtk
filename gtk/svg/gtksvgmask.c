@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gtksvgmaskprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -29,7 +30,7 @@ typedef struct
   MaskKind kind;
 
   char *ref;
-  Shape *shape;
+  SvgElement *shape;
 } SvgMask;
 
 static void
@@ -177,7 +178,7 @@ svg_mask_get_id (const SvgValue *value)
     return mask->ref;
 }
 
-Shape *
+SvgElement *
 svg_mask_get_shape (const SvgValue *value)
 {
   const SvgMask *mask = (const SvgMask *) value;
@@ -188,8 +189,8 @@ svg_mask_get_shape (const SvgValue *value)
   return mask->shape;
 }
 
-void svg_mask_set_shape (SvgValue *value,
-                         Shape    *shape)
+void svg_mask_set_shape (SvgValue   *value,
+                         SvgElement *shape)
 {
   SvgMask *mask = (SvgMask *) value;
 

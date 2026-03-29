@@ -21,20 +21,26 @@
 
 #pragma once
 
-#include "gtk/css/gtkcssparserprivate.h"
+#include <glib.h>
+#include "gtksvg.h"
 #include "gtksvgtypesprivate.h"
-#include "gtksvgunitprivate.h"
-#include "gtksvgprivate.h"
+#include "gsk/gskcomponenttransfer.h"
+#include "gtk/gtkcssnodeprivate.h"
 
 G_BEGIN_DECLS
 
-SvgValue *  svg_orient_new_angle         (double          angle,
-                                          SvgUnit         unit);
-SvgValue *  svg_orient_new_auto          (gboolean        start_reverse);
-SvgValue *  svg_orient_parse             (GtkCssParser   *parser);
+void         svg_filter_type_init         (void);
 
-OrientKind  svg_orient_get_kind          (const SvgValue *value);
-gboolean    svg_orient_get_start_reverse (const SvgValue *value);
-double      svg_orient_get_angle         (const SvgValue *value);
+gboolean     svg_filter_type_lookup       (const char    *name,
+                                           SvgFilterType *result);
+
+const char * svg_filter_type_get_name     (SvgFilterType type);
+unsigned int svg_filter_type_get_n_attrs  (SvgFilterType type);
+SvgProperty  svg_filter_type_get_property (SvgFilterType  type,
+                                           unsigned int   idx);
+gboolean     svg_filter_type_has_property (SvgFilterType  type,
+                                           SvgProperty    attr);
+unsigned int svg_filter_type_get_index    (SvgFilterType  type,
+                                           SvgProperty    attr);
 
 G_END_DECLS

@@ -27,6 +27,26 @@
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskcontourprivate.h"
 
+/* {{{ Builder */
+
+void
+path_builder_add_ellipse (GskPathBuilder *builder,
+                          double cx, double cy,
+                          double rx, double ry)
+{
+  gsk_path_builder_move_to  (builder, cx + rx, cy);
+  gsk_path_builder_conic_to (builder, cx + rx, cy + ry,
+                                      cx,      cy + ry, M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx - rx, cy + ry,
+                                      cx - rx, cy,      M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx - rx, cy - ry,
+                                      cx,      cy - ry, M_SQRT1_2);
+  gsk_path_builder_conic_to (builder, cx + rx, cy - ry,
+                                      cx + rx, cy,      M_SQRT1_2);
+  gsk_path_builder_close    (builder);
+}
+
+/* }}} */
 /* {{{ Path transformation */
 
 typedef struct

@@ -31,7 +31,7 @@ struct _SvgComputeContext
 {
   GtkSvg *svg;
   const graphene_rect_t *viewport;
-  Shape *parent; /* Can be different from the actual parent, for <use> */
+  SvgElement *parent; /* Can be different from the actual parent, for <use> */
   int64_t current_time;
   const GdkRGBA *colors;
   size_t n_colors;
@@ -59,9 +59,9 @@ struct _SvgValueClass
   double     (* distance)    (const SvgValue        *value0,
                               const SvgValue        *value1);
   SvgValue * (* resolve)     (const SvgValue        *value,
-                              ShapeAttr              attr,
+                              SvgProperty              attr,
                               unsigned int           idx,
-                              Shape                 *shape,
+                              SvgElement           *shape,
                               SvgComputeContext     *context);
 };
 
@@ -93,14 +93,14 @@ void       svg_value_print       (const SvgValue    *value,
 double     svg_value_distance    (const SvgValue    *value0,
                                   const SvgValue    *value1);
 SvgValue * svg_value_resolve     (const SvgValue    *value,
-                                  ShapeAttr          attr,
+                                  SvgProperty          attr,
                                   unsigned int       idx,
-                                  Shape             *shape,
+                                  SvgElement        *shape,
                                   SvgComputeContext *context);
 
 
 SvgValue * svg_value_alloc            (const SvgValueClass *class,
-                                       size_t                size);
+                                       size_t               size);
 
 gboolean   svg_value_is_immortal      (const SvgValue      *value);
 
@@ -110,9 +110,9 @@ double     svg_value_default_distance (const SvgValue      *value0,
                                        const SvgValue      *value1);
 
 SvgValue * svg_value_default_resolve  (const SvgValue      *value,
-                                       ShapeAttr            attr,
+                                       SvgProperty          attr,
                                        unsigned int         idx,
-                                       Shape               *shape,
+                                       SvgElement          *shape,
                                        SvgComputeContext   *context);
 
 G_END_DECLS

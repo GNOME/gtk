@@ -26,43 +26,9 @@
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgenumprivate.h"
-
-static struct {
-  const char *name;
-  SvgDimension dimension;
-} units[] = {
-  [SVG_UNIT_NUMBER] = { "", SVG_DIMENSION_NUMBER },
-  [SVG_UNIT_PERCENTAGE] = { "%", SVG_DIMENSION_NUMBER },
-  [SVG_UNIT_PX] = { "px", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_PT] = { "pt", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_IN] = { "in", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_CM] = { "cm", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_MM] = { "mm", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_VW] = { "vw", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_VH] = { "vh", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_VMIN] = { "vmin", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_VMAX] = { "vmax", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_EM] = { "em", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_EX] = { "ex", SVG_DIMENSION_LENGTH },
-  [SVG_UNIT_S] = { "s", SVG_DIMENSION_TIME },
-  [SVG_UNIT_MS] = { "ms", SVG_DIMENSION_TIME },
-  [SVG_UNIT_DEG] = { "deg", SVG_DIMENSION_ANGLE },
-  [SVG_UNIT_RAD] = { "rad", SVG_DIMENSION_ANGLE },
-  [SVG_UNIT_GRAD] = { "grad", SVG_DIMENSION_ANGLE },
-  [SVG_UNIT_TURN] = { "turn", SVG_DIMENSION_ANGLE },
-};
-
-const char *
-svg_unit_name (SvgUnit unit)
-{
-  return units[unit].name;
-}
-
-SvgDimension
-svg_unit_dimension (SvgUnit unit)
-{
-  return units[unit].dimension;
-}
+#include "gtksvgprivate.h"
+#include "gtksvgelementtypeprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -196,27 +162,28 @@ viewport_relative_to_px (double                 value,
 }
 
 double
-shape_get_current_font_size (Shape             *shape,
-                             ShapeAttr          attr,
+shape_get_current_font_size (SvgElement        *shape,
+                             SvgProperty        attr,
                              SvgComputeContext *context)
 {
   /* FIXME: units */
-  if (attr != SHAPE_ATTR_FONT_SIZE)
-    return ((SvgNumber *) shape->current[SHAPE_ATTR_FONT_SIZE])->value;
+  if (attr != SVG_PROPERTY_FONT_SIZE)
+    return ((SvgNumber *) svg_element_get_current_value (shape, SVG_PROPERTY_FONT_SIZE))->value;
   else if (context->parent)
-    return ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+    return ((SvgNumber *) svg_element_get_current_value (context->parent, SVG_PROPERTY_FONT_SIZE))->value;
   else
     return DEFAULT_FONT_SIZE;
 }
 
 static SvgValue *
 svg_number_resolve (const SvgValue    *value,
-                    ShapeAttr          attr,
+                    SvgProperty        attr,
                     unsigned int       idx,
-                    Shape             *shape,
+                    SvgElement        *shape,
                     SvgComputeContext *context)
 {
   const SvgNumber *n = (const SvgNumber *) value;
+  SvgElementType type = svg_element_get_type (shape);
 
   switch (n->unit)
     {
@@ -224,10 +191,10 @@ svg_number_resolve (const SvgValue    *value,
     case SVG_UNIT_PX:
       switch ((unsigned int) attr)
         {
-        case SHAPE_ATTR_OPACITY:
-        case SHAPE_ATTR_FILL_OPACITY:
-        case SHAPE_ATTR_STROKE_OPACITY:
-        case SHAPE_ATTR_STOP_OFFSET:
+        case SVG_PROPERTY_OPACITY:
+        case SVG_PROPERTY_FILL_OPACITY:
+        case SVG_PROPERTY_STROKE_OPACITY:
+        case SVG_PROPERTY_STOP_OFFSET:
           return svg_number_new (CLAMP (n->value, 0, 1));
         default:
           return svg_value_ref ((SvgValue *) value);
@@ -236,70 +203,70 @@ svg_number_resolve (const SvgValue    *value,
     case SVG_UNIT_PERCENTAGE:
       switch ((unsigned int) attr)
         {
-        case SHAPE_ATTR_FONT_SIZE:
+        case SVG_PROPERTY_FONT_SIZE:
           {
             double parent_size;
 
             if (context->parent)
-              parent_size = ((SvgNumber *) context->parent->current[SHAPE_ATTR_FONT_SIZE])->value;
+              parent_size = ((SvgNumber *) context->parent->current[SVG_PROPERTY_FONT_SIZE])->value;
             else
               parent_size = DEFAULT_FONT_SIZE;
 
             return svg_number_new (n->value * parent_size / 100);
           }
           break;
-        case SHAPE_ATTR_OPACITY:
-        case SHAPE_ATTR_FILL_OPACITY:
-        case SHAPE_ATTR_STROKE_OPACITY:
-        case SHAPE_ATTR_STOP_OFFSET:
+        case SVG_PROPERTY_OPACITY:
+        case SVG_PROPERTY_FILL_OPACITY:
+        case SVG_PROPERTY_STROKE_OPACITY:
+        case SVG_PROPERTY_STOP_OFFSET:
           return svg_number_new (CLAMP (n->value / 100, 0, 1));
-        case SHAPE_ATTR_FILTER:
+        case SVG_PROPERTY_FILTER:
           return svg_number_new (n->value / 100);
-        case SHAPE_ATTR_STROKE_WIDTH:
-        case SHAPE_ATTR_R:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
+        case SVG_PROPERTY_STROKE_WIDTH:
+        case SVG_PROPERTY_R:
+          if (type != SVG_ELEMENT_RADIAL_GRADIENT)
             return svg_number_new_full (SVG_UNIT_PX, n->value * normalized_diagonal (context->viewport) / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_CX:
-        case SHAPE_ATTR_RX:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
+        case SVG_PROPERTY_CX:
+        case SVG_PROPERTY_RX:
+          if (type != SVG_ELEMENT_RADIAL_GRADIENT)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_CY:
-        case SHAPE_ATTR_RY:
-          if (shape->type != SHAPE_RADIAL_GRADIENT)
+        case SVG_PROPERTY_CY:
+        case SVG_PROPERTY_RY:
+          if (type != SVG_ELEMENT_RADIAL_GRADIENT)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_Y:
-        case SHAPE_ATTR_HEIGHT:
-          if (shape->type != SHAPE_FILTER &&
-              shape->type != SHAPE_PATTERN &&
-              (shape->type != SHAPE_MASK ||
-               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
+        case SVG_PROPERTY_Y:
+        case SVG_PROPERTY_HEIGHT:
+          if (type != SVG_ELEMENT_FILTER &&
+              type != SVG_ELEMENT_PATTERN &&
+              (type != SVG_ELEMENT_MASK ||
+               svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_BOUND_UNITS)) != COORD_UNITS_OBJECT_BOUNDING_BOX))
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_X:
-        case SHAPE_ATTR_WIDTH:
-          if (shape->type != SHAPE_FILTER &&
-              shape->type != SHAPE_PATTERN &&
-              (shape->type != SHAPE_MASK ||
-               svg_enum_get (shape->current[SHAPE_ATTR_BOUND_UNITS]) != COORD_UNITS_OBJECT_BOUNDING_BOX))
+        case SVG_PROPERTY_X:
+        case SVG_PROPERTY_WIDTH:
+          if (type != SVG_ELEMENT_FILTER &&
+              type != SVG_ELEMENT_PATTERN &&
+              (type != SVG_ELEMENT_MASK ||
+               svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_BOUND_UNITS)) != COORD_UNITS_OBJECT_BOUNDING_BOX))
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_X1:
-        case SHAPE_ATTR_X2:
-          if (shape->type == SHAPE_LINE)
+        case SVG_PROPERTY_X1:
+        case SVG_PROPERTY_X2:
+          if (type == SVG_ELEMENT_LINE)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.width / 100);
           else
             return svg_value_ref ((SvgValue *) value);
-        case SHAPE_ATTR_Y1:
-        case SHAPE_ATTR_Y2:
-          if (shape->type == SHAPE_LINE)
+        case SVG_PROPERTY_Y1:
+        case SVG_PROPERTY_Y2:
+          if (type == SVG_ELEMENT_LINE)
             return svg_number_new_full (SVG_UNIT_PX, n->value * context->viewport->size.height / 100);
           else
             return svg_value_ref ((SvgValue *) value);
