@@ -6207,7 +6207,7 @@ animation_set_current_end (Animation *a,
   if (a->current.end == time)
     return FALSE;
 
-  dbg_print ("times", "current end time of %s set to %s\n", a->id, format_time (time));
+  dbg_print ("times", "current end time of %s set to %s", a->id, format_time (time));
   a->current.end = time;
   return TRUE;
 }
@@ -6344,7 +6344,7 @@ animation_update_for_spec (Animation *a,
         {
           if (a->current.begin < spec->time && spec->time < INDEFINITE)
             {
-              dbg_print ("status", "Restarting %s at %s\n", a->id, format_time (spec->time));
+              dbg_print ("status", "Restarting %s at %s", a->id, format_time (spec->time));
               a->current.begin = spec->time;
               changed = TRUE;
             }
@@ -6361,7 +6361,7 @@ animation_update_for_spec (Animation *a,
 
           if (a->current.begin != time)
             {
-              dbg_print ("times", "current start time of %s now %s\n", a->id, format_time (time));
+              dbg_print ("times", "current start time of %s now %s", a->id, format_time (time));
               a->current.begin = time;
               changed = TRUE;
 
@@ -6409,20 +6409,12 @@ advance_later (gpointer data)
 static void
 schedule_next_update (GtkSvg *self)
 {
-  GtkSvgRunMode run_mode;
-
   if (self->clock == NULL || !self->playing)
     return;
 
   g_clear_handle_id (&self->pending_advance, g_source_remove);
 
-  run_mode = self->run_mode;
-#ifdef DEBUG
-  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
-    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-#endif
-
-  if (run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
+  if (self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
     {
       frame_clock_connect (self);
       return;
@@ -6434,7 +6426,7 @@ schedule_next_update (GtkSvg *self)
 
   if (self->next_update <= self->current_time)
     {
-      dbg_print ("times", "next update NOW (%s)\n", format_time (self->current_time));
+      dbg_print ("times", "next update NOW (%s)", format_time (self->current_time));
       self->advance_after_snapshot = TRUE;
       return;
     }
@@ -6443,12 +6435,12 @@ schedule_next_update (GtkSvg *self)
     {
       int64_t interval = (self->next_update - self->current_time) / (double) G_TIME_SPAN_MILLISECOND;
 
-      dbg_print ("times", "next update in %" G_GINT64_FORMAT "ms\n", interval);
+      dbg_print ("times", "next update in %" G_GINT64_FORMAT "ms", interval);
       self->pending_advance = g_timeout_add_once (interval, advance_later, self);
     }
   else
     {
-      dbg_print ("times", "next update NEVER\n");
+      dbg_print ("times", "next update NEVER");
     }
 }
 
@@ -6460,7 +6452,7 @@ frame_clock_update (GdkFrameClock *clock,
                     GtkSvg        *self)
 {
   int64_t time = gdk_frame_clock_get_frame_time (self->clock);
-  dbg_print ("clock", "clock update, advancing to %s\n", format_time (time));
+  dbg_print ("clock", "clock update, advancing to %s", format_time (time));
   gtk_svg_advance (self, time);
 }
 
@@ -6818,12 +6810,12 @@ compute_value_for_animation (Animation         *a,
   if (a->status == ANIMATION_STATUS_INACTIVE)
     {
       /* keep the base value */
-      dbg_print ("values", "%s: too early\n", a->id);
+      dbg_print ("values", "%s: too early", a->id);
     }
   else if (a->status == ANIMATION_STATUS_RUNNING)
     {
       /* animation is active */
-      dbg_print ("values", "%s: updating value\n", a->id);
+      dbg_print ("values", "%s: updating value", a->id);
       value = compute_value_at_time (a, context);
     }
   else if (a->fill == ANIMATION_FILL_FREEZE)
@@ -6833,25 +6825,25 @@ compute_value_for_animation (Animation         *a,
         {
           if (!(a->attr == SHAPE_ATTR_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
             {
-              dbg_print ("values", "%s: frozen (fast)\n", a->id);
+              dbg_print ("values", "%s: frozen (fast)", a->id);
               value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
             }
           else
            {
-              dbg_print ("values", "%s: frozen (motion)\n", a->id);
+              dbg_print ("values", "%s: frozen (motion)", a->id);
               value = compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
            }
         }
       else
         {
-          dbg_print ("values", "%s: frozen\n", a->id);
+          dbg_print ("values", "%s: frozen", a->id);
           value = compute_value_at_time (a, context);
         }
     }
   else
     {
       /* Back to base value */
-      dbg_print ("values", "%s: back to base\n", a->id);
+      dbg_print ("values", "%s: back to base", a->id);
     }
 
   context->interpolation = previous;
@@ -11029,7 +11021,8 @@ resolve_refs_for_animation (Animation  *a,
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_mask_ref (a->frames[j].value, a->shape, data);
     }
-  else if (a->attr == SHAPE_ATTR_HREF)
+  else if (a->attr == SHAPE_ATTR_HREF ||
+           a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
     {
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_href_ref (a->frames[j].value, a->shape, data);
@@ -11051,11 +11044,6 @@ resolve_refs_for_animation (Animation  *a,
     {
       for (unsigned int j = first; j < a->n_frames; j++)
         resolve_filter_ref (a->frames[j].value, a->shape, data);
-    }
-  else if (a->attr == SHAPE_ATTR_FE_IMAGE_HREF)
-    {
-      for (unsigned int j = first; j < a->n_frames; j++)
-        resolve_href_ref (a->frames[j].value, a->shape, data);
     }
 
   if (a->motion.path_ref)
@@ -17653,7 +17641,7 @@ animation_state_dump (GtkSvg *self)
 {
   GString *s = g_string_new ("running");
   shape_dump_animation_state (self->content, s);
-  dbg_print ("times", "%s\n", s->str);
+  dbg_print ("times", "%s", s->str);
   g_string_free (s, TRUE);
 }
 
@@ -17865,11 +17853,11 @@ collect_next_update_for_animation (Animation     *a,
   if (a->run_mode > *run_mode)
     {
       const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
-      dbg_print ("run", "%s updates run mode to %s\n", a->id, mode_name[a->run_mode]);
+      dbg_print ("run", "%s updates run mode to %s", a->id, mode_name[a->run_mode]);
     }
   if (a->next_invalidate < *next_update)
     {
-      dbg_print ("run", "%s updates next update to %s\n", a->id, format_time (a->next_invalidate));
+      dbg_print ("run", "%s updates next update to %s", a->id, format_time (a->next_invalidate));
     }
 #endif
 
@@ -17916,13 +17904,18 @@ collect_next_update (GtkSvg *self)
 
   collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
 
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
+    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
+#endif
+
   self->run_mode = run_mode;
   self->next_update = next_update;
 
 #ifdef DEBUG
   const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
-  dbg_print ("run", "run mode %s\n", mode_name[self->run_mode]);
-  dbg_print ("run", "next update %s\n", format_time (self->next_update));
+  dbg_print ("run", "run mode %s", mode_name[self->run_mode]);
+  dbg_print ("run", "next update %s", format_time (self->next_update));
 #endif
 }
 
@@ -17931,7 +17924,20 @@ invalidate_for_next_update (GtkSvg *self)
 {
   if (self->next_update <= self->current_time ||
       self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
-    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    {
+      dbg_print ("run", "invalidating for update");
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    }
+#ifdef DEBUG
+  else
+    {
+      GString *s = g_string_new ("not invalidating (");
+      g_string_append_printf (s, "%s", format_time (self->next_update));
+      g_string_append_printf (s, " > %s)", format_time (self->current_time));
+      dbg_print ("run", "%s", s->str);
+      g_string_free (s, TRUE);
+    }
+#endif
 }
 
 static void
@@ -18039,13 +18045,13 @@ gtk_svg_advance (GtkSvg  *self,
   g_return_if_fail (self->load_time < INDEFINITE);
   g_return_if_fail (self->current_time <= current_time);
 
-  dbg_print ("run", "advancing current time to %s\n", format_time (current_time));
+  dbg_print ("run", "advancing current time to %s", format_time (current_time));
 
   self->current_time = current_time;
 
+  invalidate_for_next_update (self);
   update_animation_state (self);
   collect_next_update (self);
-  invalidate_for_next_update (self);
   schedule_next_update (self);
 
 #ifdef DEBUG
@@ -18784,6 +18790,9 @@ gtk_svg_set_playing (GtkSvg   *self,
             self->current_time = current_time;
 
           self->load_time += duration;
+#ifdef DEBUG
+          time_base = self->load_time;
+#endif
 
           animations_update_for_pause (self->content, duration);
           timeline_update_for_pause (self->timeline, duration);
@@ -19290,7 +19299,7 @@ gtk_svg_set_state (GtkSvg       *self,
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
     {
-      dbg_print ("state", "renderer state %u -> %u\n", previous_state, state);
+      dbg_print ("state", "renderer state %u -> %u", previous_state, state);
 
       timeline_update_for_state (self->timeline,
                                  previous_state, self->state,
