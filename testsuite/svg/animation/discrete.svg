@@ -1,0 +1,19 @@
+<svg width='100' height='100' xmlns="http://www.w3.org/2000/svg">
+  <linearGradient id="rg">
+    <stop stop-color="red" offset="0"/>
+    <stop stop-color="green" offset="1"/>
+  </linearGradient>
+  <linearGradient id="yb">
+    <stop stop-color="yellow" offset="0"/>
+    <stop stop-color="blue" offset="1"/>
+  </linearGradient>
+  <linearGradient id="gradient">
+    <animate attributeName="href"
+      id="swapgradient"
+      from="#rg" to="#yb"
+      dur='1s'
+      repeatCount='indefinite'
+      begin='0s'/>
+  </linearGradient>
+  <rect x='0%' y='0%' width='100%' height='100%' fill='url(#gradient)'/>
+</svg>
