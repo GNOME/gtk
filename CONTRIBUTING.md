@@ -287,7 +287,9 @@ you must follow:
 
 ### Disclosure
 
-Always disclose the use of LLM/GenAI tools when creating an issue or a merge request. Do not include trailers like “Co-authored-by:” or “Assisted-by:” in commit messages.
+Always disclose the use of LLM/GenAI tools when creating an issue or a
+merge request. Do not include trailers like “Co-authored-by:” or “Assisted-by:”
+in commit messages, since they serve as free advertising for AI companies.
 
 ### Reviews
 
