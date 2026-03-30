@@ -264,8 +264,11 @@ process](https://handbook.gnome.org/infrastructure/developer-access.html).
 ## AI Contribution Policy
 
 GTK is a project by humans for humans. We prefer contributions that are
-produced by human creativity. If you use the assistance of LLM/GenAI tools
-for your contributions, here are the rules you must follow:
+produced by human creativity, and we expect a human to take full responsibility
+for each contribution.
+
+If you use LLM/GenAI tools for your contributions, here are the rules
+you must follow:
 
 ### Requirements
 
