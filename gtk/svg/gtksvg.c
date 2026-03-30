@@ -263,7 +263,7 @@ format_time_buf (char    *buf,
   if (time == INDEFINITE)
     return "indefinite";
   else
-    return g_ascii_formatd (buf, size, "%.3fs", (time - time_base) / (double) G_TIME_SPAN_SECOND);
+    return g_ascii_formatd (buf, size, "%.3f", (time - time_base) / (double) G_TIME_SPAN_SECOND);
 }
 
 static const char *
