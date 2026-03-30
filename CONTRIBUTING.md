@@ -301,7 +301,7 @@ in commit messages, since they serve as free advertising for AI companies.
 
 1. Review LLM/GenAI-assisted contributions more strictly than any other contribution.
 1. Require reproducibility in fixes and tests.
-1. Reject changes that appear to be unreviewed LLM/GenAI output.
+1. Reject changes that appear to be unverified LLM/GenAI output.
 1. Reject comments and feedback that appear to be LLM/GenAI output.
 
 > A COMPUTER CAN NEVER BE HELD ACCOUNTABLE.
