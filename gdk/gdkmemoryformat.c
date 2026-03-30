@@ -161,6 +161,7 @@ name ## _mipmap_linear (guchar                *dest, \
   for (x_start = 0; x_start < src_layout->width; x_start += n) \
     { \
       T r = 0, g = 0, b = 0, a = 0; \
+      x = 0; \
 \
       for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
