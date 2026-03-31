@@ -1,5 +1,27 @@
-Overview of Changes in 4.20.4, xx-xx-xxxx
+Overview of Changes in 4.20.4, 31-03-2025
 =========================================
+
+* Bugs fixed:
+  - #7860 GtkLevelBar doesn't correctly update when value set when unmapped
+    (Ignacy Kuchciński)
+  - #7883 gtk 4.20.3 fails to build on 32-bit architectures (Benjamin Otte)
+  - !9171 Backport 32bit fixes (Benjamin Otte)
+  - !9185 Backport: Windows: fix cairo crash with dcomp disabled (Dan Yeaw)
+  - !9314 macos[backport]: Fix Drag-n-drop for macOS 26 (Arjan Molenaar)
+  - !9329 Backport levelbar fix (Ignacy Kuchciński)
+  - !9358 macos: [backport] Use event data and hit test to determine if we're
+    over window buttons (Arjan Molenaar)
+  - !9562 columnview: Backport fix from !9316 to gtk 4.20 (Sergey Bugaev)
+
+* Translation updates:
+  - Bokmål, Norwegian (Kjartan Maraas)
+  - Bulgarian (Alexander Alexandrov Shopov)
+  - German (Christian Kirbach)
+  - Indonesian (Andika Triwidada)
+  - Kazakh (Baurzhan Muftakhidinov)
+  - Romanian (Antonio Marin)
+  - Uzbek (Baxrom Raxmatov)
+
 
 Overview of Changes in 4.20.3, 20-11-2025
 =========================================
