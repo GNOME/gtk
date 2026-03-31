@@ -263,9 +263,11 @@ process](https://handbook.gnome.org/infrastructure/developer-access.html).
 
 ## AI Contribution Policy
 
-GTK is a project by humans for humans. We prefer contributions that are
-produced by human creativity, and we expect a human to take full responsibility
-for each contribution.
+GTK is a project by humans for humans. We prefer contributions that
+are produced by human creativity, we expect a human to take full
+responsibility for each contribution, and we will take more joy in
+reviewing contributions when there's people at the other end of the
+line to stand by their changes.
 
 If you use LLM/GenAI tools for your contributions, here are the rules
 you must follow:
@@ -287,9 +289,10 @@ you must follow:
 
 ### Disclosure
 
-Always disclose the use of LLM/GenAI tools when creating an issue or a
-merge request. Do not include trailers like “Co-authored-by:” or “Assisted-by:”
-in commit messages, since they serve as free advertising for AI companies.
+Always disclose the use of LLM/GenAI tools when creating an issue or
+a merge request. Do not include trailers like “Co-authored-by:” or
+“Assisted-by:” in commit messages, since they serve as free advertising
+for AI companies.
 
 ### Reviews
 
