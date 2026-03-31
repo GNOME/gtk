@@ -734,7 +734,7 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_system_bell_v1_interface, SYSTEM_BELL_VERSION);
     }
-  else if (match_global (display_wayland, interface, version, wp_cursor_shape_manager_v1_interface.name, 0))
+  else if (match_global (display_wayland, interface, version, wp_cursor_shape_manager_v1_interface.name, CURSOR_SHAPE_VERSION))
     {
       display_wayland->cursor_shape =
         wl_registry_bind (display_wayland->wl_registry, id,
