@@ -738,7 +738,7 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->cursor_shape =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &wp_cursor_shape_manager_v1_interface, CURSOR_SHAPE_VERSION);
+                          &wp_cursor_shape_manager_v1_interface, MIN (version, CURSOR_SHAPE_VERSION));
     }
   else if (match_global (display_wayland, interface, version, xdg_toplevel_icon_manager_v1_interface.name, 0))
     {
