@@ -1172,7 +1172,14 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
 
   priv->use_underline = setting;
   if (priv->child_type == LABEL_CHILD && priv->child != NULL)
-    gtk_label_set_use_underline (GTK_LABEL (priv->child), priv->use_underline);
+    {
+      gtk_label_set_use_underline (GTK_LABEL (priv->child), priv->use_underline);
+
+      const char *text = gtk_label_get_text (GTK_LABEL (priv->child));
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, text,
+                                      -1);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_USE_UNDERLINE]);
 }
