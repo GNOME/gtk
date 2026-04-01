@@ -424,24 +424,12 @@ notify_cursor_location (GtkIMContextWayland *context)
 {
   GtkIMContextWaylandGlobal *global;
   cairo_rectangle_int_t rect;
-  double nx, ny;
-  graphene_point_t p;
 
   global = gtk_im_context_wayland_get_global (context);
   if (global == NULL)
     return;
 
   rect = context->cursor_rect;
-  if (!gtk_widget_compute_point (context->widget,
-                                 GTK_WIDGET (gtk_widget_get_native (context->widget)),
-                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
-                                 &p))
-    graphene_point_init (&p, rect.x, rect.y);
-
-  gtk_native_get_surface_transform (gtk_widget_get_native (context->widget), &nx, &ny);
-
-  rect.x = p.x + nx;
-  rect.y = p.y + ny;
   zwp_text_input_v3_set_cursor_rectangle (global->text_input,
                                           rect.x, rect.y,
                                           rect.width, rect.height);
@@ -895,19 +883,41 @@ gtk_im_context_wayland_reset (GtkIMContext *context)
 
 static void
 gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
-                                            GdkRectangle *rect)
+                                            GdkRectangle *cursor_rect)
 {
   GtkIMContextWayland *context_wayland;
+  double nx, ny;
+  GdkRectangle rect;
+  graphene_point_t p;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
-  if (context_wayland->cursor_rect.x == rect->x &&
-      context_wayland->cursor_rect.y == rect->y &&
-      context_wayland->cursor_rect.width == rect->width &&
-      context_wayland->cursor_rect.height == rect->height)
+  /* May happen along destruction */
+  if (!context_wayland->widget)
     return;
 
-  context_wayland->cursor_rect = *rect;
+  /* Compute surface-local coordinates */
+  rect = *cursor_rect;
+  if (!gtk_widget_compute_point (context_wayland->widget,
+                                 GTK_WIDGET (gtk_widget_get_native (context_wayland->widget)),
+                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
+                                 &p))
+    graphene_point_init (&p, rect.x, rect.y);
+
+  gtk_native_get_surface_transform (gtk_widget_get_native (context_wayland->widget),
+                                    &nx, &ny);
+  rect.x = p.x + nx;
+  rect.y = p.y + ny;
+
+  if (context_wayland->cursor_rect.x != rect.x ||
+      context_wayland->cursor_rect.y != rect.y ||
+      context_wayland->cursor_rect.width != rect.width ||
+      context_wayland->cursor_rect.height != rect.height)
+    {
+      context_wayland->cursor_rect = rect;
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+    }
 }
 
 static void
