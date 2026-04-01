@@ -16,7 +16,7 @@
  *
  * Authors: Florian Leander Singer <sp1rit@disroot.org>
  */
-/*	$OpenBSD: diffreg.c,v 1.95 2021/10/24 21:24:16 deraadt Exp $	*/
+/*	$OpenBSD: diffreg.c,v 1.96 2026/04/01 17:47:46 deraadt Exp $	*/
 /*
  * Copyright (C) Caldera International Inc.  2001-2002.
  * All rights reserved.
@@ -896,7 +896,7 @@ static int
 readhash(GInputStream *f, int flags)
 {
 	int i, t, space;
-	int sum;
+	unsigned int sum;
 
 	sum = 1;
 	space = 0;
