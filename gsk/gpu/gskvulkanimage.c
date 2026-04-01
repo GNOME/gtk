@@ -1275,7 +1275,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
     {
       GDK_DEBUG (DMABUF, "Vulkan failed to dup() fd: %s", g_strerror (errno));
       vkDestroyImage (vk_device, self->vk_image, NULL);
-      self->vk_image = NULL;
+      self->vk_image = VK_NULL_HANDLE;
       g_object_unref (self);
       return NULL;
     }
