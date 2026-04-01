@@ -139,7 +139,7 @@ gtk_print_backends_init (void)
 /**
  * gtk_print_backend_load_modules:
  *
- * Returns: (element-type GtkPrintBackend) (transfer container):
+ * Returns: (element-type GtkPrintBackend) (transfer full):
  */
 GList *
 gtk_print_backend_load_modules (void)
