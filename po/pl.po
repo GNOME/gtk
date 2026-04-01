@@ -11,23 +11,23 @@
 # Piotr Drąg <piotrdrag@gmail.com>, 2010-2025.
 # Wojciech Szczęsny <wszczesny@aviary.pl>, 2013.
 # Aviary.pl <community-poland@mozilla.org>, 2007-2025.
-# Victoria <royal.victoria@proton.me>, 2026.
+# Victoria Niedzielska <victorian@gnome.org>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2026-03-06 19:34+0000\n"
-"PO-Revision-Date: 2026-03-06 22:57+0100\n"
-"Last-Translator: Victoria <royal.victoria@proton.me>\n"
-"Language-Team: Polish\n"
+"PO-Revision-Date: 2026-04-01 20:44+0200\n"
+"Last-Translator: Victoria Niedzielska <victorian@gnome.org>\n"
+"Language-Team: Polish <https://l10n.gnome.org/teams/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Gtranslator 49.0\n"
+"X-Generator: Gtranslator 50.0\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -1191,7 +1191,7 @@ msgid ""
 "Contact your system administrator"
 msgstr ""
 "Ustawienia systemu uniemożliwiają wprowadzanie zmian.\n"
-"Proszę skontaktować się z administratorem komputera."
+"Proszę skontaktować się z osobą administrującą komputerem."
 
 #: gtk/deprecated/gtkshow.c:291
 msgid "Could not show link"
@@ -1227,24 +1227,23 @@ msgstr "Niestandardowa licencja"
 
 #: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 2 or later"
-msgstr "Powszechna licencja publiczna GNU, wersja 2 lub późniejsza"
+msgstr "Licencja GNU GPL, wersja 2 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "GNU General Public License, version 3 or later"
-msgstr "Powszechna licencja publiczna GNU, wersja 3 lub późniejsza"
+msgstr "Licencja GNU GPL, wersja 3 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr ""
-"Pomniejsza powszechna licencja publiczna GNU, wersja 2.1 lub późniejsza"
+msgstr "Licencja GNU LGPL, wersja 2.1 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:132
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "Pomniejsza powszechna licencja publiczna GNU, wersja 3 lub późniejsza"
+msgstr "Licencja GNU LGPL, wersja 3 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:133
 msgid "BSD 2-Clause License"
-msgstr "2-klauzulowa licencja BSD"
+msgstr "Licencja BSD 2-Clause"
 
 #: gtk/gtkaboutdialog.c:134
 msgid "The MIT License (MIT)"
@@ -1252,35 +1251,35 @@ msgstr "Licencja MIT"
 
 #: gtk/gtkaboutdialog.c:135
 msgid "Artistic License 2.0"
-msgstr "Licencja twórcza 2.0"
+msgstr "Licencja artystyczna 2.0"
 
 #: gtk/gtkaboutdialog.c:136
 msgid "GNU General Public License, version 2 only"
-msgstr "Powszechna licencja publiczna GNU, tylko w wersji 2"
+msgstr "Licencja GNU GPL, tylko w wersji 2"
 
 #: gtk/gtkaboutdialog.c:137
 msgid "GNU General Public License, version 3 only"
-msgstr "Powszechna licencja publiczna GNU, tylko w wersji 3"
+msgstr "Licencja GNU GPL, tylko w wersji 3"
 
 #: gtk/gtkaboutdialog.c:138
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr "Pomniejsza powszechna licencja publiczna GNU, tylko w wersji 2.1"
+msgstr "Licencja GNU LGPL, tylko w wersji 2.1"
 
 #: gtk/gtkaboutdialog.c:139
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr "Pomniejsza powszechna licencja publiczna GNU, tylko w wersji 3"
+msgstr "Licencja GNU LGPL, tylko w wersji 3"
 
 #: gtk/gtkaboutdialog.c:140
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr "Powszechna licencja publiczna GNU Affero, wersja 3 lub późniejsza"
+msgstr "Licencja GNU AGPL, wersja 3 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:141
 msgid "GNU Affero General Public License, version 3 only"
-msgstr "Powszechna licencja publiczna GNU Affero, tylko w wersji 3"
+msgstr "Licencja GNU AGPL, tylko w wersji 3"
 
 #: gtk/gtkaboutdialog.c:142
 msgid "BSD 3-Clause License"
-msgstr "3-klauzulowa licencja BSD"
+msgstr "Licencja BSD 3-Clause"
 
 #: gtk/gtkaboutdialog.c:143
 msgid "Apache License, Version 2.0"
@@ -1288,11 +1287,11 @@ msgstr "Licencja Apache w wersji 2.0"
 
 #: gtk/gtkaboutdialog.c:144
 msgid "Mozilla Public License 2.0"
-msgstr "Licencja publiczna Mozilli 2.0"
+msgstr "Licencja MPL 2.0"
 
 #: gtk/gtkaboutdialog.c:145
 msgid "BSD Zero-Clause License"
-msgstr "0-klauzulowa licencja BSD"
+msgstr "Licencja BSD Zero-Clause"
 
 #: gtk/gtkaboutdialog.c:1029
 msgid "Website"
@@ -1305,19 +1304,19 @@ msgstr "O programie %s"
 
 #: gtk/gtkaboutdialog.c:2165
 msgid "Created by"
-msgstr "Program"
+msgstr "Utworzone przez"
 
 #: gtk/gtkaboutdialog.c:2168
 msgid "Documented by"
-msgstr "Dokumentacja"
+msgstr "Udokumentowane przez"
 
 #: gtk/gtkaboutdialog.c:2178
 msgid "Translated by"
-msgstr "Tłumaczenie"
+msgstr "Przetłumaczone przez"
 
 #: gtk/gtkaboutdialog.c:2183
 msgid "Design by"
-msgstr "Projekt"
+msgstr "Zaprojektowane przez"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -2913,19 +2912,19 @@ msgstr "P_ołącz"
 
 #: gtk/gtkmountoperation.c:678
 msgid "Connect As"
-msgstr "Połączenie jako użytkownik"
+msgstr "Połączenie jako osoba"
 
 #: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
-msgstr "_Anonimowy"
+msgstr "_Anonimowa"
 
 #: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
-msgstr "_Zarejestrowany"
+msgstr "_Zarejestrowana"
 
 #: gtk/gtkmountoperation.c:704
 msgid "_Username"
-msgstr "_Nazwa użytkownika"
+msgstr "_Nazwa osoby"
 
 #: gtk/gtkmountoperation.c:709
 msgid "_Domain"
@@ -3482,7 +3481,7 @@ msgstr "Odrzuca zadania"
 #: gtk/print/backends/gtkprintbackendcups.c:1154
 #: gtk/print/backends/gtkprintbackendcups.c:1461
 msgid "Username:"
-msgstr "Nazwa użytkownika:"
+msgstr "Nazwa osoby:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1155
 #: gtk/print/backends/gtkprintbackendcups.c:1470
@@ -4157,7 +4156,7 @@ msgstr "Brak papieru"
 
 #: gtk/print/gtkprintoperation-win32.c:632
 msgid "Need user intervention"
-msgstr "Wymagana jest interwencja użytkownika"
+msgstr "Wymagana jest interwencja osoby"
 
 #: gtk/print/gtkprintoperation-win32.c:739
 msgid "Custom size"
