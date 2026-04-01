@@ -1,5 +1,40 @@
-Overview of Changes in 4.22.2, xx-xx-xxxx
+Overview of Changes in 4.22.2, 31-03-2026
 =========================================
+
+* Bugs fixed:
+  - #8117 Docs for the new SVG parser? (Matthias Clasen)
+  - #8119 Wrong colors used for fallback symbolic icons containing classes
+    (Matthias Clasen)
+  - #8125 svg: Animating hrefs does not work (Matthias Clasen)
+  - !9590 vulkan: fix GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE check (Benjamin
+    Otte)
+  - !9656 vulkan: fix GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE check (Benjamin
+    Otte)
+  - !9659 Various Vulkan fixes (Benjamin Otte)
+  - !9660 Various Vulkan fixes (Benjamin Otte)
+  - !9665 tests: fix libtestutils build under Windows. (Christoph Reiter)
+  - !9667 Update Serbian translation
+  - !9673 testsuite: Add dmabuf compare tests to needs-udmabuf suite (Benjamin
+    Otte)
+  - !9678 testsuite: Add dmabuf compare tests to needs-udmabuf suite (Benjamin
+    Otte)
+  - !9679 dmabuf: Support dmabufs with fewer fds than planes (Benjamin Otte)
+  - !9681 dmabuf: Support dmabufs with fewer fds than planes (Benjamin Otte)
+  - !9682 Update Galician translation
+  - !9701 Update Turkish translation
+  - !9704 Update Catalan translation
+  - !9711 Load less icons as symbolics (Matthias Clasen)
+  - !9719 Fix traditional symbolic fallback (Matthias Clasen)
+  - !9736 svg: Fix invalidation (Matthias Clasen, Sergio Costas Rodriguez)
+  - !9739 Assorted backports (Alessandro Astone, Jonas Ådahl, Matthias Clasen,
+    Sergey Bugaev)
+
+* Translation updates:
+  - Catalan (Victor Dargallo)
+  - Galician (Francisco Diéguez Souto)
+  - Serbian (Марко Костић)
+  - Turkish (Sabri Ünal)
+
 
 Overview of Changes in 4.22.1, 13-03-2026
 =========================================
