@@ -70,7 +70,6 @@ enum
 enum
 {
   STATE_CHANGE,
-  REALIZED,
 
   LAST_SIGNAL
 };
