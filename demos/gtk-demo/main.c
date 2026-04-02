@@ -1160,6 +1160,9 @@ command_line (GApplication            *app,
   g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
   g_variant_dict_lookup (options, "list", "b", &list);
 
+  if (autoquit)
+    g_timeout_add_seconds (1, auto_quit, app);
+
   if (!name && !list)
     {
       g_application_activate (app);
@@ -1212,9 +1215,6 @@ out:
 
       g_signal_connect_swapped (G_OBJECT (demo), "destroy", G_CALLBACK (g_application_quit), app);
     }
-
-  if (autoquit)
-    g_timeout_add_seconds (1, auto_quit, app);
 
   return 0;
 }
