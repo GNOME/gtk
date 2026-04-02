@@ -710,13 +710,26 @@ endif
 vulkan_dep = dependency('vulkan',
                         version: vulkan_req,
                         required: vulkan_enabled)
+glslang_dep = [
+  cc.find_library('glslang', required: vulkan_enabled),
+  cc.find_library('SPIRV', required: vulkan_enabled),
+  cc.find_library('OSDependent', required: vulkan_enabled),
+  cc.find_library('MachineIndependent', required: vulkan_enabled),
+  cc.find_library('GenericCodeGen', required: vulkan_enabled),
+  cc.find_library('SPIRV-Tools', required: vulkan_enabled),
+  cc.find_library('SPIRV-Tools-opt', required: vulkan_enabled),
+  cc.find_library('stdc++', required: vulkan_enabled),
+]
+
 glslc = find_program('glslc', required: vulkan_enabled)
 if vulkan_dep.found() and glslc.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
+  glslang_deps = [ glslang_dep ]
 else
   have_vulkan = false
   vulkan_pkg_found = false
+  glslang_deps = declare_dependency()
 endif
 
 libdrm_dep = dependency('libdrm', required: os_linux)

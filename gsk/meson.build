@@ -247,6 +247,7 @@ gsk_deps = [
   cairo_dep,
   cairo_csi_dep,
   libgdk_dep,
+  glslang_deps,
 ]
 
 libgsk_f16c = static_library('gsk_f16c',
