@@ -20,12 +20,16 @@ def replace_if_changed(new, old):
   else:
     os.remove(new)
 
+sources = []
 gl_source_shaders = []
 vulkan_compiled_shaders = []
 
 for f in sys.argv[2:]:
   if f.endswith('.glsl'):
-    gl_source_shaders.append(f)
+    if f.find('generated') > -1:
+      gl_source_shaders.append(f)
+    else:
+      sources.append(f)
   elif f.endswith('.spv'):
     vulkan_compiled_shaders.append(f)
   else:
@@ -36,6 +40,11 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
   <gresource prefix='/org/gtk/libgsk'>
 
 '''
+
+for f in sources:
+  xml += '    <file alias=\'shaders/sources/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))
+
+xml += '\n'
 
 for f in gl_source_shaders:
   xml += '    <file alias=\'shaders/gl/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))

@@ -38,6 +38,7 @@ gsk_private_gpu_shader_headers = []
 gsk_generated_gpu_shader_sources = []
 gsk_private_gpu_gl_shaders = []
 gsk_private_gpu_vulkan_shaders = []
+gsk_private_gpu_vulkan_sources = [ gsk_private_gpu_include_shaders, gsk_private_gpu_shaders ]
 
 generate_interface = find_program('generate-glsl-interface.py')
 process_includes = find_program('process-glsl-includes.py')
@@ -74,6 +75,7 @@ foreach shader: gsk_private_gpu_shaders
                               ],
                               capture: true)
 
+  gsk_private_gpu_vulkan_sources += shader_glsl
   gsk_private_gpu_shader_headers += shader_header
   gsk_generated_gpu_shader_sources += shader_source
 
