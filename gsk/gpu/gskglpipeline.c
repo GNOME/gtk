@@ -258,7 +258,7 @@ gsk_gl_pipeline_load_shader (GskGLDevice       *device,
   g_string_append_printf (preamble, "#define GSK_COLOR_STATES %uu\n", color_states);
   g_string_append_printf (preamble, "#define GSK_VARIATION %uu\n", variation);
 
-  resource_name = g_strconcat ("/org/gtk/libgsk/shaders/gl/", program_name, ".glsl", NULL);
+  resource_name = g_strconcat ("/org/gtk/libgsk/shaders/gl/", program_name, "-generated.glsl", NULL);
   bytes = g_resources_lookup_data (resource_name, 0, error);
   g_free (resource_name);
   if (bytes == NULL)
