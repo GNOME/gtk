@@ -392,17 +392,17 @@ shape_editor_update_clip_path (ShapeEditor *self,
   if ((path == NULL || gsk_path_is_empty (path)) &&
       (id == NULL || *id == '\0'))
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
+      svg_element_set_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
     }
   else if (path && !gsk_path_is_empty (path))
     {
       char *s = gsk_path_to_string (path);
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_path (s, 0xffff));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_path (s, 0xffff));
       g_free (s);
     }
   else
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -420,7 +420,7 @@ static void
 set_transform (ShapeEditor *self,
                SvgValue    *tf)
 {
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_TRANSFORM, tf);
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_TRANSFORM, tf);
   path_paintable_changed (self->paintable);
   gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
   gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
@@ -434,14 +434,14 @@ mask_changed (ShapeEditor *self)
 
   if (gtk_drop_down_get_selected (self->mask_dropdown) == 0)
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_MASK, NULL);
+      svg_element_set_base_value (self->shape, SVG_PROPERTY_MASK, NULL);
     }
   else
     {
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -623,7 +623,7 @@ filter_changed (ShapeEditor *self)
 
   if (value)
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILTER, value);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILTER, value);
       path_paintable_changed (self->paintable);
       gtk_widget_remove_css_class (GTK_WIDGET (self->filter), "error");
       gtk_accessible_reset_state (GTK_ACCESSIBLE (self->filter), GTK_ACCESSIBLE_STATE_INVALID);
@@ -770,7 +770,7 @@ opacity_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_OPACITY, svg_number_new (value));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_OPACITY, svg_number_new (value));
   path_paintable_changed (self->paintable);
 }
 
@@ -789,6 +789,7 @@ stroke_changed (ShapeEditor *self)
   GdkRGBA stroke_color;
   const graphene_rect_t *viewport;
   PaintKind kind;
+  SvgValue *value;
 
   if (self->updating)
     return;
@@ -822,12 +823,22 @@ stroke_changed (ShapeEditor *self)
 
   color = color_editor_get_color (self->stroke_paint);
 
-  kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_STROKE, &stroke_symbolic, &stroke_color);
+  stroke_symbolic = 0xffff;
+  stroke_color = (GdkRGBA) { 0, 0, 0, 1 };
+
+  value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE);
+  kind = svg_paint_get_kind (value);
+
+  if (kind == PAINT_SYMBOLIC)
+    stroke_symbolic = svg_paint_get_symbolic (value);
+  else if (kind == PAINT_COLOR)
+    gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &stroke_color);
+
   stroke_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_WIDTH, viewport);
   stroke_min = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, viewport);
   stroke_max = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, viewport);
-  linecap = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN);
-  linejoin = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN);
+  linecap = svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
+  linejoin = svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
   miterlimit = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, viewport);
 
   if (do_stroke == (kind != PAINT_NONE) &&
@@ -843,21 +854,21 @@ stroke_changed (ShapeEditor *self)
     return;
 
   if (!do_stroke)
-    svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
+    svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
   else if (symbolic != 0xffff)
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_OPACITY, svg_number_new (color->alpha));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
+    svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
 
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new (width));
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new (min));
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new (max));
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new (width));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new (min));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new (max));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -874,6 +885,7 @@ fill_changed (ShapeEditor *self)
   GdkRGBA fill_color;
   GskFillRule fill_rule, rule;
   PaintKind kind;
+  SvgValue *value;
 
   if (self->updating)
     return;
@@ -899,8 +911,18 @@ fill_changed (ShapeEditor *self)
 
   color = color_editor_get_color (self->fill_paint);
 
-  kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_FILL, &fill_symbolic, &fill_color);
-  rule = svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_FILL_RULE);
+  fill_symbolic = 0xffff;
+  fill_color = (GdkRGBA) { 0, 0, 0, 1 };
+
+  value = svg_element_get_base_value (self->shape, SVG_PROPERTY_FILL);
+  kind = svg_paint_get_kind (value);
+
+  if (kind == PAINT_SYMBOLIC)
+    fill_symbolic = svg_paint_get_symbolic (value);
+  else if (kind == PAINT_COLOR)
+    gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &fill_color);
+
+  rule = svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_FILL_RULE));
 
   if (do_fill == (kind != PAINT_NONE) &&
       fill_rule == rule &&
@@ -909,16 +931,16 @@ fill_changed (ShapeEditor *self)
        gdk_rgba_equal (&fill_color, color)))
     return;
 
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (fill_rule));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (fill_rule));
   if (!do_fill)
-    svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
+    svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
   else if (symbolic != 0xffff)
     {
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
-      svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL_OPACITY, svg_number_new (color->alpha));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_shape_attr_set (self->shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
+    svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
 
   path_paintable_changed (self->paintable);
 
@@ -974,7 +996,7 @@ mask_type_changed (ShapeEditor *self)
       g_assert_not_reached ();
     }
 
-  svg_shape_attr_set (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_mask_type_new (mode));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_mask_type_new (mode));
 
   path_paintable_changed (self->paintable);
 }
@@ -1121,7 +1143,9 @@ bb_and_shape_has_attr (GObject    *object,
   else
     g_assert_not_reached ();
 
-  return b1 && b2 && can_edit_shape (self->shape) && svg_shape_has_attr (self->shape, attr);
+  return b1 && b2 &&
+         can_edit_shape (self->shape) &&
+         svg_property_applies_to (attr, svg_element_get_type (self->shape));
 }
 
 static gboolean
@@ -1168,7 +1192,8 @@ add_shape (ShapeEditor *self)
   SvgElement *shape;
   char *id;
 
-  shape = svg_shape_add (self->shape, SVG_ELEMENT_PATH);
+  shape = svg_element_new (self->shape, SVG_ELEMENT_PATH);
+  svg_element_add_child (self->shape, shape);
   shape_set_default_attrs (shape);
   id = path_paintable_find_unused_id (self->paintable, "path");
   svg_element_set_id (shape, id);
@@ -1254,7 +1279,7 @@ paths_changed (ShapeEditor *self)
   if (shape_is_graphical (self->shape))
     repopulate_attach_to (self);
 
-  if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
+  if (svg_property_applies_to (SVG_PROPERTY_MASK, svg_element_get_type (self->shape)))
     repopulate_mask (self);
 }
 
@@ -1296,6 +1321,7 @@ shape_editor_update (ShapeEditor *self)
       unsigned int idx;
       const char *id;
       SvgElementType type;
+      SvgValue *value;
 
       id = svg_element_get_id (self->shape);
       type = svg_element_get_type (self->shape);
@@ -1319,7 +1345,7 @@ shape_editor_update (ShapeEditor *self)
         {
           GskPath *path;
 
-          path = svg_shape_get_path (self->shape, viewport);
+          path = svg_element_get_path (self->shape, viewport, FALSE);
           path_editor_set_path (self->path_editor, path);
           g_object_set (self->path_editor,
                         "width", path_paintable_get_width (self->paintable),
@@ -1472,7 +1498,16 @@ shape_editor_update (ShapeEditor *self)
           gtk_spin_button_set_value (self->animation_segment, segment);
         }
 
-      kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_STROKE, &symbolic, &color);
+      symbolic = 0xffff;
+      color = (GdkRGBA) { 0, 0, 0, 1 };
+
+      value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE);
+      kind = svg_paint_get_kind (value);
+
+      if (kind == PAINT_SYMBOLIC)
+        symbolic = svg_paint_get_symbolic (value);
+      else if (kind == PAINT_COLOR)
+        gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->stroke_paint, 0);
@@ -1491,11 +1526,20 @@ shape_editor_update (ShapeEditor *self)
       gtk_spin_button_set_value (self->line_width, line_width);
       gtk_spin_button_set_value (self->max_width, max_width);
 
-      gtk_drop_down_set_selected (self->line_join, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
-      gtk_drop_down_set_selected (self->line_cap, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_STROKE_LINECAP));
-      gtk_range_set_value (GTK_RANGE (self->miter_limit), svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, viewport));
+      gtk_drop_down_set_selected (self->line_join, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN)));
+      gtk_drop_down_set_selected (self->line_cap, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP)));
+      gtk_range_set_value (GTK_RANGE (self->miter_limit), svg_number_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT), 100));
 
-      kind = svg_shape_attr_get_paint (self->shape, SVG_PROPERTY_FILL, &symbolic, &color);
+      symbolic = 0xffff;
+      color = (GdkRGBA) { 0, 0, 0, 1 };
+
+      value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE);
+      kind = svg_paint_get_kind (value);
+
+      if (kind == PAINT_SYMBOLIC)
+        symbolic = svg_paint_get_symbolic (value);
+      else if (kind == PAINT_COLOR)
+        gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->fill_paint, 0);
@@ -1506,7 +1550,7 @@ shape_editor_update (ShapeEditor *self)
 
       color_editor_set_color (self->fill_paint, &color);
 
-      gtk_drop_down_set_selected (self->fill_rule, svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_FILL_RULE));
+      gtk_drop_down_set_selected (self->fill_rule, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_FILL_RULE)));
 
       if (shape_is_graphical (self->shape))
         {
@@ -1536,21 +1580,26 @@ shape_editor_update (ShapeEditor *self)
         gtk_widget_set_sensitive (GTK_WIDGET (self->move_down), FALSE);
 
       gtk_drop_down_set_selected (self->paint_order,
-                                  svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_PAINT_ORDER));
+                                  svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_PAINT_ORDER)));
 
-      alpha_editor_set_alpha (self->opacity,
-                              svg_shape_attr_get_number (self->shape, SVG_PROPERTY_OPACITY, viewport));
+      alpha_editor_set_alpha (self->opacity, svg_number_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_OPACITY), 1));
 
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_CLIP_PATH))
+      if (svg_property_applies_to (SVG_PROPERTY_CLIP_PATH, type))
         {
           GskPath *path = NULL;
           const char *ref = NULL;
 
-          svg_shape_attr_get_clip (self->shape, SVG_PROPERTY_CLIP_PATH, &path, &ref);
-          if (path)
-            path_editor_set_path (self->clip_path_editor, path);
-          else if (ref)
-            path_editor_set_id (self->clip_path_editor, ref);
+          value = svg_element_get_base_value (self->shape, SVG_PROPERTY_CLIP_PATH);
+          if (svg_clip_get_kind (value) == CLIP_PATH)
+            {
+              path = svg_clip_get_path (value);
+              path_editor_set_path (self->clip_path_editor, path);
+            }
+          else if (svg_clip_get_kind (value) == CLIP_URL)
+            {
+              ref = svg_clip_get_id (value);
+              path_editor_set_id (self->clip_path_editor, ref);
+            }
           else
             {
               path = gsk_path_builder_free_to_path (gsk_path_builder_new ());
@@ -1564,29 +1613,35 @@ shape_editor_update (ShapeEditor *self)
                         NULL);
         }
 
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
+      if (svg_property_applies_to (SVG_PROPERTY_MASK, type))
         {
-          const char *ref = NULL;
+          SvgValue *initial;
           unsigned int pos = 0;
 
           repopulate_mask (self);
-          ref = svg_shape_attr_get_mask (self->shape, SVG_PROPERTY_MASK);
-          if (ref)
+          value = svg_element_get_base_value (self->shape, SVG_PROPERTY_MASK);
+          initial = svg_mask_new_none ();
+          if (!svg_value_equal (value, initial))
             {
               GListModel *model;
+              const char *ref = NULL;
 
               model = gtk_drop_down_get_model (self->mask_dropdown);
+              ref = svg_mask_get_id (value);
               pos = gtk_string_list_find (GTK_STRING_LIST (model), ref);
               if (pos == G_MAXUINT)
                 pos = 0;
             }
+          svg_value_unref (initial);
 
           gtk_drop_down_set_selected (self->mask_dropdown, pos);
         }
 
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_TRANSFORM))
+      if (svg_property_applies_to (SVG_PROPERTY_TRANSFORM, type))
         {
-          text = svg_shape_attr_get_transform (self->shape, SVG_PROPERTY_TRANSFORM);
+          value = svg_element_get_base_value (self->shape, SVG_PROPERTY_TRANSFORM);
+          text = svg_value_to_string (value);
+
           if (g_strcmp0 (text, "none") == 0)
             gtk_editable_set_text (GTK_EDITABLE (self->transform), "");
           else
@@ -1599,22 +1654,26 @@ shape_editor_update (ShapeEditor *self)
           g_clear_pointer (&text, g_free);
         }
 
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_FILTER))
+      if (svg_property_applies_to (SVG_PROPERTY_FILTER, type))
         {
-          text = svg_shape_attr_get_filter (self->shape, SVG_PROPERTY_FILTER);
+          value = svg_element_get_base_value (self->shape, SVG_PROPERTY_FILTER);
+          text = svg_value_to_string (value);
+
           if (g_strcmp0 (text, "none") == 0)
             gtk_editable_set_text (GTK_EDITABLE (self->filter), "");
           else
             gtk_editable_set_text (GTK_EDITABLE (self->filter), text);
+
           g_clear_pointer (&text, g_free);
         }
 
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK))
+      if (svg_property_applies_to (SVG_PROPERTY_MASK, type))
         {
         }
-      if (svg_shape_has_attr (self->shape, SVG_PROPERTY_MASK_TYPE))
+
+      if (svg_property_applies_to (SVG_PROPERTY_MASK_TYPE, type))
         {
-          switch (svg_shape_attr_get_enum (self->shape, SVG_PROPERTY_MASK_TYPE))
+          switch (svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_MASK_TYPE)))
             {
             case GSK_MASK_MODE_LUMINANCE:
               gtk_drop_down_set_selected (self->mask_type, 0);

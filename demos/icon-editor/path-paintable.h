@@ -118,30 +118,6 @@ void            path_paintable_set_path_states_by_id
 double          path_paintable_get_path_origin     (PathPaintable   *self,
                                                     size_t           idx);
 
-void            path_paintable_set_path_fill       (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    gboolean         do_fill,
-                                                    GskFillRule      rule,
-                                                    unsigned int     symbolic,
-                                                    const GdkRGBA   *color);
-gboolean        path_paintable_get_path_fill       (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    GskFillRule     *rule,
-                                                    unsigned int    *symbolic,
-                                                    GdkRGBA         *color);
-
-void            path_paintable_set_path_stroke     (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    gboolean         do_stroke,
-                                                    GskStroke       *stroke,
-                                                    unsigned int     symbolic,
-                                                    const GdkRGBA   *color);
-gboolean        path_paintable_get_path_stroke     (PathPaintable   *self,
-                                                    size_t           idx,
-                                                    GskStroke       *stroke,
-                                                    unsigned int    *symbolic,
-                                                    GdkRGBA         *color);
-
 void            path_paintable_get_attach_path     (PathPaintable   *self,
                                                     size_t           idx,
                                                     size_t          *to,

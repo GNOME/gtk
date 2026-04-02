@@ -26,6 +26,7 @@
 #include "border-paintable.h"
 #include "state-editor.h"
 #include "gtk/svg/gtksvgelementprivate.h"
+#include "gtk/svg/gtksvgpaintprivate.h"
 
 #include <glib/gstdio.h>
 
@@ -634,16 +635,16 @@ set_compat (SvgElement *shape,
 
   if (self->compat_classes)
     {
+      SvgValue *value;
       GStrvBuilder *builder;
-      unsigned int symbolic;
-      GdkRGBA rgba;
 
       builder = g_strv_builder_new ();
 
-      switch ((unsigned int) svg_shape_attr_get_paint (shape, SVG_PROPERTY_FILL, &symbolic, &rgba))
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
+      switch ((unsigned int) svg_paint_get_kind (value))
         {
         case PAINT_SYMBOLIC:
-          switch (symbolic)
+          switch (svg_paint_get_symbolic (value))
             {
             case GTK_SYMBOLIC_COLOR_FOREGROUND:
               g_strv_builder_add_many (builder, "foreground", "foreground-fill", NULL);
@@ -657,6 +658,7 @@ set_compat (SvgElement *shape,
             case GTK_SYMBOLIC_COLOR_SUCCESS:
               g_strv_builder_add_many (builder, "success", "success-fill", NULL);
               break;
+            case GTK_SYMBOLIC_COLOR_ACCENT:
             default:
               break;
             }
@@ -668,10 +670,11 @@ set_compat (SvgElement *shape,
           break;
         }
 
-      switch ((unsigned int) svg_shape_attr_get_paint (shape, SVG_PROPERTY_STROKE, &symbolic, &rgba))
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
+      switch ((unsigned int) svg_paint_get_kind (value))
         {
         case PAINT_SYMBOLIC:
-          switch (symbolic)
+          switch (svg_paint_get_symbolic (value))
             {
             case GTK_SYMBOLIC_COLOR_FOREGROUND:
               g_strv_builder_add (builder, "foreground-stroke");
@@ -685,6 +688,7 @@ set_compat (SvgElement *shape,
             case GTK_SYMBOLIC_COLOR_SUCCESS:
               g_strv_builder_add (builder, "success-stroke");
               break;
+            case GTK_SYMBOLIC_COLOR_ACCENT:
             default:
               break;
             }

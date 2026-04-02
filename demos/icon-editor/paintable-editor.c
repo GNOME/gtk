@@ -139,9 +139,11 @@ static void
 update_viewbox (PaintableEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  SvgValue *value;
   graphene_rect_t rect;
 
-  if (svg_shape_attr_get_viewbox (svg->content, SVG_PROPERTY_VIEW_BOX, &rect))
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  if (svg_view_box_get (value, &rect))
     {
       g_autofree char *text = g_strdup_printf ("%g", rect.origin.x);
       gtk_editable_set_text (GTK_EDITABLE (self->viewbox_x), text);
@@ -422,16 +424,19 @@ set_size (PaintableEditor *self,
           double           height)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  SvgValue *value;
   graphene_rect_t rect;
 
   svg->width = width;
   svg->height = height;
 
-  svg_shape_attr_set (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
-  svg_shape_attr_set (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
+  svg_element_take_base_value (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
+  svg_element_take_base_value (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
 
-  if (!svg_shape_attr_get_viewbox (svg->content, SVG_PROPERTY_VIEW_BOX, &rect))
-    svg_shape_attr_set (svg->content, SVG_PROPERTY_VIEW_BOX,
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+
+  if (!svg_view_box_get (value, &rect))
+    svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
                         svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
 
   path_paintable_changed (self->paintable);
@@ -471,8 +476,8 @@ viewbox_changed (PaintableEditor *self)
   res += sscanf (text, "%lf", &h);
   if (res == 4 && w > 0 && h > 0)
     {
-      svg_shape_attr_set (svg->content, SVG_PROPERTY_VIEW_BOX,
-                          svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
+      svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
+                                   svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
 
       path_paintable_changed (self->paintable);
       gdk_paintable_invalidate_size (GDK_PAINTABLE (self->paintable));
@@ -811,13 +816,15 @@ paintable_editor_add_path (PaintableEditor *self)
   SvgElement *content;
   size_t idx;
   SvgElement *shape;
+  SvgValue *value;
   graphene_rect_t rect;
   char *id;
 
   if (svg_element_get_n_children (svg->content) == 0 && svg->width == 0 && svg->height == 0)
     set_size (self, 100, 100);
 
-  svg_shape_attr_get_viewbox (svg->content, SVG_PROPERTY_VIEW_BOX, &rect);
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  svg_view_box_get (value, &rect);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_move_to (builder, rect.origin.x, rect.origin.y);

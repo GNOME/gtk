@@ -96,7 +96,7 @@ snapshot_spines (GtkSnapshot           *snapshot,
 
         if (states & (G_GUINT64_CONSTANT (1) << state))
           {
-            GskPath *path = svg_shape_get_path (shape, viewport);
+            GskPath *path = svg_element_get_path (shape, viewport, FALSE);
             double origin = svg_element_get_gpa_origin (shape);
             SvgElement * attach_to = NULL;
             double attach_pos;

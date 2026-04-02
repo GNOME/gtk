@@ -99,49 +99,11 @@ struct _GtkSvg
 double       svg_shape_attr_get_number    (SvgElement                 *shape,
                                            SvgProperty            attr,
                                            const graphene_rect_t *viewport);
-GskPath *    svg_shape_attr_get_path      (SvgElement                 *shape,
-                                           SvgProperty            attr);
-unsigned int svg_shape_attr_get_enum      (SvgElement                 *shape,
-                                           SvgProperty            attr);
-PaintKind    svg_shape_attr_get_paint     (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           GtkSymbolicColor      *symbolic,
-                                           GdkRGBA               *color);
-double *     svg_shape_attr_get_points    (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           unsigned int          *n_params);
-ClipKind     svg_shape_attr_get_clip      (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           GskPath              **path,
-                                           const char           **ref);
-const char * svg_shape_attr_get_mask      (SvgElement                 *shape,
-                                           SvgProperty            attr);
-char *       svg_shape_attr_get_transform (SvgElement                 *shape,
-                                           SvgProperty            attr);
-char *       svg_shape_attr_get_filter    (SvgElement                 *shape,
-                                           SvgProperty            attr);
-GskPath *    svg_shape_get_path           (SvgElement                 *shape,
-                                           const graphene_rect_t *viewport);
-gboolean     svg_shape_attr_get_viewbox   (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           graphene_rect_t       *rect);
-
-void         svg_shape_attr_set           (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           SvgValue              *value);
-
-SvgElement *      svg_shape_add          (SvgElement            *parent,
-                                     SvgElementType    type);
-void         svg_shape_delete       (SvgElement            *shape);
-
-const char * svg_shape_get_name     (SvgElementType  type);
-gboolean     svg_shape_has_attr     (SvgElement          *shape,
-                                     SvgProperty     attr);
-
-gboolean     gtk_svg_set_state_names (GtkSvg      *svg,
-                                      const char **names);
 
 /* --- */
+
+gboolean       gtk_svg_set_state_names (GtkSvg                *svg,
+                                        const char           **names);
 
 GtkSvg *       gtk_svg_copy            (GtkSvg                *orig);
 

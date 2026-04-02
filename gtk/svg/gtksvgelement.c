@@ -931,6 +931,27 @@ svg_element_add_child (SvgElement *element,
   g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
   g_assert (svg_element_type_is_container (element->type));
   g_ptr_array_add (element->shapes, child);
+
+  if (child->type == SVG_ELEMENT_TSPAN)
+    {
+      SvgElement *text_parent = NULL;
+
+      if (svg_element_type_is_text (element->type))
+        text_parent = element;
+      else if (element->parent &&
+               element->type == SVG_ELEMENT_LINK &&
+               svg_element_type_is_text (element->parent->type))
+        text_parent = element->parent;
+
+      if (text_parent)
+        {
+          TextNode node = {
+            .type = TEXT_NODE_SHAPE,
+            .shape = { .shape = child }
+          };
+          g_array_append_val (text_parent->text, node);
+        }
+    }
 }
 
 unsigned int
@@ -961,8 +982,13 @@ svg_element_set_base_value (SvgElement  *element,
                             SvgValue    *value)
 {
   g_clear_pointer (&element->base[attr], svg_value_unref);
-  element->base[attr] = svg_value_ref (value);
-  element->attrs = _gtk_bitmask_set (element->attrs, attr, TRUE);
+  if (value)
+    element->base[attr] = svg_value_ref (value);
+  else
+    element->base[attr] = svg_property_ref_initial_value (attr,
+                                                          svg_element_get_type (element),
+                                                          svg_element_get_parent (element) != NULL);
+  element->attrs = _gtk_bitmask_set (element->attrs, attr, value != NULL);
 }
 
 void
@@ -971,7 +997,8 @@ svg_element_take_base_value (SvgElement  *element,
                              SvgValue    *value)
 {
   svg_element_set_base_value (element, attr, value);
-  svg_value_unref (value);
+  if (value)
+    svg_value_unref (value);
 }
 
 SvgValue *
@@ -1454,6 +1481,13 @@ svg_element_duplicate (SvgElement *element,
   copy->parent = parent;
   copy->attrs = _gtk_bitmask_copy (element->attrs);
   copy->id = NULL;
+  copy->style = g_strdup (element->style);
+  copy->classes = g_strdupv (element->classes);
+  copy->css_node = gtk_css_node_new ();
+  gtk_css_node_set_parent (copy->css_node, parent->css_node);
+  gtk_css_node_set_name (copy->css_node, g_quark_from_static_string (svg_element_type_get_name (copy->type)));
+  gtk_css_node_set_classes (copy->css_node, (const char **) copy->classes);
+
   for (unsigned int i = FIRST_SVG_PROPERTY; i <= LAST_SVG_PROPERTY; i++)
     copy->base[i] = svg_value_ref (element->base[i]);
 
@@ -1488,7 +1522,6 @@ svg_element_set_type (SvgElement     *element,
   if (element->type == type)
     return;
 
-  g_print ("set_type\n");
   old_type = element->type;
   element->type = type;
 
@@ -1512,6 +1545,12 @@ svg_element_set_type (SvgElement     *element,
   if (!svg_element_type_is_container (old_type) &&
       svg_element_type_is_container (type))
     element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
+
+  for (unsigned int attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
+    {
+      if (!svg_property_applies_to (attr, type))
+        svg_element_set_base_value (element, attr, NULL);
+    }
 }
 
 void

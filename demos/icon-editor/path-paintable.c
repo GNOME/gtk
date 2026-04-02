@@ -27,7 +27,11 @@
 #include "svg/gtksvgpaintprivate.h"
 #include "svg/gtksvgpathprivate.h"
 #include "svg/gtksvgviewboxprivate.h"
+#include "svg/gtksvgfilterfunctionsprivate.h"
+#include "svg/gtksvgtransformprivate.h"
+#include "svg/gtksvgclipprivate.h"
 #include "svg/gtksvgelementprivate.h"
+#include "svg/gtksvgpaintprivate.h"
 
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
@@ -412,9 +416,9 @@ path_paintable_set_size (PathPaintable *self,
   self->svg->width = width;
   self->svg->height = height;
 
-  svg_shape_attr_set (self->svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
-  svg_shape_attr_set (self->svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
-  svg_shape_attr_set (self->svg->content,
+  svg_element_take_base_value (self->svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
+  svg_element_take_base_value (self->svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
+  svg_element_take_base_value (self->svg->content,
                       SVG_PROPERTY_VIEW_BOX,
                       svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   g_signal_emit (self, signals[CHANGED], 0);
@@ -569,92 +573,6 @@ path_paintable_get_path_id (PathPaintable *self,
 }
 
 void
-path_paintable_set_path_fill (PathPaintable   *self,
-                              size_t           idx,
-                              gboolean         enabled,
-                              GskFillRule      rule,
-                              unsigned int     symbolic,
-                              const GdkRGBA   *color)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-  PaintKind kind;
-  GtkSymbolicColor fill_symbolic;
-  GdkRGBA fill_color;
-  GskFillRule fill_rule;
-
-  kind = svg_shape_attr_get_paint (shape, SVG_PROPERTY_FILL, &fill_symbolic, &fill_color);
-  fill_rule = svg_shape_attr_get_enum (shape, SVG_PROPERTY_FILL_RULE);
-
-  if (enabled == (kind != PAINT_NONE) &&
-      fill_rule == rule &&
-      fill_symbolic == symbolic &&
-      ((symbolic != 0xffff && fill_color.alpha == color->alpha) ||
-       gdk_rgba_equal (&fill_color, color)))
-    return;
-
-  svg_shape_attr_set (shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (rule));
-  if (!enabled)
-    svg_shape_attr_set (shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
-  else if (symbolic != 0xffff)
-    svg_shape_attr_set (shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
-  else
-    svg_shape_attr_set (shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
-  /* FIXME opacity */
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
-path_paintable_set_path_stroke (PathPaintable *self,
-                                size_t         idx,
-                                gboolean       enabled,
-                                GskStroke     *stroke,
-                                unsigned int   symbolic,
-                                const GdkRGBA *color)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-  PaintKind kind;
-  GtkSymbolicColor stroke_symbolic;
-  GdkRGBA stroke_color;
-  double width;
-  GskLineCap linecap;
-  GskLineJoin linejoin;
-  double miterlimit;
-
-  kind = svg_shape_attr_get_paint (shape, SVG_PROPERTY_STROKE, &stroke_symbolic, &stroke_color);
-  width = svg_shape_attr_get_number (shape, SVG_PROPERTY_STROKE_WIDTH, &self->viewport);
-  linecap = svg_shape_attr_get_enum (shape, SVG_PROPERTY_STROKE_LINEJOIN);
-  linejoin = svg_shape_attr_get_enum (shape, SVG_PROPERTY_STROKE_LINEJOIN);
-  miterlimit = svg_shape_attr_get_number (shape, SVG_PROPERTY_STROKE_MITERLIMIT, &self->viewport);
-
-  if (enabled == (kind != PAINT_NONE) &&
-      width == gsk_stroke_get_line_width (stroke) &&
-      linecap == gsk_stroke_get_line_cap (stroke) &&
-      linejoin == gsk_stroke_get_line_join (stroke) &&
-      miterlimit == gsk_stroke_get_miter_limit (stroke) &&
-      stroke_symbolic == symbolic &&
-      ((symbolic != 0xffff && stroke_color.alpha == color->alpha) ||
-       gdk_rgba_equal (&stroke_color, color)))
-    return;
-
-  if (!enabled)
-    svg_shape_attr_set (shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
-  else if (symbolic != 0xffff)
-    svg_shape_attr_set (shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
-  else
-    svg_shape_attr_set (shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
-  /* FIXME opacity */
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new (gsk_stroke_get_line_width (stroke)));
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new (gsk_stroke_get_line_width (stroke) * 100. / 400.));
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new (gsk_stroke_get_line_width (stroke) * 1000. / 400.));
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (gsk_stroke_get_line_cap (stroke)));
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (gsk_stroke_get_line_join (stroke)));
-  svg_shape_attr_set (shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (gsk_stroke_get_miter_limit (stroke)));
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
-void
 path_paintable_get_attach_path (PathPaintable *self,
                                 size_t         idx,
                                 size_t        *to,
@@ -781,7 +699,7 @@ path_paintable_get_path (PathPaintable *self,
 {
   SvgElement *shape = path_paintable_get_shape (self, idx);
 
-  return svg_shape_get_path (shape, &self->viewport);
+  return svg_element_get_path (shape, &self->viewport, FALSE);
 }
 
 uint64_t
@@ -800,36 +718,6 @@ path_paintable_get_path_origin (PathPaintable *self,
   SvgElement *shape = path_paintable_get_shape (self, idx);
 
   return svg_element_get_gpa_origin (shape);
-}
-
-gboolean
-path_paintable_get_path_fill (PathPaintable *self,
-                              size_t         idx,
-                              GskFillRule   *rule,
-                              unsigned int  *symbolic,
-                              GdkRGBA       *color)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  *rule = svg_shape_attr_get_enum (shape, SVG_PROPERTY_FILL_RULE);
-  return svg_shape_attr_get_paint (shape, SVG_PROPERTY_FILL, symbolic, color);
-}
-
-gboolean
-path_paintable_get_path_stroke (PathPaintable *self,
-                                size_t         idx,
-                                GskStroke     *stroke,
-                                unsigned int  *symbolic,
-                                GdkRGBA       *color)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  gsk_stroke_set_line_width (stroke, svg_shape_attr_get_number (shape, SVG_PROPERTY_STROKE_WIDTH, &self->viewport));
-  gsk_stroke_set_line_cap (stroke, svg_shape_attr_get_enum (shape, SVG_PROPERTY_STROKE_LINECAP));
-  gsk_stroke_set_line_join (stroke, svg_shape_attr_get_enum (shape, SVG_PROPERTY_STROKE_LINEJOIN));
-  gsk_stroke_set_miter_limit (stroke, svg_shape_attr_get_number (shape, SVG_PROPERTY_STROKE_MITERLIMIT, &self->viewport));
-
-  return svg_shape_attr_get_paint (shape, SVG_PROPERTY_STROKE, symbolic, color);
 }
 
 PathPaintable *
@@ -866,18 +754,11 @@ path_paintable_get_compatibility (PathPaintable *self)
    * Icons may still render (in a degraded fashion) with older GTK.
    */
   GtkCompatibility compat = GTK_4_0;
-  PaintKind paint_kind;
-  GtkSymbolicColor symbolic;
-  GdkRGBA color;
   PaintOrder paint_order;
-  double opacity;
-  double miterlimit;
-  ClipKind clip_kind;
-  GskPath *clip_path;
   const char *ref;
-  char *str;
   GpaTransition transition;
   GpaAnimation animation;
+  SvgValue *value, *initial;
 
   for (size_t i = 0; i < svg_element_get_n_children (self->svg->content); i++)
     {
@@ -919,8 +800,8 @@ path_paintable_get_compatibility (PathPaintable *self)
           g_assert_not_reached ();
         }
 
-      paint_kind = svg_shape_attr_get_paint (shape, SVG_PROPERTY_STROKE, &symbolic, &color);
-      if (paint_kind != PAINT_NONE)
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
+      if (svg_paint_get_kind (value) != PAINT_NONE)
         compat = MAX (compat, GTK_4_20);
 
       svg_element_get_gpa_transition (shape, &transition, NULL, NULL, NULL);
@@ -931,31 +812,33 @@ path_paintable_get_compatibility (PathPaintable *self)
           ref != NULL)
         compat = MAX (compat, GTK_4_22);
 
-      paint_order = svg_shape_attr_get_enum (shape, SVG_PROPERTY_PAINT_ORDER);
+      paint_order = svg_enum_get (svg_element_get_base_value (shape, SVG_PROPERTY_PAINT_ORDER));
       if (paint_order != PAINT_ORDER_FILL_STROKE_MARKERS)
         compat = MAX (compat, GTK_4_22);
 
-      opacity = svg_shape_attr_get_number (shape, SVG_PROPERTY_OPACITY, NULL);
-      if (opacity != 1)
+      if (svg_number_get (svg_element_get_base_value (shape, SVG_PROPERTY_OPACITY), 100) != 1)
         compat = MAX (compat, GTK_4_22);
 
-      miterlimit = svg_shape_attr_get_number (shape, SVG_PROPERTY_STROKE_MITERLIMIT, NULL);
-      if (miterlimit != 4)
+      if (svg_number_get (svg_element_get_base_value (shape, SVG_PROPERTY_STROKE_MITERLIMIT), 100) != 4)
         compat = MAX (compat, GTK_4_22);
 
-      clip_kind = svg_shape_attr_get_clip (shape, SVG_PROPERTY_CLIP_PATH, &clip_path, &ref);
-      if (clip_kind != CLIP_NONE)
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_CLIP_PATH);
+      initial = svg_clip_new_none ();
+      if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
+      svg_value_unref (initial);
 
-      str = svg_shape_attr_get_transform (shape, SVG_PROPERTY_TRANSFORM);
-      if (g_strcmp0 (str, "none") != 0)
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_TRANSFORM);
+      initial = svg_transform_new_none ();
+      if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
-      g_free (str);
+      svg_value_unref (initial);
 
-      str = svg_shape_attr_get_filter (shape, SVG_PROPERTY_FILTER);
-      if (g_strcmp0 (str, "none") != 0)
+      value = svg_element_get_base_value (shape, SVG_PROPERTY_FILTER);
+      initial = svg_filter_functions_new_none ();
+      if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
-      g_free (str);
+      svg_value_unref (initial);
 
       if (compat == GTK_4_22)
         break;
@@ -982,7 +865,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         case SVG_ELEMENT_CIRCLE:
         case SVG_ELEMENT_ELLIPSE:
           if (g_strcmp0 (svg_element_get_id (shape), id) == 0)
-            return svg_shape_get_path (shape, &self->viewport);
+            return svg_element_get_path (shape, &self->viewport, FALSE);
           break;
         case SVG_ELEMENT_GROUP:
         case SVG_ELEMENT_CLIP_PATH:
