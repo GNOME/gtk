@@ -98,12 +98,12 @@ gtk_svg_location_init_attr_range (GtkSvgLocation      *start,
                                   GMarkupParseContext *context,
                                   unsigned int         attr)
 {
-#if 0
+#if GLIB_CHECK_VERSION (2, 89, 0)
   /* waiting for https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5106 */
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_markup_parse_context_get_attr_location (context, attr,
-                                            &start->lines, &start->line_chars, &start->bytes,
-                                            &end->lines, &end->line_chars, &end->bytes);
+  g_markup_parse_context_get_attribute_position (context, attr,
+                                                 &start->lines, &start->line_chars, &start->bytes,
+                                                 &end->lines, &end->line_chars, &end->bytes);
 G_GNUC_END_IGNORE_DEPRECATIONS
 #else
   gtk_svg_location_init_tag_range (start, end, context);
