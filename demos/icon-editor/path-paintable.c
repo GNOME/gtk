@@ -119,6 +119,7 @@ path_paintable_set_svg (PathPaintable *self,
   graphene_rect_init (&self->viewport, 0, 0, svg->width, svg->height);
   g_clear_object (&self->render_paintable);
   g_signal_emit (self, signals[CHANGED], 0);
+  g_signal_emit (self, signals[PATHS_CHANGED], 0);
 }
 
 static gboolean
