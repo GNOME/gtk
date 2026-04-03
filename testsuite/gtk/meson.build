@@ -38,6 +38,7 @@ tests = [
   { 'name': 'cssprovider' },
   { 'name': 'defaultvalue' },
   { 'name': 'entry' },
+  { 'name': 'enumlist' },
   { 'name': 'expression' },
   { 'name': 'filefilter' },
   { 'name': 'filter' },
