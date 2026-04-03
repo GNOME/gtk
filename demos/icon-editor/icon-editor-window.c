@@ -295,7 +295,8 @@ paintable_changed (IconEditorWindow *self)
 {
   gboolean changed;
 
-  changed = !path_paintable_equal (self->paintable, self->orig_paintable);
+  changed = !gtk_svg_equal (path_paintable_get_svg (self->paintable),
+                            path_paintable_get_svg (self->orig_paintable));
 
   icon_editor_window_set_changed (self, changed);
 }
@@ -628,7 +629,7 @@ set_compat (SvgElement *shape,
 {
   IconEditorWindow *self = data;
 
-  if (!shape_is_graphical (shape))
+  if (!svg_element_type_is_graphical (svg_element_get_type (shape)))
     return;
 
   svg_element_parse_classes (shape, NULL);

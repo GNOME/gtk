@@ -25,6 +25,7 @@
 #include "gtk/svg/gtksvgnumberprivate.h"
 #include "gtk/svg/gtksvgviewboxprivate.h"
 #include "gtk/svg/gtksvgelementprivate.h"
+#include "gtk/svg/gtksvgpathprivate.h"
 
 
 static void size_changed (PaintableEditor *self);
@@ -111,14 +112,13 @@ append_shape_editor (PaintableEditor *self,
 static void
 create_shape_editors (PaintableEditor *self)
 {
-  SvgElement *content;
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
 
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
-  content = path_paintable_get_content (self->paintable);
-  for (unsigned int i = 0; i < svg_element_get_n_children (content); i++)
+  for (unsigned int i = 0; i < svg_element_get_n_children (svg->content); i++)
     {
-      SvgElement *shape = svg_element_get_child (content, i);
+      SvgElement *shape = svg_element_get_child (svg->content, i);
       append_shape_editor (self, shape);
     }
 }
@@ -173,14 +173,14 @@ typedef struct
 } ShapeCountData;
 
 static void
-count_shapes (SvgElement    *shape,
-              gpointer  data)
+count_shapes (SvgElement *shape,
+              gpointer    data)
 {
   ShapeCountData *d = data;
 
   d->all++;
 
-  if (!shape_is_graphical (shape))
+  if (!svg_element_type_is_graphical (svg_element_get_type (shape)))
     return;
 
   d->graphical++;
@@ -487,29 +487,37 @@ viewbox_changed (PaintableEditor *self)
 static void
 author_changed (PaintableEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->author));
-  path_paintable_set_author (self->paintable, text);
+  if (g_set_str (&svg->author, text))
+    path_paintable_changed (self->paintable);
 }
 
 static void
 license_changed (PaintableEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->license));
-  path_paintable_set_license (self->paintable, text);
+  if (g_set_str (&svg->license, text))
+    path_paintable_changed (self->paintable);
 }
 
 static void
 description_changed (PaintableEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->description));
-  path_paintable_set_description (self->paintable, text);
+  if (g_set_str (&svg->description, text))
+    path_paintable_changed (self->paintable);
 }
 
 static void
 keywords_changed (PaintableEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *text = gtk_editable_get_text (GTK_EDITABLE (self->keywords));
-  path_paintable_set_keywords (self->paintable, text);
+  if (g_set_str (&svg->keywords, text))
+    path_paintable_changed (self->paintable);
 }
 
 static void
@@ -813,8 +821,6 @@ paintable_editor_add_path (PaintableEditor *self)
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   GskPathBuilder *builder;
   g_autoptr (GskPath) path = NULL;
-  SvgElement *content;
-  size_t idx;
   SvgElement *shape;
   SvgValue *value;
   graphene_rect_t rect;
@@ -831,15 +837,16 @@ paintable_editor_add_path (PaintableEditor *self)
   gsk_path_builder_rel_line_to (builder, rect.size.width, rect.size.height);
   path = gsk_path_builder_free_to_path (builder);
   g_signal_handlers_block_by_func (self->paintable, paths_changed, self);
-  idx = path_paintable_add_path (self->paintable, path);
 
-  shape = path_paintable_get_shape (self->paintable, idx);
+  shape = svg_element_new (svg->content, SVG_ELEMENT_PATH);
+  svg_element_add_child (svg->content, shape);
+  shape_set_default_attrs (shape);
+  svg_element_take_base_value (shape, SVG_PROPERTY_PATH, svg_path_new (path));
   id = path_paintable_find_unused_id (self->paintable, "path");
   svg_element_set_id (shape, id);
   g_free (id);
 
-  content = path_paintable_get_content (self->paintable);
-  append_shape_editor (self, svg_element_get_child (content, svg_element_get_n_children (content) - 1));
+  append_shape_editor (self, svg_element_get_child (svg->content, svg_element_get_n_children (svg->content) - 1));
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
 }
 
