@@ -304,6 +304,8 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    *
+   * Value changes from compositor events, connect to notify if needed.
+   *
    * Since: 4.18
    */
   device_props[PROP_ACTIVE_LAYOUT_INDEX] =
@@ -317,6 +319,8 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The names of the keyboard layouts of a `GdkDevice`.
    *
    * This is only relevant for keyboard devices.
+   *
+   * Value changes from compositor events, connect to notify if needed.
    *
    * Since: 4.18
    */
