@@ -35,11 +35,10 @@ xml += '''
     <file>theme/Empty/gtk.css</file>
 
     <file>theme/Default/gtk.css</file>
-    <file>theme/Default/Default-light.css</file>
-    <file>theme/Default/Default-dark.css</file>
-    <file>theme/Default/Default-hc.css</file>
-    <file>theme/Default/Default-hc-dark.css</file>
 '''
+for f in {'light', 'dark', 'hc', 'hc-dark'}:
+  xml += '    <file alias=\'theme/Default/gtk-{0}.css\'>theme/Default/gtk.css</file>'.format(f)
+  xml += '    <file>theme/Default/Default-{0}.css</file>'.format(f)
 
 for f in get_files('theme/Default/assets', '.png'):
   xml += '    <file>theme/Default/assets/{0}</file>\n'.format(f)
