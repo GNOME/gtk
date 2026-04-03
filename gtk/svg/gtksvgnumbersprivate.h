@@ -30,6 +30,10 @@ G_BEGIN_DECLS
 SvgValue *   svg_numbers_new                 (double         *values,
                                               unsigned int    n_values);
 
+SvgValue *   svg_numbers_new_full            (double         *values,
+                                              SvgUnit        *units,
+                                              unsigned int    n_values);
+
 SvgValue *   svg_numbers_new_identity_matrix (void);
 
 SvgValue *   svg_numbers_new_none            (void);

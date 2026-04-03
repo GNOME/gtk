@@ -138,6 +138,25 @@ svg_numbers_new (double       *values,
 }
 
 SvgValue *
+svg_numbers_new_full (double       *values,
+                      SvgUnit      *units,
+                      unsigned int  n_values)
+{
+  SvgNumbers *result;
+
+  result = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n_values));
+  result->n_values = n_values;
+
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      result->values[i].unit = units[i];
+      result->values[i].value = values[i];
+    }
+
+  return (SvgValue *) result;
+}
+
+SvgValue *
 svg_numbers_new_identity_matrix (void)
 {
   static SvgValue *id;
