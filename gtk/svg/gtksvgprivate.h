@@ -96,10 +96,6 @@ struct _GtkSvg
   } node_for;
 };
 
-double       svg_shape_attr_get_number    (SvgElement                 *shape,
-                                           SvgProperty            attr,
-                                           const graphene_rect_t *viewport);
-
 /* --- */
 
 gboolean       gtk_svg_set_state_names (GtkSvg                *svg,
