@@ -167,11 +167,14 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   g_free (id);
 
   at_context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
-  if (gtk_at_context_is_realized (at_context))
-    set_a11y_properties (window);
-  else
-    g_signal_connect_object (at_context, "notify::realized", (GCallback) set_a11y_properties, window, G_CONNECT_SWAPPED);
-  g_clear_object (&at_context);
+  if (at_context)
+    {
+      if (gtk_at_context_is_realized (at_context))
+        set_a11y_properties (window);
+      else
+        g_signal_connect_object (at_context, "notify::realized", (GCallback) set_a11y_properties, window, G_CONNECT_SWAPPED);
+      g_clear_object (&at_context);
+    }
 
   impl_class->handle_window_realize (impl, window);
 }
