@@ -3962,7 +3962,7 @@ GskGpuRenderPass *
 gsk_container_node_occlusion (GskRenderNode   *node,
                               GskGpuOcclusion *occlusion)
 {
-  GskGpuRenderPass *result;
+  GskGpuRenderPass *result = NULL;
   GskRenderNode **children;
   gsize n_children;
   int i;
