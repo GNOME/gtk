@@ -207,7 +207,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_list_box_insert (list, row, -1);
 }
 
-static void
+static GtkWidget *
 add_label_row (GtkInspectorGeneral *gen,
                GtkListBox          *list,
                const char          *name,
@@ -243,6 +243,8 @@ add_label_row (GtkInspectorGeneral *gen,
 
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
+
+  return label;
 }
 
 static void
@@ -1744,6 +1746,48 @@ dump_tool (GdkDeviceTool *tool,
   g_string_free (str, TRUE);
 }
 
+static char *
+layout_names_from_device (GdkDevice *device)
+{
+  GString *s = g_string_new ("");
+  char **layout_names = gdk_device_get_layout_names (device);
+
+  if (layout_names)
+    {
+      int n_layouts, active_layout;
+
+      active_layout = gdk_device_get_active_layout_index (device);
+      n_layouts = g_strv_length (layout_names);
+      for (int i = 0; i < n_layouts; i++)
+        {
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          g_string_append (s, layout_names[i]);
+          if (i == active_layout)
+            g_string_append (s, "*");
+        }
+    }
+  else
+    {
+      g_string_append (s, "Unknown");
+    }
+
+  return g_string_free_and_steal (s);
+}
+
+static void
+on_keyboard_device_notify (GdkDevice  *keyboard,
+                           GParamSpec *pspec,
+                           GtkWidget  *label)
+{
+  if (g_strcmp0 (pspec->name, "layout-names") == 0 || g_strcmp0 (pspec->name, "active-layout-index") == 0)
+    {
+      gchar *layouts = layout_names_from_device (keyboard);
+      gtk_label_set_label (GTK_LABEL (label), layouts);
+      g_free (layouts);
+    }
+}
+
 static void
 add_device (GtkInspectorGeneral *gen,
             GdkDevice           *device)
@@ -1771,33 +1815,19 @@ add_device (GtkInspectorGeneral *gen,
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
-      GString *s;
-      char **layout_names;
+      GtkWidget *label;
 
-      s = g_string_new ("");
-      layout_names = gdk_device_get_layout_names (device);
-      if (layout_names)
-        {
-          int n_layouts, active_layout;
+      text = layout_names_from_device (device);
+      label = add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", text, 20);
+      g_free (text);
 
-          active_layout = gdk_device_get_active_layout_index (device);
-          n_layouts = g_strv_length (layout_names);
-          for (int i = 0; i < n_layouts; i++)
-            {
-              if (s->len > 0)
-                g_string_append (s, ", ");
-              g_string_append (s, layout_names[i]);
-              if (i == active_layout)
-                g_string_append (s, "*");
-            }
-        }
-      else
-        {
-          g_string_append (s, "Unknown");
-        }
-
-      add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
-      g_string_free (s, TRUE);
+      /* Connect to associated device if exists to get layout changes */
+      /* NOTE: there is no public or private API to get the associated device */
+      g_signal_connect_object (device->associated ? device->associated : device,
+                               "notify",
+                               G_CALLBACK (on_keyboard_device_notify),
+                               label,
+                               G_CONNECT_DEFAULT);
     }
 
   g_type_class_unref (class);
