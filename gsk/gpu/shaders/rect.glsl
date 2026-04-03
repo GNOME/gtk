@@ -1,14 +1,58 @@
 #ifndef _RECT_
 #define _RECT_
 
+#include "snap.glsl"
+
 /* x,y and y,w make up the 2 points of this rect,
    note that this is not containing width or height */
 #define Rect vec4[1]
+
+/* each bytes contains a GskSnapDirection, see the C one */
+#define GskRectSnap uint
+
+GskSnapDirection
+gsk_rect_snap_get_direction (GskRectSnap snap,
+                             uint        dir)
+{ 
+  return ((snap >> (8u * dir)) & 0xFFu);
+}
+
+GskRectSnap
+gsk_rect_snap_new (GskSnapDirection top,
+                   GskSnapDirection right,
+                   GskSnapDirection bottom,
+                   GskSnapDirection left)
+{
+  return (((((left << 8u) | bottom) << 8u) | right) << 8u) | top;
+}
+
+#define GSK_RECT_SNAP_GROW gsk_rect_snap_new (GSK_SNAP_FLOOR, GSK_SNAP_CEIL, GSK_SNAP_CEIL, GSK_SNAP_FLOOR)
+#define GSK_RECT_SNAP_SHRINK gsk_rect_snap_new (GSK_SNAP_CEIL, GSK_SNAP_FLOOR, GSK_SNAP_FLOOR, GSK_SNAP_CEIL)
+#define GSK_RECT_SNAP_SHRINK_GROW gsk_rect_snap_new (GSK_SNAP_FLOOR, GSK_SNAP_FLOOR, GSK_SNAP_CEIL, GSK_SNAP_CEIL)
+#define GSK_RECT_SNAP_GROW_SHRINK gsk_rect_snap_new (GSK_SNAP_CEIL, GSK_SNAP_CEIL, GSK_SNAP_FLOOR, GSK_SNAP_FLOOR)
+#define GSK_RECT_SNAP_ROUND gsk_rect_snap_new (GSK_SNAP_ROUND, GSK_SNAP_ROUND, GSK_SNAP_ROUND, GSK_SNAP_ROUND)
 
 vec4
 rect_bounds (Rect r)
 {
   return r[0];
+}
+
+Rect
+rect_snap (Rect        src,
+           GskRectSnap snap)
+{
+  float x, y;
+
+  if (snap == 0u)
+    return src;
+
+  vec4 bounds = rect_bounds (src);
+
+  return Rect (vec4 (gsk_snap (bounds.x, gsk_rect_snap_get_direction (snap, 3u)),
+                     gsk_snap (bounds.y, gsk_rect_snap_get_direction (snap, 0u)),
+                     gsk_snap (bounds.z, gsk_rect_snap_get_direction (snap, 1u)),
+                     gsk_snap (bounds.w, gsk_rect_snap_get_direction (snap, 2u))));
 }
 
 Rect

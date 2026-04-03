@@ -105,4 +105,9 @@
 #define GSK_REPEAT_REFLECT 3u
 #define GSK_REPEAT_MASK 3u
 
+#define GSK_SNAP_NONE 0u
+#define GSK_SNAP_FLOOR 1u
+#define GSK_SNAP_CEIL 2u
+#define GSK_SNAP_ROUND 3u
+
 #endif
