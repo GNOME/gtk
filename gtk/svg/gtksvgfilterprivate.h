@@ -21,50 +21,70 @@
 
 #pragma once
 
-#include "gtk/css/gtkcssparserprivate.h"
-#include <graphene.h>
-#include "gtksvgprivate.h"
-#include "gtksvgenumprivate.h"
-#include "gtksvgvalueprivate.h"
-#include "gtksvgenumsprivate.h"
+#include <glib.h>
+#include "gtksvg.h"
+#include "gtksvgtypesprivate.h"
+#include "gsk/gskcomponenttransfer.h"
+#include "gtk/gtkcssnodeprivate.h"
 
-SvgValue *   svg_filter_new_none         (void);
-SvgValue *   svg_filter_parse_css        (GtkCssParser      *parser);
-SvgValue *   svg_filter_parse            (const char        *value);
+G_BEGIN_DECLS
 
-gboolean     svg_filter_is_none          (const SvgValue    *value);
+SvgFilter *    svg_filter_new               (SvgElement     *parent,
+                                             SvgFilterType   type);
 
-unsigned int svg_filter_get_length       (const SvgValue    *value);
-FilterKind   svg_filter_get_kind         (const SvgValue    *value,
-                                          unsigned int       pos);
-const char * svg_filter_get_ref          (const SvgValue    *value,
-                                          unsigned int       pos);
-Shape *      svg_filter_get_shape        (const SvgValue    *value,
-                                          unsigned int       pos);
-void         svg_filter_set_shape        (SvgValue          *value,
-                                          unsigned int       pos,
-                                          Shape             *shape);
-double       svg_filter_get_simple       (const SvgValue    *value,
-                                          unsigned int       pos);
-void         svg_filter_get_color_matrix (const SvgValue    *value,
-                                          unsigned int       pos,
-                                          graphene_matrix_t *matrix,
-                                          graphene_vec4_t   *offset);
-void         svg_filter_get_dropshadow   (const SvgValue    *value,
-                                          unsigned int       pos,
-                                          GdkColor          *color,
-                                          double            *dx,
-                                          double            *dy,
-                                          double            *std_dev);
+void           svg_filter_free              (SvgFilter      *filter);
 
-gboolean     svg_filter_needs_backdrop   (const SvgValue    *value);
+SvgFilterType  svg_filter_get_type          (SvgFilter      *filter);
 
-void color_matrix_type_get_color_matrix  (ColorMatrixType    type,
-                                          SvgValue          *values,
-                                          graphene_matrix_t *matrix,
-                                          graphene_vec4_t   *offset);
+SvgValue *     svg_filter_ref_initial_value (SvgFilter      *filter,
+                                             SvgProperty     attr);
 
-gboolean filter_needs_backdrop           (Shape             *filter);
+gboolean       svg_filter_property_is_set   (SvgFilter      *filter,
+                                             SvgProperty     attr);
 
+SvgValue *     svg_filter_get_base_value    (SvgFilter      *filter,
+                                             SvgProperty     attr);
+
+SvgValue *     svg_filter_get_current_value (SvgFilter      *filter,
+                                             SvgProperty     attr);
+
+void           svg_filter_set_base_value    (SvgFilter      *filter,
+                                             SvgProperty     attr,
+                                             SvgValue       *value);
+
+void           svg_filter_set_current_value (SvgFilter      *filter,
+                                             SvgProperty     attr,
+                                             SvgValue       *value);
+
+void           svg_filter_set_id            (SvgFilter      *filter,
+                                             const char     *id);
+const char *   svg_filter_get_id            (SvgFilter      *filter);
+
+void           svg_filter_set_style         (SvgFilter      *filter,
+                                             const char     *style);
+const char *   svg_filter_get_style         (SvgFilter      *filter);
+
+void           svg_filter_parse_classes     (SvgFilter      *filter,
+                                             const char     *classes);
+void           svg_filter_take_classes      (SvgFilter      *filter,
+                                             GStrv           classes);
+GStrv          svg_filter_get_classes       (SvgFilter      *filter);
+
+void           svg_filter_set_origin        (SvgFilter      *filter,
+                                             GtkSvgLocation *location);
+void           svg_filter_get_origin        (SvgFilter      *filter,
+                                             GtkSvgLocation *location);
+
+GtkCssNode *   svg_filter_get_css_node      (SvgFilter      *filter);
+
+GskComponentTransfer *
+               svg_filter_get_component_transfer (SvgFilter *filter);
+
+gboolean       svg_filter_needs_backdrop    (SvgFilter      *filter);
+
+gboolean       filter_needs_backdrop        (SvgElement     *shape);
+
+gboolean       svg_filter_equal             (SvgFilter      *filter1,
+                                             SvgFilter      *filter2);
 
 G_END_DECLS

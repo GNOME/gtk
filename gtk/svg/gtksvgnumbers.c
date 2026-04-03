@@ -26,6 +26,7 @@
 #include "gtksvgnumberprivate.h"
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgutilsprivate.h"
+#include "gtksvgelementinternal.h"
 
 typedef struct
 {
@@ -102,9 +103,9 @@ static SvgValue * svg_numbers_interpolate (const SvgValue    *value0,
                                            double             t);
 
 static SvgValue * svg_numbers_resolve (const SvgValue    *value,
-                                       ShapeAttr          attr,
+                                       SvgProperty        attr,
                                        unsigned int       idx,
-                                       Shape             *shape,
+                                       SvgElement        *shape,
                                        SvgComputeContext *context);
 
 static const SvgValueClass SVG_NUMBERS_CLASS = {
@@ -130,6 +131,25 @@ svg_numbers_new (double       *values,
   for (unsigned int i = 0; i < n_values; i++)
     {
       result->values[i].unit = SVG_UNIT_NUMBER;
+      result->values[i].value = values[i];
+    }
+
+  return (SvgValue *) result;
+}
+
+SvgValue *
+svg_numbers_new_full (double       *values,
+                      SvgUnit      *units,
+                      unsigned int  n_values)
+{
+  SvgNumbers *result;
+
+  result = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (n_values));
+  result->n_values = n_values;
+
+  for (unsigned int i = 0; i < n_values; i++)
+    {
+      result->values[i].unit = units[i];
       result->values[i].value = values[i];
     }
 
@@ -301,9 +321,9 @@ svg_numbers_interpolate (const SvgValue    *value0,
 
 static SvgValue *
 svg_numbers_resolve (const SvgValue    *value,
-                     ShapeAttr          attr,
+                     SvgProperty        attr,
                      unsigned int       idx,
-                     Shape             *shape,
+                     SvgElement        *shape,
                      SvgComputeContext *context)
 {
   SvgNumbers *orig = (SvgNumbers *) value;
@@ -313,7 +333,7 @@ svg_numbers_resolve (const SvgValue    *value,
   if (orig->n_values == 0)
     return svg_value_ref ((SvgValue *) orig);
 
-  if (attr == SHAPE_ATTR_TRANSFORM_ORIGIN)
+  if (attr == SVG_PROPERTY_TRANSFORM_ORIGIN)
     {
       double font_size;
 

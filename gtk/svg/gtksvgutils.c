@@ -30,8 +30,12 @@ GStrv
 parse_strv (const char *string)
 {
   const char *p, *p0;
-  GStrvBuilder *builder = g_strv_builder_new ();
+  GStrvBuilder *builder;
 
+  if (string == NULL)
+    return NULL;
+
+  builder = g_strv_builder_new ();
   p = string;
   while (*p)
     {

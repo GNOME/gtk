@@ -21,6 +21,7 @@
 
 #include "border-paintable.h"
 #include "path-paintable.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 struct _BorderPaintable
 {
@@ -67,37 +68,37 @@ static void
 snapshot_spines (GtkSnapshot           *snapshot,
                  graphene_rect_t       *bounds,
                  PathPaintable         *paintable,
-                 Shape                 *shape,
+                 SvgElement                 *shape,
                  unsigned int           state,
                  const graphene_rect_t *viewport,
                  float                  scale,
                  const GdkRGBA         *c,
                  GskStroke             *stroke)
 {
-  switch ((unsigned int) shape->type)
+  switch ((unsigned int) svg_element_get_type (shape))
     {
-    case SHAPE_SVG:
-    case SHAPE_GROUP:
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
+    case SVG_ELEMENT_SVG:
+    case SVG_ELEMENT_GROUP:
+      for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
         {
-          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          SvgElement *sh = svg_element_get_child (shape, i);
           snapshot_spines (snapshot, bounds, paintable, sh, state, viewport, scale, c, stroke);
         }
       break;
-    case SHAPE_LINE:
-    case SHAPE_POLYLINE:
-    case SHAPE_POLYGON:
-    case SHAPE_CIRCLE:
-    case SHAPE_ELLIPSE:
-    case SHAPE_PATH:
+    case SVG_ELEMENT_LINE:
+    case SVG_ELEMENT_POLYLINE:
+    case SVG_ELEMENT_POLYGON:
+    case SVG_ELEMENT_CIRCLE:
+    case SVG_ELEMENT_ELLIPSE:
+    case SVG_ELEMENT_PATH:
       {
-        uint64_t states = shape->gpa.states;
+        uint64_t states = svg_element_get_states (shape);
 
         if (states & (G_GUINT64_CONSTANT (1) << state))
           {
-            GskPath *path = svg_shape_get_path (shape, viewport);
-            double origin = shape->gpa.origin;
-            Shape * attach_to = NULL;
+            GskPath *path = svg_element_get_path (shape, viewport, FALSE);
+            double origin = svg_element_get_gpa_origin (shape);
+            SvgElement * attach_to = NULL;
             double attach_pos;
 
             graphene_point_t pos;
@@ -236,7 +237,7 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
 
       if (state != STATE_UNSET)
         {
-          Shape *shape = path_paintable_get_content (self->paintable);
+          SvgElement *shape = path_paintable_get_content (self->paintable);
 
           snapshot_spines (snapshot, &bounds, self->paintable, shape, state, viewport, scale, &c, stroke);
         }

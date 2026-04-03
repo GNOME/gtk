@@ -1,0 +1,49 @@
+<interface>
+  <template class="NumberEditor" parent="GtkWidget">
+    <style>
+      <class name="number-editor"/>
+      <class name="linked"/>
+    </style>
+    <child>
+      <object class="GtkSpinButton" id="value_spin">
+        <property name="hexpand">1</property>
+        <property name="numeric">1</property>
+        <property name="digits">2</property>
+        <property name="adjustment">
+          <object class="GtkAdjustment">
+            <property name="step-increment">0.1</property>
+            <property name="page-increment">1</property>
+            <property name="lower" bind-source="NumberEditor" bind-property="min" bind-flags="sync-create"/>
+            <property name="upper" bind-source="NumberEditor" bind-property="max" bind-flags="sync-create"/>
+            <property name="value" bind-source="NumberEditor" bind-property="value" bind-flags="bidirectional | sync-create"/>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkDropDown" id="unit_dropdown">
+        <property name="show-arrow">0</property>
+        <property name="model">
+          <object class="GtkStringList">
+            <items>
+              <item> </item>
+              <item>%</item>
+              <item>px</item>
+              <item>pt</item>
+              <item>in</item>
+              <item>cm</item>
+              <item>mm</item>
+              <item>vw</item>
+              <item>vh</item>
+              <item>vmin</item>
+              <item>vmax</item>
+              <item>em</item>
+              <item>ex</item>
+            </items>
+          </object>
+        </property>
+        <property name="selected" bind-source="NumberEditor" bind-property="unit" bind-flags="bidirectional | sync-create"/>
+      </object>
+    </child>
+  </template>
+</interface>

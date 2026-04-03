@@ -20,6 +20,7 @@
  */
 
 #include "path-editor.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 
 struct _PathEditor
@@ -115,17 +116,18 @@ path_to_svg_path (GskPath *path)
 /* {{{ Callbacks */
 
 static void
-collect_ids (Shape    *shape,
+collect_ids (SvgElement    *shape,
              gpointer  data)
 {
   GMenu *menu = data;
 
-  if (shape->type == SHAPE_CLIP_PATH && shape->id != NULL)
+  if (svg_element_get_type (shape) == SVG_ELEMENT_CLIP_PATH &&
+      svg_element_get_id (shape) != NULL)
     {
       g_autoptr (GMenuItem) item = NULL;
 
-      item = g_menu_item_new (shape->id, NULL);
-      g_menu_item_set_action_and_target (item, "set_id", "s", shape->id);
+      item = g_menu_item_new (svg_element_get_id (shape), NULL);
+      g_menu_item_set_action_and_target (item, "set_id", "s", svg_element_get_id (shape));
       g_menu_append_item (menu, item);
     }
 }
@@ -142,7 +144,7 @@ path_cmds_clicked (PathEditor *self)
       g_menu_item_set_action_and_target (item, "set_id", "s", "");
       g_menu_append_item (menu, item);
 
-      svg_foreach_shape (path_paintable_get_svg (self->paintable)->content, collect_ids, menu);
+      svg_element_foreach (path_paintable_get_svg (self->paintable)->content, collect_ids, menu);
 
       gtk_menu_button_set_menu_model (self->id_dropdown, G_MENU_MODEL (menu));
     }
@@ -186,8 +188,8 @@ path_cmds_activated (PathEditor *self)
 
   if (self->paintable)
     {
-      Shape *shape = path_paintable_get_shape_by_id (self->paintable, text);
-      if (shape && shape->type == SHAPE_CLIP_PATH)
+      SvgElement *shape = path_paintable_get_shape_by_id (self->paintable, text);
+      if (shape && svg_element_get_type (shape) == SVG_ELEMENT_CLIP_PATH)
         id = text;
     }
 

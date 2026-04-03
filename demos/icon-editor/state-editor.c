@@ -22,6 +22,7 @@
 #include "state-editor.h"
 #include "shape-editor.h"
 #include "path-paintable.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 struct _StateEditor
 {
@@ -56,7 +57,7 @@ static void repopulate (StateEditor *self);
 
 static GdkPaintable *
 get_paintable_for_shape (StateEditor *self,
-                         Shape       *shape)
+                         SvgElement       *shape)
 {
   return shape_get_path_image (shape, path_paintable_get_svg (self->paintable));
 }
@@ -73,22 +74,25 @@ valid_state_name (const char *name)
 }
 
 static unsigned int
-find_max_state (Shape *shape)
+find_max_state (SvgElement *shape)
 {
-  if (shape->type == SHAPE_SVG || shape->type == SHAPE_GROUP)
+  uint64_t states = svg_element_get_states (shape);
+
+  if (svg_element_get_type (shape) == SVG_ELEMENT_SVG ||
+      svg_element_get_type (shape) == SVG_ELEMENT_GROUP)
     {
       unsigned int state = 0;
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
+      for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
         {
-          Shape *sh = g_ptr_array_index (shape->shapes, i);
+          SvgElement *sh = svg_element_get_child (shape, i);
           state = MAX (state, find_max_state (sh));
         }
       return state;
     }
-  else if (shape->gpa.states == 0 || shape->gpa.states == G_MAXUINT64)
+  else if (states == 0 || states == G_MAXUINT64)
     return 0;
   else
-    return g_bit_nth_msf (shape->gpa.states, -1);
+    return g_bit_nth_msf (states, -1);
 }
 
 static void
@@ -301,23 +305,23 @@ clear_paths (StateEditor *self)
 
 static void
 create_paths_for_shape (StateEditor  *self,
-                        Shape        *shape,
+                        SvgElement   *shape,
                         unsigned int *row)
 {
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
+  for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
     {
-      Shape *sh = g_ptr_array_index (shape->shapes, i);
+      SvgElement *sh = svg_element_get_child (shape, i);
 
-      if (sh->type == SHAPE_GROUP)
+      if (svg_element_get_type (sh) == SVG_ELEMENT_GROUP)
         {
           create_paths_for_shape (self, sh, row);
           continue;
         }
       else if (shape_is_graphical (sh))
         {
-          uint64_t states = sh->gpa.states;
+          uint64_t states = svg_element_get_states (sh);
+          const char *id = svg_element_get_id (sh);
           GdkPaintable *paintable = get_paintable_for_shape (self, sh);
-          const char *id = sh->id;
           GtkWidget *child;
 
           child = gtk_image_new_from_paintable (paintable);

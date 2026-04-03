@@ -24,6 +24,7 @@
 #include "path-paintable.h"
 #include "gtk/svg/gtksvgnumberprivate.h"
 #include "gtk/svg/gtksvgviewboxprivate.h"
+#include "gtk/svg/gtksvgelementprivate.h"
 
 
 static void size_changed (PaintableEditor *self);
@@ -95,7 +96,7 @@ clear_shape_editors (PaintableEditor *self)
 
 static void
 append_shape_editor (PaintableEditor *self,
-                     Shape           *shape)
+                     SvgElement      *shape)
 {
   ShapeEditor *pe;
 
@@ -110,14 +111,14 @@ append_shape_editor (PaintableEditor *self,
 static void
 create_shape_editors (PaintableEditor *self)
 {
-  Shape *content;
+  SvgElement *content;
 
   gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
   content = path_paintable_get_content (self->paintable);
-  for (unsigned int i = 0; i < content->shapes->len; i++)
+  for (unsigned int i = 0; i < svg_element_get_n_children (content); i++)
     {
-      Shape *shape = g_ptr_array_index (content->shapes, i);
+      SvgElement *shape = svg_element_get_child (content, i);
       append_shape_editor (self, shape);
     }
 }
@@ -138,9 +139,11 @@ static void
 update_viewbox (PaintableEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  SvgValue *value;
   graphene_rect_t rect;
 
-  if (svg_shape_attr_get_viewbox (svg->content, SHAPE_ATTR_VIEW_BOX, &rect))
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  if (svg_view_box_get (value, &rect))
     {
       g_autofree char *text = g_strdup_printf ("%g", rect.origin.x);
       gtk_editable_set_text (GTK_EDITABLE (self->viewbox_x), text);
@@ -170,7 +173,7 @@ typedef struct
 } ShapeCountData;
 
 static void
-count_shapes (Shape    *shape,
+count_shapes (SvgElement    *shape,
               gpointer  data)
 {
   ShapeCountData *d = data;
@@ -182,7 +185,7 @@ count_shapes (Shape    *shape,
 
   d->graphical++;
 
-  if ((shape->gpa.states & (G_GUINT64_CONSTANT (1) << d->state)) == 0)
+  if ((svg_element_get_states (shape) & (G_GUINT64_CONSTANT (1) << d->state)) == 0)
     return;
 
   d->current++;
@@ -219,7 +222,7 @@ update_summary (PaintableEditor *self)
 
       counts.state = state;
       counts.all = counts.graphical = counts.current = 0;
-      svg_foreach_shape (svg->content, count_shapes, &counts);
+      svg_element_foreach (svg->content, count_shapes, &counts);
 
       if (state < n_names)
         summary1 = g_strdup_printf ("Current state: %u (%s)", state, names[state]);
@@ -421,16 +424,19 @@ set_size (PaintableEditor *self,
           double           height)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  SvgValue *value;
   graphene_rect_t rect;
 
   svg->width = width;
   svg->height = height;
 
-  svg_shape_attr_set (svg->content, SHAPE_ATTR_WIDTH, svg_number_new (width));
-  svg_shape_attr_set (svg->content, SHAPE_ATTR_HEIGHT, svg_number_new (height));
+  svg_element_take_base_value (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
+  svg_element_take_base_value (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
 
-  if (!svg_shape_attr_get_viewbox (svg->content, SHAPE_ATTR_VIEW_BOX, &rect))
-    svg_shape_attr_set (svg->content, SHAPE_ATTR_VIEW_BOX,
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+
+  if (!svg_view_box_get (value, &rect))
+    svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
                         svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
 
   path_paintable_changed (self->paintable);
@@ -470,8 +476,8 @@ viewbox_changed (PaintableEditor *self)
   res += sscanf (text, "%lf", &h);
   if (res == 4 && w > 0 && h > 0)
     {
-      svg_shape_attr_set (svg->content, SHAPE_ATTR_VIEW_BOX,
-                          svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
+      svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
+                                   svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
 
       path_paintable_changed (self->paintable);
       gdk_paintable_invalidate_size (GDK_PAINTABLE (self->paintable));
@@ -807,15 +813,18 @@ paintable_editor_add_path (PaintableEditor *self)
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   GskPathBuilder *builder;
   g_autoptr (GskPath) path = NULL;
-  Shape *content;
+  SvgElement *content;
   size_t idx;
-  Shape *shape;
+  SvgElement *shape;
+  SvgValue *value;
   graphene_rect_t rect;
+  char *id;
 
-  if (svg->content->shapes->len == 0 && svg->width == 0 && svg->height == 0)
+  if (svg_element_get_n_children (svg->content) == 0 && svg->width == 0 && svg->height == 0)
     set_size (self, 100, 100);
 
-  svg_shape_attr_get_viewbox (svg->content, SHAPE_ATTR_VIEW_BOX, &rect);
+  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  svg_view_box_get (value, &rect);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_move_to (builder, rect.origin.x, rect.origin.y);
@@ -825,10 +834,12 @@ paintable_editor_add_path (PaintableEditor *self)
   idx = path_paintable_add_path (self->paintable, path);
 
   shape = path_paintable_get_shape (self->paintable, idx);
-  shape->id = path_paintable_find_unused_id (self->paintable, "path");
+  id = path_paintable_find_unused_id (self->paintable, "path");
+  svg_element_set_id (shape, id);
+  g_free (id);
 
   content = path_paintable_get_content (self->paintable);
-  append_shape_editor (self, g_ptr_array_index (content->shapes, content->shapes->len - 1));
+  append_shape_editor (self, svg_element_get_child (content, svg_element_get_n_children (content) - 1));
   g_signal_handlers_unblock_by_func (self->paintable, paths_changed, self);
 }
 

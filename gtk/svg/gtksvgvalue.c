@@ -160,9 +160,9 @@ svg_value_distance (const SvgValue *value0,
 
 SvgValue *
 svg_value_default_resolve (const SvgValue    *value,
-                           ShapeAttr          attr,
+                           SvgProperty        attr,
                            unsigned int       idx,
-                           Shape             *shape,
+                           SvgElement        *shape,
                            SvgComputeContext *context)
 {
   return svg_value_ref ((SvgValue *) value);
@@ -170,9 +170,9 @@ svg_value_default_resolve (const SvgValue    *value,
 
 SvgValue *
 svg_value_resolve (const SvgValue    *value,
-                   ShapeAttr          attr,
+                   SvgProperty        attr,
                    unsigned int       idx,
-                   Shape             *shape,
+                   SvgElement        *shape,
                    SvgComputeContext *context)
 {
   return value->class->resolve (value, attr, idx, shape, context);

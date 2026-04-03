@@ -24,7 +24,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtksvgprivate.h"
 #include "gtksvgvalueprivate.h"
-#include "gtksvgenumsprivate.h"
+#include "gtksvgunitprivate.h"
 
 G_BEGIN_DECLS
 

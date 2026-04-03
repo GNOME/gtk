@@ -23,6 +23,7 @@
 
 #include "gtksvghrefprivate.h"
 #include "gtksvgvalueprivate.h"
+#include "gtksvgelementinternal.h"
 
 /* The difference between HREF_PLAIN and HREF_URL is about
  * the accepted syntax: plain fragment vs url(). When
@@ -35,7 +36,7 @@ typedef struct
   HrefKind kind;
 
   char *ref;
-  Shape *shape;
+  SvgElement *shape;
   GdkTexture *texture;
 } SvgHref;
 
@@ -187,7 +188,7 @@ svg_href_get_kind (const SvgValue *value)
   return href->kind;
 }
 
-Shape *
+SvgElement *
 svg_href_get_shape (const SvgValue *value)
 {
   const SvgHref *href = (const SvgHref *) value;
@@ -198,8 +199,8 @@ svg_href_get_shape (const SvgValue *value)
 }
 
 void
-svg_href_set_shape (SvgValue *value,
-                    Shape    *shape)
+svg_href_set_shape (SvgValue   *value,
+                    SvgElement *shape)
 {
   SvgHref *href = (SvgHref *) value;
 

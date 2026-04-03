@@ -28,7 +28,13 @@
 #include "gtk/svg/gtksvgenumsprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 
+
+#define NO_STATES 0
+#define ALL_STATES 0xffffffffffffffff
+
 #define DEFAULT_FONT_SIZE 13.333
+
+#define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 
 static inline void
 _sincos (double x, double *_sin, double *_cos)

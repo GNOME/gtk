@@ -23,7 +23,7 @@
 
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtksvgtypesprivate.h"
-#include "gtksvgenumsprivate.h"
+#include "gtksvgunitprivate.h"
 #include "gtksvgprivate.h"
 
 G_BEGIN_DECLS

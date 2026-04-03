@@ -24,6 +24,7 @@
 #include "gtksvgclipprivate.h"
 #include "gtksvgvalueprivate.h"
 #include "gtksvgpathdataprivate.h"
+#include "gtksvgelementinternal.h"
 
 #define FILL_RULE_OMITTED 0xffff
 
@@ -40,7 +41,7 @@ typedef struct
     } path;
     struct {
       char *ref;
-      Shape *shape;
+      SvgElement *shape;
     } ref;
   };
 } SvgClip;
@@ -347,7 +348,7 @@ svg_clip_get_id (const SvgValue *value)
     return clip->ref.ref;
 }
 
-Shape *
+SvgElement *
 svg_clip_get_shape (const SvgValue *value)
 {
   const SvgClip *clip = (const SvgClip *) value;
@@ -381,8 +382,8 @@ svg_clip_get_path (const SvgValue *value)
 }
 
 void
-svg_clip_set_shape (SvgValue *value,
-                    Shape    *shape)
+svg_clip_set_shape (SvgValue   *value,
+                    SvgElement *shape)
 {
   SvgClip *clip = (SvgClip *) value;
 
