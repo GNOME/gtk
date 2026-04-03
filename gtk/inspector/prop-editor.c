@@ -1131,22 +1131,15 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_ENUM)
     {
-      GEnumClass *eclass;
-      GtkStringList *names;
-      int j;
+      GtkEnumList *list;
+      GtkExpression *expression;
 
-      eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
-
-      names = gtk_string_list_new (NULL);
-      for (j = 0; j < eclass->n_values; j++)
-        gtk_string_list_append (names, eclass->values[j].value_nick);
-
-      prop_edit = gtk_drop_down_new (G_LIST_MODEL (names), NULL);
+      list = gtk_enum_list_new (spec->value_type);
+      expression = gtk_property_expression_new (GTK_TYPE_ENUM_LIST_ITEM, NULL, "nick");
+      prop_edit = gtk_drop_down_new (G_LIST_MODEL (list), expression);
 
       connect_controller (G_OBJECT (prop_edit), "notify::selected",
                           object, spec, G_CALLBACK (enum_modified));
-
-      g_type_class_unref (eclass);
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (enum_changed),
