@@ -37,7 +37,6 @@ gsk_private_gpu_shaders = files([
 gsk_private_gpu_shader_headers = []
 gsk_generated_gpu_shader_sources = []
 gsk_private_gpu_gl_shaders = []
-gsk_private_gpu_vulkan_shaders = []
 gsk_private_gpu_vulkan_sources = [ gsk_private_gpu_include_shaders, gsk_private_gpu_shaders ]
 
 generate_interface = find_program('generate-glsl-interface.py')
@@ -94,49 +93,5 @@ foreach shader: gsk_private_gpu_shaders
                              capture: true)
   gsk_private_gpu_gl_shaders += gl_shader
 
-  if (have_vulkan)
-    glslc_options = [
-      [ fs.name (fs.replace_suffix (shader, '')) + '.vert.spv',
-        [ '--target-env=vulkan1.0',
-          '-fshader-stage=vertex',
-          '-DGSK_VERTEX_SHADER=1',
-          '-I'+meson.current_source_dir(),
-          '-I'+meson.current_build_dir(),
-        ]
-      ],
-      [ fs.name (fs.replace_suffix (shader, '')) + '.frag.spv',
-        [ '--target-env=vulkan1.0',
-          '-fshader-stage=fragment',
-          '-DGSK_FRAGMENT_SHADER=1',
-          '-I'+meson.current_source_dir(),
-          '-I'+meson.current_build_dir(),
-        ]
-      ],
-      [ fs.name (fs.replace_suffix (shader, '')) + '-clipmask.frag.spv',
-        [ '--target-env=vulkan1.0',
-          '-fshader-stage=fragment',
-          '-DGSK_FRAGMENT_SHADER=1',
-          '-DGSK_VULKAN_HAS_CLIP_MASK',
-          '-I'+meson.current_source_dir(),
-          '-I'+meson.current_build_dir(),
-        ]
-      ],
-    ]
-    foreach option: glslc_options
-      target = custom_target(option.get(0),
-                             input: shader,
-                             output: option.get(0),
-                             depends: shader_glsl,
-                             depend_files: gsk_private_gpu_include_shaders,
-                             command: [
-                               glslc,
-                               '-std=450',
-                               option.get(1),
-                               '@INPUT@',
-                               '-o', '@OUTPUT@'
-                             ])
-      gsk_private_gpu_vulkan_shaders += target
-    endforeach
-  endif
 endforeach
 

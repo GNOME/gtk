@@ -721,8 +721,7 @@ glslang_dep = [
   cc.find_library('stdc++', required: vulkan_enabled),
 ]
 
-glslc = find_program('glslc', required: vulkan_enabled)
-if vulkan_dep.found() and glslc.found()
+if vulkan_dep.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
   glslang_deps = [ glslang_dep ]

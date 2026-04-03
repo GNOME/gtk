@@ -576,32 +576,6 @@ gsk_vulkan_pipeline_create_vk_shader_module_for_glsl (GdkDisplay        *display
   return shader;
 }
 
-static VkShaderModule
-gsk_vulkan_pipeline_create_vk_shader_module_for_spirv (GdkDisplay *display,
-                                                       const char *resource_name)
-{
-  VkShaderModule shader;
-  GError *error = NULL;
-  GBytes *bytes;
-
-  bytes = g_resources_lookup_data (resource_name, 0, &error);
-  if (bytes == NULL)
-    {
-      GDK_DEBUG (VULKAN, "Error loading shader data: %s", error->message);
-      g_clear_error (&error);
-      return VK_NULL_HANDLE;
-    }
-
-  shader = gsk_vulkan_pipeline_create_vk_shader_module (display,
-                                                        g_bytes_get_data (bytes, NULL),
-                                                        g_bytes_get_size (bytes));
-
-
-  g_bytes_unref (bytes);
-
-  return shader;
-}
-
 GskVulkanPipeline *
 gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
                          VkPipelineLayout           vk_layout,
@@ -619,6 +593,7 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
   GdkDisplay *display;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR", "MASK", "MASK-ONE", "MASK-ALPHA", "MASK-INV-ALPHA" };
+  char *shader_name;
 
   result = g_hash_table_lookup (priv->pipeline_cache,
                                 &(GskVulkanPipeline) {
@@ -649,44 +624,21 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
   result->blend = blend;
   result->vk_format = vk_format;
 
-  if (g_getenv ("GSK_VULKAN_PRECOMPILED") == NULL)
-    {
-      char *shader_name = g_strconcat ("/org/gtk/libgsk/shaders/sources/",
-                                       op_class->shader_name,
-                                       ".glsl",
-                                       NULL);
+  shader_name = g_strconcat ("/org/gtk/libgsk/shaders/sources/",
+                             op_class->shader_name,
+                             ".glsl",
+                             NULL);
 
-      result->vk_vertex_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_glsl (display,
-                                                                                       flags,
-                                                                                       GLSLANG_STAGE_VERTEX,
-                                                                                       shader_name);
-      result->vk_fragment_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_glsl (display,
-                                                                                         flags,
-                                                                                         GLSLANG_STAGE_FRAGMENT,
-                                                                                         shader_name);
+  result->vk_vertex_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_glsl (display,
+                                                                                   flags,
+                                                                                   GLSLANG_STAGE_VERTEX,
+                                                                                   shader_name);
+  result->vk_fragment_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_glsl (display,
+                                                                                     flags,
+                                                                                     GLSLANG_STAGE_FRAGMENT,
+                                                                                     shader_name);
 
-      g_free (shader_name);
-    }
-  else
-    {
-      char *vertex_shader_name, *fragment_shader_name;
-
-      vertex_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
-                                        op_class->shader_name,
-                                        ".vert.spv",
-                                        NULL);
-      fragment_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
-                                          op_class->shader_name,
-                                          gsk_gpu_shader_flags_has_clip_mask (flags) ? "-clipmask" : "",
-                                          ".frag.spv",
-                                          NULL);
-
-      result->vk_vertex_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_spirv (display, vertex_shader_name);
-      result->vk_fragment_shader = gsk_vulkan_pipeline_create_vk_shader_module_for_spirv (display, fragment_shader_name);
-
-      g_free (fragment_shader_name);
-      g_free (vertex_shader_name);
-    }
+  g_free (shader_name);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, display->vk_device,
                                            display->vk_pipeline_cache,

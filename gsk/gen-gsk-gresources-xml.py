@@ -22,7 +22,6 @@ def replace_if_changed(new, old):
 
 sources = []
 gl_source_shaders = []
-vulkan_compiled_shaders = []
 
 for f in sys.argv[2:]:
   if f.endswith('.glsl'):
@@ -30,8 +29,6 @@ for f in sys.argv[2:]:
       gl_source_shaders.append(f)
     else:
       sources.append(f)
-  elif f.endswith('.spv'):
-    vulkan_compiled_shaders.append(f)
   else:
     raise Exception(f"No idea what XML to generate for {f}")
 
@@ -48,11 +45,6 @@ xml += '\n'
 
 for f in gl_source_shaders:
   xml += '    <file alias=\'shaders/gl/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))
-
-xml += '\n'
-
-for f in vulkan_compiled_shaders:
-  xml += '    <file alias=\'shaders/vulkan/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '''
   </gresource>
