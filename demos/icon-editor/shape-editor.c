@@ -24,6 +24,7 @@
 #include "path-paintable.h"
 #include "color-editor.h"
 #include "mini-graph.h"
+#include "number-editor.h"
 #include "path-editor.h"
 #include "transform-editor.h"
 #include "gtk/svg/gtksvgvalueprivate.h"
@@ -55,23 +56,23 @@ struct _ShapeEditor
   GtkDropDown *shape_dropdown;
   PathEditor *path_editor;
   GtkBox *polyline_box;
-  GtkEntry *line_x1;
-  GtkEntry *line_y1;
-  GtkEntry *line_x2;
-  GtkEntry *line_y2;
-  GtkEntry *circle_cx;
-  GtkEntry *circle_cy;
-  GtkEntry *circle_r;
-  GtkEntry *ellipse_cx;
-  GtkEntry *ellipse_cy;
-  GtkEntry *ellipse_rx;
-  GtkEntry *ellipse_ry;
-  GtkEntry *rect_x;
-  GtkEntry *rect_y;
-  GtkEntry *rect_width;
-  GtkEntry *rect_height;
-  GtkEntry *rect_rx;
-  GtkEntry *rect_ry;
+  NumberEditor *line_x1;
+  NumberEditor *line_y1;
+  NumberEditor *line_x2;
+  NumberEditor *line_y2;
+  NumberEditor *circle_cx;
+  NumberEditor *circle_cy;
+  NumberEditor *circle_r;
+  NumberEditor *ellipse_cx;
+  NumberEditor *ellipse_cy;
+  NumberEditor *ellipse_rx;
+  NumberEditor *ellipse_ry;
+  NumberEditor *rect_x;
+  NumberEditor *rect_y;
+  NumberEditor *rect_width;
+  NumberEditor *rect_height;
+  NumberEditor *rect_rx;
+  NumberEditor *rect_ry;
   GtkEditableLabel *id_label;
   GtkDropDown *origin;
   GtkDropDown *transition_type;
@@ -86,9 +87,9 @@ struct _ShapeEditor
   GtkDropDown *animation_easing;
   MiniGraph *mini_graph;
   ColorEditor *stroke_paint;
-  GtkSpinButton *min_width;
-  GtkSpinButton *line_width;
-  GtkSpinButton *max_width;
+  NumberEditor *line_width;
+  NumberEditor *min_width;
+  NumberEditor *max_width;
   GtkDropDown *line_join;
   GtkDropDown *line_cap;
   ColorEditor *fill_paint;
@@ -120,27 +121,6 @@ enum
 static GParamSpec *properties[NUM_PROPERTIES];
 
 /* {{{ Callbacks */
-
-static gboolean
-get_number_from_entry (GtkEntry *entry,
-                       double   *value)
-{
-  if (!sscanf (gtk_editable_get_text (GTK_EDITABLE (entry)), "%lf", value))
-    {
-      gtk_widget_error_bell (GTK_WIDGET (entry));
-      gtk_widget_add_css_class (GTK_WIDGET (entry), "error");
-      gtk_accessible_update_state (GTK_ACCESSIBLE (entry),
-                                   GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
-                                   -1);
-      return FALSE;
-    }
-  else
-    {
-      gtk_widget_remove_css_class (GTK_WIDGET (entry), "error");
-      gtk_accessible_reset_state (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_STATE_INVALID);
-      return TRUE;
-    }
-}
 
 static void
 shape_changed (ShapeEditor *self)
@@ -196,70 +176,70 @@ shape_changed (ShapeEditor *self)
     case SVG_ELEMENT_LINE:
       {
         double x1, y1, x2, y2;
+        SvgUnit ux1, uy1, ux2, uy2;
 
-        if (!get_number_from_entry (self->line_x1, &x1) ||
-            !get_number_from_entry (self->line_y1, &y1) ||
-            !get_number_from_entry (self->line_x2, &x2) ||
-            !get_number_from_entry (self->line_y2, &y2))
-          return;
+        number_editor_get (self->line_x1, &x1, &ux1);
+        number_editor_get (self->line_y1, &y1, &uy1);
+        number_editor_get (self->line_x2, &x2, &ux2);
+        number_editor_get (self->line_y2, &y2, &uy2);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, svg_number_new (x1));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, svg_number_new (y1));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, svg_number_new (x2));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, svg_number_new (y2));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, svg_number_new_full (ux1, x1));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, svg_number_new_full (uy1, y1));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, svg_number_new_full (ux2, x2));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, svg_number_new_full (uy2, y2));
         path_paintable_changed (self->paintable);
       }
       break;
     case SVG_ELEMENT_CIRCLE:
       {
         double cx, cy, r;
+        SvgUnit ux, uy, ur;
 
-        if (!get_number_from_entry (self->circle_cx, &cx) ||
-            !get_number_from_entry (self->circle_cy, &cy) ||
-            !get_number_from_entry (self->circle_r, &r))
-          return;
+        number_editor_get (self->circle_cx, &cx, &ux);
+        number_editor_get (self->circle_cy, &cy, &uy);
+        number_editor_get (self->circle_r, &r, &ur);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new (cx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new (cy));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_R, svg_number_new (r));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_R, svg_number_new_full (ur, r));
         path_paintable_changed (self->paintable);
       }
       break;
     case SVG_ELEMENT_ELLIPSE:
       {
         double cx, cy, rx, ry;
+        SvgUnit ux, uy, urx, ury;
 
-        if (!get_number_from_entry (self->ellipse_cx, &cx) ||
-            !get_number_from_entry (self->ellipse_cy, &cy) ||
-            !get_number_from_entry (self->ellipse_rx, &rx) ||
-            !get_number_from_entry (self->ellipse_ry, &ry))
-          return;
+        number_editor_get (self->ellipse_cx, &cx, &ux);
+        number_editor_get (self->ellipse_cy, &cy, &uy);
+        number_editor_get (self->ellipse_rx, &rx, &urx);
+        number_editor_get (self->ellipse_ry, &ry, &ury);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new (cx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new (cy));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new (rx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new (ry));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
         path_paintable_changed (self->paintable);
       }
       break;
     case SVG_ELEMENT_RECT:
       {
         double x, y, width, height, rx, ry;
+        SvgUnit ux, uy, uw, uh, urx, ury;
 
-        if (!get_number_from_entry (self->rect_x, &x) ||
-            !get_number_from_entry (self->rect_y, &y) ||
-            !get_number_from_entry (self->rect_width, &width) ||
-            !get_number_from_entry (self->rect_height, &height) ||
-            !get_number_from_entry (self->rect_rx, &rx) ||
-            !get_number_from_entry (self->rect_ry, &ry))
-          return;
+        number_editor_get (self->rect_x, &x, &ux);
+        number_editor_get (self->rect_y, &y, &uy);
+        number_editor_get (self->rect_width, &width, &uw);
+        number_editor_get (self->rect_height, &height, &uh);
+        number_editor_get (self->rect_rx, &rx, &urx);
+        number_editor_get (self->rect_ry, &ry, &ury);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X, svg_number_new (x));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, svg_number_new (y));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, svg_number_new (width));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, svg_number_new (height));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new (rx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new (ry));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_X, svg_number_new_full (ux, x));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, svg_number_new_full (uy, y));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, svg_number_new_full (uw, width));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, svg_number_new_full (uh, height));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -268,26 +248,28 @@ shape_changed (ShapeEditor *self)
       {
         unsigned int n_rows = 0;
         double *parms;
+        SvgUnit *units;
         unsigned int i;
 
         for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
           n_rows++;
 
         parms = g_newa (double, 2 * n_rows);
+        units = g_newa (SvgUnit, 2 * n_rows);
 
         i = 0;
         for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->polyline_box)); child; child = gtk_widget_get_next_sibling (child))
           {
-            GtkWidget *widget = gtk_widget_get_first_child (child);
-            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
-              return;
+            GtkWidget *editor;
 
-            widget = gtk_widget_get_next_sibling (widget);
-            if (!get_number_from_entry (GTK_ENTRY (widget), &parms[i++]))
-              return;
+            editor = gtk_widget_get_first_child (child);
+            number_editor_get (NUMBER_EDITOR (editor), &parms[2 * i], &units[2 * i]);
+            editor = gtk_widget_get_next_sibling (editor);
+            number_editor_get (NUMBER_EDITOR (editor), &parms[2 * i + 1], &units[2 * i + 1]);
+            i++;
           }
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, svg_numbers_new (parms, 2 * n_rows));
+        svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, svg_numbers_new_full (parms, units, 2 * n_rows));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -336,20 +318,20 @@ static void
 polyline_add_row (ShapeEditor *self)
 {
   GtkBox *box;
-  GtkEntry *entry;
+  NumberEditor *entry;
   GtkButton *button;
 
   box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
-  gtk_widget_add_css_class (GTK_WIDGET (box), "linked");
-  entry = GTK_ENTRY (gtk_entry_new ());
-  gtk_editable_set_text (GTK_EDITABLE (entry), "0");
-  g_signal_connect_swapped (entry, "activate", G_CALLBACK (shape_changed), self);
+  entry = number_editor_new ();
+  g_signal_connect_swapped (entry, "notify::value", G_CALLBACK (shape_changed), self);
+  g_signal_connect_swapped (entry, "notify::unit", G_CALLBACK (shape_changed), self);
   gtk_box_append (box, GTK_WIDGET (entry));
-  entry = GTK_ENTRY (gtk_entry_new ());
-  gtk_editable_set_text (GTK_EDITABLE (entry), "0");
-  g_signal_connect_swapped (entry, "activate", G_CALLBACK (shape_changed), self);
+  entry = number_editor_new ();
+  g_signal_connect_swapped (entry, "notify::value", G_CALLBACK (shape_changed), self);
+  g_signal_connect_swapped (entry, "notify::unit", G_CALLBACK (shape_changed), self);
   gtk_box_append (box, GTK_WIDGET (entry));
   button = GTK_BUTTON (gtk_button_new_from_icon_name ("user-trash-symbolic"));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (button), "Delete Point");
   g_signal_connect (button, "clicked", G_CALLBACK (polyline_delete_row), self);
   gtk_box_append (box, GTK_WIDGET (button));
 
@@ -779,7 +761,9 @@ stroke_changed (ShapeEditor *self)
 {
   gboolean do_stroke;
   double width, stroke_width;
+  SvgUnit width_unit, stroke_width_unit;
   double min, max, stroke_min, stroke_max;
+  SvgUnit min_unit, max_unit, stroke_min_unit, stroke_max_unit;
   GskLineJoin line_join, linejoin;
   GskLineCap line_cap, linecap;
   double miter_limit, miterlimit;
@@ -787,22 +771,19 @@ stroke_changed (ShapeEditor *self)
   unsigned int symbolic, stroke_symbolic;
   const GdkRGBA *color;
   GdkRGBA stroke_color;
-  const graphene_rect_t *viewport;
   PaintKind kind;
   SvgValue *value;
 
   if (self->updating)
     return;
 
-  viewport = path_paintable_get_viewport (self->paintable);
-
   line_join = gtk_drop_down_get_selected (self->line_join);
   line_cap = gtk_drop_down_get_selected (self->line_cap);
   miter_limit = gtk_range_get_value (GTK_RANGE (self->miter_limit));
 
-  width = gtk_spin_button_get_value (self->line_width);
-  min = gtk_spin_button_get_value (self->min_width);
-  max = gtk_spin_button_get_value (self->max_width);
+  number_editor_get (self->line_width, &width, &width_unit);
+  number_editor_get (self->min_width, &min, &min_unit);
+  number_editor_get (self->max_width, &max, &max_unit);
 
   selected = color_editor_get_color_type (self->stroke_paint);
   if (selected == 0)
@@ -834,17 +815,26 @@ stroke_changed (ShapeEditor *self)
   else if (kind == PAINT_COLOR)
     gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &stroke_color);
 
-  stroke_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_WIDTH, viewport);
-  stroke_min = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, viewport);
-  stroke_max = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, viewport);
+  value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH);
+  stroke_width = svg_number_get (value, 100);
+  stroke_width_unit = svg_number_get_unit (value);
+
+  value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH);
+  stroke_min = svg_number_get (value, 100);
+  stroke_min_unit = svg_number_get_unit (value);
+
+  value = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH);
+  stroke_max = svg_number_get (value, 100);
+  stroke_max_unit = svg_number_get_unit (value);
+
   linecap = svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
   linejoin = svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN));
-  miterlimit = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, viewport);
+  miterlimit = svg_number_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT), 100);
 
   if (do_stroke == (kind != PAINT_NONE) &&
-      width == stroke_width &&
-      min == stroke_min &&
-      max == stroke_max &&
+      width == stroke_width && width_unit == stroke_width_unit &&
+      min == stroke_min && min_unit == stroke_min_unit &&
+      max == stroke_max && max_unit == stroke_max_unit &&
       linecap == line_cap &&
       linejoin == line_join &&
       miterlimit == miter_limit &&
@@ -863,9 +853,9 @@ stroke_changed (ShapeEditor *self)
   else
     svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new (width));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new (min));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new (max));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new_full (width_unit, width));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new_full (min_unit, min));
+  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new_full (max_unit, max));
   svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
   svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
   svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
@@ -1313,9 +1303,7 @@ shape_editor_update (ShapeEditor *self)
       SvgValue *tf;
       unsigned int symbolic;
       GdkRGBA color;
-      double line_width;
-      double min_width, max_width;
-      char buffer[128];
+      SvgValue *line_width, *min_width, *max_width;
       const graphene_rect_t *viewport;
       PaintKind kind;
       unsigned int idx;
@@ -1353,90 +1341,78 @@ shape_editor_update (ShapeEditor *self)
                         NULL);
         }
 
-      gtk_editable_set_text (GTK_EDITABLE (self->line_x1), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->line_y1), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->line_x2), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->line_y2), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->circle_cx), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->circle_cy), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->circle_r), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cx), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cy), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_rx), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->ellipse_ry), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_x), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_y), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_width), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_height), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), "0");
-      gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), "0");
+      number_editor_set (self->line_x1, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->line_y1, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->line_x2, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->line_y2, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->circle_cx, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->circle_cy, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->circle_r, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->ellipse_cx, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->ellipse_cy, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->ellipse_rx, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->ellipse_ry, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_x, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_y, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_width, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_height, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_rx, 0, SVG_UNIT_NUMBER);
+      number_editor_set (self->rect_ry, 0, SVG_UNIT_NUMBER);
 
       gtk_drop_down_set_selected (self->shape_dropdown, type);
       switch ((unsigned int) type)
         {
         case SVG_ELEMENT_LINE:
           {
-            double x1, y1, x2, y2;
-
-            x1 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X1, viewport);
-            y1 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y1, viewport);
-            x2 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X2, viewport);
-            y2 = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y2, viewport);
-
-            gtk_editable_set_text (GTK_EDITABLE (self->line_x1), g_ascii_formatd (buffer, sizeof (buffer), "%g", x1));
-            gtk_editable_set_text (GTK_EDITABLE (self->line_y1), g_ascii_formatd (buffer, sizeof (buffer), "%g", y1));
-            gtk_editable_set_text (GTK_EDITABLE (self->line_x2), g_ascii_formatd (buffer, sizeof (buffer), "%g", x2));
-            gtk_editable_set_text (GTK_EDITABLE (self->line_y2), g_ascii_formatd (buffer, sizeof (buffer), "%g", y2));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_X1);
+            number_editor_set (self->line_x1, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_Y1);
+            number_editor_set (self->line_y1, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_X2);
+            number_editor_set (self->line_x2, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_Y2);
+            number_editor_set (self->line_y2, svg_number_get (value, 100), svg_number_get_unit (value));
           }
           break;
 
         case SVG_ELEMENT_CIRCLE:
           {
-            double cx, cy, r;
-
-            cx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CX, viewport);
-            cy = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CY, viewport);
-            r = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_R, viewport);
-
-            gtk_editable_set_text (GTK_EDITABLE (self->circle_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", cx));
-            gtk_editable_set_text (GTK_EDITABLE (self->circle_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", cy));
-            gtk_editable_set_text (GTK_EDITABLE (self->circle_r), g_ascii_formatd (buffer, sizeof (buffer), "%g", r));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_CX);
+            number_editor_set (self->circle_cx, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_CY);
+            number_editor_set (self->circle_cy, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_R);
+            number_editor_set (self->circle_r, svg_number_get (value, 100), svg_number_get_unit (value));
           }
           break;
 
         case SVG_ELEMENT_ELLIPSE:
           {
-            double cx, cy, rx, ry;
-
-            cx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CX, viewport);
-            cy = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_CY, viewport);
-            rx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RX, viewport);
-            ry = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RY, viewport);
-
-            gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cx), g_ascii_formatd (buffer, sizeof (buffer), "%g", cx));
-            gtk_editable_set_text (GTK_EDITABLE (self->ellipse_cy), g_ascii_formatd (buffer, sizeof (buffer), "%g", cy));
-            gtk_editable_set_text (GTK_EDITABLE (self->ellipse_rx), g_ascii_formatd (buffer, sizeof (buffer), "%g", rx));
-            gtk_editable_set_text (GTK_EDITABLE (self->ellipse_ry), g_ascii_formatd (buffer, sizeof (buffer), "%g", ry));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_CX);
+            number_editor_set (self->ellipse_cx, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_CY);
+            number_editor_set (self->ellipse_cy, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_RX);
+            number_editor_set (self->ellipse_rx, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_RY);
+            number_editor_set (self->ellipse_ry, svg_number_get (value, 100), svg_number_get_unit (value));
           }
           break;
 
         case SVG_ELEMENT_RECT:
           {
-            double x, y, width, height, rx, ry;
-
-            x = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_X, viewport);
-            y = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_Y, viewport);
-            width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_WIDTH, viewport);
-            height = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_HEIGHT, viewport);
-            rx = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RX, viewport);
-            ry = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_RY, viewport);
-
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_x), g_ascii_formatd (buffer, sizeof (buffer), "%g", x));
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_y), g_ascii_formatd (buffer, sizeof (buffer), "%g", y));
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_width), g_ascii_formatd (buffer, sizeof (buffer), "%g", width));
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_height), g_ascii_formatd (buffer, sizeof (buffer), "%g", height));
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_rx), g_ascii_formatd (buffer, sizeof (buffer), "%g", rx));
-            gtk_editable_set_text (GTK_EDITABLE (self->rect_ry), g_ascii_formatd (buffer, sizeof (buffer), "%g", ry));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_X);
+            number_editor_set (self->rect_x, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_Y);
+            number_editor_set (self->rect_y, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_WIDTH);
+            number_editor_set (self->rect_width, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_HEIGHT);
+            number_editor_set (self->rect_height, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_RX);
+            number_editor_set (self->rect_rx, svg_number_get (value, 100), svg_number_get_unit (value));
+            value = svg_element_get_base_value (self->shape, SVG_PROPERTY_RY);
+            number_editor_set (self->rect_ry, svg_number_get (value, 100), svg_number_get_unit (value));
           }
           break;
 
@@ -1518,13 +1494,13 @@ shape_editor_update (ShapeEditor *self)
 
       color_editor_set_color (self->stroke_paint, &color);
 
-      line_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_WIDTH, viewport);
-      min_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, viewport);
-      max_width = svg_shape_attr_get_number (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, viewport);
+      line_width = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH);
+      min_width = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH);
+      max_width = svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH);
 
-      gtk_spin_button_set_value (self->min_width, min_width);
-      gtk_spin_button_set_value (self->line_width, line_width);
-      gtk_spin_button_set_value (self->max_width, max_width);
+      number_editor_set (self->line_width, svg_number_get (line_width, 100), svg_number_get_unit (line_width));
+      number_editor_set (self->min_width, svg_number_get (min_width, 100), svg_number_get_unit (min_width));
+      number_editor_set (self->max_width, svg_number_get (max_width, 100), svg_number_get_unit (max_width));
 
       gtk_drop_down_set_selected (self->line_join, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN)));
       gtk_drop_down_set_selected (self->line_cap, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP)));
@@ -1770,6 +1746,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   g_type_ensure (MINI_GRAPH_TYPE);
   g_type_ensure (PATH_EDITOR_TYPE);
   g_type_ensure (transform_editor_get_type ());
+  g_type_ensure (number_editor_get_type ());
 
   object_class->get_property = shape_editor_get_property;
   object_class->dispose = shape_editor_dispose;

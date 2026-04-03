@@ -226,15 +226,15 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="line_x1">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="line_x1">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="line_y1">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="line_y1">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -277,15 +277,15 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="line_x2">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="line_x2">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="line_y2">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="line_y2">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -328,15 +328,15 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="rect_x">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_x">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="rect_y">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_y">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -379,15 +379,17 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="rect_width">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_width">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="rect_height">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_height">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -430,15 +432,17 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="rect_rx">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_rx">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="rect_ry">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="rect_ry">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -481,15 +485,15 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="circle_cx">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="circle_cx">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="circle_cy">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="circle_cy">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -517,9 +521,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="circle_r">
-            <property name="text">0</property>
-            <signal name="activate" handler="shape_changed" swapped="yes"/>
+          <object class="NumberEditor" id="circle_r">
+            <property name="min">0</property>
+            <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+            <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
             <binding name="visible">
               <closure type="gboolean" function="bb_and_uint_equal">
                 <lookup name="expanded">expander</lookup>
@@ -573,15 +578,15 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="ellipse_cx">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="ellipse_cx">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="ellipse_cy">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="ellipse_cy">
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -624,15 +629,17 @@
               <property name="column">1</property>
             </layout>
             <child>
-              <object class="GtkEntry" id="ellipse_rx">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="ellipse_rx">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="ellipse_ry">
-                <property name="text">0</property>
-                <signal name="activate" handler="shape_changed" swapped="yes"/>
+              <object class="NumberEditor" id="ellipse_ry">
+                <property name="min">0</property>
+                <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
           </object>
@@ -681,22 +688,22 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox">
-                    <style><class name="linked"/></style>
                     <child>
-                      <object class="GtkEntry">
-                        <property name="text">0</property>
-                        <signal name="activate" handler="shape_changed" swapped="yes"/>
+                      <object class="NumberEditor">
+                        <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                        <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkEntry">
-                        <property name="text">0</property>
-                        <signal name="activate" handler="shape_changed" swapped="yes"/>
+                      <object class="NumberEditor">
+                        <signal name="notify::value" handler="shape_changed" swapped="yes"/>
+                        <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkButton">
                         <property name="icon-name">user-trash-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Delete Point</property>
                         <signal name="clicked" handler="polyline_delete_row" swapped="no"/>
                       </object>
                     </child>
@@ -708,6 +715,7 @@
               <object class="GtkButton">
                 <property name="valign">start</property>
                 <property name="icon-name">list-add-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Add Point</property>
                 <signal name="clicked" handler="polyline_add_row" swapped="yes"/>
               </object>
             </child>
@@ -1876,7 +1884,7 @@
         </child>
 
         <child>
-          <object class="GtkSpinButton" id="line_width">
+          <object class="NumberEditor" id="line_width">
             <binding name="visible">
               <closure type="gboolean" function="bb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
@@ -1886,25 +1894,15 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
-            <property name="numeric">1</property>
-            <property name="digits">2</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">25</property>
-                <property name="value">2</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-size">0</property>
-              </object>
-            </property>
+            <property name="min">0</property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::unit" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">40</property>
               <property name="column">1</property>
             </layout>
           </object>
         </child>
-
 
         <child>
           <object class="GtkLabel" id="line_min_label">
@@ -1930,7 +1928,7 @@
         </child>
 
         <child>
-          <object class="GtkSpinButton" id="min_width">
+          <object class="NumberEditor" id="min_width">
             <binding name="visible">
               <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
@@ -1941,18 +1939,9 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
-            <property name="numeric">1</property>
-            <property name="digits">2</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">25</property>
-                <property name="value">2</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-size">0</property>
-              </object>
-            </property>
+            <property name="min">0</property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::unit" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">41</property>
               <property name="column">1</property>
@@ -1984,7 +1973,7 @@
         </child>
 
         <child>
-          <object class="GtkSpinButton" id="max_width">
+          <object class="NumberEditor" id="max_width">
             <binding name="visible">
               <closure type="gboolean" function="bbb_and_uint_unequal">
                 <lookup name="expanded">expander</lookup>
@@ -1995,18 +1984,9 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
-            <property name="numeric">1</property>
-            <property name="digits">2</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">0</property>
-                <property name="upper">25</property>
-                <property name="value">2</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-size">0</property>
-              </object>
-            </property>
+            <property name="min">0</property>
             <signal name="notify::value" handler="stroke_changed" swapped="yes"/>
+            <signal name="notify::unit" handler="stroke_changed" swapped="yes"/>
             <layout>
               <property name="row">42</property>
               <property name="column">1</property>
