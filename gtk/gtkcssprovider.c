@@ -2002,6 +2002,11 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
       else
         priv->prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
     }
+  else
+    {
+      priv->prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DEFAULT;
+      priv->prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+    }
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
