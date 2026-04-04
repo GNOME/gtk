@@ -446,16 +446,6 @@ gsk_gpu_rect_to_float (const graphene_rect_t  *rect,
 }
 
 static inline void
-gsk_rect_round_larger (graphene_rect_t *rect)
-{
-  float x = floor (rect->origin.x);
-  float y = floor (rect->origin.y);
-  *rect = GRAPHENE_RECT_INIT (x, y,
-                              ceil (rect->origin.x + rect->size.width) - x,
-                              ceil (rect->origin.y + rect->size.height) - y);
-}
-
-static inline void
 gsk_rect_scale (const graphene_rect_t *r,
                 float                  sx,
                 float                  sy,
