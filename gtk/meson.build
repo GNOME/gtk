@@ -845,24 +845,6 @@ gtkprivatetypebuiltins = gnome.mkenums('gtkprivatetypebuiltins',
 
 gtkprivatetypebuiltins_h = gtkprivatetypebuiltins[1]
 
-# Generate gtktypefuncs.inc
-typefuncs = custom_target('gtktypefuncs.inc',
-  depends: [ gdkenum_h, gskenum_h, ],
-  output: 'gtktypefuncs.inc',
-  input: gdk_headers +
-    gsk_public_headers +
-    gtk_public_headers +
-    gtk_deprecated_headers +
-    [ gtktypebuiltins_h, ] +
-    [ gtk_css_enum_h, gdkenum_h, gskenum_h, ],
-  command: [
-    find_program('gentypefuncs.py'),
-    '@OUTPUT@',
-    '@INPUT@',
-  ],
-  install: false,
-)
-
 if os_win32
   xdp_dbus_generated = []
 else
@@ -1055,6 +1037,25 @@ darwin_versions = [
 
 # this needs to happen after mkenums (since the svg code uses gtk enum types)
 subdir('svg')
+
+# Generate gtktypefuncs.inc
+typefuncs = custom_target('gtktypefuncs.inc',
+  depends: [ gdkenum_h, gskenum_h, ],
+  output: 'gtktypefuncs.inc',
+  input: gdk_headers +
+    gsk_public_headers +
+    gtk_public_headers +
+    gtk_svg_public_headers +
+    gtk_deprecated_headers +
+    [ gtktypebuiltins_h, ] +
+    [ gtk_css_enum_h, gdkenum_h, gskenum_h, ],
+  command: [
+    find_program('gentypefuncs.py'),
+    '@OUTPUT@',
+    '@INPUT@',
+  ],
+  install: false,
+)
 
 # Library
 libgtk_static = static_library('gtk',
