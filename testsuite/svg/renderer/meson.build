@@ -10,6 +10,7 @@ test_data = [
   'bad-filter.svg',
   'bad-gradient.svg',
   'blend-mode.svg',
+  'blend-mode-no-animation.test',
   'circle.svg',
   'circular.svg',
   'clip.svg',
