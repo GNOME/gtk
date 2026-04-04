@@ -97,7 +97,8 @@ toggle_playing (GtkWidget *widget,
 }
 
 static GtkSvg * load_animation_file (const char     *filename,
-                                     GtkSvgFeatures  features);
+                                     GtkSvgFeatures  features,
+                                     const char     *style);
 
 static gboolean
 restart (GtkWidget *widget,
@@ -107,13 +108,15 @@ restart (GtkWidget *widget,
   GtkSvg *svg;
   const char *filename;
   GtkSvgFeatures features;
+  const char *stylesheet;
 
   svg = GTK_SVG (gtk_picture_get_paintable (GTK_PICTURE (widget)));
   features = gtk_svg_get_features (svg);
 
   filename = (const char *) g_object_get_data (G_OBJECT (widget), "filename");
+  stylesheet = (const char *) g_object_get_data (G_OBJECT (widget), "style");
 
-  svg = load_animation_file (filename, features);
+  svg = load_animation_file (filename, features, stylesheet);
 
   gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (widget));
 
@@ -155,13 +158,23 @@ error_cb (GtkSvg *svg, GError *error)
 
 static GtkSvg *
 load_animation_file (const char     *filename,
-                     GtkSvgFeatures  features)
+                     GtkSvgFeatures  features,
+                     const char     *stylesheet)
 {
   char *contents;
   size_t length;
   GBytes *bytes;
   GError *error = NULL;
   GtkSvg *svg;
+  GBytes *style = NULL;
+
+  if (stylesheet)
+    {
+      if (!g_file_get_contents (stylesheet, &contents, &length, NULL))
+        g_printerr ("Failed to load style sheet from '%s'\n", stylesheet);
+      else
+        style = g_bytes_new_take (contents, length);
+    }
 
   if (!g_file_get_contents (filename, &contents, &length, &error))
     {
@@ -173,10 +186,12 @@ load_animation_file (const char     *filename,
 
   svg = gtk_svg_new ();
   gtk_svg_set_features (svg, features);
+  gtk_svg_set_stylesheet (svg, style);
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
   gtk_svg_load_from_bytes (svg, bytes);
 
   g_bytes_unref (bytes);
+  g_clear_pointer (&style, g_bytes_unref);
 
   return svg;
 }
@@ -185,7 +200,8 @@ static void
 show_files (char           **filenames,
             gboolean         decorated,
             int              size,
-            GtkSvgFeatures   features)
+            GtkSvgFeatures   features,
+            const char      *stylesheet)
 {
   GtkWidget *sw;
   GtkWidget *window;
@@ -235,7 +251,7 @@ show_files (char           **filenames,
       GtkShortcutTrigger *trigger;
       GtkShortcutAction *action;
 
-      svg = load_animation_file (filenames[i], features);
+      svg = load_animation_file (filenames[i], features, stylesheet);
 
       gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (window));
 
@@ -256,6 +272,8 @@ show_files (char           **filenames,
         }
 
       g_object_set_data_full (G_OBJECT (picture), "filename", g_strdup (filenames[i]), g_free);
+
+      g_object_set_data_full (G_OBJECT (picture), "style", g_strdup (stylesheet), g_free);
 
       click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
@@ -305,6 +323,7 @@ do_play (int          *argc,
   gboolean allow_external = TRUE;
   gboolean allow_extensions = TRUE;
   gboolean traditional_symbolic = FALSE;
+  char *stylesheet = NULL;
   const GOptionEntry entries[] = {
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
     { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("SIZE") },
@@ -313,6 +332,7 @@ do_play (int          *argc,
     { "no-external-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_external, N_("Don't load external resources"), NULL },
     { "no-extensions", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_extensions, N_("Don't allow gpa extensions"), NULL },
     { "traditional-symbolic", 0, 0, G_OPTION_ARG_NONE, &traditional_symbolic, N_("Traditional symbolic icon"), NULL },
+    { "css", 0, 0, G_OPTION_ARG_FILENAME, &stylesheet, N_("Use CSS style"), N_("FILE") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -346,7 +366,7 @@ do_play (int          *argc,
              (allow_extensions ? GTK_SVG_EXTENSIONS : 0) |
              (traditional_symbolic ? GTK_SVG_TRADITIONAL_SYMBOLIC : 0);
 
-  show_files (filenames, decorated, size, features);
+  show_files (filenames, decorated, size, features, stylesheet);
 
   g_strfreev (filenames);
 }
