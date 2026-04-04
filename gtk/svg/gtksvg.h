@@ -95,6 +95,12 @@ void             gtk_svg_set_overflow      (GtkSvg        *self,
 GDK_AVAILABLE_IN_4_24
 GtkOverflow      gtk_svg_get_overflow      (GtkSvg        *self);
 
+GDK_AVAILABLE_IN_4_24
+void             gtk_svg_set_stylesheet    (GtkSvg        *self,
+                                            GBytes        *bytes);
+GDK_AVAILABLE_IN_4_24
+GBytes *         gtk_svg_get_stylesheet    (GtkSvg        *self);
+
 /**
  * GtkSvgFeatures:
  * @GTK_SVG_ANIMATIONS: Whether to run animations. If disabled,
