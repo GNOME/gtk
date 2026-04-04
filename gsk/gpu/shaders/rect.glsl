@@ -89,24 +89,6 @@ rect_size (Rect r)
 }
 
 Rect
-rect_round_larger (Rect r)
-{
-  return Rect (vec4 (floor(rect_bounds (r).xy), ceil (rect_bounds (r).zw)));
-}
-
-Rect
-rect_round_larger_smaller (Rect r)
-{
-  return Rect (mix (floor(rect_bounds (r)), ceil (rect_bounds (r)), bvec4(0, 1, 1, 0)));
-}
-
-Rect
-rect_round_smaller_larger (Rect r)
-{
-  return Rect (mix (floor(rect_bounds (r)), ceil (rect_bounds (r)), bvec4(1, 0, 0, 1)));
-}
-
-Rect
 rect_intersect (Rect a, Rect b)
 {
   vec4 result = vec4(max(rect_bounds (a).xy, rect_bounds (b).xy), min(rect_bounds (a).zw, rect_bounds (b).zw));

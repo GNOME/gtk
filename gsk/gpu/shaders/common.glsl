@@ -58,7 +58,7 @@ gsk_set_position (vec2 pos)
 vec2
 rect_get_position (Rect rect)
 {
-  Rect r = rect_round_larger (rect_clip (rect));
+  Rect r = rect_snap (rect_clip (rect), GSK_RECT_SNAP_GROW);
 
   vec2 pos = mix (rect_bounds (r).xy, rect_bounds (r).zw, offsets[GSK_VERTEX_INDEX]);
 
@@ -77,31 +77,31 @@ border_get_position (RoundedRect outside,
   switch (slice_index)
     {
     case SLICE_TOP_LEFT:
-      rect = rect_round_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW);
       rect = Rect (rect_bounds (rect).xwzy);
       break;
     case SLICE_TOP:
-      rect = rect_round_smaller_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_SHRINK_GROW);
       break;
     case SLICE_TOP_RIGHT:
-      rect = rect_round_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW);
       break;
     case SLICE_RIGHT:
-      rect = rect_round_larger_smaller (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW_SHRINK);
       break;
     case SLICE_BOTTOM_RIGHT:
-      rect = rect_round_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW);
       rect = Rect (rect_bounds (rect).zyxw);
       break;
     case SLICE_BOTTOM:
-      rect = rect_round_smaller_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_SHRINK_GROW);
       break;
     case SLICE_BOTTOM_LEFT:
-      rect = rect_round_larger (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW);
       rect = Rect (rect_bounds (rect).zwxy);
       break;
     case SLICE_LEFT:
-      rect = rect_round_larger_smaller (rect);
+      rect = rect_snap (rect, GSK_RECT_SNAP_GROW_SHRINK);
       break;
     }
 
