@@ -1,0 +1,11 @@
+rect.c2,
+rect.c3,
+rect.c4,
+rect.c5,
+rect.c6,
+rect.c7 {
+  fill: blue;
+}
+rect.c7 {
+  fill: gold !important;
+}

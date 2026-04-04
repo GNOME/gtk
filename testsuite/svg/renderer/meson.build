@@ -133,6 +133,7 @@ test_data = [
   'spec-rect.svg',
   'stroke-width.test',
   'style.svg',
+  'style-priority.test',
   'symbol.svg',
   'symbolic-color1.test',
   'symbolic-color2.test',
