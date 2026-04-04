@@ -87,6 +87,35 @@ textview {
   }
 }
 
+preedit {
+  &.whole {
+    text-decoration: underline;
+  }
+
+  &.selection {
+    background-color: $backdrop_selected_bg_color;
+    color: transparent;
+  }
+
+  &.prediction {
+    font-style: italic;
+  }
+
+  &.prefix, &.suffix {
+    color: gtkalpha(currentColor, 0.5);
+  }
+
+  &.spelling-error {
+    text-decoration: $error_color underline wavy;
+  }
+
+  &.compose-error {
+    text-decoration: $error_color line-through;
+  }
+}
+
+textview > text > preedit { @extend preedit; }
+
 textview > border { background-color: mix($bg_color, $base_color, 50%); }
 
 iconview {
@@ -354,6 +383,10 @@ entry {
         background-color: $selected_text_bg_color;
         color: $fg_color;
       }
+    }
+
+    > text > preedit {
+      @extend preedit;
     }
 
     // entry error and warning style

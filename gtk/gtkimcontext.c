@@ -18,6 +18,7 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
+#include "gtkimcontextprivate.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
@@ -82,6 +83,7 @@ typedef struct _GtkIMContextPrivate GtkIMContextPrivate;
 struct _GtkIMContextPrivate {
   GtkInputPurpose purpose;
   GtkInputHints hints;
+  GtkCssNode *parent_node;
 };
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
@@ -111,6 +113,8 @@ static void     gtk_im_context_set_property            (GObject        *obj,
                                                         guint           property_id,
                                                         const GValue   *value,
                                                         GParamSpec     *pspec);
+
+static void gtk_im_context_finalize (GObject *object);
 
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
@@ -195,6 +199,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 
   object_class->get_property = gtk_im_context_get_property;
   object_class->set_property = gtk_im_context_set_property;
+  object_class->finalize = gtk_im_context_finalize;
 
   klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
   klass->filter_keypress = gtk_im_context_real_filter_keypress;
@@ -472,6 +477,23 @@ gtk_im_context_real_get_surrounding_with_selection (GtkIMContext *context,
     }
   
   return result;
+}
+
+void
+gtk_im_context_set_parent_node (GtkIMContext *im_context,
+                                GtkCssNode   *css_node)
+{
+  GtkIMContextPrivate *priv = gtk_im_context_get_instance_private (im_context);
+
+  g_set_object (&priv->parent_node, css_node);
+}
+
+GtkCssNode *
+gtk_im_context_get_parent_node (GtkIMContext *im_context)
+{
+  GtkIMContextPrivate *priv = gtk_im_context_get_instance_private (im_context);
+
+  return priv->parent_node;
 }
 
 /**
@@ -1028,6 +1050,17 @@ gtk_im_context_set_property (GObject      *obj,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
     }
+}
+
+static void
+gtk_im_context_finalize (GObject *object)
+{
+  GtkIMContextPrivate *priv =
+    gtk_im_context_get_instance_private (GTK_IM_CONTEXT (object));
+
+  g_clear_object (&priv->parent_node);
+
+  G_OBJECT_CLASS (gtk_im_context_parent_class)->finalize (object);
 }
 
 /**

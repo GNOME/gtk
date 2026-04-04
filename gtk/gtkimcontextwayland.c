@@ -21,15 +21,22 @@
 #include <string.h>
 #include <wayland-client-protocol.h>
 
+#include "gtk/gtkcsscolorvalueprivate.h"
+#include "gtk/gtkcssstyleprivate.h"
+#include "gtk/gtkimcontextprivate.h"
 #include "gtk/gtkimcontextwaylandprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
+#include "gtk/gtkwidgetprivate.h"
 
 #include "gdk/wayland/gdkwayland.h"
 #include "text-input-unstable-v3-client-protocol.h"
 
+#define TEXT_INPUT_SUPPORTED_PROTOCOL_VERSION 2
+
 typedef struct _GtkIMContextWaylandGlobal GtkIMContextWaylandGlobal;
 typedef struct _GtkIMContextWayland GtkIMContextWayland;
 typedef struct _GtkIMContextWaylandClass GtkIMContextWaylandClass;
+typedef struct _GtkIMContextPreeditSegment GtkIMContextPreeditSegment;
 
 struct _GtkIMContextWaylandGlobal
 {
@@ -55,10 +62,18 @@ struct _GtkIMContextWaylandClass
   GtkIMContextClass parent_class;
 };
 
+struct _GtkIMContextPreeditSegment
+{
+  unsigned int hint_flags;
+  int start_idx;
+  int end_idx;
+};
+
 struct preedit {
   char *text;
   int cursor_begin;
   int cursor_end;
+  GArray *style_hints;
 };
 
 struct surrounding_delete {
@@ -70,6 +85,8 @@ struct _GtkIMContextWayland
 {
   GtkIMContext parent_instance;
   GtkWidget *widget;
+
+  GHashTable *style_css_nodes;
 
   struct {
     char *text;
@@ -85,6 +102,8 @@ struct _GtkIMContextWayland
   struct preedit pending_preedit;
 
   char *pending_commit;
+
+  uint32_t pending_action;
 
   cairo_rectangle_int_t cursor_rect;
   guint use_preedit : 1;
@@ -140,6 +159,23 @@ gtk_im_context_wayland_get_text_protocol (GdkDisplay *display)
 }
 
 static void
+notify_handled_actions (GtkIMContextWayland *context)
+{
+  GtkIMContextWaylandGlobal *global;
+  struct wl_array array;
+
+  global = gtk_im_context_wayland_get_global (context);
+
+  if (zwp_text_input_v3_get_version (global->text_input) <
+      ZWP_TEXT_INPUT_V3_SET_AVAILABLE_ACTIONS_SINCE_VERSION)
+    return;
+
+  wl_array_init (&array);
+  zwp_text_input_v3_set_available_actions (global->text_input, &array);
+  wl_array_release (&array);
+}
+
+static void
 notify_im_change (GtkIMContextWayland                 *context,
                   enum zwp_text_input_v3_change_cause  cause)
 {
@@ -156,6 +192,7 @@ notify_im_change (GtkIMContextWayland                 *context,
   notify_surrounding_text (context);
   notify_content_type (context);
   notify_cursor_location (context);
+  notify_handled_actions (context);
   commit_state (context);
 }
 
@@ -202,6 +239,7 @@ text_input_preedit_apply (GtkIMContextWaylandGlobal *global)
     g_signal_emit_by_name (context, "preedit-start");
 
   g_free (context->current_preedit.text);
+  g_clear_pointer (&context->current_preedit.style_hints, g_array_unref);
   context->current_preedit = context->pending_preedit;
   context->pending_preedit = defaults;
 
@@ -221,7 +259,7 @@ text_input_commit (void                     *data,
 
   if (!global->current)
       return;
-  
+
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
 
   g_free (context->pending_commit);
@@ -254,7 +292,7 @@ text_input_delete_surrounding_text (void                     *data,
 
   if (!global->current)
       return;
-  
+
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
 
   /* We already got byte lengths from text_input_v3, but GTK uses char lengths
@@ -402,32 +440,21 @@ notify_cursor_location (GtkIMContextWayland *context)
 {
   GtkIMContextWaylandGlobal *global;
   cairo_rectangle_int_t rect;
-  double nx, ny;
-  graphene_point_t p;
 
   global = gtk_im_context_wayland_get_global (context);
   if (global == NULL)
     return;
 
   rect = context->cursor_rect;
-  if (!gtk_widget_compute_point (context->widget,
-                                 GTK_WIDGET (gtk_widget_get_native (context->widget)),
-                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
-                                 &p))
-    graphene_point_init (&p, rect.x, rect.y);
-
-  gtk_native_get_surface_transform (gtk_widget_get_native (context->widget), &nx, &ny);
-
-  rect.x = p.x + nx;
-  rect.y = p.y + ny;
   zwp_text_input_v3_set_cursor_rectangle (global->text_input,
                                           rect.x, rect.y,
                                           rect.width, rect.height);
 }
 
 static uint32_t
-translate_hints (GtkInputHints   input_hints,
-                 GtkInputPurpose purpose)
+translate_hints (GtkIMContextWayland *context,
+                 GtkInputHints        input_hints,
+                 GtkInputPurpose      purpose)
 {
   uint32_t hints = 0;
 
@@ -443,6 +470,13 @@ translate_hints (GtkInputHints   input_hints,
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_SENTENCES)
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION;
+  if (input_hints & GTK_INPUT_HINT_NO_EMOJI)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_NO_EMOJI;
+  if (input_hints & GTK_INPUT_HINT_INHIBIT_OSK)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED;
+
+  if (context->use_preedit)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_PREEDIT_SHOWN;
 
   if (purpose == GTK_INPUT_PURPOSE_PIN ||
       purpose == GTK_INPUT_PURPOSE_PASSWORD)
@@ -505,7 +539,7 @@ notify_content_type (GtkIMContextWayland *context)
                 NULL);
 
   zwp_text_input_v3_set_content_type (global->text_input,
-                                      translate_hints (hints, purpose),
+                                      translate_hints (context, hints, purpose),
                                       translate_purpose (purpose));
 }
 
@@ -533,10 +567,34 @@ gtk_im_context_wayland_finalize (GObject *object)
   g_clear_object (&context->widget);
   g_free (context->surrounding.text);
   g_free (context->current_preedit.text);
+  g_clear_pointer (&context->current_preedit.style_hints, g_array_unref);
   g_free (context->pending_preedit.text);
+  g_clear_pointer (&context->pending_preedit.style_hints, g_array_unref);
   g_free (context->pending_commit);
 
+  g_clear_pointer (&context->style_css_nodes, g_hash_table_unref);
+
   G_OBJECT_CLASS (gtk_im_context_wayland_parent_class)->finalize (object);
+}
+
+static void
+update_css_node_state (gpointer key,
+                       gpointer value,
+                       gpointer user_data)
+{
+  GtkCssNode *css_node = value;
+  GtkStateFlags state_flags = GPOINTER_TO_UINT (user_data);
+
+  gtk_css_node_set_state (css_node, state_flags & ~GTK_STATE_FLAG_DROP_ACTIVE);
+}
+
+static void
+on_widget_state_changed (GtkWidget            *widget,
+                         GtkStateFlags         flags,
+                         GtkIMContextWayland  *context)
+{
+  g_hash_table_foreach (context->style_css_nodes,
+                        update_css_node_state, GUINT_TO_POINTER (flags));
 }
 
 static void
@@ -549,9 +607,195 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
     return;
 
   if (context_wayland->widget)
-    gtk_im_context_wayland_focus_out (context);
+    {
+      g_hash_table_remove_all (context_wayland->style_css_nodes);
+      g_signal_handlers_disconnect_by_func (context_wayland->widget,
+                                            on_widget_state_changed,
+                                            context);
+      gtk_im_context_wayland_focus_out (context);
+    }
 
   g_set_object (&context_wayland->widget, widget);
+
+  if (context_wayland->widget)
+    {
+      g_signal_connect (context_wayland->widget, "state-flags-changed",
+                        G_CALLBACK (on_widget_state_changed), context);
+    }
+}
+
+static void
+on_css_node_style_changed (GtkCssNode          *node,
+                           GtkCssStyleChange   *change,
+                           GtkIMContextWayland *context)
+{
+  if (context->widget)
+    return;
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
+    gtk_widget_queue_resize (context->widget);
+  else
+    gtk_widget_queue_draw (context->widget);
+}
+
+static GtkCssNode *
+lookup_css_node (GtkIMContextWayland *context_wayland,
+                 unsigned int         hint_flags)
+{
+  GtkCssNode *css_node, *parent_node;
+
+  css_node = g_hash_table_lookup (context_wayland->style_css_nodes,
+                                  GUINT_TO_POINTER (hint_flags));
+
+  if (!css_node)
+    {
+
+      parent_node = gtk_im_context_get_parent_node (GTK_IM_CONTEXT (context_wayland));
+      if (!parent_node)
+        parent_node = gtk_widget_get_css_node (context_wayland->widget);
+
+      if (!parent_node)
+        return NULL;
+
+      css_node = gtk_css_node_new ();
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("preedit"));
+      gtk_css_node_set_parent (css_node, parent_node);
+      gtk_css_node_set_state (css_node, gtk_css_node_get_state (parent_node));
+
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_WHOLE)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("whole"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_SELECTION)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("selection"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_PREDICTION)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("prediction"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_PREFIX)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("prefix"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_SUFFIX)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("suffix"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_SPELLING_ERROR)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("spelling-error"));
+      if ((hint_flags & (1 << ZWP_TEXT_INPUT_V3_PREEDIT_HINT_COMPOSE_ERROR)) != 0)
+        gtk_css_node_add_class (css_node, g_quark_from_static_string ("compose-error"));
+
+      g_signal_connect (css_node, "style-changed",
+                        G_CALLBACK (on_css_node_style_changed),
+                        context_wayland);
+
+      g_hash_table_insert (context_wayland->style_css_nodes, GUINT_TO_POINTER (hint_flags), css_node);
+    }
+
+  return css_node;
+}
+
+static void
+node_to_pango_attrs (GtkIMContextWayland        *context_wayland,
+                     GtkIMContextPreeditSegment *segment,
+                     GtkCssNode                 *node,
+                     PangoAttrList              *attrs)
+{
+  PangoAttrList *node_attrs;
+  PangoAttribute *attr;
+  GtkCssStyle *style;
+  const GdkRGBA *color;
+
+  node_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (node));
+  if (node_attrs)
+    {
+      GSList *attr_list, *l;
+
+      attr_list = pango_attr_list_get_attributes (node_attrs);
+
+      /* Change start/end indexes and move to the overall list */
+      for (l = attr_list; l; l = l->next)
+        {
+          attr = l->data;
+          attr->start_index = segment->start_idx;
+          attr->end_index = segment->end_idx;
+          pango_attr_list_insert (attrs, attr);
+        }
+
+      pango_attr_list_unref (node_attrs);
+      g_slist_free (attr_list);
+    }
+
+  style = gtk_css_node_get_style (node);
+
+  /* Foreground */
+  color = gtk_css_color_value_get_rgba (style->used->color);
+
+  if (color->alpha > 0)
+    {
+      attr = pango_attr_foreground_new (CLAMP (color->red * 65535. + 0.5, 0, 65535),
+                                        CLAMP (color->green * 65535. + 0.5, 0, 65535),
+                                        CLAMP (color->blue * 65535. + 0.5, 0, 65535));
+      attr->start_index = segment->start_idx;
+      attr->end_index = segment->end_idx;
+      pango_attr_list_insert (attrs, attr);
+
+      if (color->alpha < 1)
+        {
+          attr = pango_attr_foreground_alpha_new (CLAMP (color->alpha * 65535. + 0.5, 0, 65535));
+          attr->start_index = segment->start_idx;
+          attr->end_index = segment->end_idx;
+          pango_attr_list_insert (attrs, attr);
+        }
+    }
+
+  /* Background */
+  color = gtk_css_color_value_get_rgba (style->used->background_color);
+
+  if (color->alpha > 0)
+    {
+      attr = pango_attr_background_new (CLAMP (color->red * 65535. + 0.5, 0, 65535),
+                                        CLAMP (color->green * 65535. + 0.5, 0, 65535),
+                                        CLAMP (color->blue * 65535. + 0.5, 0, 65535));
+      attr->start_index = segment->start_idx;
+      attr->end_index = segment->end_idx;
+      pango_attr_list_insert (attrs, attr);
+
+      if (color->alpha < 1)
+        {
+          attr = pango_attr_background_alpha_new (CLAMP (color->alpha * 65535. + 0.5, 0, 65535));
+          attr->start_index = segment->start_idx;
+          attr->end_index = segment->end_idx;
+          pango_attr_list_insert (attrs, attr);
+        }
+    }
+}
+
+static PangoAttrList *
+convert_style_hints_to_pango (GtkIMContextWayland *context_wayland,
+                              const char          *text)
+{
+  PangoAttrList *attrs;
+  PangoAttribute *attr;
+  unsigned int i;
+
+  attrs = pango_attr_list_new ();
+
+  /* enable fallback, since IBus will send us things like ⎄ */
+  attr = pango_attr_fallback_new (TRUE);
+  attr->start_index = 0;
+  attr->end_index = strlen (text);
+  pango_attr_list_insert (attrs, attr);
+
+  if (!context_wayland->current_preedit.style_hints)
+    return attrs;
+
+  for (i = 0; i < context_wayland->current_preedit.style_hints->len; i++)
+    {
+      GtkIMContextPreeditSegment *segment;
+      GtkCssNode *node;
+
+      segment = &g_array_index (context_wayland->current_preedit.style_hints,
+                                GtkIMContextPreeditSegment, i);
+      node = lookup_css_node (context_wayland, segment->hint_flags);
+
+      if (node)
+        node_to_pango_attrs (context_wayland, segment, node, attrs);
+    }
+
+  return attrs;
 }
 
 static void
@@ -563,9 +807,6 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
   const char *preedit_str;
 
-  if (attrs)
-    *attrs = NULL;
-
   preedit_str =
     context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "";
 
@@ -575,35 +816,9 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
 
   if (str)
     *str = g_strdup (preedit_str);
+
   if (attrs)
-    {
-      PangoAttribute *attr;
-      guint len = strlen (preedit_str);
-
-      if (!*attrs)
-        *attrs = pango_attr_list_new ();
-
-      attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-      attr->start_index = 0;
-      attr->end_index = len;
-      pango_attr_list_insert (*attrs, attr);
-
-      /* enable fallback, since IBus will send us things like ⎄ */
-      attr = pango_attr_fallback_new (TRUE);
-      attr->start_index = 0;
-      attr->end_index = len;
-      pango_attr_list_insert (*attrs, attr);
-
-      if (context_wayland->current_preedit.cursor_begin
-          != context_wayland->current_preedit.cursor_end)
-        {
-          /* FIXME: Oh noes, how to highlight while taking into account user preferences? */
-          PangoAttribute *cursor = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-          cursor->start_index = context_wayland->current_preedit.cursor_begin;
-          cursor->end_index = context_wayland->current_preedit.cursor_end;
-          pango_attr_list_insert (*attrs, cursor);
-        }
-    }
+    *attrs = convert_style_hints_to_pango (context_wayland, preedit_str);
 }
 
 static void
@@ -649,6 +864,7 @@ enable (GtkIMContextWayland       *context_wayland,
         GtkIMContextWaylandGlobal *global)
 {
   zwp_text_input_v3_enable (global->text_input);
+
   notify_im_change (context_wayland,
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
 }
@@ -700,6 +916,106 @@ text_input_leave (void                     *data,
     disable (GTK_IM_CONTEXT_WAYLAND (global->current), global);
 }
 
+static void
+text_input_action (void                     *data,
+		   struct zwp_text_input_v3 *text_input,
+		   uint32_t                  action,
+		   uint32_t                  serial)
+{
+  GtkIMContextWaylandGlobal *global = data;
+  GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (global->current);
+
+  if (context)
+    context->pending_action = action;
+}
+
+static void
+text_input_language (void                     *data,
+                     struct zwp_text_input_v3 *text_input,
+                     const char               *lang)
+{
+}
+
+static void
+text_input_preedit_hint (void                                *data,
+                         struct zwp_text_input_v3            *text_input,
+                         uint32_t                             begin,
+                         uint32_t                             end,
+                         enum zwp_text_input_v3_preedit_hint  hint)
+{
+  GtkIMContextWaylandGlobal *global = data;
+  GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (global->current);
+  GtkIMContextPreeditSegment *segment, new_segment;
+  int first_start_idx = G_MAXINT, last_end_idx = -1;
+  unsigned int i;
+
+  if (!context->pending_preedit.style_hints)
+    {
+      context->pending_preedit.style_hints =
+        g_array_new (FALSE, FALSE, sizeof (GtkIMContextPreeditSegment));
+    }
+
+  /* Convert to a list of non-overlapping segments */
+  for (i = 0; i < context->pending_preedit.style_hints->len; i++)
+    {
+      segment = &g_array_index (context->current_preedit.style_hints,
+                                GtkIMContextPreeditSegment, i);
+
+      /* This segment is unaffected by the new hint */
+      if (begin >= segment->end_idx || end < segment->start_idx)
+        continue;
+
+      if (begin <= segment->start_idx && end >= segment->end_idx)
+        {
+          /* Segment is affected as a whole */
+          segment->hint_flags |= (1 << hint);
+        }
+      else
+        {
+          if (end < segment->end_idx)
+            {
+              /* Partition at the end */
+              new_segment.start_idx = end;
+              new_segment.end_idx = segment->end_idx;
+              new_segment.hint_flags = (1 << hint);
+              segment->end_idx = end;
+              g_array_insert_val (context->pending_preedit.style_hints, i + 1, new_segment);
+            }
+
+          if (begin > segment->start_idx)
+            {
+              /* Partition at the beginning */
+              new_segment.start_idx = segment->start_idx;
+              new_segment.end_idx = begin;
+              new_segment.hint_flags = (1 << hint);
+              segment->start_idx = begin;
+              g_array_insert_val (context->pending_preedit.style_hints, i, new_segment);
+            }
+        }
+
+      first_start_idx = MIN (segment->start_idx, first_start_idx);
+      last_end_idx = segment->end_idx;
+    }
+
+  /* Prepend any missing segment */
+  if (begin < first_start_idx)
+    {
+      new_segment.start_idx = begin;
+      new_segment.end_idx = first_start_idx;
+      new_segment.hint_flags = (1 << hint);
+      g_array_prepend_val (context->pending_preedit.style_hints, new_segment);
+      last_end_idx = MAX (last_end_idx, end);
+    }
+
+  /* Append any missing segment */
+  if (last_end_idx >= 0 && end > last_end_idx)
+    {
+      new_segment.start_idx = last_end_idx;
+      new_segment.end_idx = end;
+      new_segment.hint_flags = (1 << hint);
+      g_array_append_val (context->pending_preedit.style_hints, new_segment);
+    }
+}
 
 static const struct zwp_text_input_v3_listener text_input_listener = {
   text_input_enter,
@@ -708,6 +1024,9 @@ static const struct zwp_text_input_v3_listener text_input_listener = {
   text_input_commit,
   text_input_delete_surrounding_text,
   text_input_done,
+  text_input_action,
+  text_input_language,
+  text_input_preedit_hint,
 };
 
 static void
@@ -725,7 +1044,8 @@ registry_handle_global (void               *data,
       global->text_input_manager_wl_id = id;
       global->text_input_manager =
         wl_registry_bind (global->registry, global->text_input_manager_wl_id,
-                          &zwp_text_input_manager_v3_interface, 1);
+                          &zwp_text_input_manager_v3_interface,
+                          MIN (version, TEXT_INPUT_SUPPORTED_PROTOCOL_VERSION));
       global->text_input =
         zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
                                                   gdk_wayland_seat_get_wl_seat (seat));
@@ -832,19 +1152,41 @@ gtk_im_context_wayland_reset (GtkIMContext *context)
 
 static void
 gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
-                                            GdkRectangle *rect)
+                                            GdkRectangle *cursor_rect)
 {
   GtkIMContextWayland *context_wayland;
+  double nx, ny;
+  GdkRectangle rect;
+  graphene_point_t p;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
-  if (context_wayland->cursor_rect.x == rect->x &&
-      context_wayland->cursor_rect.y == rect->y &&
-      context_wayland->cursor_rect.width == rect->width &&
-      context_wayland->cursor_rect.height == rect->height)
+  /* May happen along destruction */
+  if (!context_wayland->widget)
     return;
 
-  context_wayland->cursor_rect = *rect;
+  /* Compute surface-local coordinates */
+  rect = *cursor_rect;
+  if (!gtk_widget_compute_point (context_wayland->widget,
+                                 GTK_WIDGET (gtk_widget_get_native (context_wayland->widget)),
+                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
+                                 &p))
+    graphene_point_init (&p, rect.x, rect.y);
+
+  gtk_native_get_surface_transform (gtk_widget_get_native (context_wayland->widget),
+                                    &nx, &ny);
+  rect.x = p.x + nx;
+  rect.y = p.y + ny;
+
+  if (context_wayland->cursor_rect.x != rect.x ||
+      context_wayland->cursor_rect.y != rect.y ||
+      context_wayland->cursor_rect.width != rect.width ||
+      context_wayland->cursor_rect.height != rect.height)
+    {
+      context_wayland->cursor_rect = rect;
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+    }
 }
 
 static void
@@ -917,9 +1259,16 @@ gtk_im_context_wayland_activate_osk_with_event (GtkIMContext *context,
   if (global == NULL)
     return FALSE;
 
-  zwp_text_input_v3_enable (global->text_input);
-  notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
-                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+  if (zwp_text_input_v3_get_version (global->text_input) >=
+      ZWP_TEXT_INPUT_V3_SHOW_INPUT_PANEL_SINCE_VERSION)
+    zwp_text_input_v3_show_input_panel (global->text_input);
+  else
+    {
+      zwp_text_input_v3_enable (global->text_input);
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+    }
+
   return TRUE;
 }
 
@@ -953,6 +1302,13 @@ on_content_type_changed (GtkIMContextWayland *context)
 }
 
 static void
+unset_css_node (GtkCssNode *node)
+{
+  gtk_css_node_set_parent (node, NULL);
+  g_object_unref (node);
+}
+
+static void
 gtk_im_context_wayland_init (GtkIMContextWayland *context)
 {
   context->use_preedit = TRUE;
@@ -960,4 +1316,6 @@ gtk_im_context_wayland_init (GtkIMContextWayland *context)
                             G_CALLBACK (on_content_type_changed), context);
   g_signal_connect_swapped (context, "notify::input-hints",
                             G_CALLBACK (on_content_type_changed), context);
+  context->style_css_nodes =
+    g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) unset_css_node);
 }
