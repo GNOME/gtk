@@ -1395,7 +1395,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
        * filtering are available */
       graphene_rect_inset (&clip_bounds, -0.5, -0.5);
       /* finally, round to full pixels */
-      gsk_rect_round_larger (&clip_bounds);
+      gsk_rect_snap (&clip_bounds, GSK_RECT_SNAP_GROW, &clip_bounds);
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
         {
