@@ -38,5 +38,6 @@ gboolean     svg_element_type_is_gradient          (SvgElementType  type);
 gboolean     svg_element_type_is_filter            (SvgElementType  type);
 gboolean     svg_element_type_never_rendered       (SvgElementType  type);
 gboolean     svg_element_type_is_clip_path_content (SvgElementType  type);
+gboolean     svg_element_type_is_graphical         (SvgElementType  type);
 
 G_END_DECLS
