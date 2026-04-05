@@ -260,15 +260,15 @@ path_paintable_get_property (GObject      *object,
   switch (property_id)
     {
     case PROP_STATE:
-      g_value_set_uint (value, path_paintable_get_state (self));
+      g_value_set_uint (value, gtk_svg_get_state (self->svg));
       break;
 
     case PROP_WEIGHT:
-      g_value_set_double (value, path_paintable_get_weight (self));
+      g_value_set_double (value, gtk_svg_get_weight (self->svg));
       break;
 
     case PROP_PLAYING:
-      g_value_set_boolean (value, path_paintable_get_playing (self));
+      g_value_set_boolean (value, self->svg->playing);
       break;
 
     default:
@@ -409,42 +409,6 @@ path_paintable_new (void)
 }
 
 void
-path_paintable_set_size (PathPaintable *self,
-                         double         width,
-                         double         height)
-{
-  self->svg->width = width;
-  self->svg->height = height;
-
-  svg_element_take_base_value (self->svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
-  svg_element_take_base_value (self->svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
-  svg_element_take_base_value (self->svg->content,
-                      SVG_PROPERTY_VIEW_BOX,
-                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
-  g_signal_emit (self, signals[CHANGED], 0);
-  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
-}
-
-double
-path_paintable_get_width (PathPaintable *self)
-{
-  return self->svg->width;
-}
-
-double
-path_paintable_get_height (PathPaintable *self)
-{
-  return self->svg->height;
-}
-
-SvgElement *
-path_paintable_get_shape (PathPaintable *self,
-                          size_t         path)
-{
-  return (SvgElement *) svg_element_get_child (self->svg->content, path);
-}
-
-void
 shape_set_default_attrs (SvgElement *shape)
 {
   svg_element_set_states (shape, ALL_STATES);
@@ -462,92 +426,6 @@ shape_set_default_attrs (SvgElement *shape)
   svg_element_take_base_value (shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (GSK_LINE_JOIN_ROUND));
 }
 
-size_t
-path_paintable_add_path (PathPaintable *self,
-                         GskPath       *path)
-{
-  SvgElement *shape;
-
-  shape = svg_element_new (self->svg->content, SVG_ELEMENT_PATH);
-  svg_element_add_child (self->svg->content, shape);
-  shape_set_default_attrs (shape);
-  svg_element_take_base_value (shape, SVG_PROPERTY_PATH, svg_path_new (path));
-
-  g_signal_emit (self, signals[CHANGED], 0);
-  g_signal_emit (self, signals[PATHS_CHANGED], 0);
-
-  return svg_element_get_n_children (self->svg->content) - 1;
-}
-
-size_t
-path_paintable_add_shape (PathPaintable  *self,
-                          SvgElementType  type,
-                          double         *params,
-                          unsigned int    n_params)
-{
-  SvgElement *shape;
-
-  shape = svg_element_new (self->svg->content, type);
-  svg_element_add_child (self->svg->content, shape);
-
-  shape_set_default_attrs (shape);
-
-  switch ((unsigned int) type)
-    {
-    case SVG_ELEMENT_LINE:
-      svg_element_take_base_value (shape, SVG_PROPERTY_X1, svg_number_new (params[0]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_Y1, svg_number_new (params[1]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_X2, svg_number_new (params[2]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_Y2, svg_number_new (params[3]));
-      break;
-    case SVG_ELEMENT_CIRCLE:
-      svg_element_take_base_value (shape, SVG_PROPERTY_CX, svg_number_new (params[0]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_CY, svg_number_new (params[1]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_R, svg_number_new (params[2]));
-      break;
-    case SVG_ELEMENT_ELLIPSE:
-      svg_element_take_base_value (shape, SVG_PROPERTY_CX, svg_number_new (params[0]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_CY, svg_number_new (params[1]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_RX, svg_number_new (params[2]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_RY, svg_number_new (params[3]));
-      break;
-    case SVG_ELEMENT_RECT:
-      svg_element_take_base_value (shape, SVG_PROPERTY_X, svg_number_new (params[0]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_Y, svg_number_new (params[1]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_WIDTH, svg_number_new (params[2]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_HEIGHT, svg_number_new (params[3]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_RX, svg_number_new (params[4]));
-      svg_element_take_base_value (shape, SVG_PROPERTY_RY, svg_number_new (params[5]));
-      break;
-    case SVG_ELEMENT_POLYLINE:
-    case SVG_ELEMENT_POLYGON:
-      svg_element_take_base_value (shape, SVG_PROPERTY_POINTS, svg_numbers_new (params, n_params));
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  g_signal_emit (self, signals[CHANGED], 0);
-  g_signal_emit (self, signals[PATHS_CHANGED], 0);
-
-  return svg_element_get_n_children (self->svg->content) - 1;
-}
-
-void
-path_paintable_set_path_states (PathPaintable *self,
-                                size_t         idx,
-                                uint64_t       states)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  if (svg_element_get_states (shape) == states)
-    return;
-
-  svg_element_set_states (shape, states);
-
-  g_signal_emit (self, signals[CHANGED], 0);
-}
-
 void
 path_paintable_set_path_states_by_id (PathPaintable *self,
                                       const char    *id,
@@ -561,37 +439,6 @@ path_paintable_set_path_states_by_id (PathPaintable *self,
   svg_element_set_states (shape, states);
 
   g_signal_emit (self, signals[CHANGED], 0);
-}
-
-const char *
-path_paintable_get_path_id (PathPaintable *self,
-                            size_t         idx)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  return svg_element_get_id (shape);
-}
-
-void
-path_paintable_get_attach_path (PathPaintable *self,
-                                size_t         idx,
-                                size_t        *to,
-                                double        *pos)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-  SvgElement *sh;
-
-  svg_element_get_gpa_attachment (shape, NULL, pos, &sh);
-
-  for (unsigned int i = 0; i < svg_element_get_n_children (self->svg->content); i++)
-    {
-      SvgElement *s = svg_element_get_child (self->svg->content, i);
-      if (s == sh)
-        {
-          *to = i;
-          break;
-        }
-    }
 }
 
 static SvgElement *
@@ -629,95 +476,6 @@ path_paintable_get_attach_path_for_shape (PathPaintable  *self,
 {
   svg_element_get_gpa_attachment (shape, NULL, pos, NULL);
   *to = find_attach_shape (self->svg->content, shape);
-}
-
-void
-path_paintable_set_keywords (PathPaintable *self,
-                             const char    *keywords)
-{
-  if (g_set_str (&self->svg->keywords, keywords))
-    g_signal_emit (self, signals[CHANGED], 0);
-}
-
-const char *
-path_paintable_get_keywords (PathPaintable *self)
-{
-  return self->svg->keywords;
-}
-
-void
-path_paintable_set_description (PathPaintable *self,
-                                const char    *description)
-{
-  if (g_set_str (&self->svg->description, description))
-    g_signal_emit (self, signals[CHANGED], 0);
-}
-
-const char *
-path_paintable_get_description (PathPaintable *self)
-{
-  return self->svg->description;
-}
-
-void
-path_paintable_set_author (PathPaintable *self,
-                           const char    *author)
-{
-  if (g_set_str (&self->svg->author, author))
-    g_signal_emit (self, signals[CHANGED], 0);
-}
-
-const char *
-path_paintable_get_author (PathPaintable *self)
-{
-  return self->svg->author;
-}
-
-void
-path_paintable_set_license (PathPaintable *self,
-                            const char    *license)
-{
-  if (g_set_str (&self->svg->license, license))
-    g_signal_emit (self, signals[CHANGED], 0);
-}
-
-const char *
-path_paintable_get_license (PathPaintable *self)
-{
-  return self->svg->license;
-}
-
-size_t
-path_paintable_get_n_paths (PathPaintable *self)
-{
-  return svg_element_get_n_children (self->svg->content);
-}
-
-GskPath *
-path_paintable_get_path (PathPaintable *self,
-                         size_t         idx)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  return svg_element_get_path (shape, &self->viewport, FALSE);
-}
-
-uint64_t
-path_paintable_get_path_states (PathPaintable *self,
-                                size_t         idx)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  return svg_element_get_states (shape);
-}
-
-double
-path_paintable_get_path_origin (PathPaintable *self,
-                                size_t         idx)
-{
-  SvgElement *shape = path_paintable_get_shape (self, idx);
-
-  return svg_element_get_gpa_origin (shape);
 }
 
 PathPaintable *
@@ -893,12 +651,6 @@ path_paintable_get_path_by_id (PathPaintable *self,
   return NULL;
 }
 
-SvgElement *
-path_paintable_get_content (PathPaintable *self)
-{
-  return self->svg->content;
-}
-
 void
 path_paintable_set_state (PathPaintable *self,
                           unsigned int   state)
@@ -935,81 +687,6 @@ path_paintable_set_weight (PathPaintable *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEIGHT]);
 }
 
-double
-path_paintable_get_weight (PathPaintable *self)
-{
-  return gtk_svg_get_weight (self->svg);
-}
-
-static unsigned int
-shape_get_max_state (SvgElement *shape)
-{
-  if (svg_element_get_type (shape) == SVG_ELEMENT_GROUP ||
-      svg_element_get_type (shape) == SVG_ELEMENT_LINK ||
-      svg_element_get_type (shape) == SVG_ELEMENT_SVG)
-    {
-      unsigned int state = 0;
-
-      for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
-        {
-          SvgElement *sh = svg_element_get_child (shape, i);
-          state = MAX (state, shape_get_max_state (sh));
-        }
-
-      return state;
-    }
-  else if (svg_element_get_states (shape) == 0)
-    {
-      return 0;
-    }
-  else if (svg_element_get_states (shape) == ALL_STATES)
-    {
-      return 63;
-    }
-  else
-    {
-      return g_bit_nth_msf (svg_element_get_states (shape), -1);
-    }
-}
-
-unsigned int
-path_paintable_get_max_state (PathPaintable *self)
-{
-  unsigned int state;
-  unsigned int n_names;
-
-  state = shape_get_max_state (self->svg->content);
-
-  gtk_svg_get_state_names (self->svg, &n_names);
-  if (n_names > 0)
-    return MAX (state, n_names - 1);
-
-  return state;
-}
-
-const char **
-path_paintable_get_state_names (PathPaintable *self,
-                                unsigned int  *length)
-{
-  return gtk_svg_get_state_names (self->svg, length);
-}
-
-gboolean
-path_paintable_set_state_names (PathPaintable  *self,
-                                const char    **names)
-{
-  g_signal_emit (self, signals[CHANGED], 0);
-
-  return gtk_svg_set_state_names (self->svg, names);
-}
-
-gboolean
-path_paintable_equal (PathPaintable *self,
-                      PathPaintable *other)
-{
-  return gtk_svg_equal (self->svg, other->svg);
-}
-
 PathPaintable *
 path_paintable_new_from_bytes (GBytes  *bytes,
                                GError **error)
@@ -1039,12 +716,6 @@ path_paintable_new_from_resource (const char *resource)
   return res;
 }
 
-const graphene_rect_t *
-path_paintable_get_viewport (PathPaintable *self)
-{
-  return &self->viewport;
-}
-
 void
 path_paintable_changed (PathPaintable *self)
 {
@@ -1055,36 +726,6 @@ void
 path_paintable_paths_changed (PathPaintable *self)
 {
   g_signal_emit (self, signals[PATHS_CHANGED], 0);
-}
-
-gboolean
-shape_is_graphical (SvgElement *shape)
-{
-  return svg_element_type_is_path (svg_element_get_type (shape)) ||
-         svg_element_type_is_text (svg_element_get_type (shape));
-}
-
-gboolean
-shape_has_children (SvgElement *shape)
-{
-  return svg_element_type_is_container (svg_element_get_type (shape));
-}
-
-gboolean
-shape_has_gpa (SvgElement *shape)
-{
-  return svg_element_type_is_path (svg_element_get_type (shape));
-}
-
-gboolean
-shape_has_ancestor (SvgElement *shape,
-                    SvgElement *ancestor)
-{
-  for (SvgElement *p = svg_element_get_parent (shape); p; p = svg_element_get_parent (p))
-    if (p == ancestor)
-      return TRUE;
-
-  return FALSE;
 }
 
 GdkPaintable *
@@ -1107,7 +748,7 @@ shape_get_path_image (SvgElement *shape,
   value = svg_element_get_base_value (orig->content, SVG_PROPERTY_VIEW_BOX);
   svg_element_set_base_value (svg->content, SVG_PROPERTY_VIEW_BOX, value);
 
-  if (shape_is_graphical (shape))
+  if (svg_element_type_is_graphical (svg_element_get_type (shape)))
     {
       SvgElement *clone = svg_element_duplicate (shape, svg->content);
       svg_element_set_base_value (clone, SVG_PROPERTY_VISIBILITY, NULL);
@@ -1123,7 +764,7 @@ shape_get_path_image (SvgElement *shape,
 }
 
 static SvgElement *
-get_shape_by_id (SvgElement      *shape,
+get_shape_by_id (SvgElement *shape,
                  const char *id)
 {
   for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
@@ -1132,7 +773,7 @@ get_shape_by_id (SvgElement      *shape,
 
       if (g_strcmp0 (svg_element_get_id (sh), id) == 0)
         return sh;
-      else if (shape_has_children (sh))
+      else if (svg_element_type_is_container (svg_element_get_type (sh)))
         {
           SvgElement *sh2 = get_shape_by_id (sh, id);
           if (sh2)
@@ -1148,36 +789,6 @@ path_paintable_get_shape_by_id (PathPaintable *self,
                                 const char    *id)
 {
   return get_shape_by_id (self->svg->content, id);
-}
-
-static unsigned int
-shape_count (SvgElement *shape)
-{
-  SvgElementType type = svg_element_get_type (shape);
-
-  if (type == SVG_ELEMENT_SVG ||
-      type == SVG_ELEMENT_GROUP ||
-      type == SVG_ELEMENT_LINK)
-    {
-      unsigned int count = 0;
-
-      for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
-        {
-          SvgElement *sh = svg_element_get_child (shape, i);
-
-          count += shape_count (sh);
-        }
-
-      return count;
-    }
-
-  return 1;
-}
-
-unsigned int
-path_paintable_get_shape_count (PathPaintable *self)
-{
-  return shape_count (self->svg->content);
 }
 
 static void

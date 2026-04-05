@@ -1087,7 +1087,9 @@ bb_and_shape_is_graphical (GObject  *object,
 {
   ShapeEditor *self = SHAPE_EDITOR (object);
 
-  return b1 && b2 && can_edit_shape (self->shape) && shape_is_graphical (self->shape);
+  return b1 && b2 &&
+         can_edit_shape (self->shape) &&
+         svg_element_type_is_graphical (svg_element_get_type (self->shape));
 }
 
 static gboolean
@@ -1098,7 +1100,9 @@ bb_and_shape_has_children (GObject  *object,
 {
   ShapeEditor *self = SHAPE_EDITOR (object);
 
-  return b1 && b2 && can_edit_shape (self->shape) && shape_has_children (self->shape);
+  return b1 && b2 &&
+         can_edit_shape (self->shape) &&
+         svg_element_type_is_container (svg_element_get_type (self->shape));
 }
 
 static gboolean
@@ -1109,7 +1113,9 @@ bb_and_shape_has_gpa (GObject  *object,
 {
   ShapeEditor *self = SHAPE_EDITOR (object);
 
-  return b1 && b2 && can_edit_shape (self->shape) && shape_has_gpa (self->shape);
+  return b1 && b2 &&
+         can_edit_shape (self->shape) &&
+         svg_element_type_is_path (svg_element_get_type (self->shape));
 }
 
 static gboolean
@@ -1200,15 +1206,26 @@ typedef struct
 } CollectData;
 
 static void
-collect_graphical (SvgElement    *shape,
-                   gpointer  data)
+collect_graphical (SvgElement *shape,
+                   gpointer    data)
 {
   CollectData *d = data;
 
-  if (shape_is_graphical (shape) &&
+  if (svg_element_type_is_graphical (svg_element_get_type (shape)) &&
       shape != d->skip &&
       svg_element_get_id (shape) != NULL)
     gtk_string_list_append (d->model, svg_element_get_id (shape));
+}
+
+static gboolean
+shape_has_ancestor (SvgElement *shape,
+                    SvgElement *ancestor)
+{
+  for (SvgElement *p = svg_element_get_parent (shape); p; p = svg_element_get_parent (p))
+    if (p == ancestor)
+      return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -1266,7 +1283,7 @@ paths_changed (ShapeEditor *self)
   if (self->deleted)
     return;
 
-  if (shape_is_graphical (self->shape))
+  if (svg_element_type_is_graphical (svg_element_get_type (self->shape)))
     repopulate_attach_to (self);
 
   if (svg_property_applies_to (SVG_PROPERTY_MASK, svg_element_get_type (self->shape)))
@@ -1299,12 +1316,13 @@ shape_editor_update (ShapeEditor *self)
 {
   if (self->shape)
     {
+      GtkSvg *svg = path_paintable_get_svg (self->paintable);
       g_autofree char *text = NULL;
       SvgValue *tf;
       unsigned int symbolic;
       GdkRGBA color;
       SvgValue *line_width, *min_width, *max_width;
-      const graphene_rect_t *viewport;
+      graphene_rect_t viewport;
       PaintKind kind;
       unsigned int idx;
       const char *id;
@@ -1327,17 +1345,17 @@ shape_editor_update (ShapeEditor *self)
           return;
         }
 
-      viewport = path_paintable_get_viewport (self->paintable);
+      graphene_rect_init (&viewport, 0, 0, svg->width, svg->height);
 
-      if (shape_is_graphical (self->shape))
+      if (svg_element_type_is_graphical (type))
         {
           GskPath *path;
 
-          path = svg_element_get_path (self->shape, viewport, FALSE);
+          path = svg_element_get_path (self->shape, &viewport, FALSE);
           path_editor_set_path (self->path_editor, path);
           g_object_set (self->path_editor,
-                        "width", path_paintable_get_width (self->paintable),
-                        "height", path_paintable_get_height (self->paintable),
+                        "width", svg->width,
+                        "height", svg->height,
                         NULL);
         }
 
@@ -1433,7 +1451,7 @@ shape_editor_update (ShapeEditor *self)
 
       gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
 
-      if (shape_is_graphical (self->shape))
+      if (svg_element_type_is_graphical (type))
         {
           GpaTransition transition;
           GpaEasing easing;
@@ -1528,7 +1546,7 @@ shape_editor_update (ShapeEditor *self)
 
       gtk_drop_down_set_selected (self->fill_rule, svg_enum_get (svg_element_get_base_value (self->shape, SVG_PROPERTY_FILL_RULE)));
 
-      if (shape_is_graphical (self->shape))
+      if (svg_element_type_is_graphical (type))
         {
           double pos;
 
@@ -1584,8 +1602,8 @@ shape_editor_update (ShapeEditor *self)
             }
 
           g_object_set (self->clip_path_editor,
-                        "width", path_paintable_get_width (self->paintable),
-                        "height", path_paintable_get_height (self->paintable),
+                        "width", svg->width,
+                        "height", svg->height,
                         NULL);
         }
 

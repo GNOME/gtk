@@ -178,6 +178,12 @@ svg_element_type_is_clip_path_content (SvgElementType type)
   return (element_types[type].flags & (ELEMENT_IS_PATH | ELEMENT_IS_TEXT)) != 0;
 }
 
+gboolean
+svg_element_type_is_graphical (SvgElementType type)
+{
+  return svg_element_type_is_path (type) || svg_element_type_is_text (type);
+}
+
 static unsigned int
 element_type_hash (gconstpointer v)
 {

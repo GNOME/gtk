@@ -152,14 +152,15 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
                                        double                 weight)
 {
   BorderPaintable *self = BORDER_PAINTABLE (paintable);
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   double w, h;
   float scale;
 
   if (!self->paintable)
     return;
 
-  w = path_paintable_get_width (self->paintable);
-  h = path_paintable_get_height (self->paintable);
+  w = svg->width;
+  h = svg->height;
 
   if (w == 0 || h == 0)
     return;
@@ -225,22 +226,19 @@ border_paintable_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       GdkRGBA c = (GdkRGBA) { 1, 0, 0, 1 };
       g_autoptr (GskStroke) stroke = NULL;
       unsigned int state;
-      const graphene_rect_t *viewport;
+      graphene_rect_t viewport;
+      SvgElement *shape;
 
       stroke = gsk_stroke_new (1.f/scale);
 
       gtk_snapshot_save (snapshot);
       gtk_snapshot_scale (snapshot, scale, scale);
 
-      state = path_paintable_get_state (self->paintable);
-      viewport = path_paintable_get_viewport (self->paintable);
+      state = gtk_svg_get_state (svg);
+      graphene_rect_init (&viewport, 0, 0, svg->width, svg->height);
+      shape = svg->content;
 
-      if (state != STATE_UNSET)
-        {
-          SvgElement *shape = path_paintable_get_content (self->paintable);
-
-          snapshot_spines (snapshot, &bounds, self->paintable, shape, state, viewport, scale, &c, stroke);
-        }
+      snapshot_spines (snapshot, &bounds, self->paintable, shape, state, &viewport, scale, &c, stroke);
 
       gtk_snapshot_restore (snapshot);
     }

@@ -98,6 +98,7 @@ find_max_state (SvgElement *shape)
 static void
 update_state_names (StateEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *names[65] = { NULL, };
   unsigned int i;
 
@@ -130,7 +131,28 @@ update_state_names (StateEditor *self)
     }
 
   names[i + 1] = NULL;
-  path_paintable_set_state_names (self->paintable, names);
+
+  gtk_svg_set_state_names (svg, names);
+  path_paintable_changed (self->paintable);
+}
+
+static unsigned int
+count_shapes (SvgElement *shape)
+{
+  SvgElementType type = svg_element_get_type (shape);
+  unsigned int count = 1;
+
+  if (svg_element_type_is_container (type))
+    {
+      for (unsigned int i = 0; i < svg_element_get_n_children (shape); i++)
+        {
+          SvgElement *sh = svg_element_get_child (shape, i);
+
+          count += count_shapes (sh);
+        }
+    }
+
+  return count;
 }
 
 static void
@@ -140,7 +162,7 @@ update_states (StateEditor *self)
   uint64_t *states;
   unsigned int n;
 
-  n = path_paintable_get_shape_count (self->paintable);
+  n = count_shapes (path_paintable_get_svg (self->paintable)->content);
 
   states = g_newa0 (uint64_t, n);
 
@@ -317,7 +339,7 @@ create_paths_for_shape (StateEditor  *self,
           create_paths_for_shape (self, sh, row);
           continue;
         }
-      else if (shape_is_graphical (sh))
+      else if (svg_element_type_is_graphical (svg_element_get_type (sh)))
         {
           uint64_t states = svg_element_get_states (sh);
           const char *id = svg_element_get_id (sh);
@@ -373,12 +395,13 @@ state_name_changed (GtkEditable *editable,
 static void
 create_paths (StateEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
   GtkWidget *child;
   const char **names;
   unsigned int n_names;
   unsigned int row;
 
-  names = path_paintable_get_state_names (self->paintable, &n_names);
+  names = gtk_svg_get_state_names (svg, &n_names);
 
   for (unsigned int i = 0; i <= self->max_state; i++)
     {
@@ -396,7 +419,7 @@ create_paths (StateEditor *self)
     }
 
   row = 0;
-  create_paths_for_shape (self, path_paintable_get_content (self->paintable), &row);
+  create_paths_for_shape (self, svg->content, &row);
 }
 
 static void
@@ -412,7 +435,8 @@ repopulate (StateEditor *self)
 static void
 paths_changed (StateEditor *self)
 {
-  self->max_state = MAX (self->max_state, find_max_state (path_paintable_get_content (self->paintable)));
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  self->max_state = MAX (self->max_state, find_max_state (svg->content));
   self->max_state = CLAMP (self->max_state, 0, 63);
 
   repopulate (self);
