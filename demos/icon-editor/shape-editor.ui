@@ -221,18 +221,21 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">2</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="line_x1">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
               <object class="NumberEditor" id="line_y1">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
@@ -272,18 +275,21 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">3</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="line_x2">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
               <object class="NumberEditor" id="line_y2">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
@@ -323,18 +329,21 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">4</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="rect_x">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
               <object class="NumberEditor" id="rect_y">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
@@ -374,12 +383,14 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">5</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="rect_width">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
@@ -387,6 +398,7 @@
             </child>
             <child>
               <object class="NumberEditor" id="rect_height">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
@@ -427,12 +439,14 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">6</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="rect_rx">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
@@ -440,6 +454,7 @@
             </child>
             <child>
               <object class="NumberEditor" id="rect_ry">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
@@ -480,18 +495,21 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">7</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="circle_cx">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
               <object class="NumberEditor" id="circle_cy">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
@@ -573,18 +591,21 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">9</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="ellipse_cx">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
             </child>
             <child>
               <object class="NumberEditor" id="ellipse_cy">
+                <property name="hexpand">1</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
               </object>
@@ -624,12 +645,14 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
+            <property name="hexpand">0</property>
             <layout>
               <property name="row">10</property>
               <property name="column">1</property>
             </layout>
             <child>
               <object class="NumberEditor" id="ellipse_rx">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>
@@ -637,6 +660,7 @@
             </child>
             <child>
               <object class="NumberEditor" id="ellipse_ry">
+                <property name="hexpand">1</property>
                 <property name="min">0</property>
                 <signal name="notify::value" handler="shape_changed" swapped="yes"/>
                 <signal name="notify::unit" handler="shape_changed" swapped="yes"/>

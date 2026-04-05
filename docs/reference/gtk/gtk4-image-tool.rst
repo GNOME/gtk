@@ -83,6 +83,14 @@ where applicable.
   Disable gpa extensions, such as states, transitions
   and dynamic stroke weight.
 
+``--traditional-symbolic``
+
+  Treat the image as a traditional symbolic icon.
+
+``--css=FILE``
+
+  Use CSS from ``FILE`` as user stylesheet.
+
 Compare
 ^^^^^^^
 

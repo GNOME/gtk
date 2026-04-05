@@ -1,0 +1,30 @@
+<svg width='100' height='100' xmlns="http://www.w3.org/2000/svg">
+  <style>
+    rect.c3,
+    rect.c4,
+    rect.c5,
+    rect.c6,
+    rect.c7 {
+      fill: red;
+    }
+    rect.c5,
+    rect.c6,
+    rect.c7 {
+      fill: orange !important;
+    }
+  </style>
+  <rect class='c1' x='0%' y='0%' width='33.3%' height='33.3%'
+      fill='black'/>
+  <rect class='c2' x='33.3%' y='0%' width='33.3%' height='33.3%'
+      fill='black' />
+  <rect class='c3' x='66.6%' y='0%' width='33.3%' height='33.3%'
+      fill='black'/>
+  <rect class='c4' x='0%' y='33.3%' width='33.3%' height='33.3%'
+      fill='black' style='fill: magenta' />
+  <rect class='c5' x='33.3%' y='33.3%' width='33.3%' height='33.3%'
+      fill='black' style='fill:magenta' />
+  <rect class='c6' x='66.6%' y='33.3%' width='33.3%' height='33.3%'
+      fill='black' style='fill:green !important' />
+  <rect class='c7' x='0%' y='66.6%' width='100%' height='33.3%'
+      fill='black' style='fill:brown !important' />
+</svg>

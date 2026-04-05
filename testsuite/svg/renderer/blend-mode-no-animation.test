@@ -1,0 +1,4 @@
+[test]
+input=blend-mode.svg
+reference=blend-mode.node
+animation=false

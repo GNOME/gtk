@@ -969,6 +969,12 @@ gtk_css_selector_new (const GtkCssSelectorClass *class,
   return selector;
 }
 
+GtkCssSelector *
+gtk_css_selector_copy (const GtkCssSelector *selector)
+{
+  return (GtkCssSelector *) g_memdup2 (selector, sizeof (GtkCssSelector) * gtk_css_selector_size (selector) + sizeof (gpointer));
+}
+
 static GtkCssSelector *
 gtk_css_selector_parse_selector_class (GtkCssParser   *parser,
                                        GtkCssSelector *selector,

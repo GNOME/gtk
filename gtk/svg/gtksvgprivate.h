@@ -55,6 +55,8 @@ struct _GtkSvg
   GtkSvgFeatures features;
   GtkSvgUses used;
 
+  GBytes *stylesheet;
+
   char *resource;
 
   int64_t load_time;

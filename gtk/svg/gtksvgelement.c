@@ -151,6 +151,9 @@ svg_element_new (SvgElement     *parent,
   if (parent)
     gtk_css_node_set_parent (element->css_node, parent->css_node);
 
+  if (type == SVG_ELEMENT_LINK)
+    gtk_css_node_set_state (element->css_node, GTK_STATE_FLAG_LINK);
+
   return element;
 }
 

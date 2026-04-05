@@ -29,6 +29,7 @@ typedef struct
 {
   GFile *input;
   GFile *reference;
+  GFile *stylesheet;
   GtkSvgFeatures features;
   GdkRGBA colors[5];
   size_t n_colors;
@@ -42,6 +43,7 @@ init_test_data (TestData *data)
 {
   data->input = NULL;
   data->reference = NULL;
+  data->stylesheet = NULL;
   data->features = GTK_SVG_EXTERNAL_RESOURCES |
                    GTK_SVG_EXTENSIONS |
                    GTK_SVG_ANIMATIONS;
@@ -55,12 +57,14 @@ clear_test_data (TestData *data)
 {
   g_object_unref (data->input);
   g_object_unref (data->reference);
+  if (data->stylesheet)
+    g_object_unref (data->stylesheet);
 }
 
 static char *
 filename_replace_extension (const char *old_file,
-                             const char *old_ext,
-                             const char *new_ext)
+                            const char *old_ext,
+                            const char *new_ext)
 {
   GString *file = g_string_new (NULL);
 
@@ -86,7 +90,9 @@ file_replace_extension (GFile      *file,
 }
 
 static char *
-test_get_sibling_file (const char *file, const char *fext, const char *sext)
+test_get_sibling_file (const char *file,
+                       const char *fext,
+                       const char *sext)
 {
   char *sfile;
 
@@ -155,7 +161,7 @@ static char *
 get_output_file (const char *file,
                  const char *fext,
                  const char *extension,
-                 gboolean is_compressed)
+                 gboolean    is_compressed)
 {
   const char *dir;
   char *result, *base;
@@ -177,7 +183,7 @@ save_output (const char *contents,
              const char *input_file,
              const char *input_file_ext,
              const char *extension,
-             gboolean is_compressed)
+             gboolean    is_compressed)
 {
   char *filename = get_output_file (input_file, input_file_ext, extension, is_compressed);
   gboolean result;
@@ -322,6 +328,17 @@ render_svg_file (TestData *data)
 
   gtk_svg_set_features (svg, data->features);
   gtk_svg_set_weight (svg, data->weight);
+  if (data->stylesheet)
+    {
+      GBytes *stylesheet;
+
+      stylesheet = g_file_load_bytes (data->stylesheet, NULL, NULL, &error);
+      if (!stylesheet)
+        g_error ("%s", error->message);
+
+      gtk_svg_set_stylesheet (svg, stylesheet);
+      g_bytes_unref (stylesheet);
+    }
 
   gtk_svg_load_from_bytes (svg, bytes);
   g_clear_pointer (&bytes, g_bytes_unref);
@@ -430,6 +447,7 @@ read_test_data (GFile    *file,
   GKeyFile *args;
   char *input;
   char *reference;
+  char *stylesheet;
   gboolean animations;
   gboolean symbolic;
   char *string;
@@ -441,10 +459,24 @@ read_test_data (GFile    *file,
   input = g_key_file_get_string (args, "test", "input", &err);
   g_assert_no_error (err);
   data->input = test_get_sibling (file, input);
+  g_free (input);
 
   reference = g_key_file_get_string (args, "test", "reference", &err);
   g_assert_no_error (err);
   data->reference = test_get_sibling (file, reference);
+  g_free (reference);
+
+  stylesheet = g_key_file_get_string (args, "test", "stylesheet", &err);
+  if (stylesheet)
+    {
+      data->stylesheet = test_get_sibling (file, stylesheet);
+      g_free (stylesheet);
+    }
+  else if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    {
+      g_clear_error (&err);
+    }
+  g_assert_no_error (err);
 
   animations = g_key_file_get_boolean (args, "test", "animations", &err);
   if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
@@ -479,6 +511,7 @@ read_test_data (GFile    *file,
             }
         }
       g_strfreev (strv);
+      g_free (string);
     }
 
   data->weight = g_key_file_get_double (args, "test", "weight", &err);
@@ -494,10 +527,6 @@ read_test_data (GFile    *file,
                    GTK_SVG_EXTENSIONS |
                    (animations ? GTK_SVG_ANIMATIONS : 0) |
                    (symbolic ? GTK_SVG_TRADITIONAL_SYMBOLIC : 0);
-
-  g_free (input);
-  g_free (reference);
-  g_free (string);
 }
 
 static void

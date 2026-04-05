@@ -37,6 +37,7 @@ typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
 void              _gtk_css_selector_free            (GtkCssSelector         *selector);
+GtkCssSelector *  gtk_css_selector_copy             (const GtkCssSelector   *selector);
 
 char *            _gtk_css_selector_to_string       (const GtkCssSelector   *selector);
 void              _gtk_css_selector_print           (const GtkCssSelector   *selector,

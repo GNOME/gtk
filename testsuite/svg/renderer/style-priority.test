@@ -1,0 +1,4 @@
+[test]
+input=style-priority.svg
+reference=style-priority.node
+stylesheet=style-priority.css
