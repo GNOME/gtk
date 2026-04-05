@@ -7361,6 +7361,7 @@ svg_css_scanner_parser_error (GtkCssParser         *parser,
   if (css_error->domain == GTK_CSS_PARSER_ERROR)
     {
       GError *error;
+      GFile *file;
       GtkSvgLocation start = { 0, };
       GtkSvgLocation end = { 0, };
 
@@ -7368,7 +7369,9 @@ svg_css_scanner_parser_error (GtkCssParser         *parser,
                                    GTK_SVG_ERROR_INVALID_SYNTAX,
                                    css_error->message);
 
-      if (data->load_user_style)
+      if ((file = gtk_css_parser_get_file (parser)) != NULL)
+        gtk_svg_error_set_input (error, g_file_peek_path (file));
+      else if (data->load_user_style)
         gtk_svg_error_set_input (error, "stylesheet");
       else
         {
@@ -7812,7 +7815,7 @@ load_internal (ParserData    *data,
 {
   SvgCssScanner *scanner;
 
-  scanner = svg_css_scanner_new (data, parent, NULL, bytes);
+  scanner = svg_css_scanner_new (data, parent, file, bytes);
   parse_stylesheet (scanner);
   svg_css_scanner_destroy (scanner);
 }
