@@ -114,6 +114,7 @@ test_data = [
   'polyline.svg',
   'pservers-grad-08-b.svg',
   'pservers-grad-11-b.svg',
+  'pseudo-classes.svg',
   'radial-gradient1.svg',
   'radial-gradient2.svg',
   'radial-gradient3.svg',
