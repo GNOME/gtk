@@ -53,6 +53,14 @@ typedef struct
   };
 } TextNode;
 
+typedef struct
+{
+  SvgProperty attr;
+  SvgValue *value;
+} PropertyValue;
+
+void property_value_clear (PropertyValue *pv);
+
 struct _SvgElement
 {
   SvgElementType type;
@@ -74,6 +82,7 @@ struct _SvgElement
   gboolean computed_for_use;
   gboolean valid_bounds;
 
+  GArray *specified;
   SvgValue *base[N_SVG_PROPERTIES];
   SvgValue *current[N_SVG_PROPERTIES];
 

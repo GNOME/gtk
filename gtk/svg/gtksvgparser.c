@@ -1165,7 +1165,7 @@ parse_shape_attrs (SvgElement           *shape,
         {
           if (svg_property_applies_to (attr, svg_element_get_type (shape)))
             {
-              if (svg_element_property_is_set (shape, attr) &&
+              if (svg_element_is_specified (shape, attr) &&
                   svg_attr_is_deprecated (attr_names[i]))
                 {
                   /* ignore */
@@ -1190,10 +1190,7 @@ parse_shape_attrs (SvgElement           *shape,
                     }
 
                   if (value)
-                    {
-                      svg_element_set_base_value (shape, attr, value);
-                      svg_value_unref (value);
-                    }
+                    svg_element_take_specified_value (shape, attr, value);
                 }
             }
           else
@@ -1205,24 +1202,24 @@ parse_shape_attrs (SvgElement           *shape,
         }
     }
 
-  if (svg_element_property_is_set (shape, SVG_PROPERTY_CLIP_PATH) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_MASK) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_HREF) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_FILTER) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_MARKER_START) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_MARKER_MID) ||
-      svg_element_property_is_set (shape, SVG_PROPERTY_MARKER_END))
+  if (svg_element_is_specified (shape, SVG_PROPERTY_CLIP_PATH) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_MASK) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_HREF) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_FILTER) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_START) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_MID) ||
+      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_END))
     g_hash_table_add (data->pending_refs, shape);
 
   if (svg_property_applies_to (SVG_PROPERTY_FX, svg_element_get_type (shape)) &&
-      svg_property_applies_to (SVG_PROPERTY_FX, svg_element_get_type (shape)))
+      svg_property_applies_to (SVG_PROPERTY_FY, svg_element_get_type (shape)))
     {
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_CX) &&
-          !svg_element_property_is_set (shape, SVG_PROPERTY_FX))
-        svg_element_set_base_value (shape, SVG_PROPERTY_FX, svg_element_get_base_value (shape, SVG_PROPERTY_CX));
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_CY) &&
-          !svg_element_property_is_set (shape, SVG_PROPERTY_FY))
-        svg_element_set_base_value (shape, SVG_PROPERTY_FY, svg_element_get_base_value (shape, SVG_PROPERTY_CY));
+      if (svg_element_is_specified (shape, SVG_PROPERTY_CX) &&
+          !svg_element_is_specified (shape, SVG_PROPERTY_FX))
+        svg_element_set_specified_value (shape, SVG_PROPERTY_FX, svg_element_get_specified_value (shape, SVG_PROPERTY_CX));
+      if (svg_element_is_specified (shape, SVG_PROPERTY_CY) &&
+          !svg_element_is_specified (shape, SVG_PROPERTY_FY))
+        svg_element_set_specified_value (shape, SVG_PROPERTY_FY, svg_element_get_specified_value (shape, SVG_PROPERTY_CY));
     }
 }
 
@@ -1372,9 +1369,8 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       value = svg_paint_parse_gpa (stroke_attr);
       if (value)
         {
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value);
           svg_element_set_gpa_stroke (shape, value);
-          svg_value_unref (value);
+          svg_element_take_base_value (shape, SVG_PROPERTY_STROKE, value);
         }
       else
         {
@@ -1387,9 +1383,8 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       value = svg_paint_parse_gpa (fill_attr);
       if (value)
         {
-          svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value);
           svg_element_set_gpa_fill (shape, value);
-          svg_value_unref (value);
+          svg_element_take_base_value (shape, SVG_PROPERTY_FILL, value);
         }
       else
         {
@@ -1404,9 +1399,9 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       if (strokewidth_parse (strokewidth_attr, values) &&
           values[0] && values[1] && values[2])
         {
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_MINWIDTH, values[0]);
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, values[1]);
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_MAXWIDTH, values[2]);
+          svg_element_set_specified_value (shape, SVG_PROPERTY_STROKE_MINWIDTH, values[0]);
+          svg_element_set_specified_value (shape, SVG_PROPERTY_STROKE_WIDTH, values[1]);
+          svg_element_set_specified_value (shape, SVG_PROPERTY_STROKE_MAXWIDTH, values[2]);
           svg_element_set_gpa_width (shape, values[1]);
         }
       else
@@ -1559,19 +1554,19 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       animation_direction != GPA_ANIMATION_NONE)
     {
       /* our dasharray-based animations require unit path length */
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_PATH_LENGTH))
+      if (svg_element_is_specified (shape, SVG_PROPERTY_PATH_LENGTH))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "pathLength",
                                    "Can't set '%s' and use gpa features", "pathLength");
 
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_STROKE_DASHARRAY))
+      if (svg_element_is_specified (shape, SVG_PROPERTY_STROKE_DASHARRAY))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "stroke-dasharray",
                                    "Can't set '%s' and use gpa features", "stroke-dasharray");
 
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_STROKE_DASHOFFSET))
+      if (svg_element_is_specified (shape, SVG_PROPERTY_STROKE_DASHOFFSET))
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "stroke-dashoffset",
                                    "Can't set '%s' and use gpa features", "stroke-dashoffset");
 
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_FILTER) &&
+      if (svg_element_is_specified (shape, SVG_PROPERTY_FILTER) &&
           transition_type == GPA_TRANSITION_MORPH)
         gtk_svg_invalid_attribute (data->svg, context, attr_names, "filter",
                                    "Can't set '%s' and use gpa features", "filter");
@@ -1670,10 +1665,7 @@ parse_color_stop_attrs (SvgElement           *shape,
             }
 
           if (value)
-            {
-              svg_color_stop_set_base_value (stop, attr, value);
-              svg_value_unref (value);
-            }
+            svg_color_stop_take_specified_value (stop, attr, value);
         }
       else
         gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], "Unknown attribute: %s", attr_names[i]);
@@ -1716,7 +1708,7 @@ parse_filter_attrs (SvgElement           *shape,
         }
       else if (svg_property_lookup_for_filter (attr_names[i], svg_element_get_type (shape), type, &attr))
         {
-          if (svg_filter_property_is_set (f, attr) && svg_attr_is_deprecated (attr_names[i]))
+          if (svg_filter_is_specified (f, attr) && svg_attr_is_deprecated (attr_names[i]))
             {
               /* ignore */
             }
@@ -1738,10 +1730,7 @@ parse_filter_attrs (SvgElement           *shape,
                 }
 
               if (value)
-                {
-                  svg_filter_set_base_value (f, attr, value);
-                  svg_value_unref (value);
-                }
+                svg_filter_take_specified_value (f, attr, value);
             }
         }
       else
@@ -1947,7 +1936,7 @@ start_element_cb (GMarkupParseContext  *context,
           if (svg_numbers_get_length (values) != svg_numbers_get_length (initial))
             {
               svg_filter_set_base_value (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES, initial);
-              if (!svg_filter_property_is_set (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES))
+              if (!svg_filter_is_specified (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES))
                 {
                   /* If this wasn't user-provided, we quietly correct the initial
                    * value to match the type
@@ -2489,6 +2478,9 @@ resolve_clip_ref (SvgValue   *value,
                   SvgElement *shape,
                   ParserData *data)
 {
+  if (svg_value_is_unset (value))
+    return;
+
   if (svg_clip_get_kind (value) == CLIP_URL &&
       svg_clip_get_shape (value) == NULL)
     {
@@ -2515,6 +2507,9 @@ resolve_mask_ref (SvgValue   *value,
                   SvgElement *shape,
                   ParserData *data)
 {
+  if (svg_value_is_unset (value))
+    return;
+
   if (svg_mask_get_kind (value) == MASK_URL && svg_mask_get_shape (value) == NULL)
     {
       const char *id = svg_mask_get_id (value);
@@ -2549,6 +2544,9 @@ resolve_href_ref (SvgValue   *value,
                   ParserData *data)
 {
   const char *ref;
+
+  if (svg_value_is_unset (value))
+    return;
 
   if (svg_href_get_kind (value) == HREF_NONE)
     return;
@@ -2607,6 +2605,9 @@ resolve_marker_ref (SvgValue   *value,
                     SvgElement *shape,
                     ParserData *data)
 {
+  if (svg_value_is_unset (value))
+    return;
+
   if (svg_href_get_kind (value) != HREF_NONE && svg_href_get_shape (value) == NULL)
     {
       const char *ref = svg_href_get_id (value);
@@ -2635,6 +2636,9 @@ resolve_paint_ref (SvgValue   *value,
                    ParserData *data)
 {
   SvgValue *paint = value;
+
+  if (svg_value_is_unset (value))
+    return;
 
   if (paint_is_server (svg_paint_get_kind (paint)) &&
       svg_paint_get_server_shape (paint) == NULL)
@@ -2688,6 +2692,9 @@ resolve_filter_ref (SvgValue   *value,
                     SvgElement *shape,
                     ParserData *data)
 {
+  if (svg_value_is_unset (value))
+    return;
+
   for (unsigned int i = 0; i < svg_filter_functions_get_length (value); i++)
     {
       if (svg_filter_functions_get_kind (value, i) == FILTER_REF &&
@@ -2971,12 +2978,6 @@ compute_update_order (SvgElement *shape,
 #define GDK_ARRAY_ELEMENT_TYPE GtkCssSelector *
 #define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
-
-typedef struct
-{
-  SvgProperty attr;
-  SvgValue *value;
-} PropertyValue;
 
 typedef struct
 {
@@ -3713,6 +3714,67 @@ apply_styles_here (SvgElement   *shape,
       parse_style_into_ruleset (&style_ruleset, &style_important, style, data);
     }
 
+  /* Our strategy to compute base values is the following:
+   * - unset everything
+   * - apply presentation attributes
+   * - apply style values
+   * - what is left unset at compute time will be inherited or set to initial values
+   */
+
+  /* unset */
+  if (idx == 0)
+    {
+      for (unsigned int i = FIRST_SVG_PROPERTY; i <= LAST_SVG_PROPERTY; i++)
+        shape_set_base_value (shape, i, idx, svg_unset_new ());
+    }
+  else if (svg_element_type_is_gradient (shape->type))
+    {
+      for (unsigned int i = FIRST_STOP_PROPERTY; i <= LAST_STOP_PROPERTY; i++)
+        shape_set_base_value (shape, i, idx, svg_unset_new ());
+    }
+  else if (svg_element_type_is_filter (shape->type))
+    {
+      for (unsigned int i = FIRST_FILTER_PROPERTY; i <= LAST_FILTER_PROPERTY; i++)
+        shape_set_base_value (shape, i, idx, svg_unset_new ());
+    }
+  else
+    g_assert_not_reached ();
+
+  /* presentation attributes */
+  if (idx == 0)
+    {
+      for (unsigned int i = 0; i < shape->specified->len; i++)
+        {
+          PropertyValue *p = &g_array_index (shape->specified, PropertyValue, i);
+          svg_element_set_base_value (shape, p->attr, p->value);
+        }
+    }
+  else if (svg_element_type_is_gradient (shape->type))
+    {
+      SvgColorStop *stop = g_ptr_array_index (shape->color_stops, idx - 1);
+      for (unsigned int i = FIRST_STOP_PROPERTY; i <= LAST_STOP_PROPERTY; i++)
+        {
+          SvgValue *value = svg_color_stop_get_specified_value (stop, i);
+          if (value)
+            svg_color_stop_set_base_value (stop, i, value);
+        }
+    }
+  else if (svg_element_type_is_filter (shape->type))
+    {
+      SvgFilter *filter = g_ptr_array_index (shape->filters, idx - 1);
+      SvgFilterType filter_type = svg_filter_get_type (filter);
+      unsigned int n_attrs = svg_filter_type_get_n_attrs (filter_type);
+      for (unsigned int i = 0; i < n_attrs; i++)
+        {
+          SvgProperty attr = svg_filter_type_get_property (filter_type, i);
+          SvgValue *value = svg_filter_get_specified_value (filter, attr);
+          if (value)
+            svg_filter_set_base_value (filter, attr, value);
+        }
+    }
+  else
+    g_assert_not_reached ();
+
   /* user styles */
   set = _gtk_bitmask_new ();
   for (unsigned int i = 0; i < data->user_rulesets->len; i++)
@@ -3869,7 +3931,7 @@ apply_styles_to_shape (SvgElement *shape,
         svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, svg_element_get_gpa_width (shape));
     }
 
-  if (svg_element_property_is_set (shape, SVG_PROPERTY_COLOR))
+  if (svg_element_is_specified (shape, SVG_PROPERTY_COLOR))
     {
       SvgValue *color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
 
@@ -3886,7 +3948,7 @@ apply_styles_to_shape (SvgElement *shape,
         data->svg->used |= BIT (svg_color_get_symbolic (color) + 1);
     }
 
-  if (svg_element_property_is_set (shape, SVG_PROPERTY_FILL))
+  if (svg_element_is_specified (shape, SVG_PROPERTY_FILL))
     {
       SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
       GtkSymbolicColor symbolic;
@@ -3907,7 +3969,7 @@ apply_styles_to_shape (SvgElement *shape,
         data->svg->used |= BIT (symbolic + 1);
     }
 
-  if (svg_element_property_is_set (shape, SVG_PROPERTY_STROKE))
+  if (svg_element_is_specified (shape, SVG_PROPERTY_STROKE))
     {
       SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
       GtkSymbolicColor symbolic;
@@ -4019,7 +4081,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 #endif
   apply_styles (&data);
 
-  if (svg_element_property_is_set (self->content, SVG_PROPERTY_VIEW_BOX))
+  if (svg_element_is_specified (self->content, SVG_PROPERTY_VIEW_BOX))
     {
       graphene_rect_t vb;
 
@@ -4028,7 +4090,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
       self->height = vb.size.height;
     }
 
-  if (svg_element_property_is_set (self->content, SVG_PROPERTY_WIDTH))
+  if (svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH))
     {
       SvgUnit unit = svg_number_get_unit (self->content->base[SVG_PROPERTY_WIDTH]);
       double value = svg_number_get (self->content->base[SVG_PROPERTY_WIDTH], 100);
@@ -4039,7 +4101,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
         self->width = value;
     }
 
-  if (svg_element_property_is_set (self->content, SVG_PROPERTY_HEIGHT))
+  if (svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
     {
       SvgUnit unit = svg_number_get_unit (self->content->base[SVG_PROPERTY_HEIGHT]);
       double value = svg_number_get (self->content->base[SVG_PROPERTY_HEIGHT], 100);
@@ -4050,9 +4112,9 @@ gtk_svg_init_from_bytes (GtkSvg *self,
         self->height = value;
     }
 
-  if (!svg_element_property_is_set (self->content, SVG_PROPERTY_VIEW_BOX) &&
-      !svg_element_property_is_set (self->content, SVG_PROPERTY_WIDTH) &&
-      !svg_element_property_is_set (self->content, SVG_PROPERTY_HEIGHT))
+  if (!svg_element_is_specified (self->content, SVG_PROPERTY_VIEW_BOX) &&
+      !svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH) &&
+      !svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
     {
       /* arbitrary */
       self->width = 200;

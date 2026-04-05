@@ -264,19 +264,19 @@ serialize_shape_attrs (GString              *s,
             }
         }
 
-      if (svg_element_property_is_set (shape, attr) ||
+      if (svg_element_is_specified (shape, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
           SvgValue *value, *initial;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-            value = svg_value_ref (shape_get_current_value (shape, attr, 0));
+            value = svg_element_get_current_value (shape, attr);
           else
-            value = shape_ref_base_value (shape, NULL, attr, 0);
+            value = svg_element_get_specified_value (shape, attr);
 
           initial = svg_property_ref_initial_value (attr, svg_element_get_type (shape), svg_element_get_parent (shape) != NULL);
 
-          if (svg_element_property_is_set (shape, attr) || !svg_value_equal (value, initial))
+          if (value && (svg_element_is_specified (shape, attr) || !svg_value_equal (value, initial)))
             {
               if (svg_property_has_presentation (attr))
                 {
@@ -288,7 +288,6 @@ serialize_shape_attrs (GString              *s,
             }
 
           svg_value_unref (initial);
-          svg_value_unref (value);
         }
     }
 }
@@ -776,16 +775,18 @@ serialize_color_stop (GString              *s,
       SvgProperty attr = svg_color_stop_get_property (i);
       SvgValue *value;
 
-      string_indent (s, indent + ATTR_INDENT);
-      g_string_append_printf (s, "%s='", names[i]);
-
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
         value = svg_color_stop_get_current_value (stop, attr);
       else
-        value = svg_color_stop_get_base_value (stop, attr);
+        value = svg_color_stop_get_specified_value (stop, attr);
 
-      svg_value_print (value, s);
-      g_string_append (s, "'");
+      if (value)
+        {
+          string_indent (s, indent + ATTR_INDENT);
+          g_string_append_printf (s, "%s='", names[i]);
+          svg_value_print (value, s);
+          g_string_append (s, "'");
+        }
     }
   g_string_append (s, ">");
 
@@ -841,9 +842,9 @@ serialize_filter_begin (GString              *s,
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
         value = svg_filter_get_current_value (f, attr);
       else
-        value = svg_filter_get_base_value (f, attr);
+        value = svg_filter_get_specified_value (f, attr);
 
-      if (!svg_value_equal (value, initial))
+      if (value && !svg_value_equal (value, initial))
         {
           string_indent (s, indent + ATTR_INDENT);
           g_string_append_printf (s, "%s='", svg_property_get_presentation (attr, svg_element_get_type (shape)));

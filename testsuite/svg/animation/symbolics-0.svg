@@ -15,7 +15,6 @@
           id='foreground'
           font-size='13.333'
           font-weight='400'
-          fill='rgb(0,0,0)'
           cx='0'
           cy='5'
           r='5'

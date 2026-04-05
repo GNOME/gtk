@@ -30,6 +30,7 @@ enum
   SVG_INITIAL,
   SVG_CURRENT,
   SVG_AUTO,
+  SVG_UNSET,
 };
 
 typedef struct
@@ -85,6 +86,9 @@ svg_keyword_print (const SvgValue *value,
     case SVG_AUTO:
       g_string_append (string, "auto");
       break;
+    case SVG_UNSET:
+      g_string_append (string, "unset");
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -133,6 +137,14 @@ svg_auto_new (void)
   return (SvgValue *) &auto_value;
 }
 
+SvgValue *
+svg_unset_new (void)
+{
+  static SvgKeyword unset_value = { { &SVG_KEYWORD_CLASS, 0 }, SVG_UNSET };
+
+  return (SvgValue *) &unset_value;
+}
+
 gboolean
 svg_value_is_inherit (const SvgValue *value)
 {
@@ -159,4 +171,11 @@ svg_value_is_auto (const SvgValue *value)
 {
   return value->class == &SVG_KEYWORD_CLASS &&
          ((const SvgKeyword *) value)->keyword == SVG_AUTO;
+}
+
+gboolean
+svg_value_is_unset (const SvgValue *value)
+{
+  return value->class == &SVG_KEYWORD_CLASS &&
+         ((const SvgKeyword *) value)->keyword == SVG_UNSET;
 }

@@ -64,6 +64,16 @@ SvgElement * svg_element_get_child           (SvgElement            *element,
 void         svg_element_move_child_down     (SvgElement            *element,
                                               SvgElement            *child);
 
+void         svg_element_set_specified_value (SvgElement            *element,
+                                              SvgProperty            attr,
+                                              SvgValue              *value);
+void         svg_element_take_specified_value (SvgElement            *element,
+                                               SvgProperty            attr,
+                                               SvgValue              *value);
+SvgValue *   svg_element_get_specified_value (SvgElement            *element,
+                                              SvgProperty            attr);
+gboolean     svg_element_is_specified        (SvgElement            *element,
+                                              SvgProperty            attr);
 void         svg_element_set_base_value      (SvgElement            *element,
                                               SvgProperty            attr,
                                               SvgValue              *value);
@@ -76,8 +86,6 @@ void         svg_element_set_current_value   (SvgElement            *element,
                                               SvgProperty            attr,
                                               SvgValue              *value);
 SvgValue *   svg_element_get_current_value   (SvgElement            *element,
-                                              SvgProperty            attr);
-gboolean     svg_element_property_is_set     (SvgElement            *element,
                                               SvgProperty            attr);
 
 void         svg_element_set_id              (SvgElement            *element,

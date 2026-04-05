@@ -59,6 +59,12 @@ text_node_clear (TextNode *self)
     }
 }
 
+void
+property_value_clear (PropertyValue *v)
+{
+  g_clear_pointer (&v->value, svg_value_unref);
+}
+
 static void
 style_elt_free (gpointer p)
 {
@@ -75,6 +81,8 @@ svg_element_free (SvgElement *element)
   g_clear_pointer (&element->style, g_free);
   g_clear_pointer (&element->classes, g_strfreev);
   g_clear_object (&element->css_node);
+
+  g_clear_pointer (&element->specified, g_array_unref);
 
   for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
     {
@@ -117,6 +125,9 @@ svg_element_new (SvgElement     *parent,
   element->type = type;
 
   element->attrs = _gtk_bitmask_new ();
+
+  element->specified = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+  g_array_set_clear_func (element->specified, (GDestroyNotify) property_value_clear);
 
   for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
     {
@@ -991,7 +1002,6 @@ svg_element_set_base_value (SvgElement  *element,
     element->base[attr] = svg_property_ref_initial_value (attr,
                                                           svg_element_get_type (element),
                                                           svg_element_get_parent (element) != NULL);
-  element->attrs = _gtk_bitmask_set (element->attrs, attr, value != NULL);
 }
 
 void
@@ -1009,6 +1019,77 @@ svg_element_get_base_value (SvgElement  *element,
                             SvgProperty  attr)
 {
   return element->base[attr];
+}
+
+void
+svg_element_set_specified_value (SvgElement  *element,
+                                 SvgProperty  attr,
+                                 SvgValue    *value)
+{
+  unsigned int i;
+  PropertyValue *v;
+
+  if (_gtk_bitmask_get (element->attrs, attr))
+    {
+      for (i = 0; i < element->specified->len; i++)
+        {
+          v = &g_array_index (element->specified, PropertyValue, i);
+
+          if (v->attr == attr)
+            {
+              g_clear_pointer (&v->value, svg_value_unref);
+              break;
+            }
+        }
+    }
+  else
+    i = element->specified->len;
+
+  if (i == element->specified->len)
+    {
+      PropertyValue pv = { attr, NULL };
+      g_array_append_val (element->specified, pv);
+    }
+
+  v = &g_array_index (element->specified, PropertyValue, i);
+  g_assert (v->attr == attr);
+  g_assert (v->value == NULL);
+  if (value)
+    v->value = svg_value_ref (value);
+
+  element->attrs = _gtk_bitmask_set (element->attrs, attr, value != NULL);
+}
+
+void
+svg_element_take_specified_value (SvgElement  *element,
+                                  SvgProperty  attr,
+                                  SvgValue    *value)
+{
+  svg_element_set_specified_value (element, attr, value);
+  if (value)
+    svg_value_unref (value);
+}
+
+SvgValue *
+svg_element_get_specified_value (SvgElement  *element,
+                                 SvgProperty  attr)
+{
+  for (unsigned int i = 0; i < element->specified->len; i++)
+    {
+      PropertyValue *v = &g_array_index (element->specified, PropertyValue, i);
+
+      if (v->attr == attr)
+        return v->value;
+    }
+
+  return NULL;
+}
+
+gboolean
+svg_element_is_specified (SvgElement  *element,
+                          SvgProperty  attr)
+{
+  return _gtk_bitmask_get (element->attrs, attr);
 }
 
 void
@@ -1033,13 +1114,6 @@ SvgElementType
 svg_element_get_type (SvgElement *element)
 {
   return element->type;
-}
-
-gboolean
-svg_element_property_is_set (SvgElement  *element,
-                             SvgProperty  attr)
-{
-  return _gtk_bitmask_get (element->attrs, attr);
 }
 
 void

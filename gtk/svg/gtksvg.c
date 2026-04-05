@@ -1850,7 +1850,11 @@ shape_ref_base_value (SvgElement   *shape,
 {
   if (idx == 0)
     {
-      if (!svg_element_property_is_set (shape, attr))
+      SvgValue *value;
+
+      value = svg_element_get_base_value (shape, attr);
+
+      if (svg_value_is_unset (value))
         {
           if (svg_element_get_type (shape) == SVG_ELEMENT_RADIAL_GRADIENT)
             {
@@ -1865,20 +1869,20 @@ shape_ref_base_value (SvgElement   *shape,
           else
             return svg_property_ref_initial_value (attr, svg_element_get_type (shape), parent != NULL);
         }
-      else if (svg_value_is_inherit (svg_element_get_base_value (shape, attr)))
+      else if (svg_value_is_inherit (value))
         {
           if (parent)
             return svg_value_ref (svg_element_get_current_value (parent, attr));
           else
             return svg_property_ref_initial_value (attr, svg_element_get_type (shape), parent != NULL);
         }
-      else if (svg_value_is_initial (svg_element_get_base_value (shape, attr)))
+      else if (svg_value_is_initial (value))
         {
           return svg_property_ref_initial_value (attr, svg_element_get_type (shape), parent != NULL);
         }
       else
         {
-          return svg_value_ref (svg_element_get_base_value (shape, attr));
+          return svg_value_ref (value);
         }
     }
   else if (FIRST_STOP_PROPERTY <= attr && attr <= LAST_STOP_PROPERTY)
@@ -1892,7 +1896,7 @@ shape_ref_base_value (SvgElement   *shape,
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
 
       value = svg_color_stop_get_base_value (stop, attr);
-      if (!svg_color_stop_property_is_set (stop, attr))
+      if (svg_value_is_unset (value))
         {
           if (svg_property_inherited (attr))
             return svg_value_ref (svg_element_get_current_value (shape, attr));
@@ -1923,7 +1927,7 @@ shape_ref_base_value (SvgElement   *shape,
       f = g_ptr_array_index (shape->filters, idx - 1);
 
       value = svg_filter_get_base_value (f, attr);
-      if (!svg_filter_property_is_set (f, attr))
+      if (svg_value_is_unset (value))
         {
           if (svg_property_inherited (attr))
             return svg_value_ref (shape_get_current_value (shape, attr, 0));
@@ -3250,7 +3254,7 @@ create_visibility_setter (SvgElement   *shape,
   Visibility initial_visibility;
   Visibility opposite_visibility;
 
-  if (svg_element_property_is_set (shape, SVG_PROPERTY_VISIBILITY))
+  if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
     initial_visibility = svg_enum_get (svg_element_get_base_value (shape, SVG_PROPERTY_VISIBILITY));
   else
     initial_visibility = VISIBILITY_VISIBLE;
@@ -3617,20 +3621,18 @@ create_morph_filter (SvgElement *shape,
   g_hash_table_insert (shapes, filter->id, filter);
 
   value = svg_percentage_new (-50);
-  svg_element_set_base_value (filter, SVG_PROPERTY_X, value);
-  svg_element_set_base_value (filter, SVG_PROPERTY_Y, value);
+  svg_element_set_specified_value (filter, SVG_PROPERTY_X, value);
+  svg_element_set_specified_value (filter, SVG_PROPERTY_Y, value);
   svg_value_unref (value);
   value = svg_percentage_new (200);
-  svg_element_set_base_value (filter, SVG_PROPERTY_WIDTH, value);
-  svg_element_set_base_value (filter, SVG_PROPERTY_HEIGHT, value);
+  svg_element_set_specified_value (filter, SVG_PROPERTY_WIDTH, value);
+  svg_element_set_specified_value (filter, SVG_PROPERTY_HEIGHT, value);
   svg_value_unref (value);
 
   f = svg_filter_new (filter, SVG_FILTER_BLUR);
   svg_element_add_filter (filter, f);
   str = g_strdup_printf ("gpa:morph-filter:%s:blurred", svg_element_get_id (shape));
-  value = svg_string_new_take (str);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_RESULT, value);
-  svg_value_unref (value);
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_RESULT, svg_string_new_take (str));
 
   create_transition (filter, filter->filters->len, timeline, states,
                      duration, delay, easing,
@@ -3641,21 +3643,13 @@ create_morph_filter (SvgElement *shape,
 
   f = svg_filter_new (filter, SVG_FILTER_COMPONENT_TRANSFER);
   svg_element_add_filter (filter, f);
-  value = svg_filter_ref_new (FILTER_REF_SOURCE_GRAPHIC);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_IN, value);
-  svg_value_unref (value);
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_IN, svg_filter_ref_new (FILTER_REF_SOURCE_GRAPHIC));
 
   f = svg_filter_new (filter, SVG_FILTER_FUNC_A);
   svg_element_add_filter (filter, f);
-  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_TYPE, value);
-  svg_value_unref (value);
-  value = svg_number_new (100);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_SLOPE, value);
-  svg_value_unref (value);
-  value = svg_number_new (0);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_INTERCEPT, value);
-  svg_value_unref (value);
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_TYPE, svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR));
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_SLOPE, svg_number_new (100));
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_INTERCEPT, svg_number_new (0));
 
   f = svg_filter_new (filter, SVG_FILTER_BLUR);
   svg_element_add_filter (filter, f);
@@ -3674,22 +3668,14 @@ create_morph_filter (SvgElement *shape,
     {
       f = svg_filter_new (filter, func);
       svg_element_add_filter (filter, f);
-      value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
-      svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_TYPE, value);
-      svg_value_unref (value);
-      value = svg_number_new (0);
-      svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_SLOPE, value);
-      svg_value_unref (value);
-      value = svg_number_new (1);
-      svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_INTERCEPT, value);
-      svg_value_unref (value);
+      svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_TYPE, svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR));
+      svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_SLOPE, svg_number_new (0));
+      svg_filter_take_specified_value (f, SVG_PROPERTY_FE_FUNC_INTERCEPT, svg_number_new (1));
     }
 
   f = svg_filter_new (filter, SVG_FILTER_FUNC_A);
   svg_element_add_filter (filter, f);
-  value = svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_FUNC_TYPE, value);
-  svg_value_unref (value);
+  svg_filter_set_specified_value (f, SVG_PROPERTY_FE_FUNC_TYPE, svg_component_transfer_type_new (COMPONENT_TRANSFER_LINEAR));
 
   create_transition (filter, filter->filters->len, timeline, states,
                      duration, delay, easing,
@@ -3707,17 +3693,11 @@ create_morph_filter (SvgElement *shape,
 
   f = svg_filter_new (filter, SVG_FILTER_COMPOSITE);
   svg_element_add_filter (filter, f);
-  value = svg_composite_operator_new (COMPOSITE_OPERATOR_ARITHMETIC);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_COMPOSITE_OPERATOR, value);
-  svg_value_unref (value);
-  value = svg_number_new (1);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_COMPOSITE_K1, value);
-  svg_value_unref (value);
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_COMPOSITE_OPERATOR, svg_composite_operator_new (COMPOSITE_OPERATOR_ARITHMETIC));
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_COMPOSITE_K1, svg_number_new (1));
   str = g_strdup_printf ("gpa:morph-filter:%s:blurred", svg_element_get_id (shape));
-  value = svg_filter_ref_new_ref (str);
+  svg_filter_take_specified_value (f, SVG_PROPERTY_FE_IN2, svg_filter_ref_new_ref (str));
   g_free (str);
-  svg_filter_set_base_value (f, SVG_PROPERTY_FE_IN2, value);
-  svg_value_unref (value);
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
   a->id = g_strdup_printf ("gpa:set:morph:%s", svg_element_get_id (shape));
@@ -4689,10 +4669,10 @@ determine_filter_subregion (SvgFilter             *f,
       return FALSE;
     }
 
-  x_set = svg_filter_property_is_set (f, SVG_PROPERTY_FE_X);
-  y_set = svg_filter_property_is_set (f, SVG_PROPERTY_FE_Y);
-  w_set = svg_filter_property_is_set (f, SVG_PROPERTY_FE_WIDTH);
-  h_set = svg_filter_property_is_set (f, SVG_PROPERTY_FE_HEIGHT);
+  x_set = svg_filter_is_specified (f, SVG_PROPERTY_FE_X);
+  y_set = svg_filter_is_specified (f, SVG_PROPERTY_FE_Y);
+  w_set = svg_filter_is_specified (f, SVG_PROPERTY_FE_WIDTH);
+  h_set = svg_filter_is_specified (f, SVG_PROPERTY_FE_HEIGHT);
 
   if (x_set || y_set || w_set || h_set)
     {
@@ -5644,11 +5624,11 @@ push_group (SvgElement   *shape,
           if (shape_is_use_target (shape, context))
             {
               SvgElement *use = context->ctx_shape_stack->data;
-              if (svg_element_property_is_set (use, SVG_PROPERTY_WIDTH))
+              if (svg_element_is_specified (use, SVG_PROPERTY_WIDTH))
                 width = svg_number_get (use->current[SVG_PROPERTY_WIDTH], context->viewport->size.width);
               else
                 width = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_WIDTH), context->viewport->size.width);
-              if (svg_element_property_is_set (use, SVG_PROPERTY_HEIGHT))
+              if (svg_element_is_specified (use, SVG_PROPERTY_HEIGHT))
                 height = svg_number_get (use->current[SVG_PROPERTY_HEIGHT], context->viewport->size.height);
               else
                 height = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_HEIGHT), context->viewport->size.height);
@@ -5695,7 +5675,7 @@ push_group (SvgElement   *shape,
     {
       GskTransform *transform = svg_transform_get_gsk (tf);
 
-      if (svg_element_property_is_set (shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
+      if (svg_element_is_specified (shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
         {
           SvgValue *tfo = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM_ORIGIN);
           SvgValue *tfb = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM_BOX);
@@ -5853,7 +5833,7 @@ push_group (SvgElement   *shape,
                 {
                   GskTransform *transform = svg_transform_get_gsk (ctf);
 
-                  if (svg_element_property_is_set (clip_shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
+                  if (svg_element_is_specified (clip_shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
                     {
                       SvgValue *tfo = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM_ORIGIN);
                       SvgValue *tfb = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM_BOX);
@@ -5947,10 +5927,10 @@ push_group (SvgElement   *shape,
 #endif
       gtk_snapshot_push_mask (context->snapshot, svg_enum_get (svg_element_get_current_value (mask_shape, SVG_PROPERTY_MASK_TYPE)));
 
-      if (svg_element_property_is_set (mask_shape, SVG_PROPERTY_X) ||
-          svg_element_property_is_set (mask_shape, SVG_PROPERTY_Y) ||
-          svg_element_property_is_set (mask_shape, SVG_PROPERTY_WIDTH) ||
-          svg_element_property_is_set (mask_shape, SVG_PROPERTY_HEIGHT))
+      if (svg_element_is_specified (mask_shape, SVG_PROPERTY_X) ||
+          svg_element_is_specified (mask_shape, SVG_PROPERTY_Y) ||
+          svg_element_is_specified (mask_shape, SVG_PROPERTY_WIDTH) ||
+          svg_element_is_specified (mask_shape, SVG_PROPERTY_HEIGHT))
         {
            graphene_rect_t mask_clip;
 
@@ -6155,7 +6135,7 @@ paint_server_get_template_value (SvgElement   *shape,
                                  SvgProperty   attr,
                                  PaintContext *context)
 {
-  if (!svg_element_property_is_set (shape, attr))
+  if (!svg_element_is_specified (shape, attr))
     {
       SvgValue *href = svg_element_get_current_value (shape, SVG_PROPERTY_HREF);
       const char *ref = svg_href_get_id (href);
@@ -6204,7 +6184,7 @@ paint_server_get_current_value (SvgElement   *shape,
 {
   SvgValue *value = NULL;
 
-  if (svg_element_property_is_set (shape, attr))
+  if (svg_element_is_specified (shape, attr))
     return svg_element_get_current_value (shape, attr);
 
   value = paint_server_get_template_value (shape, attr, context);
@@ -6479,7 +6459,7 @@ paint_radial_gradient (SvgElement            *gradient,
 
   gradient_transform = svg_transform_get_gsk (tf);
 
-  if (svg_element_property_is_set (gradient, SVG_PROPERTY_TRANSFORM_ORIGIN))
+  if (svg_element_is_specified (gradient, SVG_PROPERTY_TRANSFORM_ORIGIN))
     {
       SvgValue *tfo = gradient->current[SVG_PROPERTY_TRANSFORM_ORIGIN];
       double x, y;
@@ -6622,7 +6602,7 @@ paint_pattern (SvgElement            *pattern,
 
   transform = svg_transform_get_gsk (tf);
 
-  if (svg_element_property_is_set (pattern, SVG_PROPERTY_TRANSFORM_ORIGIN))
+  if (svg_element_is_specified (pattern, SVG_PROPERTY_TRANSFORM_ORIGIN))
     {
       SvgValue *tfo = pattern->current[SVG_PROPERTY_TRANSFORM_ORIGIN];
       double xx, yy;
@@ -7394,9 +7374,9 @@ generate_layouts (SvgElement      *self,
   if (!lastwasspace)
     lastwasspace = &lwss;
 
-  if (svg_element_property_is_set (self, SVG_PROPERTY_X))
+  if (svg_element_is_specified (self, SVG_PROPERTY_X))
     *x = svg_number_get (self->current[SVG_PROPERTY_X], 1);
-  if (svg_element_property_is_set (self, SVG_PROPERTY_Y))
+  if (svg_element_is_specified (self, SVG_PROPERTY_Y))
     *y = svg_number_get (self->current[SVG_PROPERTY_Y], 1);
 
   dx = svg_number_get (self->current[SVG_PROPERTY_DX], 1);
@@ -7504,7 +7484,7 @@ fill_text (SvgElement            *self,
             if (svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
               continue;
 
-            if (svg_element_property_is_set (node->shape.shape, SVG_PROPERTY_FILL))
+            if (svg_element_is_specified (node->shape.shape, SVG_PROPERTY_FILL))
               {
                 cpaint = svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_FILL);
                 if (node->shape.has_bounds)
@@ -7594,7 +7574,7 @@ stroke_text (SvgElement            *self,
             if (svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
               continue;
 
-            if (svg_element_property_is_set (node->shape.shape, SVG_PROPERTY_STROKE))
+            if (svg_element_is_specified (node->shape.shape, SVG_PROPERTY_STROKE))
               {
                 cpaint = svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_STROKE);
                 if (node->shape.has_bounds)

@@ -35,22 +35,28 @@ void           svg_color_stop_free              (SvgColorStop   *stop);
 unsigned int   svg_color_stop_get_index         (SvgProperty     attr);
 SvgProperty    svg_color_stop_get_property      (unsigned int    idx);
 
-gboolean       svg_color_stop_property_is_set   (SvgColorStop   *stop,
-                                                 SvgProperty     attr);
-
-SvgValue *     svg_color_stop_get_base_value    (SvgColorStop   *stop,
-                                                 SvgProperty     attr);
-
-SvgValue *     svg_color_stop_get_current_value (SvgColorStop   *stop,
-                                                 SvgProperty     attr);
+void           svg_color_stop_set_specified_value (SvgColorStop   *stop,
+                                                   SvgProperty     attr,
+                                                   SvgValue       *value);
+void           svg_color_stop_take_specified_value (SvgColorStop   *stop,
+                                                    SvgProperty     attr,
+                                                    SvgValue       *value);
+SvgValue *     svg_color_stop_get_specified_value (SvgColorStop   *stop,
+                                                   SvgProperty     attr);
+gboolean       svg_color_stop_is_specified        (SvgColorStop   *stop,
+                                                   SvgProperty     attr);
 
 void           svg_color_stop_set_base_value    (SvgColorStop   *stop,
                                                  SvgProperty     attr,
                                                  SvgValue       *value);
+SvgValue *     svg_color_stop_get_base_value    (SvgColorStop   *stop,
+                                                 SvgProperty     attr);
 
 void           svg_color_stop_set_current_value (SvgColorStop   *stop,
                                                  SvgProperty     attr,
                                                  SvgValue       *value);
+SvgValue *     svg_color_stop_get_current_value (SvgColorStop   *stop,
+                                                 SvgProperty     attr);
 
 void           svg_color_stop_set_id            (SvgColorStop   *stop,
                                                  const char     *id);
