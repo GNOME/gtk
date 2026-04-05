@@ -7263,20 +7263,19 @@ compute_update_order (SvgElement *shape,
 #define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
 
-typedef struct _PropertyValue PropertyValue;
-struct _PropertyValue {
+typedef struct
+{
   SvgProperty attr;
   SvgValue *value;
-};
+} PropertyValue;
 
-typedef struct _SvgCssRuleset SvgCssRuleset;
-struct _SvgCssRuleset
+typedef struct
 {
   GtkCssSelector *selector;
   PropertyValue *styles;
-  guint n_styles;
-  guint owns_styles;
-};
+  unsigned int n_styles;
+  gboolean owns_styles;
+} SvgCssRuleset;
 
 static void
 svg_css_ruleset_init_copy (SvgCssRuleset  *new,
@@ -7284,7 +7283,6 @@ svg_css_ruleset_init_copy (SvgCssRuleset  *new,
                            GtkCssSelector *selector)
 {
   memcpy (new, ruleset, sizeof (SvgCssRuleset));
-
   new->selector = selector;
   if (ruleset->owns_styles)
     ruleset->owns_styles = FALSE;
@@ -7295,9 +7293,7 @@ svg_css_ruleset_clear (SvgCssRuleset *ruleset)
 {
   if (ruleset->owns_styles)
     {
-      guint i;
-
-      for (i = 0; i < ruleset->n_styles; i++)
+      for (unsigned int i = 0; i < ruleset->n_styles; i++)
         {
           svg_value_unref (ruleset->styles[i].value);
           ruleset->styles[i].value = NULL;
@@ -7316,7 +7312,7 @@ svg_css_ruleset_add (SvgCssRuleset *ruleset,
                      SvgProperty    attr,
                      SvgValue      *value)
 {
-  guint i;
+  unsigned int i;
 
   g_return_if_fail (ruleset->owns_styles || ruleset->n_styles == 0);
 
@@ -7358,6 +7354,7 @@ svg_css_scanner_parser_error (GtkCssParser         *parser,
                               gpointer              user_data)
 {
   ParserData *data = user_data;
+
   if (css_error->domain == GTK_CSS_PARSER_ERROR)
     {
       GError *error;
@@ -7480,15 +7477,15 @@ parse_import (SvgCssScanner *scanner)
 
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_STRING))
     {
-      char *url;
+      char *url = gtk_css_parser_consume_string (scanner->parser);
 
-      url = gtk_css_parser_consume_string (scanner->parser);
       if (url)
         {
           if (gtk_css_parser_get_file (scanner->parser))
             file = gtk_css_parser_resolve_url (scanner->parser, url);
           else
             file = g_file_new_for_path (url);
+
           if (file == NULL)
             {
               gtk_css_parser_error_import (scanner->parser,
@@ -7503,6 +7500,7 @@ parse_import (SvgCssScanner *scanner)
   else
     {
       char *url = gtk_css_parser_consume_url (scanner->parser);
+
       if (url)
         {
           if (gtk_css_parser_get_file (scanner->parser))
