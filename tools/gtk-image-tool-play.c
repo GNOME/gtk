@@ -335,7 +335,7 @@ do_play (int          *argc,
     { "no-external-resources", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_external, N_("Don't load external resources"), NULL },
     { "no-extensions", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &allow_extensions, N_("Don't allow gpa extensions"), NULL },
     { "traditional-symbolic", 0, 0, G_OPTION_ARG_NONE, &traditional_symbolic, N_("Traditional symbolic icon"), NULL },
-    { "css", 0, 0, G_OPTION_ARG_FILENAME, &stylesheet, N_("Use CSS style"), N_("FILE") },
+    { "css", 0, 0, G_OPTION_ARG_FILENAME, &stylesheet, N_("Use FILE as user stylesheet"), N_("FILE") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
