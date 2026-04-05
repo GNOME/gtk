@@ -1,0 +1,29 @@
+color-matrix {
+  matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1);
+  offset: -1.01 -1.01 -1.01 0;
+  child: container {
+    color {
+      bounds: 0 0 65 30;
+      color: rgb(0,0,0);
+    }
+    transform {
+      transform: scale(1.25);
+      child: container {
+        inset-shadow {
+          color: rgba(255,255,255,0.5);
+          dx: 0;
+          dy: 0;
+          outline: 3 3 20 20 / 10;
+          spread: 2;
+        }
+        inset-shadow {
+          color: rgba(255,255,255,0.5);
+          dx: 0;
+          dy: 0;
+          outline: 27 3 20 20 / 9.9;
+          spread: 2;
+        }
+      }
+    }
+  }
+}

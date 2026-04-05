@@ -72,7 +72,7 @@ border_get_position (RoundedRect outside,
   uint slice_index = uint (GSK_VERTEX_INDEX) / 6u;
   uint vert_index = uint (GSK_VERTEX_INDEX) % 6u;
 
-  Rect rect = rounded_rect_intersection_slice (outside, inside, slice_index);
+  Rect rect = rounded_rect_intersection_slice (outside, inside, slice_index, true);
 
   switch (slice_index)
     {
