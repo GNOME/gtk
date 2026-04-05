@@ -27,6 +27,7 @@
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgutilsprivate.h"
 
+#include <tgmath.h>
 
 typedef struct
 {
@@ -51,6 +52,22 @@ typedef struct
       };
       double m[6];
     } matrix;
+    struct {
+      double x, y, z;
+    } translate3d, scale3d;
+    struct {
+      double x, y;
+    } skew;
+    struct {
+      double x, y, z;
+      double angle;
+    } rotate3d;
+    struct {
+      double depth;
+    } perspective;
+    struct {
+      graphene_matrix_t m;
+    } matrix3d;
   };
 } PrimitiveTransform;
 
@@ -96,6 +113,26 @@ primitive_transform_equal (const PrimitiveTransform *t0,
       return t0->matrix.xx == t1->matrix.xx && t0->matrix.yx == t1->matrix.yx &&
              t0->matrix.xy == t1->matrix.xy && t0->matrix.yy == t1->matrix.yy &&
              t0->matrix.dx == t1->matrix.dx && t0->matrix.dy == t1->matrix.dy;
+    case TRANSFORM_TRANSLATE_3D:
+      return t0->translate3d.x == t1->translate3d.x &&
+             t0->translate3d.y == t1->translate3d.y &&
+             t0->translate3d.z == t1->translate3d.z;
+    case TRANSFORM_SCALE_3D:
+      return t0->scale3d.x == t1->scale3d.x &&
+             t0->scale3d.y == t1->scale3d.y &&
+             t0->scale3d.z == t1->scale3d.z;
+    case TRANSFORM_ROTATE_3D:
+      return t0->rotate3d.angle == t1->rotate3d.angle &&
+             t0->rotate3d.x == t1->rotate3d.x &&
+             t0->rotate3d.x == t1->rotate3d.y &&
+             t0->rotate3d.z == t1->rotate3d.z;
+    case TRANSFORM_SKEW:
+      return t0->skew.x == t1->skew.x &&
+             t0->skew.y == t1->skew.y;
+    case TRANSFORM_PERSPECTIVE:
+      return t0->perspective.depth == t1->perspective.depth;
+    case TRANSFORM_MATRIX_3D:
+      return graphene_matrix_equal (&t0->matrix3d.m, &t1->matrix3d.m);
     default:
       g_assert_not_reached ();
     }
@@ -237,6 +274,69 @@ svg_transform_new_rotate_and_shift (double            angle,
   tf->transforms[2].type = TRANSFORM_TRANSLATE;
   tf->transforms[2].translate.x = - orig->x;
   tf->transforms[2].translate.y = - orig->y;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_translate_3d (double x, double y, double z)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_TRANSLATE_3D;
+  tf->transforms[0].translate3d.x = x;
+  tf->transforms[0].translate3d.y = y;
+  tf->transforms[0].translate3d.z = z;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_scale_3d (double x, double y, double z)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_SCALE_3D;
+  tf->transforms[0].scale3d.x = x;
+  tf->transforms[0].scale3d.y = y;
+  tf->transforms[0].scale3d.z = z;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_rotate_3d (double angle,
+                             double x, double y, double z)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_ROTATE_3D;
+  tf->transforms[0].rotate3d.angle = angle;
+  tf->transforms[0].rotate3d.x = x;
+  tf->transforms[0].rotate3d.y = y;
+  tf->transforms[0].rotate3d.z = z;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_skew (double x, double y)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_SKEW;
+  tf->transforms[0].skew.x = x;
+  tf->transforms[0].skew.y = y;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_perspective (double depth)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_PERSPECTIVE;
+  tf->transforms[0].perspective.depth = depth;
+  return (SvgValue *) tf;
+}
+
+SvgValue *
+svg_transform_new_matrix_3d (const graphene_matrix_t *m)
+{
+  SvgTransform *tf = svg_transform_alloc (1);
+  tf->transforms[0].type = TRANSFORM_MATRIX_3D;
+  graphene_matrix_init_from_matrix (&tf->transforms[0].matrix3d.m, m);
   return (SvgValue *) tf;
 }
 
@@ -530,6 +630,77 @@ svg_transform_parse_css (GtkCssParser *parser)
           transform.type = TRANSFORM_MATRIX;
           memcpy (transform.matrix.m, values, sizeof (double) * 6);
         }
+      else if (gtk_css_parser_has_function (parser, "translate3d"))
+        {
+          double values[3];
+
+          if (!parse_transform_function (parser, 3, 3, values))
+            goto fail;
+
+          transform.type = TRANSFORM_TRANSLATE_3D;
+          transform.translate3d.x = values[0];
+          transform.translate3d.y = values[1];
+          transform.translate3d.z = values[2];
+        }
+      else if (gtk_css_parser_has_function (parser, "scale3d"))
+        {
+          double values[3];
+
+          if (!parse_transform_function (parser, 3, 3, values))
+            goto fail;
+
+          transform.type = TRANSFORM_SCALE_3D;
+          transform.scale3d.x = values[0];
+          transform.scale3d.y = values[1];
+          transform.scale3d.z = values[2];
+        }
+      else if (gtk_css_parser_has_function (parser, "rotate3d"))
+        {
+          double values[4];
+
+          if (!parse_transform_function (parser, 4, 4, values))
+            goto fail;
+
+          transform.type = TRANSFORM_ROTATE_3D;
+          transform.rotate3d.x = values[0];
+          transform.rotate3d.y = values[1];
+          transform.rotate3d.z = values[2];
+          transform.rotate3d.angle = values[3];
+        }
+      else if (gtk_css_parser_has_function (parser, "skew"))
+        {
+          double values[2];
+
+          if (!parse_transform_function (parser, 2, 2, values))
+            goto fail;
+
+          transform.type = TRANSFORM_SKEW;
+          transform.skew.x = values[0];
+          transform.skew.y = values[1];
+        }
+      else if (gtk_css_parser_has_function (parser, "perspective"))
+        {
+          double values[1];
+
+          if (!parse_transform_function (parser, 1, 1, values))
+            goto fail;
+
+          transform.type = TRANSFORM_PERSPECTIVE;
+          transform.perspective.depth = values[0];
+        }
+      else if (gtk_css_parser_has_function (parser, "matrix3d"))
+        {
+          double values[16];
+          float floats[16];
+
+          if (!parse_transform_function (parser, 16, 16, values))
+            goto fail;
+
+          transform.type = TRANSFORM_MATRIX_3D;
+          for (unsigned int i = 0; i < 16; i++)
+            floats[i] = values[i];
+          graphene_matrix_init_from_float (&transform.matrix3d.m, floats);
+        }
       else
         {
           break;
@@ -583,7 +754,7 @@ primitive_transform_parse (TransformType  type,
   SvgValue *value = NULL;
 
   gtk_css_parser_skip_whitespace (parser);
-  switch (type)
+  switch ((unsigned int) type)
     {
     case TRANSFORM_TRANSLATE:
       if (svg_number_parse2 (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER, &x, &u))
@@ -634,8 +805,6 @@ primitive_transform_parse (TransformType  type,
         value = svg_transform_new_skew_y (angle);
       break;
 
-    case TRANSFORM_NONE:
-    case TRANSFORM_MATRIX:
     default:
       g_assert_not_reached ();
     }
@@ -679,6 +848,12 @@ svg_primitive_transform_print (const SvgValue *value,
       break;
 
     case TRANSFORM_MATRIX:
+    case TRANSFORM_TRANSLATE_3D:
+    case TRANSFORM_SCALE_3D:
+    case TRANSFORM_ROTATE_3D:
+    case TRANSFORM_SKEW:
+    case TRANSFORM_PERSPECTIVE:
+    case TRANSFORM_MATRIX_3D:
     case TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -700,6 +875,9 @@ svg_transform_print (const SvgValue *value,
 
       switch (t->type)
         {
+        case TRANSFORM_NONE:
+          g_string_append (s, "none");
+          break;
         case TRANSFORM_TRANSLATE:
           string_append_double (s, "translate(", t->translate.x);
           string_append_double (s, ", ", t->translate.y);
@@ -733,8 +911,48 @@ svg_transform_print (const SvgValue *value,
           string_append_double (s, ", ", t->matrix.dy);
           g_string_append (s, ")");
           break;
-        case TRANSFORM_NONE:
-          g_string_append (s, "none");
+        case TRANSFORM_TRANSLATE_3D:
+          string_append_double (s, "translate3d(", t->translate3d.x);
+          string_append_double (s, ", ", t->translate3d.y);
+          string_append_double (s, ", ", t->translate3d.z);
+          g_string_append (s, ")");
+          break;
+        case TRANSFORM_SCALE_3D:
+          string_append_double (s, "scale3d(", t->scale3d.x);
+          string_append_double (s, ", ", t->scale3d.y);
+          string_append_double (s, ", ", t->scale3d.z);
+          g_string_append (s, ")");
+          break;
+        case TRANSFORM_ROTATE_3D:
+          string_append_double (s, "rotate3d(", t->rotate3d.x);
+          string_append_double (s, ", ", t->rotate3d.y);
+          string_append_double (s, ", ", t->rotate3d.z);
+          string_append_double (s, ", ", t->rotate3d.angle);
+          g_string_append (s, ")");
+          break;
+        case TRANSFORM_PERSPECTIVE:
+          string_append_double (s, "perspective(", t->perspective.depth);
+          g_string_append (s, ")");
+          break;
+        case TRANSFORM_SKEW:
+          string_append_double (s, "skew(", t->skew.x);
+          string_append_double (s, ", ", t->skew.y);
+          g_string_append (s, ")");
+          break;
+        case TRANSFORM_MATRIX_3D:
+          {
+            float v[16];
+            graphene_matrix_to_float (&t->matrix3d.m, v);
+            string_append_double (s, "matrix(", v[0]);
+            for (unsigned int j = 1; j < 16; j++)
+              {
+                if (j % 4 == 0)
+                  string_append_double (s, ",\n       ", v[j]);
+                else
+                  string_append_double (s, ", ", v[j]);
+              }
+            g_string_append (s, ")");
+          }
           break;
         default:
           g_assert_not_reached ();
@@ -803,6 +1021,38 @@ primitive_transform_apply (const PrimitiveTransform *transform,
                                       transform->matrix.xy, transform->matrix.yy,
                                       transform->matrix.dx, transform->matrix.dy);
 
+    case TRANSFORM_TRANSLATE_3D:
+      return gsk_transform_translate_3d (next,
+                                         &GRAPHENE_POINT3D_INIT (
+                                           transform->translate3d.x,
+                                           transform->translate3d.y,
+                                           transform->translate3d.z));
+    case TRANSFORM_SCALE_3D:
+      return gsk_transform_scale_3d (next,
+                                     transform->scale3d.x,
+                                     transform->scale3d.y,
+                                     transform->scale3d.z);
+
+    case TRANSFORM_ROTATE_3D:
+      {
+        graphene_vec3_t v3;
+        return gsk_transform_rotate_3d (next,
+                                        transform->rotate3d.angle,
+                                        graphene_vec3_init (&v3,
+                                          transform->rotate3d.x,
+                                          transform->rotate3d.y,
+                                          transform->rotate3d.z));
+      }
+
+    case TRANSFORM_SKEW:
+      return gsk_transform_skew (next, transform->skew.x, transform->skew.y);
+
+    case TRANSFORM_PERSPECTIVE:
+      return gsk_transform_perspective (next, transform->perspective.depth);
+
+    case TRANSFORM_MATRIX_3D:
+      return gsk_transform_matrix (next, &transform->matrix3d.m);
+
     default:
       g_assert_not_reached ();
     }
@@ -821,11 +1071,21 @@ svg_transform_interpolate (const SvgValue    *value0,
     { .type = TRANSFORM_SKEW_X, .skew_x = { 0 } },
     { .type = TRANSFORM_SKEW_Y, .skew_y = { 0 } },
     { .type = TRANSFORM_MATRIX, .matrix = { .m = { 1, 0, 0, 1, 0, 0 } } },
+    { .type = TRANSFORM_TRANSLATE_3D, .translate3d = { 0, 0, 0 } },
+    { .type = TRANSFORM_SCALE_3D, .scale3d = { 1, 1, 1 } },
+    { .type = TRANSFORM_ROTATE_3D, .rotate3d = { 0, 1, 0, 0 } },
+    { .type = TRANSFORM_SKEW, .skew = { 0, 0 } },
   };
-
+  static PrimitiveTransform id_mat3 = { 0, };
   const SvgTransform *tf0 = (const SvgTransform *) value0;
   const SvgTransform *tf1 = (const SvgTransform *) value1;
   SvgTransform *tf;
+
+  if (id_mat3.type == 0)
+    {
+      id_mat3.type = TRANSFORM_MATRIX_3D;
+      graphene_matrix_init_identity (&id_mat3.matrix3d.m);
+    }
 
   tf = svg_transform_alloc (MAX (tf0->n_transforms, tf1->n_transforms));
 
@@ -837,11 +1097,17 @@ svg_transform_interpolate (const SvgValue    *value0,
 
       if (i < tf0->n_transforms)
         p0 = &tf0->transforms[i];
+      else if (tf1->transforms[i].type == TRANSFORM_PERSPECTIVE ||
+               tf1->transforms[i].type == TRANSFORM_MATRIX_3D)
+        p0 = &id_mat3;
       else
         p0 = &identity[tf1->transforms[i].type];
 
       if (i < tf1->n_transforms)
         p1 = &tf1->transforms[i];
+      else if (tf0->transforms[i].type == TRANSFORM_PERSPECTIVE ||
+               tf0->transforms[i].type == TRANSFORM_MATRIX_3D)
+        p1 = &id_mat3;
       else
         p1 = &identity[tf0->transforms[i].type];
 
@@ -876,6 +1142,8 @@ svg_transform_interpolate (const SvgValue    *value0,
       p->type = p0->type;
       switch (p0->type)
         {
+        case TRANSFORM_NONE:
+          break;
         case TRANSFORM_TRANSLATE:
           p->translate.x = lerp (t, p0->translate.x, p1->translate.x);
           p->translate.y = lerp (t, p0->translate.y, p1->translate.y);
@@ -898,7 +1166,31 @@ svg_transform_interpolate (const SvgValue    *value0,
         case TRANSFORM_MATRIX:
           interpolate_matrices (t, p0->matrix.m, p1->matrix.m, p->matrix.m);
           break;
-        case TRANSFORM_NONE:
+        case TRANSFORM_TRANSLATE_3D:
+          p->translate3d.x = lerp (t, p0->translate3d.x, p1->translate3d.x);
+          p->translate3d.y = lerp (t, p0->translate3d.y, p1->translate3d.y);
+          p->translate3d.z = lerp (t, p0->translate3d.z, p1->translate3d.z);
+          break;
+        case TRANSFORM_SCALE_3D:
+          p->scale3d.x = lerp (t, p0->scale3d.x, p1->scale3d.x);
+          p->scale3d.y = lerp (t, p0->scale3d.y, p1->scale3d.y);
+          p->scale3d.z = lerp (t, p0->scale3d.z, p1->scale3d.z);
+          break;
+        case TRANSFORM_ROTATE_3D:
+          p->rotate3d.angle = lerp (t, p0->rotate3d.angle, p1->rotate3d.angle);
+          p->rotate3d.x = lerp (t, p0->rotate3d.x, p1->rotate3d.x);
+          p->rotate3d.y = lerp (t, p0->rotate3d.y, p1->rotate3d.y);
+          p->rotate3d.z = lerp (t, p0->rotate3d.z, p1->rotate3d.z);
+          break;
+        case TRANSFORM_SKEW:
+          p->skew.x = lerp (t, p0->skew.x, p1->skew.x);
+          p->skew.y = lerp (t, p0->skew.y, p1->skew.y);
+          break;
+        case TRANSFORM_PERSPECTIVE:
+          p->perspective.depth = lerp (t, p0->perspective.depth, p1->perspective.depth);
+          break;
+        case TRANSFORM_MATRIX_3D:
+          graphene_matrix_interpolate (&p0->matrix3d.m, &p1->matrix3d.m, t, &p->matrix3d.m);
           break;
         default:
           g_assert_not_reached ();
@@ -933,7 +1225,10 @@ svg_transform_accumulate (const SvgValue    *value0,
     n0 = tf0->n_transforms;
 
   /* special-case this one */
-  if (tf1->n_transforms == 1 && tf1->transforms[0].type != TRANSFORM_MATRIX)
+  if (tf1->n_transforms == 1 &&
+      tf1->transforms[0].type != TRANSFORM_MATRIX &&
+      tf1->transforms[0].type != TRANSFORM_MATRIX_3D &&
+      tf1->transforms[0].type != TRANSFORM_PERSPECTIVE)
     {
       PrimitiveTransform *p;
 
@@ -943,13 +1238,15 @@ svg_transform_accumulate (const SvgValue    *value0,
 
       switch (p->type)
         {
+        case TRANSFORM_NONE:
+          break;
         case TRANSFORM_TRANSLATE:
           p->translate.x *= n;
           p->translate.y *= n;
           break;
         case TRANSFORM_SCALE:
-          p->scale.x = pow (p->scale.x, n);
-          p->scale.y = pow (p->scale.y, n);
+          p->scale.x = pow (p->scale.x, (double) n);
+          p->scale.y = pow (p->scale.y, (double) n);
           break;
         case TRANSFORM_ROTATE:
           p->rotate.angle *= n;
@@ -960,9 +1257,26 @@ svg_transform_accumulate (const SvgValue    *value0,
         case TRANSFORM_SKEW_Y:
           p->skew_y.angle *= n;
           break;
-        case TRANSFORM_NONE:
+        case TRANSFORM_TRANSLATE_3D:
+          p->translate3d.x *= n;
+          p->translate3d.y *= n;
+          p->translate3d.z *= n;
           break;
+        case TRANSFORM_SCALE_3D:
+          p->scale3d.x = pow (p->scale3d.x, (double) n);
+          p->scale3d.y = pow (p->scale3d.y, (double) n);
+          p->scale3d.z = pow (p->scale3d.z, (double) n);
+          break;
+        case TRANSFORM_ROTATE_3D:
+          p->rotate3d.angle *= n;
+          break;
+        case TRANSFORM_SKEW:
+          p->skew.x *= n; /* No idea if this is correct */
+          p->skew.y *= n;
+          break;
+        case TRANSFORM_PERSPECTIVE:
         case TRANSFORM_MATRIX:
+        case TRANSFORM_MATRIX_3D:
         default:
           g_assert_not_reached ();
         }
@@ -1009,6 +1323,12 @@ svg_transform_get_gsk (const SvgValue *value)
 }
 
 static double
+hypot3 (double x, double y, double z)
+{
+  return sqrt (x * x + y * y + z * z);
+}
+
+static double
 svg_transform_distance (const SvgValue *value0,
                         const SvgValue *value1)
 {
@@ -1047,9 +1367,35 @@ svg_transform_distance (const SvgValue *value0,
     case TRANSFORM_SKEW_X:
     case TRANSFORM_SKEW_Y:
     case TRANSFORM_MATRIX:
+    case TRANSFORM_MATRIX_3D:
+    case TRANSFORM_SKEW:
+    case TRANSFORM_PERSPECTIVE:
       g_warning ("Can't determine distance between these "
                  "primitive transforms");
       return 1;
+    case TRANSFORM_TRANSLATE_3D:
+      return hypot3 (p0->translate3d.x - p1->translate3d.x,
+                     p0->translate3d.y - p1->translate3d.y,
+                     p0->translate3d.z - p1->translate3d.z);
+      break;
+    case TRANSFORM_SCALE_3D:
+      return hypot3 (p0->scale3d.x - p1->scale3d.x,
+                     p0->scale3d.y - p1->scale3d.y,
+                     p0->scale3d.z - p1->scale3d.z);
+          break;
+    case TRANSFORM_ROTATE_3D:
+      if (p0->rotate3d.x == p0->rotate3d.x &&
+          p0->rotate3d.y == p0->rotate3d.y &&
+          p0->rotate3d.z == p0->rotate3d.z)
+        {
+          return hypot (p0->rotate3d.angle - p1->rotate3d.angle, 0);
+        }
+      else
+        {
+          g_warning ("Can't determine distance between these "
+                     "primitive transforms");
+          return 1;
+        }
     default:
       g_assert_not_reached ();
     }
@@ -1103,6 +1449,30 @@ svg_transform_get_primitive (const SvgValue *value,
     case TRANSFORM_MATRIX:
       memcpy (params, tf->transforms[pos].matrix.m, sizeof (double) * 6);
       break;
+    case TRANSFORM_TRANSLATE_3D:
+      params[0] = tf->transforms[pos].translate3d.x;
+      params[1] = tf->transforms[pos].translate3d.y;
+      params[2] = tf->transforms[pos].translate3d.z;
+      break;
+    case TRANSFORM_SCALE_3D:
+      params[0] = tf->transforms[pos].scale3d.x;
+      params[1] = tf->transforms[pos].scale3d.y;
+      params[2] = tf->transforms[pos].scale3d.z;
+      break;
+    case TRANSFORM_ROTATE_3D:
+      params[0] = tf->transforms[pos].rotate3d.angle;
+      params[1] = tf->transforms[pos].rotate3d.x;
+      params[2] = tf->transforms[pos].rotate3d.y;
+      params[3] = tf->transforms[pos].rotate3d.z;
+      break;
+    case TRANSFORM_SKEW:
+      params[0] = tf->transforms[pos].skew.x;
+      params[1] = tf->transforms[pos].skew.y;
+      break;
+    case TRANSFORM_PERSPECTIVE:
+      params[0] = tf->transforms[pos].perspective.depth;
+      break;
+    case TRANSFORM_MATRIX_3D:
     default:
       g_assert_not_reached ();
     }
@@ -1164,6 +1534,27 @@ svg_transform_get_transform (const SvgValue *value,
       return svg_transform_new_skew_y (tf->transforms[pos].skew_y.angle);
     case TRANSFORM_MATRIX:
       return svg_transform_new_matrix (tf->transforms[pos].matrix.m);
+    case TRANSFORM_TRANSLATE_3D:
+      return svg_transform_new_translate_3d (tf->transforms[pos].translate3d.x,
+                                             tf->transforms[pos].translate3d.y,
+                                             tf->transforms[pos].translate3d.z);
+    case TRANSFORM_SCALE_3D:
+      return svg_transform_new_scale_3d (tf->transforms[pos].scale3d.x,
+                                         tf->transforms[pos].scale3d.y,
+                                         tf->transforms[pos].scale3d.z);
+    case TRANSFORM_ROTATE_3D:
+      return svg_transform_new_rotate_3d (tf->transforms[pos].rotate3d.angle,
+                                          tf->transforms[pos].rotate3d.x,
+                                          tf->transforms[pos].rotate3d.y,
+                                          tf->transforms[pos].rotate3d.z);
+    case TRANSFORM_SKEW:
+      return svg_transform_new_skew (tf->transforms[pos].skew.x,
+                                     tf->transforms[pos].skew.y);
+    case TRANSFORM_PERSPECTIVE:
+      return svg_transform_new_perspective (tf->transforms[pos].perspective.depth);
+    case TRANSFORM_MATRIX_3D:
+      return svg_transform_new_matrix_3d (&tf->transforms[pos].matrix3d.m);
+
     default:
       g_assert_not_reached ();
     }

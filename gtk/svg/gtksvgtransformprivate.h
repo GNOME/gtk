@@ -42,6 +42,22 @@ SvgValue *     svg_transform_new_rotate_and_shift
                                            (double            angle,
                                             graphene_point_t *orig,
                                             graphene_point_t *final);
+SvgValue *     svg_transform_new_translate_3d
+                                           (double            x,
+                                            double            y,
+                                            double            z);
+SvgValue *     svg_transform_new_scale_3d  (double            x,
+                                            double            y,
+                                            double            z);
+SvgValue *     svg_transform_new_rotate_3d (double            angle,
+                                            double            x,
+                                            double            y,
+                                            double            z);
+SvgValue *     svg_transform_new_skew      (double            x,
+                                            double            y);
+SvgValue *     svg_transform_new_perspective
+                                           (double            depth);
+SvgValue *     svg_transform_new_matrix_3d (const graphene_matrix_t *m);
 
 SvgValue *     svg_transform_parse         (const char       *value);
 SvgValue *     svg_transform_parse_css     (GtkCssParser     *parser);
