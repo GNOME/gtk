@@ -31,12 +31,14 @@
 #include "gtktypebuiltins.h"
 #include "gtktextview.h"
 #include "gtktextbuffer.h"
+#include "gtkoverlay.h"
 
 struct _GtkInspectorSvg
 {
   GtkWidget parent;
 
   GObject *object;
+  GtkOverlay *overlay;
   GtkTextView *xml_view;
   GtkTextBuffer *xml_buffer;
 
@@ -373,6 +375,7 @@ gtk_inspector_svg_class_init (GtkInspectorSvgClass *klass)
   object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/svg.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorSvg, overlay);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorSvg, xml_view);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorSvg, xml_buffer);
   gtk_widget_class_bind_template_callback (widget_class, xml_changed);
