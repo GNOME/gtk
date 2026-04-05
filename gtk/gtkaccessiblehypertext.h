@@ -19,7 +19,7 @@ G_BEGIN_DECLS
 #define GTK_ACCESSIBLE_HYPERLINK_TYPE (gtk_accessible_hyperlink_get_type ())
 
 GDK_AVAILABLE_IN_4_22
-G_DECLARE_FINAL_TYPE (GtkAccessibleHyperlink, gtk_accessible_hyperlink, GTK, ACCESSIBLE_HYPERLINK, GObject);
+G_DECLARE_FINAL_TYPE (GtkAccessibleHyperlink, gtk_accessible_hyperlink, GTK, ACCESSIBLE_HYPERLINK, GObject)
 
 #define GTK_TYPE_ACCESSIBLE_HYPERTEXT (gtk_accessible_hypertext_get_type ())
 
