@@ -330,6 +330,7 @@ gtk_svg_skipped_element (GtkSvg               *self,
   error = g_error_new_valist (GTK_SVG_ERROR, code, format, args);
   va_end (args);
 
+  gtk_svg_error_set_input (error, "svg");
   gtk_svg_error_set_element (error, parent_element);
   gtk_svg_error_set_location (error, start, end);
 
@@ -365,6 +366,7 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
                            "Invalid attribute: %s", attr_name);
     }
 
+  gtk_svg_error_set_input (error, "svg");
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
   gtk_svg_error_set_attribute (error, attr_name);
   gtk_svg_location_init_tag_range (&start, &end, context);
@@ -399,6 +401,7 @@ gtk_svg_markup_error (GtkSvg              *self,
                                GTK_SVG_ERROR_INVALID_SYNTAX,
                                markup_error->message);
 
+  gtk_svg_error_set_input (error, "svg");
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
   gtk_svg_location_init_tag_range (&start, &end, context);
   gtk_svg_error_set_location (error, &start, &end);
@@ -434,6 +437,7 @@ gtk_svg_missing_attribute (GtkSvg              *self,
                            "Missing attribute: %s", attr_name);
     }
 
+  gtk_svg_error_set_input (error, "svg");
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
   gtk_svg_error_set_attribute (error, attr_name);
   gtk_svg_location_init_tag_range (&start, &end, context);
@@ -7357,20 +7361,27 @@ svg_css_scanner_parser_error (GtkCssParser         *parser,
   if (css_error->domain == GTK_CSS_PARSER_ERROR)
     {
       GError *error;
-      GtkSvgLocation start, end;
+      GtkSvgLocation start = { 0, };
+      GtkSvgLocation end = { 0, };
 
       error = g_error_new_literal (GTK_SVG_ERROR,
                                    GTK_SVG_ERROR_INVALID_SYNTAX,
                                    css_error->message);
+
+      if (data->load_user_style)
+        gtk_svg_error_set_input (error, "stylesheet");
+      else
+        {
+          gtk_svg_error_set_input (error, "svg");
+          start = data->text.start;
+          end = data->text.start;
+        }
 
       if (data->current_shape)
         {
           gtk_svg_error_set_element (error, svg_element_type_get_name (svg_element_get_type (data->current_shape)));
           gtk_svg_error_set_attribute (error, "style");
         }
-
-      start = data->text.start;
-      end = data->text.start;
 
       start.bytes += css_start->bytes;
       start.lines += css_start->lines;

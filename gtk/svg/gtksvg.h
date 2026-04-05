@@ -192,5 +192,7 @@ const GtkSvgLocation *
 GDK_AVAILABLE_IN_4_22
 const GtkSvgLocation *
               gtk_svg_error_get_end        (const GError *error);
+GDK_AVAILABLE_IN_4_24
+const char * gtk_svg_error_get_input       (const GError *error);
 
 G_END_DECLS

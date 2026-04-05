@@ -36,4 +36,7 @@ void gtk_svg_error_set_location  (GError               *error,
                                   const GtkSvgLocation *start,
                                   const GtkSvgLocation *end);
 
+void gtk_svg_error_set_input     (GError               *error,
+                                  const char           *input);
+
 G_END_DECLS

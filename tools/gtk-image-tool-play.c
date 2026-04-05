@@ -134,11 +134,14 @@ error_cb (GtkSvg *svg, GError *error)
     {
       const GtkSvgLocation *start = gtk_svg_error_get_start (error);
       const GtkSvgLocation *end = gtk_svg_error_get_end (error);
+      const char *input = gtk_svg_error_get_input (error);
       const char *element = gtk_svg_error_get_element (error);
       const char *attribute = gtk_svg_error_get_attribute (error);
 
       if (start)
         {
+          if (input)
+            g_print ("%s: ", input);
           if (end->lines != start->lines || end->line_chars != start->line_chars)
             g_print ("%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT " - %" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ",
                      start->lines, start->line_chars,

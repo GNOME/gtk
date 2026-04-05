@@ -25,6 +25,7 @@
 
 typedef struct
 {
+  char *input;
   char *element;
   char *attribute;
   GtkSvgLocation start;
@@ -42,6 +43,7 @@ gtk_svg_error_private_copy (const GtkSvgErrorPrivate *src,
 {
   g_assert (dest != NULL);
   g_assert (src != NULL);
+  dest->input = g_strdup (src->input);
   dest->element = g_strdup (src->element);
   dest->attribute = g_strdup (src->attribute);
   dest->start = src->start;
@@ -52,6 +54,7 @@ static void
 gtk_svg_error_private_clear (GtkSvgErrorPrivate *priv)
 {
   g_assert (priv != NULL);
+  g_free (priv->input);
   g_free (priv->element);
   g_free (priv->attribute);
 }
@@ -87,6 +90,15 @@ gtk_svg_error_set_location (GError               *error,
     priv->start = *start;
   if (end)
     priv->end = *end;
+}
+
+void
+gtk_svg_error_set_input (GError     *error,
+                         const char *input)
+{
+  GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+  g_assert (error->domain == GTK_SVG_ERROR);
+  priv->input = g_strdup (input);
 }
 
 /**
@@ -214,3 +226,26 @@ gtk_svg_error_get_end (const GError *error)
   else
     return NULL;
 }
+
+/**
+ * gtk_svg_error_get_input:
+ * @error: an error in the [error@Gtk.SvgError] domain
+ *
+ * Returns a string describing the input source that
+ * the parsing error occurred in.
+ *
+ * Returns: (nullable): the input source
+ *
+ * Since: 4.24
+ */
+const char *
+gtk_svg_error_get_input (const GError *error)
+{
+  GtkSvgErrorPrivate *priv = gtk_svg_error_get_private (error);
+
+  if (priv)
+    return priv->input;
+  else
+    return NULL;
+}
+
