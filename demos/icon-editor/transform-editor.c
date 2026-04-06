@@ -149,6 +149,12 @@ transform_type_changed (TransformEditor *self)
     case TRANSFORM_MATRIX:
       gtk_widget_set_visible (GTK_WIDGET (self->transform_params), TRUE);
       break;
+    case TRANSFORM_TRANSLATE_3D:
+    case TRANSFORM_SCALE_3D:
+    case TRANSFORM_ROTATE_3D:
+    case TRANSFORM_SKEW:
+    case TRANSFORM_PERSPECTIVE:
+    case TRANSFORM_MATRIX_3D:
     default:
       g_assert_not_reached ();
     }
@@ -194,6 +200,12 @@ transform_changed (TransformEditor *self)
     case TRANSFORM_MATRIX:
       value = svg_transform_new_matrix (params);
       break;
+    case TRANSFORM_TRANSLATE_3D:
+    case TRANSFORM_SCALE_3D:
+    case TRANSFORM_ROTATE_3D:
+    case TRANSFORM_SKEW:
+    case TRANSFORM_PERSPECTIVE:
+    case TRANSFORM_MATRIX_3D:
     default:
       g_assert_not_reached ();
     }
@@ -432,6 +444,12 @@ transform_editor_set_transform (TransformEditor *self,
       gtk_spin_button_set_value (self->transform_param4, params[4]);
       gtk_spin_button_set_value (self->transform_param5, params[5]);
       break;
+    case TRANSFORM_TRANSLATE_3D:
+    case TRANSFORM_SCALE_3D:
+    case TRANSFORM_ROTATE_3D:
+    case TRANSFORM_SKEW:
+    case TRANSFORM_PERSPECTIVE:
+    case TRANSFORM_MATRIX_3D:
     default:
       g_assert_not_reached ();
     }
