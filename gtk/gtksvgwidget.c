@@ -44,15 +44,22 @@
  * extensions.
  *
  * On top of the `GtkSvg` rendering, `GtkSvgWidget` adds event handling.
- * <kbd>Tab</kbd> and <kbd>Shift</kbd>-<kbd>Tab</kbd> keys can be used
- * to move the focus and <kbd>Enter</kbd> and clicks will activate links.
+ * <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys can be used
+ * to move the focus and <kbd>Enter</kbd> and clicks will activate links
+ * by emitting the [signal@Gtk.SvgWidget::activate] signal.
+ *
+ * The `tabindex` attribute can be used to influence what elements
+ * act as focus locations.
  *
  * The styling of the SVG content is following input-related pseudo
  * states such as `:focus`, `:hover` or `:visited` (for links).
  *
- * SVG animations can be triggered by input events as well. See the
- * [SVG animation](https://svgwg.org/specs/animations/) specification
- * for details.
+ * If [property@Gtk.Widget:has-tooltip] is set, then the content
+ * of \<title\> elements will be shown as tooltips.
+ *
+ * SVG animations and different \<view\>s can be triggered by input events
+ * as well. See the [SVG animation](https://svgwg.org/specs/animations/)
+ * specification for details.
  *
  * Since: 4.24
  */

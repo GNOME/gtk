@@ -135,25 +135,24 @@
  *
  * ## The supported subset of SVG
  *
- * The paintable supports much of SVG 2, with some exceptions.
+ * The paintable supports much of [SVG 2](https://svgwg.org/svg2-draft/),
+ * including [animations](https://svgwg.org/specs/animations/), with some
+ * exceptions.
  *
- * Among the graphical elements, `<textPath>` and `<foreignObject>`
- * are not supported.
+ * Among the graphical elements, `<textPath>` and `<foreignObject>` are
+ * not supported.
  *
- * Among the structural elements, `<view>` is not supported.
+ * In the `<filter>` element, the following primitives are not supported:
+ * feConvolveMatrix, feDiffuseLighting, feMorphology, feSpecularLighting
+ * and feTurbulence.
  *
- * In the `<filter>` element, the following primitives are not
- * supported: feConvolveMatrix, feDiffuseLighting,
- * feMorphology, feSpecularLighting and feTurbulence.
+ * Support for the `mask` attribute is limited to just a url referring to
+ * the `<mask>` element by ID.
  *
- * Support for the `mask` attribute is limited to just a url
- * referring to the `<mask>` element by ID.
+ * In animation elements, the parsing of `begin` and `end` attributes is
+ * limited, and the `min` and `max` attributes are not supported.
  *
- * In animation elements, the parsing of `begin` and `end` attributes
- * is limited, and the `min` and `max` attributes are not supported.
- *
- * Lastly, there is no interactivity, so links can't be activated
- * and pseudo-classes like :hover have no effect in CSS.
+ * The interactive aspects of SVG are supported by [class@Gtk.SvgWidget].
  *
  *
  * ## SVG Extensions
