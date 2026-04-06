@@ -142,7 +142,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_save                       (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_restore                    (GtkSnapshot            *snapshot);
-GDK_AVAILABLE_IN_4_20
+GDK_AVAILABLE_IN_4_24
 void            gtk_snapshot_set_snap                   (GtkSnapshot            *self,
                                                          GskRectSnap             snap);
 GDK_AVAILABLE_IN_ALL
