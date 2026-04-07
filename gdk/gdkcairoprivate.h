@@ -30,7 +30,7 @@ gdk_cairo_format_for_depth (GdkMemoryDepth depth)
     }
 }
 
-static GdkMemoryFormat
+static inline GdkMemoryFormat
 gdk_cairo_format_to_memory_format (cairo_format_t format)
 {
   GdkMemoryFormat result;
