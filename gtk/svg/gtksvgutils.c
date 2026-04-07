@@ -64,6 +64,7 @@ parser_new_for_string (const char *string)
   bytes = g_bytes_new_static (string, strlen (string));
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
   gtk_css_parser_skip_whitespace (parser);
+  g_bytes_unref (bytes);
 
   return parser;
 }
