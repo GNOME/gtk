@@ -14913,7 +14913,7 @@ gtk_svg_set_state (GtkSvg       *self,
 unsigned int
 gtk_svg_get_state (GtkSvg *self)
 {
-  g_return_val_if_fail (GTK_IS_SVG (self), -1);
+  g_return_val_if_fail (GTK_IS_SVG (self), 0);
 
   return self->state;
 }
