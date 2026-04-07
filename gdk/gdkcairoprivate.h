@@ -342,3 +342,13 @@ gdk_cairo_region_is_rectangle (cairo_region_t *region)
 {
   return cairo_region_num_rectangles (region) == 1;
 }
+
+static inline void
+gdk_cairo_surface_get_device_matrix (cairo_surface_t *surface,
+                                     cairo_matrix_t  *matrix)
+{
+  cairo_surface_get_device_scale (surface, &matrix->xx, &matrix->yy);
+  cairo_surface_get_device_offset (surface, &matrix->x0, &matrix->y0);
+  matrix->yx = matrix->xy = 0;
+}
+
