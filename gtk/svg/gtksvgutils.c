@@ -295,3 +295,15 @@ array_new_with_clear_func (size_t         elem_size,
   g_array_set_clear_func (a, clear_func);
   return a;
 }
+
+gboolean
+path_in_stroke (GskPath                *path,
+                const graphene_point_t *point,
+                GskStroke              *stroke)
+{
+  GskPathPoint p;
+  float dist;
+
+  /* FIXME: not quite right */
+  return gsk_path_get_closest_point (path, point, gsk_stroke_get_line_width (stroke) / 2, &p, &dist);
+}
