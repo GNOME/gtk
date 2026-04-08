@@ -1,0 +1,14 @@
+<svg id='x'>
+ <rect id='A' tabindex='0'/>
+ <circle id='B' tabindex='0'/>
+ <g id='C' tabindex='0'>
+   <g id='D' tabindex='0'>
+     <line id='E' tabindex='0'/>
+     <line id='F' tabindex='0'/>
+   </g>
+   <use id='G' tabindex='0'/>
+   <a id='H' tabindex='0'>
+     <text id='I' tabindex='0'/>
+   </a>
+ </g>
+</svg>
