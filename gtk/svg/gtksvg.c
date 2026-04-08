@@ -4438,6 +4438,7 @@ typedef enum
   MASKING,
   RENDERING,
   MARKERS,
+  PICKING,
 } RenderOp;
 
 typedef struct
@@ -4459,6 +4460,12 @@ typedef struct
   int depth;
   uint64_t instance_count;
   GSList *ctx_shape_stack;
+  struct {
+    graphene_point_t p;
+    GSList *points;
+    gboolean done;
+    SvgElement *picked;
+  } picking;
 } PaintContext;
 
 /* Our paint machinery can be used in different modes - for
@@ -4546,6 +4553,20 @@ static void
 push_transform (PaintContext *context,
                 GskTransform *transform)
 {
+  if (context->op == PICKING)
+    {
+      GskTransform *t;
+
+      graphene_point_t *p = g_new (graphene_point_t, 1);
+      graphene_point_init_from_point (p, &context->picking.p);
+      context->picking.points = g_slist_prepend (context->picking.points, p);
+
+      t = gsk_transform_invert (gsk_transform_ref (transform));
+      gsk_transform_transform_point (t, p, &context->picking.p);
+      gsk_transform_unref (t);
+      //g_print ("%f %f -> %f %f\n", p->x, p->y, context->picking.p.x, context->picking.p.y);
+    }
+
   context->transforms = g_slist_prepend (context->transforms,
                                          gsk_transform_ref (transform));
 }
@@ -4560,6 +4581,16 @@ pop_transform (PaintContext *context)
   context->transforms = tos->next;
   gsk_transform_unref ((GskTransform *) tos->data);
   g_slist_free_1 (tos);
+
+  if (context->op == PICKING)
+    {
+      tos = context->picking.points;
+      context->picking.points = tos->next;
+
+      context->picking.p = *(graphene_point_t *) tos->data;
+      g_free (tos->data);
+      g_slist_free_1 (tos);
+    }
 }
 
 static GskTransform *
@@ -5800,7 +5831,18 @@ push_group (SvgElement   *shape,
         }
 
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
-        gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (x, y, width, height));
+        {
+          if (context->op == PICKING)
+            {
+              if (!gsk_rect_contains_point (&GRAPHENE_RECT_INIT (x, y, width, height), &context->picking.p))
+                {
+                  if (!context->picking.done)
+                    context->picking.done = TRUE;
+                }
+            }
+
+          gtk_snapshot_push_clip (context->snapshot, &GRAPHENE_RECT_INIT (x, y, width, height));
+        }
 
       if (!svg_view_box_get (svg_element_get_current_value (shape, SVG_PROPERTY_VIEW_BOX), &view_box))
         graphene_rect_init (&view_box, 0, 0, w, h);
@@ -7812,6 +7854,9 @@ render_image (SvgElement   *shape,
   double x, y, width, height;
   GdkTexture *texture;
 
+  if (context->op == PICKING && context->picking.done)
+    return;
+
   if (svg_href_get_texture (href) == NULL)
     {
       gtk_svg_rendering_error (context->svg,
@@ -7851,7 +7896,40 @@ render_image (SvgElement   *shape,
   push_transform (context, transform);
   gsk_transform_unref (transform);
 
-  gtk_snapshot_append_texture (context->snapshot, texture, &vb);
+  if (context->op == PICKING)
+    {
+      switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)))
+        {
+        case POINTER_EVENTS_AUTO:
+        case POINTER_EVENTS_VISIBLE_PAINTED:
+        case POINTER_EVENTS_VISIBLE_FILL:
+        case POINTER_EVENTS_VISIBLE_STROKE:
+        case POINTER_EVENTS_VISIBLE:
+          if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
+            break;
+          G_GNUC_FALLTHROUGH;
+
+        case POINTER_EVENTS_BOUNDING_BOX:
+        case POINTER_EVENTS_PAINTED:
+        case POINTER_EVENTS_FILL:
+        case POINTER_EVENTS_STROKE:
+        case POINTER_EVENTS_ALL:
+          if (gsk_rect_contains_point (&vb, &context->picking.p))
+            {
+              context->picking.picked = shape;
+              context->picking.done = TRUE;
+            }
+          break;
+
+        case POINTER_EVENTS_NONE:
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+    }
+  else
+    gtk_snapshot_append_texture (context->snapshot, texture, &vb);
 
   pop_transform (context);
   gtk_snapshot_restore (context->snapshot);
@@ -7915,8 +7993,12 @@ paint_shape (SvgElement   *shape,
 {
   GskPath *path;
 
+  if (context->op == PICKING && context->picking.done)
+    return;
+
   if (svg_element_get_type (shape) == SVG_ELEMENT_USE)
     {
+      /* TODO: picking */
       if (svg_href_get_shape (svg_element_get_current_value (shape, SVG_PROPERTY_HREF)) != NULL)
         {
           SvgElement *use_shape = svg_href_get_shape (svg_element_get_current_value (shape, SVG_PROPERTY_HREF));
@@ -7951,6 +8033,8 @@ paint_shape (SvgElement   *shape,
       WritingMode wmode;
       graphene_rect_t bounds;
       float dx, dy;
+
+      /* TODO: picking */
 
       if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
         return;
@@ -8053,21 +8137,39 @@ paint_shape (SvgElement   *shape,
   if (svg_element_get_type (shape) == SVG_ELEMENT_IMAGE)
     {
       render_image (shape, context);
-
       return;
     }
 
   if (svg_element_type_is_container (svg_element_get_type (shape)))
     {
-      for (int i = 0; i < shape->shapes->len; i++)
+      if (context->op == PICKING)
         {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
+          for (int i = 0; i < shape->shapes->len; i++)
+            {
+              SvgElement *s = g_ptr_array_index (shape->shapes, shape->shapes->len - 1 - i);
 
-          render_shape (s, context);
+              if (context->picking.done)
+                break;
 
-          if (svg_element_get_type (shape) == SVG_ELEMENT_SWITCH &&
-              !svg_element_conditionally_excluded (s, context->svg))
-            break;
+              render_shape (s, context);
+
+              if (svg_element_get_type (shape) == SVG_ELEMENT_SWITCH &&
+                  !svg_element_conditionally_excluded (s, context->svg))
+                break;
+            }
+        }
+      else
+        {
+          for (int i = 0; i < shape->shapes->len; i++)
+            {
+              SvgElement *s = g_ptr_array_index (shape->shapes, i);
+
+              render_shape (s, context);
+
+              if (svg_element_get_type (shape) == SVG_ELEMENT_SWITCH &&
+                  !svg_element_conditionally_excluded (s, context->svg))
+                break;
+            }
         }
 
       return;
@@ -8078,6 +8180,20 @@ paint_shape (SvgElement   *shape,
 
   if (shape_is_degenerate (shape))
     return;
+
+  if (context->op == PICKING)
+    {
+      if (svg_element_contains (shape, context->viewport, context->svg, &context->picking.p))
+        {
+          if (!context->picking.done)
+            {
+              context->picking.picked = shape;
+              context->picking.done = TRUE;
+            }
+        }
+
+      return;
+    }
 
   /* Below is where we render *actual* content (i.e. graphical
    * shapes that have paths). This involves filling, stroking
@@ -8342,10 +8458,63 @@ can_reuse_node (GtkSvg        *self,
 }
 
 SvgElement *
-gtk_svg_pick_element (GtkSvg                 *svg,
+gtk_svg_pick_element (GtkSvg                 *self,
                       const graphene_point_t *p)
 {
-  return NULL;
+  SvgComputeContext compute_context;
+  PaintContext paint_context;
+  graphene_rect_t viewport;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+
+  if (self->width < 0 || self->height < 0)
+    return NULL;
+
+  viewport = GRAPHENE_RECT_INIT (0, 0, self->current_width, self->current_height);
+
+  compute_context.svg = self;
+  compute_context.viewport = &viewport;
+  compute_context.colors = self->node_for.colors;
+  compute_context.n_colors = self->node_for.n_colors;
+  compute_context.current_time = self->current_time;
+  compute_context.parent = NULL;
+  compute_context.interpolation = GDK_COLOR_STATE_SRGB;
+
+  compute_current_values_for_shape (self->content, &compute_context);
+
+  snapshot = gtk_snapshot_new ();
+
+  paint_context.svg = self;
+  paint_context.viewport = &viewport;
+  paint_context.viewport_stack = NULL;
+  paint_context.snapshot = snapshot;
+  paint_context.colors = self->node_for.colors;
+  paint_context.n_colors = self->node_for.n_colors;
+  paint_context.weight = self->node_for.weight;
+  paint_context.op = PICKING;
+  paint_context.op_stack = NULL;
+  paint_context.ctx_shape_stack = NULL;
+  paint_context.current_time = self->current_time;
+  paint_context.depth = 0;
+  paint_context.transforms = NULL;
+  paint_context.instance_count = 0;
+  paint_context.picking.p = *p;
+  paint_context.picking.points = NULL;
+  paint_context.picking.done = FALSE;
+  paint_context.picking.picked = NULL;
+
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_push_clip (snapshot, &viewport);
+
+  render_shape (self->content, &paint_context);
+
+  if (self->overflow == GTK_OVERFLOW_HIDDEN)
+    gtk_snapshot_pop (snapshot);
+
+  node = gtk_snapshot_free_to_node (snapshot);
+  g_clear_pointer (&node, gsk_render_node_unref);
+
+  return paint_context.picking.picked;
 }
 
 /* Note that we are doing this in two passes:
