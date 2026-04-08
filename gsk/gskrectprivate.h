@@ -4,6 +4,8 @@
 #include "gsk/gskenums.h"
 #include "gsk/gskrectsnap.h"
 
+#include "gdk/gdkcairoprivate.h"
+
 #include <graphene.h>
 #include <math.h>
 
@@ -514,4 +516,51 @@ _graphene_rect_init_from_clip_extents (graphene_rect_t *rect,
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
   gsk_rect_init (rect, x1c, y1c, x2c - x1c, y2c - y1c);
+}
+
+static inline gboolean G_GNUC_WARN_UNUSED_RESULT
+gsk_cairo_rect_snap (cairo_t               *cr,
+                     const graphene_rect_t *src,
+                     GskRectSnap            snap,
+                     graphene_rect_t       *dest)
+{
+  cairo_matrix_t mat, cr_mat, target_mat;
+
+  if (snap == GSK_RECT_SNAP_NONE)
+    {
+      if (dest != src)
+        *dest = *src;
+      return TRUE;
+    }
+
+  cairo_get_matrix (cr, &cr_mat);
+  gdk_cairo_surface_get_device_matrix (cairo_get_group_target (cr), &target_mat);
+
+  cairo_matrix_multiply (&mat, &target_mat, &cr_mat);
+
+  if (mat.xy == 0 && mat.yx == 0)
+    {
+      return gsk_rect_snap_to_grid (src,
+                                    snap,
+                                    &GRAPHENE_SIZE_INIT (ABS (mat.xx), ABS (mat.yy)),
+                                    &GRAPHENE_POINT_INIT (mat.x0 / mat.xx,
+                                                          mat.y0 / mat.yy),
+                                    dest);
+    }
+  else if (mat.xx == 0 && mat.yy == 0)
+    {
+      return gsk_rect_snap_to_grid (src,
+                                    snap,
+                                    /* FIXME: Is this the right way around? */
+                                    &GRAPHENE_SIZE_INIT (ABS (mat.yx), ABS (mat.xy)),
+                                    &GRAPHENE_POINT_INIT (mat.y0 / mat.yx,
+                                                          mat.x0 / mat.xy),
+                                    dest);
+    }
+  else
+    {
+      if (dest != src)
+        *dest = *src;
+      return TRUE;
+    }
 }
