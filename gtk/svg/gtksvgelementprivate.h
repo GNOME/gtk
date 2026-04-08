@@ -231,4 +231,9 @@ svg_element_foreach (SvgElement       *element,
 SvgAnimation *svg_element_find_animation (SvgElement *element,
                                           const char *id);
 
+SvgElement *svg_element_next     (SvgElement *element);
+SvgElement *svg_element_previous (SvgElement *element);
+SvgElement *svg_element_first    (SvgElement *element);
+SvgElement *svg_element_last     (SvgElement *element);
+
 G_END_DECLS

@@ -1791,3 +1791,69 @@ svg_element_get_visited (SvgElement *element)
 {
   return (gtk_css_node_get_state (element->css_node) & GTK_STATE_FLAG_VISITED) != 0;
 }
+
+/* Depth first traversal in pre-order */
+
+static SvgElement *
+next_after (SvgElement *element,
+            SvgElement *child)
+{
+  if (element->shapes)
+    {
+      for (unsigned int i = 0; i < element->shapes->len; i++)
+        {
+          if (g_ptr_array_index (element->shapes, i) == child)
+            {
+              if (i + 1 < element->shapes->len)
+                return g_ptr_array_index (element->shapes, i + 1);
+            }
+        }
+    }
+
+  if (element->parent)
+    return next_after (element->parent, element);
+  else
+    return NULL;
+}
+
+SvgElement *
+svg_element_first (SvgElement *element)
+{
+  return element;
+}
+
+SvgElement *
+svg_element_last (SvgElement *element)
+{
+  if (element->shapes && element->shapes->len > 0)
+    return svg_element_last (g_ptr_array_index (element->shapes, element->shapes->len - 1));
+  else
+    return element;
+}
+
+SvgElement *
+svg_element_next (SvgElement *element)
+{
+  if (element->shapes && element->shapes->len > 0)
+    return g_ptr_array_index (element->shapes, 0);
+  else if (element->parent)
+    return next_after (element->parent, element);
+  else
+    return NULL;
+}
+
+SvgElement *
+svg_element_previous (SvgElement *element)
+{
+  if (element->parent)
+    {
+      unsigned int idx;
+
+      if (g_ptr_array_find (element->parent->shapes, element, &idx) && idx > 0)
+        return svg_element_last (g_ptr_array_index (element->parent->shapes, idx - 1));
+      else
+        return element->parent;
+    }
+  else
+    return NULL;
+}
