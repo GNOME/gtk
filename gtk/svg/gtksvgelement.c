@@ -1643,3 +1643,31 @@ svg_element_move_child_down (SvgElement *element,
         }
     }
 }
+
+SvgAnimation *
+svg_element_find_animation (SvgElement *element,
+                            const char *id)
+{
+  if (element->animations)
+    {
+      for (unsigned int i = 0; i < element->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (element->animations, i);
+          if (g_strcmp0 (a->id, id) == 0)
+            return a;
+        }
+    }
+
+  if (svg_element_type_is_container (element->type))
+    {
+      for (unsigned int i = 0; i < element->shapes->len; i++)
+        {
+          SvgElement *child = g_ptr_array_index (element->shapes, i);
+          SvgAnimation *a = svg_element_find_animation (child, id);
+          if (a)
+            return a;
+        }
+    }
+
+  return NULL;
+}

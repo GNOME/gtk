@@ -204,4 +204,7 @@ svg_element_foreach (SvgElement       *element,
                      SvgShapeCallback  callback,
                      gpointer          user_data);
 
+SvgAnimation *svg_element_find_animation (SvgElement *element,
+                                          const char *id);
+
 G_END_DECLS
