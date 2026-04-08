@@ -180,4 +180,7 @@ void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
                                               SvgElementCallback     callback,
                                               gpointer               data);
 
+SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
+                                              const graphene_point_t *p);
+
 G_END_DECLS

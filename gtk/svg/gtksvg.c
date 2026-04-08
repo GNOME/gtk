@@ -8269,6 +8269,13 @@ can_reuse_node (GtkSvg        *self,
   return TRUE;
 }
 
+SvgElement *
+gtk_svg_pick_element (GtkSvg                 *svg,
+                      const graphene_point_t *p)
+{
+  return NULL;
+}
+
 /* Note that we are doing this in two passes:
  * 1. Update current values from animations
  * 2. Paint with the current values
