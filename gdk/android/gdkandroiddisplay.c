@@ -34,6 +34,9 @@
 
 #include "gdkandroiddisplay-private.h"
 
+// For GtkInterfaceColorScheme
+#include "gtk/gtkenums.h"
+
 #include <epoxy/egl.h>
 
 G_DEFINE_ENUM_TYPE (GdkAndroidDisplayNightMode, gdk_android_display_night_mode,
@@ -185,6 +188,16 @@ gdk_android_display_get_setting (GdkDisplay *display,
   if (g_strcmp0 (name, "gtk-application-prefer-dark-theme") == 0)
     {
       g_value_set_boolean (value, self->night_mode == GDK_ANDROID_DISPLAY_NIGHT_YES);
+      return TRUE;
+    }
+  else if (g_strcmp0 (name, "gtk-interface-color-scheme") == 0)
+    {
+      const GtkInterfaceColorScheme color_schemes[] = {
+        [GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED] = GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED,
+        [GDK_ANDROID_DISPLAY_NIGHT_NO] = GTK_INTERFACE_COLOR_SCHEME_LIGHT,
+        [GDK_ANDROID_DISPLAY_NIGHT_YES] = GTK_INTERFACE_COLOR_SCHEME_DARK
+      };
+      g_value_set_enum (value, color_schemes[self->night_mode]);
       return TRUE;
     }
   else if (g_strcmp0 (name, "gtk-decoration-layout") == 0)
@@ -369,5 +382,6 @@ gdk_android_display_update_night_mode (GdkAndroidDisplay *self, jobject context)
   self->night_mode = night_mode;
   g_debug ("night mode changed");
   gdk_display_setting_changed ((GdkDisplay *) self, "gtk-application-prefer-dark-theme");
+  gdk_display_setting_changed ((GdkDisplay *) self, "gtk-interface-color-scheme");
   g_object_notify_by_pspec ((GObject *) self, obj_properties[PROP_NIGHT_MODE]);
 }
