@@ -82,6 +82,8 @@ struct _SvgElement
   char **classes;
   size_t line;
   GtkSvgLocation style_loc;
+  gboolean focusable;
+  gboolean autofocus;
 
   /* For style matching */
   GtkCssNode *css_node;

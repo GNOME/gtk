@@ -161,6 +161,8 @@ svg_element_new (SvgElement     *parent,
   if (parent)
     gtk_css_node_set_parent (element->css_node, parent->css_node);
 
+  element->focusable = svg_element_get_initial_focusable (element);
+
   if (type == SVG_ELEMENT_LINK)
     gtk_css_node_set_state (element->css_node, GTK_STATE_FLAG_LINK);
 
@@ -1670,4 +1672,50 @@ svg_element_find_animation (SvgElement *element,
     }
 
   return NULL;
+}
+
+void
+svg_element_set_autofocus (SvgElement *element,
+                           gboolean    autofocus)
+{
+  element->autofocus = autofocus;
+}
+
+gboolean
+svg_element_get_autofocus (SvgElement *element)
+{
+  return element->autofocus;
+}
+
+void
+svg_element_set_focusable (SvgElement *element,
+                           gboolean    focusable)
+{
+  element->focusable = focusable;
+}
+
+gboolean
+svg_element_get_focusable (SvgElement *element)
+{
+  return element->focusable;
+}
+
+gboolean
+svg_element_get_initial_focusable (SvgElement *element)
+{
+  if (element->type == SVG_ELEMENT_SVG && element->parent == NULL)
+    return TRUE;
+  else if (element->type == SVG_ELEMENT_LINK)
+    return TRUE;
+  else
+    return FALSE;
+}
+
+static void
+svg_element_change_css_state (SvgElement *element,
+                              GtkStateFlags add,
+                              GtkStateFlags remove)
+{
+  GtkStateFlags state = gtk_css_node_get_state (element->css_node);
+  gtk_css_node_set_state (element->css_node, (state | add) & ~remove);
 }

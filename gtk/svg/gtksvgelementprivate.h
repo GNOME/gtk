@@ -147,6 +147,15 @@ void         svg_element_set_states          (SvgElement            *element,
                                               uint64_t               states);
 uint64_t     svg_element_get_states          (SvgElement            *element);
 
+void         svg_element_set_autofocus       (SvgElement            *element,
+                                              gboolean               autofocus);
+gboolean     svg_element_get_autofocus       (SvgElement            *element);
+gboolean     svg_element_get_initial_focusable
+void         svg_element_set_focusable       (SvgElement            *element,
+                                              gboolean               focusable);
+gboolean     svg_element_get_focusable       (SvgElement            *element);
+gboolean     svg_element_get_initial_focusable
+                                             (SvgElement            *element);
 void         svg_element_set_gpa_width       (SvgElement            *element,
                                               SvgValue              *value);
 SvgValue *   svg_element_get_gpa_width       (SvgElement            *element);
