@@ -2289,6 +2289,9 @@ gtk_list_base_set_anchor (GtkListBase *self,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   guint items_before;
 
+  g_return_if_fail (isfinite (anchor_align_across));
+  g_return_if_fail (isfinite (anchor_align_along));
+
   items_before = round (priv->center_widgets * CLAMP (anchor_align_along, 0, 1));
   gtk_list_item_tracker_set_position (priv->item_manager,
                                       priv->anchor,
