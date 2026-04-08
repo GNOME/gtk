@@ -236,4 +236,7 @@ SvgElement *svg_element_previous (SvgElement *element);
 SvgElement *svg_element_first    (SvgElement *element);
 SvgElement *svg_element_last     (SvgElement *element);
 
+SvgElement *svg_element_find_by_id (SvgElement *element,
+                                    const char *id);
+
 G_END_DECLS

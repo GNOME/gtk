@@ -1857,3 +1857,26 @@ svg_element_previous (SvgElement *element)
   else
     return NULL;
 }
+
+SvgElement *
+svg_element_find_by_id (SvgElement *element,
+                        const char *id)
+{
+  if (g_strcmp0 (element->id, id) == 0)
+    return element;
+
+  if (element->shapes)
+    {
+      for (unsigned int i = 0; i < element->shapes->len; i++)
+        {
+          SvgElement *child = g_ptr_array_index (element->shapes, i);
+          SvgElement *res;
+
+          res = svg_element_find_by_id (child, id);
+          if (res)
+            return res;
+        }
+    }
+
+  return NULL;
+}
