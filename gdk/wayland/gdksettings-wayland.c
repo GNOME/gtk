@@ -303,7 +303,6 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
   { FALSE, "org.gnome.desktop.a11y.interface", "high-contrast", "high-contrast", G_TYPE_NONE, { .b = FALSE } },
   { FALSE, "org.gnome.desktop.a11y.interface", "show-status-shapes", "gtk-show-status-shapes", G_TYPE_BOOLEAN, { .b = FALSE } },
-  { FALSE, "org.gnome.desktop.a11y.interface", "reduced-motion", "gtk-interface-reduced-motion", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "color-scheme", "gtk-interface-color-scheme", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "contrast", "gtk-interface-contrast", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "reduced-motion", "gtk-interface-reduced-motion", G_TYPE_ENUM, { .i = 0 } },
@@ -358,6 +357,8 @@ apply_portal_setting (TranslationEntry *entry,
         entry->fallback.i = (int) (g_variant_get_uint32 (value) + 1);
       else if (strcmp (entry->key, "contrast") == 0)
         entry->fallback.i = (int) (g_variant_get_uint32 (value) + 1);
+      else if (strcmp (entry->key, "reduced-motion") == 0)
+        entry->fallback.i = (int) (g_variant_get_uint32 (value));
       break;
     case G_TYPE_BOOLEAN:
       entry->fallback.b = g_variant_get_boolean (value);
