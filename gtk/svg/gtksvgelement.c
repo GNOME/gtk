@@ -1719,3 +1719,75 @@ svg_element_change_css_state (SvgElement *element,
   GtkStateFlags state = gtk_css_node_get_state (element->css_node);
   gtk_css_node_set_state (element->css_node, (state | add) & ~remove);
 }
+
+void
+svg_element_set_focus (SvgElement *element,
+                       gboolean    focus)
+{
+  if (focus)
+    svg_element_change_css_state (element, GTK_STATE_FLAG_FOCUSED, 0);
+  else
+    svg_element_change_css_state (element, 0, GTK_STATE_FLAG_FOCUSED);
+}
+
+gboolean
+svg_element_get_focus (SvgElement *element)
+{
+  return (gtk_css_node_get_state (element->css_node) & GTK_STATE_FLAG_FOCUSED) != 0;
+}
+
+void
+svg_element_set_active (SvgElement *element,
+                        gboolean    active)
+{
+  if (active)
+    svg_element_change_css_state (element, GTK_STATE_FLAG_ACTIVE, 0);
+  else
+    svg_element_change_css_state (element, 0, GTK_STATE_FLAG_ACTIVE);
+}
+
+gboolean
+svg_element_get_active (SvgElement *element)
+{
+  return (gtk_css_node_get_state (element->css_node) & GTK_STATE_FLAG_ACTIVE) != 0;
+}
+
+void
+svg_element_set_hover (SvgElement *element,
+                       gboolean    hover)
+{
+  if (hover)
+    svg_element_change_css_state (element, GTK_STATE_FLAG_PRELIGHT, 0);
+  else
+    svg_element_change_css_state (element, 0, GTK_STATE_FLAG_PRELIGHT);
+
+  for (element = element->parent; element; element = element->parent)
+    {
+      if (hover)
+        svg_element_change_css_state (element, GTK_STATE_FLAG_PRELIGHT, 0);
+      else
+        svg_element_change_css_state (element, 0, GTK_STATE_FLAG_PRELIGHT);
+    }
+}
+
+gboolean
+svg_element_get_hover (SvgElement *element)
+{
+  return (gtk_css_node_get_state (element->css_node) & GTK_STATE_FLAG_PRELIGHT) != 0;
+}
+
+void
+svg_element_set_visited (SvgElement *element,
+                         gboolean    visited)
+{
+  if (visited)
+    svg_element_change_css_state (element, GTK_STATE_FLAG_VISITED, 0);
+  else
+    svg_element_change_css_state (element, 0, GTK_STATE_FLAG_VISITED);
+}
+
+gboolean
+svg_element_get_visited (SvgElement *element)
+{
+  return (gtk_css_node_get_state (element->css_node) & GTK_STATE_FLAG_VISITED) != 0;
+}

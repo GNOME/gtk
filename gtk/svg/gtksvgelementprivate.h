@@ -158,6 +158,19 @@ gboolean     svg_element_get_focusable       (SvgElement            *element);
 gboolean     svg_element_get_initial_focusable
                                              (SvgElement            *element);
 
+void         svg_element_set_focus           (SvgElement            *element,
+                                              gboolean               focus);
+gboolean     svg_element_get_focus           (SvgElement            *element);
+void         svg_element_set_active          (SvgElement            *element,
+                                              gboolean               active);
+gboolean     svg_element_get_active          (SvgElement            *element);
+void         svg_element_set_hover           (SvgElement            *element,
+                                              gboolean               hover);
+gboolean     svg_element_get_hover           (SvgElement            *element);
+void         svg_element_set_visited         (SvgElement            *element,
+                                              gboolean               hover);
+gboolean     svg_element_get_visited         (SvgElement            *element);
+
 void         svg_element_set_gpa_width       (SvgElement            *element,
                                               SvgValue              *value);
 SvgValue *   svg_element_get_gpa_width       (SvgElement            *element);
