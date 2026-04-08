@@ -788,6 +788,13 @@ svg_writing_mode_is_vertical (WritingMode mode)
   return is_vertical[mode];
 }
 
+static void
+ensure_current_time (GtkSvg *self)
+{
+  if (self->clock && self->playing)
+    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+}
+
 /* }}} */
 /* {{{ Image loading */
 
@@ -14859,8 +14866,7 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  if (self->clock && self->playing)
-    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+  ensure_current_time (self);
 
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
