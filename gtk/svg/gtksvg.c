@@ -28,6 +28,7 @@
 #include "gtkenums.h"
 #include "gtksymbolicpaintable.h"
 #include "gtktypebuiltins.h"
+#include "gtkmarshalers.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtksnapshotprivate.h"
@@ -8843,7 +8844,6 @@ gtk_svg_class_init (GtkSvgClass *class)
   g_signal_set_va_marshaller (error_signal,
                               G_TYPE_FROM_CLASS (object_class),
                               g_cclosure_marshal_VOID__BOXEDv);
-
 }
 
 /* }}} */
@@ -8933,6 +8933,24 @@ gtk_svg_equal (GtkSvg *svg1,
     return FALSE;
 
   return svg_element_equal (svg1->content, svg2->content);
+}
+
+void
+gtk_svg_set_activate_callback (GtkSvg             *svg,
+                               SvgElementCallback  callback,
+                               gpointer            data)
+{
+  svg->activate_callback = callback;
+  svg->activate_data = data;
+}
+
+void
+gtk_svg_set_hover_callback (GtkSvg             *svg,
+                            SvgElementCallback  callback,
+                            gpointer            data)
+{
+  svg->hover_callback = callback;
+  svg->hover_data = data;
 }
 
 /* {{{ Animation */

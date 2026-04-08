@@ -35,6 +35,9 @@ G_BEGIN_DECLS
 
 #define DEFAULT_FONT_SIZE 13.333
 
+typedef void (* SvgElementCallback) (SvgElement *element,
+                                     gpointer    data);
+
 struct _GtkSvg
 {
   GObject parent_instance;
@@ -60,6 +63,11 @@ struct _GtkSvg
   GArray *user_styles;
   GArray *author_styles;
   gboolean style_changed;
+
+  SvgElementCallback hover_callback;
+  gpointer hover_data;
+  SvgElementCallback activate_callback;
+  gpointer activate_data;
 
   char *resource;
 
@@ -164,5 +172,12 @@ GskRenderNode *gtk_svg_apply_filter    (GtkSvg                *svg,
                                         const char            *filter,
                                         const graphene_rect_t *bounds,
                                         GskRenderNode         *node);
+
+void           gtk_svg_set_activate_callback (GtkSvg             *svg,
+                                              SvgElementCallback  callback,
+                                              gpointer            data);
+void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
+                                              SvgElementCallback     callback,
+                                              gpointer               data);
 
 G_END_DECLS
