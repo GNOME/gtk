@@ -239,4 +239,8 @@ SvgElement *svg_element_last     (SvgElement *element);
 SvgElement *svg_element_find_by_id (SvgElement *element,
                                     const char *id);
 
+gboolean svg_element_propagate_event (SvgElement *target,
+                                      GdkEvent   *event,
+                                      GtkSvg     *svg);
+
 G_END_DECLS

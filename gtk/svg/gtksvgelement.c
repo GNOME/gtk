@@ -1880,3 +1880,42 @@ svg_element_find_by_id (SvgElement *element,
 
   return NULL;
 }
+
+static gboolean
+propagate_event_down (SvgElement *element,
+                      GdkEvent   *event,
+                      GtkSvg     *svg)
+{
+  if (element->parent)
+    {
+      if (propagate_event_down (element->parent, event, svg))
+        return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+propagate_event_up (SvgElement *element,
+                    GdkEvent   *event,
+                    GtkSvg     *svg)
+{
+  if (element->parent)
+    {
+      if (propagate_event_up (element->parent, event, svg))
+        return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+gboolean
+svg_element_propagate_event (SvgElement *target,
+                             GdkEvent   *event,
+                             GtkSvg     *svg)
+{
+  if (propagate_event_down (target, event, svg))
+    return GDK_EVENT_STOP;
+
+  return propagate_event_up (target, event, svg);
+}
