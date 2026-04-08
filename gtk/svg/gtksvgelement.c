@@ -1981,3 +1981,123 @@ svg_element_or_ancestor_has_type (SvgElement     *element,
     }
   return FALSE;
 }
+
+/* bounding box check */
+gboolean
+svg_element_can_contain (SvgElement             *element,
+                         const graphene_rect_t  *viewport,
+                         GtkSvg                 *svg,
+                         const graphene_point_t *point)
+{
+  graphene_rect_t bounds;
+
+  if (svg_element_get_current_bounds (element, viewport, svg, &bounds))
+    return gsk_rect_contains_point (&bounds, point);
+
+  return TRUE;
+}
+
+/* accurate check according to pointer-events */
+gboolean
+svg_element_contains (SvgElement             *element,
+                      const graphene_rect_t  *viewport,
+                      GtkSvg                 *svg,
+                      const graphene_point_t *point)
+{
+  GskPath *path;
+  GskFillRule fill_rule;
+  gboolean ret;
+  PointerEvents pe;
+  Visibility vis;
+  graphene_rect_t bounds;
+  PaintKind fill_kind;
+  PaintKind stroke_kind;
+  GskStroke *stroke;
+
+  g_assert (svg_element_type_is_path (element->type));
+
+  pe = svg_enum_get (svg_element_get_current_value (element, SVG_PROPERTY_POINTER_EVENTS));
+  vis = svg_enum_get (svg_element_get_current_value (element, SVG_PROPERTY_VISIBILITY));
+  fill_kind = svg_paint_get_kind (svg_element_get_current_value (element, SVG_PROPERTY_FILL));
+  stroke_kind = svg_paint_get_kind (svg_element_get_current_value (element, SVG_PROPERTY_STROKE));
+  fill_rule = svg_enum_get (svg_element_get_current_value (element, SVG_PROPERTY_FILL_RULE));
+
+  switch ((unsigned int) pe)
+    {
+    case POINTER_EVENTS_NONE:
+      return FALSE;
+      break;
+
+    case POINTER_EVENTS_BOUNDING_BOX:
+      if (svg_element_get_current_bounds (element, viewport, svg, &bounds))
+        return gsk_rect_contains_point (&bounds, point);
+      return FALSE;
+
+    case POINTER_EVENTS_AUTO:
+    case POINTER_EVENTS_VISIBLE_PAINTED:
+      if (vis == VISIBILITY_HIDDEN)
+        return FALSE;
+      G_GNUC_FALLTHROUGH;
+
+    case POINTER_EVENTS_PAINTED:
+      path = svg_element_get_current_path (element, viewport);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      if (fill_kind != PAINT_NONE && gsk_path_in_fill (path, point, fill_rule))
+        ret = TRUE;
+      else if (stroke_kind != PAINT_NONE && path_in_stroke (path, point, stroke))
+        ret = TRUE;
+      else
+        ret = FALSE;
+      gsk_stroke_free (stroke);
+      gsk_path_unref (path);
+      return ret;
+
+    case POINTER_EVENTS_VISIBLE_FILL:
+      if (vis == VISIBILITY_HIDDEN || fill_kind == PAINT_NONE)
+        return FALSE;
+      G_GNUC_FALLTHROUGH;
+
+    case POINTER_EVENTS_FILL:
+      path = svg_element_get_current_path (element, viewport);
+      ret = gsk_path_in_fill (path, point, fill_rule);
+      gsk_path_unref (path);
+      return ret;
+
+    case POINTER_EVENTS_VISIBLE_STROKE:
+      if (vis == VISIBILITY_HIDDEN || stroke_kind == PAINT_NONE)
+        return FALSE;
+      G_GNUC_FALLTHROUGH;
+
+    case POINTER_EVENTS_STROKE:
+      /* FIXME: not quite right */
+      path = svg_element_get_current_path (element, viewport);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      ret = path_in_stroke (path, point, stroke);
+      gsk_stroke_free (stroke);
+      gsk_path_unref (path);
+      return ret;
+
+    case POINTER_EVENTS_VISIBLE:
+      if (vis == VISIBILITY_HIDDEN)
+        return FALSE;
+      G_GNUC_FALLTHROUGH;
+
+    case POINTER_EVENTS_ALL:
+      path = svg_element_get_current_path (element, viewport);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      if (gsk_path_in_fill (path, point, fill_rule))
+        ret = TRUE;
+      else if (path_in_stroke (path, point, stroke))
+        ret = TRUE;
+      else
+        ret = FALSE;
+      gsk_stroke_free (stroke);
+      gsk_path_unref (path);
+      return ret;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return FALSE;
+}

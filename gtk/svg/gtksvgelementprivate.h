@@ -252,4 +252,13 @@ gboolean svg_element_propagate_event (SvgElement *target,
 gboolean svg_element_or_ancestor_has_type (SvgElement     *element,
                                            SvgElementType  type);
 
+gboolean svg_element_can_contain       (SvgElement             *element,
+                                        const graphene_rect_t  *viewport,
+                                        GtkSvg                 *svg,
+                                        const graphene_point_t *point);
+gboolean svg_element_contains          (SvgElement             *element,
+                                       const graphene_rect_t  *viewport,
+                                       GtkSvg                 *svg,
+                                       const graphene_point_t *point);
+
 G_END_DECLS
