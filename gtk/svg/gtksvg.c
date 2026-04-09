@@ -13119,8 +13119,6 @@ can_reuse_node (GtkSvg        *self,
                 size_t         n_colors,
                 double         weight)
 {
-  return FALSE;
-
   if (self->node == NULL)
     return FALSE;
 
