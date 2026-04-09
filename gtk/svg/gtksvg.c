@@ -245,7 +245,7 @@
 #define DRAWING_LIMIT 150000
 
 #ifndef _MSC_VER
-#define DEBUG
+#undef DEBUG
 #endif /* _MSC_VER */
 
 
