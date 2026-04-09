@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#define SECRET
 #include "gtksvgprivate.h"
 
 #include "gtkenums.h"
