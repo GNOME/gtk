@@ -57,9 +57,20 @@ typedef struct
 {
   SvgProperty attr;
   SvgValue *value;
+  gboolean important;
 } PropertyValue;
 
 void property_value_clear (PropertyValue *pv);
+
+typedef struct
+{
+  GtkCssSelector *selector;
+  PropertyValue *styles;
+  unsigned int n_styles;
+  gboolean owns_styles;
+} SvgCssRuleset;
+
+void svg_css_ruleset_clear (SvgCssRuleset *ruleset);
 
 struct _SvgElement
 {
@@ -74,6 +85,8 @@ struct _SvgElement
 
   /* For style matching */
   GtkCssNode *css_node;
+
+  GArray *inline_styles;
 
   /* Dependency order for computing updates */
   SvgElement *first;

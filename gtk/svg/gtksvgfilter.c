@@ -44,6 +44,7 @@ struct _SvgFilter
   char **classes;
   size_t lines;
   GtkCssNode *css_node;
+  GArray *inline_styles;
   GArray *specified;
   SvgValue **current;
   SvgValue *base[1];
@@ -57,6 +58,7 @@ svg_filter_free (SvgFilter *filter)
   g_strfreev (filter->classes);
   g_object_unref (filter->css_node);
   g_array_unref (filter->specified);
+  g_array_unref (filter->inline_styles);
 
   for (unsigned int i = 0; i < svg_filter_type_get_n_attrs (filter->type); i++)
     {
@@ -320,8 +322,8 @@ svg_filter_new (SvgElement    *parent,
   filter->type = type;
   filter->current = filter->base + n_attrs;
 
-  filter->specified = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-  g_array_set_clear_func (filter->specified, (GDestroyNotify) property_value_clear);
+  filter->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
+  filter->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
 
   for (unsigned int i = 0; i < n_attrs; i++)
     {
@@ -447,4 +449,10 @@ svg_filter_equal (SvgFilter *filter1,
     }
 
   return TRUE;
+}
+
+GArray *
+svg_filter_get_inline_styles (SvgFilter *filter)
+{
+  return filter->inline_styles;
 }

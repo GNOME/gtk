@@ -57,6 +57,10 @@ struct _GtkSvg
 
   GBytes *stylesheet;
 
+  GArray *user_styles;
+  GArray *author_styles;
+  gboolean style_changed;
+
   char *resource;
 
   int64_t load_time;

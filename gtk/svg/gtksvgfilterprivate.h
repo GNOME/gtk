@@ -93,4 +93,6 @@ gboolean       filter_needs_backdrop        (SvgElement     *shape);
 gboolean       svg_filter_equal             (SvgFilter      *filter1,
                                              SvgFilter      *filter2);
 
+GArray *       svg_filter_get_inline_styles (SvgFilter      *filter);
+
 G_END_DECLS

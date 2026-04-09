@@ -82,4 +82,6 @@ GtkCssNode *   svg_color_stop_get_css_node      (SvgColorStop   *stop);
 gboolean       svg_color_stop_equal             (SvgColorStop   *stop1,
                                                  SvgColorStop   *stop2);
 
+GArray *       svg_color_stop_get_inline_styles (SvgColorStop   *stop);
+
 G_END_DECLS

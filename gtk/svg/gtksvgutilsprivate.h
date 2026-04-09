@@ -199,3 +199,6 @@ gboolean parse_enum (const char    *string,
                      unsigned int  *result);
 
 void skip_whitespace_and_optional_comma (GtkCssParser *parser);
+
+GArray *array_new_with_clear_func (size_t         elem_size,
+                                   GDestroyNotify clear_func);

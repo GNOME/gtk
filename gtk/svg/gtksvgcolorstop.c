@@ -39,6 +39,7 @@ struct _SvgColorStop
   char *style;
   char **classes;
   GtkCssNode *css_node;
+  GArray *inline_styles;
 };
 
 void
@@ -48,6 +49,7 @@ svg_color_stop_free (SvgColorStop *stop)
   g_free (stop->style);
   g_strfreev (stop->classes);
   g_object_unref (stop->css_node);
+  g_array_unref (stop->inline_styles);
 
   for (unsigned int i = 0; i < N_STOP_PROPERTIES; i++)
     {
@@ -83,6 +85,8 @@ svg_color_stop_new (SvgElement *parent)
   stop->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (stop->css_node, g_quark_from_static_string ("stop"));
   gtk_css_node_set_parent (stop->css_node, parent->css_node);
+
+  stop->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
 
   return stop;
 }
@@ -272,4 +276,10 @@ svg_color_stop_equal (SvgColorStop *stop1,
     }
 
   return TRUE;
+}
+
+GArray *
+svg_color_stop_get_inline_styles (SvgColorStop *stop)
+{
+  return stop->inline_styles;
 }

@@ -83,6 +83,7 @@ svg_element_free (SvgElement *element)
   g_clear_object (&element->css_node);
 
   g_clear_pointer (&element->specified, g_array_unref);
+  g_clear_pointer (&element->inline_styles, g_array_unref);
 
   for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
     {
@@ -126,8 +127,9 @@ svg_element_new (SvgElement     *parent,
 
   element->attrs = _gtk_bitmask_new ();
 
-  element->specified = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-  g_array_set_clear_func (element->specified, (GDestroyNotify) property_value_clear);
+  element->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
+
+  element->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
 
   for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
     {
@@ -145,10 +147,7 @@ svg_element_new (SvgElement     *parent,
     element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_filter_free);
 
   if (svg_element_type_is_text (type))
-    {
-      element->text = g_array_new (FALSE, FALSE, sizeof (TextNode));
-      g_array_set_clear_func (element->text, (GDestroyNotify) text_node_clear);
-    }
+    element->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
 
   if (svg_element_type_is_path (type))
     {

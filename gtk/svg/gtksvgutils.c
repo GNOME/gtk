@@ -287,3 +287,11 @@ skip_whitespace_and_optional_comma (GtkCssParser *parser)
   gtk_css_parser_skip_whitespace (parser);
 }
 
+GArray *
+array_new_with_clear_func (size_t         elem_size,
+                           GDestroyNotify clear_func)
+{
+  GArray *a = g_array_new (FALSE, FALSE, elem_size);
+  g_array_set_clear_func (a, clear_func);
+  return a;
+}

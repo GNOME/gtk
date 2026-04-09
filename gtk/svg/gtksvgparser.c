@@ -114,10 +114,6 @@ typedef struct
   } text;
   uint64_t num_loaded_elements;
   gboolean load_user_style;
-  GArray *user_rulesets;
-  GArray *user_rulesets_important;
-  GArray *rulesets;
-  GArray *rulesets_important;
 } ParserData;
 
 /* {{{ SvgAnimation attributes */
@@ -1202,15 +1198,6 @@ parse_shape_attrs (SvgElement           *shape,
         }
     }
 
-  if (svg_element_is_specified (shape, SVG_PROPERTY_CLIP_PATH) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_MASK) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_HREF) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_FILTER) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_START) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_MID) ||
-      svg_element_is_specified (shape, SVG_PROPERTY_MARKER_END))
-    g_hash_table_add (data->pending_refs, shape);
-
   if (svg_property_applies_to (SVG_PROPERTY_FX, svg_element_get_type (shape)) &&
       svg_property_applies_to (SVG_PROPERTY_FY, svg_element_get_type (shape)))
     {
@@ -1547,9 +1534,6 @@ parse_shape_gpa_attrs (SvgElement           *shape,
   if ((data->svg->features & GTK_SVG_ANIMATIONS) == 0)
     return;
 
-  if (attach_to_attr)
-    g_hash_table_add (data->pending_refs, shape);
-
   if (transition_type != GPA_TRANSITION_NONE ||
       animation_direction != GPA_ANIMATION_NONE)
     {
@@ -1594,7 +1578,6 @@ parse_shape_gpa_attrs (SvgElement           *shape,
   create_transitions (shape,
                       data->svg->timeline,
                       data->shapes,
-                      data->pending_refs,
                       states,
                       transition_type,
                       transition_duration,
@@ -1924,9 +1907,6 @@ start_element_cb (GMarkupParseContext  *context,
                           &handled, data, context);
 
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
-
-      if (filter_type == SVG_FILTER_IMAGE)
-        g_hash_table_add (data->pending_refs, data->current_shape);
 
       if (filter_type == SVG_FILTER_COLOR_MATRIX)
         {
@@ -2497,7 +2477,8 @@ resolve_clip_ref (SvgValue   *value,
       else
         {
           svg_clip_set_shape (value, target);
-          add_dependency_to_common_ancestor (shape, target);
+          if (shape)
+            add_dependency_to_common_ancestor (shape, target);
         }
     }
 }
@@ -2521,7 +2502,8 @@ resolve_mask_ref (SvgValue   *value,
       else
         {
           svg_mask_set_shape (value, target);
-          add_dependency_to_common_ancestor (shape, target);
+          if (shape)
+            add_dependency_to_common_ancestor (shape, target);
         }
     }
 }
@@ -2550,6 +2532,12 @@ resolve_href_ref (SvgValue   *value,
 
   if (svg_href_get_kind (value) == HREF_NONE)
     return;
+
+  /* Since hrefs can't be set in css, we can only ever
+   * get here from a presentation attr, so we always
+   * have a shape.
+   */
+  g_assert (shape != NULL);
 
   ref = svg_href_get_id (value);
   if (svg_element_get_type (shape) == SVG_ELEMENT_IMAGE || svg_element_get_type (shape) == SVG_ELEMENT_FILTER)
@@ -2625,7 +2613,8 @@ resolve_marker_ref (SvgValue   *value,
       else
         {
           svg_href_set_shape (value, target);
-          add_dependency_to_common_ancestor (shape, target);
+          if (shape)
+            add_dependency_to_common_ancestor (shape, target);
         }
     }
 }
@@ -2666,7 +2655,8 @@ resolve_paint_ref (SvgValue   *value,
       else
         {
           svg_paint_set_server_shape (paint, target);
-          add_dependency_to_common_ancestor (shape, target);
+          if (shape)
+            add_dependency_to_common_ancestor (shape, target);
         }
     }
 }
@@ -2717,7 +2707,8 @@ resolve_filter_ref (SvgValue   *value,
           else
             {
               svg_filter_functions_set_shape (value, i, target);
-              add_dependency_to_common_ancestor (shape, target);
+              if (shape)
+                add_dependency_to_common_ancestor (shape, target);
             }
         }
     }
@@ -2858,25 +2849,83 @@ resolve_filter_image_refs (SvgElement *shape,
       SvgFilterType type = svg_filter_get_type (f);
 
       if (type == SVG_FILTER_IMAGE)
-        resolve_href_ref (svg_filter_get_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF), shape, data);
+        resolve_href_ref (svg_filter_get_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF), shape, data);
     }
 }
 
 static void
-resolve_shape_refs (SvgElement *shape,
-                    ParserData *data)
+resolve_ref_in_property (SvgProperty  attr,
+                         SvgValue    *value,
+                         SvgElement  *shape,
+                         ParserData  *data)
 {
-  resolve_clip_ref (svg_element_get_base_value (shape, SVG_PROPERTY_CLIP_PATH), shape, data);
-  resolve_mask_ref (svg_element_get_base_value (shape, SVG_PROPERTY_MASK), shape, data);
-  resolve_href_ref (svg_element_get_base_value (shape, SVG_PROPERTY_HREF), shape, data);
-  resolve_marker_ref (svg_element_get_base_value (shape, SVG_PROPERTY_MARKER_START), shape, data);
-  resolve_marker_ref (svg_element_get_base_value (shape, SVG_PROPERTY_MARKER_MID), shape, data);
-  resolve_marker_ref (svg_element_get_base_value (shape, SVG_PROPERTY_MARKER_END), shape, data);
-  resolve_paint_ref (svg_element_get_base_value (shape, SVG_PROPERTY_FILL), shape, data);
-  resolve_paint_ref (svg_element_get_base_value (shape, SVG_PROPERTY_STROKE), shape, data);
-  resolve_filter_ref (svg_element_get_base_value (shape, SVG_PROPERTY_FILTER), shape, data);
-  resolve_attach_ref (shape, data);
-  resolve_filter_image_refs (shape, data);
+  switch ((unsigned int) attr)
+    {
+    case SVG_PROPERTY_FILL:
+    case SVG_PROPERTY_STROKE:
+      resolve_paint_ref (value, shape, data);
+      break;
+    case SVG_PROPERTY_MASK:
+      resolve_mask_ref (value, shape, data);
+      break;
+    case SVG_PROPERTY_MARKER_START:
+    case SVG_PROPERTY_MARKER_MID:
+    case SVG_PROPERTY_MARKER_END:
+      resolve_marker_ref (value, shape, data);
+      break;
+    case SVG_PROPERTY_CLIP_PATH:
+      resolve_clip_ref (value, shape, data);
+      break;
+    case SVG_PROPERTY_FILTER:
+      resolve_filter_ref (value, shape, data);
+      break;
+    case SVG_PROPERTY_HREF:
+      resolve_href_ref (value, shape, data);
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+resolve_refs_in_properties (PropertyValue *styles,
+                            unsigned int   n_styles,
+                            SvgElement    *shape,
+                            ParserData    *data)
+{
+  for (unsigned int i = 0; i < n_styles; i++)
+    {
+      PropertyValue *p = &styles[i];
+      resolve_ref_in_property (p->attr, p->value, shape, data);
+    }
+}
+
+static void
+resolve_refs_in_ruleset (SvgCssRuleset *r,
+                         SvgElement    *shape,
+                         ParserData    *data)
+{
+  resolve_refs_in_properties (r->styles, r->n_styles, shape, data);
+}
+
+static void
+resolve_refs_in_array (GArray     *a,
+                       SvgElement *shape,
+                       ParserData *data)
+{
+  resolve_refs_in_properties ((PropertyValue *)a->data, a->len, shape, data);
+}
+
+static void
+resolve_refs_in_rulesets (GArray    *rulesets,
+                         SvgElement *shape,
+                         ParserData *data)
+{
+  for (unsigned int i = 0; i < rulesets->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (rulesets, SvgCssRuleset, i);
+      resolve_refs_in_ruleset (r, shape, data);
+    }
 }
 
 static gboolean
@@ -2979,14 +3028,6 @@ compute_update_order (SvgElement *shape,
 #define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
 
-typedef struct
-{
-  GtkCssSelector *selector;
-  PropertyValue *styles;
-  unsigned int n_styles;
-  gboolean owns_styles;
-} SvgCssRuleset;
-
 static void
 svg_css_ruleset_init_copy (SvgCssRuleset  *new,
                            SvgCssRuleset  *ruleset,
@@ -2998,7 +3039,7 @@ svg_css_ruleset_init_copy (SvgCssRuleset  *new,
     ruleset->owns_styles = FALSE;
 }
 
-static void
+void
 svg_css_ruleset_clear (SvgCssRuleset *ruleset)
 {
   if (ruleset->owns_styles)
@@ -3020,7 +3061,8 @@ svg_css_ruleset_clear (SvgCssRuleset *ruleset)
 static void
 svg_css_ruleset_add (SvgCssRuleset *ruleset,
                      SvgProperty    attr,
-                     SvgValue      *value)
+                     SvgValue      *value,
+                     gboolean       important)
 {
   unsigned int i;
 
@@ -3030,7 +3072,8 @@ svg_css_ruleset_add (SvgCssRuleset *ruleset,
 
   for (i = 0; i < ruleset->n_styles; i++)
     {
-      if (ruleset->styles[i].attr == attr)
+      if (ruleset->styles[i].attr == attr &&
+          ruleset->styles[i].important == important)
         {
           svg_value_unref (ruleset->styles[i].value);
           ruleset->styles[i].value = NULL;
@@ -3046,6 +3089,7 @@ svg_css_ruleset_add (SvgCssRuleset *ruleset,
     }
 
   ruleset->styles[i].value = value;
+  ruleset->styles[i].important = important;
 }
 
 typedef struct _SvgCssScanner SvgCssScanner;
@@ -3144,16 +3188,8 @@ svg_css_compare_rule (gconstpointer a_,
   const SvgCssRuleset *a = (const SvgCssRuleset *) a_;
   const SvgCssRuleset *b = (const SvgCssRuleset *) b_;
 
-  return _gtk_css_selector_compare (a->selector, b->selector);
-}
-
-static void
-postprocess_styles (ParserData *data)
-{
-  g_array_sort (data->rulesets, svg_css_compare_rule);
-  g_array_sort (data->rulesets_important, svg_css_compare_rule);
-  g_array_sort (data->user_rulesets, svg_css_compare_rule);
-  g_array_sort (data->user_rulesets_important, svg_css_compare_rule);
+  /* Sort from highest to lowest specificity */
+  return _gtk_css_selector_compare (b->selector, a->selector);
 }
 
 static void load_internal (ParserData    *data,
@@ -3329,12 +3365,14 @@ lookup_property (const char  *name,
 
 static void
 parse_declaration (SvgCssScanner *scanner,
-                   SvgCssRuleset *ruleset,
-                   SvgCssRuleset *ruleset_important)
+                   PropertyValue *p,
+                   gboolean      *marker)
 {
   char *name;
-  SvgProperty attr;
-  gboolean marker;
+
+  p->value = NULL;
+  p->important = FALSE;
+  *marker = FALSE;
 
   /* advance the location over whitespace */
   gtk_css_parser_get_token (scanner->parser);
@@ -3351,40 +3389,30 @@ parse_declaration (SvgCssScanner *scanner,
   if (name == NULL)
     goto out;
 
-  if (lookup_property (name, &attr, &marker))
+  if (lookup_property (name, &p->attr, marker))
     {
-      SvgCssRuleset *rs = ruleset;
-      SvgValue *value;
-
       if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
         {
           gtk_css_parser_error_syntax (scanner->parser, "Expected ':'");
           goto out;
         }
 
-      value = svg_property_parse_css (attr, scanner->parser);
+      p->value = svg_property_parse_css (p->attr, scanner->parser);
 
-      if (value == NULL)
+      if (p->value == NULL)
         goto out;
 
       if (gtk_css_parser_try_delim (scanner->parser, '!') &&
           gtk_css_parser_try_ident (scanner->parser, "important"))
         {
-          rs = ruleset_important;
+          p->important = TRUE;
         }
 
       if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         {
           gtk_css_parser_error_syntax (scanner->parser, "Junk at end of value for %s", name);
-          svg_value_unref (value);
+          g_clear_pointer (&p->value, svg_value_unref);
           goto out;
-        }
-
-      svg_css_ruleset_add (rs, attr, value);
-      if (marker)
-        {
-          svg_css_ruleset_add (rs, SVG_PROPERTY_MARKER_MID, svg_value_ref (value));
-          svg_css_ruleset_add (rs, SVG_PROPERTY_MARKER_END, svg_value_ref (value));
         }
     }
   else
@@ -3394,33 +3422,72 @@ parse_declaration (SvgCssScanner *scanner,
 
 out:
   g_free (name);
-
   gtk_css_parser_end_block (scanner->parser);
 }
 
 static void
-parse_declarations (SvgCssScanner *scanner,
-                    SvgCssRuleset *ruleset,
-                    SvgCssRuleset *important)
+parse_declarations_into_ruleset (SvgCssScanner *scanner,
+                                 SvgCssRuleset *r)
 {
   while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
-      parse_declaration (scanner, ruleset, important);
+      PropertyValue p = { 0, };
+      gboolean marker;
+
+      parse_declaration (scanner, &p, &marker);
+      if (p.value)
+        {
+          svg_css_ruleset_add (r, p.attr, svg_value_ref (p.value), p.important);
+          if (marker)
+            {
+              svg_css_ruleset_add (r, SVG_PROPERTY_MARKER_MID, svg_value_ref (p.value), p.important);
+              svg_css_ruleset_add (r, SVG_PROPERTY_MARKER_END, svg_value_ref (p.value), p.important);
+            }
+          svg_value_unref (p.value);
+        }
     }
 }
 
 static void
-parse_style_into_ruleset (SvgCssRuleset *ruleset,
-                          SvgCssRuleset *important,
-                          const char    *style,
-                          ParserData    *data)
+parse_declarations_into_array (SvgCssScanner *scanner,
+                               GArray        *styles)
+{
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    {
+      PropertyValue p = { 0, };
+      gboolean marker;
+
+      parse_declaration (scanner, &p, &marker);
+      if (p.value)
+        {
+          g_array_append_val (styles, p);
+          if (marker)
+            {
+              p.attr = SVG_PROPERTY_MARKER_MID;
+              svg_value_ref (p.value);
+              g_array_append_val (styles, p);
+              p.attr = SVG_PROPERTY_MARKER_END;
+              svg_value_ref (p.value);
+              g_array_append_val (styles, p);
+            }
+        }
+    }
+}
+
+static void
+parse_style_into_properties (GArray     *styles,
+                             const char *style,
+                             ParserData *data)
 {
   GBytes *bytes;
   SvgCssScanner *scanner;
 
+  if (style == NULL)
+    return;
+
   bytes = g_bytes_new_static (style, strlen (style));
   scanner = svg_css_scanner_new (data, NULL, NULL, bytes);
-  parse_declarations (scanner, ruleset, important);
+  parse_declarations_into_array (scanner, styles);
   svg_css_scanner_destroy (scanner);
   g_bytes_unref (bytes);
 }
@@ -3448,7 +3515,6 @@ parse_ruleset (SvgCssScanner *scanner)
 {
   SvgCssSelectors selectors;
   SvgCssRuleset ruleset = { 0, };
-  SvgCssRuleset important = { 0, };
 
   svg_css_selectors_init (&selectors);
 
@@ -3470,20 +3536,13 @@ parse_ruleset (SvgCssScanner *scanner)
     }
 
   gtk_css_parser_start_block (scanner->parser);
-  parse_declarations (scanner, &ruleset, &important);
+  parse_declarations_into_ruleset (scanner, &ruleset);
   gtk_css_parser_end_block (scanner->parser);
   if (scanner->data->load_user_style)
-    {
-      commit_ruleset (scanner->data->user_rulesets, &selectors, &ruleset);
-      commit_ruleset (scanner->data->user_rulesets_important, &selectors, &important);
-    }
+    commit_ruleset (scanner->data->svg->user_styles, &selectors, &ruleset);
   else
-    {
-      commit_ruleset (scanner->data->rulesets, &selectors, &ruleset);
-      commit_ruleset (scanner->data->rulesets_important, &selectors, &important);
-    }
+    commit_ruleset (scanner->data->svg->author_styles, &selectors, &ruleset);
   svg_css_ruleset_clear (&ruleset);
-  svg_css_ruleset_clear (&important);
   clear_selectors (&selectors);
 
 out:
@@ -3555,10 +3614,13 @@ load_author_styles (ParserData *data)
   data->current_shape = NULL;
   data->load_user_style = FALSE;
   load_styles_for_shape (data->svg->content, data);
+
+  g_array_sort (data->svg->author_styles, svg_css_compare_rule);
+  resolve_refs_in_rulesets (data->svg->author_styles, NULL, data);
 }
 
 static void
-load_user_stylesheet (ParserData *data)
+load_user_styles (ParserData *data)
 {
   if (data->svg->stylesheet == NULL)
     return;
@@ -3566,22 +3628,118 @@ load_user_stylesheet (ParserData *data)
   data->current_shape = NULL;
   data->load_user_style = TRUE;
   load_internal (data, NULL, NULL, data->svg->stylesheet);
+
+  g_array_sort (data->svg->user_styles, svg_css_compare_rule);
+  resolve_refs_in_rulesets (data->svg->user_styles, NULL, data);
+}
+
+static void
+load_inline_style_here (SvgElement *element,
+                        gpointer    user_data)
+{
+  ParserData *data = user_data;
+  const char *style;
+
+  data->current_shape = element;
+
+  style = svg_element_get_style (element, &data->text.start);
+  data->text.start.line_chars += strlen ("style='");
+  data->text.start.bytes += strlen ("style='");
+  parse_style_into_properties (element->inline_styles, style, data);
+
+  if (svg_element_type_is_gradient (element->type))
+    {
+      for (unsigned int idx = 0; idx < element->color_stops->len; idx++)
+        {
+          SvgColorStop *stop = g_ptr_array_index (element->color_stops, idx);
+
+          style = svg_color_stop_get_style (stop);
+          svg_color_stop_get_origin (stop, &data->text.start);
+          data->text.start.line_chars += strlen ("style='");
+          data->text.start.bytes += strlen ("style='");
+          parse_style_into_properties (svg_color_stop_get_inline_styles (stop),
+                                       style,
+                                       data);
+        }
+    }
+
+  if (svg_element_type_is_filter (element->type))
+    {
+      for (unsigned int idx = 0; idx < element->filters->len; idx++)
+        {
+          SvgFilter *f = g_ptr_array_index (element->filters, idx);
+
+          style = svg_filter_get_style (f);
+          svg_filter_get_origin (f, &data->text.start);
+          data->text.start.line_chars += strlen ("style='");
+          data->text.start.bytes += strlen ("style='");
+          parse_style_into_properties (svg_filter_get_inline_styles (f),
+                                       style,
+                                       data);
+        }
+    }
+}
+
+static void
+load_inline_styles (ParserData *data)
+{
+  svg_element_foreach (data->svg->content, load_inline_style_here, data);
+}
+
+static void
+resolve_refs_here (SvgElement *element,
+                   gpointer    user_data)
+{
+  ParserData *data = user_data;
+
+  resolve_refs_in_array (element->specified, element, data);
+  resolve_refs_in_array (element->inline_styles, element, data);
+
+  /* I don't think refs are possible in styles of color stops or filters */
+
+  resolve_attach_ref (element, data);
+  resolve_filter_image_refs (element, data);
+}
+
+static void
+resolve_refs_in_shapes (ParserData *data)
+{
+  svg_element_foreach (data->svg->content, resolve_refs_here, data);
 }
 
 #if 0
+static gboolean
+ruleset_has_important (SvgCssRuleset *r,
+                        gboolean      important)
+{
+  for (unsigned int j = 0; j < r->n_styles; j++)
+    {
+      PropertyValue *p = &r->styles[j];
+      if (p->important == important)
+        return TRUE;
+    }
+  return FALSE;
+}
+
 static void
-dump_rulesets (GString *s,
-               GArray  *rulesets)
+dump_rulesets (GString  *s,
+               GArray   *rulesets,
+               gboolean  important)
 {
   for (unsigned int i = 0; i < rulesets->len; i++)
     {
       SvgCssRuleset *r = &g_array_index (rulesets, SvgCssRuleset, i);
+
+      if (!ruleset_has_important (r, important))
+        continue;
 
       _gtk_css_selector_print (r->selector, s);
       g_string_append (s, " {\n");
       for (unsigned int j = 0; j < r->n_styles; j++)
         {
           PropertyValue *p = &r->styles[j];
+          if (p->important != important)
+            continue;
           g_string_append (s, "  ");
           g_string_append (s, svg_property_get_name (p->attr));
           g_string_append (s, ": ");
@@ -3598,81 +3756,61 @@ dump_styles (ParserData *data)
 {
   GString *s = g_string_new ("");
 
-  if (data->user_rulesets->len > 0)
+  if (data->svg->user_styles->len > 0)
     {
       g_string_append (s, "/* user styles */\n");
-      dump_rulesets (s, data->user_rulesets);
+      dump_rulesets (s, data->svg->user_styles, FALSE);
     }
-  if (data->rulesets->len > 0)
+  if (data->svg->author_styles->len > 0)
     {
       g_string_append (s, "/* author styles */\n");
-      dump_rulesets (s, data->rulesets);
-    }
-  if (data->rulesets_important->len > 0)
-    {
+      dump_rulesets (s, data->svg->author_styles, FALSE);
       g_string_append (s, "/* important author styles */\n");
-      dump_rulesets (s, data->rulesets_important);
+      dump_rulesets (s, data->svg->author_styles, TRUE);
     }
-  if (data->user_rulesets_important->len > 0)
+  if (data->svg->user_styles->len > 0)
     {
       g_string_append (s, "/* important user styles */\n");
-      dump_rulesets (s, data->user_rulesets_important);
+      dump_rulesets (s, data->svg->user_styles, TRUE);
     }
 
-  g_print ("%s\n", s->str);
+  g_print ("%s", s->str);
   g_string_free (s, TRUE);
 }
 #endif
 
 static void
-apply_ruleset_to_shape (SvgCssRuleset *r,
-                        SvgElement    *shape,
-                        unsigned int   idx,
-                        GtkBitmask    *set,
-                        ParserData    *data)
+apply_ruleset_to_shape (SvgCssRuleset  *r,
+                        gboolean        important,
+                        SvgElement     *shape,
+                        unsigned int    idx,
+                        GtkBitmask    **set)
 {
   for (unsigned int j = 0; j < r->n_styles; j++)
     {
       PropertyValue *p = &r->styles[j];
 
-      if (set && _gtk_bitmask_get (set, p->attr))
+      if (_gtk_bitmask_get (*set, p->attr))
+        continue;
+
+      if (important != p->important)
         continue;
 
       if (svg_property_applies_to (p->attr, svg_element_get_type (shape)))
-        {
-          shape_set_base_value (shape, p->attr, idx, p->value);
+        shape_set_base_value (shape, p->attr, idx, p->value);
 
-          if (p->attr == SVG_PROPERTY_CLIP_PATH ||
-              p->attr == SVG_PROPERTY_MASK ||
-              p->attr == SVG_PROPERTY_HREF ||
-              p->attr == SVG_PROPERTY_FILTER ||
-              p->attr == SVG_PROPERTY_MARKER_START ||
-              p->attr == SVG_PROPERTY_MARKER_MID ||
-              p->attr == SVG_PROPERTY_MARKER_END ||
-              p->attr == SVG_PROPERTY_FILL ||
-              p->attr == SVG_PROPERTY_STROKE)
-            {
-              g_hash_table_add (data->pending_refs, shape);
-            }
-        }
-
-      if (set)
-        set = _gtk_bitmask_set (set, p->attr, TRUE);
+      *set = _gtk_bitmask_set (*set, p->attr, TRUE);
     }
 }
 
 static void
 apply_styles_here (SvgElement   *shape,
                    unsigned int  idx,
-                   ParserData   *data)
+                   GtkSvg       *svg)
 {
   GtkCssNode *node;
-  GtkCssNode *freeme = NULL;
   GtkBitmask *set;
-  const char *style = NULL;
-  GtkSvgLocation loc;
-  SvgCssRuleset style_ruleset = { 0, };
-  SvgCssRuleset style_important = { 0, };
+  GArray *inline_styles = NULL;
 
   if (idx > 0)
     {
@@ -3680,44 +3818,27 @@ apply_styles_here (SvgElement   *shape,
         {
           SvgColorStop *stop = g_ptr_array_index (shape->color_stops, idx - 1);
           node = svg_color_stop_get_css_node (stop);
-          style = svg_color_stop_get_style (stop);
-          svg_color_stop_get_origin (stop, &loc);
+          inline_styles = svg_color_stop_get_inline_styles (stop);
         }
       else
         {
           SvgFilter *ff = g_ptr_array_index (shape->filters, idx - 1);
           node = svg_filter_get_css_node (ff);
-          style = svg_filter_get_style (ff);
-          svg_filter_get_origin (ff, &loc);
+          inline_styles = svg_filter_get_inline_styles (ff);
         }
-    }
-  else if (svg_element_get_css_node (shape))
-    {
-      node = svg_element_get_css_node (shape);
-      style = svg_element_get_style (shape, &loc);
     }
   else
     {
-      freeme = node = gtk_css_node_new ();
-      style = NULL;
-      loc.lines = 0;
-      loc.line_chars = 0;
-      loc.bytes = 0;
+      node = svg_element_get_css_node (shape);
+      inline_styles = shape->inline_styles;
     }
 
-  if (style)
-    {
-      data->text.start = loc;
-      data->text.start.line_chars += strlen ("style='");
-      data->text.start.bytes += strlen ("style='");
-      data->current_shape = shape;
-      parse_style_into_ruleset (&style_ruleset, &style_important, style, data);
-    }
+  if (node == NULL)
+    return;
 
   /* Our strategy to compute base values is the following:
    * - unset everything
-   * - apply presentation attributes
-   * - apply style values
+   * - apply presentation attributes and style values, in priority order
    * - what is left unset at compute time will be inherited or set to initial values
    */
 
@@ -3740,23 +3861,92 @@ apply_styles_here (SvgElement   *shape,
   else
     g_assert_not_reached ();
 
+  /* Work from the highest priority downwards,
+   * and keep a bitmask of attrs we've already set.
+   */
+  set = _gtk_bitmask_new ();
+
+  /* important user styles */
+  for (unsigned int i = 0; i < svg->user_styles->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
+      if (gtk_css_selector_matches (r->selector, node))
+        apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
+    }
+
+  /* important inline styles */
+  if (inline_styles)
+    {
+      for (unsigned int i = 0; i < inline_styles->len; i++)
+        {
+          PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
+          if (p->important && !_gtk_bitmask_get (set, p->attr))
+            {
+              shape_set_base_value (shape, p->attr, idx, p->value);
+              set = _gtk_bitmask_set (set, p->attr, TRUE);
+            }
+        }
+    }
+
+  /* important author styles */
+  for (unsigned int i = 0; i < svg->author_styles->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
+      if (gtk_css_selector_matches (r->selector, node))
+        apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
+    }
+
+  /* inline styles */
+  if (inline_styles)
+    {
+      for (unsigned int i = 0; i < inline_styles->len; i++)
+        {
+          PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
+          if (!p->important && !_gtk_bitmask_get (set, p->attr))
+            {
+              shape_set_base_value (shape, p->attr, idx, p->value);
+              set = _gtk_bitmask_set (set, p->attr, TRUE);
+            }
+        }
+    }
+
+  /* author styles */
+  for (unsigned int i = 0; i < svg->author_styles->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
+      if (gtk_css_selector_matches (r->selector, node))
+        apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
+    }
+
+  /* user styles */
+  for (unsigned int i = 0; i < svg->user_styles->len; i++)
+    {
+      SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
+      if (gtk_css_selector_matches (r->selector, node))
+        apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
+    }
+
   /* presentation attributes */
   if (idx == 0)
     {
       for (unsigned int i = 0; i < shape->specified->len; i++)
         {
           PropertyValue *p = &g_array_index (shape->specified, PropertyValue, i);
-          svg_element_set_base_value (shape, p->attr, p->value);
+          if (!_gtk_bitmask_get (set, p->attr))
+            svg_element_set_base_value (shape, p->attr, p->value);
         }
     }
   else if (svg_element_type_is_gradient (shape->type))
     {
       SvgColorStop *stop = g_ptr_array_index (shape->color_stops, idx - 1);
-      for (unsigned int i = FIRST_STOP_PROPERTY; i <= LAST_STOP_PROPERTY; i++)
+      for (unsigned int attr = FIRST_STOP_PROPERTY; attr <= LAST_STOP_PROPERTY; attr++)
         {
-          SvgValue *value = svg_color_stop_get_specified_value (stop, i);
-          if (value)
-            svg_color_stop_set_base_value (stop, i, value);
+          if (!_gtk_bitmask_get (set, attr))
+            {
+              SvgValue *value = svg_color_stop_get_specified_value (stop, attr);
+              if (value)
+                svg_color_stop_set_base_value (stop, attr, value);
+            }
         }
     }
   else if (svg_element_type_is_filter (shape->type))
@@ -3767,98 +3957,52 @@ apply_styles_here (SvgElement   *shape,
       for (unsigned int i = 0; i < n_attrs; i++)
         {
           SvgProperty attr = svg_filter_type_get_property (filter_type, i);
-          SvgValue *value = svg_filter_get_specified_value (filter, attr);
-          if (value)
-            svg_filter_set_base_value (filter, attr, value);
+          if (!_gtk_bitmask_get (set, attr))
+            {
+              SvgValue *value = svg_filter_get_specified_value (filter, attr);
+              if (value)
+                svg_filter_set_base_value (filter, attr, value);
+            }
         }
     }
   else
     g_assert_not_reached ();
 
-  /* user styles */
-  set = _gtk_bitmask_new ();
-  for (unsigned int i = 0; i < data->user_rulesets->len; i++)
-    {
-      SvgCssRuleset *r = &g_array_index (data->user_rulesets, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
-        apply_ruleset_to_shape (r, shape, idx, set, data);
-    }
-  _gtk_bitmask_free (set);
-
-  /* author styles */
-  set = _gtk_bitmask_new ();
-  for (unsigned int i = 0; i < data->rulesets->len; i++)
-    {
-      SvgCssRuleset *r = &g_array_index (data->rulesets, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
-        apply_ruleset_to_shape (r, shape, idx, set, data);
-    }
-  _gtk_bitmask_free (set);
-
-  /* inline styles */
-  apply_ruleset_to_shape (&style_ruleset, shape, idx, NULL, data);
-
-  /* important author styles */
-  set = _gtk_bitmask_new ();
-  for (unsigned int i = 0; i < data->rulesets_important->len; i++)
-    {
-      SvgCssRuleset *r = &g_array_index (data->rulesets_important, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
-        apply_ruleset_to_shape (r, shape, idx, set, data);
-    }
-  _gtk_bitmask_free (set);
-
-  /* important inline styles */
-  apply_ruleset_to_shape (&style_important, shape, idx, NULL, data);
-
-  /* important user styles */
-  set = _gtk_bitmask_new ();
-  for (unsigned int i = 0; i < data->user_rulesets_important->len; i++)
-    {
-      SvgCssRuleset *r = &g_array_index (data->user_rulesets_important, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
-        apply_ruleset_to_shape (r, shape, idx, set, data);
-    }
-  _gtk_bitmask_free (set);
-
-  svg_css_ruleset_clear (&style_ruleset);
-  svg_css_ruleset_clear (&style_important);
-
-  g_clear_object (&freeme);
+   _gtk_bitmask_free (set);
 }
 
-static void
+void
 apply_styles_to_shape (SvgElement *shape,
-                       ParserData *data)
+                       GtkSvg     *svg)
 {
-  apply_styles_here (shape, 0, data);
+  apply_styles_here (shape, 0, svg);
 
   if (svg_element_type_is_container (svg_element_get_type (shape)))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
           SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          apply_styles_to_shape (sh, data);
+          apply_styles_to_shape (sh, svg);
         }
     }
 
   if (svg_element_type_is_gradient (svg_element_get_type (shape)))
     {
       for (unsigned int idx = 0; idx < shape->color_stops->len; idx++)
-        apply_styles_here (shape, idx + 1, data);
+        apply_styles_here (shape, idx + 1, svg);
     }
 
   if (svg_element_type_is_filter (svg_element_get_type (shape)))
     {
       for (unsigned int idx = 0; idx < shape->filters->len; idx++)
-        apply_styles_here (shape, idx + 1, data);
+        apply_styles_here (shape, idx + 1, svg);
     }
 
   /* Apply traditional symbolic heuristics *after*
    * CSS and styles, so that these take precedence.
    */
-  if (data->svg->gpa_version == 0 &&
-      ((data->svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0))
+  if (svg->gpa_version == 0 &&
+      ((svg->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0))
     {
       GStrv classes = svg_element_get_classes (shape);
       SvgValue *value;
@@ -3921,7 +4065,7 @@ apply_styles_to_shape (SvgElement *shape,
   /* gpa attrs are supported to have higher priority than
    * style and CSS, so re-set them here
    */
-  if (data->svg->gpa_version > 0)
+  if (svg->gpa_version > 0)
     {
       if (svg_element_get_gpa_fill (shape))
         svg_element_set_base_value (shape, SVG_PROPERTY_FILL, svg_element_get_gpa_fill (shape));
@@ -3935,7 +4079,7 @@ apply_styles_to_shape (SvgElement *shape,
     {
       SvgValue *color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
 
-      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+      if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_color_get_kind (color) == COLOR_SYMBOLIC)
         {
           SvgValue *value = svg_color_new_black ();
@@ -3945,7 +4089,7 @@ apply_styles_to_shape (SvgElement *shape,
         }
 
       if (svg_color_get_kind (color) == COLOR_SYMBOLIC)
-        data->svg->used |= BIT (svg_color_get_symbolic (color) + 1);
+        svg->used |= BIT (svg_color_get_symbolic (color) + 1);
     }
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_FILL))
@@ -3953,7 +4097,7 @@ apply_styles_to_shape (SvgElement *shape,
       SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
       GtkSymbolicColor symbolic;
 
-      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+      if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
@@ -3962,11 +4106,8 @@ apply_styles_to_shape (SvgElement *shape,
           paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
         }
 
-      if (paint_is_server (svg_paint_get_kind (paint)))
-        g_hash_table_add (data->pending_refs, shape);
-
       if (svg_paint_is_symbolic (paint, &symbolic))
-        data->svg->used |= BIT (symbolic + 1);
+        svg->used |= BIT (symbolic + 1);
     }
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_STROKE))
@@ -3974,7 +4115,7 @@ apply_styles_to_shape (SvgElement *shape,
       SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
       GtkSymbolicColor symbolic;
 
-      if ((data->svg->features & GTK_SVG_EXTENSIONS) == 0 &&
+      if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
@@ -3983,21 +4124,12 @@ apply_styles_to_shape (SvgElement *shape,
           paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
         }
 
-      if (paint_is_server (svg_paint_get_kind (paint)))
-        g_hash_table_add (data->pending_refs, shape);
-
       if (svg_paint_is_symbolic (paint, &symbolic))
-        data->svg->used |= BIT (symbolic + 1);
+        svg->used |= BIT (symbolic + 1);
 
       if (svg_paint_get_kind (paint) != PAINT_NONE)
-        data->svg->used |= GTK_SVG_USES_STROKES;
+        svg->used |= GTK_SVG_USES_STROKES;
     }
-}
-
-static void
-apply_styles (ParserData *data)
-{
-  apply_styles_to_shape (data->svg->content, data);
 }
 
 /* }}} */
@@ -4031,16 +4163,11 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.animations = g_hash_table_new (g_str_hash, g_str_equal);
   data.current_animation = NULL;
   data.pending_animations = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_animation_free);
-  data.pending_refs = g_hash_table_new (g_direct_hash, g_direct_equal);
   data.skip.to = NULL;
   data.skip.reason = NULL;
   data.text.text = g_string_new ("");
   data.text.collect = FALSE;
   data.num_loaded_elements = 0;
-  data.rulesets = g_array_new (FALSE, FALSE, sizeof (SvgCssRuleset));
-  data.rulesets_important = g_array_new (FALSE, FALSE, sizeof (SvgCssRuleset));
-  data.user_rulesets = g_array_new (FALSE, FALSE, sizeof (SvgCssRuleset));
-  data.user_rulesets_important = g_array_new (FALSE, FALSE, sizeof (SvgCssRuleset));
 
   context = g_markup_parse_context_new (&parser,
                                         G_MARKUP_PREFIX_ERROR_POSITION |
@@ -4057,7 +4184,6 @@ gtk_svg_init_from_bytes (GtkSvg *self,
       g_clear_pointer (&data.skip.reason, g_free);
 
       g_ptr_array_set_size (data.pending_animations, 0);
-      g_hash_table_remove_all (data.pending_refs);
     }
   else
     {
@@ -4073,13 +4199,12 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   if (self->content == NULL)
     self->content = svg_element_new (NULL, SVG_ELEMENT_SVG);
 
-  load_user_stylesheet (&data);
+  load_user_styles (&data);
   load_author_styles (&data);
-  postprocess_styles (&data);
-#if 0
-  dump_styles (&data);
-#endif
-  apply_styles (&data);
+  load_inline_styles (&data);
+
+  apply_styles_to_shape (self->content, self);
+  resolve_refs_in_shapes (&data);
 
   if (svg_element_is_specified (self->content, SVG_PROPERTY_VIEW_BOX))
     {
@@ -4148,16 +4273,6 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_set_free_func (data.pending_animations, NULL);
   g_ptr_array_set_size (data.pending_animations, 0);
 
-  if (g_hash_table_size (data.pending_refs) > 0)
-    {
-      GHashTableIter iter;
-      SvgElement *shape;
-
-      g_hash_table_iter_init (&iter, data.pending_refs);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &shape))
-        resolve_shape_refs (shape, &data);
-    }
-
   resolve_animation_refs (self->content, &data);
 
   compute_update_order (self->content, self);
@@ -4167,20 +4282,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.shapes);
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
-  g_hash_table_unref (data.pending_refs);
   g_string_free (data.text.text, TRUE);
-  for (unsigned int i = 0; i < data.rulesets->len; i++)
-    svg_css_ruleset_clear (&g_array_index (data.rulesets, SvgCssRuleset, i));
-  g_array_unref (data.rulesets);
-  for (unsigned int i = 0; i < data.rulesets_important->len; i++)
-    svg_css_ruleset_clear (&g_array_index (data.rulesets_important, SvgCssRuleset, i));
-  g_array_unref (data.rulesets_important);
-  for (unsigned int i = 0; i < data.user_rulesets->len; i++)
-    svg_css_ruleset_clear (&g_array_index (data.user_rulesets, SvgCssRuleset, i));
-  g_array_unref (data.user_rulesets);
-  for (unsigned int i = 0; i < data.user_rulesets_important->len; i++)
-    svg_css_ruleset_clear (&g_array_index (data.user_rulesets_important, SvgCssRuleset, i));
-  g_array_unref (data.user_rulesets_important);
 
   if (self->gpa_version > 0 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)

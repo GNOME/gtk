@@ -3728,7 +3728,6 @@ static void
 create_transitions (SvgElement    *shape,
                     Timeline      *timeline,
                     GHashTable    *shapes,
-                    GHashTable    *pending_refs,
                     uint64_t       states,
                     GpaTransition  type,
                     int64_t        duration,
@@ -3762,7 +3761,6 @@ create_transitions (SvgElement    *shape,
     case GPA_TRANSITION_MORPH:
       create_morph_filter (shape, timeline, shapes, states,
                            duration, delay, easing);
-      g_hash_table_add (pending_refs, shape);
       break;
     case GPA_TRANSITION_FADE:
       create_transition (shape, 0, timeline, states,
@@ -8091,6 +8089,12 @@ can_reuse_node (GtkSvg        *self,
   if (self->node == NULL)
     return FALSE;
 
+  if (self->style_changed)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: %s", "style change");
+      return FALSE;
+    }
+
   if (self->state != self->node_for.state)
     {
       dbg_print ("cache", "Can't reuse rendernode: %s", "state change");
@@ -8230,6 +8234,12 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       PaintContext paint_context;
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
+
+      if (self->style_changed)
+        {
+          apply_styles_to_shape (self->content, self);
+          self->style_changed = FALSE;
+        }
 
       /* Traditional symbolics often have overlapping shapes,
        * causing things to look wrong when using colors with
@@ -8466,6 +8476,9 @@ gtk_svg_init (GtkSvg *self)
   self->timeline = timeline_new ();
 
   self->images = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  self->user_styles = array_new_with_clear_func (sizeof (SvgCssRuleset), (GDestroyNotify) svg_css_ruleset_clear);
+  self->author_styles = array_new_with_clear_func (sizeof (SvgCssRuleset), (GDestroyNotify) svg_css_ruleset_clear);
 }
 
 static void
@@ -8494,6 +8507,9 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->state_names, g_strfreev);
 
   g_clear_pointer (&self->stylesheet, g_bytes_unref);
+
+  g_clear_pointer (&self->user_styles, g_array_unref);
+  g_clear_pointer (&self->author_styles, g_array_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -9208,6 +9224,9 @@ gtk_svg_clear_content (GtkSvg *self)
 
   g_clear_pointer (&self->state_names, g_strfreev);
   self->n_state_names = 0;
+
+  g_array_set_size (self->user_styles, 0);
+  g_array_set_size (self->author_styles, 0);
 
   /* Note: we intentionally keep the stylesheet */
 }
