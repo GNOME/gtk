@@ -105,10 +105,15 @@ static void
 replay_texture_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
+  GskRectSnap snap = gsk_texture_node_get_snap (node);
   graphene_rect_t bounds;
+
   gsk_render_node_get_bounds (node, &bounds);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
   gtk_snapshot_append_texture (snapshot, texture, &bounds);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

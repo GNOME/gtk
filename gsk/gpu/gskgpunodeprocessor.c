@@ -1231,9 +1231,15 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
   GdkTexture *texture;
   gboolean should_mipmap;
   GskGpuSampler sampler;
+  graphene_rect_t bounds;
 
   texture = gsk_texture_node_get_texture (node);
   should_mipmap = texture_node_should_mipmap (node, self->frame, &self->scale);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &node->bounds,
+                                      gsk_texture_node_get_snap (node),
+                                      &bounds))
+    return;
 
   image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, should_mipmap, &image_cs);
 
@@ -1241,7 +1247,11 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
     {
       graphene_rect_t clip, rounded_clip;
 
-      if (!gsk_gpu_node_processor_clip_bounds (self, &node->bounds, GSK_RECT_SNAP_NONE, &clip))
+      if (!gsk_gpu_node_processor_clip_bounds (self,
+                                               &bounds,
+                                               /* already snapped */
+                                               GSK_RECT_SNAP_NONE,
+                                               &clip))
         return;
 
       if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &rounded_clip))
@@ -1251,7 +1261,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
                                                   self->ccs,
                                                   &rounded_clip,
                                                   &self->scale,
-                                                  &node->bounds,
+                                                  &bounds,
                                                   texture,
                                                   should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
       gsk_gpu_node_processor_image_op (self,
@@ -1288,8 +1298,8 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
                                    image,
                                    image_cs,
                                    sampler,
-                                   &node->bounds,
-                                   &node->bounds);
+                                   &bounds,
+                                   &bounds);
 
   gdk_color_state_unref (image_cs);
   g_object_unref (image);
@@ -1307,10 +1317,18 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   GdkTexture *texture = gsk_texture_node_get_texture (node);
   GdkColorState *image_cs;
   GskGpuImage *image;
+  graphene_rect_t bounds;
   gboolean should_mipmap;
 
+  if (!gsk_rect_snap_to_grid (&node->bounds,
+                              gsk_texture_node_get_snap (node),
+                              scale,
+                              &clip_bounds->origin,
+                              &bounds))
+    return NULL;
+
   if ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
-      !gsk_rect_equal (clip_bounds, &node->bounds))
+      !gsk_rect_equal (clip_bounds, &bounds))
     return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds);
 
   should_mipmap = texture_node_should_mipmap (node, frame, scale);
@@ -1322,7 +1340,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
                                                   ccs,
                                                   clip_bounds,
                                                   scale,
-                                                  &node->bounds,
+                                                  &bounds,
                                                   gsk_texture_node_get_texture (node),
                                                   should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
       *out_bounds = *clip_bounds;
@@ -1351,7 +1369,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
     }
 
   gdk_color_state_unref (image_cs);
-  *out_bounds = node->bounds;
+  *out_bounds = bounds;
   return image;
 }
 

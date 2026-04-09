@@ -1089,6 +1089,7 @@ populate_render_node_properties (GListStore            *store,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
 
         add_texture_rows (store, texture);
+        add_snap_row (store, "Snap", gsk_texture_node_get_snap (node));
       }
       break;
 

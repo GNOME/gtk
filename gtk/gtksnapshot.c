@@ -44,6 +44,7 @@
 #include "gsk/gskroundedrectprivate.h"
 #include "gsk/gskstrokeprivate.h"
 #include "gsk/gsktextnodeprivate.h"
+#include "gsk/gsktexturenodeprivate.h"
 #include "gsk/gskrectprivate.h"
 
 #include "gtk/gskpangoprivate.h"
@@ -3007,6 +3008,7 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
                              GdkTexture            *texture,
                              const graphene_rect_t *bounds)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -3017,7 +3019,7 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
-  node = gsk_texture_node_new (texture, &real_bounds);
+  node = gsk_texture_node_new2 (texture, &real_bounds, state->props.snap);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
