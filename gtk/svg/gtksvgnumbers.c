@@ -454,7 +454,7 @@ svg_numbers_drop_last (const SvgValue *v)
       return (SvgValue *) v;
     }
 
-  n = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, o->n_values - 1);
+  n = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (o->n_values - 1));
   n->n_values = o->n_values - 1;
 
   for (unsigned int i = 0; i < n->n_values; i++)
