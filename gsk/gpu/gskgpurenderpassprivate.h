@@ -29,7 +29,7 @@ struct _GskGpuRenderPass
   float                          opacity;
   graphene_point_t               offset;
   graphene_matrix_t              projection;
-  graphene_vec2_t                scale;
+  graphene_size_t                scale;
   GskTransform                  *modelview;
   /* clipping */
   cairo_rectangle_int_t          scissor;
@@ -65,7 +65,7 @@ typedef struct {
 
 typedef struct {
   GskTransform *modelview;
-  graphene_vec2_t scale;
+  graphene_size_t scale;
   graphene_point_t offset;
   GskGpuRenderPassClipStorage clip;
 } GskGpuRenderPassTransformStorage;

@@ -33,6 +33,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "to-image",  GSK_GPU_OPTIMIZE_TO_IMAGE,          "Don't fast-path creation of images for nodes" },
   { "occlusion", GSK_GPU_OPTIMIZE_OCCLUSION_CULLING, "Disable occlusion culling via opaque node tracking" },
   { "repeat",    GSK_GPU_OPTIMIZE_REPEAT,            "Repeat drawing operations instead of using offscreen and GL_REPEAT" },
+  { "damage",    GSK_GPU_OPTIMIZE_DAMAGE,            "Redraw the whole bounding box instead of doing fine grained damage tracking" },
   { "profile",   GSK_GPU_OPTIMIZE_PROFILE,           "Disable profiling support" },
 };
 
@@ -472,6 +473,15 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
   render_region = cairo_region_copy (gdk_draw_context_get_render_region (priv->context));
+
+  if (!(priv->optimizations & GSK_GPU_OPTIMIZE_DAMAGE))
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (render_region, &extents);
+      cairo_region_destroy (render_region);
+      render_region = cairo_region_create_rectangle (&extents);
+    }
 
   gsk_gpu_frame_render (frame,
                         timestamp,

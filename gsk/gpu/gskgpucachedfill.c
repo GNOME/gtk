@@ -165,15 +165,15 @@ mod_subpixel (float  pos,
 GskGpuImage *
 gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                             GskGpuFrame           *frame,
-                            const graphene_vec2_t *scale,
+                            const graphene_size_t *scale,
                             const graphene_rect_t *bounds,
                             GskPath               *path,
                             GskFillRule            fill_rule,
                             graphene_rect_t       *out_rect)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
-  float sx = graphene_vec2_get_x (scale);
-  float sy = graphene_vec2_get_y (scale);
+  float sx = scale->width;
+  float sy = scale->height;
   float dx, dy;
   GskGpuCachedFill *cached;
   gsize fx, fy, padding;
@@ -207,11 +207,11 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
     }
 
   if (!gsk_path_get_bounds (path, &viewport) ||
-      !gsk_rect_snap_to_grid (&viewport,
-                              scale,
-                              &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
-                                                    (float) fy / (sy * SUBPIXEL_SCALE_Y)),
-                              &viewport))
+      !gsk_rect_snap_to_grid_grow (&viewport,
+                                   scale,
+                                   &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
+                                                         (float) fy / (sy * SUBPIXEL_SCALE_Y)),
+                                   &viewport))
     return NULL;
 
   padding = 1;

@@ -562,7 +562,7 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
 
 GskGpuImage *
 gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
-                         const graphene_vec2_t *scale,
+                         const graphene_size_t *scale,
                          const graphene_rect_t *viewport,
                          GskGpuCairoFunc        func,
                          gpointer               user_data,
@@ -574,8 +574,8 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
                                               FALSE,
                                               GDK_MEMORY_DEFAULT,
                                               gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
-                                              ceil (graphene_vec2_get_x (scale) * viewport->size.width),
-                                              ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+                                              ceil (scale->width * viewport->size.width),
+                                              ceil (scale->height * viewport->size.height));
   g_assert (image != NULL);
 
   gsk_gpu_upload_cairo_into_op (frame,

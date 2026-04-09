@@ -13,7 +13,7 @@ void                    gsk_gpu_cached_fill_finish_cache                (GskGpuC
 
 GskGpuImage *           gsk_gpu_cached_fill_lookup                      (GskGpuCache            *self,
                                                                          GskGpuFrame            *frame,
-                                                                         const graphene_vec2_t  *scale,
+                                                                         const graphene_size_t  *scale,
                                                                          const graphene_rect_t  *bounds,
                                                                          GskPath                *path,
                                                                          GskFillRule             fill_rule,

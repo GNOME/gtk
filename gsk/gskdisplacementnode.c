@@ -111,15 +111,6 @@ sample_image (guchar *image,
 }
 
 static void
-cairo_surface_get_device_matrix (cairo_surface_t *surface,
-                                 cairo_matrix_t  *matrix)
-{
-  cairo_surface_get_device_scale (surface, &matrix->xx, &matrix->yy);
-  cairo_surface_get_device_offset (surface, &matrix->x0, &matrix->y0);
-  matrix->yx = matrix->xy = 0;
-}
-
-static void
 get_matrix (cairo_pattern_t *pattern,
             cairo_surface_t *surface,
             cairo_matrix_t  *out_matrix)
@@ -127,7 +118,7 @@ get_matrix (cairo_pattern_t *pattern,
   cairo_matrix_t pattern_matrix, surface_matrix;
 
   cairo_pattern_get_matrix (pattern, &pattern_matrix);
-  cairo_surface_get_device_matrix (surface, &surface_matrix);
+  gdk_cairo_surface_get_device_matrix (surface, &surface_matrix);
 
   DEBUG ("pattern: %g %g %g\n         %g %g %g\n",
            pattern_matrix.xx, pattern_matrix.yx, pattern_matrix.x0,
@@ -164,7 +155,7 @@ apply_displacement (GskDisplacementNode *self,
 
   i_image = cairo_surface_map_to_image (image_surface, NULL);
   g_assert (cairo_image_surface_get_format (i_image) == CAIRO_FORMAT_ARGB32);
-  cairo_surface_get_device_matrix (image_surface, &i_matrix);
+  gdk_cairo_surface_get_device_matrix (image_surface, &i_matrix);
   DEBUG ("image:   %g %g %g\n         %g %g %g\n",
            i_matrix.xx, i_matrix.yx, i_matrix.x0,
            i_matrix.yx, i_matrix.yy, i_matrix.y0);
