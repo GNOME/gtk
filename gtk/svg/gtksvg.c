@@ -15069,6 +15069,8 @@ gtk_svg_set_stylesheet (GtkSvg *self,
   g_clear_pointer (&self->stylesheet, g_bytes_unref);
   if (bytes)
     self->stylesheet = g_bytes_ref (bytes);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STYLESHEET]);
 }
 
 /**
