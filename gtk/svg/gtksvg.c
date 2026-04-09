@@ -5485,22 +5485,22 @@ needs_copy (SvgElement    *shape,
             PaintContext  *context,
             const char   **reason)
 {
-  if (context->op != CLIPPING)
+  SvgValue *filter = svg_element_get_current_value (shape, SVG_PROPERTY_FILTER);
+  SvgValue *blend = svg_element_get_current_value (shape, SVG_PROPERTY_BLEND_MODE);
+
+  if (context->op == CLIPPING)
+    return FALSE;
+
+  if (svg_filter_functions_need_backdrop (filter))
     {
-      SvgValue *filter = svg_element_get_current_value (shape, SVG_PROPERTY_FILTER);
-      SvgValue *blend = svg_element_get_current_value (shape, SVG_PROPERTY_BLEND_MODE);
+      if (reason) *reason = "filter";
+      return TRUE;
+    }
 
-      if (svg_filter_functions_need_backdrop (filter))
-        {
-          if (reason) *reason = "filter";
-          return TRUE;
-        }
-
-      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
-        {
-          if (reason) *reason = "blending";
-          return TRUE;
-        }
+  if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+    {
+      if (reason) *reason = "blending";
+      return TRUE;
     }
 
   return FALSE;
@@ -5511,58 +5511,62 @@ needs_isolation (SvgElement    *shape,
                  PaintContext  *context,
                  const char   **reason)
 {
-  if (context->op != CLIPPING)
+  SvgValue *isolation = svg_element_get_current_value (shape, SVG_PROPERTY_ISOLATION);
+  SvgValue *opacity = svg_element_get_current_value (shape, SVG_PROPERTY_OPACITY);
+  SvgValue *blend = svg_element_get_current_value (shape, SVG_PROPERTY_BLEND_MODE);
+  SvgValue *filter = svg_element_get_current_value (shape, SVG_PROPERTY_FILTER);
+  SvgValue *tf = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM);
+
+  if (context->op == CLIPPING)
+    return FALSE;
+
+  if (svg_element_get_type (shape) == SVG_ELEMENT_SVG && svg_element_get_parent (shape) == NULL)
     {
-      SvgValue *isolation = svg_element_get_current_value (shape, SVG_PROPERTY_ISOLATION);
-      SvgValue *opacity = svg_element_get_current_value (shape, SVG_PROPERTY_OPACITY);
-      SvgValue *blend = svg_element_get_current_value (shape, SVG_PROPERTY_BLEND_MODE);
-      SvgValue *filter = svg_element_get_current_value (shape, SVG_PROPERTY_FILTER);
-      SvgValue *tf = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM);
-      GskTransform *transform;
+      if (reason) *reason = "toplevel <svg>";
+      return TRUE;
+    }
 
-      if (svg_element_get_type (shape) == SVG_ELEMENT_SVG && svg_element_get_parent (shape) == NULL)
-        {
-          if (reason) *reason = "toplevel <svg>";
-          return TRUE;
-        }
+  if (context->op == MASKING && context->op_changed && svg_element_get_type (shape) == SVG_ELEMENT_MASK)
+    {
+      if (reason) *reason = "<mask>";
+      return TRUE;
+    }
 
-      if (context->op == MASKING && context->op_changed && svg_element_get_type (shape) == SVG_ELEMENT_MASK)
-        {
-          if (reason) *reason = "<mask>";
-          return TRUE;
-        }
+  if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
+    {
+      if (reason) *reason = "isolate attribute";
+      return TRUE;
+    }
 
-      if (svg_enum_get (isolation) == ISOLATION_ISOLATE)
-        {
-          if (reason) *reason = "isolate attribute";
-          return TRUE;
-        }
+  if (svg_number_get (opacity, 1) != 1)
+    {
+      if (reason) *reason = "opacity";
+      return TRUE;
+    }
 
-      if (svg_number_get (opacity, 1) != 1)
-        {
-          if (reason) *reason = "opacity";
-          return TRUE;
-        }
+  if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
+    {
+      if (reason) *reason = "blending";
+      return TRUE;
+    }
 
-      if (svg_enum_get (blend) != GSK_BLEND_MODE_DEFAULT)
-        {
-          if (reason) *reason = "blending";
-          return TRUE;
-        }
+  if (!svg_filter_functions_is_none (filter))
+    {
+      if (reason) *reason = "filter";
+      return TRUE;
+    }
 
-      if (!svg_filter_functions_is_none (filter))
-        {
-          if (reason) *reason = "filter";
-          return TRUE;
-        }
+  if (!svg_transform_is_none (tf))
+    {
+      GskTransform *transform = svg_transform_get_gsk (tf);
 
-      transform = svg_transform_get_gsk (tf);
       if (gsk_transform_get_category (transform) <= GSK_TRANSFORM_CATEGORY_3D)
         {
           if (reason) *reason = "3D transform";
           gsk_transform_unref (transform);
           return TRUE;
         }
+
       gsk_transform_unref (transform);
     }
 
