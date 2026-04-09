@@ -599,7 +599,7 @@ svg_filter_functions_accumulate (const SvgValue    *value0,
             f1->functions,
             f1->n_functions * sizeof (FilterFunction));
 
-  memcpy (&result->functions[f0->n_functions + (n - 1) * f1->n_functions],
+  memcpy (&result->functions[n * f1->n_functions],
           f0->functions,
           f0->n_functions * sizeof (FilterFunction));
 
