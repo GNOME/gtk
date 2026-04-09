@@ -255,6 +255,7 @@ compare_render_tests = [
   'text-glyph-lsb',
   'text-mixed-color-nocairo',
   'text-mixed-color-colrv1',
+  'texture-all-snaps',
   'texture-coords',
   'texture-offscreen-mipmap',
   'texture-scale-filters-nocairo',

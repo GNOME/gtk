@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gsktexturenode.h"
+#include "gsktexturenodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
@@ -45,6 +45,7 @@ struct _GskTextureNode
   GskRenderNode render_node;
 
   GdkTexture *texture;
+  GskRectSnap snap;
 };
 
 static void
@@ -70,6 +71,10 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
   GBytes *bytes;
   const guchar *data;
   gsize stride;
+  graphene_rect_t bounds;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
 
   width = gdk_texture_get_width (self->texture);
   height = gdk_texture_get_height (self->texture);
@@ -88,17 +93,18 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
                                   GDK_COLOR_STATE_SRGB,
                                   ccs);
 
-  gdk_cairo_rectangle_snap_to_grid (cr, &node->bounds);
+  gdk_cairo_rectangle_snap_to_grid (cr, &bounds);
+
   cairo_clip (cr);
 
   cairo_push_group (cr);
   cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
   cairo_translate (cr,
-                   node->bounds.origin.x,
-                   node->bounds.origin.y);
+                   bounds.origin.x,
+                   bounds.origin.y);
   cairo_scale (cr, 
-               node->bounds.size.width / width,
-               node->bounds.size.height / height);
+               bounds.size.width / width,
+               bounds.size.height / height);
 
   for (x = 0; x < width; x += MAX_CAIRO_IMAGE_WIDTH)
     {
@@ -134,6 +140,7 @@ gsk_texture_node_draw (GskRenderNode *node,
   cairo_surface_t *surface;
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
+  graphene_rect_t bounds;
   int width, height;
 
   width = gdk_texture_get_width (self->texture);
@@ -144,23 +151,26 @@ gsk_texture_node_draw (GskRenderNode *node,
       return;
     }
 
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
+
   surface = gdk_texture_download_surface (self->texture, data->ccs);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   cairo_matrix_init_scale (&matrix,
-                           width / node->bounds.size.width,
-                           height / node->bounds.size.height);
+                           width / bounds.size.width,
+                           height / bounds.size.height);
   cairo_matrix_translate (&matrix,
-                          -node->bounds.origin.x,
-                          -node->bounds.origin.y);
+                          - bounds.origin.x,
+                          - bounds.origin.y);
   cairo_pattern_set_matrix (pattern, &matrix);
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
 
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_fill (cr);
 }
 
@@ -174,6 +184,7 @@ gsk_texture_node_diff (GskRenderNode *node1,
   cairo_region_t *sub;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
     {
@@ -210,7 +221,7 @@ gsk_texture_node_replay (GskRenderNode   *node,
       return gsk_render_node_ref (node);
     }
 
-  result = gsk_texture_node_new (texture, &node->bounds);
+  result = gsk_texture_node_new2 (texture, &node->bounds, self->snap);
   g_object_unref (texture);
 
   return result;
@@ -266,6 +277,29 @@ GskRenderNode *
 gsk_texture_node_new (GdkTexture            *texture,
                       const graphene_rect_t *bounds)
 {
+  return gsk_texture_node_new2 (texture, bounds, GSK_RECT_SNAP_NONE);
+}
+
+/*<private>
+ * gsk_texture_node_new:
+ * @texture: the `GdkTexture`
+ * @bounds: the rectangle to render the texture into
+ * @snap: how to snap the texture to the pixel grid
+ *
+ * Creates a `GskRenderNode` that will render the given
+ * @texture into the area given by @bounds using the given snap value.
+ *
+ * Note that GSK applies linear filtering when textures are
+ * scaled and transformed. See [class@Gsk.TextureScaleNode]
+ * for a way to influence filtering.
+ *
+ * Returns: (transfer full) (type GskTextureNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_texture_node_new2 (GdkTexture            *texture,
+                       const graphene_rect_t *bounds,
+                       GskRectSnap            snap)
+{
   GskTextureNode *self;
   GskRenderNode *node;
 
@@ -274,10 +308,12 @@ gsk_texture_node_new (GdkTexture            *texture,
 
   self = gsk_render_node_alloc (GSK_TYPE_TEXTURE_NODE);
   node = (GskRenderNode *) self;
-  node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) &&
+                       gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
   node->is_hdr = gdk_color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
+  self->snap = snap;
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
@@ -285,3 +321,22 @@ gsk_texture_node_new (GdkTexture            *texture,
 
   return node;
 }
+
+/**
+ * gsk_texture_node_get_snap:
+ * @node: (type GskTextureNode): a `GskRenderNode` for textures
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_texture_node_get_snap (const GskRenderNode *node)
+{
+  const GskTextureNode *self = (const GskTextureNode *) node;
+
+  return self->snap;
+}
+

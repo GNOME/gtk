@@ -65,7 +65,7 @@
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
-#include "gsktexturenode.h"
+#include "gsktexturenodeprivate.h"
 #include "gsktexturescalenode.h"
 #include "gsktransformnode.h"
 #include "gsktransformprivate.h"
@@ -3224,9 +3224,11 @@ parse_texture_node (GtkCssParser *parser,
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *texture = NULL;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "texture", parse_texture, clear_texture, &texture },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
@@ -3235,7 +3237,7 @@ parse_texture_node (GtkCssParser *parser,
   if (texture == NULL)
     texture = create_default_texture ();
 
-  node = gsk_texture_node_new (texture, &bounds);
+  node = gsk_texture_node_new2 (texture, &bounds, snap);
   g_object_unref (texture);
 
   return node;
@@ -6543,6 +6545,7 @@ render_node_print (Printer       *p,
 
         append_rect_param (p, "bounds", &node->bounds);
         append_texture_param (p, "texture", gsk_texture_node_get_texture (node));
+        append_snap_param (p, "snap", gsk_texture_node_get_snap (node));
 
         end_node (p);
       }

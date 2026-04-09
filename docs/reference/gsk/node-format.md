@@ -662,6 +662,7 @@ Possible value for hint-metrics are:
 | property | syntax              | default                | printed     |
 | -------- | ------------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`            | 50                     | always      |
+| snap     | `<snap>`            | none                   | non-default |
 | texture  | `<string>`?`<url>`? | *see below*            | always      |
 
 Creates a node like `gsk_texture_node_new()` with the given properties.
