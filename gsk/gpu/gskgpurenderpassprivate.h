@@ -93,6 +93,11 @@ gboolean                gsk_gpu_render_pass_user_to_device_exact        (GskGpuR
                                                                          const graphene_rect_t          *user,
                                                                          cairo_rectangle_int_t          *device) G_GNUC_WARN_UNUSED_RESULT;
 
+gboolean                gsk_gpu_render_pass_snap_rect                   (GskGpuRenderPass               *self,
+                                                                         const graphene_rect_t          *rect,
+                                                                         GskRectSnap                     snap,
+                                                                         graphene_rect_t                *result) G_GNUC_WARN_UNUSED_RESULT;
+
 void                    gsk_gpu_render_pass_push_blend                  (GskGpuRenderPass               *self,
                                                                          GskGpuBlend                     blend,
                                                                          GskGpuRenderPassBlendStorage   *storage);
