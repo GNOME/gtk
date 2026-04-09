@@ -501,7 +501,8 @@ compute_surface_pointing_to (GtkPopover   *popover,
 }
 
 static GdkPopupLayout *
-create_popup_layout (GtkPopover *popover)
+create_popup_layout (GtkPopover    *popover,
+                     GdkAnchorHints resize_hints)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GdkRectangle rect;
@@ -624,7 +625,7 @@ create_popup_layout (GtkPopover *popover)
       g_assert_not_reached ();
     }
 
-  anchor_hints |= GDK_ANCHOR_RESIZE;
+  anchor_hints |= resize_hints;
 
   layout = gdk_popup_layout_new (&rect, parent_anchor, surface_anchor);
   gdk_popup_layout_set_anchor_hints (layout, anchor_hints);
@@ -644,15 +645,50 @@ static gboolean
 present_popup (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkRequisition nat;
   GdkPopupLayout *layout;
+  GdkAnchorHints resize_hints = 0;
+  GtkSizeRequestMode request_mode;
+  int min_width, min_height, nat_width, nat_height;
 
-  layout = create_popup_layout (popover);
-  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &nat);
-
-  if (gdk_popup_present (GDK_POPUP (priv->surface), nat.width, nat.height, layout))
+  request_mode = gtk_widget_get_request_mode (GTK_WIDGET (popover));
+  switch (request_mode)
     {
-      update_popover_layout (popover, layout, nat.width, nat.height);
+    case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+    case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+      gtk_widget_measure (GTK_WIDGET (popover), GTK_ORIENTATION_HORIZONTAL,
+                          -1, &min_width, &nat_width, NULL, NULL);
+      gtk_widget_measure (GTK_WIDGET (popover), GTK_ORIENTATION_VERTICAL,
+                          nat_width, &min_height, &nat_height, NULL, NULL);
+      break;
+
+    case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+      gtk_widget_measure (GTK_WIDGET (popover), GTK_ORIENTATION_VERTICAL,
+                          -1, &min_height, &nat_height, NULL, NULL);
+      gtk_widget_measure (GTK_WIDGET (popover), GTK_ORIENTATION_HORIZONTAL,
+                          nat_height, &min_width, &nat_width, NULL, NULL);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* Note that while min_width and min_height are the contextual minimum
+   * width and height (for the natural size in the opposite orientation),
+   * and a smaller size could be achievable if we are given more size in
+   * the opposite orientation, we only expect the compositor to shrink us
+   * down from the proposed size, and not grow us. Because of that, we're
+   * justified in asking it not to resize us down in this orientation.
+   */
+  if (min_width != nat_width)
+    resize_hints |= GDK_ANCHOR_RESIZE_X;
+  if (min_height != nat_height)
+    resize_hints |= GDK_ANCHOR_RESIZE_Y;
+
+  layout = create_popup_layout (popover, resize_hints);
+
+  if (gdk_popup_present (GDK_POPUP (priv->surface), nat_width, nat_height, layout))
+    {
+      update_popover_layout (popover, layout, nat_width, nat_height);
       return TRUE;
     }
 
