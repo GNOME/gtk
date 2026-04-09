@@ -2539,7 +2539,7 @@ resolve_href_ref (SvgValue   *value,
    */
   g_assert (shape != NULL);
 
-  ref = svg_href_get_id (value);
+  ref = svg_href_get_ref (value);
   if (svg_element_get_type (shape) == SVG_ELEMENT_IMAGE || svg_element_get_type (shape) == SVG_ELEMENT_FILTER)
     {
       GError *error = NULL;
@@ -2564,11 +2564,29 @@ resolve_href_ref (SvgValue   *value,
 
   if (svg_href_get_shape (value) == NULL)
     {
-      SvgElement *target = g_hash_table_lookup (data->shapes, ref);
-      if (!target)
-        {
+      const char *id = NULL;
+      SvgElement *target = NULL;
+
+      if (ref && ref[0] == '#')
+        id = ref + 1;
+
+      if (id)
+        target = g_hash_table_lookup (data->shapes, id);
+
+       if (!target)
+         {
+          if (id && svg_element_get_type (shape) == SVG_ELEMENT_LINK)
+            {
+              SvgAnimation *animation = svg_element_find_animation (data->svg->content, id);
+              if (animation)
+                {
+                  svg_href_set_animation (value, animation);
+                  return;
+                }
+            }
+
           gtk_svg_invalid_reference (data->svg,
-                                     "No shape with ID %s (resolving href in <%s>)",
+                                     "No element with ID %s (resolving href in <%s>)",
                                      ref,
                                      svg_element_type_get_name (svg_element_get_type (shape)));
         }
