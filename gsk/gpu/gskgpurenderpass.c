@@ -125,6 +125,46 @@ gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
   return TRUE;
 }
 
+/*<private>
+ * gsk_gpu_render_pass_snap_rect:
+ * @self: the renderpass
+ * @rect: the rectangle to snap
+ * @snap: how to snap the rectangle
+ * @result: (out caller-allocates)
+ *
+ * Snaps the given rectangle to the device pixel grid
+ * of the renderpass.
+ * 
+ * If the renderpass is transformed in a way that isn't axis-aligned,
+ * then the result will be set to the input and no snapping will be
+ * applied.
+ *
+ * When shrinking the rectangle or when using very small
+ * rectangles it can happen that the resulting rectangle
+ * is empty. In that case this function will return false.
+ *
+ * Returns: true if the result was not empty
+ **/
+gboolean
+gsk_gpu_render_pass_snap_rect (GskGpuRenderPass      *self,
+                               const graphene_rect_t *rect,
+                               GskRectSnap            snap,
+                               graphene_rect_t       *result)
+{
+  if (gsk_transform_get_fine_category (self->modelview) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
+    {
+      if (rect != result)
+        *result = *rect;
+      return TRUE;
+    }
+
+  return gsk_rect_snap_to_grid (rect,
+                                snap,
+                                &self->scale,
+                                &self->offset,
+                                result);
+}
+
 static void
 gsk_gpu_render_pass_compute_mvp (GskGpuRenderPass  *self,
                                  graphene_matrix_t *out_mvp)
