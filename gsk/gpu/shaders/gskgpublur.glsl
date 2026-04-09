@@ -4,7 +4,7 @@ textures = 1;
 graphene_rect_t rect;
 GdkColor blur_color;
 graphene_rect_t tex_rect;
-graphene_vec2_t blur_direction;
+graphene_size_t blur_direction;
 float opacity;
 
 variation: gboolean colorize;

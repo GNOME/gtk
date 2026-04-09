@@ -98,7 +98,7 @@ static const GskGpuOpClass GSK_GPU_GLOBALS_OP_CLASS = {
 
 void
 gsk_gpu_globals_op (GskGpuFrame             *frame,
-                    const graphene_vec2_t   *scale,
+                    const graphene_size_t   *scale,
                     const graphene_matrix_t *mvp,
                     const graphene_rect_t   *clip_mask_rect,
                     const GskRoundedRect    *clip)
@@ -107,7 +107,8 @@ gsk_gpu_globals_op (GskGpuFrame             *frame,
 
   self = (GskGpuGlobalsOp *) gsk_gpu_frame_alloc_op (frame, &GSK_GPU_GLOBALS_OP_CLASS);
 
-  graphene_vec2_to_float (scale, self->instance.scale);
+  self->instance.scale[0] = scale->width;
+  self->instance.scale[1] = scale->height;
   graphene_matrix_to_float (mvp, self->instance.mvp);
   gsk_rounded_rect_to_float (clip, graphene_point_zero (), self->instance.clip);
   gsk_gpu_rect_to_float (clip_mask_rect, graphene_point_zero(), self->instance.clip_mask_rect);

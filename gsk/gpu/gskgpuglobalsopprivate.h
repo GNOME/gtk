@@ -21,7 +21,7 @@ struct _GskGpuGlobalsInstance
 G_STATIC_ASSERT (sizeof (GskGpuGlobalsInstance) % 32 == 0);
 
 void                    gsk_gpu_globals_op                              (GskGpuFrame                    *frame,
-                                                                         const graphene_vec2_t          *scale,
+                                                                         const graphene_size_t          *scale,
                                                                          const graphene_matrix_t        *mvp,
                                                                          const graphene_rect_t          *clip_mask_rect,
                                                                          const GskRoundedRect           *clip);

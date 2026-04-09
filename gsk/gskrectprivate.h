@@ -254,22 +254,19 @@ gsk_rect_subtract (const graphene_rect_t *m,
  **/
 static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_snap_to_grid_grow (const graphene_rect_t  *src,
-                            const graphene_vec2_t  *grid_scale,
+                            const graphene_size_t  *grid_scale,
                             const graphene_point_t *grid_offset,
                             graphene_rect_t        *dest)
 {
-  float x, y, xscale, yscale;
+  float x, y;
 
-  xscale = graphene_vec2_get_x (grid_scale);
-  yscale = graphene_vec2_get_y (grid_scale);
-
-  x = floorf ((src->origin.x + grid_offset->x) * xscale);
-  y = floorf ((src->origin.y + grid_offset->y) * yscale);
+  x = floorf ((src->origin.x + grid_offset->x) * grid_scale->width);
+  y = floorf ((src->origin.y + grid_offset->y) * grid_scale->height);
   *dest = GRAPHENE_RECT_INIT (
-      x / xscale - grid_offset->x,
-      y / yscale - grid_offset->y,
-      (ceilf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
-      (ceilf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
+      x / grid_scale->width - grid_offset->x,
+      y / grid_scale->height - grid_offset->y,
+      (ceilf ((src->origin.x + grid_offset->x + src->size.width) * grid_scale->width) - x) / grid_scale->width,
+      (ceilf ((src->origin.y + grid_offset->y + src->size.height) * grid_scale->height) - y) / grid_scale->height);
 
   if (dest->size.width <= 0.0 || dest->size.height <= 0.0)
     return FALSE;

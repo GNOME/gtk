@@ -7,7 +7,7 @@ GdkColor right_border_color;
 GdkColor bottom_border_color;
 GdkColor left_border_color;
 graphene_vec4_t border_widths;
-graphene_vec2_t inside_offset;
+graphene_size_t inside_offset;
 #endif /* GSK_PREAMBLE */
 
 #include "gskgpuborderinstance.glsl"
