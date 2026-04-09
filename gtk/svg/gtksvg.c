@@ -8582,20 +8582,8 @@ static double
 gtk_svg_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkSvg *self = GTK_SVG (paintable);
-  SvgValue *vb;
-  graphene_rect_t view_box;
 
-  if (self->width > 0 && self->height > 0)
-    return self->width / self->height;
-
-  vb = self->content->current[SVG_PROPERTY_VIEW_BOX];
-  if (svg_view_box_get (vb, &view_box))
-    {
-      if (view_box.size.width > 0 && view_box.size.height > 0)
-        return view_box.size.width / view_box.size.height;
-    }
-
-  return 0;
+  return self->aspect_ratio;
 }
 
 static void
@@ -9400,6 +9388,7 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->width = 0;
   self->height = 0;
+  self->aspect_ratio = 0;
   self->current_width = 0;
   self->current_height = 0;
   self->initial_state = 0;
@@ -9840,8 +9829,13 @@ gtk_svg_set_view (GtkSvg     *self,
 {
   g_assert (view == NULL || view->type == SVG_ELEMENT_VIEW);
 
+  if (self->view == view)
+    return;
+
   self->view = view;
   self->view_changed = TRUE;
+
+  determine_size (self);
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 

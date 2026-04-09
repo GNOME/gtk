@@ -4251,6 +4251,98 @@ apply_styles_to_shape (SvgElement *shape,
 
 /* }}} */
 
+/* Determine the intrinsic width, height, and aspect ratio from
+ * what we have.
+ */
+void
+determine_size (GtkSvg *self)
+{
+  SvgValue *vb;
+  double width = 0;
+  double height = 0;
+  double aspect_ratio = 0;
+
+  if (self->view && svg_element_is_specified (self->view, SVG_PROPERTY_VIEW_BOX))
+    vb = svg_element_get_specified_value (self->view, SVG_PROPERTY_VIEW_BOX);
+  else
+    vb = svg_element_get_specified_value (self->content, SVG_PROPERTY_VIEW_BOX);
+
+  if (vb)
+    {
+      graphene_rect_t rect;
+
+      svg_view_box_get (vb, &rect);
+      width = rect.size.width;
+      height = rect.size.height;
+    }
+
+  if (svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH))
+    {
+      SvgValue *value = svg_element_get_specified_value (self->content, SVG_PROPERTY_WIDTH);
+
+      g_assert (value != NULL);
+
+      SvgUnit unit = svg_number_get_unit (value);
+      double v = svg_number_get (value, 100);
+
+      if (is_absolute_length (unit))
+        width = absolute_length_to_px (v, unit);
+      else if (unit != SVG_UNIT_PERCENTAGE)
+        width = v;
+    }
+
+  if (svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
+    {
+      SvgValue *value = svg_element_get_specified_value (self->content, SVG_PROPERTY_HEIGHT);
+
+      g_assert (value != 0);
+
+      SvgUnit unit = svg_number_get_unit (value);
+      double v = svg_number_get (value, 100);
+
+      if (is_absolute_length (unit))
+        height = absolute_length_to_px (v, unit);
+      else if (unit != SVG_UNIT_PERCENTAGE)
+        height = v;
+    }
+
+  if (!vb &&
+      !svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH) &&
+      !svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
+    {
+      /* arbitrary */
+      width = 200;
+      height = 200;
+    }
+
+  if (width > 0 && height > 0)
+    {
+      aspect_ratio = width / height;
+    }
+  else if (vb)
+    {
+      graphene_rect_t rect;
+
+      svg_view_box_get (vb, &rect);
+      aspect_ratio = rect.size.width / rect.size.height;
+    }
+  else
+    {
+      aspect_ratio = 0;
+    }
+
+  if (self->width != width ||
+      self->height != height ||
+      self->aspect_ratio != aspect_ratio)
+    {
+      self->width = width;
+      self->height = height;
+      self->aspect_ratio = aspect_ratio;
+
+      gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+    }
+}
+
 void
 gtk_svg_init_from_bytes (GtkSvg *self,
                          GBytes *bytes)
@@ -4325,45 +4417,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   apply_styles_to_shape (self->content, self);
   resolve_refs_in_shapes (&data);
 
-  if (svg_element_is_specified (self->content, SVG_PROPERTY_VIEW_BOX))
-    {
-      graphene_rect_t vb;
-
-      svg_view_box_get (self->content->base[SVG_PROPERTY_VIEW_BOX], &vb);
-      self->width = vb.size.width;
-      self->height = vb.size.height;
-    }
-
-  if (svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH))
-    {
-      SvgUnit unit = svg_number_get_unit (self->content->base[SVG_PROPERTY_WIDTH]);
-      double value = svg_number_get (self->content->base[SVG_PROPERTY_WIDTH], 100);
-
-      if (is_absolute_length (unit))
-        self->width = absolute_length_to_px (value, unit);
-      else if (unit != SVG_UNIT_PERCENTAGE)
-        self->width = value;
-    }
-
-  if (svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
-    {
-      SvgUnit unit = svg_number_get_unit (self->content->base[SVG_PROPERTY_HEIGHT]);
-      double value = svg_number_get (self->content->base[SVG_PROPERTY_HEIGHT], 100);
-
-      if (is_absolute_length (unit))
-        self->height = absolute_length_to_px (value, unit);
-      else if (unit != SVG_UNIT_PERCENTAGE)
-        self->height = value;
-    }
-
-  if (!svg_element_is_specified (self->content, SVG_PROPERTY_VIEW_BOX) &&
-      !svg_element_is_specified (self->content, SVG_PROPERTY_WIDTH) &&
-      !svg_element_is_specified (self->content, SVG_PROPERTY_HEIGHT))
-    {
-      /* arbitrary */
-      self->width = 200;
-      self->height = 200;
-    }
+  determine_size (self);
 
   for (unsigned int i = 0; i < data.pending_animations->len; i++)
     {

@@ -46,7 +46,7 @@ struct _GtkSvg
 
   double current_width, current_height; /* Last snapshot size */
 
-  double width, height; /* Intrinsic size */
+  double width, height, aspect_ratio; /* Paintable properties */
 
   double weight;
   unsigned int initial_state;
