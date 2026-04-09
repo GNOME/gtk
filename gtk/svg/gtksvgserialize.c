@@ -242,6 +242,12 @@ serialize_shape_attrs (GString              *s,
   if (svg_element_get_style (shape, &loc))
     append_string_attr (s, indent, "style", svg_element_get_style (shape, &loc));
 
+  if (svg_element_get_focusable (shape) != svg_element_get_initial_focusable (shape))
+    append_string_attr (s, indent, "tabindex", svg_element_get_focusable (shape) ? "0" : "-1");
+
+  if (svg_element_get_autofocus (shape))
+    append_string_attr (s, indent, "autofocus", "autofocus");
+
   for (SvgProperty attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&

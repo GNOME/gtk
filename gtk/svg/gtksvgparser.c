@@ -1159,6 +1159,26 @@ parse_shape_attrs (SvgElement           *shape,
           *handled |= BIT (i);
           svg_element_set_id (shape, attr_values[i]);
         }
+      else if (strcmp (attr_names[i], "tabindex") == 0)
+        {
+          int tabindex;
+          char *end;
+
+          *handled |= BIT (i);
+          tabindex = g_ascii_strtoll (attr_values[i], &end, 10);
+          if (end && *end != '\0')
+            gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], "Not an integer");
+          else
+            svg_element_set_focusable (shape, tabindex >= 0);
+        }
+      else if (strcmp (attr_names[i], "autofocus") == 0)
+        {
+          *handled |= BIT (i);
+          if (strcmp (attr_values[i], "") == 0 || strcmp (attr_values[i], "autofocus") == 0)
+            svg_element_set_autofocus (shape, TRUE);
+          else
+            gtk_svg_invalid_attribute (data->svg, context, attr_names, attr_names[i], NULL);
+        }
       else if (svg_property_lookup (attr_names[i], svg_element_get_type (shape), &attr) &&
                svg_property_has_presentation (attr))
         {

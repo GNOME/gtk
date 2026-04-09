@@ -30,6 +30,7 @@ test_data = [
   'dep-cycle.svg',
   'ellipse.svg',
   'filters.svg',
+  'focus.svg',
   'fonts.svg',
   'gpa-attributes.svg',
   'gpa-condition.svg',
