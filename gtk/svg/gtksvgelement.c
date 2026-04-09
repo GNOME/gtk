@@ -1919,3 +1919,15 @@ svg_element_propagate_event (SvgElement *target,
 
   return propagate_event_up (target, event, svg);
 }
+
+gboolean
+svg_element_or_ancestor_has_type (SvgElement     *element,
+                                  SvgElementType  type)
+{
+  for (SvgElement *p = element; p; p = p->parent)
+    {
+      if (p->type == type)
+        return TRUE;
+    }
+  return FALSE;
+}

@@ -243,4 +243,7 @@ gboolean svg_element_propagate_event (SvgElement *target,
                                       GdkEvent   *event,
                                       GtkSvg     *svg);
 
+gboolean svg_element_or_ancestor_has_type (SvgElement     *element,
+                                           SvgElementType  type);
+
 G_END_DECLS

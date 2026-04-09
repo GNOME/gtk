@@ -2531,18 +2531,6 @@ resolve_mask_ref (SvgValue   *value,
     }
 }
 
-static gboolean
-shape_has_ancestor_type (SvgElement     *shape,
-                         SvgElementType  type)
-{
-  for (SvgElement *p = svg_element_get_parent (shape); p; p = p->parent)
-    {
-      if (p->type == type)
-        return TRUE;
-    }
-  return FALSE;
-}
-
 static void
 resolve_href_ref (SvgValue   *value,
                   SvgElement *shape,
@@ -2614,7 +2602,7 @@ resolve_href_ref (SvgValue   *value,
                                      svg_element_type_get_name (svg_element_get_type (shape)));
         }
       else if (svg_element_get_type (shape) == SVG_ELEMENT_USE &&
-               shape_has_ancestor_type (shape, SVG_ELEMENT_CLIP_PATH) &&
+               svg_element_or_ancestor_has_type (shape, SVG_ELEMENT_CLIP_PATH) &&
                !svg_element_type_is_clip_path_content (target->type))
         {
           gtk_svg_invalid_reference (data->svg,
