@@ -60,8 +60,7 @@ svg_paint_free (SvgValue *value)
     {
       gdk_color_finish (&paint->color);
     }
-  else if (paint->kind == PAINT_SERVER ||
-           paint->kind == PAINT_SERVER_WITH_FALLBACK)
+  else if (paint_is_server (paint->kind))
     {
       g_free (paint->server.ref);
       gdk_color_finish (&paint->server.fallback);
