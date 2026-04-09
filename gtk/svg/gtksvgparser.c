@@ -1071,7 +1071,6 @@ parse_motion_animation_attrs (SvgAnimation         *a,
           if (!points)
             {
               gtk_svg_invalid_attribute (data->svg, context, attr_names, "keyPoints", NULL);
-              g_array_unref (points);
               return FALSE;
             }
 
