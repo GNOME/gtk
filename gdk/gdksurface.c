@@ -248,21 +248,42 @@ maybe_flip_position (int       bounds_pos,
 {
   int primary;
   int secondary;
+  int badness = 0;
+  int limit;
+
+  /* Try to fit without flipping */
 
   *flipped = FALSE;
   primary = rect_pos + (1 + rect_sign) * rect_size / 2 + offset - (1 + surface_sign) * surface_size / 2;
 
-  if (!flip || (primary >= bounds_pos && primary + surface_size <= bounds_pos + bounds_size))
+  if (!flip)
     return primary;
 
-  *flipped = TRUE;
+  /* If the position gets larger than this limit,
+   * the other (right/bottom) edge is not going to fit.
+   */
+  limit = bounds_pos + bounds_size - surface_size;
+
+  if (primary < bounds_pos)
+    badness = bounds_pos - primary;
+  if (primary > limit)
+    badness = MAX (badness, primary - limit);
+  /* If it fit, we're done */
+  if (badness == 0)
+    return primary;
+
+  /* See if flipping helps */
+
   secondary = rect_pos + (1 - rect_sign) * rect_size / 2 - offset - (1 - surface_sign) * surface_size / 2;
 
-  if ((secondary >= bounds_pos && secondary + surface_size <= bounds_pos + bounds_size) || primary > bounds_pos + bounds_size)
-    return secondary;
+  if (secondary < bounds_pos && bounds_pos - secondary > badness)
+    return primary;
+  else if (secondary > limit && secondary - limit > badness)
+    return primary;
 
-  *flipped = FALSE;
-  return primary;
+  /* It does help */
+  *flipped = TRUE;
+  return secondary;
 }
 
 GdkMonitor *
