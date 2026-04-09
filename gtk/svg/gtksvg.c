@@ -1275,7 +1275,16 @@ typedef enum
   TIME_SPEC_TYPE_OFFSET,
   TIME_SPEC_TYPE_SYNC,
   TIME_SPEC_TYPE_STATES,
+  TIME_SPEC_TYPE_EVENT,
 } TimeSpecType;
+
+typedef enum
+{
+  EVENT_TYPE_FOCUS,
+  EVENT_TYPE_BLUR,
+  EVENT_TYPE_MOUSE_ENTER,
+  EVENT_TYPE_MOUSE_LEAVE,
+} EventType;
 
 typedef enum
 {
@@ -1297,6 +1306,11 @@ struct _TimeSpec
       uint64_t from;
       uint64_t to;
     } states;
+    struct {
+      char *ref;
+      SvgElement *shape;
+      EventType event;
+    } event;
   };
   int64_t time;
   GPtrArray *animations;
@@ -1307,6 +1321,8 @@ time_spec_clear (TimeSpec *t)
 {
   if (t->type == TIME_SPEC_TYPE_SYNC)
     g_free (t->sync.ref);
+  else if (t->type == TIME_SPEC_TYPE_EVENT)
+    g_free (t->event.ref);
 
   g_clear_pointer (&t->animations, g_ptr_array_unref);
 }
@@ -1342,6 +1358,11 @@ time_spec_copy (const TimeSpec *orig)
     case TIME_SPEC_TYPE_STATES:
       t->states.from = orig->states.from;
       t->states.to = orig->states.to;
+      break;
+    case TIME_SPEC_TYPE_EVENT:
+      t->event.ref = g_strdup (orig->event.ref);
+      t->event.shape = orig->event.shape;
+      t->event.event = orig->event.event;
       break;
     default:
       g_assert_not_reached ();
@@ -1379,6 +1400,12 @@ time_spec_equal (const void *p1,
              t1->states.to == t2->states.to &&
              t1->offset == t2->offset;
 
+    case TIME_SPEC_TYPE_EVENT:
+      return ((t1->event.shape != NULL && t1->event.shape == t2->event.shape) ||
+              (t1->event.ref != NULL && g_strcmp0 (t1->event.ref, t2->event.ref) == 0)) &&
+             t1->event.event == t2->event.event &&
+             t1->offset == t2->offset;
+
     default:
       g_assert_not_reached ();
     }
@@ -1410,9 +1437,11 @@ parse_states_arg (GtkCssParser *parser,
 static gboolean
 time_spec_parse (GtkCssParser  *parser,
                  GtkSvg        *svg,
+                 SvgElement    *default_event_target,
                  TimeSpec      *spec,
                  GError       **error)
 {
+  const char *event_types[] = { "focus", "blur", "mouseenter", "mouseleave" };
   memset (spec, 0, sizeof (TimeSpec));
 
   gtk_css_parser_skip_whitespace (parser);
@@ -1509,29 +1538,52 @@ time_spec_parse (GtkCssParser  *parser,
         }
       else if (gtk_css_parser_try_delim (parser, '.'))
         {
-          TimeSpecSide side;
+          unsigned int value;
 
-          spec->type = TIME_SPEC_TYPE_SYNC;
-
-          if (gtk_css_parser_try_ident (parser, "begin"))
-            side = TIME_SPEC_SIDE_BEGIN;
-          else if (gtk_css_parser_try_ident (parser, "end"))
-            side = TIME_SPEC_SIDE_END;
+          if (parser_try_enum (parser, (const char *[]) { "begin", "end" }, 2, &value))
+            {
+              spec->type = TIME_SPEC_TYPE_SYNC;
+              spec->sync.ref = id;
+              spec->sync.side = value;
+              spec->sync.base = NULL;
+            }
+          else if (parser_try_enum (parser, event_types, G_N_ELEMENTS (event_types), &value))
+            {
+              spec->type = TIME_SPEC_TYPE_EVENT;
+              spec->event.ref = id;
+              spec->event.event = value;
+              spec->event.shape = NULL;
+            }
           else
             {
               g_free (id);
               return FALSE;
             }
 
-          spec->sync.side = side;
-          spec->sync.ref = id;
-          spec->sync.base = NULL;
-
           gtk_css_parser_skip_whitespace (parser);
           parser_try_duration (parser, &spec->offset);
         }
       else
-        return FALSE;
+        {
+          unsigned int value;
+
+          if (parse_enum (id, event_types, G_N_ELEMENTS (event_types), &value))
+            {
+              g_free (id);
+              spec->type = TIME_SPEC_TYPE_EVENT;
+              spec->event.ref = NULL;
+              spec->event.event = value;
+              spec->event.shape = default_event_target;
+            }
+          else
+            {
+              g_free (id);
+              return FALSE;
+            }
+
+          gtk_css_parser_skip_whitespace (parser);
+          parser_try_duration (parser, &spec->offset);
+        }
     }
   else
     return FALSE;
@@ -1604,6 +1656,32 @@ time_spec_update_for_state (TimeSpec     *spec,
       if (state_match (spec->states.from & ~spec->states.to, previous_state) &&
           state_match (spec->states.to & ~spec->states.from, state))
         time_spec_set_time (spec, state_start_time + spec->offset);
+    }
+}
+
+static gboolean
+matches_shape (SvgElement *shape,
+               const char *ref,
+               SvgElement *target)
+{
+  if (shape != NULL)
+    return shape == target;
+  if (ref != NULL)
+    return g_strcmp0 (ref, target->id) == 0;
+  return FALSE;
+}
+
+static void
+time_spec_update_for_event (TimeSpec   *spec,
+                            SvgElement *shape,
+                            EventType   event,
+                            int64_t     event_time)
+{
+  if (spec->type == TIME_SPEC_TYPE_EVENT)
+    {
+      if (matches_shape (spec->event.shape, spec->event.ref, shape) &&
+          spec->event.event == event)
+        time_spec_set_time (spec, event_time + spec->offset);
     }
 }
 
@@ -1735,6 +1813,19 @@ timeline_update_for_state (Timeline     *timeline,
     {
       TimeSpec *spec = g_ptr_array_index (timeline->times, i);
       time_spec_update_for_state (spec, previous_state, state, state_start_time);
+    }
+}
+
+static void
+timeline_update_for_event (Timeline   *timeline,
+                           SvgElement *shape,
+                           EventType   event,
+                           int64_t     event_time)
+{
+  for (unsigned int i = 0; i < timeline->times->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (timeline->times, i);
+      time_spec_update_for_event (spec, shape, event, event_time);
     }
 }
 

@@ -123,6 +123,7 @@ typedef struct
   GtkSvg *svg;
   GArray *array;
   GError *error;
+  SvgElement *default_event_target;
 } Specs;
 
 static gboolean
@@ -135,7 +136,7 @@ time_spec_parse_one (GtkCssParser *parser,
   g_array_set_size (specs->array, specs->array->len + 1);
   spec = &g_array_index (specs->array, TimeSpec, specs->array->len - 1);
 
-  return time_spec_parse (parser, specs->svg, spec, &specs->error);
+  return time_spec_parse (parser, specs->svg, specs->default_event_target, spec, &specs->error);
 }
 
 static gboolean
@@ -213,6 +214,7 @@ parse_base_animation_attrs (SvgAnimation         *a,
       Specs specs = { 0, };
 
       specs.svg = data->svg;
+      specs.default_event_target = current_shape;
       specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
       g_array_set_clear_func (specs.array, (GDestroyNotify) time_spec_clear);
 
@@ -255,6 +257,7 @@ parse_base_animation_attrs (SvgAnimation         *a,
       Specs specs = { 0, };
 
       specs.svg = data->svg;
+      specs.default_event_target = current_shape;
       specs.array = g_array_new (FALSE, TRUE, sizeof (TimeSpec));
       g_array_set_clear_func (specs.array, (GDestroyNotify) time_spec_clear);
 

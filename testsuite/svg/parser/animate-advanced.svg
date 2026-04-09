@@ -29,9 +29,19 @@
   </path>
 
   <!-- Multiple concurrent animations on same attribute -->
-  <circle cx="130" cy="30" r="10" fill="cyan">
+  <circle id='circ' cx="130" cy="30" r="10" fill="cyan">
     <animate attributeName="r" values="10;15;10" dur="2s" repeatCount="indefinite"/>
     <animate attributeName="r" from="10" to="15" dur="4s" additive="sum" repeatCount="indefinite"/>
   </circle>
   
+  <line x1='10'>
+    <animate attributeName='x1'
+      begin='circ.mouseenter +4s'
+      from='0' to='10'
+      dur='5s'/>
+    <animate attributeName='x2'
+      begin='mouseenter +4s'
+      from='10' to='0'
+      dur='5s'/>
+  </line>
 </svg>

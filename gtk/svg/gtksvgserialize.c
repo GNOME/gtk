@@ -107,7 +107,8 @@ time_spec_print (TimeSpec *spec,
                  GString  *s)
 {
   gboolean only_nonzero = FALSE;
-  const char *sides[] = { ".begin", ".end" };
+  const char *sides[] = { "begin", "end" };
+  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave" };
 
   switch (spec->type)
     {
@@ -117,19 +118,22 @@ time_spec_print (TimeSpec *spec,
     case TIME_SPEC_TYPE_OFFSET:
       break;
     case TIME_SPEC_TYPE_SYNC:
-      g_string_append_printf (s, "%s", spec->sync.ref);
-      g_string_append_printf (s, "%s", sides[spec->sync.side]);
+      g_string_append_printf (s, "%s.%s", spec->sync.ref, sides[spec->sync.side]);
       only_nonzero = TRUE;
       break;
     case TIME_SPEC_TYPE_STATES:
-      {
-        g_string_append (s, "StateChange(");
-        print_states (s, svg, spec->states.from);
-        g_string_append (s, ", ");
-        print_states (s, svg, spec->states.to);
-        g_string_append (s, ")");
-        only_nonzero = TRUE;
-      }
+      g_string_append (s, "StateChange(");
+      print_states (s, svg, spec->states.from);
+      g_string_append (s, ", ");
+      print_states (s, svg, spec->states.to);
+      g_string_append (s, ")");
+      only_nonzero = TRUE;
+      break;
+    case TIME_SPEC_TYPE_EVENT:
+      if (spec->event.ref)
+        g_string_append_printf (s, "%s.", spec->event.ref);
+      g_string_append_printf (s, "%s", events[spec->event.event]);
+      only_nonzero = TRUE;
       break;
     default:
       g_assert_not_reached ();
