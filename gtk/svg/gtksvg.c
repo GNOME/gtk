@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#define SECRET
 #include "gtksvgprivate.h"
 
 #include "gtkenums.h"
@@ -245,7 +244,7 @@
 #define DRAWING_LIMIT 150000
 
 #ifndef _MSC_VER
-#define DEBUG
+#undef DEBUG
 #endif /* _MSC_VER */
 
 
@@ -786,6 +785,13 @@ svg_writing_mode_is_vertical (WritingMode mode)
   };
 
   return is_vertical[mode];
+}
+
+static void
+ensure_current_time (GtkSvg *self)
+{
+  if (self->clock && self->playing)
+    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
 }
 
 /* }}} */
@@ -13112,8 +13118,6 @@ can_reuse_node (GtkSvg        *self,
                 size_t         n_colors,
                 double         weight)
 {
-  return FALSE;
-
   if (self->node == NULL)
     return FALSE;
 
@@ -14859,8 +14863,7 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  if (self->clock && self->playing)
-    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+  ensure_current_time (self);
 
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
@@ -14913,7 +14916,7 @@ gtk_svg_set_state (GtkSvg       *self,
 unsigned int
 gtk_svg_get_state (GtkSvg *self)
 {
-  g_return_val_if_fail (GTK_IS_SVG (self), -1);
+  g_return_val_if_fail (GTK_IS_SVG (self), 0);
 
   return self->state;
 }
@@ -15063,6 +15066,8 @@ gtk_svg_set_stylesheet (GtkSvg *self,
   g_clear_pointer (&self->stylesheet, g_bytes_unref);
   if (bytes)
     self->stylesheet = g_bytes_ref (bytes);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STYLESHEET]);
 }
 
 /**

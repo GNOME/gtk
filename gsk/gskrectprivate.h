@@ -36,6 +36,14 @@ gsk_rect_init_offset (graphene_rect_t        *r,
 }
 
 static inline gboolean G_GNUC_PURE
+gsk_rect_contains_point (const graphene_rect_t  *r,
+                         const graphene_point_t *p)
+{
+  return p->x >= r->origin.x && p->x <= r->origin.x + r->size.width &&
+         p->y >= r->origin.y && p->y <= r->origin.y + r->size.height;
+}
+
+static inline gboolean G_GNUC_PURE
 gsk_rect_contains_rect (const graphene_rect_t *r1,
                         const graphene_rect_t *r2)
 {
