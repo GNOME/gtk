@@ -676,7 +676,7 @@ svg_paint_interpolate (const SvgValue    *value0,
   const SvgPaint *p0 = (const SvgPaint *) value0;
   const SvgPaint *p1 = (const SvgPaint *) value1;
 
-  if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
+  if (p0->kind == PAINT_COLOR && p1->kind == PAINT_COLOR)
     {
       GdkColor c;
       SvgValue *ret;
