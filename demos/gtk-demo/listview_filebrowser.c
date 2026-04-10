@@ -115,7 +115,7 @@ file_browser_view_finalize (GObject *object)
   g_free (self->icon_name);
   g_free (self->title);
 
-  G_OBJECT_CLASS (file_browser_view_parent_class)->dispose (object);
+  G_OBJECT_CLASS (file_browser_view_parent_class)->finalize (object);
 }
 
 static void

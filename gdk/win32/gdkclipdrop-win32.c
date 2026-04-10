@@ -1418,6 +1418,8 @@ gdk_win32_clipdrop_finalize (GObject *object)
   CloseHandle (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd));
   g_clear_pointer (&clipdrop->dnd_thread_items, g_free);
   g_clear_pointer (&clipdrop->clipboard_thread_items, g_free);
+
+  G_OBJECT_CLASS (gdk_win32_clipdrop_parent_class)->finalize (object);
 }
 
 static void
