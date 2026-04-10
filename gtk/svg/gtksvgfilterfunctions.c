@@ -172,17 +172,26 @@ svg_filter_functions_equal (const SvgValue *value0,
         return FALSE;
 
       if (ff0->kind == FILTER_NONE)
-        return TRUE;
+        continue;
       else if (ff0->kind == FILTER_REF)
-        return ff0->ref.shape == ff1->ref.shape &&
-               strcmp (ff0->ref.ref, ff1->ref.ref) == 0;
+        {
+          if (ff0->ref.shape != ff1->ref.shape ||
+              strcmp (ff0->ref.ref, ff1->ref.ref) != 0)
+            return FALSE;
+        }
       else if (ff0->kind == FILTER_DROPSHADOW)
-        return svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) &&
-               svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) &&
-               svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) &&
-               svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev);
+        {
+          if (!svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) ||
+              !svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) ||
+              !svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) ||
+              !svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev))
+            return FALSE;
+        }
       else
-        return svg_value_equal (ff0->simple, ff1->simple);
+        {
+          if (!svg_value_equal (ff0->simple, ff1->simple))
+            return FALSE;
+        }
     }
 
   return TRUE;
