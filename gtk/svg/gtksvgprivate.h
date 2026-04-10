@@ -25,6 +25,7 @@
 #include "gtkenums.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
 #include "gtk/svg/gtksvgelementtypeprivate.h"
@@ -185,5 +186,14 @@ SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
 
 void           gtk_svg_set_view              (GtkSvg               *self,
                                               SvgElement           *view);
+
+gboolean       gtk_svg_handle_event    (GtkSvg                *svg,
+                                        GdkEvent              *event,
+                                        double                 x,
+                                        double                 y);
+void           gtk_svg_handle_crossing (GtkSvg                *svg,
+                                        const GtkCrossingData *crossing,
+                                        double                 x,
+                                        double                 y);
 
 G_END_DECLS

@@ -9507,6 +9507,26 @@ gtk_svg_set_state_names (GtkSvg      *svg,
   return TRUE;
 }
 
+/* {{{ Input */
+
+gboolean
+gtk_svg_handle_event (GtkSvg   *self,
+                      GdkEvent *event,
+                      double    x,
+                      double    y)
+{
+  return FALSE;
+}
+
+void
+gtk_svg_handle_crossing (GtkSvg                *self,
+                         const GtkCrossingData *crossing,
+                         double                 x,
+                         double                 y)
+{
+}
+
+/* }}} */
 /* {{{ Views */
 
 void
