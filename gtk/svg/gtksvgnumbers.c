@@ -341,6 +341,7 @@ svg_numbers_resolve (const SvgValue    *value,
         return svg_value_ref ((SvgValue *) value);
 
       p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
+      p->n_values = 2;
       memcpy (p->values, orig->values, sizeof (Number) * 2);
 
       font_size = shape_get_current_font_size (shape, attr, context);
