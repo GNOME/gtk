@@ -1298,7 +1298,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
     }
 
   if (keywords_attr)
-    svg->keywords = g_strdup (keywords_attr);
+    g_set_str (&svg->keywords, keywords_attr);
 }
 
 static void
@@ -2014,7 +2014,7 @@ start_element_cb (GMarkupParseContext  *context,
                                     "rdf:resource", &license,
                                     NULL);
 
-          data->svg->license = g_strdup (license);
+          g_set_str (&data->svg->license, license);
         }
 
       return;
