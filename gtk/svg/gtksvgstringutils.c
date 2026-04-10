@@ -110,7 +110,7 @@ void
 string_indent (GString *string,
                int      indent)
 {
-  if (string->str[string->len - 1] != '\n')
+  if (string->len > 0 && string->str[string->len - 1] != '\n')
     g_string_append_c (string, '\n');
   g_string_append_printf (string, "%*s", indent, " ");
 }

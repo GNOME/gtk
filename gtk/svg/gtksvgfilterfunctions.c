@@ -172,17 +172,26 @@ svg_filter_functions_equal (const SvgValue *value0,
         return FALSE;
 
       if (ff0->kind == FILTER_NONE)
-        return TRUE;
+        continue;
       else if (ff0->kind == FILTER_REF)
-        return ff0->ref.shape == ff1->ref.shape &&
-               strcmp (ff0->ref.ref, ff1->ref.ref) == 0;
+        {
+          if (ff0->ref.shape != ff1->ref.shape ||
+              strcmp (ff0->ref.ref, ff1->ref.ref) != 0)
+            return FALSE;
+        }
       else if (ff0->kind == FILTER_DROPSHADOW)
-        return svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) &&
-               svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) &&
-               svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) &&
-               svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev);
+        {
+          if (!svg_value_equal (ff0->dropshadow.color, ff1->dropshadow.color) ||
+              !svg_value_equal (ff0->dropshadow.dx, ff1->dropshadow.dx) ||
+              !svg_value_equal (ff0->dropshadow.dy, ff1->dropshadow.dy) ||
+              !svg_value_equal (ff0->dropshadow.std_dev, ff1->dropshadow.std_dev))
+            return FALSE;
+        }
       else
-        return svg_value_equal (ff0->simple, ff1->simple);
+        {
+          if (!svg_value_equal (ff0->simple, ff1->simple))
+            return FALSE;
+        }
     }
 
   return TRUE;
@@ -446,6 +455,22 @@ svg_filter_functions_parse_css (GtkCssParser *parser)
   return (SvgValue *) filter;
 
 fail:
+  for (unsigned int i = 0; i < array->len; i++)
+    {
+      FilterFunction *ff = &g_array_index (array, FilterFunction, i);
+
+      if (ff->kind == FILTER_REF)
+        g_free (ff->ref.ref);
+      else if (ff->kind == FILTER_DROPSHADOW)
+        {
+          g_clear_pointer (&ff->dropshadow.color, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.dx, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.dy, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.std_dev, svg_value_unref);
+        }
+      else if (ff->kind != FILTER_NONE)
+        g_clear_pointer (&ff->simple, svg_value_unref);
+    }
   g_array_free (array, TRUE);
   return NULL;
 }
@@ -599,7 +624,7 @@ svg_filter_functions_accumulate (const SvgValue    *value0,
             f1->functions,
             f1->n_functions * sizeof (FilterFunction));
 
-  memcpy (&result->functions[f0->n_functions + (n - 1) * f1->n_functions],
+  memcpy (&result->functions[n * f1->n_functions],
           f0->functions,
           f0->n_functions * sizeof (FilterFunction));
 

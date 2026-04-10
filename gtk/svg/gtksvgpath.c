@@ -202,6 +202,14 @@ svg_path_interpolate (const SvgValue    *value0,
   const SvgPath *p1 = (const SvgPath *) value1;
   SvgPathData *p;
 
+  if (!p0->pdata || !p1->pdata)
+    {
+      if (t < 0.5)
+        return svg_value_ref ((SvgValue *) value0);
+      else
+        return svg_value_ref ((SvgValue *) value1);
+    }
+
   p = svg_path_data_interpolate (p0->pdata, p1->pdata, t);
 
   if (p != NULL)

@@ -196,7 +196,7 @@ parse_enum (const char    *string,
   gtk_css_parser_skip_whitespace (parser);
   ret = parser_try_enum (parser, values, n_values, result);
   gtk_css_parser_skip_whitespace (parser);
-  ret = gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF);
+  ret = ret && gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF);
   gtk_css_parser_unref (parser);
 
   return ret;

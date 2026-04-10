@@ -134,7 +134,7 @@ accumulate_color (const GdkColor *c0,
   gdk_color_convert (&cc1, interpolation, c1);
 
   for (unsigned int i = 0; i < 4; i++)
-    values[0] = accumulate (cc0.values[i], cc1.values[i], n);
+    values[i] = accumulate (cc0.values[i], cc1.values[i], n);
 
   gdk_color_finish (&cc0);
   gdk_color_finish (&cc1);

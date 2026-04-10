@@ -60,8 +60,7 @@ svg_paint_free (SvgValue *value)
     {
       gdk_color_finish (&paint->color);
     }
-  else if (paint->kind == PAINT_SERVER ||
-           paint->kind == PAINT_SERVER_WITH_FALLBACK)
+  else if (paint_is_server (paint->kind))
     {
       g_free (paint->server.ref);
       gdk_color_finish (&paint->server.fallback);
@@ -676,7 +675,7 @@ svg_paint_interpolate (const SvgValue    *value0,
   const SvgPaint *p0 = (const SvgPaint *) value0;
   const SvgPaint *p1 = (const SvgPaint *) value1;
 
-  if (p0->kind == PAINT_COLOR || p1->kind == PAINT_COLOR)
+  if (p0->kind == PAINT_COLOR && p1->kind == PAINT_COLOR)
     {
       GdkColor c;
       SvgValue *ret;

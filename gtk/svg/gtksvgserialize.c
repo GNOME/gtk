@@ -1161,7 +1161,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
           g_string_append (s, "<cc:license");
           string_indent (s, 4 * BASE_INDENT + ATTR_INDENT);
           g_string_append (s, "rdf:resource='");
-          g_string_append (s, self->license);
+          string_append_escaped (s, self->license);
           g_string_append (s, "'/>");
         }
       if (self->author)
@@ -1171,7 +1171,9 @@ gtk_svg_serialize_full (GtkSvg               *self,
           string_indent (s, 5 * BASE_INDENT);
           g_string_append (s, "<cc:Agent>");
           string_indent (s, 6 * BASE_INDENT);
-          g_string_append_printf (s, "<dc:title>%s</dc:title>", self->author);
+          g_string_append (s, "<dc:title>");
+          string_append_escaped (s, self->author);
+          g_string_append (s, "</dc:title>");
           string_indent (s, 5 * BASE_INDENT);
           g_string_append (s, "</cc:Agent>");
           string_indent (s, 4 * BASE_INDENT);
@@ -1180,7 +1182,9 @@ gtk_svg_serialize_full (GtkSvg               *self,
       if (self->description)
         {
           string_indent (s, 4 * BASE_INDENT);
-          g_string_append_printf (s, "<dc:description>%s</dc:description>", self->description);
+          g_string_append (s, "<dc:description>");
+          string_append_escaped (s, self->description);
+          g_string_append (s, "</dc:description>");
         }
       if (self->keywords)
         {
@@ -1189,7 +1193,9 @@ gtk_svg_serialize_full (GtkSvg               *self,
           string_indent (s, 5 * BASE_INDENT);
           g_string_append (s, "<rdf:Bag>");
           string_indent (s, 6 * BASE_INDENT);
-          g_string_append_printf (s, "<rdf:li>%s</rdf:li>", self->keywords);
+          g_string_append (s, "<rdf:li>");
+          string_append_escaped (s, self->keywords);
+          g_string_append (s, "</rdf:li>");
           string_indent (s, 5 * BASE_INDENT);
           g_string_append (s, "</rdf:Bag>");
           string_indent (s, 4 * BASE_INDENT);
