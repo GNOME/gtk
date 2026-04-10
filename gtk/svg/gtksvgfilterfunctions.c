@@ -455,6 +455,22 @@ svg_filter_functions_parse_css (GtkCssParser *parser)
   return (SvgValue *) filter;
 
 fail:
+  for (unsigned int i = 0; i < array->len; i++)
+    {
+      FilterFunction *ff = &g_array_index (array, FilterFunction, i);
+
+      if (ff->kind == FILTER_REF)
+        g_free (ff->ref.ref);
+      else if (ff->kind == FILTER_DROPSHADOW)
+        {
+          g_clear_pointer (&ff->dropshadow.color, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.dx, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.dy, svg_value_unref);
+          g_clear_pointer (&ff->dropshadow.std_dev, svg_value_unref);
+        }
+      else if (ff->kind != FILTER_NONE)
+        g_clear_pointer (&ff->simple, svg_value_unref);
+    }
   g_array_free (array, TRUE);
   return NULL;
 }
