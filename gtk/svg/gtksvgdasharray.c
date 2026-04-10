@@ -93,7 +93,7 @@ static SvgValue * svg_dash_array_resolve    (const SvgValue    *value,
                                              SvgComputeContext *context);
 
 static const SvgValueClass SVG_DASH_ARRAY_CLASS = {
-  "SvgFilter",
+  "SvgDashArray",
   svg_value_default_free,
   svg_dash_array_equal,
   svg_dash_array_interpolate,
