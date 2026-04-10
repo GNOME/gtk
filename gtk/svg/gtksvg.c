@@ -9218,8 +9218,16 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->gpa_version = 0;
 
+  g_clear_pointer (&self->author, g_free);
+  g_clear_pointer (&self->license, g_free);
+  g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->keywords, g_free);
+  g_clear_pointer (&self->resource, g_free);
+
   g_clear_pointer (&self->state_names, g_strfreev);
   self->n_state_names = 0;
+
+  /* Note: we intentionally keep the stylesheet */
 }
 
 static SvgElement *
