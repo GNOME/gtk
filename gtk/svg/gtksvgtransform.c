@@ -1384,9 +1384,9 @@ svg_transform_distance (const SvgValue *value0,
                      p0->scale3d.z - p1->scale3d.z);
           break;
     case TRANSFORM_ROTATE_3D:
-      if (p0->rotate3d.x == p0->rotate3d.x &&
-          p0->rotate3d.y == p0->rotate3d.y &&
-          p0->rotate3d.z == p0->rotate3d.z)
+      if (p0->rotate3d.x == p1->rotate3d.x &&
+          p0->rotate3d.y == p1->rotate3d.y &&
+          p0->rotate3d.z == p1->rotate3d.z)
         {
           return hypot (p0->rotate3d.angle - p1->rotate3d.angle, 0);
         }
