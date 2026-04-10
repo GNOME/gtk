@@ -211,6 +211,8 @@ gtk_fishbowl_finalize (GObject *object)
 
   g_hash_table_destroy (priv->children);
   priv->children = NULL;
+
+  G_OBJECT_CLASS (gtk_fishbowl_parent_class)->finalize (object);
 }
 
 static void

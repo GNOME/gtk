@@ -467,7 +467,7 @@ gtk_color_list_dispose (GObject *object)
     }
   g_free (self->colors);
 
-  G_OBJECT_CLASS (gtk_color_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_color_list_parent_class)->dispose (object);
 }
 
 static void
