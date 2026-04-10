@@ -7839,6 +7839,90 @@ skip: ;
     }
 }
 
+static gboolean
+point_in_pango_rect (PangoRectangle         *rect,
+                     const graphene_point_t *p)
+{
+  pango_extents_to_pixels (rect, NULL);
+  return rect->x <= p->x && p->x <= rect->x + rect->width &&
+         rect->y <= p->y && p->y <= rect->y + rect->height;
+}
+
+static gboolean
+point_in_layout (PangoLayout            *layout,
+                 const graphene_point_t *p)
+{
+  PangoLayoutIter *iter;
+  PangoRectangle rect;
+
+  iter = pango_layout_get_iter (layout);
+  do {
+    pango_layout_iter_get_line_extents (iter, &rect, NULL);
+    if (point_in_pango_rect (&rect, p))
+      {
+        do {
+          pango_layout_iter_get_char_extents (iter, &rect);
+          if (point_in_pango_rect (&rect, p))
+            {
+              pango_layout_iter_free (iter);
+              return TRUE;
+            }
+        } while (pango_layout_iter_next_char (iter));
+      }
+  } while (pango_layout_iter_next_line (iter));
+
+  pango_layout_iter_free (iter);
+
+  return FALSE;
+}
+
+static void
+pick_text (SvgElement   *self,
+           PaintContext *context)
+{
+  g_assert (svg_element_type_is_text (self->type));
+
+  for (unsigned int i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+
+      if (context->picking.done)
+        break;
+
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          {
+            if (svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
+              continue;
+
+            pick_text (node->shape.shape, context);
+          }
+          break;
+        case TEXT_NODE_CHARACTERS:
+          {
+            GskTransform *transform;
+            transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (node->characters.x, node->characters.y));
+            push_transform (context, transform);
+            gsk_transform_unref (transform);
+            transform = gsk_transform_rotate (NULL, node->characters.r);
+            push_transform (context, transform);
+            gsk_transform_unref (transform);
+            if (point_in_layout (node->characters.layout, &context->picking.p))
+              {
+                context->picking.picked = self;
+                context->picking.done = TRUE;
+              }
+            pop_transform (context);
+            pop_transform (context);
+          }
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
 /* }}} */
 /* {{{ Images */
 
@@ -8033,14 +8117,16 @@ paint_shape (SvgElement   *shape,
       WritingMode wmode;
       graphene_rect_t bounds;
       float dx, dy;
-
-      /* TODO: picking */
+      GskTransform *transform = NULL;
 
       if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
         return;
 
-      if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
-        return;
+      if (context->op != PICKING)
+        {
+          if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
+            return;
+        }
 
       anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
       wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
@@ -8073,7 +8159,17 @@ paint_shape (SvgElement   *shape,
                           bounds.size.width, bounds.size.height);
       shape->valid_bounds = TRUE;
 
-      GskTransform *transform = NULL;
+      if (context->op == PICKING &&
+          svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)) == POINTER_EVENTS_BOUNDING_BOX)
+        {
+          if (gsk_rect_contains_point (&shape->bounds, &context->picking.p))
+            {
+              context->picking.picked = shape;
+              context->picking.done = TRUE;
+            }
+          return;
+        }
+
       gtk_snapshot_save (context->snapshot);
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (dx, dy));
 
@@ -8081,7 +8177,46 @@ paint_shape (SvgElement   *shape,
       push_transform (context, transform);
       gsk_transform_unref (transform);
 
-      if (context->op == CLIPPING)
+      if (context->op == PICKING)
+        {
+          switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)))
+            {
+            case POINTER_EVENTS_NONE:
+              break;
+
+            case POINTER_EVENTS_AUTO:
+            case POINTER_EVENTS_VISIBLE_PAINTED:
+              if (svg_paint_get_kind (svg_element_get_current_value (shape, SVG_PROPERTY_FILL)) == PAINT_NONE &&
+                  svg_paint_get_kind (svg_element_get_current_value (shape, SVG_PROPERTY_STROKE)) == PAINT_NONE)
+                break;
+              G_GNUC_FALLTHROUGH;
+
+            case POINTER_EVENTS_VISIBLE_FILL:
+            case POINTER_EVENTS_VISIBLE_STROKE:
+            case POINTER_EVENTS_VISIBLE:
+              if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
+                break;
+              G_GNUC_FALLTHROUGH;
+
+            case POINTER_EVENTS_FILL:
+            case POINTER_EVENTS_STROKE:
+            case POINTER_EVENTS_ALL:
+              pick_text (shape, context);
+              break;
+
+            case POINTER_EVENTS_PAINTED:
+              if (svg_paint_get_kind (svg_element_get_current_value (shape, SVG_PROPERTY_FILL)) == PAINT_NONE &&
+                  svg_paint_get_kind (svg_element_get_current_value (shape, SVG_PROPERTY_STROKE)) == PAINT_NONE)
+                break;
+              pick_text (shape, context);
+              break;
+
+            case POINTER_EVENTS_BOUNDING_BOX: /* handled earlier */
+            default:
+              g_assert_not_reached ();
+            }
+        }
+      else if (context->op == CLIPPING)
         {
           SvgValue *paint = svg_paint_new_black ();
           fill_text (shape, context, paint, &bounds);
