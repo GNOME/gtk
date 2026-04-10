@@ -448,7 +448,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_LINE:
           if (element->path_for.line.x1 != svg_number_get (element->current[SVG_PROPERTY_X1], viewport->size.width) ||
               element->path_for.line.y1 != svg_number_get (element->current[SVG_PROPERTY_Y1], viewport->size.height) ||
-              element->path_for.line.x2 != svg_number_get (element->current[SVG_PROPERTY_X2], viewport->size.height) ||
+              element->path_for.line.x2 != svg_number_get (element->current[SVG_PROPERTY_X2], viewport->size.width) ||
               element->path_for.line.y2 != svg_number_get (element->current[SVG_PROPERTY_Y2], viewport->size.height))
             {
               g_clear_pointer (&element->path, gsk_path_unref);
