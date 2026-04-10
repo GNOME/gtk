@@ -124,7 +124,7 @@ primitive_transform_equal (const PrimitiveTransform *t0,
     case TRANSFORM_ROTATE_3D:
       return t0->rotate3d.angle == t1->rotate3d.angle &&
              t0->rotate3d.x == t1->rotate3d.x &&
-             t0->rotate3d.x == t1->rotate3d.y &&
+             t0->rotate3d.y == t1->rotate3d.y &&
              t0->rotate3d.z == t1->rotate3d.z;
     case TRANSFORM_SKEW:
       return t0->skew.x == t1->skew.x &&
