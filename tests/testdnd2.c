@@ -76,7 +76,7 @@ get_image_texture (GtkImage *image)
                                          NULL,
                                          width, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
-                                         0);
+                                         GTK_ICON_LOOKUP_NONE);
       paintable = GDK_PAINTABLE (icon);
       break;
     case GTK_IMAGE_GICON:
@@ -273,7 +273,7 @@ update_source_icon (GtkDragSource *source,
                                      NULL,
                                      size, 1,
                                      gtk_widget_get_direction (widget),
-                                     0);
+                                     GTK_ICON_LOOKUP_NONE);
   switch (hotspot)
     {
     default:

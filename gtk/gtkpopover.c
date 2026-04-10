@@ -1885,19 +1885,23 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
-  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_NO_MODIFIER_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_NO_MODIFIER_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
@@ -2091,11 +2095,11 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   add_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
 
   gtk_widget_class_set_css_name (widget_class, "popover");

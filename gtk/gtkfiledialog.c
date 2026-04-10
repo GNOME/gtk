@@ -710,7 +710,10 @@ gtk_file_dialog_set_initial_file (GtkFileDialog *self,
       if (g_set_object (&self->initial_folder, folder))
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_INITIAL_FOLDER]);
 
-      info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, 0, NULL, NULL);
+      info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME,
+                                G_FILE_QUERY_INFO_NONE,
+                                NULL,
+                                NULL);
       if (info && g_file_info_get_edit_name (info) != NULL)
         {
           if (g_set_str (&self->initial_name, g_file_info_get_edit_name (info)))

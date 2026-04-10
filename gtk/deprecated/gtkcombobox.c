@@ -600,57 +600,57 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                        "popdown",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "popdown",
                                        NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Up, 0,
+                                       GDK_KEY_Up, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_STEP_UP);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Up, 0,
+                                       GDK_KEY_KP_Up, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_STEP_UP);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Up, 0,
+                                       GDK_KEY_Page_Up, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_PAGE_UP);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Page_Up, 0,
+                                       GDK_KEY_KP_Page_Up, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_PAGE_UP);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Home, 0,
+                                       GDK_KEY_Home, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_START);
   gtk_widget_class_add_binding_signal (widget_class,
-                                      GDK_KEY_KP_Home, 0,
+                                      GDK_KEY_KP_Home, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_START);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Down, 0,
+                                       GDK_KEY_Down, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_STEP_DOWN);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Down, 0,
+                                       GDK_KEY_KP_Down, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_STEP_DOWN);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Down, 0,
+                                       GDK_KEY_Page_Down, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_PAGE_DOWN);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Page_Down, 0,
+                                       GDK_KEY_KP_Page_Down, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_PAGE_DOWN);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_End, 0,
+                                       GDK_KEY_End, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_END);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_End, 0,
+                                       GDK_KEY_KP_End, GDK_NO_MODIFIER_MASK,
                                        "move-active",
                                        "(i)", GTK_SCROLL_END);
 

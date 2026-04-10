@@ -630,7 +630,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                 G_TYPE_NONE, 0);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "escape",
                                        NULL);
 

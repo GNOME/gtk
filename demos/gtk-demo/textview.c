@@ -142,7 +142,7 @@ insert_text (GtkTextView *view)
                                      NULL,
                                      32, 1,
                                      gtk_widget_get_direction (widget),
-                                     0);
+                                     GTK_ICON_LOOKUP_NONE);
   nuclear = gtk_nuclear_animation_new (TRUE);
 
   /* get start of buffer; each insertion will revalidate the

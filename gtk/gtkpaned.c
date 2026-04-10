@@ -733,7 +733,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 
   /* F6 and friends */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_F6, 0,
+                                       GDK_KEY_F6, GDK_NO_MODIFIER_MASK,
                                        "cycle-child-focus",
                                        "(b)", FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -743,7 +743,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 
   /* F8 and friends */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_F8, 0,
+                                       GDK_KEY_F8, GDK_NO_MODIFIER_MASK,
                                        "cycle-handle-focus",
                                        "(b)", FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -758,28 +758,28 @@ gtk_paned_class_init (GtkPanedClass *class)
 
   /* accept and cancel positions */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "cancel-position",
                                        NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Return, 0,
+                                       GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "accept-position",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, 0,
+                                       GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "accept-position",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, 0,
+                                       GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "accept-position",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_space, 0,
+                                       GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "accept-position",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, 0,
+                                       GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
                                        "accept-position",
                                        NULL);
 

@@ -68,7 +68,7 @@ on_activate (GApplication *app,
 int
 main (int argc, char *argv[])
 {
-  GtkApplication *app = gtk_application_new ("org.gtk.fmuellner.Revealer", 0);
+  GtkApplication *app = gtk_application_new ("org.gtk.fmuellner.Revealer", G_APPLICATION_DEFAULT_FLAGS);
 
   g_signal_connect (app, "activate", G_CALLBACK (on_activate), NULL);
 

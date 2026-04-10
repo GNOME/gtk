@@ -71,7 +71,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                          size,
                                          icon_theme->scale,
                                          GTK_TEXT_DIR_NONE,
-                                         0);
+                                         GTK_ICON_LOOKUP_NONE);
 
       g_assert (icon != NULL);
 

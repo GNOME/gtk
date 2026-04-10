@@ -601,19 +601,23 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
 
-  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_NO_MODIFIER_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keysym, GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_NO_MODIFIER_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keypad_keysym, GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
@@ -1353,16 +1357,16 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_install_action (widget_class, "window.close", NULL,
                                    gtk_window_activate_close);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "activate-focus", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
                                        "activate-focus", NULL);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
@@ -3481,12 +3485,12 @@ icon_list_from_theme (GtkWindow   *window,
         info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
                                            48, scale,
                                            gtk_widget_get_direction (GTK_WIDGET (window)),
-                                           0);
+                                           GTK_ICON_LOOKUP_NONE);
       else
         info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
                                            sizes[i], scale,
                                            gtk_widget_get_direction (GTK_WIDGET (window)),
-                                           0);
+                                           GTK_ICON_LOOKUP_NONE);
 
       texture = render_paintable_to_texture (GDK_PAINTABLE (info));
       list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
@@ -3559,7 +3563,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (window))),
                                      name, NULL, size, scale,
                                      gtk_widget_get_direction (GTK_WIDGET (window)),
-                                     0);
+                                     GTK_ICON_LOOKUP_NONE);
   if (info == NULL)
     return NULL;
 

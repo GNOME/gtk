@@ -36,7 +36,7 @@ get_image_paintable (GtkImage *image)
                                          NULL,
                                          48, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
-                                         0);
+                                         GTK_ICON_LOOKUP_NONE);
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);

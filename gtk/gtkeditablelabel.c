@@ -558,7 +558,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
   g_object_unref (shortcut);
 
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "editing.stop",
                                        "b", FALSE);
 
@@ -570,7 +570,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
                                        "menu.popup",
                                        NULL);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, 0,
+                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
                                        "menu.popup",
                                        NULL);
 

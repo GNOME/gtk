@@ -1416,7 +1416,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        "menu.popup",
                                        NULL);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, 0,
+                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
                                        "menu.popup",
                                        NULL);
 
@@ -1554,29 +1554,29 @@ gtk_text_class_init (GtkTextClass *class)
 
   /* Activate
    */
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "activate",
                                        NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate",
                                        NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate",
                                        NULL);
 
   /* Deleting text */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Delete, 0,
+                                       GDK_KEY_Delete, GDK_NO_MODIFIER_MASK,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_CHARS, 1);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Delete, 0,
+                                       GDK_KEY_KP_Delete, GDK_NO_MODIFIER_MASK,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_CHARS, 1);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_BackSpace, 0,
+                                       GDK_KEY_BackSpace, GDK_NO_MODIFIER_MASK,
                                        "backspace",
                                        NULL);
 
@@ -1687,11 +1687,11 @@ gtk_text_class_init (GtkTextClass *class)
 
   /* Overwrite */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Insert, 0,
+                                       GDK_KEY_Insert, GDK_NO_MODIFIER_MASK,
                                        "toggle-overwrite",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Insert, 0,
+                                       GDK_KEY_KP_Insert, GDK_NO_MODIFIER_MASK,
                                        "toggle-overwrite",
                                        NULL);
 

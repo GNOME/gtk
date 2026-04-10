@@ -348,27 +348,27 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 
   /* Key bindings */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_space, 0,
+                                       GDK_KEY_space, GDK_NO_MODIFIER_MASK,
 				       "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, 0,
+                                       GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
 				       "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Return, 0,
+                                       GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
 				       "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, 0,
+                                       GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
 				       "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, 0,
+                                       GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
 				       "popup",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
 				       "popdown",
                                        NULL);
 

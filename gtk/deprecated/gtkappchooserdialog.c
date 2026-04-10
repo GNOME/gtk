@@ -374,7 +374,9 @@ set_gfile_and_content_type (GtkAppChooserDialog *self,
 
   info = g_file_query_info (self->gfile,
                             G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                            0, NULL, NULL);
+                            G_FILE_QUERY_INFO_NONE,
+                            NULL,
+                            NULL);
   self->content_type = g_strdup (g_file_info_get_content_type (info));
 
   g_object_unref (info);
@@ -432,7 +434,7 @@ software_button_clicked_cb (GtkButton           *button,
   else
     option = g_strdup ("--mode=overview");
 
-  process = g_subprocess_new (0, &error, "gnome-software", option, NULL);
+  process = g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, &error, "gnome-software", option, NULL);
   if (!process)
     {
       show_error_dialog (_("Failed to start GNOME Software"),

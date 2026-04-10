@@ -860,7 +860,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
                                  0);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "close",
                                        NULL);
 

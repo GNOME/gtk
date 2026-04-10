@@ -398,11 +398,11 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                               _gtk_marshal_BOOLEAN__INTv);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Up, 0,
+                                       GDK_KEY_Page_Up, GDK_NO_MODIFIER_MASK,
                                        "change-current-page",
                                        "(i)", -1);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Page_Down, 0,
+                                       GDK_KEY_Page_Down, GDK_NO_MODIFIER_MASK,
                                        "change-current-page",
                                        "(i)", 1);
   gtk_widget_class_add_binding_signal (widget_class,

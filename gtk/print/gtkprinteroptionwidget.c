@@ -519,7 +519,7 @@ dialog_response_callback (GObject *source,
 
       info = g_file_query_info (new_location,
                                 "standard::display-name",
-                                0,
+                                G_FILE_QUERY_INFO_NONE,
                                 NULL,
                                 NULL);
       if (info != NULL)

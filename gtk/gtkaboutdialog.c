@@ -613,7 +613,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Key bindings
    */
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GDK_NO_MODIFIER_MASK, "window.close", NULL);
 
   /* Bind class to template
    */

@@ -1208,7 +1208,7 @@ gtk_list_base_add_move_binding (GtkWidgetClass *widget_class,
 {
   gtk_widget_class_add_binding (widget_class,
                                 keyval,
-                                0,
+                                GDK_NO_MODIFIER_MASK,
                                 gtk_list_base_move_cursor,
                                 "(ubbbi)", orientation, TRUE, FALSE, FALSE, amount);
   gtk_widget_class_add_binding (widget_class,
@@ -1235,7 +1235,7 @@ gtk_list_base_add_custom_move_binding (GtkWidgetClass  *widget_class,
 {
   gtk_widget_class_add_binding (widget_class,
                                 keyval,
-                                0,
+                                GDK_NO_MODIFIER_MASK,
                                 callback,
                                 "(bbb)", TRUE, FALSE, FALSE);
   gtk_widget_class_add_binding (widget_class,
