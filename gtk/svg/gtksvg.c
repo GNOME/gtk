@@ -8503,12 +8503,13 @@ gtk_svg_dispose (GObject *object)
 
   g_clear_object (&self->clock);
 
-  g_free (self->author);
-  g_free (self->license);
-  g_free (self->description);
-  g_free (self->keywords);
+  g_clear_pointer (&self->author, g_free);
+  g_clear_pointer (&self->license, g_free);
+  g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->keywords, g_free);
+  g_clear_pointer (&self->resource, g_free);
 
-  g_strfreev (self->state_names);
+  g_clear_pointer (&self->state_names, g_strfreev);
 
   g_clear_pointer (&self->stylesheet, g_bytes_unref);
 
