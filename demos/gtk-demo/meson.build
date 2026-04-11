@@ -97,6 +97,7 @@ demos = files([
   'sidebar.c',
   'sizegroup.c',
   'sliding_puzzle.c',
+  'snapping.c',
   'spinbutton.c',
   'spinner.c',
   'stack.c',
