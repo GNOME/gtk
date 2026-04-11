@@ -2487,6 +2487,50 @@ animation_update_for_spec (SvgAnimation *a,
     }
 }
 
+static void
+animation_set_begin (SvgAnimation *a,
+                     int64_t       current_time)
+{
+  gboolean changed = FALSE;
+
+  if (!animation_can_start (a))
+    return;
+
+  if (a->status == ANIMATION_STATUS_RUNNING)
+    {
+      if (a->current.begin < current_time)
+        {
+          dbg_print ("status", "Restarting %s at %s", a->id, format_time (current_time));
+          a->current.begin = current_time;
+          changed = TRUE;
+        }
+    }
+  else
+    {
+      if (a->current.begin != current_time)
+        {
+          dbg_print ("times", "current start time of %s now %s", a->id, format_time (current_time));
+          a->current.begin = current_time;
+          changed = TRUE;
+
+          animation_set_current_end (a, a->current.end);
+        }
+    }
+
+  if (!changed)
+    return;
+
+  if (a->deps)
+    {
+      for (unsigned int i = 0; i < a->deps->len; i++)
+        {
+          SvgAnimation *dep = g_ptr_array_index (a->deps, i);
+          time_specs_update_for_base (dep->begin, a);
+          time_specs_update_for_base (dep->end, a);
+        }
+    }
+}
+
 static void frame_clock_connect    (GtkSvg *self);
 static void frame_clock_disconnect (GtkSvg *self);
 
