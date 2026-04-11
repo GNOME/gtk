@@ -37,6 +37,8 @@ GskRenderNode *         gsk_color_node_new                      (const GdkRGBA  
                                                                  const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_color_node_get_color                (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_color_node_get_snap                 (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS
 

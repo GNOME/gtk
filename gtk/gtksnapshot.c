@@ -3097,6 +3097,7 @@ gtk_snapshot_add_color (GtkSnapshot           *snapshot,
                         const GdkColor        *color,
                         const graphene_rect_t *bounds)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -3108,7 +3109,7 @@ gtk_snapshot_add_color (GtkSnapshot           *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
-  node = gsk_color_node_new2 (color, &real_bounds);
+  node = gsk_color_node_new2 (color, &real_bounds, state->props.snap);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -3236,7 +3237,7 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot             *snapshot,
     }
   else
     {
-      node = gsk_color_node_new2 (color, &real_bounds);
+      node = gsk_color_node_new2 (color, &real_bounds, GSK_RECT_SNAP_NONE);
     }
 
   gtk_snapshot_append_node_internal (snapshot, node);
@@ -3345,7 +3346,7 @@ gtk_snapshot_add_conic_gradient (GtkSnapshot            *snapshot,
                                          rotation,
                                          gradient);
   else
-    node = gsk_color_node_new2 (color, &real_bounds);
+    node = gsk_color_node_new2 (color, &real_bounds, GSK_RECT_SNAP_NONE);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -3432,7 +3433,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
   if (color && gsk_radial_gradient_fills_plane (start_center, start_radius,
                                                 end_center, end_radius))
     {
-      node = gsk_color_node_new2 (color, &real_bounds);
+      node = gsk_color_node_new2 (color, &real_bounds, GSK_RECT_SNAP_NONE);
     }
   else
     {
