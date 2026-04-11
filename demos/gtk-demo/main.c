@@ -813,12 +813,12 @@ static void
 demo_search_changed_cb (GtkSearchEntry *entry,
                         GtkFilter      *filter)
 {
-  const char *text;
+  char *text;
 
   g_assert (GTK_IS_SEARCH_ENTRY (entry));
   g_assert (GTK_IS_FILTER (filter));
 
-  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  text = gtk_editable_get_complete_text (GTK_EDITABLE (entry));
 
   g_clear_pointer (&search_needle, g_strfreev);
 
@@ -826,6 +826,7 @@ demo_search_changed_cb (GtkSearchEntry *entry,
     search_needle = g_str_tokenize_and_fold (text, NULL, NULL);
 
   gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
+  g_free (text);
 }
 
 static gboolean

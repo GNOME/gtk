@@ -247,6 +247,17 @@ gtk_editable_default_get_text (GtkEditable *editable)
   return NULL;
 }
 
+static char *
+gtk_editable_default_get_complete_text (GtkEditable *editable)
+{
+  GtkEditable *delegate = get_delegate (editable);
+
+  if (delegate)
+    return gtk_editable_get_complete_text (delegate);
+  else
+    return g_strdup (gtk_editable_get_text (editable));
+}
+
 static void
 gtk_editable_default_set_selection_bounds (GtkEditable *editable,
                                            int          start_pos,
@@ -283,6 +294,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   iface->insert_text = gtk_editable_default_insert_text;
   iface->delete_text = gtk_editable_default_delete_text;
   iface->get_text = gtk_editable_default_get_text;
+  iface->get_complete_text = gtk_editable_default_get_complete_text;
   iface->do_insert_text = gtk_editable_default_do_insert_text;
   iface->do_delete_text = gtk_editable_default_do_delete_text;
   iface->get_selection_bounds = gtk_editable_default_get_selection_bounds;
@@ -382,6 +394,19 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_string ("text", NULL, NULL,
                            "",
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkEditable:complete-text:
+   *
+   * The contents of the entry, including uncommited content such as the
+   * preedit.
+   *
+   * Since: 4.24
+   */
+  g_object_interface_install_property (iface,
+      g_param_spec_string ("complete-text", NULL, NULL,
+                           "",
+                           GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:cursor-position: (getter get_position) (setter set_position)
@@ -610,6 +635,24 @@ gtk_editable_set_text (GtkEditable *editable,
   pos = 0;
   gtk_editable_insert_text (editable, text, -1, &pos);
   g_object_thaw_notify (G_OBJECT (editable));
+}
+
+/**
+ * gtk_editable_get_complete_text:
+ * @editable: a `GtkEditable`
+ *
+ * Retrieves the contents of @editable, including *pseudo-content*
+ * such as the preedit buffer.
+ *
+ * Returns: (transfer full): the complete contents of the editable
+ * Since: 4.24
+ */
+char *
+gtk_editable_get_complete_text (GtkEditable *editable)
+{
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
+
+  return GTK_EDITABLE_GET_IFACE (editable)->get_complete_text (editable);
 }
 
 /**
@@ -973,6 +1016,7 @@ gtk_editable_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_MAX_WIDTH_CHARS, "max-width-chars");
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_XALIGN, "xalign");
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_ENABLE_UNDO, "enable-undo");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_COMPLETE_TEXT, "complete-text");
 
   return GTK_EDITABLE_NUM_PROPERTIES;
 }
@@ -1184,6 +1228,10 @@ gtk_editable_delegate_get_property (GObject    *object,
 
     case GTK_EDITABLE_PROP_ENABLE_UNDO:
       g_value_set_boolean (value, gtk_editable_get_enable_undo (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_COMPLETE_TEXT:
+      g_value_take_string (value, gtk_editable_get_complete_text (delegate));
       break;
 
     default:
