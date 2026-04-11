@@ -241,6 +241,7 @@ clip property. If that rectangle is indeed rounded, a node like
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 | color    | `<color>`        | #FF00CC                | always      |
 
 Creates a node like `gsk_color_node_new()` with the given properties.

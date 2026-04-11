@@ -36,6 +36,7 @@ struct _GskColorNode
 {
   GskRenderNode render_node;
   GdkColor color;
+  GskRectSnap snap;
 };
 
 static void
@@ -55,9 +56,13 @@ gsk_color_node_draw (GskRenderNode *node,
                      GskCairoData  *data)
 {
   GskColorNode *self = (GskColorNode *) node;
+  graphene_rect_t bounds;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
 
   gdk_cairo_set_source_color (cr, data->ccs, &self->color);
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_fill (cr);
 }
 
@@ -70,6 +75,7 @@ gsk_color_node_diff (GskRenderNode *node1,
   GskColorNode *self2 = (GskColorNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->snap == self2->snap &&
       gdk_color_equal (&self1->color, &self2->color))
     return;
 
@@ -88,8 +94,21 @@ gsk_color_node_occlusion (GskRenderNode   *node,
                           GskGpuOcclusion *occlusion)
 {
   GskColorNode *self = (GskColorNode *) node;
+  cairo_rectangle_int_t storage;
+  GskGpuRenderPass *result;
 
-  return gsk_gpu_occlusion_begin_rendering_color (occlusion, &self->color);
+  if (!gdk_color_is_opaque (&self->color))
+    return NULL;
+
+  if (!gsk_gpu_occlusion_push_clip (occlusion, &node->bounds, self->snap, &storage))
+    return NULL;
+
+  result = gsk_gpu_occlusion_begin_rendering_color (occlusion, &self->color);
+  if (result)
+    return result;
+
+  gsk_gpu_occlusion_pop_clip (occlusion, &storage);
+  return NULL;
 }
 
 static void
@@ -167,7 +186,7 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   GskRenderNode *node;
 
   gdk_color_init_from_rgba (&color, rgba);
-  node = gsk_color_node_new2 (&color, bounds);
+  node = gsk_color_node_new2 (&color, bounds, GSK_RECT_SNAP_NONE);
   gdk_color_finish (&color);
 
   return node;
@@ -177,15 +196,17 @@ gsk_color_node_new (const GdkRGBA         *rgba,
  * gsk_color_node_new2:
  * @color: a `GdkColor` specifying a color
  * @bounds: the rectangle to render the color into
+ * @snap: how to snap the color to the pixel grid
  *
  * Creates a `GskRenderNode` that will render the color specified by @color
- * into the area given by @bounds.
+ * into the area given by @bounds using the given snap value.
  *
  * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
  */
 GskRenderNode *
 gsk_color_node_new2 (const GdkColor        *color,
-                     const graphene_rect_t *bounds)
+                     const graphene_rect_t *bounds,
+                     GskRectSnap            snap)
 {
   GskColorNode *self;
   GskRenderNode *node;
@@ -195,15 +216,34 @@ gsk_color_node_new2 (const GdkColor        *color,
 
   self = gsk_render_node_alloc (GSK_TYPE_COLOR_NODE);
   node = (GskRenderNode *) self;
-  node->fully_opaque = gdk_color_is_opaque (color);
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) && gdk_color_is_opaque (color);
   node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = !gdk_color_is_srgb (color);
 
   gdk_color_init_copy (&self->color, color);
+  self->snap = snap;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
   return node;
+}
+
+/**
+ * gsk_color_node_get_snap:
+ * @node: (type GskColorNode): a `GskRenderNode` for textures
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_color_node_get_snap (const GskRenderNode *node)
+{
+  const GskColorNode *self = (const GskColorNode *) node;
+
+  return self->snap;
 }
 
