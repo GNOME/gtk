@@ -58,6 +58,7 @@ typedef enum
   SVG_ELEMENT_SYMBOL,
   SVG_ELEMENT_SWITCH,
   SVG_ELEMENT_LINK,
+  SVG_ELEMENT_VIEW,
 } SvgElementType;
 
 typedef enum

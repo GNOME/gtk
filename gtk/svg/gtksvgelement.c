@@ -440,6 +440,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_SYMBOL:
     case SVG_ELEMENT_SWITCH:
     case SVG_ELEMENT_LINK:
+    case SVG_ELEMENT_VIEW:
       g_error ("Attempt to get the path of a %s", svg_element_type_get_name (element->type));
       break;
     default:
@@ -541,6 +542,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_SYMBOL:
         case SVG_ELEMENT_SWITCH:
         case SVG_ELEMENT_LINK:
+        case SVG_ELEMENT_VIEW:
           g_error ("Attempt to get the path of a %s", svg_element_type_get_name (element->type));
           break;
         default:
@@ -613,6 +615,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_SYMBOL:
         case SVG_ELEMENT_SWITCH:
         case SVG_ELEMENT_LINK:
+        case SVG_ELEMENT_VIEW:
         default:
           g_assert_not_reached ();
         }
@@ -742,6 +745,7 @@ svg_element_get_current_bounds (SvgElement            *element,
     case SVG_ELEMENT_LINEAR_GRADIENT:
     case SVG_ELEMENT_RADIAL_GRADIENT:
     case SVG_ELEMENT_FILTER:
+    case SVG_ELEMENT_VIEW:
       break;
     default:
       g_assert_not_reached ();
@@ -911,6 +915,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
     case SVG_ELEMENT_LINEAR_GRADIENT:
     case SVG_ELEMENT_RADIAL_GRADIENT:
     case SVG_ELEMENT_FILTER:
+    case SVG_ELEMENT_VIEW:
       break;
     default:
       g_assert_not_reached ();

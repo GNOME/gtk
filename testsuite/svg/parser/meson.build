@@ -88,6 +88,7 @@ test_data = [
   'transforms.svg',
   'units.svg',
   'use.svg',
+  'view.svg',
   'viewbox.svg',
   'viewbox2.svg',
   'viewbox3.svg',

@@ -552,6 +552,7 @@ path_paintable_get_compatibility (PathPaintable *self)
         case SVG_ELEMENT_SYMBOL:
         case SVG_ELEMENT_SWITCH:
         case SVG_ELEMENT_LINK:
+        case SVG_ELEMENT_VIEW:
           compat = MAX (compat, GTK_4_22);
           continue;
         default:
@@ -642,6 +643,7 @@ path_paintable_get_path_by_id (PathPaintable *self,
         case SVG_ELEMENT_SYMBOL:
         case SVG_ELEMENT_SWITCH:
         case SVG_ELEMENT_LINK:
+        case SVG_ELEMENT_VIEW:
           break;
         default:
           g_assert_not_reached ();
