@@ -127,9 +127,10 @@ gsk_gpu_occlusion_get_min_pixels (GskGpuOcclusion *self)
   return result;
 }
 
-static gboolean
-gsk_gpu_occlusion_clip (GskGpuOcclusion       *self,
-                        const graphene_rect_t *clip)
+gboolean
+gsk_gpu_occlusion_push_clip (GskGpuOcclusion       *self,
+                             const graphene_rect_t *clip,
+                             cairo_rectangle_int_t *out_save)
 {
   cairo_rectangle_int_t device;
 
@@ -146,9 +147,17 @@ gsk_gpu_occlusion_clip (GskGpuOcclusion       *self,
       device.width * device.height < gsk_gpu_occlusion_get_min_pixels (self))
     return FALSE;
 
+  *out_save = self->device_clip;
   self->device_clip = device;
 
   return TRUE;
+}
+
+void
+gsk_gpu_occlusion_pop_clip (GskGpuOcclusion             *self,
+                            const cairo_rectangle_int_t *saved)
+{
+  self->device_clip = *saved;
 }
 
 static void
@@ -266,15 +275,14 @@ gsk_gpu_occlusion_try_node_untracked (GskGpuOcclusion *self,
       !gsk_render_node_get_opaque_rect (node, &opaque))
     return NULL;
 
-  prev_clip = self->device_clip;
-  if (!gsk_gpu_occlusion_clip (self, &opaque))
+  if (!gsk_gpu_occlusion_push_clip (self, &opaque, &prev_clip))
     return NULL;
 
   result = GSK_RENDER_NODE_GET_CLASS (node)->occlusion (node, self);
 
   if (result == NULL)
     {
-      self->device_clip = prev_clip;
+      gsk_gpu_occlusion_pop_clip (self, &prev_clip);
     }
 
   return result;
