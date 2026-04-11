@@ -69,6 +69,7 @@ struct _GtkSvg
   SvgElement *view;
   SvgElement *focus;
   SvgElement *initial_focus;
+  SvgElement *hover;
 
   SvgElementCallback hover_callback;
   gpointer hover_data;

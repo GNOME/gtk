@@ -9427,6 +9427,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->focus = NULL;
   self->initial_focus = NULL;
   self->view = NULL;
+  self->hover = NULL;
 }
 
 static SvgElement *
@@ -9616,6 +9617,36 @@ gtk_svg_handle_event (GtkSvg   *self,
                       double    x,
                       double    y)
 {
+  graphene_point_t p = GRAPHENE_POINT_INIT (x, y);
+  SvgElement *target;
+
+  ensure_current_time (self);
+
+  switch ((unsigned int) gdk_event_get_event_type (event))
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      if (self->focus)
+        return svg_element_propagate_event (self->focus, event, self);
+      break;
+
+    case GDK_MOTION_NOTIFY:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      gtk_svg_set_hover (self, gtk_svg_pick_element (self, &p));
+      break;
+
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      target = gtk_svg_pick_element (self, &p);
+      if (target)
+        svg_element_propagate_event (target, event, self);
+      break;
+
+    default:
+      break;
+    }
+
   return FALSE;
 }
 
@@ -9625,6 +9656,21 @@ gtk_svg_handle_crossing (GtkSvg                *self,
                          double                 x,
                          double                 y)
 {
+  if (crossing->type == GTK_CROSSING_FOCUS ||
+      crossing->type == GTK_CROSSING_ACTIVE)
+    {
+      if (crossing->direction == GTK_CROSSING_IN)
+        gtk_svg_grab_focus (self);
+      else
+        gtk_svg_lose_focus (self);
+    }
+  else if (crossing->type == GTK_CROSSING_POINTER)
+    {
+      if (crossing->direction == GTK_CROSSING_IN)
+        gtk_svg_set_hover (self, gtk_svg_pick_element (self, &GRAPHENE_POINT_INIT (x, y)));
+      else
+        gtk_svg_set_hover (self, NULL);
+    }
 }
 
 gboolean
