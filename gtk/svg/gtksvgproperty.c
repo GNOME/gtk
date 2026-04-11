@@ -1698,7 +1698,7 @@ parse_value_error (GtkCssParser         *parser,
                    gpointer              user_data)
 {
   /* FIXME: locations */
-  if (user_data)
+  if (user_data && !*(GError **) user_data)
     *((GError **) user_data) = g_error_copy (css_error);
 }
 
@@ -1765,6 +1765,7 @@ svg_property_parse_and_validate (SvgProperty   attr,
   if (value && !shape_attr_value_is_valid (attr, value))
     {
       g_clear_pointer (&value, svg_value_unref);
+      g_clear_error (error);
       g_set_error (error,
                    GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_ATTRIBUTE,
                    "Value is not valid");
