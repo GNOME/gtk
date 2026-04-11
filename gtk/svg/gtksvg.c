@@ -1182,6 +1182,8 @@ parse_states_css (GtkCssParser *parser,
               return FALSE;
             }
 
+          g_free (id);
+
           *states |= BIT (u);
         }
       else if (gtk_css_parser_has_integer (parser))
