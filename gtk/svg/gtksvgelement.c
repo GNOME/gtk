@@ -1901,10 +1901,27 @@ propagate_event_down (SvgElement *element,
 }
 
 static gboolean
+event_activates (GdkEvent *event)
+{
+  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
+    return gdk_key_event_get_keyval (event) == GDK_KEY_Return;
+  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+    return gdk_button_event_get_button (event) == GDK_BUTTON_PRIMARY;
+  else
+    return FALSE;
+}
+
+static gboolean
 propagate_event_up (SvgElement *element,
                     GdkEvent   *event,
                     GtkSvg     *svg)
 {
+  if (element->type == SVG_ELEMENT_LINK && event_activates (event))
+    {
+      gtk_svg_activate_element (svg, element);
+      return GDK_EVENT_STOP;
+    }
+
   if (element->parent)
     {
       if (propagate_event_up (element->parent, event, svg))

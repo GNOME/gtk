@@ -196,4 +196,7 @@ void           gtk_svg_handle_crossing (GtkSvg                *svg,
                                         double                 x,
                                         double                 y);
 
+void           gtk_svg_activate_element (GtkSvg               *svg,
+                                         SvgElement           *element);
+
 G_END_DECLS

@@ -9509,6 +9509,43 @@ gtk_svg_set_state_names (GtkSvg      *svg,
 
 /* {{{ Input */
 
+void
+gtk_svg_activate_element (GtkSvg     *self,
+                          SvgElement *link)
+{
+  SvgValue *value = svg_element_get_current_value (link, SVG_PROPERTY_HREF);
+  SvgAnimation *animation = svg_href_get_animation (value);
+  SvgElement *target = svg_href_get_shape (value);
+
+  g_assert (svg_element_get_type (link) == SVG_ELEMENT_LINK);
+
+  if (animation)
+    {
+      ensure_current_time (self);
+      animation_set_begin (animation, self->current_time);
+      animation_update_state (animation, self->current_time);
+      collect_next_update (self);
+      invalidate_for_next_update (self);
+      schedule_next_update (self);
+    }
+  else if (target && svg_element_get_type (target) == SVG_ELEMENT_VIEW)
+    {
+      gtk_svg_set_view (self, target);
+    }
+  else
+    {
+      if (self->activate_callback)
+        self->activate_callback (link, self->activate_data);
+    }
+
+  if (!svg_element_get_visited (link))
+    {
+      svg_element_set_visited (link, TRUE);
+      self->style_changed = TRUE;
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    }
+}
+
 gboolean
 gtk_svg_handle_event (GtkSvg   *self,
                       GdkEvent *event,
