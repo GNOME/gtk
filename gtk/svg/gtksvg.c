@@ -3129,6 +3129,28 @@ mark_as_computed_for_use (SvgElement *shape,
 }
 
 static void
+apply_view (SvgElement *content,
+            SvgElement *view)
+{
+  SvgValue *vb;
+  SvgValue *cf;
+
+  if (!view)
+    view = content;
+
+  vb = svg_element_get_specified_value (view, SVG_PROPERTY_VIEW_BOX);
+  cf = svg_element_get_specified_value (view, SVG_PROPERTY_CONTENT_FIT);
+
+  if (!vb)
+    vb = svg_element_get_specified_value (content, SVG_PROPERTY_VIEW_BOX);
+  if (!cf)
+    cf = svg_element_get_specified_value (content, SVG_PROPERTY_CONTENT_FIT);
+
+  svg_element_set_base_value (content, SVG_PROPERTY_VIEW_BOX, vb);
+  svg_element_set_base_value (content, SVG_PROPERTY_CONTENT_FIT, cf);
+}
+
+static void
 compute_current_values_for_shape (SvgElement        *shape,
                                   SvgComputeContext *context)
 {
@@ -8231,6 +8253,12 @@ can_reuse_node (GtkSvg        *self,
       return FALSE;
     }
 
+  if (self->view_changed)
+    {
+      dbg_print ("cache", "Can't reuse rendernode: %s", "view change");
+      return FALSE;
+    }
+
   if (self->state != self->node_for.state)
     {
       dbg_print ("cache", "Can't reuse rendernode: %s", "state change");
@@ -8382,6 +8410,12 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
         {
           apply_styles_to_shape (self->content, self);
           self->style_changed = FALSE;
+        }
+
+      if (self->view_changed)
+        {
+          apply_view (self->content, self->view);
+          self->view_changed = FALSE;
         }
 
       /* Traditional symbolics often have overlapping shapes,
@@ -9392,6 +9426,7 @@ gtk_svg_clear_content (GtkSvg *self)
 
   self->focus = NULL;
   self->initial_focus = NULL;
+  self->view = NULL;
 }
 
 static SvgElement *
@@ -9731,6 +9766,11 @@ void
 gtk_svg_set_view (GtkSvg     *self,
                   SvgElement *view)
 {
+  g_assert (view == NULL || view->type == SVG_ELEMENT_VIEW);
+
+  self->view = view;
+  self->view_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 /* }}} */

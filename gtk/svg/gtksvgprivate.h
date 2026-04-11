@@ -64,7 +64,9 @@ struct _GtkSvg
   GArray *user_styles;
   GArray *author_styles;
   gboolean style_changed;
+  gboolean view_changed;
 
+  SvgElement *view;
   SvgElement *focus;
   SvgElement *initial_focus;
 
