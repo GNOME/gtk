@@ -4426,7 +4426,6 @@ typedef enum
   MASKING,
   RENDERING,
   MARKERS,
-  PICKING,
 } RenderOp;
 
 typedef struct
@@ -4449,9 +4448,11 @@ typedef struct
   uint64_t instance_count;
   GSList *ctx_shape_stack;
   struct {
+    gboolean picking;
     graphene_point_t p;
     GSList *points;
     gboolean done;
+    SvgElement *clipped;
     SvgElement *picked;
   } picking;
 } PaintContext;
@@ -4541,7 +4542,7 @@ static void
 push_transform (PaintContext *context,
                 GskTransform *transform)
 {
-  if (context->op == PICKING)
+  if (context->picking.picking)
     {
       GskTransform *t;
 
@@ -4570,7 +4571,7 @@ pop_transform (PaintContext *context)
   gsk_transform_unref ((GskTransform *) tos->data);
   g_slist_free_1 (tos);
 
-  if (context->op == PICKING)
+  if (context->picking.picking)
     {
       tos = context->picking.points;
       context->picking.points = tos->next;
@@ -5812,7 +5813,7 @@ push_group (SvgElement   *shape,
 
       if (svg_enum_get (overflow) == OVERFLOW_HIDDEN)
         {
-          if (context->op == PICKING)
+          if (context->picking.picking)
             {
               if (!gsk_rect_contains_point (&GRAPHENE_RECT_INIT (x, y, width, height), &context->picking.p))
                 {
@@ -5943,8 +5944,6 @@ push_group (SvgElement   *shape,
   if (svg_clip_get_kind (clip) == CLIP_PATH ||
       (svg_clip_get_kind (clip) == CLIP_URL && svg_clip_get_shape (clip) != NULL))
     {
-      push_op (context, CLIPPING);
-
       /* Clip mask - see language in the spec about 'raw geometry' */
       if (svg_clip_get_kind (clip) == CLIP_PATH)
         {
@@ -5961,6 +5960,15 @@ push_group (SvgElement   *shape,
               break;
             }
 
+          if (context->picking.picking)
+            {
+              if (!gsk_path_in_fill (svg_clip_get_path (clip), &context->picking.p, rule))
+                {
+                  if (!context->picking.done)
+                    context->picking.clipped = shape;
+                }
+            }
+
 #ifdef DEBUG
           if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
             gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
@@ -5969,14 +5977,14 @@ push_group (SvgElement   *shape,
         }
       else
         {
-          /* In the general case, we collect the clip geometry in a mask.
-           * We special-case a single shape in the <clipPath> without
-           * transforms and translate them to a clip or a fill.
-           */
           SvgElement *clip_shape = svg_clip_get_shape (clip);
           SvgValue *ctf = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM);
           SvgElement *child = NULL;
 
+          /* In the general case, we collect the clip geometry in a mask.
+           * We special-case a single shape in the <clipPath> without
+           * transforms and translate them to a clip or a fill.
+           */
           if (clip_shape->shapes->len > 0)
             child = g_ptr_array_index (clip_shape->shapes, 0);
 
@@ -5992,15 +6000,27 @@ push_group (SvgElement   *shape,
               GskPath *path;
 
               path = svg_element_get_current_path (child, context->viewport);
+
+              if (context->picking.picking)
+                {
+                  if (!gsk_path_in_fill (path, &context->picking.p, GSK_FILL_RULE_WINDING))
+                    {
+                      if (!context->picking.done)
+                        context->picking.clipped = shape;
+                    }
+                }
+
 #ifdef DEBUG
               if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
                 gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
 #endif
               svg_snapshot_push_fill (context->snapshot, path, GSK_FILL_RULE_WINDING);
+
               gsk_path_unref (path);
             }
           else
             {
+              push_op (context, CLIPPING);
 #ifdef DEBUG
               if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
                 gtk_snapshot_push_debug (context->snapshot, "mask for clip");
@@ -6084,10 +6104,19 @@ push_group (SvgElement   *shape,
                 }
 
               gtk_snapshot_pop (context->snapshot); /* mask */
+
+              pop_op (context);
+
+              if (context->picking.picking)
+                {
+                  if (context->picking.done && context->picking.picked != NULL)
+                    context->picking.picked = NULL;
+                  else
+                    context->picking.clipped = shape;
+                  context->picking.done = FALSE;
+                }
             }
         }
-
-      pop_op (context);
     }
 
   if (svg_mask_get_kind (mask) != MASK_NONE &&
@@ -6172,7 +6201,9 @@ push_group (SvgElement   *shape,
       pop_op (context);
     }
 
-  if (context->op != CLIPPING && svg_element_get_type (shape) != SVG_ELEMENT_MASK)
+  if (!context->picking.picking &&
+      context->op != CLIPPING &&
+      svg_element_get_type (shape) != SVG_ELEMENT_MASK)
     {
       if (svg_number_get (opacity, 1) != 1)
         gtk_snapshot_push_opacity (context->snapshot, svg_number_get (opacity, 1));
@@ -6193,7 +6224,9 @@ pop_group (SvgElement   *shape,
   SvgValue *tf = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM);
   SvgValue *blend = svg_element_get_current_value (shape, SVG_PROPERTY_BLEND_MODE);
 
-  if (context->op != CLIPPING && svg_element_get_type (shape) != SVG_ELEMENT_MASK)
+  if (!context->picking.picking &&
+      context->op != CLIPPING &&
+      svg_element_get_type (shape) != SVG_ELEMENT_MASK)
     {
       if (!svg_filter_functions_is_none (filter))
         {
@@ -7918,7 +7951,7 @@ render_image (SvgElement   *shape,
   double x, y, width, height;
   GdkTexture *texture;
 
-  if (context->op == PICKING && context->picking.done)
+  if (context->picking.picking && context->picking.done)
     return;
 
   if (svg_href_get_texture (href) == NULL)
@@ -7960,7 +7993,7 @@ render_image (SvgElement   *shape,
   push_transform (context, transform);
   gsk_transform_unref (transform);
 
-  if (context->op == PICKING)
+  if (context->picking.picking)
     {
       switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)))
         {
@@ -8044,7 +8077,9 @@ paint_shape (SvgElement   *shape,
 {
   GskPath *path;
 
-  if (context->op == PICKING && context->picking.done)
+  if (context->picking.picking &&
+      (context->picking.done ||
+       context->picking.clipped == shape))
     return;
 
   if (svg_element_get_type (shape) == SVG_ELEMENT_USE)
@@ -8072,7 +8107,7 @@ paint_shape (SvgElement   *shape,
       if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
         return;
 
-      if (context->op != PICKING)
+      if (!context->picking.picking)
         {
           if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
             return;
@@ -8109,7 +8144,7 @@ paint_shape (SvgElement   *shape,
                           bounds.size.width, bounds.size.height);
       shape->valid_bounds = TRUE;
 
-      if (context->op == PICKING &&
+      if (context->picking.picking &&
           svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)) == POINTER_EVENTS_BOUNDING_BOX)
         {
           if (gsk_rect_contains_point (&shape->bounds, &context->picking.p))
@@ -8127,7 +8162,7 @@ paint_shape (SvgElement   *shape,
       push_transform (context, transform);
       gsk_transform_unref (transform);
 
-      if (context->op == PICKING)
+      if (context->picking.picking)
         {
           switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)))
             {
@@ -8227,7 +8262,7 @@ paint_shape (SvgElement   *shape,
 
   if (shape->shapes)
     {
-      if (context->op == PICKING)
+      if (context->picking.picking)
         {
           for (int i = 0; i < shape->shapes->len; i++)
             {
@@ -8266,7 +8301,7 @@ paint_shape (SvgElement   *shape,
   if (shape_is_degenerate (shape))
     return;
 
-  if (context->op == PICKING)
+  if (context->picking.picking)
     {
       if (svg_element_contains (shape, context->viewport, context->svg, &context->picking.p))
         {
@@ -8576,13 +8611,14 @@ gtk_svg_pick_element (GtkSvg                 *self,
   paint_context.colors = self->node_for.colors;
   paint_context.n_colors = self->node_for.n_colors;
   paint_context.weight = self->node_for.weight;
-  paint_context.op = PICKING;
+  paint_context.op = RENDERING;
   paint_context.op_stack = NULL;
   paint_context.ctx_shape_stack = NULL;
   paint_context.current_time = self->current_time;
   paint_context.depth = 0;
   paint_context.transforms = NULL;
   paint_context.instance_count = 0;
+  paint_context.picking.picking = TRUE;
   paint_context.picking.p = *p;
   paint_context.picking.points = NULL;
   paint_context.picking.done = FALSE;
@@ -8736,6 +8772,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
       paint_context.depth = 0;
       paint_context.transforms = NULL;
       paint_context.instance_count = 0;
+      paint_context.picking.picking = FALSE;
 
       if (self->overflow == GTK_OVERFLOW_HIDDEN)
         gtk_snapshot_push_clip (snapshot,
@@ -9740,6 +9777,7 @@ gtk_svg_apply_filter (GtkSvg                *svg,
   paint_context.depth = 0;
   paint_context.transforms = NULL;
   paint_context.instance_count = 0;
+  paint_context.picking.picking = FALSE;
 
   /* This is necessary so the filter has current values.
    * Also, any other part of the svg that the filter might
