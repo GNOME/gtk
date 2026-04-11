@@ -857,7 +857,7 @@ get_texture (GtkSvg      *svg,
                               &cache_this,
                               error);
       if (texture && cache_this)
-        g_hash_table_insert (svg->images, g_strdup (string), texture);
+        g_hash_table_insert (svg->images, g_strdup (string), g_object_ref (texture));
     }
 
   return texture;
