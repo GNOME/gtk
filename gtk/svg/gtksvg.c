@@ -9584,6 +9584,32 @@ gtk_svg_activate_element (GtkSvg     *self,
     }
 }
 
+static void
+gtk_svg_set_hover (GtkSvg     *self,
+                   SvgElement *target)
+{
+  if (self->hover == target)
+    return;
+
+  if (self->hover)
+    {
+      timeline_update_for_event (self->timeline, self->content, EVENT_TYPE_MOUSE_LEAVE, self->current_time);
+      svg_element_set_hover (self->hover, FALSE);
+    }
+
+  if (target)
+    {
+      timeline_update_for_event (self->timeline, self->content, EVENT_TYPE_MOUSE_ENTER, self->current_time);
+      svg_element_set_hover (target, TRUE);
+    }
+
+  self->hover = target;
+  self->style_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+  if (self->hover_callback)
+    self->hover_callback (self->hover, self->hover_data);
+}
+
 gboolean
 gtk_svg_handle_event (GtkSvg   *self,
                       GdkEvent *event,
