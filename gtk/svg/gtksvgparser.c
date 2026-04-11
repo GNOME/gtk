@@ -1231,6 +1231,14 @@ parse_shape_attrs (SvgElement           *shape,
           !svg_element_is_specified (shape, SVG_PROPERTY_FY))
         svg_element_set_specified_value (shape, SVG_PROPERTY_FY, svg_element_get_specified_value (shape, SVG_PROPERTY_CY));
     }
+
+  if (svg_element_get_autofocus (shape) && svg_element_get_focusable (shape))
+    {
+      if (data->svg->initial_focus == NULL)
+        data->svg->initial_focus = shape;
+      else
+        gtk_svg_invalid_attribute (data->svg, context, attr_names, "autofocus", "Duplicate autofocus");
+    }
 }
 
 static void

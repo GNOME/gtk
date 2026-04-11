@@ -65,6 +65,9 @@ struct _GtkSvg
   GArray *author_styles;
   gboolean style_changed;
 
+  SvgElement *focus;
+  SvgElement *initial_focus;
+
   SvgElementCallback hover_callback;
   gpointer hover_data;
   SvgElementCallback activate_callback;
@@ -195,6 +198,11 @@ void           gtk_svg_handle_crossing (GtkSvg                *svg,
                                         const GtkCrossingData *crossing,
                                         double                 x,
                                         double                 y);
+
+gboolean       gtk_svg_grab_focus      (GtkSvg                *svg);
+gboolean       gtk_svg_lose_focus      (GtkSvg                *svg);
+gboolean       gtk_svg_move_focus      (GtkSvg                *svg,
+                                        GtkDirectionType       direction);
 
 void           gtk_svg_activate_element (GtkSvg               *svg,
                                          SvgElement           *element);

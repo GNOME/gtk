@@ -9389,6 +9389,9 @@ gtk_svg_clear_content (GtkSvg *self)
   g_array_set_size (self->author_styles, 0);
 
   /* Note: we intentionally keep the stylesheet */
+
+  self->focus = NULL;
+  self->initial_focus = NULL;
 }
 
 static SvgElement *
@@ -9561,6 +9564,164 @@ gtk_svg_handle_crossing (GtkSvg                *self,
                          double                 x,
                          double                 y)
 {
+}
+
+gboolean
+gtk_svg_grab_focus (GtkSvg *self)
+{
+  SvgElement *focus = NULL;
+
+  if (self->focus)
+    return TRUE;
+
+  if (self->initial_focus)
+    {
+      focus = self->initial_focus;
+      self->initial_focus = NULL;
+    }
+  else
+    {
+      do
+        {
+          if (focus)
+            focus = svg_element_next (focus);
+          else
+            focus = self->content;
+
+          if (svg_element_get_focusable (focus))
+            break;
+        }
+      while (focus);
+    }
+
+  if (!focus)
+    return FALSE;
+
+  svg_element_set_focus (focus, TRUE);
+
+  if (self->load_time != INDEFINITE)
+    {
+      ensure_current_time (self);
+      timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
+      update_animation_state (self);
+      collect_next_update (self);
+      invalidate_for_next_update (self);
+      schedule_next_update (self);
+    }
+
+  self->focus = focus;
+  self->style_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  return TRUE;
+}
+
+gboolean
+gtk_svg_lose_focus (GtkSvg *self)
+{
+  if (!self->focus)
+    return TRUE;
+
+  svg_element_set_focus (self->focus, FALSE);
+
+  if (self->load_time != INDEFINITE)
+    {
+      ensure_current_time (self);
+      timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
+      update_animation_state (self);
+      collect_next_update (self);
+      invalidate_for_next_update (self);
+      schedule_next_update (self);
+    }
+
+  self->focus = NULL;
+  self->style_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  return TRUE;
+}
+
+gboolean
+gtk_svg_move_focus (GtkSvg           *self,
+                    GtkDirectionType  direction)
+{
+  SvgElement *focus = NULL;
+
+  if (direction == GTK_DIR_TAB_FORWARD)
+    {
+      SvgElement *next = self->focus;
+
+      do
+        {
+          if (next)
+            next = svg_element_next (next);
+          else
+            next = svg_element_first (self->content);
+
+          if (next == NULL || svg_element_get_focusable (next))
+            {
+              focus = next;
+              break;
+            }
+        }
+      while (next);
+    }
+  else if (direction == GTK_DIR_TAB_BACKWARD)
+    {
+      SvgElement *next = self->focus;
+
+      do
+        {
+          if (next)
+            next = svg_element_previous (next);
+          else
+            next = svg_element_last (self->content);
+
+          if (next == NULL || svg_element_get_focusable (next))
+            {
+              focus = next;
+              break;
+            }
+        } while (next);
+    }
+  else
+    {
+      focus = self->focus;
+    }
+
+  if (self->focus != focus)
+    {
+      ensure_current_time (self);
+
+      if (self->focus)
+        {
+          if (self->load_time != INDEFINITE)
+            timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
+
+          svg_element_set_focus (self->focus, FALSE);
+        }
+      if (focus)
+        {
+          if (self->load_time != INDEFINITE)
+            timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
+
+          svg_element_set_focus (focus, TRUE);
+        }
+
+      if (self->load_time != INDEFINITE)
+        {
+          update_animation_state (self);
+          collect_next_update (self);
+          invalidate_for_next_update (self);
+          schedule_next_update (self);
+        }
+
+      self->focus = focus;
+      self->style_changed = TRUE;
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    }
+
+  return self->focus != NULL;
 }
 
 /* }}} */
