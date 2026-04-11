@@ -22,6 +22,12 @@ void                    gsk_gpu_occlusion_render_node                   (GskGpuF
 
 GskGpuFrame *           gsk_gpu_occlusion_get_frame                     (GskGpuOcclusion                *self);
 
+gboolean                gsk_gpu_occlusion_push_clip                     (GskGpuOcclusion                *self,
+                                                                         const graphene_rect_t          *clip,
+                                                                         cairo_rectangle_int_t          *out_save);
+void                    gsk_gpu_occlusion_pop_clip                      (GskGpuOcclusion                *self,
+                                                                         const cairo_rectangle_int_t    *saved);
+
 gboolean                gsk_gpu_occlusion_push_transform                (GskGpuOcclusion                *self,
                                                                          GskTransform                   *transform,
                                                                          GskGpuTransform                *out_save);
