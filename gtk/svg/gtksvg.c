@@ -5297,12 +5297,12 @@ apply_filter_tree (SvgElement    *shape,
                                             subregion.size.width, subregion.size.height,
                                             &sx, &sy, &tx, &ty);
 
-                transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty));
-                transform = gsk_transform_scale (transform, sx, sy);
+                transform = gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (tx, ty)), sx, sy);
 
                 node = gsk_texture_node_new (svg_href_get_texture (href), &vb);
                 result = apply_transform (node, transform);
                 gsk_render_node_unref (node);
+                gsk_transform_unref (transform);
               }
             else if (svg_href_get_shape (href) != NULL)
               {
