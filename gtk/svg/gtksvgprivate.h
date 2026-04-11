@@ -183,4 +183,7 @@ void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
 SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
                                               const graphene_point_t *p);
 
+void           gtk_svg_set_view              (GtkSvg               *self,
+                                              SvgElement           *view);
+
 G_END_DECLS

@@ -9507,6 +9507,15 @@ gtk_svg_set_state_names (GtkSvg      *svg,
   return TRUE;
 }
 
+/* {{{ Views */
+
+void
+gtk_svg_set_view (GtkSvg     *self,
+                  SvgElement *view)
+{
+}
+
+/* }}} */
 /* }}} */
 /* {{{ Public API */
 /* {{{ Constructors */
