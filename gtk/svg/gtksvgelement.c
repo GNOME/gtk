@@ -41,6 +41,7 @@
 #include "gtksvganimationprivate.h"
 #include "gtkmain.h"
 
+#define CLONE_LIMIT 15000
 
 static void
 text_node_clear (TextNode *self)
@@ -139,7 +140,7 @@ svg_element_new (SvgElement     *parent,
       element->current[attr] = svg_value_ref (element->base[attr]);
     }
 
-  if (svg_element_type_is_container (type))
+  if (svg_element_type_is_container (type) || element->type == SVG_ELEMENT_USE)
     element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
 
   if (svg_element_type_is_gradient (type))
@@ -1594,17 +1595,24 @@ svg_element_duplicate (SvgElement *element,
   copy->id = NULL;
   copy->style = g_strdup (element->style);
   copy->classes = g_strdupv (element->classes);
+  copy->title = g_strdup (element->title);
+  copy->description = g_strdup (element->description);
+  copy->line = element->line;
+  copy->style_loc = element->style_loc;
+  copy->focusable = element->focusable;
+
   copy->css_node = gtk_css_node_new ();
   gtk_css_node_set_parent (copy->css_node, parent->css_node);
   gtk_css_node_set_name (copy->css_node, g_quark_from_static_string (svg_element_type_get_name (copy->type)));
   gtk_css_node_set_classes (copy->css_node, (const char **) copy->classes);
+  if (copy->type == SVG_ELEMENT_LINK)
+    gtk_css_node_set_state (copy->css_node, GTK_STATE_FLAG_LINK);
 
-  for (unsigned int i = FIRST_SVG_PROPERTY; i <= LAST_SVG_PROPERTY; i++)
-    copy->base[i] = svg_value_ref (element->base[i]);
+  copy->specified = g_array_ref (element->specified);
+  copy->styles = g_ptr_array_ref (element->styles);
 
   copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
-  copy->styles = g_ptr_array_new ();
 
   copy->gpa.states = element->gpa.states;
   copy->gpa.transition = element->gpa.transition;
@@ -2101,3 +2109,235 @@ svg_element_contains (SvgElement             *element,
 
   return FALSE;
 }
+
+void svg_element_build_shadow_tree (SvgElement *element,
+                                    GtkSvg     *svg,
+                                    int        *clone_count);
+
+static SvgElement *
+svg_element_clone (SvgElement *element,
+                   SvgElement *parent,
+                   GtkSvg     *svg,
+                   int        *clone_count)
+{
+  SvgElement *clone = g_new0 (SvgElement, 1);
+
+  if ((*clone_count)++ > CLONE_LIMIT)
+    {
+      gtk_svg_rendering_error (svg, "excessive instance count, aborting");
+      return NULL;
+    }
+
+  if (element->type == SVG_ELEMENT_USE)
+    svg_element_build_shadow_tree (element, svg, clone_count);
+
+  clone->type = element->type;
+  clone->parent = parent;
+  clone->attrs = _gtk_bitmask_copy (element->attrs);
+  clone->id = NULL;
+  clone->style = g_strdup (element->style);
+  clone->classes = g_strdupv (element->classes);
+  clone->title = g_strdup (element->title);
+  clone->description = g_strdup (element->description);
+  clone->line = element->line;
+  clone->style_loc = element->style_loc;
+  clone->focusable = element->focusable;
+
+  clone->first = NULL;
+  clone->next = NULL;
+
+  clone->css_node = gtk_css_node_new ();
+  gtk_css_node_set_parent (clone->css_node, parent->css_node);
+  gtk_css_node_set_name (clone->css_node, g_quark_from_static_string (svg_element_type_get_name (clone->type)));
+  gtk_css_node_set_classes (clone->css_node, (const char **) clone->classes);
+  if (clone->type == SVG_ELEMENT_LINK)
+    gtk_css_node_set_state (clone->css_node, GTK_STATE_FLAG_LINK);
+
+  clone->specified = g_array_ref (element->specified);
+
+  for (unsigned int i = 0; i < N_SVG_PROPERTIES; i++)
+    {
+      clone->base[i] = svg_value_ref (element->base[i]);
+      clone->current[i] = svg_value_ref (element->current[i]);
+    }
+
+  if (element->shapes)
+    {
+      SvgElement *p, *q;
+      unsigned int idx;
+
+      clone->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
+      for (unsigned int i = 0; i < element->shapes->len; i++)
+        {
+          SvgElement *child = g_ptr_array_index (element->shapes, i);
+          SvgElement *child_clone = svg_element_clone (child, clone, svg, clone_count);
+          if (!child_clone)
+            {
+              svg_element_free (clone);
+              return NULL;
+            }
+          g_ptr_array_add (clone->shapes, child_clone);
+        }
+
+      /* Copy dependency order */
+      q = NULL;
+      for (p = element->first; p; p = p->next)
+        {
+          g_ptr_array_find (element->shapes, p, &idx);
+
+          if (p == element->first)
+            {
+              clone->first = g_ptr_array_index (clone->shapes, idx);
+              q = clone->first;
+            }
+          else if (q)
+            {
+              q->next = g_ptr_array_index (clone->shapes, idx);
+              q = q->next;
+            }
+        }
+    }
+
+  if (element->animations)
+    {
+      for (unsigned int i = 0; i < element->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (element->animations, i);
+          svg_element_add_animation (clone, svg_animation_clone (a, clone));
+        }
+    }
+
+  if (element->color_stops)
+    {
+      clone->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_color_stop_free);
+      for (unsigned int i = 0; i < element->color_stops->len; i++)
+        {
+          SvgColorStop *stop = g_ptr_array_index (element->color_stops, i);
+          g_ptr_array_add (clone->color_stops, svg_color_stop_clone (stop, clone));
+        }
+    }
+
+  if (element->filters)
+    {
+      clone->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_filter_free);
+      for (unsigned int i = 0; i < element->filters->len; i++)
+        {
+          SvgFilter *f = g_ptr_array_index (element->filters, i);
+          g_ptr_array_add (clone->filters, svg_filter_clone (f, clone));
+        }
+    }
+
+  if (element->text)
+    {
+      clone->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
+      for (unsigned int i = 0; i < element->text->len; i++)
+        {
+          TextNode *t = &g_array_index (element->text, TextNode, i);
+          TextNode tn;
+
+          switch (t->type)
+            {
+            case TEXT_NODE_CHARACTERS:
+              tn.type = TEXT_NODE_CHARACTERS;
+              tn.characters.text = g_strdup (t->characters.text);
+              if (t->characters.layout)
+                tn.characters.layout = g_object_ref (t->characters.layout);
+              tn.characters.x = t->characters.x;
+              tn.characters.y = t->characters.y;
+              tn.characters.r = t->characters.r;
+              break;
+            case TEXT_NODE_SHAPE:
+              tn.type = TEXT_NODE_SHAPE;
+              tn.shape.shape = t->shape.shape;
+              tn.shape.has_bounds = t->shape.has_bounds;
+              tn.shape.bounds = t->shape.bounds;
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+
+          g_array_append_val (clone->text, tn);
+        }
+    }
+
+  clone->styles = g_ptr_array_ref (element->styles);
+  clone->inline_styles = g_array_ref (element->inline_styles);
+
+  if (element->gpa.fill)
+    clone->gpa.fill = svg_value_ref (element->gpa.fill);
+  if (element->gpa.stroke)
+    clone->gpa.stroke = svg_value_ref (element->gpa.stroke);
+  if (element->gpa.width)
+    clone->gpa.width = svg_value_ref (element->gpa.width);
+
+  clone->gpa.states = element->gpa.states;
+  clone->gpa.transition = element->gpa.transition;
+  clone->gpa.transition_easing = element->gpa.transition_easing;
+  clone->gpa.transition_duration = element->gpa.transition_duration;
+  clone->gpa.transition_delay = element->gpa.transition_delay;
+  clone->gpa.animation = element->gpa.animation;
+  clone->gpa.animation_easing = element->gpa.animation_easing;
+  clone->gpa.animation_duration = element->gpa.animation_duration;
+  clone->gpa.animation_repeat = element->gpa.animation_repeat;
+  clone->gpa.animation_segment = element->gpa.animation_segment;
+  clone->gpa.origin = element->gpa.origin;
+  clone->gpa.attach.ref = NULL;
+  clone->gpa.attach.shape = NULL;
+  clone->gpa.attach.pos = 0;
+
+  clone->corresponding = element;
+
+  return clone;
+}
+
+void
+svg_element_build_shadow_tree (SvgElement *element,
+                               GtkSvg     *svg,
+                               int        *clone_count)
+{
+  SvgValue *href;
+  SvgElement *target;
+
+  g_assert (element->type == SVG_ELEMENT_USE);
+
+  href = svg_element_get_current_value (element, SVG_PROPERTY_HREF);
+  if (href)
+    target = svg_href_get_shape (href);
+  else
+    target = NULL;
+
+  if (element->shapes->len > 0)
+    {
+      SvgElement *current = g_ptr_array_index (element->shapes, 0);
+      if (current->corresponding == target)
+        return;
+      g_ptr_array_remove_index (element->shapes, 0);
+      element->first = NULL;
+    }
+
+  if (target)
+    {
+      SvgElement *clone = svg_element_clone (target, element, svg, clone_count);
+      if (clone)
+        {
+          g_ptr_array_add (element->shapes, clone);
+          element->first = clone;
+        }
+    }
+}
+
+void
+svg_element_ensure_shadow_tree (SvgElement *element,
+                                GtkSvg     *svg)
+{
+  int clone_count = 0;
+
+  svg_element_build_shadow_tree (element, svg, &clone_count);
+}
+
+SvgElement *
+svg_element_get_corresponding (SvgElement *element)
+{
+  return element->corresponding;
+}
+

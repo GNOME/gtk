@@ -352,3 +352,87 @@ svg_animation_equal (SvgAnimation *animation1,
 
   return TRUE;
 }
+
+SvgAnimation *
+svg_animation_clone (SvgAnimation *a,
+                     SvgElement   *parent)
+{
+  SvgAnimation *clone = g_new0 (SvgAnimation, 1);
+
+  clone->type = a->type;
+  clone->status = ANIMATION_STATUS_INACTIVE;
+
+  clone->id = NULL;
+  clone->href = NULL;
+  clone->line = a->line;
+
+  clone->shape = parent;
+  clone->attr = a->attr;
+  clone->idx = a->idx;
+
+  clone->has_simple_duration = a->has_simple_duration;
+  clone->has_repeat_count = a->has_repeat_count;
+  clone->has_repeat_duration = a->has_repeat_duration;
+  clone->has_begin = a->has_begin;
+  clone->has_end = a->has_end;
+
+  clone->begin = g_ptr_array_ref (a->begin);
+  for (unsigned int i = 0; i < a->begin->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (a->begin, i);
+      time_spec_add_animation (spec, clone);
+    }
+
+  clone->end = g_ptr_array_ref (a->end);
+  for (unsigned int i = 0; i < a->end->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (a->end, i);
+      time_spec_add_animation (spec, clone);
+    }
+
+  clone->current.begin = INDEFINITE;
+  clone->current.end = INDEFINITE;
+  clone->previous.begin = 0;
+  clone->previous.end = 0;
+
+  clone->simple_duration = a->simple_duration;
+  clone->repeat_count = a->repeat_count;
+  clone->repeat_duration = a->repeat_duration;
+  clone->color_interpolation = a->color_interpolation;
+
+  clone->fill = a->fill;
+  clone->restart = a->restart;
+  clone->additive = a->additive;
+  clone->accumulate = a->accumulate;
+
+  clone->calc_mode = a->calc_mode;
+  clone->frames = g_new (Frame, a->n_frames);
+  memcpy (clone->frames, a->frames, sizeof (Frame) * a->n_frames);
+  for (unsigned int i = 0; i < a->n_frames; i++)
+    svg_value_ref (clone->frames[i].value);
+  clone->n_frames = a->n_frames;
+
+  if (a->type == ANIMATION_TYPE_MOTION)
+    {
+      clone->motion.path_ref = g_strdup (a->motion.path_ref);
+      clone->motion.path_shape = a->motion.path_shape;
+      if (a->motion.path)
+        clone->motion.path = gsk_path_ref (a->motion.path);
+      if (a->motion.measure)
+        clone->motion.measure = gsk_path_measure_ref (a->motion.measure);
+      clone->motion.rotate = a->motion.rotate;
+      clone->motion.angle = a->motion.angle;
+    }
+
+  /* FIXME */
+  clone->deps = NULL;
+
+  clone->gpa.transition = a->gpa.transition;
+  clone->gpa.animation = a->gpa.animation;
+  clone->gpa.easing = a->gpa.easing;
+  clone->gpa.origin = a->gpa.origin;
+  clone->gpa.segment = a->gpa.segment;
+  clone->gpa.attach_pos = a->gpa.attach_pos;
+
+  return clone;
+}

@@ -30,6 +30,9 @@ G_BEGIN_DECLS
 
 SvgColorStop * svg_color_stop_new               (SvgElement     *parent);
 
+SvgColorStop * svg_color_stop_clone             (SvgColorStop   *stop,
+                                                 SvgElement     *parent);
+
 void           svg_color_stop_free              (SvgColorStop   *stop);
 
 unsigned int   svg_color_stop_get_index         (SvgProperty     attr);

@@ -32,6 +32,9 @@ G_BEGIN_DECLS
 SvgFilter *    svg_filter_new               (SvgElement     *parent,
                                              SvgFilterType   type);
 
+SvgFilter *    svg_filter_clone             (SvgFilter      *filter,
+                                             SvgElement     *parent);
+
 void           svg_filter_free              (SvgFilter      *filter);
 
 SvgFilterType  svg_filter_get_type          (SvgFilter      *filter);

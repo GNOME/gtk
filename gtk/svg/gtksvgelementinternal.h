@@ -103,6 +103,8 @@ struct _SvgElement
   SvgValue *base[N_SVG_PROPERTIES];
   SvgValue *current[N_SVG_PROPERTIES];
 
+  SvgElement *corresponding;
+
   GPtrArray *shapes;
   GPtrArray *animations;
   GPtrArray *color_stops;

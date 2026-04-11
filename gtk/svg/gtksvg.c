@@ -1592,7 +1592,7 @@ time_spec_parse (GtkCssParser  *parser,
   return TRUE;
 }
 
-static void
+void
 time_spec_add_animation (TimeSpec     *spec,
                          SvgAnimation *a)
 {
@@ -3116,19 +3116,6 @@ shape_init_current_values (SvgElement        *shape,
 }
 
 static void
-mark_as_computed_for_use (SvgElement *shape,
-                          gboolean    computed_for_use)
-{
-  shape->computed_for_use = computed_for_use;
-
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
-    {
-      for (SvgElement *sh = shape->first; sh; sh = sh->next)
-        mark_as_computed_for_use (sh, computed_for_use);
-    }
-}
-
-static void
 apply_view (SvgElement *content,
             SvgElement *view)
 {
@@ -3246,14 +3233,15 @@ compute_current_values_for_shape (SvgElement        *shape,
       svg_value_unref (motion);
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (svg_element_get_type (shape) == SVG_ELEMENT_USE)
+    svg_element_ensure_shadow_tree (shape, context->svg);
+
+  if (shape->shapes)
     {
       SvgElement *parent = context->parent;
       context->parent = shape;
-
       for (SvgElement *sh = shape->first; sh; sh = sh->next)
         compute_current_values_for_shape (sh, context);
-
       context->parent = parent;
     }
 
@@ -5743,18 +5731,10 @@ needs_isolation (SvgElement    *shape,
 }
 
 static gboolean
-shape_is_use_target (SvgElement   *shape,
-                     PaintContext *context)
+shape_is_use_target (SvgElement *shape)
 {
-  if (context->ctx_shape_stack)
-    {
-      SvgElement *ctx_shape = context->ctx_shape_stack->data;
-
-      return svg_element_get_type (ctx_shape) == SVG_ELEMENT_USE &&
-             svg_href_get_shape (svg_element_get_current_value (ctx_shape, SVG_PROPERTY_HREF)) == shape;
-    }
-
-  return FALSE;
+  return shape->parent != NULL &&
+         svg_element_get_type (shape->parent) == SVG_ELEMENT_USE;
 }
 
 static void
@@ -5808,9 +5788,9 @@ push_group (SvgElement   *shape,
           x = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_X), context->viewport->size.width);
           y = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_Y), context->viewport->size.height);
 
-          if (shape_is_use_target (shape, context))
+          if (shape_is_use_target (shape))
             {
-              SvgElement *use = context->ctx_shape_stack->data;
+              SvgElement *use = shape->parent;
               if (svg_element_is_specified (use, SVG_PROPERTY_WIDTH))
                 width = svg_number_get (use->current[SVG_PROPERTY_WIDTH], context->viewport->size.width);
               else
@@ -8058,19 +8038,6 @@ recompute_current_values (SvgElement   *shape,
   compute_current_values_for_shape (shape, &ctx);
 }
 
-static gboolean
-shape_is_ancestor (SvgElement *parent,
-                   SvgElement *shape)
-{
-  for (SvgElement *p = svg_element_get_parent (shape);  p; p = p->parent)
-    {
-      if (p == parent)
-        return TRUE;
-    }
-  return FALSE;
-}
-
-
 static void
 paint_shape (SvgElement   *shape,
              PaintContext *context)
@@ -8082,33 +8049,16 @@ paint_shape (SvgElement   *shape,
 
   if (svg_element_get_type (shape) == SVG_ELEMENT_USE)
     {
-      /* TODO: picking */
-      if (svg_href_get_shape (svg_element_get_current_value (shape, SVG_PROPERTY_HREF)) != NULL)
+      if (shape->shapes->len > 0)
         {
-          SvgElement *use_shape = svg_href_get_shape (svg_element_get_current_value (shape, SVG_PROPERTY_HREF));
-
-          if (shape_is_ancestor (use_shape, shape))
-            {
-              gtk_svg_rendering_error (context->svg, "not following invalid <use> href");
-              return;
-            }
-
-          mark_as_computed_for_use (use_shape, FALSE);
-          recompute_current_values (use_shape, shape, context);
+          SvgElement *use_shape = g_ptr_array_index (shape->shapes, 0);
 
           push_ctx_shape (context, shape);
           render_shape (use_shape, context);
           pop_ctx_shape (context);
-
-          mark_as_computed_for_use (use_shape, TRUE);
         }
-      return;
-    }
 
-  if (shape->computed_for_use)
-    {
-      recompute_current_values (shape, svg_element_get_parent (shape), context);
-      mark_as_computed_for_use (shape, FALSE);
+      return;
     }
 
   if (svg_element_get_type (shape) == SVG_ELEMENT_TEXT)
@@ -8275,7 +8225,7 @@ paint_shape (SvgElement   *shape,
       return;
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (shape->shapes)
     {
       if (context->op == PICKING)
         {
@@ -8438,7 +8388,7 @@ render_shape (SvgElement   *shape,
 
   if (svg_element_type_never_rendered (svg_element_get_type (shape)))
     {
-      if (!((svg_element_get_type (shape) == SVG_ELEMENT_SYMBOL && shape_is_use_target (shape, context)) ||
+      if (!((svg_element_get_type (shape) == SVG_ELEMENT_SYMBOL && shape_is_use_target (shape)) ||
            (svg_element_get_type (shape) == SVG_ELEMENT_CLIP_PATH && context->op == CLIPPING && context->op_changed) ||
            (svg_element_get_type (shape) == SVG_ELEMENT_MASK && context->op == MASKING && context->op_changed) ||
            (svg_element_get_type (shape) == SVG_ELEMENT_MARKER && context->op == MARKERS && context->op_changed)))

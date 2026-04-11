@@ -456,3 +456,38 @@ svg_filter_get_inline_styles (SvgFilter *filter)
 {
   return filter->inline_styles;
 }
+
+SvgFilter *
+svg_filter_clone (SvgFilter  *filter,
+                  SvgElement *parent)
+{
+  SvgFilter *clone;
+  size_t n_attrs;
+
+  n_attrs = svg_filter_type_get_n_attrs (filter->type);
+  clone = g_malloc0 (sizeof (SvgFilter) + sizeof (SvgValue *) * (2 * n_attrs - 1));
+
+  clone->type = filter->type;
+  clone->current = clone->base + n_attrs;
+  clone->specified = g_array_ref (filter->specified);
+
+  for (unsigned int i = 0; i < n_attrs; i++)
+    {
+      clone->base[i] = svg_value_ref (filter->base[i]);
+      clone->current[i] = svg_value_ref (filter->current[i]);
+    }
+
+  clone->attrs = filter->attrs;
+  clone->id = g_strdup (filter->id);
+  clone->style = g_strdup (filter->style);
+  clone->classes = g_strdupv (filter->classes);
+  clone->lines = filter->lines;
+
+  clone->inline_styles = g_array_ref (filter->inline_styles);
+
+  clone->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (clone->css_node, g_quark_from_static_string (svg_filter_type_get_name (clone->type)));
+  gtk_css_node_set_parent (clone->css_node, parent->css_node);
+
+  return clone;
+}

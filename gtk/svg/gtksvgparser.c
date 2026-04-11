@@ -4094,7 +4094,7 @@ apply_styles_to_shape (SvgElement *shape,
 {
   apply_styles_here (shape, 0, svg);
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (shape->shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {

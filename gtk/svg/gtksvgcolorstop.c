@@ -283,3 +283,33 @@ svg_color_stop_get_inline_styles (SvgColorStop *stop)
 {
   return stop->inline_styles;
 }
+
+SvgColorStop *
+svg_color_stop_clone (SvgColorStop *stop,
+                      SvgElement   *parent)
+{
+  SvgColorStop *clone = g_new0 (SvgColorStop, 1);
+
+  clone->attrs = stop->attrs;
+
+  for (SvgProperty attr = FIRST_STOP_PROPERTY; attr <= LAST_STOP_PROPERTY; attr++)
+    {
+      if (stop->specified[attr - FIRST_STOP_PROPERTY])
+        clone->specified[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->specified[attr - FIRST_STOP_PROPERTY]);
+      clone->base[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->base[attr - FIRST_STOP_PROPERTY]);
+      clone->current[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->current[attr - FIRST_STOP_PROPERTY]);
+    }
+
+  clone->lines = stop->lines;
+  clone->id = g_strdup (stop->id);
+  clone->style = g_strdup (stop->style);
+  clone->classes = g_strdupv (stop->classes);
+
+  clone->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (clone->css_node, g_quark_from_static_string ("stop"));
+  gtk_css_node_set_parent (clone->css_node, parent->css_node);
+
+  clone->inline_styles = g_array_ref (stop->inline_styles);
+
+  return clone;
+}
