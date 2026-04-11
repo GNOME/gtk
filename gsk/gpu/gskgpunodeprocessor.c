@@ -914,7 +914,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuRenderPass *self,
   const GdkColor *color;
 
   color = gsk_color_node_get_gdk_color (node);
-  if (!gsk_gpu_node_processor_clip_bounds (self, &node->bounds, GSK_RECT_SNAP_NONE, &bounds))
+  if (!gsk_gpu_node_processor_clip_bounds (self,
+                                           &node->bounds,
+                                           gsk_color_node_get_snap (node),
+                                           &bounds))
     return;
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
