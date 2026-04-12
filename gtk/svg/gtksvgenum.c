@@ -128,31 +128,34 @@ svg_ ## class_name ## _new (EnumType value) \
   g_assert_not_reached (); \
 } \
 
-#define DEF_E_PARSE(class_name) \
+#define DEF_E_PARSE(class_name, EnumType) \
+SvgValue * \
+svg_ ## class_name ## _try_parse (GtkCssParser *parser) \
+{ \
+  return svg_enum_try_parse (class_name ## _values, \
+                             G_N_ELEMENTS (class_name ## _values), \
+                             parser); \
+} \
+\
 SvgValue * \
 svg_ ## class_name ## _parse (GtkCssParser *parser) \
 { \
-  SvgValue *value; \
-\
-  value = svg_enum_try_parse (class_name ## _values, \
-                              G_N_ELEMENTS (class_name ## _values), \
-                              parser); \
+  SvgValue *value = svg_ ## class_name ## _try_parse (parser); \
   if (value == NULL) \
-    gtk_css_parser_error_syntax (parser, "Unknown #EnumType value"); \
-\
+    gtk_css_parser_error_syntax (parser, "Unknown " #EnumType " value"); \
   return value; \
 }
 
 #define DEFINE_ENUM(CLASS_NAME, class_name, EnumType, ...) \
   DEF_E(CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__) \
-  DEF_E_PARSE(class_name)
+  DEF_E_PARSE(class_name, EnumType)
 
 #define DEFINE_ENUM_NO_PARSE(CLASS_NAME, class_name, EnumType, ...) \
   DEF_E(CLASS_NAME, class_name, EnumType, svg_value_default_resolve, __VA_ARGS__)
 
 #define DEFINE_ENUM_CUSTOM_RESOLVE(CLASS_NAME, class_name, EnumType, resolve, ...) \
   DEF_E(CLASS_NAME, class_name, EnumType, resolve, __VA_ARGS__) \
-  DEF_E_PARSE(class_name)
+  DEF_E_PARSE(class_name, EnumType)
 
 DEFINE_ENUM (FILL_RULE, fill_rule, GskFillRule,
   DEFINE_ENUM_VALUE (FILL_RULE, GSK_FILL_RULE_WINDING, "nonzero"),

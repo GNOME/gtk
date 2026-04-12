@@ -209,7 +209,7 @@ parse_font_weight (GtkCssParser *parser)
 {
   SvgValue *v;
 
-  v = svg_font_weight_parse (parser);
+  v = svg_font_weight_try_parse (parser);
   if (v)
     return v;
 
@@ -221,7 +221,7 @@ parse_font_size (GtkCssParser *parser)
 {
   SvgValue *v;
 
-  v = svg_font_size_parse (parser);
+  v = svg_font_size_try_parse (parser);
   if (v)
     return v;
 
