@@ -1,0 +1,14 @@
+<svg>
+  <rect id='rect'>
+    <title lang='de-de'>Ein Rechteck</title>
+    <title lang='en-us'>A rect</title>
+    <desc lang='de-de'>Ein Rechteck, aber richtig</desc>
+    <title lang=''>▬</title>
+    <desc lang='en-us'>A rect, for real</desc>
+    <desc lang=''>▬▬</desc>
+  </rect>
+  <circle>
+    <title>nah</title>
+    <title lang='de-de'>Der Kreis</title>
+  </circle>
+</svg>

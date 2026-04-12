@@ -53,6 +53,7 @@ test_data = [
   'marker3.svg',
   'marker4.svg',
   'metadata.svg',
+  'metadata2.svg',
   'nested-svg.svg',
   'nested-svg-aspect-ratio.svg',
   'nested-svg-overflow.svg',

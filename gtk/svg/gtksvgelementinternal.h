@@ -80,6 +80,8 @@ struct _SvgElement
   char *id;
   char *style;
   char **classes;
+  char *title;
+  char *description;
   size_t line;
   GtkSvgLocation style_loc;
   gboolean focusable;

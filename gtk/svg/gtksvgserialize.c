@@ -912,6 +912,22 @@ serialize_shape (GString              *s,
       g_string_append_c (s, '>');
     }
 
+  if (svg_element_get_title (shape))
+    {
+      string_indent (s, indent + BASE_INDENT);
+      g_string_append (s, "<title>");
+      g_string_append (s, svg_element_get_title (shape));
+      g_string_append (s, "</title>");
+    }
+
+  if (svg_element_get_description (shape))
+    {
+      string_indent (s, indent + BASE_INDENT);
+      g_string_append (s, "<desc>");
+      g_string_append (s, svg_element_get_description (shape));
+      g_string_append (s, "</desc>");
+    }
+
   for (unsigned int i = 0; i < shape->styles->len; i++)
     {
       StyleElt *elt = g_ptr_array_index (shape->styles, i);

@@ -101,6 +101,12 @@ void         svg_element_parse_classes       (SvgElement            *element,
 void         svg_element_take_classes        (SvgElement            *element,
                                               GStrv                  classes);
 GStrv        svg_element_get_classes         (SvgElement            *element);
+void         svg_element_set_title           (SvgElement            *element,
+                                              const char            *title);
+const char * svg_element_get_title           (SvgElement            *element);
+void         svg_element_set_description     (SvgElement            *element,
+                                              const char            *description);
+const char * svg_element_get_description     (SvgElement            *element);
 GtkCssNode * svg_element_get_css_node        (SvgElement            *element);
 
 void         svg_element_set_origin          (SvgElement            *element,

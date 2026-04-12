@@ -80,6 +80,8 @@ svg_element_free (SvgElement *element)
   g_clear_pointer (&element->id, g_free);
   g_clear_pointer (&element->style, g_free);
   g_clear_pointer (&element->classes, g_strfreev);
+  g_clear_pointer (&element->title, g_free);
+  g_clear_pointer (&element->description, g_free);
   g_clear_object (&element->css_node);
 
   g_clear_pointer (&element->specified, g_array_unref);
@@ -1173,6 +1175,32 @@ GStrv
 svg_element_get_classes (SvgElement *element)
 {
   return element->classes;
+}
+
+void
+svg_element_set_title (SvgElement *element,
+                       const char *title)
+{
+  g_set_str (&element->title, title);
+}
+
+const char *
+svg_element_get_title (SvgElement *element)
+{
+  return element->title;
+}
+
+void
+svg_element_set_description (SvgElement *element,
+                             const char *description)
+{
+  g_set_str (&element->description, description);
+}
+
+const char *
+svg_element_get_description (SvgElement *element)
+{
+  return element->description;
 }
 
 GtkCssNode *
