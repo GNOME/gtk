@@ -123,6 +123,7 @@ diff_node_with_file (const char     *file,
   else
     bytes2 = g_bytes_new_static ("", 0);
   new = g_memory_input_stream_new_from_bytes (bytes2);
+  g_bytes_unref (bytes2);
   out = g_memory_output_stream_new_resizable ();
 
   fbase = g_path_get_basename (file);

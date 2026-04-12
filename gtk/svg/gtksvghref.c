@@ -48,6 +48,9 @@ svg_href_free (SvgValue *value)
   if (r->kind != HREF_NONE)
     g_free (r->ref);
 
+  if (r->texture)
+    g_object_unref (r->texture);
+
   g_free (value);
 }
 
