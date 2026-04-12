@@ -1083,9 +1083,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
+      graphene_rect_t viewport;
       GdkRGBA real_colors[5];
       const GdkRGBA *col = colors;
       size_t n_col = n_colors;
+      SvgComputeContext context;
 
       if (n_colors >= 5)
         {
@@ -1098,13 +1100,27 @@ gtk_svg_serialize_full (GtkSvg               *self,
           n_col = 5;
         }
 
-      SvgComputeContext context;
+      viewport = GRAPHENE_RECT_INIT (0, 0, self->current_width, self->current_height);
+
+      if (self->style_changed)
+        {
+          apply_styles_to_shape (self->content, self);
+          self->style_changed = FALSE;
+        }
+
+      if (self->view_changed)
+        {
+          apply_view (self->content, self->view);
+          self->view_changed = FALSE;
+        }
+
       context.svg = self;
-      context.viewport = NULL;
+      context.viewport = &viewport;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
       context.n_colors = n_col;
+      context.interpolation = GDK_COLOR_STATE_SRGB;
 
       compute_current_values_for_shape (self->content, &context);
     }
