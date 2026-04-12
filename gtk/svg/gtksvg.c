@@ -2539,16 +2539,21 @@ static void
 advance_later (gpointer data)
 {
   GtkSvg *self = data;
+  int64_t current_time;
 
   self->pending_advance = 0;
 
-  gtk_svg_advance (self, MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock)));
+  current_time = self->current_time + 1;
+  if (self->clock)
+    current_time = MAX (current_time, gdk_frame_clock_get_frame_time (self->clock));
+
+  gtk_svg_advance (self, current_time);
 }
 
 static void
 schedule_next_update (GtkSvg *self)
 {
-  if (self->clock == NULL || !self->playing)
+  if (!self->playing)
     return;
 
   g_clear_handle_id (&self->pending_advance, g_source_remove);
