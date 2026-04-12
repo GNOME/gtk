@@ -1,7 +1,9 @@
-/* Paintable/SVG
+/* Paintable/SVG Paintable
+ * #Keywords: symbolic
  *
- * This demo shows using GtkSvg to display an SVG image in
- * a GtkPicture that can be scaled by resizing the window.
+ * This demo shows using a GtkSvg paintable to display an
+ * SVG image in a GtkPicture that can be scaled by resizing
+ * the window.
  */
 
 #include <gtk/gtk.h>
