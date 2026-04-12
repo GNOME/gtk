@@ -909,6 +909,41 @@ serialize_shape (GString              *s,
       g_string_append_printf (s, "<%s", svg_element_type_get_name (svg_element_get_type (shape)));
       serialize_shape_attrs (s, svg, indent, shape, flags);
       serialize_gpa_attrs (s, svg, indent, shape, flags);
+
+      if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
+        {
+          GtkStateFlags state = gtk_css_node_get_state (svg_element_get_css_node (shape));
+          struct {
+            GtkStateFlags flag;
+            const char *name;
+          } checked_flags[] = {
+            { GTK_STATE_FLAG_ACTIVE, "active" },
+            { GTK_STATE_FLAG_PRELIGHT, "hover" },
+            { GTK_STATE_FLAG_FOCUSED, "focused" },
+            { GTK_STATE_FLAG_LINK, "link" },
+            { GTK_STATE_FLAG_VISITED, "visited" },
+          };
+          gboolean started = FALSE;
+
+          for (unsigned int i = 0; i < G_N_ELEMENTS (checked_flags); i++)
+            {
+              if (state & checked_flags[i].flag)
+                {
+                  if (!started)
+                    {
+                      string_indent (s, indent + ATTR_INDENT);
+                      g_string_append_printf (s, "gpa:css-state='");
+                    }
+                  else
+                    g_string_append_c (s, ',');
+                  g_string_append (s, checked_flags[i].name);
+                  started = TRUE;
+                }
+            }
+          if (started)
+            g_string_append_c (s, '\'');
+        }
+
       g_string_append_c (s, '>');
     }
 
