@@ -9,6 +9,11 @@
 #include <graphene.h>
 #include <math.h>
 
+/* the epsilon we allow pixels to be off due to rounding errors.
+ * Chosen rather randomly.
+ */
+#define GSK_SNAP_EPSILON 0.001
+
 #define GSK_RECT_INIT_CAIRO(cairo_rect) GRAPHENE_RECT_INIT((cairo_rect)->x, (cairo_rect)->y, (cairo_rect)->width, (cairo_rect)->height)
 
 static inline void
@@ -185,11 +190,11 @@ gsk_rect_snap_direction (float            value,
   switch (snap)
     {
     case GSK_SNAP_FLOOR:
-      return floorf (value);
+      return floorf (value + GSK_SNAP_EPSILON);
     case GSK_SNAP_CEIL:
-      return ceilf (value);
+      return ceilf (value - GSK_SNAP_EPSILON);
     case GSK_SNAP_ROUND:
-      return round (value);
+      return round (value + GSK_SNAP_EPSILON);
     case GSK_SNAP_NONE:
     default:
       return value;
