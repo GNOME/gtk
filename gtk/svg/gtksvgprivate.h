@@ -70,6 +70,7 @@ struct _GtkSvg
   SvgElement *focus;
   SvgElement *initial_focus;
   SvgElement *hover;
+  SvgElement *active;
 
   SvgElementCallback hover_callback;
   gpointer hover_data;
@@ -209,5 +210,9 @@ gboolean       gtk_svg_move_focus      (GtkSvg                *svg,
 
 void           gtk_svg_activate_element (GtkSvg               *svg,
                                          SvgElement           *element);
+
+void           gtk_svg_set_active       (GtkSvg               *svg,
+                                         SvgElement           *element);
+SvgElement *   gtk_svg_get_active       (GtkSvg               *svg);
 
 G_END_DECLS

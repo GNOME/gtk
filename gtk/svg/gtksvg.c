@@ -9712,6 +9712,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->initial_focus = NULL;
   self->view = NULL;
   self->hover = NULL;
+  self->active = NULL;
 }
 
 static SvgElement *
@@ -9879,13 +9880,13 @@ gtk_svg_set_hover (GtkSvg     *self,
 
   if (self->hover)
     {
-      timeline_update_for_event (self->timeline, self->content, EVENT_TYPE_MOUSE_LEAVE, self->current_time);
+      timeline_update_for_event (self->timeline, self->hover, EVENT_TYPE_MOUSE_LEAVE, self->current_time);
       svg_element_set_hover (self->hover, FALSE);
     }
 
   if (target)
     {
-      timeline_update_for_event (self->timeline, self->content, EVENT_TYPE_MOUSE_ENTER, self->current_time);
+      timeline_update_for_event (self->timeline, target, EVENT_TYPE_MOUSE_ENTER, self->current_time);
       svg_element_set_hover (target, TRUE);
     }
 
@@ -9894,6 +9895,30 @@ gtk_svg_set_hover (GtkSvg     *self,
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   if (self->hover_callback)
     self->hover_callback (self->hover, self->hover_data);
+}
+
+void
+gtk_svg_set_active (GtkSvg     *self,
+                    SvgElement *target)
+{
+  if (self->active == target)
+    return;
+
+  if (self->active)
+    svg_element_set_active (self->active, FALSE);
+
+  if (target)
+    svg_element_set_active (target, TRUE);
+
+  self->active = target;
+  self->style_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+SvgElement *
+gtk_svg_get_active (GtkSvg *self)
+{
+  return self->active;
 }
 
 gboolean
@@ -9932,6 +9957,13 @@ gtk_svg_handle_event (GtkSvg   *self,
       break;
     }
 
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE &&
+      gdk_button_event_get_button (event) == GDK_BUTTON_PRIMARY &&
+      gtk_svg_get_active (self) != NULL)
+    {
+      gtk_svg_set_active (self, NULL);
+    }
+
   return FALSE;
 }
 
@@ -9954,7 +9986,10 @@ gtk_svg_handle_crossing (GtkSvg                *self,
       if (crossing->direction == GTK_CROSSING_IN)
         gtk_svg_set_hover (self, gtk_svg_pick_element (self, &GRAPHENE_POINT_INIT (x, y)));
       else
-        gtk_svg_set_hover (self, NULL);
+        {
+          gtk_svg_set_hover (self, NULL);
+          gtk_svg_set_active (self, NULL);
+        }
     }
 }
 

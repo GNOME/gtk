@@ -1937,25 +1937,33 @@ propagate_event_down (SvgElement *element,
 }
 
 static gboolean
-event_activates (GdkEvent *event)
-{
-  if (gdk_event_get_event_type (event) == GDK_KEY_PRESS)
-    return gdk_key_event_get_keyval (event) == GDK_KEY_Return;
-  else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
-    return gdk_button_event_get_button (event) == GDK_BUTTON_PRIMARY;
-  else
-    return FALSE;
-}
-
-static gboolean
 propagate_event_up (SvgElement *element,
                     GdkEvent   *event,
                     GtkSvg     *svg)
 {
-  if (element->type == SVG_ELEMENT_LINK && event_activates (event))
+  if (element->type == SVG_ELEMENT_LINK)
     {
-      gtk_svg_activate_element (svg, element);
-      return GDK_EVENT_STOP;
+      if (gdk_event_get_event_type (event) == GDK_KEY_PRESS &&
+          gdk_key_event_get_keyval (event) == GDK_KEY_Return)
+        {
+          gtk_svg_activate_element (svg, element);
+          return GDK_EVENT_STOP;
+        }
+
+      if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS &&
+          gdk_button_event_get_button (event) == GDK_BUTTON_PRIMARY)
+        {
+          gtk_svg_set_active (svg, element);
+          return GDK_EVENT_STOP;
+        }
+      else if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE &&
+               gdk_button_event_get_button (event) == GDK_BUTTON_PRIMARY &&
+               gtk_svg_get_active (svg) == element)
+        {
+          gtk_svg_activate_element (svg, element);
+          gtk_svg_set_active (svg, NULL);
+          return GDK_EVENT_STOP;
+        }
     }
 
   if (element->parent)
