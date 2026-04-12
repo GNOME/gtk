@@ -1,0 +1,15 @@
+input: hover.svg
+output: hover-0.svg
+time: 1000
+pointer: enter 10 50
+time: 2000
+output: hover-1.svg
+pointer: move 50 10
+time: 3000
+output: hover-2.svg
+pointer: move 90 50
+time: 4000
+output: hover-3.svg
+pointer: leave
+time: 5000
+output: hover-4.svg

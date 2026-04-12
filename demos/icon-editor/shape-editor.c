@@ -1021,6 +1021,7 @@ can_edit_shape (SvgElement *shape)
     case SVG_ELEMENT_SYMBOL:
     case SVG_ELEMENT_SWITCH:
     case SVG_ELEMENT_LINK:
+    case SVG_ELEMENT_VIEW:
       return FALSE;
     default:
       g_assert_not_reached ();

@@ -19,13 +19,11 @@
             fy='100'>
       <stop
               offset='0'
-              stop-color='rgb(0,0,153)'
-              stop-opacity='1'>
+              stop-color='rgb(0,0,153)'>
       </stop>
       <stop
               offset='1'
-              stop-color='rgb(34,238,34)'
-              stop-opacity='1'>
+              stop-color='rgb(34,238,34)'>
       </stop>
     </radialGradient>
     <rect
@@ -50,13 +48,11 @@
             fy='100'>
       <stop
               offset='0'
-              stop-color='rgb(238,34,34)'
-              stop-opacity='1'>
+              stop-color='rgb(238,34,34)'>
       </stop>
       <stop
               offset='1'
-              stop-color='rgb(255,255,102)'
-              stop-opacity='1'>
+              stop-color='rgb(255,255,102)'>
       </stop>
     </radialGradient>
     <rect
@@ -83,13 +79,11 @@
             fy='180'>
       <stop
               offset='0'
-              stop-color='rgb(0,102,0)'
-              stop-opacity='1'>
+              stop-color='rgb(0,102,0)'>
       </stop>
       <stop
               offset='1'
-              stop-color='rgb(255,255,0)'
-              stop-opacity='1'>
+              stop-color='rgb(255,255,0)'>
       </stop>
     </radialGradient>
     <text
@@ -113,13 +107,11 @@
             fy='245'>
       <stop
               offset='0'
-              stop-color='rgb(0,0,0)'
-              stop-opacity='1'>
+              stop-color='rgb(0,0,0)'>
       </stop>
       <stop
               offset='1'
-              stop-color='rgb(221,102,221)'
-              stop-opacity='1'>
+              stop-color='rgb(221,102,221)'>
       </stop>
     </radialGradient>
     <text

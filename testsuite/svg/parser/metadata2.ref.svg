@@ -1,0 +1,12 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <rect
+          id='rect'>
+    <title>A rect</title>
+    <desc>A rect, for real</desc>
+  </rect>
+  <circle>
+    <title>nah</title>
+  </circle>
+</svg>

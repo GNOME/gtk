@@ -44,6 +44,8 @@ struct _SvgFilter
   char **classes;
   size_t lines;
   GtkCssNode *css_node;
+  GArray *inline_styles;
+  GArray *specified;
   SvgValue **current;
   SvgValue *base[1];
 };
@@ -55,6 +57,8 @@ svg_filter_free (SvgFilter *filter)
   g_free (filter->style);
   g_strfreev (filter->classes);
   g_object_unref (filter->css_node);
+  g_array_unref (filter->specified);
+  g_array_unref (filter->inline_styles);
 
   for (unsigned int i = 0; i < svg_filter_type_get_n_attrs (filter->type); i++)
     {
@@ -90,12 +94,83 @@ svg_filter_ref_initial_value (SvgFilter   *filter,
   return svg_property_ref_initial_value (attr, SVG_ELEMENT_FILTER, TRUE);
 }
 
+void
+svg_filter_set_specified_value (SvgFilter   *filter,
+                                SvgProperty  attr,
+                                SvgValue    *value)
+{
+  unsigned int i;
+  PropertyValue *v;
+  unsigned int pos = svg_filter_type_get_index (filter->type, attr);
+
+  if ((filter->attrs & BIT (pos)) != 0)
+    {
+      for (i = 0; i < filter->specified->len; i++)
+        {
+          v = &g_array_index (filter->specified, PropertyValue, i);
+
+          if (v->attr == attr)
+            {
+              g_clear_pointer (&v->value, svg_value_unref);
+              break;
+            }
+        }
+    }
+  else
+    i = filter->specified->len;
+
+  if (i == filter->specified->len)
+    {
+      PropertyValue pv = { attr, NULL };
+      g_array_append_val (filter->specified, pv);
+    }
+
+  v = &g_array_index (filter->specified, PropertyValue, i);
+  g_assert (v->value == NULL);
+  if (value)
+    {
+      filter->attrs |= BIT (pos);
+      v->value = svg_value_ref (value);
+    }
+  else
+    {
+      filter->attrs &= ~BIT (pos);
+    }
+}
+
+void
+svg_filter_take_specified_value (SvgFilter   *filter,
+                                 SvgProperty  attr,
+                                 SvgValue    *value)
+{
+  svg_filter_set_specified_value (filter, attr, value);
+  if (value)
+    svg_value_unref (value);
+}
+
 SvgValue *
-svg_filter_get_base_value (SvgFilter   *filter,
-                           SvgProperty  attr)
+svg_filter_get_specified_value (SvgFilter   *filter,
+                                SvgProperty  attr)
+{
+  if (svg_filter_is_specified (filter, attr))
+    {
+      for (unsigned int i = 0; i < filter->specified->len; i++)
+        {
+          PropertyValue *v = &g_array_index (filter->specified, PropertyValue, i);
+          if (v->attr == attr)
+            return v->value;
+        }
+    }
+
+  return NULL;
+}
+
+gboolean
+svg_filter_is_specified (SvgFilter   *filter,
+                         SvgProperty  attr)
 {
   unsigned int pos = svg_filter_type_get_index (filter->type, attr);
-  return filter->base[pos];
+  return (filter->attrs & BIT (pos)) != 0;
 }
 
 void
@@ -103,26 +178,25 @@ svg_filter_set_base_value (SvgFilter   *filter,
                            SvgProperty  attr,
                            SvgValue    *value)
 {
-  unsigned int pos = svg_filter_type_get_index (filter->type, attr);
-  g_clear_pointer (&filter->base[pos], svg_value_unref);
-  filter->base[pos] = svg_value_ref (value);
-  filter->attrs |= BIT (pos);
-}
+  unsigned int pos;
 
-gboolean
-svg_filter_property_is_set (SvgFilter   *filter,
-                            SvgProperty  attr)
-{
-  unsigned int pos = svg_filter_type_get_index (filter->type, attr);
-  return (filter->attrs & BIT (pos)) != 0;
+  if (!svg_filter_type_has_property (filter->type, attr))
+    return;
+
+  pos = svg_filter_type_get_index (filter->type, attr);
+  g_clear_pointer (&filter->base[pos], svg_value_unref);
+  if (value)
+    filter->base[pos] = svg_value_ref (value);
+  else
+    filter->base[pos] = svg_filter_ref_initial_value (filter, attr);
 }
 
 SvgValue *
-svg_filter_get_current_value (SvgFilter   *filter,
-                              SvgProperty  attr)
+svg_filter_get_base_value (SvgFilter   *filter,
+                           SvgProperty  attr)
 {
   unsigned int pos = svg_filter_type_get_index (filter->type, attr);
-  return filter->current[pos];
+  return filter->base[pos];
 }
 
 void
@@ -136,6 +210,14 @@ svg_filter_set_current_value (SvgFilter   *filter,
     svg_value_ref (value);
   g_clear_pointer (&filter->current[pos], svg_value_unref);
   filter->current[pos] = value;
+}
+
+SvgValue *
+svg_filter_get_current_value (SvgFilter   *filter,
+                              SvgProperty  attr)
+{
+  unsigned int pos = svg_filter_type_get_index (filter->type, attr);
+  return filter->current[pos];
 }
 
 GskComponentTransfer *
@@ -239,6 +321,9 @@ svg_filter_new (SvgElement    *parent,
 
   filter->type = type;
   filter->current = filter->base + n_attrs;
+
+  filter->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
+  filter->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
 
   for (unsigned int i = 0; i < n_attrs; i++)
     {
@@ -364,4 +449,45 @@ svg_filter_equal (SvgFilter *filter1,
     }
 
   return TRUE;
+}
+
+GArray *
+svg_filter_get_inline_styles (SvgFilter *filter)
+{
+  return filter->inline_styles;
+}
+
+SvgFilter *
+svg_filter_clone (SvgFilter  *filter,
+                  SvgElement *parent)
+{
+  SvgFilter *clone;
+  size_t n_attrs;
+
+  n_attrs = svg_filter_type_get_n_attrs (filter->type);
+  clone = g_malloc0 (sizeof (SvgFilter) + sizeof (SvgValue *) * (2 * n_attrs - 1));
+
+  clone->type = filter->type;
+  clone->current = clone->base + n_attrs;
+  clone->specified = g_array_ref (filter->specified);
+
+  for (unsigned int i = 0; i < n_attrs; i++)
+    {
+      clone->base[i] = svg_value_ref (filter->base[i]);
+      clone->current[i] = svg_value_ref (filter->current[i]);
+    }
+
+  clone->attrs = filter->attrs;
+  clone->id = g_strdup (filter->id);
+  clone->style = g_strdup (filter->style);
+  clone->classes = g_strdupv (filter->classes);
+  clone->lines = filter->lines;
+
+  clone->inline_styles = g_array_ref (filter->inline_styles);
+
+  clone->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (clone->css_node, g_quark_from_static_string (svg_filter_type_get_name (clone->type)));
+  gtk_css_node_set_parent (clone->css_node, parent->css_node);
+
+  return clone;
 }

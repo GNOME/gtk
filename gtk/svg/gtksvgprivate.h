@@ -25,6 +25,7 @@
 #include "gtkenums.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
 #include "gtk/svg/gtksvgelementtypeprivate.h"
@@ -35,6 +36,9 @@ G_BEGIN_DECLS
 
 #define DEFAULT_FONT_SIZE 13.333
 
+typedef void (* SvgElementCallback) (SvgElement *element,
+                                     gpointer    data);
+
 struct _GtkSvg
 {
   GObject parent_instance;
@@ -42,7 +46,7 @@ struct _GtkSvg
 
   double current_width, current_height; /* Last snapshot size */
 
-  double width, height; /* Intrinsic size */
+  double width, height, aspect_ratio; /* Paintable properties */
 
   double weight;
   unsigned int initial_state;
@@ -56,6 +60,22 @@ struct _GtkSvg
   GtkSvgUses used;
 
   GBytes *stylesheet;
+
+  GArray *user_styles;
+  GArray *author_styles;
+  gboolean style_changed;
+  gboolean view_changed;
+
+  SvgElement *view;
+  SvgElement *focus;
+  SvgElement *initial_focus;
+  SvgElement *hover;
+  SvgElement *active;
+
+  SvgElementCallback hover_callback;
+  gpointer hover_data;
+  SvgElementCallback activate_callback;
+  gpointer activate_data;
 
   char *resource;
 
@@ -160,5 +180,39 @@ GskRenderNode *gtk_svg_apply_filter    (GtkSvg                *svg,
                                         const char            *filter,
                                         const graphene_rect_t *bounds,
                                         GskRenderNode         *node);
+
+void           gtk_svg_set_activate_callback (GtkSvg             *svg,
+                                              SvgElementCallback  callback,
+                                              gpointer            data);
+void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
+                                              SvgElementCallback     callback,
+                                              gpointer               data);
+
+SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
+                                              const graphene_point_t *p);
+
+void           gtk_svg_set_view              (GtkSvg               *self,
+                                              SvgElement           *view);
+
+gboolean       gtk_svg_handle_event    (GtkSvg                *svg,
+                                        GdkEvent              *event,
+                                        double                 x,
+                                        double                 y);
+void           gtk_svg_handle_crossing (GtkSvg                *svg,
+                                        const GtkCrossingData *crossing,
+                                        double                 x,
+                                        double                 y);
+
+gboolean       gtk_svg_grab_focus      (GtkSvg                *svg);
+gboolean       gtk_svg_lose_focus      (GtkSvg                *svg);
+gboolean       gtk_svg_move_focus      (GtkSvg                *svg,
+                                        GtkDirectionType       direction);
+
+void           gtk_svg_activate_element (GtkSvg               *svg,
+                                         SvgElement           *element);
+
+void           gtk_svg_set_active       (GtkSvg               *svg,
+                                         SvgElement           *element);
+SvgElement *   gtk_svg_get_active       (GtkSvg               *svg);
 
 G_END_DECLS

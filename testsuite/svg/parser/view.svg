@@ -1,0 +1,4 @@
+<svg>
+  <view id='view1' viewBox='0 0 10 20'/>
+  <view id='view2' preserveAspectRatio='xMidYMid slice'/>
+</svg>

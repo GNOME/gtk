@@ -7,7 +7,8 @@ subdir('renderer')
 subdir('animation')
 
 internal_tests = [
-  'path-classify'
+  'path-classify',
+  'traverse',
 ]
 
 foreach t : internal_tests

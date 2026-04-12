@@ -32,10 +32,14 @@ SvgValue *   svg_href_new_plain    (const char     *string);
 SvgValue *   svg_href_new_url_take (const char     *string);
 
 const char * svg_href_get_id       (const SvgValue *value);
+const char * svg_href_get_ref      (const SvgValue *value);
 HrefKind     svg_href_get_kind     (const SvgValue *value);
 SvgElement * svg_href_get_shape    (const SvgValue *value);
 void         svg_href_set_shape    (SvgValue       *value,
                                     SvgElement     *shape);
+SvgAnimation * svg_href_get_animation (const SvgValue *value);
+void         svg_href_set_animation   (SvgValue       *value,
+                                       SvgAnimation    *animation);
 GdkTexture * svg_href_get_texture  (const SvgValue *value);
 void         svg_href_set_texture  (SvgValue       *value,
                                     GdkTexture     *texture);

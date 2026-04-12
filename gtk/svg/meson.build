@@ -9,6 +9,7 @@ gtk_svg_public_sources = files([
   'gtksvgelementtype.c',
   'gtksvgenum.c',
   'gtksvgerror.c',
+  'gtksvgeventcontroller.c',
   'gtksvgfilter.c',
   'gtksvgfilterfunctions.c',
   'gtksvgfilterref.c',

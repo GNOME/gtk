@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width='64' height='64'
+  tabindex='-1' id='toplevel'>
+  <style>
+    rect { fill: yellow; }
+    rect:focus { stroke: black; }
+  </style>
+  <rect id='rect1' x='0' y='0' width='50%' height='50%' tabindex='0'>
+    <animate attributeName='fill'
+        from='yellow' to='red'
+        dur='500ms'
+        fill='freeze'
+        begin='rect1.focus'/>
+    <animate attributeName='fill'
+        from='red' to='yellow'
+        dur='500ms'
+        fill='freeze'
+        begin='rect1.blur'/>
+  </rect>
+  <g id='group'>
+    <a id='link' href="http://www.gtk.org">
+      <rect id='rect2' x='50%' y='0' width='50%' height='50%'>
+        <animate attributeName='fill'
+            from='yellow' to='lightgreen'
+            dur='500ms'
+            fill='freeze'
+            begin='link.focus'/>
+        <animate attributeName='fill'
+            from='lightgreen' to='yellow'
+            dur='500ms'
+            fill='freeze'
+            begin='link.blur'/>
+      </rect>
+    </a>
+    <rect id='rect3' x='0' y='50%' width='50%' height='50%' tabindex='0'/>
+  </g>
+  <rect id='rect4' x='50%' y='50%' width='50%' height='50%' tabindex='0'/>
+</svg>

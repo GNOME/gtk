@@ -220,7 +220,12 @@ void             svg_animation_motion_fill_from_path
                                              (SvgAnimation  *animation,
                                               GskPath       *path);
 
-void time_spec_drop_animation (TimeSpec  *spec,
+SvgAnimation *   svg_animation_clone (SvgAnimation *animation,
+                                      SvgElement   *parent);
+
+void time_spec_add_animation  (TimeSpec     *spec,
+                               SvgAnimation *a);
+void time_spec_drop_animation (TimeSpec     *spec,
                                SvgAnimation *a);
 
 G_END_DECLS

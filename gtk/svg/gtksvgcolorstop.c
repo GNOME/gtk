@@ -31,6 +31,7 @@
 struct _SvgColorStop
 {
   unsigned int attrs;
+  SvgValue *specified[N_STOP_PROPERTIES];
   SvgValue *base[N_STOP_PROPERTIES];
   SvgValue *current[N_STOP_PROPERTIES];
   size_t lines;
@@ -38,6 +39,7 @@ struct _SvgColorStop
   char *style;
   char **classes;
   GtkCssNode *css_node;
+  GArray *inline_styles;
 };
 
 void
@@ -47,9 +49,11 @@ svg_color_stop_free (SvgColorStop *stop)
   g_free (stop->style);
   g_strfreev (stop->classes);
   g_object_unref (stop->css_node);
+  g_array_unref (stop->inline_styles);
 
   for (unsigned int i = 0; i < N_STOP_PROPERTIES; i++)
     {
+      g_clear_pointer (&stop->specified[i], svg_value_unref);
       g_clear_pointer (&stop->base[i], svg_value_unref);
       g_clear_pointer (&stop->current[i], svg_value_unref);
     }
@@ -82,31 +86,46 @@ svg_color_stop_new (SvgElement *parent)
   gtk_css_node_set_name (stop->css_node, g_quark_from_static_string ("stop"));
   gtk_css_node_set_parent (stop->css_node, parent->css_node);
 
+  stop->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
+
   return stop;
 }
 
+void
+svg_color_stop_set_specified_value (SvgColorStop *stop,
+                                    SvgProperty   attr,
+                                    SvgValue     *value)
+{
+  unsigned int pos = svg_color_stop_get_index (attr);
+  g_clear_pointer (&stop->specified[pos], svg_value_unref);
+  if (value)
+    stop->specified[pos] = svg_value_ref (value);
+}
+
+void
+svg_color_stop_take_specified_value (SvgColorStop *stop,
+                                     SvgProperty   attr,
+                                     SvgValue     *value)
+{
+  svg_color_stop_set_specified_value (stop, attr, value);
+  if (value)
+    svg_value_unref (value);
+}
+
+SvgValue *
+svg_color_stop_get_specified_value (SvgColorStop *stop,
+                                    SvgProperty   attr)
+{
+  unsigned int pos = svg_color_stop_get_index (attr);
+  return stop->specified[pos];
+}
+
 gboolean
-svg_color_stop_property_is_set (SvgColorStop *stop,
-                                SvgProperty   attr)
+svg_color_stop_is_specified (SvgColorStop *stop,
+                             SvgProperty   attr)
 {
   unsigned int pos = svg_color_stop_get_index (attr);
-  return (stop->attrs & BIT (pos)) != 0;
-}
-
-SvgValue *
-svg_color_stop_get_base_value (SvgColorStop *stop,
-                               SvgProperty   attr)
-{
-  unsigned int pos = svg_color_stop_get_index (attr);
-  return stop->base[pos];
-}
-
-SvgValue *
-svg_color_stop_get_current_value (SvgColorStop *stop,
-                                  SvgProperty   attr)
-{
-  unsigned int pos = svg_color_stop_get_index (attr);
-  return stop->current[pos];
+  return stop->specified[pos] != NULL;
 }
 
 void
@@ -116,8 +135,24 @@ svg_color_stop_set_base_value (SvgColorStop *stop,
 {
   unsigned int pos = svg_color_stop_get_index (attr);
   g_clear_pointer (&stop->base[pos], svg_value_unref);
-  stop->base[pos] = svg_value_ref (value);
-  stop->attrs |= BIT (pos);
+  if (value)
+    {
+      stop->base[pos] = svg_value_ref (value);
+      stop->attrs |= BIT (pos);
+    }
+  else
+    {
+      stop->base[pos] = svg_property_ref_initial_value (attr, SVG_ELEMENT_LINEAR_GRADIENT, TRUE);
+      stop->attrs &= ~BIT (pos);
+    }
+}
+
+SvgValue *
+svg_color_stop_get_base_value (SvgColorStop *stop,
+                               SvgProperty   attr)
+{
+  unsigned int pos = svg_color_stop_get_index (attr);
+  return stop->base[pos];
 }
 
 void
@@ -131,6 +166,14 @@ svg_color_stop_set_current_value (SvgColorStop *stop,
     svg_value_ref (value);
   g_clear_pointer (&stop->current[pos], svg_value_unref);
   stop->current[pos] = value;
+}
+
+SvgValue *
+svg_color_stop_get_current_value (SvgColorStop *stop,
+                                  SvgProperty   attr)
+{
+  unsigned int pos = svg_color_stop_get_index (attr);
+  return stop->current[pos];
 }
 
 void
@@ -233,4 +276,40 @@ svg_color_stop_equal (SvgColorStop *stop1,
     }
 
   return TRUE;
+}
+
+GArray *
+svg_color_stop_get_inline_styles (SvgColorStop *stop)
+{
+  return stop->inline_styles;
+}
+
+SvgColorStop *
+svg_color_stop_clone (SvgColorStop *stop,
+                      SvgElement   *parent)
+{
+  SvgColorStop *clone = g_new0 (SvgColorStop, 1);
+
+  clone->attrs = stop->attrs;
+
+  for (SvgProperty attr = FIRST_STOP_PROPERTY; attr <= LAST_STOP_PROPERTY; attr++)
+    {
+      if (stop->specified[attr - FIRST_STOP_PROPERTY])
+        clone->specified[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->specified[attr - FIRST_STOP_PROPERTY]);
+      clone->base[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->base[attr - FIRST_STOP_PROPERTY]);
+      clone->current[attr - FIRST_STOP_PROPERTY] = svg_value_ref (stop->current[attr - FIRST_STOP_PROPERTY]);
+    }
+
+  clone->lines = stop->lines;
+  clone->id = g_strdup (stop->id);
+  clone->style = g_strdup (stop->style);
+  clone->classes = g_strdupv (stop->classes);
+
+  clone->css_node = gtk_css_node_new ();
+  gtk_css_node_set_name (clone->css_node, g_quark_from_static_string ("stop"));
+  gtk_css_node_set_parent (clone->css_node, parent->css_node);
+
+  clone->inline_styles = g_array_ref (stop->inline_styles);
+
+  return clone;
 }

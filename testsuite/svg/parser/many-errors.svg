@@ -29,4 +29,5 @@
     </filter>
   </defs>
   <polyline points='1,,2, 3 4'/>
+  <line pointer-events='humbug'/>
 </svg>

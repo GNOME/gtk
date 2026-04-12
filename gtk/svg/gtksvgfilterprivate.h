@@ -32,6 +32,9 @@ G_BEGIN_DECLS
 SvgFilter *    svg_filter_new               (SvgElement     *parent,
                                              SvgFilterType   type);
 
+SvgFilter *    svg_filter_clone             (SvgFilter      *filter,
+                                             SvgElement     *parent);
+
 void           svg_filter_free              (SvgFilter      *filter);
 
 SvgFilterType  svg_filter_get_type          (SvgFilter      *filter);
@@ -39,22 +42,28 @@ SvgFilterType  svg_filter_get_type          (SvgFilter      *filter);
 SvgValue *     svg_filter_ref_initial_value (SvgFilter      *filter,
                                              SvgProperty     attr);
 
-gboolean       svg_filter_property_is_set   (SvgFilter      *filter,
-                                             SvgProperty     attr);
-
-SvgValue *     svg_filter_get_base_value    (SvgFilter      *filter,
-                                             SvgProperty     attr);
-
-SvgValue *     svg_filter_get_current_value (SvgFilter      *filter,
-                                             SvgProperty     attr);
+void           svg_filter_set_specified_value (SvgFilter      *filter,
+                                               SvgProperty     attr,
+                                               SvgValue       *value);
+void           svg_filter_take_specified_value (SvgFilter      *filter,
+                                                SvgProperty     attr,
+                                                SvgValue       *value);
+SvgValue *     svg_filter_get_specified_value (SvgFilter      *filter,
+                                               SvgProperty     attr);
+gboolean       svg_filter_is_specified        (SvgFilter      *filter,
+                                               SvgProperty     attr);
 
 void           svg_filter_set_base_value    (SvgFilter      *filter,
                                              SvgProperty     attr,
                                              SvgValue       *value);
+SvgValue *     svg_filter_get_base_value    (SvgFilter      *filter,
+                                             SvgProperty     attr);
 
 void           svg_filter_set_current_value (SvgFilter      *filter,
                                              SvgProperty     attr,
                                              SvgValue       *value);
+SvgValue *     svg_filter_get_current_value (SvgFilter      *filter,
+                                             SvgProperty     attr);
 
 void           svg_filter_set_id            (SvgFilter      *filter,
                                              const char     *id);
@@ -86,5 +95,7 @@ gboolean       filter_needs_backdrop        (SvgElement     *shape);
 
 gboolean       svg_filter_equal             (SvgFilter      *filter1,
                                              SvgFilter      *filter2);
+
+GArray *       svg_filter_get_inline_styles (SvgFilter      *filter);
 
 G_END_DECLS

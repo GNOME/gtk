@@ -1,0 +1,25 @@
+input: focus.svg
+time: 0
+output: focus-0.svg
+focus: forward
+output: focus-1.svg
+time: 1000
+output: focus-2.svg
+focus: forward
+time: 2000
+output: focus-3.svg
+key: Return expect: activate http://www.gtk.org
+time: 3000
+output: focus-4.svg
+focus: forward
+time: 5000
+output: focus-5.svg
+focus: forward
+time: 6000
+output: focus-6.svg
+focus: forward
+time: 7000
+output: focus-7.svg
+focus: forward
+time: 8000
+output: focus-8.svg

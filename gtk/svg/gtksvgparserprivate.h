@@ -27,9 +27,14 @@
 G_BEGIN_DECLS
 
 void gtk_svg_init_from_bytes    (GtkSvg     *self,
-                                  GBytes     *bytes);
+                                 GBytes     *bytes);
 
 void gtk_svg_init_from_resource (GtkSvg     *self,
-                                  const char *path);
+                                 const char *path);
+
+void apply_styles_to_shape      (SvgElement *shape,
+                                 GtkSvg     *svg);
+
+void determine_size             (GtkSvg     *svg);
 
 G_END_DECLS

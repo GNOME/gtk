@@ -53,6 +53,25 @@ typedef struct
   };
 } TextNode;
 
+typedef struct
+{
+  SvgProperty attr;
+  SvgValue *value;
+  gboolean important;
+} PropertyValue;
+
+void property_value_clear (PropertyValue *pv);
+
+typedef struct
+{
+  GtkCssSelector *selector;
+  PropertyValue *styles;
+  unsigned int n_styles;
+  gboolean owns_styles;
+} SvgCssRuleset;
+
+void svg_css_ruleset_clear (SvgCssRuleset *ruleset);
+
 struct _SvgElement
 {
   SvgElementType type;
@@ -61,11 +80,17 @@ struct _SvgElement
   char *id;
   char *style;
   char **classes;
+  char *title;
+  char *description;
   size_t line;
   GtkSvgLocation style_loc;
+  gboolean focusable;
+  gboolean autofocus;
 
   /* For style matching */
   GtkCssNode *css_node;
+
+  GArray *inline_styles;
 
   /* Dependency order for computing updates */
   SvgElement *first;
@@ -74,8 +99,11 @@ struct _SvgElement
   gboolean computed_for_use;
   gboolean valid_bounds;
 
+  GArray *specified;
   SvgValue *base[N_SVG_PROPERTIES];
   SvgValue *current[N_SVG_PROPERTIES];
+
+  SvgElement *corresponding;
 
   GPtrArray *shapes;
   GPtrArray *animations;

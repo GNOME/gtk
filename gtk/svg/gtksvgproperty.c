@@ -828,12 +828,12 @@ static SvgPropertyInfo shape_attrs[] = {
   },
   [SVG_PROPERTY_VIEW_BOX] = {
     .flags = SVG_PROPERTY_NO_CSS,
-    .applies_to = ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_MARKER),
+    .applies_to = ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_VIEW) | BIT (SVG_ELEMENT_MARKER),
     .parse_value = svg_view_box_parse,
   },
   [SVG_PROPERTY_CONTENT_FIT] = {
     .flags = SVG_PROPERTY_NO_CSS,
-    .applies_to = ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_IMAGE),
+    .applies_to = ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_VIEW) | BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_IMAGE),
     .parse_value = svg_content_fit_parse,
   },
   [SVG_PROPERTY_REF_X] = {
@@ -910,6 +910,11 @@ static SvgPropertyInfo shape_attrs[] = {
     .flags = SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
     .applies_to = ELEMENT_ANY,
     .parse_value = parse_language_list,
+  },
+  [SVG_PROPERTY_POINTER_EVENTS] = {
+    .flags = SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE),
+    .parse_value = svg_pointer_events_parse,
   },
   [SVG_PROPERTY_STROKE_MINWIDTH] = {
     .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_NO_CSS,
@@ -1241,6 +1246,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_MARKER_END].initial_value = svg_href_new_none ();
   shape_attrs[SVG_PROPERTY_REQUIRED_EXTENSIONS].initial_value = svg_string_list_new (NULL);
   shape_attrs[SVG_PROPERTY_SYSTEM_LANGUAGE].initial_value = svg_language_new_list (0, NULL);
+  shape_attrs[SVG_PROPERTY_POINTER_EVENTS].initial_value = svg_pointer_events_new (POINTER_EVENTS_AUTO);
   shape_attrs[SVG_PROPERTY_STROKE_MINWIDTH].initial_value = svg_percentage_new (25);
   shape_attrs[SVG_PROPERTY_STROKE_MAXWIDTH].initial_value = svg_percentage_new (150);
   shape_attrs[SVG_PROPERTY_STOP_OFFSET].initial_value = svg_number_new (0);
@@ -1451,8 +1457,8 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "fy", BIT (SVG_ELEMENT_RADIAL_GRADIENT), 0, SVG_PROPERTY_FY },
   { "fr", BIT (SVG_ELEMENT_RADIAL_GRADIENT), 0, SVG_PROPERTY_FR },
   { "mask-type", BIT (SVG_ELEMENT_MASK), 0, SVG_PROPERTY_MASK_TYPE },
-  { "viewBox", ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_VIEW_BOX },
-  { "preserveAspectRatio", ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_IMAGE), 0, SVG_PROPERTY_CONTENT_FIT },
+  { "viewBox", ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_VIEW) | BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_VIEW_BOX },
+  { "preserveAspectRatio", ELEMENT_VIEWPORTS | BIT (SVG_ELEMENT_PATTERN) | BIT (SVG_ELEMENT_VIEW) | BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_IMAGE), 0, SVG_PROPERTY_CONTENT_FIT },
   { "refX", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_REF_X },
   { "refY", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_REF_Y },
   { "markerUnits", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_UNITS },
@@ -1469,6 +1475,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "text-decoration", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_DECORATION },
   { "requiredExtensions", ELEMENT_ANY, 0, SVG_PROPERTY_REQUIRED_EXTENSIONS },
   { "systemLanguage", ELEMENT_ANY, 0, SVG_PROPERTY_SYSTEM_LANGUAGE },
+  { "pointer-events", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_POINTER_EVENTS },
   { "gpa:stroke-minwidth", ELEMENT_ANY, 0, SVG_PROPERTY_STROKE_MINWIDTH },
   { "gpa:stroke-maxwidth", ELEMENT_ANY, 0, SVG_PROPERTY_STROKE_MAXWIDTH },
   { "offset", ELEMENT_GRADIENTS, 0, SVG_PROPERTY_STOP_OFFSET },

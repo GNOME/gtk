@@ -15,23 +15,19 @@
             spreadMethod='repeat'>
       <stop
               offset='0'
-              stop-color='rgb(255,0,0)'
-              stop-opacity='1'>
+              stop-color='rgb(255,0,0)'>
       </stop>
       <stop
               offset='0.5'
-              stop-color='rgb(255,0,0)'
-              stop-opacity='1'>
+              stop-color='rgb(255,0,0)'>
       </stop>
       <stop
               offset='0.5'
-              stop-color='rgb(255,255,0)'
-              stop-opacity='1'>
+              stop-color='rgb(255,255,0)'>
       </stop>
       <stop
               offset='1'
-              stop-color='rgb(255,255,0)'
-              stop-opacity='1'>
+              stop-color='rgb(255,255,0)'>
       </stop>
     </linearGradient>
   </defs>

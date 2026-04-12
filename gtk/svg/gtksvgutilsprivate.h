@@ -36,6 +36,8 @@
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
 
+G_BEGIN_DECLS
+
 static inline void
 _sincos (double x, double *_sin, double *_cos)
 {
@@ -199,3 +201,12 @@ gboolean parse_enum (const char    *string,
                      unsigned int  *result);
 
 void skip_whitespace_and_optional_comma (GtkCssParser *parser);
+
+GArray *array_new_with_clear_func (size_t         elem_size,
+                                   GDestroyNotify clear_func);
+
+gboolean path_in_stroke (GskPath                *path,
+                         const graphene_point_t *point,
+                         GskStroke              *stroke);
+
+G_END_DECLS

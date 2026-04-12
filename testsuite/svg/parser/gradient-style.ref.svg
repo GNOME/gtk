@@ -15,21 +15,15 @@
             fy='500'>
       <stop
               style='stop-color:#aa88ff'
-              offset='0%'
-              stop-color='rgb(170,136,255)'
-              stop-opacity='1'>
+              offset='0%'>
       </stop>
       <stop
               style='stop-color:#ffddcc'
-              offset='50%'
-              stop-color='rgb(255,221,204)'
-              stop-opacity='1'>
+              offset='50%'>
       </stop>
       <stop
               style='stop-color:#bbffee'
-              offset='100%'
-              stop-color='rgb(187,255,238)'
-              stop-opacity='1'>
+              offset='100%'>
       </stop>
     </radialGradient>
     <radialGradient
@@ -42,21 +36,15 @@
             fy='1600'>
       <stop
               style='stop-color:#aa88ff'
-              offset='0%'
-              stop-color='rgb(170,136,255)'
-              stop-opacity='1'>
+              offset='0%'>
       </stop>
       <stop
               style='stop-color:#ffddcc'
-              offset='50%'
-              stop-color='rgb(255,221,204)'
-              stop-opacity='1'>
+              offset='50%'>
       </stop>
       <stop
               style='stop-color:#bbffee'
-              offset='100%'
-              stop-color='rgb(187,255,238)'
-              stop-opacity='1'>
+              offset='100%'>
       </stop>
     </radialGradient>
     <radialGradient
@@ -69,21 +57,15 @@
             fy='2500'>
       <stop
               style='stop-color:#aa88ff'
-              offset='0%'
-              stop-color='rgb(170,136,255)'
-              stop-opacity='1'>
+              offset='0%'>
       </stop>
       <stop
               style='stop-color:#ffddcc'
-              offset='50%'
-              stop-color='rgb(255,221,204)'
-              stop-opacity='1'>
+              offset='50%'>
       </stop>
       <stop
               style='stop-color:#bbffee'
-              offset='100%'
-              stop-color='rgb(187,255,238)'
-              stop-opacity='1'>
+              offset='100%'>
       </stop>
     </radialGradient>
     <radialGradient
@@ -97,21 +79,15 @@
             fr='50'>
       <stop
               style='stop-color:#aa88ff'
-              offset='0%'
-              stop-color='rgb(170,136,255)'
-              stop-opacity='1'>
+              offset='0%'>
       </stop>
       <stop
               style='stop-color:#ffddcc'
-              offset='50%'
-              stop-color='rgb(255,221,204)'
-              stop-opacity='1'>
+              offset='50%'>
       </stop>
       <stop
               style='stop-color:#bbffee'
-              offset='100%'
-              stop-color='rgb(187,255,238)'
-              stop-opacity='1'>
+              offset='100%'>
       </stop>
     </radialGradient>
     <radialGradient
@@ -125,21 +101,15 @@
             fr='50'>
       <stop
               style='stop-color:#aa88ff'
-              offset='0%'
-              stop-color='rgb(170,136,255)'
-              stop-opacity='1'>
+              offset='0%'>
       </stop>
       <stop
               style='stop-color:#ffddcc'
-              offset='50%'
-              stop-color='rgb(255,221,204)'
-              stop-opacity='1'>
+              offset='50%'>
       </stop>
       <stop
               style='stop-color:#bbffee'
-              offset='100%'
-              stop-color='rgb(187,255,238)'
-              stop-opacity='1'>
+              offset='100%'>
       </stop>
     </radialGradient>
   </defs>
@@ -148,7 +118,6 @@
     <rect
             id='rec1'
             style='fill:url(#plain_svg11_gradient)'
-            fill='url(#plain_svg11_gradient)'
             x='50'
             y='100'
             width='900'
@@ -157,7 +126,6 @@
     <rect
             id='rec2'
             style='fill:url(#full_svg11_gradient)'
-            fill='url(#full_svg11_gradient)'
             x='50'
             y='1100'
             width='900'
@@ -166,7 +134,6 @@
     <rect
             id='rec3'
             style='fill:url(#full_svg11_outside_gradient)'
-            fill='url(#full_svg11_outside_gradient)'
             x='50'
             y='2100'
             width='900'
@@ -175,7 +142,6 @@
     <rect
             id='rec4'
             style='fill:url(#svg2_inside_gradient)'
-            fill='url(#svg2_inside_gradient)'
             x='50'
             y='3100'
             width='900'
@@ -184,7 +150,6 @@
     <rect
             id='rec5'
             style='fill:url(#svg2_outside_gradient)'
-            fill='url(#svg2_outside_gradient)'
             x='50'
             y='4100'
             width='900'
@@ -193,12 +158,6 @@
     <circle
             id='circle1'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='500'
             cy='500'
             r='200'>
@@ -206,12 +165,6 @@
     <circle
             id='circle2'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='500'
             cy='1500'
             r='200'>
@@ -219,12 +172,6 @@
     <circle
             id='circle2_2'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='600'
             cy='1600'
             r='1'>
@@ -232,12 +179,6 @@
     <circle
             id='circle3'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='500'
             cy='2500'
             r='200'>
@@ -245,12 +186,6 @@
     <circle
             id='circle3_2'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='800'
             cy='2500'
             r='1'>
@@ -258,12 +193,6 @@
     <circle
             id='circle4'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='500'
             cy='3500'
             r='200'>
@@ -271,12 +200,6 @@
     <circle
             id='circle4_2'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='600'
             cy='3600'
             r='50'>
@@ -284,12 +207,6 @@
     <circle
             id='circle5'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='500'
             cy='4500'
             r='200'>
@@ -297,12 +214,6 @@
     <circle
             id='circle5_2'
             style='fill:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000000;stroke-opacity:1'
-            fill='none'
-            stroke='rgb(0,0,0)'
-            stroke-opacity='1'
-            stroke-width='1'
-            stroke-miterlimit='4'
-            stroke-dasharray='none'
             cx='800'
             cy='4500'
             r='50'>

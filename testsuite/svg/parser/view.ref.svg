@@ -1,0 +1,12 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <view
+          id='view1'
+          viewBox='0 0 10 20'>
+  </view>
+  <view
+          id='view2'
+          preserveAspectRatio='xMidYMid slice'>
+  </view>
+</svg>

@@ -134,6 +134,10 @@ static ElementTypeInfo element_types[] = {
     .name = "a",
     .flags = ELEMENT_IS_CONTAINER,
   },
+  [SVG_ELEMENT_VIEW] = {
+    .name = "view",
+    .flags = ELEMENT_IS_NEVER_RENDERED,
+  },
 };
 
 gboolean

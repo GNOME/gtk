@@ -1,5 +1,5 @@
 /* svg-view.c
- * Copyright (C) 2025  Red Hat, Inc
+ * Copyright (C) 2026 Red Hat, Inc
  * Author: Matthias Clasen
  *
  * This library is free software; you can redistribute it and/or
@@ -18,41 +18,6 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
-
-/* Show an SVG animation using the SVG renderer.
- * Left/right click change states.
- */
-
-
-static void
-clicked (GtkGestureClick *click,
-         int              n_press,
-         double           x,
-         double           y,
-         GtkSvg          *svg)
-{
-  unsigned int state;
-
-  state = gtk_svg_get_state (svg);
-
-  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click)) == 1)
-    {
-      if (state == 63)
-        state = 0;
-      else
-        state++;
-    }
-  else
-    {
-      if (state == 0)
-        state = 63;
-      else
-        state--;
-    }
-
-  g_print ("state now %u\n", state);
-  gtk_svg_set_state (svg, state);
-}
 
 static void
 error_cb (GtkSvg *svg, GError *error)
@@ -83,16 +48,27 @@ error_cb (GtkSvg *svg, GError *error)
   g_print ("%s\n", error->message);
 }
 
+static void
+activate_cb (GtkSvgWidget *svg,
+             const char   *id,
+             const char   *href,
+             GtkWindow    *window)
+{
+  GtkAlertDialog *alert;
+
+  alert = gtk_alert_dialog_new ("Activated link %s: %s", id, href);
+  gtk_alert_dialog_show (alert, window);
+  g_object_unref (alert);
+}
+
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *picture;
-  char *contents;
-  size_t length;
+  GFile *file;
   GBytes *bytes;
   GError *error = NULL;
-  GtkSvg *svg;
-  GtkEventController *click;
+  GtkWidget *window;
+  GtkSvgWidget *svg;
 
   if (argc < 2)
     {
@@ -102,26 +78,19 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new ();
-
-  if (!g_file_get_contents (argv[1], &contents, &length, &error))
+  file = g_file_new_for_commandline_arg (argv[1]);
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
+  if (!bytes)
     g_error ("%s", error->message);
 
-  bytes = g_bytes_new_take (contents, length);
+  window = gtk_window_new ();
 
-  svg = gtk_svg_new ();
+  svg = gtk_svg_widget_new ();
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
-  gtk_svg_load_from_bytes (svg, bytes);
+  g_signal_connect (svg, "activate", G_CALLBACK (activate_cb), window);
+  gtk_svg_widget_load_from_bytes (svg, bytes);
 
-  gtk_svg_play (svg);
-
-  picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (svg));
-  gtk_window_set_child (GTK_WINDOW (window), picture);
-
-  click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
-  g_signal_connect (click, "pressed", G_CALLBACK (clicked), svg);
-  gtk_widget_add_controller (picture, click);
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (svg));
 
   gtk_window_present (GTK_WINDOW (window));
 

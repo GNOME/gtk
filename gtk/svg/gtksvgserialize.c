@@ -107,7 +107,8 @@ time_spec_print (TimeSpec *spec,
                  GString  *s)
 {
   gboolean only_nonzero = FALSE;
-  const char *sides[] = { ".begin", ".end" };
+  const char *sides[] = { "begin", "end" };
+  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave" };
 
   switch (spec->type)
     {
@@ -117,19 +118,22 @@ time_spec_print (TimeSpec *spec,
     case TIME_SPEC_TYPE_OFFSET:
       break;
     case TIME_SPEC_TYPE_SYNC:
-      g_string_append_printf (s, "%s", spec->sync.ref);
-      g_string_append_printf (s, "%s", sides[spec->sync.side]);
+      g_string_append_printf (s, "%s.%s", spec->sync.ref, sides[spec->sync.side]);
       only_nonzero = TRUE;
       break;
     case TIME_SPEC_TYPE_STATES:
-      {
-        g_string_append (s, "StateChange(");
-        print_states (s, svg, spec->states.from);
-        g_string_append (s, ", ");
-        print_states (s, svg, spec->states.to);
-        g_string_append (s, ")");
-        only_nonzero = TRUE;
-      }
+      g_string_append (s, "StateChange(");
+      print_states (s, svg, spec->states.from);
+      g_string_append (s, ", ");
+      print_states (s, svg, spec->states.to);
+      g_string_append (s, ")");
+      only_nonzero = TRUE;
+      break;
+    case TIME_SPEC_TYPE_EVENT:
+      if (spec->event.ref)
+        g_string_append_printf (s, "%s.", spec->event.ref);
+      g_string_append_printf (s, "%s", events[spec->event.event]);
+      only_nonzero = TRUE;
       break;
     default:
       g_assert_not_reached ();
@@ -238,6 +242,12 @@ serialize_shape_attrs (GString              *s,
   if (svg_element_get_style (shape, &loc))
     append_string_attr (s, indent, "style", svg_element_get_style (shape, &loc));
 
+  if (svg_element_get_focusable (shape) != svg_element_get_initial_focusable (shape))
+    append_string_attr (s, indent, "tabindex", svg_element_get_focusable (shape) ? "0" : "-1");
+
+  if (svg_element_get_autofocus (shape))
+    append_string_attr (s, indent, "autofocus", "autofocus");
+
   for (SvgProperty attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
@@ -264,19 +274,19 @@ serialize_shape_attrs (GString              *s,
             }
         }
 
-      if (svg_element_property_is_set (shape, attr) ||
+      if (svg_element_is_specified (shape, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
           SvgValue *value, *initial;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
-            value = svg_value_ref (shape_get_current_value (shape, attr, 0));
+            value = svg_element_get_current_value (shape, attr);
           else
-            value = shape_ref_base_value (shape, NULL, attr, 0);
+            value = svg_element_get_specified_value (shape, attr);
 
           initial = svg_property_ref_initial_value (attr, svg_element_get_type (shape), svg_element_get_parent (shape) != NULL);
 
-          if (svg_element_property_is_set (shape, attr) || !svg_value_equal (value, initial))
+          if (value && (svg_element_is_specified (shape, attr) || !svg_value_equal (value, initial)))
             {
               if (svg_property_has_presentation (attr))
                 {
@@ -288,7 +298,6 @@ serialize_shape_attrs (GString              *s,
             }
 
           svg_value_unref (initial);
-          svg_value_unref (value);
         }
     }
 }
@@ -776,16 +785,18 @@ serialize_color_stop (GString              *s,
       SvgProperty attr = svg_color_stop_get_property (i);
       SvgValue *value;
 
-      string_indent (s, indent + ATTR_INDENT);
-      g_string_append_printf (s, "%s='", names[i]);
-
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
         value = svg_color_stop_get_current_value (stop, attr);
       else
-        value = svg_color_stop_get_base_value (stop, attr);
+        value = svg_color_stop_get_specified_value (stop, attr);
 
-      svg_value_print (value, s);
-      g_string_append (s, "'");
+      if (value)
+        {
+          string_indent (s, indent + ATTR_INDENT);
+          g_string_append_printf (s, "%s='", names[i]);
+          svg_value_print (value, s);
+          g_string_append (s, "'");
+        }
     }
   g_string_append (s, ">");
 
@@ -841,9 +852,9 @@ serialize_filter_begin (GString              *s,
       if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
         value = svg_filter_get_current_value (f, attr);
       else
-        value = svg_filter_get_base_value (f, attr);
+        value = svg_filter_get_specified_value (f, attr);
 
-      if (!svg_value_equal (value, initial))
+      if (value && !svg_value_equal (value, initial))
         {
           string_indent (s, indent + ATTR_INDENT);
           g_string_append_printf (s, "%s='", svg_property_get_presentation (attr, svg_element_get_type (shape)));
@@ -898,7 +909,58 @@ serialize_shape (GString              *s,
       g_string_append_printf (s, "<%s", svg_element_type_get_name (svg_element_get_type (shape)));
       serialize_shape_attrs (s, svg, indent, shape, flags);
       serialize_gpa_attrs (s, svg, indent, shape, flags);
+
+      if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
+        {
+          GtkStateFlags state = gtk_css_node_get_state (svg_element_get_css_node (shape));
+          struct {
+            GtkStateFlags flag;
+            const char *name;
+          } checked_flags[] = {
+            { GTK_STATE_FLAG_ACTIVE, "active" },
+            { GTK_STATE_FLAG_PRELIGHT, "hover" },
+            { GTK_STATE_FLAG_FOCUSED, "focused" },
+            { GTK_STATE_FLAG_LINK, "link" },
+            { GTK_STATE_FLAG_VISITED, "visited" },
+          };
+          gboolean started = FALSE;
+
+          for (unsigned int i = 0; i < G_N_ELEMENTS (checked_flags); i++)
+            {
+              if (state & checked_flags[i].flag)
+                {
+                  if (!started)
+                    {
+                      string_indent (s, indent + ATTR_INDENT);
+                      g_string_append_printf (s, "gpa:css-state='");
+                    }
+                  else
+                    g_string_append_c (s, ',');
+                  g_string_append (s, checked_flags[i].name);
+                  started = TRUE;
+                }
+            }
+          if (started)
+            g_string_append_c (s, '\'');
+        }
+
       g_string_append_c (s, '>');
+    }
+
+  if (svg_element_get_title (shape))
+    {
+      string_indent (s, indent + BASE_INDENT);
+      g_string_append (s, "<title>");
+      g_string_append (s, svg_element_get_title (shape));
+      g_string_append (s, "</title>");
+    }
+
+  if (svg_element_get_description (shape))
+    {
+      string_indent (s, indent + BASE_INDENT);
+      g_string_append (s, "<desc>");
+      g_string_append (s, svg_element_get_description (shape));
+      g_string_append (s, "</desc>");
     }
 
   for (unsigned int i = 0; i < shape->styles->len; i++)
@@ -1056,9 +1118,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
   if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
     {
+      graphene_rect_t viewport;
       GdkRGBA real_colors[5];
       const GdkRGBA *col = colors;
       size_t n_col = n_colors;
+      SvgComputeContext context;
 
       if (n_colors >= 5)
         {
@@ -1071,13 +1135,27 @@ gtk_svg_serialize_full (GtkSvg               *self,
           n_col = 5;
         }
 
-      SvgComputeContext context;
+      viewport = GRAPHENE_RECT_INIT (0, 0, self->current_width, self->current_height);
+
+      if (self->style_changed)
+        {
+          apply_styles_to_shape (self->content, self);
+          self->style_changed = FALSE;
+        }
+
+      if (self->view_changed)
+        {
+          apply_view (self->content, self->view);
+          self->view_changed = FALSE;
+        }
+
       context.svg = self;
-      context.viewport = NULL;
+      context.viewport = &viewport;
       context.current_time = self->current_time;
       context.parent = NULL;
       context.colors = col;
       context.n_colors = n_col;
+      context.interpolation = GDK_COLOR_STATE_SRGB;
 
       compute_current_values_for_shape (self->content, &context);
     }

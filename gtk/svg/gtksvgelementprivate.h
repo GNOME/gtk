@@ -64,6 +64,16 @@ SvgElement * svg_element_get_child           (SvgElement            *element,
 void         svg_element_move_child_down     (SvgElement            *element,
                                               SvgElement            *child);
 
+void         svg_element_set_specified_value (SvgElement            *element,
+                                              SvgProperty            attr,
+                                              SvgValue              *value);
+void         svg_element_take_specified_value (SvgElement            *element,
+                                               SvgProperty            attr,
+                                               SvgValue              *value);
+SvgValue *   svg_element_get_specified_value (SvgElement            *element,
+                                              SvgProperty            attr);
+gboolean     svg_element_is_specified        (SvgElement            *element,
+                                              SvgProperty            attr);
 void         svg_element_set_base_value      (SvgElement            *element,
                                               SvgProperty            attr,
                                               SvgValue              *value);
@@ -76,8 +86,6 @@ void         svg_element_set_current_value   (SvgElement            *element,
                                               SvgProperty            attr,
                                               SvgValue              *value);
 SvgValue *   svg_element_get_current_value   (SvgElement            *element,
-                                              SvgProperty            attr);
-gboolean     svg_element_property_is_set     (SvgElement            *element,
                                               SvgProperty            attr);
 
 void         svg_element_set_id              (SvgElement            *element,
@@ -93,6 +101,12 @@ void         svg_element_parse_classes       (SvgElement            *element,
 void         svg_element_take_classes        (SvgElement            *element,
                                               GStrv                  classes);
 GStrv        svg_element_get_classes         (SvgElement            *element);
+void         svg_element_set_title           (SvgElement            *element,
+                                              const char            *title);
+const char * svg_element_get_title           (SvgElement            *element);
+void         svg_element_set_description     (SvgElement            *element,
+                                              const char            *description);
+const char * svg_element_get_description     (SvgElement            *element);
 GtkCssNode * svg_element_get_css_node        (SvgElement            *element);
 
 void         svg_element_set_origin          (SvgElement            *element,
@@ -138,6 +152,30 @@ void         svg_element_delete              (SvgElement            *element);
 void         svg_element_set_states          (SvgElement            *element,
                                               uint64_t               states);
 uint64_t     svg_element_get_states          (SvgElement            *element);
+
+void         svg_element_set_autofocus       (SvgElement            *element,
+                                              gboolean               autofocus);
+gboolean     svg_element_get_autofocus       (SvgElement            *element);
+
+void         svg_element_set_focusable       (SvgElement            *element,
+                                              gboolean               focusable);
+gboolean     svg_element_get_focusable       (SvgElement            *element);
+
+gboolean     svg_element_get_initial_focusable
+                                             (SvgElement            *element);
+
+void         svg_element_set_focus           (SvgElement            *element,
+                                              gboolean               focus);
+gboolean     svg_element_get_focus           (SvgElement            *element);
+void         svg_element_set_active          (SvgElement            *element,
+                                              gboolean               active);
+gboolean     svg_element_get_active          (SvgElement            *element);
+void         svg_element_set_hover           (SvgElement            *element,
+                                              gboolean               hover);
+gboolean     svg_element_get_hover           (SvgElement            *element);
+void         svg_element_set_visited         (SvgElement            *element,
+                                              gboolean               hover);
+gboolean     svg_element_get_visited         (SvgElement            *element);
 
 void         svg_element_set_gpa_width       (SvgElement            *element,
                                               SvgValue              *value);
@@ -195,5 +233,36 @@ void
 svg_element_foreach (SvgElement       *element,
                      SvgShapeCallback  callback,
                      gpointer          user_data);
+
+SvgAnimation *svg_element_find_animation (SvgElement *element,
+                                          const char *id);
+
+SvgElement *svg_element_next     (SvgElement *element);
+SvgElement *svg_element_previous (SvgElement *element);
+SvgElement *svg_element_first    (SvgElement *element);
+SvgElement *svg_element_last     (SvgElement *element);
+
+SvgElement *svg_element_find_by_id (SvgElement *element,
+                                    const char *id);
+
+gboolean svg_element_propagate_event (SvgElement *target,
+                                      GdkEvent   *event,
+                                      GtkSvg     *svg);
+
+gboolean svg_element_or_ancestor_has_type (SvgElement     *element,
+                                           SvgElementType  type);
+
+gboolean svg_element_can_contain       (SvgElement             *element,
+                                        const graphene_rect_t  *viewport,
+                                        GtkSvg                 *svg,
+                                        const graphene_point_t *point);
+gboolean svg_element_contains          (SvgElement             *element,
+                                       const graphene_rect_t  *viewport,
+                                       GtkSvg                 *svg,
+                                       const graphene_point_t *point);
+
+void         svg_element_ensure_shadow_tree (SvgElement *element,
+                                             GtkSvg     *svg);
+SvgElement * svg_element_get_corresponding  (SvgElement *element);
 
 G_END_DECLS
