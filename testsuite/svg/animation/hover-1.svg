@@ -1,0 +1,35 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='2000ms'
+        font-size='13.333'
+        font-weight='400'
+        width='0px'
+        height='0px'
+        viewBox='0 0 100 100'>
+  <style type='text/css'>
+  circle:hover { fill: red; }
+</style>
+  <circle
+          id='circ'
+          font-size='13.333'
+          font-weight='400'
+          fill='rgb(255,0,0)'
+          cx='0'
+          cy='50'
+          r='50'
+          gpa:css-state='hover'>
+  </circle>
+  <use
+          font-size='13.333'
+          font-weight='400'
+          href='#circ'
+          x='100'
+          width='0'
+          height='0'>
+  </use>
+</svg>

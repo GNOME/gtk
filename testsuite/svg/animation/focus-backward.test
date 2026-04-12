@@ -1,0 +1,21 @@
+input: focus.svg
+time: 0
+output: focus-backward-0.svg
+focus: backward
+time: 1000
+output: focus-backward-1.svg
+focus: backward
+time: 2000
+output: focus-backward-2.svg
+focus: backward
+time: 5000
+output: focus-backward-3.svg
+focus: backward
+time: 6000
+output: focus-backward-4.svg
+focus: backward
+time: 7000
+output: focus-backward 5.svg
+focus: backward
+time: 8000
+output: focus-backward 6.svg

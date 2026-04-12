@@ -1,0 +1,6 @@
+input: button.svg
+output: button-0.svg
+time: 1000
+button: 1 48 16 expect: activate http://www.gtk.org
+time: 2000
+output: button-1.svg
