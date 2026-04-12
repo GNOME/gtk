@@ -9,7 +9,7 @@
 #include <gtk/gtk.h>
 #include "demo4widget.h"
 
-static const gboolean qr[] = {
+static const gboolean qr_code[] = {
   0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0,
   0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0,
@@ -43,31 +43,184 @@ struct _GtkTiler
   GObject parent_instance;
 };
 
+enum {
+  ON,
+  OFF,
+  BETWEEN
+};
+
+static const GdkRGBA colors[] = {
+  [ON]      = { 0.2,  0.6,   1,    1 },
+  [OFF]     = { 1,    0.95,  0.7,  1 },
+  [BETWEEN] = { 1,    1,     1,    1 },
+};
+
+static void
+snapshot_point (GtkSnapshot *snapshot,
+                gboolean     on)
+{
+  gtk_snapshot_append_color (snapshot,
+                             &colors[on ? ON : OFF],
+                             &GRAPHENE_RECT_INIT (0, 0, 1, 1));
+}
+
+static void
+snapshot_between_2_points (GtkSnapshot    *snapshot,
+                           GtkOrientation  orientation,
+                           gboolean        on_first,
+                           gboolean        on_second)
+{
+  if (on_first == on_second)
+    {
+      snapshot_point (snapshot, on_first);
+      return;
+    }
+
+  gtk_snapshot_append_linear_gradient (snapshot,
+                                       &GRAPHENE_RECT_INIT (0, 0, 1, 1),
+                                       &GRAPHENE_POINT_INIT (0, 0),
+                                       orientation == GTK_ORIENTATION_HORIZONTAL
+                                       ? &GRAPHENE_POINT_INIT (1, 0)
+                                       : &GRAPHENE_POINT_INIT (0, 1),
+                                       (GskColorStop[3]) {
+                                           { 0.3, colors[on_first ? ON : OFF] },
+                                           { 0.5, colors[BETWEEN] },
+                                           { 0.7, colors[on_second ? ON : OFF] }
+                                       },
+                                       3);
+}
+
+static void
+snapshot_between_4_points (GtkSnapshot    *snapshot,
+                           gboolean        top_left,
+                           gboolean        top_right,
+                           gboolean        bottom_left,
+                           gboolean        bottom_right)
+{
+  if (top_left == top_right && bottom_left == bottom_right)
+    {
+      snapshot_between_2_points (snapshot, GTK_ORIENTATION_VERTICAL, top_left, bottom_left);
+      return;
+    }
+  else if (top_left == bottom_left && top_right == bottom_right)
+    {
+      snapshot_between_2_points (snapshot, GTK_ORIENTATION_HORIZONTAL, top_left, top_right);
+      return;
+    }
+  else if (top_left == bottom_right && top_right == bottom_left)
+    {
+      /* across */
+      gtk_snapshot_append_conic_gradient (snapshot,
+                                          &GRAPHENE_RECT_INIT (0, 0, 1, 1),
+                                          &GRAPHENE_POINT_INIT (0.5, 0.5),
+                                          0,
+                                          (GskColorStop[13]) {
+                                              { 0,    colors[BETWEEN] },
+                                              { 0.06, colors[top_right ? ON : OFF] },
+                                              { 0.19, colors[top_right ? ON : OFF] },
+                                              { 0.25, colors[BETWEEN] },
+                                              { 0.31, colors[bottom_right ? ON : OFF] },
+                                              { 0.44, colors[bottom_right ? ON : OFF] },
+                                              { 0.5,  colors[BETWEEN] },
+                                              { 0.56, colors[bottom_left ? ON : OFF] },
+                                              { 0.69, colors[bottom_left ? ON : OFF] },
+                                              { 0.75, colors[BETWEEN] },
+                                              { 0.81, colors[top_left ? ON : OFF] },
+                                              { 0.94, colors[top_left ? ON : OFF] },
+                                              { 1.0,  colors[BETWEEN] }
+                                          },
+                                          13);
+    }
+  else
+    {
+      gboolean on[] = { top_left, top_right, bottom_left, bottom_right };
+      gsize i;
+
+      /* one of them is different */
+      for (i = 0; i < 3; i++)
+        {
+          if (on[i] != on[3])
+            break;
+        }
+      if (i == 0 && on[0] == on[1])
+        i = 3;
+
+      gtk_snapshot_append_radial_gradient (snapshot,
+                                           &GRAPHENE_RECT_INIT (0, 0, 1, 1),
+                                           &GRAPHENE_POINT_INIT (i & 1 ? 1 : 0, i & 2 ? 1 : 0),
+                                           1,
+                                           1,
+                                           0,
+                                           1,
+                                           (GskColorStop[3]) {
+                                               { 0.3, colors[on[i] ? ON : OFF] },
+                                               { 0.5, colors[BETWEEN] },
+                                               { 0.7, colors[on[i] ? OFF : ON] }
+                                           },
+                                           3);
+    }
+}
+
+static void
+snapshot_line (GtkSnapshot    *snapshot,
+               const gboolean *qr)
+{
+  gsize x;
+
+  gtk_snapshot_save (snapshot);
+
+  snapshot_between_2_points (snapshot, GTK_ORIENTATION_HORIZONTAL, qr[0], qr[0]);
+  for (x = 0; x < 21; x++)
+    {
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (1, 0));
+      snapshot_point (snapshot, qr[x]);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (1, 0));
+      snapshot_between_2_points (snapshot, GTK_ORIENTATION_HORIZONTAL, qr[x], qr[MIN (x + 1, 20)]);
+    }
+
+  gtk_snapshot_restore (snapshot);
+}
+
+static void
+snapshot_between_lines (GtkSnapshot    *snapshot,
+                        const gboolean *above,
+                        const gboolean *below)
+{
+  gsize x;
+
+  gtk_snapshot_save (snapshot);
+
+  snapshot_between_4_points (snapshot, above[0], above[0], below[0], below[0]);
+  for (x = 0; x < 21; x++)
+    {
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (1, 0));
+      snapshot_between_2_points (snapshot, GTK_ORIENTATION_VERTICAL, above[x], below[x]);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (1, 0));
+      snapshot_between_4_points (snapshot, above[x], above[MIN (x + 1, 20)], below[x], below[MIN (x + 1, 20)]);
+    }
+
+  gtk_snapshot_restore (snapshot);
+}
+
 static void
 gtk_tiler_snapshot (GdkPaintable *paintable,
                     GdkSnapshot  *snapshot,
                     double        width,
                     double        height)
 {
-  const GdkRGBA colors[2] = {
-    { 0, 0, 1, 1 },
-    { 1, 1, 0, 1 }
-  };
-
-  gsize x, y;
+  gsize y;
 
   gtk_snapshot_save (snapshot);
   gtk_snapshot_set_snap (snapshot, GSK_RECT_SNAP_ROUND);
-  gtk_snapshot_scale (snapshot, width / 21.0, height / 21.0);
+  gtk_snapshot_scale (snapshot, width / 43.0, height / 43.0);
 
+  snapshot_between_lines (snapshot, qr_code, qr_code);
   for (y = 0; y < 21; y++)
     {
-      for (x = 0; x < 21; x++)
-        {
-          gtk_snapshot_append_color (snapshot,
-                                     &colors[qr[21 * y + x]],
-                                     &GRAPHENE_RECT_INIT (x, y, 1, 1));
-        }
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, 1));
+      snapshot_line (snapshot, &qr_code[21 * y]);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, 1));
+      snapshot_between_lines (snapshot, &qr_code[21 * y], &qr_code[21 * MIN (y + 1, 20)]);
     }
 
   gtk_snapshot_restore (snapshot);
