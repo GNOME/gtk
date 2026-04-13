@@ -189,6 +189,8 @@ void                    gdk_wayland_display_unregister_session  (GdkDisplay *dis
 
 const char *            gdk_wayland_display_get_session_id      (GdkDisplay *display);
 
+void                    gdk_wayland_display_remove_session_toplevel (GdkDisplay *display,
+                                                                     const char *name);
 
 G_END_DECLS
 

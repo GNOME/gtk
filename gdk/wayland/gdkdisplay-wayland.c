@@ -181,9 +181,6 @@ init_skip_protocols (GdkWaylandDisplay *display_wayland)
   if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
     g_strv_builder_add (strv, wp_color_manager_v1_interface.name);
 
-  if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), SESSION_MANAGEMENT))
-    g_strv_builder_add (strv, xdg_session_manager_v1_interface.name);
-
   if (help)
     {
       gdk_help_message ("%s can be set to a list of Wayland interfaces to disable.\n", variable);
@@ -1439,6 +1436,34 @@ gdk_wayland_display_get_session_id (GdkDisplay *display)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   return display_wayland->session_id;
+}
+
+static gint
+cmp_toplevel_session_id (GdkToplevel *toplevel,
+                         const char  *expected)
+{
+  return g_strcmp0 (gdk_wayland_toplevel_get_session_id (toplevel), expected);
+}
+
+void
+gdk_wayland_display_remove_session_toplevel (GdkDisplay *display,
+                                             const char *name)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GList *found_toplevel = NULL;
+
+  if (!display_wayland->session)
+    return;
+
+  found_toplevel = g_list_find_custom (display_wayland->toplevels, name,
+                                       (GCompareFunc) cmp_toplevel_session_id);
+  if (found_toplevel)
+    {
+      gdk_wayland_toplevel_remove_from_session (found_toplevel->data);
+      return;
+    }
+
+  xdg_session_v1_remove_toplevel (display_wayland->session, name);
 }
 
 /* }}} */

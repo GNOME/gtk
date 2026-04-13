@@ -192,7 +192,10 @@ get_state_file (GtkApplicationImpl *impl,
   else if (dbus->instance_id)
     instance_id = dbus->instance_id;
   else
-    instance_id = "fallback";
+    {
+      GTK_DEBUG (SESSION, "Session didn't report an instance_id, so we're using \"fallback\"!");
+      instance_id = "fallback";
+    }
 
   dir = g_get_user_state_dir ();
 
@@ -252,6 +255,7 @@ request_restore (GtkApplicationImplDBus *dbus)
     }
 
   g_variant_get (reply, "(usas)", &dbus->reason, &dbus->instance_id, &discard_iter);
+  dbus->save_restore_registered = TRUE;
 
   GTK_DEBUG (SESSION, "Registered restore, reason %s instance-id %s",
              g_enum_get_value (g_type_class_get (GTK_TYPE_RESTORE_REASON), dbus->reason)->value_nick,
@@ -294,6 +298,27 @@ request_restore (GtkApplicationImplDBus *dbus)
                                  NULL,
                                  NULL);
   return TRUE;
+}
+
+static void
+drop_restore_request (GtkApplicationImplDBus *dbus)
+{
+  const char *app_id;
+
+  app_id = g_application_get_application_id (G_APPLICATION (dbus->impl.application));
+
+  g_dbus_connection_call (dbus->session,
+                          "org.gnome.SessionManager",
+                          "/org/gnome/SessionManager",
+                          "org.gnome.SessionManager",
+                          "UnregisterRestore",
+                          g_variant_new ("(ss)", app_id, dbus->instance_id),
+                          NULL, G_DBUS_CALL_FLAGS_NONE,
+                          -1, NULL, NULL, NULL);
+
+  dbus->reason = GTK_RESTORE_REASON_LAUNCH;
+  g_clear_pointer (&dbus->instance_id, g_free);
+  dbus->save_restore_registered = FALSE;
 }
 
 static void
@@ -378,20 +403,8 @@ gtk_application_impl_dbus_shutdown (GtkApplicationImpl *impl)
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   g_cancellable_cancel (dbus->cancellable);
 
-  if (dbus->instance_id)
-    g_dbus_connection_call_sync (dbus->session,
-                                 "org.gnome.SessionManager",
-                                 "/org/gnome/SessionManager",
-                                 "org.gnome.SessionManager",
-                                 "UnregisterRestore",
-                                 g_variant_new ("(ss)",
-                                                g_application_get_application_id (G_APPLICATION (impl->application)),
-                                                dbus->instance_id),
-                                 NULL,
-                                 G_DBUS_CALL_FLAGS_NONE,
-                                 -1,
-                                 NULL,
-                                 NULL);
+  if (dbus->save_restore_registered)
+    drop_restore_request (dbus);
 }
 
 GQuark gtk_application_impl_dbus_export_id_quark (void);
@@ -671,11 +684,23 @@ gtk_application_impl_dbus_store_state (GtkApplicationImpl *impl,
 static void
 gtk_application_impl_dbus_forget_state (GtkApplicationImpl *impl)
 {
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   char *file;
 
   file = get_state_file (impl, NULL);
   g_remove (file);
   g_free (file);
+
+  if (dbus->save_restore_registered)
+    drop_restore_request (dbus);
+}
+
+static void
+gtk_application_impl_dbus_unforget_state (GtkApplicationImpl *impl)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+  if (!dbus->save_restore_registered)
+    request_restore (dbus);
 }
 
 static GVariant *
@@ -770,6 +795,7 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->clear_restore_reason = gtk_application_impl_dbus_clear_restore_reason;
   impl_class->store_state = gtk_application_impl_dbus_store_state;
   impl_class->forget_state = gtk_application_impl_dbus_forget_state;
+  impl_class->unforget_state = gtk_application_impl_dbus_unforget_state;
   impl_class->retrieve_state = gtk_application_impl_dbus_retrieve_state;
 
   gobject_class->finalize = gtk_application_impl_dbus_finalize;

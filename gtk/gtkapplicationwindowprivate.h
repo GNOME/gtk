@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-void         gtk_application_window_save            (GtkApplicationWindow *window,
+void         gtk_application_window_save_state      (GtkApplicationWindow *window,
                                                      GVariantDict         *state);
 
 G_END_DECLS

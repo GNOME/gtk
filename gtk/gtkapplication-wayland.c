@@ -233,7 +233,41 @@ gtk_application_impl_wayland_window_forget (GtkApplicationImpl *impl,
 
   surface = gtk_native_get_surface (GTK_NATIVE (window));
   if (GDK_IS_WAYLAND_TOPLEVEL (surface))
-    gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
+    {
+      GTK_DEBUG (SESSION, "Forgetting saved toplevel: %s",
+                 gdk_wayland_toplevel_get_session_id (GDK_TOPLEVEL (surface)));
+      gdk_wayland_toplevel_remove_from_session (GDK_TOPLEVEL (surface));
+    }
+}
+
+static void
+gtk_application_impl_wayland_window_forget_by_state (GtkApplicationImpl *impl,
+                                                     GVariant           *state)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  char *id = NULL;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_forget_by_state (impl, state);
+
+  if (g_variant_lookup (state, "session-id", "&s", &id))
+    {
+      GTK_DEBUG (SESSION, "Forgetting saved toplevel (by ID): %s", id);
+      gdk_wayland_display_remove_session_toplevel (display, id);
+    }
+}
+
+static void
+gtk_application_impl_wayland_window_unforget (GtkApplicationImpl *impl,
+                                              GtkWindow          *window)
+{
+  GdkSurface *surface;
+
+  GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class)->window_unforget (impl, window);
+
+  surface = gtk_native_get_surface (GTK_NATIVE (window));
+  GTK_DEBUG (SESSION, "Adding toplevel back to session: %s",
+             gdk_wayland_toplevel_get_session_id (GDK_TOPLEVEL (surface)));
+  gdk_wayland_toplevel_ensure_in_session (GDK_TOPLEVEL (surface));
 }
 
 static guint
@@ -423,6 +457,8 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
   impl_class->before_emit = gtk_application_impl_wayland_before_emit;
   impl_class->window_removed = gtk_application_impl_wayland_window_removed;
   impl_class->window_forget = gtk_application_impl_wayland_window_forget;
+  impl_class->window_forget_by_state = gtk_application_impl_wayland_window_forget_by_state;
+  impl_class->window_unforget = gtk_application_impl_wayland_window_unforget;
   impl_class->inhibit = gtk_application_impl_wayland_inhibit;
   impl_class->uninhibit = gtk_application_impl_wayland_uninhibit;
   impl_class->startup = gtk_application_impl_wayland_startup;

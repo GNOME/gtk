@@ -58,7 +58,7 @@ struct _GtkApplicationWindowClass
 
   /**
    * GtkApplicationWindowClass::save_state:
-   * @dict: a dictionary where to store the window's state
+   * @dict: a dictionary to populate with application window state
    *
    * Class closure for the [signal@ApplicationWindow::save-state] signal.
    *

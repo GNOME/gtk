@@ -780,9 +780,9 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::restore-window:
-   * @application: the `GtkApplication` which emitted the signal
+   * @application: the application which emitted the signal
    * @reason: the reason this window is restored
-   * @state: an "a{sv}" `GVariant` with state to restore, as saved by a [signal@Gtk.ApplicationWindow::save-state] handler
+   * @state: an `a{sv}` dictionary containing the state to restore, as saved by a [signal@Gtk.ApplicationWindow::save-state] handler
    *
    * Emitted when an application's per-window state is restored.
    *
@@ -802,9 +802,10 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @reason means that only one window should be restored, you can reliably
    * ignore emissions if a window already exists
    *
-   * Note that this signal is not emitted only during the app's initial launch.
-   * If all windows are closed but the app keeps running, the signal will be
-   * emitted the next time a new window is opened.
+   * This signal will be emitted whenever the application needs to restore its
+   * windows. This normally happens during the initial launch, but it can also
+   * happen in the existing application instance if it is re-activated after all
+   * application windows were closed.
    *
    * Since: 4.24
    */
@@ -819,20 +820,20 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::save-state:
-   * @application: the `GtkApplication` which emitted the signal
-   * @dict: a `GVariantDict`
+   * @application: the application which emitted the signal
+   * @dict: a dictionary to populate with application state
    *
    * Emitted when the application is saving global state.
    *
-   * The handler for this signal should persist any
-   * global state of @application into @dict.
+   * The handler for this signal should persist any global state of
+   * @application into @dict.
    *
    * See [signal@Gtk.Application::restore-state] for how to
    * restore global state, and [signal@Gtk.ApplicationWindow::save-state]
    * and [signal@Gtk.Application::restore-window] for handling
    * per-window state.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.24
    */
@@ -848,9 +849,9 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::restore-state:
-   * @application: the `GtkApplication` which emitted the signal
+   * @application: the application which emitted the signal
    * @reason: the reason for restoring state
-   * @state: an "a{sv}" `GVariant` with state to restore
+   * @state: an `a{sv}` dictionary containing the state to restore, as saved by a [signal@Gtk.Application::save-state] handler
    *
    * Emitted when application global state is restored.
    *
@@ -858,7 +859,13 @@ gtk_application_class_init (GtkApplicationClass *class)
    * corresponding handler for [signal@Gtk.Application::save-state]
    * does.
    *
-   * Returns: true to stop stop further handlers from running
+   * You must be careful to be robust in the face of app upgrades and downgrades:
+   * the @state might have been created by a previous or occasionally even a future
+   * version of your app. Do not assume that a given key exists in the state.
+   * Apps must try to restore state saved by a previous version, but are free to
+   * discard state if it was written by a future version.
+   *
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.24
    */
@@ -1552,7 +1559,7 @@ collect_window_state (GtkApplication *application,
 
   dict = g_variant_dict_new (NULL);
   if (GTK_IS_APPLICATION_WINDOW (window))
-    gtk_application_window_save (GTK_APPLICATION_WINDOW (window), dict);
+    gtk_application_window_save_state (GTK_APPLICATION_WINDOW (window), dict);
 
   state = g_variant_new ("(a{sv}@a{sv})", &builder, g_variant_dict_end (dict));
   g_variant_dict_unref (dict);
@@ -1630,15 +1637,11 @@ collect_state (GtkApplication *application)
 
 /**
  * gtk_application_save:
- * @application: a `GtkApplication`
+ * @application: an application
  *
- * Saves the state of application.
+ * Saves the state of the application.
  *
  * See [method@Gtk.Application.forget] for a way to forget the state.
- *
- * If [property@Gtk.Application:register-session] is set, `GtkApplication`
- * calls this function automatically when the application is closed or
- * the session ends.
  *
  * Since: 4.24
  */
@@ -1653,6 +1656,17 @@ gtk_application_save (GtkApplication *application)
   if (!priv->support_save)
     return;
 
+  if (priv->forgotten)
+    {
+      for (GList *l = priv->windows; l != NULL; l = l->next)
+        {
+          GtkWindow *window = GTK_WINDOW (l->data);
+          gtk_application_impl_window_unforget (priv->impl, window);
+        }
+
+      gtk_application_impl_unforget_state (priv->impl);
+    }
+
   state = collect_state (application);
   gtk_application_impl_store_state (priv->impl, state);
   g_variant_unref (state);
@@ -1663,13 +1677,12 @@ gtk_application_save (GtkApplication *application)
 
 /**
  * gtk_application_forget:
- * @application: a `GtkApplication`
+ * @application: an application
  *
- * Forget state that has been previously saved and prevent
- * further automatic state saving.
+ * Forget state that has been previously saved and prevent further automatic
+ * state saving.
  *
- * In order to reenable state saving, call
- * [method@Gtk.Application.save].
+ * In order to re-enable state saving, call [method@Gtk.Application.save].
  *
  * Since: 4.24
  */
@@ -1683,8 +1696,10 @@ gtk_application_forget (GtkApplication *application)
 
   if (priv->kept_window_state)
     {
-      // TODO: Tell compositor to forget the window state
-      //       (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      GVariant *gtk_state;
+      g_variant_get (priv->kept_window_state, "(@a{sv}@a{sv})", &gtk_state, NULL);
+      gtk_application_impl_window_forget_by_state (priv->impl, gtk_state);
+      g_variant_unref (gtk_state);
       g_clear_pointer (&priv->kept_window_state, g_variant_unref);
     }
 
@@ -1717,8 +1732,7 @@ restore_window (GtkApplication   *application,
   if (priv->pending_window_state)
     {
       GTK_DEBUG (SESSION, "App didn't restore a toplevel, removing it from session");
-      // TODO: Tell compositor to forget the window state
-      // (currently impossible due to https://gitlab.freedesktop.org/wayland/wayland-protocols/-/merge_requests/18#note_3171587)
+      gtk_application_impl_window_forget_by_state (priv->impl, gtk_state);
       priv->pending_window_state = NULL;
     }
 }

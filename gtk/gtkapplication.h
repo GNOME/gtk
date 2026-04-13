@@ -65,11 +65,11 @@ struct _GtkApplicationClass
 
   /**
    * GtkApplicationClass::save_state:
-   * @state: a dictionary where to store the application's state
+   * @state: a dictionary to populate with application state
    *
    * Class closure for the [signal@Application::save-state] signal.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.24
    */
@@ -83,7 +83,7 @@ struct _GtkApplicationClass
    *
    * Class closure for the [signal@Application::restore-state] signal.
    *
-   * Returns: true to stop stop further handlers from running
+   * Returns: true to stop further handlers from running
    *
    * Since: 4.24
    */
@@ -94,8 +94,7 @@ struct _GtkApplicationClass
   /**
    * GtkApplicationClass::restore_window:
    * @reason: the reason this window is restored
-   * @state: (nullable): the state to restore, as saved by a
-   *   [signal@Gtk.ApplicationWindow::save-state] handler
+   * @state: a dictionary containing the application window state to restore
    *
    * Class closure for the [signal@Application::restore-window] signal.
    *
