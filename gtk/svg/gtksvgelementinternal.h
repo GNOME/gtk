@@ -72,6 +72,13 @@ typedef struct
 
 void svg_css_ruleset_clear (SvgCssRuleset *ruleset);
 
+typedef struct
+{
+  PangoLanguage *lang;
+  const char *type;
+  char *string;
+} LangString;
+
 struct _SvgElement
 {
   SvgElementType type;
@@ -80,6 +87,7 @@ struct _SvgElement
   char *id;
   char *style;
   char **classes;
+  GArray *lang_strings;
   char *title;
   char *description;
   size_t line;

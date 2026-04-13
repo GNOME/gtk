@@ -1287,6 +1287,12 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FE_FUNC_EXPONENT].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FE_FUNC_OFFSET].initial_value = svg_number_new (0);
 
+  /* We require initial values to immortal for thread-safety
+   * reasons. since they are the only objects in the SVG code
+   * that are shared between different GtkSvg instances (and
+   * thus may be shared between threads), and our refcounting
+   * for values is not atomic.
+   */
 #ifndef G_DISABLE_ASSERT
   for (unsigned int i = 0; i < G_N_ELEMENTS (shape_attrs); i++)
     {
@@ -1298,6 +1304,9 @@ shape_attrs_init_default_values (void)
 #endif
 }
 
+/* Sadly, initial values for properties of SVG objects
+ * are confusingly dependent on the type of the object.
+ */
 SvgValue *
 svg_property_ref_initial_value (SvgProperty    attr,
                                 SvgElementType shape_type,

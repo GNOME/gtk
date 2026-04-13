@@ -22,6 +22,8 @@ test_tree_traverse (void)
   svg = gtk_svg_new_from_bytes (bytes);
   g_assert_nonnull (svg);
 
+  gtk_svg_set_load_time (svg, 0);
+
   s = g_string_new ("");
 
   while (gtk_svg_move_focus (svg, GTK_DIR_TAB_FORWARD))

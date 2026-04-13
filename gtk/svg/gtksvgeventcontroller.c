@@ -23,6 +23,11 @@
 #include "gtkeventcontrollerprivate.h"
 #include "gtksvgprivate.h"
 
+/* This is like GtkEventControllerLegacy, but
+ * a) it handles crossing events too
+ * b) it passes x, y along
+ */
+
 struct _GtkSvgEventController
 {
   GtkEventController parent_instance;

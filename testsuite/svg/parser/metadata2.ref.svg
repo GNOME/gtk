@@ -1,6 +1,7 @@
 <svg
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'>
+  <title>Test title</title>
   <rect
           id='rect'>
     <title>A rect</title>

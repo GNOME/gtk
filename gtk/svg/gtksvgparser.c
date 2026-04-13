@@ -72,8 +72,6 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
-/* {{{ Parser */
-
 /* The parser creates the shape tree. We maintain a current shape,
  * and a current animation. Some things are done in a post-processing
  * step: finding the shape that an animation belongs to, resolving
@@ -84,12 +82,13 @@
  * shapes, but not color stops and filter primitives. SvgAnimations
  * are their own thing too.
  *
- * So each shapes can have multiple
+ * So each shape can have multiple
  * - child shapes
  * - animations
  * - color stops
  * - filter primitives
  */
+
 typedef struct
 {
   GtkSvg *svg;
@@ -114,45 +113,8 @@ typedef struct
   } text;
   uint64_t num_loaded_elements;
   gboolean load_user_style;
-  GArray *titles;
-  GArray *descs;
-} ParserData;
-
-typedef struct
-{
   PangoLanguage *lang;
-  char *string;
-} LangString;
-
-static void
-lang_string_clear (LangString *l)
-{
-  g_free (l->string);
-  l->string = NULL;
-  l->lang = NULL;
-}
-
-static const char *
-pick_best_lang_string (GArray *ls)
-{
-  const char *string;
-
-  for (unsigned int i = 0; i < ls->len; i++)
-    {
-      LangString *l = &g_array_index (ls, LangString, i);
-
-      if (i == 0)
-        string = l->string;
-
-      if (l->lang == gtk_get_default_language ())
-        {
-          string = l->string;
-          break;
-        }
-    }
-
-  return string;
-}
+} ParserData;
 
 /* {{{ SvgAnimation attributes */
 
@@ -1791,6 +1753,7 @@ parse_filter_attrs (SvgElement           *shape,
 }
 
 /* }}} */
+/* {{{ Parser */
 
 G_GNUC_PRINTF (4, 5)
 static void
@@ -2009,21 +1972,15 @@ start_element_cb (GMarkupParseContext  *context,
   if (strcmp (element_name, "title") == 0 ||
       strcmp (element_name, "desc") == 0)
     {
-      LangString l = { 0, };
-
       for (unsigned int i = 0; attr_names[i]; i++)
         {
           if (strcmp (attr_names[i], "lang") == 0)
             {
-              l.lang = pango_language_from_string (attr_values[i]);
+              data->lang = pango_language_from_string (attr_values[i]);
               break;
             }
         }
 
-      if (strcmp (element_name, "title") == 0)
-        g_array_append_val (data->titles, l);
-      else
-        g_array_append_val (data->descs, l);
       start_collect_text (data, context);
       return;
     }
@@ -2455,17 +2412,7 @@ do_target:
 
       g_assert (shape_type == svg_element_get_type (data->current_shape));
 
-      if (data->titles->len > 0)
-        {
-          svg_element_set_title (data->current_shape, pick_best_lang_string (data->titles));
-          g_array_set_size (data->titles, 0);
-        }
-
-      if (data->descs->len > 0)
-        {
-          svg_element_set_description (data->current_shape, pick_best_lang_string (data->descs));
-          g_array_set_size (data->descs, 0);
-        }
+      svg_element_set_language (data->current_shape, gtk_get_default_language ());
 
       data->current_shape = tos->data;
       data->shape_stack = tos->next;
@@ -2480,13 +2427,11 @@ do_target:
     }
   else if (strcmp (element_name, "title") == 0)
     {
-      LangString *l = &g_array_index (data->titles, LangString, data->titles->len - 1);
-      l->string = g_strdup (data->text.text->str);
+      svg_element_add_title (data->current_shape, data->lang, data->text.text->str);
     }
   else if (strcmp (element_name, "desc") == 0)
     {
-      LangString *l = &g_array_index (data->descs, LangString, data->descs->len - 1);
-      l->string = g_strdup (data->text.text->str);
+      svg_element_add_description (data->current_shape, data->lang, data->text.text->str);
     }
 }
 
@@ -2540,7 +2485,22 @@ error_cb (GMarkupParseContext *context,
   gtk_svg_markup_error (data->svg, context, error);
 }
 
+/* }}} */
 /* {{{ Href handling, dependency tracking */
+
+/* To deal with forward references, we resolve references after parsing
+ * the entire SVG. The references hide in various value types (e.g. paint
+ * servers), as well as in animations.
+ *
+ * Note: Since we don't have scripting, once resolved, the reference of a
+ * value does not change. However, animations can change swap the value
+ * out for another one with a different reference.
+ *
+ * Some kinds of references induce dependencies wrt. to computing current
+ * values (e.g. the when an <animateMotion> element has an <mpath> child
+ * that refers to the path of an element, then that element needs to have
+ * its values upated before the animation uses its path.
+ */
 
 static void
 add_dependency (SvgElement *shape0,
@@ -2552,7 +2512,7 @@ add_dependency (SvgElement *shape0,
 }
 
 /* Record the fact that when computing updated
- * values, shape2 must be handled before shape1
+ * values, shape0 must be handled before shape1.
  */
 static void
 add_dependency_to_common_ancestor (SvgElement *shape0,
@@ -2632,9 +2592,8 @@ resolve_href_ref (SvgValue   *value,
   if (svg_href_get_kind (value) == HREF_NONE)
     return;
 
-  /* Since hrefs can't be set in css, we can only ever
-   * get here from a presentation attr, so we always
-   * have a shape.
+  /* Since hrefs can't be set in css, we can only ever get here
+   * from a presentation attr, so we always have a shape.
    */
   g_assert (shape != NULL);
 
@@ -4250,6 +4209,7 @@ apply_styles_to_shape (SvgElement *shape,
 }
 
 /* }}} */
+/* {{{ API */
 
 /* Determine the intrinsic width, height, and aspect ratio from
  * what we have.
@@ -4377,8 +4337,6 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.text.text = g_string_new ("");
   data.text.collect = FALSE;
   data.num_loaded_elements = 0;
-  data.titles = array_new_with_clear_func (sizeof (LangString), (GDestroyNotify) lang_string_clear);
-  data.descs = array_new_with_clear_func (sizeof (LangString), (GDestroyNotify) lang_string_clear);
 
   context = g_markup_parse_context_new (&parser,
                                         G_MARKUP_PREFIX_ERROR_POSITION |
@@ -4456,8 +4414,6 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
   g_string_free (data.text.text, TRUE);
-  g_array_unref (data.titles);
-  g_array_unref (data.descs);
 
   if (self->gpa_version > 0 &&
       (self->features & GTK_SVG_ANIMATIONS) == 0)
@@ -4479,3 +4435,5 @@ gtk_svg_init_from_resource (GtkSvg     *self,
 }
 
 /* }}} */
+
+/* vim:set foldmethod=marker: */

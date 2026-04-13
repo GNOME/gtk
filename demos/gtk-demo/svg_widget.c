@@ -1,28 +1,10 @@
-/* Paintable/SVG Paintable
- * #Keywords: symbolic
+/* SVG
  *
- * This demo shows using a GtkSvg paintable to display an
- * SVG image in a GtkPicture that can be scaled by resizing
- * the window.
+ * This demo shows using a GtkSvgWidget to display a
+ * scalable, animated, interactive SVG image.
  */
 
 #include <gtk/gtk.h>
-
-static void
-image_clicked (GtkGestureClick *click,
-               int n_press,
-               double x,
-               double y,
-               GtkImage *image)
-{
-  GtkSvg *paintable = GTK_SVG (gtk_image_get_paintable (image));
-  guint state = gtk_svg_get_state (paintable);
-
-  if (state < 63)
-    gtk_svg_set_state (paintable, state + 1);
-  else
-    gtk_svg_set_state (paintable, 0);
-}
 
 static void
 open_response_cb (GObject      *source,
@@ -36,26 +18,15 @@ open_response_cb (GObject      *source,
   file = gtk_file_dialog_open_finish (dialog, result, NULL);
   if (file)
     {
+      GtkSvgWidget *widget;
       GBytes *bytes;
-      GdkPaintable *paintable;
-      GtkWidget *image;
-      GtkEventController *controller;
+
+      widget = GTK_SVG_WIDGET (gtk_window_get_child (GTK_WINDOW (window)));
 
       bytes = g_file_load_bytes (file, NULL, NULL, NULL);
-      paintable = GDK_PAINTABLE (gtk_svg_new_from_bytes (bytes));
+      gtk_svg_widget_load_from_bytes (widget, bytes);
       g_bytes_unref (bytes);
 
-      image = gtk_picture_new ();
-      gtk_window_set_child (GTK_WINDOW (window), image);
-
-      controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
-      g_signal_connect (controller, "pressed",
-                        G_CALLBACK (image_clicked), image);
-      gtk_widget_add_controller (image, controller);
-
-      gtk_picture_set_paintable (GTK_PICTURE (image), paintable);
-
-      g_object_unref (paintable);
       g_object_unref (file);
     }
 }
@@ -69,7 +40,7 @@ show_file_open (GtkWidget *button,
   GListStore *filters;
 
   dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, "Open svg image");
+  gtk_file_dialog_set_title (dialog, "Open SVG");
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/svg+xml");
@@ -87,15 +58,50 @@ show_file_open (GtkWidget *button,
                         open_response_cb, window);
 }
 
+static void
+launched_cb (GObject      *source,
+             GAsyncResult *result,
+             gpointer      data)
+{
+  GtkUriLauncher *launcher = GTK_URI_LAUNCHER (source);
+  GtkWindow *window = data;
+  GError *error = NULL;
+
+  if (!gtk_uri_launcher_launch_finish (launcher, result, &error))
+    {
+      if (g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED))
+        {
+          GtkAlertDialog *alert = gtk_alert_dialog_new ("Opening url failed");
+          gtk_alert_dialog_set_detail (alert, error->message);
+          g_error_free (error);
+          gtk_alert_dialog_show (alert, window);
+          g_object_unref (alert);
+        }
+    }
+}
+
+static void
+activate_cb (GtkSvgWidget *widget,
+             const char   *id,
+             const char   *url,
+             GtkWindow    *window)
+{
+  if (url && g_str_has_prefix (url, "http://"))
+    {
+      GtkUriLauncher *launcher = gtk_uri_launcher_new (url);
+      gtk_uri_launcher_launch (launcher, window, NULL, launched_cb, window);
+      g_object_unref (launcher);
+    }
+}
+
 static GtkWidget *window;
 
 GtkWidget *
-do_paintable_svg (GtkWidget *do_widget)
+do_svg_widget (GtkWidget *do_widget)
 {
   GtkWidget *header;
-  GtkWidget *image;
   GtkWidget *button;
-  GdkPaintable *paintable;
+  GtkWidget *widget;
 
   if (!window)
     {
@@ -103,22 +109,21 @@ do_paintable_svg (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 330, 330);
-      gtk_window_set_title (GTK_WINDOW (window), "Paintable — SVG");
+      gtk_window_set_title (GTK_WINDOW (window), "SVG");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       button = gtk_button_new_with_mnemonic ("_Open");
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
-      image = gtk_picture_new ();
-      gtk_widget_set_size_request (image, 16, 16);
-
       g_signal_connect (button, "clicked", G_CALLBACK (show_file_open), window);
 
-      gtk_window_set_child (GTK_WINDOW (window), image);
+      widget = GTK_WIDGET (gtk_svg_widget_new ());
+      gtk_window_set_child (GTK_WINDOW (window), widget);
 
-      paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/paintable_svg/org.gtk.gtk4.NodeEditor.Devel.svg"));
-      gtk_picture_set_paintable (GTK_PICTURE (image), paintable);
-      g_object_unref (paintable);
+      g_object_set (widget, "resource", "/svg_widget/gtk-logo-interactive.svg", NULL);
+      gtk_widget_set_has_tooltip (widget, TRUE);
+
+      g_signal_connect (widget, "activate", G_CALLBACK (activate_cb), window);
     }
 
   if (!gtk_widget_get_visible (window))

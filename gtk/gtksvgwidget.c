@@ -48,17 +48,19 @@
  * to move the focus and <kbd>Enter</kbd> and clicks will activate links
  * by emitting the [signal@Gtk.SvgWidget::activate] signal.
  *
- * The `tabindex` attribute can be used to influence what elements
- * act as focus locations.
+ * The `tabindex` and `autofocus` attributes can be used to influence
+ * what elements act as focus locations, and where focus goes initially.
  *
  * The styling of the SVG content is following input-related pseudo
- * states such as `:focus`, `:hover` or `:visited` (for links).
+ * classes such as `:focus`, `:active`, `:hover` or `:visited`.
  *
  * If [property@Gtk.Widget:has-tooltip] is set, then the content
  * of \<title\> elements will be shown as tooltips.
  *
- * SVG animations and different \<view\>s can be triggered by input events
- * as well. See the [SVG animation](https://svgwg.org/specs/animations/)
+ * SVG animations and different \<view\>s can be triggered by input
+ * events as well. The following events are supported: focus, blur,
+ * mouseenter, mouseleave, click.
+ * See the [SVG animation](https://svgwg.org/specs/animations/)
  * specification for details.
  *
  * Since: 4.24
@@ -218,7 +220,9 @@ gtk_svg_widget_init (GtkSvgWidget *self)
                             G_CALLBACK (gtk_widget_queue_draw), self);
   g_signal_connect_swapped (self->svg, "invalidate-size",
                             G_CALLBACK (gtk_widget_queue_resize), self);
+
   g_signal_connect (self->svg, "error", G_CALLBACK (error_cb), self);
+
   gtk_svg_set_activate_callback (self->svg, activate_cb, self);
   gtk_svg_set_hover_callback (self->svg, hover_cb, self);
 
@@ -374,10 +378,14 @@ gtk_svg_widget_query_tooltip (GtkWidget  *widget,
   SvgElement *target;
 
   target = gtk_svg_pick_element (self->svg, &GRAPHENE_POINT_INIT (x, y));
-  if (target && svg_element_get_title (target))
+  while (target)
     {
-      gtk_tooltip_set_text (tooltip, svg_element_get_title (target));
-      return TRUE;
+      if (svg_element_get_title (target))
+        {
+          gtk_tooltip_set_text (tooltip, svg_element_get_title (target));
+          return TRUE;
+        }
+      target = svg_element_get_parent (target);
     }
 
   return FALSE;
@@ -599,10 +607,9 @@ gtk_svg_widget_get_stylesheet (GtkSvgWidget *self)
  *
  * Sets the state of the widget.
  *
- * If the paintable is currently playing, the state change
- * will apply transitions that are defined in the SVG. If
- * the paintable is not playing, the state change will take
- * effect instantaneously.
+ * The state change will apply transitions that are defined
+ * in the SVG. See [class@Gtk.Svg] for details about states
+ * and transitions.
  *
  * Since: 4.24
  */

@@ -249,7 +249,6 @@
 #undef DEBUG
 #endif /* _MSC_VER */
 
-
 /* {{{ Some debug tools */
 
 #ifdef DEBUG
@@ -789,11 +788,12 @@ svg_writing_mode_is_vertical (WritingMode mode)
   return is_vertical[mode];
 }
 
-static void
-ensure_current_time (GtkSvg *self)
+static int64_t
+get_current_time (GtkSvg *self)
 {
-  if (self->clock && self->playing)
-    self->current_time = MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+  if (self->clock && self->playing && self->load_time != INDEFINITE)
+    return MAX (self->current_time, gdk_frame_clock_get_frame_time (self->clock));
+  return self->current_time;
 }
 
 /* }}} */
@@ -1284,6 +1284,7 @@ typedef enum
   EVENT_TYPE_BLUR,
   EVENT_TYPE_MOUSE_ENTER,
   EVENT_TYPE_MOUSE_LEAVE,
+  EVENT_TYPE_CLICK,
 } EventType;
 
 typedef enum
@@ -1441,7 +1442,7 @@ time_spec_parse (GtkCssParser  *parser,
                  TimeSpec      *spec,
                  GError       **error)
 {
-  const char *event_types[] = { "focus", "blur", "mouseenter", "mouseleave" };
+  const char *event_types[] = { "focus", "blur", "mouseenter", "mouseleave", "click" };
   memset (spec, 0, sizeof (TimeSpec));
 
   gtk_css_parser_skip_whitespace (parser);
@@ -9455,6 +9456,10 @@ static void
 update_animation_state (GtkSvg *self)
 {
   shape_update_animation_state (self->content, self->current_time);
+
+  collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
 }
 
 /*< private>
@@ -9496,9 +9501,6 @@ gtk_svg_set_load_time (GtkSvg  *self,
   timeline_set_load_time (self->timeline, load_time);
 
   update_animation_state (self);
-  collect_next_update (self);
-  invalidate_for_next_update (self);
-  schedule_next_update (self);
 }
 
 /*< private >
@@ -9531,10 +9533,7 @@ gtk_svg_advance (GtkSvg  *self,
 
   self->current_time = current_time;
 
-  invalidate_for_next_update (self);
   update_animation_state (self);
-  collect_next_update (self);
-  schedule_next_update (self);
 
 #ifdef DEBUG
   animation_state_dump (self);
@@ -9841,14 +9840,14 @@ gtk_svg_activate_element (GtkSvg     *self,
   SvgValue *value = svg_element_get_current_value (link, SVG_PROPERTY_HREF);
   SvgAnimation *animation = svg_href_get_animation (value);
   SvgElement *target = svg_href_get_shape (value);
+  int64_t current_time = get_current_time (self);
 
   g_assert (svg_element_get_type (link) == SVG_ELEMENT_LINK);
 
   if (animation)
     {
-      ensure_current_time (self);
-      animation_set_begin (animation, self->current_time);
-      animation_update_state (animation, self->current_time);
+      animation_set_begin (animation, current_time);
+      animation_update_state (animation, current_time);
       collect_next_update (self);
       invalidate_for_next_update (self);
       schedule_next_update (self);
@@ -9863,6 +9862,12 @@ gtk_svg_activate_element (GtkSvg     *self,
         self->activate_callback (link, self->activate_data);
     }
 
+  /* For links, browsers treat 'click' as 'device independent'
+   * and emit it regardless whether key or button press.
+   */
+  timeline_update_for_event (self->timeline, link, EVENT_TYPE_CLICK, current_time);
+  gtk_svg_advance (self, current_time);
+
   if (!svg_element_get_visited (link))
     {
       svg_element_set_visited (link, TRUE);
@@ -9875,22 +9880,28 @@ static void
 gtk_svg_set_hover (GtkSvg     *self,
                    SvgElement *target)
 {
+  int64_t current_time = get_current_time (self);
+
   if (self->hover == target)
     return;
 
   if (self->hover)
     {
-      timeline_update_for_event (self->timeline, self->hover, EVENT_TYPE_MOUSE_LEAVE, self->current_time);
+      timeline_update_for_event (self->timeline, self->hover, EVENT_TYPE_MOUSE_LEAVE, current_time);
       svg_element_set_hover (self->hover, FALSE);
     }
 
   if (target)
     {
-      timeline_update_for_event (self->timeline, target, EVENT_TYPE_MOUSE_ENTER, self->current_time);
+      timeline_update_for_event (self->timeline, target, EVENT_TYPE_MOUSE_ENTER, current_time);
       svg_element_set_hover (target, TRUE);
     }
 
   self->hover = target;
+  self->style_changed = TRUE;
+
+  gtk_svg_advance (self, current_time);
+
   self->style_changed = TRUE;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   if (self->hover_callback)
@@ -9930,7 +9941,9 @@ gtk_svg_handle_event (GtkSvg   *self,
   graphene_point_t p = GRAPHENE_POINT_INIT (x, y);
   SvgElement *target;
 
-  ensure_current_time (self);
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
 
   switch ((unsigned int) gdk_event_get_event_type (event))
     {
@@ -9973,6 +9986,10 @@ gtk_svg_handle_crossing (GtkSvg                *self,
                          double                 x,
                          double                 y)
 {
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return;
+
   if (crossing->type == GTK_CROSSING_FOCUS ||
       crossing->type == GTK_CROSSING_ACTIVE)
     {
@@ -9997,6 +10014,11 @@ gboolean
 gtk_svg_grab_focus (GtkSvg *self)
 {
   SvgElement *focus = NULL;
+  int64_t current_time = get_current_time (self);
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
 
   if (self->focus)
     return TRUE;
@@ -10015,7 +10037,7 @@ gtk_svg_grab_focus (GtkSvg *self)
           else
             focus = self->content;
 
-          if (svg_element_get_focusable (focus))
+          if (focus && svg_element_get_focusable (focus))
             break;
         }
       while (focus);
@@ -10026,17 +10048,11 @@ gtk_svg_grab_focus (GtkSvg *self)
 
   svg_element_set_focus (focus, TRUE);
 
-  if (self->load_time != INDEFINITE)
-    {
-      ensure_current_time (self);
-      timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
-      update_animation_state (self);
-      collect_next_update (self);
-      invalidate_for_next_update (self);
-      schedule_next_update (self);
-    }
+  timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, current_time);
+  gtk_svg_advance (self, current_time);
 
   self->focus = focus;
+
   self->style_changed = TRUE;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
@@ -10046,22 +10062,22 @@ gtk_svg_grab_focus (GtkSvg *self)
 gboolean
 gtk_svg_lose_focus (GtkSvg *self)
 {
+  int64_t current_time = get_current_time (self);
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
+
   if (!self->focus)
     return TRUE;
 
   svg_element_set_focus (self->focus, FALSE);
 
-  if (self->load_time != INDEFINITE)
-    {
-      ensure_current_time (self);
-      timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
-      update_animation_state (self);
-      collect_next_update (self);
-      invalidate_for_next_update (self);
-      schedule_next_update (self);
-    }
+  timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, current_time);
+  gtk_svg_advance (self, current_time);
 
   self->focus = NULL;
+
   self->style_changed = TRUE;
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
@@ -10073,6 +10089,11 @@ gtk_svg_move_focus (GtkSvg           *self,
                     GtkDirectionType  direction)
 {
   SvgElement *focus = NULL;
+  int64_t current_time;
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
 
   if (direction == GTK_DIR_TAB_FORWARD)
     {
@@ -10116,37 +10137,28 @@ gtk_svg_move_focus (GtkSvg           *self,
       focus = self->focus;
     }
 
-  if (self->focus != focus)
+  if (self->focus == focus)
+    return FALSE;
+
+  current_time = get_current_time (self);
+
+  if (self->focus)
     {
-      ensure_current_time (self);
-
-      if (self->focus)
-        {
-          if (self->load_time != INDEFINITE)
-            timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
-
-          svg_element_set_focus (self->focus, FALSE);
-        }
-      if (focus)
-        {
-          if (self->load_time != INDEFINITE)
-            timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
-
-          svg_element_set_focus (focus, TRUE);
-        }
-
-      if (self->load_time != INDEFINITE)
-        {
-          update_animation_state (self);
-          collect_next_update (self);
-          invalidate_for_next_update (self);
-          schedule_next_update (self);
-        }
-
-      self->focus = focus;
-      self->style_changed = TRUE;
-      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+      timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, current_time);
+      svg_element_set_focus (self->focus, FALSE);
     }
+
+  if (focus)
+    {
+      timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, current_time);
+      svg_element_set_focus (focus, TRUE);
+    }
+
+  gtk_svg_advance (self, current_time);
+
+  self->focus = focus;
+  self->style_changed = TRUE;
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
   return self->focus != NULL;
 }
@@ -10374,8 +10386,6 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  ensure_current_time (self);
-
   if ((self->features & GTK_SVG_EXTENSIONS) == 0)
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
@@ -10395,16 +10405,14 @@ gtk_svg_set_state (GtkSvg       *self,
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
     {
+      int64_t current_time = get_current_time (self);
       dbg_print ("state", "renderer state %u -> %u", previous_state, state);
 
       timeline_update_for_state (self->timeline,
                                  previous_state, self->state,
-                                 self->current_time + self->state_change_delay);
+                                 current_time + self->state_change_delay);
 
       update_animation_state (self);
-      collect_next_update (self);
-      invalidate_for_next_update (self);
-      schedule_next_update (self);
 
 #ifdef DEBUG
       animation_state_dump (self);

@@ -100,6 +100,7 @@ demos = files([
   'spinbutton.c',
   'spinner.c',
   'stack.c',
+  'svg_widget.c',
   'tabs.c',
   'tagged_entry.c',
   'textmask.c',

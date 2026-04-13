@@ -26,7 +26,15 @@
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
 
+/* We have our own path data structure here instead of
+ * just relying on GskPath for two reasons:
+ * - SVG considers A to be a primitive and requires
+ *   it to be interpolated as such
+ * - SVG does not have conics (O)
+ */
+
 #define SVG_PATH_ARC 22
+
 typedef struct
 {
   unsigned int op;
