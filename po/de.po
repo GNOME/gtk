@@ -37,8 +37,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-19 02:45+0000\n"
-"PO-Revision-Date: 2026-02-19 21:20+0100\n"
+"POT-Creation-Date: 2026-03-15 13:10+0000\n"
+"PO-Revision-Date: 2026-03-15 20:52+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -2395,7 +2395,7 @@ msgstr "Eine Datei gleichen Namens ist bereits vorhanden"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6467 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2622,7 +2622,7 @@ msgstr "Programm"
 msgid "Audio"
 msgstr "Sprache"
 
-#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1082
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilefilter.c:1111
 msgid "Image"
 msgstr "Grafik"
 
@@ -2754,11 +2754,11 @@ msgstr "Kodierung"
 msgid "Line Ending"
 msgstr "Zeilenende"
 
-#: gtk/gtkfilefilter.c:1095
+#: gtk/gtkfilefilter.c:1124
 msgid "Unspecified"
 msgstr "Unbestimmt"
 
-#: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
+#: gtk/gtkfontchooserdialog.c:202 gtk/gtkfontchooserdialog.c:205
 msgid "Change Font Features"
 msgstr "Schrifteigenschaften ändern"
 
@@ -2938,7 +2938,7 @@ msgid "Play"
 msgstr "Wiedergabe"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6468
 msgid "_OK"
 msgstr "_OK"
 
@@ -4183,8 +4183,8 @@ msgstr ""
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:605
-#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:617
+#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Drucken"
 
@@ -4573,12 +4573,12 @@ msgstr "_Rückgängig"
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: gtk/gtkwindow.c:6454
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Wollen Sie den GTK-Inspektor verwenden?"
 
-#: gtk/gtkwindow.c:6456
+#: gtk/gtkwindow.c:6458
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4589,7 +4589,7 @@ msgstr ""
 "Interna einer beliebigen GTK-Anwendung zu untersuchen und zu verändern. "
 "Dabei kann die Anwendung unerwünscht arbeiten oder abstürzen."
 
-#: gtk/gtkwindow.c:6461
+#: gtk/gtkwindow.c:6463
 msgid "Don’t show this message again"
 msgstr "Diese Meldung nicht mehr anzeigen"
 
@@ -4735,15 +4735,11 @@ msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Sie können hier beliebige von GTK erkannte CSS-Regeln eingeben."
 
 #: gtk/inspector/css-editor.c:142
-#, fuzzy
-#| msgid ""
-#| "You can temporarily disable this custom CSS by clicking on the “Pause” "
-#| "button above."
 msgid ""
 "You can temporarily disable this custom CSS by toggling the switch above."
 msgstr ""
 "Sie können vorübergehend dieses benutzerdefinierte CSS deaktivieren, indem "
-"Sie oben auf den Knopf »Pause« klicken."
+"Sie den Schalter darüber umschalten."
 
 #: gtk/inspector/css-editor.c:143
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4756,10 +4752,8 @@ msgid "Saving CSS failed"
 msgstr "Speichern des CSS ist fehlgeschlagen"
 
 #: gtk/inspector/css-editor.ui:39
-#, fuzzy
-#| msgid "Disable this custom CSS"
 msgid "Enable this custom CSS"
-msgstr "Dieses eigene CSS deaktivieren"
+msgstr "Dieses eigene CSS aktivieren"
 
 #: gtk/inspector/css-editor.ui:45
 msgid "Save the current CSS"
@@ -5049,17 +5043,18 @@ msgstr "Oberste Ebene"
 msgid "Child Visible"
 msgstr "Sichtbares Unterelement"
 
-#: gtk/inspector/misc-info.ui:685
-#, fuzzy
-#| msgid "Paper Size"
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:686
 msgid "Paintable Size"
-msgstr "Papiergröße"
+msgstr ""
 
-#: gtk/inspector/misc-info.ui:710
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:712
 msgid "Paintable Aspect Ratio"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:735
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:738
 msgid "Paintable Flags"
 msgstr ""
 
@@ -7873,7 +7868,7 @@ msgid "Overwrite existing file"
 msgstr "Die bestehende Datei überschreiben"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -7989,20 +7984,7 @@ msgid "Validate the file."
 msgstr "Die Datei prüfen."
 
 #: tools/gtk-image-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
-#| "\n"
-#| "Perform various tasks on images.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  compare      Show differences between two images\n"
-#| "  convert      Convert the image to a different format or color state\n"
-#| "  info         Show general information about the image\n"
-#| "  relabel      Change the color state of the image without conversion\n"
-#| "  show         Show the image\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
@@ -8030,6 +8012,7 @@ msgstr ""
 "  info         Allgemeine Informationen über das Bild anzeigen\n"
 "  relabel      Den Farbstatus des Bildes ohne Konvertierung ändern\n"
 "  show         Das Bild anzeigen\n"
+"  play         Eine Animation abspielen\r\n"
 "\n"
 
 #: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
@@ -8161,44 +8144,39 @@ msgstr "Informationen zum Bild bereitstellen."
 msgid "Can only accept a single image file\n"
 msgstr "Es wird nur eine einzelne Bilddatei akzeptiert\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Keine Titelleiste hinzufügen"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "GRÖßE"
 
-#: tools/gtk-image-tool-play.c:323
-#, fuzzy
-#| msgid "Style Variations"
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
-msgstr "Stilvariationen"
+msgstr "Animationen nicht abspielen"
+
+#: tools/gtk-image-tool-play.c:311
+msgid "Don't use system resources"
+msgstr "Keine Systemressourcen verwenden"
+
+#: tools/gtk-image-tool-play.c:312
+msgid "Don't load external resources"
+msgstr "Keine externen Ressourcen laden"
+
+#: tools/gtk-image-tool-play.c:313
+msgid "Don't allow gpa extensions"
+msgstr "gpa-Erweiterung nicht erlauben"
 
 #: tools/gtk-image-tool-play.c:324
-msgid "Don't use system resources"
-msgstr ""
-
-#: tools/gtk-image-tool-play.c:325
-msgid "Don't load external resources"
-msgstr ""
-
-#: tools/gtk-image-tool-play.c:326
-msgid "Don't allow gpa extensions"
-msgstr ""
+msgid "Show one or more animations."
+msgstr "Ein oder mehrere Animationen anzeigen."
 
 #: tools/gtk-image-tool-play.c:337
-#, fuzzy
-#| msgid "Show one or more images."
-msgid "Show one or more animations."
-msgstr "Ein oder mehrere Bilder anzeigen."
-
-#: tools/gtk-image-tool-play.c:350
-#, fuzzy, c-format
-#| msgid "No image file specified\n"
+#, c-format
 msgid "No animation file specified\n"
-msgstr "Es wurde keine Bilddatei angegeben\n"
+msgstr "Es wurde keine Animationsdatei angegeben\n"
 
 #: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
@@ -8607,21 +8585,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "»%s« konnte nicht als Zahl verarbeitet werden"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  extract      Extract data urls\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8647,9 +8611,11 @@ msgstr ""
 "Befehle:\n"
 "  benchmark    Darstellung eines Knotens auf ihre Leistung vergleichen\n"
 "  compare      Knoten oder Bilder vergleichen\n"
+"  convert      In Knoten umwandeln\n"
 "  extract      Datenadressen extrahieren\n"
 "  info         Informationen über den Knoten bereitstellen\n"
-"  show         Knoten anzeigen\n"
+"  match        Übereinstimmung für Muster im Knoten\n"
+" show         Den Knoten anzeigen\n"
 "  render       Ein Bildschirmfoto des Knotens aufnehmen\n"
 "\n"
 
@@ -8824,11 +8790,11 @@ msgstr "Die Knotenposition unverändert lassen"
 
 #: tools/gtk-rendernode-tool-render.c:310
 msgid "Area to render"
-msgstr ""
+msgstr "Darzustellender Bereich"
 
 #: tools/gtk-rendernode-tool-render.c:310
 msgid "X,Y,W,H"
-msgstr ""
+msgstr "X,Y,B,H"
 
 #: tools/gtk-rendernode-tool-render.c:326
 msgid "Render a .node file to an image."
@@ -8848,7 +8814,7 @@ msgstr ""
 
 #: tools/gtk-rendernode-tool-show.c:121
 msgid "Put node into offload container"
-msgstr ""
+msgstr "Knoten in einen Offload-Container legen"
 
 #: tools/gtk-rendernode-tool-show.c:138
 msgid "Show the render node."
