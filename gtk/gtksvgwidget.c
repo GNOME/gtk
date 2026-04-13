@@ -48,17 +48,19 @@
  * to move the focus and <kbd>Enter</kbd> and clicks will activate links
  * by emitting the [signal@Gtk.SvgWidget::activate] signal.
  *
- * The `tabindex` attribute can be used to influence what elements
- * act as focus locations.
+ * The `tabindex` and `autofocus` attributes can be used to influence
+ * what elements act as focus locations, and where focus goes initially.
  *
  * The styling of the SVG content is following input-related pseudo
- * classes such as `:focus`, `:hover` or `:visited` (for links).
+ * classes such as `:focus`, `:active`, `:hover` or `:visited`.
  *
  * If [property@Gtk.Widget:has-tooltip] is set, then the content
  * of \<title\> elements will be shown as tooltips.
  *
- * SVG animations and different \<view\>s can be triggered by input events
- * as well. See the [SVG animation](https://svgwg.org/specs/animations/)
+ * SVG animations and different \<view\>s can be triggered by input
+ * events as well. The following events are supported: focus, blur,
+ * mouseenter, mouseleave, click.
+ * See the [SVG animation](https://svgwg.org/specs/animations/)
  * specification for details.
  *
  * Since: 4.24
