@@ -10412,7 +10412,7 @@ gtk_svg_set_state (GtkSvg       *self,
                                  previous_state, self->state,
                                  current_time + self->state_change_delay);
 
-      update_animation_state (self);
+      gtk_svg_advance (self, current_time);
 
 #ifdef DEBUG
       animation_state_dump (self);
