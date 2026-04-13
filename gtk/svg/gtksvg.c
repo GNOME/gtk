@@ -1284,6 +1284,7 @@ typedef enum
   EVENT_TYPE_BLUR,
   EVENT_TYPE_MOUSE_ENTER,
   EVENT_TYPE_MOUSE_LEAVE,
+  EVENT_TYPE_CLICK,
 } EventType;
 
 typedef enum
@@ -1441,7 +1442,7 @@ time_spec_parse (GtkCssParser  *parser,
                  TimeSpec      *spec,
                  GError       **error)
 {
-  const char *event_types[] = { "focus", "blur", "mouseenter", "mouseleave" };
+  const char *event_types[] = { "focus", "blur", "mouseenter", "mouseleave", "click" };
   memset (spec, 0, sizeof (TimeSpec));
 
   gtk_css_parser_skip_whitespace (parser);
@@ -9860,6 +9861,12 @@ gtk_svg_activate_element (GtkSvg     *self,
       if (self->activate_callback)
         self->activate_callback (link, self->activate_data);
     }
+
+  /* For links, browsers treat 'click' as 'device independent'
+   * and emit it regardless whether key or button press.
+   */
+  timeline_update_for_event (self->timeline, link, EVENT_TYPE_CLICK, current_time);
+  gtk_svg_advance (self, current_time);
 
   if (!svg_element_get_visited (link))
     {
