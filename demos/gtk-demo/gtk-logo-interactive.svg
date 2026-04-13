@@ -1,0 +1,82 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        id='svg6843'
+        width='128'
+        height='128'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license
+                rdf:resource=''/>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description></dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <style>
+    path:focus { fill-opacity: 0.6 !important; }
+    a:active { filter: hue-rotate(45deg); }
+  </style>
+  <g id='layer1'>
+    <animateTransform
+        id='rotate'
+        type='rotate'
+        from='0 64 64'
+        to='360 64 64'
+        dur='1s'
+        begin='indefinite'/>
+    />
+  <title>The GTK logo</title>
+    <a href='#rotate' tabindex='-1'>
+      <path
+            id='path6976'
+            tabindex='0'
+            style='fill:#729fcf;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
+            d='M 20.8841 30.827 L 53.817 55.5277 L 107.333 39.0605 L 70.5873 17.1778 L 20.8841 30.827 Z'>
+        <title>Blue Face</title>
+      </path>
+    </a>
+    <a href='#blink' tabindex='-1'>
+      <path
+            id='path6978'
+            tabindex='0'
+            style='fill:#e40000;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
+            d='M 22.9424 82.2871 L 20.8841 30.827 L 53.817 55.5277 L 53.817 111.105 L 22.9424 82.2871 Z'>
+        <title>Red Face</title>
+        <animate
+                id='blink'
+                attributeName='fill'
+                values='#e40000;yellow;#e40000'
+                dur='0.5s'
+                begin='indefinite'/>
+      </path>
+    </a>
+    <a href="http://www.gtk.org" tabindex='-1'>
+      <path
+              tabindex='0'
+              id='path6980'
+              style='fill:#7fe719;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
+              d='M 53.817 111.105 L 103.216 90.5207 L 107.333 39.0605 L 53.817 55.5277 L 53.817 111.105 Z'>
+        <title>Green Face</title>
+      </path>
+    </a>
+    <path
+            id='path6982'
+            style='opacity:1;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1'
+            d='M 23.2166 81.3195 L 70.4857 67.3614 L 103.384 90.4445'>
+    </path>
+    <path
+            id='path6984'
+            style='opacity:1;fill:#babdb6;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1'
+            d='M 70.4345 17.8756 L 70.4345 66.9849'>
+    </path>
+  </g>
+</svg>
