@@ -24,6 +24,7 @@ GskGpuFrame *           gsk_gpu_occlusion_get_frame                     (GskGpuO
 
 gboolean                gsk_gpu_occlusion_push_clip                     (GskGpuOcclusion                *self,
                                                                          const graphene_rect_t          *clip,
+                                                                         GskRectSnap                     snap,
                                                                          cairo_rectangle_int_t          *out_save);
 void                    gsk_gpu_occlusion_pop_clip                      (GskGpuOcclusion                *self,
                                                                          const cairo_rectangle_int_t    *saved);
