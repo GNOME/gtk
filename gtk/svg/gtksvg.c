@@ -9892,6 +9892,12 @@ gtk_svg_set_hover (GtkSvg     *self,
 
   self->hover = target;
   self->style_changed = TRUE;
+
+  update_animation_state (self);
+  collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
+
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
   if (self->hover_callback)
     self->hover_callback (self->hover, self->hover_data);
