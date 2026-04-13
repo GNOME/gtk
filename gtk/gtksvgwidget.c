@@ -376,10 +376,14 @@ gtk_svg_widget_query_tooltip (GtkWidget  *widget,
   SvgElement *target;
 
   target = gtk_svg_pick_element (self->svg, &GRAPHENE_POINT_INIT (x, y));
-  if (target && svg_element_get_title (target))
+  while (target)
     {
-      gtk_tooltip_set_text (tooltip, svg_element_get_title (target));
-      return TRUE;
+      if (svg_element_get_title (target))
+        {
+          gtk_tooltip_set_text (tooltip, svg_element_get_title (target));
+          return TRUE;
+        }
+      target = svg_element_get_parent (target);
     }
 
   return FALSE;
