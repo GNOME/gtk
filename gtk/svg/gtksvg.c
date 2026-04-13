@@ -9932,6 +9932,10 @@ gtk_svg_handle_event (GtkSvg   *self,
   graphene_point_t p = GRAPHENE_POINT_INIT (x, y);
   SvgElement *target;
 
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
+
   ensure_current_time (self);
 
   switch ((unsigned int) gdk_event_get_event_type (event))
@@ -9975,6 +9979,10 @@ gtk_svg_handle_crossing (GtkSvg                *self,
                          double                 x,
                          double                 y)
 {
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return;
+
   if (crossing->type == GTK_CROSSING_FOCUS ||
       crossing->type == GTK_CROSSING_ACTIVE)
     {
@@ -9999,6 +10007,11 @@ gboolean
 gtk_svg_grab_focus (GtkSvg *self)
 {
   SvgElement *focus = NULL;
+  int64_t current_time = get_current_time (self);
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
 
   if (self->focus)
     return TRUE;
@@ -10028,12 +10041,8 @@ gtk_svg_grab_focus (GtkSvg *self)
 
   svg_element_set_focus (focus, TRUE);
 
-  if (self->load_time != INDEFINITE)
-    {
-      int64_t current_time = get_current_time (self);
-      timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, current_time);
-      update_animation_state (self);
-    }
+  timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, current_time);
+  update_animation_state (self);
 
   self->focus = focus;
 
@@ -10046,17 +10055,19 @@ gtk_svg_grab_focus (GtkSvg *self)
 gboolean
 gtk_svg_lose_focus (GtkSvg *self)
 {
+  int64_t current_time = get_current_time (self);
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
+
   if (!self->focus)
     return TRUE;
 
   svg_element_set_focus (self->focus, FALSE);
 
-  if (self->load_time != INDEFINITE)
-    {
-      int64_t current_time = get_current_time (self);
-      timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, current_time);
-      update_animation_state (self);
-    }
+  timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, current_time);
+  update_animation_state (self);
 
   self->focus = NULL;
 
@@ -10071,6 +10082,10 @@ gtk_svg_move_focus (GtkSvg           *self,
                     GtkDirectionType  direction)
 {
   SvgElement *focus = NULL;
+
+  /* Don't handle events before we're loaded */
+  if (self->load_time == INDEFINITE)
+    return FALSE;
 
   if (direction == GTK_DIR_TAB_FORWARD)
     {
@@ -10120,15 +10135,13 @@ gtk_svg_move_focus (GtkSvg           *self,
 
       if (self->focus)
         {
-          if (self->load_time != INDEFINITE)
-            timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
+          timeline_update_for_event (self->timeline, self->focus, EVENT_TYPE_BLUR, self->current_time);
 
           svg_element_set_focus (self->focus, FALSE);
         }
       if (focus)
         {
-          if (self->load_time != INDEFINITE)
-            timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
+          timeline_update_for_event (self->timeline, focus, EVENT_TYPE_FOCUS, self->current_time);
 
           svg_element_set_focus (focus, TRUE);
         }
