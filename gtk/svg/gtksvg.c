@@ -10015,7 +10015,7 @@ gtk_svg_grab_focus (GtkSvg *self)
           else
             focus = self->content;
 
-          if (svg_element_get_focusable (focus))
+          if (focus && svg_element_get_focusable (focus))
             break;
         }
       while (focus);
