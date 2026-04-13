@@ -52,7 +52,7 @@
  * act as focus locations.
  *
  * The styling of the SVG content is following input-related pseudo
- * states such as `:focus`, `:hover` or `:visited` (for links).
+ * classes such as `:focus`, `:hover` or `:visited` (for links).
  *
  * If [property@Gtk.Widget:has-tooltip] is set, then the content
  * of \<title\> elements will be shown as tooltips.
@@ -218,7 +218,9 @@ gtk_svg_widget_init (GtkSvgWidget *self)
                             G_CALLBACK (gtk_widget_queue_draw), self);
   g_signal_connect_swapped (self->svg, "invalidate-size",
                             G_CALLBACK (gtk_widget_queue_resize), self);
+
   g_signal_connect (self->svg, "error", G_CALLBACK (error_cb), self);
+
   gtk_svg_set_activate_callback (self->svg, activate_cb, self);
   gtk_svg_set_hover_callback (self->svg, hover_cb, self);
 
@@ -599,10 +601,9 @@ gtk_svg_widget_get_stylesheet (GtkSvgWidget *self)
  *
  * Sets the state of the widget.
  *
- * If the paintable is currently playing, the state change
- * will apply transitions that are defined in the SVG. If
- * the paintable is not playing, the state change will take
- * effect instantaneously.
+ * The state change will apply transitions that are defined
+ * in the SVG. See [class@Gtk.Svg] for details about states
+ * and transitions.
  *
  * Since: 4.24
  */
