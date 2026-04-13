@@ -1,0 +1,17 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'>
+  <circle
+          tabindex='0'
+          pointer-events='bounding-box'>
+  </circle>
+  <rect>
+  </rect>
+  <a
+          tabindex='-1'>
+    <ellipse
+            tabindex='0'
+            pointer-events='visibleFill'>
+    </ellipse>
+  </a>
+</svg>

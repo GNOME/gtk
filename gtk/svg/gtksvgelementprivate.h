@@ -101,12 +101,16 @@ void         svg_element_parse_classes       (SvgElement            *element,
 void         svg_element_take_classes        (SvgElement            *element,
                                               GStrv                  classes);
 GStrv        svg_element_get_classes         (SvgElement            *element);
-void         svg_element_set_title           (SvgElement            *element,
+void         svg_element_add_title           (SvgElement            *element,
+                                              PangoLanguage         *lang,
                                               const char            *title);
 const char * svg_element_get_title           (SvgElement            *element);
-void         svg_element_set_description     (SvgElement            *element,
+void         svg_element_add_description     (SvgElement            *element,
+                                              PangoLanguage         *lang,
                                               const char            *description);
 const char * svg_element_get_description     (SvgElement            *element);
+void         svg_element_set_language        (SvgElement            *element,
+                                              PangoLanguage         *lang);
 GtkCssNode * svg_element_get_css_node        (SvgElement            *element);
 
 void         svg_element_set_origin          (SvgElement            *element,

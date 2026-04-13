@@ -75,12 +75,22 @@ style_elt_free (gpointer p)
   g_free (e);
 }
 
+static void
+lang_string_clear (LangString *l)
+{
+  g_free (l->string);
+  l->string = NULL;
+  l->lang = NULL;
+  l->type = NULL;
+}
+
 void
 svg_element_free (SvgElement *element)
 {
   g_clear_pointer (&element->id, g_free);
   g_clear_pointer (&element->style, g_free);
   g_clear_pointer (&element->classes, g_strfreev);
+  g_clear_pointer (&element->lang_strings, g_array_unref);
   g_clear_pointer (&element->title, g_free);
   g_clear_pointer (&element->description, g_free);
   g_clear_object (&element->css_node);
@@ -127,6 +137,8 @@ svg_element_new (SvgElement     *parent,
 
   element->parent = parent;
   element->type = type;
+
+  element->lang_strings = array_new_with_clear_func (sizeof (LangString), (GDestroyNotify) lang_string_clear);
 
   element->attrs = _gtk_bitmask_new ();
 
@@ -1179,10 +1191,17 @@ svg_element_get_classes (SvgElement *element)
 }
 
 void
-svg_element_set_title (SvgElement *element,
-                       const char *title)
+svg_element_add_title (SvgElement    *element,
+                       PangoLanguage *lang,
+                       const char    *title)
 {
-  g_set_str (&element->title, title);
+  LangString l;
+
+  l.type = "title";
+  l.lang = lang;
+  l.string = g_strdup (title);
+
+  g_array_append_val (element->lang_strings, l);
 }
 
 const char *
@@ -1192,16 +1211,59 @@ svg_element_get_title (SvgElement *element)
 }
 
 void
-svg_element_set_description (SvgElement *element,
-                             const char *description)
+svg_element_add_description (SvgElement    *element,
+                             PangoLanguage *lang,
+                             const char    *description)
 {
-  g_set_str (&element->description, description);
+  LangString l;
+
+  l.type = "desc";
+  l.lang = lang;
+  l.string = g_strdup (description);
+
+  g_array_append_val (element->lang_strings, l);
 }
 
 const char *
 svg_element_get_description (SvgElement *element)
 {
   return element->description;
+}
+
+static const char *
+pick_best_lang_string (GArray        *ls,
+                       const char    *type,
+                       PangoLanguage *lang)
+{
+  const char *string = NULL;
+
+  for (unsigned int i = 0; i < ls->len; i++)
+    {
+      LangString *l = &g_array_index (ls, LangString, i);
+
+      if (strcmp (l->type, type) != 0)
+        continue;
+
+      if (string == NULL)
+        string = l->string;
+
+      if (l->lang == lang)
+        {
+          string = l->string;
+          break;
+        }
+    }
+
+  return string;
+}
+
+void
+svg_element_set_language (SvgElement    *element,
+                          PangoLanguage *lang)
+{
+  g_set_str (&element->title, pick_best_lang_string (element->lang_strings, "title", lang));
+  g_set_str (&element->description, pick_best_lang_string (element->lang_strings, "desc", lang));
+  g_clear_pointer (&element->lang_strings, g_array_unref);
 }
 
 GtkCssNode *

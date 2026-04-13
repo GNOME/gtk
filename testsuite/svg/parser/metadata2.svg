@@ -1,4 +1,5 @@
 <svg>
+  <title>Test title</title>
   <rect id='rect'>
     <title lang='de-de'>Ein Rechteck</title>
     <title lang='en-us'>A rect</title>
