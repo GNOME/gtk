@@ -93,6 +93,12 @@ svg_transform_path (GskTransform *transform,
 /* }}} */
 /* {{{ Path decomposition */
 
+/* Some svg simplifiers (tinysvg, looking at you) replace
+ * perfectly fine basic shapes like rects and circles with
+ * paths. Since we can deal much more efficiently with those
+ * basic shapes, we make some effort to recover them.
+ */
+
 static gboolean
 path_is_rect (GskPathOperation *ops,
               size_t            n_ops,
@@ -670,6 +676,8 @@ svg_path_classify (GskPath        *path,
 
 /* }}} */
 /* {{{ Snapshotting */
+
+/* Like gtk_snapshot_push_fill, but more efficient */
 
 void
 svg_snapshot_push_fill (GtkSnapshot *snapshot,

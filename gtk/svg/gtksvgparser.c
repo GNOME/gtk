@@ -72,8 +72,6 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
-/* {{{ Parser */
-
 /* The parser creates the shape tree. We maintain a current shape,
  * and a current animation. Some things are done in a post-processing
  * step: finding the shape that an animation belongs to, resolving
@@ -84,12 +82,13 @@
  * shapes, but not color stops and filter primitives. SvgAnimations
  * are their own thing too.
  *
- * So each shapes can have multiple
+ * So each shape can have multiple
  * - child shapes
  * - animations
  * - color stops
  * - filter primitives
  */
+
 typedef struct
 {
   GtkSvg *svg;
@@ -117,6 +116,8 @@ typedef struct
   GArray *titles;
   GArray *descs;
 } ParserData;
+
+/* {{{ Language-tagged strings (for title, desc) */
 
 typedef struct
 {
@@ -154,6 +155,7 @@ pick_best_lang_string (GArray *ls)
   return string;
 }
 
+/* }}} */
 /* {{{ SvgAnimation attributes */
 
 typedef struct
@@ -1791,6 +1793,7 @@ parse_filter_attrs (SvgElement           *shape,
 }
 
 /* }}} */
+/* {{{ Parser */
 
 G_GNUC_PRINTF (4, 5)
 static void
@@ -2540,7 +2543,22 @@ error_cb (GMarkupParseContext *context,
   gtk_svg_markup_error (data->svg, context, error);
 }
 
+/* }}} */
 /* {{{ Href handling, dependency tracking */
+
+/* To deal with forward references, we resolve references after parsing
+ * the entire SVG. The references hide in various value types (e.g. paint
+ * servers), as well as in animations.
+ *
+ * Note: Since we don't have scripting, once resolved, the reference of a
+ * value does not change. However, animations can change swap the value
+ * out for another one with a different reference.
+ *
+ * Some kinds of references induce dependencies wrt. to computing current
+ * values (e.g. the when an <animateMotion> element has an <mpath> child
+ * that refers to the path of an element, then that element needs to have
+ * its values upated before the animation uses its path.
+ */
 
 static void
 add_dependency (SvgElement *shape0,
@@ -2552,7 +2570,7 @@ add_dependency (SvgElement *shape0,
 }
 
 /* Record the fact that when computing updated
- * values, shape2 must be handled before shape1
+ * values, shape0 must be handled before shape1.
  */
 static void
 add_dependency_to_common_ancestor (SvgElement *shape0,
@@ -2632,9 +2650,8 @@ resolve_href_ref (SvgValue   *value,
   if (svg_href_get_kind (value) == HREF_NONE)
     return;
 
-  /* Since hrefs can't be set in css, we can only ever
-   * get here from a presentation attr, so we always
-   * have a shape.
+  /* Since hrefs can't be set in css, we can only ever get here
+   * from a presentation attr, so we always have a shape.
    */
   g_assert (shape != NULL);
 
@@ -4250,6 +4267,7 @@ apply_styles_to_shape (SvgElement *shape,
 }
 
 /* }}} */
+/* {{{ API */
 
 /* Determine the intrinsic width, height, and aspect ratio from
  * what we have.
@@ -4479,3 +4497,5 @@ gtk_svg_init_from_resource (GtkSvg     *self,
 }
 
 /* }}} */
+
+/* vim:set foldmethod=marker: */

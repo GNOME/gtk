@@ -121,6 +121,9 @@ svg_initial_new (void)
   return (SvgValue *) &initial;
 }
 
+/* This is a made-up keyword value, which we use
+ * as the from value in 'to' animations.
+ */
 SvgValue *
 svg_current_new (void)
 {
@@ -137,6 +140,12 @@ svg_auto_new (void)
   return (SvgValue *) &auto_value;
 }
 
+/* This does not really exist in SVG either. We use it
+ * during cascading. All property values get initialized
+ * with this value, and then overwritten with presentation
+ * attributes and style values. What is left 'unset' afterwards
+ * will be inherited or set to initial values.
+ */
 SvgValue *
 svg_unset_new (void)
 {
