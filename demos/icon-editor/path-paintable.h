@@ -95,3 +95,6 @@ GtkSvg *        path_paintable_get_svg             (PathPaintable *self);
 
 char *          path_paintable_find_unused_id      (PathPaintable *self,
                                                     const char    *prefix);
+
+SvgValue *      ref_value (SvgElement *shape,
+                           SvgProperty attr);

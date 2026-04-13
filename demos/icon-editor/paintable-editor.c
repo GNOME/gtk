@@ -142,7 +142,7 @@ update_viewbox (PaintableEditor *self)
   SvgValue *value;
   graphene_rect_t rect;
 
-  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  value = ref_value (svg->content, SVG_PROPERTY_VIEW_BOX);
   if (svg_view_box_get (value, &rect))
     {
       g_autofree char *text = g_strdup_printf ("%g", rect.origin.x);
@@ -161,6 +161,7 @@ update_viewbox (PaintableEditor *self)
       gtk_editable_set_text (GTK_EDITABLE (self->viewbox_w), "");
       gtk_editable_set_text (GTK_EDITABLE (self->viewbox_h), "");
     }
+  svg_value_unref (value);
 }
 
 typedef struct
@@ -394,7 +395,7 @@ update_xml (PaintableEditor *self)
 
   g_signal_handlers_block_by_func (self->xml_buffer, xml_changed, self);
   gtk_text_buffer_set_text (self->xml_buffer, g_bytes_get_data (xml, NULL), g_bytes_get_size (xml));
-  update_timeout (self);
+  //update_timeout (self);
   g_signal_handlers_unblock_by_func (self->xml_buffer, xml_changed, self);
 }
 
@@ -433,11 +434,12 @@ set_size (PaintableEditor *self,
   svg_element_take_base_value (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
   svg_element_take_base_value (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
 
-  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  value = ref_value (svg->content, SVG_PROPERTY_VIEW_BOX);
 
   if (!svg_view_box_get (value, &rect))
     svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
                         svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
+  svg_value_unref (value);
 
   path_paintable_changed (self->paintable);
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self->paintable));
@@ -829,8 +831,9 @@ paintable_editor_add_path (PaintableEditor *self)
   if (svg_element_get_n_children (svg->content) == 0 && svg->width == 0 && svg->height == 0)
     set_size (self, 100, 100);
 
-  value = svg_element_get_base_value (svg->content, SVG_PROPERTY_VIEW_BOX);
+  value = ref_value (svg->content, SVG_PROPERTY_VIEW_BOX);
   svg_view_box_get (value, &rect);
+  svg_value_unref (value);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_move_to (builder, rect.origin.x, rect.origin.y);

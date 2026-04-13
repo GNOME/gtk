@@ -32,6 +32,7 @@
 #include "svg/gtksvgclipprivate.h"
 #include "svg/gtksvgelementprivate.h"
 #include "svg/gtksvgpaintprivate.h"
+#include "svg/gtksvgkeywordprivate.h"
 
 
 #define BIT(n) (G_GUINT64_CONSTANT (1) << (n))
@@ -512,7 +513,6 @@ path_paintable_get_compatibility (PathPaintable *self)
    * Icons may still render (in a degraded fashion) with older GTK.
    */
   GtkCompatibility compat = GTK_4_0;
-  PaintOrder paint_order;
   const char *ref;
   GpaTransition transition;
   GpaAnimation animation;
@@ -559,9 +559,10 @@ path_paintable_get_compatibility (PathPaintable *self)
           g_assert_not_reached ();
         }
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
+      value = ref_value (shape, SVG_PROPERTY_STROKE);
       if (svg_paint_get_kind (value) != PAINT_NONE)
         compat = MAX (compat, GTK_4_20);
+      svg_value_unref (value);
 
       svg_element_get_gpa_transition (shape, &transition, NULL, NULL, NULL);
       svg_element_get_gpa_animation (shape, &animation, NULL, NULL, NULL, NULL);
@@ -571,33 +572,41 @@ path_paintable_get_compatibility (PathPaintable *self)
           ref != NULL)
         compat = MAX (compat, GTK_4_22);
 
-      paint_order = svg_enum_get (svg_element_get_base_value (shape, SVG_PROPERTY_PAINT_ORDER));
-      if (paint_order != PAINT_ORDER_FILL_STROKE_MARKERS)
+      value = ref_value (shape, SVG_PROPERTY_PAINT_ORDER);
+      if (svg_enum_get (value) != PAINT_ORDER_FILL_STROKE_MARKERS)
         compat = MAX (compat, GTK_4_22);
+      svg_value_unref (value);
 
-      if (svg_number_get (svg_element_get_base_value (shape, SVG_PROPERTY_OPACITY), 100) != 1)
+      value = ref_value (shape, SVG_PROPERTY_OPACITY);
+      if (svg_number_get (value, 100) != 1)
         compat = MAX (compat, GTK_4_22);
+      svg_value_unref (value);
 
-      if (svg_number_get (svg_element_get_base_value (shape, SVG_PROPERTY_STROKE_MITERLIMIT), 100) != 4)
+      value = ref_value (shape, SVG_PROPERTY_STROKE_MITERLIMIT);
+      if (svg_number_get (value, 100) != 4)
         compat = MAX (compat, GTK_4_22);
+      svg_value_unref (value);
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_CLIP_PATH);
+      value = ref_value (shape, SVG_PROPERTY_CLIP_PATH);
       initial = svg_clip_new_none ();
       if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
       svg_value_unref (initial);
+      svg_value_unref (value);
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_TRANSFORM);
+      value = ref_value (shape, SVG_PROPERTY_TRANSFORM);
       initial = svg_transform_new_none ();
       if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
       svg_value_unref (initial);
+      svg_value_unref (value);
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_FILTER);
+      value = ref_value (shape, SVG_PROPERTY_FILTER);
       initial = svg_filter_functions_new_none ();
       if (!svg_value_equal (value, initial))
         compat = MAX (compat, GTK_4_22);
       svg_value_unref (initial);
+      svg_value_unref (value);
 
       if (compat == GTK_4_22)
         break;
@@ -741,20 +750,19 @@ shape_get_path_image (SvgElement *shape,
   svg->width = orig->width;
   svg->height = orig->width;
 
-  value = svg_element_get_base_value (orig->content, SVG_PROPERTY_WIDTH);
-  svg_element_set_base_value (svg->content, SVG_PROPERTY_WIDTH, value);
+  value = svg_element_get_specified_value (orig->content, SVG_PROPERTY_WIDTH);
+  svg_element_set_specified_value (svg->content, SVG_PROPERTY_WIDTH, value);
+  value = svg_element_get_specified_value (orig->content, SVG_PROPERTY_HEIGHT);
+  svg_element_set_specified_value (svg->content, SVG_PROPERTY_HEIGHT, value);
 
-  value = svg_element_get_base_value (orig->content, SVG_PROPERTY_HEIGHT);
-  svg_element_set_base_value (svg->content, SVG_PROPERTY_HEIGHT, value);
-
-  value = svg_element_get_base_value (orig->content, SVG_PROPERTY_VIEW_BOX);
-  svg_element_set_base_value (svg->content, SVG_PROPERTY_VIEW_BOX, value);
+  value = svg_element_get_specified_value (orig->content, SVG_PROPERTY_VIEW_BOX);
+  svg_element_set_specified_value (svg->content, SVG_PROPERTY_VIEW_BOX, value);
 
   if (svg_element_type_is_graphical (svg_element_get_type (shape)))
     {
       SvgElement *clone = svg_element_duplicate (shape, svg->content);
-      svg_element_set_base_value (clone, SVG_PROPERTY_VISIBILITY, NULL);
-      svg_element_set_base_value (clone, SVG_PROPERTY_DISPLAY, NULL);
+      svg_element_set_specified_value (clone, SVG_PROPERTY_VISIBILITY, NULL);
+      svg_element_set_specified_value (clone, SVG_PROPERTY_DISPLAY, NULL);
       svg_element_add_child (svg->content, clone);
     }
   bytes = gtk_svg_serialize (svg);
@@ -893,6 +901,20 @@ path_paintable_find_unused_id (PathPaintable *self,
     }
 
   return NULL;
+}
+
+SvgValue *
+ref_value (SvgElement  *shape,
+           SvgProperty  attr)
+{
+  SvgValue *value = svg_element_get_specified_value (shape, attr);
+  if (value)
+    value = svg_value_ref (value);
+  else
+    value = svg_property_ref_initial_value (attr,
+                                            svg_element_get_type (shape),
+                                            svg_element_get_parent (shape) != NULL);
+  return value;
 }
 
 /* }}} */
