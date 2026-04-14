@@ -104,7 +104,7 @@ struct _SvgElement
   SvgElement *first;
   SvgElement *next;
 
-  gboolean computed_for_use;
+  gboolean invalid_use;
   gboolean valid_bounds;
 
   GArray *specified;

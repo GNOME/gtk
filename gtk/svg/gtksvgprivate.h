@@ -58,6 +58,7 @@ struct _GtkSvg
   gboolean has_animations;
   GtkSvgFeatures features;
   GtkSvgUses used;
+  gboolean has_use_cycle;
 
   GBytes *stylesheet;
 

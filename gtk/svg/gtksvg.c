@@ -9690,6 +9690,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->max_state = 0;
   self->state_change_delay = 0;
   self->used = 0;
+  self->has_use_cycle = FALSE;
 
   self->gpa_version = 0;
 

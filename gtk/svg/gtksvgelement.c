@@ -2180,31 +2180,48 @@ svg_element_contains (SvgElement             *element,
   return FALSE;
 }
 
-void svg_element_build_shadow_tree (SvgElement *element,
-                                    GtkSvg     *svg,
-                                    int        *clone_count);
+static gboolean
+svg_element_has_ancestor_or_corresponding (SvgElement *element,
+                                           SvgElement *ancestor)
+{
+  for (SvgElement *parent = element->parent; parent; parent = parent->parent)
+    {
+      if (parent == ancestor || parent->corresponding == ancestor)
+        return TRUE;
+    }
+  return FALSE;
+}
+
+typedef struct
+{
+  unsigned int count;
+} ShadowData;
+
+static void svg_element_build_shadow_tree (SvgElement *element,
+                                           GtkSvg     *svg,
+                                           ShadowData *data);
 
 static SvgElement *
 svg_element_clone (SvgElement *element,
                    SvgElement *parent,
                    GtkSvg     *svg,
-                   int        *clone_count)
+                   ShadowData *data)
 {
   SvgElement *clone = g_new0 (SvgElement, 1);
 
-  if ((*clone_count)++ > CLONE_LIMIT)
+  if (data->count++ > CLONE_LIMIT)
     {
-      gtk_svg_rendering_error (svg, "excessive instance count, aborting");
+      gtk_svg_rendering_error (svg, "Excessive instance count, aborting");
       return NULL;
     }
 
   if (element->type == SVG_ELEMENT_USE)
-    svg_element_build_shadow_tree (element, svg, clone_count);
+    svg_element_build_shadow_tree (element, svg, data);
 
   clone->type = element->type;
   clone->parent = parent;
   clone->attrs = _gtk_bitmask_copy (element->attrs);
-  clone->id = NULL;
+  clone->id = NULL; /* Lets not confuse find-by-id */
   clone->style = g_strdup (element->style);
   clone->classes = g_strdupv (element->classes);
   clone->title = g_strdup (element->title);
@@ -2240,7 +2257,7 @@ svg_element_clone (SvgElement *element,
       for (unsigned int i = 0; i < element->shapes->len; i++)
         {
           SvgElement *child = g_ptr_array_index (element->shapes, i);
-          SvgElement *child_clone = svg_element_clone (child, clone, svg, clone_count);
+          SvgElement *child_clone = svg_element_clone (child, clone, svg, data);
           if (!child_clone)
             {
               svg_element_free (clone);
@@ -2360,10 +2377,10 @@ svg_element_clone (SvgElement *element,
   return clone;
 }
 
-void
+static void
 svg_element_build_shadow_tree (SvgElement *element,
                                GtkSvg     *svg,
-                               int        *clone_count)
+                               ShadowData *data)
 {
   SvgValue *href;
   SvgElement *target;
@@ -2371,10 +2388,19 @@ svg_element_build_shadow_tree (SvgElement *element,
   g_assert (element->type == SVG_ELEMENT_USE);
 
   href = svg_element_get_current_value (element, SVG_PROPERTY_HREF);
-  if (href)
-    target = svg_href_get_shape (href);
-  else
-    target = NULL;
+  if (!href || !svg_href_get_shape (href))
+    return;
+
+  target = svg_href_get_shape (href);
+
+  if (element == target || element->corresponding == target ||
+      svg_element_has_ancestor_or_corresponding (element, target))
+    {
+      if (!svg->has_use_cycle)
+        gtk_svg_rendering_error (svg, "Circular <use>, aborting");
+      svg->has_use_cycle = TRUE;
+      return;
+    }
 
   if (element->shapes->len > 0)
     {
@@ -2387,7 +2413,7 @@ svg_element_build_shadow_tree (SvgElement *element,
 
   if (target)
     {
-      SvgElement *clone = svg_element_clone (target, element, svg, clone_count);
+      SvgElement *clone = svg_element_clone (target, element, svg, data);
       if (clone)
         {
           g_ptr_array_add (element->shapes, clone);
@@ -2400,9 +2426,9 @@ void
 svg_element_ensure_shadow_tree (SvgElement *element,
                                 GtkSvg     *svg)
 {
-  int clone_count = 0;
+  ShadowData data = { .count = 0 };
 
-  svg_element_build_shadow_tree (element, svg, &clone_count);
+  svg_element_build_shadow_tree (element, svg, &data);
 }
 
 SvgElement *
