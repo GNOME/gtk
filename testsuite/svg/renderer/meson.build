@@ -23,6 +23,7 @@ test_data = [
   'color.svg',
   'color-matrix.svg',
   'conditional.svg',
+  'crash-circular-use.svg',
   'dashes.svg',
   'ellipse.svg',
   'ellipse2.svg',
