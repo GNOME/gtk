@@ -26,7 +26,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _SvgComputeContext SvgComputeContext;
 struct _SvgComputeContext
 {
   GtkSvg *svg;

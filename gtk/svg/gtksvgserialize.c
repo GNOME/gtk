@@ -42,6 +42,10 @@
 #include "gtksvgcolorstopprivate.h"
 #include "gtksvgelementinternal.h"
 #include "gtksvganimationprivate.h"
+#include "gtksvgkeywordprivate.h"
+#include "gtksvggpaprivate.h"
+#include "gtksvgtimespecprivate.h"
+#include "gtksvgparserprivate.h"
 
 #include <stdint.h>
 
@@ -61,104 +65,6 @@
 
 #define BASE_INDENT 2
 #define ATTR_INDENT 8
-
-void
-print_states (GString  *s,
-              GtkSvg   *svg,
-              uint64_t  states)
-{
-  if (states == ALL_STATES)
-    {
-      g_string_append (s, "all");
-    }
-  else if (states == NO_STATES)
-    {
-      g_string_append (s, "none");
-    }
-  else
-    {
-      gboolean first = TRUE;
-      unsigned int n_state_names = 0;
-      const char **state_names = NULL;
-      if (svg)
-        {
-          n_state_names = svg->n_state_names;
-          state_names = (const char **) svg->state_names;
-        }
-      for (unsigned int u = 0; u < 64; u++)
-        {
-          if ((states & BIT (u)) != 0)
-            {
-              if (!first)
-                g_string_append_c (s, ' ');
-              first = FALSE;
-              if (u < n_state_names)
-                g_string_append (s, state_names[u]);
-              else
-                g_string_append_printf (s, "%u", u);
-            }
-        }
-    }
-}
-
-void
-time_spec_print (TimeSpec *spec,
-                 GtkSvg   *svg,
-                 GString  *s)
-{
-  gboolean only_nonzero = FALSE;
-  const char *sides[] = { "begin", "end" };
-  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave" };
-
-  switch (spec->type)
-    {
-    case TIME_SPEC_TYPE_INDEFINITE:
-      g_string_append (s, "indefinite");
-      return;
-    case TIME_SPEC_TYPE_OFFSET:
-      break;
-    case TIME_SPEC_TYPE_SYNC:
-      g_string_append_printf (s, "%s.%s", spec->sync.ref, sides[spec->sync.side]);
-      only_nonzero = TRUE;
-      break;
-    case TIME_SPEC_TYPE_STATES:
-      g_string_append (s, "StateChange(");
-      print_states (s, svg, spec->states.from);
-      g_string_append (s, ", ");
-      print_states (s, svg, spec->states.to);
-      g_string_append (s, ")");
-      only_nonzero = TRUE;
-      break;
-    case TIME_SPEC_TYPE_EVENT:
-      if (spec->event.ref)
-        g_string_append_printf (s, "%s.", spec->event.ref);
-      g_string_append_printf (s, "%s", events[spec->event.event]);
-      only_nonzero = TRUE;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  if (!only_nonzero || spec->offset != 0)
-    {
-      string_append_double (s, only_nonzero ? " " : "", spec->offset / (double) G_TIME_SPAN_MILLISECOND);
-      g_string_append (s, "ms");
-    }
-}
-
-void
-time_specs_print (GPtrArray *specs,
-                  GtkSvg    *svg,
-                  GString   *s)
-{
-  for (unsigned int i = 0; i < specs->len; i++)
-    {
-      TimeSpec *spec = g_ptr_array_index (specs, i);
-      if (i > 0)
-        g_string_append (s, "; ");
-      time_spec_print (spec, svg, s);
-    }
-}
 
 /* copied from gtksymbolicpaintable.c */
 static const GdkRGBA *

@@ -86,7 +86,8 @@ typedef enum
   ANIMATION_STATUS_DONE,
 } AnimationStatus;
 
-typedef struct {
+typedef struct
+{
   SvgValue *value;
   double time;
   double point;
@@ -188,6 +189,9 @@ TimeSpec *       svg_animation_add_begin     (SvgAnimation  *animation,
 TimeSpec *       svg_animation_add_end       (SvgAnimation  *animation,
                                               TimeSpec      *spec);
 
+int64_t          svg_animation_get_current_begin (SvgAnimation *animation);
+int64_t          svg_animation_get_current_end   (SvgAnimation *animation);
+
 void             svg_animation_update_for_pause
                                              (SvgAnimation  *animation,
                                               int64_t        duration);
@@ -223,9 +227,16 @@ void             svg_animation_motion_fill_from_path
 SvgAnimation *   svg_animation_clone (SvgAnimation *animation,
                                       SvgElement   *parent);
 
-void time_spec_add_animation  (TimeSpec     *spec,
-                               SvgAnimation *a);
-void time_spec_drop_animation (TimeSpec     *spec,
-                               SvgAnimation *a);
+void            animation_update_for_spec (SvgAnimation *animation,
+                                           TimeSpec     *spec);
+void            animation_set_begin       (SvgAnimation *a,
+                                          int64_t       current_time);
+
+gboolean        animation_set_current_end (SvgAnimation *a,
+                                           int64_t       time);
+
+int64_t         determine_repeat_duration (SvgAnimation *a);
+int64_t         determine_simple_duration (SvgAnimation *a);
+
 
 G_END_DECLS

@@ -27,6 +27,8 @@
 #include "gtk/svg/gtksvgtypesprivate.h"
 #include "gtk/svg/gtksvgenumsprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gsk/gskpath.h"
+#include "gsk/gskstroke.h"
 
 
 #define NO_STATES 0
