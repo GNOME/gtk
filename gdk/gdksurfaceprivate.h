@@ -341,7 +341,6 @@ void       gdk_surface_queue_state_change  (GdkSurface       *surface,
 
 void       gdk_surface_apply_state_change  (GdkSurface       *surface);
 
-GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
 
 gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);

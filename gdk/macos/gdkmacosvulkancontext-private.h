@@ -39,7 +39,6 @@ G_BEGIN_DECLS
 typedef struct _GdkMacosVulkanContext GdkMacosVulkanContext;
 typedef struct _GdkMacosVulkanContextClass GdkMacosVulkanContextClass;
 
-GDK_AVAILABLE_IN_ALL
 GType gdk_macos_vulkan_context_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

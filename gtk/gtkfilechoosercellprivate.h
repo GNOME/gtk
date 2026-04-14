@@ -26,7 +26,6 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FILE_CHOOSER_CELL (gtk_file_chooser_cell_get_type ())
 
-GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK, FILE_CHOOSER_CELL, GtkWidget)
 
 GtkFileChooserCell * gtk_file_chooser_cell_new (void);
