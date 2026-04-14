@@ -37,6 +37,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"
+#include "svg/gtksvg.h"
 
 
 /**
@@ -71,6 +72,7 @@ typedef struct _GtkSpinnerClass GtkSpinnerClass;
 struct _GtkSpinner
 {
   GtkWidget parent;
+  GtkSvg *paintable;
 
   guint spinning : 1;
 };
@@ -93,7 +95,7 @@ G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 static void
 update_state_flags (GtkSpinner *spinner)
 {
-  if (spinner->spinning && gtk_widget_get_mapped (GTK_WIDGET (spinner)))
+  if (spinner->spinning)
     gtk_widget_set_state_flags (GTK_WIDGET (spinner),
                                 GTK_STATE_FLAG_CHECKED, FALSE);
   else
@@ -120,12 +122,31 @@ static void
 gtk_spinner_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
+  GtkSpinner *spinner = GTK_SPINNER (widget);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
-  gtk_css_style_snapshot_icon (style,
-                               snapshot,
-                               gtk_widget_get_width (widget),
-                               gtk_widget_get_height (widget));
+  gtk_css_style_snapshot_icon_paintable (style,
+                                         snapshot,
+                                         GDK_PAINTABLE (spinner->paintable),
+                                         gtk_widget_get_width (widget),
+                                         gtk_widget_get_height (widget));
+}
+
+static void
+ensure_paintable (GtkSpinner *spinner)
+{
+  GdkFrameClock *clock;
+
+  if (spinner->paintable)
+    return;
+
+  spinner->paintable = gtk_svg_new_from_resource ("/org/gtk/libgtk/icons/process-working.gpa");
+
+  g_signal_connect_swapped (spinner->paintable, "invalidate-contents",
+                            G_CALLBACK (gtk_widget_queue_draw), spinner);
+
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (spinner));
+  gtk_svg_set_frame_clock (spinner->paintable, clock);
 }
 
 static void
@@ -135,7 +156,9 @@ gtk_spinner_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->map (widget);
 
-  update_state_flags (spinner);
+  ensure_paintable (spinner);
+
+  gtk_svg_play (spinner->paintable);
 }
 
 static void
@@ -143,17 +166,17 @@ gtk_spinner_unmap (GtkWidget *widget)
 {
   GtkSpinner *spinner = GTK_SPINNER (widget);
 
-  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
+  gtk_svg_pause (spinner->paintable);
 
-  update_state_flags (spinner);
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
 }
 
 static void
 gtk_spinner_css_changed (GtkWidget         *widget,
                          GtkCssStyleChange *change)
-{ 
+{
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->css_changed (widget, change);
-  
+
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
     {
@@ -202,6 +225,9 @@ gtk_spinner_set_spinning (GtkSpinner *spinner,
 
   spinner->spinning = spinning;
 
+  if (gtk_widget_get_mapped (GTK_WIDGET (spinner)))
+    gtk_svg_set_state (spinner->paintable, spinner->spinning ? 0 : 1);
+
   update_state_flags (spinner);
 
   g_object_notify (G_OBJECT (spinner), "spinning");
@@ -240,6 +266,19 @@ gtk_spinner_set_property (GObject      *object,
 }
 
 static void
+gtk_spinner_dispose (GObject *object)
+{
+  GtkSpinner *spinner = GTK_SPINNER (object);
+
+  if (spinner->paintable)
+    g_signal_handlers_disconnect_by_func (spinner->paintable, G_CALLBACK (gtk_widget_queue_draw), spinner);
+
+  g_clear_object (&spinner->paintable);
+
+  G_OBJECT_CLASS (gtk_spinner_parent_class)->dispose (object);
+}
+
+static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
 {
   GObjectClass *gobject_class;
@@ -248,6 +287,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   gobject_class = G_OBJECT_CLASS(klass);
   gobject_class->get_property = gtk_spinner_get_property;
   gobject_class->set_property = gtk_spinner_set_property;
+  gobject_class->dispose = gtk_spinner_dispose;
 
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->snapshot = gtk_spinner_snapshot;

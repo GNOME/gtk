@@ -2,8 +2,8 @@
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="decorated">0</property>
-    <child>
-      <object class="GtkSpinner" id="spinner1"/>
-    </child>
+    <property name="child">
+      <object class="GtkCheckButton" id="spinner1"/>
+    </property>
   </object>
 </interface>

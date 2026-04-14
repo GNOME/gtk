@@ -3406,7 +3406,7 @@ create_visibility_setter (SvgElement   *shape,
   Visibility opposite_visibility;
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
-    initial_visibility = svg_enum_get (svg_element_get_base_value (shape, SVG_PROPERTY_VISIBILITY));
+    initial_visibility = svg_enum_get (svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY));
   else
     initial_visibility = VISIBILITY_VISIBLE;
 
@@ -10412,7 +10412,7 @@ gtk_svg_set_state (GtkSvg       *self,
                                  previous_state, self->state,
                                  current_time + self->state_change_delay);
 
-      update_animation_state (self);
+      gtk_svg_advance (self, current_time);
 
 #ifdef DEBUG
       animation_state_dump (self);

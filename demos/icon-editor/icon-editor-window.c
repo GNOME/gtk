@@ -641,7 +641,7 @@ set_compat (SvgElement *shape,
 
       builder = g_strv_builder_new ();
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
+      value = ref_value (shape, SVG_PROPERTY_FILL);
       switch ((unsigned int) svg_paint_get_kind (value))
         {
         case PAINT_SYMBOLIC:
@@ -670,8 +670,9 @@ set_compat (SvgElement *shape,
         default:
           break;
         }
+      svg_value_unref (value);
 
-      value = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
+      value = ref_value (shape, SVG_PROPERTY_STROKE);
       switch ((unsigned int) svg_paint_get_kind (value))
         {
         case PAINT_SYMBOLIC:
@@ -697,6 +698,7 @@ set_compat (SvgElement *shape,
         default:
           break;
         }
+      svg_value_unref (value);
 
       svg_element_take_classes (shape, g_strv_builder_end (builder));
     }

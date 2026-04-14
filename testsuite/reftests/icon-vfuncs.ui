@@ -4,7 +4,8 @@
     <child>
       <object class="GtkGrid" id="grid1">
         <child>
-          <object class="GtkSpinner" id="spinner1">
+          <object class="GtkImage" id="spinner1">
+            <property name="icon_name">pan-up-symbolic</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <layout>
