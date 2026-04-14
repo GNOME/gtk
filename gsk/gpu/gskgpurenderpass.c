@@ -429,7 +429,6 @@ gsk_gpu_render_pass_push_transform_check_scale (GskGpuRenderPass                
       scale_y >= GSK_GPU_MIN_SCALE)
     return TRUE;
 
-  gsk_gpu_clip_init_copy (&storage->clip.clip, &self->clip);
   gsk_gpu_clip_init_all_clipped (&self->clip);
   self->modelview = gsk_transform_ref (storage->modelview);
   storage->clip.modified = GSK_GPU_GLOBAL_CLIP;
