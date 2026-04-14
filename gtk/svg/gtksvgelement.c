@@ -2292,7 +2292,7 @@ svg_element_clone (SvgElement *element,
       for (unsigned int i = 0; i < element->animations->len; i++)
         {
           SvgAnimation *a = g_ptr_array_index (element->animations, i);
-          svg_element_add_animation (clone, svg_animation_clone (a, clone));
+          svg_element_add_animation (clone, svg_animation_clone (a, clone, svg->timeline));
         }
     }
 

@@ -358,7 +358,8 @@ svg_animation_equal (SvgAnimation *animation1,
 
 SvgAnimation *
 svg_animation_clone (SvgAnimation *a,
-                     SvgElement   *parent)
+                     SvgElement   *parent,
+                     Timeline     *timeline)
 {
   SvgAnimation *clone = g_new0 (SvgAnimation, 1);
 
@@ -379,18 +380,56 @@ svg_animation_clone (SvgAnimation *a,
   clone->has_begin = a->has_begin;
   clone->has_end = a->has_end;
 
-  clone->begin = g_ptr_array_ref (a->begin);
+  clone->begin = g_ptr_array_new ();
   for (unsigned int i = 0; i < a->begin->len; i++)
     {
       TimeSpec *spec = g_ptr_array_index (a->begin, i);
-      time_spec_add_animation (spec, clone);
+      TimeSpec *p, *tmp;
+      switch (spec->type)
+        {
+        case TIME_SPEC_TYPE_INDEFINITE:
+        case TIME_SPEC_TYPE_OFFSET:
+        case TIME_SPEC_TYPE_SYNC:
+        case TIME_SPEC_TYPE_STATES:
+          p = spec;
+          break;
+        case TIME_SPEC_TYPE_EVENT:
+          tmp = time_spec_copy (spec);
+          tmp->event.shape = parent;
+          p = timeline_get_time_spec (timeline, tmp);
+          time_spec_free (tmp);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+      time_spec_add_animation (p, clone);
+      svg_animation_add_begin (clone, p);
     }
 
-  clone->end = g_ptr_array_ref (a->end);
+  clone->end = g_ptr_array_new ();
   for (unsigned int i = 0; i < a->end->len; i++)
     {
       TimeSpec *spec = g_ptr_array_index (a->end, i);
-      time_spec_add_animation (spec, clone);
+      TimeSpec *p, *tmp;
+      switch (spec->type)
+        {
+        case TIME_SPEC_TYPE_INDEFINITE:
+        case TIME_SPEC_TYPE_OFFSET:
+        case TIME_SPEC_TYPE_SYNC:
+        case TIME_SPEC_TYPE_STATES:
+          p = spec;
+          break;
+        case TIME_SPEC_TYPE_EVENT:
+          tmp = time_spec_copy (spec);
+          tmp->event.shape = parent;
+          p = timeline_get_time_spec (timeline, tmp);
+          time_spec_free (tmp);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+      time_spec_add_animation (p, clone);
+      svg_animation_add_end (clone, p);
     }
 
   clone->current.begin = INDEFINITE;
