@@ -16,6 +16,13 @@ clip {
       child: cairo { }
     }
 
+    /* draw a small rectangle after every transform to check
+       that we properly unset everything in our error handling */
+    color {
+      color: red;
+      bounds: -40 -20 10 10;
+    }
+
     /* too small scale, but via 2 transforms */
     transform {
       transform: scale(0.001);
@@ -25,10 +32,20 @@ clip {
       }
     }
 
+    color {
+      color: red;
+      bounds: -20 -40 10 10;
+    }
+
     /* too small scale with dihedral matrix */
     transform {
       transform: rotate(90) scale(0.000001);
       child: cairo { }
+    }
+
+    color {
+      color: lime;
+      bounds: 10 -40 10 10;
     }
 
     /* too small scale with dihedral matrix, but via 2 transforms */
@@ -40,6 +57,11 @@ clip {
       }
     }
 
+    color {
+      color: lime;
+      bounds: 30 -20 10 10;
+    }
+
     /* too small scale with dihedral matrix, but via intermediate 3d matrix */
     transform {
       transform: scale(0.001) rotate(45);
@@ -49,10 +71,20 @@ clip {
       }
     }
 
+    color {
+      color: blue;
+      bounds: -40 10 10 10;
+    }
+
     /* too small scale for 3d matrix */
     transform {
       transform: scale(0.000001) perspective(800);
       child: cairo { }
+    }
+
+    color {
+      color: blue;
+      bounds: -20 30 10 10;
     }
 
     /* too small scale for 3d matrix, but via 2 transforms */
@@ -64,6 +96,11 @@ clip {
       }
     }
 
+    color {
+      color: yellow;
+      bounds: 10 30 10 10;
+    }
+
     /* non-invertible matrix */
     transform {
       transform: matrix3d(0,0,0,0,
@@ -71,6 +108,11 @@ clip {
                           0,0,1,0,
                           0,0,0,1);
       child: cairo { } 
+    }
+
+    color {
+      color: yellow;
+      bounds: 30 10 10 10;
     }
   }
 }
