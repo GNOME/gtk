@@ -136,8 +136,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
    */
   tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes", NULL, NULL,
                                                    GDK_TYPE_AXIS_FLAGS, 0,
-                                                   G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT_ONLY);
+                                                   G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkDeviceTool:hardware-id:

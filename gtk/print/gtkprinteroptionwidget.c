@@ -113,7 +113,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
                                    PROP_SOURCE,
                                    g_param_spec_object ("source", NULL, NULL,
 							GTK_TYPE_PRINTER_OPTION,
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
 
 }
 

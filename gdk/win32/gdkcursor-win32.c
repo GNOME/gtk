@@ -230,16 +230,16 @@ gdk_win32_hcursor_class_init (GdkWin32HCursorClass *klass)
   hcursor_props[PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   hcursor_props[PROP_HANDLE] =
       g_param_spec_pointer ("handle", NULL, NULL,
-                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   hcursor_props[PROP_DESTROYABLE] =
       g_param_spec_boolean ("destroyable", NULL, NULL,
                             TRUE,
-                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, hcursor_props);
 }

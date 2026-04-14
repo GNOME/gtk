@@ -149,17 +149,17 @@ gtk_inspector_node_wrapper_class_init (GtkInspectorNodeWrapperClass *klass)
 
   props[PROP_DRAW_NODE] =
     g_param_spec_pointer ("draw-node", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
   props[PROP_NODE] =
     g_param_spec_pointer ("node", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
   props[PROP_PROFILE_NODE] =
     g_param_spec_pointer ("profile-node", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
   props[PROP_ROLE] =
     g_param_spec_string ("role", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, props);
 }

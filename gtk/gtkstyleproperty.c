@@ -100,7 +100,7 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
                                    PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   klass->properties = g_hash_table_new (g_str_hash, g_str_equal);
 }

@@ -176,23 +176,23 @@ accessible_attribute_class_init (AccessibleAttributeClass *class)
   g_object_class_install_property (object_class, PROP_KIND,
       g_param_spec_uint ("kind", NULL, NULL,
                          0, 2, 0,
-                         G_PARAM_READWRITE));
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_ATTRIBUTE,
       g_param_spec_uint ("attribute", NULL, NULL,
                          0, G_MAXUINT, 0,
-                         G_PARAM_READWRITE));
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_IS_DEFAULT,
       g_param_spec_boolean ("is-default", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_VALUE,
       g_param_spec_boxed ("value", NULL, NULL,
                           GTK_TYPE_ACCESSIBLE_VALUE,
-                          G_PARAM_READWRITE));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 struct _GtkInspectorA11y

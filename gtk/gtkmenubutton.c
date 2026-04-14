@@ -456,7 +456,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_POPOVER] =
       g_param_spec_object ("popover", NULL, NULL,
                            GTK_TYPE_POPOVER,
-                           G_PARAM_READWRITE);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:icon-name:

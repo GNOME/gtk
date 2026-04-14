@@ -207,7 +207,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   props[PROP_IS_POINTER] =
       g_param_spec_boolean ("is-pointer", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEventControllerMotion:contains-pointer:
@@ -223,7 +223,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 

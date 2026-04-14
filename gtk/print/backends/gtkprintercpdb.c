@@ -48,7 +48,7 @@ gtk_printer_cpdb_class_init (GtkPrinterCpdbClass *klass)
                                    g_param_spec_pointer ("printer-obj", 
                                                          NULL, 
                                                          NULL,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static void

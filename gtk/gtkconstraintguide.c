@@ -351,8 +351,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_MIN_WIDTH] =
       g_param_spec_int ("min-width", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:min-height:
@@ -362,8 +361,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_MIN_HEIGHT] =
       g_param_spec_int ("min-height", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:nat-width:
@@ -373,8 +371,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_NAT_WIDTH] =
       g_param_spec_int ("nat-width", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:nat-height:
@@ -384,8 +381,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_NAT_HEIGHT] =
       g_param_spec_int ("nat-height", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:max-width:
@@ -395,8 +391,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_MAX_WIDTH] =
       g_param_spec_int ("max-width", NULL, NULL,
                         0, G_MAXINT, G_MAXINT,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:max-height:
@@ -406,8 +401,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_MAX_HEIGHT] =
       g_param_spec_int ("max-height", NULL, NULL,
                         0, G_MAXINT, G_MAXINT,
-                        G_PARAM_READWRITE|
-                        G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:strength:
@@ -419,8 +413,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
       g_param_spec_enum ("strength", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_STRENGTH,
                          GTK_CONSTRAINT_STRENGTH_MEDIUM,
-                         G_PARAM_READWRITE|
-                         G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkConstraintGuide:name:
@@ -430,7 +423,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   guide_props[PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, guide_props);
 }

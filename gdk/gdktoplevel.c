@@ -174,7 +174,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:startup-id:
@@ -187,7 +187,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_string ("startup-id", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:transient-for:
@@ -197,7 +197,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_object ("transient-for", NULL, NULL,
                            GDK_TYPE_SURFACE,
-                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:modal:
@@ -207,7 +207,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("modal", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:icon-list:
@@ -216,7 +216,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    */
   g_object_interface_install_property (iface,
       g_param_spec_pointer ("icon-list", NULL, NULL,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:decorated:
@@ -226,7 +226,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("decorated", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:deletable:
@@ -236,7 +236,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("deletable", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:fullscreen-mode:
@@ -247,7 +247,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
       g_param_spec_enum ("fullscreen-mode", NULL, NULL,
                          GDK_TYPE_FULLSCREEN_MODE,
                          GDK_FULLSCREEN_ON_CURRENT_MONITOR,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:shortcuts-inhibited:
@@ -257,7 +257,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("shortcuts-inhibited", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:capabilities:
@@ -270,7 +270,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
       g_param_spec_flags ("capabilities", NULL, NULL,
                           GDK_TYPE_TOPLEVEL_CAPABILITIES,
                           0,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:gravity:
@@ -292,7 +292,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
       g_param_spec_enum ("gravity", NULL, NULL,
                          GDK_TYPE_GRAVITY,
                          GDK_GRAVITY_NORTH_EAST,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel::compute-size:

@@ -59,7 +59,7 @@ gtk_printer_cups_class_init (GtkPrinterCupsClass *class)
                                    PROP_PROFILE_TITLE,
                                    g_param_spec_string ("profile-title", NULL, NULL,
                                                         "",
-                                                        G_PARAM_READABLE));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 }
 
 static void

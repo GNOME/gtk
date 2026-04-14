@@ -412,7 +412,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_PAGE_SETUP,
                                    g_param_spec_object ("page-setup", NULL, NULL,
                                                         GTK_TYPE_PAGE_SETUP,
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:current-page:
@@ -425,7 +425,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     G_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:print-settings: (getter get_settings) (setter set_settings)
@@ -436,7 +436,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_PRINT_SETTINGS,
                                    g_param_spec_object ("print-settings", NULL, NULL,
                                                         GTK_TYPE_PRINT_SETTINGS,
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:selected-printer:
@@ -447,7 +447,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_SELECTED_PRINTER,
                                    g_param_spec_object ("selected-printer", NULL, NULL,
                                                         GTK_TYPE_PRINTER,
-                                                        G_PARAM_READABLE));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:manual-capabilities:
@@ -459,7 +459,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    g_param_spec_flags ("manual-capabilities", NULL, NULL,
                                                        GTK_TYPE_PRINT_CAPABILITIES,
                                                        0,
-                                                       G_PARAM_READWRITE));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:support-selection:
@@ -470,7 +470,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_SUPPORT_SELECTION,
                                    g_param_spec_boolean ("support-selection", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintUnixDialog:has-selection:
@@ -481,7 +481,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_HAS_SELECTION,
                                    g_param_spec_boolean ("has-selection", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
    /**
     * GtkPrintUnixDialog:embed-page-setup:
@@ -492,7 +492,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                    PROP_EMBED_PAGE_SETUP,
                                    g_param_spec_boolean ("embed-page-setup", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /* Bind class to template
    */

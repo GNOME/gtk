@@ -842,7 +842,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   properties[PROP_ENABLE_RUBBERBAND] =
     g_param_spec_boolean ("enable-rubberband", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnView:model:
@@ -886,7 +886,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   properties[PROP_SHOW_ROW_SEPARATORS] =
     g_param_spec_boolean ("show-row-separators", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnView:show-column-separators:
@@ -896,7 +896,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   properties[PROP_SHOW_COLUMN_SEPARATORS] =
     g_param_spec_boolean ("show-column-separators", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnView:sorter:
@@ -916,7 +916,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   properties[PROP_SINGLE_CLICK_ACTIVATE] =
     g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnView:tab-behavior:
@@ -929,7 +929,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
     g_param_spec_enum ("tab-behavior", NULL, NULL,
                        GTK_TYPE_LIST_TAB_BEHAVIOR,
                        GTK_LIST_TAB_ALL,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnView:header-factory:

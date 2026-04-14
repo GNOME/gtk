@@ -1104,7 +1104,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_DEFAULT_PAGE_SETUP,
 				   g_param_spec_object ("default-page-setup", NULL, NULL,
 							GTK_TYPE_PAGE_SETUP,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:print-settings:
@@ -1119,7 +1119,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_PRINT_SETTINGS,
 				   g_param_spec_object ("print-settings", NULL, NULL,
 							GTK_TYPE_PRINT_SETTINGS,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:job-name:
@@ -1134,7 +1134,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_JOB_NAME,
 				   g_param_spec_string ("job-name", NULL, NULL,
 							"",
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:n-pages:
@@ -1157,7 +1157,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:current-page:
@@ -1175,7 +1175,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:use-full-page:
@@ -1193,7 +1193,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_USE_FULL_PAGE,
 				   g_param_spec_boolean ("use-full-page", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:track-print-status:
@@ -1210,7 +1210,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_TRACK_PRINT_STATUS,
 				   g_param_spec_boolean ("track-print-status", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:unit:
@@ -1224,7 +1224,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   g_param_spec_enum ("unit", NULL, NULL,
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_NONE,
-						      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:show-progress:
@@ -1236,7 +1236,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_SHOW_PROGRESS,
 				   g_param_spec_boolean ("show-progress", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:allow-async:
@@ -1256,7 +1256,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_ALLOW_ASYNC,
 				   g_param_spec_boolean ("allow-async", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:export-filename:
@@ -1276,7 +1276,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_EXPORT_FILENAME,
 				   g_param_spec_string ("export-filename", NULL, NULL,
 							NULL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:status:
@@ -1288,7 +1288,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   g_param_spec_enum ("status", NULL, NULL,
 						      GTK_TYPE_PRINT_STATUS,
 						      GTK_PRINT_STATUS_INITIAL,
-						      G_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+						      G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:status-string:
@@ -1305,7 +1305,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_STATUS_STRING,
 				   g_param_spec_string ("status-string", NULL, NULL,
 							"",
-							G_PARAM_READABLE));
+							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
   
 
   /**
@@ -1321,7 +1321,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_CUSTOM_TAB_LABEL,
 				   g_param_spec_string ("custom-tab-label", NULL, NULL,
 							NULL,
-							G_PARAM_READWRITE));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:support-selection:
@@ -1334,7 +1334,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_SUPPORT_SELECTION,
 				   g_param_spec_boolean ("support-selection", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:has-selection:
@@ -1348,7 +1348,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_HAS_SELECTION,
 				   g_param_spec_boolean ("has-selection", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
 
   /**
@@ -1361,7 +1361,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_EMBED_PAGE_SETUP,
 				   g_param_spec_boolean ("embed-page-setup", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrintOperation:n-pages-to-print:
@@ -1383,7 +1383,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+						     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 /**

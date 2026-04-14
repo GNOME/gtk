@@ -647,7 +647,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
 
   g_object_class_install_property (object_class, PROP_BUTTON,
       g_param_spec_object ("button", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorActions, swin);
