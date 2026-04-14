@@ -24,20 +24,8 @@
 #include <glib.h>
 #include "gtksvgprivate.h"
 #include "gtksvganimationprivate.h"
+#include "gtksvgutilsprivate.h"
 
 G_BEGIN_DECLS
-
-/* Helper functions used by both serialization and debug code */
-void time_spec_print  (TimeSpec *spec,
-                       GtkSvg   *svg,
-                       GString  *s);
-
-void time_specs_print (GPtrArray *specs,
-                       GtkSvg    *svg,
-                       GString   *s);
-
-void print_states     (GString  *s,
-                       GtkSvg   *svg,
-                       uint64_t  states);
 
 G_END_DECLS

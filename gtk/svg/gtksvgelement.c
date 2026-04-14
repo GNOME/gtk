@@ -37,9 +37,11 @@
 #include "gtksvgstringlistprivate.h"
 #include "gtksvglanguageprivate.h"
 #include "gtksvgkeywordprivate.h"
-#include "gsk/gskpathprivate.h"
 #include "gtksvganimationprivate.h"
+#include "gtksvgpaintprivate.h"
 #include "gtkmain.h"
+#include "gsk/gskpathprivate.h"
+#include "gsk/gskrectprivate.h"
 
 #define CLONE_LIMIT 15000
 

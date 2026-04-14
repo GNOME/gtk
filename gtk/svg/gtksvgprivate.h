@@ -36,6 +36,21 @@ G_BEGIN_DECLS
 
 #define DEFAULT_FONT_SIZE 13.333
 
+/* Max. nesting level of paint calls we allow */
+#define NESTING_LIMIT 256
+
+/* This is a mitigation for SVG files which create millions of elements
+ * in an attempt to exhaust memory.  We don't allow loading more than
+ * this number of elements during the initial streaming load process.
+ */
+#define LOADING_LIMIT 50000
+
+/* This is a mitigation for SVG files which create deeply nested
+ * <use> elements or deeply nested references of patterns.
+ */
+#define DRAWING_LIMIT 150000
+
+
 typedef void (* SvgElementCallback) (SvgElement *element,
                                      gpointer    data);
 
@@ -215,5 +230,41 @@ void           gtk_svg_activate_element (GtkSvg               *svg,
 void           gtk_svg_set_active       (GtkSvg               *svg,
                                          SvgElement           *element);
 SvgElement *   gtk_svg_get_active       (GtkSvg               *svg);
+
+void           gtk_svg_emit_error        (GtkSvg              *svg,
+                                          const GError        *error);
+void           gtk_svg_invalid_reference (GtkSvg              *self,
+                                          const char          *format,
+                                          ...) G_GNUC_PRINTF (2, 3);
+void           gtk_svg_invalid_attribute (GtkSvg              *self,
+                                          GMarkupParseContext *context,
+                                          const char         **attr_names,
+                                          const char          *attr_name,
+                                          const char          *format,
+                                          ...) G_GNUC_PRINTF (5, 6);
+void           gtk_svg_rendering_error   (GtkSvg              *self,
+                                          const char          *format,
+                                          ...) G_GNUC_PRINTF (2, 3);
+void           gtk_svg_update_error      (GtkSvg              *self,
+                                          const char          *format,
+                                          ...) G_GNUC_PRINTF (2, 3);
+
+void           ensure_fontmap            (GtkSvg              *svg);
+void           apply_view                (SvgElement          *content,
+                                          SvgElement          *view);
+
+gboolean       add_font_from_url         (GtkSvg               *svg,
+                                          GMarkupParseContext  *context,
+                                          const char          **attr_names,
+                                          const char           *attr_name,
+                                          const char           *url);
+
+GdkTexture *   get_texture               (GtkSvg               *svg,
+                                          const char           *string,
+                                          GError              **error);
+
+void           compute_current_values_for_shape
+                                         (SvgElement        *shape,
+                                          SvgComputeContext *context);
 
 G_END_DECLS

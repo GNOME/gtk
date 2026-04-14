@@ -24,6 +24,7 @@
 G_BEGIN_DECLS
 
 typedef struct _SvgValue SvgValue;
+typedef struct _SvgComputeContext SvgComputeContext;
 typedef struct _SvgPathData SvgPathData;
 typedef struct _SvgFilter SvgFilter;
 typedef struct _SvgColorStop SvgColorStop;

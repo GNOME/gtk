@@ -65,6 +65,9 @@
 #include "gtksvgcolorstopprivate.h"
 #include "gtksvgelementinternal.h"
 #include "gtksvganimationprivate.h"
+#include "gtksvgtimespecprivate.h"
+#include "gtksvggpaprivate.h"
+#include "gtkmain.h"
 
 #include <stdint.h>
 
@@ -116,6 +119,204 @@ typedef struct
   PangoLanguage *lang;
 } ParserData;
 
+/* {{{ Errors */
+
+G_GNUC_PRINTF (6, 7)
+static void
+gtk_svg_skipped_element (GtkSvg               *self,
+                         const char           *parent_element,
+                         const GtkSvgLocation *start,
+                         const GtkSvgLocation *end,
+                         GtkSvgError           code,
+                         const char           *format,
+                         ...)
+{ 
+  GError *error;
+  va_list args;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_SVG_ERROR, code, format, args);
+  va_end (args);
+
+  gtk_svg_error_set_input (error, "svg");
+  gtk_svg_error_set_element (error, parent_element);
+  gtk_svg_error_set_location (error, start, end);
+
+  gtk_svg_emit_error (self, error);
+  g_clear_error (&error);
+}
+
+static void
+gtk_svg_markup_error (GtkSvg              *self,
+                      GMarkupParseContext *context,
+                      const GError        *markup_error)
+{
+  GError *error;
+  GtkSvgLocation start, end;
+
+  error = g_error_new_literal (GTK_SVG_ERROR,
+                               GTK_SVG_ERROR_INVALID_SYNTAX,
+                               markup_error->message);
+
+  gtk_svg_error_set_input (error, "svg");
+  gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
+  gtk_svg_location_init_tag_range (&start, &end, context);
+  gtk_svg_error_set_location (error, &start, &end);
+
+  gtk_svg_emit_error (self, error);
+  g_clear_error (&error);
+}
+
+G_GNUC_PRINTF (4, 5)
+static void
+gtk_svg_missing_attribute (GtkSvg              *self,
+                           GMarkupParseContext *context,
+                           const char          *attr_name,
+                           const char          *format,
+                           ...)
+{
+  GError *error;
+  GtkSvgLocation start, end;
+
+  if (format)
+    {
+      va_list args;
+      va_start (args, format);
+      error = g_error_new_valist (GTK_SVG_ERROR,
+                                  GTK_SVG_ERROR_MISSING_ATTRIBUTE,
+                                  format, args);
+      va_end (args);
+    }
+  else
+    {
+      error = g_error_new (GTK_SVG_ERROR,
+                           GTK_SVG_ERROR_MISSING_ATTRIBUTE,
+                           "Missing attribute: %s", attr_name);
+    }
+
+  gtk_svg_error_set_input (error, "svg");
+  gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
+  gtk_svg_error_set_attribute (error, attr_name);
+  gtk_svg_location_init_tag_range (&start, &end, context);
+  gtk_svg_error_set_location (error, &start, &end);
+
+  gtk_svg_emit_error (self, error);
+  g_error_free (error);
+}
+
+static void
+gtk_svg_check_unhandled_attributes (GtkSvg               *self,
+                                    GMarkupParseContext  *context,
+                                    const char          **attr_names,
+                                    uint64_t              handled)
+{
+  unsigned int n = g_strv_length ((char **) attr_names);
+
+  for (unsigned int i = 0; i < n; i++)
+    {
+      if ((handled & BIT (i)) == 0)
+        gtk_svg_invalid_attribute (self, context, attr_names, attr_names[i],
+                                   "Unhandled attribute: %s", attr_names[i]);
+    }
+}
+
+/* }}} */
+/* {{{ Helpers */
+
+static gboolean
+has_ancestor (GMarkupParseContext *context,
+              const char          *elt)
+{
+  const GSList *list;
+
+  for (list = g_markup_parse_context_get_element_stack (context);
+       list != NULL;
+       list = list->next)
+    {
+      const char *name = list->data;
+      if (strcmp (name, elt) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+check_ancestors (GMarkupParseContext *context,
+                 ...)
+{
+  const GSList *list;
+  va_list args;
+  const char *name;
+
+  list = g_markup_parse_context_get_element_stack (context);
+
+  va_start (args, context);
+  while ((name = va_arg (args, const char *)) != NULL)
+    {
+      list = list->next;
+
+      if (list == NULL)
+        return FALSE;
+
+      if (strcmp (name, (const char *) list->data) != 0)
+        return FALSE;
+    }
+  va_end (args);
+
+  return TRUE;
+}
+
+static void
+markup_filter_attributes (const char *element_name,
+                          const char **attr_names,
+                          const char **attr_values,
+                          uint64_t    *handled,
+                          const char  *name,
+                          ...)
+{
+  va_list ap;
+
+  va_start (ap, name);
+  while (name)
+    {
+      const char **ptr;
+
+      ptr = va_arg (ap, const char **);
+
+      if (ptr)
+        *ptr = NULL;
+      for (unsigned int i = 0; attr_names[i]; i++)
+        {
+          if (g_str_has_suffix (name, "*") &&
+              strncmp (attr_names[i], name, strlen (name) - 1) == 0)
+            {
+              g_assert (ptr == NULL);
+              *handled |= G_GUINT64_CONSTANT(1) << i;
+            }
+          else if (strcmp (attr_names[i], name) == 0)
+            {
+              if (ptr)
+                *ptr = attr_values[i];
+              *handled |= G_GUINT64_CONSTANT(1) << i;
+              break;
+            }
+        }
+
+      name = va_arg (ap, const char *);
+    }
+
+  va_end (ap);
+}
+
+static inline gboolean
+g_strv_has (GStrv       strv,
+            const char *s)
+{
+  return g_strv_contains ((const char * const *) strv, s);
+}
+
+/* }}} */
 /* {{{ SvgAnimation attributes */
 
 typedef struct
@@ -1111,6 +1312,33 @@ parse_motion_animation_attrs (SvgAnimation         *a,
     }
 
   return TRUE;
+}
+
+/* }}} */
+/* {{{ gpa things */
+
+static gboolean
+strokewidth_parse (const char  *value,
+                   SvgValue   **values)
+{
+  GtkCssParser *parser = parser_new_for_string (value);
+  unsigned int i;
+  gboolean retval = TRUE;
+
+  for (i = 0; i < 3; i++)
+    {
+      gtk_css_parser_skip_whitespace (parser);
+      values[i] = svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_LENGTH|SVG_PARSE_PERCENTAGE);
+      if (!values[i])
+        retval = FALSE;
+    }
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    retval = FALSE;
+
+  gtk_css_parser_unref (parser);
+
+  return retval;
 }
 
 /* }}} */
@@ -3856,6 +4084,40 @@ dump_styles (ParserData *data)
 #endif
 
 static void
+shape_set_base_value (SvgElement   *shape,
+                      SvgProperty   attr,
+                      unsigned int  idx,
+                      SvgValue     *value)
+{
+  if (idx == 0)
+    {
+      svg_element_set_base_value (shape, attr, value);
+    }
+  else if (FIRST_STOP_PROPERTY <= attr && attr <= LAST_STOP_PROPERTY)
+    {
+      SvgColorStop *stop;
+
+      g_assert (svg_element_type_is_gradient (svg_element_get_type (shape)));
+      g_assert (idx <= shape->color_stops->len);
+
+      stop = g_ptr_array_index (shape->color_stops, idx - 1);
+      svg_color_stop_set_base_value (stop, attr, value);
+    }
+  else if (FIRST_FILTER_PROPERTY <= attr && attr <= LAST_FILTER_PROPERTY)
+    {
+      SvgFilter *f;
+
+      g_assert (svg_element_type_is_filter (svg_element_get_type (shape)));
+      g_assert (idx <= shape->filters->len);
+
+      f = g_ptr_array_index (shape->filters, idx - 1);
+      svg_filter_set_base_value (f, attr, value);
+    }
+  else
+    g_assert_not_reached ();
+}
+
+static void
 apply_ruleset_to_shape (SvgCssRuleset  *r,
                         gboolean        important,
                         SvgElement     *shape,
@@ -3873,7 +4135,9 @@ apply_ruleset_to_shape (SvgCssRuleset  *r,
         continue;
 
       if (svg_property_applies_to (p->attr, svg_element_get_type (shape)))
-        shape_set_base_value (shape, p->attr, idx, p->value);
+        {
+          shape_set_base_value (shape, p->attr, idx, p->value);
+        }
 
       *set = _gtk_bitmask_set (*set, p->attr, TRUE);
     }
@@ -4415,8 +4679,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_ptr_array_unref (data.pending_animations);
   g_string_free (data.text.text, TRUE);
 
-  if (self->gpa_version > 0 &&
-      (self->features & GTK_SVG_ANIMATIONS) == 0)
+  if (self->gpa_version > 0 && (self->features & GTK_SVG_ANIMATIONS) == 0)
     apply_state (self, self->state);
 }
 

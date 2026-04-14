@@ -22,6 +22,9 @@
 #include "gtksvganimationprivate.h"
 #include "gtksvgvalueprivate.h"
 #include "gtksvgelementinternal.h"
+#include "gtksvgtimespecprivate.h"
+
+#define dbg_print(cond,fmt,...)
 
 CalcMode
 svg_animation_type_default_calc_mode (AnimationType type)
@@ -435,4 +438,206 @@ svg_animation_clone (SvgAnimation *a,
   clone->gpa.attach_pos = a->gpa.attach_pos;
 
   return clone;
+}
+
+static gboolean
+animation_can_start (SvgAnimation *a)
+{
+  /* Handling restart */
+  switch (a->status)
+    {
+    case ANIMATION_STATUS_INACTIVE:
+      break;
+    case ANIMATION_STATUS_RUNNING:
+      if (a->restart != ANIMATION_RESTART_ALWAYS)
+        return FALSE;
+      break;
+    case ANIMATION_STATUS_DONE:
+      if (a->restart == ANIMATION_RESTART_NEVER)
+        return FALSE;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+time_specs_update_for_base (GPtrArray    *specs,
+                            SvgAnimation *base)
+{
+  for (unsigned int i = 0; i < specs->len; i++)
+    {
+      TimeSpec *spec = g_ptr_array_index (specs, i);
+      time_spec_update_for_base (spec, base);
+    }
+}
+
+void
+animation_update_for_spec (SvgAnimation *a,
+                           TimeSpec     *spec)
+{
+  gboolean changed = FALSE;
+
+  if (svg_animation_has_begin (a, spec))
+    {
+      if (!animation_can_start (a))
+        return;
+
+      if (a->status == ANIMATION_STATUS_RUNNING)
+        {
+          if (a->current.begin < spec->time && spec->time < INDEFINITE)
+            {
+              dbg_print ("status", "Restarting %s at %s", a->id, format_time (spec->time));
+              a->current.begin = spec->time;
+              changed = TRUE;
+            }
+        }
+      else
+        {
+          int64_t time;
+
+          /* We need to allow starting in the past. But we don't allow
+           * a post-dated start to fall into a previous activation.
+           */
+
+         time = find_first_time (a->begin, a->previous.end);
+
+          if (a->current.begin != time)
+            {
+              dbg_print ("times", "current start time of %s now %s", a->id, format_time (time));
+              a->current.begin = time;
+              changed = TRUE;
+
+              animation_set_current_end (a, a->current.end);
+            }
+        }
+    }
+
+  if (svg_animation_has_end (a, spec))
+    {
+      int64_t end = find_first_time (a->end, a->current.begin);
+
+      changed = animation_set_current_end (a, end);
+    }
+
+  if (!changed)
+    return;
+
+  if (a->deps)
+    {
+      for (unsigned int i = 0; i < a->deps->len; i++)
+        {
+          SvgAnimation *dep = g_ptr_array_index (a->deps, i);
+          time_specs_update_for_base (dep->begin, a);
+          time_specs_update_for_base (dep->end, a);
+        }
+    }
+}
+
+void
+animation_set_begin (SvgAnimation *a,
+                     int64_t       current_time)
+{
+  gboolean changed = FALSE;
+
+  if (!animation_can_start (a))
+    return;
+
+  if (a->status == ANIMATION_STATUS_RUNNING)
+    {
+      if (a->current.begin < current_time)
+        {
+          dbg_print ("status", "Restarting %s at %s", a->id, format_time (current_time));
+          a->current.begin = current_time;
+          changed = TRUE;
+        }
+    }
+  else
+    {
+      if (a->current.begin != current_time)
+        {
+          dbg_print ("times", "current start time of %s now %s", a->id, format_time (current_time));
+          a->current.begin = current_time;
+          changed = TRUE;
+
+          animation_set_current_end (a, a->current.end);
+        }
+    }
+
+  if (!changed)
+    return;
+
+  if (a->deps)
+    {
+      for (unsigned int i = 0; i < a->deps->len; i++)
+        {
+          SvgAnimation *dep = g_ptr_array_index (a->deps, i);
+          time_specs_update_for_base (dep->begin, a);
+          time_specs_update_for_base (dep->end, a);
+        }
+    }
+}
+
+gboolean
+animation_set_current_end (SvgAnimation *a,
+                           int64_t       time)
+{
+  /* FIXME take min, max into account */
+  if (time < a->current.begin)
+    time = a->current.begin;
+
+  if (a->current.begin < INDEFINITE && a->repeat_duration < INDEFINITE)
+    time = MIN (time, a->current.begin + a->repeat_duration);
+
+  if (a->current.end == time)
+    return FALSE;
+
+  dbg_print ("times", "current end time of %s set to %s", a->id, format_time (time));
+  a->current.end = time;
+  return TRUE;
+}
+
+int64_t
+svg_animation_get_current_begin (SvgAnimation *a)
+{
+  return a->current.begin;
+}
+
+int64_t
+svg_animation_get_current_end (SvgAnimation *a)
+{
+  return a->current.end;
+}
+
+int64_t
+determine_repeat_duration (SvgAnimation *a)
+{
+  if (a->repeat_duration < INDEFINITE)
+    return a->repeat_duration;
+  else if (a->simple_duration < INDEFINITE && a->repeat_count != REPEAT_FOREVER)
+    return a->simple_duration * a->repeat_count;
+  else if (a->current.end < INDEFINITE)
+    return a->current.end - a->current.begin;
+  else if (a->simple_duration < INDEFINITE)
+    return a->simple_duration;
+
+  return INDEFINITE;
+}
+
+int64_t
+determine_simple_duration (SvgAnimation *a)
+{
+  int64_t repeat_duration;
+
+  if (a->simple_duration < INDEFINITE)
+    return a->simple_duration;
+
+  repeat_duration = determine_repeat_duration (a);
+
+  if (repeat_duration < INDEFINITE && a->repeat_count != REPEAT_FOREVER)
+    return (int64_t) (repeat_duration / a->repeat_count);
+
+  return INDEFINITE;
 }

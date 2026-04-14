@@ -22,6 +22,7 @@
 #pragma once
 
 #include "gtksvgelementprivate.h"
+#include "gtkcssselectorprivate.h"
 
 G_BEGIN_DECLS
 

@@ -145,6 +145,8 @@ ensure_paintable (GtkSpinner *spinner)
   g_signal_connect_swapped (spinner->paintable, "invalidate-contents",
                             G_CALLBACK (gtk_widget_queue_draw), spinner);
 
+  gtk_svg_set_state (spinner->paintable, spinner->spinning ? 0 : 1);
+
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (spinner));
   gtk_svg_set_frame_clock (spinner->paintable, clock);
 }
