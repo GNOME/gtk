@@ -2661,6 +2661,8 @@ do_target:
     {
       svg_element_add_description (data->current_shape, data->lang, data->text.text->str);
     }
+
+  data->lang = NULL;
 }
 
 static void
