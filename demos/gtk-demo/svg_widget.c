@@ -1,7 +1,13 @@
 /* SVG
  *
- * This demo shows using a GtkSvgWidget to display a
+ * This demo uses a GtkSvgWidget to display a
  * scalable, animated, interactive SVG image.
+ *
+ * Hover over the faces of the cube to see
+ * tooltips, click on them to activate links.
+ *
+ * Keyboard navigation with Tab and Enter works
+ * as well.
  */
 
 #include <gtk/gtk.h>
