@@ -391,12 +391,17 @@ extract_scale_from_transform (GskTransform *transform,
         graphene_vec3_t shear;
 
         gsk_transform_to_matrix (transform, &matrix);
-        graphene_matrix_decompose (&matrix,
-                                   &translation,
-                                   &matrix_scale,
-                                   &rotation,
-                                   &shear,
-                                   &perspective);
+        if (!graphene_matrix_decompose (&matrix,
+                                        &translation,
+                                        &matrix_scale,
+                                        &rotation,
+                                        &shear,
+                                        &perspective))
+          {
+            *out_scale_x = 0;
+            *out_scale_y = 0;
+            return;
+          }
 
         *out_scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
         *out_scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
