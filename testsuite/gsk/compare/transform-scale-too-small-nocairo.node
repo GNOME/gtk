@@ -1,0 +1,76 @@
+/* first, ensure the bounds are guaranteed,
+ * so changes in the bounds logic can't change
+ * this test
+ */
+clip {
+  clip: -50 -50 100 100;
+  child: container {
+    color {
+      color: black;
+      bounds: -50 -50 100 100;
+    }
+
+    /* too small scale */
+    transform {
+      transform: scale(0.000001);
+      child: cairo { }
+    }
+
+    /* too small scale, but via 2 transforms */
+    transform {
+      transform: scale(0.001);
+      child: transform {
+        transform: scale(0.001);
+        child: cairo { }
+      }
+    }
+
+    /* too small scale with dihedral matrix */
+    transform {
+      transform: rotate(90) scale(0.000001);
+      child: cairo { }
+    }
+
+    /* too small scale with dihedral matrix, but via 2 transforms */
+    transform {
+      transform: scale(0.001);
+      child: transform {
+        transform: rotate(90) scale(0.001);
+        child: cairo { }
+      }
+    }
+
+    /* too small scale with dihedral matrix, but via intermediate 3d matrix */
+    transform {
+      transform: scale(0.001) rotate(45);
+      child: transform {
+        transform: rotate(45) scale(0.001);
+        child: cairo { }
+      }
+    }
+
+    /* too small scale for 3d matrix */
+    transform {
+      transform: scale(0.000001) perspective(800);
+      child: cairo { }
+    }
+
+    /* too small scale for 3d matrix, but via 2 transforms */
+    transform {
+      transform: scale(0.001);
+      child: transform {
+        transform: scale(0.001) perspective(800);
+        child: cairo { }
+      }
+    }
+
+    /* non-invertible matrix */
+    transform {
+      transform: matrix3d(0,0,0,0,
+                          1,1,0,0,
+                          0,0,1,0,
+                          0,0,0,1);
+      child: cairo { } 
+    }
+  }
+}
