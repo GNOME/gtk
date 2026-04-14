@@ -441,7 +441,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      if (!gtk_accessible_text_get_extents (accessible_text, offset, offset + 1, &extents))
+      if (!gtk_accessible_text_get_extents (accessible_text, offset, offset, &extents))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -474,7 +474,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      if (!gtk_accessible_text_get_extents (accessible_text, start, end, &extents))
+      if (!gtk_accessible_text_get_extents (accessible_text, start, end - 1, &extents))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
