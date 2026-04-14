@@ -6342,11 +6342,7 @@ gtk_svg_snapshot_with_weight (GtkSymbolicPaintable  *paintable,
           self->style_changed = FALSE;
         }
 
-      if (self->view_changed)
-        {
-          apply_view (self->content, self->view);
-          self->view_changed = FALSE;
-        }
+      apply_view (self->content, self->view);
 
       /* Traditional symbolics often have overlapping shapes,
        * causing things to look wrong when using colors with
