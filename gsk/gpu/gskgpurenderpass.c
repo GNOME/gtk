@@ -26,6 +26,15 @@
  */
 #define EPSILON 0.001
 
+/* the minimum scale required. If it's smaller than this, we treat it like 0 and
+ * skip it.
+ *
+ * We set this to 1/100,000 because then 100,000 units would make up 1 pixel. And
+ * it's unlikely that something useful results from scaling this far, considering
+ * max texture size is usually 16,384 and FLOAT16 can't represent numbers this big.
+ */
+#define GSK_GPU_MIN_SCALE 0.00001
+
 gboolean
 gsk_gpu_render_pass_device_to_user (GskGpuRenderPass            *self,
                                     const cairo_rectangle_int_t *device,
@@ -391,18 +400,42 @@ extract_scale_from_transform (GskTransform *transform,
         graphene_vec3_t shear;
 
         gsk_transform_to_matrix (transform, &matrix);
-        graphene_matrix_decompose (&matrix,
-                                   &translation,
-                                   &matrix_scale,
-                                   &rotation,
-                                   &shear,
-                                   &perspective);
+        if (!graphene_matrix_decompose (&matrix,
+                                        &translation,
+                                        &matrix_scale,
+                                        &rotation,
+                                        &shear,
+                                        &perspective))
+          {
+            *out_scale_x = 0;
+            *out_scale_y = 0;
+            return;
+          }
 
         *out_scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
         *out_scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
       }
       return;
     }
+}
+
+static gboolean
+gsk_gpu_render_pass_push_transform_check_scale (GskGpuRenderPass                 *self,
+                                                float                             scale_x,
+                                                float                             scale_y,
+                                                GskGpuRenderPassTransformStorage *storage)
+{
+  if (scale_x >= GSK_GPU_MIN_SCALE &&
+      scale_y >= GSK_GPU_MIN_SCALE)
+    return TRUE;
+
+  gsk_gpu_clip_init_copy (&storage->clip.clip, &self->clip);
+  gsk_gpu_clip_init_all_clipped (&self->clip);
+  self->modelview = gsk_transform_ref (storage->modelview);
+  storage->clip.modified = GSK_GPU_GLOBAL_CLIP;
+  self->pending_globals |= storage->clip.modified;
+
+  return FALSE;
 }
 
 static void
@@ -438,6 +471,12 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         float dx, dy, scale_x, scale_y;
 
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+        if (!gsk_gpu_render_pass_push_transform_check_scale (self,
+                                                             scale_x * storage->scale.width,
+                                                             scale_y * storage->scale.height,
+                                                             storage))
+          return;
+
         gsk_gpu_clip_scale (&self->clip, &storage->clip.clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
@@ -457,13 +496,18 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
         gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
         inverted = gdk_dihedral_invert (dihedral);
         gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
+        old_scale_x = storage->scale.width;
+        old_scale_y = storage->scale.height;
+        if (!gsk_gpu_render_pass_push_transform_check_scale (self,
+                                                             fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
+                                                             fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)),
+                                                             storage))
+          return;
         gsk_gpu_clip_scale (&self->clip, &storage->clip.clip, inverted, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
         self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
                                             yx * self->offset.x + yy * self->offset.y);
-        old_scale_x = storage->scale.width;
-        old_scale_y = storage->scale.height;
         self->scale = GRAPHENE_SIZE_INIT (fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
                                           fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
         self->modelview = gsk_transform_dihedral (gsk_transform_ref (storage->modelview), dihedral);
@@ -521,6 +565,11 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
             gsk_transform_to_dihedral (self->modelview, &dihedral, &scale_x, &scale_y, &dx, &dy);
             inverted = gdk_dihedral_invert (dihedral);
             gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
+            if (!gsk_gpu_render_pass_push_transform_check_scale (self,
+                                                                 fabs (scale_x * xx + scale_y * yx),
+                                                                 fabs (scale_x * xy + scale_y * yy),
+                                                                 storage))
+              return;
             dx /= scale_x;
             dy /= scale_y;
             self->offset = GRAPHENE_POINT_INIT (xx * dx + xy * dy,
@@ -554,7 +603,6 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                               storage->scale.height * storage->clip.clip.rect.bounds.size.height);
             new_pixels = MAX (scale_x * self->clip.rect.bounds.size.width,
                               scale_y * self->clip.rect.bounds.size.height);
-
             /* Check that our offscreen doesn't get too big.  1.5 ~ sqrt(2) */
             if (new_pixels > 1.5 * old_pixels)
               {
@@ -562,6 +610,12 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                 scale_x *= forced_downscale;
                 scale_y *= forced_downscale;
               }
+
+            if (!gsk_gpu_render_pass_push_transform_check_scale (self,
+                                                                 scale_x,
+                                                                 scale_y,
+                                                                 storage))
+              return;
 
             self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
             self->scale = GRAPHENE_SIZE_INIT (scale_x, scale_y);
