@@ -27,6 +27,7 @@
 #include "state-editor.h"
 #include "gtk/svg/gtksvgelementprivate.h"
 #include "gtk/svg/gtksvgpaintprivate.h"
+#include "gtk/svg/gtksvgserializeprivate.h"
 
 #include <glib/gstdio.h>
 

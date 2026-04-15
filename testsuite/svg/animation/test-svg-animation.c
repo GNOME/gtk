@@ -24,6 +24,7 @@
 #include "gtk/svg/gtksvgprivate.h"
 #include "gtk/svg/gtksvgelementprivate.h"
 #include "gtk/svg/gtksvghrefprivate.h"
+#include "gtk/svg/gtksvgserializeprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gdk/gdkeventsprivate.h"
 #include "testsuite/testutils.h"

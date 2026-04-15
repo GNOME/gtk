@@ -29,6 +29,7 @@
 #include "gtkrendericonprivate.h"
 #include "gtkmarshalers.h"
 #include "svg/gtksvgprivate.h"
+#include "svg/gtksvgrendererprivate.h"
 #include "svg/gtksvgeventcontrollerprivate.h"
 #include "svg/gtksvgelementprivate.h"
 #include "svg/gtksvghrefprivate.h"

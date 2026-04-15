@@ -28,4 +28,37 @@
 
 G_BEGIN_DECLS
 
+/*< private >
+ * GtkSvgSerializeFlags:
+ * @GTK_SVG_SERIALIZE_DEFAULT: Default behavior. Serialize
+ *   the DOM, with gpa attributes, and with compatibility
+ *   tweaks
+ * @GTK_SVG_SERIALIZE_AT_CURRENT_TIME: Serialize the current
+ *   values of a running animation, as opposed to the DOM
+ *   values that the parser produced
+ * @GTK_SVG_SERIALIZE_INCLUDE_STATE: Include custom attributes
+ *   with various information about the state of the renderer,
+ *   such as the current time, or the status of running animations
+ * @GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS: Instead of gpa attributes,
+ *   include the animations that were generated from them
+ * @GTK_SVG_SERIALIZE_NO_COMPAT: Don't include things that
+ *   improve the rendering of the serialized result in renderers
+ *   which don't support extensions, but stick to the pristine
+ *   DOM
+ */
+typedef enum
+{
+  GTK_SVG_SERIALIZE_DEFAULT            = 0,
+  GTK_SVG_SERIALIZE_AT_CURRENT_TIME    = 1 << 0,
+  GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION  = 1 << 1,
+  GTK_SVG_SERIALIZE_INCLUDE_STATE      = 1 << 2,
+  GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS   = 1 << 3,
+  GTK_SVG_SERIALIZE_NO_COMPAT          = 1 << 4,
+} GtkSvgSerializeFlags;
+
+GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
+                                        const GdkRGBA         *colors,
+                                        size_t                 n_colors,
+                                        GtkSvgSerializeFlags   flags);
+
 G_END_DECLS
