@@ -34,7 +34,8 @@
         dur='1s'
         begin='indefinite'/>
     />
-  <title>The GTK logo</title>
+  <title>The GTK Logo</title>
+  <title lang='de-de'>Das GTK Logo</title>
     <a href='#rotate' tabindex='-1'>
       <path
             id='path6976'
@@ -42,6 +43,7 @@
             style='fill:#729fcf;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
             d='M 20.8841 30.827 L 53.817 55.5277 L 107.333 39.0605 L 70.5873 17.1778 L 20.8841 30.827 Z'>
         <title>Blue Face</title>
+        <title lang='de-de'>Blaue Seite</title>
       </path>
     </a>
     <a href='#blink' tabindex='-1'>
@@ -51,6 +53,7 @@
             style='fill:#e40000;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
             d='M 22.9424 82.2871 L 20.8841 30.827 L 53.817 55.5277 L 53.817 111.105 L 22.9424 82.2871 Z'>
         <title>Red Face</title>
+        <title lang='de-de'>Rote Seite</title>
         <animate
                 id='blink'
                 attributeName='fill'
@@ -66,6 +69,7 @@
               style='fill:#7fe719;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.12364459;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline'
               d='M 53.817 111.105 L 103.216 90.5207 L 107.333 39.0605 L 53.817 55.5277 L 53.817 111.105 Z'>
         <title>Green Face</title>
+        <title lang='de-de'>Grüne Seite</title>
       </path>
     </a>
     <path

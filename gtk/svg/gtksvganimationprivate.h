@@ -225,7 +225,8 @@ void             svg_animation_motion_fill_from_path
                                               GskPath       *path);
 
 SvgAnimation *   svg_animation_clone (SvgAnimation *animation,
-                                      SvgElement   *parent);
+                                      SvgElement   *parent,
+                                      Timeline     *timeline);
 
 void            animation_update_for_spec (SvgAnimation *animation,
                                            TimeSpec     *spec);
