@@ -26,39 +26,11 @@ PASS_FLAT(5) mat3 _mat;
 PASS_FLAT(8) mat3 _yuv;
 PASS_FLAT(11) vec3 _yuv_add;
 PASS_FLAT(12) uint _range;
+PASS_FLAT(13) mat3 _to_xyz;
+PASS_FLAT(16) mat3 _from_xyz;
 
 
 #ifdef GSK_VERTEX_SHADER
-
-const mat3 identity = mat3(
-  1.0, 0.0, 0.0,
-  0.0, 1.0, 0.0,
-  0.0, 0.0, 1.0
-);
-
-const mat3 srgb_to_xyz = mat3(
-  0.4124564, 0.2126729, 0.0193339,
-  0.3575761, 0.7151522, 0.1191920,
-  0.1804375, 0.0721750, 0.9503041
-);
-
-const mat3 xyz_to_srgb = mat3(
-  3.2404542, -0.9692660,  0.0556434,
- -1.5371385,  1.8760108, -0.2040259,
- -0.4985314,  0.0415560,  1.0572252
-);
-
-const mat3 rec2020_to_xyz = mat3(
-  0.6369580, 0.2627002, 0.0000000,
-  0.1446169, 0.6779981, 0.0280727,
-  0.1688810, 0.0593017, 1.0609851
-);
-
-const mat3 xyz_to_rec2020 = mat3(
-  1.7166512, -0.6666844,  0.0176399,
- -0.3556708,  1.6164812, -0.0427706,
- -0.2533663,  0.0157685,  0.9421031
-);
 
 const mat3 pal_to_xyz = mat3(
  0.4305538, 0.2220043, 0.0201822,
@@ -216,6 +188,8 @@ run (out vec2 pos)
   _opacity = in_opacity;
   _transfer_function = in_transfer_function;
   _range = in_range;
+  _to_xyz = cicp_to_xyz (in_color_primaries);
+  _from_xyz = cicp_from_xyz (in_color_primaries);
 
   if (VARIATION_REVERSE)
     {
@@ -305,7 +279,7 @@ hlg_eotf (vec3 v)
   v = mix (hi, lo, lessThanEqual (abs (v), vec3 (0.5)));
 
   float Ys = dot (vec3 (0.2627, 0.6780, 0.0593), v);
-  v *= (1000.0 / 203.0) * pow (max (Ys, 0.0), 0.2);
+  v *= pow (max (Ys, 0.0), 0.2);
 
   return v;
 }
@@ -319,7 +293,7 @@ hlg_oetf (vec3 v)
 
   float Yd = dot (vec3 (0.2627, 0.6780, 0.0593), v);
   if (Yd > 0.0)
-    v *= pow (203.0 / 1000.0, 1.0 / 1.2) * pow (Yd, 1.0 / 1.2 - 1.0);
+    v *= pow (Yd, 1.0 / 1.2 - 1.0);
 
   vec3 lo = sign (v) * sqrt (3.0 * abs (v));
   vec3 hi = sign (v) * (a * log (12.0 * abs (v) - b) + c);
@@ -396,6 +370,64 @@ apply_cicp_oetf (vec3 color,
     }
 }
 
+uint
+luminance_from_cicp_tf (uint transfer_function)
+{
+  switch (transfer_function)
+    {
+    case 1u:
+    case 4u:
+    case 5u:
+    case 6u:
+    case 8u:
+    case 13u:
+    case 14u:
+    case 15u:
+      return SDR_LUMINANCE;
+    case 16u:
+      return PQ_LUMINANCE;
+    case 18u:
+      return HLG_LUMINANCE;
+    default:
+      return SDR_LUMINANCE;
+    }
+}
+
+vec3
+apply_cicp_tone_map_from_alt (vec3 color,
+                              uint transfer_function)
+{
+  uint from_lum = luminance (ALT_COLOR_SPACE);
+  uint to_lum = luminance_from_cicp_tf (transfer_function);
+
+  if (from_lum == to_lum)
+    return color;
+
+  if (max_nits (from_lum) > max_nits (to_lum))
+    return ictcp_tone_map (color,
+                           cs_to_xyz (ALT_COLOR_SPACE),
+                           cs_from_xyz (ALT_COLOR_SPACE),
+                           from_lum, to_lum);
+
+  return linear_tone_map (color, from_lum, to_lum);
+}
+
+vec3
+apply_cicp_tone_map_to_alt (vec3 color,
+                            uint transfer_function)
+{
+  uint from_lum = luminance_from_cicp_tf (transfer_function);
+  uint to_lum = luminance (ALT_COLOR_SPACE);
+
+  if (from_lum == to_lum)
+    return color;
+
+  if (max_nits (from_lum) > max_nits (to_lum))
+    return ictcp_tone_map (color, _to_xyz, _from_xyz, from_lum, to_lum);
+
+  return linear_tone_map (color, from_lum, to_lum);
+}
+
 vec4
 convert_color_from_cicp (vec4 color)
 {
@@ -412,6 +444,7 @@ convert_color_from_cicp (vec4 color)
   color.rgb = _yuv * (color.rgb + _yuv_add);
 
   color.rgb = apply_cicp_eotf (color.rgb, _transfer_function);
+  color.rgb = apply_cicp_tone_map_to_alt (color.rgb, _transfer_function);
   color.rgb = _mat * color.rgb;
 
   color = output_color_from_alt (color);
@@ -424,6 +457,7 @@ convert_color_to_cicp (vec4 color)
 {
   color = alt_color_from_output (color);
 
+  color.rgb = apply_cicp_tone_map_from_alt (color.rgb, _transfer_function);
   color.rgb = _mat * color.rgb;
   color.rgb = apply_cicp_oetf (color.rgb, _transfer_function);
 
