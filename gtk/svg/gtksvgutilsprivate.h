@@ -211,4 +211,38 @@ gboolean path_in_stroke (GskPath                *path,
                          const graphene_point_t *point,
                          GskStroke              *stroke);
 
+const char * format_time_buf (char    *buf,
+                              size_t   size,
+                              int64_t  time);
+const char * format_time     (int64_t time);
+
+#ifdef DEBUG
+#if 0
+static void
+print_rect (const char *label,
+            const graphene_rect_t *rect)
+{
+  g_print ("%s: %g %g %g %g\n",
+           label,
+           rect->origin.x, rect->origin.y,
+           rect->size.width, rect->size.height);
+}
+#endif
+
+#define dbg_print(cond, fmt,...) \
+  G_STMT_START { \
+    if (strstr (g_getenv ("SVG_DEBUG") ?:"", cond)) \
+      { \
+        char buf[64]; \
+        g_print ("%s: ", format_time_buf (buf, 64, g_get_monotonic_time ())); \
+        g_print (fmt __VA_OPT__(,) __VA_ARGS__); \
+        g_print ("\n"); \
+      } \
+  } G_STMT_END
+
+#else
+#define dbg_print(cond,fmt,...)
+#define print_rect (label, rect)
+#endif
+
 G_END_DECLS

@@ -155,6 +155,9 @@ void           gtk_svg_clear_content   (GtkSvg                *self);
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
 
+void           gtk_svg_advance_after_snapshot
+                                       (GtkSvg                *self);
+
 GtkSvgRunMode  gtk_svg_get_run_mode    (GtkSvg                *self);
 
 int64_t        gtk_svg_get_next_update (GtkSvg                *self);
@@ -192,20 +195,12 @@ GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
                                         size_t                 n_colors,
                                         GtkSvgSerializeFlags   flags);
 
-GskRenderNode *gtk_svg_apply_filter    (GtkSvg                *svg,
-                                        const char            *filter,
-                                        const graphene_rect_t *bounds,
-                                        GskRenderNode         *node);
-
 void           gtk_svg_set_activate_callback (GtkSvg             *svg,
                                               SvgElementCallback  callback,
                                               gpointer            data);
 void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
                                               SvgElementCallback     callback,
                                               gpointer               data);
-
-SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
-                                              const graphene_point_t *p);
 
 void           gtk_svg_set_view              (GtkSvg               *self,
                                               SvgElement           *view);

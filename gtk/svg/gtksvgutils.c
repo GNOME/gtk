@@ -307,3 +307,23 @@ path_in_stroke (GskPath                *path,
   /* FIXME: not quite right */
   return gsk_path_get_closest_point (path, point, gsk_stroke_get_line_width (stroke) / 2, &p, &dist);
 }
+
+static int64_t time_base;
+
+const char *
+format_time_buf (char    *buf,
+                 size_t   size,
+                 int64_t  time)
+{
+  if (time == INDEFINITE)
+    return "indefinite";
+  else
+    return g_ascii_formatd (buf, size, "%.3f", (time - time_base) / (double) G_TIME_SPAN_SECOND);
+}
+
+const char *
+format_time (int64_t time)
+{
+  static char buf[64];
+  return format_time_buf (buf, 64, time);
+}
