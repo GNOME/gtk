@@ -4955,6 +4955,7 @@ event_surface_is_still_viewable (GdkEvent *event)
     }
 }
 
+G_GNUC_WARN_UNUSED_RESULT
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              double    *x,
@@ -4970,7 +4971,8 @@ translate_event_coordinates (GdkEvent  *event,
   *x = *y = 0;
 
   if (!gdk_event_get_position (event, &event_x, &event_y))
-    return FALSE;
+    /* If this kind of event doesn't have a position, we're good */
+    return TRUE;
 
   event_widget = gtk_get_event_widget (event);
   native = gtk_widget_get_native (event_widget);
@@ -5004,7 +5006,8 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  translate_event_coordinates (event, &x, &y, widget);
+  if (!translate_event_coordinates (event, &x, &y, widget))
+    return FALSE;
 
   return_val = gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_CAPTURE);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
@@ -5031,7 +5034,8 @@ gtk_widget_event (GtkWidget *widget,
   if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
-  translate_event_coordinates (event, &x, &y, widget);
+  if (!translate_event_coordinates (event, &x, &y, widget))
+    return FALSE;
 
   if (widget == target)
     return_val |= gtk_widget_run_controllers (widget, event, target, x, y, GTK_PHASE_TARGET);
