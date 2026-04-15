@@ -495,7 +495,7 @@ gtk_show_file_android (GFile               *file,
       gchar *curi = g_file_get_uri (file);
       uri = (*env)->CallStaticObjectMethod (env, gdk_android_get_java_cache ()->a_uri.klass,
                                             gdk_android_get_java_cache ()->a_uri.parse,
-                                            gdk_android_utf8_to_java (uri));
+                                            gdk_android_utf8_to_java (curi));
       g_free (curi);
       if (gdk_android_check_exception (error))
         {
