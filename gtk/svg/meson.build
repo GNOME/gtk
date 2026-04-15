@@ -30,6 +30,7 @@ gtk_svg_public_sources = files([
   'gtksvgpathdata.c',
   'gtksvgpathutils.c',
   'gtksvgproperty.c',
+  'gtksvgrenderer.c',
   'gtksvgserialize.c',
   'gtksvgstring.c',
   'gtksvgstringlist.c',

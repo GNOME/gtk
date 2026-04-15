@@ -155,47 +155,12 @@ void           gtk_svg_clear_content   (GtkSvg                *self);
 void           gtk_svg_advance         (GtkSvg                *self,
                                         int64_t                current_time);
 
+void           gtk_svg_advance_after_snapshot
+                                       (GtkSvg                *self);
+
 GtkSvgRunMode  gtk_svg_get_run_mode    (GtkSvg                *self);
 
 int64_t        gtk_svg_get_next_update (GtkSvg                *self);
-
-/*< private >
- * GtkSvgSerializeFlags:
- * @GTK_SVG_SERIALIZE_DEFAULT: Default behavior. Serialize
- *   the DOM, with gpa attributes, and with compatibility
- *   tweaks
- * @GTK_SVG_SERIALIZE_AT_CURRENT_TIME: Serialize the current
- *   values of a running animation, as opposed to the DOM
- *   values that the parser produced
- * @GTK_SVG_SERIALIZE_INCLUDE_STATE: Include custom attributes
- *   with various information about the state of the renderer,
- *   such as the current time, or the status of running animations
- * @GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS: Instead of gpa attributes,
- *   include the animations that were generated from them
- * @GTK_SVG_SERIALIZE_NO_COMPAT: Don't include things that
- *   improve the rendering of the serialized result in renderers
- *   which don't support extensions, but stick to the pristine
- *   DOM
- */
-typedef enum
-{
-  GTK_SVG_SERIALIZE_DEFAULT            = 0,
-  GTK_SVG_SERIALIZE_AT_CURRENT_TIME    = 1 << 0,
-  GTK_SVG_SERIALIZE_EXCLUDE_ANIMATION  = 1 << 1,
-  GTK_SVG_SERIALIZE_INCLUDE_STATE      = 1 << 2,
-  GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS   = 1 << 3,
-  GTK_SVG_SERIALIZE_NO_COMPAT          = 1 << 4,
-} GtkSvgSerializeFlags;
-
-GBytes *       gtk_svg_serialize_full  (GtkSvg                *self,
-                                        const GdkRGBA         *colors,
-                                        size_t                 n_colors,
-                                        GtkSvgSerializeFlags   flags);
-
-GskRenderNode *gtk_svg_apply_filter    (GtkSvg                *svg,
-                                        const char            *filter,
-                                        const graphene_rect_t *bounds,
-                                        GskRenderNode         *node);
 
 void           gtk_svg_set_activate_callback (GtkSvg             *svg,
                                               SvgElementCallback  callback,
@@ -203,9 +168,6 @@ void           gtk_svg_set_activate_callback (GtkSvg             *svg,
 void           gtk_svg_set_hover_callback    (GtkSvg                *svg,
                                               SvgElementCallback     callback,
                                               gpointer               data);
-
-SvgElement *   gtk_svg_pick_element          (GtkSvg                 *svg,
-                                              const graphene_point_t *p);
 
 void           gtk_svg_set_view              (GtkSvg               *self,
                                               SvgElement           *view);

@@ -24,6 +24,7 @@
 #include "gtk/svg/gtksvgprivate.h"
 #include "gtk/svg/gtksvgelementprivate.h"
 #include "gtk/svg/gtksvghrefprivate.h"
+#include "gtk/svg/gtksvgserializeprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gdk/gdkeventsprivate.h"
 #include "testsuite/testutils.h"
@@ -130,15 +131,15 @@ get_sibling (const char *file,
 
 typedef enum
 {
-  INPUT,
-  TIME,
-  STATE,
-  COLORS,
-  OUTPUT,
-  FOCUS,
-  KEY,
-  BUTTON,
-  POINTER,
+  STEP_INPUT,
+  STEP_TIME,
+  STEP_STATE,
+  STEP_COLORS,
+  STEP_OUTPUT,
+  STEP_FOCUS,
+  STEP_KEY,
+  STEP_BUTTON,
+  STEP_POINTER,
 } StepType;
 
 enum
@@ -171,13 +172,13 @@ clear_step (gpointer data)
 {
   Step *step = data;
 
-  if (step->type == INPUT)
+  if (step->type == STEP_INPUT)
     g_free (step->input);
 
-  if (step->type == OUTPUT)
+  if (step->type == STEP_OUTPUT)
     g_free (step->output);
 
-  if (step->type == BUTTON)
+  if (step->type == STEP_BUTTON)
     g_free (step->activate);
 }
 
@@ -207,7 +208,7 @@ parse_test_file (const char *filename)
     g_error ("Can't parse %s.%u (expected 'input: ')\n", filename, i);
 
   memset (&step, 0, sizeof (Step));
-  step.type = INPUT;
+  step.type = STEP_INPUT;
   step.input = get_sibling (filename, strv[i] + strlen ("input: "));
   g_array_append_val (steps, step);
 
@@ -219,7 +220,7 @@ parse_test_file (const char *filename)
         {
           char *end;
 
-          step.type = STATE;
+          step.type = STEP_STATE;
           step.state = g_ascii_strtoull (strv[i] + strlen ("state: "), &end, 10);
           if ((end && *end != '\0') || step.state > 63)
             g_error ("Can't parse %s.%u (expected a state)\n", filename, i);
@@ -227,7 +228,7 @@ parse_test_file (const char *filename)
       else if (g_str_has_prefix (strv[i], "time: "))
         {
           char *end;
-          step.type = TIME;
+          step.type = STEP_TIME;
           step.time = g_ascii_strtoull (strv[i] + strlen ("time: "), &end, 10);
           if (end && *end != '\0')
             g_error ("Can't parse %s.%u (expected a time)\n", filename, i);
@@ -236,7 +237,7 @@ parse_test_file (const char *filename)
         {
           GStrv cols = g_strsplit (strv[i] + strlen ("colors: "), ";", 0);
 
-          step.type = COLORS;
+          step.type = STEP_COLORS;
           step.n_colors = MIN (g_strv_length (cols), 5);
           for (unsigned int j = 0; j < step.n_colors; j++)
             {
@@ -247,12 +248,12 @@ parse_test_file (const char *filename)
         }
       else if (g_str_has_prefix (strv[i], "output: "))
         {
-          step.type = OUTPUT;
+          step.type = STEP_OUTPUT;
           step.output = get_sibling (filename, strv[i] + strlen ("output: "));
         }
       else if (g_str_has_prefix (strv[i], "focus: "))
         {
-          step.type = FOCUS;
+          step.type = STEP_FOCUS;
           if (strcmp (strv[i] + strlen ("focus: "), "forward") == 0)
             step.direction = GTK_DIR_TAB_FORWARD;
           else if (strcmp (strv[i] + strlen ("focus: "), "backward") == 0)
@@ -265,7 +266,7 @@ parse_test_file (const char *filename)
           char *p;
           char *key;
 
-          step.type = KEY;
+          step.type = STEP_KEY;
 
           key = g_strdup (strv[i] + strlen ("key: "));
           p = strstr (key, " expect:");
@@ -285,7 +286,7 @@ parse_test_file (const char *filename)
         {
           const char *p;
 
-          step.type = BUTTON;
+          step.type = STEP_BUTTON;
           if (sscanf (strv[i], "button: %d %lf %lf", &step.button, &step.x, &step.y) < 3)
             g_error ("Can't parse button info");
 
@@ -297,7 +298,7 @@ parse_test_file (const char *filename)
         }
       else if (g_str_has_prefix (strv[i], "pointer: "))
         {
-          step.type = POINTER;
+          step.type = STEP_POINTER;
           if (sscanf (strv[i], "pointer: enter %lf %lf", &step.x, &step.y) == 2)
             {
               step.pointer = ENTER;
@@ -507,7 +508,7 @@ play_svg_test (GFile *file)
 
       switch (step->type)
         {
-        case INPUT:
+        case STEP_INPUT:
           g_assert (i == 0);
           if (!g_file_get_contents (step->input, &contents, &length, &error))
             g_error ("%s", error->message);
@@ -520,7 +521,7 @@ play_svg_test (GFile *file)
           gtk_svg_set_load_time (svg, load_time);
           break;
 
-        case TIME:
+        case STEP_TIME:
           time = step->time;
           data = g_new (StepData, 1);
           data->step = i;
@@ -530,7 +531,7 @@ play_svg_test (GFile *file)
           g_timeout_add_once (time, advance, data);
           break;
 
-        case STATE:
+        case STEP_STATE:
           data = g_new (StepData, 1);
           data->step = i;
           data->svg = svg;
@@ -538,18 +539,18 @@ play_svg_test (GFile *file)
           g_timeout_add_once (time, set_state, data);
           break;
 
-        case COLORS:
+        case STEP_COLORS:
           g_print ("FIXME: apply colors\n");
           break;
 
-        case OUTPUT:
+        case STEP_OUTPUT:
           data = g_new (StepData, 1);
           data->step = i;
           data->output = g_path_get_basename (step->output);
           g_timeout_add_once (time, snapshot_here, data);
           break;
 
-        case FOCUS:
+        case STEP_FOCUS:
           data = g_new (StepData, 1);
           data->step = i;
           data->svg = svg;
@@ -557,7 +558,7 @@ play_svg_test (GFile *file)
           g_timeout_add_once (time, focus, data);
           break;
 
-        case KEY:
+        case STEP_KEY:
           data = g_new (StepData, 1);
           data->step = i;
           data->svg = svg;
@@ -565,7 +566,7 @@ play_svg_test (GFile *file)
           g_timeout_add_once (time, key, data);
           break;
 
-        case BUTTON:
+        case STEP_BUTTON:
           data = g_new (StepData, 1);
           data->step = i;
           data->svg = svg;
@@ -575,7 +576,7 @@ play_svg_test (GFile *file)
           g_timeout_add_once (time, button, data);
           break;
 
-        case POINTER:
+        case STEP_POINTER:
           data = g_new (StepData, 1);
           data->step = i;
           data->svg = svg;
@@ -659,11 +660,11 @@ render_svg_file (GFile *file, gboolean generate)
       time = (unsigned int) g_ascii_strtoull (&p[1], &end, 10);
       *p = '\0';
 
-      step.type = TIME;
+      step.type = STEP_TIME;
       step.time = time;
       g_array_append_val (steps, step);
 
-      step.type = OUTPUT;
+      step.type = STEP_OUTPUT;
       step.output = g_file_get_path (file);
       g_array_append_val (steps, step);
     }
@@ -673,7 +674,7 @@ render_svg_file (GFile *file, gboolean generate)
       Step *step = &g_array_index (steps, Step, i);
       switch (step->type)
         {
-        case INPUT:
+        case STEP_INPUT:
           g_assert (i == 0);
           if (!g_file_get_contents (step->input, &contents, &length, &error))
           g_error ("%s", error->message);
@@ -686,20 +687,20 @@ render_svg_file (GFile *file, gboolean generate)
           gtk_svg_set_load_time (svg, load_time);
           break;
 
-        case TIME:
+        case STEP_TIME:
           gtk_svg_advance (svg, load_time + step->time * G_TIME_SPAN_MILLISECOND);
           break;
 
-        case STATE:
+        case STEP_STATE:
           gtk_svg_set_state (svg, step->state);
           break;
 
-        case COLORS:
+        case STEP_COLORS:
           colors = step->colors;
           n_colors = step->n_colors;
           break;
 
-        case OUTPUT:
+        case STEP_OUTPUT:
           {
             GBytes *output;
 
@@ -741,11 +742,11 @@ render_svg_file (GFile *file, gboolean generate)
           }
           break;
 
-        case FOCUS:
+        case STEP_FOCUS:
           gtk_svg_move_focus (svg, step->direction);
           break;
 
-        case KEY:
+        case STEP_KEY:
           {
             GdkTranslatedKey translated;
             GdkEvent *event;
@@ -774,7 +775,7 @@ render_svg_file (GFile *file, gboolean generate)
           }
           break;
 
-        case BUTTON:
+        case STEP_BUTTON:
           {
             GdkEvent *event;
             char *activate = NULL;
@@ -796,7 +797,7 @@ render_svg_file (GFile *file, gboolean generate)
           }
           break;
 
-        case POINTER:
+        case STEP_POINTER:
           {
             GdkEvent *event;
             GtkCrossingData crossing;
