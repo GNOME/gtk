@@ -336,7 +336,11 @@ create_visibility_setter (SvgElement   *shape,
   Visibility opposite_visibility;
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
-    initial_visibility = svg_enum_get (svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY));
+    {
+      SvgValue *value = svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY);
+      g_assert (value != NULL);
+      initial_visibility = svg_enum_get (value);
+    }
   else
     initial_visibility = VISIBILITY_VISIBLE;
 
