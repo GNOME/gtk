@@ -1153,7 +1153,7 @@ gtk_pango_get_line_start (PangoLayout *layout,
       length = pango_layout_line_get_length (line);
       end_index = start_index + length;
 
-      if (index >= start_index && index <= end_index)
+      if (index >= start_index && (index < end_index || pango_layout_iter_at_last_line (iter)))
         {
           /* Found line for offset */
           if (pango_layout_iter_next_line (iter))
