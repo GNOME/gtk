@@ -780,7 +780,20 @@ convert_style_hints_to_pango (GtkIMContextWayland *context_wayland,
   pango_attr_list_insert (attrs, attr);
 
   if (!context_wayland->current_preedit.style_hints)
-    return attrs;
+    {
+      /* Add default underline when there are no style hints from the compositor.
+       * This handles cases where the compositor doesn't support preedit hints
+       * (e.g., older protocol versions)
+       */
+      if (strlen (text) > 0)
+        {
+          attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
+          attr->end_index = strlen (text);
+          pango_attr_list_insert (attrs, attr);
+        }
+      return attrs;
+    }
 
   for (i = 0; i < context_wayland->current_preedit.style_hints->len; i++)
     {
