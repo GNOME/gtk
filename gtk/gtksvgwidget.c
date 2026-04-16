@@ -409,7 +409,7 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
   widget_class->query_tooltip = gtk_svg_widget_query_tooltip;
 
   /**
-   * GtkSvg:resource:
+   * GtkSvgWidget:resource:
    *
    * Resource to load SVG data from.
    *
@@ -423,7 +423,7 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
-   * GtkSvg:state:
+   * GtkSvgWidget:state:
    *
    * The current state of the renderer.
    *
@@ -437,7 +437,7 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSvg:stylesheet:
+   * GtkSvgWidget:stylesheet:
    *
    * A CSS stylesheet to apply to the SVG.
    *
