@@ -8,6 +8,7 @@ gsk_private_gpu_include_shaders = files([
   'enums.glsl',
   'rect.glsl',
   'roundedrect.glsl',
+  'snap.glsl',
 ])
 
 gsk_private_gpu_shaders = files([
