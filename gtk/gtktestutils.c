@@ -82,6 +82,8 @@ gtk_test_init (int    *argcp,
 
   gtk_disable_setlocale();
   lang = setlocale (LC_ALL, "en_US.UTF-8");
+  if (lang == NULL)
+    g_test_message ("Failed to set locale to en_US.UTF-8");
   if (g_test_verbose ())
     g_test_message ("language: %s", lang ? lang : "C");
 
