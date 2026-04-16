@@ -83,7 +83,10 @@ gtk_test_init (int    *argcp,
   gtk_disable_setlocale();
   lang = setlocale (LC_ALL, "en_US.UTF-8");
   if (lang == NULL)
-    g_test_message ("Failed to set locale to en_US.UTF-8");
+    {
+      g_test_message (">>> COULD NOT SET LOCALE TO en_US.UTF-8 <<<");
+      g_test_message ("The locale is required for correct operation. This will be a warning in GTK 4.24 and cause this tests to fail, so please ensure it is installed.");
+    }
   if (g_test_verbose ())
     g_test_message ("language: %s", lang ? lang : "C");
 
