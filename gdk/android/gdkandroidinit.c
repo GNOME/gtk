@@ -123,9 +123,9 @@ static GdkAndroidJavaCache gdk_android_java_cache;
     gdk_android_java_cache.cklass.cname = (*env)->NewGlobalRef (env, cklass##_##cname);                                                \
 }
 
-#define POPULATE_REFCACHE_CURSOR_TYPE(cname, jname, cssname) {                                                                                          \
-    POPULATE_REFCACHE_FIELD (a_pointericon, cname, jname)                                                                                               \
-    g_hash_table_insert (gdk_android_java_cache.a_pointericon.gdk_type_mapping, cssname, GINT_TO_POINTER (gdk_android_java_cache.a_pointericon.cname)); \
+#define POPULATE_REFCACHE_CURSOR_TYPE(cname, jname, cssname) {                                                                                                    \
+    POPULATE_REFCACHE_FIELD (a_pointericon, cname, jname)                                                                                                         \
+    g_hash_table_insert (gdk_android_java_cache.a_pointericon.gdk_type_mapping, (gpointer)cssname, GINT_TO_POINTER (gdk_android_java_cache.a_pointericon.cname)); \
   }
 
 jclass

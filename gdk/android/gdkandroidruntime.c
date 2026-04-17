@@ -167,7 +167,8 @@ gdk_android_runtime_gtk_thread (GdkAndroidRuntimeData *data)
                    data,
                    NULL);
 
-  char *argv[] = { "android-gtk", NULL };
+  char  arg0[] = "android-gtk";
+  char *argv[] = { arg0, NULL };
   __android_log_print (ANDROID_LOG_DEBUG,
                        "GTK Runtime",
                        "Calling main()");
@@ -287,6 +288,7 @@ _gdk_android_application_start_runtime (JNIEnv  *env,
   GdkAndroidRuntimeData *data = g_new (GdkAndroidRuntimeData, 1);
   gint rc = (*env)->GetJavaVM(env, &data->vm);
   g_assert(rc == JNI_OK);
+  (void)rc;
 
   jclass link_error_class = (*env)->FindClass (env, "java/lang/UnsatisfiedLinkError");
 
