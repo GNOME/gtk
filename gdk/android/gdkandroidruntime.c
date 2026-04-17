@@ -288,6 +288,7 @@ _gdk_android_application_start_runtime (JNIEnv  *env,
   GdkAndroidRuntimeData *data = g_new (GdkAndroidRuntimeData, 1);
   gint rc = (*env)->GetJavaVM(env, &data->vm);
   g_assert(rc == JNI_OK);
+  (void)rc;
 
   jclass link_error_class = (*env)->FindClass (env, "java/lang/UnsatisfiedLinkError");
 
