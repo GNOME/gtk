@@ -160,6 +160,10 @@ _gdk_android_surface_on_layout_surface (JNIEnv *env, jobject this,
 
   gdk_surface_request_layout ((GdkSurface *) self);
 
+  /* Complete a deferred map: gdk_android_surface_eventloop_idle sets
+   * delayed_map = TRUE when notifyVisibility(true) arrives before the surface
+   * geometry is fully known (cfg.x == 0 || cfg.y == 0).  At this point width,
+   * height, and scale are initialised, so it is safe to map the surface. */
   if (self->delayed_map)
     {
       gdk_android_surface_handle_map (self);
@@ -323,6 +327,10 @@ gdk_android_surface_eventloop_idle (GdkAndroidSurfaceOnVisibilityData *data)
       // gdk_android_surface_queue_configuration_update(self);
       if (self->cfg.x == 0 || self->cfg.y == 0)
         {
+          /* Position not yet known — defer map to
+           * _gdk_android_surface_on_layout_surface.  This runs before
+           * notifyLayoutSurface because surfaceCreated calls
+           * notifyVisibility synchronously (see ToplevelActivity.java). */
           self->delayed_map = TRUE;
         }
       else
