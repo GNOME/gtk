@@ -6,6 +6,7 @@ gdk_android_sources = files([
   'gdkandroidsurface.c',
   'gdkandroidtoplevel.c',
   'gdkandroidpopup.c',
+  'gdkandroidchoreographersource.c',
   'gdkandroidcairocontext.c',
   'gdkandroidclipboard.c',
   'gdkandroiddnd.c',

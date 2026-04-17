@@ -68,6 +68,7 @@ struct _GdkAndroidSurface
 
   GdkAndroidSurfaceConfiguration cfg;
 
+  GList *visible_node;
   GdkDrop *active_drop;
 };
 

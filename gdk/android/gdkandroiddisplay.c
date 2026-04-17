@@ -21,8 +21,10 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkeventsprivate.h"
+#include "gdkframeclockprivate.h"
 
 #include "gdkandroidinit-private.h"
+#include "gdkandroidchoreographersource-private.h"
 #include "gdkandroidsurface-private.h"
 #include "gdkandroidtoplevel-private.h"
 #include "gdkandroidpopup-private.h"
@@ -65,11 +67,37 @@ enum
 };
 static GParamSpec *obj_properties[N_PROPERTIES] = { 0, };
 
+static gboolean
+gdk_android_display_on_choreographer_vsync (gpointer user_data)
+{
+  GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (user_data);
+
+  for (GList *l = display->visible_surfaces; l != NULL; l = l->next)
+    {
+      GdkSurface *surface = GDK_SURFACE (l->data);
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+      if (clock)
+        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_PAINT);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 gdk_android_display_finalize (GObject *object)
 {
   GdkAndroidDisplay *self = (GdkAndroidDisplay *) object;
   GdkDisplay *display = (GdkDisplay *) self;
+
+  if (self->choreographer_source)
+    {
+      g_source_destroy (self->choreographer_source);
+      g_source_unref (self->choreographer_source);
+      self->choreographer_source = NULL;
+    }
+
+  g_list_free (self->visible_surfaces);
+  self->visible_surfaces = NULL;
 
   g_clear_object (&display->clipboard);
 
@@ -271,6 +299,15 @@ gdk_android_display_init (GdkAndroidDisplay *self)
   self->keymap = g_object_new (GDK_TYPE_ANDROID_KEYMAP, NULL);
 
   self->drags = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+
+  self->choreographer_source = gdk_android_choreographer_source_new (g_main_context_default ());
+  if (self->choreographer_source)
+    {
+      g_source_set_callback (self->choreographer_source,
+                             gdk_android_display_on_choreographer_vsync,
+                             self, NULL);
+      g_source_attach (self->choreographer_source, g_main_context_default ());
+    }
 
   gdk_display_set_composited (display, TRUE);
   gdk_display_set_input_shapes (display, TRUE);

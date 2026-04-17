@@ -22,7 +22,10 @@
 #include <math.h>
 
 #include "gdkframeclockidleprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkglcontextprivate.h"
+
+#include "gdkandroidchoreographersource-private.h"
 
 #include <android/native_window_jni.h>
 
@@ -338,6 +341,13 @@ gdk_android_surface_eventloop_idle (GdkAndroidSurfaceOnVisibilityData *data)
           self->delayed_map = FALSE;
           gdk_android_surface_handle_map (self);
         }
+
+      GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
+      display->visible_surfaces = g_list_prepend (display->visible_surfaces, self);
+      self->visible_node = display->visible_surfaces;
+      if (display->visible_surfaces->next == NULL && display->choreographer_source)
+        gdk_android_choreographer_source_unpause (
+            (GdkAndroidChoreographerSource *) display->choreographer_source);
     }
   else
     {
@@ -362,6 +372,17 @@ gdk_android_surface_eventloop_idle (GdkAndroidSurfaceOnVisibilityData *data)
 
       // cont. ugly hack
       self->visible = old_visibility;
+
+      GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
+      if (self->visible_node)
+        {
+          display->visible_surfaces = g_list_delete_link (display->visible_surfaces,
+                                                          self->visible_node);
+          self->visible_node = NULL;
+          if (display->visible_surfaces == NULL && display->choreographer_source)
+            gdk_android_choreographer_source_pause (
+                (GdkAndroidChoreographerSource *) display->choreographer_source);
+        }
     }
 
   g_object_unref (self);
@@ -473,8 +494,15 @@ gdk_android_surface_frame_clock_after_paint (GdkFrameClock *clock,
     goto exit;
   gfloat refresh = (*env)->CallFloatMethod (env, view,
                                             gdk_android_get_java_cache ()->a_display.get_refresh_rate);
-  timings->refresh_interval = 1000000.f / refresh; // \frac{1}{refresh} * 10^6
-  timings->presentation_time = 0;
+  timings->refresh_interval = 1000000.f / refresh;
+
+  GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
+  if (display->choreographer_source)
+    timings->presentation_time =
+      gdk_android_choreographer_source_get_presentation_time (
+        (GdkAndroidChoreographerSource *) display->choreographer_source);
+  else
+    timings->presentation_time = 0;
 
   timings->complete = TRUE;
 exit:
