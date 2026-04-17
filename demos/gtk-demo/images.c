@@ -140,22 +140,15 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/images/stateful.gpa"));
-      gtk_svg_play (GTK_SVG (paintable));
-      gtk_svg_set_state (GTK_SVG (paintable), 0);
-      image = gtk_image_new_from_paintable (paintable);
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 128);
-
+      image = GTK_WIDGET (gtk_svg_widget_new ());
+      g_object_set (image, "resource", "/images/stateful.gpa", NULL);
+      gtk_widget_set_size_request (image, 128, 128);
       gtk_frame_set_child (GTK_FRAME (frame), image);
 
       state = gtk_switch_new ();
       gtk_widget_set_halign (state, GTK_ALIGN_START);
-      g_object_bind_property (state, "active",
-                              paintable, "state",
-                              G_BINDING_DEFAULT);
+      g_object_bind_property (state, "active", image, "state", G_BINDING_DEFAULT);
       gtk_box_append (GTK_BOX (vbox), state);
-      g_object_unref (paintable);
-
 
       /* Animations */
 
@@ -168,14 +161,10 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_append (GTK_BOX (vbox), frame);
 
-      paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/images/animated.gpa"));
-      gtk_svg_play (GTK_SVG (paintable));
-      gtk_svg_set_state (GTK_SVG (paintable), 0);
-      image = gtk_image_new_from_paintable (paintable);
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 128);
-
+      image = GTK_WIDGET (gtk_svg_widget_new ());
+      g_object_set (image, "resource", "/images/animated.gpa", NULL);
+      gtk_widget_set_size_request (image, 128, 128);
       gtk_frame_set_child (GTK_FRAME (frame), image);
-      g_object_unref (paintable);
 
       /* Video */
 
