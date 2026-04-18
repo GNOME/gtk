@@ -963,7 +963,6 @@ prepare_print_response (GDBusConnection *connection,
     }
 
   g_variant_unref (options);
-
   g_object_unref (task);
 }
 
@@ -1007,7 +1006,7 @@ prepare_print_called (GObject      *source,
                                             NULL,
                                             G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
                                             prepare_print_response,
-                                            self, NULL);
+                                            g_object_ref (task), g_object_unref);
 
     }
 
@@ -1049,7 +1048,7 @@ setup_window_handle_exported (GtkWindow  *window,
                                         NULL,
                                         G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
                                         prepare_print_response,
-                                        task, NULL);
+                                        g_object_ref (task), g_object_unref);
 
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
   g_variant_builder_add (&opt_builder, "{sv}", "handle_token", g_variant_new_string (handle_token));
@@ -1160,7 +1159,6 @@ print_response (GDBusConnection *connection,
           break;
         }
     }
-
   g_object_unref (task);
 }
 
@@ -1204,7 +1202,7 @@ print_called (GObject      *source,
                                             NULL,
                                             G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
                                             print_response,
-                                            task, NULL);
+                                            g_object_ref (task), g_object_unref);
 
     }
 
@@ -1255,7 +1253,7 @@ print_window_handle_exported (GtkWindow  *window,
                                         NULL,
                                         G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
                                         print_response,
-                                        task, NULL);
+                                        g_object_ref (task), g_object_unref);
 
   fd_list = g_unix_fd_list_new ();
   idx = g_unix_fd_list_append (fd_list, ptd->fds[0], NULL);
