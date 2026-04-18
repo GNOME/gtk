@@ -55,7 +55,7 @@
 #include "gskpathbuilder.h"
 #include "gskprivate.h"
 #include "gskradialgradientnodeprivate.h"
-#include "gskrectsnap.h"
+#include "gskrectsnapprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"

@@ -2,7 +2,7 @@
 
 #include "gdk/gdkdihedralprivate.h"
 #include "gsk/gskenums.h"
-#include "gsk/gskrectsnap.h"
+#include "gsk/gskrectsnapprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
 
