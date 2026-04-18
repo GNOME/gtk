@@ -43,6 +43,9 @@ struct _GdkAndroidDisplay
   GHashTable *drags;
 
   GdkAndroidDisplayNightMode night_mode;
+
+  GSource *choreographer_source;
+  GList   *visible_surfaces;
 };
 
 struct _GdkAndroidDisplayClass

@@ -309,6 +309,8 @@ public class ToplevelActivity extends Activity {
 
 			@Override
 			public void surfaceCreated(@NonNull SurfaceHolder holder) {
+				// Must be synchronous (not via GlibContext) so that delayed_map
+				// is set before surfaceChanged dispatches notifyLayoutSurface.
 				notifyVisibility(true);
 			}
 
