@@ -37,8 +37,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-15 13:10+0000\n"
-"PO-Revision-Date: 2026-03-15 20:52+0100\n"
+"POT-Creation-Date: 2026-04-03 21:21+0000\n"
+"PO-Revision-Date: 2026-04-18 21:07+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -4182,9 +4182,9 @@ msgstr ""
 "konnte."
 
 #. window
-#: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:617
-#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:287
+#: gtk/print/gtkprintoperation-portal.c:634
+#: gtk/print/gtkprintoperation-portal.c:703 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Drucken"
 
@@ -7385,10 +7385,8 @@ msgid "Font Name"
 msgstr "Schriftname"
 
 #: gtk/ui/gtkfontchooserwidget.ui:391
-#, fuzzy
-#| msgid "Style Variations"
 msgid "Font Variation Axes"
-msgstr "Stilvariationen"
+msgstr "Achsen der Schriftvariationen"
 
 #: gtk/ui/gtkfontchooserwidget.ui:439
 msgid "Font Features"
@@ -8706,7 +8704,7 @@ msgstr "Fehlerfarbe"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
-msgstr "Von symbolischem SVG in einen Knoten umwandeln"
+msgstr "Von symbolischem SVG in einen Knoten umwandeln."
 
 #: tools/gtk-rendernode-tool-convert.c:177
 #, c-format
