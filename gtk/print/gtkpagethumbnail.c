@@ -116,7 +116,7 @@ gtk_page_thumbnail_class_init (GtkPageThumbnailClass *class)
 
   properties[PROP_PAGE_NUM] =
       g_param_spec_int ("page-num", NULL, NULL,
-                        0, G_MAXINT, 0, G_PARAM_READWRITE);
+                        0, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

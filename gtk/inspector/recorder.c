@@ -2529,12 +2529,12 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   object_class->set_property = gtk_inspector_recorder_set_property;
   object_class->dispose = gtk_inspector_recorder_dispose;
 
-  props[PROP_RECORDING] = g_param_spec_boolean ("recording", NULL, NULL, FALSE, G_PARAM_READWRITE);
-  props[PROP_RECORD_EVENTS] = g_param_spec_boolean ("record-events", NULL, NULL, TRUE, G_PARAM_READWRITE);
-  props[PROP_DEBUG_NODES] = g_param_spec_boolean ("debug-nodes", NULL, NULL, FALSE, G_PARAM_READWRITE);
-  props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", NULL, NULL, FALSE, G_PARAM_READWRITE);
-  props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", NULL, NULL, G_PARAM_READWRITE);
-  props[PROP_DARK] = g_param_spec_boolean ("dark", NULL, NULL, FALSE, G_PARAM_READWRITE);
+  props[PROP_RECORDING] = g_param_spec_boolean ("recording", NULL, NULL, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_RECORD_EVENTS] = g_param_spec_boolean ("record-events", NULL, NULL, TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_DEBUG_NODES] = g_param_spec_boolean ("debug-nodes", NULL, NULL, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", NULL, NULL, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", NULL, NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_DARK] = g_param_spec_boolean ("dark", NULL, NULL, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

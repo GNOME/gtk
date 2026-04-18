@@ -577,7 +577,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_HIDE_EXPANDER] =
       g_param_spec_boolean ("hide-expander", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeExpander:indent-for-depth:
@@ -589,7 +589,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_INDENT_FOR_DEPTH] =
       g_param_spec_boolean ("indent-for-depth", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeExpander:indent-for-icon:
@@ -601,7 +601,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_INDENT_FOR_ICON] =
       g_param_spec_boolean ("indent-for-icon", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeExpander:item:

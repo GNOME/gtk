@@ -438,7 +438,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 
   g_object_class_install_property (object_class, PROP_SEARCH_ENTRY,
       g_param_spec_object ("search-entry", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, list);

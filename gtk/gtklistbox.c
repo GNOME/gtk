@@ -531,7 +531,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
     g_param_spec_enum ("selection-mode", NULL, NULL,
                        GTK_TYPE_SELECTION_MODE,
                        GTK_SELECTION_SINGLE,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
     /**
    * GtkListBox:activate-on-single-click:
@@ -542,7 +542,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   properties[PROP_ACTIVATE_ON_SINGLE_CLICK] =
     g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListBox:accept-unpaired-release:
@@ -552,7 +552,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   properties[PROP_ACCEPT_UNPAIRED_RELEASE] =
     g_param_spec_boolean ("accept-unpaired-release", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -563,7 +563,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   properties[PROP_SHOW_SEPARATORS] =
     g_param_spec_boolean ("show-separators", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
                           /**
                            * GtkListBox:tab-behavior:
@@ -576,7 +576,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                             g_param_spec_enum ("tab-behavior", NULL, NULL,
                                                GTK_TYPE_LIST_TAB_BEHAVIOR,
                                                GTK_LIST_TAB_ALL,
-                                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
@@ -3940,7 +3940,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   row_properties[ROW_PROP_ACTIVATABLE] =
     g_param_spec_boolean ("activatable", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListBoxRow:selectable:
@@ -3950,7 +3950,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   row_properties[ROW_PROP_SELECTABLE] =
     g_param_spec_boolean ("selectable", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListBoxRow:child:
@@ -3960,7 +3960,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   row_properties[ROW_PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 

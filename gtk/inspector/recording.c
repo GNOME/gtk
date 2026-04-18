@@ -83,7 +83,7 @@ gtk_inspector_recording_class_init (GtkInspectorRecordingClass *klass)
   props[PROP_TIMESTAMP] =
     g_param_spec_int64 ("timestamp", NULL, NULL,
                         G_MININT64, G_MAXINT64, 0,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }

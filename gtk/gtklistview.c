@@ -882,7 +882,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   properties[PROP_ENABLE_RUBBERBAND] =
     g_param_spec_boolean ("enable-rubberband", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListView:factory:
@@ -928,7 +928,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   properties[PROP_SHOW_SEPARATORS] =
     g_param_spec_boolean ("show-separators", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListView:single-click-activate:
@@ -938,7 +938,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   properties[PROP_SINGLE_CLICK_ACTIVATE] =
     g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkListView:tab-behavior:
@@ -951,7 +951,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
     g_param_spec_enum ("tab-behavior", NULL, NULL,
                        GTK_TYPE_LIST_TAB_BEHAVIOR,
                        GTK_LIST_TAB_ALL,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

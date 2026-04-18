@@ -893,7 +893,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
 
   g_object_class_install_property (object_class, PROP_BUTTONS,
       g_param_spec_object ("buttons", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/resource-list.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, buffer);

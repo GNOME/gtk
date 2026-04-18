@@ -220,7 +220,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
   props[PROP_CONTAINS_POINTER] =
       g_param_spec_boolean ("contains-pointer", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropControllerMotion:drop:
@@ -240,7 +240,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
   props[PROP_DROP] =
       g_param_spec_object ("drop", NULL, NULL,
                            GDK_TYPE_DROP,
-                           G_PARAM_READABLE);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropControllerMotion:is-pointer:
@@ -257,7 +257,7 @@ gtk_drop_controller_motion_class_init (GtkDropControllerMotionClass *klass)
   props[PROP_IS_POINTER] =
       g_param_spec_boolean ("is-pointer", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 

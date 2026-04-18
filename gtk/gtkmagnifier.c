@@ -198,17 +198,17 @@ gtk_magnifier_class_init (GtkMagnifierClass *klass)
                                    PROP_INSPECTED,
                                    g_param_spec_object ("inspected", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_MAGNIFICATION,
                                    g_param_spec_double ("magnification", NULL, NULL,
                                                         1, G_MAXDOUBLE, 1,
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_RESIZE,
                                    g_param_spec_boolean ("resize", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_css_name (widget_class, "magnifier");
 }

@@ -389,7 +389,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_DATE,
                                    g_param_spec_boxed ("date", NULL, NULL,
                                                        G_TYPE_DATE_TIME,
-                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar:year:
@@ -405,7 +405,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_YEAR,
                                    g_param_spec_int ("year", NULL, NULL,
                                                      1, 9999, 1,
-                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar:month:
@@ -421,7 +421,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_MONTH,
                                    g_param_spec_int ("month", NULL, NULL,
                                                      0, 11, 0,
-                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar:day:
@@ -435,7 +435,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_DAY,
                                    g_param_spec_int ("day", NULL, NULL,
                                                      1, 31, 1,
-                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar:show-heading:

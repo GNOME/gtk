@@ -480,68 +480,68 @@ path_view_class_init (PathViewClass *class)
   properties[PROP_PATH1]
       = g_param_spec_boxed ("path1", NULL, NULL,
                             GSK_TYPE_PATH,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_PATH2]
       = g_param_spec_boxed ("path2", NULL, NULL,
                             GSK_TYPE_PATH,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_DO_FILL]
       = g_param_spec_boolean ("do-fill", NULL, NULL,
                               TRUE,
-                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                              G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_STROKE]
       = g_param_spec_boxed ("stroke", NULL, NULL,
                             GSK_TYPE_STROKE,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_FILL_RULE]
       = g_param_spec_enum ("fill-rule", NULL, NULL,
                            GSK_TYPE_FILL_RULE,
                            GSK_FILL_RULE_WINDING,
-                           G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_FG_COLOR]
       = g_param_spec_boxed ("fg-color", NULL, NULL,
                             GDK_TYPE_RGBA,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_BG_COLOR]
       = g_param_spec_boxed ("bg-color", NULL, NULL,
                             GDK_TYPE_RGBA,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_POINTS]
       = g_param_spec_boolean ("show-points", NULL, NULL,
                               FALSE,
-                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                              G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_CONTROLS]
       = g_param_spec_boolean ("show-controls", NULL, NULL,
                               FALSE,
-                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                              G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_INTERSECTIONS]
       = g_param_spec_boolean ("show-intersections", NULL, NULL,
                               FALSE,
-                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                              G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_POINT_COLOR]
       = g_param_spec_boxed ("point-color", NULL, NULL,
                             GDK_TYPE_RGBA,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_INTERSECTION_COLOR]
       = g_param_spec_boxed ("intersection-color", NULL, NULL,
                             GDK_TYPE_RGBA,
-                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_ZOOM]
       = g_param_spec_double ("zoom", NULL, NULL,
                              1, 20, 1,
-                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 

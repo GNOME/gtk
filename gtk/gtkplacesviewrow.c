@@ -338,37 +338,37 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   properties[PROP_ICON] =
           g_param_spec_object ("icon", NULL, NULL,
                                G_TYPE_ICON,
-                               G_PARAM_READWRITE);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_NAME] =
           g_param_spec_string ("name", NULL, NULL,
                                "",
-                               G_PARAM_READWRITE);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_PATH] =
           g_param_spec_string ("path", NULL, NULL,
                                "",
-                               G_PARAM_READWRITE);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_VOLUME] =
           g_param_spec_object ("volume", NULL, NULL,
                                G_TYPE_VOLUME,
-                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_MOUNT] =
           g_param_spec_object ("mount", NULL, NULL,
                                G_TYPE_MOUNT,
-                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_FILE] =
           g_param_spec_object ("file", NULL, NULL,
                                G_TYPE_FILE,
-                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_IS_NETWORK] =
           g_param_spec_boolean ("is-network", NULL, NULL,
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

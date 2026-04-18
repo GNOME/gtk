@@ -271,7 +271,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                           NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:sorter:
@@ -350,7 +350,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_ID] =
     g_param_spec_string ("id", NULL, NULL,
                           NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

@@ -124,7 +124,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
 						        "",
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:backend:
@@ -135,7 +135,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_BACKEND,
                                    g_param_spec_object ("backend", NULL, NULL,
 						        GTK_TYPE_PRINT_BACKEND,
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:is-virtual: (getter is_virtual)
@@ -146,7 +146,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_IS_VIRTUAL,
                                    g_param_spec_boolean ("is-virtual", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:accepts-pdf: (getter accepts_pdf)
@@ -157,7 +157,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_ACCEPTS_PDF,
                                    g_param_spec_boolean ("accepts-pdf", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:accepts-ps: (getter accepts_ps)
@@ -168,7 +168,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_ACCEPTS_PS,
                                    g_param_spec_boolean ("accepts-ps", NULL, NULL,
 							 TRUE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:state-message:
@@ -179,7 +179,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_STATE_MESSAGE,
                                    g_param_spec_string ("state-message", NULL, NULL,
 						        "",
-							G_PARAM_READABLE));
+							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:location:
@@ -190,7 +190,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_LOCATION,
                                    g_param_spec_string ("location", NULL, NULL,
 						        "",
-							G_PARAM_READABLE));
+							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:icon-name:
@@ -201,7 +201,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_ICON_NAME,
                                    g_param_spec_string ("icon-name", NULL, NULL,
 						        "printer",
-							G_PARAM_READABLE));
+							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:job-count:
@@ -214,7 +214,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
  						     0,
  						     G_MAXINT,
  						     0,
- 						     G_PARAM_READABLE));
+ 						     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:paused: (getter is_paused)
@@ -228,7 +228,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_PAUSED,
                                    g_param_spec_boolean ("paused", NULL, NULL,
 							 FALSE,
-							 G_PARAM_READABLE));
+							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter:accepting-jobs: (getter is_accepting_jobs)
@@ -239,7 +239,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    PROP_ACCEPTING_JOBS,
                                    g_param_spec_boolean ("accepting-jobs", NULL, NULL,
 							 TRUE,
-							 G_PARAM_READABLE));
+							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPrinter::details-acquired:

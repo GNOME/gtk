@@ -135,7 +135,7 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
                                    PROP_SUBPROPERTIES,
                                    g_param_spec_boxed ("subproperties", NULL, NULL,
                                                        G_TYPE_STRV,
-                                                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   property_class->parse_value = gtk_css_shorthand_property_parse_value;
 }

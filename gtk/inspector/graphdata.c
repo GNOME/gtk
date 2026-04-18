@@ -96,7 +96,7 @@ graph_data_class_init (GraphDataClass *klass)
                                    PROP_N_VALUES,
                                    g_param_spec_uint ("n-values", NULL, NULL,
                                                       1, G_MAXUINT, 1,
-                                                      G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 static void

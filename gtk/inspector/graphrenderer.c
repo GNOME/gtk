@@ -215,19 +215,19 @@ graph_renderer_class_init (GraphRendererClass *klass)
                                    PROP_DATA,
                                    g_param_spec_object ("data", NULL, NULL,
                                                         graph_data_get_type (),
-                                                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_MINIMUM,
                                    g_param_spec_double ("minimum", NULL, NULL,
                                                         -G_MAXDOUBLE, G_MAXDOUBLE, -G_MAXDOUBLE,
-                                                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_MINIMUM,
                                    g_param_spec_double ("maximum", NULL, NULL,
                                                         -G_MAXDOUBLE, G_MAXDOUBLE, G_MAXDOUBLE,
-                                                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 static void

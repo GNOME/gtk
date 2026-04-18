@@ -159,9 +159,7 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
    */
   obj_properties[PROP_STYLUS_ONLY] = g_param_spec_boolean ("stylus-only", NULL, NULL,
                                                      TRUE,
-                                                     G_PARAM_READWRITE |
-                                                     G_PARAM_EXPLICIT_NOTIFY |
-                                                     G_PARAM_CONSTRUCT);
+                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
   g_object_class_install_properties (object_class,  N_PROPERTIES, obj_properties);
 
   event_controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);

@@ -302,8 +302,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   obj_props[PROP_REALIZED] =
     g_param_spec_boolean ("realized", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE |
-                          G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkATContext::state-change:

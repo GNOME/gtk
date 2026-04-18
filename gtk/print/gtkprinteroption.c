@@ -98,7 +98,7 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
                                    PROP_VALUE,
                                    g_param_spec_string ("value", NULL, NULL,
                                                         "",
-                                                        G_PARAM_READWRITE));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 GtkPrinterOption *
