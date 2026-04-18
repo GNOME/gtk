@@ -1,5 +1,30 @@
-Overview of Changes in 4.22.3, xx-xx-xxxx
+Overview of Changes in 4.22.3, 18-04-2026
 =========================================
+
+* Bugs fixed:
+  - #7833 Input panel misplaced when typing with an input method in a GTKPopover
+    widget (cdbg)
+  - #8146 Snapshot with too small an angle shift freezes (Matthias Clasen)
+  - !9748 Update Polish translation
+  - !9753 gtk-demo: Make --autoquit work again (Benjamin Otte)
+  - !9755 gtk-demo: Make --autoquit work again (Benjamin Otte)
+  - !9763 Backport !9761 (cssprovider: Fix gtk-application-prefer-dark-theme
+    setting) (Florian "sp1rit"​)
+  - !9770 Update Russian translation
+  - !9781 gdksettings-wayland: Apply reduced-motion setting (Alice)
+  - !9797 Update German translation
+  - !9811 Revert "testutils: Warn if setting up language didn't work" (Lukáš
+    Tyrychtr, Matthias Clasen, cdbg)
+  - !9820 Update Norwegian Bokmål translation
+  - !9824 transform: Better float comparisons (Matthias Clasen)
+  - !9826 print dialog: Fix GTask lifecycle management (Matthias Clasen)
+
+* Translation updates:
+  - German (Christian Kirbach)
+  - Norwegian Bokmål (Kjartan Maraas)
+  - Polish (Victoria Niedzielska)
+  - Russian (Artur S0)
+
 
 Overview of Changes in 4.22.2, 31-03-2026
 =========================================
