@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 #define GTK_TYPE_COLOR_PICKER_WIN32 gtk_color_picker_win32_get_type ()
 G_DECLARE_FINAL_TYPE (GtkColorPickerWin32, gtk_color_picker_win32, GTK, COLOR_PICKER_WIN32, GObject)
 
-GDK_AVAILABLE_IN_ALL
 GtkColorPicker * gtk_color_picker_win32_new (void);
 
 G_END_DECLS

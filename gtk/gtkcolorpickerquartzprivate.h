@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 #define GTK_TYPE_COLOR_PICKER_QUARTZ gtk_color_picker_quartz_get_type ()
 G_DECLARE_FINAL_TYPE (GtkColorPickerQuartz, gtk_color_picker_quartz, GTK, COLOR_PICKER_QUARTZ, GObject)
 
-GDK_AVAILABLE_IN_ALL
 GtkColorPicker * gtk_color_picker_quartz_new (void);
 
 G_END_DECLS
