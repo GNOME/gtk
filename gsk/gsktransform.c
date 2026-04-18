@@ -1114,6 +1114,9 @@ gsk_rotate3d_transform_invert (GskTransform *transform,
   return gsk_transform_rotate_3d (next, - self->angle, &self->axis);
 }
 
+/* The graphene version of this function takes an epsilon, and
+ * squares it, which is bad news if you want to pass FLT_MIN...
+ */
 static bool
 vec3_near (const graphene_vec3_t *v1,
            const graphene_vec3_t *v2,
