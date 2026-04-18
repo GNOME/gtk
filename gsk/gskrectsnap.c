@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gskrectsnap.h"
+#include "gskrectsnapprivate.h"
 
 /**
  * GskRectSnap:
@@ -42,12 +42,12 @@ typedef unsigned GskRectSnap;
  * Since: 4.24
  **/
 GskRectSnap
-gsk_rect_snap_new (GskSnapDirection top,
-                   GskSnapDirection right,
-                   GskSnapDirection bottom,
-                   GskSnapDirection left)
+(gsk_rect_snap_new) (GskSnapDirection top,
+                     GskSnapDirection right,
+                     GskSnapDirection bottom,
+                     GskSnapDirection left)
 {
-  return GSK_RECT_SNAP_INIT (top, right, bottom, left);
+  return gsk_rect_snap_new (top, right, bottom, left);
 }
 
 /**
@@ -62,9 +62,9 @@ gsk_rect_snap_new (GskSnapDirection top,
  * Since: 4.24
  **/
 GskSnapDirection
-gsk_rect_snap_get_direction (GskRectSnap snap,
-                             unsigned    dir)
+(gsk_rect_snap_get_direction) (GskRectSnap snap,
+                               unsigned    dir)
 { 
-  return (GskSnapDirection) ((snap >> (8 * dir)) & 0xFF);
+  return gsk_rect_snap_get_direction (snap, dir);
 }
 
