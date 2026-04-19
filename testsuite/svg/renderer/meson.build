@@ -150,6 +150,7 @@ test_data = [
   'transform-skew.svg',
   'use.svg',
   'use2.svg',
+  'use-shadow-tree.svg',
   'viewbox.svg',
   'viewport.svg',
   'viewports.svg',

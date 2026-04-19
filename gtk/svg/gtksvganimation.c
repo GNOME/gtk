@@ -467,7 +467,6 @@ svg_animation_clone (SvgAnimation *a,
       clone->motion.angle = a->motion.angle;
     }
 
-  /* FIXME */
   clone->deps = NULL;
 
   clone->gpa.transition = a->gpa.transition;

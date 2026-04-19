@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox='0 0 100 80'>
+  <desc>
+    This example has paint values that refer to a paint server. The
+    paint server is defined outside the use element.
+    Following what browsers do, and despite the spec language alluding
+    to 'shadow dom', we expect the reference to the paint server to work
+    both in direct rendering and in the use shadow tree.
+  </desc>
+  <defs>
+    <linearGradient id='external-gradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+      <stop offset='0%' stop-color='red'/>
+      <stop offset='100%' stop-color='blue'/>
+    </linearGradient>
+  </defs>
+
+  <g id='group-for-use'>
+    <rect x='0' y='0' width='20' height='20' fill='url(#external-gradient) cyan'/>
+    <rect x='25' y='0' width='20' height='20' fill='url(#external-gradient) green'/>
+  </g>
+
+  <use href='#group-for-use' x='0' y='40'/>
+</svg>
+

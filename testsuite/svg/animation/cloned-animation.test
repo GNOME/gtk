@@ -1,0 +1,21 @@
+# cloned animations
+input: cloned-animation.svg
+time: 0
+output: cloned-animation-0.svg
+time: 1000
+pointer: enter 25 25
+output: cloned-animation-1.svg
+time: 2000
+button: 1 25 25
+output: cloned-animation-2.svg
+time: 3000
+pointer: move 25 75
+output: cloned-animation-3.svg
+time: 4000
+button: 1 25 75
+output: cloned-animation-4.svg
+time: 5000
+pointer: leave
+output: cloned-animation-5.svg
+time: 6000
+output: cloned-animation-6.svg

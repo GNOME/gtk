@@ -39,6 +39,10 @@
 #include "gtksvgkeywordprivate.h"
 #include "gtksvganimationprivate.h"
 #include "gtksvgpaintprivate.h"
+#include "gtksvgfilterfunctionsprivate.h"
+#include "gtksvgclipprivate.h"
+#include "gtksvgmaskprivate.h"
+#include "gtksvgfilterprivate.h"
 #include "gtkmain.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskrectprivate.h"
@@ -2197,6 +2201,7 @@ svg_element_has_ancestor_or_corresponding (SvgElement *element,
 typedef struct
 {
   unsigned int count;
+  GHashTable *map;
 } ShadowData;
 
 static void svg_element_build_shadow_tree (SvgElement *element,
@@ -2302,7 +2307,9 @@ svg_element_clone (SvgElement *element,
       for (unsigned int i = 0; i < element->animations->len; i++)
         {
           SvgAnimation *a = g_ptr_array_index (element->animations, i);
-          svg_element_add_animation (clone, svg_animation_clone (a, clone, svg->timeline));
+          SvgAnimation *a_clone = svg_animation_clone (a, clone, svg->timeline);
+          svg_element_add_animation (clone, a_clone);
+          g_hash_table_insert (data->map, a, a_clone);
         }
     }
 
@@ -2386,7 +2393,343 @@ svg_element_clone (SvgElement *element,
 
   clone->corresponding = element;
 
+  g_hash_table_insert (data->map, element, clone);
+
   return clone;
+}
+
+static void
+svg_animation_resolve_shadow_references (SvgAnimation *a,
+                                         GHashTable   *map)
+{
+  SvgValue *value;
+  SvgElement *clone;
+  unsigned int first;
+
+  if (a->motion.path_shape)
+    {
+      clone = g_hash_table_lookup (map, a->motion.path_shape);
+      if (clone)
+        a->motion.path_shape = clone;
+    }
+
+  for (unsigned int k = 0; k < 2; k++)
+    {
+      GPtrArray *specs = k == 0 ? a->begin : a->end;
+      for (unsigned int i = 0; i < specs->len; i++)
+        {
+          TimeSpec *spec = g_ptr_array_index (specs, i);
+          if (spec->type == TIME_SPEC_TYPE_SYNC)
+            {
+              SvgAnimation *anim = g_hash_table_lookup (map, spec->sync.base);
+              if (anim)
+                spec->sync.base = anim;
+              if (spec->sync.base)
+                svg_animation_add_dep (spec->sync.base, a);
+            }
+          else if (spec->type == TIME_SPEC_TYPE_EVENT)
+            {
+              clone = g_hash_table_lookup (map, spec->event.shape);
+              if (clone)
+                spec->event.shape = clone;
+            }
+        }
+    }
+
+  /* Skip the 'current' keyword in frames[0] if present */
+  if (a->frames &&
+      a->frames[0].value &&
+      svg_value_is_current (a->frames[0].value))
+    first = 1;
+  else
+    first = 0;
+
+  if (a->attr == SVG_PROPERTY_CLIP_PATH)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        {
+          value = a->frames[j].value;
+          if (svg_clip_get_kind (value) == CLIP_URL)
+            {
+              clone = g_hash_table_lookup (map, svg_clip_get_shape (value));
+              if (clone)
+                {
+                  a->frames[j].value = svg_clip_new_url_take (g_strdup (svg_clip_get_id (value)));
+                  svg_clip_set_shape (a->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (a->attr == SVG_PROPERTY_MASK)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        {
+          value = a->frames[j].value;
+          if (svg_mask_get_kind (value) == MASK_URL)
+            {
+              clone = g_hash_table_lookup (map, svg_mask_get_shape (value));
+              if (clone)
+                {
+                  a->frames[j].value = svg_mask_new_url_take (g_strdup (svg_mask_get_id (value)));
+                  svg_mask_set_shape (a->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (a->attr == SVG_PROPERTY_HREF ||
+           a->attr == SVG_PROPERTY_FE_IMAGE_HREF ||
+           a->attr == SVG_PROPERTY_MARKER_START ||
+           a->attr == SVG_PROPERTY_MARKER_MID ||
+           a->attr == SVG_PROPERTY_MARKER_END)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        {
+          value = a->frames[j].value;
+          clone = g_hash_table_lookup (map, svg_href_get_shape (value));
+          if (clone)
+            {
+               if (svg_href_get_kind (value) == HREF_URL)
+                 a->frames[j].value = svg_href_new_url_take (g_strdup (svg_href_get_ref (value)));
+               else
+                 a->frames[j].value = svg_href_new_plain (svg_href_get_ref (value));
+               svg_href_set_shape (a->frames[j].value, clone);
+               svg_value_unref (value);
+            }
+        }
+    }
+  else if (a->attr == SVG_PROPERTY_FILL ||
+           a->attr == SVG_PROPERTY_STROKE)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        {
+          value = a->frames[j].value;
+          PaintKind kind = svg_paint_get_kind (value);
+          if (paint_is_server (kind))
+            {
+              clone = g_hash_table_lookup (map, svg_paint_get_server_shape (value));
+              if (clone)
+                {
+                  const char *ref = svg_paint_get_server_ref (value);
+                  const GdkColor *fallback = svg_paint_get_server_fallback (value);
+
+                  if (kind == PAINT_SERVER_WITH_FALLBACK)
+                    a->frames[j].value = svg_paint_new_server_with_fallback (ref, fallback);
+                  else if (kind == PAINT_SERVER_WITH_CURRENT_COLOR)
+                    a->frames[j].value = svg_paint_new_server_with_current_color (ref);
+                  else
+                    a->frames[j].value = svg_paint_new_server (ref);
+
+                  svg_paint_set_server_shape (a->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (a->attr == SVG_PROPERTY_FILTER)
+    {
+      for (unsigned int j = first; j < a->n_frames; j++)
+        {
+          value = a->frames[j].value;
+
+          a->frames[j].value = svg_filter_functions_copy (value);
+          for (unsigned int k = 0; k < svg_filter_functions_get_length (value); k++)
+            {
+              if (svg_filter_functions_get_kind (value, k) == FILTER_REF)
+                {
+                  clone = g_hash_table_lookup (map, svg_filter_functions_get_shape (value, k));
+                  if (clone)
+                    svg_filter_functions_set_shape (a->frames[j].value, k, clone);
+                }
+            }
+
+          svg_value_unref (value);
+        }
+    }
+}
+
+static void
+override_specified (SvgElement  *element,
+                    SvgProperty  attr,
+                    SvgValue    *old_value,
+                    SvgValue    *new_value)
+{
+  /* Styles have already been applied when we do this,
+   * so override base values too, when necessary.
+   */
+  if (element->base[attr] == old_value)
+    svg_element_set_base_value (element, attr, new_value);
+  svg_element_take_specified_value (element, attr, new_value);
+}
+
+static void
+svg_element_resolve_shadow_references (SvgElement *element,
+                                       GHashTable *map)
+{
+  SvgValue *value, *new_value;
+  SvgElement *clone;
+  SvgAnimation *anim;
+  SvgProperty href_props[] = {
+    SVG_PROPERTY_HREF,
+    SVG_PROPERTY_FE_IMAGE_HREF,
+    SVG_PROPERTY_MARKER_START,
+    SVG_PROPERTY_MARKER_MID,
+    SVG_PROPERTY_MARKER_END
+  };
+  SvgProperty paint_props[] = {
+    SVG_PROPERTY_FILL,
+    SVG_PROPERTY_STROKE,
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (href_props); i++)
+    {
+      value = svg_element_get_specified_value (element, href_props[i]);
+      if (!value)
+        continue;
+
+      clone = g_hash_table_lookup (map, svg_href_get_shape (value));
+      anim = g_hash_table_lookup (map, svg_href_get_animation (value));
+      if (clone || anim)
+        {
+          if (svg_href_get_kind (value) == HREF_URL)
+            new_value = svg_href_new_url_take (g_strdup (svg_href_get_ref (value)));
+          else
+            new_value = svg_href_new_plain (svg_href_get_ref (value));
+          if (clone)
+            svg_href_set_shape (new_value, clone);
+          else
+            svg_href_set_animation (new_value, anim);
+          override_specified (element, href_props[i], value, new_value);
+        }
+    }
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (paint_props); i++)
+    {
+      PaintKind kind;
+      value = svg_element_get_specified_value (element, paint_props[i]);
+
+      if (!value)
+        continue;
+
+      kind = svg_paint_get_kind (value);
+      if (!paint_is_server (kind))
+        continue;
+
+      clone = g_hash_table_lookup (map, svg_paint_get_server_shape (value));
+      if (clone)
+        {
+          const char *ref = svg_paint_get_server_ref (value);
+          const GdkColor *fallback = svg_paint_get_server_fallback (value);
+
+          if (kind == PAINT_SERVER_WITH_FALLBACK)
+            new_value = svg_paint_new_server_with_fallback (ref, fallback);
+          else if (kind == PAINT_SERVER_WITH_CURRENT_COLOR)
+            new_value = svg_paint_new_server_with_current_color (ref);
+          else
+            new_value = svg_paint_new_server (ref);
+          svg_paint_set_server_shape (new_value, clone);
+          override_specified (element, paint_props[i], value, new_value);
+        }
+    }
+
+  value = svg_element_get_specified_value (element, SVG_PROPERTY_CLIP_PATH);
+  if (value && svg_clip_get_kind (value) == CLIP_URL)
+    {
+      clone = g_hash_table_lookup (map, svg_clip_get_shape (value));
+      if (clone)
+        {
+          new_value = svg_clip_new_url_take (g_strdup (svg_clip_get_id (value)));
+          svg_clip_set_shape (new_value, clone);
+          override_specified (element, SVG_PROPERTY_CLIP_PATH, value, new_value);
+        }
+    }
+
+  value = svg_element_get_specified_value (element, SVG_PROPERTY_MASK);
+  if (value && svg_mask_get_kind (value) == MASK_URL)
+    {
+      clone = g_hash_table_lookup (map, svg_mask_get_shape (value));
+      if (clone)
+        {
+          new_value = svg_mask_new_url_take (g_strdup (svg_mask_get_id (value)));
+          svg_mask_set_shape (new_value, clone);
+          override_specified (element, SVG_PROPERTY_MASK, value, new_value);
+        }
+    }
+
+  value = svg_element_get_specified_value (element, SVG_PROPERTY_FILTER);
+  if (value && !svg_filter_functions_is_none (value))
+    {
+      unsigned int length = svg_filter_functions_get_length (value);
+      gboolean needs_copy = FALSE;
+
+      for (unsigned int i = 0; i < length; i++)
+        {
+          if (svg_filter_functions_get_kind (value, i) == FILTER_REF)
+            {
+              needs_copy = TRUE;
+              break;
+            }
+        }
+
+      if (needs_copy)
+        {
+          new_value = svg_filter_functions_copy (value);
+          for (unsigned int i = 0; i < length; i++)
+            {
+              if (svg_filter_functions_get_kind (value, i) == FILTER_REF)
+                {
+                  clone = g_hash_table_lookup (map, svg_filter_functions_get_shape (value, i));
+                  if (clone)
+                    svg_filter_functions_set_shape (new_value, i, clone);
+                }
+            }
+          override_specified (element, SVG_PROPERTY_FILTER, value, new_value);
+        }
+    }
+
+  if (element->filters)
+    {
+      for (unsigned int i = 0; i < element->filters->len; i++)
+        {
+          SvgFilter *f = g_ptr_array_index (element->filters, i);
+
+          value = svg_filter_get_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF);
+          if (!value)
+            continue;
+
+          clone = g_hash_table_lookup (map, svg_href_get_shape (value));
+          if (!clone)
+            continue;
+
+          if (svg_href_get_kind (value) == HREF_URL)
+            new_value = svg_href_new_url_take (g_strdup (svg_href_get_ref (value)));
+          else
+            new_value = svg_href_new_plain (svg_href_get_ref (value));
+          svg_href_set_shape (new_value, clone);
+          if (svg_filter_get_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF) == value)
+            svg_filter_set_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF, new_value);
+          svg_filter_take_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF, new_value);
+        }
+    }
+
+  if (element->animations)
+    {
+      for (unsigned int i = 0; i < element->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (element->animations, i);
+          svg_animation_resolve_shadow_references (a, map);
+        }
+    }
+
+  if (element->shapes)
+    {
+      for (unsigned int i = 0; i < element->shapes->len; i++)
+        {
+          SvgElement *child = g_ptr_array_index (element->shapes, i);
+          svg_element_resolve_shadow_references (child, map);
+        }
+    }
 }
 
 static void
@@ -2438,9 +2781,20 @@ void
 svg_element_ensure_shadow_tree (SvgElement *element,
                                 GtkSvg     *svg)
 {
-  ShadowData data = { .count = 0 };
+  ShadowData data;
+
+  data.count = 0;
+  data.map = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   svg_element_build_shadow_tree (element, svg, &data);
+
+  if (element->shapes && element->shapes->len > 0)
+    {
+      SvgElement *clone = g_ptr_array_index (element->shapes, 0);
+      svg_element_resolve_shadow_references (clone, data.map);
+    }
+
+  g_hash_table_destroy (data.map);
 }
 
 SvgElement *
@@ -2448,4 +2802,3 @@ svg_element_get_corresponding (SvgElement *element)
 {
   return element->corresponding;
 }
-

@@ -10,6 +10,7 @@ test_data = [
   'animate-motion.test',
   'button.test',
   'clips.test',
+  'cloned-animation.test',
   'colors.test',
   'colors-linear.test',
   'dashes.test',
