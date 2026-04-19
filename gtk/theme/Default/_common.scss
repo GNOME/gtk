@@ -182,11 +182,6 @@ gridview {
       }
 
     }
-
-    box { //cells
-      border-spacing: 8px; //label separation
-      margin: 12px;
-    }
   }
 }
 
@@ -3694,6 +3689,11 @@ filechooser {
   gridview child {
     border-radius: 12px;
     margin: 12px;
+
+    > filelistcell > box { //cells
+      border-spacing: 8px; //label separation
+      margin: 12px;
+    }
 
     &:hover {
       background-color: gtkalpha(currentColor, .04);
