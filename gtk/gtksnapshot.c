@@ -30,6 +30,7 @@
 #include "gdk/gdkcolorstateprivate.h"
 
 #include "gsk/gskbordernodeprivate.h"
+#include "gsk/gskclipnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
@@ -121,6 +122,7 @@ struct _GtkSnapshotState {
     } repeat;
     struct {
       graphene_rect_t bounds;
+      GskRectSnap snap;
     } clip;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     struct {
@@ -1078,7 +1080,7 @@ gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
       return NULL;
     }
 
-  clip_node = gsk_clip_node_new (node, &state->data.clip.bounds);
+  clip_node = gsk_clip_node_new2 (node, &state->data.clip.bounds, state->data.clip.snap);
 
   gsk_render_node_unref (node);
 
@@ -1111,6 +1113,7 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
                                    NULL);
 
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.clip.bounds);
+  state->data.clip.snap = state->props.snap;
 }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

@@ -216,10 +216,16 @@ replay_clip_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const graphene_rect_t *clip = gsk_clip_node_get_clip (node);
   GskRenderNode *child = gsk_clip_node_get_child (node);
+  GskRectSnap snap = gsk_clip_node_get_snap (node);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
 
   gtk_snapshot_push_clip (snapshot, clip);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

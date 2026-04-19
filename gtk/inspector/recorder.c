@@ -1496,6 +1496,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         const graphene_rect_t *clip = gsk_clip_node_get_clip (node);
         add_rect_row (store, "Clip", clip);
+        add_snap_row (store, "Snap", gsk_clip_node_get_snap (node));
       }
       break;
 

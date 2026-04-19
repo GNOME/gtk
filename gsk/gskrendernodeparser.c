@@ -28,7 +28,7 @@
 #include "gskblurnode.h"
 #include "gskbordernodeprivate.h"
 #include "gskcaironodeprivate.h"
-#include "gskclipnode.h"
+#include "gskclipnodeprivate.h"
 #include "gskcolormatrixnodeprivate.h"
 #include "gskcolornodeprivate.h"
 #include "gskconicgradientnodeprivate.h"
@@ -3737,9 +3737,11 @@ parse_clip_node (GtkCssParser *parser,
 {
   GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   GskRenderNode *child = NULL;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "clip", parse_rounded_rect, NULL, &clip },
     { "child", parse_node, clear_node, &child },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -3748,7 +3750,7 @@ parse_clip_node (GtkCssParser *parser,
     child = create_default_render_node ();
 
   if (gsk_rounded_rect_is_rectilinear (&clip))
-    result = gsk_clip_node_new (child, &clip.bounds);
+    result = gsk_clip_node_new2 (child, &clip.bounds, snap);
   else
     result = gsk_rounded_clip_node_new (child, &clip);
 
@@ -6347,6 +6349,7 @@ render_node_print (Printer       *p,
 
         append_rect_param (p, "clip", gsk_clip_node_get_clip (node));
         append_node_param (p, "child", gsk_clip_node_get_child (node));
+        append_snap_param (p, "snap", gsk_clip_node_get_snap (node));
 
         end_node (p);
       }

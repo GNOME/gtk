@@ -769,11 +769,16 @@ static void
 gsk_gpu_node_processor_add_node_clipped (GskGpuRenderPass   *self,
                                          GskRenderNode         *node,
                                          gsize                  pos,
-                                         const graphene_rect_t *clip_bounds)
+                                         const graphene_rect_t *clip_bounds,
+                                         GskRectSnap            snap)
 {
   GskGpuRenderPassClipStorage storage;
+  graphene_rect_t snapped_clip;
 
-  gsk_gpu_render_pass_push_clip_rect (self, clip_bounds, &storage);
+  if (!gsk_gpu_render_pass_snap_rect (self, clip_bounds, snap, &snapped_clip))
+    return;
+
+  gsk_gpu_render_pass_push_clip_rect (self, &snapped_clip, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, node, pos);
@@ -788,7 +793,8 @@ gsk_gpu_node_processor_add_clip_node (GskGpuRenderPass *self,
   gsk_gpu_node_processor_add_node_clipped (self,
                                            gsk_clip_node_get_child (node),
                                            0,
-                                           gsk_clip_node_get_clip (node));
+                                           gsk_clip_node_get_clip (node),
+                                           gsk_clip_node_get_snap (node));
 }
 
 static void
@@ -2792,7 +2798,8 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
       gsk_gpu_node_processor_add_node_clipped (self,
                                                child,
                                                0,
-                                               &node->bounds);
+                                               &node->bounds,
+                                               GSK_RECT_SNAP_NONE);
       return;
     }
 
@@ -2947,7 +2954,8 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                   gsk_gpu_node_processor_add_node_clipped (self,
                                                            child,
                                                            0,
-                                                           &clip_bounds);
+                                                           &clip_bounds,
+                                                           GSK_RECT_SNAP_NONE);
                 }
             }
 

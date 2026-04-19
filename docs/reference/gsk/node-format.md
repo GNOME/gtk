@@ -229,6 +229,7 @@ a base64-encoded data url of a cairo script.
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
 | clip     | `<rounded-rect>` | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_clip_node_new()` with the given properties.
 

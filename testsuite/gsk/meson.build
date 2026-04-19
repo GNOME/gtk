@@ -45,6 +45,7 @@ compare_render_tests = [
   'cairo-coordinates',
   'cairo-translations',
   'clip-all-clipped-issue-7044',
+  'clip-all-snaps',
   'clip-contained',
   'clip-coordinates-2d',
   'clip-coordinates-nocairo',
