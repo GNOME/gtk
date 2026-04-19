@@ -389,14 +389,16 @@ svg_animation_clone (SvgAnimation *a,
         {
         case TIME_SPEC_TYPE_INDEFINITE:
         case TIME_SPEC_TYPE_OFFSET:
-        case TIME_SPEC_TYPE_SYNC:
         case TIME_SPEC_TYPE_STATES:
           p = spec;
           break;
+        case TIME_SPEC_TYPE_SYNC:
         case TIME_SPEC_TYPE_EVENT:
           tmp = time_spec_copy (spec);
-          tmp->event.shape = parent;
+          tmp->offset++; /* force a copy */
           p = timeline_get_time_spec (timeline, tmp);
+          g_assert (p != spec);
+          p->offset = spec->offset;
           time_spec_free (tmp);
           break;
         default:
@@ -421,7 +423,6 @@ svg_animation_clone (SvgAnimation *a,
           break;
         case TIME_SPEC_TYPE_EVENT:
           tmp = time_spec_copy (spec);
-          tmp->event.shape = parent;
           p = timeline_get_time_spec (timeline, tmp);
           time_spec_free (tmp);
           break;
