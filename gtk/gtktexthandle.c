@@ -22,6 +22,7 @@
 #include "gtkbinlayout.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
 #include "gtkmarshalers.h"
@@ -29,12 +30,15 @@
 #include "gtknativeprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkrendericonprivate.h"
+#include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
 #include "gsk/gskrendererprivate.h"
+
+#define DEBUG_TEXTHANDLE_LOGIC 0
 
 enum {
   DRAG_STARTED,
@@ -53,10 +57,15 @@ struct _GtkTextHandle
   GtkWidget *controller_widget;
   GtkWidget *contents;
 
+#if DEBUG_TEXTHANDLE_LOGIC
+  GtkEventController *motion;
+  graphene_point_t mpos;
+  const GdkRGBA *mpos_color;
+#endif
+
   GdkRectangle pointing_to;
   GtkBorder border;
-  int dx;
-  int dy;
+  graphene_matrix_t surface_transform;
   guint surface_transform_changed_cb;
 
   guint role : 2;
@@ -86,6 +95,70 @@ G_DEFINE_TYPE_WITH_CODE (GtkTextHandle, gtk_text_handle, GTK_TYPE_WIDGET,
                                                 gtk_text_handle_native_interface_init))
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+#if DEBUG_TEXTHANDLE_LOGIC
+
+static const GdkRGBA gdk_texthandle_debug_color_red = { .red = 1., .green = 0., .blue = 0., .alpha = 1. };
+static const GdkRGBA gdk_texthandle_debug_color_blue = { .red = 0., .green = 0., .blue = 1., .alpha = 1. };
+
+static void
+handle_get_input_extents (GtkTextHandle *handle,
+                          GtkBorder     *border);
+
+static void
+handle_do_toplevel_transform (GtkTextHandle *handle, gfloat *tx, gfloat *ty);
+
+static void
+handle_motion (GtkEventController *motion, gdouble x, gdouble y, GtkTextHandle *handle)
+{
+  GtkBorder input_extents;
+  graphene_point_t p;
+
+  handle_get_input_extents (handle, &input_extents);
+
+  graphene_point_init (&p, x, y);
+  handle_do_toplevel_transform (handle, &p.x, &p.y);
+
+  graphene_point_init_from_point(&handle->mpos, &p);
+
+  if (p.x < input_extents.left || p.x >= input_extents.right ||
+      p.y < input_extents.top || p.y >= input_extents.bottom)
+    handle->mpos_color = &gdk_texthandle_debug_color_red;
+  else
+    handle->mpos_color = &gdk_texthandle_debug_color_blue;
+
+  gtk_widget_queue_draw (GTK_WIDGET (handle));
+}
+
+static void
+handle_motion_leave (GtkEventController *motion, GtkTextHandle *handle)
+{
+  handle->mpos_color = NULL;
+}
+
+/* transform tip-space to widget-space - only needed for visualization */
+static void
+handle_do_tip_transform (GtkTextHandle *handle, gfloat *tx, gfloat *ty)
+{
+  GtkWidget *widget = GTK_WIDGET (handle);
+
+  if (handle->role == GTK_TEXT_HANDLE_ROLE_CURSOR)
+    {
+      *tx += gtk_widget_get_width (widget) / 2.f;
+    }
+  else if ((handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_END &&
+            gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ||
+           (handle->role == GTK_TEXT_HANDLE_ROLE_SELECTION_START &&
+            gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL))
+    {
+      *tx += gtk_widget_get_width (widget);
+    }
+  else
+    {
+      *tx += 0.;
+    }
+}
+#endif
 
 static GdkSurface *
 gtk_text_handle_native_get_surface (GtkNative *native)
@@ -147,6 +220,9 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
 
   native = gtk_widget_get_native (parent);
   gtk_native_get_surface_transform (native, &nx, &ny);
+
+  if (!gtk_widget_compute_transform (GTK_WIDGET (native), parent, &handle->surface_transform))
+    graphene_matrix_init_identity (&handle->surface_transform);
 
   if (!gtk_widget_compute_point (parent, GTK_WIDGET (native),
                                  &point, &transformed))
@@ -233,6 +309,44 @@ gtk_text_handle_snapshot (GtkWidget   *widget,
 {
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
+#if DEBUG_TEXTHANDLE_LOGIC
+  GtkTextHandle *handle = (GtkTextHandle*)widget;
+  GtkBorder border;
+
+  handle_get_input_extents (GTK_TEXT_HANDLE (widget), &border);
+
+  gtk_snapshot_save (snapshot);
+
+  /* transform to tip-space */
+  graphene_point_t tr = GRAPHENE_POINT_INIT_ZERO;
+  handle_do_tip_transform (handle, &tr.x, &tr.y);
+  gtk_snapshot_translate(snapshot, &tr);
+
+  /* draw extents (happens to work as popup surface allocated is big enough to include them) */
+  GskRoundedRect rect = GSK_ROUNDED_RECT_INIT(border.left, border.top, border.right - border.left, border.bottom - border.top);
+  float rl[4] = { 2., 2., 2., 2. };
+  GdkRGBA clrl[4] = { gdk_texthandle_debug_color_blue, gdk_texthandle_debug_color_blue, gdk_texthandle_debug_color_blue, gdk_texthandle_debug_color_blue };
+  gtk_snapshot_append_border (snapshot, &rect, rl, clrl);
+
+  /* draw current pointer */
+  if (handle->mpos_color)
+    {
+      GskPathBuilder *pb = gsk_path_builder_new ();
+      gsk_path_builder_add_circle (pb, &handle->mpos, 4.);
+      GskPath *p = gsk_path_builder_free_to_path (pb);
+      gtk_snapshot_append_fill (snapshot, p, GSK_FILL_RULE_WINDING, handle->mpos_color);
+      gsk_path_unref (p);
+    }
+
+  gtk_snapshot_restore (snapshot);
+
+  /* draw widget bounds */
+  GskRoundedRect irect = GSK_ROUNDED_RECT_INIT(0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
+  float irl[4] = { 2., 2., 2., 2. };
+  GdkRGBA iclrl[4] = { gdk_texthandle_debug_color_red, gdk_texthandle_debug_color_red, gdk_texthandle_debug_color_red, gdk_texthandle_debug_color_red };
+  gtk_snapshot_append_border (snapshot, &irect, irl, iclrl);
+#endif
+
   gtk_css_style_snapshot_icon (style,
                                snapshot,
                                gtk_widget_get_width (widget),
@@ -308,6 +422,15 @@ text_handle_set_up_gesture (GtkTextHandle *handle)
   g_signal_connect (handle->controller, "drag-end",
                     G_CALLBACK (handle_drag_end), handle);
 
+
+#if DEBUG_TEXTHANDLE_LOGIC
+  handle->motion = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_phase (handle->motion, GTK_PHASE_CAPTURE);
+  g_signal_connect (handle->motion, "motion", G_CALLBACK (handle_motion), handle);
+  g_signal_connect (handle->motion, "leave", G_CALLBACK (handle_motion_leave), handle);
+  gtk_widget_add_controller (handle->controller_widget, handle->motion);
+#endif
+
   gtk_widget_add_controller (handle->controller_widget, handle->controller);
 }
 
@@ -316,6 +439,7 @@ unset_surface_transform_changed_cb (gpointer user_data)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (user_data);
 
+  graphene_matrix_init_identity (&handle->surface_transform);
   handle->surface_transform_changed_cb = 0;
 }
 
@@ -365,6 +489,12 @@ gtk_text_handle_unmap (GtkWidget *widget)
 
   if (handle->controller_widget)
     {
+#if DEBUG_TEXTHANDLE_LOGIC
+      gtk_widget_remove_controller (handle->controller_widget,
+                                    handle->motion);
+      handle->motion = NULL;
+#endif
+
       gtk_widget_remove_controller (handle->controller_widget,
                                     handle->controller);
       handle->controller_widget = NULL;
@@ -458,6 +588,25 @@ handle_get_input_extents (GtkTextHandle *handle,
   border->bottom = gtk_widget_get_height (widget) + handle->border.bottom;
 }
 
+/* transform controller-space to tip-space */
+static void
+handle_do_toplevel_transform (GtkTextHandle *handle, gfloat *tx, gfloat *ty)
+{
+  graphene_point_t p;
+
+  /* controller-space to parent-space */
+  graphene_matrix_transform_point (&handle->surface_transform,
+                                   &GRAPHENE_POINT_INIT (*tx, *ty),
+                                   &p);
+
+  /* parent-space to tip-space */
+  p.x -= handle->pointing_to.x;
+  p.y -= handle->pointing_to.y + handle->pointing_to.height;
+
+  *tx = p.x;
+  *ty = p.y;
+}
+
 static void
 handle_drag_begin (GtkGestureDrag *gesture,
                    double          x,
@@ -467,18 +616,10 @@ handle_drag_begin (GtkGestureDrag *gesture,
   GtkBorder input_extents;
   graphene_point_t p;
 
-  x -= handle->pointing_to.x;
-  y -= handle->pointing_to.y;
-
-  /* Figure out if the coordinates fall into the handle input area, coordinates
-   * are relative to the parent widget.
-   */
   handle_get_input_extents (handle, &input_extents);
-  if (!gtk_widget_compute_point (handle->controller_widget,
-                                 gtk_widget_get_parent (GTK_WIDGET (handle)),
-                                 &GRAPHENE_POINT_INIT (x, y),
-                                 &p))
-    graphene_point_init (&p, x, y);
+
+  graphene_point_init (&p, x, y);
+  handle_do_toplevel_transform (handle, &p.x, &p.y);
 
   if (p.x < input_extents.left || p.x >= input_extents.right ||
       p.y < input_extents.top || p.y >= input_extents.bottom)
@@ -488,11 +629,6 @@ handle_drag_begin (GtkGestureDrag *gesture,
     }
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-  /* Store untranslated coordinates here, so ::update does not need
-   * an extra translation
-   */
-  handle->dx = x;
-  handle->dy = y;
   handle->dragged = TRUE;
   g_signal_emit (handle, signals[DRAG_STARTED], 0);
 }
@@ -505,13 +641,16 @@ handle_drag_update (GtkGestureDrag *gesture,
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
   double start_x, start_y;
-  int x, y;
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  x = start_x + offset_x - handle->dx;
-  y = start_y + offset_y - handle->dy + (handle->pointing_to.height / 2);
-  g_signal_emit (widget, signals[HANDLE_DRAGGED], 0, x, y);
+  graphene_point_t p;
+  graphene_matrix_transform_point (&handle->surface_transform,
+                                   &GRAPHENE_POINT_INIT (start_x + offset_x, start_y + offset_y),
+                                   &p);
+  p.y -= handle->pointing_to.height / 2.f;
+
+  g_signal_emit (widget, signals[HANDLE_DRAGGED], 0, (int)p.x, (int)p.y);
 }
 
 static void
@@ -562,6 +701,8 @@ gtk_text_handle_update_for_role (GtkTextHandle *handle)
 static void
 gtk_text_handle_init (GtkTextHandle *handle)
 {
+  graphene_matrix_init_identity (&handle->surface_transform);
+
   handle->contents = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL, NULL, NULL);
   gtk_widget_set_can_target (handle->contents, FALSE);
   gtk_widget_set_parent (handle->contents, GTK_WIDGET (handle));
