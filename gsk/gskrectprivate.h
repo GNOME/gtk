@@ -45,6 +45,12 @@ gsk_rect_init_offset (graphene_rect_t        *r,
 }
 
 static inline gboolean G_GNUC_PURE
+gsk_rect_is_empty (const graphene_rect_t *rect)
+{
+  return rect->size.width == 0 || rect->size.height == 0;
+}
+
+static inline gboolean G_GNUC_PURE
 gsk_rect_contains_point (const graphene_rect_t  *r,
                          const graphene_point_t *p)
 {
@@ -80,6 +86,21 @@ gsk_rect_intersects (const graphene_rect_t *r1,
     return TRUE;
 }
 
+/*<priv>
+ * gsk_rect_intersection:
+ * @r1: first rect to intersect
+ * @r2: second rect to intersect
+ * @res: (out caller-allocates): Result of the intersection
+ *
+ * Intersects the 2 rectangles and returns the intersection.
+ *
+ * If the intersection is empty, the result is initialized to a line
+ * or point that will end up in the covered pixel(s) when either of
+ * the input rectangles is set to grow when snapping.
+ *
+ * Returns: true if an intersection exists, false if the intersection
+ *   is empty and the result is a point or line.
+ **/
 static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_intersection (const graphene_rect_t *r1,
                        const graphene_rect_t *r2,
@@ -93,16 +114,9 @@ gsk_rect_intersection (const graphene_rect_t *r1,
   x2 = MIN (r1->origin.x + r1->size.width, r2->origin.x + r2->size.width);
   y2 = MIN (r1->origin.y + r1->size.height, r2->origin.y + r2->size.height);
 
-  if (x1 >= x2 || y1 >= y2)
-    {
-      gsk_rect_init (res, 0.f, 0.f, 0.f, 0.f);
-      return FALSE;
-    }
-  else
-    {
-      gsk_rect_init (res, x1, y1, x2 - x1, y2 - y1);
-      return TRUE;
-    }
+  gsk_rect_init (res, x1, y1, MAX (x2 - x1, 0.f), MAX (y2 - y1, 0.f));
+
+  return !gsk_rect_is_empty (res);
 }
 
 /**
@@ -175,12 +189,6 @@ gsk_rect_coverage (const graphene_rect_t *r1,
     }
 
   *res = r;
-}
-
-static inline gboolean G_GNUC_PURE
-gsk_rect_is_empty (const graphene_rect_t *rect)
-{
-  return rect->size.width == 0 || rect->size.height == 0;
 }
 
 static inline float
