@@ -31,6 +31,7 @@
 SvgValue *   svg_filter_functions_new_none         (void);
 SvgValue *   svg_filter_functions_parse_css        (GtkCssParser      *parser);
 SvgValue *   svg_filter_functions_parse            (const char        *value);
+SvgValue *   svg_filter_functions_copy             (const SvgValue    *value);
 
 gboolean     svg_filter_functions_is_none          (const SvgValue    *value);
 
