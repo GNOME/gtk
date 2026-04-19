@@ -20,3 +20,53 @@ _gsk_rect_snap_get_direction (GskRectSnap snap,
   return (GskSnapDirection) ((snap >> (8 * side)) & 0xFF);
 }
 
+#define gsk_rect_snap_can_shrink(...) _gsk_rect_snap_can_shrink(__VA_ARGS__)
+static inline gboolean
+_gsk_rect_snap_can_shrink (GskRectSnap snap)
+{
+  GskSnapDirection dir;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_TOP);
+  if (dir == GSK_SNAP_CEIL || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_RIGHT);
+  if (dir == GSK_SNAP_FLOOR || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_BOTTOM);
+  if (dir == GSK_SNAP_FLOOR || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_LEFT);
+  if (dir == GSK_SNAP_CEIL || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  return FALSE;
+}
+
+#define gsk_rect_snap_can_grow(...) _gsk_rect_snap_can_grow(__VA_ARGS__)
+static inline gboolean
+_gsk_rect_snap_can_grow (GskRectSnap snap)
+{
+  GskSnapDirection dir;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_TOP);
+  if (dir == GSK_SNAP_FLOOR || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_RIGHT);
+  if (dir == GSK_SNAP_CEIL || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_BOTTOM);
+  if (dir == GSK_SNAP_CEIL || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  dir = _gsk_rect_snap_get_direction (snap, GSK_SIDE_LEFT);
+  if (dir == GSK_SNAP_FLOOR || dir == GSK_SNAP_ROUND)
+    return TRUE;
+
+  return FALSE;
+}
+
