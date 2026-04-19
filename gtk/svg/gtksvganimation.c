@@ -513,113 +513,7 @@ time_specs_update_for_base (GPtrArray    *specs,
     }
 }
 
-void
-animation_update_for_spec (SvgAnimation *a,
-                           TimeSpec     *spec)
-{
-  gboolean changed = FALSE;
-
-  if (svg_animation_has_begin (a, spec))
-    {
-      if (!animation_can_start (a))
-        return;
-
-      if (a->status == ANIMATION_STATUS_RUNNING)
-        {
-          if (a->current.begin < spec->time && spec->time < INDEFINITE)
-            {
-              dbg_print ("status", "Restarting %s at %s", a->id, format_time (spec->time));
-              a->current.begin = spec->time;
-              changed = TRUE;
-            }
-        }
-      else
-        {
-          int64_t time;
-
-          /* We need to allow starting in the past. But we don't allow
-           * a post-dated start to fall into a previous activation.
-           */
-
-         time = find_first_time (a->begin, a->previous.end);
-
-          if (a->current.begin != time)
-            {
-              dbg_print ("times", "current start time of %s now %s", a->id, format_time (time));
-              a->current.begin = time;
-              changed = TRUE;
-
-              animation_set_current_end (a, a->current.end);
-            }
-        }
-    }
-
-  if (svg_animation_has_end (a, spec))
-    {
-      int64_t end = find_first_time (a->end, a->current.begin);
-
-      changed = animation_set_current_end (a, end);
-    }
-
-  if (!changed)
-    return;
-
-  if (a->deps)
-    {
-      for (unsigned int i = 0; i < a->deps->len; i++)
-        {
-          SvgAnimation *dep = g_ptr_array_index (a->deps, i);
-          time_specs_update_for_base (dep->begin, a);
-          time_specs_update_for_base (dep->end, a);
-        }
-    }
-}
-
-void
-animation_set_begin (SvgAnimation *a,
-                     int64_t       current_time)
-{
-  gboolean changed = FALSE;
-
-  if (!animation_can_start (a))
-    return;
-
-  if (a->status == ANIMATION_STATUS_RUNNING)
-    {
-      if (a->current.begin < current_time)
-        {
-          dbg_print ("status", "Restarting %s at %s", a->id, format_time (current_time));
-          a->current.begin = current_time;
-          changed = TRUE;
-        }
-    }
-  else
-    {
-      if (a->current.begin != current_time)
-        {
-          dbg_print ("times", "current start time of %s now %s", a->id, format_time (current_time));
-          a->current.begin = current_time;
-          changed = TRUE;
-
-          animation_set_current_end (a, a->current.end);
-        }
-    }
-
-  if (!changed)
-    return;
-
-  if (a->deps)
-    {
-      for (unsigned int i = 0; i < a->deps->len; i++)
-        {
-          SvgAnimation *dep = g_ptr_array_index (a->deps, i);
-          time_specs_update_for_base (dep->begin, a);
-          time_specs_update_for_base (dep->end, a);
-        }
-    }
-}
-
-gboolean
+static gboolean
 animation_set_current_end (SvgAnimation *a,
                            int64_t       time)
 {
@@ -638,20 +532,123 @@ animation_set_current_end (SvgAnimation *a,
   return TRUE;
 }
 
-int64_t
-svg_animation_get_current_begin (SvgAnimation *a)
+void
+svg_animation_update_for_spec (SvgAnimation *animation,
+                               TimeSpec     *spec)
 {
-  return a->current.begin;
+  gboolean changed = FALSE;
+
+  if (svg_animation_has_begin (animation, spec))
+    {
+      if (!animation_can_start (animation))
+        {
+          /* nothing to do */
+        }
+      else if (animation->status == ANIMATION_STATUS_RUNNING)
+        {
+          if (animation->current.begin < spec->time && spec->time < INDEFINITE)
+            {
+              dbg_print ("status", "Restarting %s at %s", animation->id, format_time (spec->time));
+              animation->current.begin = spec->time;
+              changed = TRUE;
+            }
+        }
+      else
+        {
+          int64_t time;
+
+          /* We need to allow starting in the past. But we don't allow
+           * a post-dated start to fall into a previous activation.
+           */
+
+         time = find_first_time (animation->begin, animation->previous.end);
+
+          if (animation->current.begin != time)
+            {
+              dbg_print ("times", "Current start time of %s now %s", animation->id, format_time (time));
+              animation->current.begin = time;
+              changed = TRUE;
+
+              animation_set_current_end (animation, animation->current.end);
+            }
+        }
+    }
+  else if (svg_animation_has_end (animation, spec))
+    {
+      int64_t end = find_first_time (animation->end, animation->current.begin);
+
+      changed = animation_set_current_end (animation, end);
+    }
+
+  if (changed && animation->deps)
+    {
+      for (unsigned int i = 0; i < animation->deps->len; i++)
+        {
+          SvgAnimation *dep = g_ptr_array_index (animation->deps, i);
+          time_specs_update_for_base (dep->begin, animation);
+          time_specs_update_for_base (dep->end, animation);
+        }
+    }
+}
+
+void
+svg_animation_start (SvgAnimation *animation,
+                     int64_t       current_time)
+{
+  gboolean changed = FALSE;
+
+  if (!animation_can_start (animation))
+    return;
+
+  if (animation->status == ANIMATION_STATUS_RUNNING)
+    {
+      if (animation->current.begin < current_time)
+        {
+          dbg_print ("status", "Restarting %s at %s", animation->id, format_time (current_time));
+          animation->current.begin = current_time;
+          changed = TRUE;
+        }
+    }
+  else
+    {
+      if (animation->current.begin != current_time)
+        {
+          dbg_print ("times", "current start time of %s now %s", animation->id, format_time (current_time));
+          animation->current.begin = current_time;
+          changed = TRUE;
+
+          animation_set_current_end (animation, animation->current.end);
+        }
+    }
+
+  if (!changed)
+    return;
+
+  if (animation->deps)
+    {
+      for (unsigned int i = 0; i < animation->deps->len; i++)
+        {
+          SvgAnimation *dep = g_ptr_array_index (animation->deps, i);
+          time_specs_update_for_base (dep->begin, animation);
+          time_specs_update_for_base (dep->end, animation);
+        }
+    }
 }
 
 int64_t
-svg_animation_get_current_end (SvgAnimation *a)
+svg_animation_get_current_begin (SvgAnimation *animation)
 {
-  return a->current.end;
+  return animation->current.begin;
 }
 
 int64_t
-determine_repeat_duration (SvgAnimation *a)
+svg_animation_get_current_end (SvgAnimation *animation)
+{
+  return animation->current.end;
+}
+
+static int64_t
+compute_repeat_duration (SvgAnimation *a)
 {
   if (a->repeat_duration < INDEFINITE)
     return a->repeat_duration;
@@ -665,18 +662,379 @@ determine_repeat_duration (SvgAnimation *a)
   return INDEFINITE;
 }
 
-int64_t
-determine_simple_duration (SvgAnimation *a)
+static int64_t
+compute_simple_duration (SvgAnimation *a)
 {
   int64_t repeat_duration;
 
   if (a->simple_duration < INDEFINITE)
     return a->simple_duration;
 
-  repeat_duration = determine_repeat_duration (a);
+  repeat_duration = compute_repeat_duration (a);
 
   if (repeat_duration < INDEFINITE && a->repeat_count != REPEAT_FOREVER)
     return (int64_t) (repeat_duration / a->repeat_count);
 
   return INDEFINITE;
 }
+
+int64_t
+svg_animation_get_simple_duration (SvgAnimation *animation)
+{
+  return compute_simple_duration (animation);
+}
+
+/* {{{ Updates */
+
+/* Determine what repetition the time falls into,
+ * relative to the animations current start time.
+ * Also what frame we are on, and how far into that
+ * frame we are.
+ *
+ * Note: this assumes that the duration is finite
+ * and the animation runs forever.
+ */
+gboolean
+svg_animation_get_progress (SvgAnimation *a,
+                            int64_t       time,
+                            int          *out_rep,
+                            unsigned int *out_frame,
+                            double       *out_frame_t,
+                            int64_t      *out_frame_start,
+                            int64_t      *out_frame_end)
+{
+  int64_t start;
+  int64_t simple_duration;
+  double t;
+  int rep;
+  int64_t cycle_start, cycle_end;
+  int64_t frame_start, frame_end;
+  unsigned int i;
+
+  start = a->current.begin;
+  //g_assert (start < INDEFINITE);
+
+  simple_duration = compute_simple_duration (a);
+  if (simple_duration == INDEFINITE)
+    simple_duration = compute_repeat_duration (a);
+
+  if (simple_duration == INDEFINITE || simple_duration == 0)
+    {
+      *out_rep = 0;
+      *out_frame = 0;
+      *out_frame_t = 0;
+      *out_frame_start = a->current.begin;
+      *out_frame_end = a->current.end;
+      return FALSE;
+    }
+
+  t = (time - start) / (double) simple_duration;
+  rep = floor (t); /* number of completed repetitions */
+
+  cycle_start = start + rep * simple_duration;
+  cycle_end = cycle_start + simple_duration;
+
+  frame_start = frame_end = cycle_start;
+  for (i = 0; i + 1 < a->n_frames; i++)
+    {
+      frame_start = frame_end;
+      frame_end = lerp (a->frames[i + 1].time, cycle_start, cycle_end);
+
+      if (time < frame_end)
+        break;
+    }
+
+  t = (time - frame_start) / (double) (frame_end - frame_start);
+
+  *out_rep = rep;
+  *out_frame = i;
+  *out_frame_t = t;
+  *out_frame_start = frame_start;
+  *out_frame_end = frame_end;
+
+  return TRUE;
+}
+
+void
+svg_animation_update_run_mode (SvgAnimation *a,
+                               int64_t       current_time)
+{
+  if (a->status == ANIMATION_STATUS_INACTIVE)
+    {
+      a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
+      a->next_invalidate = a->current.begin;
+    }
+  else if (a->status == ANIMATION_STATUS_RUNNING)
+    {
+      int rep;
+      unsigned int frame;
+      double frame_t;
+      int64_t frame_start, frame_end;
+
+      if (a->type == ANIMATION_TYPE_SET)
+        {
+          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
+          a->next_invalidate = a->current.end;
+          return;
+        }
+
+      svg_animation_get_progress (a, current_time,
+                                  &rep, &frame, &frame_t, &frame_start, &frame_end);
+
+      if (a->calc_mode == CALC_MODE_DISCRETE)
+        {
+          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
+          a->next_invalidate = frame_end;
+        }
+      else if (svg_property_discrete (a->attr))
+        {
+          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
+          if (frame_t < 0.5)
+            a->next_invalidate = (frame_start + frame_end) / 2;
+          else
+            a->next_invalidate = frame_end;
+        }
+      else
+        {
+          a->run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
+          a->next_invalidate = a->current.end;
+        }
+    }
+  else if (a->current.begin < INDEFINITE && current_time <= a->current.begin)
+    {
+      a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
+      a->next_invalidate = a->current.begin;
+    }
+  else
+    {
+      a->run_mode = GTK_SVG_RUN_MODE_STOPPED;
+      a->next_invalidate = INDEFINITE;
+    }
+}
+
+void
+svg_animation_update_state (SvgAnimation *a,
+                            int64_t       current_time)
+{
+  AnimationStatus status = a->status;
+
+  if (a->status == ANIMATION_STATUS_INACTIVE ||
+      a->status == ANIMATION_STATUS_DONE)
+    {
+      if (current_time < a->current.begin)
+        ;  /* remain inactive */
+      else if (current_time <= a->current.end)
+        status = ANIMATION_STATUS_RUNNING;
+      else
+        status = ANIMATION_STATUS_DONE;
+    }
+  else if (a->status == ANIMATION_STATUS_RUNNING)
+    {
+      if (current_time >= a->current.end)
+        status = ANIMATION_STATUS_DONE;
+    }
+
+  if (a->status != status)
+    {
+      if (a->status == ANIMATION_STATUS_RUNNING) /* Ending this activation */
+        a->previous = a->current;
+
+      a->status = status;
+
+      if (a->status != ANIMATION_STATUS_RUNNING)
+        {
+          a->current.begin = find_first_time (a->begin, current_time);
+          animation_set_current_end (a, find_first_time (a->end, a->current.begin));
+        }
+
+      svg_animation_update_run_mode (a, current_time);
+      a->state_changed = TRUE;
+
+#ifdef DEBUG
+      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "state"))
+        {
+          const char *name[] = { "INACTIVE", "RUNNING ", "DONE    " };
+          GString *s = g_string_new ("");
+          g_string_append_printf (s, "state of %s now %s [", a->id, name[status]);
+          g_string_append_printf (s, "%s ", format_time (a->current.begin));
+          g_string_append_printf (s, "%s] ", format_time (a->current.end));
+          switch (a->run_mode)
+            {
+            case GTK_SVG_RUN_MODE_CONTINUOUS:
+              g_string_append_printf (s, "--> %s\n", format_time (a->next_invalidate));
+              break;
+            case GTK_SVG_RUN_MODE_DISCRETE:
+              g_string_append_printf (s, "> > %s\n", format_time (a->next_invalidate));
+              break;
+            case GTK_SVG_RUN_MODE_STOPPED:
+              g_string_append (s, "\n");
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+          dbg_print ("state", "%s", s->str);
+          g_string_free (s, TRUE);
+        }
+#endif
+    }
+  else
+    svg_animation_update_run_mode (a, current_time);
+}
+
+/* }}} */
+/* ((( Reference resolution */
+
+void
+svg_animation_resolve_shadow_references (SvgAnimation *animation,
+                                         GHashTable   *map)
+{
+  SvgValue *value;
+  SvgElement *clone;
+  unsigned int first;
+
+  if (animation->motion.path_shape)
+    {
+      clone = g_hash_table_lookup (map, animation->motion.path_shape);
+      if (clone)
+        animation->motion.path_shape = clone;
+    }
+
+  for (unsigned int k = 0; k < 2; k++)
+    {
+      GPtrArray *specs = k == 0 ? animation->begin : animation->end;
+      for (unsigned int i = 0; i < specs->len; i++)
+        {
+          TimeSpec *spec = g_ptr_array_index (specs, i);
+          if (spec->type == TIME_SPEC_TYPE_SYNC)
+            {
+              SvgAnimation *anim = g_hash_table_lookup (map, spec->sync.base);
+              if (anim)
+                spec->sync.base = anim;
+              if (spec->sync.base)
+                svg_animation_add_dep (spec->sync.base, animation);
+            }
+          else if (spec->type == TIME_SPEC_TYPE_EVENT)
+            {
+              clone = g_hash_table_lookup (map, spec->event.shape);
+              if (clone)
+                spec->event.shape = clone;
+            }
+        }
+    }
+
+  /* Skip the 'current' keyword in frames[0] if present */
+  if (animation->frames &&
+      animation->frames[0].value &&
+      svg_value_is_current (animation->frames[0].value))
+    first = 1;
+  else
+    first = 0;
+
+  if (animation->attr == SVG_PROPERTY_CLIP_PATH)
+    {
+      for (unsigned int j = first; j < animation->n_frames; j++)
+        {
+          value = animation->frames[j].value;
+          if (svg_clip_get_kind (value) == CLIP_URL)
+            {
+              clone = g_hash_table_lookup (map, svg_clip_get_shape (value));
+              if (clone)
+                {
+                  animation->frames[j].value = svg_clip_new_url_take (g_strdup (svg_clip_get_id (value)));
+                  svg_clip_set_shape (animation->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (animation->attr == SVG_PROPERTY_MASK)
+    {
+      for (unsigned int j = first; j < animation->n_frames; j++)
+        {
+          value = animation->frames[j].value;
+          if (svg_mask_get_kind (value) == MASK_URL)
+            {
+              clone = g_hash_table_lookup (map, svg_mask_get_shape (value));
+              if (clone)
+                {
+                  animation->frames[j].value = svg_mask_new_url_take (g_strdup (svg_mask_get_id (value)));
+                  svg_mask_set_shape (animation->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (animation->attr == SVG_PROPERTY_HREF ||
+           animation->attr == SVG_PROPERTY_FE_IMAGE_HREF ||
+           animation->attr == SVG_PROPERTY_MARKER_START ||
+           animation->attr == SVG_PROPERTY_MARKER_MID ||
+           animation->attr == SVG_PROPERTY_MARKER_END)
+    {
+      for (unsigned int j = first; j < animation->n_frames; j++)
+        {
+          value = animation->frames[j].value;
+          clone = g_hash_table_lookup (map, svg_href_get_shape (value));
+          if (clone)
+            {
+               if (svg_href_get_kind (value) == HREF_URL)
+                 animation->frames[j].value = svg_href_new_url_take (g_strdup (svg_href_get_ref (value)));
+               else
+                 animation->frames[j].value = svg_href_new_plain (svg_href_get_ref (value));
+               svg_href_set_shape (animation->frames[j].value, clone);
+               svg_value_unref (value);
+            }
+        }
+    }
+  else if (animation->attr == SVG_PROPERTY_FILL ||
+           animation->attr == SVG_PROPERTY_STROKE)
+    {
+      for (unsigned int j = first; j < animation->n_frames; j++)
+        {
+          value = animation->frames[j].value;
+          PaintKind kind = svg_paint_get_kind (value);
+          if (paint_is_server (kind))
+            {
+              clone = g_hash_table_lookup (map, svg_paint_get_server_shape (value));
+              if (clone)
+                {
+                  const char *ref = svg_paint_get_server_ref (value);
+                  const GdkColor *fallback = svg_paint_get_server_fallback (value);
+
+                  if (kind == PAINT_SERVER_WITH_FALLBACK)
+                    animation->frames[j].value = svg_paint_new_server_with_fallback (ref, fallback);
+                  else if (kind == PAINT_SERVER_WITH_CURRENT_COLOR)
+                    animation->frames[j].value = svg_paint_new_server_with_current_color (ref);
+                  else
+                    animation->frames[j].value = svg_paint_new_server (ref);
+
+                  svg_paint_set_server_shape (animation->frames[j].value, clone);
+                  svg_value_unref (value);
+                }
+            }
+        }
+    }
+  else if (animation->attr == SVG_PROPERTY_FILTER)
+    {
+      for (unsigned int j = first; j < animation->n_frames; j++)
+        {
+          value = animation->frames[j].value;
+
+          animation->frames[j].value = svg_filter_functions_copy (value);
+          for (unsigned int k = 0; k < svg_filter_functions_get_length (value); k++)
+            {
+              if (svg_filter_functions_get_kind (value, k) == FILTER_REF)
+                {
+                  clone = g_hash_table_lookup (map, svg_filter_functions_get_shape (value, k));
+                  if (clone)
+                    svg_filter_functions_set_shape (animation->frames[j].value, k, clone);
+                }
+            }
+
+          svg_value_unref (value);
+        }
+    }
+}
+
+/* }}} */
+
+/* vim:set foldmethod=marker: */

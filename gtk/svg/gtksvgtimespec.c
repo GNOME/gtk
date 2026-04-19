@@ -366,7 +366,7 @@ time_spec_set_time (TimeSpec *spec,
       for (unsigned int i = 0; i < spec->animations->len; i++)
         {
           SvgAnimation *a = g_ptr_array_index (spec->animations, i);
-          animation_update_for_spec (a, spec);
+          svg_animation_update_for_spec (a, spec);
         }
     }
 }

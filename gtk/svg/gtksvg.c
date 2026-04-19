@@ -630,6 +630,207 @@ add_font_from_url (GtkSvg               *svg,
 /* }}} */
 /* {{{ Animation */
 
+static int64_t
+get_last_start (SvgAnimation *a)
+{
+  if (a->status == ANIMATION_STATUS_DONE)
+    return a->previous.begin;
+  else
+    return a->current.begin;
+}
+
+static int
+compare_anim (gconstpointer a,
+              gconstpointer b)
+{
+  SvgAnimation *a1 = (SvgAnimation *) a;
+  SvgAnimation *a2 = (SvgAnimation *) b;
+  int64_t start1, start2;
+
+  /* It doesn't matter, but we sort by attributes to get
+   * a predictable order
+   */
+  if (a1->attr < a2->attr)
+    return -1;
+  else if (a1->attr > a2->attr)
+    return 1;
+
+  /* The situation with animateTransform vs. animateMotion
+   * is special: they don't add to each other, and
+   * the accumulate animateMotion transform is always
+   * applied after the accumulate animateTransform.
+   */
+  if (a1->attr == SVG_PROPERTY_TRANSFORM)
+    {
+      if (a1->type == ANIMATION_TYPE_MOTION && a2->type != ANIMATION_TYPE_MOTION)
+        return 1;
+      else if (a1->type != ANIMATION_TYPE_MOTION && a2->type == ANIMATION_TYPE_MOTION)
+        return -1;
+    }
+
+  /* SvgAnimation priorities:
+   * - started later > started earlier
+   * - later in document > earlier in document
+   *
+   * Sort higher priority animations to the end
+   * so their effect overrides lower priority ones.
+   */
+  start1 = get_last_start (a1);
+  start2 = get_last_start (a2);
+
+  if (start1 < start2)
+    return -1;
+  else if (start1 > start2)
+    return 1;
+
+  if (a1->line < a2->line)
+    return -1;
+  else if (a1->line > a2->line)
+    return 1;
+
+  return 0;
+}
+
+static void
+collect_next_update_for_animation (SvgAnimation  *a,
+                                   int64_t        current_time,
+                                   GtkSvgRunMode *run_mode,
+                                   int64_t       *next_update)
+{
+  svg_animation_update_run_mode (a, current_time);
+
+#ifdef DEBUG
+  if (a->run_mode > *run_mode)
+    {
+      const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
+      dbg_print ("run", "%s updates run mode to %s", a->id, mode_name[a->run_mode]);
+    }
+  if (a->next_invalidate < *next_update)
+    {
+      dbg_print ("run", "%s updates next update to %s", a->id, format_time (a->next_invalidate));
+    }
+#endif
+
+  *run_mode = MAX (*run_mode, a->run_mode);
+  *next_update = MIN (*next_update, a->next_invalidate);
+
+  if (a->state_changed)
+    {
+      *next_update = current_time;
+      a->state_changed = FALSE;
+    }
+}
+
+static void
+collect_next_update_for_shape (SvgElement    *shape,
+                               int64_t        current_time,
+                               GtkSvgRunMode *run_mode,
+                               int64_t       *next_update)
+{
+  if (shape->animations)
+    {
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
+          collect_next_update_for_animation (a, current_time, run_mode, next_update);
+        }
+    }
+
+  if (shape->shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          SvgElement *s = g_ptr_array_index (shape->shapes, i);
+          collect_next_update_for_shape (s, current_time, run_mode, next_update);
+        }
+    }
+}
+
+static void
+collect_next_update (GtkSvg *self)
+{
+  GtkSvgRunMode run_mode = GTK_SVG_RUN_MODE_STOPPED;
+  int64_t next_update = INDEFINITE;
+
+  collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
+
+#ifdef DEBUG
+  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
+    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
+#endif
+
+  self->run_mode = run_mode;
+  self->next_update = next_update;
+
+#ifdef DEBUG
+  const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
+  dbg_print ("run", "run mode %s", mode_name[self->run_mode]);
+  dbg_print ("run", "next update %s", format_time (self->next_update));
+#endif
+}
+
+static void
+invalidate_for_next_update (GtkSvg *self)
+{
+  if (self->next_update <= self->current_time ||
+      self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
+    {
+      dbg_print ("run", "invalidating for update");
+      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+    }
+#ifdef DEBUG
+  else
+    {
+      GString *s = g_string_new ("not invalidating (");
+      g_string_append_printf (s, "%s", format_time (self->next_update));
+      g_string_append_printf (s, " > %s)", format_time (self->current_time));
+      dbg_print ("run", "%s", s->str);
+      g_string_free (s, TRUE);
+    }
+#endif
+}
+
+static void
+shape_update_animation_state (SvgElement *shape,
+                              int64_t     current_time)
+{
+  if (shape->animations)
+    {
+      gboolean any_changed = FALSE;
+
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
+          svg_animation_update_state (a, current_time);
+          any_changed |= a->state_changed;
+        }
+
+      if (any_changed)
+        g_ptr_array_sort_values (shape->animations, compare_anim);
+    }
+
+  if (shape->shapes)
+    {
+      for (unsigned int i = 0; i < shape->shapes->len; i++)
+        {
+          SvgElement *s = g_ptr_array_index (shape->shapes, i);
+          shape_update_animation_state (s, current_time);
+        }
+    }
+}
+
+static void schedule_next_update (GtkSvg *self);
+
+static void
+update_animation_state (GtkSvg *self)
+{
+  shape_update_animation_state (self->content, self->current_time);
+
+  collect_next_update (self);
+  invalidate_for_next_update (self);
+  schedule_next_update (self);
+}
+
 static void
 animations_update_for_pause (SvgElement *shape,
                              int64_t     duration)
@@ -861,208 +1062,8 @@ shape_set_current_value (SvgElement   *shape,
 /* }}} */
 /* {{{ Update computation */
 
-/* Determine what repetition the time falls into,
- * relative to the animations current start time.
- * Also what frame we are on, and how far into that
- * frame we are.
- *
- * Note: this assumes that the duration is finite
- * and the animation runs forever.
- */
-static void
-find_current_cycle_and_frame (SvgAnimation *a,
-                              GtkSvg       *svg,
-                              int64_t       time,
-                              int          *out_rep,
-                              unsigned int *out_frame,
-                              double       *out_frame_t,
-                              int64_t      *out_frame_start,
-                              int64_t      *out_frame_end)
-{
-  int64_t start;
-  int64_t simple_duration;
-  double t;
-  int rep;
-  int64_t cycle_start, cycle_end;
-  int64_t frame_start, frame_end;
-  unsigned int i;
-
-  start = a->current.begin;
-  //g_assert (start < INDEFINITE);
-
-  simple_duration = determine_simple_duration (a);
-  if (simple_duration == INDEFINITE)
-    simple_duration = determine_repeat_duration (a);
-
-  if (simple_duration == INDEFINITE || simple_duration == 0)
-    {
-      if (svg)
-        gtk_svg_update_error (svg, "Not enough data to advance animation %s", a->id);
-      *out_rep = 0;
-      *out_frame = 0;
-      *out_frame_t = 0;
-      *out_frame_start = a->current.begin;
-      *out_frame_end = a->current.end;
-      return;
-    }
-
-  t = (time - start) / (double) simple_duration;
-  rep = floor (t); /* number of completed repetitions */
-
-  cycle_start = start + rep * simple_duration;
-  cycle_end = cycle_start + simple_duration;
-
-  frame_start = frame_end = cycle_start;
-  for (i = 0; i + 1 < a->n_frames; i++)
-    {
-      frame_start = frame_end;
-      frame_end = lerp (a->frames[i + 1].time, cycle_start, cycle_end);
-
-      if (time < frame_end)
-        break;
-    }
-
-  t = (time - frame_start) / (double) (frame_end - frame_start);
-
-  *out_rep = rep;
-  *out_frame = i;
-  *out_frame_t = t;
-  *out_frame_start = frame_start;
-  *out_frame_end = frame_end;
-}
-
-static void
-animation_update_run_mode (SvgAnimation *a,
-                           int64_t       current_time)
-{
-  if (a->status == ANIMATION_STATUS_INACTIVE)
-    {
-      a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
-      a->next_invalidate = a->current.begin;
-    }
-  else if (a->status == ANIMATION_STATUS_RUNNING)
-    {
-      int rep;
-      unsigned int frame;
-      double frame_t;
-      int64_t frame_start, frame_end;
-
-      if (a->type == ANIMATION_TYPE_SET)
-        {
-          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
-          a->next_invalidate = a->current.end;
-          return;
-        }
-
-      /* FIXME: get svg here */
-      find_current_cycle_and_frame (a, NULL, current_time,
-                                    &rep, &frame, &frame_t, &frame_start, &frame_end);
-
-      if (a->calc_mode == CALC_MODE_DISCRETE)
-        {
-          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
-          a->next_invalidate = frame_end;
-        }
-      else if (svg_property_discrete (a->attr))
-        {
-          a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
-          if (frame_t < 0.5)
-            a->next_invalidate = (frame_start + frame_end) / 2;
-          else
-            a->next_invalidate = frame_end;
-        }
-      else
-        {
-          a->run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-          a->next_invalidate = a->current.end;
-        }
-    }
-  else if (a->current.begin < INDEFINITE && current_time <= a->current.begin)
-    {
-      a->run_mode = GTK_SVG_RUN_MODE_DISCRETE;
-      a->next_invalidate = a->current.begin;
-    }
-  else
-    {
-      a->run_mode = GTK_SVG_RUN_MODE_STOPPED;
-      a->next_invalidate = INDEFINITE;
-    }
-}
-
-static void
-animation_update_state (SvgAnimation *a,
-                        int64_t       current_time)
-{
-  AnimationStatus status = a->status;
-
-  if (a->status == ANIMATION_STATUS_INACTIVE ||
-      a->status == ANIMATION_STATUS_DONE)
-    {
-      if (current_time < a->current.begin)
-        ;  /* remain inactive */
-      else if (current_time <= a->current.end)
-        status = ANIMATION_STATUS_RUNNING;
-      else
-        status = ANIMATION_STATUS_DONE;
-    }
-  else if (a->status == ANIMATION_STATUS_RUNNING)
-    {
-      if (current_time >= a->current.end)
-        status = ANIMATION_STATUS_DONE;
-    }
-
-  if (a->status != status)
-    {
-      if (a->status == ANIMATION_STATUS_RUNNING) /* Ending this activation */
-        a->previous = a->current;
-
-      a->status = status;
-
-      if (a->status != ANIMATION_STATUS_RUNNING)
-        {
-          a->current.begin = find_first_time (a->begin, current_time);
-          animation_set_current_end (a, find_first_time (a->end, a->current.begin));
-        }
-
-      animation_update_run_mode (a, current_time);
-
-      a->state_changed = TRUE;
-
-#ifdef DEBUG
-      if (strstr (g_getenv ("SVG_DEBUG") ?:"", "state"))
-        {
-          const char *name[] = { "INACTIVE", "RUNNING ", "DONE    " };
-          GString *s = g_string_new ("");
-          g_string_append_printf (s, "state of %s now %s [", a->id, name[status]);
-          g_string_append_printf (s, "%s ", format_time (a->current.begin));
-          g_string_append_printf (s, "%s] ", format_time (a->current.end));
-          switch (a->run_mode)
-            {
-            case GTK_SVG_RUN_MODE_CONTINUOUS:
-              g_string_append_printf (s, "--> %s\n", format_time (a->next_invalidate));
-              break;
-            case GTK_SVG_RUN_MODE_DISCRETE:
-              g_string_append_printf (s, "> > %s\n", format_time (a->next_invalidate));
-              break;
-            case GTK_SVG_RUN_MODE_STOPPED:
-              g_string_append (s, "\n");
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-          dbg_print ("state", "%s", s->str);
-          g_string_free (s, TRUE);
-        }
-#endif
-    }
-  else
-    animation_update_run_mode (a, current_time);
-}
-
 static void frame_clock_connect    (GtkSvg *self);
 static void frame_clock_disconnect (GtkSvg *self);
-
-static void schedule_next_update (GtkSvg *self);
 
 static void
 advance_later (gpointer data)
@@ -1406,8 +1407,9 @@ compute_value_at_time (SvgAnimation      *a,
   if (a->type == ANIMATION_TYPE_SET)
     return resolve_value (a->shape, context, a->attr, a->idx, a->frames[0].value);
 
-  find_current_cycle_and_frame (a, context->svg, context->current_time,
-                                &rep, &frame, &frame_t, &frame_start, &frame_end);
+  if (!svg_animation_get_progress (a, context->current_time,
+                                   &rep, &frame, &frame_t, &frame_start, &frame_end))
+    gtk_svg_update_error (context->svg, "Not enough data to advance animation %s", a->id);
 
   if (a->calc_mode == CALC_MODE_DISCRETE || svg_property_discrete (a->attr))
     {
@@ -1533,67 +1535,6 @@ compute_value_for_animation (SvgAnimation      *a,
   context->interpolation = previous;
 
   return value;
-}
-
-static int64_t
-get_last_start (SvgAnimation *a)
-{
-  if (a->status == ANIMATION_STATUS_DONE)
-    return a->previous.begin;
-  else
-    return a->current.begin;
-}
-
-static int
-compare_anim (gconstpointer a,
-              gconstpointer b)
-{
-  SvgAnimation *a1 = (SvgAnimation *) a;
-  SvgAnimation *a2 = (SvgAnimation *) b;
-  int64_t start1, start2;
-
-  /* It doesn't matter, but we sort by attributes to get
-   * a predictable order
-   */
-  if (a1->attr < a2->attr)
-    return -1;
-  else if (a1->attr > a2->attr)
-    return 1;
-
-  /* The situation with animateTransform vs. animateMotion
-   * is special: they don't add to each other, and
-   * the accumulate animateMotion transform is always
-   * applied after the accumulate animateTransform.
-   */
-  if (a1->attr == SVG_PROPERTY_TRANSFORM)
-    {
-      if (a1->type == ANIMATION_TYPE_MOTION && a2->type != ANIMATION_TYPE_MOTION)
-        return 1;
-      else if (a1->type != ANIMATION_TYPE_MOTION && a2->type == ANIMATION_TYPE_MOTION)
-        return -1;
-    }
-
-  /* SvgAnimation priorities:
-   * - started later > started earlier
-   * - later in document > earlier in document
-   *
-   * Sort higher priority animations to the end
-   * so their effect overrides lower priority ones.
-   */
-  start1 = get_last_start (a1);
-  start2 = get_last_start (a2);
-
-  if (start1 < start2)
-    return -1;
-  else if (start1 > start2)
-    return 1;
-
-  if (a1->line < a2->line)
-    return -1;
-  else if (a1->line > a2->line)
-    return 1;
-
-  return 0;
 }
 
 static void
@@ -2309,144 +2250,6 @@ gtk_svg_set_hover_callback (GtkSvg             *svg,
 
 /* {{{ Animation */
 
-static void
-collect_next_update_for_animation (SvgAnimation  *a,
-                                   int64_t        current_time,
-                                   GtkSvgRunMode *run_mode,
-                                   int64_t       *next_update)
-{
-  animation_update_run_mode (a, current_time);
-
-#ifdef DEBUG
-  if (a->run_mode > *run_mode)
-    {
-      const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
-      dbg_print ("run", "%s updates run mode to %s", a->id, mode_name[a->run_mode]);
-    }
-  if (a->next_invalidate < *next_update)
-    {
-      dbg_print ("run", "%s updates next update to %s", a->id, format_time (a->next_invalidate));
-    }
-#endif
-
-  *run_mode = MAX (*run_mode, a->run_mode);
-  *next_update = MIN (*next_update, a->next_invalidate);
-
-  if (a->state_changed)
-    {
-      *next_update = current_time;
-      a->state_changed = FALSE;
-    }
-}
-
-static void
-collect_next_update_for_shape (SvgElement    *shape,
-                               int64_t        current_time,
-                               GtkSvgRunMode *run_mode,
-                               int64_t       *next_update)
-{
-  if (shape->animations)
-    {
-      for (unsigned int i = 0; i < shape->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
-          collect_next_update_for_animation (a, current_time, run_mode, next_update);
-        }
-    }
-
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
-          collect_next_update_for_shape (s, current_time, run_mode, next_update);
-        }
-    }
-}
-
-static void
-collect_next_update (GtkSvg *self)
-{
-  GtkSvgRunMode run_mode = GTK_SVG_RUN_MODE_STOPPED;
-  int64_t next_update = INDEFINITE;
-
-  collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
-
-#ifdef DEBUG
-  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
-    run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-#endif
-
-  self->run_mode = run_mode;
-  self->next_update = next_update;
-
-#ifdef DEBUG
-  const char *mode_name[] = { "STOPPED", "DISCRETE", "CONTINUOUS" };
-  dbg_print ("run", "run mode %s", mode_name[self->run_mode]);
-  dbg_print ("run", "next update %s", format_time (self->next_update));
-#endif
-}
-
-static void
-invalidate_for_next_update (GtkSvg *self)
-{
-  if (self->next_update <= self->current_time ||
-      self->run_mode == GTK_SVG_RUN_MODE_CONTINUOUS)
-    {
-      dbg_print ("run", "invalidating for update");
-      gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
-    }
-#ifdef DEBUG
-  else
-    {
-      GString *s = g_string_new ("not invalidating (");
-      g_string_append_printf (s, "%s", format_time (self->next_update));
-      g_string_append_printf (s, " > %s)", format_time (self->current_time));
-      dbg_print ("run", "%s", s->str);
-      g_string_free (s, TRUE);
-    }
-#endif
-}
-
-static void
-shape_update_animation_state (SvgElement *shape,
-                              int64_t     current_time)
-{
-  if (shape->animations)
-    {
-      gboolean any_changed = FALSE;
-
-      for (unsigned int i = 0; i < shape->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
-          animation_update_state (a, current_time);
-          any_changed |= a->state_changed;
-        }
-
-      if (any_changed)
-        g_ptr_array_sort_values (shape->animations, compare_anim);
-    }
-
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
-          shape_update_animation_state (s, current_time);
-        }
-    }
-}
-
-static void
-update_animation_state (GtkSvg *self)
-{
-  shape_update_animation_state (self->content, self->current_time);
-
-  collect_next_update (self);
-  invalidate_for_next_update (self);
-  schedule_next_update (self);
-}
-
 /*< private>
  * gtk_svg_set_load_time:
  * @self: an SVG paintable
@@ -2744,8 +2547,8 @@ gtk_svg_activate_element (GtkSvg     *self,
 
   if (animation)
     {
-      animation_set_begin (animation, current_time);
-      animation_update_state (animation, current_time);
+      svg_animation_start (animation, current_time);
+      svg_animation_update_state (animation, current_time);
       collect_next_update (self);
       invalidate_for_next_update (self);
       schedule_next_update (self);
