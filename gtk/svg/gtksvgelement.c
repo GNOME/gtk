@@ -2242,12 +2242,22 @@ svg_element_clone (SvgElement *element,
   if (clone->type == SVG_ELEMENT_LINK)
     gtk_css_node_set_state (clone->css_node, GTK_STATE_FLAG_LINK);
 
-  clone->specified = g_array_ref (element->specified);
-
-  for (unsigned int i = 0; i < N_SVG_PROPERTIES; i++)
+  clone->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
+  for (unsigned int i = 0; i < element->specified->len; i++)
     {
-      clone->base[i] = svg_value_ref (element->base[i]);
-      clone->current[i] = svg_value_ref (element->current[i]);
+      PropertyValue *p = &g_array_index (element->specified, PropertyValue, i);
+      PropertyValue pv;
+
+      pv.attr = p->attr;
+      pv.value = svg_value_ref (p->value);
+      pv.important = p->important;
+      g_array_append_val (clone->specified, pv);
+    }
+
+  for (unsigned int attr = 0; attr < N_SVG_PROPERTIES; attr++)
+    {
+      clone->base[attr] = svg_value_ref (element->base[attr]);
+      clone->current[attr] = svg_property_ref_initial_value (attr, clone->type, clone->parent != NULL);
     }
 
   if (element->shapes)
