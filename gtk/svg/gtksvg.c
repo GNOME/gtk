@@ -2218,7 +2218,7 @@ shape_dump_animation_state (SvgElement *shape, GString *string)
         }
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (shape->shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -2354,7 +2354,7 @@ collect_next_update_for_shape (SvgElement    *shape,
         }
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (shape->shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
@@ -2427,7 +2427,7 @@ shape_update_animation_state (SvgElement *shape,
         g_ptr_array_sort_values (shape->animations, compare_anim);
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (shape->shapes)
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {
