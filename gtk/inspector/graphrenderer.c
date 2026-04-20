@@ -224,7 +224,7 @@ graph_renderer_class_init (GraphRendererClass *klass)
                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
-                                   PROP_MINIMUM,
+                                   PROP_MAXIMUM,
                                    g_param_spec_double ("maximum", NULL, NULL,
                                                         -G_MAXDOUBLE, G_MAXDOUBLE, G_MAXDOUBLE,
                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
