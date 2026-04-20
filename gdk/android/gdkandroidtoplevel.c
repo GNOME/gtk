@@ -92,14 +92,14 @@ _gdk_android_toplevel_bind_native (JNIEnv *env, jobject this,
   gdk_android_toplevel_update_title (self);
   gdk_android_toplevel_update_window (self);
 
-  gdk_android_display_update_night_mode (display, this);
+  gdk_android_display_update_configuration (display, this);
 }
 
 void
 _gdk_android_toplevel_on_configuration_change (JNIEnv *env, jobject this)
 {
   GdkAndroidDisplay *display = gdk_android_display_get_display_instance ();
-  gdk_android_display_update_night_mode (display, this);
+  gdk_android_display_update_configuration (display, this);
 }
 
 void

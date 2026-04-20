@@ -22,6 +22,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdkrgbaprivate.h"
 
 #include "gdkandroidinit-private.h"
 #include "gdkandroidchoreographersource-private.h"
@@ -63,6 +64,7 @@ G_DEFINE_TYPE (GdkAndroidDisplay, gdk_android_display, GDK_TYPE_DISPLAY)
 enum
 {
   PROP_NIGHT_MODE = 1,
+  PROP_ACCENT_COLOR,
   N_PROPERTIES
 };
 static GParamSpec *obj_properties[N_PROPERTIES] = { 0, };
@@ -128,6 +130,9 @@ gdk_android_display_get_property (GObject *object, guint prop_id, GValue *value,
     {
     case PROP_NIGHT_MODE:
       g_value_set_enum (value, gdk_android_display_get_night_mode (self));
+      break;
+    case PROP_ACCENT_COLOR:
+      g_value_set_boxed (value, gdk_android_display_get_accent_color (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -281,6 +286,18 @@ gdk_android_display_class_init (GdkAndroidDisplayClass *klass)
   obj_properties[PROP_NIGHT_MODE] = g_param_spec_enum ("night-mode", NULL, NULL,
                                                        GDK_TYPE_ANDROID_DISPLAY_NIGHT_MODE, GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED,
                                                        G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+
+   /**
+   * GdkAndroidDisplay:accent-color: (getter get_accent_color)
+   *
+   * The current accent color of the OS.
+   *
+   * Since: 4.24
+   */
+  obj_properties[PROP_ACCENT_COLOR] = g_param_spec_boxed ("accent-color", NULL, NULL,
+                                                          GDK_TYPE_RGBA,
+                                                          G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
@@ -398,14 +415,36 @@ gdk_android_display_get_night_mode (GdkAndroidDisplay *self)
   return self->night_mode;
 }
 
+/**
+ * gdk_android_display_get_accent_color: (get-property accent-color)
+ * @self: (transfer none): the display
+ *
+ * Get the current [system_accent1_600](https://developer.android.com/reference/android/R.color#system_accent1_600)
+ * color, generally considered the “accent color”.
+ *
+ * Returns: current accent color
+ *
+ * Since: 4.24
+ */
+const GdkRGBA *
+gdk_android_display_get_accent_color (GdkAndroidDisplay *self)
+{
+  g_return_val_if_fail (GDK_IS_ANDROID_DISPLAY (self), NULL);
+  return &self->accent_color_rgba;
+}
+
 void
-gdk_android_display_update_night_mode (GdkAndroidDisplay *self, jobject context)
+gdk_android_display_update_configuration (GdkAndroidDisplay *self, jobject context)
 {
   JNIEnv *env = gdk_android_get_env ();
   (*env)->PushLocalFrame (env, 5);
   jobject resources = (*env)->CallObjectMethod (env, context, gdk_android_get_java_cache ()->a_context.get_resources);
   jobject configuration = (*env)->CallObjectMethod (env, resources, gdk_android_get_java_cache ()->a_resources.get_configuration);
   jint ui = (*env)->GetIntField (env, configuration, gdk_android_get_java_cache ()->a_configuration.ui);
+
+  guint32 color = (guint32)(*env)->CallIntMethod (env, context,
+                                                  gdk_android_get_java_cache ()->a_context.get_color,
+                                                  gdk_android_get_java_cache ()->a_res_color.system_accent1_600);
   (*env)->PopLocalFrame (env, NULL);
 
   GdkAndroidDisplayNightMode night_mode = GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED;
@@ -414,11 +453,20 @@ gdk_android_display_update_night_mode (GdkAndroidDisplay *self, jobject context)
   else if (ui & gdk_android_get_java_cache ()->a_configuration.ui_night_no)
     night_mode = GDK_ANDROID_DISPLAY_NIGHT_NO;
 
-  if (self->night_mode == night_mode)
-    return;
-  self->night_mode = night_mode;
-  g_debug ("night mode changed");
-  gdk_display_setting_changed ((GdkDisplay *) self, "gtk-application-prefer-dark-theme");
-  gdk_display_setting_changed ((GdkDisplay *) self, "gtk-interface-color-scheme");
-  g_object_notify_by_pspec ((GObject *) self, obj_properties[PROP_NIGHT_MODE]);
+  if (self->night_mode != night_mode)
+    {
+      self->night_mode = night_mode;
+      g_debug ("night mode changed");
+      gdk_display_setting_changed ((GdkDisplay *) self, "gtk-application-prefer-dark-theme");
+      gdk_display_setting_changed ((GdkDisplay *) self, "gtk-interface-color-scheme");
+      g_object_notify_by_pspec ((GObject *) self, obj_properties[PROP_NIGHT_MODE]);
+    }
+
+  if (self->accent_color != color)
+    {
+      self->accent_color = color;
+      self->accent_color_rgba = GDK_RGBA_INIT_FROM_INT (color);
+      g_debug ("accent color changed");
+      g_object_notify_by_pspec ((GObject *) self, obj_properties[PROP_ACCENT_COLOR]);
+    }
 }

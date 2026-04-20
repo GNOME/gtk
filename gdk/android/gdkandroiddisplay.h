@@ -63,8 +63,10 @@ GDK_AVAILABLE_IN_4_18
 JNIEnv *gdk_android_display_get_env (GdkDisplay *self);
 
 GDK_AVAILABLE_IN_4_18
-GdkAndroidDisplayNightMode gdk_android_display_get_night_mode (GdkAndroidDisplay *self);
+GdkAndroidDisplayNightMode  gdk_android_display_get_night_mode   (GdkAndroidDisplay *self);
 
+GDK_AVAILABLE_IN_4_24
+const GdkRGBA              *gdk_android_display_get_accent_color (GdkAndroidDisplay *self);
 
 GDK_AVAILABLE_IN_4_18
 gpointer gdk_android_display_get_egl_display (GdkAndroidDisplay *self);

@@ -269,6 +269,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
 
   jclass android_context = (*env)->FindClass (env, "android/content/Context");
   gdk_android_java_cache.a_context.klass = (*env)->NewGlobalRef (env, android_context);
+  POPULATE_REFCACHE_METHOD (a_context, get_color, "getColor", "(I)I")
   POPULATE_REFCACHE_METHOD (a_context, get_content_resolver, "getContentResolver", "()Landroid/content/ContentResolver;")
   POPULATE_REFCACHE_METHOD (a_context, get_system_service, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;")
   POPULATE_REFCACHE_METHOD (a_context, get_resources, "getResources", "()Landroid/content/res/Resources;")
@@ -342,6 +343,10 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   POPULATE_REFCACHE_FIELD (a_configuration, ui_night_undefined, "UI_MODE_NIGHT_UNDEFINED")
   POPULATE_REFCACHE_FIELD (a_configuration, ui_night_no, "UI_MODE_NIGHT_NO")
   POPULATE_REFCACHE_FIELD (a_configuration, ui_night_yes, "UI_MODE_NIGHT_YES")
+
+  jclass android_res_color = (*env)->FindClass (env, "android/R$color");
+  gdk_android_java_cache.a_res_color.klass = (*env)->NewGlobalRef (env, android_res_color);
+  POPULATE_REFCACHE_FIELD (a_res_color, system_accent1_600, "system_accent1_600")
 
   jclass android_clipboard_manager = (*env)->FindClass (env, "android/content/ClipboardManager");
   gdk_android_java_cache.a_clipboard_manager.klass = (*env)->NewGlobalRef (env, android_clipboard_manager);
@@ -670,6 +675,7 @@ gdk_android_finalize (void)
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_cursor.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_resources.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_configuration.klass);
+  (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_res_color.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_clipboard_manager.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_clip_desc.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_clip_desc.mime_text_html);
