@@ -49,8 +49,7 @@ G_DEFINE_TYPE (GtkFileChooserCell, gtk_file_chooser_cell, GTK_TYPE_WIDGET)
 
 enum
 {
-  PROP_POSITION = 1,
-  PROP_ITEM,
+  PROP_ITEM = 1,
   PROP_LIST_ITEM,
 };
 
