@@ -334,10 +334,11 @@ create_visibility_setter (SvgElement   *shape,
   TimeSpec *begin, *end;
   Visibility initial_visibility;
   Visibility opposite_visibility;
+  SvgValue *value;
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
     {
-      SvgValue *value = svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY);
+      value = svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY);
       g_assert (value != NULL);
       initial_visibility = svg_enum_get (value);
     }

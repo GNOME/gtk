@@ -1,0 +1,70 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='2000ms'
+        font-size='13.333'
+        font-weight='400'
+        fill='rgb(255,0,0)'
+        width='0px'
+        height='0px'
+        viewBox='0 0 100 100'>
+  <desc>
+    This test contains an animation inside a use tree that
+    gets triggered by a click on a link that is also in the
+    use tree.
+    The expected behavior is everything gets cloned in the use
+    shadow tree and the original and cloned animations can be
+    triggered independently.
+    Browsers don't get this right.
+  </desc>
+  <style type='text/css'> rect:hover { fill: green }</style>
+  <g
+          id='group'
+          font-size='13.333'
+          font-weight='400'
+          fill='rgb(255,0,0)'
+          gpa:css-state='hover'>
+    <a
+            id='shift'
+            font-size='13.333'
+            font-weight='400'
+            fill='rgb(255,0,0)'
+            gpa:css-state='hover,link,visited'>
+      <rect
+              font-size='13.333'
+              transform='translate(0, 0)'
+              font-weight='400'
+              fill='rgb(0,128,0)'
+              x='0'
+              y='0'
+              width='50'
+              height='50'
+              gpa:css-state='hover'>
+        <animateTransform
+                id='shift-on-click'
+                attributeName='transform'
+                begin='shift.click'
+                dur='2000ms'
+                values='0 0; 50 0; 0 0'
+                keyTimes='0; 0.5; 1'
+                type='translate'
+                gpa:status='running'
+                gpa:current-start-time='2000ms'
+                gpa:current-end-time='4000ms'/>
+      </rect>
+    </a>
+  </g>
+  <use
+          font-size='13.333'
+          font-weight='400'
+          fill='rgb(0,0,255)'
+          href='#group'
+          y='50'
+          width='0'
+          height='0'>
+  </use>
+</svg>

@@ -37,13 +37,13 @@
 
 #define DEG_TO_RAD(x) ((x) * G_PI / 180)
 
-#ifndef G_DISABLE_ASSERT
 static gboolean
 filter_kind_is_simple (FilterKind kind)
 {
   return kind != FILTER_REF && kind != FILTER_DROPSHADOW;
 }
 
+#ifndef G_DISABLE_ASSERT
 static gboolean
 filter_kind_is_matrix (FilterKind kind)
 {
@@ -938,4 +938,37 @@ svg_filter_functions_get_dropshadow (const SvgValue *value,
   *dx = svg_number_get (f->functions[pos].dropshadow.dx, 1);
   *dy = svg_number_get (f->functions[pos].dropshadow.dy, 1);
   *std_dev = svg_number_get (f->functions[pos].dropshadow.std_dev, 1);
+}
+
+SvgValue *
+svg_filter_functions_copy (const SvgValue *value)
+{
+  const SvgFilterFunctions *f = (const SvgFilterFunctions *) value;
+  SvgFilterFunctions *ff;
+
+  g_assert (value->class == &SVG_FILTER_FUNCTIONS_CLASS);
+
+  ff = svg_filter_functions_alloc (f->n_functions);
+  ff->n_functions = f->n_functions;
+
+  for (unsigned int i = 0; i < f->n_functions; i++)
+    {
+      ff->functions[i].kind = f->functions[i].kind;
+      if (filter_kind_is_simple (f->functions[i].kind))
+        ff->functions[i].simple = svg_value_ref (f->functions[i].simple);
+      else if (f->functions[i].kind == FILTER_REF)
+        {
+          ff->functions[i].ref.ref = g_strdup (f->functions[i].ref.ref);
+          ff->functions[i].ref.shape = f->functions[i].ref.shape;
+        }
+      else if (f->functions[i].kind == FILTER_DROPSHADOW)
+        {
+          ff->functions[i].dropshadow.color = svg_value_ref (f->functions[i].dropshadow.color);
+          ff->functions[i].dropshadow.dx = svg_value_ref (f->functions[i].dropshadow.dx);
+          ff->functions[i].dropshadow.dy = svg_value_ref (f->functions[i].dropshadow.dy);
+          ff->functions[i].dropshadow.std_dev = svg_value_ref (f->functions[i].dropshadow.std_dev);
+        }
+    }
+
+  return (SvgValue *) ff;
 }

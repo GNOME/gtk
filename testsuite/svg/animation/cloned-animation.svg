@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+   viewBox='0 0 100 100' fill='red'>
+  <desc>
+    This test contains an animation inside a use tree that
+    gets triggered by a click on a link that is also in the
+    use tree.
+    The expected behavior is everything gets cloned in the use
+    shadow tree and the original and cloned animations can be
+    triggered independently.
+    Browsers don't get this right.
+  </desc>
+  <style> rect:hover { fill: green }</style>
+  <g id='group'>
+     <a id='shift'>
+      <rect x='0' y='0' width='50' height='50'>
+        <animateTransform
+          id='shift-on-click'
+          attributeName='transform'
+          type='translate'
+          values='0 0; 50 0; 0 0'
+          dur='2s'
+          begin='shift.click'/>
+      </rect>
+    </a>
+  </g>
+  <use href='#group' y='50' fill='blue'/>
+</svg>

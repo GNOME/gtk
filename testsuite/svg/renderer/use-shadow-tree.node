@@ -1,0 +1,28 @@
+linear-gradient {
+  bounds: 0 0 20 20;
+  start: 0 0;
+  end: 20 0;
+  stops: 0 rgb(255,0,0), 1 rgb(0,0,255);
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 25 0 20 20;
+  start: 25 0;
+  end: 45 0;
+  stops: 0 rgb(255,0,0), 1 rgb(0,0,255);
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 0 40 20 20;
+  start: 0 40;
+  end: 20 40;
+  stops: 0 rgb(255,0,0), 1 rgb(0,0,255);
+  premultiplied: false;
+}
+linear-gradient {
+  bounds: 25 40 20 20;
+  start: 25 40;
+  end: 45 40;
+  stops: 0 rgb(255,0,0), 1 rgb(0,0,255);
+  premultiplied: false;
+}

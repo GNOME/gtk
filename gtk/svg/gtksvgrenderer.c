@@ -82,8 +82,6 @@
 
 #include "gdk/gdkrgbaprivate.h"
 
-#undef DEBUG
-
 typedef enum
 {
   CLIPPING,
@@ -199,7 +197,6 @@ get_fontmap (GtkSvg *svg)
     return pango_cairo_font_map_get_default ();
 }
 
-/* }}} */
 /* {{{ Gradients */
 
 static void
@@ -260,6 +257,7 @@ transform_gradient_line (GskTransform *transform,
   *end_out = e;
 }
 
+/* }}} */
 /* {{{ Rendernode utilities */
 
 static GskRenderNode *
@@ -442,7 +440,6 @@ push_transform (PaintContext *context,
       t = gsk_transform_invert (gsk_transform_ref (transform));
       gsk_transform_transform_point (t, p, &context->picking.p);
       gsk_transform_unref (t);
-      //g_print ("%f %f -> %f %f\n", p->x, p->y, context->picking.p.x, context->picking.p.y);
     }
 
   context->transforms = g_slist_prepend (context->transforms,
@@ -4622,6 +4619,9 @@ can_reuse_node (GtkSvg        *self,
  * paint order that is determined by the document
  * structure, and use that order in a separate pass
  * before we paint.
+ *
+ * Another complication is that hrefs can be animated,
+ * so may have to regenerate use shadow trees mid-compute.
  */
 
 void
@@ -4776,3 +4776,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
 
   gtk_svg_advance_after_snapshot (self);
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker: */

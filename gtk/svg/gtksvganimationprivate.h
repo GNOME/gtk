@@ -179,6 +179,10 @@ void             svg_animation_drop_and_free (SvgAnimation  *animation);
 gboolean         svg_animation_equal         (SvgAnimation  *animation1,
                                               SvgAnimation  *animation2);
 
+SvgAnimation *   svg_animation_clone         (SvgAnimation  *animation,
+                                              SvgElement    *parent,
+                                              Timeline      *timeline);
+
 gboolean         svg_animation_has_begin     (SvgAnimation  *animation,
                                               TimeSpec      *spec);
 gboolean         svg_animation_has_end       (SvgAnimation  *animation,
@@ -189,12 +193,24 @@ TimeSpec *       svg_animation_add_begin     (SvgAnimation  *animation,
 TimeSpec *       svg_animation_add_end       (SvgAnimation  *animation,
                                               TimeSpec      *spec);
 
-int64_t          svg_animation_get_current_begin (SvgAnimation *animation);
-int64_t          svg_animation_get_current_end   (SvgAnimation *animation);
+void             svg_animation_add_dep       (SvgAnimation  *base,
+                                              SvgAnimation  *anim);
+
+void             svg_animation_start         (SvgAnimation  *animation,
+                                              int64_t        current_time);
 
 void             svg_animation_update_for_pause
                                              (SvgAnimation  *animation,
                                               int64_t        duration);
+
+void             svg_animation_update_for_spec (SvgAnimation *animation,
+                                                TimeSpec     *spec);
+
+CalcMode         svg_animation_type_default_calc_mode
+                                             (AnimationType  type);
+
+int64_t          svg_animation_get_current_begin (SvgAnimation *animation);
+int64_t          svg_animation_get_current_end   (SvgAnimation *animation);
 
 GskPath *        svg_animation_motion_get_base_path
                                              (SvgAnimation          *animation,
@@ -205,12 +221,6 @@ GskPath *        svg_animation_motion_get_current_path
 GskPathMeasure * svg_animation_motion_get_current_measure
                                              (SvgAnimation          *animation,
                                               const graphene_rect_t *viewport);
-
-void             svg_animation_add_dep       (SvgAnimation  *base,
-                                              SvgAnimation  *anim);
-
-CalcMode         svg_animation_type_default_calc_mode
-                                             (AnimationType  type);
 
 void             svg_animation_fill_from_values
                                              (SvgAnimation  *animation,
@@ -224,20 +234,25 @@ void             svg_animation_motion_fill_from_path
                                              (SvgAnimation  *animation,
                                               GskPath       *path);
 
-SvgAnimation *   svg_animation_clone (SvgAnimation *animation,
-                                      SvgElement   *parent,
-                                      Timeline     *timeline);
+int64_t          svg_animation_get_simple_duration
+                                           (SvgAnimation *animation);
 
-void            animation_update_for_spec (SvgAnimation *animation,
-                                           TimeSpec     *spec);
-void            animation_set_begin       (SvgAnimation *a,
-                                          int64_t       current_time);
+gboolean         svg_animation_get_progress (SvgAnimation *a,
+                                             int64_t       time,
+                                             int          *out_rep,
+                                             unsigned int *out_frame,
+                                             double       *out_frame_t,
+                                             int64_t      *out_frame_start,
+                                             int64_t      *out_frame_end);
 
-gboolean        animation_set_current_end (SvgAnimation *a,
-                                           int64_t       time);
+void             svg_animation_update_run_mode
+                                            (SvgAnimation *a,
+                                             int64_t       current_time);
+void             svg_animation_update_state (SvgAnimation *a,
+                                             int64_t       current_time);
 
-int64_t         determine_repeat_duration (SvgAnimation *a);
-int64_t         determine_simple_duration (SvgAnimation *a);
-
+void             svg_animation_resolve_shadow_references
+                                            (SvgAnimation *animation,
+                                             GHashTable   *map);
 
 G_END_DECLS

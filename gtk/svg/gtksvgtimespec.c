@@ -366,7 +366,7 @@ time_spec_set_time (TimeSpec *spec,
       for (unsigned int i = 0; i < spec->animations->len; i++)
         {
           SvgAnimation *a = g_ptr_array_index (spec->animations, i);
-          animation_update_for_spec (a, spec);
+          svg_animation_update_for_spec (a, spec);
         }
     }
 }
@@ -401,18 +401,6 @@ time_spec_update_for_state (TimeSpec     *spec,
     }
 }
 
-static gboolean
-matches_shape (SvgElement *shape,
-               const char *ref,
-               SvgElement *target)
-{
-  if (shape != NULL)
-    return shape == target;
-  if (ref != NULL)
-    return g_strcmp0 (ref, target->id) == 0;
-  return FALSE;
-}
-
 void
 time_spec_update_for_event (TimeSpec   *spec,
                             SvgElement *shape,
@@ -421,8 +409,7 @@ time_spec_update_for_event (TimeSpec   *spec,
 {
   if (spec->type == TIME_SPEC_TYPE_EVENT)
     {
-      if (matches_shape (spec->event.shape, spec->event.ref, shape) &&
-          spec->event.event == event)
+      if (spec->event.shape == shape && spec->event.event == event)
         time_spec_set_time (spec, event_time + spec->offset);
     }
 }
@@ -474,7 +461,7 @@ time_spec_print (TimeSpec *spec,
 {
   gboolean only_nonzero = FALSE;
   const char *sides[] = { "begin", "end" };
-  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave" };
+  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave", "click" };
 
   switch (spec->type)
     {

@@ -3042,6 +3042,13 @@ resolve_refs_for_animation (SvgAnimation  *a,
               else
                 svg_animation_add_dep (spec->sync.base, a);
             }
+          else if (spec->type == TIME_SPEC_TYPE_EVENT && spec->event.shape == NULL)
+            {
+              g_assert (spec->event.ref);
+              spec->event.shape = g_hash_table_lookup (data->shapes, spec->event.ref);
+              if (!spec->event.shape)
+                gtk_svg_invalid_reference (data->svg, "No shape with ID %s", spec->event.ref);
+            }
         }
     }
 

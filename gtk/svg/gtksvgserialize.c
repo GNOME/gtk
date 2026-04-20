@@ -496,7 +496,7 @@ serialize_animation_status (GString              *s,
 
       if (!a->has_simple_duration)
         {
-          int64_t d = determine_simple_duration (a);
+          int64_t d = svg_animation_get_simple_duration (a);
           if (d == INDEFINITE)
             append_string_attr (s, indent, "gpa:computed-simple-duration", "indefinite");
           else
