@@ -62,6 +62,7 @@ enum
   PROP_ACCESSIBLE_ROLE = 1,
   PROP_ACCESSIBLE,
   PROP_DISPLAY,
+  PROP_REALIZED,
 
   N_PROPS
 };
@@ -69,6 +70,7 @@ enum
 enum
 {
   STATE_CHANGE,
+  REALIZED,
 
   LAST_SIGNAL
 };
@@ -163,6 +165,10 @@ gtk_at_context_get_property (GObject    *gobject,
 
     case PROP_DISPLAY:
       g_value_set_object (value, self->display);
+      break;
+
+    case PROP_REALIZED:
+      g_value_set_boolean (value, self->realized);
       break;
 
     default:
@@ -286,6 +292,19 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkATContext:realized:
+   *
+   * Whether the `GtkATContext` has been realized or not.
+   *
+   * Since: 4.24
+   */
+  obj_props[PROP_REALIZED] =
+    g_param_spec_boolean ("realized", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE |
+                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkATContext::state-change:
@@ -839,6 +858,8 @@ gtk_at_context_realize (GtkATContext *self)
   GTK_AT_CONTEXT_GET_CLASS (self)->realize (self);
 
   self->realized = TRUE;
+
+  g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_REALIZED]);
 }
 
 void
