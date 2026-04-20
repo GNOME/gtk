@@ -805,6 +805,9 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
       gtk_widget_set_sensitive (GTK_WIDGET (fontchooser->language_frame), TRUE);
       gtk_check_button_set_active (fontchooser->language_button, TRUE);
 
+      /* Language is already normalized to base language in set_language,
+       * so we can do a simple exact match
+       */
       model = gtk_single_selection_get_model (fontchooser->language_selection);
       n_items = g_list_model_get_n_items (model);
       lang_str = pango_language_to_string (language);
@@ -3055,8 +3058,26 @@ gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
                                       const char           *language)
 {
   PangoLanguage *lang;
+  char base_lang[10];
+  const char *lang_to_use = language;
 
-  lang = pango_language_from_string (language);
+  /* Normalize language to base language (e.g., "en-in" -> "en")
+   * since font language lists contain only base languages
+   */
+  if (language && strpbrk (language, "-_") != NULL)
+    {
+      const char *p = language;
+      size_t len = 0;
+
+      while (*p && *p != '-' && *p != '_' && len < sizeof(base_lang) - 1)
+        {
+          base_lang[len++] = *p++;
+        }
+      base_lang[len] = '\0';
+      lang_to_use = base_lang;
+    }
+
+  lang = pango_language_from_string (lang_to_use);
   if (fontchooser->language == lang)
     return;
 
@@ -3079,7 +3100,7 @@ gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
           if (obj)
             {
               const char *code = gtk_string_object_get_string (obj);
-              if (g_strcmp0 (code, language) == 0)
+              if (g_strcmp0 (code, lang_to_use) == 0)
                 {
                   gtk_single_selection_set_selected (fontchooser->language_selection, i);
                   g_object_unref (obj);
