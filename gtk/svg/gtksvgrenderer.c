@@ -82,8 +82,6 @@
 
 #include "gdk/gdkrgbaprivate.h"
 
-#undef DEBUG
-
 typedef enum
 {
   CLIPPING,

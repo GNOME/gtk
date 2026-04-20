@@ -23,8 +23,7 @@
 #include "gtksvgvalueprivate.h"
 #include "gtksvgelementinternal.h"
 #include "gtksvgtimespecprivate.h"
-
-#define dbg_print(cond,fmt,...)
+#include "gtksvgutilsprivate.h"
 
 CalcMode
 svg_animation_type_default_calc_mode (AnimationType type)
@@ -582,6 +581,7 @@ svg_animation_update_for_spec (SvgAnimation *animation,
 
   if (changed && animation->deps)
     {
+      dbg_print ("status", "Updating deps of %s", animation->id);
       for (unsigned int i = 0; i < animation->deps->len; i++)
         {
           SvgAnimation *dep = g_ptr_array_index (animation->deps, i);

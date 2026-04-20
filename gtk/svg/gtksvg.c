@@ -97,6 +97,10 @@
 
 #include "gdk/gdkrgbaprivate.h"
 
+#ifdef DEBUG
+extern int64_t time_base;
+#endif
+
 /**
  * GtkSvg:
  *

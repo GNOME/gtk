@@ -308,7 +308,7 @@ path_in_stroke (GskPath                *path,
   return gsk_path_get_closest_point (path, point, gsk_stroke_get_line_width (stroke) / 2, &p, &dist);
 }
 
-static int64_t time_base;
+int64_t time_base;
 
 const char *
 format_time_buf (char    *buf,
