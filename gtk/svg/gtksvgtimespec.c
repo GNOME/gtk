@@ -474,7 +474,7 @@ time_spec_print (TimeSpec *spec,
 {
   gboolean only_nonzero = FALSE;
   const char *sides[] = { "begin", "end" };
-  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave" };
+  const char *events[] = { "focus", "blur", "mouseenter", "mouseleave", "click" };
 
   switch (spec->type)
     {
