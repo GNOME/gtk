@@ -929,7 +929,7 @@ gtk_mnemonic_trigger_class_init (GtkMnemonicTriggerClass *klass)
    *
    * The key value for the trigger.
    */
-  mnemonic_props[KEYVAL_PROP_KEYVAL] =
+  mnemonic_props[MNEMONIC_PROP_KEYVAL] =
     g_param_spec_uint (I_("keyval"), NULL, NULL,
                        0, G_MAXINT,
                        0,
