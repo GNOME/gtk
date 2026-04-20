@@ -94,7 +94,7 @@ pq_eotf (float v[3])
     {
       float x = powf (fabsf (v[i]), minv);
       x = powf (MAX ((x - c1), 0) / (c2 - (c3 * x)), ninv);
-      v[i] = sign (v[i]) * x * 10000 / 203.0;
+      v[i] = sign (v[i]) * x;
     }
 }
 
@@ -109,8 +109,7 @@ pq_oetf (float v[3])
 
   for (int i = 0; i < 3; i++)
     {
-      float x = v[i] * 203.0 / 10000.0;
-      x = powf (fabsf (x), n);
+      float x = powf (fabsf (v[i]), n);
       v[i] = sign (v[i]) * powf (((c1 + (c2 * x)) / (1 + (c3 * x))), m);
     }
 }
@@ -161,7 +160,7 @@ hlg_eotf (float v[3])
     }
 
   float Ys = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
-  float scale = (1000.f / 203.f) * powf (MAX (Ys, 0.0f), 0.2f);
+  float scale = powf (MAX (Ys, 0.0f), 0.2f);
   v[0] *= scale;
   v[1] *= scale;
   v[2] *= scale;
@@ -177,8 +176,7 @@ hlg_oetf (float v[3])
   float Yd = 0.2627f * v[0] + 0.6780f * v[1] + 0.0593f * v[2];
   if (Yd > 0.0f)
     {
-      float scale = powf (203.f / 1000.f, 1.f / 1.2f)
-                   * powf (Yd, 1.f / 1.2f - 1.f);
+      float scale = powf (Yd, 1.f / 1.2f - 1.f);
       v[0] *= scale;
       v[1] *= scale;
       v[2] *= scale;
@@ -364,3 +362,178 @@ static const float bt2020_to_rgb[9] = {
  -0.571353,  1.000000, -0.164553,
  -0.000000,  1.000000,  1.881400,
 };
+
+static inline void
+multiply_vec (float       res[3],
+              const float m[9],
+              const float v[3])
+{
+  float tmp[3];
+  tmp[0] = m[0] * v[0] + m[1] * v[1] + m[2] * v[2];
+  tmp[1] = m[3] * v[0] + m[4] * v[1] + m[5] * v[2];
+  tmp[2] = m[6] * v[0] + m[7] * v[1] + m[8] * v[2];
+  res[0] = tmp[0];
+  res[1] = tmp[1];
+  res[2] = tmp[2];
+}
+
+typedef enum {
+  GDK_LUMINANCE_SDR,
+  GDK_LUMINANCE_PQ,
+  GDK_LUMINANCE_HLG,
+} GdkLuminance;
+
+static inline float
+max_nits (GdkLuminance luminance)
+{
+  switch (luminance)
+    {
+    case GDK_LUMINANCE_SDR: return 80.0f;
+    case GDK_LUMINANCE_PQ:  return 10000.0f;
+    case GDK_LUMINANCE_HLG: return 1000.0f;
+    default: g_assert_not_reached ();
+    }
+}
+
+static inline float
+ref_nits (GdkLuminance luminance)
+{
+  switch (luminance)
+    {
+    case GDK_LUMINANCE_SDR: return 80.0f;
+    case GDK_LUMINANCE_PQ:
+    case GDK_LUMINANCE_HLG: return 203.0f;
+    default: g_assert_not_reached ();
+    }
+}
+
+/* HPE LMS matrix with crosstalk 0.04 */
+/* Ref: https://professional.dolby.com/siteassets/pdfs/ictcp_dolbywhitepaper_v071.pdf */
+static const float xyz_to_lms[9] = {
+  0.3592833157,  0.6976050754, -0.0358915960,
+ -0.1920808171,  1.1004767415,  0.0753748831,
+  0.0070797916,  0.0748396541,  0.8433265123,
+};
+
+static const float lms_to_xyz[9] = {
+  2.0701520550, -1.3263472277,  0.2066510727,
+  0.3647384571,  0.6805661141, -0.0453045711,
+ -0.0497472147, -0.0492609565,  1.1880659712,
+};
+
+static const float lms_pq_to_ictcp[9] = {
+  0.5,             0.5,            0.0,
+  1.613525390625, -3.323486328125, 1.709716796875,
+  4.378173828125, -4.24560546875, -0.132568359375,
+};
+
+static const float ictcp_to_lms_pq[9] = {
+  1.0,                 0.008609037037933,    0.111029625003026,
+  1.0,                -0.008609037037933,   -0.111029625003026,
+  1.0,                 0.560031335710679,   -0.320627174987319,
+};
+
+static inline float
+pq_oetf_1f (float v)
+{
+  float n = 2610.0 / (1 << 14);
+  float m = 2523.0 / (1 << 5);
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  float x = powf (fabsf (v), n);
+  return sign (v) * powf (((c1 + (c2 * x)) / (1 + (c3 * x))), m);
+}
+
+static inline float
+pq_eotf_1f (float v)
+{
+  float ninv = (1 << 14) / 2610.0;
+  float minv = (1 << 5) / 2523.0;
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  float x = powf (fabsf (v), minv);
+  x = powf (MAX ((x - c1), 0) / (c2 - (c3 * x)), ninv);
+  return sign (v) * x;
+}
+
+/*
+ * ICtCp tone mapping.
+ *
+ * Converts to ICtCp via XYZ -> LMS -> PQ -> ICtCp,
+ * applies a smooth tone curve on the I (intensity) channel,
+ * and converts back. Preserves hue and chroma.
+ */
+static inline void
+ictcp_tone_map (float        v[3],
+                const float  to_xyz[9],
+                const float  from_xyz[9],
+                GdkLuminance from_lum,
+                GdkLuminance to_lum)
+{
+  float src_max = max_nits (from_lum);
+  float src_ref = ref_nits (from_lum);
+  float dst_max = max_nits (to_lum);
+  float dst_ref = ref_nits (to_lum);
+
+  float headroom = dst_max / dst_ref;
+  float tm_ref = headroom >= 1.5f ? dst_ref : dst_max / 1.5f;
+
+  float lms[3], ictcp[3];
+
+  /* Forward: linear RGB -> XYZ -> LMS -> PQ -> ICtCp */
+  multiply_vec (lms, to_xyz, v);
+  multiply_vec (lms, xyz_to_lms, lms);
+  pq_oetf (lms);
+  multiply_vec (ictcp, lms_pq_to_ictcp, lms);
+
+  /* Tone curve on I in absolute nits */
+  float lum = pq_eotf_1f (ictcp[0]) * src_max;
+
+  if (lum < src_ref)
+    lum *= tm_ref / src_ref;
+  else
+    {
+      float ratio = (lum - src_ref) / (src_max - src_ref);
+      lum = tm_ref + (dst_max - tm_ref) * 5.0f * ratio / (4.0f * ratio + 1.0f);
+    }
+
+  ictcp[0] = pq_oetf_1f (lum / dst_max);
+
+  /* Reverse: ICtCp -> PQ -> LMS -> XYZ -> linear RGB */
+  multiply_vec (lms, ictcp_to_lms_pq, ictcp);
+  pq_eotf (lms);
+  multiply_vec (v, lms_to_xyz, lms);
+  multiply_vec (v, from_xyz, v);
+}
+
+static inline void
+linear_tone_map (float        v[3],
+                 GdkLuminance from_lum,
+                 GdkLuminance to_lum)
+{
+  float s = (max_nits (from_lum) / ref_nits (from_lum))
+          * (ref_nits (to_lum) / max_nits (to_lum));
+  v[0] *= s;
+  v[1] *= s;
+  v[2] *= s;
+}
+
+static inline void
+apply_tone_map (float        v[3],
+                const float  to_xyz[9],
+                const float  from_xyz[9],
+                GdkLuminance from_lum,
+                GdkLuminance to_lum)
+{
+  if (from_lum == to_lum)
+    return;
+
+  if (max_nits (from_lum) > max_nits (to_lum))
+    ictcp_tone_map (v, to_xyz, from_xyz, from_lum, to_lum);
+  else
+    linear_tone_map (v, from_lum, to_lum);
+}

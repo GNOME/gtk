@@ -298,13 +298,15 @@ gdk_convert_ ## name (GdkColorState  *self, \
     } \
 }
 
-#define TRANSFORM(name, eotf, matrix, nonlinear, matrix2, oetf) \
+#define TRANSFORM(name, eotf, from_lum, to_lum, matrix, nonlinear, matrix2, oetf) \
 static inline void \
 name (GdkColorState  *self, \
       float           values[4]) \
 { \
   if (eotf != NONE) \
     eotf (values); \
+  if (from_lum != to_lum) \
+    linear_tone_map (values, from_lum, to_lum); \
   if (matrix != IDENTITY) \
     { \
       float res[3]; \
@@ -342,27 +344,63 @@ name (GdkColorState *self, \
 } \
 CONVERT_FUNC (name)
 
-TRANSFORM(srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE, IDENTITY, NONE)
-TRANSFORM(srgb_linear_to_srgb,           NONE,      IDENTITY,        NONE, IDENTITY, srgb_oetf)
-TRANSFORM(rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE, IDENTITY, NONE)
-TRANSFORM(rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        NONE, IDENTITY, pq_oetf)
-TRANSFORM(srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE, IDENTITY, NONE)
-TRANSFORM(rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE, IDENTITY, NONE)
-TRANSFORM(srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE, IDENTITY, NONE)
-TRANSFORM(rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE, IDENTITY, NONE)
-TRANSFORM(srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
-TRANSFORM(rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
-TRANSFORM(srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
-TRANSFORM(rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
+TRANSFORM(srgb_to_srgb_linear,           srgb_eotf, GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, IDENTITY,        NONE, IDENTITY, NONE)
+TRANSFORM(srgb_linear_to_srgb,           NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, IDENTITY,        NONE, IDENTITY, srgb_oetf)
+TRANSFORM(rec2100_pq_to_rec2100_linear,  pq_eotf,   GDK_LUMINANCE_PQ,  GDK_LUMINANCE_PQ,  IDENTITY,        NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_linear_to_rec2100_pq,  NONE,      GDK_LUMINANCE_PQ,  GDK_LUMINANCE_PQ,  IDENTITY,        NONE, IDENTITY, pq_oetf)
+TRANSFORM(srgb_linear_to_rec2100_linear, NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  srgb_to_rec2020, NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_linear_to_srgb_linear, NONE,      GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_srgb, NONE, IDENTITY, NONE)
+TRANSFORM(srgb_to_rec2100_linear,        srgb_eotf, GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  srgb_to_rec2020, NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_pq_to_srgb_linear,     pq_eotf,   GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_srgb, NONE, IDENTITY, NONE)
+TRANSFORM(srgb_linear_to_rec2100_pq,     NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
+TRANSFORM(rec2100_linear_to_srgb,        NONE,      GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
+TRANSFORM(srgb_to_rec2100_pq,            srgb_eotf, GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
+TRANSFORM(rec2100_pq_to_srgb,            pq_eotf,   GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
 
-TRANSFORM(oklab_to_srgb_linear,          NONE,      oklab_to_lms,    from_oklab_nl, lms_to_srgb,    NONE)
-TRANSFORM(oklab_to_srgb,                 NONE,      oklab_to_lms,    from_oklab_nl, lms_to_srgb,    srgb_oetf)
-TRANSFORM(oklab_to_rec2100_linear,       NONE,      oklab_to_lms,    from_oklab_nl, lms_to_rec2020, NONE)
-TRANSFORM(oklab_to_rec2100_pq,           NONE,      oklab_to_lms,    from_oklab_nl, lms_to_rec2020, pq_oetf)
-TRANSFORM(srgb_linear_to_oklab,          NONE,      srgb_to_lms,     to_oklab_nl,   lms_to_oklab,   NONE)
-TRANSFORM(srgb_to_oklab,                 srgb_eotf, srgb_to_lms,     to_oklab_nl,   lms_to_oklab,   NONE)
-TRANSFORM(rec2100_linear_to_oklab,       NONE,      rec2020_to_lms,  to_oklab_nl,   lms_to_oklab,   NONE)
-TRANSFORM(rec2100_pq_to_oklab,           pq_eotf,   rec2020_to_lms,  to_oklab_nl,   lms_to_oklab,   NONE)
+#define TRANSFORM_OKLAB(name, eotf, from_lum, to_lum, matrix, nonlinear, matrix2, oetf) \
+static inline void \
+name (GdkColorState  *self, \
+      float           values[4]) \
+{ \
+  if (eotf != NONE) \
+    eotf (values); \
+  if (from_lum != to_lum) \
+    linear_tone_map (values, from_lum, to_lum); \
+  if (matrix != IDENTITY) \
+    { \
+      float res[3]; \
+      res[0] = matrix[0] * values[0] + matrix[1] * values[1] + matrix[2] * values[2]; \
+      res[1] = matrix[3] * values[0] + matrix[4] * values[1] + matrix[5] * values[2]; \
+      res[2] = matrix[6] * values[0] + matrix[7] * values[1] + matrix[8] * values[2]; \
+      values[0] = res[0]; \
+      values[1] = res[1]; \
+      values[2] = res[2]; \
+    } \
+  if (nonlinear != NONE) \
+    nonlinear (values); \
+  if (matrix2 != IDENTITY) \
+    { \
+      float res[3]; \
+      res[0] = matrix2[0] * values[0] + matrix2[1] * values[1] + matrix2[2] * values[2]; \
+      res[1] = matrix2[3] * values[0] + matrix2[4] * values[1] + matrix2[5] * values[2]; \
+      res[2] = matrix2[6] * values[0] + matrix2[7] * values[1] + matrix2[8] * values[2]; \
+      values[0] = res[0]; \
+      values[1] = res[1]; \
+      values[2] = res[2]; \
+    } \
+  if (oetf != NONE) \
+    oetf (values); \
+} \
+CONVERT_FUNC (name)
+
+TRANSFORM_OKLAB(oklab_to_srgb_linear,    NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, oklab_to_lms,   from_oklab_nl, lms_to_srgb,    NONE)
+TRANSFORM_OKLAB(oklab_to_srgb,           NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, oklab_to_lms,   from_oklab_nl, lms_to_srgb,    srgb_oetf)
+TRANSFORM_OKLAB(oklab_to_rec2100_linear, NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  oklab_to_lms,   from_oklab_nl, lms_to_rec2020, NONE)
+TRANSFORM_OKLAB(oklab_to_rec2100_pq,     NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_PQ,  oklab_to_lms,   from_oklab_nl, lms_to_rec2020, pq_oetf)
+TRANSFORM_OKLAB(srgb_linear_to_oklab,    NONE,      GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, srgb_to_lms,    to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM_OKLAB(srgb_to_oklab,           srgb_eotf, GDK_LUMINANCE_SDR, GDK_LUMINANCE_SDR, srgb_to_lms,    to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM_OKLAB(rec2100_linear_to_oklab, NONE,      GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_lms, to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM_OKLAB(rec2100_pq_to_oklab,     pq_eotf,   GDK_LUMINANCE_PQ,  GDK_LUMINANCE_SDR, rec2020_to_lms, to_oklab_nl,   lms_to_oklab,   NONE)
 
 #define DEG_TO_RAD(x) ((x) * G_PI / 180)
 #define RAD_TO_DEG(x) ((x) * 180 / G_PI)
@@ -735,6 +773,9 @@ struct _GdkCicpColorState
   float from_srgb[9];
   float from_rec2020[9];
 
+  const float *to_xyz;
+  const float *from_xyz;
+
   const float *from_yuv;
   const float *to_yuv;
 
@@ -743,7 +784,18 @@ struct _GdkCicpColorState
 
 /* {{{ Conversion functions */
 
-#define TRANSFORM_FROM_CICP(name, matrix, oetf) \
+static inline GdkLuminance
+luminance_from_cicp_tf (guint transfer_function)
+{
+  switch (transfer_function)
+    {
+    case 16: return GDK_LUMINANCE_PQ;
+    case 18: return GDK_LUMINANCE_HLG;
+    default: return GDK_LUMINANCE_SDR;
+    }
+}
+
+#define TRANSFORM_FROM_CICP(name, matrix, oetf, to_lum) \
 static void \
 name (GdkColorState  *color_state, \
       float         (*values)[4], \
@@ -751,16 +803,19 @@ name (GdkColorState  *color_state, \
 { \
   GdkCicpColorState *self = (GdkCicpColorState *) color_state; \
 \
-  transform_from_cicp (self, oetf, self->matrix, values, n_values); \
+  transform_from_cicp (self, oetf, self->matrix, to_lum, values, n_values); \
 }
 
 static void
 transform_from_cicp (GdkCicpColorState *self,
                      GdkTransferFunc    oetf,
                      float              matrix[9],
+                     GdkLuminance       to_lum,
                      float            (*values)[4],
                      gsize              n_values)
 {
+  GdkLuminance from_lum = luminance_from_cicp_tf (self->cicp.transfer_function);
+
   for (gsize i = 0; i < n_values; i++)
     {
       if (self->cicp.range == GDK_CICP_RANGE_NARROW)
@@ -783,6 +838,7 @@ transform_from_cicp (GdkCicpColorState *self,
         }
       if (self->eotf != NONE)
         self->eotf (values[i]);
+      apply_tone_map (values[i], self->to_xyz, self->from_xyz, from_lum, to_lum);
       if (matrix != IDENTITY)
         {
           float res[3];
@@ -798,7 +854,7 @@ transform_from_cicp (GdkCicpColorState *self,
     }
 }
 
-#define TRANSFORM_TO_CICP(name, eotf, matrix) \
+#define TRANSFORM_TO_CICP(name, eotf, matrix, to_xyz, from_xyz, from_lum) \
 static void \
 name (GdkColorState  *color_state, \
       float         (*values)[4], \
@@ -806,20 +862,26 @@ name (GdkColorState  *color_state, \
 { \
   GdkCicpColorState *self = (GdkCicpColorState *) color_state; \
 \
-  transform_to_cicp (self, eotf, self->matrix, values, n_values); \
+  transform_to_cicp (self, eotf, self->matrix, to_xyz, from_xyz, from_lum, values, n_values); \
 }
 
 static void
 transform_to_cicp (GdkCicpColorState *self,
                    GdkTransferFunc    eotf,
                    float              matrix[9],
+                   const float       *to_xyz,
+                   const float       *from_xyz,
+                   GdkLuminance       from_lum,
                    float            (*values)[4],
                    gsize              n_values)
 {
+  GdkLuminance to_lum = luminance_from_cicp_tf (self->cicp.transfer_function);
+
   for (gsize i = 0; i < n_values; i++)
     {
       if (eotf != NONE)
         eotf (values[i]);
+      apply_tone_map (values[i], to_xyz, from_xyz, from_lum, to_lum);
       if (matrix != IDENTITY)
         {
           float res[3];
@@ -861,15 +923,15 @@ transform_to_cicp (GdkCicpColorState *self,
     }
 }
 
-TRANSFORM_FROM_CICP(gdk_convert_cicp_to_srgb,           to_srgb,      srgb_oetf)
-TRANSFORM_FROM_CICP(gdk_convert_cicp_to_srgb_linear,    to_srgb,      NONE)
-TRANSFORM_FROM_CICP(gdk_convert_cicp_to_rec2100_pq,     to_rec2020,   pq_oetf)
-TRANSFORM_FROM_CICP(gdk_convert_cicp_to_rec2100_linear, to_rec2020,   NONE)
+TRANSFORM_FROM_CICP(gdk_convert_cicp_to_srgb,           to_srgb,    srgb_oetf, GDK_LUMINANCE_SDR)
+TRANSFORM_FROM_CICP(gdk_convert_cicp_to_srgb_linear,    to_srgb,    NONE,      GDK_LUMINANCE_SDR)
+TRANSFORM_FROM_CICP(gdk_convert_cicp_to_rec2100_pq,     to_rec2020, pq_oetf,   GDK_LUMINANCE_PQ)
+TRANSFORM_FROM_CICP(gdk_convert_cicp_to_rec2100_linear, to_rec2020, NONE,      GDK_LUMINANCE_PQ)
 
-TRANSFORM_TO_CICP(gdk_convert_cicp_from_srgb,           srgb_eotf,   from_srgb)
-TRANSFORM_TO_CICP(gdk_convert_cicp_from_srgb_linear,    NONE,        from_srgb)
-TRANSFORM_TO_CICP(gdk_convert_cicp_from_rec2100_pq,     pq_eotf,     from_rec2020)
-TRANSFORM_TO_CICP(gdk_convert_cicp_from_rec2100_linear, NONE,        from_rec2020)
+TRANSFORM_TO_CICP(gdk_convert_cicp_from_srgb,           srgb_eotf, from_srgb,    srgb_to_xyz,    xyz_to_srgb,    GDK_LUMINANCE_SDR)
+TRANSFORM_TO_CICP(gdk_convert_cicp_from_srgb_linear,    NONE,      from_srgb,    srgb_to_xyz,    xyz_to_srgb,    GDK_LUMINANCE_SDR)
+TRANSFORM_TO_CICP(gdk_convert_cicp_from_rec2100_pq,     pq_eotf,   from_rec2020, rec2020_to_xyz, xyz_to_rec2020, GDK_LUMINANCE_PQ)
+TRANSFORM_TO_CICP(gdk_convert_cicp_from_rec2100_linear, NONE,      from_rec2020, rec2020_to_xyz, xyz_to_rec2020, GDK_LUMINANCE_PQ)
 
 /* }}} */
 /* {{{ Vfuncs */
@@ -1145,6 +1207,9 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   self->to_yuv = to_yuv;
   self->from_yuv = from_yuv;
+
+  self->to_xyz = to_xyz;
+  self->from_xyz = from_xyz;
 
   self->eotf = eotf;
   self->oetf = oetf;
