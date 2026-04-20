@@ -173,7 +173,6 @@ enum
   PROP_0,
 
   PROP_FILENAME,
-  PROP_LIMIT,
   PROP_SIZE
 };
 
