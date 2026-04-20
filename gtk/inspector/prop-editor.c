@@ -31,6 +31,7 @@
 #include "deprecated/gtkiconview.h"
 #include "deprecated/gtktreeview.h"
 #include "gtkcolordialogbutton.h"
+#include "gtkcolorswatchprivate.h"
 #include "gtkfontdialogbutton.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
@@ -215,6 +216,85 @@ static void
 notify_property (GObject *object, GParamSpec *pspec)
 {
   g_object_notify (object, pspec->name);
+}
+
+static void
+rgba_ro_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (data);
+  GValue val = G_VALUE_INIT;
+  GdkRGBA *color;
+
+  g_value_init (&val, GDK_TYPE_RGBA);
+  get_property_value (object, pspec, &val);
+
+  color = g_value_get_boxed (&val);
+
+  if (color != NULL)
+    gtk_color_swatch_set_rgba (swatch, color);
+
+ g_value_unset (&val);
+}
+
+static void
+readonly_fallback_changed (GObject    *object,
+                           GParamSpec *spec,
+                           gpointer    data)
+{
+  GValue gvalue = {0};
+  char *value;
+  char *type;
+
+  g_value_init (&gvalue, spec->value_type);
+  g_object_get_property (object, spec->name, &gvalue);
+  strdup_value_contents (&gvalue, &value, &type);
+
+  gtk_label_set_label (GTK_LABEL (data), value);
+
+  g_value_unset (&gvalue);
+  g_free (value);
+  g_free (type);
+}
+
+static GtkWidget *
+property_viewer (GObject                *object,
+                 GParamSpec             *spec,
+                 GtkInspectorPropEditor *self)
+{
+  GtkWidget *prop_view;
+  GType type = G_PARAM_SPEC_TYPE (spec);
+
+  if (type == G_TYPE_PARAM_BOXED &&
+      G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
+    {
+      prop_view = g_object_new (GTK_TYPE_COLOR_SWATCH,
+                                "accessible-role", GTK_ACCESSIBLE_ROLE_IMG,
+                                "selectable", FALSE,
+                                "has-menu", FALSE,
+                                "can-drag", FALSE,
+                                NULL);
+
+      rgba_ro_changed (object, spec, prop_view);
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (rgba_ro_changed),
+                                 prop_view, G_OBJECT (prop_view));
+    }
+  else
+    {
+      prop_view = gtk_label_new ("");
+      gtk_label_set_ellipsize (GTK_LABEL (prop_view), PANGO_ELLIPSIZE_END);
+      gtk_label_set_max_width_chars (GTK_LABEL (prop_view), 20);
+      gtk_label_set_xalign (GTK_LABEL (prop_view), 0.0);
+      gtk_widget_set_hexpand (prop_view, TRUE);
+      gtk_widget_set_halign (prop_view, GTK_ALIGN_FILL);
+
+      readonly_fallback_changed (object, spec, prop_view);
+      g_object_connect_property (self->object, spec,
+                                 G_CALLBACK (readonly_fallback_changed),
+                                 prop_view, G_OBJECT (prop_view));
+    }
+
+  return prop_view;
 }
 
 static void
@@ -1706,26 +1786,6 @@ add_gtk_settings_info (GtkInspectorPropEditor *self)
 }
 
 static void
-readonly_changed (GObject    *object,
-                  GParamSpec *spec,
-                  gpointer    data)
-{
-  GValue gvalue = {0};
-  char *value;
-  char *type;
-
-  g_value_init (&gvalue, spec->value_type);
-  g_object_get_property (object, spec->name, &gvalue);
-  strdup_value_contents (&gvalue, &value, &type);
-
-  gtk_label_set_label (GTK_LABEL (data), value);
-
-  g_value_unset (&gvalue);
-  g_free (value);
-  g_free (type);
-}
-
-static void
 constructed (GObject *object)
 {
   GtkInspectorPropEditor *self = GTK_INSPECTOR_PROP_EDITOR (object);
@@ -1763,18 +1823,8 @@ constructed (GObject *object)
 
   if (!can_modify)
     {
-      label = gtk_label_new ("");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_label_set_max_width_chars (GTK_LABEL (label), 20);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_widget_set_hexpand (label, TRUE);
-      gtk_widget_set_halign (label, GTK_ALIGN_FILL);
-      gtk_box_append (GTK_BOX (box), label);
-
-      readonly_changed (self->object, spec, label);
-      g_object_connect_property (self->object, spec,
-                                 G_CALLBACK (readonly_changed),
-                                 label, G_OBJECT (label));
+      self->self = property_viewer (self->object, spec, self);
+      gtk_box_append (GTK_BOX (box), self->self);
 
       if (self->size_group)
         gtk_size_group_add_widget (self->size_group, box);
