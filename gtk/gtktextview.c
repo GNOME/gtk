@@ -6008,11 +6008,20 @@ gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
   GtkTextViewPrivate *priv = text_view->priv;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
+  GdkDisplay *display;
+  GdkDevice *source;
+  gboolean is_touchscreen;
 
   buffer = get_buffer (text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
 
-  if (gtk_text_iter_compare (&start, &end) == 0 &&
+  display = gtk_widget_get_display (GTK_WIDGET (text_view));
+  source = gdk_event_get_device (event);
+  is_touchscreen = GTK_DISPLAY_DEBUG_CHECK (display, TOUCHSCREEN) ||
+                   gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+
+  if (is_touchscreen &&
+      gtk_text_iter_compare (&start, &end) == 0 &&
       gtk_text_iter_can_insert (&start, priv->editable))
     gtk_im_context_activate_osk (priv->im_context, event);
 }
