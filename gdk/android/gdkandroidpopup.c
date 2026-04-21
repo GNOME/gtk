@@ -72,7 +72,9 @@ gdk_android_popup_present (GdkPopup       *popup,
                                    NULL,
                                    &bounds,
                                    self->layout,
+                                   GDK_SURFACE_LAYOUT_POPUP_HELPER_DEFAULT,
                                    &self->popup_bounds);
+
   JNIEnv *env = gdk_android_get_env ();
   if (!surface_impl->surface)
     {

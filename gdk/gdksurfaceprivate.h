@@ -182,17 +182,24 @@ GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                              void           (*get_bounds) (GdkMonitor   *monitor,
                                                                            GdkRectangle *bounds));
 
-void gdk_surface_layout_popup_helper (GdkSurface     *surface,
-                                      int             width,
-                                      int             height,
-                                      int             shadow_left,
-                                      int             shadow_right,
-                                      int             shadow_top,
-                                      int             shadow_bottom,
-                                      GdkMonitor     *monitor,
-                                      GdkRectangle   *bounds,
-                                      GdkPopupLayout *layout,
-                                      GdkRectangle   *out_final_rect);
+typedef enum
+{
+  GDK_SURFACE_LAYOUT_POPUP_HELPER_DEFAULT  = 0,
+  GDK_SURFACE_LAYOUT_POPUP_HELPER_ROOT_OUT = 1 << 0,
+} GdkSurfaceLayoutPopupHelperFlags;
+
+void gdk_surface_layout_popup_helper (GdkSurface                       *surface,
+                                      int                               width,
+                                      int                               height,
+                                      int                               shadow_left,
+                                      int                               shadow_right,
+                                      int                               shadow_top,
+                                      int                               shadow_bottom,
+                                      GdkMonitor                       *monitor,
+                                      GdkRectangle                     *bounds,
+                                      GdkPopupLayout                   *layout,
+                                      GdkSurfaceLayoutPopupHelperFlags  flags,
+                                      GdkRectangle                     *out_final_rect);
 
 static inline GdkGravity
 gdk_gravity_flip_horizontally (GdkGravity anchor)
