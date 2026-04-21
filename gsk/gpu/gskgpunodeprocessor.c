@@ -3605,12 +3605,6 @@ gsk_gpu_node_processor_add_node_untracked (GskGpuRenderPass *self,
 {
   GskRenderNodeType node_type;
 
-  /* This catches the corner cases of empty nodes, so after this check
-   * there's quaranteed to be at least 1 pixel that needs to be drawn
-   */
-  if (node->bounds.size.width == 0 || node->bounds.size.height == 0)
-    return;
-
   if (!gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, &node->bounds))
     return;
 
