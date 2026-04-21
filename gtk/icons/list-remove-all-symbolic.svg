@@ -1,10 +1,10 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0">
-  <path id="path0" fill="none" stroke="url(&quot;#gpa:foreground&quot;) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 12 10 L 15 10 M 4 11 L 6 11 M 9 7 L 1 7 L 1 15 L 9 15 Z M 12 13 L 15 13 M 12 7 L 15 7 M 1 4 L 15 4 M 1 1 L 15 1" class="transparent-fill foreground-stroke" gpa:stroke-width="0.5 2 3" gpa:stroke="foreground" gpa:fill="none">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0" gpa:state-names="outline empty">
+  <path id="path0" fill="none" stroke="url(&quot;#gpa:foreground&quot;) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 12 10 L 15 10 M 4 11 L 6 11 M 9 7 L 1 7 L 1 15 L 9 15 Z M 12 13 L 15 13 M 12 7 L 15 7 M 1 4 L 15 4 M 1 1 L 15 1" class="transparent-fill foreground-stroke" gpa:stroke-width="0.5 2 3" gpa:stroke="foreground" gpa:fill="none" gpa:states="outline">
     </path>
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>list-remove-all remove item list</rdf:li>

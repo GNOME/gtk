@@ -1,25 +1,26 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="1">
-  <path id="path0" fill="none" stroke="url(&quot;#gpa:foreground&quot;) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z" class="transparent-fill foreground-stroke" gpa:stroke-width="0.5 2 3" gpa:stroke="foreground" gpa:fill="none" gpa:states="0">
-    </path>
-  <path id="path1" fill="url(&quot;#gpa:foreground&quot;) rgb(0,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z" class="foreground foreground-fill" gpa:states="1" gpa:fill="foreground">
-    </path>
-  <path id="path1" fill="url(&quot;#gpa:error&quot;) rgb(204,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137083, 4.68629169 14, 8 14 C 11.3137083 14, 14 11.3137083, 14 8 C 14 4.68629169, 11.3137083 2, 8 2 C 4.68629169 2, 2 4.68629169, 2 8 Z" class="error error-fill" gpa:states="2" gpa:fill="error">
-    </path>
-  <metadata>
+<?xml version='1.0' encoding='utf-8'?>
+<svg:svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" gpa:version="1" gpa:state-names="outline filled color empty" gpa:state="0" width="16" height="16">
+  <svg:metadata>
     <rdf:RDF>
       <cc:Work>
         <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>media-record rec playback redmeansrecording</rdf:li>
-          </rdf:Bag>
-        </dc:subject>
         <dc:creator>
           <cc:Agent>
             <dc:title>Jakub Steiner</dc:title>
           </cc:Agent>
         </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>media-record rec playback redmeansrecording</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
       </cc:Work>
     </rdf:RDF>
-  </metadata>
-</svg>
+  </svg:metadata>
+  <svg:path id="outline" fill="none" stroke="rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" gpa:stroke-minwidth="0.5" gpa:stroke-maxwidth="3" class="transparent-fill foreground-stroke" gpa:states="outline" gpa:stroke="foreground">
+  </svg:path>
+  <svg:path id="filled" visibility="hidden" fill="rgb(0,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" class="foreground foreground-fill" gpa:states="filled" gpa:fill="foreground">
+  </svg:path>
+  <svg:path id="color" visibility="hidden" fill="rgb(204,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" class="error error-fill" gpa:states="color" gpa:fill="error">
+  </svg:path>
+</svg:svg>

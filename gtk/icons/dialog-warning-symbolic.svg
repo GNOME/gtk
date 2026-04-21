@@ -1,8 +1,8 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16" gpa:state-names="outline empty">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>dialog wanrning explamation mark</rdf:li>
@@ -16,10 +16,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="path0" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 5.65291 2.4334 L 1.34709 10.5666 C 0.851478 11.5028, 0.882517 12.6301, 1.42889 13.5376 C 1.97526 14.4451, 2.9571 15, 4.01636 15 L 11.9836 15 C 13.0429 15, 14.0247 14.4451, 14.5711 13.5376 C 15.1175 12.6301, 15.1485 11.5028, 14.6529 10.5666 L 10.3471 2.4334 C 9.88683 1.56401, 8.9837 1.02026, 8 1.02026 C 7.0163 1.02026, 6.11317 1.56401, 5.65291 2.4334 Z" class="transparent-fill foreground-stroke" gpa:stroke="foreground" gpa:states="0">
+  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 5.65291 2.4334 L 1.34709 10.5666 C 0.851478 11.5028, 0.882517 12.6301, 1.42889 13.5376 C 1.97526 14.4451, 2.9571 15, 4.01636 15 L 11.9836 15 C 13.0429 15, 14.0247 14.4451, 14.5711 13.5376 C 15.1175 12.6301, 15.1485 11.5028, 14.6529 10.5666 L 10.3471 2.4334 C 9.88683 1.56401, 8.9837 1.02026, 8 1.02026 C 7.0163 1.02026, 6.11317 1.56401, 5.65291 2.4334 Z" class="transparent-fill foreground-stroke" gpa:states="outline">
   </path>
-  <path id="path1" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 8 5 L 8 9" class="transparent-fill foreground-stroke" gpa:stroke="foreground" gpa:states="0">
+  <path id="path1" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 8 5 L 8 9" class="transparent-fill foreground-stroke" gpa:states="outline">
   </path>
-  <path id="path2" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 7.97656 12 L 8.05859 12" class="transparent-fill foreground-stroke" gpa:stroke="foreground" gpa:states="0">
+  <path id="path2" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 7.97656 12 L 8.05859 12" class="transparent-fill foreground-stroke" gpa:states="outline">
   </path>
 </svg>
