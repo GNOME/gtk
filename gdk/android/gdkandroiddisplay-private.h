@@ -43,6 +43,8 @@ struct _GdkAndroidDisplay
   GHashTable *drags;
 
   GdkAndroidDisplayNightMode night_mode;
+  guint32 accent_color;
+  GdkRGBA accent_color_rgba;
 
   GSource *choreographer_source;
   GList   *visible_surfaces;
@@ -62,6 +64,6 @@ GdkAndroidSurface *gdk_android_display_get_surface_from_identifier (GdkAndroidDi
 // surface: transfers none
 void gdk_android_display_add_surface (GdkAndroidDisplay *self, GdkAndroidSurface *surface);
 
-void gdk_android_display_update_night_mode (GdkAndroidDisplay *self, jobject context);
+void gdk_android_display_update_configuration (GdkAndroidDisplay *self, jobject context);
 
 G_END_DECLS

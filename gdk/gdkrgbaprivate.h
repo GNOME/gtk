@@ -36,6 +36,16 @@
 
 #define GDK_RGBA_INIT_ALPHA(rgba,opacity) ((GdkRGBA) { (rgba)->red, (rgba)->green, (rgba)->blue, (rgba)->alpha * (opacity) })
 
+static inline gfloat
+_gdk_rgba_component_from_int (guint32 color, guint offset)
+{
+  return ((color >> offset) & 0xFF) / 255.f;
+}
+#define GDK_RGBA_INIT_FROM_INT(color) ((GdkRGBA) { _gdk_rgba_component_from_int((color), 16), \
+                                                   _gdk_rgba_component_from_int((color),  8), \
+                                                   _gdk_rgba_component_from_int((color),  0), \
+                                                   _gdk_rgba_component_from_int((color), 24) })
+
 #define GDK_RGBA_TRANSPARENT ((GdkRGBA) { 0, 0, 0, 0 })
 #define GDK_RGBA_BLACK ((GdkRGBA) { 0, 0, 0, 1 })
 #define GDK_RGBA_WHITE ((GdkRGBA) { 1, 1, 1, 1 })
