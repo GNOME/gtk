@@ -72,7 +72,7 @@ gdk_android_popup_present (GdkPopup       *popup,
                                    NULL,
                                    &bounds,
                                    self->layout,
-                                   GDK_SURFACE_LAYOUT_POPUP_HELPER_DEFAULT,
+                                   GDK_SURFACE_LAYOUT_POPUP_HELPER_ROOT_OUT,
                                    &self->popup_bounds);
 
   JNIEnv *env = gdk_android_get_env ();
@@ -114,13 +114,15 @@ gdk_android_popup_get_rect_anchor (GdkPopup *popup)
 static int
 gdk_android_popup_get_position_x (GdkPopup *popup)
 {
-  return GDK_SURFACE (popup)->x;
+  GdkSurface *surface = (GdkSurface *)popup;
+  return surface->x - (surface->parent ? surface->parent->x : 0);
 }
 
 static int
 gdk_android_popup_get_position_y (GdkPopup *popup)
 {
-  return GDK_SURFACE (popup)->y;
+  GdkSurface *surface = (GdkSurface *)popup;
+  return surface->y - (surface->parent ? surface->parent->y : 0);
 }
 
 static void
