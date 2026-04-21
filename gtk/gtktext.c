@@ -3142,9 +3142,18 @@ gtk_text_click_gesture_released (GtkGestureClick *gesture,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkEvent *event =
     gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
+  GdkDisplay *display;
+  GdkDevice *source;
+  gboolean is_touchscreen;
+
+  display = gtk_widget_get_display (GTK_WIDGET (self));
+  source = gdk_event_get_device (event);
+  is_touchscreen = GTK_DISPLAY_DEBUG_CHECK (display, TOUCHSCREEN) ||
+                   gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
   if (n_press == 1 &&
       !priv->in_drag &&
+      is_touchscreen &&
       priv->current_pos == priv->selection_bound)
     gtk_im_context_activate_osk (priv->im_context, event);
 }
