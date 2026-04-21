@@ -33,6 +33,7 @@ test_data = [
   'paths.test',
   'paths2.test',
   'priority.test',
+  'priority2.test',
   'states.test',
   'symbolics.test',
   'transform-animation.test',

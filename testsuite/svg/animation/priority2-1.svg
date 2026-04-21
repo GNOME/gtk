@@ -1,0 +1,55 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='1000ms'
+        font-size='13.333'
+        font-weight='400'
+        width='0px'
+        height='0px'
+        viewBox='0 0 480 360'>
+  <desc>
+    Test that !important styles override animations.
+  </desc>
+  <style type='text/css'>
+    rect.imp { fill: blue !important; }
+    rect { fill: blue; }
+  </style>
+  <rect
+          class='imp'
+          font-size='13.333'
+          font-weight='400'
+          fill='rgb(0,0,255)'
+          width='480px'
+          height='180px'>
+    <animate
+            attributeName='fill'
+            begin='0ms'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,0); rgb(0,128,0); rgb(255,0,0)'
+            keyTimes='0; 0.5; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'/>
+  </rect>
+  <rect
+          font-size='13.333'
+          font-weight='400'
+          fill='rgb(0,128,0)'
+          y='180px'
+          width='480px'
+          height='180px'>
+    <animate
+            attributeName='fill'
+            begin='0ms'
+            dur='2000ms'
+            repeatCount='indefinite'
+            values='rgb(255,0,0); rgb(0,128,0); rgb(255,0,0)'
+            keyTimes='0; 0.5; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'/>
+  </rect>
+</svg>

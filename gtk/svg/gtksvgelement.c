@@ -147,6 +147,7 @@ svg_element_new (SvgElement     *parent,
   element->lang_strings = array_new_with_clear_func (sizeof (LangString), (GDestroyNotify) lang_string_clear);
 
   element->attrs = _gtk_bitmask_new ();
+  element->important = _gtk_bitmask_new ();
 
   element->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
 
@@ -1017,10 +1018,16 @@ svg_element_add_animation (SvgElement   *shape,
   g_ptr_array_add (shape->animations, animation);
 }
 
+/* What we call base value here is roughly the 'cascaded' value of CSS:
+ * the result of applying styles. We carry an 'important' booleant to
+ * indicate whether the applies styles was !important.
+ * Values that are important have higher priority than animations.
+ */
 void
 svg_element_set_base_value (SvgElement  *element,
                             SvgProperty  attr,
-                            SvgValue    *value)
+                            SvgValue    *value,
+                            gboolean     important)
 {
   g_clear_pointer (&element->base[attr], svg_value_unref);
   if (value)
@@ -1029,6 +1036,7 @@ svg_element_set_base_value (SvgElement  *element,
     element->base[attr] = svg_property_ref_initial_value (attr,
                                                           svg_element_get_type (element),
                                                           svg_element_get_parent (element) != NULL);
+  element->important = _gtk_bitmask_set (element->important, attr, important);
 }
 
 void
@@ -1036,7 +1044,7 @@ svg_element_take_base_value (SvgElement  *element,
                              SvgProperty  attr,
                              SvgValue    *value)
 {
-  svg_element_set_base_value (element, attr, value);
+  svg_element_set_base_value (element, attr, value, FALSE);
   if (value)
     svg_value_unref (value);
 }
@@ -1117,6 +1125,13 @@ svg_element_is_specified (SvgElement  *element,
                           SvgProperty  attr)
 {
   return _gtk_bitmask_get (element->attrs, attr);
+}
+
+gboolean
+svg_element_is_important (SvgElement  *element,
+                          SvgProperty  attr)
+{
+  return _gtk_bitmask_get (element->important, attr);
 }
 
 void
@@ -1660,6 +1675,7 @@ svg_element_duplicate (SvgElement *element,
   copy->type = element->type;
   copy->parent = parent;
   copy->attrs = _gtk_bitmask_copy (element->attrs);
+  copy->important = _gtk_bitmask_copy (element->important);
   copy->id = NULL;
   copy->style = g_strdup (element->style);
   copy->classes = g_strdupv (element->classes);
@@ -1736,7 +1752,7 @@ svg_element_set_type (SvgElement     *element,
   for (unsigned int attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
       if (!svg_property_applies_to (attr, type))
-        svg_element_set_base_value (element, attr, NULL);
+        svg_element_set_base_value (element, attr, NULL, FALSE);
     }
 }
 
@@ -2228,6 +2244,7 @@ svg_element_clone (SvgElement *element,
   clone->type = element->type;
   clone->parent = parent;
   clone->attrs = _gtk_bitmask_copy (element->attrs);
+  clone->important = _gtk_bitmask_copy (element->important);
   clone->id = NULL; /* Lets not confuse find-by-id */
   clone->style = g_strdup (element->style);
   clone->classes = g_strdupv (element->classes);
@@ -2408,7 +2425,7 @@ override_specified (SvgElement  *element,
    * so override base values too, when necessary.
    */
   if (element->base[attr] == old_value)
-    svg_element_set_base_value (element, attr, new_value);
+    svg_element_set_base_value (element, attr, new_value, FALSE);
   svg_element_take_specified_value (element, attr, new_value);
 }
 
@@ -2557,7 +2574,7 @@ svg_element_resolve_shadow_references (SvgElement *element,
             new_value = svg_href_new_plain (svg_href_get_ref (value));
           svg_href_set_shape (new_value, clone);
           if (svg_filter_get_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF) == value)
-            svg_filter_set_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF, new_value);
+            svg_filter_set_base_value (f, SVG_PROPERTY_FE_IMAGE_HREF, new_value, FALSE);
           svg_filter_take_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF, new_value);
         }
     }

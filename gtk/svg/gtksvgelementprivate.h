@@ -74,9 +74,12 @@ SvgValue *   svg_element_get_specified_value (SvgElement            *element,
                                               SvgProperty            attr);
 gboolean     svg_element_is_specified        (SvgElement            *element,
                                               SvgProperty            attr);
+gboolean     svg_element_is_important        (SvgElement            *elmeent,
+                                              SvgProperty            attr);
 void         svg_element_set_base_value      (SvgElement            *element,
                                               SvgProperty            attr,
-                                              SvgValue              *value);
+                                              SvgValue              *value,
+                                              gboolean               important);
 void         svg_element_take_base_value     (SvgElement            *element,
                                               SvgProperty            attr,
                                               SvgValue              *value);

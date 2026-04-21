@@ -374,7 +374,7 @@ shape_editor_update_clip_path (ShapeEditor *self,
   if ((path == NULL || gsk_path_is_empty (path)) &&
       (id == NULL || *id == '\0'))
     {
-      svg_element_set_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
     }
   else if (path && !gsk_path_is_empty (path))
     {
@@ -416,7 +416,7 @@ mask_changed (ShapeEditor *self)
 
   if (gtk_drop_down_get_selected (self->mask_dropdown) == 0)
     {
-      svg_element_set_base_value (self->shape, SVG_PROPERTY_MASK, NULL);
+      svg_element_take_base_value (self->shape, SVG_PROPERTY_MASK, NULL);
     }
   else
     {

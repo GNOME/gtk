@@ -1622,8 +1622,8 @@ apply_view (SvgElement *content,
   if (!cf)
     cf = svg_element_get_specified_value (content, SVG_PROPERTY_CONTENT_FIT);
 
-  svg_element_set_base_value (content, SVG_PROPERTY_VIEW_BOX, vb);
-  svg_element_set_base_value (content, SVG_PROPERTY_CONTENT_FIT, cf);
+  svg_element_set_base_value (content, SVG_PROPERTY_VIEW_BOX, vb, FALSE);
+  svg_element_set_base_value (content, SVG_PROPERTY_CONTENT_FIT, cf, FALSE);
 }
 
 void
@@ -1673,6 +1673,9 @@ compute_current_values_for_shape (SvgElement        *shape,
           SvgAnimation *a = g_ptr_array_index (shape->animations, i);
           SvgValue *val;
 
+          if (svg_element_is_important (shape, a->attr))
+            continue;
+
           val = compute_value_for_animation (a, context);
           if (val)
             {
@@ -1710,14 +1713,18 @@ compute_current_values_for_shape (SvgElement        *shape,
             }
         }
 
-      if (!svg_value_equal (motion, identity))
+      if (!svg_element_is_important (shape, SVG_PROPERTY_TRANSFORM))
         {
-          SvgValue *combined;
+          if (!svg_value_equal (motion, identity))
+            {
+              SvgValue *combined;
 
-          combined = svg_value_accumulate (shape_get_current_value (shape, SVG_PROPERTY_TRANSFORM, 0), motion, context, 1);
-          svg_element_set_current_value (shape, SVG_PROPERTY_TRANSFORM, combined);
-          svg_value_unref (combined);
+              combined = svg_value_accumulate (shape_get_current_value (shape, SVG_PROPERTY_TRANSFORM, 0), motion, context, 1);
+              svg_element_set_current_value (shape, SVG_PROPERTY_TRANSFORM, combined);
+              svg_value_unref (combined);
+            }
         }
+
       svg_value_unref (identity);
       svg_value_unref (motion);
     }

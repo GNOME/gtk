@@ -55,7 +55,8 @@ gboolean       svg_filter_is_specified        (SvgFilter      *filter,
 
 void           svg_filter_set_base_value    (SvgFilter      *filter,
                                              SvgProperty     attr,
-                                             SvgValue       *value);
+                                             SvgValue       *value,
+                                             gboolean        important);
 SvgValue *     svg_filter_get_base_value    (SvgFilter      *filter,
                                              SvgProperty     attr);
 

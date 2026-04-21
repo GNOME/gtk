@@ -51,7 +51,8 @@ gboolean       svg_color_stop_is_specified        (SvgColorStop   *stop,
 
 void           svg_color_stop_set_base_value    (SvgColorStop   *stop,
                                                  SvgProperty     attr,
-                                                 SvgValue       *value);
+                                                 SvgValue       *value,
+                                                 gboolean        important);
 SvgValue *     svg_color_stop_get_base_value    (SvgColorStop   *stop,
                                                  SvgProperty     attr);
 
