@@ -78,6 +78,21 @@ gsk_gpu_render_pass_user_to_device (GskGpuRenderPass      *self,
   return TRUE;
 }
 
+static gboolean
+gsk_gpu_render_pass_user_to_device_grow (GskGpuRenderPass      *self,
+                                         const graphene_rect_t *user,
+                                         cairo_rectangle_int_t *device)
+{
+  graphene_rect_t tmp;
+
+  if (!gsk_gpu_render_pass_user_to_device (self, user, &tmp))
+    return FALSE;
+
+  gsk_rect_to_cairo_grow (&tmp, device);
+
+  return TRUE;
+}
+
 gboolean
 gsk_gpu_render_pass_user_to_device_shrink (GskGpuRenderPass      *self,
                                            const graphene_rect_t *user,
@@ -699,6 +714,39 @@ gsk_gpu_render_pass_get_clip_bounds (GskGpuRenderPass *self,
                             &self->clip.rect.bounds,
                             &GRAPHENE_POINT_INIT (-self->offset.x, -self->offset.y));
       return TRUE;
+    }
+}
+
+/*<private>
+ * gsk_gpu_render_pass_in_clip_fast:
+ * @self: the renderpass
+ * @rect: a rectangle to check
+ *
+ * Does a quick check to see if the rectangle may be inside the clip.
+ *
+ * This function is written for performance and quick rejection, so it
+ * may return true even though the rectangle is clipped entirely.
+ * However, it will never return false if the rect is still visible.
+ *
+ * This function takes into account that the rectangle may be snapped,
+ * so it will check with pixel boundary accuracy.
+ *
+ * Returns: false if it can guarantee the rectangle will be clipped away
+ **/
+gboolean
+gsk_gpu_render_pass_in_clip_fast (GskGpuRenderPass      *self,
+                                  const graphene_rect_t *rect)
+{
+  cairo_rectangle_int_t device;
+
+  if (gsk_gpu_render_pass_user_to_device_grow (self, rect, &device))
+    {
+      /* conversion worked, so check against scissor rect */
+      return gdk_rectangle_intersect (&self->scissor, &device, NULL);
+    }
+  else
+    {
+      return gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, rect);
     }
 }
 
