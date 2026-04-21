@@ -1,14 +1,19 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="1">
-  <path d="M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z" id="stroke" gpa:states="0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" visibility="hidden" gpa:stroke="foreground">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0" gpa:state-names="outline state1 empty">
+  <style type="text/css">
+    .not-initial-state {
+      visibility: hidden;
+    }
+  </style>
+  <path d="M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z" id="stroke" gpa:states="outline" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill not-initial-state" gpa:stroke="foreground">
     </path>
-  <path d="M 10 10 L 14 6 M 10 6 L 14 10" id="x" gpa:states="0 1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" gpa:stroke="foreground">
+  <path d="M 10 10 L 14 6 M 10 6 L 14 10" id="x" gpa:states="outline state1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:stroke="foreground">
     </path>
-  <path d="M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z" id="fill" gpa:states="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill-rule="nonzero" fill="rgb(0,0,0)" gpa:stroke="foreground" gpa:fill="foreground">
+  <path d="M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z" id="fill" gpa:states="state1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill-rule="nonzero" fill="rgb(0,0,0)" class="foreground-stroke foreground-fill" gpa:stroke="foreground" gpa:fill="foreground">
     </path>
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>audio-volume-muted sound audio mute disabled</rdf:li>

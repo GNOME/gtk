@@ -1,8 +1,8 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16" gpa:state-names="outline empty">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>eye hide view-conceal user-not-tracked private privacy</rdf:li>
@@ -16,8 +16,8 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="path0" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 1 1 L 15 15 M 4.332 4.332 C 6.736 2.408, 10.319 2.65, 12.426 5.059 L 15 8 L 12.426 10.941 Q 12.072 11.346, 11.668 11.668 M 8.978 12.868 C 6.96408 13.2097, 4.91734 12.4798, 3.574 10.941 L 1 8 L 2.525 6.424" class="transparent-fill foreground-stroke" gpa:stroke="foreground">
+  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 1 1 L 15 15 M 4.332 4.332 C 6.736 2.408, 10.319 2.65, 12.426 5.059 L 15 8 L 12.426 10.941 Q 12.072 11.346, 11.668 11.668 M 8.978 12.868 C 6.96408 13.2097, 4.91734 12.4798, 3.574 10.941 L 1 8 L 2.525 6.424" class="transparent-fill foreground-stroke" gpa:states="outline">
   </path>
-  <path id="path1" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" d="M 6.586 6.586 C 7.09121 6.08057, 7.8277 5.8831, 8.518 6.068 C 9.20805 6.25296, 9.74704 6.79195, 9.932 7.482 C 10.1169 8.17229, 9.91943 8.90879, 9.414 9.414" class="transparent-fill foreground-stroke" gpa:stroke="foreground">
+  <path id="path1" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" d="M 6.586 6.586 C 7.09121 6.08057, 7.8277 5.8831, 8.518 6.068 C 9.20805 6.25296, 9.74704 6.79195, 9.932 7.482 C 10.1169 8.17229, 9.91943 8.90879, 9.414 9.414" class="transparent-fill foreground-stroke" gpa:states="outline">
   </path>
 </svg>

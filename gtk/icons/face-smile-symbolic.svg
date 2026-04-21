@@ -1,9 +1,15 @@
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0">
-  <path d="M 1 8 C 1 11.8659935, 4.13400698 15, 8 15 C 11.8659935 15, 15 11.8659935, 15 8 C 15 4.13400698, 11.8659935 1, 8 1 C 4.13400698 1, 1 4.13400698, 1 8 Z" id="path0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" gpa:stroke="foreground">
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0" gpa:state-names="outline empty">
+  <style type="text/css">
+    .not-initial-state {
+      visibility: hidden;
+    }
+  </style>
+  <path d="M 1 8 C 1 11.8659935, 4.13400698 15, 8 15 C 11.8659935 15, 15 11.8659935, 15 8 C 15 4.13400698, 11.8659935 1, 8 1 C 4.13400698 1, 1 4.13400698, 1 8 Z" id="path0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
     </path>
-  <path d="M 10.999999 6.49655151 C 10.999999 6.77459812, 10.7745981 7, 10.4965525 7 C 10.2185049 7, 9.99310303 6.77459812, 9.99310303 6.49655151 C 9.99310303 6.21850491, 10.2185049 5.99310303, 10.4965525 5.99310303 C 10.7745981 5.99310303, 10.999999 6.21850491, 10.999999 6.49655151 Z M 6.03448296 6.49655151 C 6.03448296 6.77459812, 5.80908108 7, 5.53103447 7 C 5.25298786 7, 5.02758598 6.77459812, 5.02758598 6.49655151 C 5.02758598 6.21850491, 5.25298786 5.99310303, 5.53103447 5.99310303 C 5.80908108 5.99310303, 6.03448296 6.21850491, 6.03448296 6.49655151 Z" id="path1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" gpa:stroke="foreground">
+  <path d="M 10.999999 6.49655151 C 10.999999 6.77459812, 10.7745981 7, 10.4965525 7 C 10.2185049 7, 9.99310303 6.77459812, 9.99310303 6.49655151 C 9.99310303 6.21850491, 10.2185049 5.99310303, 10.4965525 5.99310303 C 10.7745981 5.99310303, 10.999999 6.21850491, 10.999999 6.49655151 Z M 6.03448296 6.49655151 C 6.03448296 6.77459812, 5.80908108 7, 5.53103447 7 C 5.25298786 7, 5.02758598 6.77459812, 5.02758598 6.49655151 C 5.02758598 6.21850491, 5.25298786 5.99310303, 5.53103447 5.99310303 C 5.80908108 5.99310303, 6.03448296 6.21850491, 6.03448296 6.49655151 Z" id="path1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
     </path>
-  <path d="M 11.0310888 9.48407745 C 10.4058743 10.5669813, 9.25042915 11.2340775, 8 11.2340775 C 6.74957037 11.2340775, 5.59412575 10.5669813, 4.96891117 9.48407745" id="path2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" gpa:stroke="foreground">
+  <path d="M 11.0310888 9.48407745 C 10.4058743 10.5669813, 9.25042915 11.2340775, 8 11.2340775 C 6.74957037 11.2340775, 5.59412575 10.5669813, 4.96891117 9.48407745" id="path2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill" gpa:states="outline" gpa:stroke="foreground">
     </path>
   <metadata>
     <rdf:RDF>
