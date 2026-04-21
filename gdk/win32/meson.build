@@ -14,6 +14,7 @@ gdk_win32_public_sources = files([
 ])
 
 gdk_win32_sources = gdk_win32_public_sources + files([
+  'gdkapplaunchcontext-win32.c',
   'gdkcairocontext-win32.c',
   'gdkclipboard-win32.c',
   'gdkclipdrop-win32.c',

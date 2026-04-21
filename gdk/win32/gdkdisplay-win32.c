@@ -33,6 +33,7 @@
 #include "gdkwin32display.h"
 #include "gdkwin32surface.h"
 #include "gdkmonitor-win32.h"
+#include "gdkapplaunchcontext-win32.h"
 #include "gdkwin32.h"
 #include "gdkvulkancontext-win32.h"
 
@@ -1413,7 +1414,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->flush = gdk_win32_display_flush;
   display_class->queue_events = _gdk_win32_display_queue_events;
 
-  //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
+  display_class->get_app_launch_context = gdk_win32_display_get_app_launch_context;
 
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
