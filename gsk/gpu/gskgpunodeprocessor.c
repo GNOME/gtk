@@ -3605,7 +3605,7 @@ gsk_gpu_node_processor_add_node_untracked (GskGpuRenderPass *self,
 {
   GskRenderNodeType node_type;
 
-  if (!gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, &node->bounds))
+  if (!gsk_gpu_render_pass_in_clip_fast (self, &node->bounds))
     return;
 
   node_type = gsk_render_node_get_node_type (node);
