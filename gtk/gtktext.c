@@ -3006,9 +3006,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   else if (button == GDK_BUTTON_PRIMARY)
     {
       gboolean have_selection;
-      gboolean is_touchscreen, extend_selection;
-      GdkDisplay *display;
-      GdkDevice *source;
+      gboolean extend_selection;
       guint state;
 
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
@@ -3017,12 +3015,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
 
-      display = gtk_widget_get_display (widget);
-      source = gdk_event_get_device (event);
-      is_touchscreen = GTK_DISPLAY_DEBUG_CHECK (display, TOUCHSCREEN) ||
-                       gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
-
-      priv->text_handles_enabled = is_touchscreen;
+      priv->text_handles_enabled = gtk_event_treat_as_touch (event);
 
       priv->in_drag = FALSE;
       priv->select_words = FALSE;
@@ -3041,7 +3034,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
         case 1:
           if (in_selection (self, x))
             {
-              if (is_touchscreen)
+              if (gtk_event_treat_as_touch (event))
                 {
                   if (priv->selection_bubble &&
                       gtk_widget_get_visible (priv->selection_bubble))
@@ -3145,6 +3138,7 @@ gtk_text_click_gesture_released (GtkGestureClick *gesture,
 
   if (n_press == 1 &&
       !priv->in_drag &&
+      gtk_event_treat_as_touch (event) &&
       priv->current_pos == priv->selection_bound)
     gtk_im_context_activate_osk (priv->im_context, event);
 }

@@ -2080,3 +2080,17 @@ gtk_propagate_event (GtkWidget *widget,
 
   return gtk_propagate_event_internal (widget, event, topmost);
 }
+
+gboolean
+gtk_event_treat_as_touch (GdkEvent *event)
+{
+  switch ((unsigned int) gdk_device_get_source (gdk_event_get_device (event)))
+    {
+    case GDK_SOURCE_TOUCHSCREEN:
+      return TRUE;
+    case GDK_SOURCE_KEYBOARD:
+      return FALSE;
+    default:
+      return GTK_DISPLAY_DEBUG_CHECK (gdk_event_get_display (event), TOUCHSCREEN);
+    }
+}

@@ -99,6 +99,8 @@ GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
 
 guint32    gtk_get_current_event_time   (void);
 
+gboolean   gtk_event_treat_as_touch (GdkEvent *event);
+
 void check_crossing_invariants (GtkWidget       *widget,
                                 GtkCrossingData *crossing);
 
