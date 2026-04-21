@@ -558,8 +558,9 @@ gdk_android_surface_get_geometry (GdkSurface *surface,
                                   int *x, int *y,
                                   int *width, int *height)
 {
-  *x = surface->x;
-  *y = surface->y;
+  GdkSurface *parent = surface->parent;
+  *x = surface->x - (parent ? parent->x : 0);
+  *y = surface->y - (parent ? parent->y : 0);
   *width = surface->width;
   *height = surface->height;
 }
@@ -569,8 +570,8 @@ gdk_android_surface_get_root_coords (GdkSurface *surface,
                                      int x, int y,
                                      int *root_x, int *root_y)
 {
-  *root_x = x - surface->x;
-  *root_y = y - surface->y;
+  *root_x = x + surface->x;
+  *root_y = y + surface->y;
 }
 
 static gboolean

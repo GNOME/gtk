@@ -622,6 +622,7 @@ gdk_broadway_surface_layout_popup (GdkSurface     *surface,
                                    monitor,
                                    &bounds,
                                    layout,
+                                   GDK_SURFACE_LAYOUT_POPUP_HELPER_DEFAULT,
                                    &final_rect);
 
   x = final_rect.x;

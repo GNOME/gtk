@@ -85,6 +85,7 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
                                    monitor,
                                    &bounds,
                                    self->layout,
+                                   GDK_SURFACE_LAYOUT_POPUP_HELPER_DEFAULT,
                                    &final_rect);
 
   gdk_surface_get_origin (GDK_SURFACE (self)->parent, &x, &y);

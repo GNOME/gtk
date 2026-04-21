@@ -310,17 +310,18 @@ gdk_surface_get_layout_monitor (GdkSurface      *surface,
 }
 
 void
-gdk_surface_layout_popup_helper (GdkSurface     *surface,
-                                 int             width,
-                                 int             height,
-                                 int             shadow_left,
-                                 int             shadow_right,
-                                 int             shadow_top,
-                                 int             shadow_bottom,
-                                 GdkMonitor     *monitor,
-                                 GdkRectangle   *bounds,
-                                 GdkPopupLayout *layout,
-                                 GdkRectangle   *out_final_rect)
+gdk_surface_layout_popup_helper (GdkSurface                       *surface,
+                                 int                               width,
+                                 int                               height,
+                                 int                               shadow_left,
+                                 int                               shadow_right,
+                                 int                               shadow_top,
+                                 int                               shadow_bottom,
+                                 GdkMonitor                       *monitor,
+                                 GdkRectangle                     *bounds,
+                                 GdkPopupLayout                   *layout,
+                                 GdkSurfaceLayoutPopupHelperFlags  flags,
+                                 GdkRectangle                     *out_final_rect)
 {
   GdkRectangle root_rect;
   GdkGravity rect_anchor;
@@ -331,7 +332,6 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
-  int x, y;
 
   g_return_if_fail (GDK_IS_POPUP (surface));
 
@@ -417,9 +417,13 @@ gdk_surface_layout_popup_helper (GdkSurface     *surface,
   final_rect.width += shadow_left + shadow_right;
   final_rect.height += shadow_top + shadow_bottom;
 
-  gdk_surface_get_origin (surface->parent, &x, &y);
-  final_rect.x -= x;
-  final_rect.y -= y;
+  if ((flags & GDK_SURFACE_LAYOUT_POPUP_HELPER_ROOT_OUT) == 0)
+    {
+      int x, y;
+      gdk_surface_get_origin (surface->parent, &x, &y);
+      final_rect.x -= x;
+      final_rect.y -= y;
+    }
 
   if (flipped_x)
     {
