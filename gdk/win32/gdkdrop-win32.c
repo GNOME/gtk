@@ -648,6 +648,13 @@ idroptarget_drop (LPDROPTARGET This,
 
   gdk_drop_emit_leave_event (ctx->drop, TRUE, GDK_CURRENT_TIME);
 
+  if (drop_win32->actions == GDK_ACTION_NONE)
+    {
+      g_clear_object (&ctx->drop);
+      set_data_object (&ctx->data_object, NULL);
+      return E_UNEXPECTED;
+    }
+
   while (!drop_win32->drop_finished)
     g_main_context_iteration (NULL, FALSE);
 

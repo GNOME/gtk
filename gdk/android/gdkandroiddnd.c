@@ -225,6 +225,7 @@ gdk_android_drag_cancel (GdkDrag            *drag,
   GdkAndroidSurface *initiator = (GdkAndroidSurface *)gdk_drag_get_surface (drag);
   (*env)->CallVoidMethod (env, initiator->surface,
                           gdk_android_get_java_cache ()->surface.cancel_dnd);
+  gdk_drag_drop_done (drag, FALSE);
 }
 
 static void
@@ -477,7 +478,7 @@ gdk_android_dnd_handle_drag_start_fail (GdkAndroidDisplay *display,
                                                            &native);
   if (drag)
     {
-      gdk_drag_drop_done (drag, FALSE);
+      gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
       g_hash_table_remove (display->drags, GSIZE_TO_POINTER (native));
     }
 }
@@ -552,10 +553,17 @@ gdk_android_dnd_surface_handle_drop_event (GdkAndroidSurface *surface,
           jboolean successful = (*env)->CallBooleanMethod (env, event,
                                                            gdk_android_get_java_cache()->a_drag_event.get_result);
           if (successful)
-            g_signal_emit_by_name (drag, "drop-performed");
-          gdk_drag_drop_done (drag, successful);
-          g_hash_table_remove (display->drags, GSIZE_TO_POINTER (native));
-          g_signal_emit_by_name (drag, "dnd-finished");
+            {
+              g_signal_emit_by_name (drag, "drop-performed");
+              gdk_drag_drop_done (drag, TRUE);
+              g_hash_table_remove (display->drags, GSIZE_TO_POINTER (native));
+              g_signal_emit_by_name (drag, "dnd-finished");
+            }
+          else
+            {
+              gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
+              g_hash_table_remove (display->drags, GSIZE_TO_POINTER (native));
+            }
           g_object_unref (drag);
         }
       return TRUE;
