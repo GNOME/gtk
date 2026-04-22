@@ -1855,9 +1855,16 @@ gsk_gpu_node_processor_radial_gradient_op (GskGpuRenderPass   *self,
   const graphene_point_t *start_center, *end_center;
   float start_radius, end_radius, aspect_ratio;
   const GskGradient *gradient;
+  graphene_rect_t bounds;
   GdkColor colors[7];
   graphene_vec4_t offsets[2];
   graphene_vec4_t hints[2];
+
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &node->bounds,
+                                      gsk_radial_gradient_node_get_snap (node),
+                                      &bounds))
+    return;
 
   gradient = gsk_gradient_node_get_gradient (node);
   start_center = gsk_radial_gradient_node_get_start_center (node);
@@ -1877,7 +1884,7 @@ gsk_gpu_node_processor_radial_gradient_op (GskGpuRenderPass   *self,
   gsk_gpu_radial_gradient_op (self,
                               target,
                               gsk_gradient_get_interpolation (gradient),
-                              &node->bounds,
+                              &bounds,
                               gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GRADIENTS),
                               graphene_point_equal (start_center, end_center),
                               gsk_gradient_get_premultiplied (gradient),
@@ -1913,6 +1920,14 @@ gsk_gpu_node_processor_add_radial_gradient_node (GskGpuRenderPass *self,
 
   if (gsk_radial_gradient_node_is_zero_length (node))
     {
+      graphene_rect_t bounds;
+
+      if (!gsk_gpu_node_processor_clip_bounds (self,
+                                               &node->bounds,
+                                               gsk_radial_gradient_node_get_snap (node),
+                                               &bounds))
+        return;
+
       switch (gsk_gradient_get_repeat (gradient))
         {
         case GSK_REPEAT_NONE:
@@ -1930,7 +1945,7 @@ gsk_gpu_node_processor_add_radial_gradient_node (GskGpuRenderPass *self,
             gsk_gpu_color_op (self,
                               self->ccs,
                               gsk_gpu_color_states_find (self->ccs, &color),
-                              &node->bounds,
+                              &bounds,
                               &color);
             gdk_color_finish (&color);
             return;
