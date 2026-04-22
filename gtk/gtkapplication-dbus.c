@@ -297,6 +297,9 @@ request_restore (GtkApplicationImplDBus *dbus)
                                  -1,
                                  NULL,
                                  NULL);
+  else
+    g_variant_builder_clear (&discarded);
+
   return TRUE;
 }
 
