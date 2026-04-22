@@ -41,6 +41,8 @@ GskRenderNode *         gsk_linear_gradient_node_new                (const graph
                                                                      const graphene_point_t   *end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap              gsk_linear_gradient_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t * gsk_linear_gradient_node_get_start         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

@@ -1729,11 +1729,17 @@ gsk_gpu_node_processor_linear_gradient_op (GskGpuRenderPass   *self,
                                            gsize                  n_stops)
 {
   const GskGradient *gradient;
+  graphene_rect_t bounds;
   GdkColor colors[7];
   graphene_vec4_t offsets[2];
   graphene_vec4_t hints[2];
 
   gradient = gsk_gradient_node_get_gradient (node);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &node->bounds,
+                                      gsk_linear_gradient_node_get_snap (node),
+                                      &bounds))
+    return;
 
   gsk_gpu_color_stops_to_shader (stops,
                                  n_stops,
@@ -1746,7 +1752,7 @@ gsk_gpu_node_processor_linear_gradient_op (GskGpuRenderPass   *self,
   gsk_gpu_linear_gradient_op (self,
                               target,
                               gsk_gradient_get_interpolation (gradient),
-                              &node->bounds,
+                              &bounds,
                               gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GRADIENTS),
                               gsk_gradient_get_premultiplied (gradient),
                               gsk_gradient_get_repeat (gradient),
@@ -1773,6 +1779,14 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuRenderPass *self,
 
   if (gsk_linear_gradient_node_is_zero_length (node))
     {
+      graphene_rect_t bounds;
+
+      if (!gsk_gpu_node_processor_clip_bounds (self,
+                                               &node->bounds,
+                                               gsk_linear_gradient_node_get_snap (node),
+                                               &bounds))
+        return;
+
       switch (gsk_gradient_get_repeat (gradient))
         {
         case GSK_REPEAT_NONE:
@@ -1798,7 +1812,7 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuRenderPass *self,
             gsk_gpu_color_op (self,
                               self->ccs,
                               gsk_gpu_color_states_find (self->ccs, &color),
-                              &node->bounds,
+                              &bounds,
                               &color);
           }
           break;
@@ -1811,7 +1825,7 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuRenderPass *self,
             gsk_gpu_color_op (self,
                               self->ccs,
                               gsk_gpu_color_states_find (self->ccs, &color),
-                              &node->bounds,
+                              &bounds,
                               &color);
             gdk_color_finish (&color);
             return;
