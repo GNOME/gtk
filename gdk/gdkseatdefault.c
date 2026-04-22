@@ -320,11 +320,25 @@ gdk_seat_default_init (GdkSeatDefault *seat)
 {
 }
 
+void
+gdk_seat_default_init_for_logical_pair (GdkSeatDefault *seat,
+                                        GdkDevice *pointer,
+                                        GdkDevice *keyboard)
+{
+  GdkSeatDefaultPrivate *priv;
+
+  priv = gdk_seat_default_get_instance_private (seat);
+  priv->logical_pointer = g_object_ref (pointer);
+  priv->logical_keyboard = g_object_ref (keyboard);
+
+  gdk_seat_device_added (GDK_SEAT (seat), priv->logical_pointer);
+  gdk_seat_device_added (GDK_SEAT (seat), priv->logical_keyboard);
+}
+
 GdkSeat *
 gdk_seat_default_new_for_logical_pair (GdkDevice *pointer,
                                        GdkDevice *keyboard)
 {
-  GdkSeatDefaultPrivate *priv;
   GdkDisplay *display;
   GdkSeat *seat;
 
@@ -334,12 +348,7 @@ gdk_seat_default_new_for_logical_pair (GdkDevice *pointer,
                        "display", display,
                        NULL);
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
-  priv->logical_pointer = g_object_ref (pointer);
-  priv->logical_keyboard = g_object_ref (keyboard);
-
-  gdk_seat_device_added (seat, priv->logical_pointer);
-  gdk_seat_device_added (seat, priv->logical_keyboard);
+  gdk_seat_default_init_for_logical_pair (GDK_SEAT_DEFAULT (seat), pointer, keyboard);
 
   return seat;
 }

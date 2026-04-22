@@ -16,6 +16,7 @@ gdk_x11_public_sources = files([
   'gdkproperty-x11.c',
   'gdkscreen-x11.c',
   'gdkselection-x11.c',
+  'gdkseat-xi2.c',
   'gdksurface-x11.c',
   'gdkxid.c',
   'xsettings-client.c',
