@@ -1127,6 +1127,7 @@ populate_render_node_properties (GListStore            *store,
         GString *s;
         GdkTexture *texture;
 
+        add_snap_row (store, "Snap", gsk_linear_gradient_node_get_snap (node));
         add_text_row (store, "Direction", "%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
         add_text_row (store, "Interpolation", "%s", gdk_color_state_get_name (interpolation));
         add_text_row (store, "Hue Interpolation", "%s", hue_interpolation_to_string (hue_interpolation));

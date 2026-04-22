@@ -429,6 +429,7 @@ Possible values for the isolations property are:
 | property          | syntax            | default        | printed     |
 | ----------------- | ----------------- | -------------- | ----------- |
 | bounds            | `<rect>`          | 50             | always      |
+| snap              | `<snap>`          | none           | non-default |
 | start             | `<point>`         | 0 0            | always      |
 | end               | `<point>`         | 0 50           | always      |
 | stops             | `<color-stops>`   | 0 #AF0, 1 #F0C | always      |

@@ -2561,6 +2561,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
                                      gboolean      repeating)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   graphene_point_t start = GRAPHENE_POINT_INIT (0, 0);
   graphene_point_t end = GRAPHENE_POINT_INIT (0, 50);
   GArray *stops = NULL;
@@ -2570,6 +2571,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   GskRepeat repeat = GSK_REPEAT_PAD;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "start", parse_point, NULL, &start },
     { "end", parse_point, NULL, &end },
     { "stops", parse_stops, clear_stops, &stops },
@@ -2622,7 +2624,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   gsk_gradient_set_premultiplied (gradient, premultiplied);
   gsk_gradient_set_repeat (gradient, repeat);
 
-  result = gsk_linear_gradient_node_new2 (&bounds, &start, &end, gradient);
+  result = gsk_linear_gradient_node_new2 (&bounds, snap, &start, &end, gradient);
 
   gsk_gradient_free (gradient);
   clear_stops (&stops);
@@ -6234,6 +6236,7 @@ render_node_print (Printer       *p,
 
         gradient = gsk_gradient_node_get_gradient (node);
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_linear_gradient_node_get_snap (node));
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gradient);

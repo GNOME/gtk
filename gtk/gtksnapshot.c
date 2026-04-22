@@ -3000,6 +3000,7 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot             *snapshot,
                                   const graphene_point_t  *end_point,
                                   const GskGradient       *gradient)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -3026,13 +3027,14 @@ gtk_snapshot_add_linear_gradient (GtkSnapshot             *snapshot,
       real_end_point.y = scale_y * end_point->y + dy;
 
       node = gsk_linear_gradient_node_new2 (&real_bounds,
+                                            state->props.snap,
                                             &real_start_point,
                                             &real_end_point,
                                             gradient);
     }
   else
     {
-      node = gsk_color_node_new2 (color, &real_bounds, GSK_RECT_SNAP_NONE);
+      node = gsk_color_node_new2 (color, &real_bounds, state->props.snap);
     }
 
   gtk_snapshot_append_node_internal (snapshot, node);
