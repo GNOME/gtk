@@ -3195,6 +3195,7 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
   GskGradient *gradient;
 
   gradient = gsk_gradient_new ();
+  gsk_gradient_set_repeat (gradient, GSK_REPEAT_REPEAT);
   gsk_gradient_add_color_stops (gradient, stops, n_stops);
 
   gtk_snapshot_add_radial_gradient (snapshot, bounds,
