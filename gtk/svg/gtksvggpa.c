@@ -237,7 +237,7 @@ shape_apply_state (GtkSvg       *self,
       if ((self->features & GTK_SVG_ANIMATIONS) == 0)
         {
           SvgValue *value = svg_visibility_new (visibility);
-          svg_element_set_base_value (shape, SVG_PROPERTY_VISIBILITY, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_VISIBILITY, value, FALSE);
           svg_value_unref (value);
         }
 

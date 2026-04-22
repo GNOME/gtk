@@ -39,6 +39,7 @@ struct _SvgFilter
 {
   SvgFilterType type;
   unsigned int attrs;
+  unsigned int important;
   char *id;
   char *style;
   char **classes;
@@ -176,7 +177,8 @@ svg_filter_is_specified (SvgFilter   *filter,
 void
 svg_filter_set_base_value (SvgFilter   *filter,
                            SvgProperty  attr,
-                           SvgValue    *value)
+                           SvgValue    *value,
+                           gboolean     important)
 {
   unsigned int pos;
 
@@ -189,6 +191,10 @@ svg_filter_set_base_value (SvgFilter   *filter,
     filter->base[pos] = svg_value_ref (value);
   else
     filter->base[pos] = svg_filter_ref_initial_value (filter, attr);
+  if (important)
+    filter->important |= BIT (pos);
+  else
+    filter->important &= ~BIT (pos);
 }
 
 SvgValue *

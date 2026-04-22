@@ -31,6 +31,7 @@
 struct _SvgColorStop
 {
   unsigned int attrs;
+  unsigned int important;
   SvgValue *specified[N_STOP_PROPERTIES];
   SvgValue *base[N_STOP_PROPERTIES];
   SvgValue *current[N_STOP_PROPERTIES];
@@ -99,7 +100,14 @@ svg_color_stop_set_specified_value (SvgColorStop *stop,
   unsigned int pos = svg_color_stop_get_index (attr);
   g_clear_pointer (&stop->specified[pos], svg_value_unref);
   if (value)
-    stop->specified[pos] = svg_value_ref (value);
+    {
+      stop->specified[pos] = svg_value_ref (value);
+      stop->attrs |= BIT (pos);
+    }
+  else
+    {
+      stop->attrs &= ~BIT (pos);
+    }
 }
 
 void
@@ -131,20 +139,19 @@ svg_color_stop_is_specified (SvgColorStop *stop,
 void
 svg_color_stop_set_base_value (SvgColorStop *stop,
                                SvgProperty   attr,
-                               SvgValue     *value)
+                               SvgValue     *value,
+                               gboolean      important)
 {
   unsigned int pos = svg_color_stop_get_index (attr);
   g_clear_pointer (&stop->base[pos], svg_value_unref);
   if (value)
-    {
-      stop->base[pos] = svg_value_ref (value);
-      stop->attrs |= BIT (pos);
-    }
+    stop->base[pos] = svg_value_ref (value);
   else
-    {
-      stop->base[pos] = svg_property_ref_initial_value (attr, SVG_ELEMENT_LINEAR_GRADIENT, TRUE);
-      stop->attrs &= ~BIT (pos);
-    }
+    stop->base[pos] = svg_property_ref_initial_value (attr, SVG_ELEMENT_LINEAR_GRADIENT, TRUE);
+  if (important)
+    stop->important |= BIT (pos);
+  else
+    stop->important &= ~BIT (pos);
 }
 
 SvgValue *

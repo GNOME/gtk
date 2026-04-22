@@ -1616,7 +1616,8 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       if (value)
         {
           svg_element_set_gpa_stroke (shape, value);
-          svg_element_take_base_value (shape, SVG_PROPERTY_STROKE, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value, FALSE);
+          svg_value_unref (value);
         }
       else
         {
@@ -1630,7 +1631,8 @@ parse_shape_gpa_attrs (SvgElement           *shape,
       if (value)
         {
           svg_element_set_gpa_fill (shape, value);
-          svg_element_take_base_value (shape, SVG_PROPERTY_FILL, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value, FALSE);
+          svg_value_unref (value);
         }
       else
         {
@@ -2175,7 +2177,7 @@ start_element_cb (GMarkupParseContext  *context,
 
           if (svg_numbers_get_length (values) != svg_numbers_get_length (initial))
             {
-              svg_filter_set_base_value (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES, initial);
+              svg_filter_set_base_value (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES, initial, FALSE);
               if (!svg_filter_is_specified (f, SVG_PROPERTY_FE_COLOR_MATRIX_VALUES))
                 {
                   /* If this wasn't user-provided, we quietly correct the initial
@@ -4096,11 +4098,12 @@ static void
 shape_set_base_value (SvgElement   *shape,
                       SvgProperty   attr,
                       unsigned int  idx,
-                      SvgValue     *value)
+                      SvgValue     *value,
+                      gboolean      important)
 {
   if (idx == 0)
     {
-      svg_element_set_base_value (shape, attr, value);
+      svg_element_set_base_value (shape, attr, value, important);
     }
   else if (FIRST_STOP_PROPERTY <= attr && attr <= LAST_STOP_PROPERTY)
     {
@@ -4110,7 +4113,7 @@ shape_set_base_value (SvgElement   *shape,
       g_assert (idx <= shape->color_stops->len);
 
       stop = g_ptr_array_index (shape->color_stops, idx - 1);
-      svg_color_stop_set_base_value (stop, attr, value);
+      svg_color_stop_set_base_value (stop, attr, value, important);
     }
   else if (FIRST_FILTER_PROPERTY <= attr && attr <= LAST_FILTER_PROPERTY)
     {
@@ -4120,7 +4123,7 @@ shape_set_base_value (SvgElement   *shape,
       g_assert (idx <= shape->filters->len);
 
       f = g_ptr_array_index (shape->filters, idx - 1);
-      svg_filter_set_base_value (f, attr, value);
+      svg_filter_set_base_value (f, attr, value, important);
     }
   else
     g_assert_not_reached ();
@@ -4144,9 +4147,7 @@ apply_ruleset_to_shape (SvgCssRuleset  *r,
         continue;
 
       if (svg_property_applies_to (p->attr, svg_element_get_type (shape)))
-        {
-          shape_set_base_value (shape, p->attr, idx, p->value);
-        }
+        shape_set_base_value (shape, p->attr, idx, p->value, important);
 
       *set = _gtk_bitmask_set (*set, p->attr, TRUE);
     }
@@ -4195,17 +4196,17 @@ apply_styles_here (SvgElement   *shape,
   if (idx == 0)
     {
       for (unsigned int i = FIRST_SVG_PROPERTY; i <= LAST_SVG_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new ());
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
     }
   else if (svg_element_type_is_gradient (shape->type))
     {
       for (unsigned int i = FIRST_STOP_PROPERTY; i <= LAST_STOP_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new ());
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
     }
   else if (svg_element_type_is_filter (shape->type))
     {
       for (unsigned int i = FIRST_FILTER_PROPERTY; i <= LAST_FILTER_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new ());
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
     }
   else
     g_assert_not_reached ();
@@ -4231,7 +4232,7 @@ apply_styles_here (SvgElement   *shape,
           PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
           if (p->important && !_gtk_bitmask_get (set, p->attr))
             {
-              shape_set_base_value (shape, p->attr, idx, p->value);
+              shape_set_base_value (shape, p->attr, idx, p->value, TRUE);
               set = _gtk_bitmask_set (set, p->attr, TRUE);
             }
         }
@@ -4253,7 +4254,7 @@ apply_styles_here (SvgElement   *shape,
           PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
           if (!p->important && !_gtk_bitmask_get (set, p->attr))
             {
-              shape_set_base_value (shape, p->attr, idx, p->value);
+              shape_set_base_value (shape, p->attr, idx, p->value, FALSE);
               set = _gtk_bitmask_set (set, p->attr, TRUE);
             }
         }
@@ -4282,7 +4283,7 @@ apply_styles_here (SvgElement   *shape,
         {
           PropertyValue *p = &g_array_index (shape->specified, PropertyValue, i);
           if (!_gtk_bitmask_get (set, p->attr))
-            svg_element_set_base_value (shape, p->attr, p->value);
+            svg_element_set_base_value (shape, p->attr, p->value, FALSE);
         }
     }
   else if (svg_element_type_is_gradient (shape->type))
@@ -4294,7 +4295,7 @@ apply_styles_here (SvgElement   *shape,
             {
               SvgValue *value = svg_color_stop_get_specified_value (stop, attr);
               if (value)
-                svg_color_stop_set_base_value (stop, attr, value);
+                svg_color_stop_set_base_value (stop, attr, value, FALSE);
             }
         }
     }
@@ -4310,7 +4311,7 @@ apply_styles_here (SvgElement   *shape,
             {
               SvgValue *value = svg_filter_get_specified_value (filter, attr);
               if (value)
-                svg_filter_set_base_value (filter, attr, value);
+                svg_filter_set_base_value (filter, attr, value, FALSE);
             }
         }
     }
@@ -4375,7 +4376,7 @@ apply_styles_to_shape (SvgElement *shape,
       else
         value = svg_paint_new_symbolic (GTK_SYMBOLIC_COLOR_FOREGROUND);
 
-      svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value);
+      svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value, FALSE);
       svg_value_unref (value);
 
       if (!classes)
@@ -4392,21 +4393,21 @@ apply_styles_to_shape (SvgElement *shape,
         value = svg_paint_new_none ();
 
       has_stroke = !svg_value_equal (value, svg_paint_new_none ());
-      svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value);
+      svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value, FALSE);
       svg_value_unref (value);
 
       if (has_stroke)
         {
           value = svg_number_new (2);
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, value, FALSE);
           svg_value_unref (value);
 
           value = svg_linejoin_new (GSK_LINE_JOIN_ROUND);
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_LINEJOIN, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_LINEJOIN, value, FALSE);
           svg_value_unref (value);
 
           value = svg_linecap_new (GSK_LINE_CAP_ROUND);
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_LINECAP, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_LINECAP, value, FALSE);
           svg_value_unref (value);
         }
     }
@@ -4417,22 +4418,21 @@ apply_styles_to_shape (SvgElement *shape,
   if (svg->gpa_version > 0)
     {
       if (svg_element_get_gpa_fill (shape))
-        svg_element_set_base_value (shape, SVG_PROPERTY_FILL, svg_element_get_gpa_fill (shape));
+        svg_element_set_base_value (shape, SVG_PROPERTY_FILL, svg_element_get_gpa_fill (shape), FALSE);
       if (svg_element_get_gpa_stroke (shape))
-        svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, svg_element_get_gpa_stroke (shape));
+        svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, svg_element_get_gpa_stroke (shape), FALSE);
       if (svg_element_get_gpa_width (shape))
-        svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, svg_element_get_gpa_width (shape));
+        svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, svg_element_get_gpa_width (shape), FALSE);
     }
 
   if (svg_element_is_specified (shape, SVG_PROPERTY_COLOR))
     {
       SvgValue *color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
-
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_color_get_kind (color) == COLOR_SYMBOLIC)
         {
           SvgValue *value = svg_color_new_black ();
-          svg_element_set_base_value (shape, SVG_PROPERTY_COLOR, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_COLOR, value, FALSE);
           svg_value_unref (value);
           color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
         }
@@ -4450,7 +4450,7 @@ apply_styles_to_shape (SvgElement *shape,
           svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
-          svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_FILL, value, FALSE);
           svg_value_unref (value);
           paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
         }
@@ -4468,7 +4468,7 @@ apply_styles_to_shape (SvgElement *shape,
           svg_paint_get_kind (paint) == PAINT_SYMBOLIC)
         {
           SvgValue *value = svg_paint_new_black ();
-          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value);
+          svg_element_set_base_value (shape, SVG_PROPERTY_STROKE, value, FALSE);
           svg_value_unref (value);
           paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
         }

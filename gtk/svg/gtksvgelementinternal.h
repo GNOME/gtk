@@ -84,7 +84,6 @@ struct _SvgElement
 {
   SvgElementType type;
   SvgElement *parent;
-  GtkBitmask *attrs;
   char *id;
   char *style;
   char **classes;
@@ -107,6 +106,9 @@ struct _SvgElement
 
   gboolean invalid_use;
   gboolean valid_bounds;
+
+  GtkBitmask *attrs;
+  GtkBitmask *important;
 
   GArray *specified;
   SvgValue *base[N_SVG_PROPERTIES];

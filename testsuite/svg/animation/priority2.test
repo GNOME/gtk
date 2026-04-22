@@ -1,0 +1,7 @@
+input: priority2.svg
+time: 0
+output: priority2-0.svg
+time: 1000
+output: priority2-1.svg
+time: 2000
+output: priority2-2.svg
