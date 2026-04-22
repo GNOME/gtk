@@ -292,6 +292,7 @@ Possible values for the transfer propertes are:
 | property          | syntax            | default        | printed     |
 | ----------------- | ----------------- | -------------- | ----------- |
 | bounds            | `<rect>`          | 50             | always      |
+| snap              | `<snap>`          | none           | non-default |
 | center            | `<point>`         | 25, 25         | always      |
 | rotation          | `<number>`        | 0              | always      |
 | stops             | `<color-stops>`   | 0 #AF0, 1 #F0C | always      |

@@ -102,12 +102,19 @@ static void
 replay_conic_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
-  gsk_render_node_get_bounds (node, &bounds);
+  GskRectSnap snap = gsk_conic_gradient_node_get_snap (node);
   const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
   float rotation = gsk_conic_gradient_node_get_rotation (node);
   const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
 
+  gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
+
   gtk_snapshot_add_conic_gradient (snapshot, &bounds, center, rotation, gradient);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

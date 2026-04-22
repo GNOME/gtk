@@ -38,6 +38,7 @@ struct _GskConicGradientNode
 {
   GskRenderNode render_node;
   GskGradient gradient;
+  GskRectSnap snap;
 
   graphene_point_t center;
   float rotation;
@@ -154,6 +155,7 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
                               GskCairoData  *data)
 {
   GskConicGradientNode *self = (GskConicGradientNode *) node;
+  graphene_rect_t bounds;
   cairo_pattern_t *pattern;
   graphene_point_t corner;
   float radius;
@@ -161,14 +163,17 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
   GArray *stops;
   GskGradient *gradient = &self->gradient;
 
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
+
   pattern = cairo_pattern_create_mesh ();
-  graphene_rect_get_top_right (&node->bounds, &corner);
+  graphene_rect_get_top_right (&bounds, &corner);
   radius = graphene_point_distance (&self->center, &corner, NULL, NULL);
-  graphene_rect_get_bottom_right (&node->bounds, &corner);
+  graphene_rect_get_bottom_right (&bounds, &corner);
   radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
-  graphene_rect_get_bottom_left (&node->bounds, &corner);
+  graphene_rect_get_bottom_left (&bounds, &corner);
   radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
-  graphene_rect_get_top_left (&node->bounds, &corner);
+  graphene_rect_get_top_left (&bounds, &corner);
   radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
 
   gsize n_stops = gsk_gradient_get_n_stops (gradient);
@@ -284,7 +289,7 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
 
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_translate (cr, self->center.x, self->center.y);
   cairo_set_source (cr, pattern);
   cairo_fill (cr);
@@ -301,6 +306,7 @@ gsk_conic_gradient_node_diff (GskRenderNode *node1,
   GskConicGradientNode *self2 = (GskConicGradientNode *) node2;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       !graphene_point_equal (&self1->center, &self2->center) ||
       self1->rotation != self2->rotation ||
       !gsk_gradient_equal (&self1->gradient, &self2->gradient))
@@ -371,6 +377,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   gsk_gradient_add_color_stops (gradient, color_stops, n_color_stops);
 
   node = gsk_conic_gradient_node_new2 (bounds,
+                                       GSK_RECT_SNAP_NONE,
                                        center, rotation,
                                        gradient);
 
@@ -382,6 +389,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
 /*< private >
  * gsk_conic_gradient_node_new2:
  * @bounds: the bounds of the node
+ * @snap: how to snap the gradient to the pixel grid
  * @center: the center of the gradient
  * @rotation: the rotation of the gradient in degrees
  * @gradient: the gradient specification
@@ -396,6 +404,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
  */
 GskRenderNode *
 gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
+                              GskRectSnap              snap,
                               const graphene_point_t  *center,
                               float                    rotation,
                               const GskGradient       *gradient)
@@ -413,11 +422,12 @@ gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
   gsk_rect_normalize (&node->bounds);
   graphene_point_init_from_point (&self->center, center);
 
+  self->snap = snap;
   self->rotation = rotation;
 
   gsk_gradient_init_copy (&self->gradient, gradient);
 
-  node->fully_opaque = gsk_gradient_is_opaque (gradient);
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) && gsk_gradient_is_opaque (gradient);
   node->preferred_depth = gdk_color_state_get_depth (gsk_gradient_get_interpolation (gradient));
   node->is_hdr = gdk_color_state_is_hdr (gsk_gradient_get_interpolation (gradient));
 
@@ -525,3 +535,22 @@ gsk_conic_gradient_node_get_angle (const GskRenderNode *node)
 
   return self->angle;
 }
+
+/**
+ * gsk_conic_gradient_node_get_snap:
+ * @node: (type GskConicGradientNode): a `GskRenderNode` for a conic gradient
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_conic_gradient_node_get_snap (const GskRenderNode *node)
+{
+  const GskConicGradientNode *self = (const GskConicGradientNode *) node;
+
+  return self->snap;
+}
+

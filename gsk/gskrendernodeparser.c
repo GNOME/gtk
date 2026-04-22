@@ -2843,6 +2843,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
                            Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
   double rotation = 0.0;
   GArray *stops = NULL;
@@ -2851,6 +2852,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
   gboolean premultiplied = TRUE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "center", parse_point, NULL, &center },
     { "rotation", parse_double, NULL, &rotation },
     { "stops", parse_stops, clear_stops, &stops },
@@ -2894,7 +2896,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
   gsk_gradient_set_premultiplied (gradient, premultiplied);
   gsk_gradient_set_repeat (gradient, GSK_REPEAT_PAD);
 
-  result = gsk_conic_gradient_node_new2 (&bounds, &center, rotation, gradient);
+  result = gsk_conic_gradient_node_new2 (&bounds, snap, &center, rotation, gradient);
 
   gsk_gradient_free (gradient);
   clear_stops (&stops);
@@ -6305,6 +6307,7 @@ render_node_print (Printer       *p,
 
         gradient = gsk_gradient_node_get_gradient (node);
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_conic_gradient_node_get_snap (node));
         append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
         append_float_param (p, "rotation", gsk_conic_gradient_node_get_rotation (node), 0.0f);
 
