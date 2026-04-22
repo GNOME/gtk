@@ -2714,6 +2714,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                                      gboolean      repeating)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   graphene_point_t center = GRAPHENE_POINT_INIT (25, 25);
   double hradius = 25.0;
   double vradius = 25.0;
@@ -2737,6 +2738,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   GskRepeat repeat = GSK_REPEAT_PAD;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "center", parse_point, NULL, &center },
     { "hradius", parse_strictly_positive_double, NULL, &hradius },
     { "vradius", parse_strictly_positive_double, NULL, &vradius },
@@ -2809,6 +2811,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   gsk_gradient_set_repeat (gradient, repeat);
 
   result = gsk_radial_gradient_node_new2 (&bounds,
+                                          snap,
                                           &start.center, start.radius,
                                           &end.center, end.radius,
                                           aspect_ratio.value,
@@ -6267,6 +6270,7 @@ render_node_print (Printer       *p,
         gradient = gsk_gradient_node_get_gradient (node);
 
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_radial_gradient_node_get_snap (node));
         append_circle_param (p, "start",
                              gsk_radial_gradient_node_get_start_center (node),
                              gsk_radial_gradient_node_get_start_radius (node));

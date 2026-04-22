@@ -46,6 +46,8 @@ GskRenderNode *         gsk_radial_gradient_node_new      (const graphene_rect_t
                                                            float                     end,
                                                            const GskColorStop       *color_stops,
                                                            gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_radial_gradient_node_get_snap          (const GskRenderNode *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_radial_gradient_node_get_n_color_stops (const GskRenderNode *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

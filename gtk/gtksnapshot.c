@@ -3211,6 +3211,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
                                   float                    aspect_ratio,
                                   const GskGradient       *gradient)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -3230,7 +3231,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
   if (color && gsk_radial_gradient_fills_plane (start_center, start_radius,
                                                 end_center, end_radius))
     {
-      node = gsk_color_node_new2 (color, &real_bounds, GSK_RECT_SNAP_NONE);
+      node = gsk_color_node_new2 (color, &real_bounds, state->props.snap);
     }
   else
     {
@@ -3244,6 +3245,7 @@ gtk_snapshot_add_radial_gradient (GtkSnapshot             *snapshot,
       real_end.y = scale_y * end_center->y + dy;
 
       node = gsk_radial_gradient_node_new2 (&real_bounds,
+                                            state->props.snap,
                                             &real_start, start_radius * scale_x,
                                             &real_end, end_radius * scale_x,
                                             aspect_ratio * (scale_x / scale_y),

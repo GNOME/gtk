@@ -498,6 +498,7 @@ parameter defines the copy node to paste from.
 | property          | syntax              | default        | printed     |
 | ----------------- | ------------------- | -------------- | ----------- |
 | bounds            | `<rect>`            | 50             | always      |
+| snap              | `<snap>`            | none           | non-default |
 |                   |                     |                |             |
 | center            | `<point>`           | 25 25          | never       |
 | hradius           | `<number>`          | 25             | never       |

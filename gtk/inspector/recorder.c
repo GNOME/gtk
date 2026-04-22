@@ -1170,6 +1170,7 @@ populate_render_node_properties (GListStore            *store,
         GString *s;
         GdkTexture *texture;
 
+        add_snap_row (store, "Snap", gsk_radial_gradient_node_get_snap (node));
         add_text_row (store, "Center", "%.2f, %.2f", center->x, center->y);
         add_text_row (store, "Direction", "%.2f ⟶  %.2f", start, end);
         add_text_row (store, "Radius", "%.2f, %.2f", hradius, vradius);

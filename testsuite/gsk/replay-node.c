@@ -76,7 +76,7 @@ static void
 replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
-  gsk_render_node_get_bounds (node, &bounds);
+  GskRectSnap snap = gsk_radial_gradient_node_get_snap (node);
   const graphene_point_t *center = gsk_radial_gradient_node_get_center (node);
   float hradius = gsk_radial_gradient_node_get_hradius (node);
   float vradius = gsk_radial_gradient_node_get_vradius (node);
@@ -84,11 +84,18 @@ replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   float end = gsk_radial_gradient_node_get_end (node);
   const GskGradient *gradient = gsk_gradient_node_get_gradient (node);
 
+  gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
+
   gtk_snapshot_add_radial_gradient (snapshot, &bounds,
                                     center, hradius * start,
                                     center, hradius * end,
                                     hradius / vradius,
                                     gradient);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
