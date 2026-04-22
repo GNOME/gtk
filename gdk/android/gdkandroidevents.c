@@ -164,7 +164,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
   GdkModifierType mods = gdk_android_events_meta_to_gdk (AMotionEvent_getMetaState (event));
   mods |= gdk_android_events_buttons_to_gdkmods (dev_impl->button_state);
 
-  gint64 time = AMotionEvent_getEventTime (event);
+  gint64 time = AMotionEvent_getEventTime (event) / 1000000 /* ns to ms */;
 
   // Update keyboard focus on motion events only for autohide surfaces
   // This *doesn't really* match the behaviour of Mutter (autohide popups
@@ -393,7 +393,7 @@ gdk_android_events_handle_key_event (GdkAndroidSurface *surface,
   GdkModifierType mods = gdk_android_events_meta_to_gdk (AKeyEvent_getMetaState (event));
   mods |= gdk_android_events_buttons_to_gdkmods (((GdkAndroidDevice *) display->seat->logical_pointer)->button_state);
 
-  gint64 time = AKeyEvent_getEventTime (event);
+  gint64 time = AKeyEvent_getEventTime (event) / 1000000 /* ns to ms */;
 
   gint32 keycode = AKeyEvent_getKeyCode (event);
 
