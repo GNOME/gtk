@@ -34,9 +34,11 @@ static const JNINativeMethod glib_context_natives[] = {
   { .name = "runOnMain", .signature = "(Ljava/lang/Runnable;)V", .fnPtr = _gdk_android_glib_context_run_on_main }
 };
 
+static void _gdk_android_gdk_context__set_latest_activity (JNIEnv *env, jclass this, jobject activity);
 static void _gdk_android_gdk_context_activate (JNIEnv *env, jclass this);
 static void _gdk_android_gdk_context_open (JNIEnv *env, jclass this, jobject uri, jstring jhint);
 static const JNINativeMethod gdk_context_natives[] = {
+  { .name = "_set_latest_activity", .signature = "(Lorg/gtk/android/ToplevelActivity;)V", .fnPtr = _gdk_android_gdk_context__set_latest_activity },
   { .name = "activate", .signature = "()V", .fnPtr = _gdk_android_gdk_context_activate },
   { .name = "open", .signature = "(Landroid/net/Uri;Ljava/lang/String;)V", .fnPtr = _gdk_android_gdk_context_open }
 };
@@ -69,6 +71,11 @@ static const JNINativeMethod toplevel_natives[] = {
   { .name = "notifyActivityResult", .signature = "(IILandroid/content/Intent;)V", .fnPtr = _gdk_android_toplevel_on_activity_result }
 };
 
+static void
+_gdk_android_gdk_context__set_latest_activity (JNIEnv *env, jclass this, jobject activity)
+{
+  gdk_android_set_latest_activity (env, activity);
+}
 static void
 _gdk_android_gdk_context_activate (JNIEnv *env, jclass this)
 {
