@@ -36,6 +36,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
+#include <gdk/gdkkeysyms.h>
 
 /**
  * GtkCheckButton:
@@ -425,6 +426,30 @@ update_accessible_state (GtkCheckButton *check_button)
                                -1);
 }
 
+static void
+update_accessible_mnemonic (GtkCheckButton *check_button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
+
+  if (priv->child_type == LABEL_CHILD && priv->child != NULL && priv->use_underline)
+    {
+      guint keyval = gtk_label_get_mnemonic_keyval (GTK_LABEL (priv->child));
+      if (keyval != GDK_KEY_VoidSymbol)
+        {
+          const char *name = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+          char *shortcut = g_strdup_printf ("Alt+%s", name);
+          gtk_accessible_update_property (GTK_ACCESSIBLE (check_button),
+                                          GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, shortcut,
+                                          -1);
+          g_free (shortcut);
+          return;
+        }
+    }
+
+  /* No mnemonic - clear the property */
+  gtk_accessible_reset_property (GTK_ACCESSIBLE (check_button),
+                                 GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
+}
 
 static GtkCheckButton *
 get_group_next (GtkCheckButton *self)
@@ -1040,6 +1065,8 @@ gtk_check_button_set_label (GtkCheckButton *self,
                                       -1);
     }
 
+  update_accessible_mnemonic (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
 
   g_object_thaw_notify (G_OBJECT (self));
@@ -1181,6 +1208,8 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
                                       -1);
     }
 
+  update_accessible_mnemonic (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_USE_UNDERLINE]);
 }
 
@@ -1216,6 +1245,8 @@ gtk_check_button_set_child (GtkCheckButton *button,
   gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
 
   gtk_check_button_real_set_child (button, child, WIDGET_CHILD);
+
+  update_accessible_mnemonic (button);
 
   g_object_notify_by_pspec (G_OBJECT (button), props[PROP_CHILD]);
 
