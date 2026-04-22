@@ -91,6 +91,8 @@ static int pre_initialized = FALSE;
 static int gtk_initialized = FALSE;
 static GList *current_events = NULL;
 
+/* {{{ Debug flags */
+
 typedef struct {
   GdkDisplay *display;
   guint flags;
@@ -209,6 +211,9 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "session-mgmt", GTK_DEBUG_SESSION, "Information about session saving" },
   { "general-info", GTK_DEBUG_GENERAL_INFO, "General information (in markdown)" },
 };
+
+/* }}} */
+/* {{{ Initialization */
 
 /* This checks to see if the process is running suid or sgid
  * at the current time. If so, we don’t allow GTK to be initialized.
@@ -820,6 +825,8 @@ gtk_is_initialized (void)
   return gtk_initialized;
 }
 
+/* }}} */
+/* {{{ Locale handling */
 
 /**
  * gtk_get_locale_direction:
@@ -913,6 +920,9 @@ gtk_get_default_language (void)
   return pango_language_get_default ();
 }
 
+/* }}} */
+/* {{{ Clipboard sync */
+
 typedef struct {
   GMainLoop *store_loop;
   guint n_clipboards;
@@ -994,6 +1004,9 @@ gtk_main_sync (void)
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
 }
+
+/* }}} */
+/* {{{ Event handling */
 
 static GdkEvent *
 rewrite_event_for_surface (GdkEvent  *event,
@@ -2087,3 +2100,7 @@ gtk_event_treat_as_touch (GdkEvent *event)
       return GTK_DISPLAY_DEBUG_CHECK (gdk_event_get_display (event), TOUCHSCREEN);
     }
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker: */
