@@ -2565,7 +2565,25 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
                                                     0,
                                                     &tex_rect);
   if (image == NULL)
-    return;
+    {
+      GdkColor color;
+      float values[4];
+
+      graphene_vec4_to_float (gsk_color_matrix_node_get_color_offset (node),
+                              values);
+      gdk_color_init (&color,
+                      gsk_color_matrix_node_get_color_state (node),
+                      values);
+
+      gsk_gpu_color_op (self,
+                        self->ccs,
+                        gsk_gpu_color_states_find (self->ccs, &color),
+                        &node->bounds,
+                        &color);
+      gdk_color_finish (&color);
+
+      return;
+    }
 
   gsk_gpu_color_matrix_op (self,
                            self->ccs,
