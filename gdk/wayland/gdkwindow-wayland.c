@@ -40,12 +40,21 @@
 #include <string.h>
 #include <errno.h>
 
+/* GdkWindowImplWayland */
 enum {
-  COMMITTED,
+  IMPL_COMMITTED,
+
+  IMPL_LAST_SIGNAL
+};
+
+/* GdkWindowWayland */
+enum {
+  XDG_TOPLEVEL_REALIZED,
 
   LAST_SIGNAL
 };
 
+static guint impl_signals[IMPL_LAST_SIGNAL];
 static guint signals[LAST_SIGNAL];
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
@@ -77,6 +86,27 @@ G_DEFINE_TYPE (GdkWaylandWindow, gdk_wayland_window, GDK_TYPE_WINDOW)
 static void
 gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (wayland_window_class);
+
+  /**
+   * GdkWindow::xdg-toplevel-realized:
+   * @window: the #GdkWindow which received the signal
+   *
+   * Emitted when an `xdg_toplevel` is created for @window during
+   * realization. The toplevel can be retrieved with
+   * gdk_wayland_window_get_xdg_toplevel().
+   *
+   * This signal is emitted before the first commit to the Wayland
+   * surface owned by @window.
+   *
+   * Since: 3.24
+   */
+  signals[XDG_TOPLEVEL_REALIZED] = g_signal_new ("xdg-toplevel-realized",
+                                                 GDK_TYPE_WAYLAND_WINDOW,
+                                                 G_SIGNAL_RUN_LAST,
+                                                 0,
+                                                 NULL, NULL, NULL,
+                                                 G_TYPE_NONE, 0);
 }
 
 static void
@@ -740,7 +770,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
   impl->awaiting_frame = TRUE;
 
-  g_signal_emit (impl, signals[COMMITTED], 0);
+  g_signal_emit (impl, impl_signals[IMPL_COMMITTED], 0);
 }
 
 static void
@@ -2227,6 +2257,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (impl->hint == GDK_WINDOW_TYPE_HINT_DIALOG)
     _gdk_wayland_screen_add_orphan_dialog (window);
 
+  g_signal_emit (window, signals[XDG_TOPLEVEL_REALIZED], 0);
   wl_surface_commit (impl->display_server.wl_surface);
 }
 
@@ -5161,12 +5192,12 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->invalidate_for_new_frame = gdk_wayland_window_invalidate_for_new_frame;
   impl_class->titlebar_gesture = gdk_wayland_window_titlebar_gesture;
 
-  signals[COMMITTED] = g_signal_new ("committed",
-                                     G_TYPE_FROM_CLASS (object_class),
-                                     G_SIGNAL_RUN_LAST,
-                                     0,
-                                     NULL, NULL, NULL,
-                                     G_TYPE_NONE, 0);
+  impl_signals[IMPL_COMMITTED] = g_signal_new ("committed",
+                                               G_TYPE_FROM_CLASS (object_class),
+                                               G_SIGNAL_RUN_LAST,
+                                               0,
+                                               NULL, NULL, NULL,
+                                               G_TYPE_NONE, 0);
 }
 
 void
@@ -5283,6 +5314,30 @@ gdk_wayland_window_get_gtk_surface (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
 
   return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.gtk_surface;
+}
+
+/**
+ * gdk_wayland_window_get_xdg_toplevel:
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the `xdg_toplevel` associated with the Wayland surface of
+ * @window, or %NULL if the window does not currently have one (e.g.,
+ * the window is not yet realized or is not a toplevel).
+ *
+ * Use the #GdkWindow::xdg-toplevel-realized signal to be notified
+ * when the `xdg_toplevel` becomes available.
+ *
+ * Returns: (nullable) (transfer none): the Wayland `xdg_toplevel`,
+ *   or %NULL
+ *
+ * Since: 3.24
+ */
+struct xdg_toplevel *
+gdk_wayland_window_get_xdg_toplevel (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  return GDK_WINDOW_IMPL_WAYLAND (window->impl)->display_server.xdg_toplevel;
 }
 
 /**
