@@ -69,6 +69,10 @@ public class ToplevelActivity extends Activity {
 	}
 
 	public static class GdkContext {
+        @Keep
+        @GlibContext.GtkThread
+        private static native void _set_latest_activity(ToplevelActivity activity);
+
 		@GlibContext.GtkThread
 		public static native void activate();
 		@GlibContext.GtkThread
@@ -449,26 +453,39 @@ public class ToplevelActivity extends Activity {
 		this.view = new ToplevelView();
 		setContentView(this.view);
 
-		long identifier = getIntent().getLongExtra(toplevelIdentifierKey, 0);
+		long[] possibleIdentifiers = {
+			savedInstanceState != null ? savedInstanceState.getLong(toplevelIdentifierKey, 0) : 0L,
+			getIntent().getLongExtra(toplevelIdentifierKey, 0),
+		};
 		GlibContext.blockForMain(() -> {
-			try {
-				bindNative(identifier);
-			} catch (UnregisteredSurfaceException e) {
-				Intent intent = getIntent();
-				if (intent.getData() != null) {
-					String hint = "";
-					if (intent.getAction() != null) {
-						String[] action = intent.getAction().split("\\.");
-						hint = action[action.length - 1].toLowerCase();
-					}
-					GdkContext.open(intent.getData(), hint);
-				} else {
-					GdkContext.activate();
-				}
+			for (long identifier : possibleIdentifiers) {
+				if (identifier == 0)
+					continue;
 
-				if (nativeIdentifier == 0)
-					Logger.getLogger("Toplevel").log(Level.SEVERE, "Call to activate did not spawn a new window");
+				try {
+					bindNative(identifier);
+					return;
+				} catch (UnregisteredSurfaceException e) {
+					this.nativeIdentifier = 0;
+				}
 			}
+
+			GdkContext._set_latest_activity(this);
+
+			Intent intent = getIntent();
+			if (intent.getData() != null) {
+				String hint = "";
+				if (intent.getAction() != null) {
+					String[] action = intent.getAction().split("\\.");
+					hint = action[action.length - 1].toLowerCase();
+				}
+				GdkContext.open(intent.getData(), hint);
+			} else {
+				GdkContext.activate();
+			}
+
+			if (nativeIdentifier == 0)
+				Logger.getLogger("Toplevel").log(Level.SEVERE, "Call to activate did not spawn a new window");
 		});
 	}
 
@@ -515,6 +532,13 @@ public class ToplevelActivity extends Activity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateToplevelState();
+	}
+
+	@Override
+	public void onSaveInstanceState(@NonNull Bundle outState) {
+		if (this.nativeIdentifier != 0)
+			outState.putLong(toplevelIdentifierKey, this.nativeIdentifier);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
