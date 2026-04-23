@@ -128,6 +128,7 @@ compare_render_tests = [
   'fill-subpixel-shift-nocairo',
   'fill-with-3d-contents-nocairo',
   'gradient-premultiply-end-values',
+  'gradient-with-lots-of-colorstops-double-clips',
   'glyph-cache-overflow',
   'glyph-cache-overflow-slices',
   'glyph-hinting-none',

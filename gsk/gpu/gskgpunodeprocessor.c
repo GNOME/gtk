@@ -1681,7 +1681,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuRenderPass   *self,
                                    image,
                                    ics,
                                    GSK_GPU_SAMPLER_DEFAULT,
-                                   &node->bounds,
+                                   &bounds,
                                    &bounds);
 
   g_object_unref (image);
