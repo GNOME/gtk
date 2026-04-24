@@ -990,7 +990,7 @@ prepare_print_called (GObject      *source,
 
   g_variant_get (ret, "(o)", &path);
   if (strcmp (path, ptd->portal_handle) != 0)
-   {
+    {
       g_free (ptd->portal_handle);
       ptd->portal_handle = g_steal_pointer (&path);
 
@@ -1141,6 +1141,7 @@ print_response (GDBusConnection *connection,
         {
         case 0:
           g_task_return_boolean (task, TRUE);
+          g_object_unref (task);
           break;
 
         case 1:
@@ -1148,6 +1149,7 @@ print_response (GDBusConnection *connection,
                                    GTK_DIALOG_ERROR,
                                    GTK_DIALOG_ERROR_DISMISSED,
                                    "Dismissed by user");
+          g_object_unref (task);
           break;
 
         case 2:
@@ -1156,10 +1158,10 @@ print_response (GDBusConnection *connection,
                                    GTK_DIALOG_ERROR,
                                    GTK_DIALOG_ERROR_FAILED,
                                    "Operation failed");
+          g_object_unref (task);
           break;
         }
     }
-  g_object_unref (task);
 }
 
 static void
