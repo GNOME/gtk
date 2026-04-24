@@ -490,6 +490,7 @@ gtk_popover_bin_set_menu_model (GtkPopoverBin *self,
       GtkWidget *popover;
 
       popover = gtk_popover_menu_new_from_model (model);
+      gtk_popover_set_position (GTK_POPOVER (popover), GTK_POS_BOTTOM);
       gtk_popover_bin_set_popover (self, popover);
     }
   else
