@@ -81,18 +81,22 @@ typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
  * funcGTDAC is GetThreadDpiAwarenessContext() and
  * funcADACE is AreDpiAwarenessContextsEqual() provided by user32.dll, on
  * Windows 10 Creator Edition and later.
+ * funcGSMFD is GetSystemMetricsForDpi(), provided by user32.dll on
+ * Windows 10 Anniversary Update and later.
  * Treat HANDLE as void*, for convenience, since DPI_AWARENESS_CONTEXT is
  * declared using DEFINE_HANDLE.
  */
 typedef BOOL (WINAPI *funcSPDAC)  (void *);
 typedef HANDLE (WINAPI *funcGTDAC)  (void);
 typedef BOOL (WINAPI *funcADACE) (void *, void *);
+typedef int (WINAPI *funcGSMFD) (int, UINT);
 
 typedef struct _GdkWin32User32DPIFuncs
 {
   funcSPDAC setPDAC;
   funcGTDAC getTDAC;
   funcADACE areDACEqual;
+  funcGSMFD getSysMetrics;
 } GdkWin32User32DPIFuncs;
 
 typedef enum {

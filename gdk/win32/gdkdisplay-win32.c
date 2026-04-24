@@ -945,6 +945,21 @@ gdk_win32_display_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->finalize (object);
 }
 
+/* Polyfill for GetSystemMetricsForDPI */
+static int WINAPI
+get_system_metrics_for_dpi_fallback (int index, UINT dpi)
+{
+  HDC hdc;
+  int system_dpi;
+
+  /* Polyfill GetDpiForSystem () */
+  hdc = GetDC (NULL);
+  system_dpi = GetDeviceCaps (hdc, LOGPIXELSX);
+  ReleaseDC (NULL, hdc);
+
+  return MulDiv (GetSystemMetrics (index), dpi, system_dpi);
+}
+
 static void
 _gdk_win32_enable_hidpi (GdkWin32Display *display)
 {
@@ -969,7 +984,11 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
         (funcGTDAC) GetProcAddress (user32, "GetThreadDpiAwarenessContext");
       display->user32_dpi_funcs.areDACEqual =
         (funcADACE) GetProcAddress (user32, "AreDpiAwarenessContextsEqual");
+      display->user32_dpi_funcs.getSysMetrics =
+        (funcGSMFD) GetProcAddress (user32, "GetSystemMetricsForDpi");
     }
+  if (!display->user32_dpi_funcs.getSysMetrics)
+    display->user32_dpi_funcs.getSysMetrics = get_system_metrics_for_dpi_fallback;
 
   if (g_getenv ("GDK_WIN32_DISABLE_HIDPI") == NULL)
     {

@@ -301,6 +301,14 @@ _get_system_font_name (HDC hdc)
   return result;
 }
 
+static int
+get_sys_metrics_for_default_dpi (GdkDisplay *display, int index)
+{
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+
+  return win32_display->user32_dpi_funcs.getSysMetrics (index, USER_DEFAULT_SCREEN_DPI);
+}
+
 gboolean
 gdk_win32_display_get_setting (GdkDisplay  *display,
                                const char *name,
@@ -330,21 +338,23 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
     }
   else if (strcmp ("gtk-cursor-theme-size", name) == 0)
     {
-      int cursor_size = GetSystemMetrics (SM_CXCURSOR);
+      int cursor_size = get_sys_metrics_for_default_dpi (display, SM_CXCURSOR);
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, cursor_size));
       g_value_set_int (value, cursor_size);
       return TRUE;
     }
   else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
     {
-      int i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
+      int i = MAX (get_sys_metrics_for_default_dpi (display, SM_CXDRAG),
+                   get_sys_metrics_for_default_dpi (display, SM_CYDRAG));
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-double-click-distance", name) == 0)
     {
-      int i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
+      int i = MAX (get_sys_metrics_for_default_dpi (display, SM_CXDOUBLECLK),
+                   get_sys_metrics_for_default_dpi (display, SM_CYDOUBLECLK));
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
