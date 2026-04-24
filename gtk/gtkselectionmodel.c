@@ -253,6 +253,12 @@ gtk_selection_model_default_init (GtkSelectionModelInterface *iface)
    * items, they need to be queried manually. It is also not necessary for
    * a model to change the selection state of any of the items in the selection
    * model, though it would be rather useless to emit such a signal.
+   *
+   * ::: warning
+   *     Note that you have to be careful when modifying the model in signal
+   *     handlers, as it may cause reentrancy problems. This is also the
+   *     case when you modify base models underneath the selection model.
+   *     When in doubt, defer changes to an idle.
    */
   signals[SELECTION_CHANGED] =
     g_signal_new ("selection-changed",
