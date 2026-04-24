@@ -511,7 +511,7 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
                   0,
                   NULL, NULL,
                   _gtk_marshal_VOID__STRING_STRING,
-                  G_TYPE_NONE, 1, G_TYPE_STRING);
+                  G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
   g_signal_set_va_marshaller (activate_signal,
                               G_TYPE_FROM_CLASS (object_class),
                               _gtk_marshal_VOID__STRING_STRINGv);
