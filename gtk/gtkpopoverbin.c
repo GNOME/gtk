@@ -697,7 +697,11 @@ gtk_popover_bin_popup (GtkPopoverBin *self)
 {
   g_return_if_fail (GTK_IS_POPOVER_BIN (self));
 
-  gtk_popover_bin_popup_at_position (self, -1.0, -1.0);
+  if (self->popover == NULL)
+    return;
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (self->popover), NULL);
+  gtk_popover_popup (GTK_POPOVER (self->popover));
 }
 
 /**
