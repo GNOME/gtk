@@ -866,6 +866,11 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = ELEMENT_TEXTS,
     .parse_value = svg_text_anchor_parse,
   },
+  [SVG_PROPERTY_DOMINANT_BASELINE] = {
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = ELEMENT_TEXTS,
+    .parse_value = svg_dominant_baseline_parse,
+  },
   [SVG_PROPERTY_DX] = {
     .flags = SVG_PROPERTY_NO_CSS,
     .applies_to = ELEMENT_TEXTS,
@@ -1223,6 +1228,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FY].initial_value = svg_number_new (0);
   shape_attrs[SVG_PROPERTY_FR].initial_value = svg_percentage_new (0);
   shape_attrs[SVG_PROPERTY_TEXT_ANCHOR].initial_value = svg_text_anchor_new (TEXT_ANCHOR_START);
+  shape_attrs[SVG_PROPERTY_DOMINANT_BASELINE].initial_value = svg_dominant_baseline_new (DOMINANT_BASELINE_AUTO);
   shape_attrs[SVG_PROPERTY_DX].initial_value = svg_number_new (0);
   shape_attrs[SVG_PROPERTY_DY].initial_value = svg_number_new (0);
   shape_attrs[SVG_PROPERTY_UNICODE_BIDI].initial_value = svg_unicode_bidi_new (UNICODE_BIDI_NORMAL);
@@ -1475,6 +1481,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "xml:lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "text-anchor", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_ANCHOR },
+  { "dominant-baseline", ELEMENT_ANY, 0, SVG_PROPERTY_DOMINANT_BASELINE },
   { "dx", ELEMENT_TEXTS, 0, SVG_PROPERTY_DX },
   { "dy", ELEMENT_TEXTS, 0, SVG_PROPERTY_DY },
   { "unicode-bidi", ELEMENT_ANY, 0, SVG_PROPERTY_UNICODE_BIDI },

@@ -3287,6 +3287,8 @@ text_create_layout (SvgElement       *self,
   PangoGravity gravity;
   PangoFontDescription *font_desc;
   PangoLayout *layout;
+  PangoFontMetrics *metrics;
+  int ascent, descent;
   PangoAttrList *attr_list;
   PangoAttribute *attr;
   TextDecoration decoration;
@@ -3294,6 +3296,7 @@ text_create_layout (SvgElement       *self,
   PangoLayoutIter *iter;
   double offset;
   SvgValue *font_family;
+  DominantBaseline baseline;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SVG_PROPERTY_LANG], 0));
@@ -3362,6 +3365,11 @@ text_create_layout (SvgElement       *self,
 
   layout = pango_layout_new (context);
   pango_layout_set_font_description (layout, font_desc);
+
+  metrics = pango_context_get_metrics (context, font_desc, pango_context_get_language (context));
+  ascent = pango_font_metrics_get_ascent (metrics);
+  descent = pango_font_metrics_get_descent (metrics);
+
   pango_font_description_free (font_desc);
 
   attr_list = pango_attr_list_new ();
@@ -3408,6 +3416,50 @@ text_create_layout (SvgElement       *self,
   iter = pango_layout_get_iter (layout);
   offset = pango_layout_iter_get_baseline (iter) / (double)PANGO_SCALE;
   pango_layout_iter_free (iter);
+
+  baseline = svg_enum_get (self->current[SVG_PROPERTY_DOMINANT_BASELINE]);
+  switch (baseline)
+    {
+    case DOMINANT_BASELINE_AUTO:
+    case DOMINANT_BASELINE_ALPHABETIC:
+      offset += 0.;
+      break;
+    case DOMINANT_BASELINE_HANGING:
+      offset -= (ascent - descent) / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_MIDDLE:
+      // Approximate meanline using strikethrough position and thickness
+      // https://mail.gnome.org/archives/gtk-i18n-list/2012-December/msg00046.html
+      offset -= (pango_font_metrics_get_strikethrough_position (metrics) +
+                 pango_font_metrics_get_strikethrough_thickness (metrics) / 2
+                ) / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_CENTRAL:
+      offset = .5 * (ascent + descent) / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_TEXT_BEFORE_EDGE:
+    case DOMINANT_BASELINE_TEXT_BOTTOM:
+      //offset -= ascent / (double)PANGO_SCALE;
+      // Bit of a klutch, but leads to better results
+      offset -= (2.*ascent - h) / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_TEXT_AFTER_EDGE:
+    case DOMINANT_BASELINE_TEXT_TOP:
+      offset += descent / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_IDEOGRAPHIC:
+      // Approx
+      offset += descent / (double)PANGO_SCALE;
+      break;
+    case DOMINANT_BASELINE_MATHEMATICAL:
+      // Approx
+      offset += .5 * (ascent + descent) / (double)PANGO_SCALE;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+  pango_font_metrics_unref (metrics);
+
   switch (wmode)
     {
     case WRITING_MODE_HORIZONTAL_TB:

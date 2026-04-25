@@ -1,0 +1,45 @@
+clip {
+  clip: 0 0 1920 600;
+  child: container {
+    color {
+      bounds: 0 0 1920 600;
+      color: rgb(255,255,255);
+    }
+    stroke {
+      child: color {
+        bounds: -4 96 1928 8;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 0 100\
+L 1920 100";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    stroke {
+      child: color {
+        bounds: -4 271 1928 8;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 0 275\
+L 1920 275";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+    stroke {
+      child: color {
+        bounds: -4 446 1928 8;
+        color: rgb(0,0,255);
+      }
+      path: "\
+M 0 450\
+L 1920 450";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" height="600" width="1920" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <rect x="0" y="0" width="1920" height="600" fill="white"/>
+
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="auto" fill="black" x="10" text-anchor="left" y="100">Auto</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="alphabetical" fill="black" x="150" text-anchor="left" y="100">Alphabetical</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="hanging" fill="black" x="500" text-anchor="left" y="100">Hanging</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="middle" fill="black" x="750" text-anchor="left" y="100">Middle</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="central" fill="black" x="950" text-anchor="left" y="100">Central</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="text-after-edge" fill="black" x="1150" text-anchor="left" y="100">Text-after-edge</text>
+  <text font-family="DejaVuSans" font-size="50" dominant-baseline="text-before-edge" fill="black" x="1520" text-anchor="left" y="100">Text-before-edge</text>
+  <line stroke="blue" x1="0" y1="100" x2="1920" y2="100"/>
+
+  <text font-family="Roboto" font-size="50" dominant-baseline="auto" fill="black" x="10" text-anchor="left" y="275">Auto</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="alphabetical" fill="black" x="150" text-anchor="left" y="275">Alphabetical</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="hanging" fill="black" x="500" text-anchor="left" y="275">Hanging</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="middle" fill="black" x="750" text-anchor="left" y="275">Middle</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="central" fill="black" x="950" text-anchor="left" y="275">Central</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="text-after-edge" fill="black" x="1150" text-anchor="left" y="275">Text-after-edge</text>
+  <text font-family="Roboto" font-size="50" dominant-baseline="text-before-edge" fill="black" x="1520" text-anchor="left" y="275">Text-before-edge</text>
+  <line stroke="blue" x1="0" y1="275" x2="1920" y2="275"/>
+
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="auto" fill="black" x="10" text-anchor="left" y="450">Auto</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="alphabetical" fill="black" x="150" text-anchor="left" y="450">Alphabetical</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="hanging" fill="black" x="500" text-anchor="left" y="450">Hanging</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="middle" fill="black" x="750" text-anchor="left" y="450">Middle</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="central" fill="black" x="950" text-anchor="left" y="450">Central</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="text-after-edge" fill="black" x="1150" text-anchor="left" y="450">Text-after-edge</text>
+  <text font-family="Roboto" font-style="italic" font-weight="bold" font-size="50" dominant-baseline="text-before-edge" fill="black" x="1520" text-anchor="left" y="450">Text-before-edge</text>
+  <line stroke="blue" x1="0" y1="450" x2="1920" y2="450"/>
+
+</svg>
