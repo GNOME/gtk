@@ -142,6 +142,7 @@ test_data = [
   'symbolic-color3.test',
   'symbolic-color4.test',
   'text-align-01-b.svg',
+  'text-dominant-baseline-01.svg',
   'text-fonts-02-t.svg',
   'text-stroke-gradient.svg',
   'text-text-03-b.svg',
