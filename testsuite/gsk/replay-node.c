@@ -254,10 +254,16 @@ replay_rounded_clip_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *bounds = gsk_rounded_clip_node_get_clip (node);
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  GskRectSnap snap = gsk_rounded_clip_node_get_snap (node);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
 
   gtk_snapshot_push_rounded_clip (snapshot, bounds);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

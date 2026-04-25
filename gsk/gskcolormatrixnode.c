@@ -191,7 +191,17 @@ gsk_color_matrix_node_diff (GskRenderNode *node1,
       graphene_vec4_equal (&self1->color_offset, &self2->color_offset) &&
       graphene_matrix_equal_fast (&self1->color_matrix, &self2->color_matrix))
     {
+      cairo_region_t *save;
+      cairo_rectangle_int_t clip_rect;
+
+      save = data->region;
+      data->region = cairo_region_create ();
       gsk_render_node_diff (self1->child, self2->child, data);
+      gsk_rect_to_cairo_grow (&node1->bounds, &clip_rect);
+      cairo_region_intersect_rectangle (data->region, &clip_rect);
+      cairo_region_union (save, data->region);
+      cairo_region_destroy (data->region);
+      data->region = save;
       return;
     }
 

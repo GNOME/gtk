@@ -1507,6 +1507,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         const GskRoundedRect *clip = gsk_rounded_clip_node_get_clip (node);
         add_rect_row (store, "Clip", &clip->bounds);
+        add_snap_row (store, "Snap", gsk_rounded_clip_node_get_snap (node));
 
         add_text_row (store, "Top Left Corner Size", "%.2f x %.2f", clip->corner[0].width, clip->corner[0].height);
         add_text_row (store, "Top Right Corner Size", "%.2f x %.2f", clip->corner[1].width, clip->corner[1].height);

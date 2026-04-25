@@ -58,7 +58,7 @@
 #include "gskrectsnapprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnodeprivate.h"
-#include "gskroundedclipnode.h"
+#include "gskroundedclipnodeprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskshadownodeprivate.h"
 #include "gskstroke.h"
@@ -3771,10 +3771,12 @@ parse_rounded_clip_node (GtkCssParser *parser,
                          Context      *context)
 {
   GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   GskRenderNode *child = NULL;
   const Declaration declarations[] = {
     { "clip", parse_rounded_rect, NULL, &clip },
     { "child", parse_node, clear_node, &child },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -3782,7 +3784,7 @@ parse_rounded_clip_node (GtkCssParser *parser,
   if (child == NULL)
     child = create_default_render_node ();
 
-  result = gsk_rounded_clip_node_new (child, &clip);
+  result = gsk_rounded_clip_node_new2 (child, &clip, snap);
 
   gsk_render_node_unref (child);
 
@@ -6371,6 +6373,7 @@ render_node_print (Printer       *p,
 
         append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_get_clip (node));
         append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
+        append_snap_param (p, "snap", gsk_rounded_clip_node_get_snap (node));
 
         end_node (p);
       }

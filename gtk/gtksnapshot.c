@@ -40,6 +40,7 @@
 #include "gsk/gskradialgradientnodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
+#include "gsk/gskroundedclipnodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gsk/gskstrokeprivate.h"
 #include "gsk/gsktextnodeprivate.h"
@@ -140,6 +141,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } glshader_texture;
     struct {
       GskRoundedRect bounds;
+      GskRectSnap snap;
     } rounded_clip;
     struct {
       GskPath *path;
@@ -673,38 +675,6 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
 }
 
 static GskRenderNode *
-merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
-                          const graphene_vec4_t   *offset2,
-                          GskRenderNode           *child)
-{
-  const graphene_matrix_t *matrix1 = gsk_color_matrix_node_get_color_matrix (child);
-  const graphene_vec4_t *offset1 = gsk_color_matrix_node_get_color_offset (child);
-  graphene_matrix_t matrix;
-  graphene_vec4_t offset;
-  GskRenderNode *result;
-
-  g_assert (gsk_render_node_get_node_type (child) == GSK_COLOR_MATRIX_NODE);
-
-  /* color matrix node: color = trans(mat) * p + offset; for a pixel p.
-   * color =  trans(mat2) * (trans(mat1) * p + offset1) + offset2
-   *       =  trans(mat2) * trans(mat1) * p + trans(mat2) * offset1 + offset2
-   *       = trans(mat1 * mat2) * p + (trans(mat2) * offset1 + offset2)
-   * Which this code does.
-   * mat1 and offset1 come from @child.
-   */
-
-  graphene_matrix_transform_vec4 (matrix2, offset1, &offset);
-  graphene_vec4_add (&offset, offset2, &offset);
-
-  graphene_matrix_multiply (matrix1, matrix2, &matrix);
-
-  result = gsk_color_matrix_node_new (gsk_color_matrix_node_get_child (child),
-                                      &matrix, &offset);
-
-  return result;
-}
-
-static GskRenderNode *
 gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
                                    GtkSnapshotState *state,
                                    GskRenderNode   **nodes,
@@ -716,42 +686,10 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  if (gsk_render_node_get_node_type (node) == GSK_COLOR_MATRIX_NODE)
-    {
-      result = merge_color_matrix_nodes (&state->data.color_matrix.matrix,
-                                         &state->data.color_matrix.offset,
-                                         node);
-      gsk_render_node_unref (node);
-    }
-  else if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
-    {
-      GskRenderNode *transform_child = gsk_transform_node_get_child (node);
-      GskRenderNode *color_matrix;
-
-      if (gsk_render_node_get_node_type (transform_child) == GSK_COLOR_MATRIX_NODE)
-        {
-          color_matrix = merge_color_matrix_nodes (&state->data.color_matrix.matrix,
-                                                   &state->data.color_matrix.offset,
-                                                   transform_child);
-        }
-      else
-        {
-          color_matrix = gsk_color_matrix_node_new (transform_child,
-                                                    &state->data.color_matrix.matrix,
-                                                    &state->data.color_matrix.offset);
-        }
-      result = gsk_transform_node_new (color_matrix,
-                                       gsk_transform_node_get_transform (node));
-      gsk_render_node_unref (color_matrix);
-      gsk_render_node_unref (node);
-    }
-  else
-    {
-      result = gsk_color_matrix_node_new (node,
-                                          &state->data.color_matrix.matrix,
-                                          &state->data.color_matrix.offset);
-      gsk_render_node_unref (node);
-    }
+  result = gsk_color_matrix_node_new (node,
+                                      &state->data.color_matrix.matrix,
+                                      &state->data.color_matrix.offset);
+  gsk_render_node_unref (node);
 
   return result;
 }
@@ -1312,14 +1250,18 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
       if (graphene_rect_contains_rect (&state->data.rounded_clip.bounds.bounds, &node->bounds))
         return node;
 
-      clip_node = gsk_clip_node_new (node, &state->data.rounded_clip.bounds.bounds);
+      clip_node = gsk_clip_node_new2 (node,
+                                      &state->data.rounded_clip.bounds.bounds,
+                                      state->data.rounded_clip.snap);
     }
   else
     {
       if (gsk_rounded_rect_contains_rect (&state->data.rounded_clip.bounds, &node->bounds))
         return node;
 
-      clip_node = gsk_rounded_clip_node_new (node, &state->data.rounded_clip.bounds);
+      clip_node = gsk_rounded_clip_node_new2 (node,
+                                              &state->data.rounded_clip.bounds,
+                                              state->data.rounded_clip.snap);
     }
 
   if (clip_node->bounds.size.width == 0 ||
@@ -1363,6 +1305,7 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
                                    NULL);
 
   gsk_rounded_rect_scale_affine (&state->data.rounded_clip.bounds, bounds, scale_x, scale_y, dx, dy);
+  state->data.rounded_clip.snap = state->props.snap;
 }
 
 static GskRenderNode *

@@ -587,6 +587,7 @@ difference is that the default value for the "repeat" property is "repeat".
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
 | clip     | `<rounded-rect>` | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 
 Creates a node like `gsk_rounded_clip_node_new()` with the given properties.
 

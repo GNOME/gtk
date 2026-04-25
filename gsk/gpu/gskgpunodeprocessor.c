@@ -802,31 +802,46 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuRenderPass *self,
                                               GskRenderNode       *node)
 {
   GskGpuRenderPassClipStorage storage;
-  const GskRoundedRect *clip;
+  GskRoundedRect clip;
   GskRenderNode *child;
 
   child = gsk_rounded_clip_node_get_child (node);
-  clip = gsk_rounded_clip_node_get_clip (node);
+  clip = *gsk_rounded_clip_node_get_clip (node);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &clip.bounds,
+                                      gsk_rounded_clip_node_get_snap (node),
+                                      &clip.bounds))
+    return;
 
   /* Common case for entries etc: rounded solid color background.
    * And we have a shader for that */
-  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
-      gsk_rect_contains_rect (&child->bounds, &clip->bounds))
+  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE)
     {
-      const GdkColor *color;
+      graphene_rect_t child_bounds;
 
-      color = gsk_color_node_get_gdk_color (child);
+      if (!gsk_gpu_render_pass_snap_rect (self,
+                                          &child->bounds,
+                                          gsk_color_node_get_snap (node),
+                                          &child_bounds))
+        return;
 
-      gsk_gpu_rounded_color_op (self,
-                                self->ccs,
-                                gsk_gpu_color_states_find (self->ccs, color),
-                                &clip->bounds,
-                                clip,
-                                color);
-      return;
+      if (gsk_rect_contains_rect (&child_bounds, &clip.bounds))
+        {
+          const GdkColor *color;
+
+          color = gsk_color_node_get_gdk_color (child);
+
+          gsk_gpu_rounded_color_op (self,
+                                    self->ccs,
+                                    gsk_gpu_color_states_find (self->ccs, color),
+                                    &clip.bounds,
+                                    &clip,
+                                    color);
+          return;
+        }
     }
 
-  gsk_gpu_render_pass_push_clip_rounded (self, clip, &storage);
+  gsk_gpu_render_pass_push_clip_rounded (self, &clip, &storage);
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     gsk_gpu_node_processor_add_node (self, child, 0);
