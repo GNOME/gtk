@@ -456,6 +456,7 @@ translate_hints (GtkIMContextWayland *context,
                  GtkInputHints        input_hints,
                  GtkInputPurpose      purpose)
 {
+  GtkIMContextWaylandGlobal *global;
   uint32_t hints = 0;
 
   if (input_hints & GTK_INPUT_HINT_SPELLCHECK)
@@ -470,13 +471,29 @@ translate_hints (GtkIMContextWayland *context,
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_SENTENCES)
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION;
-  if (input_hints & GTK_INPUT_HINT_NO_EMOJI)
-    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_NO_EMOJI;
-  if (input_hints & GTK_INPUT_HINT_INHIBIT_OSK)
-    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED;
 
-  if (context->use_preedit)
-    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_PREEDIT_SHOWN;
+  global = gtk_im_context_wayland_get_global (context);
+
+  if (zwp_text_input_v3_get_version (global->text_input) >=
+      ZWP_TEXT_INPUT_V3_CONTENT_HINT_NO_EMOJI_SINCE_VERSION)
+    {
+      if (input_hints & GTK_INPUT_HINT_NO_EMOJI)
+        hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_NO_EMOJI;
+    }
+
+  if (zwp_text_input_v3_get_version (global->text_input) >=
+      ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED_SINCE_VERSION)
+    {
+      if (input_hints & GTK_INPUT_HINT_INHIBIT_OSK)
+        hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED;
+    }
+
+  if (zwp_text_input_v3_get_version (global->text_input) >=
+      ZWP_TEXT_INPUT_V3_CONTENT_HINT_PREEDIT_SHOWN_SINCE_VERSION)
+    {
+      if (context->use_preedit)
+        hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_PREEDIT_SHOWN;
+    }
 
   if (purpose == GTK_INPUT_PURPOSE_PIN ||
       purpose == GTK_INPUT_PURPOSE_PASSWORD)
