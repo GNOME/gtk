@@ -10,15 +10,13 @@
 #include "gskgpuimageprivate.h"
 #include "gskpathprivate.h"
 #include "gskrectprivate.h"
+#include "gsktransformprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkcairoprivate.h"
 
 #include "gsk/gskprivate.h"
-
-#define SUBPIXEL_SCALE_X 32
-#define SUBPIXEL_SCALE_Y 32
 
 typedef struct _GskGpuCachedFill GskGpuCachedFill;
 
@@ -162,27 +160,49 @@ mod_subpixel (float  pos,
     return (gsize) - ceil (pos);
 }
 
+static void
+determine_scale_and_subpixel_grid (const graphene_size_t *scale,
+                                   GskTransform           *modelview,
+                                   float                  *sx,
+                                   float                  *sy,
+                                   size_t                 *subpixel_scale)
+{
+  if (gsk_transform_get_fine_category (modelview) <= GSK_FINE_TRANSFORM_CATEGORY_3D)
+    {
+      *sx = *sy = ceilf (MAX (scale->width, scale->height) + 0.5);
+      *subpixel_scale = 1;
+    }
+  else
+    {
+      *sx = scale->width;
+      *sy = scale->height;
+      *subpixel_scale = 32;
+    }
+}
+
 GskGpuImage *
 gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                             GskGpuFrame           *frame,
                             const graphene_size_t *scale,
                             const graphene_rect_t *bounds,
+                            GskTransform          *modelview,
                             GskPath               *path,
                             GskFillRule            fill_rule,
                             graphene_rect_t       *out_rect)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
-  float sx = scale->width;
-  float sy = scale->height;
-  float dx, dy;
+  float sx, sy, dx, dy;
   GskGpuCachedFill *cached;
   gsize fx, fy, padding;
   cairo_rectangle_int_t area;
   GskGpuImage *image = NULL;
   graphene_rect_t viewport;
+  size_t subpixel_scale;
 
-  fx = mod_subpixel (bounds->origin.x, sx, SUBPIXEL_SCALE_X, &dx);
-  fy = mod_subpixel (bounds->origin.y, sy, SUBPIXEL_SCALE_Y, &dy);
+  determine_scale_and_subpixel_grid (scale, modelview, &sx, &sy, &subpixel_scale);
+
+  fx = mod_subpixel (bounds->origin.x, sx, subpixel_scale, &dx);
+  fy = mod_subpixel (bounds->origin.y, sy, subpixel_scale, &dy);
 
   cached = g_hash_table_lookup (priv->fill_cache,
                                 &(GskGpuCachedFill) {
@@ -209,8 +229,8 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
   if (!gsk_path_get_bounds (path, &viewport) ||
       !gsk_rect_snap_to_grid_grow (&viewport,
                                    scale,
-                                   &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
-                                                         (float) fy / (sy * SUBPIXEL_SCALE_Y)),
+                                   &GRAPHENE_POINT_INIT ((float) fx / (sx * subpixel_scale),
+                                                         (float) fy / (sy * subpixel_scale)),
                                    &viewport))
     return NULL;
 
