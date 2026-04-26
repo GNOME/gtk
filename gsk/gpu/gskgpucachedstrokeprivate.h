@@ -4,6 +4,7 @@
 
 #include "gsk/gskpath.h"
 #include "gsk/gskstroke.h"
+#include "gsk/gsktransform.h"
 
 #include <graphene.h>
 
@@ -16,6 +17,7 @@ GskGpuImage *           gsk_gpu_cached_stroke_lookup                    (GskGpuC
                                                                          GskGpuFrame            *frame,
                                                                          const graphene_size_t  *scale,
                                                                          const graphene_rect_t  *bounds,
+                                                                         GskTransform           *modelview,
                                                                          GskPath                *path,
                                                                          const GskStroke        *stroke,
                                                                          graphene_rect_t        *rect);
