@@ -1,8 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" id="svg1" width="16" height="16" gpa:state-names="outline empty">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:subject>
           <rdf:Bag>
             <rdf:li>window-restore small square</rdf:li>
@@ -16,6 +17,6 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="window" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 7 5 L 9 5 C 10.108 5, 11 5.892, 11 7 L 11 9 C 11 10.108, 10.108 11, 9 11 L 7 11 C 5.892 11, 5 10.108, 5 9 L 5 7 C 5 5.892, 5.892 5, 7 5 Z" class="transparent-fill foreground-stroke" gpa:states="outline">
+  <path id="window" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 7 5 L 9 5 C 10.108 5, 11 5.892, 11 7 L 11 9 C 11 10.108, 10.108 11, 9 11 L 7 11 C 5.892 11, 5 10.108, 5 9 L 5 7 C 5 5.892, 5.892 5, 7 5 Z" gpa:states="outline">
   </path>
 </svg>

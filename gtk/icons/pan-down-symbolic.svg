@@ -1,8 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" id="svg1" width="16" height="16" gpa:state-names="outline empty">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:subject>
           <rdf:Bag>
             <rdf:li>pan-down arrow</rdf:li>
@@ -16,6 +17,6 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 13 6 L 8 11 L 3 6" class="transparent-fill foreground-stroke" gpa:states="outline">
+  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 13 6 L 8 11 L 3 6" gpa:states="outline">
     </path>
 </svg>

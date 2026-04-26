@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" gpa:version="1" gpa:state-names="outline filled color empty" gpa:state="0" width="16" height="16">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state-names="outline filled color empty" gpa:state="0" width="16" height="16">
   <metadata>
     <rdf:RDF>
       <cc:Work>
@@ -17,10 +17,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="outline" fill="none" stroke="rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" gpa:stroke-minwidth="0.5" gpa:stroke-maxwidth="3" class="transparent-fill foreground-stroke" gpa:states="outline" gpa:stroke="foreground">
+  <path id="outline" fill="none" stroke="rgb(0,0,0)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" gpa:stroke-minwidth="0.5" gpa:stroke-maxwidth="3" gpa:states="outline" gpa:stroke="foreground">
   </path>
-  <path id="filled" visibility="hidden" fill="rgb(0,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" class="foreground foreground-fill" gpa:states="filled" gpa:fill="foreground">
+  <path id="filled" visibility="hidden" fill="rgb(0,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" gpa:states="filled" gpa:fill="foreground">
   </path>
-  <path id="color" visibility="hidden" fill="rgb(204,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" class="error error-fill" gpa:states="color" gpa:fill="error">
+  <path id="color" visibility="hidden" fill="rgb(204,0,0)" fill-rule="nonzero" stroke="none" d="M 2 8 C 2 11.3137, 4.68629 14, 8 14 C 11.3137 14, 14 11.3137, 14 8 C 14 4.68629, 11.3137 2, 8 2 C 4.68629 2, 2 4.68629, 2 8 Z" gpa:states="color" gpa:fill="error">
   </path>
 </svg>

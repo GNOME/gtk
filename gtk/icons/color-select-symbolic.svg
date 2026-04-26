@@ -1,20 +1,9 @@
-<svg
-        xmlns='http://www.w3.org/2000/svg'
-        xmlns:svg='http://www.w3.org/2000/svg'
-        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-        xmlns:cc='http://creativecommons.org/ns#'
-        xmlns:dc='http://purl.org/dc/elements/1.1/'
-        xmlns:gpa='https://www.gtk.org/grappa'
-        gpa:version='1'
-        gpa:state-names='outline filled'
-        gpa:state='0'
-        width='16'
-        height='16'>
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state-names="outline filled" gpa:state="0" width="16" height="16">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license
-                rdf:resource='https://creativecommons.org/publicdomain/zero/1.0/'/>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:creator>
           <cc:Agent>
             <dc:title>Jakub Steiner</dc:title>
@@ -28,57 +17,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path
-          id='path0'
-          class='transparent-fill foreground-stroke'
-          fill='none'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 1 15 L 2 14 L 2 12 L 8 6 L 10 8 L 4 14 L 2 14'
-          gpa:stroke-minwidth='0.5'
-          gpa:stroke-maxwidth='3'
-          gpa:stroke='foreground'
-          gpa:states='outline filled'>
+  <path id="path0" fill="none" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" d="M 1 15 L 2 14 L 2 12 L 8 6 L 10 8 L 4 14 L 2 14" gpa:stroke-minwidth="0.5" gpa:stroke-maxwidth="3" gpa:stroke="foreground" gpa:states="outline filled">
   </path>
-  <path
-          id='outline'
-          class='transparent-fill foreground-stroke'
-          fill='none'
-          fill-opacity='0.25'
-          fill-rule='nonzero'
-          stroke='url(#gpa:foreground) rgb(0,0,0)'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 6 4 L 6.844 3.156 C 7.48248 2.51765, 8.51752 2.51765, 9.156 3.156 L 10 4 L 11.71 2.277 C 11.9778 2.00717, 12.342 1.85507, 12.7222 1.85432 C 13.1023 1.85357, 13.4671 2.00423, 13.736 2.273 C 14.2809 2.83392, 14.2697 3.72985, 13.711 4.277 L 12 6 L 12.844 6.844 C 13.4823 7.48248, 13.4823 8.51752, 12.844 9.156 L 12 10 Z'
-          gpa:stroke-minwidth='0.5'
-          gpa:stroke-maxwidth='3'
-          gpa:stroke='foreground'
-          gpa:states='outline filled'>
+  <path id="outline" fill="none" fill-opacity="0.25" fill-rule="nonzero" stroke="url(#gpa:foreground) rgb(0,0,0)" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" d="M 6 4 L 6.844 3.156 C 7.48248 2.51765, 8.51752 2.51765, 9.156 3.156 L 10 4 L 11.71 2.277 C 11.9778 2.00717, 12.342 1.85507, 12.7222 1.85432 C 13.1023 1.85357, 13.4671 2.00423, 13.736 2.273 C 14.2809 2.83392, 14.2697 3.72985, 13.711 4.277 L 12 6 L 12.844 6.844 C 13.4823 7.48248, 13.4823 8.51752, 12.844 9.156 L 12 10 Z" gpa:stroke-minwidth="0.5" gpa:stroke-maxwidth="3" gpa:stroke="foreground" gpa:states="outline filled">
   </path>
-  <path
-          id='fill'
-          class='foreground foreground-fill'
-          visibility='hidden'
-          fill='url(#gpa:foreground) rgb(0,0,0)'
-          fill-opacity='1'
-          fill-rule='nonzero'
-          stroke='none'
-          stroke-opacity='1'
-          stroke-width='2'
-          stroke-linecap='round'
-          stroke-linejoin='round'
-          stroke-miterlimit='4'
-          d='M 6 4 L 6.844 3.156 C 7.48248 2.51765, 8.51752 2.51765, 9.156 3.156 L 10 4 L 11.71 2.277 C 11.9778 2.00717, 12.342 1.85507, 12.7222 1.85432 C 13.1023 1.85357, 13.4671 2.00423, 13.736 2.273 C 14.2809 2.83392, 14.2697 3.72985, 13.711 4.277 L 12 6 L 12.844 6.844 C 13.4823 7.48248, 13.4823 8.51752, 12.844 9.156 L 12 10 Z'
-          gpa:stroke-minwidth='0.25'
-          gpa:stroke-maxwidth='1.5'
-          gpa:fill='foreground'
-          gpa:states='filled'>
+  <path id="fill" visibility="hidden" fill="url(#gpa:foreground) rgb(0,0,0)" fill-opacity="1" fill-rule="nonzero" stroke="none" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" d="M 6 4 L 6.844 3.156 C 7.48248 2.51765, 8.51752 2.51765, 9.156 3.156 L 10 4 L 11.71 2.277 C 11.9778 2.00717, 12.342 1.85507, 12.7222 1.85432 C 13.1023 1.85357, 13.4671 2.00423, 13.736 2.273 C 14.2809 2.83392, 14.2697 3.72985, 13.711 4.277 L 12 6 L 12.844 6.844 C 13.4823 7.48248, 13.4823 8.51752, 12.844 9.156 L 12 10 Z" gpa:stroke-minwidth="0.25" gpa:stroke-maxwidth="1.5" gpa:fill="foreground" gpa:states="filled">
   </path>
 </svg>
