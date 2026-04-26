@@ -1,8 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" gpa:version="1" gpa:state="0" width="16" height="16" gpa:state-names="outline empty">
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:subject>
           <rdf:Bag>
             <rdf:li>folder-documents document blank empty text sheet text-x-generic pages inkscape graphics</rdf:li>
@@ -16,8 +17,8 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 3 4 L 3 13 C 3 14.1046, 3.89543 15, 5 15 L 11 15 C 12.1046 15, 13 14.1046, 13 13 L 13 6 C 13 5.35971, 12.7456 4.74565, 12.2929 4.29289 L 10.7071 2.70711 C 10.2544 2.25435, 9.64029 2, 9 2 L 5 2 C 3.89543 2, 3 2.89543, 3 4 Z" class="transparent-fill foreground-stroke" gpa:states="outline">
+  <path id="path0" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M 3 4 L 3 13 C 3 14.1046, 3.89543 15, 5 15 L 11 15 C 12.1046 15, 13 14.1046, 13 13 L 13 6 C 13 5.35971, 12.7456 4.74565, 12.2929 4.29289 L 10.7071 2.70711 C 10.2544 2.25435, 9.64029 2, 9 2 L 5 2 C 3.89543 2, 3 2.89543, 3 4 Z" gpa:states="outline">
   </path>
-  <path id="path1" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" d="M 8.53103 2 L 8.53103 6.49655 L 10.4966 6.49655 C 11.8792 6.49655, 13 7.61738, 13 9" class="transparent-fill foreground-stroke" gpa:states="outline">
+  <path id="path1" fill="none" stroke="rgb(0,0,0)" gpa:stroke="foreground" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" d="M 8.53103 2 L 8.53103 6.49655 L 10.4966 6.49655 C 11.8792 6.49655, 13 7.61738, 13 9" gpa:states="outline">
   </path>
 </svg>

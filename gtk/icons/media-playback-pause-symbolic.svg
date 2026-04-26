@@ -1,17 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:gpa="https://www.gtk.org/grappa" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="16" height="16" gpa:version="1" gpa:state="0" gpa:state-names="outline filled empty">
-  <style type="text/css">
-    .not-initial-state {
-      visibility: hidden;
-    }
-  </style>
-  <path d="M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z" id="path0" gpa:states="filled" gpa:transition-type="fade" gpa:transition-duration="200ms" stroke="none" fill-rule="nonzero" fill="rgb(0,0,0)" class="foreground-fill" gpa:fill="foreground">
+  <path d="M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z" id="path0" gpa:states="filled" gpa:transition-type="fade" gpa:transition-duration="200ms" stroke="none" fill-rule="nonzero" fill="rgb(0,0,0)" gpa:fill="foreground">
     </path>
-  <path d="M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z" id="path1" gpa:states="outline" gpa:transition-type="fade" gpa:transition-duration="200ms" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" class="foreground-stroke transparent-fill not-initial-state" gpa:stroke="foreground">
+  <path d="M 6 3.5 L 6 12.5 C 6 13.3284273, 5.32842731 14, 4.5 14 C 3.67157292 14, 3 13.3284273, 3 12.5 L 3 3.5 C 3 2.67157292, 3.67157292 2, 4.5 2 C 5.32842731 2, 6 2.67157292, 6 3.5 Z M 13 3.5 L 13 12.5 C 13 13.3284273, 12.3284273 14, 11.5 14 C 10.6715727 14, 10 13.3284273, 10 12.5 L 10 3.5 C 10 2.67157292, 10.6715727 2, 11.5 2 C 12.3284273 2, 13 2.67157292, 13 3.5 Z" id="path1" gpa:states="outline" gpa:transition-type="fade" gpa:transition-duration="200ms" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0,0,0)" fill="none" gpa:stroke="foreground" visibility="hidden">
     </path>
   <metadata>
     <rdf:RDF>
       <cc:Work>
-        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"></cc:license>
+        <cc:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:subject>
           <rdf:Bag>
             <rdf:li>media-playback-pause</rdf:li>
