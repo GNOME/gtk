@@ -225,6 +225,11 @@ Closes: https://gitlab.gnome.org/GNOME/gtk/issues/1234
  the commit message, e.g. `Bug: #1234`, and use the automatic issue
  closing syntax in the description of the merge request.
 
+- If some of your changes were generated mechanically (either by a script,
+  or by some elaborate commandline), it is a good idea to include this
+  information in the merge request description (if it is a script, attach it),
+  so the changes can be regenerated if necessary.
+
 ### Commit access to the GTK repository
 
 GTK is part of the GNOME infrastructure. At the current time, any
