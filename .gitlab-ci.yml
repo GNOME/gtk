@@ -132,7 +132,7 @@ container:fedora:
 
 .container.android:
   variables:
-    BASE_TAG: '2025-11-11.0'
+    BASE_TAG: '2026-04-27.0'
     FDO_DISTRIBUTION_VERSION: sid
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -330,7 +330,7 @@ fedora-mingw64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - pip3 install --user meson==1.8.2
+    - pip3 install --user meson==1.11.1
     - meson -Dintrospection=disabled -Dgraphene:introspection=disabled _build
     - meson compile -C _build
 
@@ -405,7 +405,7 @@ macos-arm64:
     - |
       python3 -m venv .venv
       source .venv/bin/activate
-      pip3 install meson==1.9.0 ninja==1.11.1.1
+      pip3 install meson==1.11.1 ninja==1.11.1.1
       ln -s /opt/ccache/ccache .venv/bin
     # The introspection feature requires pkg-config and bison.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
@@ -483,8 +483,9 @@ android:
     FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
   before_script:
     - .gitlab-ci/show-info-linux.sh
-    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross and glib/hack.patch files.
+    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross, fontconfig.wrap and glib/hack.patch files.
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git --branch android36 pixiewood
+    - cp -f pixiewood/prepare/wraps/fontconfig/fontconfig.wrap subprojects/
     # glib/hack makes the g_set_user_dirs public. Drop once glib has android support
     - mkdir -p subprojects/packagefiles/
     - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
