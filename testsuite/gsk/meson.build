@@ -41,6 +41,7 @@ compare_render_tests = [
   'border-zero-width-color',
   'borders-rotated',
   'borders-scaled',
+  'bug-early-exit-doesnt-clear-clip-mask',
   'cairo-coordinates',
   'cairo-translations',
   'clip-all-clipped-issue-7044',

@@ -1,0 +1,37 @@
+/* have a clip so the clip mask isn't fully
+   opaque */
+rounded-clip {
+  clip: 10 10 30 30 / 10;
+  /* We need 2 nodes here: */
+  child: container {
+    /* the transform triggers a clip mask
+       because 3D transforms can't have clips.
+       it also gets aborted after that because
+       a final check for too small scale is
+       found. */
+    transform {
+      transform: perspective(800) scale(0.0001);
+    }
+    /* BUG HERE: We forget to reset the
+       clip mask */
+
+    /* the color node is just to ensure bounds
+       for the container node */
+    color {
+      bounds: 10 10 30 30;
+      color: lime; 
+    }
+  }
+}
+
+/* draw something that doesn't trigger occlusion
+   optimizations, so the above stuff gets
+   actually drawn and triggers the bug. */
+color {
+  bounds: 0 0 30 30;
+  color: red; 
+}
+color {
+  bounds: 10 10 30 30;
+  color: blue; 
+}

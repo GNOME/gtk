@@ -431,7 +431,7 @@ gsk_gpu_render_pass_push_transform_check_scale (GskGpuRenderPass                
 
   gsk_gpu_clip_init_all_clipped (&self->clip);
   self->modelview = gsk_transform_ref (storage->modelview);
-  storage->clip.modified = GSK_GPU_GLOBAL_CLIP;
+  storage->clip.modified |= GSK_GPU_GLOBAL_CLIP;
   self->pending_globals |= storage->clip.modified;
 
   return FALSE;
