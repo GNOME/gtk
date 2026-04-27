@@ -483,9 +483,8 @@ android:
     FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
   before_script:
     - .gitlab-ci/show-info-linux.sh
-    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross, fontconfig.wrap and glib/hack.patch files.
+    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross and glib/hack.patch files.
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git --branch android36 pixiewood
-    - cp -f pixiewood/prepare/wraps/fontconfig/fontconfig.wrap subprojects/
     # glib/hack makes the g_set_user_dirs public. Drop once glib has android support
     - mkdir -p subprojects/packagefiles/
     - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
