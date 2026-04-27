@@ -16,7 +16,8 @@ PASS_FLAT(0) mat4 _color_matrix;
 PASS_FLAT(4) vec4 _color_offset;
 PASS(5) vec2 _pos;
 PASS_FLAT(6) Rect _bounds;
-PASS(7) vec2 _tex_coord;
+PASS_FLAT(7) Rect _tex_rect;
+PASS(8) vec2 _tex_coord;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -42,6 +43,7 @@ run (out vec2 pos)
     
   _color_matrix = cm;
   _color_offset = in_color_offset;
+  _tex_rect = rect_from_gsk (in_tex_rect);
 }
 
 #endif
@@ -54,7 +56,8 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec4 pixel = texture (GSK_TEXTURE0, _tex_coord);
+  vec4 pixel = texture (GSK_TEXTURE0, _tex_coord) *
+               rect_coverage (_tex_rect, _pos);
   pixel = alt_color_from_output (pixel);
 
   pixel = _color_matrix * pixel + _color_offset;
