@@ -15,7 +15,7 @@ glib_major_req = 2
 glib_minor_req = 84
 
 pango_major_req = 1
-pango_minor_req = 56
+pango_minor_req = 57
 
 # keep these numbers in sync with wrap files where there exist
 glib_req           = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
