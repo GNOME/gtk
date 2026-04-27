@@ -218,7 +218,8 @@ serialize_gpa_attrs (GString              *s,
   if (svg->gpa_version == 0 || !svg_element_type_is_path (svg_element_get_type (shape)))
     return;
 
-  if (svg_element_get_gpa_stroke (shape))
+  if (svg_element_get_gpa_stroke (shape) &&
+      svg_paint_get_kind (svg_element_get_gpa_stroke (shape)) != PAINT_NONE)
     {
       string_indent (s, indent + ATTR_INDENT);
       g_string_append (s, "gpa:stroke='");
@@ -226,7 +227,8 @@ serialize_gpa_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  if (svg_element_get_gpa_fill (shape))
+  if (svg_element_get_gpa_fill (shape) &&
+      svg_paint_get_kind (svg_element_get_gpa_fill (shape)) != PAINT_NONE)
     {
       string_indent (s, indent + ATTR_INDENT);
       g_string_append (s, "gpa:fill='");
