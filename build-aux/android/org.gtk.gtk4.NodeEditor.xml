@@ -15,6 +15,8 @@
     <glib>
       <patch>hack</patch>
     </glib>
+    <cairo/>
+    <fontconfig/>
   </dependencies>
   <build target="gtk4-node-editor" java-sources="gdk/android/glue/java/">
     <configure-options>
