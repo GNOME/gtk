@@ -134,36 +134,36 @@ shape_changed (ShapeEditor *self)
   switch (old_type)
     {
     case SVG_ELEMENT_LINE:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X1, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y1, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X2, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y2, NULL);
       break;
     case SVG_ELEMENT_CIRCLE:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_R, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_R, NULL);
       break;
     case SVG_ELEMENT_ELLIPSE:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
       break;
     case SVG_ELEMENT_RECT:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_X, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, NULL);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_WIDTH, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_HEIGHT, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
       break;
     case SVG_ELEMENT_POLYLINE:
     case SVG_ELEMENT_POLYGON:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_POINTS, NULL);
       break;
     case SVG_ELEMENT_PATH:
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_PATH, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_PATH, NULL);
       break;
     default:
       break;
@@ -183,10 +183,10 @@ shape_changed (ShapeEditor *self)
         number_editor_get (self->line_x2, &x2, &ux2);
         number_editor_get (self->line_y2, &y2, &uy2);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X1, svg_number_new_full (ux1, x1));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y1, svg_number_new_full (uy1, y1));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X2, svg_number_new_full (ux2, x2));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y2, svg_number_new_full (uy2, y2));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_X1, svg_number_new_full (ux1, x1));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y1, svg_number_new_full (uy1, y1));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_X2, svg_number_new_full (ux2, x2));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y2, svg_number_new_full (uy2, y2));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -199,9 +199,9 @@ shape_changed (ShapeEditor *self)
         number_editor_get (self->circle_cy, &cy, &uy);
         number_editor_get (self->circle_r, &r, &ur);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_R, svg_number_new_full (ur, r));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_R, svg_number_new_full (ur, r));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -215,10 +215,10 @@ shape_changed (ShapeEditor *self)
         number_editor_get (self->ellipse_rx, &rx, &urx);
         number_editor_get (self->ellipse_ry, &ry, &ury);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, svg_number_new_full (ux, cx));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, svg_number_new_full (uy, cy));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -234,12 +234,12 @@ shape_changed (ShapeEditor *self)
         number_editor_get (self->rect_rx, &rx, &urx);
         number_editor_get (self->rect_ry, &ry, &ury);
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_X, svg_number_new_full (ux, x));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_Y, svg_number_new_full (uy, y));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_WIDTH, svg_number_new_full (uw, width));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_HEIGHT, svg_number_new_full (uh, height));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_X, svg_number_new_full (ux, x));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y, svg_number_new_full (uy, y));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_WIDTH, svg_number_new_full (uw, width));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_HEIGHT, svg_number_new_full (uh, height));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, svg_number_new_full (urx, rx));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, svg_number_new_full (ury, ry));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -269,7 +269,7 @@ shape_changed (ShapeEditor *self)
             i++;
           }
 
-        svg_element_take_base_value (self->shape, SVG_PROPERTY_POINTS, svg_numbers_new_full (parms, units, 2 * n_rows));
+        svg_element_take_specified_value (self->shape, SVG_PROPERTY_POINTS, svg_numbers_new_full (parms, units, 2 * n_rows));
         path_paintable_changed (self->paintable);
       }
       break;
@@ -347,7 +347,7 @@ shape_editor_update_path (ShapeEditor *self,
     return;
 
   svg_element_set_type (self->shape, SVG_ELEMENT_PATH);
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_PATH, svg_path_new (path));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_PATH, svg_path_new (path));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -374,17 +374,17 @@ shape_editor_update_clip_path (ShapeEditor *self,
   if ((path == NULL || gsk_path_is_empty (path)) &&
       (id == NULL || *id == '\0'))
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CLIP_PATH, NULL);
     }
   else if (path && !gsk_path_is_empty (path))
     {
       char *s = gsk_path_to_string (path);
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_path (s, 0xffff));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_path (s, 0xffff));
       g_free (s);
     }
   else
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CLIP_PATH, svg_clip_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -402,7 +402,7 @@ static void
 set_transform (ShapeEditor *self,
                SvgValue    *tf)
 {
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_TRANSFORM, tf);
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_TRANSFORM, tf);
   path_paintable_changed (self->paintable);
   gtk_widget_remove_css_class (GTK_WIDGET (self->transform), "error");
   gtk_accessible_reset_state (GTK_ACCESSIBLE (self->transform), GTK_ACCESSIBLE_STATE_INVALID);
@@ -416,14 +416,14 @@ mask_changed (ShapeEditor *self)
 
   if (gtk_drop_down_get_selected (self->mask_dropdown) == 0)
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_MASK, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_MASK, NULL);
     }
   else
     {
       const char *id;
 
       id = gtk_string_object_get_string (GTK_STRING_OBJECT (gtk_drop_down_get_selected_item (self->mask_dropdown)));
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_MASK, svg_mask_new_url_take (g_strdup_printf ("#%s", id)));
     }
 
   path_paintable_changed (self->paintable);
@@ -605,7 +605,7 @@ filter_changed (ShapeEditor *self)
 
   if (value)
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILTER, value);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILTER, value);
       path_paintable_changed (self->paintable);
       gtk_widget_remove_css_class (GTK_WIDGET (self->filter), "error");
       gtk_accessible_reset_state (GTK_ACCESSIBLE (self->filter), GTK_ACCESSIBLE_STATE_INVALID);
@@ -740,7 +740,7 @@ paint_order_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_PAINT_ORDER, svg_paint_order_new (value));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_PAINT_ORDER, svg_paint_order_new (value));
   path_paintable_changed (self->paintable);
 }
 
@@ -752,8 +752,43 @@ opacity_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_OPACITY, svg_number_new (value));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_OPACITY, svg_number_new (value));
   path_paintable_changed (self->paintable);
+}
+
+static SvgValue *
+get_effective_fill (SvgElement *shape)
+{
+  if (svg_element_get_gpa_fill (shape))
+    return svg_value_ref (svg_element_get_gpa_fill (shape));
+  else
+    return ref_value (shape, SVG_PROPERTY_FILL);
+}
+
+static SvgValue *
+get_effective_stroke (SvgElement *shape)
+{
+  if (svg_element_get_gpa_stroke (shape))
+    return svg_value_ref (svg_element_get_gpa_stroke (shape));
+  else
+    return ref_value (shape, SVG_PROPERTY_STROKE);
+}
+
+static PaintKind
+get_paint (SvgValue         *value,
+           GtkSymbolicColor *symbolic,
+           GdkRGBA          *rgba)
+{
+  PaintKind kind = svg_paint_get_kind (value);
+
+  if (svg_paint_is_symbolic (value, symbolic))
+    return PAINT_SYMBOLIC;
+  else if (svg_paint_get_kind (value) == PAINT_COLOR)
+    gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) rgba);
+  else
+    kind = PAINT_NONE;
+
+  return kind;
 }
 
 static void
@@ -807,13 +842,8 @@ stroke_changed (ShapeEditor *self)
   stroke_symbolic = 0xffff;
   stroke_color = (GdkRGBA) { 0, 0, 0, 1 };
 
-  value = ref_value (self->shape, SVG_PROPERTY_STROKE);
-  kind = svg_paint_get_kind (value);
-
-  if (kind == PAINT_SYMBOLIC)
-    stroke_symbolic = svg_paint_get_symbolic (value);
-  else if (kind == PAINT_COLOR)
-    gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &stroke_color);
+  value = get_effective_stroke (self->shape);
+  kind = get_paint (value, &stroke_symbolic, &stroke_color);
   svg_value_unref (value);
 
   value = ref_value (self->shape, SVG_PROPERTY_STROKE_WIDTH);
@@ -853,22 +883,27 @@ stroke_changed (ShapeEditor *self)
        gdk_rgba_equal (&stroke_color, color)))
     return;
 
+  svg_element_set_gpa_stroke (self->shape, NULL);
   if (!do_stroke)
-    svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
+    {
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_none ());
+    }
   else if (symbolic != 0xffff)
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_OPACITY, svg_number_new (color->alpha));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_symbolic (symbolic));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
+    {
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE, svg_paint_new_rgba (color));
+    }
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new_full (width_unit, width));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new_full (min_unit, min));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new_full (max_unit, max));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_WIDTH, svg_number_new_full (width_unit, width));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_MINWIDTH, svg_number_new_full (min_unit, min));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_MAXWIDTH, svg_number_new_full (max_unit, max));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_linecap_new (line_cap));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_LINEJOIN, svg_linejoin_new (line_join));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_MITERLIMIT, svg_number_new (miter_limit));
   path_paintable_changed (self->paintable);
 
   g_clear_object (&self->path_image);
@@ -914,13 +949,8 @@ fill_changed (ShapeEditor *self)
   fill_symbolic = 0xffff;
   fill_color = (GdkRGBA) { 0, 0, 0, 1 };
 
-  value = ref_value (self->shape, SVG_PROPERTY_FILL);
-  kind = svg_paint_get_kind (value);
-
-  if (kind == PAINT_SYMBOLIC)
-    fill_symbolic = svg_paint_get_symbolic (value);
-  else if (kind == PAINT_COLOR)
-    gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &fill_color);
+  value = get_effective_fill (self->shape);
+  kind = get_paint (value, &fill_symbolic, &fill_color);
   svg_value_unref (value);
 
   value = ref_value (self->shape, SVG_PROPERTY_FILL_RULE);
@@ -934,16 +964,21 @@ fill_changed (ShapeEditor *self)
        gdk_rgba_equal (&fill_color, color)))
     return;
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (fill_rule));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL_RULE, svg_fill_rule_new (fill_rule));
+  svg_element_set_gpa_fill (self->shape, NULL);
   if (!do_fill)
-    svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
+    {
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL, NULL);
+    }
   else if (symbolic != 0xffff)
     {
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
-      svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL_OPACITY, svg_number_new (color->alpha));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_symbolic (symbolic));
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL_OPACITY, svg_number_new (color->alpha));
     }
   else
-    svg_element_take_base_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
+    {
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_rgba (color));
+    }
 
   path_paintable_changed (self->paintable);
 
@@ -999,7 +1034,7 @@ mask_type_changed (ShapeEditor *self)
       g_assert_not_reached ();
     }
 
-  svg_element_take_base_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_mask_type_new (mode));
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_STROKE_LINECAP, svg_mask_type_new (mode));
 
   path_paintable_changed (self->paintable);
 }
@@ -1526,14 +1561,9 @@ shape_editor_update (ShapeEditor *self)
       symbolic = 0xffff;
       color = (GdkRGBA) { 0, 0, 0, 1 };
 
-      value = ref_value (self->shape, SVG_PROPERTY_STROKE);
-      kind = svg_paint_get_kind (value);
+      value = get_effective_stroke (self->shape);
+      kind = get_paint (value, &symbolic, &color);
       svg_value_unref (value);
-
-      if (kind == PAINT_SYMBOLIC)
-        symbolic = svg_paint_get_symbolic (value);
-      else if (kind == PAINT_COLOR)
-        gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->stroke_paint, 0);
@@ -1568,14 +1598,9 @@ shape_editor_update (ShapeEditor *self)
       symbolic = 0xffff;
       color = (GdkRGBA) { 0, 0, 0, 1 };
 
-      value = ref_value (self->shape, SVG_PROPERTY_STROKE);
-      kind = svg_paint_get_kind (value);
+      value = get_effective_fill (self->shape);
+      kind = get_paint (value, &symbolic, &color);
       svg_value_unref (value);
-
-      if (kind == PAINT_SYMBOLIC)
-        symbolic = svg_paint_get_symbolic (value);
-      else if (kind == PAINT_COLOR)
-        gdk_color_to_float (svg_paint_get_color (value), GDK_COLOR_STATE_SRGB, (float *) &color);
 
       if (kind == PAINT_NONE)
         color_editor_set_color_type (self->fill_paint, 0);
