@@ -120,7 +120,7 @@ exit:
 
 static GdkGrabStatus
 gdk_android_device_grab (GdkDevice *device, GdkSurface *surface,
-                         gboolean owner_events, GdkEventMask event_mask,
+                         gboolean owner_events,
                          GdkSurface *confine_to, GdkCursor *cursor,
                          guint32 time_)
 {

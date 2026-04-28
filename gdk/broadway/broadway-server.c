@@ -2049,7 +2049,6 @@ broadway_server_grab_pointer (BroadwayServer *server,
                               int client_id,
                               int id,
                               gboolean owner_events,
-                              guint32 event_mask,
                               guint32 time_)
 {
   if (server->pointer_grab_surface_id != -1 &&

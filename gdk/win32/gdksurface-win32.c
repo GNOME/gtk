@@ -1923,7 +1923,6 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
    */
   gdk_device_grab (device, pointer_surface,
                    FALSE,
-                   GDK_ALL_EVENTS_MASK,
                    context->cursor,
                    timestamp);
 

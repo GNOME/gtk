@@ -101,10 +101,9 @@ struct _GdkDeviceClass
                               GdkCursor *cursor);
 
   GdkGrabStatus (* grab)     (GdkDevice        *device,
-                              GdkSurface        *surface,
+                              GdkSurface       *surface,
                               gboolean          owner_events,
-                              GdkEventMask      event_mask,
-                              GdkSurface        *confine_to,
+                              GdkSurface       *confine_to,
                               GdkCursor        *cursor,
                               guint32           time_);
   void          (*ungrab)    (GdkDevice        *device,
@@ -174,7 +173,6 @@ void           gdk_device_update_tool (GdkDevice     *device,
 GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                GdkSurface        *surface,
                                gboolean          owner_events,
-                               GdkEventMask      event_mask,
                                GdkCursor        *cursor,
                                guint32           time_);
 void gdk_device_ungrab        (GdkDevice        *device,

@@ -99,7 +99,6 @@ static GdkGrabStatus
 gdk_macos_device_grab (GdkDevice    *device,
                        GdkSurface   *window,
                        gboolean      owner_events,
-                       GdkEventMask  event_mask,
                        GdkSurface   *confine_to,
                        GdkCursor    *cursor,
                        guint32       time_)

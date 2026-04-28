@@ -87,7 +87,6 @@ static GdkGrabStatus
 gdk_wayland_device_grab (GdkDevice    *device,
                          GdkSurface   *surface,
                          gboolean      owner_events,
-                         GdkEventMask  event_mask,
                          GdkSurface   *confine_to,
                          GdkCursor    *cursor,
                          uint32_t      time_)

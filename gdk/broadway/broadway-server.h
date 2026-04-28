@@ -77,7 +77,6 @@ guint32             broadway_server_grab_pointer              (BroadwayServer  *
                                                                int              client_id,
                                                                int              id,
                                                                gboolean         owner_events,
-                                                               guint32          event_mask,
                                                                guint32          time_);
 guint32             broadway_server_ungrab_pointer            (BroadwayServer  *server,
                                                                guint32          time_);

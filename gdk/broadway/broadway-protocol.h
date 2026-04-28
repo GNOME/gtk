@@ -261,7 +261,6 @@ typedef struct {
   BroadwayRequestBase base;
   guint32 id;
   guint32 owner_events;
-  guint32 event_mask;
   guint32 time_;
 } BroadwayRequestGrabPointer;
 

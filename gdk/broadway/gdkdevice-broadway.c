@@ -29,7 +29,6 @@ static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
 static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
                                                  GdkSurface     *surface,
                                                  gboolean       owner_events,
-                                                 GdkEventMask   event_mask,
                                                  GdkSurface     *confine_to,
                                                  GdkCursor     *cursor,
                                                  guint32        time_);
@@ -165,7 +164,6 @@ static GdkGrabStatus
 gdk_broadway_device_grab (GdkDevice    *device,
                           GdkSurface    *surface,
                           gboolean      owner_events,
-                          GdkEventMask  event_mask,
                           GdkSurface    *confine_to,
                           GdkCursor    *cursor,
                           guint32       time_)
@@ -187,7 +185,6 @@ gdk_broadway_device_grab (GdkDevice    *device,
       return _gdk_broadway_server_grab_pointer (broadway_display->server,
                                                 GDK_BROADWAY_SURFACE (surface)->id,
                                                 owner_events,
-                                                event_mask,
                                                 time_);
     }
 }

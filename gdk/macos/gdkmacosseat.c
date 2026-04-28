@@ -66,18 +66,6 @@ struct _GdkMacosSeatClass
 
 G_DEFINE_TYPE (GdkMacosSeat, gdk_macos_seat, GDK_TYPE_SEAT)
 
-#define KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |    \
-                         GDK_FOCUS_CHANGE_MASK)
-#define TOUCH_EVENTS    (GDK_TOUCH_MASK)
-#define POINTER_EVENTS  (GDK_POINTER_MOTION_MASK |                      \
-                         GDK_BUTTON_PRESS_MASK |                        \
-                         GDK_BUTTON_RELEASE_MASK |                      \
-                         GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK |     \
-                         GDK_ENTER_NOTIFY_MASK |                        \
-                         GDK_LEAVE_NOTIFY_MASK |                        \
-                         GDK_PROXIMITY_IN_MASK |                        \
-                         GDK_PROXIMITY_OUT_MASK)
-
 static void
 gdk_macos_tablet_data_free (gpointer user_data)
 {
@@ -162,22 +150,9 @@ gdk_macos_seat_grab (GdkSeat                *seat,
 
   if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
     {
-      /* ALL_POINTING spans 3 capabilities; get the mask for the ones we have */
-      GdkEventMask pointer_evmask = 0;
-
-      /* We let tablet styli take over the pointer cursor */
-      if (capabilities & (GDK_SEAT_CAPABILITY_POINTER |
-                          GDK_SEAT_CAPABILITY_TABLET_STYLUS))
-        {
-          pointer_evmask |= POINTER_EVENTS;
-        }
-
-      if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
-        pointer_evmask |= TOUCH_EVENTS;
-
       status = gdk_device_grab (self->logical_pointer, surface,
                                 owner_events,
-                                pointer_evmask, cursor,
+                                cursor,
                                 evtime);
     }
 
@@ -186,7 +161,7 @@ gdk_macos_seat_grab (GdkSeat                *seat,
     {
       status = gdk_device_grab (self->logical_keyboard, surface,
                                 owner_events,
-                                KEYBOARD_EVENTS, cursor,
+                                cursor,
                                 evtime);
 
       if (status != GDK_GRAB_SUCCESS)

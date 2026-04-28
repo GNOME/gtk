@@ -769,29 +769,12 @@ gdk_device_get_axis (GdkDevice  *device,
   return FALSE;
 }
 
-static GdkEventMask
-get_native_grab_event_mask (GdkEventMask grab_mask)
-{
-  /* Similar to the above but for pointer events only */
-  return
-    GDK_POINTER_MOTION_MASK |
-    GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-    GDK_SCROLL_MASK |
-    (grab_mask &
-     ~(GDK_BUTTON_MOTION_MASK |
-       GDK_BUTTON1_MOTION_MASK |
-       GDK_BUTTON2_MOTION_MASK |
-       GDK_BUTTON3_MOTION_MASK));
-}
-
 GdkGrabStatus
-gdk_device_grab (GdkDevice        *device,
-                 GdkSurface       *surface,
-                 gboolean          owner_events,
-                 GdkEventMask      event_mask,
-                 GdkCursor        *cursor,
-                 guint32           time_)
+gdk_device_grab (GdkDevice  *device,
+                 GdkSurface *surface,
+                 gboolean    owner_events,
+                 GdkCursor  *cursor,
+                 guint32     time_)
 {
   GdkGrabStatus res;
 
@@ -805,7 +788,6 @@ gdk_device_grab (GdkDevice        *device,
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
                                              surface,
                                              owner_events,
-                                             get_native_grab_event_mask (event_mask),
                                              NULL,
                                              cursor,
                                              time_);

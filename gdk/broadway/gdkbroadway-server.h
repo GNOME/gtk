@@ -35,7 +35,6 @@ void               _gdk_broadway_server_query_mouse              (GdkBroadwaySer
 GdkGrabStatus      _gdk_broadway_server_grab_pointer             (GdkBroadwayServer  *server,
 								  int                 id,
 								  gboolean            owner_events,
-								  guint32             event_mask,
 								  guint32             time_);
 guint32            _gdk_broadway_server_ungrab_pointer           (GdkBroadwayServer  *server,
 								  guint32             time_);
@@ -74,4 +73,3 @@ gboolean           _gdk_broadway_server_surface_move_resize       (GdkBroadwaySe
 void               _gdk_broadway_server_surface_set_modal_hint   (GdkBroadwayServer *server,
                                                                   int                id,
                                                                   gboolean           modal_hint);
-

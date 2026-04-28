@@ -105,7 +105,6 @@ static GdkGrabStatus
 gdk_device_virtual_grab (GdkDevice    *device,
                          GdkSurface   *surface,
                          gboolean      owner_events,
-                         GdkEventMask  event_mask,
                          GdkSurface   *confine_to,
                          GdkCursor    *cursor,
                          guint32       time_)

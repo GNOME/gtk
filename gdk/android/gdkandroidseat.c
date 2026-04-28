@@ -93,19 +93,6 @@ gdk_android_seat_get_capabilities (GdkSeat *seat)
   return GDK_SEAT_CAPABILITY_ALL;
 }
 
-#define KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | \
-                         GDK_FOCUS_CHANGE_MASK)
-#define POINTER_EVENTS  (GDK_POINTER_MOTION_MASK |                  \
-                         GDK_BUTTON_PRESS_MASK |                    \
-                         GDK_BUTTON_RELEASE_MASK |                  \
-                         GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK | \
-                         GDK_ENTER_NOTIFY_MASK |                    \
-                         GDK_LEAVE_NOTIFY_MASK |                    \
-                         GDK_PROXIMITY_IN_MASK |                    \
-                         GDK_PROXIMITY_OUT_MASK |                   \
-                         GDK_TOUCHPAD_GESTURE_MASK)
-#define TOUCH_EVENTS    (GDK_TOUCH_MASK)
-
 static GdkGrabStatus
 gdk_android_seat_grab (GdkSeat               *seat,
                        GdkSurface            *surface,
@@ -143,7 +130,7 @@ gdk_android_seat_grab (GdkSeat               *seat,
     {
       status = gdk_device_grab (self->logical_pointer, surface,
                                 owner_events,
-                                POINTER_EVENTS, cursor,
+                                cursor,
                                 evtime);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;
@@ -165,7 +152,7 @@ gdk_android_seat_grab (GdkSeat               *seat,
     {
       status = gdk_device_grab (self->logical_touchscreen, surface,
                                 owner_events,
-                                TOUCH_EVENTS, cursor,
+                                cursor,
                                 evtime);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;
@@ -177,7 +164,7 @@ gdk_android_seat_grab (GdkSeat               *seat,
     {
       status = gdk_device_grab (self->logical_keyboard, surface,
                                 owner_events,
-                                KEYBOARD_EVENTS, cursor,
+                                cursor,
                                 evtime);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;

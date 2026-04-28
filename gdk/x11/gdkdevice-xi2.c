@@ -37,6 +37,17 @@
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+#define GRAB_EVENT_MASK                                  \
+  (GDK_POINTER_MOTION_MASK |                             \
+   GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |     \
+   GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |       \
+   GDK_SCROLL_MASK |                                     \
+   (GDK_ALL_EVENTS_MASK &                                \
+    ~(GDK_BUTTON_MOTION_MASK |                           \
+      GDK_BUTTON1_MOTION_MASK |                          \
+      GDK_BUTTON2_MOTION_MASK |                          \
+      GDK_BUTTON3_MOTION_MASK)))
+
 typedef struct _ScrollValuator ScrollValuator;
 
 struct _ScrollValuator
@@ -83,7 +94,6 @@ static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
 static GdkGrabStatus gdk_x11_device_xi2_grab   (GdkDevice     *device,
                                                 GdkSurface     *surface,
                                                 gboolean       owner_events,
-                                                GdkEventMask   event_mask,
                                                 GdkSurface     *confine_to,
                                                 GdkCursor     *cursor,
                                                 guint32        time_);
@@ -306,10 +316,9 @@ gdk_x11_convert_grab_status (int status)
 
 static GdkGrabStatus
 gdk_x11_device_xi2_grab (GdkDevice    *device,
-                         GdkSurface    *surface,
+                         GdkSurface   *surface,
                          gboolean      owner_events,
-                         GdkEventMask  event_mask,
-                         GdkSurface    *confine_to,
+                         GdkSurface   *confine_to,
                          GdkCursor    *cursor,
                          guint32       time_)
 {
@@ -337,7 +346,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
 
   mask.deviceid = device_xi2->device_id;
   mask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
-                                                        event_mask,
+                                                        GRAB_EVENT_MASK,
                                                         &mask.mask_len);
 
   status = XIGrabDevice (GDK_DISPLAY_XDISPLAY (display),
