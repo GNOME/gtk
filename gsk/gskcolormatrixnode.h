@@ -37,6 +37,8 @@ GType                   gsk_color_matrix_node_get_type          (void) G_GNUC_CO
 GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
                                                                  const graphene_matrix_t  *color_matrix,
                                                                  const graphene_vec4_t    *color_offset);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_color_matrix_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_matrix_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

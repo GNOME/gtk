@@ -1255,7 +1255,7 @@ apply_filter_tree (SvgElement    *shape,
                 gdk_color_finish (&new_color);
               }
             else
-              result = gsk_color_matrix_node_new2 (&in->node->bounds, in->node, color_state, &matrix, &offset);
+              result = gsk_color_matrix_node_new2 (&in->node->bounds, GSK_RECT_SNAP_NONE, in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }
