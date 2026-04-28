@@ -1804,7 +1804,8 @@ on_key_press_event (GtkEventController *controller,
   if (keyval == GDK_KEY_Return ||
       keyval == GDK_KEY_KP_Enter ||
       keyval == GDK_KEY_ISO_Enter ||
-      keyval == GDK_KEY_space)
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_KP_Space)
     {
       GtkWidget *focus_widget;
       GtkWindow *toplevel;

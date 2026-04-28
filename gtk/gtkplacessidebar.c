@@ -3060,7 +3060,8 @@ on_key_pressed (GtkEventControllerKey *controller,
       if (keyval == GDK_KEY_Return ||
           keyval == GDK_KEY_KP_Enter ||
           keyval == GDK_KEY_ISO_Enter ||
-          keyval == GDK_KEY_space)
+          keyval == GDK_KEY_space ||
+          keyval == GDK_KEY_KP_Space)
         {
           GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 

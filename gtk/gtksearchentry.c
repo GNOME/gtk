@@ -925,6 +925,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   if (gtk_search_entry_is_keynav (keyval, state) ||
       keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_KP_Space ||
       keyval == GDK_KEY_Menu ||
       keyval == GDK_KEY_Return ||
       keyval == GDK_KEY_KP_Enter ||
