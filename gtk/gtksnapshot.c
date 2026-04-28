@@ -32,6 +32,7 @@
 #include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskclipnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
@@ -112,6 +113,7 @@ struct _GtkSnapshotState {
     struct {
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
+      GskRectSnap snap;
     } color_matrix;
     struct {
       GskComponentTransfer *red;
@@ -652,9 +654,12 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  result = gsk_color_matrix_node_new (node,
-                                      &state->data.color_matrix.matrix,
-                                      &state->data.color_matrix.offset);
+  result = gsk_color_matrix_node_new2 (&node->bounds,
+                                       state->data.color_matrix.snap,
+                                       node,
+                                       GDK_COLOR_STATE_SRGB,
+                                       &state->data.color_matrix.matrix,
+                                       &state->data.color_matrix.offset);
   gsk_render_node_unref (node);
 
   return result;
@@ -693,6 +698,7 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
 
   graphene_matrix_init_from_matrix (&state->data.color_matrix.matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&state->data.color_matrix.offset, color_offset);
+  state->data.color_matrix.snap = state->props.snap;
 }
 
 static GskRenderNode *
