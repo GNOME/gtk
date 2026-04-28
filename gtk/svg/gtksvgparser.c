@@ -4414,8 +4414,8 @@ apply_styles_to_shape (SvgElement *shape,
         }
     }
 
-  /* gpa attrs are supported to have higher priority than
-   * style and CSS, so re-set them here
+  /* gpa attrs are supposed to have higher priority than style and CSS,
+   * so re-set them here
    */
   if (svg->gpa_version > 0)
     {
