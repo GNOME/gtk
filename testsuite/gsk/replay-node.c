@@ -212,10 +212,16 @@ replay_color_matrix_node (GskRenderNode *node, GtkSnapshot *snapshot)
   const graphene_matrix_t *matrix = gsk_color_matrix_node_get_color_matrix (node);
   const graphene_vec4_t *offset = gsk_color_matrix_node_get_color_offset (node);
   GskRenderNode *child = gsk_color_matrix_node_get_child (node);
+  GskRectSnap snap = gsk_color_matrix_node_get_snap (node);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
 
   gtk_snapshot_push_color_matrix (snapshot, matrix, offset);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

@@ -6,6 +6,7 @@
 G_BEGIN_DECLS
 
 GskRenderNode * gsk_color_matrix_node_new2 (const graphene_rect_t   *bounds,
+                                            GskRectSnap              snap,
                                             GskRenderNode           *child,
                                             GdkColorState           *color_state,
                                             const graphene_matrix_t *color_matrix,

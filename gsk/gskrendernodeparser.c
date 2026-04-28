@@ -3406,12 +3406,14 @@ parse_color_matrix_node (GtkCssParser *parser,
 {
   GskRenderNode *child = NULL;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   graphene_matrix_t matrix;
   GskTransform *transform = NULL;
   graphene_vec4_t offset;
   GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "matrix", parse_transform, clear_transform, &transform },
     { "offset", parse_vec4, NULL, &offset },
     { "child", parse_node, clear_node, &child },
@@ -3430,7 +3432,7 @@ parse_color_matrix_node (GtkCssParser *parser,
 
   gsk_transform_to_matrix (transform, &matrix);
 
-  result = gsk_color_matrix_node_new2 (&bounds, child, color_state, &matrix, &offset);
+  result = gsk_color_matrix_node_new2 (&bounds, snap, child, color_state, &matrix, &offset);
 
   gsk_transform_unref (transform);
   gsk_render_node_unref (child);
@@ -6439,6 +6441,7 @@ render_node_print (Printer       *p,
           append_vec4_param (p, "offset", gsk_color_matrix_node_get_color_offset (node));
         append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_color_matrix_node_get_snap (node));
         append_color_state_param (p, "color-state", gsk_color_matrix_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
 
         end_node (p);

@@ -256,6 +256,7 @@ people to change it.
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
 | bounds   | `<rect>`         | *see below*            | always      |
+| snap     | `<snap>`         | none                   | non-default |
 | matrix   | `<transform>`    | none                   | non-default |
 | offset   | `<number>{4}`    | 0 0 0 0                | non-default |
 
