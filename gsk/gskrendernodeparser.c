@@ -50,7 +50,7 @@
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskoutsetshadownodeprivate.h"
-#include "gskpastenode.h"
+#include "gskpastenodeprivate.h"
 #include "gskpath.h"
 #include "gskpathbuilder.h"
 #include "gskprivate.h"
@@ -4132,16 +4132,18 @@ parse_paste_node (GtkCssParser *parser,
                   Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   gsize depth = 0;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "depth", parse_size, NULL, &depth},
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_paste_node_new (&bounds, depth);
+  node = gsk_paste_node_new2 (&bounds, snap, depth);
 
   return node;
 }
@@ -6932,6 +6934,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         start_node (p, "paste", node_name);
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_paste_node_get_snap (node));
         if (gsk_paste_node_get_depth (node) != 0)
           append_size_param (p, "depth", gsk_paste_node_get_depth (node));
         end_node (p);

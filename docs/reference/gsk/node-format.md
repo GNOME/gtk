@@ -487,6 +487,7 @@ Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 | depth    | `<number>`       | 0                      | non-default |
 
 Paste the copied contents of a previous copy node. The 0-indexed depth

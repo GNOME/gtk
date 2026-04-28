@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskpastenode.h"
+#include "gskpastenodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
@@ -34,6 +34,7 @@ struct _GskPasteNode
 {
   GskRenderNode render_node;
   gsize depth;
+  GskRectSnap snap;
 };
 
 static void
@@ -56,6 +57,7 @@ gsk_paste_node_diff (GskRenderNode *node1,
   cairo_rectangle_int_t bounds;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       self1->depth != self2->depth)
     {
       gsk_render_node_diff_impossible (node1, node2, data);
@@ -87,6 +89,9 @@ gsk_paste_node_render_opacity (GskRenderNode  *node,
   GskPasteNode *self = (GskPasteNode *) node;
   const graphene_rect_t *copy;
   graphene_rect_t clipped;
+
+  if (gsk_rect_snap_can_shrink (self->snap))
+    return;
 
   copy = g_slist_nth_data (data->copies, self->depth);
   if (copy == NULL)
@@ -132,6 +137,42 @@ gsk_paste_node_get_depth (const GskRenderNode *node)
   return self->depth;
 }
 
+/*<private>
+ * gsk_paste_node_new:
+ * @bounds: the rectangle to render the paste into
+ * @snap: how to snap the color to the pixel grid
+ * @depth: the index of which copy to paste. This will usually be 0.
+ *
+ * Creates a `GskRenderNode` that will paste copied contents.
+ *
+ * Returns: (transfer full) (type GskPasteNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_paste_node_new2 (const graphene_rect_t *bounds,
+                     GskRectSnap            snap,
+                     gsize                  depth)
+{
+  GskPasteNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_TYPE_PASTE_NODE);
+  node = (GskRenderNode *) self;
+  node->fully_opaque = FALSE;
+  node->preferred_depth = GDK_MEMORY_NONE;
+  node->contains_paste_node = TRUE;
+  node->needs_blending = TRUE;
+
+  self->snap = snap;
+  self->depth = depth;
+
+  gsk_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_normalize (&node->bounds);
+
+  return node;
+}
+
 /**
  * gsk_paste_node_new:
  * @bounds: the rectangle to render the paste into
@@ -147,23 +188,24 @@ GskRenderNode *
 gsk_paste_node_new (const graphene_rect_t *bounds,
                     gsize                  depth)
 {
-  GskPasteNode *self;
-  GskRenderNode *node;
+  return gsk_paste_node_new2 (bounds, GSK_RECT_SNAP_NONE, depth);
+}
 
-  g_return_val_if_fail (bounds != NULL, NULL);
+/**
+ * gsk_paste_node_get_snap:
+ * @node: (type GskPasteNode): a `GskPasteNode`
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_paste_node_get_snap (const GskRenderNode *node)
+{
+  const GskPasteNode *self = (const GskPasteNode *) node;
 
-  self = gsk_render_node_alloc (GSK_TYPE_PASTE_NODE);
-  node = (GskRenderNode *) self;
-  node->fully_opaque = FALSE;
-  node->preferred_depth = GDK_MEMORY_NONE;
-  node->contains_paste_node = TRUE;
-  node->needs_blending = TRUE;
-
-  self->depth = depth;
-
-  gsk_rect_init_from_rect (&node->bounds, bounds);
-  gsk_rect_normalize (&node->bounds);
-
-  return node;
+  return self->snap;
 }
 
