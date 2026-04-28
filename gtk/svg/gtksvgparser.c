@@ -4325,6 +4325,8 @@ void
 apply_styles_to_shape (SvgElement *shape,
                        GtkSvg     *svg)
 {
+  SvgValue *color, *paint;
+
   apply_styles_here (shape, 0, svg);
 
   if (shape->shapes)
@@ -4425,9 +4427,9 @@ apply_styles_to_shape (SvgElement *shape,
         svg_element_set_base_value (shape, SVG_PROPERTY_STROKE_WIDTH, svg_element_get_gpa_width (shape), FALSE);
     }
 
-  if (svg_element_is_specified (shape, SVG_PROPERTY_COLOR))
+  color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
+  if (!svg_value_is_unset (color))
     {
-      SvgValue *color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_color_get_kind (color) == COLOR_SYMBOLIC)
         {
@@ -4441,9 +4443,9 @@ apply_styles_to_shape (SvgElement *shape,
         svg->used |= BIT (svg_color_get_symbolic (color) + 1);
     }
 
-  if (svg_element_is_specified (shape, SVG_PROPERTY_FILL))
+  paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
+  if (!svg_value_is_unset (paint))
     {
-      SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
       GtkSymbolicColor symbolic;
 
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
@@ -4459,9 +4461,9 @@ apply_styles_to_shape (SvgElement *shape,
         svg->used |= BIT (symbolic + 1);
     }
 
-  if (svg_element_is_specified (shape, SVG_PROPERTY_STROKE))
+  paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
+  if (!svg_value_is_unset (paint))
     {
-      SvgValue *paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
       GtkSymbolicColor symbolic;
 
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
