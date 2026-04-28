@@ -822,7 +822,6 @@ gdk_device_grab (GdkDevice        *device,
                                     device,
                                     surface,
                                     owner_events,
-                                    event_mask,
                                     serial,
                                     time_,
                                     FALSE);

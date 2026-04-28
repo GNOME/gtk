@@ -72,7 +72,6 @@ typedef struct
   GdkSurface *surface;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
-  guint event_mask;
   guint32 time;
 
   guint activated : 1;
@@ -226,7 +225,6 @@ GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display
                                                        GdkDevice        *device,
                                                        GdkSurface        *surface,
                                                        gboolean          owner_events,
-                                                       GdkEventMask      event_mask,
                                                        gulong            serial_start,
                                                        guint32           time,
                                                        gboolean          implicit);
@@ -312,4 +310,3 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
 int gdk_display_guess_scale_factor         (GdkDisplay   *display);
 
 G_END_DECLS
-

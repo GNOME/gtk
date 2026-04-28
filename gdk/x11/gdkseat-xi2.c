@@ -182,7 +182,6 @@ gdk_x11_seat_xi2_grab (GdkSeat                *seat,
                                     seat_xi2->logical_touch,
                                     surface,
                                     owner_events,
-                                    GDK_TOUCH_MASK,
                                     serial,
                                     evtime,
                                     FALSE);

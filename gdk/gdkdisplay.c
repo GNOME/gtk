@@ -597,14 +597,13 @@ _gdk_display_get_last_device_grab (GdkDisplay *display,
 }
 
 GdkDeviceGrabInfo *
-_gdk_display_add_device_grab (GdkDisplay       *display,
-                              GdkDevice        *device,
-                              GdkSurface        *surface,
-                              gboolean          owner_events,
-                              GdkEventMask      event_mask,
-                              unsigned long     serial_start,
-                              guint32           time,
-                              gboolean          implicit)
+_gdk_display_add_device_grab (GdkDisplay    *display,
+                              GdkDevice     *device,
+                              GdkSurface    *surface,
+                              gboolean       owner_events,
+                              unsigned long  serial_start,
+                              guint32        time,
+                              gboolean       implicit)
 {
   GdkDeviceGrabInfo *info, *other_info;
   GList *grabs, *l;
@@ -615,7 +614,6 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   info->serial_start = serial_start;
   info->serial_end = G_MAXULONG;
   info->owner_events = owner_events;
-  info->event_mask = event_mask;
   info->time = time;
   info->implicit = implicit;
 
@@ -2047,7 +2045,7 @@ gdk_display_init_dmabuf_invoke_callback (gpointer data)
   GDK_DISPLAY_DEBUG (self, DMABUF,
                      "Initialization finished. Advertising %zu dmabuf formats",
                      gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
-  
+
   return G_SOURCE_REMOVE;
 }
 
