@@ -293,6 +293,43 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   free (button_state.mask);
 }
 
+static void
+device_grab_update_callback (GdkDisplay *display,
+                             gpointer    data,
+                             gulong      serial)
+{
+  GdkDevice *device = data;
+
+  _gdk_display_device_grab_update (display, device, serial);
+}
+
+static void
+_gdk_x11_device_update_grab_info (GdkDevice  *device,
+                                  GdkDisplay *display,
+                                  int         status)
+{
+  if (status == GrabSuccess)
+    _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
+}
+
+static void
+_gdk_x11_device_update_grab_info_ungrab (GdkDevice  *device,
+                                         GdkDisplay *display,
+                                         guint32     time,
+                                         gulong      serial)
+{
+  GdkDeviceGrabInfo *grab;
+
+  XFlush (GDK_DISPLAY_XDISPLAY (display));
+
+  grab = _gdk_display_get_last_device_grab (display, device);
+  if (grab)
+    {
+      grab->serial_end = serial;
+      _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
+    }
+}
+
 static GdkGrabStatus
 gdk_x11_convert_grab_status (int status)
 {
@@ -360,7 +397,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
 
   g_free (mask.mask);
 
-  _gdk_x11_display_update_grab_info (display, device, status);
+  _gdk_x11_device_update_grab_info (device, display, status);
 
   return gdk_x11_convert_grab_status (status);
 }
@@ -378,7 +415,7 @@ gdk_x11_device_xi2_ungrab (GdkDevice *device,
 
   XIUngrabDevice (GDK_DISPLAY_XDISPLAY (display), device_xi2->device_id, time_);
 
-  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
+  _gdk_x11_device_update_grab_info_ungrab (device, display, time_, serial);
 }
 
 static GdkSurface *

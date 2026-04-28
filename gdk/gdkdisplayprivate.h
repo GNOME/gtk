@@ -72,7 +72,6 @@ typedef struct
   GdkSurface *surface;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
-  guint32 time;
 
   guint activated : 1;
   guint implicit_ungrab : 1;
@@ -226,7 +225,6 @@ GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display
                                                        GdkSurface        *surface,
                                                        gboolean          owner_events,
                                                        gulong            serial_start,
-                                                       guint32           time,
                                                        gboolean          implicit);
 GdkDeviceGrabInfo * _gdk_display_has_device_grab      (GdkDisplay       *display,
                                                        GdkDevice        *device,

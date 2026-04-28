@@ -172,18 +172,15 @@ gdk_x11_seat_xi2_grab (GdkSeat                *seat,
       GdkX11SeatXI2 *seat_xi2 = GDK_X11_SEAT_XI2 (seat);
       GdkDisplay *display;
       gulong serial;
-      guint32 evtime;
 
       display = gdk_surface_get_display (surface);
       serial = _gdk_display_get_next_serial (display);
-      evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
 
       _gdk_display_add_device_grab (display,
                                     seat_xi2->logical_touch,
                                     surface,
                                     owner_events,
                                     serial,
-                                    evtime,
                                     FALSE);
     }
 

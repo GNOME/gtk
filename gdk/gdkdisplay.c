@@ -602,7 +602,6 @@ _gdk_display_add_device_grab (GdkDisplay    *display,
                               GdkSurface    *surface,
                               gboolean       owner_events,
                               unsigned long  serial_start,
-                              guint32        time,
                               gboolean       implicit)
 {
   GdkDeviceGrabInfo *info, *other_info;
@@ -614,7 +613,6 @@ _gdk_display_add_device_grab (GdkDisplay    *display,
   info->serial_start = serial_start;
   info->serial_end = G_MAXULONG;
   info->owner_events = owner_events;
-  info->time = time;
   info->implicit = implicit;
 
   grabs = g_hash_table_lookup (display->device_grabs, device);

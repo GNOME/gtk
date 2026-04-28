@@ -2237,7 +2237,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
                                         event_surface,
                                         FALSE,
                                         serial,
-                                        gdk_event_get_time (event),
                                         TRUE);
           _gdk_display_device_grab_update (display, device, serial);
         }

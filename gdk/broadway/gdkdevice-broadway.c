@@ -218,10 +218,7 @@ gdk_broadway_device_ungrab (GdkDevice *device,
       if (serial != 0)
         {
           grab = _gdk_display_get_last_device_grab (display, device);
-          if (grab &&
-              (time_ == GDK_CURRENT_TIME ||
-               grab->time == GDK_CURRENT_TIME ||
-               !TIME_IS_LATER (grab->time, time_)))
+          if (grab)
             grab->serial_end = serial;
         }
     }
@@ -261,4 +258,3 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
   return g_hash_table_lookup (broadway_display->id_ht,
                               GUINT_TO_POINTER (mouse_toplevel_id));
 }
-
