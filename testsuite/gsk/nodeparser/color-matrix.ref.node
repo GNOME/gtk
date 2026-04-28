@@ -5,6 +5,7 @@ color-matrix {
     bounds: 0 0 50 50;
     color: rgb(255,0,204);
   }
+  bounds: 0 0 50 50;
 }
 color-matrix {
   matrix: matrix3d(0.5, 0, 0, 0, 0, 0.1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1);
@@ -12,4 +13,5 @@ color-matrix {
     bounds: 0 0 50 50;
     color: rgb(255,0,204);
   }
+  bounds: 0 0 50 50;
 }

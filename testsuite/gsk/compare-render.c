@@ -641,10 +641,10 @@ opaque_create_test (GskRenderNode *node,
 
   /* Turn image to white, don't touch alpha */
   graphene_matrix_init_from_float (&matrix,
-                                   (const float []) { 0, 0, 0, 0,
-                                                      0, 0, 0, 0,
-                                                      0, 0, 0, 0,
-                                                      1, 1, 1, 1 });
+                                   (const float []) { 0,    0,    0,    0,
+                                                      0,    0,    0,    0,
+                                                      0,    0,    0,    0,
+                                                      1.01, 1.01, 1.01, 1 });
   result = gsk_color_matrix_node_new (clip, &matrix, graphene_vec4_zero ());
 
   gsk_render_node_unref (clip);

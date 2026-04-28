@@ -3,4 +3,5 @@ color-matrix {
     bounds: 0 0 50 50;
     color: rgb(255,0,204);
   }
+  bounds: 0 0 50 50;
 }
