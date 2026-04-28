@@ -458,12 +458,18 @@ static void
 replay_paste_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
+  GskRectSnap snap = gsk_color_matrix_node_get_snap (node);
 
   gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
 
   gtk_snapshot_append_paste (snapshot,
                              &bounds,
                              gsk_paste_node_get_depth (node));
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

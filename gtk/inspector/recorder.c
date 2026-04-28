@@ -1629,6 +1629,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case GSK_PASTE_NODE:
+      add_snap_row (store, "Snap", gsk_paste_node_get_snap (node));
       add_uint_row (store, "Copy to paste", gsk_paste_node_get_depth (node));
       break;
 

@@ -35,6 +35,8 @@ GType                   gsk_paste_node_get_type                 (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_paste_node_new                      (const graphene_rect_t    *bounds,
                                                                  gsize                     depth);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_paste_node_get_snap                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                   gsk_paste_node_get_depth                (const GskRenderNode      *node) G_GNUC_PURE;
 

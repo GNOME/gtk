@@ -39,6 +39,7 @@
 #include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gsklineargradientnodeprivate.h"
 #include "gsk/gskoutsetshadownodeprivate.h"
+#include "gsk/gskpastenodeprivate.h"
 #include "gsk/gskradialgradientnodeprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
@@ -3735,6 +3736,7 @@ gtk_snapshot_append_paste (GtkSnapshot           *snapshot,
                            const graphene_rect_t *bounds,
                            gsize                  nth)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
 
   g_return_if_fail (snapshot != NULL);
@@ -3744,7 +3746,7 @@ gtk_snapshot_append_paste (GtkSnapshot           *snapshot,
    * in the copy and the paste coordinate system. */
   gtk_snapshot_ensure_identity (snapshot);
 
-  node = gsk_paste_node_new (bounds, nth);
+  node = gsk_paste_node_new2 (bounds, state->props.snap, nth);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
