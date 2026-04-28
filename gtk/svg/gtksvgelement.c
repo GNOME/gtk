@@ -1522,9 +1522,9 @@ void
 svg_element_set_gpa_width (SvgElement *element,
                            SvgValue   *value)
 {
-  if (element->gpa.width)
-    svg_value_unref (element->gpa.width);
-  element->gpa.width = svg_value_ref (value);
+  g_clear_pointer (&element->gpa.width, svg_value_unref);
+  if (value)
+    element->gpa.width = svg_value_ref (value);
 }
 
 SvgValue *
@@ -1537,9 +1537,9 @@ void
 svg_element_set_gpa_fill (SvgElement *element,
                           SvgValue   *value)
 {
-  if (element->gpa.fill)
-    svg_value_unref (element->gpa.fill);
-  element->gpa.fill = svg_value_ref (value);
+  g_clear_pointer (&element->gpa.fill, svg_value_unref);
+  if (value)
+    element->gpa.fill = svg_value_ref (value);
 }
 
 SvgValue *
@@ -1552,9 +1552,9 @@ void
 svg_element_set_gpa_stroke (SvgElement *element,
                             SvgValue   *value)
 {
-  if (element->gpa.stroke)
-    svg_value_unref (element->gpa.stroke);
-  element->gpa.stroke = svg_value_ref (value);
+  g_clear_pointer (&element->gpa.stroke, svg_value_unref);
+  if (value)
+    element->gpa.stroke = svg_value_ref (value);
 }
 
 SvgValue *
