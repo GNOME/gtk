@@ -29,6 +29,7 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
+#include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
@@ -179,6 +180,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       graphene_size_t scale;
       graphene_point_t offset;
     } displacement;
+    struct {
+      graphene_rect_t bounds;
+      GskRenderNode *first_node;
+      GdkColorState *color_state;
+      float factors[4];
+    } arithmetic;
   } data;
 };
 
@@ -2185,6 +2192,112 @@ gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
   gtk_snapshot_push_state (snapshot,
                            state->transform,
                            gtk_snapshot_collect_displacement_displacement,
+                           NULL);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
+                                 GtkSnapshotState *state,
+                                 GskRenderNode   **nodes,
+                                 guint             n_nodes)
+{
+  GskRenderNode *second_node, *node;
+
+  second_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  if (state->data.arithmetic.first_node == NULL && second_node == NULL)
+    return NULL;
+
+  if (state->data.arithmetic.first_node == NULL)
+    state->data.arithmetic.first_node = gsk_container_node_new (NULL, 0);
+
+  if (second_node == NULL)
+    second_node = gsk_container_node_new (NULL, 0);
+
+  node = gsk_arithmetic_node_new (&state->data.arithmetic.bounds,
+                                  state->data.arithmetic.first_node,
+                                  second_node,
+                                  state->data.arithmetic.color_state,
+                                  state->data.arithmetic.factors);
+
+  g_object_unref (second_node);
+
+  return node;
+}
+
+static void
+gtk_snapshot_clear_arithmetic (GtkSnapshotState *state)
+{
+  g_clear_pointer (&state->data.arithmetic.first_node, gsk_render_node_unref);
+  g_clear_pointer (&state->data.arithmetic.color_state, gdk_color_state_unref);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_arithmetic_first (GtkSnapshot      *snapshot,
+                                       GtkSnapshotState *state,
+                                       GskRenderNode   **nodes,
+                                       guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_arithmetic);
+
+  prev_state->data.arithmetic.first_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+/*<private>
+ * gtk_snapshot_push_arithmetic:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: The rectangle to apply to
+ * @color_state: The color state to composite the 2 nodes in
+ * @factors: the 4 factors, often named "k1" to "k4"
+ *
+ * Snapshots 2 children and composites them algorithmically with the given
+ * factors. This 
+ * Snapshots a displacement operation that will use a displacement
+ * mask to displace a given image. This is modeled after [SVG's feComposite
+ * filter with using operator=arithmetic](https://drafts.csswg.org/filter-effects/#elementdef-fecomposite)
+ *
+ * Until the first call to [method@Gtk.Snapshot.pop], the first child will
+ * be snapshot. After that call, the second child will be recorded until
+ * the second call to [method@Gtk.Snapshot.pop].
+ *
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
+                              const graphene_rect_t *bounds,
+                              GdkColorState         *color_state,
+                              const float            factors[4])
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (bounds != NULL);
+  g_return_if_fail (color_state != NULL);
+  g_return_if_fail (factors != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_arithmetic,
+                                   gtk_snapshot_clear_arithmetic);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.arithmetic.bounds);
+  state->data.arithmetic.color_state = gdk_color_state_ref (color_state);
+  state->data.arithmetic.factors[0] = factors[0];
+  state->data.arithmetic.factors[1] = factors[1];
+  state->data.arithmetic.factors[2] = factors[2];
+  state->data.arithmetic.factors[3] = factors[3];
+
+  gtk_snapshot_push_state (snapshot,
+                           state->transform,
+                           gtk_snapshot_collect_arithmetic_first,
                            NULL);
 }
 
