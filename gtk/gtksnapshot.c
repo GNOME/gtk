@@ -188,6 +188,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } isolation;
     struct {
       graphene_rect_t bounds;
+      GskRectSnap snap;
       GskRenderNode *displacement_node;
       GdkColorChannel channels[2];
       graphene_size_t max;
@@ -2070,6 +2071,7 @@ gtk_snapshot_collect_displacement (GtkSnapshot      *snapshot,
     state->data.displacement.displacement_node = gsk_container_node_new (NULL, 0);
 
   node = gsk_displacement_node_new (&state->data.displacement.bounds,
+                                    state->data.displacement.snap,
                                     child_node,
                                     state->data.displacement.displacement_node,
                                     state->data.displacement.channels,

@@ -709,6 +709,7 @@ heatmap_from_mask (GskRenderNode        *mask,
   gsk_gradient_free (gradient);
 
   displacement = gsk_displacement_node_new (&bounds,
+                                            GSK_RECT_SNAP_NONE,
                                             gradient_node,
                                             container,
                                             (GdkColorChannel[2]) { GDK_COLOR_CHANNEL_RED, GDK_COLOR_CHANNEL_GREEN },

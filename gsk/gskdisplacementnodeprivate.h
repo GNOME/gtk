@@ -32,12 +32,14 @@ typedef struct _GskDisplacementNode                GskDisplacementNode;
 
 GType                   gsk_displacement_node_get_type          (void) G_GNUC_CONST;
 GskRenderNode *         gsk_displacement_node_new               (const graphene_rect_t    *bounds,
+                                                                 GskRectSnap               snap,
                                                                  GskRenderNode            *child,
                                                                  GskRenderNode            *displacement,
                                                                  const GdkColorChannel     channels[2],
                                                                  const graphene_size_t    *max,
                                                                  const graphene_size_t    *scale,
                                                                  const graphene_point_t   *offset);
+GskRectSnap             gsk_displacement_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GskRenderNode *         gsk_displacement_node_get_child         (const GskRenderNode      *node) G_GNUC_PURE;
 GskRenderNode *         gsk_displacement_node_get_displacement  (const GskRenderNode      *node) G_GNUC_PURE;
 const GdkColorChannel * gsk_displacement_node_get_channels      (const GskRenderNode      *node) G_GNUC_PURE;
