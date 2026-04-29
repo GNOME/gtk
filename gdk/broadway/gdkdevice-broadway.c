@@ -168,60 +168,20 @@ gdk_broadway_device_grab (GdkDevice    *device,
                           GdkCursor    *cursor,
                           guint32       time_)
 {
-  GdkDisplay *display;
-  GdkBroadwayDisplay *broadway_display;
-
-  display = gdk_device_get_display (device);
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-      return GDK_GRAB_SUCCESS;
-    }
-  else
-    {
-      /* Device is a pointer */
-      return _gdk_broadway_server_grab_pointer (broadway_display->server,
-                                                GDK_BROADWAY_SURFACE (surface)->id,
-                                                owner_events,
-                                                time_);
-    }
+  return GDK_GRAB_SUCCESS;
 }
-
-#define TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
 
 static void
 gdk_broadway_device_ungrab (GdkDevice *device,
                             guint32    time_)
 {
-  GdkDisplay *display;
-  GdkBroadwayDisplay *broadway_display;
-  GdkDeviceGrabInfo *grab;
-  guint32 serial;
+  GdkDisplay *display = gdk_device_get_display (device);
+  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
 
-  display = gdk_device_get_display (device);
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  if (grab != NULL)
+    grab->serial_end = grab->serial_start;
 
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-    }
-  else
-    {
-      /* Device is a pointer */
-      serial = _gdk_broadway_server_ungrab_pointer (broadway_display->server, time_);
-
-      if (serial != 0)
-        {
-          grab = _gdk_display_get_last_device_grab (display, device);
-          if (grab)
-            grab->serial_end = serial;
-        }
-    }
+  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static GdkSurface *

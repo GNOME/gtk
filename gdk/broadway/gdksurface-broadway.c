@@ -1183,9 +1183,9 @@ static void
 create_moveresize_surface (MoveResizeData *mv_resize,
                            guint32         timestamp)
 {
+  GdkBroadwayDisplay *broadway_display;
   GdkGrabStatus status;
-  GdkSeat *seat;
-  GdkDevice *pointer;
+  GdkSurface *surface;
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
@@ -1195,16 +1195,11 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   gdk_broadway_surface_move_resize_internal (mv_resize->moveresize_emulation_surface, TRUE, -100, -100, 1, 1);
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
-  seat = gdk_display_get_default_seat (mv_resize->display);
-  pointer = gdk_seat_get_pointer (seat);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  status = gdk_device_grab (pointer,
-                            mv_resize->moveresize_emulation_surface,
-                            FALSE,
-                            NULL,
-                            timestamp);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  broadway_display = GDK_BROADWAY_DISPLAY (mv_resize->display);
+  surface = mv_resize->moveresize_emulation_surface;
+  status = _gdk_broadway_server_grab_pointer (broadway_display->server,
+                                              GDK_BROADWAY_SURFACE (surface)->id,
+                                              FALSE, timestamp);
 
   if (status != GDK_GRAB_SUCCESS)
     {
