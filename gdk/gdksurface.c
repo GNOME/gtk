@@ -1706,53 +1706,12 @@ gdk_surface_get_device_position (GdkSurface       *surface,
 void
 gdk_surface_hide (GdkSurface *surface)
 {
-  gboolean was_mapped;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (surface->destroyed)
     return;
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-
   gdk_surface_queue_set_is_mapped (surface, FALSE);
-
-  if (was_mapped)
-    {
-      GdkDisplay *display;
-      GdkSeat *seat;
-      GList *devices, *d;
-
-      /* May need to break grabs on children */
-      display = surface->display;
-      seat = gdk_display_get_default_seat (display);
-      if (seat)
-        {
-          devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
-          devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-          devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-        }
-      else
-        devices = NULL;
-
-      for (d = devices; d; d = d->next)
-        {
-          GdkDevice *device = d->data;
-
-          if (_gdk_display_end_device_grab (display,
-                                            device,
-                                            _gdk_display_get_next_serial (display),
-                                            surface,
-                                            TRUE))
-            {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-              gdk_device_ungrab (device, GDK_CURRENT_TIME);
-G_GNUC_END_IGNORE_DEPRECATIONS
-            }
-        }
-
-      g_list_free (devices);
-    }
 
   GDK_SURFACE_GET_CLASS (surface)->hide (surface);
 

@@ -156,6 +156,7 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
                      NULL, NULL,
                      show_grabbing_popup,
                      NULL);
+      GDK_MACOS_SURFACE (self)->popup_grab = TRUE;
     }
   else
     {

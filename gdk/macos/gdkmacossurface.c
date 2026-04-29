@@ -197,8 +197,12 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
   was_key = [self->window isKeyWindow];
 
-  seat = gdk_display_get_default_seat (surface->display);
-  gdk_seat_ungrab (seat);
+  if (self->popup_grab)
+    {
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat);
+      self->popup_grab = FALSE;
+    }
 
   [self->window hide];
 

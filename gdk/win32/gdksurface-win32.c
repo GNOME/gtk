@@ -379,7 +379,7 @@ gdk_win32_surface_constructed (GObject *object)
 
   if (gdk_win32_display_get_dcomp_device (display_win32))
     dwExStyle |= WS_EX_NOREDIRECTIONBITMAP;
-  
+
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
@@ -779,8 +779,19 @@ gdk_win32_surface_show (GdkSurface *surface,
 static void
 gdk_win32_surface_hide (GdkSurface *surface)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
   if (surface->destroyed)
     return;
+
+  if (surface->autohide && impl->popup_grab)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat);
+      impl->popup_grab = FALSE;
+    }
 
   GDK_NOTE (MISC, g_print ("gdk_win32_surface_hide: %p: %s\n",
 			   GDK_SURFACE_HWND (surface),
@@ -1076,6 +1087,8 @@ gdk_win32_surface_present_popup (GdkSurface     *surface,
                                  int             height,
                                  GdkPopupLayout *layout)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
   gdk_win32_surface_layout_popup (surface, width, height, layout);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -1089,6 +1102,7 @@ gdk_win32_surface_present_popup (GdkSurface     *surface,
                      TRUE,
                      NULL, NULL,
                      show_grabbing_popup, NULL);
+      impl->popup_grab = TRUE;
     }
   else
     {
@@ -1110,7 +1124,7 @@ gdk_win32_surface_raise (GdkSurface *surface)
         API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface), HWND_TOPMOST,
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
-         
+
       else if (GDK_IS_POPUP (surface))
         ShowWindow (GDK_SURFACE_HWND (surface), SW_SHOWNOACTIVATE);
       else
@@ -3478,7 +3492,7 @@ gdk_win32_drag_surface_present (GdkDragSurface *drag_surface,
 {
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
-  gdk_win32_surface_resize (surface, width, height);  
+  gdk_win32_surface_resize (surface, width, height);
   gdk_win32_surface_show (surface, FALSE);
   maybe_notify_mapped (surface);
 
@@ -3495,19 +3509,19 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
  * gdk_win32_surface_set_dcomp_content:
  * @self: The surface to set the content on
  * @dcomp_content: (nullable): The content to set.
- * 
+ *
  * Sets the content to be displayed in the surface.
- * 
+ *
  * This function should be called by draw contexts when they are created
  * or destroyed.
  * They set up their preferred method of rendering and then set it using
  * this function. The dcomp_content must be valid content for the
  * [IDCompositionVisual::SetContent()](https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-idcompositionvisual-setcontent)
  * function.
- * 
+ *
  * The content should be set to NULL again when the draw context gets
  * destroyed.
- * 
+ *
  * This function may not be called when Direct Composition is not in use.
  * See gdk_win32_display_get_dcomp_device() for details.
  */

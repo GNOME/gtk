@@ -20,7 +20,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -445,6 +445,15 @@ gdk_broadway_surface_hide (GdkSurface *surface)
 
   /* FIXME: update state ? */
 
+  if (surface->autohide && impl->popup_grab)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat);
+      impl->popup_grab = FALSE;
+    }
+
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
 
   _gdk_broadway_surface_grab_check_unmap (surface,
@@ -664,6 +673,8 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
                                     int             height,
                                     GdkPopupLayout *layout)
 {
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
+
   gdk_broadway_surface_layout_popup (surface, width, height, layout);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -677,6 +688,7 @@ gdk_broadway_surface_present_popup (GdkSurface     *surface,
                      TRUE,
                      NULL, NULL,
                      show_grabbing_popup, NULL);
+      impl->popup_grab = TRUE;
     }
   else
     {

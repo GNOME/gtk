@@ -300,6 +300,7 @@ gdk_android_surface_handle_map (GdkAndroidSurface *self)
                      TRUE,
                      NULL, NULL,
                      gdk_android_surface_do_map_cb, NULL);
+      self->popup_grab = TRUE;
     }
   else
     {
@@ -544,6 +545,15 @@ gdk_android_surface_hide (GdkSurface *surface)
 
   if (!self->surface || surface->destroyed)
     return;
+
+  if (surface->autohide && self->popup_grab)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat);
+      self->popup_grab = FALSE;
+    }
 
   JNIEnv *env = gdk_android_get_env ();
 

@@ -815,7 +815,22 @@ void
 gdk_device_ungrab (GdkDevice  *device,
                    guint32     time_)
 {
+  GdkDeviceGrabInfo *grab;
+  GdkDisplay *display;
+  gulong serial;
+
   g_return_if_fail (GDK_IS_DEVICE (device));
+
+  display = gdk_device_get_display (device);
+
+  grab = _gdk_display_get_last_device_grab (display, device);
+
+  if (grab)
+    {
+      serial = _gdk_display_get_next_serial (display);
+      _gdk_display_end_device_grab (display, device,
+                                    serial, grab->surface, TRUE);
+    }
 
   GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
 }
