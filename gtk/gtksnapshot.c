@@ -32,6 +32,7 @@
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
 #include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gsklineargradientnodeprivate.h"
@@ -170,6 +171,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     struct {
       GskIsolation features;
     } isolation;
+    struct {
+      graphene_rect_t bounds;
+      GskRenderNode *displacement_node;
+      GdkColorChannel channels[2];
+      graphene_size_t max;
+      graphene_size_t scale;
+      graphene_point_t offset;
+    } displacement;
   } data;
 };
 
@@ -2066,6 +2075,116 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   gtk_snapshot_push_state (snapshot,
                            end_state->transform,
                            gtk_snapshot_collect_cross_fade_start,
+                           NULL);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_displacement (GtkSnapshot      *snapshot,
+                                   GtkSnapshotState *state,
+                                   GskRenderNode   **nodes,
+                                   guint             n_nodes)
+{
+  GskRenderNode *child_node, *node;
+
+  child_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  if (child_node == NULL)
+    return NULL;
+
+  if (state->data.displacement.displacement_node == NULL)
+    state->data.displacement.displacement_node = gsk_container_node_new (NULL, 0);
+
+  node = gsk_displacement_node_new (&state->data.displacement.bounds,
+                                    child_node,
+                                    state->data.displacement.displacement_node,
+                                    state->data.displacement.channels,
+                                    &state->data.displacement.max,
+                                    &state->data.displacement.scale,
+                                    &state->data.displacement.offset);
+
+  g_object_unref (child_node);
+
+  return node;
+}
+
+static void
+gtk_snapshot_clear_displacement (GtkSnapshotState *state)
+{
+  g_clear_pointer (&state->data.displacement.displacement_node, gsk_render_node_unref);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_displacement_displacement (GtkSnapshot      *snapshot,
+                                                GtkSnapshotState *state,
+                                                GskRenderNode   **nodes,
+                                                guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_displacement);
+
+  prev_state->data.displacement.displacement_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+/*<private>
+ * gtk_snapshot_push_displacement:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: The rectangle to apply to
+ * @channels: Which channels to usefor the displacement in horizontal and
+ *   vertical direction respectively.
+ * @max: The maximum displacement in units
+ * @scale: The scale to apply to the displacement value
+ * @offset: The offset to apply to the displacement value
+ *
+ * Snapshots a displacement operation that will use a displacement
+ * mask to displace a given image. This is modeled after [SVG's feDisplacementMap
+ * filter](https://www.w3.org/TR/SVG11/filters.html#feDisplacementMapElement).
+ *
+ * Until the first call to [method@Gtk.Snapshot.pop], the displacement
+ * mask will be snapshot. After that call, the image to be displaced will be
+ * recorded until the second call to [method@Gtk.Snapshot.pop].
+ *
+ * The amount to displace is determine by sampling the displacement
+ * at every coordinate, converting its value into the given colorstate and
+ * applying the formula `value = scale * (value - offset)` and clamping the
+ * resulting value to be between `-max` and `max`.
+ *
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
+                                const graphene_rect_t  *bounds,
+                                const GdkColorChannel   channels[2],
+                                const graphene_size_t  *max,
+                                const graphene_size_t  *scale,
+                                const graphene_point_t *offset)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_displacement,
+                                   gtk_snapshot_clear_displacement);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.displacement.bounds);
+  state->data.displacement.channels[0] = channels[0];
+  state->data.displacement.channels[1] = channels[1];
+  state->data.displacement.max = GRAPHENE_SIZE_INIT (max->width * scale_x,
+                                                     max->height * scale_y);
+  state->data.displacement.scale = GRAPHENE_SIZE_INIT (scale->width * scale_x,
+                                                       scale->height * scale_y);
+  state->data.displacement.offset = GRAPHENE_POINT_INIT (offset->x * scale_x,
+                                                         offset->y * scale_y);
+
+  gtk_snapshot_push_state (snapshot,
+                           state->transform,
+                           gtk_snapshot_collect_displacement_displacement,
                            NULL);
 }
 

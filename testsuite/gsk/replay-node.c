@@ -6,6 +6,7 @@
 #include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcomponenttransfernodeprivate.h>
+#include <gsk/gskdisplacementnodeprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskoutsetshadownodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
@@ -471,7 +472,16 @@ replay_isolation_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_displacement_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_push_displacement (snapshot,
+                                  &node->bounds,
+                                  gsk_displacement_node_get_channels (node),
+                                  gsk_displacement_node_get_max (node),
+                                  gsk_displacement_node_get_scale (node),
+                                  gsk_displacement_node_get_offset (node));
+  replay_node (gsk_displacement_node_get_displacement (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+  replay_node (gsk_displacement_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void

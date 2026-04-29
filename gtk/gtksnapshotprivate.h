@@ -53,6 +53,12 @@ void                    gtk_snapshot_push_repeat2               (GtkSnapshot    
                                                                  const graphene_rect_t  *bounds,
                                                                  const graphene_rect_t  *child_bounds,
                                                                  GskRepeat               repeat);
+void                    gtk_snapshot_push_displacement          (GtkSnapshot            *snapshot,
+                                                                 const graphene_rect_t  *bounds,
+                                                                 const GdkColorChannel   channels[2],
+                                                                 const graphene_size_t  *max,
+                                                                 const graphene_size_t  *scale,
+                                                                 const graphene_point_t *offset);
 
 void                    gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
                                                                  const GdkColor         *color,
