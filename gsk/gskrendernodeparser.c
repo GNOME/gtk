@@ -6807,6 +6807,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         scale = gsk_displacement_node_get_scale (node);
         offset = gsk_displacement_node_get_offset (node);
         start_node (p, "displacement", node_name);
+        append_rect_param (p, "bounds", &node->bounds);
         append_node_param (p, "child", gsk_displacement_node_get_child (node));
         append_node_param (p, "displacement", gsk_displacement_node_get_displacement (node));
         append_two_float_param (p, "max", max->width, max->height);
