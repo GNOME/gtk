@@ -2148,12 +2148,12 @@ static void
 gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
                                             GskRenderNode       *node)
 {
-  float k1, k2, k3, k4;
+  const float *k;
   GskRenderNode *first_child, *second_child;
   graphene_rect_t first_rect, second_rect;
   GskGpuImage *first_image, *second_image;
 
-  gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+  k = gsk_arithmetic_node_get_factors (node);
 
   first_child = gsk_arithmetic_node_get_first_child (node);
   second_child = gsk_arithmetic_node_get_second_child (node);
@@ -2195,7 +2195,7 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
                          GSK_GPU_SAMPLER_DEFAULT,
                          &first_rect,
                          &second_rect,
-                         k1, k2, k3, k4);
+                         k[0], k[1], k[2], k[3]);
 
   g_object_unref (first_image);
   g_object_unref (second_image);

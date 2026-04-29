@@ -4340,7 +4340,7 @@ parse_arithmetic_node (GtkCssParser *parser,
   if (second == NULL)
     second = create_default_render_node ();
 
-  result = gsk_arithmetic_node_new (&bounds, first, second, color_state, k[0], k[1], k[2], k[3]);
+  result = gsk_arithmetic_node_new (&bounds, first, second, color_state, k);
 
   gsk_render_node_unref (first);
   gsk_render_node_unref (second);
@@ -5995,22 +5995,19 @@ append_two_float_param (Printer    *p,
 }
 
 static void
-append_four_float_param (Printer    *p,
-                         const char *param_name,
-                         float       value1,
-                         float       value2,
-                         float       value3,
-                         float       value4)
+append_four_float_param (Printer     *p,
+                         const char  *param_name,
+                         const float  values[4])
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  string_append_double (p->str, value1);
+  string_append_double (p->str, values[0]);
   g_string_append_c (p->str, ' ');
-  string_append_double (p->str, value2);
+  string_append_double (p->str, values[1]);
   g_string_append_c (p->str, ' ');
-  string_append_double (p->str, value3);
+  string_append_double (p->str, values[2]);
   g_string_append_c (p->str, ' ');
-  string_append_double (p->str, value4);
+  string_append_double (p->str, values[3]);
   g_string_append (p->str, ";\n");
 }
 
@@ -6820,14 +6817,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_ARITHMETIC_NODE:
       {
-        float k1, k2, k3, k4;
-
-        gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
-
         start_node (p, "arithmetic", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
-        append_four_float_param (p, "k", k1, k2, k3, k4);
+        append_four_float_param (p, "k", gsk_arithmetic_node_get_factors (node));
         append_node_param (p, "first", gsk_arithmetic_node_get_first_child (node));
         append_node_param (p, "second", gsk_arithmetic_node_get_second_child (node));
         append_color_state_param (p, "color-state", gsk_arithmetic_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
