@@ -51,6 +51,7 @@
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcomponenttransfernodeprivate.h>
 #include <gsk/gskcopypasteutilsprivate.h>
+#include <gsk/gskdisplacementnodeprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskoutsetshadownodeprivate.h>
 #include <gsk/gskrendererprivate.h>
@@ -1668,6 +1669,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_DISPLACEMENT_NODE:
       {
+        add_snap_row (store, "Snap", gsk_displacement_node_get_snap (node));
       }
       break;
 

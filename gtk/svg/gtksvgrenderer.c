@@ -1389,6 +1389,7 @@ apply_filter_tree (SvgElement    *shape,
             offset.x = offset.y = 0.5;
 
             result = gsk_displacement_node_new (&subregion,
+                                                GSK_RECT_SNAP_NONE,
                                                 in->node, in2->node,
                                                 channels,
                                                 &max, &scale, &offset);

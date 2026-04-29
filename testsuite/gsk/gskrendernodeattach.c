@@ -256,6 +256,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         child = node_attach (gsk_displacement_node_get_child (node), surface, idx);
         displacement = node_attach (gsk_displacement_node_get_displacement (node), surface, idx);
         res = gsk_displacement_node_new (&bounds,
+                                         gsk_displacement_node_get_snap (node),
                                          child,
                                          displacement,
                                          gsk_displacement_node_get_channels (node),

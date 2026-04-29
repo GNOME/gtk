@@ -2387,7 +2387,10 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuRenderPass *self,
   const GdkColorChannel *channels;
   const graphene_point_t *offset;
 
-  if (!gsk_gpu_node_processor_clip_bounds (self, &node->bounds, GSK_RECT_SNAP_NONE, &bounds))
+  if (!gsk_gpu_node_processor_clip_bounds (self,
+                                           &node->bounds,
+                                           gsk_displacement_node_get_snap (node),
+                                           &bounds))
     return;
 
   displacement_child = gsk_displacement_node_get_displacement (node);
