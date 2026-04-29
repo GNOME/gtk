@@ -6026,7 +6026,6 @@ append_channels_param (Printer         *p,
                           param_name,
                           channel_names[channel1],
                           channel_names[channel2]);
-  g_string_append (p->str, ";\n");
 }
 
 static void
