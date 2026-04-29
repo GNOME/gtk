@@ -599,57 +599,6 @@ gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
-                           GtkSnapshotState *state,
-                           GskRenderNode   **nodes,
-                           guint             n_nodes)
-{
-  GskRenderNode *node, *blur_node;
-  double radius;
-
-  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
-  if (node == NULL)
-    return NULL;
-
-  radius = state->data.blur.radius;
-
-  if (radius == 0.0)
-    return node;
-
-  if (radius < 0)
-    return node;
-
-  blur_node = gsk_blur_node_new (node, radius);
-
-  gsk_render_node_unref (node);
-
-  return blur_node;
-}
-
-/**
- * gtk_snapshot_push_blur:
- * @snapshot: a `GtkSnapshot`
- * @radius: the blur radius to use. Must be positive
- *
- * Blurs an image.
- *
- * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
- */
-void
-gtk_snapshot_push_blur (GtkSnapshot *snapshot,
-                        double       radius)
-{
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  GtkSnapshotState *state;
-
-  state = gtk_snapshot_push_state (snapshot,
-                                   current_state->transform,
-                                   gtk_snapshot_collect_blur,
-                                   NULL);
-  state->data.blur.radius = radius;
-}
-
-static GskRenderNode *
 merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
                           const graphene_vec4_t   *offset2,
                           GskRenderNode           *child)
@@ -976,6 +925,63 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 
   if (gsk_transform_get_category (state->transform) < GSK_TRANSFORM_CATEGORY_IDENTITY)
     gtk_snapshot_autopush_transform (snapshot);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
+                           GtkSnapshotState *state,
+                           GskRenderNode   **nodes,
+                           guint             n_nodes)
+{
+  GskRenderNode *node, *blur_node;
+  double radius;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  radius = state->data.blur.radius;
+
+  if (radius == 0.0)
+    return node;
+
+  if (radius < 0)
+    return node;
+
+  blur_node = gsk_blur_node_new (node, radius);
+
+  gsk_render_node_unref (node);
+
+  return blur_node;
+}
+
+/**
+ * gtk_snapshot_push_blur:
+ * @snapshot: a `GtkSnapshot`
+ * @radius: the blur radius to use. Must be positive
+ *
+ * Blurs an image.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_blur (GtkSnapshot *snapshot,
+                        double       radius)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  gtk_snapshot_ensure_affine_with_flags (snapshot,
+                                         ENSURE_POSITIVE_SCALE | ENSURE_UNIFORM_SCALE,
+                                         &scale_x, &scale_y,
+                                         &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_blur,
+                                   NULL);
+  state->data.blur.radius = radius * scale_x;
 }
 
 void
