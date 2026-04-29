@@ -33,7 +33,7 @@
 #include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdisplay-win32.h"
-#include "gdkseatdefaultprivate.h"
+#include "gdkseat-win32.h"
 
 #define WINTAB32_DLL "Wintab32.dll"
 
@@ -772,11 +772,11 @@ gdk_device_manager_win32_constructed (GObject *object)
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
 
-  seat = gdk_seat_default_new_for_logical_pair (device_manager->core_pointer,
-                                                device_manager->core_keyboard);
+  seat = gdk_win32_seat_new_for_logical_pair (device_manager->core_pointer,
+                                              device_manager->core_keyboard);
   gdk_display_add_seat (device_manager->display, seat);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
+  gdk_win32_seat_add_physical_device (GDK_WIN32_SEAT (seat), device_manager->system_pointer);
+  gdk_win32_seat_add_physical_device (GDK_WIN32_SEAT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
   display_win32->device_manager = device_manager;
@@ -1203,7 +1203,7 @@ gdk_wintab_make_event (GdkDisplay *display,
                                         event_x,
                                         event_y,
                                         axes);
-                                          
+
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB button %s:%d %g,%g\n",
                              (event->event_type == GDK_BUTTON_PRESS ?

@@ -17,12 +17,12 @@
  * Author: Carlos Garnacho <carlosg@gnome.org>
  */
 
-#include "gdkseatdefaultprivate.h"
+#include "gdkseat-broadway.h"
 #include "gdkdevicetoolprivate.h"
 
-typedef struct _GdkSeatDefaultPrivate GdkSeatDefaultPrivate;
+typedef struct _GdkBroadwaySeatPrivate GdkBroadwaySeatPrivate;
 
-struct _GdkSeatDefaultPrivate
+struct _GdkBroadwaySeatPrivate
 {
   GdkDevice *logical_pointer;
   GdkDevice *logical_keyboard;
@@ -33,13 +33,13 @@ struct _GdkSeatDefaultPrivate
   GPtrArray *tools;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GdkSeatDefault, gdk_seat_default, GDK_TYPE_SEAT)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkBroadwaySeat, gdk_broadway_seat, GDK_TYPE_SEAT)
 
 static void
-gdk_seat_default_dispose (GObject *object)
+gdk_broadway_seat_dispose (GObject *object)
 {
-  GdkSeatDefault *seat = GDK_SEAT_DEFAULT (object);
-  GdkSeatDefaultPrivate *priv = gdk_seat_default_get_instance_private (seat);
+  GdkBroadwaySeat *seat = GDK_BROADWAY_SEAT (object);
+  GdkBroadwaySeatPrivate *priv = gdk_broadway_seat_get_instance_private (seat);
   GList *l;
 
   if (priv->logical_pointer)
@@ -73,35 +73,35 @@ gdk_seat_default_dispose (GObject *object)
   priv->physical_pointers = NULL;
   priv->physical_keyboards = NULL;
 
-  G_OBJECT_CLASS (gdk_seat_default_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_broadway_seat_parent_class)->dispose (object);
 }
 
 static GdkSeatCapabilities
-gdk_seat_default_get_capabilities (GdkSeat *seat)
+gdk_broadway_seat_get_capabilities (GdkSeat *seat)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
 
   return priv->capabilities;
 }
 
 static GdkGrabStatus
-gdk_seat_default_grab (GdkSeat                *seat,
-                       GdkSurface              *surface,
-                       GdkSeatCapabilities     capabilities,
-                       gboolean                owner_events,
-                       GdkCursor              *cursor,
-                       GdkEvent               *event,
-                       GdkSeatGrabPrepareFunc  prepare_func,
-                       gpointer                prepare_func_data)
+gdk_broadway_seat_grab (GdkSeat                *seat,
+                        GdkSurface             *surface,
+                        GdkSeatCapabilities     capabilities,
+                        gboolean                owner_events,
+                        GdkCursor              *cursor,
+                        GdkEvent               *event,
+                        GdkSeatGrabPrepareFunc  prepare_func,
+                        gpointer                prepare_func_data)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
   guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean was_visible;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
   was_visible = gdk_surface_get_mapped (surface);
 
   if (prepare_func)
@@ -148,11 +148,11 @@ gdk_seat_default_grab (GdkSeat                *seat,
 }
 
 static void
-gdk_seat_default_ungrab (GdkSeat *seat)
+gdk_broadway_seat_ungrab (GdkSeat *seat)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (priv->logical_pointer, GDK_CURRENT_TIME);
@@ -161,12 +161,12 @@ gdk_seat_default_ungrab (GdkSeat *seat)
 }
 
 static GdkDevice *
-gdk_seat_default_get_logical_device (GdkSeat             *seat,
-                                     GdkSeatCapabilities  capability)
+gdk_broadway_seat_get_logical_device (GdkSeat             *seat,
+                                      GdkSeatCapabilities  capability)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
 
   /* There must be only one flag set */
   switch ((guint) capability)
@@ -232,13 +232,13 @@ append_filtered (GList               *list,
 }
 
 static GList *
-gdk_seat_default_get_devices (GdkSeat             *seat,
-                              GdkSeatCapabilities  capabilities)
+gdk_broadway_seat_get_devices (GdkSeat             *seat,
+                               GdkSeatCapabilities  capabilities)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
   GList *devices = NULL;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
 
   if (capabilities & (GDK_SEAT_CAPABILITY_ALL_POINTING))
     devices = append_filtered (devices, priv->physical_pointers, capabilities);
@@ -250,14 +250,14 @@ gdk_seat_default_get_devices (GdkSeat             *seat,
 }
 
 static GList *
-gdk_seat_default_get_tools (GdkSeat *seat)
+gdk_broadway_seat_get_tools (GdkSeat *seat)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
   GdkDeviceTool *tool;
   GList *tools = NULL;
   guint i;
 
-  priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
 
   if (!priv->tools)
     return NULL;
@@ -272,72 +272,63 @@ gdk_seat_default_get_tools (GdkSeat *seat)
 }
 
 static void
-gdk_seat_default_class_init (GdkSeatDefaultClass *klass)
+gdk_broadway_seat_class_init (GdkBroadwaySeatClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSeatClass *seat_class = GDK_SEAT_CLASS (klass);
 
-  object_class->dispose = gdk_seat_default_dispose;
+  object_class->dispose = gdk_broadway_seat_dispose;
 
-  seat_class->get_capabilities = gdk_seat_default_get_capabilities;
+  seat_class->get_capabilities = gdk_broadway_seat_get_capabilities;
 
-  seat_class->grab = gdk_seat_default_grab;
-  seat_class->ungrab = gdk_seat_default_ungrab;
+  seat_class->grab = gdk_broadway_seat_grab;
+  seat_class->ungrab = gdk_broadway_seat_ungrab;
 
-  seat_class->get_logical_device = gdk_seat_default_get_logical_device;
-  seat_class->get_devices = gdk_seat_default_get_devices;
-  seat_class->get_tools = gdk_seat_default_get_tools;
+  seat_class->get_logical_device = gdk_broadway_seat_get_logical_device;
+  seat_class->get_devices = gdk_broadway_seat_get_devices;
+  seat_class->get_tools = gdk_broadway_seat_get_tools;
 }
 
 static void
-gdk_seat_default_init (GdkSeatDefault *seat)
+gdk_broadway_seat_init (GdkBroadwaySeat *seat)
 {
-}
-
-void
-gdk_seat_default_init_for_logical_pair (GdkSeatDefault *seat,
-                                        GdkDevice *pointer,
-                                        GdkDevice *keyboard)
-{
-  GdkSeatDefaultPrivate *priv;
-
-  priv = gdk_seat_default_get_instance_private (seat);
-  priv->logical_pointer = g_object_ref (pointer);
-  priv->logical_keyboard = g_object_ref (keyboard);
-
-  gdk_seat_device_added (GDK_SEAT (seat), priv->logical_pointer);
-  gdk_seat_device_added (GDK_SEAT (seat), priv->logical_keyboard);
 }
 
 GdkSeat *
-gdk_seat_default_new_for_logical_pair (GdkDevice *pointer,
-                                       GdkDevice *keyboard)
+gdk_broadway_seat_new_for_logical_pair (GdkDevice *pointer,
+                                        GdkDevice *keyboard)
 {
+  GdkBroadwaySeatPrivate *priv;
   GdkDisplay *display;
   GdkSeat *seat;
 
   display = gdk_device_get_display (pointer);
 
-  seat = g_object_new (GDK_TYPE_SEAT_DEFAULT,
+  seat = g_object_new (GDK_TYPE_BROADWAY_SEAT,
                        "display", display,
                        NULL);
 
-  gdk_seat_default_init_for_logical_pair (GDK_SEAT_DEFAULT (seat), pointer, keyboard);
+  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
+  priv->logical_pointer = g_object_ref (pointer);
+  priv->logical_keyboard = g_object_ref (keyboard);
+
+  gdk_seat_device_added (seat, priv->logical_pointer);
+  gdk_seat_device_added (seat, priv->logical_keyboard);
 
   return seat;
 }
 
 void
-gdk_seat_default_add_physical_device (GdkSeatDefault *seat,
-                                      GdkDevice      *device)
+gdk_broadway_seat_add_physical_device (GdkBroadwaySeat *seat,
+                                       GdkDevice       *device)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
   GdkSeatCapabilities capability;
 
-  g_return_if_fail (GDK_IS_SEAT_DEFAULT (seat));
+  g_return_if_fail (GDK_IS_BROADWAY_SEAT (seat));
   g_return_if_fail (GDK_IS_DEVICE (device));
 
-  priv = gdk_seat_default_get_instance_private (seat);
+  priv = gdk_broadway_seat_get_instance_private (seat);
   capability = device_get_capability (device);
 
   if (capability & GDK_SEAT_CAPABILITY_ALL_POINTING)
@@ -357,16 +348,16 @@ gdk_seat_default_add_physical_device (GdkSeatDefault *seat,
 }
 
 void
-gdk_seat_default_remove_physical_device (GdkSeatDefault *seat,
-                                         GdkDevice      *device)
+gdk_broadway_seat_remove_physical_device (GdkBroadwaySeat *seat,
+                                          GdkDevice       *device)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
   GList *l;
 
-  g_return_if_fail (GDK_IS_SEAT_DEFAULT (seat));
+  g_return_if_fail (GDK_IS_BROADWAY_SEAT (seat));
   g_return_if_fail (GDK_IS_DEVICE (device));
 
-  priv = gdk_seat_default_get_instance_private (seat);
+  priv = gdk_broadway_seat_get_instance_private (seat);
 
   if (g_list_find (priv->physical_pointers, device))
     {
@@ -393,15 +384,15 @@ gdk_seat_default_remove_physical_device (GdkSeatDefault *seat,
 }
 
 void
-gdk_seat_default_add_tool (GdkSeatDefault *seat,
-                           GdkDeviceTool  *tool)
+gdk_broadway_seat_add_tool (GdkBroadwaySeat *seat,
+                            GdkDeviceTool   *tool)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
 
-  g_return_if_fail (GDK_IS_SEAT_DEFAULT (seat));
+  g_return_if_fail (GDK_IS_BROADWAY_SEAT (seat));
   g_return_if_fail (tool != NULL);
 
-  priv = gdk_seat_default_get_instance_private (seat);
+  priv = gdk_broadway_seat_get_instance_private (seat);
 
   if (!priv->tools)
     priv->tools = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
@@ -411,15 +402,15 @@ gdk_seat_default_add_tool (GdkSeatDefault *seat,
 }
 
 void
-gdk_seat_default_remove_tool (GdkSeatDefault *seat,
-                              GdkDeviceTool  *tool)
+gdk_broadway_seat_remove_tool (GdkBroadwaySeat *seat,
+                               GdkDeviceTool   *tool)
 {
-  GdkSeatDefaultPrivate *priv;
+  GdkBroadwaySeatPrivate *priv;
 
-  g_return_if_fail (GDK_IS_SEAT_DEFAULT (seat));
+  g_return_if_fail (GDK_IS_BROADWAY_SEAT (seat));
   g_return_if_fail (tool != NULL);
 
-  priv = gdk_seat_default_get_instance_private (seat);
+  priv = gdk_broadway_seat_get_instance_private (seat);
 
   if (tool != gdk_seat_get_tool (GDK_SEAT (seat), tool->serial, tool->hw_id, tool->type))
     return;

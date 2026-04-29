@@ -684,7 +684,7 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
           _gdk_device_add_physical_device (logical, device);
 
           seat = gdk_device_get_seat (logical);
-          gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device);
+          gdk_x11_seat_xi2_add_physical_device (GDK_X11_SEAT_XI2 (seat), device);
 
           ensure_logical_touch_device (GINT_TO_POINTER (dev->deviceid),
                                        GINT_TO_POINTER (dev->attachment),
@@ -721,7 +721,7 @@ detach_from_seat (GdkDevice *device)
   if (gdk_x11_device_xi2_get_device_type (device_xi2) == GDK_X11_DEVICE_TYPE_LOGICAL)
     gdk_display_remove_seat (gdk_device_get_display (device), seat);
   else if (gdk_x11_device_xi2_get_device_type (device_xi2) == GDK_X11_DEVICE_TYPE_PHYSICAL)
-    gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), device);
+    gdk_x11_seat_xi2_remove_physical_device (GDK_X11_SEAT_XI2 (seat), device);
 }
 
 static void
@@ -781,7 +781,7 @@ relate_physical_devices (gpointer key,
   _gdk_device_add_physical_device (logical, physical);
 
   seat = gdk_device_get_seat (logical);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), physical);
+  gdk_x11_seat_xi2_add_physical_device (GDK_X11_SEAT_XI2 (seat), physical);
 }
 
 static void
@@ -984,7 +984,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
             continue;
 
           seat = gdk_device_get_seat (physical);
-          gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), physical);
+          gdk_x11_seat_xi2_remove_physical_device (GDK_X11_SEAT_XI2 (seat), physical);
 
           /* Add new logical device if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)
@@ -1006,7 +1006,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
                   _gdk_device_add_physical_device (logical, physical);
 
                   seat = gdk_device_get_seat (logical);
-                  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), physical);
+                  gdk_x11_seat_xi2_add_physical_device (GDK_X11_SEAT_XI2 (seat), physical);
                   ensure_logical_touch_device (GINT_TO_POINTER (ev->info[i].deviceid), GINT_TO_POINTER (logical_id), device_manager);
                 }
             }
@@ -1170,7 +1170,7 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
               if (!tool && serial_id > 0)
                 {
                   tool = gdk_device_tool_new (serial_id, tool_id, tool_type, 0);
-                  gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
+                  gdk_x11_seat_xi2_add_tool (GDK_X11_SEAT_XI2 (seat), tool);
                 }
             }
         }

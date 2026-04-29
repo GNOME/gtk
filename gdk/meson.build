@@ -61,7 +61,6 @@ gdk_public_sources = files([
   'gdkrectangle.c',
   'gdkrgba.c',
   'gdkseat.c',
-  'gdkseatdefault.c',
   'gdksnapshot.c',
   'gdksubsurface.c',
   'gdksurface.c',
@@ -142,7 +141,6 @@ gdk_private_h_sources = files([
   'gdkeventsprivate.h',
   'gdkhslaprivate.h',
   'gdkmonitorprivate.h',
-  'gdkseatdefaultprivate.h',
   'gdktoplevelsizeprivate.h',
 ])
 

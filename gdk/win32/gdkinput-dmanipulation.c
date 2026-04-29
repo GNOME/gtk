@@ -31,7 +31,6 @@
 #include "gdkdisplay-win32.h"
 #include "gdkprivate-win32.h"
 #include "gdkeventsprivate.h"
-#include "gdkseatdefaultprivate.h"
 #include "gdkinput-dmanipulation.h"
 #include "winpointer.h"
 

@@ -27,7 +27,7 @@
 #include "gdkdevicetoolprivate.h"
 #include "gdkdisplay-win32.h"
 #include "gdkeventsprivate.h"
-#include "gdkseatdefaultprivate.h"
+#include "gdkseat-win32.h"
 
 #include "gdkinput-winpointer.h"
 
@@ -847,10 +847,10 @@ winpointer_create_device (GdkDeviceManagerWin32 *device_manager,
     case GDK_SOURCE_PEN:
       {
         device->tool_pen = gdk_device_tool_new (0, 0, GDK_DEVICE_TOOL_TYPE_PEN, axes_flags);
-        gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), device->tool_pen);
+        gdk_win32_seat_add_tool (GDK_WIN32_SEAT (seat), device->tool_pen);
 
         device->tool_eraser = gdk_device_tool_new (0, 0, GDK_DEVICE_TOOL_TYPE_ERASER, axes_flags);
-        gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), device->tool_eraser);
+        gdk_win32_seat_add_tool (GDK_WIN32_SEAT (seat), device->tool_eraser);
       }
     break;
     case GDK_SOURCE_TOUCHSCREEN:
@@ -865,7 +865,7 @@ winpointer_create_device (GdkDeviceManagerWin32 *device_manager,
   _gdk_device_set_associated_device (GDK_DEVICE (device), device_manager->core_pointer);
   _gdk_device_add_physical_device (device_manager->core_pointer, GDK_DEVICE (device));
 
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), GDK_DEVICE (device));
+  gdk_win32_seat_add_physical_device (GDK_WIN32_SEAT (seat), GDK_DEVICE (device));
 
 cleanup:
   g_free (name);
@@ -965,15 +965,15 @@ winpointer_enumerate_devices (GdkDeviceManagerWin32 *device_manager)
           gdk_device_update_tool (GDK_DEVICE (device), NULL);
 
           if (device->tool_pen)
-            gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), device->tool_pen);
+            gdk_win32_seat_remove_tool (GDK_WIN32_SEAT (seat), device->tool_pen);
 
           if (device->tool_eraser)
-            gdk_seat_default_remove_tool (GDK_SEAT_DEFAULT (seat), device->tool_eraser);
+            gdk_win32_seat_remove_tool (GDK_WIN32_SEAT (seat), device->tool_eraser);
 
           _gdk_device_set_associated_device (GDK_DEVICE (device), NULL);
           _gdk_device_remove_physical_device (device_manager->core_pointer, GDK_DEVICE (device));
 
-          gdk_seat_default_remove_physical_device (GDK_SEAT_DEFAULT (seat), GDK_DEVICE (device));
+          gdk_win32_seat_remove_physical_device (GDK_WIN32_SEAT (seat), GDK_DEVICE (device));
 
           g_object_unref (device);
         }

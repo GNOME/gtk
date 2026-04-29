@@ -17,13 +17,24 @@
  * Author: Alessandro Astone <alessandro.astone@canonical.com>
  */
 
-#include "gdkseatdefaultprivate.h"
+#include "gdkseatprivate.h"
 
 #define GDK_TYPE_X11_SEAT_XI2 (gdk_x11_seat_xi2_get_type ())
-G_DECLARE_FINAL_TYPE (GdkX11SeatXI2, gdk_x11_seat_xi2, GDK, X11_SEAT_XI2, GdkSeatDefault)
+G_DECLARE_FINAL_TYPE (GdkX11SeatXI2, gdk_x11_seat_xi2, GDK, X11_SEAT_XI2, GdkSeat)
 
 GdkSeat *gdk_x11_seat_xi2_new_for_logical_pair (GdkDevice *pointer,
                                                 GdkDevice *keyboard);
 
 GdkDevice *gdk_x11_seat_xi2_get_logical_touch (GdkX11SeatXI2 *seat);
 void       gdk_x11_seat_xi2_set_logical_touch (GdkX11SeatXI2 *seat, GdkDevice *device);
+
+void gdk_x11_seat_xi2_add_physical_device (GdkX11SeatXI2 *seat,
+                                           GdkDevice     *device);
+
+void gdk_x11_seat_xi2_remove_physical_device (GdkX11SeatXI2 *seat,
+                                              GdkDevice     *device);
+void gdk_x11_seat_xi2_add_tool (GdkX11SeatXI2 *seat,
+                                GdkDeviceTool *tool);
+
+void gdk_x11_seat_xi2_remove_tool (GdkX11SeatXI2 *seat,
+                                   GdkDeviceTool *tool);
