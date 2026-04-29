@@ -109,27 +109,6 @@ gdk_device_virtual_grab (GdkDevice    *device,
                          GdkCursor    *cursor,
                          guint32       time_)
 {
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    {
-      GdkWin32HCursor *win32_hcursor;
-      GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_device_get_display (device));
-      win32_hcursor = NULL;
-
-      if (cursor != NULL)
-        win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
-                                                                        cursor,
-                                                                        gdk_surface_get_scale (surface));
-
-      g_set_object (&display->grab_cursor, win32_hcursor);
-
-      if (display->grab_cursor != NULL)
-        SetCursor (gdk_win32_hcursor_get_handle (display->grab_cursor));
-      else
-        SetCursor (LoadCursor (NULL, IDC_ARROW));
-
-      SetCapture (GDK_SURFACE_HWND (surface));
-    }
-
   return GDK_GRAB_SUCCESS;
 }
 
@@ -139,20 +118,12 @@ gdk_device_virtual_ungrab (GdkDevice *device,
 {
   GdkDeviceGrabInfo *info;
   GdkDisplay *display;
-  GdkWin32Display *win32_display;
 
   display = gdk_device_get_display (device);
-  win32_display = GDK_WIN32_DISPLAY (display);
   info = _gdk_display_get_last_device_grab (display, device);
 
   if (info)
     info->serial_end = 0;
-
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    {
-      g_clear_object (&win32_display->grab_cursor);
-      ReleaseCapture ();
-    }
 
   _gdk_display_device_grab_update (display, device, 0);
 }

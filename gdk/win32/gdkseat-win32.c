@@ -19,6 +19,7 @@
 
 #include "gdkseat-win32.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkwin32.h"
 
 typedef struct _GdkWin32SeatPrivate GdkWin32SeatPrivate;
 
@@ -97,6 +98,7 @@ gdk_win32_seat_grab (GdkSeat                *seat,
                      gpointer                prepare_func_data)
 {
   GdkWin32SeatPrivate *priv;
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_seat_get_display (seat));
   guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean was_visible;
@@ -118,6 +120,8 @@ gdk_win32_seat_grab (GdkSeat                *seat,
 
   if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
     {
+      SetCapture (GDK_SURFACE_HWND (surface));
+
       status = gdk_device_grab (priv->logical_pointer, surface,
                                 owner_events,
                                 cursor,
@@ -135,7 +139,7 @@ gdk_win32_seat_grab (GdkSeat                *seat,
       if (status != GDK_GRAB_SUCCESS)
         {
           if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
-            gdk_device_ungrab (priv->logical_pointer, evtime);
+            ReleaseCapture ();
         }
     }
 
@@ -153,6 +157,8 @@ gdk_win32_seat_ungrab (GdkSeat *seat)
   GdkWin32SeatPrivate *priv;
 
   priv = gdk_win32_seat_get_instance_private (GDK_WIN32_SEAT (seat));
+
+  ReleaseCapture ();
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (priv->logical_pointer, GDK_CURRENT_TIME);
