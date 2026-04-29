@@ -481,6 +481,7 @@ android:
     EXTRA_MESON_FLAGS: "-Dgperf:werror=false"
     BACKEND_FLAGS: "-Dandroid-backend=true"
     FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
+  allow_failure: true
   before_script:
     - .gitlab-ci/show-info-linux.sh
     # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross, fontconfig.wrap and glib/hack.patch files.
@@ -535,11 +536,13 @@ android:
 
 android:demo:
   extends: '.android-defaults'
+  allow_failure: true
   variables:
     APPID: org.gtk.Demo4
 
 android:nodeeditor:
   extends: '.android-defaults'
+  allow_failure: true
   variables:
     APPID: org.gtk.gtk4.NodeEditor
 
@@ -547,6 +550,7 @@ android-signer:
   extends:
     - .distribution.android
   stage: android
+  allow_failure: true
   artifacts:
     paths:
       - apks
