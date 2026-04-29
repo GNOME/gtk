@@ -1,3 +1,15 @@
+Overview of Changes in 4.22.4, 29-04-2026
+=========================================
+
+* Bugs fixed:
+  - !9833 Misc backports (Benjamin Otte, Alessandro Astone, Sergio Costas
+    Rodriguez)
+  - !9866 popoverbin: Point to the center of the widget when popping up
+    (Matthias Clasen, Hari Rana)
+
+* Translation updates:
+  - Slovak (Jose Riha)
+
 Overview of Changes in 4.22.3, 18-04-2026
 =========================================
 
