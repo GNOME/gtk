@@ -18,6 +18,7 @@
  */
 
 #include "gdkdevicetoolprivate.h"
+#include "gdkdevice-xi2-private.h"
 #include "gdkdisplayprivate.h"
 #include "gdkseat-xi2-private.h"
 
@@ -318,6 +319,13 @@ gdk_x11_seat_xi2_grab (GdkSeat                *seat,
 
   if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
     {
+      status = gdk_x11_device_xi2_grab (seat_xi2->logical_pointer, surface,
+                                        owner_events,
+                                        cursor,
+                                        evtime);
+      if (status != GDK_GRAB_SUCCESS)
+        return status;
+
       status = gdk_device_grab (seat_xi2->logical_pointer, surface,
                                 owner_events,
                                 cursor,
@@ -327,15 +335,26 @@ gdk_x11_seat_xi2_grab (GdkSeat                *seat,
   if (status == GDK_GRAB_SUCCESS &&
       capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
-      status = gdk_device_grab (seat_xi2->logical_keyboard, surface,
-                                owner_events,
-                                cursor,
-                                evtime);
+      status = gdk_x11_device_xi2_grab (seat_xi2->logical_keyboard, surface,
+                                        owner_events,
+                                        cursor,
+                                        evtime);
+
+      if (status == GDK_GRAB_SUCCESS)
+        {
+          status = gdk_device_grab (seat_xi2->logical_keyboard, surface,
+                                    owner_events,
+                                    cursor,
+                                    evtime);
+        }
 
       if (status != GDK_GRAB_SUCCESS)
         {
           if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
-            gdk_device_ungrab (seat_xi2->logical_pointer, evtime);
+            {
+              gdk_x11_device_xi2_ungrab (seat_xi2->logical_pointer, evtime);
+              gdk_device_ungrab (seat_xi2->logical_pointer, evtime);
+            }
         }
     }
 
@@ -369,6 +388,9 @@ void
 gdk_x11_seat_xi2_ungrab (GdkSeat *seat)
 {
   GdkX11SeatXI2 *seat_xi2 = GDK_X11_SEAT_XI2 (seat);
+
+  gdk_x11_device_xi2_ungrab (seat_xi2->logical_pointer, GDK_CURRENT_TIME);
+  gdk_x11_device_xi2_ungrab (seat_xi2->logical_keyboard, GDK_CURRENT_TIME);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (seat_xi2->logical_pointer, GDK_CURRENT_TIME);

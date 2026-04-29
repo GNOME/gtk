@@ -1835,7 +1835,6 @@ static gboolean
 drag_grab (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkSeatCapabilities capabilities;
   GdkSeat *seat;
   GdkCursor *cursor;
 
@@ -1844,14 +1843,14 @@ drag_grab (GdkDrag *drag)
 
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-  capabilities = GDK_SEAT_CAPABILITY_POINTER;
-
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
   g_set_object (&x11_drag->cursor, cursor);
 
-  if (gdk_seat_grab (seat, x11_drag->ipc_surface,
-                     capabilities, FALSE,
-                     x11_drag->cursor, NULL, NULL, NULL) != GDK_GRAB_SUCCESS)
+  if (gdk_x11_device_xi2_grab (gdk_seat_get_pointer (seat),
+                               x11_drag->ipc_surface,
+                               FALSE,
+                               x11_drag->cursor,
+                               GDK_CURRENT_TIME) != GDK_GRAB_SUCCESS)
     return FALSE;
 
   g_set_object (&x11_drag->grab_seat, seat);
@@ -1867,8 +1866,7 @@ drag_ungrab (GdkDrag *drag)
   if (!x11_drag->grab_seat)
     return;
 
-  gdk_seat_ungrab (x11_drag->grab_seat);
-
+  gdk_x11_device_xi2_ungrab (gdk_seat_get_pointer (x11_drag->grab_seat), GDK_CURRENT_TIME);
   g_clear_object (&x11_drag->grab_seat);
 }
 
@@ -1970,12 +1968,10 @@ gdk_x11_drag_update_cursor (GdkDrag *drag)
 
   if (x11_drag->grab_seat)
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gdk_device_grab (gdk_seat_get_pointer (x11_drag->grab_seat),
-                       x11_drag->ipc_surface,
-                       FALSE,
-                       cursor, GDK_CURRENT_TIME);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      gdk_x11_device_xi2_grab (gdk_seat_get_pointer (x11_drag->grab_seat),
+                               x11_drag->ipc_surface,
+                               FALSE,
+                               cursor, GDK_CURRENT_TIME);
     }
 }
 
