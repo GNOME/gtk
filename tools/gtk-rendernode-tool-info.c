@@ -36,6 +36,7 @@ typedef struct {
   unsigned int counts[N_NODE_TYPES];
   guint max_depth;
   guint cur_depth;
+  guint n_leafs;
 } NodeCount;
 
 static void
@@ -51,6 +52,8 @@ count_nodes (GskRenderNode *node,
   count->cur_depth++;
   count->max_depth = MAX (count->cur_depth, count->max_depth);
   children = gsk_render_node_get_children (node, &n_children);
+  if (n_children == 0)
+    count->n_leafs++;
   for (i = 0; i < n_children; i++)
     count_nodes (children[i], count);
   count->cur_depth--;
@@ -63,6 +66,7 @@ file_info (const char *filename)
   NodeCount count = { { 0, } };
   unsigned int total = 0;
   unsigned int namelen = 0;
+  unsigned int digits = 0;
   graphene_rect_t bounds, opaque;
 
   node = load_node_file (filename);
@@ -77,13 +81,14 @@ file_info (const char *filename)
     }
 
   namelen = MAX (namelen, strlen (_("Number of nodes:")));
+  namelen = MAX (namelen, strlen (_("leaf nodes")));
 
   g_print ("%*s %u\n", namelen, _("Number of nodes:"), total);
 
-  int digits = 0;
   while (pow (10, digits) < total)
     digits++;
 
+  g_print ("%*s: %*u\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       if (count.counts[i] > 0)

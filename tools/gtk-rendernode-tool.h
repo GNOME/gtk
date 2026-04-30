@@ -13,5 +13,6 @@ void do_show        (int *argc, const char ***argv);
 void do_render      (int *argc, const char ***argv);
 
 GskRenderNode *filter_copypaste     (GskRenderNode *node, int argc, const char **argv);
+GskRenderNode *filter_cut           (GskRenderNode *node, int argc, const char **argv);
 GskRenderNode *filter_strip         (GskRenderNode *node, int argc, const char **argv);
 GskRenderNode *filter_texture       (GskRenderNode *node, int argc, const char **argv);
