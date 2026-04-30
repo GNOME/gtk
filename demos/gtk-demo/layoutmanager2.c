@@ -175,7 +175,7 @@ get_child (unsigned int i)
 }
 
 static GtkWidget *
-get_label_child (unsigned int num)
+get_label_child (void)
 {
   gunichar ch;
   char buf[12] = { 0, };
@@ -192,8 +192,41 @@ get_label_child (unsigned int num)
   frame = gtk_aspect_frame_new (0.5, 0.5, 1, FALSE);
   gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (frame), label);
 
+  gtk_widget_set_margin_start (frame, 4);
+  gtk_widget_set_margin_end (frame, 4);
+  gtk_widget_set_margin_top (frame, 4);
+  gtk_widget_set_margin_bottom (frame, 4);
+
   return frame;
 }
+
+GdkPaintable * color_paintable_new (const char *name,
+                                    float r, float g, float b);
+
+static GtkWidget *
+get_color_child (void)
+{
+  GtkWidget *picture;
+  float r, g, b;
+  GdkPaintable *paintable;
+
+  picture = gtk_picture_new ();
+  gtk_widget_set_size_request (picture, 32, 32);
+
+  r = g_random_double_range (0, 1);
+  g = g_random_double_range (0, 1);
+  b = g_random_double_range (0, 1);
+
+  paintable = color_paintable_new ("Color", r, g, b);
+
+  gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+
+  g_object_unref (paintable);
+
+  return picture;
+}
+
+extern GtkWidget *create_squiggle (void);
 
 static void
 repopulate (GtkWindow    *window,
@@ -215,18 +248,49 @@ repopulate (GtkWindow    *window,
 
   for (unsigned i = 0; i < 18 * 36; i++)
     {
-      if (kind == 0)
-        child = get_child (i);
-      else
-        child = get_label_child (i);
+      switch (kind)
+        {
+        case 0:
+          child = get_child (i);
+          break;
+        case 1:
+          child = get_label_child ();
+          break;
+        case 2:
+          child = get_color_child ();
+          break;
+        case 3:
+          child = create_squiggle ();
+          break;
+        default:
+          g_assert_not_reached ();
+        }
 
       demo2_widget_add_child (DEMO2_WIDGET (widget), child);
     }
 
-  if (kind == 0)
-    gtk_window_set_title (GTK_WINDOW (window), "Transformed icons");
-  else
-    gtk_window_set_title (GTK_WINDOW (window), "Transformed text");
+  switch (kind)
+    {
+    case 0:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed icons");
+      break;
+    case 1:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed text");
+      break;
+    case 2:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed colors");
+      break;
+    case 3:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed squiggles");
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_widget_set_margin_start (widget, 10);
+  gtk_widget_set_margin_end (widget, 10);
+  gtk_widget_set_margin_top (widget, 10);
+  gtk_widget_set_margin_bottom (widget, 10);
 
   gtk_window_set_child (GTK_WINDOW (window), widget);
 
@@ -234,7 +298,7 @@ repopulate (GtkWindow    *window,
   demo2_widget_set_direction (DEMO2_WIDGET (widget), direction);
 }
 
-#define N_KINDS 2
+#define N_KINDS 4
 static unsigned int kind = 0;
 
 static void
@@ -288,7 +352,7 @@ do_layoutmanager2 (GtkWidget *parent)
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Layout Manager — Transformation");
-      gtk_window_set_default_size (GTK_WINDOW (window), 600, 620);
+      gtk_window_set_default_size (GTK_WINDOW (window), 620, 660);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       headerbar = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);

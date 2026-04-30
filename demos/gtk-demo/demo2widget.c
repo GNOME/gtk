@@ -32,7 +32,12 @@ demo2_widget_init (Demo2Widget *self)
 static void
 demo2_widget_dispose (GObject *object)
 {
+  Demo2Widget *self = DEMO2_WIDGET (object);
   GtkWidget *child;
+
+  if (self->tick_id)
+    gtk_widget_remove_tick_callback (GTK_WIDGET (self), self->tick_id);
+  self->tick_id = 0;
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
     gtk_widget_unparent (child);
