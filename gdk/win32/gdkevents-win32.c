@@ -1735,6 +1735,7 @@ gdk_event_translate (MSG *msg,
        * the keyboard is grabbed.
        */
       if (!keyboard_grab &&
+          !surface->shortcuts_inhibited &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
 	   msg->wParam == VK_F4))

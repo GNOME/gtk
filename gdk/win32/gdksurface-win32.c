@@ -3391,7 +3391,6 @@ gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkSeat *gdk_seat;
-  GdkGrabStatus status;
 
   if (surface->shortcuts_inhibited)
     return; /* Already inhibited */
@@ -3402,12 +3401,6 @@ gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
   gdk_seat = gdk_surface_get_seat_from_event (surface, gdk_event);
 
   if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
-    return;
-
-  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
-                          TRUE, NULL, gdk_event, NULL, NULL);
-
-  if (status != GDK_GRAB_SUCCESS)
     return;
 
   // TODO: install a WH_KEYBOARD_LL hook to take alt-tab/win etc.
@@ -3422,13 +3415,10 @@ static void
 gdk_win32_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkSeat *gdk_seat;
 
   if (!surface->shortcuts_inhibited)
     return; /* Not inhibited */
 
-  gdk_seat = surface->current_shortcuts_inhibited_seat;
-  gdk_seat_ungrab (gdk_seat);
   surface->current_shortcuts_inhibited_seat = NULL;
 
   surface->shortcuts_inhibited = FALSE;
