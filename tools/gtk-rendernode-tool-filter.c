@@ -82,6 +82,11 @@ static const Filter filters[] = {
     .run = filter_copypaste,
   },
   {
+    .name = "cut",
+    .description = "Cut out a part of the rendernode",
+    .run = filter_cut,
+  },
+  {
     .name = "save",
     .description = "Save current node to file",
     .suppress_printing = TRUE,
