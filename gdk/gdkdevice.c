@@ -776,7 +776,7 @@ gdk_device_grab (GdkDevice  *device,
                  GdkCursor  *cursor,
                  guint32     time_)
 {
-  GdkGrabStatus res;
+  GdkGrabStatus res = GDK_GRAB_SUCCESS;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
@@ -785,12 +785,15 @@ gdk_device_grab (GdkDevice  *device,
   if (GDK_SURFACE_DESTROYED (surface))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  res = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                             surface,
-                                             owner_events,
-                                             NULL,
-                                             cursor,
-                                             time_);
+  if (GDK_DEVICE_GET_CLASS (device)->grab)
+    {
+      res = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                                 surface,
+                                                 owner_events,
+                                                 NULL,
+                                                 cursor,
+                                                 time_);
+    }
 
   if (res == GDK_GRAB_SUCCESS)
     {
@@ -832,7 +835,8 @@ gdk_device_ungrab (GdkDevice  *device,
                                     serial, grab->surface, TRUE);
     }
 
-  GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
+  if (GDK_DEVICE_GET_CLASS (device)->ungrab)
+    GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
 }
 
 /* Private API */
