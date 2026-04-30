@@ -269,7 +269,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_ARITHMETIC_NODE:
       {
         GskRenderNode *first, *second;
-        float k1, k2, k3, k4;
+        const float *k;
         graphene_rect_t bounds;
         GdkColorState *color_state;
 
@@ -277,10 +277,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
         first = node_attach (gsk_arithmetic_node_get_first_child (node), surface, idx);
         second = node_attach (gsk_arithmetic_node_get_second_child (node), surface, idx);
-        gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
+        k = gsk_arithmetic_node_get_factors (node);
         color_state = gsk_arithmetic_node_get_color_state (node);
 
-        res = gsk_arithmetic_node_new (&bounds, first, second, color_state, k1, k2, k3, k4);
+        res = gsk_arithmetic_node_new (&bounds, first, second, color_state, k);
         gsk_render_node_unref (first);
         gsk_render_node_unref (second);
         return res;

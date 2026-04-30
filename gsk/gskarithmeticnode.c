@@ -283,10 +283,7 @@ gsk_arithmetic_node_replay (GskRenderNode   *node,
     result = gsk_arithmetic_node_new (&node->bounds,
                                       first, second,
                                       self->color_state,
-                                      self->factors[0],
-                                      self->factors[1],
-                                      self->factors[2],
-                                      self->factors[3]);
+                                      self->factors);
 
   gsk_render_node_unref (first);
   gsk_render_node_unref (second);
@@ -317,10 +314,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskArithmeticNode, gsk_arithmetic_node)
  * @first: The first node to be composited
  * @second: The second node to be composited
  * @color_state: The color state to composite in
- * @k1: first factor
- * @k2: second factor
- * @k3: third factor
- * @k4: fourth factor
+ * @factors: the 4 factors, often named "k1" to "k4"
  *
  * Creates a `GskRenderNode` that will composite the
  * @first and @second nodes arithmetically.
@@ -332,10 +326,7 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                          GskRenderNode         *first,
                          GskRenderNode         *second,
                          GdkColorState         *color_state,
-                         float                  k1,
-                         float                  k2,
-                         float                  k3,
-                         float                  k4)
+                         const float            factors[4])
 {
   GskArithmeticNode *self;
   GskRenderNode *node;
@@ -356,10 +347,10 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
   self->first = gsk_render_node_ref (first);
   self->second = gsk_render_node_ref (second);
   self->color_state = gdk_color_state_ref (color_state);
-  self->factors[0] = k1;
-  self->factors[1] = k2;
-  self->factors[2] = k3;
-  self->factors[3] = k4;
+  self->factors[0] = factors[0];
+  self->factors[1] = factors[1];
+  self->factors[2] = factors[2];
+  self->factors[3] = factors[3];
 
   graphene_rect_union (&first->bounds, &second->bounds, &child_bounds);
   graphene_rect_intersection (bounds, &child_bounds, &node->bounds);
@@ -372,7 +363,7 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
                        gsk_render_node_is_fully_opaque (second) &&
                        gsk_rect_contains_rect (&first->bounds, bounds) &&
                        gsk_rect_contains_rect (&second->bounds, bounds) &&
-                       k1 + k2 + k3 + k4 >= 1;
+                       factors[0] + factors[1] + factors[2] + factors[3] >= 1;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (first) ||
                                    gsk_render_node_contains_subsurface_node (second);
   node->contains_paste_node = gsk_render_node_contains_paste_node (first) ||
@@ -416,26 +407,17 @@ gsk_arithmetic_node_get_second_child (const GskRenderNode *node)
 /*< private >
  * gsk_arithmetic_node_get_factors:
  * @node: (type GskArithmeticNode): a `GskRenderNode`
- * @k1: Return location for first factor
- * @k2: Return location for second factor
- * @k3: Return location for third factor
- * @k4: Return location for fourth factor
  *
  * Retrieves the factors used by @node.
+ *
+ * Returns: (transfer none) (array fixed-size=4): the factors
  */
-void
-gsk_arithmetic_node_get_factors (const GskRenderNode *node,
-                                 float               *k1,
-                                 float               *k2,
-                                 float               *k3,
-                                 float               *k4)
+const float *
+gsk_arithmetic_node_get_factors (const GskRenderNode *node)
 {
   const GskArithmeticNode *self = (const GskArithmeticNode *) node;
 
-  *k1 = self->factors[0];
-  *k2 = self->factors[1];
-  *k3 = self->factors[2];
-  *k4 = self->factors[3];
+  return self->factors;
 }
 
 /*< private >

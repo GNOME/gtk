@@ -1647,11 +1647,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_ARITHMETIC_NODE:
       {
-        float k1, k2, k3, k4;
+        const float *k;
         char *tmp;
 
-        gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
-        tmp = g_strdup_printf ("%f %f %f %f", k1, k2, k3, k4);
+        k = gsk_arithmetic_node_get_factors (node);
+        tmp = g_strdup_printf ("%f %f %f %f", k[0], k[1], k[2], k[3]);
         add_text_row (store, "Factors", "%s", tmp);
         add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_arithmetic_node_get_color_state (node)));
         g_free (tmp);

@@ -29,9 +29,11 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
+#include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskbordernodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
+#include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
 #include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gsklineargradientnodeprivate.h"
@@ -170,6 +172,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     struct {
       GskIsolation features;
     } isolation;
+    struct {
+      graphene_rect_t bounds;
+      GskRenderNode *displacement_node;
+      GdkColorChannel channels[2];
+      graphene_size_t max;
+      graphene_size_t scale;
+      graphene_point_t offset;
+    } displacement;
+    struct {
+      graphene_rect_t bounds;
+      GskRenderNode *first_node;
+      GdkColorState *color_state;
+      float factors[4];
+    } arithmetic;
   } data;
 };
 
@@ -599,57 +615,6 @@ gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
-                           GtkSnapshotState *state,
-                           GskRenderNode   **nodes,
-                           guint             n_nodes)
-{
-  GskRenderNode *node, *blur_node;
-  double radius;
-
-  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
-  if (node == NULL)
-    return NULL;
-
-  radius = state->data.blur.radius;
-
-  if (radius == 0.0)
-    return node;
-
-  if (radius < 0)
-    return node;
-
-  blur_node = gsk_blur_node_new (node, radius);
-
-  gsk_render_node_unref (node);
-
-  return blur_node;
-}
-
-/**
- * gtk_snapshot_push_blur:
- * @snapshot: a `GtkSnapshot`
- * @radius: the blur radius to use. Must be positive
- *
- * Blurs an image.
- *
- * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
- */
-void
-gtk_snapshot_push_blur (GtkSnapshot *snapshot,
-                        double       radius)
-{
-  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  GtkSnapshotState *state;
-
-  state = gtk_snapshot_push_state (snapshot,
-                                   current_state->transform,
-                                   gtk_snapshot_collect_blur,
-                                   NULL);
-  state->data.blur.radius = radius;
-}
-
-static GskRenderNode *
 merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
                           const graphene_vec4_t   *offset2,
                           GskRenderNode           *child)
@@ -976,6 +941,63 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 
   if (gsk_transform_get_category (state->transform) < GSK_TRANSFORM_CATEGORY_IDENTITY)
     gtk_snapshot_autopush_transform (snapshot);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
+                           GtkSnapshotState *state,
+                           GskRenderNode   **nodes,
+                           guint             n_nodes)
+{
+  GskRenderNode *node, *blur_node;
+  double radius;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  radius = state->data.blur.radius;
+
+  if (radius == 0.0)
+    return node;
+
+  if (radius < 0)
+    return node;
+
+  blur_node = gsk_blur_node_new (node, radius);
+
+  gsk_render_node_unref (node);
+
+  return blur_node;
+}
+
+/**
+ * gtk_snapshot_push_blur:
+ * @snapshot: a `GtkSnapshot`
+ * @radius: the blur radius to use. Must be positive
+ *
+ * Blurs an image.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_blur (GtkSnapshot *snapshot,
+                        double       radius)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  gtk_snapshot_ensure_affine_with_flags (snapshot,
+                                         ENSURE_POSITIVE_SCALE | ENSURE_UNIFORM_SCALE,
+                                         &scale_x, &scale_y,
+                                         &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_blur,
+                                   NULL);
+  state->data.blur.radius = radius * scale_x;
 }
 
 void
@@ -2060,6 +2082,222 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   gtk_snapshot_push_state (snapshot,
                            end_state->transform,
                            gtk_snapshot_collect_cross_fade_start,
+                           NULL);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_displacement (GtkSnapshot      *snapshot,
+                                   GtkSnapshotState *state,
+                                   GskRenderNode   **nodes,
+                                   guint             n_nodes)
+{
+  GskRenderNode *child_node, *node;
+
+  child_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  if (child_node == NULL)
+    return NULL;
+
+  if (state->data.displacement.displacement_node == NULL)
+    state->data.displacement.displacement_node = gsk_container_node_new (NULL, 0);
+
+  node = gsk_displacement_node_new (&state->data.displacement.bounds,
+                                    child_node,
+                                    state->data.displacement.displacement_node,
+                                    state->data.displacement.channels,
+                                    &state->data.displacement.max,
+                                    &state->data.displacement.scale,
+                                    &state->data.displacement.offset);
+
+  g_object_unref (child_node);
+
+  return node;
+}
+
+static void
+gtk_snapshot_clear_displacement (GtkSnapshotState *state)
+{
+  g_clear_pointer (&state->data.displacement.displacement_node, gsk_render_node_unref);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_displacement_displacement (GtkSnapshot      *snapshot,
+                                                GtkSnapshotState *state,
+                                                GskRenderNode   **nodes,
+                                                guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_displacement);
+
+  prev_state->data.displacement.displacement_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+/*<private>
+ * gtk_snapshot_push_displacement:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: The rectangle to apply to
+ * @channels: Which channels to usefor the displacement in horizontal and
+ *   vertical direction respectively.
+ * @max: The maximum displacement in units
+ * @scale: The scale to apply to the displacement value
+ * @offset: The offset to apply to the displacement value
+ *
+ * Snapshots a displacement operation that will use a displacement
+ * mask to displace a given image. This is modeled after [SVG's feDisplacementMap
+ * filter](https://www.w3.org/TR/SVG11/filters.html#feDisplacementMapElement).
+ *
+ * Until the first call to [method@Gtk.Snapshot.pop], the displacement
+ * mask will be snapshot. After that call, the image to be displaced will be
+ * recorded until the second call to [method@Gtk.Snapshot.pop].
+ *
+ * The amount to displace is determine by sampling the displacement
+ * at every coordinate, converting its value into the given colorstate and
+ * applying the formula `value = scale * (value - offset)` and clamping the
+ * resulting value to be between `-max` and `max`.
+ *
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
+                                const graphene_rect_t  *bounds,
+                                const GdkColorChannel   channels[2],
+                                const graphene_size_t  *max,
+                                const graphene_size_t  *scale,
+                                const graphene_point_t *offset)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_displacement,
+                                   gtk_snapshot_clear_displacement);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.displacement.bounds);
+  state->data.displacement.channels[0] = channels[0];
+  state->data.displacement.channels[1] = channels[1];
+  state->data.displacement.max = GRAPHENE_SIZE_INIT (max->width * scale_x,
+                                                     max->height * scale_y);
+  state->data.displacement.scale = GRAPHENE_SIZE_INIT (scale->width * scale_x,
+                                                       scale->height * scale_y);
+  state->data.displacement.offset = GRAPHENE_POINT_INIT (offset->x * scale_x,
+                                                         offset->y * scale_y);
+
+  gtk_snapshot_push_state (snapshot,
+                           state->transform,
+                           gtk_snapshot_collect_displacement_displacement,
+                           NULL);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
+                                 GtkSnapshotState *state,
+                                 GskRenderNode   **nodes,
+                                 guint             n_nodes)
+{
+  GskRenderNode *second_node, *node;
+
+  second_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  if (state->data.arithmetic.first_node == NULL && second_node == NULL)
+    return NULL;
+
+  if (state->data.arithmetic.first_node == NULL)
+    state->data.arithmetic.first_node = gsk_container_node_new (NULL, 0);
+
+  if (second_node == NULL)
+    second_node = gsk_container_node_new (NULL, 0);
+
+  node = gsk_arithmetic_node_new (&state->data.arithmetic.bounds,
+                                  state->data.arithmetic.first_node,
+                                  second_node,
+                                  state->data.arithmetic.color_state,
+                                  state->data.arithmetic.factors);
+
+  g_object_unref (second_node);
+
+  return node;
+}
+
+static void
+gtk_snapshot_clear_arithmetic (GtkSnapshotState *state)
+{
+  g_clear_pointer (&state->data.arithmetic.first_node, gsk_render_node_unref);
+  g_clear_pointer (&state->data.arithmetic.color_state, gdk_color_state_unref);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_arithmetic_first (GtkSnapshot      *snapshot,
+                                       GtkSnapshotState *state,
+                                       GskRenderNode   **nodes,
+                                       guint             n_nodes)
+{
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_arithmetic);
+
+  prev_state->data.arithmetic.first_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+
+  return NULL;
+}
+
+/*<private>
+ * gtk_snapshot_push_arithmetic:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: The rectangle to apply to
+ * @color_state: The color state to composite the 2 nodes in
+ * @factors: the 4 factors, often named "k1" to "k4"
+ *
+ * Snapshots 2 children and composites them algorithmically with the given
+ * factors. This 
+ * Snapshots a displacement operation that will use a displacement
+ * mask to displace a given image. This is modeled after [SVG's feComposite
+ * filter with using operator=arithmetic](https://drafts.csswg.org/filter-effects/#elementdef-fecomposite)
+ *
+ * Until the first call to [method@Gtk.Snapshot.pop], the first child will
+ * be snapshot. After that call, the second child will be recorded until
+ * the second call to [method@Gtk.Snapshot.pop].
+ *
+ * Calling this function requires two subsequent calls
+ * to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
+                              const graphene_rect_t *bounds,
+                              GdkColorState         *color_state,
+                              const float            factors[4])
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+  float dx, dy, scale_x, scale_y;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (bounds != NULL);
+  g_return_if_fail (color_state != NULL);
+  g_return_if_fail (factors != NULL);
+
+  gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_arithmetic,
+                                   gtk_snapshot_clear_arithmetic);
+  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.arithmetic.bounds);
+  state->data.arithmetic.color_state = gdk_color_state_ref (color_state);
+  state->data.arithmetic.factors[0] = factors[0];
+  state->data.arithmetic.factors[1] = factors[1];
+  state->data.arithmetic.factors[2] = factors[2];
+  state->data.arithmetic.factors[3] = factors[3];
+
+  gtk_snapshot_push_state (snapshot,
+                           state->transform,
+                           gtk_snapshot_collect_arithmetic_first,
                            NULL);
 }
 

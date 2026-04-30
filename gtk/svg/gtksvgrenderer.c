@@ -1110,14 +1110,14 @@ apply_filter_tree (SvgElement    *shape,
               }
             else if (svg_op == COMPOSITE_OPERATOR_ARITHMETIC)
               {
-                float k1, k2, k3, k4;
+                float k[4];
 
-                k1 = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K1), 1);
-                k2 = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K2), 1);
-                k3 = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K3), 1);
-                k4 = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K4), 1);
+                k[0] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K1), 1);
+                k[1] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K2), 1);
+                k[2] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K3), 1);
+                k[3] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K4), 1);
 
-                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, color_state, k1, k2, k3, k4);
+                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, color_state, k);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {

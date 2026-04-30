@@ -1,0 +1,18 @@
+color {
+  bounds: -25 -25 50 50;
+  color: rgb(0,0,255);
+}
+transform {
+  transform: scale(0.125);
+  child: blur {
+    blur: 32;
+    child: color {
+      bounds: -80 -80 160 160;
+      color: rgb(255,0,0);
+    }
+  }
+}
+color {
+  bounds: -16 -16 32 32;
+  color: rgb(0,0,255);
+}

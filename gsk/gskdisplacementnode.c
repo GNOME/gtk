@@ -38,8 +38,6 @@
  *
  * A render node that uses a displacement map to offset each pixel of the
  * child.
- *
- * Since: 4.22
  */
 struct _GskDisplacementNode
 {
@@ -397,8 +395,6 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
  * resulting value to be between `-max` and `max`.
  *
  * Returns: (transfer full) (type GskDisplacementNode): A new `GskRenderNode`
- *
- * Since: 4.22
  */
 GskRenderNode *
 gsk_displacement_node_new (const graphene_rect_t  *bounds,
@@ -453,8 +449,6 @@ gsk_displacement_node_new (const graphene_rect_t  *bounds,
  * Gets the child node that is getting displaced by the given @node.
  *
  * Returns: (transfer none): the child `GskRenderNode`
- *
- * Since: 4.22
  **/
 GskRenderNode *
 gsk_displacement_node_get_child (const GskRenderNode *node)
@@ -471,8 +465,6 @@ gsk_displacement_node_get_child (const GskRenderNode *node)
  * Gets the node that defines the displacement mask.
  *
  * Returns: (transfer none): the displacement `GskRenderNode`
- *
- * Since: 4.22
  **/
 GskRenderNode *
 gsk_displacement_node_get_displacement (const GskRenderNode *node)

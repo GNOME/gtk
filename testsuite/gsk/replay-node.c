@@ -6,6 +6,7 @@
 #include <gsk/gskcolormatrixnodeprivate.h>
 #include <gsk/gskcolornodeprivate.h>
 #include <gsk/gskcomponenttransfernodeprivate.h>
+#include <gsk/gskdisplacementnodeprivate.h>
 #include <gsk/gskinsetshadownodeprivate.h>
 #include <gsk/gskoutsetshadownodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
@@ -471,34 +472,34 @@ replay_isolation_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_displacement_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_push_displacement (snapshot,
+                                  &node->bounds,
+                                  gsk_displacement_node_get_channels (node),
+                                  gsk_displacement_node_get_max (node),
+                                  gsk_displacement_node_get_scale (node),
+                                  gsk_displacement_node_get_offset (node));
+  replay_node (gsk_displacement_node_get_displacement (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+  replay_node (gsk_displacement_node_get_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
 replay_arithmetic_node (GskRenderNode *node,
                         GtkSnapshot   *snapshot)
 {
-  float k1, k2, k3, k4;
-  GtkSnapshot *snap;
-  GskRenderNode *node1, *node2;
   graphene_rect_t bounds;
-  GdkColorState *color_state;
 
   gsk_render_node_get_bounds (node, &bounds);
-  gsk_arithmetic_node_get_factors (node, &k1, &k2, &k3, &k4);
-  color_state = gsk_arithmetic_node_get_color_state (node);
 
-  snap = gtk_snapshot_new ();
-  replay_node (gsk_arithmetic_node_get_first_child (node), snap);
-  node1 = gtk_snapshot_free_to_node (snap);
-
-  snap = gtk_snapshot_new ();
-  replay_node (gsk_arithmetic_node_get_second_child (node), snap);
-  node2 = gtk_snapshot_free_to_node (snap);
-
-  node = gsk_arithmetic_node_new (&bounds, node1, node2, color_state, k1, k2, k3, k4);
-  gtk_snapshot_append_node (snapshot, node);
-  gsk_render_node_unref (node);
+  gtk_snapshot_push_arithmetic (snapshot,
+                                &bounds,
+                                gsk_arithmetic_node_get_color_state (node),
+                                gsk_arithmetic_node_get_factors (node));
+  replay_node (gsk_arithmetic_node_get_first_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
+  replay_node (gsk_arithmetic_node_get_second_child (node), snapshot);
+  gtk_snapshot_pop (snapshot);
 }
 
 void
