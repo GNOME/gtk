@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-04-18 17:38+0000\n"
-"PO-Revision-Date: 2026-04-23 13:47+0200\n"
+"POT-Creation-Date: 2026-04-25 00:18+0000\n"
+"PO-Revision-Date: 2026-04-30 09:41+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -672,8 +672,7 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
-"Nie je možné získať údaje schránky. Funkcia GlobalLock(0x%p) zlyhala: "
-"0x%lx."
+"Nie je možné získať údaje schránky. Funkcia GlobalLock(0x%p) zlyhala: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:847
 #, c-format
@@ -1463,7 +1462,7 @@ msgstr "bunka"
 #: gtk/gtkaccessible.c:843
 msgctxt "accessibility"
 msgid "checkbox"
-msgstr "zaškrtávacie pole"
+msgstr "začiarkavacie pole"
 
 #: gtk/gtkaccessible.c:844
 msgctxt "accessibility"
@@ -1623,7 +1622,7 @@ msgstr "položka ponuky"
 #: gtk/gtkaccessible.c:874
 msgctxt "accessibility"
 msgid "menu item checkbox"
-msgstr "zaškrtávacia položka ponuky"
+msgstr "začiarkavacia položka ponuky"
 
 #: gtk/gtkaccessible.c:875
 msgctxt "accessibility"
@@ -4283,7 +4282,7 @@ msgstr "Zhora nadol"
 msgid "Bottom to top"
 msgstr "Zdola nahor"
 
-#: gtk/gtkprintdialog.c:1765
+#: gtk/gtkprintdialog.c:1767
 msgid "Failed to create the read file descriptor"
 msgstr "Zlyhalo vytvorenie popisovača súboru na čítanie"
 
