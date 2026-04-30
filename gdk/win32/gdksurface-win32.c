@@ -1764,6 +1764,26 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
 }
 
 static void
+update_cursor_for_drag_move_resize (GdkSurface *surface,
+                                    GdkCursor  *cursor)
+{
+  GdkWin32HCursor *win32_hcursor = NULL;
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+
+  if (cursor != NULL)
+    win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
+                                                                    cursor,
+                                                                    gdk_surface_get_scale (surface));
+
+  g_set_object (&display->grab_cursor, win32_hcursor);
+
+  if (display->grab_cursor != NULL)
+    SetCursor (gdk_win32_hcursor_get_handle (display->grab_cursor));
+  else
+    SetCursor (LoadCursor (NULL, IDC_ARROW));
+}
+
+static void
 setup_drag_move_resize_context (GdkSurface                  *surface,
                                 GdkW32DragMoveResizeContext *context,
                                 GdkW32WindowDragOp           op,
@@ -1935,10 +1955,7 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
    * our op before it even begins, but only if context->op is not NONE.
    * This is why we first do the grab, *then* set the op.
    */
-  gdk_device_grab (device, pointer_surface,
-                   FALSE,
-                   context->cursor,
-                   timestamp);
+  SetCapture (GDK_SURFACE_HWND (surface));
 
   context->surface = g_object_ref (surface);
   context->op = op;
@@ -1951,6 +1968,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
   context->current_root_y = root_y;
   context->timestamp = timestamp;
   context->start_rect = rect;
+
+  update_cursor_for_drag_move_resize (surface, context->cursor);
 
   GDK_NOTE (EVENTS,
             g_print ("begin drag moveresize: surface %p, toplevel %p, "
@@ -1970,7 +1989,8 @@ gdk_win32_surface_end_move_resize_drag (GdkSurface *surface)
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
-  gdk_device_ungrab (context->device, GDK_CURRENT_TIME);
+  update_cursor_for_drag_move_resize (surface, NULL);
+  ReleaseCapture ();
 
   g_clear_object (&context->cursor);
 
