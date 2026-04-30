@@ -175,7 +175,7 @@ get_child (unsigned int i)
 }
 
 static GtkWidget *
-get_label_child (unsigned int num)
+get_label_child (void)
 {
   gunichar ch;
   char buf[12] = { 0, };
@@ -199,7 +199,7 @@ GdkPaintable * color_paintable_new (const char *name,
                                     float r, float g, float b);
 
 static GtkWidget *
-get_color_child (unsigned int num)
+get_color_child (void)
 {
   GtkWidget *picture;
   float r, g, b;
@@ -220,6 +220,8 @@ get_color_child (unsigned int num)
 
   return picture;
 }
+
+extern GtkWidget *create_squiggle (void);
 
 static void
 repopulate (GtkWindow    *window,
@@ -247,10 +249,13 @@ repopulate (GtkWindow    *window,
           child = get_child (i);
           break;
         case 1:
-          child = get_label_child (i);
+          child = get_label_child ();
           break;
         case 2:
-          child = get_color_child (i);
+          child = get_color_child ();
+          break;
+        case 3:
+          child = create_squiggle ();
           break;
         default:
           g_assert_not_reached ();
@@ -270,6 +275,9 @@ repopulate (GtkWindow    *window,
     case 2:
       gtk_window_set_title (GTK_WINDOW (window), "Transformed colors");
       break;
+    case 3:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed squiggles");
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -280,7 +288,7 @@ repopulate (GtkWindow    *window,
   demo2_widget_set_direction (DEMO2_WIDGET (widget), direction);
 }
 
-#define N_KINDS 3
+#define N_KINDS 4
 static unsigned int kind = 0;
 
 static void

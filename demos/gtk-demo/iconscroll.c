@@ -505,7 +505,9 @@ populate_svg (void)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
 }
 
-static GtkWidget *
+GtkWidget *create_squiggle (void);
+
+GtkWidget *
 create_squiggle (void)
 {
   GtkWidget *image;
