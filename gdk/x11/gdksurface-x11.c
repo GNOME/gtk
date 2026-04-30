@@ -5444,8 +5444,11 @@ gdk_x11_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
   if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
     return;
 
-  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
-                          TRUE, NULL, gdk_event, NULL, NULL);
+  status = gdk_x11_device_xi2_grab (gdk_seat_get_keyboard (gdk_seat),
+                                    surface,
+                                    TRUE,
+                                    NULL,
+                                    gdk_event_get_time (event));
 
   if (status != GDK_GRAB_SUCCESS)
     return;
@@ -5465,7 +5468,7 @@ gdk_x11_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
     return; /* Not inhibited */
 
   gdk_seat = surface->current_shortcuts_inhibited_seat;
-  gdk_seat_ungrab (gdk_seat);
+  gdk_x11_device_xi2_ungrab (gdk_seat_get_keyboard (gdk_seat), GDK_CURRENT_TIME);
   surface->current_shortcuts_inhibited_seat = NULL;
 
   surface->shortcuts_inhibited = FALSE;
