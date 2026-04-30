@@ -93,6 +93,11 @@ static const Filter filters[] = {
     .run = filter_save,
   },
   {
+    .name = "simplify",
+    .description = "Simplify the node by keeping it functionally identical",
+    .run = filter_simplify,
+  },
+  {
     .name = "strip",
     .description = "Strip debug nodes (and others)",
     .run = filter_strip,
