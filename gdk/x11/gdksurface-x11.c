@@ -3981,7 +3981,7 @@ wmspec_moveresize (GdkSurface *surface,
   GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
 
   if (button != 0)
-    gdk_seat_ungrab (gdk_device_get_seat (device)); /* Release passive grab */
+    gdk_x11_device_xi2_ungrab (device, timestamp); /* Release passive grab */
   GDK_X11_DISPLAY (display)->wm_moveresize_button = button;
 
   wmspec_send_message (display, surface, root_x, root_y, direction, button);
@@ -4423,9 +4423,10 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
 
 static void
 create_moveresize_surface (MoveResizeData *mv_resize,
-                          guint32         timestamp)
+                           guint32         timestamp)
 {
   GdkGrabStatus status;
+  GdkSeat *seat;
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
@@ -4434,10 +4435,10 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   gdk_surface_set_is_mapped (mv_resize->moveresize_emulation_surface, TRUE);
   gdk_x11_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
-  status = gdk_seat_grab (gdk_device_get_seat (mv_resize->device),
-                          mv_resize->moveresize_emulation_surface,
-                          GDK_SEAT_CAPABILITY_POINTER, FALSE,
-                          NULL, NULL, NULL, NULL);
+  seat = gdk_device_get_seat (mv_resize->device);
+  status = gdk_x11_device_xi2_grab (gdk_seat_get_pointer (seat),
+                                    mv_resize->moveresize_emulation_surface,
+                                    FALSE, NULL, timestamp);
 
   if (status != GDK_GRAB_SUCCESS)
     {
@@ -4842,7 +4843,7 @@ gdk_x11_surface_show_window_menu (GdkSurface *surface,
                 NULL);
 
   /* Ungrab the implicit grab */
-  gdk_seat_ungrab (gdk_device_get_seat (device));
+  gdk_x11_device_xi2_ungrab (device, gdk_event_get_time (event));
 
   xclient.type = ClientMessage;
   xclient.window = GDK_SURFACE_XID (surface);
@@ -5448,7 +5449,7 @@ gdk_x11_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
                                     surface,
                                     TRUE,
                                     NULL,
-                                    gdk_event_get_time (event));
+                                    gdk_event_get_time (gdk_event));
 
   if (status != GDK_GRAB_SUCCESS)
     return;
