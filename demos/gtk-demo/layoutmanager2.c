@@ -192,6 +192,11 @@ get_label_child (void)
   frame = gtk_aspect_frame_new (0.5, 0.5, 1, FALSE);
   gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (frame), label);
 
+  gtk_widget_set_margin_start (frame, 4);
+  gtk_widget_set_margin_end (frame, 4);
+  gtk_widget_set_margin_top (frame, 4);
+  gtk_widget_set_margin_bottom (frame, 4);
+
   return frame;
 }
 
@@ -282,6 +287,11 @@ repopulate (GtkWindow    *window,
       g_assert_not_reached ();
     }
 
+  gtk_widget_set_margin_start (widget, 10);
+  gtk_widget_set_margin_end (widget, 10);
+  gtk_widget_set_margin_top (widget, 10);
+  gtk_widget_set_margin_bottom (widget, 10);
+
   gtk_window_set_child (GTK_WINDOW (window), widget);
 
   demo2_widget_set_orientation (DEMO2_WIDGET (widget), orientation);
@@ -342,7 +352,7 @@ do_layoutmanager2 (GtkWidget *parent)
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Layout Manager — Transformation");
-      gtk_window_set_default_size (GTK_WINDOW (window), 600, 620);
+      gtk_window_set_default_size (GTK_WINDOW (window), 620, 660);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       headerbar = gtk_header_bar_new ();
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
