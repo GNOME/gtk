@@ -5362,6 +5362,29 @@ append_bytes_param (Printer    *p,
   g_string_append (p->str, ";\n");
 }
 
+static char *
+bytes_to_hex_string (GBytes *bytes)
+{
+  const char *values = "0123456789ABCDEF";
+  char *s;
+  gsize i, size;
+  const guchar *data;
+
+  data = g_bytes_get_data (bytes, &size);
+  g_assert (size < G_MAXSIZE / 2 - 1);
+  s = g_new (char, 2 * size + 1);
+
+  for (i = 0; i < size; i++)
+    {
+      s[2 * i + 0] = values[data[i] / 16];
+      s[2 * i + 1] = values[data[i] % 16];
+    }
+
+  s[2 * size] = 0;
+
+  return s;
+}
+
 static void
 append_compressed_bytes_param (Printer    *p,
                                const char *param_name,
@@ -5385,7 +5408,17 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   ((guchar *) g_bytes_get_data (compressed_bytes, NULL))[9] = 3;
 #endif
 
-  append_bytes_param (p, param_name, compressed_bytes, "application/gzip");
+  /* rough estimates for the length of each string */
+  if (2 * g_bytes_get_size (bytes) <= 4 * g_bytes_get_size (compressed_bytes) / 3 + 25)
+    {
+      char *bytes_str = bytes_to_hex_string (bytes);
+      append_string_param (p, param_name, bytes_str);
+      g_free (bytes_str);
+    }
+  else
+    {
+      append_bytes_param (p, param_name, compressed_bytes, "application/gzip");
+    }
 
   g_object_unref (compressor);
   g_bytes_unref (compressed_bytes);
