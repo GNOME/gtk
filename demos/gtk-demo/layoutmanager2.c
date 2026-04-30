@@ -195,6 +195,32 @@ get_label_child (unsigned int num)
   return frame;
 }
 
+GdkPaintable * color_paintable_new (const char *name,
+                                    float r, float g, float b);
+
+static GtkWidget *
+get_color_child (unsigned int num)
+{
+  GtkWidget *picture;
+  float r, g, b;
+  GdkPaintable *paintable;
+
+  picture = gtk_picture_new ();
+  gtk_widget_set_size_request (picture, 32, 32);
+
+  r = g_random_double_range (0, 1);
+  g = g_random_double_range (0, 1);
+  b = g_random_double_range (0, 1);
+
+  paintable = color_paintable_new ("Color", r, g, b);
+
+  gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+
+  g_object_unref (paintable);
+
+  return picture;
+}
+
 static void
 repopulate (GtkWindow    *window,
             unsigned int  kind)
@@ -215,18 +241,38 @@ repopulate (GtkWindow    *window,
 
   for (unsigned i = 0; i < 18 * 36; i++)
     {
-      if (kind == 0)
-        child = get_child (i);
-      else
-        child = get_label_child (i);
+      switch (kind)
+        {
+        case 0:
+          child = get_child (i);
+          break;
+        case 1:
+          child = get_label_child (i);
+          break;
+        case 2:
+          child = get_color_child (i);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
 
       demo2_widget_add_child (DEMO2_WIDGET (widget), child);
     }
 
-  if (kind == 0)
-    gtk_window_set_title (GTK_WINDOW (window), "Transformed icons");
-  else
-    gtk_window_set_title (GTK_WINDOW (window), "Transformed text");
+  switch (kind)
+    {
+    case 0:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed icons");
+      break;
+    case 1:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed text");
+      break;
+    case 2:
+      gtk_window_set_title (GTK_WINDOW (window), "Transformed colors");
+      break;
+    default:
+      g_assert_not_reached ();
+    }
 
   gtk_window_set_child (GTK_WINDOW (window), widget);
 
@@ -234,7 +280,7 @@ repopulate (GtkWindow    *window,
   demo2_widget_set_direction (DEMO2_WIDGET (widget), direction);
 }
 
-#define N_KINDS 2
+#define N_KINDS 3
 static unsigned int kind = 0;
 
 static void

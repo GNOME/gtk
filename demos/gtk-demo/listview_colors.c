@@ -299,6 +299,16 @@ gtk_color_new (const char *name,
   return result;
 }
 
+GdkPaintable * color_paintable_new (const char *name,
+                                    float r, float g, float b);
+
+GdkPaintable *
+color_paintable_new (const char *name,
+                     float r, float g, float b)
+{
+  return (GdkPaintable *) gtk_color_new (name, r, g, b);
+}
+
 #define N_COLORS (256 * 256 * 256)
 
 #define GTK_TYPE_COLOR_LIST (gtk_color_list_get_type ())
