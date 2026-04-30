@@ -22,6 +22,7 @@
 
 #include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
+#include "gdkseatprivate.h"
 
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
@@ -108,19 +109,9 @@ _gdk_broadway_surface_grab_check_unmap (GdkSurface *surface,
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  /* End all grabs on the newly hidden surface */
-  for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
 
@@ -129,29 +120,9 @@ _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GdkDeviceGrabInfo *grab;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = NULL;
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  for (d = devices; d; d = d->next)
-    {
-      /* Make sure there is no lasting grab in this native surface */
-      grab = _gdk_display_get_last_device_grab (display, d->data);
-
-      if (grab && grab->surface == surface)
-        {
-          grab->serial_end = grab->serial_start;
-          grab->implicit_ungrab = TRUE;
-        }
-
-    }
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
 
@@ -165,13 +136,6 @@ gdk_broadway_device_grab (GdkDevice    *device,
 static void
 gdk_broadway_device_ungrab (GdkDevice *device)
 {
-  GdkDisplay *display = gdk_device_get_display (device);
-  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
-
-  if (grab != NULL)
-    grab->serial_end = grab->serial_start;
-
-  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static GdkSurface *

@@ -111,16 +111,6 @@ gdk_device_virtual_grab (GdkDevice  *device,
 static void
 gdk_device_virtual_ungrab (GdkDevice *device)
 {
-  GdkDeviceGrabInfo *info;
-  GdkDisplay *display;
-
-  display = gdk_device_get_display (device);
-  info = _gdk_display_get_last_device_grab (display, device);
-
-  if (info)
-    info->serial_end = 0;
-
-  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static void

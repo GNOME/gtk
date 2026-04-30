@@ -65,6 +65,7 @@
 #include "gdkdisplay-win32.h"
 //#include "gdkselection-win32.h"
 #include "gdkdragprivate.h"
+#include "gdkseatprivate.h"
 #include "gdkprivate.h"
 
 #include <windowsx.h>
@@ -186,28 +187,6 @@ generate_focus_event (GdkDeviceManagerWin32 *device_manager,
   device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_keyboard;
 
   event = gdk_focus_event_new (surface, device, in);
-
-  _gdk_win32_append_event (event);
-}
-
-static void
-generate_grab_broken_event (GdkDeviceManagerWin32 *device_manager,
-                            GdkSurface            *surface,
-                            gboolean               keyboard,
-                            GdkSurface            *grab_surface)
-{
-  GdkEvent *event;
-  GdkDevice *device;
-
-  if (keyboard)
-    device = device_manager->core_keyboard;
-  else
-    device = device_manager->core_pointer;
-
-  event = gdk_grab_broken_event_new (surface,
-                                     device,
-                                     grab_surface,
-                                     FALSE);
 
   _gdk_win32_append_event (event);
 }
@@ -437,17 +416,16 @@ find_surface_for_mouse_event (GdkSurface *reported_surface,
 {
   POINT pt;
   GdkDisplay *display;
-  GdkDeviceManagerWin32 *device_manager;
-  GdkSurface *event_surface;
+  GdkSurface *event_surface, *grab_surface;
+  GdkSeat *seat;
   HWND hwnd;
   RECT rect;
-  GdkDeviceGrabInfo *grab;
 
   display = gdk_display_get_default ();
-  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
 
-  grab = _gdk_display_get_last_device_grab (display, device_manager->core_pointer);
-  if (grab == NULL)
+  seat = gdk_display_get_default_seat (display);
+  grab_surface = gdk_seat_get_topmost_grab_surface (seat);
+  if (grab_surface == NULL)
     return reported_surface;
 
   pt = msg->pt;
@@ -464,7 +442,7 @@ find_surface_for_mouse_event (GdkSurface *reported_surface,
         event_surface = gdk_win32_display_handle_table_lookup_ (display, hwnd);
     }
   if (event_surface == NULL)
-    event_surface = grab->surface;
+    event_surface = grab_surface;
 
   /* need to also adjust the coordinates to the new surface */
   ScreenToClient (GDK_SURFACE_HWND (event_surface), &pt);
@@ -1601,8 +1579,6 @@ gdk_event_translate (MSG *msg,
 
   GdkSurface *new_surface;
 
-  GdkDeviceGrabInfo *keyboard_grab = NULL;
-  GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkSurface *grab_surface = NULL;
 
   crossing_cb_t crossing_cb = NULL;
@@ -1647,10 +1623,7 @@ gdk_event_translate (MSG *msg,
       return FALSE;
     }
 
-  keyboard_grab = _gdk_display_get_last_device_grab (display,
-                                                     win32_display->device_manager->core_keyboard);
-  pointer_grab = _gdk_display_get_last_device_grab (display,
-                                                    win32_display->device_manager->core_pointer);
+  grab_surface = gdk_seat_get_topmost_grab_surface (gdk_display_get_default_seat (display));
 
   g_object_ref (surface);
 
@@ -1717,7 +1690,7 @@ gdk_event_translate (MSG *msg,
       /* Let the system handle Alt-Tab, Alt-Space and Alt-F4 unless
        * the keyboard is grabbed.
        */
-      if (!keyboard_grab &&
+      if (!grab_surface &&
           !surface->shortcuts_inhibited &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
@@ -2085,7 +2058,7 @@ gdk_event_translate (MSG *msg,
       if ((button_state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
         {
           release_implicit_grab = TRUE;
-          prev_surface = pointer_grab->surface;
+          prev_surface = grab_surface;
         }
 
       generate_button_event (GDK_BUTTON_RELEASE, button, surface, msg);
@@ -2582,12 +2555,13 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_KILLFOCUS:
-      if (keyboard_grab != NULL &&
-	  !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
+      if (grab_surface != NULL &&
+	  !GDK_SURFACE_DESTROYED (grab_surface) &&
 	  (win32_display->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
-	{
-	  generate_grab_broken_event (win32_display->device_manager, keyboard_grab->surface, TRUE, NULL);
-	}
+        {
+          GdkSeat *seat = gdk_display_get_default_seat (display);
+          gdk_seat_break_grab (seat, grab_surface);
+        }
       G_GNUC_FALLTHROUGH;
 
     case WM_SETFOCUS:
@@ -2615,9 +2589,6 @@ gdk_event_translate (MSG *msg,
     case WM_SETCURSOR:
       GDK_NOTE (EVENTS, g_print (" %#x %#x",
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
-
-      if (pointer_grab != NULL)
-        grab_surface = pointer_grab->surface;
 
       if (grab_surface == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
@@ -2822,14 +2793,8 @@ gdk_event_translate (MSG *msg,
       if (hwndpos->flags & SWP_HIDEWINDOW ||
 	  ((hwndpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
       {
-        GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-
-        if ((pointer_grab != NULL && pointer_grab->surface == surface) ||
-            (keyboard_grab != NULL && keyboard_grab->surface == surface))
-          {
-            ReleaseCapture ();
-            gdk_device_ungrab (device);
-          }
+        if (grab_surface == surface)
+          ReleaseCapture ();
       }
 
       /* Update surface HWND state */
@@ -2991,13 +2956,8 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_NCDESTROY:
-      if ((pointer_grab != NULL && pointer_grab->surface == surface) ||
-          (keyboard_grab && keyboard_grab->surface == surface))
-      {
-        GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+      if (grab_surface == surface)
         ReleaseCapture ();
-        gdk_device_ungrab (device);
-      }
 
       if ((surface != NULL) && (msg->hwnd != GetDesktopWindow ()))
 	gdk_surface_destroy_notify (surface);

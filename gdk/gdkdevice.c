@@ -783,25 +783,7 @@ gdk_device_grab (GdkDevice  *device,
     return GDK_GRAB_NOT_VIEWABLE;
 
   if (GDK_DEVICE_GET_CLASS (device)->grab)
-    {
-      res = GDK_DEVICE_GET_CLASS (device)->grab (device, surface);
-    }
-
-  if (res == GDK_GRAB_SUCCESS)
-    {
-      GdkDisplay *display;
-      gulong serial;
-
-      display = gdk_surface_get_display (surface);
-      serial = _gdk_display_get_next_serial (display);
-
-      _gdk_display_add_device_grab (display,
-                                    device,
-                                    surface,
-                                    TRUE,
-                                    serial,
-                                    FALSE);
-    }
+    res = GDK_DEVICE_GET_CLASS (device)->grab (device, surface);
 
   return res;
 }
@@ -809,22 +791,7 @@ gdk_device_grab (GdkDevice  *device,
 void
 gdk_device_ungrab (GdkDevice *device)
 {
-  GdkDeviceGrabInfo *grab;
-  GdkDisplay *display;
-  gulong serial;
-
   g_return_if_fail (GDK_IS_DEVICE (device));
-
-  display = gdk_device_get_display (device);
-
-  grab = _gdk_display_get_last_device_grab (display, device);
-
-  if (grab)
-    {
-      serial = _gdk_display_get_next_serial (display);
-      _gdk_display_end_device_grab (display, device,
-                                    serial, grab->surface, TRUE);
-    }
 
   if (GDK_DEVICE_GET_CLASS (device)->ungrab)
     GDK_DEVICE_GET_CLASS (device)->ungrab (device);

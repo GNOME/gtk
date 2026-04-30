@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
+#include "gdkseatprivate.h"
 
 #include <glib/gprintf.h>
 #include <stdlib.h>
@@ -57,7 +58,7 @@ static int _gdk_error_handler_push_count = 0;
  * Private function declarations
  */
 
-static int	    gdk_x_error			 (Display     *display, 
+static int	    gdk_x_error			 (Display     *display,
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
 
@@ -80,29 +81,19 @@ _gdk_x11_surfaceing_init (void)
  **/
 void
 _gdk_x11_surface_grab_check_unmap (GdkSurface *surface,
-                                  gulong     serial)
+                                   gulong     serial)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  /* End all grabs on the newly hidden surface */
-  for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
 /*
  * _gdk_x11_surface_grab_check_destroy:
  * @surface: a `GdkSurface`
- * 
+ *
  * Checks to see if surface is the current grab surface, and if
  * so, clear the current grab surface.
  **/
@@ -111,33 +102,9 @@ _gdk_x11_surface_grab_check_destroy (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GdkDeviceGrabInfo *grab;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  for (d = devices; d; d = d->next)
-    {
-      /* Make sure there is no lasting grab in this native surface */
-      grab = _gdk_display_get_last_device_grab (display, d->data);
-
-      if (grab && grab->surface == surface)
-        {
-          /* We don't know the actual serial to end, but it
-             doesn't really matter as this only happens
-             after we get told of the destroy from the
-             server so we know its ended in the server,
-             just make sure its ended. */
-          grab->serial_end = grab->serial_start;
-          grab->implicit_ungrab = TRUE;
-        }
-    }
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
 /*
@@ -292,7 +259,7 @@ _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
   XRectangle *rectangles;
   cairo_rectangle_int_t box;
   int i, n;
-  
+
   n = cairo_region_num_rectangles (region);
   rectangles = g_new (XRectangle, n);
 

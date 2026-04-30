@@ -128,13 +128,6 @@ gdk_android_device_grab (GdkDevice *device, GdkSurface *surface)
 static void
 gdk_android_device_ungrab (GdkDevice *device)
 {
-  GdkDisplay *display = gdk_device_get_display (device);
-  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
-  if (grab != NULL)
-    grab->serial_end = grab->serial_start;
-
-  g_debug ("Ungrabbing: %s", device->name);
-  _gdk_display_device_grab_update (display, device, 0);
 }
 
 static GdkSurface *

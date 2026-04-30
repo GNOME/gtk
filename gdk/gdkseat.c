@@ -23,7 +23,9 @@
 #include "gdkdisplay.h"
 #include "gdkdevice.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkeventsprivate.h"
 #include "gdkseatprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include <glib/gi18n-lib.h>
 
@@ -38,6 +40,7 @@ typedef struct _GdkSeatPrivate GdkSeatPrivate;
 struct _GdkSeatPrivate
 {
   GdkDisplay *display;
+  GList *grabs;
 };
 
 enum {
@@ -220,7 +223,9 @@ GdkGrabStatus
 gdk_seat_grab (GdkSeat    *seat,
                GdkSurface *surface)
 {
+  GdkSeatPrivate *priv = gdk_seat_get_instance_private (seat);
   GdkSeatClass *seat_class;
+  GdkGrabStatus status;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
@@ -228,7 +233,12 @@ gdk_seat_grab (GdkSeat    *seat,
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
 
-  return seat_class->grab (seat, surface);
+  status = seat_class->grab (seat, surface);
+
+  if (status == GDK_GRAB_SUCCESS)
+    priv->grabs = g_list_prepend (priv->grabs, g_object_ref (surface));
+
+  return status;
 }
 
 /*
@@ -243,12 +253,24 @@ void
 gdk_seat_ungrab (GdkSeat    *seat,
                  GdkSurface *surface)
 {
+  GdkSeatPrivate *priv = gdk_seat_get_instance_private (seat);
   GdkSeatClass *seat_class;
+  GdkSurface *grab_surface;
 
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
   seat_class->ungrab (seat, surface);
+
+  if (!priv->grabs)
+    {
+      g_warning ("Unpaired ungrab call");
+      return;
+    }
+
+  grab_surface = priv->grabs->data;
+  priv->grabs = g_list_remove (priv->grabs, grab_surface);
+  g_clear_object (&grab_surface);
 }
 
 /**
@@ -408,4 +430,56 @@ gdk_seat_get_tools (GdkSeat *seat)
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
   return seat_class->get_tools (seat);
+}
+
+GdkSurface *
+gdk_seat_get_topmost_grab_surface (GdkSeat *seat)
+{
+  GdkSeatPrivate *priv = gdk_seat_get_instance_private (seat);
+
+  if (!priv->grabs)
+    return NULL;
+
+  return priv->grabs->data;
+}
+
+static gboolean
+surface_has_ancestor (GdkSurface *surface,
+                      GdkSurface *ancestor)
+{
+  while (surface->parent)
+    {
+      surface = surface->parent;
+      if (surface == ancestor)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+gdk_seat_break_grab (GdkSeat    *seat,
+                     GdkSurface *if_child)
+{
+  GdkSeatPrivate *priv = gdk_seat_get_instance_private (seat);
+  GList *l;
+
+  for (l = priv->grabs; l; l = l->next)
+    {
+      GdkSurface *grab_surface;
+      GdkEvent *event;
+
+      grab_surface = l->data;
+
+      if (grab_surface != if_child &&
+          surface_has_ancestor (grab_surface, if_child))
+        break;
+
+      event = gdk_grab_broken_event_new (grab_surface,
+                                         gdk_seat_get_pointer (seat),
+                                         NULL,
+                                         FALSE);
+
+      _gdk_event_queue_append (priv->display, event);
+    }
 }

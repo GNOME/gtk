@@ -726,21 +726,15 @@ GdkSurface *
 gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
                                                uint32_t   time_)
 {
-  GdkDeviceGrabInfo *grab;
+  GdkSeat *seat;
   GdkSurface *focus = NULL;
-  GdkSurface *surface = NULL;
   GdkSurface *prev_focus = NULL;
 
+  seat = gdk_device_get_seat (device);
   focus = gdk_wayland_device_get_focus (device);
-  grab = _gdk_display_get_last_device_grab (gdk_device_get_display (device), device);
+  prev_focus = gdk_seat_get_topmost_grab_surface (seat);
 
-  if (grab)
-    {
-      prev_focus = grab->surface;
-      surface = grab->surface;
-    }
-
-  if (focus != surface)
+  if (focus != prev_focus)
     device_emit_grab_crossing (device, prev_focus, focus, GDK_CROSSING_UNGRAB, time_);
 
   return prev_focus;

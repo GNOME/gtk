@@ -1345,8 +1345,6 @@ gdk_wayland_surface_present_popup (GdkWaylandPopup *wayland_popup,
 
   if (!wayland_surface->mapped)
     {
-      show_popup (wayland_popup, width, height, layout);
-
       if (surface->autohide)
         {
           GdkSeat *seat;
@@ -1367,6 +1365,8 @@ gdk_wayland_surface_present_popup (GdkWaylandPopup *wayland_popup,
                 }
             }
         }
+
+      show_popup (wayland_popup, width, height, layout);
     }
   else
     {

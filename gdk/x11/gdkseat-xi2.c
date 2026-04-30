@@ -292,8 +292,6 @@ gdk_x11_seat_xi2_grab (GdkSeat    *seat,
   GdkX11SeatXI2 *seat_xi2 = GDK_X11_SEAT_XI2 (seat);
   guint32 evtime = GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  GdkDisplay *display;
-  gulong serial;
   gboolean was_visible;
 
   was_visible = gdk_surface_get_mapped (surface);
@@ -329,20 +327,6 @@ gdk_x11_seat_xi2_grab (GdkSeat    *seat,
   if (status != GDK_GRAB_SUCCESS && !was_visible)
     gdk_surface_hide (surface);
 
-  if (status != GDK_GRAB_SUCCESS)
-    return status;
-
-  /* Add a gdk device grab on the logical touch device */
-  display = gdk_surface_get_display (surface);
-  serial = _gdk_display_get_next_serial (display);
-
-  _gdk_display_add_device_grab (display,
-                                seat_xi2->logical_touch,
-                                surface,
-                                TRUE,
-                                serial,
-                                FALSE);
-
   return status;
 }
 
@@ -359,23 +343,6 @@ gdk_x11_seat_xi2_ungrab (GdkSeat    *seat,
   gdk_device_ungrab (seat_xi2->logical_pointer);
   gdk_device_ungrab (seat_xi2->logical_keyboard);
   G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (seat_xi2->logical_touch)
-    {
-      GdkDeviceGrabInfo *touch_grab;
-      GdkDisplay *display;
-
-      display = gdk_device_get_display (seat_xi2->logical_touch);
-      touch_grab = _gdk_display_get_last_device_grab (display, seat_xi2->logical_touch);
-
-      if (touch_grab)
-        {
-          gulong serial = _gdk_display_get_next_serial (display);
-
-          touch_grab->serial_end = serial;
-          _gdk_display_device_grab_update (display, seat_xi2->logical_touch, serial);
-        }
-    }
 }
 
 void

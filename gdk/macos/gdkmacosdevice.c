@@ -107,19 +107,6 @@ gdk_macos_device_grab (GdkDevice  *device,
 static void
 gdk_macos_device_ungrab (GdkDevice *device)
 {
-  GdkMacosDevice *self = (GdkMacosDevice *)device;
-  GdkDeviceGrabInfo *grab;
-  GdkDisplay *display;
-
-  g_assert (GDK_IS_MACOS_DEVICE (self));
-
-  display = gdk_device_get_display (device);
-  grab = _gdk_display_get_last_device_grab (display, device);
-
-  if (grab != NULL)
-    grab->serial_end = grab->serial_start;
-
-  _gdk_display_device_grab_update (display, device, 0);
 }
 
 void

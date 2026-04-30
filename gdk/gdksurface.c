@@ -45,6 +45,7 @@
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"
 #include "gdksubsurfaceprivate.h"
+#include "gdkseatprivate.h"
 
 #include "gsk/gskrectprivate.h"
 
@@ -2060,8 +2061,8 @@ update_cursor (GdkDisplay *display,
   GdkSurface *cursor_surface;
   GdkSurface *pointer_surface;
   GdkPointerSurfaceInfo *pointer_info;
-  GdkDeviceGrabInfo *grab;
   GdkCursor *cursor;
+  GdkSeat *seat;
 
   g_assert (display);
   g_assert (device);
@@ -2069,19 +2070,11 @@ update_cursor (GdkDisplay *display,
   pointer_info = _gdk_display_get_pointer_info (display, device);
   pointer_surface = pointer_info->surface_under_pointer;
 
-  /* We ignore the serials here and just pick the last grab
-     we've sent, as that would shortly be used anyway. */
-  grab = _gdk_display_get_last_device_grab (display, device);
-  if (grab != NULL)
-    {
-      /* use the cursor from the grab surface */
-      cursor_surface = grab->surface;
-    }
-  else
-    {
-      /* otherwise use the cursor from the pointer surface */
-      cursor_surface = pointer_surface;
-    }
+  seat = gdk_device_get_seat (device);
+  cursor_surface = gdk_seat_get_topmost_grab_surface (seat);
+
+  if (!cursor_surface)
+    cursor_surface = pointer_surface;
 
   cursor = g_hash_table_lookup (cursor_surface->device_cursor, device);
 
@@ -2163,8 +2156,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
           pointer_info = _gdk_display_get_pointer_info (display, device);
           pointer_info->last_physical_device = device;
         }
-
-      _gdk_display_device_grab_update (display, device, serial);
     }
 
   event_surface = gdk_event_get_surface (event);

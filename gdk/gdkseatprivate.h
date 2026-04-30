@@ -75,3 +75,8 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat    *seat,
                                           GdkSurface *surface);
 void           gdk_seat_ungrab           (GdkSeat    *seat,
                                           GdkSurface *surface);
+
+GdkSurface * gdk_seat_get_topmost_grab_surface (GdkSeat *seat);
+
+void gdk_seat_break_grab (GdkSeat *seat,
+                          GdkSurface *if_child);

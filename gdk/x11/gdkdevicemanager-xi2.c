@@ -1315,36 +1315,6 @@ get_event_surface (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
         surface = gdk_x11_surface_lookup_for_display (display, xev->event);
-
-        /* Apply keyboard grabs to non-native windows */
-        if (ev->evtype == XI_KeyPress || ev->evtype == XI_KeyRelease)
-          {
-            GdkDeviceGrabInfo *info;
-            GdkDevice *device;
-            GdkSeat *seat;
-            gulong serial;
-
-            device = g_hash_table_lookup (device_manager->id_table,
-                                          GUINT_TO_POINTER (((XIDeviceEvent *) ev)->deviceid));
-
-            if ((ev->evtype == XI_TouchUpdate ||
-                 ev->evtype == XI_TouchBegin ||
-                 ev->evtype == XI_TouchEnd) &&
-                gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
-              {
-                seat = gdk_device_get_seat (device);
-                device = gdk_x11_seat_xi2_get_logical_touch (GDK_X11_SEAT_XI2 (seat));
-              }
-
-            serial = _gdk_display_get_next_serial (display);
-            info = _gdk_display_has_device_grab (display, device, serial);
-
-            if (info && !info->owner_events)
-              {
-                /* Report key event against grab surface */
-                surface = info->surface;
-              }
-          }
       }
       break;
 #ifdef XINPUT_2_4

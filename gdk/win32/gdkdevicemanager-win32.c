@@ -1011,7 +1011,8 @@ gdk_wintab_make_event (GdkDisplay *display,
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
-  GdkDeviceGrabInfo *last_grab;
+  GdkSeat *seat;
+  GdkSurface *grab_surface;
   guint key_state;
   GdkEvent *event;
 
@@ -1031,6 +1032,7 @@ gdk_wintab_make_event (GdkDisplay *display,
    */
   static guint button_map[8] = {0, 1, 4, 5, 2, 3, 6, 7};
 
+  seat = gdk_display_get_default_seat (display);
   device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   if (surface != device_manager->wintab_items->wintab_surface)
     {
@@ -1107,14 +1109,10 @@ gdk_wintab_make_event (GdkDisplay *display,
           return NULL;
         }
 
-      last_grab = _gdk_display_get_last_device_grab (display, GDK_DEVICE (source_device));
+      grab_surface = gdk_seat_get_topmost_grab_surface (seat);
 
-      if (last_grab && last_grab->surface)
-        {
-          g_object_unref (surface);
-
-          surface = g_object_ref (last_grab->surface);
-        }
+      if (grab_surface)
+        g_set_object (&surface, grab_surface);
 
       if (surface == NULL)
         {
