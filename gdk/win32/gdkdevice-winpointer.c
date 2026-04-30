@@ -107,18 +107,6 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
     }
 }
 
-static GdkGrabStatus
-gdk_device_winpointer_grab (GdkDevice  *device,
-                            GdkSurface *surface)
-{
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_device_winpointer_ungrab (GdkDevice *device)
-{
-}
-
 static void
 screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
 {
@@ -203,7 +191,5 @@ gdk_device_winpointer_class_init (GdkDeviceWinpointerClass *klass)
 
   object_class->finalize = gdk_device_winpointer_finalize;
   device_class->set_surface_cursor = gdk_device_winpointer_set_surface_cursor;
-  device_class->grab = gdk_device_winpointer_grab;
-  device_class->ungrab = gdk_device_winpointer_ungrab;
   device_class->surface_at_position = gdk_device_winpointer_surface_at_position;
 }

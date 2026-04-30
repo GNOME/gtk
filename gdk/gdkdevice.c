@@ -769,34 +769,6 @@ gdk_device_get_axis (GdkDevice  *device,
   return FALSE;
 }
 
-GdkGrabStatus
-gdk_device_grab (GdkDevice  *device,
-                 GdkSurface *surface)
-{
-  GdkGrabStatus res = GDK_GRAB_SUCCESS;
-
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
-  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return GDK_GRAB_NOT_VIEWABLE;
-
-  if (GDK_DEVICE_GET_CLASS (device)->grab)
-    res = GDK_DEVICE_GET_CLASS (device)->grab (device, surface);
-
-  return res;
-}
-
-void
-gdk_device_ungrab (GdkDevice *device)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  if (GDK_DEVICE_GET_CLASS (device)->ungrab)
-    GDK_DEVICE_GET_CLASS (device)->ungrab (device);
-}
-
 /* Private API */
 void
 _gdk_device_reset_axes (GdkDevice *device)

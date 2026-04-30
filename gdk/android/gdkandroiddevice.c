@@ -118,18 +118,6 @@ exit:
   (*env)->PopLocalFrame (env, NULL);
 }
 
-static GdkGrabStatus
-gdk_android_device_grab (GdkDevice *device, GdkSurface *surface)
-{
-  /* Should remain empty */
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_android_device_ungrab (GdkDevice *device)
-{
-}
-
 static GdkSurface *
 gdk_android_device_surface_at_position (GdkDevice *device,
                                         double *win_x, double *win_y,
@@ -156,8 +144,6 @@ gdk_android_device_class_init (GdkAndroidDeviceClass *klass)
   object_class->constructed = gdk_android_device_constructed;
 
   device_class->set_surface_cursor = gdk_android_device_set_surface_cursor;
-  device_class->grab = gdk_android_device_grab;
-  device_class->ungrab = gdk_android_device_ungrab;
   device_class->surface_at_position = gdk_android_device_surface_at_position;
 }
 

@@ -91,50 +91,16 @@ static GdkGrabStatus
 gdk_win32_seat_grab (GdkSeat    *seat,
                      GdkSurface *surface)
 {
-  GdkWin32SeatPrivate *priv;
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_seat_get_display (seat));
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  gboolean was_visible;
-
-  priv = gdk_win32_seat_get_instance_private (GDK_WIN32_SEAT (seat));
-  was_visible = gdk_surface_get_mapped (surface);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   SetCapture (GDK_SURFACE_HWND (surface));
 
-  status = gdk_device_grab (priv->logical_pointer, surface);
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (priv->logical_keyboard, surface);
-
-      if (status != GDK_GRAB_SUCCESS)
-        ReleaseCapture ();
-    }
-
-  if (status != GDK_GRAB_SUCCESS && !was_visible)
-    gdk_surface_hide (surface);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return status;
+  return GDK_GRAB_SUCCESS;
 }
 
 static void
 gdk_win32_seat_ungrab (GdkSeat    *seat,
                        GdkSurface *surface)
 {
-  GdkWin32SeatPrivate *priv;
-
-  priv = gdk_win32_seat_get_instance_private (GDK_WIN32_SEAT (seat));
-
   ReleaseCapture ();
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (priv->logical_pointer);
-  gdk_device_ungrab (priv->logical_keyboard);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static GdkDevice *

@@ -125,36 +125,13 @@ static GdkGrabStatus
 gdk_macos_seat_grab (GdkSeat    *seat,
                      GdkSurface *surface)
 {
-  GdkMacosSeat *self = GDK_MACOS_SEAT (seat);
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  gboolean was_visible;
-
-  was_visible = gdk_surface_get_mapped (surface);
-
-  status = gdk_device_grab (self->logical_pointer, surface);
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (self->logical_keyboard, surface);
-
-      if (status != GDK_GRAB_SUCCESS)
-        gdk_device_ungrab (self->logical_pointer);
-    }
-
-  if (status != GDK_GRAB_SUCCESS && !was_visible)
-    gdk_surface_hide (surface);
-
-  return status;
+  return GDK_GRAB_SUCCESS;
 }
 
 static void
 gdk_macos_seat_ungrab (GdkSeat    *seat,
                        GdkSurface *surface)
 {
-  GdkMacosSeat *self = GDK_MACOS_SEAT (seat);
-
-  gdk_device_ungrab (self->logical_pointer);
-  gdk_device_ungrab (self->logical_keyboard);
 }
 
 static GdkDevice *

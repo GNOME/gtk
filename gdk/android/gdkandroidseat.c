@@ -99,18 +99,7 @@ gdk_android_seat_grab (GdkSeat    *seat,
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
   GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  gboolean grabbed_pointer = FALSE;
-  gboolean grabbed_touchscreen = FALSE;
-  gboolean grabbed_keyboard = FALSE;
-
-  gboolean was_visible = gdk_surface_get_mapped (surface);
-
   JNIEnv *env = gdk_android_get_env();
-
-  status = gdk_device_grab (self->logical_pointer, surface);
-  if (status != GDK_GRAB_SUCCESS)
-    goto failure;
 
   (*env)->PushLocalFrame (env, 1);
   GdkAndroidToplevel *toplevel = gdk_android_surface_get_toplevel (surface_impl);
@@ -121,36 +110,7 @@ gdk_android_seat_grab (GdkSeat    *seat,
   (*env)->CallVoidMethod (env, view, gdk_android_get_java_cache ()->toplevel_view.set_grabbed_surface, surface_impl->surface);
   (*env)->PopLocalFrame (env, NULL);
 
-  grabbed_pointer = TRUE;
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (self->logical_touchscreen, surface);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
-      grabbed_touchscreen = TRUE;
-    }
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (self->logical_keyboard, surface);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
-      grabbed_keyboard = TRUE;
-    }
-
-  return status;
-failure:
-  if (grabbed_pointer)
-    gdk_device_ungrab (self->logical_pointer);
-  if (grabbed_touchscreen)
-    gdk_device_ungrab (self->logical_touchscreen);
-  if (grabbed_keyboard)
-    gdk_device_ungrab (self->logical_keyboard);
-
-  if (!was_visible)
-    gdk_surface_hide (surface);
-  return status;
+  return GDK_GRAB_SUCCESS;
 }
 
 static void
@@ -166,10 +126,6 @@ gdk_android_seat_ungrab (GdkSeat    *seat,
       (*env)->DeleteGlobalRef (env, self->active_grab_view);
       self->active_grab_view = NULL;
     }
-
-  gdk_device_ungrab (self->logical_pointer);
-  gdk_device_ungrab (self->logical_touchscreen);
-  gdk_device_ungrab (self->logical_keyboard);
 }
 
 static GdkDevice *

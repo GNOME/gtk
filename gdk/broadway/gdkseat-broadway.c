@@ -92,62 +92,23 @@ static GdkGrabStatus
 gdk_broadway_seat_grab (GdkSeat    *seat,
                         GdkSurface *surface)
 {
-  GdkBroadwaySeatPrivate *priv;
   GdkDisplay *display = gdk_seat_get_display (seat);
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
-  guint32 evtime = GDK_CURRENT_TIME;
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  gboolean was_visible;
 
-  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
-  was_visible = gdk_surface_get_mapped (surface);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  status = _gdk_broadway_server_grab_pointer (broadway_display->server,
-                                              GDK_BROADWAY_SURFACE (surface)->id,
-                                              TRUE,
-                                              evtime);
-  if (status != GDK_GRAB_SUCCESS)
-    return status;
-
-  status = gdk_device_grab (priv->logical_pointer, surface);
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (priv->logical_keyboard, surface);
-
-      if (status != GDK_GRAB_SUCCESS)
-        {
-          _gdk_broadway_server_ungrab_pointer (broadway_display->server, evtime);
-          gdk_device_ungrab (priv->logical_pointer);
-        }
-    }
-
-  if (status != GDK_GRAB_SUCCESS && !was_visible)
-    gdk_surface_hide (surface);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  return status;
+  return _gdk_broadway_server_grab_pointer (broadway_display->server,
+                                            GDK_BROADWAY_SURFACE (surface)->id,
+                                            TRUE,
+                                            GDK_CURRENT_TIME);
 }
 
 static void
 gdk_broadway_seat_ungrab (GdkSeat    *seat,
                           GdkSurface *surface)
 {
-  GdkBroadwaySeatPrivate *priv;
   GdkDisplay *display = gdk_seat_get_display (seat);
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
-
   _gdk_broadway_server_ungrab_pointer (broadway_display->server, GDK_CURRENT_TIME);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (priv->logical_pointer);
-  gdk_device_ungrab (priv->logical_keyboard);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static GdkDevice *

@@ -27,9 +27,6 @@
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
-static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice  *device,
-                                                 GdkSurface *surface);
-static void          gdk_broadway_device_ungrab (GdkDevice *device);
 static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                                              double          *win_x,
                                                              double          *win_y,
@@ -44,8 +41,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
-  device_class->grab = gdk_broadway_device_grab;
-  device_class->ungrab = gdk_broadway_device_ungrab;
   device_class->surface_at_position = gdk_broadway_device_surface_at_position;
 }
 
@@ -125,18 +120,6 @@ _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface)
   gdk_seat_break_grab (seat, surface);
 }
 
-
-static GdkGrabStatus
-gdk_broadway_device_grab (GdkDevice    *device,
-                          GdkSurface    *surface)
-{
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_broadway_device_ungrab (GdkDevice *device)
-{
-}
 
 static GdkSurface *
 gdk_broadway_device_surface_at_position (GdkDevice       *device,
