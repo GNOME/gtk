@@ -452,24 +452,19 @@ find_surface_for_mouse_event (GdkSurface *reported_surface,
 
   pt = msg->pt;
 
-  if (!grab->owner_events)
-    event_surface = grab->surface;
-  else
+  event_surface = NULL;
+  hwnd = WindowFromPoint (pt);
+  if (hwnd != NULL)
     {
-      event_surface = NULL;
-      hwnd = WindowFromPoint (pt);
-      if (hwnd != NULL)
-	{
-	  POINT client_pt = pt;
+      POINT client_pt = pt;
 
-	  ScreenToClient (hwnd, &client_pt);
-	  GetClientRect (hwnd, &rect);
-	  if (PtInRect (&rect, client_pt))
-	    event_surface = gdk_win32_display_handle_table_lookup_ (display, hwnd);
-	}
-      if (event_surface == NULL)
-	event_surface = grab->surface;
+      ScreenToClient (hwnd, &client_pt);
+      GetClientRect (hwnd, &rect);
+      if (PtInRect (&rect, client_pt))
+        event_surface = gdk_win32_display_handle_table_lookup_ (display, hwnd);
     }
+  if (event_surface == NULL)
+    event_surface = grab->surface;
 
   /* need to also adjust the coordinates to the new surface */
   ScreenToClient (GDK_SURFACE_HWND (event_surface), &pt);
@@ -899,20 +894,8 @@ send_crossing_event (GdkDisplay      *display,
                      guint32          time_)
 {
   GdkEvent *event;
-  GdkDeviceGrabInfo *grab;
   POINT pt;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-  grab = _gdk_display_has_device_grab (display, GDK_WIN32_DISPLAY (display)->device_manager->core_pointer, 0);
-
-  if (grab != NULL &&
-      !grab->owner_events &&
-      mode != GDK_CROSSING_UNGRAB)
-    {
-      /* !owner_event => only report events wrt grab surface, ignore rest */
-      if (surface != grab->surface)
-	return;
-    }
 
   pt = *screen_pt;
   ScreenToClient (GDK_SURFACE_HWND (surface), &pt);
@@ -1624,7 +1607,7 @@ gdk_event_translate (MSG *msg,
 
   crossing_cb_t crossing_cb = NULL;
 
-  int button;
+  int button, button_state;
 
   gboolean return_val = FALSE;
 
@@ -2052,10 +2035,11 @@ gdk_event_translate (MSG *msg,
       if (GDK_SURFACE_DESTROYED (surface))
 	break;
 
-      if (pointer_grab == NULL)
-	{
-	  SetCapture (GDK_SURFACE_HWND (surface));
-	}
+      button_state = build_pointer_event_state (msg);
+
+      /* Start capture only on the first mouse button pressed */
+      if ((button_state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
+        SetCapture (GDK_SURFACE_HWND (surface));
 
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     surface, msg);
@@ -2095,16 +2079,13 @@ gdk_event_translate (MSG *msg,
 
       g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
 
-      if (pointer_grab != NULL && pointer_grab->implicit)
-        {
-          int state = build_pointer_event_state (msg);
+      button_state = build_pointer_event_state (msg);
 
-          /* We keep the implicit grab until no buttons at all are held down */
-          if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
-            {
-              release_implicit_grab = TRUE;
-              prev_surface = pointer_grab->surface;
-            }
+      /* We keep the implicit grab until no buttons at all are held down */
+      if ((button_state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
+        {
+          release_implicit_grab = TRUE;
+          prev_surface = pointer_grab->surface;
         }
 
       generate_button_event (GDK_BUTTON_RELEASE, button, surface, msg);
@@ -2308,11 +2289,6 @@ gdk_event_translate (MSG *msg,
           win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
-      if (pointer_grab != NULL &&
-          !pointer_grab->implicit &&
-          !pointer_grab->owner_events)
-        g_set_object (&surface, pointer_grab->surface);
-
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && win32_display->event_record->mouse_surface != surface)
         crossing_cb = make_crossing_event;
 
@@ -2337,11 +2313,6 @@ gdk_event_translate (MSG *msg,
           win32_display->device_manager->pen_touch_input = TRUE;
           win32_display->device_manager->last_digitizer_time = msg->time;
         }
-
-      if (pointer_grab != NULL &&
-          !pointer_grab->implicit &&
-          !pointer_grab->owner_events)
-        g_set_object (&surface, pointer_grab->surface);
 
       gdk_winpointer_input_events (surface, NULL, msg);
 
@@ -2370,11 +2341,6 @@ gdk_event_translate (MSG *msg,
           win32_display->device_manager->pen_touch_input = TRUE;
           win32_display->device_manager->last_digitizer_time = msg->time;
         }
-
-      if (pointer_grab != NULL &&
-          !pointer_grab->implicit &&
-          !pointer_grab->owner_events)
-        g_set_object (&surface, pointer_grab->surface);
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && win32_display->event_record->mouse_surface != surface)
         crossing_cb = make_crossing_event;
@@ -2446,11 +2412,6 @@ gdk_event_translate (MSG *msg,
           win32_display->device_manager->pen_touch_input = TRUE;
           win32_display->device_manager->last_digitizer_time = msg->time;
         }
-
-      if (pointer_grab != NULL &&
-          !pointer_grab->implicit &&
-          !pointer_grab->owner_events)
-        g_set_object (&surface, pointer_grab->surface);
 
       if (IS_POINTER_NEW_WPARAM (msg->wParam))
         {
@@ -2630,10 +2591,6 @@ gdk_event_translate (MSG *msg,
       G_GNUC_FALLTHROUGH;
 
     case WM_SETFOCUS:
-      if (keyboard_grab != NULL &&
-	  !keyboard_grab->owner_events)
-	break;
-
       if (GDK_SURFACE_DESTROYED (surface))
 	break;
 

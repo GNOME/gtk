@@ -35,6 +35,7 @@
 struct _GdkMacosDevice
 {
   GdkDevice parent_instance;
+  GdkSurface *implicit_grab;
 };
 
 struct _GdkMacosDeviceClass
@@ -178,4 +179,26 @@ gdk_macos_device_init (GdkMacosDevice *self)
 {
   _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_X, 0, 0, 1);
   _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_Y, 0, 0, 1);
+}
+
+void
+gdk_macos_device_set_implicit_grab (GdkDevice  *device,
+                                    GdkSurface *surface)
+{
+  GdkMacosDevice *self = (GdkMacosDevice *)device;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (!surface || GDK_IS_MACOS_SURFACE (surface));
+
+  g_set_object (&self->implicit_grab, surface);
+}
+
+GdkSurface *
+gdk_macos_device_get_implicit_grab (GdkDevice *device)
+{
+  GdkMacosDevice *self = (GdkMacosDevice *)device;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+
+  return self->implicit_grab;
 }

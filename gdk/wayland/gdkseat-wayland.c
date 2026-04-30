@@ -731,26 +731,9 @@ pointer_handle_leave (void              *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkDeviceGrabInfo *grab;
 
   if (!seat->pointer_info.focus)
     return;
-
-  grab = _gdk_display_get_last_device_grab (seat->display,
-                                            seat->logical_pointer);
-
-  if (seat->pointer_info.button_modifiers != 0 &&
-      grab && grab->implicit)
-    {
-      gulong display_serial;
-
-      display_serial = _gdk_display_get_next_serial (seat->display);
-      _gdk_display_end_device_grab (seat->display, seat->logical_pointer,
-                                    display_serial, NULL, TRUE);
-      _gdk_display_device_grab_update (seat->display,
-                                       seat->logical_pointer,
-                                       display_serial);
-    }
 
   event = gdk_crossing_event_new (GDK_LEAVE_NOTIFY,
                                   seat->pointer_info.focus,
