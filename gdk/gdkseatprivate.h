@@ -24,10 +24,6 @@ typedef struct _GdkSeatClass GdkSeatClass;
 #include "gdkseat.h"
 #include "gdkdeviceprivate.h"
 
-typedef void (* GdkSeatGrabPrepareFunc) (GdkSeat   *seat,
-                                         GdkSurface *surface,
-                                         gpointer   user_data);
-
 #define GDK_SEAT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_SEAT, GdkSeatClass))
 #define GDK_IS_SEAT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_SEAT))
 #define GDK_SEAT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_SEAT, GdkSeatClass))
@@ -45,15 +41,10 @@ struct _GdkSeatClass
 
   GdkSeatCapabilities (*get_capabilities) (GdkSeat *seat);
 
-  GdkGrabStatus (* grab)   (GdkSeat                *seat,
-                            GdkSurface              *surface,
-                            GdkSeatCapabilities     capabilities,
-                            gboolean                owner_events,
-                            GdkCursor              *cursor,
-                            GdkEvent               *event,
-                            GdkSeatGrabPrepareFunc  prepare_func,
-                            gpointer                prepare_func_data);
-  void          (* ungrab) (GdkSeat                *seat);
+  GdkGrabStatus (* grab) (GdkSeat    *seat,
+                          GdkSurface *surface);
+
+  void (* ungrab) (GdkSeat *seat);
 
   GdkDevice * (* get_logical_device) (GdkSeat             *seat,
                                       GdkSeatCapabilities  capability);
@@ -79,14 +70,6 @@ GdkDeviceTool *
                               guint64           hw_id,
                               GdkDeviceToolType type);
 
-GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
-                                          GdkSurface              *surface,
-                                          GdkSeatCapabilities     capabilities,
-                                          gboolean                owner_events,
-                                          GdkCursor              *cursor,
-                                          GdkEvent               *event,
-                                          GdkSeatGrabPrepareFunc  prepare_func,
-                                          gpointer                prepare_func_data);
-void           gdk_seat_ungrab           (GdkSeat                *seat);
-
-
+GdkGrabStatus  gdk_seat_grab             (GdkSeat    *seat,
+                                          GdkSurface *surface);
+void           gdk_seat_ungrab           (GdkSeat    *seat);

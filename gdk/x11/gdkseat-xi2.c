@@ -42,14 +42,8 @@ static GdkDevice *gdk_x11_seat_xi2_get_logical_device (GdkSeat             *seat
                                                        GdkSeatCapabilities  capability);
 static GList *gdk_x11_seat_xi2_get_devices (GdkSeat             *seat,
                                             GdkSeatCapabilities  capabilities);
-static GdkGrabStatus gdk_x11_seat_xi2_grab (GdkSeat                *seat,
-                                            GdkSurface              *surface,
-                                            GdkSeatCapabilities     capabilities,
-                                            gboolean                owner_events,
-                                            GdkCursor              *cursor,
-                                            GdkEvent               *event,
-                                            GdkSeatGrabPrepareFunc  prepare_func,
-                                            gpointer                prepare_func_data);
+static GdkGrabStatus gdk_x11_seat_xi2_grab (GdkSeat    *seat,
+                                            GdkSurface *surface);
 static void gdk_x11_seat_xi2_ungrab (GdkSeat *seat);
 
 static void
@@ -291,70 +285,49 @@ gdk_x11_seat_xi2_get_devices (GdkSeat             *seat,
 }
 
 static GdkGrabStatus
-gdk_x11_seat_xi2_grab (GdkSeat                *seat,
-                       GdkSurface              *surface,
-                       GdkSeatCapabilities     capabilities,
-                       gboolean                owner_events,
-                       GdkCursor              *cursor,
-                       GdkEvent               *event,
-                       GdkSeatGrabPrepareFunc  prepare_func,
-                       gpointer                prepare_func_data)
+gdk_x11_seat_xi2_grab (GdkSeat    *seat,
+                       GdkSurface *surface)
 {
   GdkX11SeatXI2 *seat_xi2 = GDK_X11_SEAT_XI2 (seat);
-  guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+  guint32 evtime = GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
+  GdkDisplay *display;
+  gulong serial;
   gboolean was_visible;
 
   was_visible = gdk_surface_get_mapped (surface);
 
-  if (prepare_func)
-    (prepare_func) (seat, surface, prepare_func_data);
+  status = gdk_x11_device_xi2_grab (seat_xi2->logical_pointer, surface,
+                                    TRUE,
+                                    NULL,
+                                    evtime);
+  if (status != GDK_GRAB_SUCCESS)
+    return status;
 
-  if (!gdk_surface_get_mapped (surface))
-    {
-      g_critical ("Surface %p has not been mapped in GdkSeatGrabPrepareFunc",
-                  surface);
-      return GDK_GRAB_NOT_VIEWABLE;
-    }
+  status = gdk_device_grab (seat_xi2->logical_pointer, surface,
+                            TRUE,
+                            NULL,
+                            evtime);
 
-  if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
-    {
-      status = gdk_x11_device_xi2_grab (seat_xi2->logical_pointer, surface,
-                                        owner_events,
-                                        cursor,
-                                        evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        return status;
-
-      status = gdk_device_grab (seat_xi2->logical_pointer, surface,
-                                owner_events,
-                                cursor,
-                                evtime);
-    }
-
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (status == GDK_GRAB_SUCCESS)
     {
       status = gdk_x11_device_xi2_grab (seat_xi2->logical_keyboard, surface,
-                                        owner_events,
-                                        cursor,
+                                        TRUE,
+                                        NULL,
                                         evtime);
 
       if (status == GDK_GRAB_SUCCESS)
         {
           status = gdk_device_grab (seat_xi2->logical_keyboard, surface,
-                                    owner_events,
-                                    cursor,
+                                    TRUE,
+                                    NULL,
                                     evtime);
         }
 
       if (status != GDK_GRAB_SUCCESS)
         {
-          if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
-            {
-              gdk_x11_device_xi2_ungrab (seat_xi2->logical_pointer, evtime);
-              gdk_device_ungrab (seat_xi2->logical_pointer, evtime);
-            }
+          gdk_x11_device_xi2_ungrab (seat_xi2->logical_pointer, evtime);
+          gdk_device_ungrab (seat_xi2->logical_pointer, evtime);
         }
     }
 
@@ -365,21 +338,15 @@ gdk_x11_seat_xi2_grab (GdkSeat                *seat,
     return status;
 
   /* Add a gdk device grab on the logical touch device */
-  if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
-    {
-      GdkDisplay *display;
-      gulong serial;
+  display = gdk_surface_get_display (surface);
+  serial = _gdk_display_get_next_serial (display);
 
-      display = gdk_surface_get_display (surface);
-      serial = _gdk_display_get_next_serial (display);
-
-      _gdk_display_add_device_grab (display,
-                                    seat_xi2->logical_touch,
-                                    surface,
-                                    owner_events,
-                                    serial,
-                                    FALSE);
-    }
+  _gdk_display_add_device_grab (display,
+                                seat_xi2->logical_touch,
+                                surface,
+                                TRUE,
+                                serial,
+                                FALSE);
 
   return status;
 }

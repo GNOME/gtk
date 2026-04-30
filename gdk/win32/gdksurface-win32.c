@@ -1073,14 +1073,6 @@ show_popup (GdkSurface *surface)
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static void
-show_grabbing_popup (GdkSeat    *seat,
-                     GdkSurface *surface,
-                     gpointer    user_data)
-{
-  show_popup (surface);
-}
-
 static gboolean
 gdk_win32_surface_present_popup (GdkSurface     *surface,
                                  int             width,
@@ -1094,19 +1086,12 @@ gdk_win32_surface_present_popup (GdkSurface     *surface,
   if (GDK_SURFACE_IS_MAPPED (surface))
     return TRUE;
 
+  show_popup (surface);
+
   if (surface->autohide)
     {
-      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                     surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     show_grabbing_popup, NULL);
+      gdk_seat_grab (gdk_display_get_default_seat (surface->display), surface);
       impl->popup_grab = TRUE;
-    }
-  else
-    {
-      show_popup (surface);
     }
 
   return GDK_SURFACE_IS_MAPPED (surface);

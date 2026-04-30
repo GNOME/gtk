@@ -216,64 +216,9 @@ gdk_seat_get_capabilities (GdkSeat *seat)
   return seat_class->get_capabilities (seat);
 }
 
-/*
- * gdk_seat_grab:
- * @seat: a `GdkSeat`
- * @surface: the `GdkSurface` which will own the grab
- * @capabilities: capabilities that will be grabbed
- * @owner_events: if %FALSE then all device events are reported with respect to
- *   @surface and are only reported if selected by @event_mask. If %TRUE then
- *   pointer events for this application are reported as normal, but pointer
- *   events outside this application are reported with respect to @surface and
- *   only if selected by @event_mask. In either mode, unreported events are
- *   discarded.
- * @cursor: (nullable): the cursor to display while the grab is active.
- *   If this is %NULL then the normal cursors are used for @surface and
- *   its descendants, and the cursor for @surface is used elsewhere.
- * @event: (nullable): the event that is triggering the grab, or %NULL if none
- *   is available.
- * @prepare_func: (nullable) (scope call): function to prepare the surface
- *   to be grabbed, it can be %NULL if @surface is visible before this call.
- * @prepare_func_data: (closure): user data to pass to @prepare_func
- *
- * Grabs the seat so that all events corresponding to the given @capabilities
- * are passed to this application.
- *
- * The grab remains in place until the seat is ungrabbed with
- * [method@Gdk.Seat.ungrab], or the surface becomes hidden. This overrides
- * any previous grab on the seat by this client.
- *
- * As a rule of thumb, if a grab is desired over %GDK_SEAT_CAPABILITY_POINTER,
- * all other "pointing" capabilities (eg. %GDK_SEAT_CAPABILITY_TOUCH) should
- * be grabbed too, so the user is able to interact with all of those while
- * the grab holds, you should thus use %GDK_SEAT_CAPABILITY_ALL_POINTING most
- * commonly.
- *
- * Grabs are used for operations which need complete control over the
- * events corresponding to the given capabilities. For example in GTK this
- * is used for Drag and Drop operations, popup menus and such.
- *
- * Note that if the event mask of a `GdkSurface` has selected both button press
- * and button release events, or touch begin and touch end, then a press event
- * will cause an automatic grab until the button is released, equivalent to a
- * grab on the surface with @owner_events set to %TRUE. This is done because
- * most applications expect to receive paired press and release events.
- *
- * If you set up anything at the time you take the grab that needs to be
- * cleaned up when the grab ends, you should handle the `GdkEventGrabBroken`
- * events that are emitted when the grab ends unvoluntarily.
- *
- * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
- */
 GdkGrabStatus
-gdk_seat_grab (GdkSeat                *seat,
-               GdkSurface              *surface,
-               GdkSeatCapabilities     capabilities,
-               gboolean                owner_events,
-               GdkCursor              *cursor,
-               GdkEvent               *event,
-               GdkSeatGrabPrepareFunc  prepare_func,
-               gpointer                prepare_func_data)
+gdk_seat_grab (GdkSeat    *seat,
+               GdkSurface *surface)
 {
   GdkSeatClass *seat_class;
 
@@ -281,13 +226,9 @@ gdk_seat_grab (GdkSeat                *seat,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_seat_get_display (seat), GDK_GRAB_FAILED);
 
-  capabilities &= GDK_SEAT_CAPABILITY_ALL;
-  g_return_val_if_fail (capabilities != GDK_SEAT_CAPABILITY_NONE, GDK_GRAB_FAILED);
-
   seat_class = GDK_SEAT_GET_CLASS (seat);
 
-  return seat_class->grab (seat, surface, capabilities, owner_events, cursor,
-                           event, prepare_func, prepare_func_data);
+  return seat_class->grab (seat, surface);
 }
 
 /*

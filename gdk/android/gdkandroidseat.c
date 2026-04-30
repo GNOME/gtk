@@ -94,18 +94,12 @@ gdk_android_seat_get_capabilities (GdkSeat *seat)
 }
 
 static GdkGrabStatus
-gdk_android_seat_grab (GdkSeat               *seat,
-                       GdkSurface            *surface,
-                       GdkSeatCapabilities    capabilities,
-                       gboolean               owner_events,
-                       GdkCursor             *cursor,
-                       GdkEvent              *event,
-                       GdkSeatGrabPrepareFunc prepare_func,
-                       gpointer               prepare_func_data)
+gdk_android_seat_grab (GdkSeat    *seat,
+                       GdkSurface *surface)
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
   GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
-  guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+  guint32 evtime = GDK_CURRENT_TIME;
 
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean grabbed_pointer = FALSE;
@@ -114,57 +108,42 @@ gdk_android_seat_grab (GdkSeat               *seat,
 
   gboolean was_visible = gdk_surface_get_mapped (surface);
 
-  if (prepare_func)
-    (prepare_func) (seat, surface, prepare_func_data);
-
   JNIEnv *env = gdk_android_get_env();
 
-  if (!gdk_surface_get_mapped (surface))
-    {
-      g_critical ("Surface %p has not been mapped in GdkSeatGrabPrepareFunc",
-                  surface);
-      return GDK_GRAB_NOT_VIEWABLE;
-    }
+  status = gdk_device_grab (self->logical_pointer, surface,
+                            TRUE,
+                            NULL,
+                            evtime);
+  if (status != GDK_GRAB_SUCCESS)
+    goto failure;
 
-  if (capabilities & (GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TABLET_STYLUS))
-    {
-      status = gdk_device_grab (self->logical_pointer, surface,
-                                owner_events,
-                                cursor,
-                                evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
+  (*env)->PushLocalFrame (env, 1);
+  GdkAndroidToplevel *toplevel = gdk_android_surface_get_toplevel (surface_impl);
+  jobject view = (*env)->GetObjectField (env, toplevel->activity, gdk_android_get_java_cache ()->toplevel.toplevel_view);
+  if (self->active_grab_view)
+    (*env)->DeleteGlobalRef (env, self->active_grab_view);
+  self->active_grab_view = (*env)->NewGlobalRef (env, view);
+  (*env)->CallVoidMethod (env, view, gdk_android_get_java_cache ()->toplevel_view.set_grabbed_surface, surface_impl->surface);
+  (*env)->PopLocalFrame (env, NULL);
 
-      (*env)->PushLocalFrame (env, 1);
-      GdkAndroidToplevel *toplevel = gdk_android_surface_get_toplevel (surface_impl);
-      jobject view = (*env)->GetObjectField (env, toplevel->activity, gdk_android_get_java_cache ()->toplevel.toplevel_view);
-      if (self->active_grab_view)
-        (*env)->DeleteGlobalRef (env, self->active_grab_view);
-      self->active_grab_view = (*env)->NewGlobalRef (env, view);
-      (*env)->CallVoidMethod (env, view, gdk_android_get_java_cache ()->toplevel_view.set_grabbed_surface, surface_impl->surface);
-      (*env)->PopLocalFrame (env, NULL);
+  grabbed_pointer = TRUE;
 
-      grabbed_pointer = TRUE;
-    }
-
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_TOUCH)
+  if (status == GDK_GRAB_SUCCESS)
     {
       status = gdk_device_grab (self->logical_touchscreen, surface,
-                                owner_events,
-                                cursor,
+                                TRUE,
+                                NULL,
                                 evtime);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;
       grabbed_touchscreen = TRUE;
     }
 
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (status == GDK_GRAB_SUCCESS)
     {
       status = gdk_device_grab (self->logical_keyboard, surface,
-                                owner_events,
-                                cursor,
+                                TRUE,
+                                NULL,
                                 evtime);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;

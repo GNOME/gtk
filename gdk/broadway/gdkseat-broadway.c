@@ -89,67 +89,44 @@ gdk_broadway_seat_get_capabilities (GdkSeat *seat)
 }
 
 static GdkGrabStatus
-gdk_broadway_seat_grab (GdkSeat                *seat,
-                        GdkSurface             *surface,
-                        GdkSeatCapabilities     capabilities,
-                        gboolean                owner_events,
-                        GdkCursor              *cursor,
-                        GdkEvent               *event,
-                        GdkSeatGrabPrepareFunc  prepare_func,
-                        gpointer                prepare_func_data)
+gdk_broadway_seat_grab (GdkSeat    *seat,
+                        GdkSurface *surface)
 {
   GdkBroadwaySeatPrivate *priv;
   GdkDisplay *display = gdk_seat_get_display (seat);
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
-  guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+  guint32 evtime = GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean was_visible;
 
   priv = gdk_broadway_seat_get_instance_private (GDK_BROADWAY_SEAT (seat));
   was_visible = gdk_surface_get_mapped (surface);
 
-  if (prepare_func)
-    (prepare_func) (seat, surface, prepare_func_data);
-
-  if (!gdk_surface_get_mapped (surface))
-    {
-      g_critical ("Surface %p has not been mapped in GdkSeatGrabPrepareFunc",
-                  surface);
-      return GDK_GRAB_NOT_VIEWABLE;
-    }
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-  if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
-    {
-      status = _gdk_broadway_server_grab_pointer (broadway_display->server,
-                                                  GDK_BROADWAY_SURFACE (surface)->id,
-                                                  owner_events,
-                                                  evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        return status;
+  status = _gdk_broadway_server_grab_pointer (broadway_display->server,
+                                              GDK_BROADWAY_SURFACE (surface)->id,
+                                              TRUE,
+                                              evtime);
+  if (status != GDK_GRAB_SUCCESS)
+    return status;
 
-      status = gdk_device_grab (priv->logical_pointer, surface,
-                                owner_events,
-                                cursor,
-                                evtime);
-    }
+  status = gdk_device_grab (priv->logical_pointer, surface,
+                            TRUE,
+                            NULL,
+                            evtime);
 
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
+  if (status == GDK_GRAB_SUCCESS)
     {
       status = gdk_device_grab (priv->logical_keyboard, surface,
-                                owner_events,
-                                cursor,
+                                TRUE,
+                                NULL,
                                 evtime);
 
       if (status != GDK_GRAB_SUCCESS)
         {
-          if (capabilities & ~GDK_SEAT_CAPABILITY_KEYBOARD)
-            {
-              _gdk_broadway_server_ungrab_pointer (broadway_display->server, evtime);
-              gdk_device_ungrab (priv->logical_pointer, evtime);
-            }
+          _gdk_broadway_server_ungrab_pointer (broadway_display->server, evtime);
+          gdk_device_ungrab (priv->logical_pointer, evtime);
         }
     }
 

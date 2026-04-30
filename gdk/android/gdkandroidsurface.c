@@ -265,14 +265,6 @@ typedef struct
 } GdkAndroidSurfaceOnVisibilityData;
 
 static void
-gdk_android_surface_do_map_cb (GdkSeat    *seat,
-                               GdkSurface *surface,
-                               gpointer    user_data)
-{
-  gdk_surface_set_is_mapped (surface, TRUE);
-}
-
-static void
 gdk_android_surface_handle_map (GdkAndroidSurface *self)
 {
   GdkSurface *surface = (GdkSurface *) self;
@@ -291,20 +283,13 @@ gdk_android_surface_handle_map (GdkAndroidSurface *self)
       return;
     }
 
+  gdk_surface_set_is_mapped (surface, TRUE);
+
   if (surface->autohide)
     {
       g_debug ("Grabbing surface %p [%s]", self, G_OBJECT_TYPE_NAME (self));
-      gdk_seat_grab ((GdkSeat *) display->seat,
-                     surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     gdk_android_surface_do_map_cb, NULL);
+      gdk_seat_grab ((GdkSeat *) display->seat, surface);
       self->popup_grab = TRUE;
-    }
-  else
-    {
-      gdk_surface_set_is_mapped (surface, TRUE);
     }
 }
 

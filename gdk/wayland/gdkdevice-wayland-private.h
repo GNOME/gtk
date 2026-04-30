@@ -200,7 +200,6 @@ struct _GdkWaylandSeat
 
   GdkModifierType key_modifiers;
   GdkSurface *keyboard_focus;
-  GdkSurface *grab_surface;
   uint32_t grab_time;
   gboolean have_server_repeat;
   uint32_t server_repeat_rate;
@@ -286,4 +285,3 @@ void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
 void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
                                           GdkEventSequence *sequence);
-
