@@ -100,14 +100,9 @@ struct _GdkDeviceClass
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
-  GdkGrabStatus (* grab)     (GdkDevice        *device,
-                              GdkSurface       *surface,
-                              gboolean          owner_events,
-                              GdkSurface       *confine_to,
-                              GdkCursor        *cursor,
-                              guint32           time_);
-  void          (*ungrab)    (GdkDevice        *device,
-                              guint32           time_);
+  GdkGrabStatus (* grab)     (GdkDevice  *device,
+                              GdkSurface *surface);
+  void          (*ungrab)    (GdkDevice *device);
 
   GdkSurface * (* surface_at_position) (GdkDevice       *device,
                                         double          *win_x,
@@ -171,12 +166,8 @@ void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
 
 GdkGrabStatus gdk_device_grab (GdkDevice        *device,
-                               GdkSurface        *surface,
-                               gboolean          owner_events,
-                               GdkCursor        *cursor,
-                               guint32           time_);
-void gdk_device_ungrab        (GdkDevice        *device,
-                               guint32           time_);
+                               GdkSurface        *surface);
+void gdk_device_ungrab        (GdkDevice        *device);
 int gdk_device_get_n_axes     (GdkDevice       *device);
 gboolean gdk_device_get_axis  (GdkDevice         *device,
                                double            *axes,
@@ -194,4 +185,3 @@ gboolean gdk_device_grab_info (GdkDisplay  *display,
                                gboolean    *owner_events);
 
 G_END_DECLS
-

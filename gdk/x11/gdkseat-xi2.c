@@ -304,10 +304,7 @@ gdk_x11_seat_xi2_grab (GdkSeat    *seat,
   if (status != GDK_GRAB_SUCCESS)
     return status;
 
-  status = gdk_device_grab (seat_xi2->logical_pointer, surface,
-                            TRUE,
-                            NULL,
-                            evtime);
+  status = gdk_device_grab (seat_xi2->logical_pointer, surface);
 
   if (status == GDK_GRAB_SUCCESS)
     {
@@ -318,16 +315,13 @@ gdk_x11_seat_xi2_grab (GdkSeat    *seat,
 
       if (status == GDK_GRAB_SUCCESS)
         {
-          status = gdk_device_grab (seat_xi2->logical_keyboard, surface,
-                                    TRUE,
-                                    NULL,
-                                    evtime);
+          status = gdk_device_grab (seat_xi2->logical_keyboard, surface);
         }
 
       if (status != GDK_GRAB_SUCCESS)
         {
           gdk_x11_device_xi2_ungrab (seat_xi2->logical_pointer, evtime);
-          gdk_device_ungrab (seat_xi2->logical_pointer, evtime);
+          gdk_device_ungrab (seat_xi2->logical_pointer);
         }
     }
 
@@ -360,8 +354,8 @@ gdk_x11_seat_xi2_ungrab (GdkSeat *seat)
   gdk_x11_device_xi2_ungrab (seat_xi2->logical_keyboard, GDK_CURRENT_TIME);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (seat_xi2->logical_pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (seat_xi2->logical_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (seat_xi2->logical_pointer);
+  gdk_device_ungrab (seat_xi2->logical_keyboard);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (seat_xi2->logical_touch)

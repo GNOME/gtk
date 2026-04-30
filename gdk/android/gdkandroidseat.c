@@ -99,8 +99,6 @@ gdk_android_seat_grab (GdkSeat    *seat,
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
   GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
-  guint32 evtime = GDK_CURRENT_TIME;
-
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean grabbed_pointer = FALSE;
   gboolean grabbed_touchscreen = FALSE;
@@ -110,10 +108,7 @@ gdk_android_seat_grab (GdkSeat    *seat,
 
   JNIEnv *env = gdk_android_get_env();
 
-  status = gdk_device_grab (self->logical_pointer, surface,
-                            TRUE,
-                            NULL,
-                            evtime);
+  status = gdk_device_grab (self->logical_pointer, surface);
   if (status != GDK_GRAB_SUCCESS)
     goto failure;
 
@@ -130,10 +125,7 @@ gdk_android_seat_grab (GdkSeat    *seat,
 
   if (status == GDK_GRAB_SUCCESS)
     {
-      status = gdk_device_grab (self->logical_touchscreen, surface,
-                                TRUE,
-                                NULL,
-                                evtime);
+      status = gdk_device_grab (self->logical_touchscreen, surface);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;
       grabbed_touchscreen = TRUE;
@@ -141,10 +133,7 @@ gdk_android_seat_grab (GdkSeat    *seat,
 
   if (status == GDK_GRAB_SUCCESS)
     {
-      status = gdk_device_grab (self->logical_keyboard, surface,
-                                TRUE,
-                                NULL,
-                                evtime);
+      status = gdk_device_grab (self->logical_keyboard, surface);
       if (status != GDK_GRAB_SUCCESS)
         goto failure;
       grabbed_keyboard = TRUE;
@@ -153,11 +142,11 @@ gdk_android_seat_grab (GdkSeat    *seat,
   return status;
 failure:
   if (grabbed_pointer)
-    gdk_device_ungrab (self->logical_pointer, evtime);
+    gdk_device_ungrab (self->logical_pointer);
   if (grabbed_touchscreen)
-    gdk_device_ungrab (self->logical_touchscreen, evtime);
+    gdk_device_ungrab (self->logical_touchscreen);
   if (grabbed_keyboard)
-    gdk_device_ungrab (self->logical_keyboard, evtime);
+    gdk_device_ungrab (self->logical_keyboard);
 
   if (!was_visible)
     gdk_surface_hide (surface);
@@ -177,9 +166,9 @@ gdk_android_seat_ungrab (GdkSeat *seat)
       self->active_grab_view = NULL;
     }
 
-  gdk_device_ungrab (self->logical_pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (self->logical_touchscreen, GDK_CURRENT_TIME);
-  gdk_device_ungrab (self->logical_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (self->logical_pointer);
+  gdk_device_ungrab (self->logical_touchscreen);
+  gdk_device_ungrab (self->logical_keyboard);
 }
 
 static GdkDevice *

@@ -119,17 +119,14 @@ exit:
 }
 
 static GdkGrabStatus
-gdk_android_device_grab (GdkDevice *device, GdkSurface *surface,
-                         gboolean owner_events,
-                         GdkSurface *confine_to, GdkCursor *cursor,
-                         guint32 time_)
+gdk_android_device_grab (GdkDevice *device, GdkSurface *surface)
 {
   /* Should remain empty */
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_android_device_ungrab (GdkDevice *device, guint32 time_)
+gdk_android_device_ungrab (GdkDevice *device)
 {
   GdkDisplay *display = gdk_device_get_display (device);
   GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);

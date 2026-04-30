@@ -26,14 +26,9 @@
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
-static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
-                                                 GdkSurface     *surface,
-                                                 gboolean       owner_events,
-                                                 GdkSurface     *confine_to,
-                                                 GdkCursor     *cursor,
-                                                 guint32        time_);
-static void          gdk_broadway_device_ungrab (GdkDevice     *device,
-                                                 guint32        time_);
+static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice  *device,
+                                                 GdkSurface *surface);
+static void          gdk_broadway_device_ungrab (GdkDevice *device);
 static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                                              double          *win_x,
                                                              double          *win_y,
@@ -162,18 +157,13 @@ _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface)
 
 static GdkGrabStatus
 gdk_broadway_device_grab (GdkDevice    *device,
-                          GdkSurface    *surface,
-                          gboolean      owner_events,
-                          GdkSurface    *confine_to,
-                          GdkCursor    *cursor,
-                          guint32       time_)
+                          GdkSurface    *surface)
 {
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_broadway_device_ungrab (GdkDevice *device,
-                            guint32    time_)
+gdk_broadway_device_ungrab (GdkDevice *device)
 {
   GdkDisplay *display = gdk_device_get_display (device);
   GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);

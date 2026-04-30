@@ -96,20 +96,15 @@ gdk_macos_device_surface_at_position (GdkDevice       *device,
 }
 
 static GdkGrabStatus
-gdk_macos_device_grab (GdkDevice    *device,
-                       GdkSurface   *window,
-                       gboolean      owner_events,
-                       GdkSurface   *confine_to,
-                       GdkCursor    *cursor,
-                       guint32       time_)
+gdk_macos_device_grab (GdkDevice  *device,
+                       GdkSurface *window)
 {
   /* Should remain empty */
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_macos_device_ungrab (GdkDevice *device,
-                         guint32    time_)
+gdk_macos_device_ungrab (GdkDevice *device)
 {
   GdkMacosDevice *self = (GdkMacosDevice *)device;
   GdkDeviceGrabInfo *grab;

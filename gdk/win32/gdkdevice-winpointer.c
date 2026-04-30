@@ -108,19 +108,14 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
-gdk_device_winpointer_grab (GdkDevice    *device,
-                            GdkSurface   *surface,
-                            gboolean      owner_events,
-                            GdkSurface   *confine_to,
-                            GdkCursor    *cursor,
-                            guint32       time_)
+gdk_device_winpointer_grab (GdkDevice  *device,
+                            GdkSurface *surface)
 {
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_device_winpointer_ungrab (GdkDevice *device,
-                              guint32    time_)
+gdk_device_winpointer_ungrab (GdkDevice *device)
 {
 }
 

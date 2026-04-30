@@ -121,19 +121,14 @@ gdk_device_wintab_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
-gdk_device_wintab_grab (GdkDevice    *device,
-                        GdkSurface   *surface,
-                        gboolean      owner_events,
-                        GdkSurface   *confine_to,
-                        GdkCursor    *cursor,
-                        guint32       time_)
+gdk_device_wintab_grab (GdkDevice  *device,
+                        GdkSurface *surface)
 {
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_device_wintab_ungrab (GdkDevice *device,
-                          guint32    time_)
+gdk_device_wintab_ungrab (GdkDevice *device)
 {
 }
 

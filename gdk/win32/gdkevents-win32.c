@@ -808,7 +808,7 @@ apply_message_filters (GdkDisplay *display,
  * from.
  */
 static void
-show_surface_recurse (GdkSurface *surface, 
+show_surface_recurse (GdkSurface *surface,
                       gboolean    hide_surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
@@ -857,7 +857,7 @@ show_surface_recurse (GdkSurface *surface,
 }
 
 static void
-do_show_surface (GdkSurface *surface, 
+do_show_surface (GdkSurface *surface,
                  gboolean    hide_surface)
 {
   GdkSurface *tmp_surface = NULL;
@@ -2871,7 +2871,7 @@ gdk_event_translate (MSG *msg,
             (keyboard_grab != NULL && keyboard_grab->surface == surface))
           {
             ReleaseCapture ();
-            gdk_device_ungrab (device, msg -> time);
+            gdk_device_ungrab (device);
           }
       }
 
@@ -3039,7 +3039,7 @@ gdk_event_translate (MSG *msg,
       {
         GdkDevice *device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
         ReleaseCapture ();
-        gdk_device_ungrab (device, msg -> time);
+        gdk_device_ungrab (device);
       }
 
       if ((surface != NULL) && (msg->hwnd != GetDesktopWindow ()))
@@ -3068,7 +3068,7 @@ gdk_event_translate (MSG *msg,
 				 (HWND) msg->lParam));
       if (GDK_IS_POPUP (surface) || GDK_IS_DRAG_SURFACE (surface))
         {
-          /* Popups cannot be activated or de-activated - 
+          /* Popups cannot be activated or de-activated -
            * they only support keyboard focus, which GTK
            * will handle for us.
            */

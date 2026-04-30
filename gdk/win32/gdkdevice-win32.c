@@ -130,20 +130,15 @@ _gdk_device_win32_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
-gdk_device_win32_grab (GdkDevice    *device,
-                       GdkSurface   *surface,
-                       gboolean      owner_events,
-                       GdkSurface   *confine_to,
-                       GdkCursor    *cursor,
-                       guint32       time_)
+gdk_device_win32_grab (GdkDevice  *device,
+                       GdkSurface *surface)
 {
   /* No support for grabbing physical devices atm */
   return GDK_GRAB_NOT_VIEWABLE;
 }
 
 static void
-gdk_device_win32_ungrab (GdkDevice *device,
-                         guint32    time_)
+gdk_device_win32_ungrab (GdkDevice *device)
 {
 }
 

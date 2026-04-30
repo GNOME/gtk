@@ -102,19 +102,14 @@ gdk_device_virtual_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
-gdk_device_virtual_grab (GdkDevice    *device,
-                         GdkSurface   *surface,
-                         gboolean      owner_events,
-                         GdkSurface   *confine_to,
-                         GdkCursor    *cursor,
-                         guint32       time_)
+gdk_device_virtual_grab (GdkDevice  *device,
+                         GdkSurface *surface)
 {
   return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_device_virtual_ungrab (GdkDevice *device,
-                           guint32    time_)
+gdk_device_virtual_ungrab (GdkDevice *device)
 {
   GdkDeviceGrabInfo *info;
   GdkDisplay *display;

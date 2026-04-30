@@ -771,10 +771,7 @@ gdk_device_get_axis (GdkDevice  *device,
 
 GdkGrabStatus
 gdk_device_grab (GdkDevice  *device,
-                 GdkSurface *surface,
-                 gboolean    owner_events,
-                 GdkCursor  *cursor,
-                 guint32     time_)
+                 GdkSurface *surface)
 {
   GdkGrabStatus res = GDK_GRAB_SUCCESS;
 
@@ -787,12 +784,7 @@ gdk_device_grab (GdkDevice  *device,
 
   if (GDK_DEVICE_GET_CLASS (device)->grab)
     {
-      res = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                                 surface,
-                                                 owner_events,
-                                                 NULL,
-                                                 cursor,
-                                                 time_);
+      res = GDK_DEVICE_GET_CLASS (device)->grab (device, surface);
     }
 
   if (res == GDK_GRAB_SUCCESS)
@@ -806,7 +798,7 @@ gdk_device_grab (GdkDevice  *device,
       _gdk_display_add_device_grab (display,
                                     device,
                                     surface,
-                                    owner_events,
+                                    TRUE,
                                     serial,
                                     FALSE);
     }
@@ -815,8 +807,7 @@ gdk_device_grab (GdkDevice  *device,
 }
 
 void
-gdk_device_ungrab (GdkDevice  *device,
-                   guint32     time_)
+gdk_device_ungrab (GdkDevice *device)
 {
   GdkDeviceGrabInfo *grab;
   GdkDisplay *display;
@@ -836,7 +827,7 @@ gdk_device_ungrab (GdkDevice  *device,
     }
 
   if (GDK_DEVICE_GET_CLASS (device)->ungrab)
-    GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
+    GDK_DEVICE_GET_CLASS (device)->ungrab (device);
 }
 
 /* Private API */

@@ -93,7 +93,6 @@ gdk_win32_seat_grab (GdkSeat    *seat,
 {
   GdkWin32SeatPrivate *priv;
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_seat_get_display (seat));
-  guint32 evtime = GDK_CURRENT_TIME;
   GdkGrabStatus status = GDK_GRAB_SUCCESS;
   gboolean was_visible;
 
@@ -104,17 +103,11 @@ gdk_win32_seat_grab (GdkSeat    *seat,
 
   SetCapture (GDK_SURFACE_HWND (surface));
 
-  status = gdk_device_grab (priv->logical_pointer, surface,
-                            TRUE,
-                            NULL,
-                            evtime);
+  status = gdk_device_grab (priv->logical_pointer, surface);
 
   if (status == GDK_GRAB_SUCCESS)
     {
-      status = gdk_device_grab (priv->logical_keyboard, surface,
-                                TRUE,
-                                NULL,
-                                evtime);
+      status = gdk_device_grab (priv->logical_keyboard, surface);
 
       if (status != GDK_GRAB_SUCCESS)
         ReleaseCapture ();
@@ -138,8 +131,8 @@ gdk_win32_seat_ungrab (GdkSeat *seat)
   ReleaseCapture ();
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (priv->logical_pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (priv->logical_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (priv->logical_pointer);
+  gdk_device_ungrab (priv->logical_keyboard);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 

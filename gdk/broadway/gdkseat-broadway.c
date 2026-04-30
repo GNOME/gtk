@@ -111,22 +111,16 @@ gdk_broadway_seat_grab (GdkSeat    *seat,
   if (status != GDK_GRAB_SUCCESS)
     return status;
 
-  status = gdk_device_grab (priv->logical_pointer, surface,
-                            TRUE,
-                            NULL,
-                            evtime);
+  status = gdk_device_grab (priv->logical_pointer, surface);
 
   if (status == GDK_GRAB_SUCCESS)
     {
-      status = gdk_device_grab (priv->logical_keyboard, surface,
-                                TRUE,
-                                NULL,
-                                evtime);
+      status = gdk_device_grab (priv->logical_keyboard, surface);
 
       if (status != GDK_GRAB_SUCCESS)
         {
           _gdk_broadway_server_ungrab_pointer (broadway_display->server, evtime);
-          gdk_device_ungrab (priv->logical_pointer, evtime);
+          gdk_device_ungrab (priv->logical_pointer);
         }
     }
 
@@ -150,8 +144,8 @@ gdk_broadway_seat_ungrab (GdkSeat *seat)
   _gdk_broadway_server_ungrab_pointer (broadway_display->server, GDK_CURRENT_TIME);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (priv->logical_pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (priv->logical_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (priv->logical_pointer);
+  gdk_device_ungrab (priv->logical_keyboard);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
