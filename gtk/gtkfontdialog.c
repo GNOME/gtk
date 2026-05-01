@@ -80,7 +80,7 @@ static void
 gtk_font_dialog_init (GtkFontDialog *self)
 {
   self->modal = TRUE;
-  self->language = pango_language_get_default ();
+  self->language = NULL;
 }
 
 static void
