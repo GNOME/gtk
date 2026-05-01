@@ -40,8 +40,9 @@
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
+#include "gtkgesturedrag.h"
+#include "gtkgesturelongpress.h"
 #include "gtkgesturesingle.h"
 #include "gtkimageprivate.h"
 #include "gtkimcontextsimple.h"
@@ -540,6 +541,10 @@ static void     gtk_text_click_gesture_released (GtkGestureClick     *gesture,
                                                  double                    x,
                                                  double                    y,
                                                  GtkText                  *self);
+static void     gtk_text_long_press_gesture_pressed (GtkGestureLongPress      *gesture,
+                                                     double                    x,
+                                                     double                    y,
+                                                     GtkText                  *self);
 static void     gtk_text_drag_gesture_update        (GtkGestureDrag           *gesture,
                                                      double                    offset_x,
                                                      double                    offset_y,
@@ -2086,7 +2091,7 @@ gtk_text_init (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkCssNode *widget_node;
-  GtkGesture *gesture;
+  GtkGesture *gesture, *click_gesture;
   GtkEventController *controller;
   int i;
   GtkDropTarget *target;
@@ -2156,6 +2161,14 @@ gtk_text_init (GtkText *self)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+  click_gesture = gesture;
+
+  gesture = gtk_gesture_long_press_new ();
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), TRUE);
+  g_signal_connect (gesture, "pressed",
+                    G_CALLBACK (gtk_text_long_press_gesture_pressed), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+  gtk_gesture_group (click_gesture, gesture);
 
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_static_name (controller, "gtk-text-motion-controller");
@@ -3141,6 +3154,16 @@ gtk_text_click_gesture_released (GtkGestureClick *gesture,
       gtk_event_treat_as_touch (event) &&
       priv->current_pos == priv->selection_bound)
     gtk_im_context_activate_osk (priv->im_context, event);
+}
+
+static void
+gtk_text_long_press_gesture_pressed (GtkGestureLongPress *gesture,
+                                     double               x,
+                                     double               y,
+                                     GtkText             *self)
+{
+  gtk_text_selection_bubble_popup_set (self);
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static char *
