@@ -2901,17 +2901,18 @@ gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
   GdkSurface *surface = gdk_event_get_surface (event);
+  GdkEventType evtype = gdk_event_get_event_type (event);
   gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   gboolean handled = FALSE;
 
-  if (!GDK_SURFACE_IS_MAPPED (surface))
+  if (!GDK_SURFACE_IS_MAPPED (surface) &&
+      !(evtype == GDK_LEAVE_NOTIFY || evtype == GDK_TOUCH_CANCEL))
     return FALSE;
 
   if (check_autohide (event))
     return TRUE;
 
-
-  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
+  if (evtype == GDK_MOTION_NOTIFY)
     surface->request_motion = FALSE;
 
   g_signal_emit (surface, signals[EVENT], 0, event, &handled);
