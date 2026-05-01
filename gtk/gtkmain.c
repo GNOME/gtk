@@ -28,6 +28,7 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdkdebugprivate.h"
+#include "gdk/gdkseatprivate.h"
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gtknative.h"
@@ -1079,21 +1080,20 @@ rewrite_event_for_surface (GdkEvent  *event,
   return NULL;
 }
 
-/* If there is a pointer or keyboard grab in effect with owner_events = TRUE,
- * then what X11 does is deliver the event normally if it was going to this
- * client, otherwise, delivers it in terms of the grab surface. This function
- * rewrites events to the effect that events going to the same window group
- * are delivered normally, otherwise, the event is delivered in terms of the
- * grab window.
+/* If there is a seat grab in effect what GDK does is deliver the event normally
+ * if it was going to this client, otherwise, delivers it in terms of the grab
+ * surface.
+ *
+ * This function rewrites events to the effect that events going to the same
+ * window group are delivered normally, otherwise, the event is delivered in
+ * terms of the grab surface.
  */
 static GdkEvent *
 rewrite_event_for_grabs (GdkEvent *event)
 {
   GdkSurface *grab_surface;
   GtkWidget *event_widget, *grab_widget;
-  gboolean owner_events;
-  GdkDisplay *display;
-  GdkDevice *device;
+  GdkSeat *seat;
 
   switch ((guint) gdk_event_get_event_type (event))
     {
@@ -1112,10 +1112,10 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_HOLD:
-      display = gdk_event_get_display (event);
-      device = gdk_event_get_device (event);
+      seat = gdk_event_get_seat (event);
+      grab_surface = gdk_seat_get_topmost_grab_surface (seat);
 
-      if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events))
+      if (!grab_surface)
         return NULL;
       break;
     default:
@@ -1128,18 +1128,10 @@ rewrite_event_for_grabs (GdkEvent *event)
   if (!grab_widget)
     return NULL;
 
-  /* If owner_events was set, events in client surfaces get forwarded
+  /* Events in client surfaces get forwarded
    * as normal, but we consider other window groups foreign surfaces.
    */
-  if (owner_events &&
-      gtk_main_get_window_group (grab_widget) == gtk_main_get_window_group (event_widget))
-    return NULL;
-
-  /* If owner_events was not set, events only get sent to the grabbing
-   * surface.
-   */
-  if (!owner_events &&
-      grab_surface == gtk_native_get_surface (gtk_widget_get_native (event_widget)))
+  if (gtk_main_get_window_group (grab_widget) == gtk_main_get_window_group (event_widget))
     return NULL;
 
   return rewrite_event_for_surface (event, grab_surface);

@@ -588,48 +588,6 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
     }
 }
 
-/*< private >
- * gdk_device_grab_info:
- * @display: the display for which to get the grab information
- * @device: device to get the grab information from
- * @grab_surface: (out) (transfer none): location to store current grab surface
- * @owner_events: (out): location to store boolean indicating whether
- *   the @owner_events flag to gdk_device_grab() was %TRUE.
- *
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- *
- * Returns: %TRUE if this application currently has the
- *  keyboard grabbed.
- */
-gboolean
-gdk_device_grab_info (GdkDisplay  *display,
-                      GdkDevice   *device,
-                      GdkSurface  **grab_surface,
-                      gboolean    *owner_events)
-{
-  GdkSurface *surface;
-  GdkSeat *seat;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  seat = gdk_device_get_seat (device);
-  surface = gdk_seat_get_topmost_grab_surface (seat);
-
-  if (surface)
-    {
-      if (surface)
-        *grab_surface = surface;
-      if (owner_events)
-        *owner_events = TRUE;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 /**
  * gdk_display_device_is_grabbed:
  * @display: a `GdkDisplay`

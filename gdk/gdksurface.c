@@ -2318,11 +2318,10 @@ gdk_surface_ensure_motion (GdkSurface *surface)
   if (!gdk_surface_get_device_position (surface, device, &x, &y, &state))
     return;
 
-  if (gdk_device_grab_info (display, device, &grab_surface, NULL))
-    {
-      if (grab_surface != surface)
-        return;
-    }
+  grab_surface = gdk_seat_get_topmost_grab_surface (seat);
+
+  if (grab_surface && surface != grab_surface)
+    return;
 
   event = gdk_motion_event_new (surface,
                                 device,
@@ -2745,10 +2744,9 @@ gdk_surface_queue_set_is_mapped (GdkSurface *surface,
 static gboolean
 check_autohide (GdkEvent *event)
 {
-  GdkDisplay *display;
-  GdkDevice *device;
   GdkSurface *grab_surface, *event_surface;
   GdkEventType evtype = gdk_event_get_event_type (event);
+  GdkSeat *seat;
 
  switch ((guint) evtype)
     {
@@ -2765,9 +2763,9 @@ check_autohide (GdkEvent *event)
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
-      display = gdk_event_get_display (event);
-      device = gdk_event_get_device (event);
-      if (gdk_device_grab_info (display, device, &grab_surface, NULL))
+      seat = gdk_event_get_seat (event);
+      grab_surface = gdk_seat_get_topmost_grab_surface (seat);
+      if (grab_surface)
         {
           event_surface = gdk_event_get_surface (event);
           if (event_surface->autohide &&
