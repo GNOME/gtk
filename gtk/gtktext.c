@@ -3152,7 +3152,8 @@ gtk_text_click_gesture_released (GtkGestureClick *gesture,
   if (n_press == 1 &&
       !priv->in_drag &&
       gtk_event_treat_as_touch (event) &&
-      priv->current_pos == priv->selection_bound)
+      priv->current_pos == priv->selection_bound &&
+      (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_INHIBIT_OSK) == 0)
     gtk_im_context_activate_osk (priv->im_context, event);
 }
 
