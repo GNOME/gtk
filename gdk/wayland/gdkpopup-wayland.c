@@ -286,6 +286,12 @@ gdk_wayland_popup_hide_surface (GdkWaylandSurface *wayland_surface)
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
+  if (popup->display_server.xdg_popup && surface->autohide)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (display);
+      gdk_seat_ungrab (seat);
+    }
+
   g_clear_pointer (&popup->display_server.xdg_popup, xdg_popup_destroy);
   g_clear_pointer (&popup->display_server.zxdg_popup_v6, zxdg_popup_v6_destroy);
   display_wayland->current_popups =
