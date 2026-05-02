@@ -142,18 +142,23 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
                                              GdkColorState         *color_state)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuFrame *frame;
   gpointer previous;
   gboolean retval = FALSE;
+  gint64 timestamp;
 
   previous = gsk_gpu_renderer_save_current (self);
+
+  timestamp = g_get_monotonic_time ();
+  gsk_gpu_device_maybe_gc (priv->device, timestamp);
 
   gsk_gpu_renderer_make_current (self);
 
   frame = gsk_gpu_renderer_get_frame (self);
 
   if (gsk_gpu_frame_download_texture (frame,
-                                      g_get_monotonic_time (),
+                                      timestamp,
                                       GDK_TEXTURE (texture),
                                       data,
                                       layout,
@@ -173,6 +178,8 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
     }
 
   gsk_gpu_renderer_restore_current (self, previous);
+
+  gsk_gpu_device_queue_gc (priv->device);
 
   return retval;
 }
