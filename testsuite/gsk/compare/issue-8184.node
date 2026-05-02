@@ -1,0 +1,23 @@
+rounded-clip {
+  clip: -450 300 900 600 / 15;
+  child: transform {
+    transform: rotate(90);
+    child: texture-scale {
+      bounds: -2000 -2000 4000 4000;
+      filter: nearest;
+      texture: memory {
+        format: RGB8;
+        width: 1;
+        height: 1;
+        offset: 0;
+        stride: 4;
+        data: "FF0000";
+      }
+    }
+  }
+}
+
+border {
+  outline: -450 300 900 600;
+  widths: 20;
+}
