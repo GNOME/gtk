@@ -79,7 +79,7 @@
  * {
  *   ...
  *   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
- *   gtk_editable_install_properties (object_clas, NUM_PROPERTIES);
+ *   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
  *   ...
  * }
  * ```
