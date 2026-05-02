@@ -59,7 +59,7 @@ cache_gc_cb (gpointer data)
   gboolean result = G_SOURCE_CONTINUE;
 
   timestamp = g_get_monotonic_time ();
-  GSK_DEBUG (CACHE, "Periodic GC (timestamp %lld)", (long long) timestamp);
+  GSK_DEBUG (CACHE, "Periodic %s GC (timestamp %lld)", G_OBJECT_TYPE_NAME (self), (long long) timestamp);
 
   /* gc can collect the device if all windows are closed and only
    * the cache is keeping it alive */
@@ -94,7 +94,8 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self,
 
   if (priv->cache_timeout == 0 || dead_textures > 50 || dead_texture_pixels > 1000 * 1000)
     {
-      GSK_DEBUG (CACHE, "Pre-frame GC (%" G_GSIZE_FORMAT " dead textures, %" G_GSIZE_FORMAT " dead pixels)",
+      GSK_DEBUG (CACHE, "Pre-frame %s GC (%" G_GSIZE_FORMAT " dead textures, %" G_GSIZE_FORMAT " dead pixels)",
+                 G_OBJECT_TYPE_NAME (self),
                  dead_textures, dead_texture_pixels);
       gsk_gpu_device_gc (self, timestamp);
     }
