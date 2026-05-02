@@ -70,7 +70,11 @@ gdk_android_monitor_update (GdkAndroidMonitor  *self,
                             const GdkRectangle *bounds,
                             gfloat              density)
 {
-  gdk_monitor_set_geometry (GDK_MONITOR (self), bounds);
+  GdkRectangle sbounds = {
+    .x = bounds->x / density, .y = bounds->y / density,
+    .width = bounds->width / density, .height = bounds->height / density
+  };
+  gdk_monitor_set_geometry (GDK_MONITOR (self), &sbounds);
   gdk_monitor_set_scale (GDK_MONITOR (self), density);
 }
 
