@@ -335,7 +335,7 @@ gsk_gpu_render_pass_set_transform (GskGpuRenderPass *self,
   gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &GSK_RECT_INIT_CAIRO (&self->scissor));
   gsk_gpu_clip_scale (&self->clip,
                       &self->clip,
-                      transform->dihedral,
+                      gdk_dihedral_invert (transform->dihedral),
                       transform->scale.width,
                       transform->scale.height);
   self->offset = transform->offset;

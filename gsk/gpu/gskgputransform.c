@@ -91,7 +91,7 @@ gsk_gpu_transform_transform_rect (const GskGpuTransform *self,
                             (rect->origin.y + self->offset.y) * self->scale.height,
                             rect->size.width * self->scale.width,
                             rect->size.height * self->scale.height);
-  gsk_rect_dihedral (&tmp, gdk_dihedral_invert (self->dihedral), result);
+  gsk_rect_dihedral (&tmp, self->dihedral, result);
 }
 
 void
@@ -101,7 +101,7 @@ gsk_gpu_transform_invert_rect (const GskGpuTransform *self,
 {
   graphene_rect_t tmp;
 
-  gsk_rect_dihedral (rect, self->dihedral, &tmp);
+  gsk_rect_dihedral (rect, gdk_dihedral_invert (self->dihedral), &tmp);
   *result = GRAPHENE_RECT_INIT (tmp.origin.x / self->scale.width - self->offset.x,
                                 tmp.origin.y / self->scale.height - self->offset.y,
                                 tmp.size.width / self->scale.width,
