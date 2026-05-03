@@ -213,14 +213,21 @@ static void
 replay_repeat_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   GskRenderNode *child = gsk_repeat_node_get_child (node);
+  GskRectSnap snap = gsk_repeat_node_get_snap (node);
   const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
+  GskRectSnap child_snap = gsk_repeat_node_get_child_snap (node);
   GskRepeat repeat = gsk_repeat_node_get_repeat (node);
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
 
-  gtk_snapshot_push_repeat2 (snapshot, &bounds, child_bounds, repeat);
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
+
+  gtk_snapshot_push_repeat2 (snapshot, &bounds, child_bounds, child_snap, repeat);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

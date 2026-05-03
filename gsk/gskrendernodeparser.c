@@ -3505,12 +3505,16 @@ parse_repeat_node (GtkCssParser *parser,
 {
   GskRenderNode *child = NULL;
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   graphene_rect_t child_bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRectSnap child_snap = GSK_RECT_SNAP_NONE;
   GskRepeat repeat = GSK_REPEAT_REPEAT;
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "child-bounds", parse_rect, NULL, &child_bounds },
+    { "child-snap", parse_rect_snap, NULL, &child_snap },
     { "repeat", parse_repeat, NULL, &repeat },
   };
   GskRenderNode *result;
@@ -3522,10 +3526,10 @@ parse_repeat_node (GtkCssParser *parser,
 
   if (!(parse_result & (1 << 1)))
     gsk_render_node_get_bounds (child, &bounds);
-  if (!(parse_result & (1 << 2)))
+  if (!(parse_result & (1 << 3)))
     gsk_render_node_get_bounds (child, &child_bounds);
 
-  result = gsk_repeat_node_new2 (&bounds, child, &child_bounds, repeat);
+  result = gsk_repeat_node_new2 (&bounds, snap, child, &child_bounds, child_snap, repeat);
 
   gsk_render_node_unref (child);
 
@@ -6818,7 +6822,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
         if (!graphene_rect_equal (&node->bounds, &child->bounds))
           append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_repeat_node_get_snap (node));
         append_rect_param (p, "child-bounds", gsk_repeat_node_get_child_bounds (node));
+        append_snap_param (p, "child-snap", gsk_repeat_node_get_child_snap (node));
         append_node_param (p, "child", gsk_repeat_node_get_child (node));
         if (repeat != GSK_REPEAT_REPEAT)
           append_repeat_param (p, "repeat", repeat);

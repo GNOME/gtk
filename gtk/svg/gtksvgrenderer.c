@@ -978,10 +978,10 @@ apply_filter_tree (SvgElement    *shape,
             switch (edge_mode)
               {
              case EDGE_MODE_DUPLICATE:
-               child = gsk_repeat_node_new2 (&filter_region, in->node, &in->bounds, GSK_REPEAT_PAD);
+               child = gsk_repeat_node_new2 (&filter_region, GSK_RECT_SNAP_NONE, in->node, &in->bounds, GSK_RECT_SNAP_NONE, GSK_REPEAT_PAD);
                break;
              case EDGE_MODE_WRAP:
-               child = gsk_repeat_node_new2 (&filter_region, in->node, &in->bounds, GSK_REPEAT_REPEAT);
+               child = gsk_repeat_node_new2 (&filter_region, GSK_RECT_SNAP_NONE, in->node, &in->bounds, GSK_RECT_SNAP_NONE, GSK_REPEAT_REPEAT);
                break;
              case EDGE_MODE_NONE:
                child = gsk_render_node_ref (in->node);

@@ -52,6 +52,7 @@ void                    gtk_snapshot_push_subsurface            (GtkSnapshot    
 void                    gtk_snapshot_push_repeat2               (GtkSnapshot            *snapshot,
                                                                  const graphene_rect_t  *bounds,
                                                                  const graphene_rect_t  *child_bounds,
+                                                                 GskRectSnap             child_snap,
                                                                  GskRepeat               repeat);
 void                    gtk_snapshot_push_displacement          (GtkSnapshot            *snapshot,
                                                                  const graphene_rect_t  *bounds,

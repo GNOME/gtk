@@ -8,8 +8,10 @@
 G_BEGIN_DECLS
 
 GskRenderNode *         gsk_repeat_node_new2                    (const graphene_rect_t  *bounds,
+                                                                 GskRectSnap             snap,
                                                                  GskRenderNode          *child,
                                                                  const graphene_rect_t  *child_bounds,
+                                                                 GskRectSnap             child_snap,
                                                                  GskRepeat               repeat);
 
 GskRepeat               gsk_repeat_node_get_repeat              (GskRenderNode          *node);
