@@ -546,6 +546,9 @@ replay_arithmetic_node (GskRenderNode *node,
 
   gsk_render_node_get_bounds (node, &bounds);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_arithmetic_node_get_snap (node));
+
   gtk_snapshot_push_arithmetic (snapshot,
                                 &bounds,
                                 gsk_arithmetic_node_get_color_state (node),
@@ -554,6 +557,8 @@ replay_arithmetic_node (GskRenderNode *node,
   gtk_snapshot_pop (snapshot);
   replay_node (gsk_arithmetic_node_get_second_child (node), snapshot);
   gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 void

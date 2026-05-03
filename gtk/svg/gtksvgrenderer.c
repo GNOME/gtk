@@ -1117,7 +1117,7 @@ apply_filter_tree (SvgElement    *shape,
                 k[2] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K3), 1);
                 k[3] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K4), 1);
 
-                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, color_state, k);
+                result = gsk_arithmetic_node_new (&subregion, GSK_RECT_SNAP_NONE, in->node, in2->node, color_state, k);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {

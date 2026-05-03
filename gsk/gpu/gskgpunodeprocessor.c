@@ -2234,10 +2234,16 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
 {
   const float *k;
   GskRenderNode *first_child, *second_child;
-  graphene_rect_t first_rect, second_rect;
+  graphene_rect_t bounds, first_rect, second_rect;
   GskGpuImage *first_image, *second_image;
 
   k = gsk_arithmetic_node_get_factors (node);
+  if (!gsk_gpu_node_processor_clip_bounds (self,
+                                           &node->bounds,
+                                           gsk_arithmetic_node_get_snap (node),
+                                           &bounds))
+    return;
+
 
   first_child = gsk_arithmetic_node_get_first_child (node);
   second_child = gsk_arithmetic_node_get_second_child (node);
@@ -2272,7 +2278,7 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
   gsk_gpu_arithmetic_op (self,
                          self->ccs,
                          gsk_arithmetic_node_get_color_state (node),
-                         &node->bounds,
+                         &bounds,
                          first_image,
                          GSK_GPU_SAMPLER_DEFAULT,
                          second_image,
