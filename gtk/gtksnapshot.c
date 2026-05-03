@@ -126,6 +126,8 @@ struct _GtkSnapshotState {
       graphene_rect_t bounds;
       graphene_rect_t child_bounds;
       GskRepeat repeat;
+      GskRectSnap snap;
+      GskRectSnap child_snap;
     } repeat;
     struct {
       graphene_rect_t bounds;
@@ -780,18 +782,18 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
                              guint             n_nodes)
 {
   GskRenderNode *node, *repeat_node;
-  const graphene_rect_t *bounds = &state->data.repeat.bounds;
   const graphene_rect_t *child_bounds = &state->data.repeat.child_bounds;
-  GskRepeat repeat = state->data.repeat.repeat;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
     return NULL;
 
-  repeat_node = gsk_repeat_node_new2 (bounds,
+  repeat_node = gsk_repeat_node_new2 (&state->data.repeat.bounds,
+                                      state->data.repeat.snap,
                                       node,
                                       child_bounds->size.width > 0 ? child_bounds : NULL,
-                                      repeat);
+                                      state->data.repeat.child_snap,
+                                      state->data.repeat.repeat);
 
   gsk_render_node_unref (node);
 
@@ -962,6 +964,7 @@ void
 gtk_snapshot_push_repeat2 (GtkSnapshot           *snapshot,
                            const graphene_rect_t *bounds,
                            const graphene_rect_t *child_bounds,
+                           GskRectSnap            child_snap,
                            GskRepeat              repeat)
 {
   GtkSnapshotState *state, *current_state;
@@ -989,6 +992,8 @@ gtk_snapshot_push_repeat2 (GtkSnapshot           *snapshot,
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.repeat.bounds);
   state->data.repeat.child_bounds = real_child_bounds;
   state->data.repeat.repeat = repeat;
+  state->data.repeat.snap = state->props.snap;
+  state->data.repeat.child_snap = child_snap;
 }
 
 /**
@@ -1007,7 +1012,13 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
                           const graphene_rect_t *bounds,
                           const graphene_rect_t *child_bounds)
 {
-  gtk_snapshot_push_repeat2 (snapshot, bounds, child_bounds, GSK_REPEAT_REPEAT);
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+
+  gtk_snapshot_push_repeat2 (snapshot,
+                             bounds,
+                             child_bounds,
+                             current_state->props.snap,
+                             GSK_REPEAT_REPEAT);
 }
 
 static GskRenderNode *

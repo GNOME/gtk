@@ -537,8 +537,10 @@ in premultiplied form (as in CSS) or unpremultiplied form (as in SVG).
 | property     | syntax     | default                | printed     |
 | ------------ | ---------- | ---------------------- | ----------- |
 | bounds       | `<rect>`   | *bounds of child node* | non-default |
+| snap         | `<snap>`   | none                   | non-default |
 | child        | `<node>`   | color { }              | always      |
 | child-bounds | `<rect>`   | *bounds of child node* | non-default |
+| child-snap   | `<snap>`   | none                   | non-default |
 
 Creates a node like `gsk_repeat_node_new()` with the given properties.
 

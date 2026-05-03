@@ -1455,9 +1455,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_REPEAT_NODE:
       {
-        const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
 
-        add_rect_row (store, "Child Bounds", child_bounds);
+        add_snap_row (store, "Snap", gsk_repeat_node_get_snap (node));
+        add_rect_row (store, "Child Bounds", gsk_repeat_node_get_child_bounds (node));
+        add_snap_row (store, "Child Snap", gsk_repeat_node_get_child_snap (node));
       }
       break;
 

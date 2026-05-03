@@ -12136,6 +12136,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
           gtk_snapshot_push_repeat2 (snapshot,
                                      &enlarged,
                                      &bounds,
+                                     GSK_RECT_SNAP_NONE,
                                      GSK_REPEAT_REFLECT);
           gtk_snapshot_append_paste (snapshot,
                                      &bounds,
