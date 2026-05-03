@@ -662,7 +662,10 @@ gtk_grid_view_measure_list (GtkWidget *widget,
   height = 0;
 
   gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
-  for_size = MAX (for_size, col_min * (int) self->min_columns);
+  if (for_size == -1)
+    for_size = col_nat * (int) self->max_columns;
+  else
+    for_size = MAX (for_size, col_min * (int) self->min_columns);
   n_columns = gtk_grid_view_compute_n_columns (self, for_size, xspacing, col_min, col_nat);
   column_size = (for_size + xspacing) / n_columns - xspacing;
 
