@@ -211,8 +211,7 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
 
   cairo_set_source (cr, first_pattern);
 
-  gdk_cairo_rect (cr, &node->bounds);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   cairo_pattern_destroy (first_pattern);
   cairo_pattern_destroy (second_pattern);
