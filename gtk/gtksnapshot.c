@@ -817,19 +817,6 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE &&
-      gsk_rect_equal (child_bounds, &node->bounds))
-    {
-      /* Repeating a color node entirely is pretty easy by just increasing
-       * the size of the color node.
-       */
-      GskRenderNode *color_node = gsk_color_node_new2 (gsk_color_node_get_gdk_color (node), bounds);
-
-      gsk_render_node_unref (node);
-
-      return color_node;
-    }
-
   repeat_node = gsk_repeat_node_new2 (bounds,
                                       node,
                                       child_bounds->size.width > 0 ? child_bounds : NULL,
@@ -2220,7 +2207,7 @@ gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
                                   state->data.arithmetic.color_state,
                                   state->data.arithmetic.factors);
 
-  g_object_unref (second_node);
+  gsk_render_node_unref (second_node);
 
   return node;
 }

@@ -3164,7 +3164,12 @@ resolve_filter_image_refs (SvgElement *shape,
       SvgFilterType type = svg_filter_get_type (f);
 
       if (type == SVG_FILTER_IMAGE)
-        resolve_href_ref (svg_filter_get_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF), shape, data);
+        {
+          SvgValue *value = svg_filter_get_specified_value (f, SVG_PROPERTY_FE_IMAGE_HREF);
+
+          if (value)
+            resolve_href_ref (value, shape, data);
+        }
     }
 }
 
