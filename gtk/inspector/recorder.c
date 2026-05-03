@@ -1678,6 +1678,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         const float *k;
         char *tmp;
 
+        add_snap_row (store, "Snap", gsk_arithmetic_node_get_snap (node));
         k = gsk_arithmetic_node_get_factors (node);
         tmp = g_strdup_printf ("%f %f %f %f", k[0], k[1], k[2], k[3]);
         add_text_row (store, "Factors", "%s", tmp);

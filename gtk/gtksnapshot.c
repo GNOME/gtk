@@ -197,6 +197,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } displacement;
     struct {
       graphene_rect_t bounds;
+      GskRectSnap snap;
       GskRenderNode *first_node;
       GdkColorState *color_state;
       float factors[4];
@@ -2185,6 +2186,7 @@ gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
     second_node = gsk_container_node_new (NULL, 0);
 
   node = gsk_arithmetic_node_new (&state->data.arithmetic.bounds,
+                                  state->data.arithmetic.snap,
                                   state->data.arithmetic.first_node,
                                   second_node,
                                   state->data.arithmetic.color_state,
@@ -2264,6 +2266,7 @@ gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
   state->data.arithmetic.factors[1] = factors[1];
   state->data.arithmetic.factors[2] = factors[2];
   state->data.arithmetic.factors[3] = factors[3];
+  state->data.arithmetic.snap = state->props.snap;
 
   gtk_snapshot_push_state (snapshot,
                            state->transform,
