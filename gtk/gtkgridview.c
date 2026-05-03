@@ -726,6 +726,20 @@ gtk_grid_view_measure_list (GtkWidget *widget,
   *natural = height;
 }
 
+static GtkSizeRequestMode
+gtk_grid_view_get_request_mode (GtkWidget *widget)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  GtkOrientation orientation;
+
+  orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  else
+    return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+}
+
 static void
 gtk_grid_view_measure (GtkWidget      *widget,
                        GtkOrientation  orientation,
@@ -1091,6 +1105,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   list_base_class->move_focus_along = gtk_grid_view_move_focus_along;
   list_base_class->move_focus_across = gtk_grid_view_move_focus_across;
 
+  widget_class->get_request_mode = gtk_grid_view_get_request_mode;
   widget_class->measure = gtk_grid_view_measure;
   widget_class->size_allocate = gtk_grid_view_size_allocate;
   widget_class->root = gtk_grid_view_root;
