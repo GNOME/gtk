@@ -181,9 +181,9 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
   graphene_rect_t clip_bounds;
   float tile_left, tile_right, tile_top, tile_bottom;
 
-  gdk_cairo_rect (cr, &node->bounds);
-  cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+    return;
 
   tile_left = (clip_bounds.origin.x - self->child_bounds.origin.x) / self->child_bounds.size.width;
   tile_right = (clip_bounds.origin.x + clip_bounds.size.width - self->child_bounds.origin.x) / self->child_bounds.size.width;
@@ -277,6 +277,9 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
     {
       /* repeat in both directions */
       float x, y;
+
+      gdk_cairo_rect (cr, &clip_bounds);
+      cairo_clip (cr);
 
       for (x = floorf (tile_left); x < ceilf (tile_right); x++)
         {
@@ -405,9 +408,9 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
   graphene_rect_t clip_bounds, draw_bounds;
   graphene_point_t draw_pos;
 
-  gdk_cairo_rect (cr, &node->bounds);
-  cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+    return;
 
   gsk_repeat_node_compute_rect_for_reflect (&clip_bounds,
                                             &self->child_bounds,
