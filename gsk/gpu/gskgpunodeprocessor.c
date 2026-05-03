@@ -2767,10 +2767,12 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
   repeat = gsk_repeat_node_get_repeat (node);
   if (repeat == GSK_REPEAT_NONE)
     {
+      if (!gsk_rect_intersection (&node->bounds, child_bounds, &bounds))
+        return;
       gsk_gpu_node_processor_add_node_clipped (self,
                                                child,
                                                0,
-                                               &node->bounds);
+                                               &bounds);
       return;
     }
 
