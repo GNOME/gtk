@@ -141,11 +141,14 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
                                              GdkColorState         *color_state)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuFrame *frame;
   gpointer previous;
   gboolean retval = FALSE;
 
   previous = gsk_gpu_renderer_save_current (self);
+
+  gsk_gpu_device_maybe_gc (priv->device);
 
   gsk_gpu_renderer_make_current (self);
 
@@ -172,6 +175,8 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
     }
 
   gsk_gpu_renderer_restore_current (self, previous);
+
+  gsk_gpu_device_queue_gc (priv->device);
 
   return retval;
 }
