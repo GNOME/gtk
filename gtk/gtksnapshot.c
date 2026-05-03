@@ -2207,7 +2207,7 @@ gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
                                   state->data.arithmetic.color_state,
                                   state->data.arithmetic.factors);
 
-  g_object_unref (second_node);
+  gsk_render_node_unref (second_node);
 
   return node;
 }
