@@ -276,7 +276,6 @@ gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
 static GtkSnapshotState *
 gtk_snapshot_push_state (GtkSnapshot                 *snapshot,
                          GskTransform                *transform,
-                         const GtkSnapshotProperties *props,
                          GtkSnapshotCollectFunc       collect_func,
                          GtkSnapshotClearFunc         clear_func)
 {
@@ -286,8 +285,20 @@ gtk_snapshot_push_state (GtkSnapshot                 *snapshot,
   gtk_snapshot_states_set_size (&snapshot->state_stack, n_states + 1);
   state = gtk_snapshot_states_get (&snapshot->state_stack, n_states);
 
+  if (n_states > 0)
+    {
+      GtkSnapshotState *prev;
+
+      prev = gtk_snapshot_states_get (&snapshot->state_stack, n_states - 1);
+      state->props = prev->props;
+    }
+  else
+    {
+      state->props = (GtkSnapshotProperties) {
+          .snap = GSK_RECT_SNAP_NONE,
+      };
+    }
   state->transform = gsk_transform_ref (transform);
-  state->props = *props;
   state->collect_func = collect_func;
   state->clear_func = clear_func;
   state->start_node_index = gtk_snapshot_nodes_get_size (&snapshot->nodes);
@@ -345,9 +356,6 @@ gtk_snapshot_init (GtkSnapshot *self)
 
   gtk_snapshot_push_state (self,
                            NULL,
-                           &(GtkSnapshotProperties) {
-                             .snap = GSK_RECT_SNAP_NONE,
-                           },
                            gtk_snapshot_collect_default,
                            NULL);
 }
@@ -436,11 +444,8 @@ gtk_snapshot_collect_autopush_transform (GtkSnapshot      *snapshot,
 static void
 gtk_snapshot_autopush_transform (GtkSnapshot *snapshot)
 {
-  GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
-
   gtk_snapshot_push_state (snapshot,
                            NULL,
-                           &state->props,
                            gtk_snapshot_collect_autopush_transform,
                            NULL);
 }
@@ -503,7 +508,6 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
 
       state = gtk_snapshot_push_state (snapshot,
                                        current_state->transform,
-                                       &current_state->props,
                                        gtk_snapshot_collect_debug,
                                        gtk_snapshot_clear_debug);
 
@@ -517,7 +521,6 @@ gtk_snapshot_push_debug (GtkSnapshot *snapshot,
     {
       gtk_snapshot_push_state (snapshot,
                                current_state->transform,
-                               &current_state->props,
                                gtk_snapshot_collect_default,
                                NULL);
     }
@@ -571,7 +574,6 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_opacity,
                                    NULL);
   state->data.opacity.opacity = CLAMP (opacity, 0.0, 1.0);
@@ -627,7 +629,6 @@ gtk_snapshot_push_isolation (GtkSnapshot  *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_isolation,
                                    NULL);
   state->data.isolation.features = features;
@@ -745,7 +746,6 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_color_matrix,
                                    NULL);
 
@@ -813,7 +813,6 @@ gtk_snapshot_push_component_transfer (GtkSnapshot                *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_component_transfer,
                                    gtk_snapshot_clear_component_transfer);
 
@@ -1003,7 +1002,6 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_blur,
                                    NULL);
   state->data.blur.radius = radius * scale_x;
@@ -1032,7 +1030,6 @@ gtk_snapshot_push_repeat2 (GtkSnapshot           *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    empty_child_bounds
                                    ? gtk_snapshot_collect_discard_repeat
                                    : gtk_snapshot_collect_repeat,
@@ -1114,7 +1111,6 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_clip,
                                    NULL);
 
@@ -1272,7 +1268,6 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_gl_shader,
                                    gtk_snapshot_clear_gl_shader);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &transformed_bounds);
@@ -1289,7 +1284,6 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
       current_state = gtk_snapshot_get_current_state (snapshot);
       state = gtk_snapshot_push_state (snapshot,
                                        current_state->transform,
-                                       &current_state->props,
                                        gtk_snapshot_collect_gl_shader_texture,
                                        NULL);
       state->data.glshader_texture.bounds = transformed_bounds;
@@ -1363,7 +1357,6 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_rounded_clip,
                                    NULL);
 
@@ -1434,7 +1427,6 @@ gtk_snapshot_push_fill (GtkSnapshot *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_fill,
                                    gtk_snapshot_clear_fill);
 
@@ -1541,7 +1533,6 @@ gtk_snapshot_push_stroke (GtkSnapshot     *snapshot,
   current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_stroke,
                                    gtk_snapshot_clear_stroke);
 
@@ -1663,7 +1654,7 @@ gtk_snapshot_push_shadows (GtkSnapshot          *snapshot,
                            const GskShadowEntry *shadow,
                            gsize                 n_shadows)
 {
-  GtkSnapshotState *state, *current_state;
+  GtkSnapshotState *state;
   GskTransform *transform;
   float scale_x, scale_y, dx, dy;
   gsize i;
@@ -1674,10 +1665,8 @@ gtk_snapshot_push_shadows (GtkSnapshot          *snapshot,
                                          &dx, &dy);
   transform = gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, dy)), scale_x, scale_y);
 
-  current_state = gtk_snapshot_get_current_state (snapshot);
   state = gtk_snapshot_push_state (snapshot,
                                    transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_shadow,
                                    gtk_snapshot_clear_shadow);
 
@@ -1783,14 +1772,12 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
 
   top_state = gtk_snapshot_push_state (snapshot,
                                        current_state->transform,
-                                       &current_state->props,
                                        gtk_snapshot_collect_blend_top,
                                        gtk_snapshot_clear_blend_top);
   top_state->data.blend.blend_mode = blend_mode;
 
   gtk_snapshot_push_state (snapshot,
                            top_state->transform,
-                           &top_state->props,
                            gtk_snapshot_collect_blend_bottom,
                            NULL);
 }
@@ -1865,7 +1852,6 @@ gtk_snapshot_push_mask (GtkSnapshot *snapshot,
 
   source_state = gtk_snapshot_push_state (snapshot,
                                           current_state->transform,
-                                          &current_state->props,
                                           gtk_snapshot_collect_mask_source,
                                           gtk_snapshot_clear_mask_source);
 
@@ -1873,7 +1859,6 @@ gtk_snapshot_push_mask (GtkSnapshot *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            source_state->transform,
-                           &source_state->props,
                            gtk_snapshot_collect_mask_mask,
                            NULL);
 }
@@ -1920,7 +1905,6 @@ gtk_snapshot_push_copy (GtkSnapshot *snapshot)
 
   gtk_snapshot_push_state (snapshot,
                            current_state->transform,
-                           &current_state->props,
                            gtk_snapshot_collect_copy,
                            NULL);
 }
@@ -1996,7 +1980,6 @@ gtk_snapshot_push_composite (GtkSnapshot   *snapshot,
 
   child_state = gtk_snapshot_push_state (snapshot,
                                          current_state->transform,
-                                         &current_state->props,
                                          gtk_snapshot_collect_composite_child,
                                          gtk_snapshot_clear_composite_child);
 
@@ -2004,7 +1987,6 @@ gtk_snapshot_push_composite (GtkSnapshot   *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            child_state->transform,
-                           &child_state->props,
                            gtk_snapshot_collect_composite_mask,
                            NULL);
 }
@@ -2107,14 +2089,12 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
 
   end_state = gtk_snapshot_push_state (snapshot,
                                        current_state->transform,
-                                       &current_state->props,
                                        gtk_snapshot_collect_cross_fade_end,
                                        gtk_snapshot_clear_cross_fade_end);
   end_state->data.cross_fade.progress = progress;
 
   gtk_snapshot_push_state (snapshot,
                            end_state->transform,
-                           &end_state->props,
                            gtk_snapshot_collect_cross_fade_start,
                            NULL);
 }
@@ -2211,7 +2191,6 @@ gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_displacement,
                                    gtk_snapshot_clear_displacement);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.displacement.bounds);
@@ -2226,7 +2205,6 @@ gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            state->transform,
-                           &state->props,
                            gtk_snapshot_collect_displacement_displacement,
                            NULL);
 }
@@ -2322,7 +2300,6 @@ gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_arithmetic,
                                    gtk_snapshot_clear_arithmetic);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.arithmetic.bounds);
@@ -2334,7 +2311,6 @@ gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
 
   gtk_snapshot_push_state (snapshot,
                            state->transform,
-                           &state->props,
                            gtk_snapshot_collect_arithmetic_first,
                            NULL);
 }
@@ -2474,13 +2450,17 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot,
 void
 gtk_snapshot_push_collect (GtkSnapshot *snapshot)
 {
+  GtkSnapshotState *state;
+
   gtk_snapshot_push_state (snapshot,
                            NULL,
-                           &(GtkSnapshotProperties) {
-                             .snap = GSK_RECT_SNAP_NONE,
-                           },
                            gtk_snapshot_collect_default,
                            NULL);
+
+  state = gtk_snapshot_get_current_state (snapshot);
+  state->props = (GtkSnapshotProperties) {
+      .snap = GSK_RECT_SNAP_NONE,
+  };
 }
 
 GskRenderNode *
@@ -2648,7 +2628,6 @@ gtk_snapshot_save (GtkSnapshot *snapshot)
 
   gtk_snapshot_push_state (snapshot,
                            current_state->transform,
-                           &current_state->props,
                            NULL,
                            NULL);
 }
@@ -3797,7 +3776,6 @@ gtk_snapshot_push_subsurface (GtkSnapshot   *snapshot,
 
   state = gtk_snapshot_push_state (snapshot,
                                    current_state->transform,
-                                   &current_state->props,
                                    gtk_snapshot_collect_subsurface,
                                    gtk_snapshot_clear_subsurface);
 
