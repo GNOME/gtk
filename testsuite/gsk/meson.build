@@ -19,6 +19,7 @@ serialize = executable('serialize',
 )
 
 compare_render_tests = [
+  'arithmetic-bounds',
   'big-box-glyph',
   'big-checkerboard',
   'big-checkerboard-scaled-down',
