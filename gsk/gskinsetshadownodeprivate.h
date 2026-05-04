@@ -7,6 +7,7 @@
 G_BEGIN_DECLS
 
 GskRenderNode *         gsk_inset_shadow_node_new2              (const GskRoundedRect   *outline,
+                                                                 GskRectSnap             snap,
                                                                  const GdkColor         *color,
                                                                  const graphene_point_t *offset,
                                                                  float                   spread,

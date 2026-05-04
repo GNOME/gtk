@@ -1554,11 +1554,18 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuRenderPass *self,
   float spread, blur_radius;
   const GdkColor *color;
   const graphene_point_t *offset;
+  GskRoundedRect outline;
 
   color = gsk_inset_shadow_node_get_gdk_color (node);
   spread = gsk_inset_shadow_node_get_spread (node);
   blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
   offset = gsk_inset_shadow_node_get_offset (node);
+  outline = *gsk_inset_shadow_node_get_outline (node);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &outline.bounds,
+                                      gsk_inset_shadow_node_get_snap (node),
+                                      &outline.bounds))
+    return;
 
   if (blur_radius < 0.01)
     {
@@ -1569,8 +1576,8 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuRenderPass *self,
       gsk_gpu_border_op (self,
                          self->ccs,
                          gsk_gpu_color_states_find (self->ccs, color),
-                         &node->bounds,
-                         gsk_inset_shadow_node_get_outline (node),
+                         &outline.bounds,
+                         &outline,
                          color,
                          color,
                          color,
@@ -1583,9 +1590,9 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuRenderPass *self,
       gsk_gpu_box_shadow_op (self,
                              self->ccs,
                              gsk_gpu_color_states_find (self->ccs, color),
-                             &node->bounds,
+                             &outline.bounds,
                              TRUE,
-                             gsk_inset_shadow_node_get_outline (node),
+                             &outline,
                              &GRAPHENE_SIZE_INIT (offset->x, offset->y),
                              spread,
                              blur_radius,

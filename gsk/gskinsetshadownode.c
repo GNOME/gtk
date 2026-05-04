@@ -41,6 +41,7 @@ struct _GskInsetShadowNode
   graphene_point_t offset;
   float spread;
   float blur_radius;
+  GskRectSnap snap;
 };
 
 static void
@@ -60,7 +61,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
                             GskCairoData  *data)
 {
   GskInsetShadowNode *self = (GskInsetShadowNode *) node;
-  GskRoundedRect box, clip_box;
+  GskRoundedRect outline, box, clip_box;
   int clip_radius;
   graphene_rect_t clip_rect;
   double blur_radius;
@@ -69,8 +70,12 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   if (gdk_color_is_clear (&self->color))
     return;
 
+  outline = self->outline;
+  if (!gsk_cairo_rect_snap (cr, &outline.bounds, self->snap, &outline.bounds))
+    return;
+
   _graphene_rect_init_from_clip_extents (&clip_rect, cr);
-  if (!gsk_rounded_rect_intersects_rect (&self->outline, &clip_rect))
+  if (!gsk_rounded_rect_intersects_rect (&outline, &clip_rect))
     return;
 
   blur_radius = self->blur_radius / 2;
@@ -79,14 +84,14 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  gsk_rounded_rect_path (&self->outline, cr);
+  gsk_rounded_rect_path (&outline, cr);
   cairo_clip (cr);
 
-  gsk_rounded_rect_init_copy (&box, &self->outline);
+  gsk_rounded_rect_init_copy (&box, &outline);
   gsk_rounded_rect_offset (&box, self->offset.x, self->offset.y);
   gsk_rounded_rect_shrink (&box, self->spread, self->spread, self->spread, self->spread);
 
-  gsk_rounded_rect_init_copy (&clip_box, &self->outline);
+  gsk_rounded_rect_init_copy (&clip_box, &outline);
   gsk_rounded_rect_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
   if (!gsk_cairo_shadow_needs_blur (blur_radius))
@@ -164,6 +169,7 @@ gsk_inset_shadow_node_diff (GskRenderNode *node1,
   GskInsetShadowNode *self2 = (GskInsetShadowNode *) node2;
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
+      self1->snap == self2->snap &&
       gdk_color_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->spread == self2->spread &&
@@ -223,6 +229,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
 
   gdk_color_init_from_rgba (&color2, color);
   node = gsk_inset_shadow_node_new2 (outline,
+                                     GSK_RECT_SNAP_NONE,
                                      &color2,
                                      &GRAPHENE_POINT_INIT (dx, dy),
                                      spread, blur_radius);
@@ -234,6 +241,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
 /*< private >
  * gsk_inset_shadow_node_new2:
  * @outline: outline of the region containing the shadow
+ * @snap: how to snap the outline to the pixel grid
  * @color: color of the shadow
  * @offset: offset of shadow
  * @spread: how far the shadow spreads towards the inside
@@ -246,6 +254,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
  */
 GskRenderNode *
 gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
+                            GskRectSnap             snap,
                             const GdkColor         *color,
                             const graphene_point_t *offset,
                             float                   spread,
@@ -265,6 +274,7 @@ gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   gdk_color_init_copy (&self->color, color);
+  self->snap = snap;
   self->offset = *offset;
   self->spread = spread;
   self->blur_radius = blur_radius;
@@ -405,3 +415,21 @@ gsk_inset_shadow_node_get_blur_radius (const GskRenderNode *node)
 
   return self->blur_radius;
 }
+
+/* gsk_texture_node_get_snap:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode` for an inset shadow
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_inset_shadow_node_get_snap (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  return self->snap;
+}
+
