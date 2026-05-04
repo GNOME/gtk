@@ -6005,7 +6005,8 @@ gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
 
   if (gtk_event_treat_as_touch (event) &&
       gtk_text_iter_compare (&start, &end) == 0 &&
-      gtk_text_iter_can_insert (&start, priv->editable))
+      gtk_text_iter_can_insert (&start, priv->editable) &&
+      (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_INHIBIT_OSK) == 0)
     gtk_im_context_activate_osk (priv->im_context, event);
 }
 
@@ -9302,7 +9303,10 @@ gtk_text_view_activate_misc_insert_emoji (GtkWidget  *widget,
                                           const char *action_name,
                                           GVariant   *parameter)
 {
-  gtk_text_view_insert_emoji (GTK_TEXT_VIEW (widget));
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  gtk_text_view_insert_emoji (text_view);
+  hide_selection_bubble (text_view);
 }
 
 static void
