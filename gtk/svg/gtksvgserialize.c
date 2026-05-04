@@ -215,24 +215,26 @@ serialize_gpa_attrs (GString              *s,
                      SvgElement           *shape,
                      GtkSvgSerializeFlags  flags)
 {
+  SvgValue *value;
+
   if (svg->gpa_version == 0 || !svg_element_type_is_path (svg_element_get_type (shape)))
     return;
 
-  if (svg_element_get_gpa_stroke (shape) &&
-      svg_paint_get_kind (svg_element_get_gpa_stroke (shape)) != PAINT_NONE)
+  value = svg_element_get_gpa_stroke (shape);
+  if (value && svg_paint_get_kind (value) != PAINT_NONE)
     {
       string_indent (s, indent + ATTR_INDENT);
       g_string_append (s, "gpa:stroke='");
-      svg_paint_print_gpa (svg_element_get_gpa_stroke (shape), s);
+      svg_paint_print_gpa (value, s);
       g_string_append_c (s, '\'');
     }
 
-  if (svg_element_get_gpa_fill (shape) &&
-      svg_paint_get_kind (svg_element_get_gpa_fill (shape)) != PAINT_NONE)
+  value = svg_element_get_gpa_fill (shape);
+  if (value && svg_paint_get_kind (value) != PAINT_NONE)
     {
       string_indent (s, indent + ATTR_INDENT);
       g_string_append (s, "gpa:fill='");
-      svg_paint_print_gpa (svg_element_get_gpa_fill (shape), s);
+      svg_paint_print_gpa (value, s);
       g_string_append_c (s, '\'');
     }
 
