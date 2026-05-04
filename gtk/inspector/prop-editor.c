@@ -1011,6 +1011,20 @@ describe_expression (GtkExpression *expression)
 }
 
 static void
+string_append_unichar_escaped (GString  *string,
+                               gunichar  ch)
+{
+  char text[16] = { 0, };
+  int len;
+  char *escaped;
+
+  len = g_unichar_to_utf8 (ch, text);
+  escaped = g_markup_escape_text (text, len);
+  g_string_append (string, escaped);
+  g_free (escaped);
+}
+
+static void
 toggle_unicode (GtkWidget *stack,
                 gboolean   show_unicode)
 {
@@ -1034,7 +1048,7 @@ toggle_unicode (GtkWidget *stack,
           gunichar ch = g_utf8_get_char (p);
           if (s->len > 0)
             g_string_append_unichar (s, 0x2005);
-          g_string_append_unichar (s, ch);
+          string_append_unichar_escaped (s, ch);
           g_string_append_unichar (s, 0x2005);
           g_string_append (s, "<span alpha=\"70%\" font_size=\"smaller\">");
           g_string_append_printf (s, "%04X", ch);
