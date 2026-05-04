@@ -1043,6 +1043,8 @@ toggle_unicode (GtkWidget *stack,
 
       orig = gtk_editable_get_text (GTK_EDITABLE (entry));
       s = g_string_sized_new (10 * strlen (orig));
+
+      g_string_append_unichar (s, 0x202d); /* LRO, we are rendering left-to-right */
       for (p = orig; *p; p = g_utf8_next_char (p))
         {
           gunichar ch = g_utf8_get_char (p);
@@ -1054,6 +1056,7 @@ toggle_unicode (GtkWidget *stack,
           g_string_append_printf (s, "%04X", ch);
           g_string_append (s, "</span>");
         }
+      g_string_append_unichar (s, 0x202c); /* PDF */
       pango_parse_markup (s->str, s->len, 0, &attrs, &text, NULL, NULL);
       gtk_editable_set_text (GTK_EDITABLE (unicode), text);
       gtk_entry_set_attributes (GTK_ENTRY (unicode), attrs);
