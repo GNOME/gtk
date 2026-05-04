@@ -689,6 +689,7 @@ representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANS
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 | texture  | `<url>`          | *see below*            | always      |
 | filter   | `filter`         | linear                 | non-default |
 

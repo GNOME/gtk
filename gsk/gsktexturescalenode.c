@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gsktexturescalenode.h"
+#include "gsktexturescalenodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
@@ -42,6 +42,7 @@ struct _GskTextureScaleNode
 
   GdkTexture *texture;
   GskScalingFilter filter;
+  GskRectSnap snap;
 };
 
 static void
@@ -71,10 +72,13 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   };
   cairo_t *cr2;
   cairo_surface_t *surface2;
-  graphene_rect_t clip_rect;
+  graphene_rect_t bounds, clip_rect;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
 
   /* Make sure we draw the minimum region by using the clip */
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_rect, cr);
   if (clip_rect.size.width <= 0 || clip_rect.size.height <= 0)
@@ -91,9 +95,9 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   cairo_matrix_init_scale (&matrix,
-                           gdk_texture_get_width (self->texture) / node->bounds.size.width,
-                           gdk_texture_get_height (self->texture) / node->bounds.size.height);
-  cairo_matrix_translate (&matrix, -node->bounds.origin.x, -node->bounds.origin.y);
+                           gdk_texture_get_width (self->texture) / bounds.size.width,
+                           gdk_texture_get_height (self->texture) / bounds.size.height);
+  cairo_matrix_translate (&matrix, -bounds.origin.x, -bounds.origin.y);
   cairo_pattern_set_matrix (pattern, &matrix);
   cairo_pattern_set_filter (pattern, filters[self->filter]);
 
@@ -101,7 +105,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
 
-  gdk_cairo_rect (cr2, &node->bounds);
+  gdk_cairo_rect (cr2, &bounds);
   cairo_fill (cr2);
 
   cairo_destroy (cr2);
@@ -127,6 +131,7 @@ gsk_texture_scale_node_diff (GskRenderNode *node1,
   cairo_region_t *sub;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       self1->filter != self2->filter ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
@@ -164,7 +169,7 @@ gsk_texture_scale_node_replay (GskRenderNode   *node,
       return gsk_render_node_ref (node);
     }
 
-  result = gsk_texture_scale_node_new (texture, &node->bounds, self->filter);
+  result = gsk_texture_scale_node_new2 (texture, &node->bounds, self->snap, self->filter);
   g_object_unref (texture);
 
   return result;
@@ -223,6 +228,77 @@ gsk_texture_scale_node_get_filter (const GskRenderNode *node)
 }
 
 /**
+ * gsk_texture_scale_node_get_snap:
+ * @node: (type GskTextureScaleNode): a `GskRenderNode` of type %GSK_TEXTURE_SCALE_NODE
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_texture_scale_node_get_snap (const GskRenderNode *node)
+{
+  const GskTextureScaleNode *self = (const GskTextureScaleNode *) node;
+
+  return self->snap;
+}
+
+/**
+ * gsk_texture_scale_node_new:
+ * @texture: the texture to scale
+ * @bounds: the size of the texture to scale to
+ * @snap: how to snap the texture to the pixel grid
+ * @filter: how to scale the texture
+ *
+ * Creates a node that scales the texture to the size given by the
+ * bounds using the filter and then places it at the bounds' position.
+ *
+ * Note that further scaling and other transformations which are
+ * applied to the node will apply linear filtering to the resulting
+ * texture, as usual.
+ *
+ * This node is intended for tight control over scaling applied
+ * to a texture, such as in image editors and requires the
+ * application to be aware of the whole render tree as further
+ * transforms may be applied that conflict with the desired effect
+ * of this node.
+ *
+ * Returns: (transfer full) (type GskTextureScaleNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_texture_scale_node_new2 (GdkTexture            *texture,
+                             const graphene_rect_t *bounds,
+                             GskRectSnap            snap,
+                             GskScalingFilter       filter)
+{
+  GskTextureScaleNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+  g_return_val_if_fail (bounds != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_TYPE_TEXTURE_SCALE_NODE);
+  node = (GskRenderNode *) self;
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) &&
+    gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
+    bounds->size.width == floor (bounds->size.width) &&
+    bounds->size.height == floor (bounds->size.height);
+  node->is_hdr = gdk_color_state_is_hdr (gdk_texture_get_color_state (texture));
+
+  self->snap = snap;
+  self->texture = g_object_ref (texture);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_normalize (&node->bounds);
+  self->filter = filter;
+
+  node->preferred_depth = gdk_texture_get_depth (texture);
+
+  return node;
+}
+
+/**
  * gsk_texture_scale_node_new:
  * @texture: the texture to scale
  * @bounds: the size of the texture to scale to
@@ -250,25 +326,8 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
                             const graphene_rect_t *bounds,
                             GskScalingFilter       filter)
 {
-  GskTextureScaleNode *self;
-  GskRenderNode *node;
-
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  self = gsk_render_node_alloc (GSK_TYPE_TEXTURE_SCALE_NODE);
-  node = (GskRenderNode *) self;
-  node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
-    bounds->size.width == floor (bounds->size.width) &&
-    bounds->size.height == floor (bounds->size.height);
-  node->is_hdr = gdk_color_state_is_hdr (gdk_texture_get_color_state (texture));
-
-  self->texture = g_object_ref (texture);
-  gsk_rect_init_from_rect (&node->bounds, bounds);
-  gsk_rect_normalize (&node->bounds);
-  self->filter = filter;
-
-  node->preferred_depth = gdk_texture_get_depth (texture);
-
-  return node;
+  return gsk_texture_scale_node_new2 (texture, bounds, GSK_RECT_SNAP_NONE, filter);
 }
