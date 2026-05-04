@@ -4233,7 +4233,8 @@ gdk_wayland_seat_grab (GdkSeat    *seat,
 }
 
 static void
-gdk_wayland_seat_ungrab (GdkSeat *seat)
+gdk_wayland_seat_ungrab (GdkSeat    *seat,
+                         GdkSurface *surface)
 {
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GdkDisplay *display = gdk_seat_get_display (seat);

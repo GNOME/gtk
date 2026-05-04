@@ -86,9 +86,9 @@ rect_anchor_to_anchor (GdkGravity rect_anchor)
       return XDG_POSITIONER_ANCHOR_BOTTOM;
     case GDK_GRAVITY_SOUTH_EAST:
       return XDG_POSITIONER_ANCHOR_BOTTOM_RIGHT;
-    default: 
+    default:
       g_assert_not_reached ();
-    } 
+    }
 }
 
 static enum xdg_positioner_gravity
@@ -289,7 +289,7 @@ gdk_wayland_popup_hide_surface (GdkWaylandSurface *wayland_surface)
   if (popup->display_server.xdg_popup && surface->autohide)
     {
       GdkSeat *seat = gdk_display_get_default_seat (display);
-      gdk_seat_ungrab (seat);
+      gdk_seat_ungrab (seat, surface);
     }
 
   g_clear_pointer (&popup->display_server.xdg_popup, xdg_popup_destroy);

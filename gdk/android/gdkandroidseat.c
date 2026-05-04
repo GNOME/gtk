@@ -154,7 +154,8 @@ failure:
 }
 
 static void
-gdk_android_seat_ungrab (GdkSeat *seat)
+gdk_android_seat_ungrab (GdkSeat    *seat,
+                         GdkSurface *surface)
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
 

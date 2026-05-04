@@ -44,7 +44,8 @@ struct _GdkSeatClass
   GdkGrabStatus (* grab) (GdkSeat    *seat,
                           GdkSurface *surface);
 
-  void (* ungrab) (GdkSeat *seat);
+  void (* ungrab) (GdkSeat    *seat,
+                   GdkSurface *surface);
 
   GdkDevice * (* get_logical_device) (GdkSeat             *seat,
                                       GdkSeatCapabilities  capability);
@@ -72,4 +73,5 @@ GdkDeviceTool *
 
 GdkGrabStatus  gdk_seat_grab             (GdkSeat    *seat,
                                           GdkSurface *surface);
-void           gdk_seat_ungrab           (GdkSeat    *seat);
+void           gdk_seat_ungrab           (GdkSeat    *seat,
+                                          GdkSurface *surface);

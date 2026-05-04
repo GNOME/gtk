@@ -200,7 +200,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   if (self->popup_grab)
     {
       seat = gdk_display_get_default_seat (surface->display);
-      gdk_seat_ungrab (seat);
+      gdk_seat_ungrab (seat, surface);
       self->popup_grab = FALSE;
     }
 

@@ -148,7 +148,8 @@ gdk_macos_seat_grab (GdkSeat    *seat,
 }
 
 static void
-gdk_macos_seat_ungrab (GdkSeat *seat)
+gdk_macos_seat_ungrab (GdkSeat    *seat,
+                       GdkSurface *surface)
 {
   GdkMacosSeat *self = GDK_MACOS_SEAT (seat);
 

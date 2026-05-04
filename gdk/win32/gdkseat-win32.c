@@ -122,7 +122,8 @@ gdk_win32_seat_grab (GdkSeat    *seat,
 }
 
 static void
-gdk_win32_seat_ungrab (GdkSeat *seat)
+gdk_win32_seat_ungrab (GdkSeat    *seat,
+                       GdkSurface *surface)
 {
   GdkWin32SeatPrivate *priv;
 

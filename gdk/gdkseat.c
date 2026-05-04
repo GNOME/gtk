@@ -240,14 +240,15 @@ gdk_seat_grab (GdkSeat    *seat,
  * See [method@Gdk.Seat.grab] for more information.
  */
 void
-gdk_seat_ungrab (GdkSeat *seat)
+gdk_seat_ungrab (GdkSeat    *seat,
+                 GdkSurface *surface)
 {
   GdkSeatClass *seat_class;
 
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  seat_class->ungrab (seat);
+  seat_class->ungrab (seat, surface);
 }
 
 /**

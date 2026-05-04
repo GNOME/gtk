@@ -133,7 +133,8 @@ gdk_broadway_seat_grab (GdkSeat    *seat,
 }
 
 static void
-gdk_broadway_seat_ungrab (GdkSeat *seat)
+gdk_broadway_seat_ungrab (GdkSeat    *seat,
+                          GdkSurface *surface)
 {
   GdkBroadwaySeatPrivate *priv;
   GdkDisplay *display = gdk_seat_get_display (seat);

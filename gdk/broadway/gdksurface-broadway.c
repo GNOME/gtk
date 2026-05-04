@@ -450,7 +450,7 @@ gdk_broadway_surface_hide (GdkSurface *surface)
       GdkSeat *seat;
 
       seat = gdk_display_get_default_seat (surface->display);
-      gdk_seat_ungrab (seat);
+      gdk_seat_ungrab (seat, surface);
       impl->popup_grab = FALSE;
     }
 

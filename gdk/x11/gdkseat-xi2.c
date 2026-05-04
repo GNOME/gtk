@@ -44,7 +44,8 @@ static GList *gdk_x11_seat_xi2_get_devices (GdkSeat             *seat,
                                             GdkSeatCapabilities  capabilities);
 static GdkGrabStatus gdk_x11_seat_xi2_grab (GdkSeat    *seat,
                                             GdkSurface *surface);
-static void gdk_x11_seat_xi2_ungrab (GdkSeat *seat);
+static void gdk_x11_seat_xi2_ungrab (GdkSeat    *seat,
+                                     GdkSurface *surface);
 
 static void
 gdk_x11_seat_xi2_dispose (GObject *object)
@@ -346,7 +347,8 @@ gdk_x11_seat_xi2_grab (GdkSeat    *seat,
 }
 
 void
-gdk_x11_seat_xi2_ungrab (GdkSeat *seat)
+gdk_x11_seat_xi2_ungrab (GdkSeat    *seat,
+                         GdkSurface *surface)
 {
   GdkX11SeatXI2 *seat_xi2 = GDK_X11_SEAT_XI2 (seat);
 
