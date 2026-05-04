@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-02-20 00:48+0000\n"
-"PO-Revision-Date: 2026-02-23 23:19+0200\n"
+"POT-Creation-Date: 2026-04-25 00:18+0000\n"
+"PO-Revision-Date: 2026-05-04 22:38+0300\n"
 "Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -2326,7 +2326,7 @@ msgstr "Jau yra failas tokiu pavadinimu"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:654
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6465 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6467 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2683,7 +2683,7 @@ msgstr "Eilučių pabaigos"
 msgid "Unspecified"
 msgstr "Nenurodyta"
 
-#: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
+#: gtk/gtkfontchooserdialog.c:202 gtk/gtkfontchooserdialog.c:205
 msgid "Change Font Features"
 msgstr "Keisti šrifto savybes"
 
@@ -2863,7 +2863,7 @@ msgid "Play"
 msgstr "Groti"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6466
+#: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6468
 msgid "_OK"
 msgstr "_Gerai"
 
@@ -4102,9 +4102,9 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Labiausiai tikėtina priežastis – nepavyko sukurti laikinojo failo."
 
 #. window
-#: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:605
-#: gtk/print/gtkprintoperation-portal.c:674 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:287
+#: gtk/print/gtkprintoperation-portal.c:634
+#: gtk/print/gtkprintoperation-portal.c:703 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Spausdinti"
 
@@ -4491,12 +4491,12 @@ msgstr "Atša_ukti"
 msgid "_Redo"
 msgstr "Paka_rtoti"
 
-#: gtk/gtkwindow.c:6454
+#: gtk/gtkwindow.c:6456
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Ar norite naudoti GTK inspektorių?"
 
-#: gtk/gtkwindow.c:6456
+#: gtk/gtkwindow.c:6458
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4507,7 +4507,7 @@ msgstr ""
 "keisti GTK programos vidurius. Jo naudojimas gali sukelti programai problemų "
 "ar ją nulaužti."
 
-#: gtk/gtkwindow.c:6461
+#: gtk/gtkwindow.c:6463
 msgid "Don’t show this message again"
 msgstr "Daugiau nerodyti šio pranešimo"
 
@@ -4952,15 +4952,18 @@ msgstr "Yra aukščiausio lygio"
 msgid "Child Visible"
 msgstr "Matomas vaikuose"
 
-#: gtk/inspector/misc-info.ui:685
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:686
 msgid "Paintable Size"
 msgstr "Piešimo dydis"
 
-#: gtk/inspector/misc-info.ui:710
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:712
 msgid "Paintable Aspect Ratio"
 msgstr "Piešimo proporcijos"
 
-#: gtk/inspector/misc-info.ui:735
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:738
 msgid "Paintable Flags"
 msgstr "Piešimo požymiai"
 
@@ -5375,7 +5378,7 @@ msgstr "Inspektuoti inspektorių"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
-msgstr "Pažymėti objektas"
+msgstr "Pažymėti objektą"
 
 #: gtk/inspector/window.ui:50 gtk/inspector/window.ui:131
 msgid "Show Details"
@@ -7750,7 +7753,7 @@ msgid "Overwrite existing file"
 msgstr "Perrašyti esamą failą"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:47
-#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:327
+#: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:314
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool-benchmark.c:100
 #: tools/gtk-rendernode-tool-render.c:311
@@ -8021,36 +8024,36 @@ msgstr "Pateikti informaciją apie paveikslėlį."
 msgid "Can only accept a single image file\n"
 msgstr "Galima pateikti tik vieną paveikslėlio failą\n"
 
-#: tools/gtk-image-tool-play.c:321 tools/gtk-image-tool-show.c:118
+#: tools/gtk-image-tool-play.c:308 tools/gtk-image-tool-show.c:118
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "Don't add a titlebar"
 msgstr "Nepridėti pavadinimo juostos"
 
-#: tools/gtk-image-tool-play.c:322 tools/gtk-rendernode-tool-convert.c:97
+#: tools/gtk-image-tool-play.c:309 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
 msgstr "DYDIS"
 
-#: tools/gtk-image-tool-play.c:323
+#: tools/gtk-image-tool-play.c:310
 msgid "Don't run animations"
 msgstr "Nevykdyti animacijų"
 
-#: tools/gtk-image-tool-play.c:324
+#: tools/gtk-image-tool-play.c:311
 msgid "Don't use system resources"
 msgstr "Nenaudoti sistemos išteklių"
 
-#: tools/gtk-image-tool-play.c:325
+#: tools/gtk-image-tool-play.c:312
 msgid "Don't load external resources"
 msgstr "Neįkelti išorinių išteklių"
 
-#: tools/gtk-image-tool-play.c:326
+#: tools/gtk-image-tool-play.c:313
 msgid "Don't allow gpa extensions"
 msgstr "Neleisti gpa plėtinių"
 
-#: tools/gtk-image-tool-play.c:337
+#: tools/gtk-image-tool-play.c:324
 msgid "Show one or more animations."
 msgstr "Rodyti vieną ar daugiau animacijų."
 
-#: tools/gtk-image-tool-play.c:350
+#: tools/gtk-image-tool-play.c:337
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Nenurodytas animacijos failas\n"
