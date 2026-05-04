@@ -206,6 +206,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "css", GTK_DEBUG_CSS, "Information about deprecated CSS features" },
   { "builder", GTK_DEBUG_BUILDER, "Information about deprecated GtkBuilder features" },
   { "session-mgmt", GTK_DEBUG_SESSION, "Information about session saving" },
+  { "snap", GTK_DEBUG_SNAP, "Snap all CSS rendering to the pixel grid" },
 };
 
 /* This checks to see if the process is running suid or sgid

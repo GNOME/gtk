@@ -131,6 +131,7 @@ typedef enum {
   GTK_DEBUG_CSS             = 1 << 20,
   GTK_DEBUG_BUILDER         = 1 << 21,
   GTK_DEBUG_SESSION         = 1 << 22,
+  GTK_DEBUG_SNAP            = 1 << 23,
 } GtkDebugFlags;
 
 /**

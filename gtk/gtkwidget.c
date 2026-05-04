@@ -12104,6 +12104,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   gtk_css_boxes_init (&boxes, widget);
 
   gtk_snapshot_push_collect (snapshot);
+  if (GTK_DEBUG_CHECK (SNAP))
+    gtk_snapshot_set_snap (snapshot, GSK_RECT_SNAP_ROUND);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
@@ -12159,6 +12161,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
       gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
+      if (GTK_DEBUG_CHECK (SNAP))
+        gtk_snapshot_set_snap (snapshot, GSK_RECT_SNAP_NONE);
       klass->snapshot (widget, snapshot);
       gtk_snapshot_pop (snapshot);
     }
