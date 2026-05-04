@@ -1377,7 +1377,7 @@ row_activated (GtkListBox *box, GtkListBoxRow *row)
 
       paintable = GTK_SVG (gtk_image_get_paintable (image));
       if (gtk_svg_get_state (paintable) == 0)
-        gtk_svg_set_state (paintable, 63);
+        gtk_svg_set_state (paintable, 1);
       else
         gtk_svg_set_state (paintable, 0);
     }
@@ -2209,6 +2209,13 @@ builder_add_symbolic (GtkBuilder *builder,
 }
 
 static void
+set_paintable_clock (GtkWidget *window,
+                     GtkSvg    *svg)
+{
+  gtk_svg_set_frame_clock (svg, gtk_widget_get_frame_clock (window));
+}
+
+static void
 activate (GApplication *app)
 {
   GList *list;
@@ -2622,6 +2629,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_object_unref (media_stream);
   g_object_unref (input_stream);
   g_object_unref (file);
+
+  g_signal_connect (window, "map", G_CALLBACK (set_paintable_clock),
+                    gtk_builder_get_object (builder, "view_refresh_paintable"));
+  g_signal_connect (window, "map", G_CALLBACK (set_paintable_clock),
+                    gtk_builder_get_object (builder, "checked_paintable"));
 
   gtk_window_present (window);
 
