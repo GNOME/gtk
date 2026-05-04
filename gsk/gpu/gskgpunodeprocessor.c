@@ -1406,6 +1406,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   GdkColorState *image_cs;
   GskScalingFilter scaling_filter;
   GskGpuSampler sampler;
+  graphene_rect_t bounds;
   gboolean need_mipmap, need_offscreen;
 
   texture = gsk_texture_scale_node_get_texture (node);
@@ -1413,6 +1414,11 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter),
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
   image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &node->bounds,
+                                      gsk_texture_scale_node_get_snap (node),
+                                      &bounds))
+    return;
 
   need_offscreen = image == NULL ||
                    self->modelview != NULL ||
@@ -1446,7 +1452,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
           g_assert_not_reached ();
         }
       /* now intersect with actual node bounds */
-      if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+      if (!gsk_rect_intersection (&clip_bounds, &bounds, &clip_bounds))
         {
           if (image)
             {
@@ -1463,7 +1469,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
                                                           self->ccs,
                                                           &clip_bounds,
                                                           &GRAPHENE_SIZE_INIT (1, 1),
-                                                          &node->bounds,
+                                                          &bounds,
                                                           texture,
                                                           scaling_filter);
         }
@@ -1481,7 +1487,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
                                        offscreen,
                                        self->ccs,
                                        GSK_GPU_SAMPLER_DEFAULT,
-                                       &node->bounds,
+                                       &bounds,
                                        &clip_bounds);
 
       g_object_unref (offscreen);
@@ -1507,8 +1513,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
                                    image,
                                    image_cs,
                                    sampler,
-                                   &node->bounds,
-                                   &node->bounds);
+                                   &bounds,
+                                   &bounds);
 
   gdk_color_state_unref (image_cs);
   g_object_unref (image);

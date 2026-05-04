@@ -378,10 +378,15 @@ replay_texture_scale_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   GdkTexture *texture = gsk_texture_scale_node_get_texture (node);
   GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
+  GskRectSnap snap = gsk_texture_node_get_snap (node);
   graphene_rect_t bounds;
+
   gsk_render_node_get_bounds (node, &bounds);
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
   gtk_snapshot_append_scaled_texture (snapshot, texture, filter, &bounds);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

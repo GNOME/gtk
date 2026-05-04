@@ -66,7 +66,7 @@
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
 #include "gsktexturenodeprivate.h"
-#include "gsktexturescalenode.h"
+#include "gsktexturescalenodeprivate.h"
 #include "gsktransformnode.h"
 #include "gsktransformprivate.h"
 
@@ -3253,10 +3253,12 @@ parse_texture_scale_node (GtkCssParser *parser,
                           Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   GdkTexture *texture = NULL;
   GskScalingFilter filter = GSK_SCALING_FILTER_LINEAR;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "texture", parse_texture, clear_texture, &texture },
     { "filter", parse_scaling_filter, NULL, &filter }
   };
@@ -3267,7 +3269,7 @@ parse_texture_scale_node (GtkCssParser *parser,
   if (texture == NULL)
     texture = create_default_texture ();
 
-  node = gsk_texture_scale_node_new (texture, &bounds, filter);
+  node = gsk_texture_scale_node_new2 (texture, &bounds, snap, filter);
   g_object_unref (texture);
 
   return node;
@@ -6612,6 +6614,7 @@ render_node_print (Printer       *p,
 
         start_node (p, "texture-scale", node_name);
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_texture_scale_node_get_snap (node));
 
         if (filter != GSK_SCALING_FILTER_LINEAR)
           {
