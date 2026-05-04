@@ -1425,6 +1425,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
+        add_snap_row (store, "Snap", gsk_inset_shadow_node_get_snap (node));
 
         add_float_row (store, "Spread", spread);
         add_float_row (store, "Radius", radius);

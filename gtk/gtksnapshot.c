@@ -3597,6 +3597,7 @@ gtk_snapshot_add_inset_shadow (GtkSnapshot            *snapshot,
                                float                   spread,
                                float                   blur_radius)
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, x, y;
@@ -3610,6 +3611,7 @@ gtk_snapshot_add_inset_shadow (GtkSnapshot            *snapshot,
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
   node = gsk_inset_shadow_node_new2 (&real_outline,
+                                     state->props.snap,
                                      color,
                                      &GRAPHENE_POINT_INIT (scale_x * offset->x,
                                                            scale_y * offset->y),
