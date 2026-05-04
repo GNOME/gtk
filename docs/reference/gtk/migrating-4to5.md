@@ -150,15 +150,15 @@ a {
 }
 
 b {
-  color: rgb(from green, r g b / calc(alpha * 0.6));
+  color: rgb(from green r g b / calc(alpha * 0.6));
 }
 
 c {
-  color: hsl(from red, h calc(s * 1.3) calc(l * 1.3));
+  color: hsl(from red h calc(s * 1.3) calc(l * 1.3));
 }
 
 d {
-  color: hsl(from red, h calc(s * 0.7) calc(l * 0.7));
+  color: hsl(from red h calc(s * 0.7) calc(l * 0.7));
 }
 ```
 
