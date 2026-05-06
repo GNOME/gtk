@@ -212,32 +212,20 @@ gsk_border_node_diff (GskRenderNode *node1,
 {
   GskBorderNode *self1 = (GskBorderNode *) node1;
   GskBorderNode *self2 = (GskBorderNode *) node2;
-  gboolean uniform1 = self1->uniform_width && self1->uniform_color;
-  gboolean uniform2 = self2->uniform_width && self2->uniform_color;
 
-  if (uniform1 &&
-      uniform2 &&
+  if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       self1->border_width[0] == self2->border_width[0] &&
-      gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
-      gdk_color_equal (&self1->border_color[0], &self2->border_color[0]))
-    return;
-
-  /* Different uniformity -> diff impossible */
-  if (uniform1 ^ uniform2)
-    {
-      gsk_render_node_diff_impossible (node1, node2, data);
-      return;
-    }
-
-  if (self1->border_width[0] == self2->border_width[0] &&
-      self1->border_width[1] == self2->border_width[1] &&
-      self1->border_width[2] == self2->border_width[2] &&
-      self1->border_width[3] == self2->border_width[3] &&
+      self1->uniform_width == self2->uniform_width &&
+      (self1->uniform_width ||
+       (self1->border_width[1] == self2->border_width[1] &&
+        self1->border_width[2] == self2->border_width[2] &&
+        self1->border_width[3] == self2->border_width[3])) &&
       gdk_color_equal (&self1->border_color[0], &self2->border_color[0]) &&
-      gdk_color_equal (&self1->border_color[1], &self2->border_color[1]) &&
-      gdk_color_equal (&self1->border_color[2], &self2->border_color[2]) &&
-      gdk_color_equal (&self1->border_color[3], &self2->border_color[3]) &&
-      gsk_rounded_rect_equal (&self1->outline, &self2->outline))
+      self1->uniform_color == self2->uniform_color &&
+      (self1->uniform_color ||
+       (gdk_color_equal (&self1->border_color[1], &self2->border_color[1]) &&
+        gdk_color_equal (&self1->border_color[2], &self2->border_color[2]) &&
+        gdk_color_equal (&self1->border_color[3], &self2->border_color[3]))))
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
