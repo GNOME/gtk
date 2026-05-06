@@ -4617,6 +4617,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.text.text = g_string_new ("");
   data.text.collect = FALSE;
   data.num_loaded_elements = 0;
+  data.load_user_style = FALSE;
+  data.lang = NULL;
 
   context = g_markup_parse_context_new (&parser,
                                         G_MARKUP_PREFIX_ERROR_POSITION |
