@@ -96,8 +96,6 @@ gsk_border_node_draw (GskRenderNode *node,
   GskBorderNode *self = (GskBorderNode *) node;
   GskRoundedRect inside;
 
-  cairo_save (cr);
-
   gsk_rounded_rect_init_copy (&inside, &self->outline);
   gsk_rounded_rect_shrink (&inside,
                            self->border_width[0], self->border_width[1],
@@ -202,7 +200,6 @@ gsk_border_node_draw (GskRenderNode *node,
     }
 
   cairo_fill (cr);
-  cairo_restore (cr);
 }
 
 static void
