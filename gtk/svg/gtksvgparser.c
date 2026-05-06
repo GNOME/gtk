@@ -958,16 +958,16 @@ parse_value_animation_attrs (SvgAnimation         *a,
           for (unsigned int i = 0; i < values->len; i++)
             {
               SvgValue *tf = g_ptr_array_index (values, i);
-              TransformType type;
 
-              type = svg_transform_get_primitive (tf, 0, vals);
-
-              if (svg_transform_get_length (tf) != 1 || type != TRANSFORM_TRANSLATE)
+              if (svg_value_is_current (tf) ||
+                  svg_transform_get_length (tf) != 1 ||
+                  svg_transform_get_primitive (tf, 0, vals) != TRANSFORM_TRANSLATE)
                 {
                   gtk_svg_invalid_attribute (data->svg, context, attr_names, NULL,
                                              "Transform is not a translation");
                   g_ptr_array_unref (values);
                   g_array_unref (points);
+                  gsk_path_builder_unref (builder);
                   return FALSE;
                 }
 
