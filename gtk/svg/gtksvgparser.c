@@ -4673,7 +4673,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
           gtk_svg_invalid_reference (self,
                                      "No shape with ID %s (resolving begin or end attribute)",
                                      a->href);
-          svg_animation_free (a);
+          svg_animation_drop_and_free (a);
         }
       else
         {
