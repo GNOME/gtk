@@ -1,0 +1,18 @@
+copy {
+  child: component-transfer {
+    child: clip {
+      clip: 10 10 88 88;
+      child: container {
+        color "node1" {
+          bounds: 2 2 96 96;
+          color: rgb(255,105,180);
+        }
+        "node1";
+        "node1";
+      }
+    }
+    red: gamma(1, 2, 0);
+    green: linear(0.5, 0.2);
+    color-state: srgb-linear;
+  }
+}

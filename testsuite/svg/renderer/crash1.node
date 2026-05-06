@@ -1,0 +1,16 @@
+clip {
+  clip: 0 0 16 16;
+  child: transform {
+    transform: translate(8.16228, 16.3246) rotate(243.435);
+    child: fill {
+      child: color {
+        bounds: 0 0 100 100;
+        color: rgb(255,0,0);
+      }
+      path: "\
+M 0 0\
+L 100 100";
+      fill-rule: winding;
+    }
+  }
+}

@@ -561,7 +561,10 @@ serialize_animation_transform (GString              *s,
   g_string_append (s, "<animateTransform");
   serialize_base_animation_attrs (s, svg, indent, a);
   serialize_value_animation_attrs (s, svg, indent, a);
-  append_string_attr (s, indent, "type", types[svg_transform_get_type (a->frames[0].value, 0)]);
+  if (!svg_value_is_current (a->frames[0].value))
+    append_string_attr (s, indent, "type", types[svg_transform_get_type (a->frames[0].value, 0)]);
+  else if (a->n_frames > 1)
+    append_string_attr (s, indent, "type", types[svg_transform_get_type (a->frames[1].value, 0)]);
   serialize_animation_status (s, svg, indent, a, flags);
   g_string_append (s, "/>");
 }

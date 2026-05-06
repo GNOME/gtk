@@ -75,14 +75,18 @@ svg_filter_ref_initial_value (SvgFilter   *filter,
 {
   if (filter->type == SVG_FILTER_COLOR_MATRIX && attr == SVG_PROPERTY_FE_COLOR_MATRIX_VALUES)
     {
-      switch (svg_enum_get (filter->base[svg_filter_type_get_index (filter->type, SVG_PROPERTY_FE_COLOR_MATRIX_TYPE)]))
-        {
-        case COLOR_MATRIX_TYPE_MATRIX: return svg_numbers_new_identity_matrix ();
-        case COLOR_MATRIX_TYPE_SATURATE: return svg_numbers_new1 (1);
-        case COLOR_MATRIX_TYPE_HUE_ROTATE: return svg_numbers_new1 (0);
-        case COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA: return svg_numbers_new_none ();
-        default: g_assert_not_reached ();
-        }
+      SvgValue *type = svg_filter_get_specified_value (filter, SVG_PROPERTY_FE_COLOR_MATRIX_TYPE);
+      if (type == NULL)
+        return svg_numbers_new_identity_matrix ();
+      else
+        switch (svg_enum_get (type))
+          {
+          case COLOR_MATRIX_TYPE_MATRIX: return svg_numbers_new_identity_matrix ();
+          case COLOR_MATRIX_TYPE_SATURATE: return svg_numbers_new1 (1);
+          case COLOR_MATRIX_TYPE_HUE_ROTATE: return svg_numbers_new1 (0);
+          case COLOR_MATRIX_TYPE_LUMINANCE_TO_ALPHA: return svg_numbers_new_none ();
+          default: g_assert_not_reached ();
+          }
     }
 
   if (filter->type == SVG_FILTER_DROPSHADOW && attr == SVG_PROPERTY_FE_STD_DEV)

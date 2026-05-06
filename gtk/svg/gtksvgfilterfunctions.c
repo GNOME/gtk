@@ -757,8 +757,15 @@ color_matrix_type_get_color_matrix (ColorMatrixType    type,
         float m[16];
         float o[4];
 
+        if (svg_numbers_get_length (values) != 20)
+          {
+            graphene_vec4_init (offset, 0, 0, 0, 0);
+            graphene_matrix_init_identity (matrix);
+            return;
+          }
+
         for (unsigned int j = 0; j < 4; j++)
-          o[j] = svg_numbers_get (values, 5* j + 4, 1);
+          o[j] = svg_numbers_get (values, 5 * j + 4, 1);
 
         graphene_vec4_init_from_float (offset, o);
 
