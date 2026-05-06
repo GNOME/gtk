@@ -1161,6 +1161,9 @@ command_line (GApplication            *app,
   g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
   g_variant_dict_lookup (options, "list", "b", &list);
 
+  if (name || autoquit || list)
+    g_object_set (app, "support-save", FALSE, NULL);
+    
   if (autoquit)
     g_timeout_add_seconds (1, auto_quit, app);
 
