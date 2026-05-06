@@ -43,8 +43,6 @@ svg_animation_init (SvgAnimation  *animation,
   animation->status = ANIMATION_STATUS_INACTIVE;
 
   animation->type = type;
-  animation->begin = NULL;
-  animation->end = NULL;
 
   animation->simple_duration = INDEFINITE;
   animation->repeat_count = REPEAT_FOREVER;
