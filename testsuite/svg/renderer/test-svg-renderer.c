@@ -618,7 +618,11 @@ main (int argc, char **argv)
 
       render_svg_file (&data);
 
+      clear_test_data (&data);
+
       g_object_unref (file);
+
+      g_free (generate);
 
       return 0;
     }
