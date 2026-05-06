@@ -25,6 +25,7 @@ test_data = [
   'conditional.svg',
   'crash-circular-use.svg',
   'crash1.svg',
+  'crash2.svg',
   'dashes.svg',
   'ellipse.svg',
   'ellipse2.svg',

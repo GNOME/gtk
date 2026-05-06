@@ -407,7 +407,10 @@ parse_base_animation_attrs (SvgAnimation         *a,
   if (!current_shape)
     current_shape = data->current_shape;
 
-  current_type = svg_element_get_type (current_shape);
+  if (current_shape)
+    current_type = svg_element_get_type (current_shape);
+  else
+    current_type = 0;
 
   if (begin_attr)
     {
