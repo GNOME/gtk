@@ -286,6 +286,7 @@ gtk_drag_source_begin (GtkGesture       *gesture,
   GdkEventSequence *current;
 
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  g_clear_handle_id (&source->timeout_id, g_source_remove);
   source->timeout_id = g_timeout_add (MIN_TIME_TO_DND, drag_timeout, source);
 
   gtk_gesture_get_point (gesture, current, &source->start_x, &source->start_y);
