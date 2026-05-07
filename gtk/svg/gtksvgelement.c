@@ -242,6 +242,12 @@ svg_element_conditionally_excluded (SvgElement *element,
 
 /* }}} */
 
+static gboolean
+auto_or_unset (SvgValue *value)
+{
+  return svg_value_is_auto (value) || svg_value_is_unset (value);
+}
+
 static void
 resolve_rx (SvgElement            *element,
             const graphene_rect_t *viewport,
@@ -258,9 +264,9 @@ resolve_rx (SvgElement            *element,
 
   if (element->type == SVG_ELEMENT_ELLIPSE)
     {
-      if (svg_value_is_auto (values[SVG_PROPERTY_RX]))
+      if (auto_or_unset (values[SVG_PROPERTY_RX]))
         {
-          if (svg_value_is_auto (values[SVG_PROPERTY_RY]))
+          if (auto_or_unset (values[SVG_PROPERTY_RY]))
             *ry = 0;
           else
             *ry = svg_number_get (values[SVG_PROPERTY_RY], viewport->size.height);
@@ -277,17 +283,17 @@ resolve_rx (SvgElement            *element,
     }
   else if (element->type == SVG_ELEMENT_RECT)
     {
-      if (svg_value_is_auto (values[SVG_PROPERTY_RX]) &&
-         svg_value_is_auto (values[SVG_PROPERTY_RY]))
+      if (auto_or_unset (values[SVG_PROPERTY_RX]) &&
+          auto_or_unset (values[SVG_PROPERTY_RY]))
         {
           *rx = *ry = 0;
         }
-      else if (svg_value_is_auto (values[SVG_PROPERTY_RY]))
+      else if (auto_or_unset (values[SVG_PROPERTY_RY]))
         {
           *rx = svg_number_get (values[SVG_PROPERTY_RX], viewport->size.width);
           *ry = *rx;
         }
-      else if (svg_value_is_auto (values[SVG_PROPERTY_RX]))
+      else if (auto_or_unset (values[SVG_PROPERTY_RX]))
         {
           *ry = svg_number_get (values[SVG_PROPERTY_RY], viewport->size.height);
           *rx = *ry;
