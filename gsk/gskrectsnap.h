@@ -60,6 +60,8 @@ G_STATIC_ASSERT (GSK_RECT_SNAP_NONE == GSK_RECT_SNAP_INIT (GSK_SNAP_NONE, GSK_SN
  *
  * This is useful to avoid seams but can lead to overlap with adjacent content.
  *
+ * ![Snap by growing](snap-grow.svg)
+ *
  * Since: 4.24
  */
 #define GSK_RECT_SNAP_GROW 0x01020201
@@ -73,6 +75,8 @@ G_STATIC_ASSERT (GSK_RECT_SNAP_GROW == GSK_RECT_SNAP_INIT (GSK_SNAP_FLOOR, GSK_S
  * This is useful to make sure the rectangle fits into the allocated area and does not overlap content
  * that is not snapped.
  *
+ * ![Snap by shrinking](snap-shrink.svg)
+ *
  * Since: 4.24
  */
 #define GSK_RECT_SNAP_SHRINK 0x02010102
@@ -85,6 +89,8 @@ G_STATIC_ASSERT (GSK_RECT_SNAP_SHRINK == GSK_RECT_SNAP_INIT (GSK_SNAP_CEIL, GSK_
  *
  * This is useful when multiple rectangles are placed next to each other at the same coordinate, and they should
  * do so without any seams.
+ *
+ * ![Snap by rounding](snap-round.svg)
  *
  * Since: 4.24
  */
