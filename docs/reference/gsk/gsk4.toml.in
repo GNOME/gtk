@@ -76,6 +76,9 @@ content_images = [
   "images/gamma-dark.png",
   "images/linear-light.png",
   "images/linear-dark.png",
+  "images/snap-grow.svg",
+  "images/snap-shrink.svg",
+  "images/snap-round.svg",
 ]
 content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gsk/"
 urlmap_file = "urlmap.js"
