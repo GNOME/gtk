@@ -82,7 +82,6 @@ typedef struct _GtkIMContextAndroid
 {
   GtkIMContextSimple parent;
   jobject context;
-  GdkSurface *client_surface;
   GtkWidget *client_widget;
   gboolean focused;
   GtkInputPurpose input_purpose;
@@ -336,19 +335,33 @@ gdk_im_context_android_finalize (GObject *object)
   (*env)->DeleteGlobalRef (env, self->context);
   if (self->preedit)
     (*env)->DeleteGlobalRef (env, self->preedit);
+  g_clear_weak_pointer (&self->client_widget);
   G_OBJECT_CLASS(gtk_im_context_android_parent_class)->finalize (object);
+}
+
+static GdkAndroidSurface *
+gtk_im_context_android_get_surface (GtkIMContextAndroid *self)
+{
+  GtkNative *native;
+
+  if (!self->client_widget)
+    return NULL;
+
+  native = gtk_widget_get_native (self->client_widget);
+  if (!native)
+    return NULL;
+
+  return GDK_ANDROID_SURFACE (gtk_native_get_surface (native));
 }
 
 static void
 gtk_im_context_android_update_ime_keyboard (GtkIMContextAndroid *self)
 {
-  if (!GDK_IS_ANDROID_SURFACE (self->client_surface))
-    return;
-  GdkAndroidSurface *surface = (GdkAndroidSurface *)self->client_surface;
-  if (surface->surface == NULL)
+  GdkAndroidSurface *surface = gtk_im_context_android_get_surface (self);
+  if (!surface || !surface->surface)
     return;
 
-  JNIEnv *env = gdk_android_display_get_env (gdk_surface_get_display (self->client_surface));
+  JNIEnv *env = gdk_android_display_get_env (gdk_surface_get_display ((GdkSurface *)surface));
   (*env)->CallVoidMethod (env, surface->surface,
                           gdk_android_get_java_cache ()->surface.set_active_im_context,
                           self->context);
@@ -363,19 +376,14 @@ gtk_im_context_android_set_client_widget (GtkIMContext *context,
 {
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
 
-  GTK_DEBUG (MODULES, "gtk_im_context_android_set_client_surface: %p", widget);
+  GTK_DEBUG (MODULES, "gtk_im_context_android_set_client_widget: %p", widget);
 
+  g_clear_weak_pointer (&self->client_widget);
   self->client_widget = widget;
-  self->client_surface = NULL;
-
   if (widget != NULL)
     {
-      GtkNative *native = gtk_widget_get_native (widget);
-      if (native != NULL)
-        {
-          self->client_surface = gtk_native_get_surface (native);
-          gtk_im_context_android_update_ime_keyboard (self);
-        }
+      g_object_add_weak_pointer ((GObject *)self->client_widget, (gpointer *)&self->client_widget);
+      gtk_im_context_android_update_ime_keyboard (self);
     }
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->set_client_widget)
@@ -422,6 +430,7 @@ static void
 gtk_im_context_android_reset (GtkIMContext *context)
 {
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
+  GdkAndroidSurface *surface = gtk_im_context_android_get_surface (self);
   JNIEnv *env = gdk_android_get_env ();
   (*env)->PushLocalFrame (env, 1);
 
@@ -433,13 +442,11 @@ gtk_im_context_android_reset (GtkIMContext *context)
       g_signal_emit_by_name (self, "preedit-end");
     }
 
-  if (GDK_IS_ANDROID_SURFACE (self->client_surface))
+  if (surface && surface->surface)
     {
-      GdkAndroidSurface *surface = (GdkAndroidSurface *)self->client_surface;
-      if (surface->surface)
-        (*env)->CallStaticVoidMethod (env, gtk_im_context_android_java_cache.class,
-                                  gtk_im_context_android_java_cache.reset,
-                                  surface->surface);
+      (*env)->CallStaticVoidMethod (env, gtk_im_context_android_java_cache.class,
+                                    gtk_im_context_android_java_cache.reset,
+                                    surface->surface);
     }
   (*env)->PopLocalFrame (env, NULL);
   GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->reset (context);
