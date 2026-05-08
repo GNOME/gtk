@@ -38,6 +38,7 @@
 #include "gtk/svg/gtksvgclipprivate.h"
 #include "gtk/svg/gtksvgmaskprivate.h"
 #include "gtk/svg/gtksvgelementprivate.h"
+#include "gtk/svg/gtksvgkeywordprivate.h"
 
 struct _ShapeEditor
 {
@@ -1469,10 +1470,16 @@ shape_editor_update (ShapeEditor *self)
             number_editor_set (self->ellipse_cy, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
             value = ref_value (self->shape, SVG_PROPERTY_RX);
-            number_editor_set (self->ellipse_rx, svg_number_get (value, 100), svg_number_get_unit (value));
+            if (svg_value_is_auto (value))
+              number_editor_set (self->ellipse_rx, 0, SVG_UNIT_PX);
+            else
+              number_editor_set (self->ellipse_rx, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
             value = ref_value (self->shape, SVG_PROPERTY_RY);
-            number_editor_set (self->ellipse_ry, svg_number_get (value, 100), svg_number_get_unit (value));
+            if (svg_value_is_auto (value))
+              number_editor_set (self->ellipse_ry, 0, SVG_UNIT_PX);
+            else
+              number_editor_set (self->ellipse_ry, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
           }
           break;
@@ -1492,10 +1499,16 @@ shape_editor_update (ShapeEditor *self)
             number_editor_set (self->rect_height, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
             value = ref_value (self->shape, SVG_PROPERTY_RX);
-            number_editor_set (self->rect_rx, svg_number_get (value, 100), svg_number_get_unit (value));
+            if (svg_value_is_auto (value))
+              number_editor_set (self->rect_rx, 0, SVG_UNIT_PX);
+            else
+              number_editor_set (self->rect_rx, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
             value = ref_value (self->shape, SVG_PROPERTY_RY);
-            number_editor_set (self->rect_ry, svg_number_get (value, 100), svg_number_get_unit (value));
+            if (svg_value_is_auto (value))
+              number_editor_set (self->rect_rx, 0, SVG_UNIT_PX);
+            else
+              number_editor_set (self->rect_ry, svg_number_get (value, 100), svg_number_get_unit (value));
             svg_value_unref (value);
           }
           break;
