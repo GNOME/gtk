@@ -22,6 +22,7 @@ gsk_private_gpu_shaders = files([
   'gskgpucolormatrix.glsl',
   'gskgpucomponenttransfer.glsl',
   'gskgpucomposite.glsl',
+  'gskgpucompositefetch.glsl',
   'gskgpuconicgradient.glsl',
   'gskgpuconvert.glsl',
   'gskgpuconvertbuiltin.glsl',
@@ -138,4 +139,3 @@ foreach shader: gsk_private_gpu_shaders
     endforeach
   endif
 endforeach
-

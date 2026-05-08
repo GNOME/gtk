@@ -165,5 +165,5 @@ typedef enum {
   GSK_GPU_OPTIMIZE_DUAL_BLEND           = 1 <<  8,
   GSK_GPU_OPTIMIZE_DAMAGE               = 1 <<  9,
   GSK_GPU_OPTIMIZE_PROFILE              = 1 << 10,
+  GSK_GPU_OPTIMIZE_FRAMEBUFFER_FETCH    = 1 << 11,
 } GskGpuOptimizations;
-

@@ -35,6 +35,9 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "repeat",    GSK_GPU_OPTIMIZE_REPEAT,            "Repeat drawing operations instead of using offscreen and GL_REPEAT" },
   { "damage",    GSK_GPU_OPTIMIZE_DAMAGE,            "Redraw the whole bounding box instead of doing fine grained damage tracking" },
   { "profile",   GSK_GPU_OPTIMIZE_PROFILE,           "Disable profiling support" },
+  { "framebuffer-fetch",
+    GSK_GPU_OPTIMIZE_FRAMEBUFFER_FETCH,
+    "Use framebuffer fetch for Porter-Duff compositing when available" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;

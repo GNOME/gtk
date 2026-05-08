@@ -55,7 +55,11 @@ for demo_file in in_files:
         title = f.readline().replace("/*", "").strip()
         keywords = set()
         line = f.readline().strip();
-        while not line.endswith('*/'):
+        while True:
+            if line == "":
+                raise RuntimeError(f"{demo_file}: missing closing '*/' in demo header")
+            if line.endswith('*/'):
+                break
             if line.startswith("* #Keywords:"):
                 keywords = keywords.union(set(map(wordify, line.replace ("* #Keywords:", "").strip().split(","))))
             else:

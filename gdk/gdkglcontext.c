@@ -109,6 +109,7 @@ const GdkDebugKey gdk_gl_feature_keys[] = {
   { "external-objects", GDK_GL_FEATURE_EXTERNAL_OBJECTS, "GL_EXT_memory_object and GL_EXT_semaphore"},
   { "external-objects-win32", GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32, "GL_EXT_memory_object_win32 and GL_EXT_semaphore_win32" },
   { "blend-func-extended", GDK_GL_FEATURE_BLEND_FUNC_EXTENDED, "GL_EXT_blend_func_extended" },
+  { "shader-framebuffer-fetch", GDK_GL_FEATURE_SHADER_FRAMEBUFFER_FETCH, "GL_EXT_shader_framebuffer_fetch or GL_APPLE_shader_framebuffer_fetch" },
 };
 
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
@@ -1820,6 +1821,10 @@ gdk_gl_context_check_features (GdkGLContext *context)
       epoxy_has_gl_extension ("GL_EXT_blend_func_extended"))
     features |= GDK_GL_FEATURE_BLEND_FUNC_EXTENDED;
 
+  if (epoxy_has_gl_extension ("GL_EXT_shader_framebuffer_fetch") ||
+      epoxy_has_gl_extension ("GL_APPLE_shader_framebuffer_fetch"))
+    features |= GDK_GL_FEATURE_SHADER_FRAMEBUFFER_FETCH;
+
   return features;
 }
 
@@ -2705,4 +2710,3 @@ gdk_gl_context_download (GdkGLContext          *self,
       glDeleteFramebuffers (1, &fbo);
     }
 }
-

@@ -231,6 +231,7 @@
     <file>builder.c</file>
     <file>clipboard.c</file>
     <file>combobox.c</file>
+    <file>composite_stress.c</file>
     <file>constraints.c</file>
     <file>constraints_interactive.c</file>
     <file>constraints_vfl.c</file>

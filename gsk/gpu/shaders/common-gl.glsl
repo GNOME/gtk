@@ -106,7 +106,11 @@ gsk_texture_straight_alpha (samplerExternalOES tex,
 }
 #endif
 
+#ifdef GSK_FRAMEBUFFER_FETCH
+layout(location = 0) inout vec4 out_color;
+#else
 layout(location = 0) out vec4 out_color;
+#endif
 void
 gsk_set_output_color (vec4 color)
 {

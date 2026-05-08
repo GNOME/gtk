@@ -104,6 +104,7 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
   *supported = -1;
   if (!(display->vulkan_features & GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND))
     *supported &= ~GSK_GPU_OPTIMIZE_DUAL_BLEND;
+  *supported &= ~GSK_GPU_OPTIMIZE_FRAMEBUFFER_FETCH;
   if (!(display->vulkan_features & GDK_VULKAN_FEATURE_PROFILE))
     *supported &= ~GSK_GPU_OPTIMIZE_PROFILE;
 

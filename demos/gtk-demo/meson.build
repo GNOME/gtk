@@ -7,6 +7,7 @@ demos = files([
   'builder.c',
   'clipboard.c',
   'combobox.c',
+  'composite_stress.c',
   'constraints.c',
   'constraints_interactive.c',
   'constraints_vfl.c',

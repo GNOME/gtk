@@ -19,6 +19,7 @@
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucomponenttransferopprivate.h"
 #include "gskgpucompositeopprivate.h"
+#include "gskgpucompositefetchopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
 #include "gskgpuconvertbuiltinopprivate.h"
@@ -3172,6 +3173,19 @@ gsk_gpu_porter_duff_needs_dual_blend (GskPorterDuff op)
   }
 }
 
+static gboolean
+gsk_gpu_porter_duff_can_use_framebuffer_fetch (GskGpuRenderPass *self,
+                                               GskPorterDuff     op)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (!gsk_gpu_frame_should_optimize (self->frame,
+                                      GSK_GPU_OPTIMIZE_FRAMEBUFFER_FETCH))
+    return FALSE;
+
+  return gsk_gpu_porter_duff_needs_dual_blend (op);
+}
+
 static GskGpuBlend
 gsk_gpu_blend_for_porter_duff (GskPorterDuff op)
 {
@@ -3214,6 +3228,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
   graphene_rect_t bounds, mask_rect;
   GskPorterDuff op;
   GskGpuRenderPassBlendStorage storage;
+  gboolean use_fetch;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
     return;
@@ -3225,10 +3240,6 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
   if (op == GSK_PORTER_DUFF_DEST)
     return;
   
-  gsk_gpu_render_pass_push_blend (self,
-                                  gsk_gpu_blend_for_porter_duff (op),
-                                  &storage);
-
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                          0,
                                                          &bounds,
@@ -3237,6 +3248,12 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                                                          &mask_rect);
   if (mask_image == NULL)
     return;
+
+  use_fetch = gsk_gpu_porter_duff_can_use_framebuffer_fetch (self, op);
+  if (!use_fetch)
+    gsk_gpu_render_pass_push_blend (self,
+                                    gsk_gpu_blend_for_porter_duff (op),
+                                    &storage);
 
   if (op == GSK_PORTER_DUFF_CLEAR)
     {
@@ -3293,6 +3310,19 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                            &child_rect,
                            &mask_rect);
         }
+      else if (use_fetch)
+        {
+          gsk_gpu_composite_fetch_op (self,
+                                      self->ccs,
+                                      &bounds,
+                                      child_image,
+                                      GSK_GPU_SAMPLER_DEFAULT,
+                                      mask_image,
+                                      GSK_GPU_SAMPLER_DEFAULT,
+                                      op,
+                                      &child_rect,
+                                      &mask_rect);
+        }
       else if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_DUAL_BLEND))
         {
           gsk_gpu_composite_op (self,
@@ -3345,7 +3375,8 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
 
   g_object_unref (mask_image);
 
-  gsk_gpu_render_pass_pop_blend (self, &storage);
+  if (!use_fetch)
+    gsk_gpu_render_pass_pop_blend (self, &storage);
 }
 
 static void
@@ -4012,4 +4043,3 @@ gsk_container_node_occlusion (GskRenderNode   *node,
 
   return result;
 }
-
