@@ -756,7 +756,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    */
   pspecs[PROP_APPLICATION_PREFER_DARK_THEME] = g_param_spec_boolean ("gtk-application-prefer-dark-theme", NULL, NULL,
                                                                      FALSE,
-                                                                     GTK_PARAM_READWRITE);
+                                                                     GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
 
   /**
    * GtkSettings:gtk-entry-select-on-focus:
@@ -1281,6 +1281,16 @@ gtk_settings_set_property (GObject      *object,
 
   g_value_copy (value, &settings->property_values[property_id - 1].value);
   settings->property_values[property_id - 1].source = GTK_SETTINGS_SOURCE_APPLICATION;
+
+  if (property_id == PROP_APPLICATION_PREFER_DARK_THEME)
+    {
+      g_warning ("Use GtkSettings:gtk-interface-color-scheme instead");
+      g_value_set_enum (&settings->property_values[PROP_INTERFACE_COLOR_SCHEME - 1].value,
+                        g_value_get_boolean (value) ? GTK_INTERFACE_COLOR_SCHEME_DARK
+                                                    : GTK_INTERFACE_COLOR_SCHEME_LIGHT);
+      settings->property_values[PROP_INTERFACE_COLOR_SCHEME - 1].source = GTK_SETTINGS_SOURCE_APPLICATION;
+      g_object_notify_by_pspec (object, pspecs[PROP_INTERFACE_COLOR_SCHEME]);
+    }
 }
 
 static void
@@ -1658,6 +1668,7 @@ get_theme_name (GtkSettings  *settings,
                 char        **theme_variant)
 {
   GtkInterfaceContrast prefers_contrast;
+  GtkInterfaceColorScheme prefers_color_scheme;
   gboolean prefer_dark;
 
   *theme_name = NULL;
@@ -1686,12 +1697,15 @@ get_theme_name (GtkSettings  *settings,
 
   g_free (*theme_name);
 
-  g_object_get (settings,
-                "gtk-theme-name", theme_name,
-                "gtk-application-prefer-dark-theme", &prefer_dark,
+  g_object_get (settings, "gtk-theme-name", theme_name, NULL);
+
+  g_object_get (settings->theme_provider,
+                "prefers-contrast", &prefers_contrast,
+                "prefers-color-scheme", &prefers_color_scheme,
                 NULL);
 
-  g_object_get (settings->theme_provider, "prefers-contrast", &prefers_contrast, NULL);
+  prefer_dark = prefers_color_scheme == GTK_INTERFACE_COLOR_SCHEME_DARK;
+
   if (prefers_contrast == GTK_INTERFACE_CONTRAST_MORE)
     {
       if (prefer_dark)
