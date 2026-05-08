@@ -1011,16 +1011,50 @@ gsk_gpu_node_processor_add_border_node (GskGpuRenderPass *self,
   GdkColorState *acs;
   const GdkColor *colors;
   graphene_vec4_t widths;
+  GskRoundedRect outside;
+  GskRectSnap border_snap;
 
+  outside = *gsk_border_node_get_outline (node);
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &outside.bounds,
+                                      gsk_border_node_get_snap (node),
+                                      &outside.bounds))
+    return;
   colors = gsk_border_node_get_gdk_colors (node);
   acs = gsk_gpu_color_states_find (self->ccs, &colors[0]);
-  graphene_vec4_init_from_float (&widths, gsk_border_node_get_widths (node));
+  border_snap = gsk_border_node_get_border_snap (node);
+  if (border_snap == GSK_RECT_SNAP_NONE)
+    {
+      graphene_vec4_init_from_float (&widths, gsk_border_node_get_widths (node));
+    }
+  else
+    {
+      float snapped_widths[4];
+      const float *w;
+      GskRoundedRect inside;
+      G_GNUC_UNUSED gboolean ignored;
+  
+      inside = outside;
+      w = gsk_border_node_get_widths (node);
+      gsk_rounded_rect_shrink (&inside, w[0], w[1], w[2], w[3]);
+      ignored = gsk_gpu_render_pass_snap_rect (self,
+                                               &inside.bounds,
+                                               border_snap,
+                                               &inside.bounds);
+      snapped_widths[0] = inside.bounds.origin.y - outside.bounds.origin.y;
+      snapped_widths[1] = outside.bounds.origin.x + outside.bounds.size.width -
+                          inside.bounds.origin.x - inside.bounds.size.width;
+      snapped_widths[1] = outside.bounds.origin.y + outside.bounds.size.height -
+                          inside.bounds.origin.y - inside.bounds.size.height;
+      snapped_widths[3] = inside.bounds.origin.x - outside.bounds.origin.x;
+      graphene_vec4_init_from_float (&widths, snapped_widths);
+    }
 
   gsk_gpu_border_op (self,
                      self->ccs,
                      acs,
                      &node->bounds,
-                     gsk_border_node_get_outline (node),
+                     &outside,
                      &colors[0],
                      &colors[1],
                      &colors[2],

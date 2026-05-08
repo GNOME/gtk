@@ -71,6 +71,7 @@ void                    gtk_snapshot_add_color                  (GtkSnapshot    
 void                    gtk_snapshot_add_border                 (GtkSnapshot            *snapshot,
                                                                  const GskRoundedRect   *outline,
                                                                  const float             border_width[4],
+                                                                 GskRectSnap             border_snap,
                                                                  const GdkColor          border_color[4]);
 
 void                    gtk_snapshot_add_inset_shadow           (GtkSnapshot            *snapshot,

@@ -198,11 +198,13 @@ Creates a node like `gsk_blur_node_new()` with the given properties.
 
 ### border
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| colors   | `<color>{1,4}`   | black                  | non-default |
-| outline  | `<rounded-rect>` | 50                     | always      |
-| widths   | `<number>{1,4}`  | 1                      | non-default |
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| colors      | `<color>{1,4}`   | black                  | non-default |
+| outline     | `<rounded-rect>` | 50                     | always      |
+| snap        | `<snap>`         | none                   | non-default |
+| border-snap | `<snap>`         | none                   | non-default |
+| widths      | `<number>{1,4}`  | 1                      | non-default |
 
 Creates a node like `gsk_border_node_new()` with the given properties.
 

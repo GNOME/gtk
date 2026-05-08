@@ -1286,6 +1286,7 @@ populate_render_node_properties (GListStore            *store,
         const GdkColor *colors = gsk_border_node_get_gdk_colors (node);
         int i;
 
+        add_snap_row (store, "Snap", gsk_border_node_get_snap (node));
         for (i = 0; i < 4; i++)
           {
             GdkTexture *texture;
@@ -1300,6 +1301,7 @@ populate_render_node_properties (GListStore            *store,
             g_free (text);
             g_free (tmp);
           }
+        add_snap_row (store, "Border Snap", gsk_border_node_get_border_snap (node));
       }
       break;
 

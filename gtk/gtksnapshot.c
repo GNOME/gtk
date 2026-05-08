@@ -3497,7 +3497,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   for (int i = 0; i < 4; i++)
     gdk_color_init_from_rgba (&color[i], &border_color[i]);
 
-  gtk_snapshot_add_border (snapshot, outline, border_width, color);
+  gtk_snapshot_add_border (snapshot, outline, border_width, GSK_RECT_SNAP_NONE, color);
 
   for (int i = 0; i < 4; i++)
     gdk_color_finish (&color[i]);
@@ -3509,6 +3509,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
  * @outline: the outline of the border
  * @border_width: (array fixed-size=4): the stroke width of the border on
  *   the top, right, bottom and left side respectively.
+ * @border_snap: how to snap the border to the pixel grid
  * @border_color: (array fixed-size=4): the color used on the top, right,
  *   bottom and left side.
  *
@@ -3520,8 +3521,10 @@ void
 gtk_snapshot_add_border (GtkSnapshot          *snapshot,
                          const GskRoundedRect *outline,
                          const float           border_width[4],
+                         GskRectSnap           border_snap,
                          const GdkColor        border_color[4])
 {
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, dx, dy;
@@ -3535,12 +3538,14 @@ gtk_snapshot_add_border (GtkSnapshot          *snapshot,
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
   node = gsk_border_node_new2 (&real_outline,
+                               state->props.snap,
                                (float[4]) {
                                  border_width[0] * scale_y,
                                  border_width[1] * scale_x,
                                  border_width[2] * scale_y,
                                  border_width[3] * scale_x,
                                },
+                               border_snap,
                                border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
