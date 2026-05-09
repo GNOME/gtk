@@ -17,8 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __GTK_GST_BIN_PRIVATE_H__
-#define __GTK_GST_BIN_PRIVATE_H__
+#pragma once
 
 #include <gio/gio.h>
 #include <gst/gst.h>
@@ -29,5 +28,3 @@ G_DECLARE_FINAL_TYPE (GtkGstBin, gtk_gst_bin, GTK, GST_BIN, GstBin);
 void
 gtk_gst_bin_set_stream (GtkGstBin    *bin,
                         GInputStream *stream);
-
-#endif /* __GTK_GST_BIN_PRIVATE_H__ */
