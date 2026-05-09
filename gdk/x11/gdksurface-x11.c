@@ -4717,7 +4717,7 @@ gdk_x11_get_server_time (GdkSurface *surface)
  *
  * Deprecated: 4.18
  **/
-XID
+Window
 gdk_x11_surface_get_xid (GdkSurface *surface)
 {
   return GDK_X11_SURFACE (surface)->xid;

@@ -1706,7 +1706,7 @@ void
 gsk_path_builder_add_op (GskPathBuilder         *builder,
                          GskPathOperation        op,
                          const graphene_point_t *pts,
-                         size_t                  n_pts,
+                         gsize                   n_pts,
                          float                   weight)
 {
   switch (op)

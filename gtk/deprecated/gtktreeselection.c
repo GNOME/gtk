@@ -1179,7 +1179,7 @@ unselect_all_helper (GtkTreeRBTree *tree,
     }
 }
 
-static gboolean
+static int
 gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;

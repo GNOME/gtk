@@ -425,7 +425,7 @@ static gboolean surface_event             (GdkSurface         *surface,
 static void     after_paint               (GdkFrameClock      *clock,
                                            GtkWindow          *window);
 
-static int gtk_window_focus              (GtkWidget        *widget,
+static gboolean gtk_window_focus          (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);

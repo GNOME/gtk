@@ -299,7 +299,7 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
 
 GdkModifierType
 gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
-                                      guint32    mods)
+                                      uint32_t   mods)
 {
   struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
 

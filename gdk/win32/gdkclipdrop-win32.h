@@ -263,6 +263,6 @@ void     _gdk_win32_advertise_clipboard_contentformats             (GdkClipboard
                                                                     GdkContentFormats           *contentformats);
 
 void     gdk_win32_clipdrop_add_win32_format_to_pairs              (GdkWin32Clipdrop            *clipdrop,
-                                                                    UINT                         format,
+                                                                    UINT                         w32format,
                                                                     GArray                      *array,
                                                                     GdkContentFormatsBuilder    *builder);
