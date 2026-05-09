@@ -32,6 +32,4 @@ typedef struct _GdkAndroidKeymapClass GdkAndroidKeymapClass;
 
 GType gdk_android_keymap_get_type (void);
 
-GdkAndroidKeymap *_gdk_android_keymap_new (void);
-
 G_END_DECLS

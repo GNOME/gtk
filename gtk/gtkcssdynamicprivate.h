@@ -27,8 +27,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCssDynamic           GtkCssDynamic;
 
-GType                   gtk_css_dynamic_get_type        (void) G_GNUC_CONST;
-
 GtkStyleAnimation *     gtk_css_dynamic_new             (gint64 timestamp);
 
 G_END_DECLS

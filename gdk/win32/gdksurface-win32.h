@@ -209,8 +209,6 @@ struct _GdkWin32SurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GType _gdk_win32_surface_get_type (void);
-
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 
 void gdk_win32_surface_move (GdkSurface *surface,

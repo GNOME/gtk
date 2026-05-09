@@ -211,8 +211,6 @@ guint                   gtk_application_impl_inhibit                    (GtkAppl
                                                                          const char                  *reason);
 void                    gtk_application_impl_uninhibit                  (GtkApplicationImpl          *impl,
                                                                          guint                        cookie);
-gboolean                gtk_application_impl_is_inhibited               (GtkApplicationImpl          *impl,
-                                                                         GtkApplicationInhibitFlags   flags);
 
 char *                 gtk_application_impl_dbus_get_window_path       (GtkApplicationImplDBus      *dbus,
                                                                          GtkWindow                   *window);

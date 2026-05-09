@@ -51,7 +51,6 @@ GtkWidget *             gtk_list_header_widget_new              (GtkListItemFact
 
 void                    gtk_list_header_widget_set_factory      (GtkListHeaderWidget    *self,
                                                                  GtkListItemFactory     *factory);
-GtkListItemFactory *    gtk_list_header_widget_get_factory      (GtkListHeaderWidget    *self);
 
 void                    gtk_list_header_widget_set_child        (GtkListHeaderWidget    *self,
                                                                  GtkWidget              *child);

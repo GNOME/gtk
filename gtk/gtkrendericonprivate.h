@@ -39,12 +39,5 @@ void    gtk_css_style_snapshot_icon_paintable   (GtkCssStyle            *style,
                                                  double                  width,
                                                  double                  height);
 
-void    gtk_css_style_render_icon_get_extents   (GtkCssStyle            *style,
-                                                 GdkRectangle           *extents,
-                                                 int                     x,
-                                                 int                     y,
-                                                 int                     width,
-                                                 int                     height);
-
 G_END_DECLS
 

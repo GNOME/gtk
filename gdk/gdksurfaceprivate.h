@@ -347,8 +347,6 @@ void       gdk_surface_apply_state_change  (GdkSurface       *surface);
 
 void           gdk_surface_request_motion (GdkSurface *surface);
 
-gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);
-
 GdkSubsurface * gdk_surface_create_subsurface  (GdkSurface          *surface);
 gsize           gdk_surface_get_n_subsurfaces  (GdkSurface          *surface);
 GdkSubsurface * gdk_surface_get_subsurface     (GdkSurface          *surface,

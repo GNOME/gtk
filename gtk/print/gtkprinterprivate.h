@@ -62,7 +62,6 @@ cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter         
 							     double               width,
 							     double               height,
 							     GIOChannel          *cache_io);
-GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
 
 /* GtkPrintJob private methods: */
 GDK_AVAILABLE_IN_ALL

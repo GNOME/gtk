@@ -154,8 +154,7 @@ gboolean                gdk_memory_format_find_by_gst_video_format  (GstVideoFor
 GstVideoFormat          gdk_memory_format_get_gst_video_format      (GdkMemoryFormat             format);
 #endif
 
-guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
-const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
+const char *            gdk_memory_format_get_name                  (GdkMemoryFormat             format);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              const GdkMemoryLayout      *dest_layout,

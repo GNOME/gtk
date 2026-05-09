@@ -100,7 +100,6 @@ struct _GtkTreeRBNode
 GtkTreeRBTree * gtk_tree_rbtree_new                     (void);
 void            gtk_tree_rbtree_free                    (GtkTreeRBTree                 *tree);
 void            gtk_tree_rbtree_remove                  (GtkTreeRBTree                 *tree);
-void            gtk_tree_rbtree_destroy                 (GtkTreeRBTree                 *tree);
 GtkTreeRBNode * gtk_tree_rbtree_insert_before           (GtkTreeRBTree                 *tree,
                                                          GtkTreeRBNode                 *node,
                                                          int                            height,

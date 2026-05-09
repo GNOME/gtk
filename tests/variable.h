@@ -17,4 +17,3 @@ void   variable_add                (Variable *variable,
                                     double    value);
 double variable_mean               (Variable *variable);
 double variable_standard_deviation (Variable *variable);
-void   variable_reset              (Variable *variable);
