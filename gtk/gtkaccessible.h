@@ -175,7 +175,7 @@ struct _GtkAccessibleInterface
  */
 typedef struct _GtkAccessibleList GtkAccessibleList;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 
 GDK_AVAILABLE_IN_4_10

@@ -1342,6 +1342,8 @@ gsk_shader_args_builder_ref (GskShaderArgsBuilder *builder)
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of float type.
+ *
+ * Deprecated: 4.16
  */
 void
 gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,

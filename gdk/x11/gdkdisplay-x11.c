@@ -1707,6 +1707,8 @@ update_shadow_width (GdkDisplay *display)
  *
  * The X11 backend uses the program class to set the class name part
  * of the `WM_CLASS` property on toplevel windows; see the ICCCM.
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_display_set_program_class (GdkDisplay *display,
@@ -1898,6 +1900,8 @@ gdk_x11_display_flush (GdkDisplay *display)
  *
  * Returns: (transfer none): The default group leader surface
  * for @display
+ *
+ * Deprecated: 4.18
  */
 GdkSurface *
 gdk_x11_display_get_default_group (GdkDisplay *display)
@@ -1936,6 +1940,8 @@ gdk_x11_display_grab (GdkDisplay *display)
  *
  * Ungrab @display after it has been grabbed with
  * gdk_x11_display_grab().
+ *
+ * Deprecated: 4.18
  **/
 void
 gdk_x11_display_ungrab (GdkDisplay *display)
@@ -2033,6 +2039,8 @@ gdk_x11_display_finalize (GObject *object)
  * Find the `GdkDisplay` corresponding to @xdisplay, if any exists.
 *
  * Returns: (transfer none) (type GdkX11Display): the `GdkDisplay`, if found, otherwise %NULL.
+ *
+ * Deprecated: 4.18
  **/
 GdkDisplay *
 gdk_x11_lookup_xdisplay (Display *xdisplay)
@@ -2066,6 +2074,8 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Returns the X display of a `GdkDisplay`.
  *
  * Returns: (transfer none): an X display
+ *
+ * Deprecated: 4.18
  */
 Display *
 gdk_x11_display_get_xdisplay (GdkDisplay *display)
@@ -2082,6 +2092,8 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
  * Returns the X Screen used by `GdkDisplay`.
  *
  * Returns: (transfer none): an X Screen
+ *
+ * Deprecated: 4.18
  */
 Screen *
 gdk_x11_display_get_xscreen (GdkDisplay *display)
@@ -2098,6 +2110,8 @@ gdk_x11_display_get_xscreen (GdkDisplay *display)
  * Returns the root X window used by `GdkDisplay`.
  *
  * Returns: an X Window
+ *
+ * Deprecated: 4.18
  */
 Window
 gdk_x11_display_get_xrootwindow (GdkDisplay *display)
@@ -2227,6 +2241,8 @@ broadcast_xmessage (GdkDisplay *display,
  * not normally need to call it directly. See the
  * [Startup Notification Protocol specification](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt)
  * for definitions of the message types and keys that can be used.
+ *
+ * Deprecated: 4.18
  **/
 void
 gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
@@ -2334,6 +2350,8 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
  * movements. See gdk_x11_surface_set_user_time().
  *
  * Returns: the timestamp of the last user interaction
+ *
+ * Deprecated: 4.18
  */
 guint32
 gdk_x11_display_get_user_time (GdkDisplay *display)
@@ -2560,6 +2578,8 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
  * the application. Use gdk_x11_display_error_trap_pop() or
  * gdk_x11_display_error_trap_pop_ignored()to lift a trap pushed
  * with this function.
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_display_error_trap_push (GdkDisplay *display)
@@ -2668,6 +2688,8 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
  *
  * Once the scale is set by this call it will not change in response
  * to later user configuration changes.
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_display_set_surface_scale (GdkDisplay *display,
@@ -2712,6 +2734,8 @@ gdk_x11_display_set_surface_scale (GdkDisplay *display,
  * gdk_x11_display_error_trap_pop_ignored() would be more efficient.
  *
  * Returns: X error code or 0 on success
+ *
+ * Deprecated: 4.18
  */
 int
 gdk_x11_display_error_trap_pop (GdkDisplay *display)
@@ -2729,6 +2753,8 @@ gdk_x11_display_error_trap_pop (GdkDisplay *display)
  * Does not block to see if an error occurred; merely records the
  * range of requests to ignore errors for, and ignores those errors
  * if they arrive asynchronously.
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
@@ -2749,6 +2775,8 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
  *
  * See the X Session Management Library documentation for more information on
  * session management and the Inter-Client Communication Conventions Manual
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_set_sm_client_id (const char *sm_client_id)
@@ -2789,6 +2817,8 @@ gdk_x11_display_get_max_request_size (GdkDisplay *display)
  * Retrieves the `GdkX11Screen` of the @display.
  *
  * Returns: (transfer none): the `GdkX11Screen`
+ *
+ * Deprecated: 4.18
  */
 GdkX11Screen *
 gdk_x11_display_get_screen (GdkDisplay *display)
@@ -2870,6 +2900,8 @@ gdk_x11_display_get_monitors (GdkDisplay *display)
  *
  * Returns: (transfer none): the primary monitor, or any monitor if no
  *   primary monitor is configured by the user
+ *
+ * Deprecated: 4.18
  */
 GdkMonitor *
 gdk_x11_display_get_primary_monitor (GdkDisplay *display)

@@ -300,6 +300,8 @@ gsk_gl_shader_node_get_child (const GskRenderNode *node,
  * Gets shader code for the node.
  *
  * Returns: (transfer none): the `GskGLShader` shader
+ *
+ * Deprecated: 4.16
  */
 GskGLShader *
 gsk_gl_shader_node_get_shader (const GskRenderNode *node)

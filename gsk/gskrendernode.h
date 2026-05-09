@@ -133,15 +133,15 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
  */
 #define GSK_VALUE_HOLDS_RENDER_NODE(value)       (G_VALUE_HOLDS ((value), GSK_TYPE_RENDER_NODE))
 
-GDK_AVAILABLE_IN_4_4
+GDK_AVAILABLE_IN_4_6
 void                    gsk_value_set_render_node               (GValue                   *value,
                                                                  GskRenderNode            *node);
-GDK_AVAILABLE_IN_4_4
+GDK_AVAILABLE_IN_4_6
 void                    gsk_value_take_render_node              (GValue                   *value,
                                                                  GskRenderNode            *node);
-GDK_AVAILABLE_IN_4_4
+GDK_AVAILABLE_IN_4_6
 GskRenderNode *         gsk_value_get_render_node               (const GValue             *value);
-GDK_AVAILABLE_IN_4_4
+GDK_AVAILABLE_IN_4_6
 GskRenderNode *         gsk_value_dup_render_node               (const GValue             *value);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
