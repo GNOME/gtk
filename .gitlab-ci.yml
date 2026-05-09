@@ -10,6 +10,9 @@ include:
     inputs:
       dist-job-name: "release-build"
       tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
+  - component: "gitlab.gnome.org/GNOME/citemplates/goblint@master"
+    inputs:
+      job-stage: "analysis"
 
 stages:
   - prepare
