@@ -6020,7 +6020,7 @@ main (int argc, char *argv[])
    */
   for (i = 1; i < argc; i++)
     {
-      if (strncmp (argv[i], "--bench", strlen("--bench")) == 0)
+      if (g_str_has_prefix (argv[i], "--bench"))
         {
           int num = 1;
 	  char *nextarg;
