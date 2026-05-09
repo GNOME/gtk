@@ -20,6 +20,7 @@ gtk_svg_public_sources = files([
   'gtksvglanguage.c',
   'gtksvglocation.c',
   'gtksvgmask.c',
+  'gtksvgmediaquery.c',
   'gtksvgnumber.c',
   'gtksvgnumbers.c',
   'gtksvgorient.c',
