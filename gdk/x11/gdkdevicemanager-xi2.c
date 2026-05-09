@@ -602,7 +602,7 @@ ensure_logical_touch_device (gpointer key,
   Display *xdisplay;
   int logical_pointer_id;
   int ndevices;
-  g_autofree char *name = NULL;
+  char *name;
 
   device_manager = user_data;
   physical = g_hash_table_lookup (device_manager->id_table, key);
@@ -631,6 +631,7 @@ ensure_logical_touch_device (gpointer key,
   device_manager->devices = g_list_append (device_manager->devices, logical_touch);
 
   XIFreeDeviceInfo (info);
+  g_free (name);
 }
 
 static void
