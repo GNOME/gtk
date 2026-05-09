@@ -58,6 +58,7 @@ struct _GtkSvg
 {
   GObject parent_instance;
   SvgElement *content;
+  GtkSettings *settings;
 
   double current_width, current_height; /* Last snapshot size */
 

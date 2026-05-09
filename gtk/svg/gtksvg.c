@@ -3308,6 +3308,28 @@ gtk_svg_get_stylesheet (GtkSvg *self)
   return self->stylesheet;
 }
 
+/**
+ * gtk_svg_set_settings:
+ * @self: an SVG paintable
+ * @settings: (nullable): the settings object
+ *
+ * Sets a settings object holding settinsg used when
+ * rendering the SVG.
+ *
+ * Since: 4.24
+ */
+void
+gtk_svg_set_settings (GtkSvg      *self,
+                      GtkSettings *settings)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->settings == settings)
+    return;
+
+  self->settings = settings;
+}
+
 /* }}} */
 /* {{{ Animation */
 

@@ -305,6 +305,7 @@ gtk_svg_widget_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_svg_widget_parent_class)->realize (widget);
 
   gtk_svg_set_frame_clock (self->svg, gtk_widget_get_frame_clock (widget));
+  gtk_svg_set_settings (self->svg, gtk_widget_get_settings (widget));
   gtk_svg_play (self->svg);
 }
 
