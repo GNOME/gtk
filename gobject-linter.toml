@@ -1,0 +1,2 @@
+min_glib_version = "2.84"
+msvc_compatible = true
