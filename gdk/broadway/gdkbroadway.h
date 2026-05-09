@@ -30,7 +30,6 @@
 
 #include <gdk/broadway/gdkbroadwaydisplay.h>
 #include <gdk/broadway/gdkbroadwaysurface.h>
-#include <gdk/broadway/gdkbroadwaycursor.h>
 #include <gdk/broadway/gdkbroadwaymonitor.h>
 
 #undef __GDKBROADWAY_H_INSIDE__

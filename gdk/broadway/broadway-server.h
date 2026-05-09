@@ -57,7 +57,6 @@ BroadwayServer     *broadway_server_on_unix_socket_new        (char            *
                                                                GError         **error);
 gboolean            broadway_server_has_client                (BroadwayServer  *server);
 void                broadway_server_flush                     (BroadwayServer  *server);
-void                broadway_server_sync                      (BroadwayServer  *server);
 void                broadway_server_roundtrip                 (BroadwayServer  *server,
                                                                int              id,
                                                                guint32          tag);
@@ -82,7 +81,6 @@ guint32             broadway_server_grab_pointer              (BroadwayServer  *
                                                                guint32          time_);
 guint32             broadway_server_ungrab_pointer            (BroadwayServer  *server,
                                                                guint32          time_);
-gint32              broadway_server_get_mouse_surface         (BroadwayServer  *server);
 void                broadway_server_set_show_keyboard         (BroadwayServer  *server,
                                                                gboolean         show);
 guint32             broadway_server_new_surface               (BroadwayServer  *server,
@@ -105,17 +103,10 @@ void                broadway_server_surface_lower             (BroadwayServer  *
 void                broadway_server_surface_set_transient_for (BroadwayServer  *server,
                                                                int              id,
                                                                int              parent);
-gboolean            broadway_server_surface_translate         (BroadwayServer  *server,
-                                                               int              id,
-                                                               cairo_region_t  *area,
-                                                               int              dx,
-                                                               int              dy);
 guint32             broadway_server_upload_texture            (BroadwayServer  *server,
                                                                GBytes          *bytes);
 void                broadway_server_release_texture           (BroadwayServer  *server,
                                                                guint32          id);
-cairo_surface_t   * broadway_server_create_surface            (int              width,
-                                                               int              height);
 void                broadway_server_surface_update_nodes      (BroadwayServer  *server,
                                                                int              id,
                                                                guint32          data[],
