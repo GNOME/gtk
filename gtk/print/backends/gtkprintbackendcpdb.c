@@ -943,10 +943,8 @@ cpdb_printer_get_settings_from_options (GtkPrinter            *printer,
                                 CPDB_OPTION_JOB_HOLD_UNTIL,
                                 CPDB_JOB_HOLD_INDEFINITE);
     }
-  if (print_at != NULL)
-    g_free (print_at);
-  if (print_at_time != NULL)
-    g_free (print_at_time);
+  g_free (print_at);
+  g_free (print_at_time);
 
   gtk_printer_option_set_foreach (options, add_option_to_settings, settings);
 }

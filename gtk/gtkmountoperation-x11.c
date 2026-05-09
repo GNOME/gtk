@@ -766,8 +766,7 @@ pid_get_parent (GPid pid)
   ppid = kp->p_ppid;
 
 out:
-  if (kp)
-      g_free (kp);
+  g_free (kp);
   return ppid;
 }
 
