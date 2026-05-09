@@ -56,7 +56,7 @@ parse_code (GVariantBuilder *b,
             const char      *code,
             gboolean         needs_presentation_selector)
 {
-  g_auto(GStrv) strv = NULL;
+  char **strv;
   int j;
 
   strv = g_strsplit (code, "-", -1);
@@ -69,6 +69,7 @@ parse_code (GVariantBuilder *b,
       if (*end != '\0')
         {
           g_error ("failed to parse code: %s\n", strv[j]);
+          g_strfreev (strv);
           return FALSE;
         }
       if (0x1f3fb <= u && u <= 0x1f3ff)
@@ -78,6 +79,7 @@ parse_code (GVariantBuilder *b,
               if (strv[j+1])
                 {
                   g_error ("unexpected inner skin tone in default-text generic sequence: %s\n", code);
+                  g_strfreev (strv);
                   return FALSE;
                 }
               g_variant_builder_add (b, "u", 0);
@@ -96,6 +98,8 @@ parse_code (GVariantBuilder *b,
 
   if (needs_presentation_selector)
     g_variant_builder_add (b, "u", 0xfe0f);
+
+  g_strfreev (strv);
 
   return TRUE;
 }

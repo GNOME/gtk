@@ -47,13 +47,13 @@ static const struct wl_registry_listener registry_listener = {
 static void
 test_wayland_connect_to_socket (void)
 {
-  g_autoptr(GDBusConnection) connection = NULL;
-  g_autoptr(GVariant) variant = NULL;
-  g_autoptr(GUnixFDList) fd_list = NULL;
-  g_autoptr(GError) error = NULL;
+  GDBusConnection *connection;
+  GVariant *variant;
+  GUnixFDList *fd_list;
+  GError *error = NULL;
   int fd_idx;
   int fd;
-  g_autofree char *fd_string = NULL;
+  char *fd_string;
   GdkDisplay *display;
   struct wl_display *wl_display;
   struct wl_registry *wl_registry;
@@ -87,6 +87,7 @@ test_wayland_connect_to_socket (void)
 
   fd_string = g_strdup_printf ("%d", fd);
   setenv ("WAYLAND_SOCKET", fd_string, 1);
+  g_free (fd_string);
 
   g_assert_true (gtk_init_check ());
   display = gdk_display_get_default ();
@@ -102,6 +103,10 @@ test_wayland_connect_to_socket (void)
   wl_display_roundtrip (wl_display);
 
   g_assert_true (saw_mutter_x11_interop);
+
+  g_object_unref (fd_list);
+  g_variant_unref (variant);
+  g_object_unref (connection);
 }
 
 int
