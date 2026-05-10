@@ -70,3 +70,6 @@ ignore = [
 
 [rules.no_g_auto_macros]
 ignore = ["demos/icon-editor/**"]
+
+[rules.property_switch_exhaustiveness]
+style = "legacy"
