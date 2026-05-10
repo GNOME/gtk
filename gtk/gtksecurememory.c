@@ -1431,8 +1431,8 @@ gtk_secure_strdup_full (const char *tag,
 		return NULL;
 
 	len = strlen (str) + 1;
-	res = (char *)gtk_secure_alloc_full (tag, len, options);
-	strcpy (res, str);
+	res = (char *) gtk_secure_alloc_full (tag, len, options);
+	g_strlcpy (res, str, len);
 	return res;
 }
 

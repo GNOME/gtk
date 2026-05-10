@@ -1072,7 +1072,7 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
 
       httpGetHostname (dispatch->request->http, dispatch_hostname, sizeof (dispatch_hostname));
       if (is_address_local (dispatch_hostname))
-        strcpy (dispatch_hostname, "localhost");
+        g_strlcpy (dispatch_hostname, "localhost", sizeof (dispatch_hostname));
 
       if (dispatch->request->need_auth_info)
         {
@@ -1129,7 +1129,7 @@ request_password (gpointer data)
 
   httpGetHostname (dispatch->request->http, hostname, sizeof (hostname));
   if (is_address_local (hostname))
-    strcpy (hostname, "localhost");
+    g_strlcpy (hostname, "localhost", sizeof (hostname));
 
   if (dispatch->backend->username != NULL)
     username = dispatch->backend->username;
@@ -1614,7 +1614,7 @@ cups_dispatch_watch_finalize (GSource *source)
 
       httpGetHostname (dispatch->request->http, hostname, sizeof (hostname));
       if (is_address_local (hostname))
-        strcpy (hostname, "localhost");
+        g_strlcpy (hostname, "localhost", sizeof (hostname));
 
       if (dispatch->backend->username != NULL)
         username = dispatch->backend->username;
@@ -2496,14 +2496,14 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
   cups_server = g_strdup (cupsGetServer());
 
   if (strcasecmp (uri, hostname) == 0)
-    strcpy (hostname, "localhost");
+    g_strlcpy (hostname, "localhost", sizeof (hostname));
 
   /* if the cups server is local and listening at a unix domain socket
    * then use the socket connection
    */
   if ((strstr (hostname, "localhost") != NULL) &&
       (cups_server[0] == '/'))
-    strcpy (hostname, cups_server);
+    g_strlcpy (hostname, cups_server, sizeof (hostname));
 
   g_free (cups_server);
 
