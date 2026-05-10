@@ -438,8 +438,8 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
     }
 
   if (!G_IS_DIR_SEPARATOR (wintab32_dll_path[strlen (wintab32_dll_path) -1]))
-    strcat (wintab32_dll_path, G_DIR_SEPARATOR_S);
-  strcat (wintab32_dll_path, WINTAB32_DLL);
+    g_strlcat (wintab32_dll_path, G_DIR_SEPARATOR_S, n + 1 + strlen (WINTAB32_DLL));
+  g_strlcat (wintab32_dll_path, WINTAB32_DLL, n + 1 + strlen (WINTAB32_DLL));;
 
   wintab32 = LoadLibraryA (wintab32_dll_path);
   g_free (wintab32_dll_path);
