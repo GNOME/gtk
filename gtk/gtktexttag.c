@@ -182,7 +182,7 @@ enum {
   PROP_WORD_SET,
   PROP_SENTENCE_SET,
 
-  LAST_ARG
+  N_PROPS
 };
 static void gtk_text_tag_finalize     (GObject         *object);
 static void gtk_text_tag_set_property (GObject         *object,

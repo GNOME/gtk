@@ -72,10 +72,10 @@ enum {
   PROP_0,
   PROP_CHILD,
 
-  LAST_ARG
+  N_PROPS
 };
 
-static GParamSpec *properties[LAST_ARG] = { NULL, };
+static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void gtk_drag_icon_root_init   (GtkRootInterface *iface);
 static void gtk_drag_icon_native_init (GtkNativeInterface *iface);
@@ -389,7 +389,7 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, LAST_ARG, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "dnd");
 }
