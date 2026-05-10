@@ -2322,7 +2322,7 @@ test_no_ids (void)
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, buffer, -1, &error);
-  g_assert_null (error);
+  g_assert_no_error (error);
 
   obj = gtk_builder_get_object (builder, "button_ok");
   g_assert_true (GTK_IS_BUTTON (obj));
