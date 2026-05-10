@@ -20,8 +20,6 @@
 #include "gdksettings-wayland.h"
 #include "gdk/gdkprivate.h"
 
-#include "wm-button-layout-translation.h"
-
 /* {{{ Settings handling */
 
 typedef enum
