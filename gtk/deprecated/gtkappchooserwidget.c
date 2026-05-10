@@ -218,7 +218,6 @@ struct _GtkAppChooserWidgetClass {
 
 enum {
   PROP_CONTENT_TYPE = 1,
-  PROP_GFILE,
   PROP_SHOW_DEFAULT,
   PROP_SHOW_RECOMMENDED,
   PROP_SHOW_FALLBACK,
