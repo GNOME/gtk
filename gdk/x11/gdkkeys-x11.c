@@ -745,7 +745,7 @@ _gdk_x11_keymap_keys_changed (GdkDisplay *display)
 
   if (display_x11->keymap)
     {
-      g_signal_emit_by_name (display_x11->keymap, "keys_changed", 0);
+      g_signal_emit_by_name (display_x11->keymap, "keys-changed", 0);
 
     if (KEYMAP_USE_XKB (display_x11->keymap))
       {

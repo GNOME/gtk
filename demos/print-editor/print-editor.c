@@ -408,7 +408,7 @@ print_done (GtkPrintOperation *op,
       update_statusbar ();
 
       /* This ref is unref:ed when we get the final state change */
-      g_signal_connect (op, "status_changed",
+      g_signal_connect (op, "status-changed",
 			G_CALLBACK (status_changed_cb), NULL);
     }
 }
@@ -441,11 +441,11 @@ print_or_preview (GSimpleAction *action, GtkPrintOperationAction print_action)
   if (page_setup != NULL)
     gtk_print_operation_set_default_page_setup (print, page_setup);
 
-  g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), print_data);
+  g_signal_connect (print, "begin-print", G_CALLBACK (begin_print), print_data);
   g_signal_connect (print, "end-print", G_CALLBACK (end_print), print_data);
-  g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), print_data);
-  g_signal_connect (print, "create_custom_widget", G_CALLBACK (create_custom_widget), print_data);
-  g_signal_connect (print, "custom_widget_apply", G_CALLBACK (custom_widget_apply), print_data);
+  g_signal_connect (print, "draw-page", G_CALLBACK (draw_page), print_data);
+  g_signal_connect (print, "create-custom-widget", G_CALLBACK (create_custom_widget), print_data);
+  g_signal_connect (print, "custom-widget-apply", G_CALLBACK (custom_widget_apply), print_data);
 
   g_signal_connect (print, "done", G_CALLBACK (print_done), print_data);
 
@@ -856,7 +856,7 @@ activate (GApplication *app)
                            0);
 
   g_signal_connect_object (buffer,
-                           "mark_set", /* cursor moved */
+                           "mark-set", /* cursor moved */
                            G_CALLBACK (mark_set_callback),
                            NULL,
                            0);

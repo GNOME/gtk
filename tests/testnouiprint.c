@@ -88,7 +88,7 @@ main (int argc, char **argv)
   gtk_print_operation_set_print_settings (print, settings);
   gtk_print_operation_set_n_pages (print, 1);
   gtk_print_operation_set_unit (print, GTK_UNIT_MM);
-  g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);
+  g_signal_connect (print, "draw-page", G_CALLBACK (draw_page), NULL);
   gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT, NULL, NULL);
 
   return 0;
