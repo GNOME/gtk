@@ -111,22 +111,22 @@ static void gtk_demo_class_init (GtkDemoClass *klass)
     g_param_spec_string ("filename",
                          NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_NAME] =
     g_param_spec_string ("name",
                          NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_TITLE] =
     g_param_spec_string ("title",
                          NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_KEYWORDS] =
     g_param_spec_string ("keywords",
                          NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

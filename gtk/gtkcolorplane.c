@@ -488,22 +488,19 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
                                    PROP_H_ADJUSTMENT,
                                    g_param_spec_object ("h-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_S_ADJUSTMENT,
                                    g_param_spec_object ("s-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_V_ADJUSTMENT,
                                    g_param_spec_object ("v-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_WRITABLE |
-                                                        G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_css_name (widget_class, "plane");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SLIDER);

@@ -699,7 +699,7 @@ gtk_scale_class_init (GtkScaleClass *class)
       g_param_spec_int ("digits", NULL, NULL,
                         -1, MAX_DIGITS,
                         1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkScale:draw-value:
@@ -709,7 +709,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   properties[PROP_DRAW_VALUE] =
       g_param_spec_boolean ("draw-value", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkScale:has-origin:
@@ -719,7 +719,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   properties[PROP_HAS_ORIGIN] =
       g_param_spec_boolean ("has-origin", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkScale:value-pos:
@@ -730,7 +730,7 @@ gtk_scale_class_init (GtkScaleClass *class)
       g_param_spec_enum ("value-pos", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE,
                          GTK_POS_TOP,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 

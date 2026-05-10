@@ -850,7 +850,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_FILTER] =
       g_param_spec_object ("filter", NULL, NULL,
                            GTK_TYPE_FILTER,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFilterListModel:incremental:
@@ -860,7 +860,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_INCREMENTAL] =
       g_param_spec_boolean ("incremental", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFilterListModel:item-type:
@@ -882,7 +882,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFilterListModel:n-items:
@@ -904,7 +904,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_PENDING] =
       g_param_spec_uint ("pending", NULL, NULL,
                          0, G_MAXUINT, 0,
-                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -917,7 +917,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   properties[PROP_WATCH_ITEMS] =
       g_param_spec_boolean ("watch-items", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }

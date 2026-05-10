@@ -520,7 +520,7 @@ suggestion_entry_class_init (SuggestionEntryClass *klass)
       g_param_spec_string ("placeholder-text",
                            NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_POPUP_VISIBLE] =
       g_param_spec_boolean ("popup-visible",

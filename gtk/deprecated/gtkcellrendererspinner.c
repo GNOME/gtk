@@ -184,7 +184,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererSpinner:pulse:
@@ -199,7 +199,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                    PROP_PULSE,
                                    g_param_spec_uint ("pulse", NULL, NULL,
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererSpinner:size:
@@ -210,7 +210,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                    PROP_SIZE,
                                    g_param_spec_enum ("size", NULL, NULL,
                                                       GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_INHERIT,
-                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
 }
 

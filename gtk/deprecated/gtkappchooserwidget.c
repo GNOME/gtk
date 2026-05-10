@@ -152,7 +152,7 @@ gtk_app_item_class_init (GtkAppItemClass *class)
 
   item_properties[ITEM_PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
                                                          NULL,
-                                                         G_PARAM_READABLE);
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_ITEM_PROPS, item_properties);
 }

@@ -792,7 +792,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
  native_props[PROP_ACCEPT_LABEL] =
       g_param_spec_string ("accept-label", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileChooserNative:cancel-label:
@@ -803,7 +803,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
   native_props[PROP_CANCEL_LABEL] =
       g_param_spec_string ("cancel-label", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, native_props);
 }

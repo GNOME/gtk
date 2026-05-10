@@ -219,7 +219,7 @@ demo4_widget_class_init (Demo4WidgetClass *class)
   g_object_class_install_property (object_class, PROP_PROGRESS,
       g_param_spec_double ("progress", NULL, NULL,
                            0.0, 1.0, 0.5,
-                           G_PARAM_READWRITE));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 GtkWidget *

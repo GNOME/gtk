@@ -207,11 +207,11 @@ baseline_widget_class_init (BaselineWidgetClass *class)
   widget_class->measure = baseline_widget_measure;
 
   g_object_class_install_property (object_class, PROP_ABOVE,
-    g_param_spec_int ("above", NULL, NULL, 0, G_MAXINT, 0, G_PARAM_READWRITE));
+    g_param_spec_int ("above", NULL, NULL, 0, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_BELOW,
-    g_param_spec_int ("below", NULL, NULL, -1, G_MAXINT, 0, G_PARAM_READWRITE));
+    g_param_spec_int ("below", NULL, NULL, -1, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_ACROSS,
-    g_param_spec_int ("across", NULL, NULL, 0, G_MAXINT, 0, G_PARAM_READWRITE));
+    g_param_spec_int ("across", NULL, NULL, 0, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static GtkWidget *

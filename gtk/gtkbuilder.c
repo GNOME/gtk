@@ -481,7 +481,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   builder_props[PROP_TRANSLATION_DOMAIN] =
       g_param_spec_string ("translation-domain", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
  /**
   * GtkBuilder:current-object:
@@ -491,7 +491,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   builder_props[PROP_CURRENT_OBJECT] =
       g_param_spec_object ("current-object", NULL, NULL,
                            G_TYPE_OBJECT,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
  /**
   * GtkBuilder:scope:
@@ -501,7 +501,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   builder_props[PROP_SCOPE] =
       g_param_spec_object ("scope", NULL, NULL,
                            GTK_TYPE_BUILDER_SCOPE,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, builder_props);
 }

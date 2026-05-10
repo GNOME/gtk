@@ -382,7 +382,7 @@ gtk_text_view_child_class_init (GtkTextViewChildClass *klass)
     g_param_spec_enum ("window-type", NULL, NULL,
                        GTK_TYPE_TEXT_WINDOW_TYPE,
                        GTK_TEXT_WINDOW_TEXT,
-                       GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY|G_PARAM_EXPLICIT_NOTIFY);
+                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

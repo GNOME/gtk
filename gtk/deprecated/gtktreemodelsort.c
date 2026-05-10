@@ -489,7 +489,7 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
                                    PROP_MODEL,
                                    g_param_spec_object ("model", NULL, NULL,
 							GTK_TYPE_TREE_MODEL,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 static void

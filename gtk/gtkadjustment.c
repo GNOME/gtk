@@ -139,7 +139,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("value", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAdjustment:lower:
@@ -150,7 +150,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("lower", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAdjustment:upper:
@@ -164,7 +164,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("upper", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAdjustment:step-increment:
@@ -175,7 +175,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("step-increment", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAdjustment:page-increment:
@@ -186,7 +186,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("page-increment", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAdjustment:page-size:
@@ -201,7 +201,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
       g_param_spec_double ("page-size", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, adjustment_props);
 

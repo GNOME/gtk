@@ -623,7 +623,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 				   PROP_VALUE,
 				   g_param_spec_int ("value", NULL, NULL,
 						     0, 100, 0,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererProgress:text:
@@ -637,7 +637,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 				   PROP_TEXT,
 				   g_param_spec_string ("text", NULL, NULL,
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererProgress:pulse:
@@ -657,7 +657,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                    PROP_PULSE,
                                    g_param_spec_int ("pulse", NULL, NULL,
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererProgress:text-xalign:
@@ -670,7 +670,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                    PROP_TEXT_XALIGN,
                                    g_param_spec_float ("text-xalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererProgress:text-yalign:
@@ -683,7 +683,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                    PROP_TEXT_YALIGN,
                                    g_param_spec_float ("text-yalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,
@@ -698,7 +698,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                    PROP_INVERTED,
                                    g_param_spec_boolean ("inverted", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 static void

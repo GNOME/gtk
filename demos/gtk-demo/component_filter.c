@@ -191,7 +191,7 @@ component_filter_class_init (ComponentFilterClass *class)
                                    PROP_TRANSFER,
                                    g_param_spec_boxed ("transfer", NULL, NULL,
                                                        GSK_TYPE_COMPONENT_TRANSFER,
-                                                       G_PARAM_READABLE));
+                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/image_filter/component_filter.ui");
 

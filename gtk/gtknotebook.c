@@ -611,7 +611,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:tab:
@@ -622,7 +622,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_TAB,
                                    g_param_spec_object ("tab", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:menu:
@@ -633,7 +633,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_MENU,
                                    g_param_spec_object ("menu", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:tab-label:
@@ -644,7 +644,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_TAB_LABEL,
                                    g_param_spec_string ("tab-label", NULL, NULL,
                                                         NULL,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:menu-label:
@@ -655,7 +655,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_MENU_LABEL,
                                    g_param_spec_string ("menu-label", NULL, NULL,
                                                         NULL,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:position:
@@ -666,7 +666,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_POSITION,
                                    g_param_spec_int ("position", NULL, NULL,
                                                      -1, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:tab-expand:
@@ -677,7 +677,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_TAB_EXPAND,
                                    g_param_spec_boolean ("tab-expand", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:tab-fill:
@@ -688,7 +688,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_TAB_FILL,
                                    g_param_spec_boolean ("tab-fill", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:reorderable:
@@ -699,7 +699,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_REORDERABLE,
                                    g_param_spec_boolean ("reorderable", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkNotebookPage:detachable:
@@ -710,7 +710,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
                                    CHILD_PROP_DETACHABLE,
                                    g_param_spec_boolean ("detachable", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
 }
 
@@ -1132,7 +1132,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
       g_param_spec_int ("page", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:tab-pos:
@@ -1143,7 +1143,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
       g_param_spec_enum ("tab-pos", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE,
                          GTK_POS_TOP,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:show-tabs:
@@ -1153,7 +1153,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_SHOW_TABS] =
       g_param_spec_boolean ("show-tabs", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:show-border:
@@ -1163,7 +1163,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_SHOW_BORDER] =
       g_param_spec_boolean ("show-border", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:scrollable:
@@ -1173,7 +1173,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_SCROLLABLE] =
       g_param_spec_boolean ("scrollable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:enable-popup:
@@ -1183,7 +1183,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_ENABLE_POPUP] =
       g_param_spec_boolean ("enable-popup", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:group-name:
@@ -1193,7 +1193,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_GROUP_NAME] =
       g_param_spec_string ("group-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkNotebook:pages:
@@ -1203,7 +1203,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_PAGES] =
       g_param_spec_object ("pages", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READABLE);
+                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 

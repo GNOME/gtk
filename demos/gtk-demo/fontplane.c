@@ -261,8 +261,7 @@ gtk_font_plane_class_init (GtkFontPlaneClass *class)
                                                         NULL,
                                                         NULL,
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY));
+							G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_WIDTH_ADJUSTMENT,
@@ -270,8 +269,7 @@ gtk_font_plane_class_init (GtkFontPlaneClass *class)
                                                         NULL,
                                                         NULL,
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE |
-							G_PARAM_CONSTRUCT_ONLY));
+							G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 GtkWidget *

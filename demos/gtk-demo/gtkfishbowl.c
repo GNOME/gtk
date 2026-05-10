@@ -312,34 +312,34 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
       g_param_spec_boolean ("animating",
                             NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   props[PROP_BENCHMARK] =
       g_param_spec_boolean ("benchmark",
                             NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   props[PROP_COUNT] =
       g_param_spec_uint ("count",
                          NULL, NULL,
                          0, G_MAXUINT,
                          0,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   props[PROP_FRAMERATE] =
       g_param_spec_double ("framerate",
                            NULL, NULL,
                            0, G_MAXDOUBLE,
                            0,
-                           G_PARAM_READABLE);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   props[PROP_UPDATE_DELAY] =
       g_param_spec_int64 ("update-delay",
                           NULL, NULL,
                           0, G_MAXINT64,
                           G_USEC_PER_SEC,
-                          G_PARAM_READWRITE);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 

@@ -316,7 +316,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   pspecs[PROP_PREFERS_COLOR_SCHEME] = g_param_spec_enum ("prefers-color-scheme", NULL, NULL,
                                                          GTK_TYPE_INTERFACE_COLOR_SCHEME,
                                                          GTK_INTERFACE_COLOR_SCHEME_DEFAULT,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCssProvider:prefers-contrast:
@@ -345,7 +345,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   pspecs[PROP_PREFERS_CONTRAST] = g_param_spec_enum ("prefers-contrast", NULL, NULL,
                                                      GTK_TYPE_INTERFACE_CONTRAST,
                                                      GTK_INTERFACE_CONTRAST_NO_PREFERENCE,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCssProvider:prefers-reduced-motion:
@@ -373,7 +373,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   pspecs[PROP_PREFERS_REDUCED_MOTION] = g_param_spec_enum ("prefers-reduced-motion", NULL, NULL,
                                                            GTK_TYPE_REDUCED_MOTION,
                                                            GTK_REDUCED_MOTION_NO_PREFERENCE,
-                                                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
 }

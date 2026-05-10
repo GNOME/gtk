@@ -1973,7 +1973,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_POINTING_TO] =
       g_param_spec_boxed ("pointing-to", NULL, NULL,
                           GDK_TYPE_RECTANGLE,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:position:
@@ -1983,7 +1983,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_POSITION] =
       g_param_spec_enum ("position", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE, GTK_POS_BOTTOM,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:autohide:
@@ -1993,7 +1993,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_AUTOHIDE] =
       g_param_spec_boolean ("autohide", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:default-widget:
@@ -2013,7 +2013,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_HAS_ARROW] =
       g_param_spec_boolean ("has-arrow", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:mnemonics-visible:
@@ -2023,7 +2023,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_MNEMONICS_VISIBLE] =
       g_param_spec_boolean ("mnemonics-visible", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:child:
@@ -2033,7 +2033,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopover:cascade-popdown:
@@ -2045,7 +2045,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_CASCADE_POPDOWN] =
       g_param_spec_boolean ("cascade-popdown", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

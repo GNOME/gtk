@@ -378,7 +378,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
   properties[PROP_ITEM_TYPE] =
       g_param_spec_gtype ("item-type", NULL, NULL,
                           G_TYPE_OBJECT,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPropertyLookupListModel:n-items:
@@ -400,7 +400,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
   properties[PROP_PROPERTY] =
       g_param_spec_string ("property", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPropertyLookupListModel:object:
@@ -410,7 +410,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
   properties[PROP_OBJECT] =
       g_param_spec_object ("object", NULL, NULL,
                            G_TYPE_OBJECT,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

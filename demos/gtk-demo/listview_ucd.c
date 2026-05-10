@@ -81,19 +81,19 @@ ucd_item_class_init (UcdItemClass *class)
                                    PROP_CODEPOINT,
                                    g_param_spec_uint ("codepoint", NULL, NULL,
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE));
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
-                                                        G_PARAM_READABLE));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_SCRIPT,
                                    g_param_spec_uint ("script", NULL, NULL,
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE));
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 }
 
 static UcdItem *

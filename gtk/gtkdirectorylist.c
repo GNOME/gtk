@@ -290,7 +290,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_ATTRIBUTES] =
       g_param_spec_string ("attributes", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:error:
@@ -300,7 +300,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_ERROR] =
       g_param_spec_boxed ("error", NULL, NULL,
                           G_TYPE_ERROR,
-                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:file:
@@ -310,7 +310,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_FILE] =
       g_param_spec_object ("file", NULL, NULL,
                            G_TYPE_FILE,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:io-priority:
@@ -320,7 +320,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_IO_PRIORITY] =
       g_param_spec_int ("io-priority", NULL, NULL,
                         -G_MAXINT, G_MAXINT, G_PRIORITY_DEFAULT,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:item-type:
@@ -342,7 +342,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_LOADING] =
       g_param_spec_boolean ("loading", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:monitored:
@@ -352,7 +352,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_MONITORED] =
       g_param_spec_boolean ("monitored", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDirectoryList:n-items:

@@ -100,19 +100,19 @@ settings_key_class_init (SettingsKeyClass *klass)
   gobject_class->get_property = settings_key_get_property;
 
   properties[PROP_DESCRIPTION] =
-    g_param_spec_string ("description", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("description", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_NAME] =
-    g_param_spec_string ("name", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("name", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_SETTINGS] =
-    g_param_spec_object ("settings", NULL, NULL, G_TYPE_SETTINGS, G_PARAM_READABLE);
+    g_param_spec_object ("settings", NULL, NULL, G_TYPE_SETTINGS, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_SUMMARY] =
-    g_param_spec_string ("summary", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("summary", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_VALUE] =
-    g_param_spec_string ("value", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("value", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_TYPE] =
-    g_param_spec_string ("type", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("type", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_DEFAULT_VALUE] =
-    g_param_spec_string ("default-value", NULL, NULL, NULL, G_PARAM_READABLE);
+    g_param_spec_string ("default-value", NULL, NULL, NULL, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

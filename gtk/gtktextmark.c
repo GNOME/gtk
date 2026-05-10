@@ -134,7 +134,7 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
                                    PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextMark:left-gravity:
@@ -149,7 +149,7 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
                                    PROP_LEFT_GRAVITY,
                                    g_param_spec_boolean ("left-gravity", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 static void

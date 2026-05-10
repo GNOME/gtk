@@ -355,40 +355,40 @@ gtk_filter_paintable_class_init (GtkFilterPaintableClass *klass)
 
   props[PROP_TEXTURE]    = g_param_spec_object ("texture", NULL, NULL,
                                                 GDK_TYPE_TEXTURE,
-                                                G_PARAM_READWRITE);
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_BRIGHTNESS] = g_param_spec_float ("brightness", NULL, NULL,
                                                0, 2, 1,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_CONTRAST]   = g_param_spec_float ("contrast", NULL, NULL,
                                                0, 2, 1,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_SATURATION] = g_param_spec_float ("saturation", NULL, NULL,
                                                0, 2, 1,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_SEPIA]      = g_param_spec_float ("sepia", NULL, NULL,
                                                0, 1, 1,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_INVERT]     = g_param_spec_float ("invert", NULL, NULL,
                                                0, 1, 0,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_ROTATE]     = g_param_spec_float ("rotate", NULL, NULL,
                                                0, 360, 0,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_BLUR]       = g_param_spec_float ("blur", NULL, NULL,
                                                0, 50, 0,
-                                               G_PARAM_READWRITE);
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_RED_TRANSFER] = g_param_spec_boxed ("red-transfer", NULL, NULL,
                                                  GSK_TYPE_COMPONENT_TRANSFER,
-                                                 G_PARAM_READWRITE);
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_GREEN_TRANSFER] = g_param_spec_boxed ("green-transfer", NULL, NULL,
                                                    GSK_TYPE_COMPONENT_TRANSFER,
-                                                   G_PARAM_READWRITE);
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_BLUE_TRANSFER] = g_param_spec_boxed ("blue-transfer", NULL, NULL,
                                                   GSK_TYPE_COMPONENT_TRANSFER,
-                                                  G_PARAM_READWRITE);
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   props[PROP_ALPHA_TRANSFER] = g_param_spec_boxed ("alpha-transfer", NULL, NULL,
                                                    GSK_TYPE_COMPONENT_TRANSFER,
-                                                   G_PARAM_READWRITE);
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 }

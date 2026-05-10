@@ -413,7 +413,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
   properties[PROP_HAS_MAP] =
       g_param_spec_boolean ("has-map", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMapListModel:item-type:

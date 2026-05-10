@@ -605,7 +605,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   header_bar_props[PROP_SHOW_TITLE_BUTTONS] =
       g_param_spec_boolean ("show-title-buttons", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkHeaderBar:decoration-layout:
@@ -618,7 +618,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   header_bar_props[PROP_DECORATION_LAYOUT] =
       g_param_spec_string ("decoration-layout", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkHeaderBar:use-native-controls:
@@ -637,7 +637,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   header_bar_props[PROP_USE_NATIVE_CONTROLS] =
       g_param_spec_boolean ("use-native-controls", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 

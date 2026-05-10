@@ -201,7 +201,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 				   PROP_MODEL,
 				   g_param_spec_object  ("model", NULL, NULL,
 							 GTK_TYPE_TREE_MODEL,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
 
   /**
@@ -218,7 +218,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                     PROP_CELL_AREA,
                                     g_param_spec_object ("cell-area", NULL, NULL,
 							 GTK_TYPE_CELL_AREA,
-							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellView:cell-area-context:
@@ -240,7 +240,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                     PROP_CELL_AREA_CONTEXT,
                                     g_param_spec_object ("cell-area-context", NULL, NULL,
 							 GTK_TYPE_CELL_AREA_CONTEXT,
-							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellView:draw-sensitive:
@@ -255,7 +255,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                     PROP_DRAW_SENSITIVE,
                                     g_param_spec_boolean ("draw-sensitive", NULL, NULL,
 							  FALSE,
-							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							  GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellView:fit-model:
@@ -271,7 +271,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                     PROP_FIT_MODEL,
                                     g_param_spec_boolean ("fit-model", NULL, NULL,
 							  FALSE,
-							  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							  GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_css_name (widget_class, I_("cellview"));
 }

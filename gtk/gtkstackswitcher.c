@@ -552,8 +552,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                    PROP_STACK,
                                    g_param_spec_object ("stack", NULL, NULL,
                                                         GTK_TYPE_STACK,
-                                                        GTK_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 

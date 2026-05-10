@@ -246,7 +246,7 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
    */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", NULL, NULL,
-                            FALSE, GTK_PARAM_READWRITE));
+                            FALSE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /* Bind class to template
    */

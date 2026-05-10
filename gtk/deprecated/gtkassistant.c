@@ -290,7 +290,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                    g_param_spec_enum ("page-type", NULL, NULL,
                                                       GTK_TYPE_ASSISTANT_PAGE_TYPE,
                                                       GTK_ASSISTANT_PAGE_CONTENT,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkAssistantPage:title:
@@ -303,7 +303,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                    CHILD_PROP_PAGE_TITLE,
                                    g_param_spec_string ("title", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkAssistantPage:complete:
@@ -319,7 +319,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                    CHILD_PROP_PAGE_COMPLETE,
                                    g_param_spec_boolean ("complete", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkAssistantPage:child:
@@ -332,7 +332,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
                                    CHILD_PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 enum
@@ -650,7 +650,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                    PROP_USE_HEADER_BAR,
                                    g_param_spec_int ("use-header-bar", NULL, NULL,
                                                      -1, 1, -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
+                                                     GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkAssistant:pages:
@@ -661,7 +661,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                    PROP_PAGES,
                                    g_param_spec_object ("pages", NULL, NULL,
                                                         G_TYPE_LIST_MODEL,
-                                                        GTK_PARAM_READABLE));
+                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /* Bind class to template
    */

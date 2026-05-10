@@ -124,8 +124,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
   layout_child_properties[PROP_LAYOUT_MANAGER] =
     g_param_spec_object ("layout-manager", NULL, NULL,
                          GTK_TYPE_LAYOUT_MANAGER,
-                         GTK_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY);
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLayoutChild:child-widget:
@@ -135,8 +134,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
   layout_child_properties[PROP_CHILD_WIDGET] =
     g_param_spec_object ("child-widget", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY);
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, layout_child_properties);
 }

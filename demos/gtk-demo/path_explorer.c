@@ -824,67 +824,67 @@ path_explorer_class_init (PathExplorerClass *class)
 
   pspecs[PROP_PATH] = g_param_spec_boxed ("path", NULL, NULL,
                                           GSK_TYPE_PATH,
-                                          G_PARAM_READWRITE);
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_FILL] = g_param_spec_boolean ("fill", NULL, NULL,
                                             FALSE,
-                                            G_PARAM_READWRITE);
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_STROKE] = g_param_spec_boolean ("stroke", NULL, NULL,
                                               TRUE,
-                                              G_PARAM_READWRITE);
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_LINE_WIDTH] = g_param_spec_float ("line-width", NULL, NULL,
                                                 0, G_MAXFLOAT, 1,
-                                                G_PARAM_READWRITE);
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_LINE_CAP] = g_param_spec_enum ("line-cap", NULL, NULL,
                                              GSK_TYPE_LINE_CAP, GSK_LINE_CAP_BUTT,
-                                             G_PARAM_READWRITE);
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_LINE_JOIN] = g_param_spec_enum ("line-join", NULL, NULL,
                                               GSK_TYPE_LINE_JOIN, GSK_LINE_JOIN_MITER,
-                                              G_PARAM_READWRITE);
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_MITER_LIMIT] = g_param_spec_float ("miter-limit", NULL, NULL,
                                                  0, G_MAXFLOAT, 4,
-                                                 G_PARAM_READWRITE);
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_DASHES] = g_param_spec_string ("dashes", NULL, NULL,
                                              NULL,
-                                             G_PARAM_READWRITE);
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_DASH_OFFSET] = g_param_spec_float ("dash-offset", NULL, NULL,
                                                  0, G_MAXFLOAT, 0,
-                                                 G_PARAM_READWRITE);
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_FILL_RULE] = g_param_spec_enum ("fill-rule", NULL, NULL,
                                               GSK_TYPE_FILL_RULE, GSK_FILL_RULE_WINDING,
-                                              G_PARAM_READWRITE);
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_SHOW_POINTS] = g_param_spec_boolean ("show-points", NULL, NULL,
                                                    FALSE,
-                                                   G_PARAM_READWRITE);
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_SHOW_BOUNDS] = g_param_spec_boolean ("show-bounds", NULL, NULL,
                                                    FALSE,
-                                                   G_PARAM_READWRITE);
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_START] = g_param_spec_float ("start", NULL, NULL,
                                            0, 1, 0,
-                                           G_PARAM_READWRITE);
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_END] = g_param_spec_float ("end", NULL, NULL,
                                          0, 1, 1,
-                                         G_PARAM_READWRITE);
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_FILL_COLOR] = g_param_spec_boxed ("fill-color", NULL, NULL,
                                                 GDK_TYPE_RGBA,
-                                                G_PARAM_READWRITE);
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   pspecs[PROP_STROKE_COLOR] = g_param_spec_boxed ("stroke-color", NULL, NULL,
                                                   GDK_TYPE_RGBA,
-                                                  G_PARAM_READWRITE);
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, pspecs);
 }

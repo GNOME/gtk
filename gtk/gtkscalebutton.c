@@ -230,7 +230,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0,
-							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton:adjustment:
@@ -241,7 +241,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_ADJUSTMENT,
                                    g_param_spec_object ("adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton:icons:
@@ -267,7 +267,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_ICONS,
                                    g_param_spec_boxed ("icons", NULL, NULL,
                                                        G_TYPE_STRV,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton:active:
@@ -280,7 +280,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READABLE));
+                                                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton:has-frame:
@@ -293,7 +293,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_HAS_FRAME,
                                    g_param_spec_boolean ("has-frame", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton::value-changed:

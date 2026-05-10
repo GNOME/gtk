@@ -305,7 +305,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_TREE_MODEL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:minimum-key-length:
@@ -315,7 +315,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_MINIMUM_KEY_LENGTH] =
       g_param_spec_int ("minimum-key-length", NULL, NULL,
                         0, G_MAXINT, 1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:text-column:
@@ -327,7 +327,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_TEXT_COLUMN] =
     g_param_spec_int ("text-column", NULL, NULL,
                       -1, G_MAXINT, -1,
-                      GTK_PARAM_READWRITE);
+                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:inline-completion:
@@ -341,7 +341,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_INLINE_COMPLETION] =
       g_param_spec_boolean ("inline-completion", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:popup-completion:
@@ -352,7 +352,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_POPUP_COMPLETION] =
       g_param_spec_boolean ("popup-completion", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:popup-set-width:
@@ -363,7 +363,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_POPUP_SET_WIDTH] =
       g_param_spec_boolean ("popup-set-width", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:popup-single-match:
@@ -377,7 +377,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_POPUP_SINGLE_MATCH] =
       g_param_spec_boolean ("popup-single-match", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:inline-selection:
@@ -388,7 +388,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_INLINE_SELECTION] =
       g_param_spec_boolean ("inline-selection", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryCompletion:cell-area:
@@ -402,7 +402,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
   entry_completion_props[PROP_CELL_AREA] =
       g_param_spec_object ("cell-area", NULL, NULL,
                            GTK_TYPE_CELL_AREA,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, entry_completion_props);
 }

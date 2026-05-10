@@ -300,7 +300,7 @@ demo_image_class_init (DemoImageClass *class)
 
   g_object_class_install_property (object_class, PROP_ICON_NAME,
       g_param_spec_string ("icon-name", NULL, NULL,
-                           NULL, G_PARAM_READWRITE));
+                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
                        
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 
