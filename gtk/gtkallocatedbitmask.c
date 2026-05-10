@@ -70,7 +70,7 @@ gtk_allocated_bitmask_new_for_bits (gsize bits)
 {
   GtkBitmask *mask;
   
-  mask = g_malloc (sizeof (GtkBitmask));
+  mask = g_new (GtkBitmask, 1);
   mask->len = bits ? 1 : 0;
   mask->data[0] = bits;
 

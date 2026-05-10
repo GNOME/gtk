@@ -238,7 +238,7 @@ gtk_tree_list_row_sort_keys_ref_key (GtkTreeListRowSortKeys *self,
     key = g_malloc (GTK_SORT_KEYS_ALIGN (gtk_sort_keys_get_key_size (self->sort_keys), G_ALIGNOF (GtkTreeListRowCacheKey))
                     + sizeof (GtkTreeListRowCacheKey));
   else
-    key = g_malloc (sizeof (GtkTreeListRowCacheKey));
+    key = g_new (GtkTreeListRowCacheKey, 1);
   cache_key = cache_key_from_key (self, key);
   cache_key->row = g_object_ref (row);
   cache_key->ref_count = 1;
