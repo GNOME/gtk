@@ -174,11 +174,6 @@ enum {
   LAST_SIGNAL
 };
 
-enum {
-  ARG_0,
-  LAST_ARG
-};
-
 #define PIXEL_BOUND(d) (((d) + PANGO_SCALE - 1) / PANGO_SCALE)
 
 static guint signals[LAST_SIGNAL] = { 0 };
