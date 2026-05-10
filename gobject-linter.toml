@@ -128,3 +128,10 @@ level = "ignore"
 
 [rules.use_g_string_free_and_steal]
 level = "ignore"
+
+[rules.use_pragma_once]
+ignore = [
+  # external sources should stay unmodified
+  "gdk/win32/wintab.h",
+  "gtk/roaring/roaring.h",
+]
