@@ -101,17 +101,17 @@ test_object_class_init (TestObjectClass *class)
   object_class->get_property = test_object_get_property;
 
   g_object_class_install_property (object_class, PROP_STRING,
-      g_param_spec_string ("string", "String", "String",
+      g_param_spec_string ("string", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class, PROP_NUMBER,
-      g_param_spec_uint ("number", "Number", "Number",
+      g_param_spec_uint ("number", NULL, NULL,
                          0, G_MAXUINT, 0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class, PROP_ALLOW_CHILDREN,
-      g_param_spec_boolean ("allow-children", "Allow children", "Allow children",
+      g_param_spec_boolean ("allow-children", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }

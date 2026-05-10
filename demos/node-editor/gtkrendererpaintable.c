@@ -226,15 +226,13 @@ gtk_renderer_paintable_class_init (GtkRendererPaintableClass *klass)
 
   properties[PROP_PAINTABLE] =
     g_param_spec_object ("paintable",
-                         "Paintable",
-                         "The paintable to be shown",
+                         NULL, NULL,
                          GDK_TYPE_PAINTABLE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_RENDERER] =
     g_param_spec_object ("renderer",
-                         "Renderer",
-                         "Renderer used to render the paintable",
+                         NULL, NULL,
                          GSK_TYPE_RENDERER,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

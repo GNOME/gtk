@@ -310,38 +310,33 @@ gtk_fishbowl_class_init (GtkFishbowlClass *klass)
 
   props[PROP_ANIMATING] =
       g_param_spec_boolean ("animating",
-                            "animating",
-                            "Whether children are moving around",
+                            NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE);
 
   props[PROP_BENCHMARK] =
       g_param_spec_boolean ("benchmark",
-                            "Benchmark",
-                            "Adapt the count property to hit the maximum framerate",
+                            NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE);
 
   props[PROP_COUNT] =
       g_param_spec_uint ("count",
-                         "Count",
-                         "Number of widgets",
+                         NULL, NULL,
                          0, G_MAXUINT,
                          0,
                          G_PARAM_READWRITE);
 
   props[PROP_FRAMERATE] =
       g_param_spec_double ("framerate",
-                           "Framerate",
-                           "Framerate of this widget in frames per second",
+                           NULL, NULL,
                            0, G_MAXDOUBLE,
                            0,
                            G_PARAM_READABLE);
 
   props[PROP_UPDATE_DELAY] =
       g_param_spec_int64 ("update-delay",
-                          "Update delay",
-                          "Number of usecs between updates",
+                          NULL, NULL,
                           0, G_MAXINT64,
                           G_USEC_PER_SEC,
                           G_PARAM_READWRITE);

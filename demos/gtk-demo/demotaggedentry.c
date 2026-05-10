@@ -366,10 +366,10 @@ demo_tagged_entry_tag_class_init (DemoTaggedEntryTagClass *class)
                     G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class, PROP_LABEL,
-      g_param_spec_string ("label", "Label", "Label",
+      g_param_spec_string ("label", NULL, NULL,
                            NULL, G_PARAM_READWRITE));
   g_object_class_install_property (object_class, PROP_HAS_CLOSE_BUTTON,
-      g_param_spec_boolean ("has-close-button", "Has close button", "Whether this tag has a close button",
+      g_param_spec_boolean ("has-close-button", NULL, NULL,
                             FALSE, G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_css_name (widget_class, "tag");
