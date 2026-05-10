@@ -34,6 +34,7 @@ typedef struct
   GdkRGBA colors[5];
   size_t n_colors;
   double weight;
+  GtkInterfaceColorScheme color_scheme;
 
   gboolean generate;
 } TestData;
@@ -50,6 +51,7 @@ init_test_data (TestData *data)
   data->n_colors = 0;
   data->weight = -1;
   data->generate = FALSE;
+  data->color_scheme = GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED;
 }
 
 static void
@@ -340,6 +342,17 @@ render_svg_file (TestData *data)
       g_bytes_unref (stylesheet);
     }
 
+  if (data->color_scheme != GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED)
+    {
+      GtkSettings *settings = gtk_settings_get_default ();
+
+      g_object_set (settings,
+                    "gtk-interface-color-scheme", data->color_scheme,
+                    NULL);
+
+      gtk_svg_set_settings (svg, settings);
+    }
+
   gtk_svg_load_from_bytes (svg, bytes);
   g_clear_pointer (&bytes, g_bytes_unref);
 
@@ -519,6 +532,20 @@ read_test_data (GFile    *file,
     {
       data->weight = -1;
       g_clear_error (&err);
+    }
+
+  string = g_key_file_get_string (args, "test", "color-scheme", &err);
+  if (g_error_matches (err, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+    {
+      data->color_scheme = GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED;
+      g_clear_error (&err);
+    }
+  else
+    {
+      if (strcmp (string, "light") == 0)
+        data->color_scheme = GTK_INTERFACE_COLOR_SCHEME_LIGHT;
+      else if (strcmp (string, "dark") == 0)
+        data->color_scheme = GTK_INTERFACE_COLOR_SCHEME_DARK;
     }
 
   g_key_file_unref (args);

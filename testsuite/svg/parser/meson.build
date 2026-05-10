@@ -55,6 +55,7 @@ test_data = [
   'marker2.svg',
   'marker3.svg',
   'marker4.svg',
+  'media.svg',
   'metadata.svg',
   'metadata2.svg',
   'nested-svg.svg',

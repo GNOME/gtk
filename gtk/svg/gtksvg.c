@@ -87,6 +87,7 @@
 #include "gtksvganimationprivate.h"
 #include "gtksvgtimespecprivate.h"
 #include "gtksvggpaprivate.h"
+#include "gtksvgmediaqueryprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -2494,6 +2495,9 @@ gtk_svg_clear_content (GtkSvg *self)
   g_array_set_size (self->user_styles, 0);
   g_array_set_size (self->author_styles, 0);
 
+  g_list_free_full (self->media, (GDestroyNotify) svg_css_media_block_free);
+  self->media = NULL;
+
   /* Note: we intentionally keep the stylesheet */
 
   self->focus = NULL;
@@ -3308,6 +3312,13 @@ gtk_svg_get_stylesheet (GtkSvg *self)
   return self->stylesheet;
 }
 
+static void
+setting_changed (GtkSvg *self)
+{
+  gtk_svg_update_media (self);
+  self->style_changed = TRUE;
+}
+
 /**
  * gtk_svg_set_settings:
  * @self: an SVG paintable
@@ -3327,7 +3338,22 @@ gtk_svg_set_settings (GtkSvg      *self,
   if (self->settings == settings)
     return;
 
+  if (self->settings)
+    g_signal_handlers_disconnect_by_func (self->settings, setting_changed, self);
+
   self->settings = settings;
+
+  if (settings)
+    {
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-color-scheme",
+                                G_CALLBACK (setting_changed), self);
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-contrast",
+                                G_CALLBACK (setting_changed), self);
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-reduced-motion",
+                                G_CALLBACK (setting_changed), self);
+    }
+
+  setting_changed (self);
 }
 
 /* }}} */

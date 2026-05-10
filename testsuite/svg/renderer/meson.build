@@ -90,6 +90,8 @@ test_data = [
   'marker7.svg',
   'marker-cycles.svg',
   'mask.svg',
+  'media1.test',
+  'media2.test',
   'more-filters.svg',
   'nested-svg.svg',
   'nested-svg-aspect-ratio.svg',

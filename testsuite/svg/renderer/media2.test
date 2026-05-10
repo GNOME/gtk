@@ -1,0 +1,5 @@
+# test prefers-color-scheme media queries
+[test]
+input=media.svg
+reference=media2.node
+color-scheme=dark
