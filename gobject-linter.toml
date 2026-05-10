@@ -77,3 +77,7 @@ style = "legacy"
 
 [rules.property_switch_exhaustiveness]
 style = "legacy"
+
+[rules.type_style]
+level = "ignore"
+style = "c"
