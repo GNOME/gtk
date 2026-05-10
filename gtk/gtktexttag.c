@@ -1944,6 +1944,10 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
+    case PROP_LINE_HEIGHT_SET:
+      priv->line_height_set = g_value_get_boolean (value);
+      break;
+
     case PROP_EDITABLE_SET:
       priv->editable_set = g_value_get_boolean (value);
       break;
