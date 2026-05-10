@@ -441,7 +441,10 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
     strcat (wintab32_dll_path, G_DIR_SEPARATOR_S);
   strcat (wintab32_dll_path, WINTAB32_DLL);
 
-  if ((wintab32 = LoadLibraryA (wintab32_dll_path)) == NULL)
+  wintab32 = LoadLibraryA (wintab32_dll_path);
+  g_free (wintab32_dll_path);
+
+  if (wintab32 == NULL)
     return;
 
   device_manager->wintab_items->wintab32 = wintab32;
