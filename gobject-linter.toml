@@ -67,3 +67,6 @@ ignore = [
   "gtk/gtkcssstyleprivate.h",
   "gtk/svg/gtksvgenumprivate.h",
 ]
+
+[rules.no_g_auto_macros]
+ignore = ["demos/icon-editor/**"]
