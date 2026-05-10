@@ -157,7 +157,7 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
   context_ime->cursor_location.height = 0;
   context_ime->commit_string          = NULL;
 
-  context_ime->priv = g_malloc0 (sizeof (GtkIMContextIMEPrivate));
+  context_ime->priv = g_new0 (GtkIMContextIMEPrivate, 1);
   context_ime->priv->focus_behavior = GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT;
 }
 

@@ -391,7 +391,7 @@ gtk_im_context_quartz_init (GtkIMContextQuartz *qc)
   qc->preedit_str = g_strdup ("");
   qc->cursor_index = 0;
   qc->selected_len = 0;
-  qc->cursor_rect = g_malloc (sizeof (GdkRectangle));
+  qc->cursor_rect = g_new (GdkRectangle, 1);
   qc->focused = FALSE;
 
   qc->helper = g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);

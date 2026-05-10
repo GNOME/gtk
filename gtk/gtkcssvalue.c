@@ -128,7 +128,7 @@ get_accounting_data (const char *class)
   c = g_hash_table_lookup (counters, class);
   if (!c)
     {
-       c = g_malloc0 (sizeof (ValueAccounting));
+       c = g_new0 (ValueAccounting, 1);
        g_hash_table_insert (counters, (gpointer)class, c);
     }
 
