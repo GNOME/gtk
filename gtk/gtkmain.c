@@ -392,9 +392,7 @@ enum_locale_proc (LPSTR locale)
             {
               char str[300];
 
-              strcpy (str, language);
-              strcat (str, "_");
-              strcat (str, country);
+              g_snprintf (str, sizeof (str), "%s_%s", language, country);
 
               if (setlocale (LC_ALL, str) != NULL)
                 setlocale_called = TRUE;
