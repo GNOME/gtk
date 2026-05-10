@@ -605,6 +605,11 @@ get_data_response (gpointer user_data)
 
           return G_SOURCE_REMOVE;
         }
+      else
+        {
+          GDK_NOTE (DND, g_print ("Error creeating output stream: %s", error->message));
+          g_clear_error (&error);
+        }
     }
 
   increment_dnd_queue_counter (gdk_surface_get_display (GDK_WIN32_DRAG (drag)->drag_surface));

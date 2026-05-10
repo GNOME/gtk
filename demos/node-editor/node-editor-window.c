@@ -1196,6 +1196,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
   gtk_popover_popdown (GTK_POPOVER (self->testcase_popover));
 
 out:
+  g_clear_error (&error);
   g_free (text);
   g_free (png_file);
   g_free (node_file);
