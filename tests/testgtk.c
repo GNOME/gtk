@@ -732,7 +732,7 @@ create_statusbar (GtkWidget *widget)
 
       statusbar = gtk_statusbar_new ();
       g_signal_connect (statusbar,
-			"text_popped",
+			"text-popped",
 			G_CALLBACK (statusbar_popped),
 			NULL);
 
@@ -2245,14 +2245,14 @@ create_size_group_window (GdkDisplay   *display,
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button), SIZE_GROUP_INITIAL_SIZE);
   gtk_widget_set_hexpand (spin_button, TRUE);
   gtk_box_append (GTK_BOX (hbox), spin_button);
-  g_signal_connect (spin_button, "value_changed",
+  g_signal_connect (spin_button, "value-changed",
 		    G_CALLBACK (size_group_hsize_changed), main_button);
 
   spin_button = gtk_spin_button_new_with_range (1, 100, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button), SIZE_GROUP_INITIAL_SIZE);
   gtk_widget_set_hexpand (spin_button, TRUE);
   gtk_box_append (GTK_BOX (hbox), spin_button);
-  g_signal_connect (spin_button, "value_changed",
+  g_signal_connect (spin_button, "value-changed",
 		    G_CALLBACK (size_group_vsize_changed), main_button);
 
   return window;
@@ -2607,7 +2607,7 @@ create_spins (GtkWidget *widget)
 
       adjustment = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adjustment, 0.0, 0);
-      g_signal_connect (adjustment, "value_changed",
+      g_signal_connect (adjustment, "value-changed",
 			G_CALLBACK (change_digits),
 			spinner2);
       gtk_box_append (GTK_BOX (vbox2), spinner2);
@@ -2665,7 +2665,7 @@ create_spins (GtkWidget *widget)
       spinner = gtk_spin_button_new_with_range (0.0, 10.0, 0.009);
       gtk_widget_set_hexpand (spinner, TRUE);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (spinner), 0.0);
-      g_signal_connect (spinner, "value_changed",
+      g_signal_connect (spinner, "value-changed",
 			G_CALLBACK (get_spin_value), val_label);
       gtk_box_append (GTK_BOX (hbox), spinner);
       gtk_box_append (GTK_BOX (hbox), val_label);
@@ -3819,7 +3819,7 @@ create_notebook (GtkWidget *widget)
       gtk_window_set_child (GTK_WINDOW (window), box1);
 
       sample_notebook = gtk_notebook_new ();
-      g_signal_connect (sample_notebook, "switch_page",
+      g_signal_connect (sample_notebook, "switch-page",
                         G_CALLBACK (page_switch), NULL);
       gtk_notebook_set_tab_pos (GTK_NOTEBOOK (sample_notebook), GTK_POS_TOP);
       gtk_widget_set_vexpand (sample_notebook, TRUE);

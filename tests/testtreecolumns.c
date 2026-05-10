@@ -497,7 +497,7 @@ view_column_model_new (GtkTreeView *view)
   ((ViewColumnModel *)retval)->view = view;
   ((ViewColumnModel *)retval)->columns = gtk_tree_view_get_columns (view);
 
-  g_signal_connect (view, "columns_changed", G_CALLBACK (update_columns), retval);
+  g_signal_connect (view, "columns-changed", G_CALLBACK (update_columns), retval);
 
   return retval;
 }

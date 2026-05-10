@@ -439,12 +439,12 @@ main (int argc, char **argv)
                     G_CALLBACK (press_handler), icon_list);
   gtk_widget_add_controller (icon_list, GTK_EVENT_CONTROLLER (gesture));
 
-  g_signal_connect (icon_list, "selection_changed",
+  g_signal_connect (icon_list, "selection-changed",
 		    G_CALLBACK (selection_changed), NULL);
-  g_signal_connect (icon_list, "popup_menu",
+  g_signal_connect (icon_list, "popup-menu",
 		    G_CALLBACK (popup_menu_handler), NULL);
 
-  g_signal_connect (icon_list, "item_activated",
+  g_signal_connect (icon_list, "item-activated",
 		    G_CALLBACK (item_activated), NULL);
   
   model = create_model ();

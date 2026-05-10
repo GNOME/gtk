@@ -3703,23 +3703,23 @@ create_volume_monitor (GtkPlacesSidebar *sidebar)
 
   sidebar->volume_monitor = g_volume_monitor_get ();
 
-  g_signal_connect_object (sidebar->volume_monitor, "volume_added",
+  g_signal_connect_object (sidebar->volume_monitor, "volume-added",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "volume_removed",
+  g_signal_connect_object (sidebar->volume_monitor, "volume-removed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "volume_changed",
+  g_signal_connect_object (sidebar->volume_monitor, "volume-changed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "mount_added",
+  g_signal_connect_object (sidebar->volume_monitor, "mount-added",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "mount_removed",
+  g_signal_connect_object (sidebar->volume_monitor, "mount-removed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "mount_changed",
+  g_signal_connect_object (sidebar->volume_monitor, "mount-changed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "drive_disconnected",
+  g_signal_connect_object (sidebar->volume_monitor, "drive-disconnected",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "drive_connected",
+  g_signal_connect_object (sidebar->volume_monitor, "drive-connected",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
-  g_signal_connect_object (sidebar->volume_monitor, "drive_changed",
+  g_signal_connect_object (sidebar->volume_monitor, "drive-changed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
 }
 

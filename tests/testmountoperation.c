@@ -137,7 +137,7 @@ main (int argc, char *argv[])
         "Yes", "No", "Sauerkraut", NULL
       };
 
-      g_signal_emit_by_name (op, "ask_question", "Foo\nbar", choices);
+      g_signal_emit_by_name (op, "ask-question", "Foo\nbar", choices);
     }
   else if (show_processes)
     {
@@ -180,7 +180,7 @@ main (int argc, char *argv[])
       if (!dont_save_password)
           flags |= G_ASK_PASSWORD_SAVING_SUPPORTED;
 
-      g_signal_emit_by_name (op, "ask_password",
+      g_signal_emit_by_name (op, "ask-password",
                              argc > 1 ? argv[1] : "Credentials needed",
                              argc > 2 ? argv[2] : "default user",
                              argc > 3 ? argv[3] : "default domain",
