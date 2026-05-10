@@ -383,7 +383,10 @@ print_done (GtkPrintOperation *op,
 
       alert = gtk_alert_dialog_new ("Error printing file");
       if (error)
-        gtk_alert_dialog_set_detail (alert, error->message);
+        {
+          gtk_alert_dialog_set_detail (alert, error->message);
+          g_clear_error (&error);
+        }
       gtk_alert_dialog_show (alert, GTK_WINDOW (main_window));
       g_object_unref (alert);
     }
