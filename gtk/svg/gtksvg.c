@@ -1884,30 +1884,19 @@ gtk_svg_dispose (GObject *object)
 {
   GtkSvg *self = GTK_SVG (object);
 
-  frame_clock_disconnect (self);
-  g_clear_handle_id (&self->pending_advance, g_source_remove);
+  gtk_svg_clear_content (self);
 
+  /* clear_content preserves the stylesheet */
+  g_clear_pointer (&self->stylesheet, g_bytes_unref);
+
+  /* clear_content recreates these */
   g_clear_pointer (&self->content, svg_element_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
-  g_clear_object (&self->fontmap);
-  g_clear_pointer (&self->font_files, g_ptr_array_unref);
-  g_clear_pointer (&self->node, gsk_render_node_unref);
 
+  frame_clock_disconnect (self);
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
   g_clear_object (&self->clock);
-
-  g_clear_pointer (&self->author, g_free);
-  g_clear_pointer (&self->license, g_free);
-  g_clear_pointer (&self->description, g_free);
-  g_clear_pointer (&self->keywords, g_free);
-  g_clear_pointer (&self->resource, g_free);
-
-  g_clear_pointer (&self->state_names, g_strfreev);
-
-  g_clear_pointer (&self->stylesheet, g_bytes_unref);
-
-  g_clear_pointer (&self->user_styles, g_array_unref);
-  g_clear_pointer (&self->author_styles, g_array_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
