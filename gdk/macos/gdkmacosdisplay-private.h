@@ -100,7 +100,6 @@ struct _GdkMacosDisplayClass
 
 
 GdkDisplay      *_gdk_macos_display_open                           (const char      *display_name);
-int              _gdk_macos_display_get_fd                         (GdkMacosDisplay *self);
 void             _gdk_macos_display_queue_events                   (GdkMacosDisplay *self);
 void             _gdk_macos_display_to_display_coords              (GdkMacosDisplay *self,
                                                                     int              x,
