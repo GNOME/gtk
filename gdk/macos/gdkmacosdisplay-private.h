@@ -138,9 +138,6 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
 void             _gdk_macos_display_reload_monitors                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
-NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisplay *self,
-                                                                    int             *x,
-                                                                    int             *y);
 gboolean         _gdk_macos_display_get_setting                    (GdkMacosDisplay *self,
                                                                     const char      *setting,
                                                                     GValue          *value);
