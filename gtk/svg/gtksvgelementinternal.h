@@ -23,6 +23,7 @@
 
 #include "gtksvgelementprivate.h"
 #include "gtkcssselectorprivate.h"
+#include "gtksvgmediaqueryprivate.h"
 
 G_BEGIN_DECLS
 
@@ -65,6 +66,7 @@ void property_value_clear (PropertyValue *pv);
 
 typedef struct
 {
+  SvgCssMediaBlock *media;
   GtkCssSelector *selector;
   PropertyValue *styles;
   unsigned int n_styles;

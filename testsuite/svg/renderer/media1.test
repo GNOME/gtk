@@ -1,0 +1,5 @@
+# test prefers-color-scheme media queries
+[test]
+input=media.svg
+reference=media1.node
+color-scheme=light

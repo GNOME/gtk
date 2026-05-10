@@ -1,0 +1,11 @@
+<svg width='64' height='64' xmlns='http://www.w3.org/2000/svg'>
+  <style>
+    @media (prefers-color-scheme: light) {
+      rect { fill: yellow; }
+    }
+    @media not (prefers-color-scheme: light) {
+      rect { fill: lightgreen; }
+    }
+  </style>
+  <rect x='0' y='0' width='50%' height='50%'/>
+</svg>

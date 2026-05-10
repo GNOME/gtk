@@ -29,6 +29,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/gtkcssselectorprivate.h"
+#include "gtk/gtkcssmediaqueryprivate.h"
 #include <glib/gstdio.h>
 #include "gtksvgenumtypes.h"
 #include "gtksvgutilsprivate.h"
@@ -67,6 +68,7 @@
 #include "gtksvganimationprivate.h"
 #include "gtksvgtimespecprivate.h"
 #include "gtksvggpaprivate.h"
+#include "gtksvgmediaqueryprivate.h"
 #include "gtkmain.h"
 
 #include <stdint.h>
@@ -3421,6 +3423,8 @@ struct _SvgCssScanner
   ParserData *data;
   GtkCssParser *parser;
   SvgCssScanner *parent;
+  GArray *media_features;
+  SvgCssMediaBlock *media;
 };
 
 static void
@@ -3489,10 +3493,90 @@ svg_css_scanner_new (ParserData    *data,
                      GBytes        *bytes)
 {
   SvgCssScanner *scanner = g_new0 (SvgCssScanner, 1);
+  GtkCssDiscreteMediaFeature feature;
 
   scanner->data = data;
   scanner->parent = parent;
   scanner->parser = gtk_css_parser_new_for_bytes (bytes, file, svg_css_scanner_parser_error, data, NULL);
+
+  if (parent == NULL)
+    {
+      GtkInterfaceColorScheme prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DEFAULT;
+      GtkInterfaceContrast prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
+      GtkReducedMotion prefers_reduced_motion = GTK_REDUCED_MOTION_NO_PREFERENCE;
+
+      if (data->svg->settings)
+        g_object_get (data->svg->settings,
+                      "gtk-interface-color-scheme", &prefers_color_scheme,
+                      "gtk-interface-contrast", &prefers_contrast,
+                      "gtk-interface-reduced-motion", &prefers_reduced_motion,
+                      NULL);
+
+      scanner->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 3);
+
+      feature.name = "prefers-color-scheme";
+
+      switch (prefers_color_scheme)
+        {
+        case GTK_INTERFACE_COLOR_SCHEME_DEFAULT:
+        case GTK_INTERFACE_COLOR_SCHEME_LIGHT:
+        case GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED:
+          feature.value = "light";
+          break;
+
+        case GTK_INTERFACE_COLOR_SCHEME_DARK:
+          feature.value = "dark";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      g_array_append_vals (scanner->media_features, &feature, 1);
+
+      feature.name = "prefers-contrast";
+
+      switch (prefers_contrast)
+        {
+        case GTK_INTERFACE_CONTRAST_NO_PREFERENCE:
+        case GTK_INTERFACE_CONTRAST_UNSUPPORTED:
+          feature.value = "no-preference";
+          break;
+
+        case GTK_INTERFACE_CONTRAST_MORE:
+          feature.value = "more";
+          break;
+
+        case GTK_INTERFACE_CONTRAST_LESS:
+          feature.value = "less";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      g_array_append_vals (scanner->media_features, &feature, 1);
+
+      feature.name = "prefers-reduced-motion";
+
+      switch (prefers_reduced_motion)
+        {
+        case GTK_REDUCED_MOTION_NO_PREFERENCE:
+          feature.value = "no-preference";
+          break;
+
+        case GTK_REDUCED_MOTION_REDUCE:
+          feature.value = "reduce";
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      g_array_append_vals (scanner->media_features, &feature, 1);
+    }
+  else
+    scanner->media_features = g_array_ref (parent->media_features);
 
   return scanner;
 }
@@ -3501,6 +3585,8 @@ static void
 svg_css_scanner_destroy (SvgCssScanner *scanner)
 {
   gtk_css_parser_unref (scanner->parser);
+  g_array_unref (scanner->media_features);
+
   g_free (scanner);
 }
 
@@ -3633,10 +3719,58 @@ parse_import (SvgCssScanner *scanner)
   return TRUE;
 }
 
+static void parse_statement (SvgCssScanner *scanner);
+
+static gboolean
+parse_media_block (SvgCssScanner *scanner)
+{
+  SvgCssMediaCondition *condition = NULL;
+  SvgCssMediaBlock *media;
+
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "media"))
+    return FALSE;
+
+  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
+    {
+      condition = parse_media_query (scanner->parser);
+      if (condition == NULL)
+        return FALSE;
+    }
+
+  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY))
+    {
+      svg_css_media_condition_free (condition);
+      gtk_css_parser_error_syntax (scanner->parser, "Expected '{' after @media query");
+      return FALSE;
+    }
+
+  media = g_new0 (SvgCssMediaBlock, 1);
+  media->condition = condition;
+  media->next = scanner->media;
+
+  scanner->data->svg->media = g_list_append (scanner->data->svg->media, media);
+
+  scanner->media = media;
+
+  gtk_css_parser_start_block (scanner->parser);
+
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
+         !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+    parse_statement (scanner);
+
+  gtk_css_parser_end_block (scanner->parser);
+
+  scanner->media = scanner->media->next;
+
+  return TRUE;
+}
 
 static void
 parse_at_keyword (SvgCssScanner *scanner)
 {
+  if (parse_media_block (scanner))
+    return;
+
   gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
   if (!parse_import (scanner))
     gtk_css_parser_error_syntax (scanner->parser, "Unknown @ rule");
@@ -3861,6 +3995,9 @@ parse_ruleset (SvgCssScanner *scanner)
   gtk_css_parser_start_block (scanner->parser);
   parse_declarations_into_ruleset (scanner, &ruleset);
   gtk_css_parser_end_block (scanner->parser);
+
+  ruleset.media = scanner->media;
+
   if (scanner->data->load_user_style)
     commit_ruleset (scanner->data->svg->user_styles, &selectors, &ruleset);
   else
@@ -4161,6 +4298,12 @@ apply_ruleset_to_shape (SvgCssRuleset  *r,
     }
 }
 
+static gboolean
+media_condition_is_true (SvgCssRuleset *r)
+{
+  return r->media == NULL || r->media->value;
+}
+
 static void
 apply_styles_here (SvgElement   *shape,
                    unsigned int  idx,
@@ -4228,7 +4371,7 @@ apply_styles_here (SvgElement   *shape,
   for (unsigned int i = 0; i < svg->user_styles->len; i++)
     {
       SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
+      if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
         apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
     }
 
@@ -4250,7 +4393,7 @@ apply_styles_here (SvgElement   *shape,
   for (unsigned int i = 0; i < svg->author_styles->len; i++)
     {
       SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
+      if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
         apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
     }
 
@@ -4272,7 +4415,7 @@ apply_styles_here (SvgElement   *shape,
   for (unsigned int i = 0; i < svg->author_styles->len; i++)
     {
       SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
+      if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
         apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
     }
 
@@ -4280,7 +4423,7 @@ apply_styles_here (SvgElement   *shape,
   for (unsigned int i = 0; i < svg->user_styles->len; i++)
     {
       SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
-      if (gtk_css_selector_matches (r->selector, node))
+      if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
         apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
     }
 
@@ -4656,6 +4799,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   load_user_styles (&data);
   load_author_styles (&data);
   load_inline_styles (&data);
+
+  gtk_svg_update_media (self);
 
   apply_styles_to_shape (self->content, self);
   resolve_refs_in_shapes (&data);

@@ -87,6 +87,7 @@
 #include "gtksvganimationprivate.h"
 #include "gtksvgtimespecprivate.h"
 #include "gtksvggpaprivate.h"
+#include "gtksvgmediaqueryprivate.h"
 
 #include <tgmath.h>
 #include <stdint.h>
@@ -1884,30 +1885,19 @@ gtk_svg_dispose (GObject *object)
 {
   GtkSvg *self = GTK_SVG (object);
 
-  frame_clock_disconnect (self);
-  g_clear_handle_id (&self->pending_advance, g_source_remove);
+  gtk_svg_clear_content (self);
 
+  /* clear_content preserves the stylesheet */
+  g_clear_pointer (&self->stylesheet, g_bytes_unref);
+
+  /* clear_content recreates these */
   g_clear_pointer (&self->content, svg_element_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
-  g_clear_object (&self->fontmap);
-  g_clear_pointer (&self->font_files, g_ptr_array_unref);
-  g_clear_pointer (&self->node, gsk_render_node_unref);
 
+  frame_clock_disconnect (self);
+  g_clear_handle_id (&self->pending_advance, g_source_remove);
   g_clear_object (&self->clock);
-
-  g_clear_pointer (&self->author, g_free);
-  g_clear_pointer (&self->license, g_free);
-  g_clear_pointer (&self->description, g_free);
-  g_clear_pointer (&self->keywords, g_free);
-  g_clear_pointer (&self->resource, g_free);
-
-  g_clear_pointer (&self->state_names, g_strfreev);
-
-  g_clear_pointer (&self->stylesheet, g_bytes_unref);
-
-  g_clear_pointer (&self->user_styles, g_array_unref);
-  g_clear_pointer (&self->author_styles, g_array_unref);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -2504,6 +2494,9 @@ gtk_svg_clear_content (GtkSvg *self)
 
   g_array_set_size (self->user_styles, 0);
   g_array_set_size (self->author_styles, 0);
+
+  g_list_free_full (self->media, (GDestroyNotify) svg_css_media_block_free);
+  self->media = NULL;
 
   /* Note: we intentionally keep the stylesheet */
 
@@ -3317,6 +3310,50 @@ gtk_svg_get_stylesheet (GtkSvg *self)
   g_return_val_if_fail (GTK_IS_SVG (self), NULL);
 
   return self->stylesheet;
+}
+
+static void
+setting_changed (GtkSvg *self)
+{
+  gtk_svg_update_media (self);
+  self->style_changed = TRUE;
+}
+
+/**
+ * gtk_svg_set_settings:
+ * @self: an SVG paintable
+ * @settings: (nullable): the settings object
+ *
+ * Sets a settings object holding settinsg used when
+ * rendering the SVG.
+ *
+ * Since: 4.24
+ */
+void
+gtk_svg_set_settings (GtkSvg      *self,
+                      GtkSettings *settings)
+{
+  g_return_if_fail (GTK_IS_SVG (self));
+
+  if (self->settings == settings)
+    return;
+
+  if (self->settings)
+    g_signal_handlers_disconnect_by_func (self->settings, setting_changed, self);
+
+  self->settings = settings;
+
+  if (settings)
+    {
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-color-scheme",
+                                G_CALLBACK (setting_changed), self);
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-contrast",
+                                G_CALLBACK (setting_changed), self);
+      g_signal_connect_swapped (self->settings, "notify::gtk-interface-reduced-motion",
+                                G_CALLBACK (setting_changed), self);
+    }
+
+  setting_changed (self);
 }
 
 /* }}} */
