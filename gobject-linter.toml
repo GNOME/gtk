@@ -81,3 +81,11 @@ style = "legacy"
 [rules.type_style]
 level = "ignore"
 style = "c"
+
+[rules.untranslated_string]
+ignore = [
+  "demos/**",
+  "examples/**",
+  "tests/**",
+  "testsuite/**",
+]
