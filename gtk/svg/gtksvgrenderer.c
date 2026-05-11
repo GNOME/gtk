@@ -77,7 +77,6 @@
 #include "gtksvgelementinternal.h"
 #include "gtksvgparserprivate.h"
 
-#include <tgmath.h>
 #include <stdint.h>
 
 #include "gdk/gdkrgbaprivate.h"

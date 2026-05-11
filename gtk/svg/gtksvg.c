@@ -89,7 +89,6 @@
 #include "gtksvggpaprivate.h"
 #include "gtksvgmediaqueryprivate.h"
 
-#include <tgmath.h>
 #include <stdint.h>
 
 #ifdef HAVE_PANGOFT
