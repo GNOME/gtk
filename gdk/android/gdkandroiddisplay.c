@@ -285,7 +285,7 @@ gdk_android_display_class_init (GdkAndroidDisplayClass *klass)
    */
   obj_properties[PROP_NIGHT_MODE] = g_param_spec_enum ("night-mode", NULL, NULL,
                                                        GDK_TYPE_ANDROID_DISPLAY_NIGHT_MODE, GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED,
-                                                       G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                                                       G_PARAM_STATIC_NAME | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
    /**
    * GdkAndroidDisplay:accent-color: (getter get_accent_color)
@@ -296,7 +296,7 @@ gdk_android_display_class_init (GdkAndroidDisplayClass *klass)
    */
   obj_properties[PROP_ACCENT_COLOR] = g_param_spec_boxed ("accent-color", NULL, NULL,
                                                           GDK_TYPE_RGBA,
-                                                          G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                                                          G_PARAM_STATIC_NAME | G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }

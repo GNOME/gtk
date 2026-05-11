@@ -285,7 +285,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
                                                      GTK_PRINT_BACKEND_STATUS_UNKNOWN,
                                                      GTK_PRINT_BACKEND_STATUS_UNAVAILABLE,
                                                      GTK_PRINT_BACKEND_STATUS_UNKNOWN,
-                                                     GTK_PARAM_READWRITE)); 
+                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME)); 
   
   signals[PRINTER_LIST_CHANGED] =
     g_signal_new ("printer-list-changed",

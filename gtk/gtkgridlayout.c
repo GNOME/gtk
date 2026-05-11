@@ -164,7 +164,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   child_props[PROP_CHILD_COLUMN] =
     g_param_spec_int ("column", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayoutChild:row:
@@ -174,7 +174,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   child_props[PROP_CHILD_ROW] =
     g_param_spec_int ("row", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayoutChild:column-span:
@@ -184,7 +184,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   child_props[PROP_CHILD_COLUMN_SPAN] =
     g_param_spec_int ("column-span", NULL, NULL,
                       1, G_MAXINT, 1,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayoutChild:row-span:
@@ -194,7 +194,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   child_props[PROP_CHILD_ROW_SPAN] =
     g_param_spec_int ("row-span", NULL, NULL,
                       1, G_MAXINT, 1,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_CHILD_PROPERTIES, child_props);
 }
@@ -1660,7 +1660,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   layout_props[PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayout:column-spacing:
@@ -1670,7 +1670,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   layout_props[PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayout:row-homogeneous:
@@ -1680,7 +1680,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   layout_props[PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayout:column-homogeneous:
@@ -1690,7 +1690,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   layout_props[PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGridLayout:baseline-row:
@@ -1701,7 +1701,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   layout_props[PROP_BASELINE_ROW] =
     g_param_spec_int ("baseline-row", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPERTIES, layout_props);
 }

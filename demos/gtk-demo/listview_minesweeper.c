@@ -81,10 +81,9 @@ sweeper_cell_class_init (SweeperCellClass *klass)
 
   cell_properties[CELL_PROP_LABEL] =
     g_param_spec_string ("label",
-                         "label",
-                         "label to display for this row",
+                         NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_CELL_PROPS, cell_properties);
 }
@@ -227,31 +226,27 @@ sweeper_game_class_init (SweeperGameClass *klass)
 
   game_properties[GAME_PROP_HEIGHT] =
     g_param_spec_uint ("height",
-                       "height",
-                       "height of the game grid",
+                       NULL, NULL,
                        1, G_MAXUINT, 8,
-                       G_PARAM_READABLE);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   game_properties[GAME_PROP_PLAYING] =
     g_param_spec_boolean ("playing",
-                          "playing",
-                          "if the game is still going on",
+                          NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   game_properties[GAME_PROP_WIDTH] =
     g_param_spec_uint ("width",
-                       "width",
-                       "width of the game grid",
+                       NULL, NULL,
                        1, G_MAXUINT, 8,
-                       G_PARAM_READABLE);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   game_properties[GAME_PROP_WIN] =
     g_param_spec_boolean ("win",
-                          "win",
-                          "if the game was won",
+                          NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_GAME_PROPS, game_properties);
 }

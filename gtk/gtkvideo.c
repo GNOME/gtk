@@ -420,7 +420,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   properties[PROP_AUTOPLAY] =
     g_param_spec_boolean ("autoplay", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkVideo:file:
@@ -430,7 +430,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   properties[PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkVideo:loop:
@@ -440,7 +440,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   properties[PROP_LOOP] =
     g_param_spec_boolean ("loop", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkVideo:media-stream:
@@ -450,7 +450,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   properties[PROP_MEDIA_STREAM] =
     g_param_spec_object ("media-stream", NULL, NULL,
                          GTK_TYPE_MEDIA_STREAM,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkVideo:graphics-offload:
@@ -463,7 +463,7 @@ gtk_video_class_init (GtkVideoClass *klass)
     g_param_spec_enum ("graphics-offload", NULL, NULL,
                        GTK_TYPE_GRAPHICS_OFFLOAD_ENABLED,
                        GTK_GRAPHICS_OFFLOAD_DISABLED,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

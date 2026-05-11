@@ -528,7 +528,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_TAG_TABLE] =
       g_param_spec_object ("tag-table", NULL, NULL,
                            GTK_TYPE_TEXT_TAG_TABLE,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /* Normal properties */
 
@@ -543,7 +543,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_TEXT] =
       g_param_spec_string ("text", NULL, NULL,
                            "",
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:has-selection:
@@ -553,7 +553,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_HAS_SELECTION] =
       g_param_spec_boolean ("has-selection", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE);
+                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:can-undo:
@@ -563,7 +563,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_CAN_UNDO] =
     g_param_spec_boolean ("can-undo", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READABLE);
+                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:can-redo:
@@ -573,7 +573,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_CAN_REDO] =
     g_param_spec_boolean ("can-redo", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READABLE);
+                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:enable-undo:
@@ -583,7 +583,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_ENABLE_UNDO] =
     g_param_spec_boolean ("enable-undo", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:cursor-position:
@@ -597,7 +597,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
       g_param_spec_int ("cursor-position", NULL, NULL,
 			0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE);
+                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, text_buffer_props);
 

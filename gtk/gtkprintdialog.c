@@ -377,7 +377,7 @@ gtk_print_dialog_class_init (GtkPrintDialogClass *class)
   properties[PROP_ACCEPT_LABEL] =
       g_param_spec_string ("accept-label", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPrintDialog:page-setup:
@@ -389,7 +389,7 @@ gtk_print_dialog_class_init (GtkPrintDialogClass *class)
   properties[PROP_PAGE_SETUP] =
       g_param_spec_object ("page-setup", NULL, NULL,
                            GTK_TYPE_PAGE_SETUP,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPrintDialog:modal:
@@ -401,7 +401,7 @@ gtk_print_dialog_class_init (GtkPrintDialogClass *class)
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPrintDialog:print-settings:
@@ -413,7 +413,7 @@ gtk_print_dialog_class_init (GtkPrintDialogClass *class)
   properties[PROP_PRINT_SETTINGS] =
       g_param_spec_object ("print-settings", NULL, NULL,
                            GTK_TYPE_PRINT_SETTINGS,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPrintDialog:title:
@@ -426,7 +426,7 @@ gtk_print_dialog_class_init (GtkPrintDialogClass *class)
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

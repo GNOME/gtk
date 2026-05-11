@@ -687,7 +687,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, GDK_ACTION_NONE,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDropTarget:drop:
@@ -699,7 +699,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_DROP] =
        g_param_spec_object ("drop", NULL, NULL,
                             GDK_TYPE_DROP,
-                            GTK_PARAM_READABLE | G_PARAM_DEPRECATED);
+                            GTK_PARAM_READABLE | G_PARAM_DEPRECATED | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropTarget:current-drop:
@@ -711,7 +711,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_CURRENT_DROP] =
        g_param_spec_object ("current-drop", NULL, NULL,
                             GDK_TYPE_DROP,
-                            GTK_PARAM_READABLE);
+                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropTarget:formats:
@@ -721,7 +721,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_FORMATS] =
        g_param_spec_boxed ("formats", NULL, NULL,
                            GDK_TYPE_CONTENT_FORMATS,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropTarget:preload:
@@ -748,7 +748,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_PRELOAD] =
        g_param_spec_boolean ("preload", NULL, NULL,
                              FALSE,
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDropTarget:value:
@@ -766,7 +766,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_VALUE] =
        g_param_spec_boxed ("value", NULL, NULL,
                            G_TYPE_VALUE,
-                           GTK_PARAM_READABLE);
+                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

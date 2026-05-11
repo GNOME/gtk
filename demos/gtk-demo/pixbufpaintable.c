@@ -175,8 +175,8 @@ pixbuf_paintable_class_init (PixbufPaintableClass *class)
   object_class->set_property = pixbuf_paintable_set_property;
 
   g_object_class_install_property (object_class, PROP_RESOURCE_PATH,
-      g_param_spec_string ("resource-path", "Resource path", "Resource path",
-                           NULL, G_PARAM_READWRITE));
+      g_param_spec_string ("resource-path", NULL, NULL,
+                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
 }
 

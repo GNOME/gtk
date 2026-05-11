@@ -2472,7 +2472,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_LABEL] =
       g_param_spec_string ("label", NULL, NULL,
                            "",
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:attributes:
@@ -2482,7 +2482,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
-                          GTK_PARAM_READWRITE);
+                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:use-markup:
@@ -2494,7 +2494,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_USE_MARKUP] =
       g_param_spec_boolean ("use-markup", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:use-underline:
@@ -2505,7 +2505,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:justify:
@@ -2519,7 +2519,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_enum ("justify", NULL, NULL,
                          GTK_TYPE_JUSTIFICATION,
                          GTK_JUSTIFY_LEFT,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:xalign:
@@ -2533,7 +2533,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_float ("xalign", NULL, NULL,
                           0.0, 1.0,
                           0.5,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:yalign:
@@ -2547,7 +2547,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_float ("yalign", NULL, NULL,
                           0.0, 1.0,
                           0.5,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:wrap:
@@ -2557,7 +2557,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_WRAP] =
       g_param_spec_boolean ("wrap", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:wrap-mode:
@@ -2575,7 +2575,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_enum ("wrap-mode", NULL, NULL,
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_WORD,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:natural-wrap-mode:
@@ -2594,7 +2594,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_enum ("natural-wrap-mode", NULL, NULL,
                          GTK_TYPE_NATURAL_WRAP_MODE,
                          GTK_NATURAL_WRAP_INHERIT,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:selectable:
@@ -2604,7 +2604,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_SELECTABLE] =
       g_param_spec_boolean ("selectable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:mnemonic-keyval:
@@ -2615,7 +2615,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_uint ("mnemonic-keyval", NULL, NULL,
                          0, G_MAXUINT,
                          GDK_KEY_VoidSymbol,
-                         GTK_PARAM_READABLE);
+                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:mnemonic-widget:
@@ -2625,7 +2625,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_MNEMONIC_WIDGET] =
       g_param_spec_object ("mnemonic-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:ellipsize:
@@ -2646,7 +2646,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:width-chars:
@@ -2663,7 +2663,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:single-line-mode:
@@ -2678,7 +2678,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_SINGLE_LINE_MODE] =
       g_param_spec_boolean ("single-line-mode", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:max-width-chars:
@@ -2695,7 +2695,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:lines:
@@ -2720,7 +2720,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_int ("lines", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:extra-menu:
@@ -2730,7 +2730,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_EXTRA_MENU] =
       g_param_spec_object ("extra-menu", NULL, NULL,
                           G_TYPE_MENU_MODEL,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:tabs:
@@ -2742,7 +2742,7 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_TABS] =
       g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 

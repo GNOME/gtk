@@ -487,7 +487,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_BUFFER] =
       g_param_spec_object ("buffer", NULL, NULL,
                            GTK_TYPE_ENTRY_BUFFER,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:max-length:
@@ -498,7 +498,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_int ("max-length", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:visibility:
@@ -509,7 +509,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_VISIBILITY] =
       g_param_spec_boolean ("visibility", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:has-frame:
@@ -519,7 +519,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_HAS_FRAME] =
       g_param_spec_boolean ("has-frame", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:invisible-char:
@@ -529,7 +529,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_INVISIBLE_CHAR] =
       g_param_spec_unichar ("invisible-char", NULL, NULL,
                             '*',
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:activates-default:
@@ -539,7 +539,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:scroll-offset:
@@ -550,7 +550,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_int ("scroll-offset", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:truncate-multiline:
@@ -560,7 +560,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TRUNCATE_MULTILINE] =
       g_param_spec_boolean ("truncate-multiline", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:overwrite-mode:
@@ -570,7 +570,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_OVERWRITE_MODE] =
       g_param_spec_boolean ("overwrite-mode", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:text-length:
@@ -581,7 +581,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_uint ("text-length", NULL, NULL,
                          0, G_MAXUINT16,
                          0,
-                         GTK_PARAM_READABLE);
+                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:invisible-char-set:
@@ -591,7 +591,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_INVISIBLE_CHAR_SET] =
       g_param_spec_boolean ("invisible-char-set", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE);
+                            GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:progress-fraction:
@@ -602,7 +602,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_double ("progress-fraction", NULL, NULL,
                            0.0, 1.0,
                            0.0,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:progress-pulse-step:
@@ -616,7 +616,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_double ("progress-pulse-step", NULL, NULL,
                            0.0, 1.0,
                            0.0,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
   * GtkEntry:placeholder-text:
@@ -627,7 +627,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
    /**
    * GtkEntry:primary-icon-paintable:
@@ -637,7 +637,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_PAINTABLE_PRIMARY] =
       g_param_spec_object ("primary-icon-paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-paintable:
@@ -647,7 +647,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_PAINTABLE_SECONDARY] =
       g_param_spec_object ("secondary-icon-paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-name:
@@ -657,7 +657,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ICON_NAME_PRIMARY] =
       g_param_spec_string ("primary-icon-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-name:
@@ -667,7 +667,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ICON_NAME_SECONDARY] =
       g_param_spec_string ("secondary-icon-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-gicon:
@@ -677,7 +677,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_GICON_PRIMARY] =
       g_param_spec_object ("primary-icon-gicon", NULL, NULL,
                            G_TYPE_ICON,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-gicon:
@@ -687,7 +687,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_GICON_SECONDARY] =
       g_param_spec_object ("secondary-icon-gicon", NULL, NULL,
                            G_TYPE_ICON,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-storage-type:
@@ -698,7 +698,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_enum ("primary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE);
+                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-storage-type:
@@ -709,7 +709,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_enum ("secondary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE);
+                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-activatable:
@@ -726,7 +726,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ACTIVATABLE_PRIMARY] =
       g_param_spec_boolean ("primary-icon-activatable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-activatable:
@@ -743,7 +743,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ACTIVATABLE_SECONDARY] =
       g_param_spec_boolean ("secondary-icon-activatable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-sensitive:
@@ -760,7 +760,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_SENSITIVE_PRIMARY] =
       g_param_spec_boolean ("primary-icon-sensitive", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-sensitive:
@@ -777,7 +777,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_SENSITIVE_SECONDARY] =
       g_param_spec_boolean ("secondary-icon-sensitive", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-tooltip-text:
@@ -789,7 +789,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TOOLTIP_TEXT_PRIMARY] =
       g_param_spec_string ("primary-icon-tooltip-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-tooltip-text:
@@ -801,7 +801,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TOOLTIP_TEXT_SECONDARY] =
       g_param_spec_string ("secondary-icon-tooltip-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-tooltip-markup:
@@ -813,7 +813,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TOOLTIP_MARKUP_PRIMARY] =
       g_param_spec_string ("primary-icon-tooltip-markup", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-tooltip-markup:
@@ -825,7 +825,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TOOLTIP_MARKUP_SECONDARY] =
       g_param_spec_string ("secondary-icon-tooltip-markup", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:im-module:
@@ -841,7 +841,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_IM_MODULE] =
       g_param_spec_string ("im-module", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:completion:
@@ -853,7 +853,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_COMPLETION] =
       g_param_spec_object ("completion", NULL, NULL,
                            GTK_TYPE_ENTRY_COMPLETION,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:input-purpose:
@@ -871,7 +871,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_enum ("input-purpose", NULL, NULL,
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:input-hints:
@@ -884,7 +884,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_flags ("input-hints", NULL, NULL,
                           GTK_TYPE_INPUT_HINTS,
                           GTK_INPUT_HINT_NONE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:attributes:
@@ -899,7 +899,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:tabs:
@@ -909,7 +909,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_TABS] =
       g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:show-emoji-icon:
@@ -920,7 +920,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_SHOW_EMOJI_ICON] =
       g_param_spec_boolean ("show-emoji-icon", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:extra-menu:
@@ -930,7 +930,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_EXTRA_MENU] =
       g_param_spec_object ("extra-menu", NULL, NULL,
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:enable-emoji-completion:
@@ -941,7 +941,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ENABLE_EMOJI_COMPLETION] =
       g_param_spec_boolean ("enable-emoji-completion", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:menu-entry-icon-primary-text:
@@ -964,7 +964,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_MENU_ENTRY_ICON_PRIMARY_TEXT] =
       g_param_spec_string ("menu-entry-icon-primary-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:menu-entry-icon-secondary-text:
@@ -987,7 +987,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_MENU_ENTRY_ICON_SECONDARY_TEXT] =
       g_param_spec_string ("menu-entry-icon-secondary-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
   g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");

@@ -152,7 +152,7 @@ gtk_app_item_class_init (GtkAppItemClass *class)
 
   item_properties[ITEM_PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
                                                          NULL,
-                                                         G_PARAM_READABLE);
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_ITEM_PROPS, item_properties);
 }
@@ -608,7 +608,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_boolean ("show-default", NULL, NULL,
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
 
   /**
@@ -622,7 +622,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_boolean ("show-recommended", NULL, NULL,
                                 TRUE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
 
   /**
@@ -636,7 +636,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_boolean ("show-fallback", NULL, NULL,
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
 
   /**
@@ -647,7 +647,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_boolean ("show-other", NULL, NULL,
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
 
   /**
@@ -659,7 +659,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_boolean ("show-all", NULL, NULL,
                                 FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
 
   /**
@@ -670,7 +670,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    */
   pspec = g_param_spec_string ("default-text", NULL, NULL,
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);
 
   /**

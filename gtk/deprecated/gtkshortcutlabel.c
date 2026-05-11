@@ -524,7 +524,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutLabel:disabled-text:
@@ -536,7 +536,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   properties[PROP_DISABLED_TEXT] =
     g_param_spec_string ("disabled-text", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

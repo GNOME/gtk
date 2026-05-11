@@ -286,7 +286,7 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
   g_object_class_install_property (object_class, PROP_SCALE_TYPE,
       g_param_spec_int ("scale-type", NULL, NULL,
                         0, 1, 0,
-                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 void

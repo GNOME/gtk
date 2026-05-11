@@ -472,7 +472,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   g_object_class_install_property (gobject_class, PROP_FILE,
                                    g_param_spec_object ("file", NULL, NULL,
                                                         G_TYPE_FILE,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkIconPaintable:icon-name:

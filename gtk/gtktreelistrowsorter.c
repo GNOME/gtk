@@ -540,7 +540,7 @@ gtk_tree_list_row_sorter_class_init (GtkTreeListRowSorterClass *class)
   properties[PROP_SORTER] =
       g_param_spec_object ("sorter", NULL, NULL,
                           GTK_TYPE_SORTER,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

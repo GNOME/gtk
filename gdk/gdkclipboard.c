@@ -362,7 +362,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -374,7 +374,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
     g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -386,7 +386,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
     g_param_spec_boolean ("local", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_STATIC_NAME |
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -399,7 +399,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
     g_param_spec_object ("content", NULL, NULL,
                          GDK_TYPE_CONTENT_PROVIDER,
                          G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**

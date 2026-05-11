@@ -738,7 +738,7 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", NULL, NULL,
-                            FALSE, GTK_PARAM_READWRITE));
+                            FALSE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_css_name (widget_class, I_("colorchooser"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

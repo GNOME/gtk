@@ -446,7 +446,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_SHOW_HEADING,
                                    g_param_spec_boolean ("show-heading", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar:show-day-names:
@@ -457,7 +457,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_SHOW_DAY_NAMES,
                                    g_param_spec_boolean ("show-day-names", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   /**
    * GtkCalendar:show-week-numbers:
    *
@@ -467,7 +467,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    PROP_SHOW_WEEK_NUMBERS,
                                    g_param_spec_boolean ("show-week-numbers", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCalendar::day-selected:

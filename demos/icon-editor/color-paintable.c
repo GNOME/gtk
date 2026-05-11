@@ -215,12 +215,12 @@ color_paintable_class_init (ColorPaintableClass *class)
   properties[PROP_SYMBOLIC] =
     g_param_spec_enum ("symbolic", NULL, NULL,
                        GTK_TYPE_SYMBOLIC_COLOR, GTK_SYMBOLIC_COLOR_FOREGROUND,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_ALPHA] =
     g_param_spec_float ("alpha", NULL, NULL,
                         0, 1, 1,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

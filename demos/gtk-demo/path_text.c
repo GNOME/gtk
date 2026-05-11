@@ -434,17 +434,15 @@ gtk_path_widget_class_init (GtkPathWidgetClass *klass)
 
   properties[PROP_TEXT] =
     g_param_spec_string ("text",
-                         "text",
-                         "Text transformed along a path",
+                         NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_EDITABLE] =
     g_param_spec_boolean ("editable",
-                          "editable",
-                          "If the path can be edited by the user",
+                          NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

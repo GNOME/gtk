@@ -97,17 +97,17 @@ prop_holder_class_init (PropHolderClass *class)
   properties[PROP_OBJECT] =
       g_param_spec_object ("object", NULL, NULL,
                            G_TYPE_OBJECT,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_PSPEC] =
       g_param_spec_param ("pspec", NULL, NULL,
                           G_TYPE_PARAM,
-                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
-                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

@@ -187,7 +187,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialog:modal:
@@ -199,7 +199,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialog:language:
@@ -211,7 +211,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   properties[PROP_LANGUAGE] =
       g_param_spec_boxed ("language", NULL, NULL,
                           PANGO_TYPE_LANGUAGE,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialog:font-map:
@@ -226,7 +226,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   properties[PROP_FONT_MAP] =
       g_param_spec_object ("font-map", NULL, NULL,
                            PANGO_TYPE_FONT_MAP,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialog:filter:
@@ -238,7 +238,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   properties[PROP_FILTER] =
       g_param_spec_object ("filter", NULL, NULL,
                            GTK_TYPE_FILTER,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

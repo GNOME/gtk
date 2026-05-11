@@ -269,7 +269,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   props[PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileFilter:patterns:
@@ -281,7 +281,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   props[PROP_PATTERNS] =
       g_param_spec_boxed ("patterns", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileFilter:mime-types:
@@ -293,7 +293,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   props[PROP_MIME_TYPES] =
       g_param_spec_boxed ("mime-types", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileFilter:suffixes:
@@ -305,7 +305,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   props[PROP_SUFFIXES] =
       g_param_spec_boxed ("suffixes", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 }

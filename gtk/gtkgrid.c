@@ -435,7 +435,7 @@ gtk_grid_class_init (GtkGridClass *class)
   obj_properties[PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGrid:column-spacing:
@@ -445,7 +445,7 @@ gtk_grid_class_init (GtkGridClass *class)
   obj_properties[PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGrid:row-homogeneous:
@@ -455,7 +455,7 @@ gtk_grid_class_init (GtkGridClass *class)
   obj_properties[PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGrid:column-homogeneous:
@@ -465,7 +465,7 @@ gtk_grid_class_init (GtkGridClass *class)
   obj_properties[PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGrid:baseline-row:
@@ -475,7 +475,7 @@ gtk_grid_class_init (GtkGridClass *class)
   obj_properties[PROP_BASELINE_ROW] =
     g_param_spec_int ("baseline-row", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 

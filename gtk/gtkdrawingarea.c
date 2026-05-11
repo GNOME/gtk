@@ -289,7 +289,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   props[PROP_CONTENT_WIDTH] =
     g_param_spec_int ("content-width", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDrawingArea:content-height:
@@ -299,7 +299,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   props[PROP_CONTENT_HEIGHT] =
     g_param_spec_int ("content-height", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 

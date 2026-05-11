@@ -94,10 +94,10 @@ my_object_class_init (MyObjectClass *class)
   object_class->set_property = my_object_set_property;
   object_class->finalize = my_object_finalize;
 
-  properties[PROP_LABEL] = g_param_spec_string ("label", "label", "label",
-                                                NULL, G_PARAM_READWRITE);
-  properties[PROP_ID] = g_param_spec_int ("id", "id", "id",
-                                          0, G_MAXINT, 0, G_PARAM_READWRITE);
+  properties[PROP_LABEL] = g_param_spec_string ("label", NULL, NULL,
+                                                NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  properties[PROP_ID] = g_param_spec_int ("id", NULL, NULL,
+                                          0, G_MAXINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 }

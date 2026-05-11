@@ -194,7 +194,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   progress_props[PROP_INVERTED] =
       g_param_spec_boolean ("inverted", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkProgressBar:fraction:
@@ -205,7 +205,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
       g_param_spec_double ("fraction", NULL, NULL,
                            0.0, 1.0,
                            0.0,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkProgressBar:pulse-step:
@@ -216,7 +216,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
       g_param_spec_double ("pulse-step", NULL, NULL,
                            0.0, 1.0,
                            0.1,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkProgressBar:text:
@@ -226,7 +226,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   progress_props[PROP_TEXT] =
       g_param_spec_string ("text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkProgressBar:show-text:
@@ -245,7 +245,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   progress_props[PROP_SHOW_TEXT] =
       g_param_spec_boolean ("show-text", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkProgressBar:ellipsize:
@@ -264,7 +264,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
       g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, progress_props);
 

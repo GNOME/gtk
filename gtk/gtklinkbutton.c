@@ -194,7 +194,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                    PROP_URI,
                                    g_param_spec_string ("uri", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkLinkButton:visited:
@@ -207,7 +207,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                    PROP_VISITED,
                                    g_param_spec_boolean ("visited", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkLinkButton::activate-link:

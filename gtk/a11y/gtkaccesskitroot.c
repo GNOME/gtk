@@ -405,7 +405,7 @@ gtk_accesskit_root_class_init (GtkAccessKitRootClass *klass)
                          GTK_TYPE_ROOT,
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }

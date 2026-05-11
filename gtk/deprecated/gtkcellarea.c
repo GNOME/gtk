@@ -779,7 +779,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                                    PROP_FOCUS_CELL,
                                    g_param_spec_object ("focus-cell", NULL, NULL,
                                                         GTK_TYPE_CELL_RENDERER,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellArea:edited-cell:
@@ -793,7 +793,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                                    PROP_EDITED_CELL,
                                    g_param_spec_object ("edited-cell", NULL, NULL,
                                                         GTK_TYPE_CELL_RENDERER,
-                                                        GTK_PARAM_READABLE));
+                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellArea:edit-widget:
@@ -807,7 +807,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                                    PROP_EDIT_WIDGET,
                                    g_param_spec_object ("edit-widget", NULL, NULL,
                                                         GTK_TYPE_CELL_EDITABLE,
-                                                        GTK_PARAM_READABLE));
+                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /* Pool for Cell Properties */
   if (!cell_property_pool)

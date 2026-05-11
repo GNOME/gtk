@@ -544,7 +544,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression", NULL, NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkNumericSorter:sort-order:
@@ -555,7 +555,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
     g_param_spec_enum ("sort-order", NULL, NULL,
                        GTK_TYPE_SORT_TYPE,
                        GTK_SORT_ASCENDING,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

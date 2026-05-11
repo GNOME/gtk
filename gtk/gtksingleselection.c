@@ -441,7 +441,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_AUTOSELECT] =
     g_param_spec_boolean ("autoselect", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSingleSelection:can-unselect:
@@ -451,7 +451,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_CAN_UNSELECT] =
     g_param_spec_boolean ("can-unselect", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSingleSelection:item-type:
@@ -463,7 +463,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_ITEM_TYPE] =
     g_param_spec_gtype ("item-type", NULL, NULL,
                         G_TYPE_OBJECT,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSingleSelection:model:
@@ -473,7 +473,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_MODEL] =
     g_param_spec_object ("model", NULL, NULL,
                          G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSingleSelection:n-items:
@@ -485,7 +485,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_N_ITEMS] =
     g_param_spec_uint ("n-items", NULL, NULL,
                        0, G_MAXUINT, 0,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSingleSelection:selected:
@@ -495,7 +495,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_SELECTED] =
     g_param_spec_uint ("selected", NULL, NULL,
                        0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSingleSelection:selected-item:
@@ -505,7 +505,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
   properties[PROP_SELECTED_ITEM] =
     g_param_spec_object ("selected-item", NULL, NULL,
                          G_TYPE_OBJECT,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

@@ -615,7 +615,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   pspec = g_param_spec_object ("gfile", NULL, NULL,
                                G_TYPE_FILE,
                                G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
   g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
 
   /**
@@ -627,7 +627,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    */
   pspec = g_param_spec_string ("heading", NULL, NULL,
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
 

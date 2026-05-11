@@ -4364,36 +4364,36 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   properties[PROP_LOCATION] =
           g_param_spec_object ("location", NULL, NULL,
                                G_TYPE_FILE,
-                               GTK_PARAM_READWRITE);
+                               GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags", NULL, NULL,
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
-                              GTK_PARAM_READWRITE);
+                              GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_RECENT] =
           g_param_spec_boolean ("show-recent", NULL, NULL,
                                 TRUE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_DESKTOP] =
           g_param_spec_boolean ("show-desktop", NULL, NULL,
                                 TRUE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_ENTER_LOCATION] =
           g_param_spec_boolean ("show-enter-location", NULL, NULL,
                                 FALSE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash", NULL, NULL,
                                 TRUE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
           g_param_spec_boolean ("show-other-locations", NULL, NULL,
                                 TRUE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_SHOW_STARRED_LOCATION] =
           g_param_spec_boolean ("show-starred-location", NULL, NULL,
                                 FALSE,
-                                GTK_PARAM_READWRITE);
+                                GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 

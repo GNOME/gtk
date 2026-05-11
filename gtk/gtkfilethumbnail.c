@@ -239,12 +239,12 @@ _gtk_file_thumbnail_class_init (GtkFileThumbnailClass *klass)
   properties[PROP_ICON_SIZE] =
     g_param_spec_int ("icon-size", NULL, NULL,
                       -1, G_MAXINT, -1,
-                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_INFO] =
     g_param_spec_object ("file-info", NULL, NULL,
                          G_TYPE_FILE_INFO,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 

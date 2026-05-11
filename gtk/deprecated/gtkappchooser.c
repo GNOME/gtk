@@ -75,7 +75,7 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
   pspec = g_param_spec_string ("content-type", NULL, NULL,
                                NULL,
                                G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
   g_object_interface_install_property (iface, pspec);
 }
 

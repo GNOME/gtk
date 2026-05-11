@@ -307,11 +307,11 @@ gtk_clock_class_init (GtkClockClass *klass)
   gobject_class->finalize = gtk_clock_finalize;
 
   properties[PROP_LOCATION] =
-    g_param_spec_string ("location", NULL, NULL, NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+    g_param_spec_string ("location", NULL, NULL, NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
   properties[PROP_TIME] =
-    g_param_spec_boxed ("time", NULL, NULL, G_TYPE_DATE_TIME, G_PARAM_READABLE);
+    g_param_spec_boxed ("time", NULL, NULL, G_TYPE_DATE_TIME, G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   properties[PROP_TIMEZONE] =
-    g_param_spec_boxed ("timezone", NULL, NULL, G_TYPE_TIME_ZONE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+    g_param_spec_boxed ("timezone", NULL, NULL, G_TYPE_TIME_ZONE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

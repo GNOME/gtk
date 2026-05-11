@@ -588,7 +588,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_CURSOR] =
       g_param_spec_object ("cursor", NULL, NULL,
                            GDK_TYPE_CURSOR,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:display:
@@ -598,7 +598,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:frame-clock:
@@ -608,7 +608,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_FRAME_CLOCK] =
       g_param_spec_object ("frame-clock", NULL, NULL,
                            GDK_TYPE_FRAME_CLOCK,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:mapped:
@@ -618,7 +618,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_MAPPED] =
       g_param_spec_boolean ("mapped", NULL, NULL,
                             FALSE,
-                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:width:
@@ -628,7 +628,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_WIDTH] =
       g_param_spec_int ("width", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:height:
@@ -638,7 +638,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_HEIGHT] =
       g_param_spec_int ("height", NULL, NULL,
                         0, G_MAXINT, 0,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:scale-factor:
@@ -651,7 +651,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT, 1,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkSurface:scale:
@@ -663,7 +663,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   properties[PROP_SCALE] =
       g_param_spec_double ("scale", NULL, NULL,
                         1., G_MAXDOUBLE, 1.,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

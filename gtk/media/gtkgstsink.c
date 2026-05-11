@@ -1119,7 +1119,7 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
   properties[PROP_PAINTABLE] =
     g_param_spec_object ("paintable", NULL, NULL,
                          GTK_TYPE_GST_PAINTABLE,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkGstSink:gl-context:
@@ -1129,17 +1129,17 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
   properties[PROP_GL_CONTEXT] =
     g_param_spec_object ("gl-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   properties[PROP_USES_GL] =
     g_param_spec_boolean ("uses-gl", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

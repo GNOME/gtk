@@ -369,14 +369,14 @@ gtk_at_spi_cache_class_init (GtkAtSpiCacheClass *klass)
                          NULL,
                          G_PARAM_WRITABLE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   obj_props[PROP_CONNECTION] =
     g_param_spec_object ("connection", NULL, NULL,
                          G_TYPE_DBUS_CONNECTION,
                          G_PARAM_WRITABLE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }

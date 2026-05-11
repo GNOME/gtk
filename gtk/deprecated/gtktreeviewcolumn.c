@@ -277,95 +277,95 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   tree_column_props[PROP_VISIBLE] =
       g_param_spec_boolean ("visible", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_RESIZABLE] =
       g_param_spec_boolean ("resizable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_X_OFFSET] =
       g_param_spec_int ("x-offset", NULL, NULL,
                         -G_MAXINT, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE);
+                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_WIDTH] =
       g_param_spec_int ("width", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE);
+                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_SPACING] =
       g_param_spec_int ("spacing", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_SIZING] =
       g_param_spec_enum ("sizing", NULL, NULL,
                          GTK_TYPE_TREE_VIEW_COLUMN_SIZING,
                          GTK_TREE_VIEW_COLUMN_GROW_ONLY,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_FIXED_WIDTH] =
       g_param_spec_int ("fixed-width", NULL, NULL,
                          -1, G_MAXINT,
                          -1,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_MIN_WIDTH] =
       g_param_spec_int ("min-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_MAX_WIDTH] =
       g_param_spec_int ("max-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            "",
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_EXPAND] =
       g_param_spec_boolean ("expand", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_CLICKABLE] =
       g_param_spec_boolean ("clickable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_WIDGET] =
       g_param_spec_object ("widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_ALIGNMENT] =
       g_param_spec_float ("alignment", NULL, NULL,
                           0.0, 1.0, 0.0,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_REORDERABLE] =
       g_param_spec_boolean ("reorderable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_SORT_INDICATOR] =
       g_param_spec_boolean ("sort-indicator", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_SORT_ORDER] =
       g_param_spec_enum ("sort-order", NULL, NULL,
                          GTK_TYPE_SORT_TYPE,
                          GTK_SORT_ASCENDING,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeViewColumn:sort-column-id:
@@ -377,7 +377,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
       g_param_spec_int ("sort-column-id", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeViewColumn:cell-area:
@@ -390,7 +390,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   tree_column_props[PROP_CELL_AREA] =
       g_param_spec_object ("cell-area", NULL, NULL,
                            GTK_TYPE_CELL_AREA,
-                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, tree_column_props);
 }

@@ -273,7 +273,7 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
   properties[PROP_DIALOG] =
       g_param_spec_object ("dialog", NULL, NULL,
                            GTK_TYPE_COLOR_DIALOG,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColorDialogButton:rgba:
@@ -292,7 +292,7 @@ gtk_color_dialog_button_class_init (GtkColorDialogButtonClass *class)
   properties[PROP_RGBA] =
       g_param_spec_boxed ("rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

@@ -580,7 +580,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
       g_param_spec_enum ("side", NULL, NULL,
                          GTK_TYPE_PACK_TYPE,
                          GTK_PACK_START,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindowControls:decoration-layout:
@@ -593,7 +593,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   props[PROP_DECORATION_LAYOUT] =
       g_param_spec_string ("decoration-layout", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -613,7 +613,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   props[PROP_USE_NATIVE_CONTROLS] =
       g_param_spec_boolean ("use-native-controls", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindowControls:empty:
@@ -623,7 +623,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   props[PROP_EMPTY] =
     g_param_spec_boolean ("empty", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

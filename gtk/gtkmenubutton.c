@@ -434,7 +434,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model", NULL, NULL,
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:direction:
@@ -446,7 +446,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
       g_param_spec_enum ("direction", NULL, NULL,
                          GTK_TYPE_ARROW_TYPE,
                          GTK_ARROW_DOWN,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:popover:
@@ -466,7 +466,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_ICON_NAME] =
       g_param_spec_string ("icon-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:always-show-arrow:
@@ -478,7 +478,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_ALWAYS_SHOW_ARROW] =
       g_param_spec_boolean ("always-show-arrow", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:label:
@@ -488,7 +488,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_LABEL] =
       g_param_spec_string ("label", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:use-underline:
@@ -498,7 +498,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline", NULL, NULL,
                            FALSE,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:has-frame:
@@ -508,7 +508,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_HAS_FRAME] =
     g_param_spec_boolean ("has-frame", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:primary:
@@ -522,7 +522,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_PRIMARY] =
     g_param_spec_boolean ("primary", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:child:
@@ -534,7 +534,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:active:
@@ -546,7 +546,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_ACTIVE] =
     g_param_spec_boolean ("active", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMenuButton:can-shrink:
@@ -559,7 +559,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   menu_button_props[PROP_CAN_SHRINK] =
     g_param_spec_boolean ("can-shrink", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 

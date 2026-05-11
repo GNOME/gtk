@@ -220,7 +220,7 @@ gtk_path_sweep_class_init (GtkPathSweepClass *klass)
   properties[PROP_PATH] =
     g_param_spec_boxed ("path", NULL, NULL,
                         GSK_TYPE_PATH,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

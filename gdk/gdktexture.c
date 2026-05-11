@@ -405,7 +405,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       1,
                       G_PARAM_READWRITE |
                       G_PARAM_CONSTRUCT_ONLY |
-                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_STATIC_NAME |
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -420,7 +420,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       1,
                       G_PARAM_READWRITE |
                       G_PARAM_CONSTRUCT_ONLY |
-                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_STATIC_NAME |
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -435,7 +435,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);

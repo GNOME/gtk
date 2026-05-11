@@ -643,7 +643,7 @@ gtk_mutable_string_object_class_init (GtkMutableStringObjectClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_STRING,
                                    g_param_spec_string ("string", NULL, NULL, NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 static void
@@ -829,13 +829,13 @@ gtk_bool_object_class_init (GtkBoolObjectClass *klass)
                                    PROP_VALUE,
                                    g_param_spec_boolean ("value", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    PROP_VALUE2,
                                    g_param_spec_boolean ("value2", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 static void

@@ -169,21 +169,21 @@ object_property_class_init (ObjectPropertyClass *class)
   pspec = g_param_spec_string ("name", NULL, NULL,
                                NULL,
                                G_PARAM_READABLE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_NAME, pspec);
 
   pspec = g_param_spec_string ("value", NULL, NULL,
                                NULL,
                                G_PARAM_READABLE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_VALUE, pspec);
 
   pspec = g_param_spec_object ("texture", NULL, NULL,
                                GDK_TYPE_TEXTURE,
                                G_PARAM_READABLE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_TEXTURE, pspec);
 }

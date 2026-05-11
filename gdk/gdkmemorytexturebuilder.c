@@ -210,7 +210,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_BYTES] =
     g_param_spec_boxed ("bytes", NULL, NULL,
                         G_TYPE_BYTES,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:color-state:
@@ -222,7 +222,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:format:
@@ -235,7 +235,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
     g_param_spec_enum ("format", NULL, NULL,
                        GDK_TYPE_MEMORY_FORMAT,
                        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:height:
@@ -247,7 +247,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:stride:
@@ -262,7 +262,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_STRIDE] =
     g_param_spec_uint64 ("stride", NULL, NULL,
                          0, G_MAXUINT64, 0,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:update-region:
@@ -274,7 +274,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:update-texture:
@@ -286,7 +286,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMemoryTextureBuilder:width:
@@ -298,7 +298,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

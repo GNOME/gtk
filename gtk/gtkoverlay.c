@@ -329,7 +329,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                                    PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   /**
    * GtkOverlay::get-child-position:

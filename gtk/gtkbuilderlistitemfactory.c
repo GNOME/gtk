@@ -276,7 +276,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
   properties[PROP_BYTES] =
     g_param_spec_boxed ("bytes", NULL, NULL,
                         G_TYPE_BYTES,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkBuilderListItemFactory:resource:
@@ -286,7 +286,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
   properties[PROP_RESOURCE] =
     g_param_spec_string ("resource", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkBuilderListItemFactory:scope:
@@ -296,7 +296,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
   properties[PROP_SCOPE] =
     g_param_spec_object ("scope", NULL, NULL,
                          GTK_TYPE_BUILDER_SCOPE,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

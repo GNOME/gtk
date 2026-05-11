@@ -151,7 +151,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   /**
    * GtkAspectFrame:yalign:
    *
@@ -161,7 +161,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    PROP_YALIGN,
                                    g_param_spec_float ("yalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   /**
    * GtkAspectFrame:ratio:
    *
@@ -174,7 +174,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    PROP_RATIO,
                                    g_param_spec_float ("ratio", NULL, NULL,
                                                        MIN_RATIO, MAX_RATIO, 1.0,
-                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   /**
    * GtkAspectFrame:obey-child:
    *
@@ -184,7 +184,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    PROP_OBEY_CHILD,
                                    g_param_spec_boolean ("obey-child", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
   /**
    * GtkAspectFrame:child:
    *
@@ -194,7 +194,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("aspectframe"));
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), GTK_ACCESSIBLE_ROLE_GENERIC);

@@ -298,7 +298,7 @@ gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
                          NULL,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -314,7 +314,7 @@ gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
                          NULL,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);

@@ -6758,7 +6758,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
                                    g_param_spec_boolean ("search-mode", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooserWidget:subtitle:
@@ -6768,7 +6768,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   g_object_class_install_property (gobject_class, PROP_SUBTITLE,
                                    g_param_spec_string ("subtitle", NULL, NULL,
                                                         "",
-                                                        GTK_PARAM_READABLE));
+                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooserWidget:show-time:
@@ -6780,7 +6780,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   g_object_class_install_property (gobject_class, PROP_SHOW_TIME,
                                    g_param_spec_boolean ("show-time", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READABLE));
+                                                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   _gtk_file_chooser_install_properties (gobject_class);
 

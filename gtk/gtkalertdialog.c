@@ -193,7 +193,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAlertDialog:message:
@@ -205,7 +205,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_MESSAGE] =
       g_param_spec_string ("message", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAlertDialog:detail:
@@ -217,7 +217,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_DETAIL] =
       g_param_spec_string ("detail", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAlertDialog:buttons:
@@ -235,7 +235,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_BUTTONS] =
       g_param_spec_boxed ("buttons", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAlertDialog:cancel-button:
@@ -255,7 +255,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_CANCEL_BUTTON] =
       g_param_spec_int ("cancel-button", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAlertDialog:default-button:
@@ -275,7 +275,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   properties[PROP_DEFAULT_BUTTON] =
       g_param_spec_int ("default-button", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                        G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

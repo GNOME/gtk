@@ -271,7 +271,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
                                    g_param_spec_enum ("mode", NULL, NULL,
                                                       GTK_TYPE_SIZE_GROUP_MODE,
                                                       GTK_SIZE_GROUP_HORIZONTAL,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
 }
 
 static void

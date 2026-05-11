@@ -619,7 +619,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                    PROP_VISIBLE_SUBMENU,
                                    g_param_spec_string ("visible-submenu", NULL, NULL,
                                                         NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPopoverMenu:menu-model:
@@ -630,7 +630,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                    PROP_MENU_MODEL,
                                    g_param_spec_object ("menu-model", NULL, NULL,
                                                         G_TYPE_MENU_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkPopoverMenu:flags:
@@ -647,7 +647,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                    g_param_spec_flags ("flags", NULL, NULL,
                                                        GTK_TYPE_POPOVER_MENU_FLAGS,
                                                        GTK_POPOVER_MENU_SLIDING,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME
                                                          | G_PARAM_EXPLICIT_NOTIFY));
 
   add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);

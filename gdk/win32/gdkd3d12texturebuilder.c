@@ -207,7 +207,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
   properties[PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:fence:
@@ -218,7 +218,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
    */
   properties[PROP_FENCE] =
     g_param_spec_pointer ("fence", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:fence-wait:
@@ -230,7 +230,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
   properties[PROP_FENCE_WAIT] =
     g_param_spec_uint64 ("fence-wait", NULL, NULL,
                          0, G_MAXUINT64, 0,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:premultiplied:
@@ -244,7 +244,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
   properties[PROP_PREMULTIPLIED] =
     g_param_spec_boolean ("premultiplied", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:resource:
@@ -255,7 +255,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
    */
   properties[PROP_RESOURCE] =
     g_param_spec_pointer ("resource", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:update-region:
@@ -267,7 +267,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
   properties[PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkD3D12TextureBuilder:update-texture:
@@ -279,7 +279,7 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
   properties[PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

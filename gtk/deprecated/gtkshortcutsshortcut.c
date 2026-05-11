@@ -582,7 +582,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:icon:
@@ -599,7 +599,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ICON] =
     g_param_spec_object ("icon", NULL, NULL,
                          G_TYPE_ICON,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:icon-set:
@@ -611,7 +611,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ICON_SET] =
     g_param_spec_boolean ("icon-set", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:title:
@@ -626,7 +626,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                          "",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:subtitle:
@@ -642,7 +642,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL,
                          "",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:subtitle-set:
@@ -654,7 +654,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_SUBTITLE_SET] =
     g_param_spec_boolean ("subtitle-set", NULL, NULL,
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:accel-size-group:
@@ -668,7 +668,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:title-size-group:
@@ -682,7 +682,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsShortcut:direction:
@@ -698,7 +698,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
     g_param_spec_enum ("direction", NULL, NULL,
                        GTK_TYPE_TEXT_DIRECTION,
                        GTK_TEXT_DIR_NONE,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkShortcutsShortcut:shortcut-type:
@@ -711,7 +711,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
     g_param_spec_enum ("shortcut-type", NULL, NULL,
                        GTK_TYPE_SHORTCUT_TYPE,
                        GTK_SHORTCUT_ACCELERATOR,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkShortcutsShortcut:action-name:
@@ -728,7 +728,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
   gtk_widget_class_set_css_name (widget_class, I_("shortcut"));

@@ -454,7 +454,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
                         G_TYPE_BYTES,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_STATIC_STRINGS);
+                        G_PARAM_STATIC_NAME);
 
   /**
    * GskGLShader:resource:
@@ -469,7 +469,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
                          NULL,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, GLSHADER_N_PROPS, gsk_gl_shader_properties);
 }

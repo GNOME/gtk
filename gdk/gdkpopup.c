@@ -87,7 +87,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_object ("parent", NULL, NULL,
                            GDK_TYPE_SURFACE,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   /**
    * GdkPopup:autohide:
@@ -97,7 +97,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("autohide", NULL, NULL,
                            FALSE,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 }
 
 /**

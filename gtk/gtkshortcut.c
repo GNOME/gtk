@@ -155,7 +155,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                          GTK_TYPE_SHORTCUT_ACTION,
                          G_PARAM_READWRITE |
                          G_PARAM_EXPLICIT_NOTIFY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   /**
    * GtkShortcut:arguments:
@@ -166,7 +166,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
     g_param_spec_variant ("arguments", NULL, NULL,
                           G_VARIANT_TYPE_ANY,
                           NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkShortcut:trigger:
@@ -178,7 +178,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_READWRITE |
                          G_PARAM_EXPLICIT_NOTIFY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

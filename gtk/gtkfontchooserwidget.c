@@ -922,7 +922,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
    */
   pspec = g_param_spec_object ("tweak-action", NULL, NULL,
                                G_TYPE_ACTION,
-                               G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   g_object_class_install_property (gobject_class, PROP_TWEAK_ACTION, pspec);
 
   _gtk_font_chooser_install_properties (gobject_class);
