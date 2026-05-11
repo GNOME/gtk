@@ -261,7 +261,7 @@ gtk_image_class_init (GtkImageClass *class)
       g_param_spec_enum ("storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:use-fallback:

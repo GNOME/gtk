@@ -661,7 +661,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                    PROP_PAGES,
                                    g_param_spec_object ("pages", NULL, NULL,
                                                         G_TYPE_LIST_MODEL,
-                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /* Bind class to template
    */

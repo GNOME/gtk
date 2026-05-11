@@ -266,7 +266,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
   properties[PROP_LOADING] =
       g_param_spec_boolean ("loading", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkBookmarkList:n-items:

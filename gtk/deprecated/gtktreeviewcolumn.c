@@ -288,13 +288,13 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
       g_param_spec_int ("x-offset", NULL, NULL,
                         -G_MAXINT, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_WIDTH] =
       g_param_spec_int ("width", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   tree_column_props[PROP_SPACING] =
       g_param_spec_int ("spacing", NULL, NULL,

@@ -1013,7 +1013,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_IS_ACTIVE] =
       g_param_spec_boolean ("is-active", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindow:decorated:
@@ -1089,7 +1089,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_SUSPENDED] =
       g_param_spec_boolean ("suspended", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:application:

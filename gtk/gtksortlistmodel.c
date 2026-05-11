@@ -1079,7 +1079,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   properties[PROP_PENDING] =
       g_param_spec_uint ("pending", NULL, NULL,
                          0, G_MAXUINT, 0,
-                         GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:section-sorter:

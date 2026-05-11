@@ -708,7 +708,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    PROP_POPUP_SHOWN,
                                    g_param_spec_boolean ("popup-shown", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
 
    /**

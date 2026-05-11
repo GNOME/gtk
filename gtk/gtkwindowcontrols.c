@@ -623,7 +623,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   props[PROP_EMPTY] =
     g_param_spec_boolean ("empty", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

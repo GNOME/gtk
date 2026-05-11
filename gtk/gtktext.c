@@ -896,7 +896,7 @@ gtk_text_class_init (GtkTextClass *class)
       g_param_spec_int ("scroll-offset", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkText:truncate-multiline:

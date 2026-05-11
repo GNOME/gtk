@@ -137,7 +137,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_string ("font-features", NULL, NULL,
                           "",
-                          GTK_PARAM_READABLE));
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFontChooser:language:

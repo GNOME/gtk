@@ -1272,7 +1272,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_PARENT] =
       g_param_spec_object ("parent", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:root:
@@ -1284,7 +1284,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_ROOT] =
       g_param_spec_object ("root", NULL, NULL,
                            GTK_TYPE_ROOT,
-                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:width-request:
@@ -1364,7 +1364,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_HAS_FOCUS] =
       g_param_spec_boolean ("has-focus", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:can-target:
@@ -1396,7 +1396,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_HAS_DEFAULT] =
       g_param_spec_boolean ("has-default", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:receives-default:
@@ -1638,7 +1638,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT,
                         1,
-                        GTK_PARAM_READABLE);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWidget:css-name:

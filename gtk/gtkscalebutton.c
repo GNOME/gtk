@@ -280,7 +280,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkScaleButton:has-frame:

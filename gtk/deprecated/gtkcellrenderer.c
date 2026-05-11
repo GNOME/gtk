@@ -380,7 +380,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 				   PROP_EDITING,
 				   g_param_spec_boolean ("editing", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READABLE));
+							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY))

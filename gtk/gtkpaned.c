@@ -467,7 +467,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_MIN_POSITION] =
     g_param_spec_int ("min-position", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:max-position:
@@ -481,7 +481,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_MAX_POSITION] =
     g_param_spec_int ("max-position", NULL, NULL,
                       0, G_MAXINT, G_MAXINT,
-                      GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:wide-handle:

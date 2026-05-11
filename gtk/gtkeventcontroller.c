@@ -204,7 +204,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   properties[PROP_WIDGET] =
       g_param_spec_object ("widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEventController:propagation-phase:

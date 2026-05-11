@@ -300,7 +300,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_ERROR] =
       g_param_spec_boxed ("error", NULL, NULL,
                           G_TYPE_ERROR,
-                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDirectoryList:file:
@@ -342,7 +342,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   properties[PROP_LOADING] =
       g_param_spec_boolean ("loading", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDirectoryList:monitored:

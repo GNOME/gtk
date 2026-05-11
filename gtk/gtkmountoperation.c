@@ -177,7 +177,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                    PROP_IS_SHOWING,
                                    g_param_spec_boolean ("is-showing", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkMountOperation:display:

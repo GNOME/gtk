@@ -131,7 +131,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    PROP_MIN_WIDTH,
                                    g_param_spec_int ("minimum-width", NULL, NULL,
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaContext:natural-width:
@@ -146,7 +146,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    PROP_NAT_WIDTH,
                                    g_param_spec_int ("natural-width", NULL, NULL,
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaContext:minimum-height:
@@ -161,7 +161,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    PROP_MIN_HEIGHT,
                                    g_param_spec_int ("minimum-height", NULL, NULL,
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaContext:natural-height:
@@ -176,7 +176,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    PROP_NAT_HEIGHT,
                                    g_param_spec_int ("natural-height", NULL, NULL,
                                                      -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 }
 
 /*************************************************************

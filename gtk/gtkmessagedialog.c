@@ -439,7 +439,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_MESSAGE_AREA,
                                    g_param_spec_object ("message-area", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmessagedialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);

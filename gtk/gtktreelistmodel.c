@@ -692,7 +692,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
   properties[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeListModel:n-items:
@@ -1055,7 +1055,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_CHILDREN] =
       g_param_spec_object ("children", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeListRow:depth:
@@ -1065,7 +1065,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_DEPTH] =
       g_param_spec_uint ("depth", NULL, NULL,
                          0, G_MAXUINT, 0,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeListRow:expandable: (getter is_expandable)
@@ -1075,7 +1075,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_EXPANDABLE] =
       g_param_spec_boolean ("expandable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeListRow:expanded:
@@ -1095,7 +1095,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_ITEM] =
       g_param_spec_object ("item", NULL, NULL,
                            G_TYPE_OBJECT,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_ROW_PROPERTIES, row_properties);
 }

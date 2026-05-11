@@ -406,7 +406,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_string ("complete-text", NULL, NULL,
                            "",
-                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:cursor-position: (getter get_position) (setter set_position)
@@ -417,7 +417,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_int ("cursor-position", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
-                        GTK_PARAM_READABLE));
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkEditable:enable-undo:
@@ -438,7 +438,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_int ("selection-bound", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
-                        GTK_PARAM_READABLE));
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkEditable:editable:

@@ -132,7 +132,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("filters", NULL, NULL,
                                                           G_TYPE_LIST_MODEL,
-                                                          GTK_PARAM_READABLE));
+                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooser:shortcut-folders:
@@ -148,7 +148,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("shortcut-folders", NULL, NULL,
                                                           G_TYPE_LIST_MODEL,
-                                                          GTK_PARAM_READABLE));
+                                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooser:create-folders:

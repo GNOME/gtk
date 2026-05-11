@@ -969,7 +969,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   props[PROP_ICON_NAMES] =
       g_param_spec_boxed ("icon-names", NULL, NULL,
                           G_TYPE_STRV,
-                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkIconTheme:search-path:

@@ -730,7 +730,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   props[PROP_CHILD_REVEALED] =
     g_param_spec_boolean ("child-revealed", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkRevealer:child:

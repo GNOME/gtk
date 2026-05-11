@@ -1034,7 +1034,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_TRANSITION_RUNNING] =
       g_param_spec_boolean ("transition-running", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStack:interpolate-size:
@@ -1054,7 +1054,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_PAGES] =
       g_param_spec_object ("pages", NULL, NULL,
                            GTK_TYPE_SELECTION_MODEL,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 

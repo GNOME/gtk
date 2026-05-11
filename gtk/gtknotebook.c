@@ -1203,7 +1203,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   properties[PROP_PAGES] =
       g_param_spec_object ("pages", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 

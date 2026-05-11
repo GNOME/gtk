@@ -286,7 +286,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                                    PROP_SIZE,
                                    g_param_spec_int ("size", NULL, NULL,
                                                      -1, G_MAXINT, 0,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkRecentManager::changed:

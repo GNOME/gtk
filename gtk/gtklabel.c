@@ -2615,7 +2615,7 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_uint ("mnemonic-keyval", NULL, NULL,
                          0, G_MAXUINT,
                          GDK_KEY_VoidSymbol,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLabel:mnemonic-widget:

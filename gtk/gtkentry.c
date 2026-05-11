@@ -550,7 +550,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_int ("scroll-offset", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEntry:truncate-multiline:
@@ -581,7 +581,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_uint ("text-length", NULL, NULL,
                          0, G_MAXUINT16,
                          0,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:invisible-char-set:
@@ -698,7 +698,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_enum ("primary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:secondary-icon-storage-type:
@@ -709,7 +709,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_enum ("secondary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntry:primary-icon-activatable:

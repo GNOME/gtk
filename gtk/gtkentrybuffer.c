@@ -358,7 +358,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    entry_buffer_props[PROP_LENGTH] =
        g_param_spec_uint ("length", NULL, NULL,
                           0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
-                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEntryBuffer:max-length:
