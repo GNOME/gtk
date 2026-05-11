@@ -394,7 +394,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_NAME] =
     g_param_spec_string ("program-name", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:version:
@@ -404,7 +404,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_VERSION] =
     g_param_spec_string ("version", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:copyright:
@@ -414,7 +414,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_COPYRIGHT] =
     g_param_spec_string ("copyright", NULL, NULL,
                         NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:comments:
@@ -428,7 +428,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_COMMENTS] =
     g_param_spec_string ("comments", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:license:
@@ -451,7 +451,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_LICENSE] =
     g_param_spec_string ("license", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:system-information:
@@ -469,7 +469,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_SYSTEM_INFORMATION] =
     g_param_spec_string ("system-information", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:license-type:
@@ -494,7 +494,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
     g_param_spec_enum ("license-type", NULL, NULL,
                        GTK_TYPE_LICENSE,
                        GTK_LICENSE_UNKNOWN,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:website:
@@ -506,7 +506,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_WEBSITE] =
     g_param_spec_string ("website", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:website-label:
@@ -516,7 +516,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_WEBSITE_LABEL] =
     g_param_spec_string ("website-label", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:authors:
@@ -529,7 +529,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_AUTHORS] =
     g_param_spec_boxed ("authors", NULL, NULL,
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:documenters:
@@ -542,7 +542,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_DOCUMENTERS] =
     g_param_spec_boxed ("documenters", NULL, NULL,
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:artists:
@@ -555,7 +555,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_ARTISTS] =
     g_param_spec_boxed ("artists", NULL, NULL,
                         G_TYPE_STRV,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:translator-credits:
@@ -570,7 +570,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_TRANSLATOR_CREDITS] =
     g_param_spec_string ("translator-credits", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo:
@@ -583,7 +583,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_LOGO] =
     g_param_spec_object ("logo", NULL, NULL,
                          GDK_TYPE_PAINTABLE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo-icon-name:
@@ -595,7 +595,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_LOGO_ICON_NAME] =
     g_param_spec_string ("logo-icon-name", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:wrap-license:
@@ -605,7 +605,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_WRAP_LICENSE] =
     g_param_spec_boolean ("wrap-license", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

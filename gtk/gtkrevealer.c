@@ -700,7 +700,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
     g_param_spec_enum ("transition-type", NULL, NULL,
                        GTK_TYPE_REVEALER_TRANSITION_TYPE,
                        GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
-                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRevealer:transition-duration:
@@ -710,7 +710,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   props[PROP_TRANSITION_DURATION] =
     g_param_spec_uint ("transition-duration", NULL, NULL,
                        0, G_MAXUINT, 250,
-                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRevealer:reveal-child:
@@ -720,7 +720,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   props[PROP_REVEAL_CHILD] =
     g_param_spec_boolean ("reveal-child", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRevealer:child-revealed:
@@ -740,7 +740,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   props[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
   g_object_class_install_properties (object_class, LAST_PROP, props);

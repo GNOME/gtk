@@ -664,7 +664,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    PROP_MODEL,
                                    g_param_spec_object ("model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -683,7 +683,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkComboBox:has-frame:
@@ -694,7 +694,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    PROP_HAS_FRAME,
                                    g_param_spec_boolean ("has-frame", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkComboBox:popup-shown:
@@ -722,7 +722,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     g_param_spec_enum ("button-sensitivity", NULL, NULL,
                                                        GTK_TYPE_SENSITIVITY_TYPE,
                                                        GTK_SENSITIVITY_AUTO,
-                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:has-entry:
@@ -733,7 +733,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_HAS_ENTRY,
                                     g_param_spec_boolean ("has-entry", NULL, NULL,
                                                           FALSE,
-                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 
    /**
     * GtkComboBox:entry-text-column:
@@ -747,7 +747,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_ENTRY_TEXT_COLUMN,
                                     g_param_spec_int ("entry-text-column", NULL, NULL,
                                                       -1, G_MAXINT, -1,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:id-column:
@@ -759,7 +759,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_ID_COLUMN,
                                     g_param_spec_int ("id-column", NULL, NULL,
                                                       -1, G_MAXINT, -1,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:active-id:
@@ -770,7 +770,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_ACTIVE_ID,
                                     g_param_spec_string ("active-id", NULL, NULL,
                                                          NULL,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:popup-fixed-width:
@@ -782,7 +782,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_POPUP_FIXED_WIDTH,
                                     g_param_spec_boolean ("popup-fixed-width", NULL, NULL,
                                                           TRUE,
-                                                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkComboBox:child:
@@ -793,7 +793,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     PROP_CHILD,
                                     g_param_spec_object ("child", NULL, NULL,
                                                          GTK_TYPE_WIDGET,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, box);

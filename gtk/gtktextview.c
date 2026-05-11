@@ -963,7 +963,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_PIXELS_ABOVE_LINES,
                                    g_param_spec_int ("pixels-above-lines", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:pixels-below-lines:
@@ -974,7 +974,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_PIXELS_BELOW_LINES,
                                    g_param_spec_int ("pixels-below-lines", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:pixels-inside-wrap:
@@ -985,7 +985,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_PIXELS_INSIDE_WRAP,
                                    g_param_spec_int ("pixels-inside-wrap", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:editable:
@@ -996,7 +996,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_EDITABLE,
                                    g_param_spec_boolean ("editable", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:wrap-mode:
@@ -1008,7 +1008,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_enum ("wrap-mode", NULL, NULL,
                                                       GTK_TYPE_WRAP_MODE,
                                                       GTK_WRAP_NONE,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:justification:
@@ -1020,7 +1020,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_enum ("justification", NULL, NULL,
                                                       GTK_TYPE_JUSTIFICATION,
                                                       GTK_JUSTIFY_LEFT,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:left-margin:
@@ -1037,7 +1037,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_LEFT_MARGIN,
                                    g_param_spec_int ("left-margin", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:right-margin:
@@ -1054,7 +1054,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_RIGHT_MARGIN,
                                    g_param_spec_int ("right-margin", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:top-margin:
@@ -1071,7 +1071,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_TOP_MARGIN,
                                    g_param_spec_int ("top-margin", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:bottom-margin:
@@ -1088,7 +1088,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_BOTTOM_MARGIN,
                                    g_param_spec_int ("bottom-margin", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:indent:
@@ -1104,7 +1104,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_INDENT,
                                    g_param_spec_int ("indent", NULL, NULL,
                                                      G_MININT, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:tabs:
@@ -1115,7 +1115,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_TABS,
                                    g_param_spec_boxed ("tabs", NULL, NULL,
                                                        PANGO_TYPE_TAB_ARRAY,
-						       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextView:cursor-visible:
@@ -1126,7 +1126,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_CURSOR_VISIBLE,
                                    g_param_spec_boolean ("cursor-visible", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:buffer:
@@ -1137,7 +1137,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_BUFFER,
                                    g_param_spec_object ("buffer", NULL, NULL,
 							GTK_TYPE_TEXT_BUFFER,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextView:overwrite:
@@ -1148,7 +1148,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_OVERWRITE,
                                    g_param_spec_boolean ("overwrite", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:accepts-tab:
@@ -1159,7 +1159,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_ACCEPTS_TAB,
                                    g_param_spec_boolean ("accepts-tab", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /**
     * GtkTextView:im-module:
@@ -1175,7 +1175,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                     PROP_IM_MODULE,
                                     g_param_spec_string ("im-module", NULL, NULL,
                                                          NULL,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextView:input-purpose:
@@ -1190,7 +1190,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_enum ("input-purpose", NULL, NULL,
                                                       GTK_TYPE_INPUT_PURPOSE,
                                                       GTK_INPUT_PURPOSE_FREE_FORM,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1204,7 +1204,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_flags ("input-hints", NULL, NULL,
                                                        GTK_TYPE_INPUT_HINTS,
                                                        GTK_INPUT_HINT_NONE,
-                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -1219,7 +1219,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_MONOSPACE,
                                    g_param_spec_boolean ("monospace", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkTextView:extra-menu:
@@ -1230,7 +1230,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    PROP_EXTRA_MENU,
                                    g_param_spec_object ("extra-menu", NULL, NULL,
                                                         G_TYPE_MENU_MODEL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");

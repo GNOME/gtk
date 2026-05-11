@@ -508,7 +508,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    PROP_TITLE,
                                    g_param_spec_string ("title", NULL, NULL,
                                                         _("Pick a Font"),
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFontButton:use-font:
@@ -519,7 +519,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    PROP_USE_FONT,
                                    g_param_spec_boolean ("use-font", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontButton:use-size:
@@ -530,7 +530,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    PROP_USE_SIZE,
                                    g_param_spec_boolean ("use-size", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontButton:modal:
@@ -541,7 +541,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                    PROP_MODAL,
                                    g_param_spec_boolean ("modal", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontButton::font-set:

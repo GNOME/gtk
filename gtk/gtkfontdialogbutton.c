@@ -321,7 +321,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
       g_param_spec_enum ("level", NULL, NULL,
                          GTK_TYPE_FONT_LEVEL,
                          GTK_FONT_LEVEL_FONT,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialogButton:font-desc:
@@ -386,7 +386,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
   properties[PROP_USE_FONT] =
       g_param_spec_boolean ("use-font", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontDialogButton:use-size:
@@ -396,7 +396,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
   properties[PROP_USE_SIZE] =
       g_param_spec_boolean ("use-size", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

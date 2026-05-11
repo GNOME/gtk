@@ -323,7 +323,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    */
   widget_props[PROP_SEARCH_MODE_ENABLED] = g_param_spec_boolean ("search-mode-enabled", NULL, NULL,
                                                                  FALSE,
-                                                                 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchBar:show-close-button:
@@ -332,7 +332,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    */
   widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button", NULL, NULL,
                                                                FALSE,
-                                                               GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchBar:child:
@@ -341,7 +341,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    */
   widget_props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
                                                   GTK_TYPE_WIDGET,
-                                                  GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchBar:key-capture-widget:
@@ -351,7 +351,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   widget_props[PROP_KEY_CAPTURE_WIDGET]
       = g_param_spec_object ("key-capture-widget", NULL, NULL,
                              GTK_TYPE_WIDGET,
-                             GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 

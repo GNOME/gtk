@@ -363,7 +363,7 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   props[PROP_DECORATION_LAYOUT] =
       g_param_spec_string ("decoration-layout", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 

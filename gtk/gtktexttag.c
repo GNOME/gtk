@@ -218,7 +218,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 
   /* Style args */
 
@@ -242,7 +242,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_BACKGROUND_RGBA,
                                    g_param_spec_boxed ("background-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:background-full-height:
@@ -254,7 +254,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_BACKGROUND_FULL_HEIGHT,
                                    g_param_spec_boolean ("background-full-height", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:foreground:
@@ -276,7 +276,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FOREGROUND_RGBA,
                                    g_param_spec_boxed ("foreground-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:direction:
@@ -288,7 +288,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("direction", NULL, NULL,
                                                       GTK_TYPE_TEXT_DIRECTION,
                                                       GTK_TEXT_DIR_NONE,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:editable:
@@ -299,7 +299,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_EDITABLE,
                                    g_param_spec_boolean ("editable", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:font:
@@ -313,7 +313,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FONT,
                                    g_param_spec_string ("font", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:font-desc:
@@ -324,7 +324,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FONT_DESC,
                                    g_param_spec_boxed ("font-desc", NULL, NULL,
                                                        PANGO_TYPE_FONT_DESCRIPTION,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:family:
@@ -335,7 +335,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FAMILY,
                                    g_param_spec_string ("family", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:style:
@@ -347,7 +347,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("style", NULL, NULL,
                                                       PANGO_TYPE_STYLE,
                                                       PANGO_STYLE_NORMAL,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:variant:
@@ -359,7 +359,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("variant", NULL, NULL,
                                                       PANGO_TYPE_VARIANT,
                                                       PANGO_VARIANT_NORMAL,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkTextTag:weight:
    *
@@ -371,7 +371,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      PANGO_WEIGHT_NORMAL,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:stretch:
@@ -383,7 +383,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("stretch", NULL, NULL,
                                                       PANGO_TYPE_STRETCH,
                                                       PANGO_STRETCH_NORMAL,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:size:
@@ -396,7 +396,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:scale:
@@ -412,7 +412,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         0.0,
                                                         G_MAXDOUBLE,
                                                         1.0,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:size-points:
@@ -425,7 +425,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         0.0,
                                                         G_MAXDOUBLE,
                                                         0.0,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
 
   /**
    * GtkTextTag:justification:
@@ -437,7 +437,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("justification", NULL, NULL,
                                                       GTK_TYPE_JUSTIFICATION,
                                                       GTK_JUSTIFY_LEFT,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:language:
@@ -454,7 +454,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_LANGUAGE,
                                    g_param_spec_string ("language", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
 
   /**
    * GtkTextTag:left-margin:
@@ -467,7 +467,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:right-margin:
@@ -480,7 +480,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:indent:
@@ -498,7 +498,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      G_MININT,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:rise:
@@ -513,7 +513,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 						     G_MININT,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-above-lines:
@@ -526,7 +526,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-below-lines:
@@ -539,7 +539,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-inside-wrap:
@@ -552,7 +552,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:line-height:
@@ -565,7 +565,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_LINE_HEIGHT,
                                    g_param_spec_float ("line-height", NULL, NULL,
                                                        0.0, 10.0, 0.0,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:strikethrough:
@@ -576,7 +576,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_STRIKETHROUGH,
                                    g_param_spec_boolean ("strikethrough", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:underline:
@@ -588,7 +588,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("underline", NULL, NULL,
                                                       PANGO_TYPE_UNDERLINE,
                                                       PANGO_UNDERLINE_NONE,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:underline-rgba:
@@ -605,7 +605,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_UNDERLINE_RGBA,
                                    g_param_spec_boxed ("underline-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:overline:
@@ -617,7 +617,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("overline", NULL, NULL,
                                                       PANGO_TYPE_OVERLINE,
                                                       PANGO_OVERLINE_NONE,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:overline-rgba:
@@ -630,7 +630,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_OVERLINE_RGBA,
                                    g_param_spec_boxed ("overline-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:strikethrough-rgba:
@@ -643,7 +643,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_STRIKETHROUGH_RGBA,
                                    g_param_spec_boxed ("strikethrough-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:wrap-mode:
@@ -656,7 +656,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("wrap-mode", NULL, NULL,
                                                       GTK_TYPE_WRAP_MODE,
                                                       GTK_WRAP_NONE,
-                                                      GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:tabs:
@@ -667,7 +667,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_TABS,
                                    g_param_spec_boxed ("tabs", NULL, NULL,
                                                        PANGO_TYPE_TAB_ARRAY,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   
   /**
    * GtkTextTag:invisible:
@@ -682,7 +682,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_INVISIBLE,
                                    g_param_spec_boolean ("invisible", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:paragraph-background:
@@ -704,7 +704,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_PARAGRAPH_BACKGROUND_RGBA,
                                    g_param_spec_boxed ("paragraph-background-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:fallback:
@@ -718,7 +718,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FALLBACK,
                                    g_param_spec_boolean ("fallback", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:letter-spacing:
@@ -729,7 +729,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_LETTER_SPACING,
                                    g_param_spec_int ("letter-spacing", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:font-features:
@@ -740,7 +740,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FONT_FEATURES,
                                    g_param_spec_string ("font-features", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:allow-breaks:
@@ -751,7 +751,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_ALLOW_BREAKS,
                                    g_param_spec_boolean ("allow-breaks", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:show-spaces:
@@ -763,7 +763,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_flags ("show-spaces", NULL, NULL,
                                                          PANGO_TYPE_SHOW_FLAGS,
                                                          PANGO_SHOW_NONE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:insert-hyphens:
@@ -774,7 +774,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_INSERT_HYPHENS,
                                    g_param_spec_boolean ("insert-hyphens", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:text-transform:
@@ -788,7 +788,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_enum ("text-transform", NULL, NULL,
                                                          PANGO_TYPE_TEXT_TRANSFORM,
                                                          PANGO_TEXT_TRANSFORM_NONE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:word:
@@ -803,7 +803,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_WORD,
                                    g_param_spec_boolean ("word", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:sentence:
@@ -818,7 +818,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_SENTENCE,
                                    g_param_spec_boolean ("sentence", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:accumulative-margin:
@@ -833,11 +833,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_ACCUMULATIVE_MARGIN,
                                    g_param_spec_boolean ("accumulative-margin", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /* Style props are set or not */
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME))
 
   /**
    * GtkTextTag:background-set:

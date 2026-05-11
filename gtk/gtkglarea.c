@@ -924,7 +924,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_AUTO_RENDER] =
     g_param_spec_boolean ("auto-render", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE |
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                           G_PARAM_STATIC_NAME |
                           G_PARAM_EXPLICIT_NOTIFY);
 
@@ -941,7 +941,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_HAS_DEPTH_BUFFER] =
     g_param_spec_boolean ("has-depth-buffer", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE |
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                           G_PARAM_STATIC_NAME |
                           G_PARAM_EXPLICIT_NOTIFY);
 
@@ -954,7 +954,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_HAS_STENCIL_BUFFER] =
     g_param_spec_boolean ("has-stencil-buffer", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE |
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                           G_PARAM_STATIC_NAME |
                           G_PARAM_EXPLICIT_NOTIFY);
 
@@ -969,7 +969,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_USE_ES] =
     g_param_spec_boolean ("use-es", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE |
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                           G_PARAM_STATIC_NAME |
                           G_PARAM_EXPLICIT_NOTIFY);
 

@@ -721,7 +721,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_FORMATS] =
        g_param_spec_boxed ("formats", NULL, NULL,
                            GDK_TYPE_CONTENT_FORMATS,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkDropTarget:preload:

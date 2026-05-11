@@ -184,7 +184,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                    PROP_TITLE,
                                    g_param_spec_string ("title", NULL, NULL,
                                                         _("Pick a Color"),
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
 
   /**
@@ -243,7 +243,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                    PROP_SHOW_EDITOR,
                                    g_param_spec_boolean ("show-editor", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkColorButton:modal:
@@ -254,7 +254,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                    PROP_MODAL,
                                    g_param_spec_boolean ("modal", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

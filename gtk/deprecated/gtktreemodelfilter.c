@@ -536,7 +536,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
                                    PROP_CHILD_MODEL,
                                    g_param_spec_object ("child-model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkTreeModelFilter:virtual-root:
@@ -547,7 +547,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
                                    PROP_VIRTUAL_ROOT,
                                    g_param_spec_boxed ("virtual-root", NULL, NULL,
                                                        GTK_TYPE_TREE_PATH,
-                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void

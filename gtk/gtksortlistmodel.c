@@ -1035,7 +1035,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   properties[PROP_INCREMENTAL] =
       g_param_spec_boolean ("incremental", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:item-type:
@@ -1057,7 +1057,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   properties[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:n-items:
@@ -1091,7 +1091,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   properties[PROP_SECTION_SORTER] =
       g_param_spec_object ("section-sorter", NULL, NULL,
                            GTK_TYPE_SORTER,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:sorter:
@@ -1101,7 +1101,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   properties[PROP_SORTER] =
       g_param_spec_object ("sorter", NULL, NULL,
                             GTK_TYPE_SORTER,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }

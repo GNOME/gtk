@@ -91,7 +91,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                        g_param_spec_enum ("action", NULL, NULL,
                                                           GTK_TYPE_FILE_CHOOSER_ACTION,
                                                           GTK_FILE_CHOOSER_ACTION_OPEN,
-                                                          GTK_PARAM_READWRITE));
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
 
   /**
@@ -104,7 +104,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("filter", NULL, NULL,
                                                             GTK_TYPE_FILE_FILTER,
-                                                            GTK_PARAM_READWRITE));
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooser:select-multiple:
@@ -116,7 +116,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("select-multiple", NULL, NULL,
                                                              FALSE,
-                                                             GTK_PARAM_READWRITE));
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFileChooser:filters:
@@ -161,7 +161,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   g_object_interface_install_property (iface,
                                        g_param_spec_boolean ("create-folders", NULL, NULL,
                                                              TRUE,
-                                                             GTK_PARAM_READWRITE));
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 /**

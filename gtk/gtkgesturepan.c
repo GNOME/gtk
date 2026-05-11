@@ -232,7 +232,7 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                                    g_param_spec_enum ("orientation", NULL, NULL,
                                                       GTK_TYPE_ORIENTATION,
                                                       GTK_ORIENTATION_HORIZONTAL,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkGesturePan::pan:

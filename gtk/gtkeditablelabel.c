@@ -511,7 +511,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
   properties[PROP_EDITING] =
     g_param_spec_boolean ("editing", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

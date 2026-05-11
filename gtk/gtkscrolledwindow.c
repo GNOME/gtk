@@ -624,7 +624,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_HADJUSTMENT] =
       g_param_spec_object ("hadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:vadjustment:
@@ -634,7 +634,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_VADJUSTMENT] =
       g_param_spec_object ("vadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:hscrollbar-policy:
@@ -648,7 +648,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
       g_param_spec_enum ("hscrollbar-policy", NULL, NULL,
                          GTK_TYPE_POLICY_TYPE,
                          GTK_POLICY_AUTOMATIC,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:vscrollbar-policy:
@@ -662,7 +662,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
       g_param_spec_enum ("vscrollbar-policy", NULL, NULL,
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:window-placement: (getter get_placement) (setter set_placement)
@@ -673,7 +673,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
       g_param_spec_enum ("window-placement", NULL, NULL,
                         GTK_TYPE_CORNER_TYPE,
                         GTK_CORNER_TOP_LEFT,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:has-frame:
@@ -683,7 +683,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_HAS_FRAME] =
       g_param_spec_boolean ("has-frame", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:min-content-width:
@@ -693,7 +693,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_MIN_CONTENT_WIDTH] =
       g_param_spec_int ("min-content-width", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:min-content-height:
@@ -703,7 +703,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_MIN_CONTENT_HEIGHT] =
       g_param_spec_int ("min-content-height", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:kinetic-scrolling:
@@ -715,7 +715,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_KINETIC_SCROLLING] =
       g_param_spec_boolean ("kinetic-scrolling", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:overlay-scrolling:
@@ -732,7 +732,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_OVERLAY_SCROLLING] =
       g_param_spec_boolean ("overlay-scrolling", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:max-content-width:
@@ -742,7 +742,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_MAX_CONTENT_WIDTH] =
       g_param_spec_int ("max-content-width", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:max-content-height:
@@ -752,7 +752,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_MAX_CONTENT_HEIGHT] =
       g_param_spec_int ("max-content-height", NULL, NULL,
                         -1, G_MAXINT, -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:propagate-natural-width:
@@ -766,7 +766,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_PROPAGATE_NATURAL_WIDTH] =
       g_param_spec_boolean ("propagate-natural-width", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:propagate-natural-height:
@@ -780,7 +780,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_PROPAGATE_NATURAL_HEIGHT] =
       g_param_spec_boolean ("propagate-natural-height", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScrolledWindow:child:
@@ -794,7 +794,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   properties[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 

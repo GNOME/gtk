@@ -270,7 +270,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
       g_param_spec_enum ("baseline-position", NULL, NULL,
                          GTK_TYPE_BASELINE_POSITION,
                          GTK_BASELINE_POSITION_CENTER,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCenterBox:start-widget:
@@ -286,7 +286,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   props[PROP_START_WIDGET] =
       g_param_spec_object ("start-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCenterBox:center-widget:
@@ -298,7 +298,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   props[PROP_CENTER_WIDGET] =
       g_param_spec_object ("center-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCenterBox:end-widget:
@@ -314,7 +314,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   props[PROP_END_WIDGET] =
       g_param_spec_object ("end-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCenterBox:shrink-center-last:
@@ -333,7 +333,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   props[PROP_SHRINK_CENTER_LAST] =
       g_param_spec_boolean ("shrink-center-last", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

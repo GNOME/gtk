@@ -255,7 +255,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_TEXT] =
       g_param_spec_string ("text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_MARKUP] =
       g_param_spec_string ("markup", NULL, NULL,
@@ -265,12 +265,12 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_SINGLE_PARAGRAPH_MODE] =
       g_param_spec_boolean ("single-paragraph-mode", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   text_cell_renderer_props[PROP_BACKGROUND] =
       g_param_spec_string ("background", NULL, NULL,
@@ -285,7 +285,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_BACKGROUND_RGBA] =
       g_param_spec_boxed ("background-rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   text_cell_renderer_props[PROP_FOREGROUND] =
       g_param_spec_string ("foreground", NULL, NULL,
                            NULL,
@@ -299,93 +299,93 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_FOREGROUND_RGBA] =
       g_param_spec_boxed ("foreground-rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
 
   text_cell_renderer_props[PROP_EDITABLE] =
       g_param_spec_boolean ("editable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_FONT] =
       g_param_spec_string ("font", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_FONT_DESC] =
       g_param_spec_boxed ("font-desc", NULL, NULL,
                           PANGO_TYPE_FONT_DESCRIPTION,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_FAMILY] =
       g_param_spec_string ("family", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_STYLE] =
       g_param_spec_enum ("style", NULL, NULL,
                          PANGO_TYPE_STYLE,
                          PANGO_STYLE_NORMAL,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_VARIANT] =
       g_param_spec_enum ("variant", NULL, NULL,
                          PANGO_TYPE_VARIANT,
                          PANGO_VARIANT_NORMAL,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_WEIGHT] =
       g_param_spec_int ("weight", NULL, NULL,
                         0, G_MAXINT,
                         PANGO_WEIGHT_NORMAL,
-                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
    text_cell_renderer_props[PROP_STRETCH] =
        g_param_spec_enum ("stretch", NULL, NULL,
                           PANGO_TYPE_STRETCH,
                           PANGO_STRETCH_NORMAL,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_SIZE] =
       g_param_spec_int ("size", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_SIZE_POINTS] =
       g_param_spec_double ("size-points", NULL, NULL,
                            0.0, G_MAXDOUBLE,
                            0.0,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_SCALE] =
       g_param_spec_double ("scale", NULL, NULL,
                            0.0, G_MAXDOUBLE,
                            1.0,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_RISE] =
       g_param_spec_int ("rise", NULL, NULL,
                         -G_MAXINT, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
 
   text_cell_renderer_props[PROP_STRIKETHROUGH] =
       g_param_spec_boolean ("strikethrough", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_UNDERLINE] =
       g_param_spec_enum ("underline", NULL, NULL,
                          PANGO_TYPE_UNDERLINE,
                          PANGO_UNDERLINE_NONE,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_LANGUAGE] =
       g_param_spec_string ("language", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererText:ellipsize:
@@ -399,7 +399,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:width-chars:
@@ -412,7 +412,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:max-width-chars:
@@ -430,7 +430,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:wrap-mode:
@@ -443,7 +443,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_enum ("wrap-mode", NULL, NULL,
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_CHAR,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:wrap-width:
@@ -456,7 +456,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_int ("wrap-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:alignment:
@@ -471,7 +471,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
       g_param_spec_enum ("alignment", NULL, NULL,
                          PANGO_TYPE_ALIGNMENT,
                          PANGO_ALIGN_LEFT,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:placeholder-text:
@@ -482,11 +482,11 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /* Style props are set or not */
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) text_cell_renderer_props[propval] = g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE)
+#define ADD_SET_PROP(propname, propval, nick, blurb) text_cell_renderer_props[propval] = g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME)
 
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET, NULL, NULL);
 

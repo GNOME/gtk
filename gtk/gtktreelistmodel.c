@@ -670,7 +670,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
   properties[PROP_AUTOEXPAND] =
       g_param_spec_boolean ("autoexpand", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeListModel:item-type:
@@ -718,7 +718,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
   properties[PROP_PASSTHROUGH] =
       g_param_spec_boolean ("passthrough", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -1085,7 +1085,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   row_properties[ROW_PROP_EXPANDED] =
       g_param_spec_boolean ("expanded", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeListRow:item:

@@ -66,7 +66,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_string ("font", NULL, NULL,
                            GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
-                           GTK_PARAM_READWRITE));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFontChooser:font-desc:
@@ -79,7 +79,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_boxed ("font-desc", NULL, NULL,
                           PANGO_TYPE_FONT_DESCRIPTION,
-                          GTK_PARAM_READWRITE));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFontChooser:preview-text:
@@ -92,7 +92,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_string ("preview-text", NULL, NULL,
                           pango_language_get_sample_string (NULL),
-                          GTK_PARAM_READWRITE));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkFontChooser:show-preview-entry:
@@ -105,7 +105,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_boolean ("show-preview-entry", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontChooser:level:
@@ -121,7 +121,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_FONT_CHOOSER_LEVEL_FAMILY |
                           GTK_FONT_CHOOSER_LEVEL_STYLE |
                           GTK_FONT_CHOOSER_LEVEL_SIZE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontChooser:font-features:
@@ -150,7 +150,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
      (iface,
       g_param_spec_string ("language", NULL, NULL,
                           "",
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkFontChooser::font-activated:

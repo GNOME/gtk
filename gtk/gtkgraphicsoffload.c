@@ -255,7 +255,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
    */
   properties[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
                                                 GTK_TYPE_WIDGET,
-                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGraphicsOffload:enabled:
@@ -267,7 +267,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
   properties[PROP_ENABLED] = g_param_spec_enum ("enabled", NULL, NULL,
                                                 GTK_TYPE_GRAPHICS_OFFLOAD_ENABLED,
                                                 GTK_GRAPHICS_OFFLOAD_ENABLED,
-                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGraphicsOffload:black-background:
@@ -278,7 +278,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
    */
   properties[PROP_BLACK_BACKGROUND] = g_param_spec_boolean ("black-background", NULL, NULL,
                                                             FALSE,
-                                                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

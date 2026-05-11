@@ -166,7 +166,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                    PROP_PARENT,
                                    g_param_spec_object ("parent", NULL, NULL,
                                                         GTK_TYPE_WINDOW,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkMountOperation:is-showing:
@@ -188,7 +188,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                    PROP_DISPLAY,
                                    g_param_spec_object ("display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static void

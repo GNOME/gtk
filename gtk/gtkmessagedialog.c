@@ -369,7 +369,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    g_param_spec_enum ("message-type", NULL, NULL,
                                                       GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:buttons:
    *
@@ -392,7 +392,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_TEXT,
                                    g_param_spec_string ("text", NULL, NULL,
                                                         "",
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkMessageDialog:use-markup:
    *
@@ -404,7 +404,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_USE_MARKUP,
                                    g_param_spec_boolean ("use-markup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:secondary-text:
    *
@@ -414,7 +414,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_SECONDARY_TEXT,
                                    g_param_spec_string ("secondary-text", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkMessageDialog:secondary-use-markup:
    *
@@ -426,7 +426,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_SECONDARY_USE_MARKUP,
                                    g_param_spec_boolean ("secondary-use-markup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:message-area:
    *

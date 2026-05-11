@@ -509,19 +509,19 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 
   g_object_class_install_property (object_class, PROP_RGBA,
       g_param_spec_boxed ("rgba", NULL, NULL,
-                          GDK_TYPE_RGBA, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                          GDK_TYPE_RGBA, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_SELECTABLE,
       g_param_spec_boolean ("selectable", NULL, NULL,
-                            TRUE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_HAS_MENU,
       g_param_spec_boolean ("has-menu", NULL, NULL,
-                            TRUE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_CAN_DROP,
       g_param_spec_boolean ("can-drop", NULL, NULL,
-                            FALSE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                            FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class, PROP_CAN_DRAG,
       g_param_spec_boolean ("can-drag", NULL, NULL,
-                            TRUE, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkColorSwatch|menu.popup:

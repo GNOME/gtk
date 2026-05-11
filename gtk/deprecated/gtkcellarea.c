@@ -779,7 +779,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                                    PROP_FOCUS_CELL,
                                    g_param_spec_object ("focus-cell", NULL, NULL,
                                                         GTK_TYPE_CELL_RENDERER,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellArea:edited-cell:

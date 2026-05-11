@@ -2286,7 +2286,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
           g_param_spec_flags ("open-flags", NULL, NULL,
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
-                              GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

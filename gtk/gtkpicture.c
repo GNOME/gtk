@@ -472,7 +472,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_PAINTABLE] =
       g_param_spec_object ("paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPicture:file:
@@ -482,7 +482,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_FILE] =
       g_param_spec_object ("file", NULL, NULL,
                            G_TYPE_FILE,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPicture:alternative-text:
@@ -492,7 +492,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_ALTERNATIVE_TEXT] =
       g_param_spec_string ("alternative-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPicture:keep-aspect-ratio:
@@ -505,7 +505,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_KEEP_ASPECT_RATIO] =
       g_param_spec_boolean ("keep-aspect-ratio", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
   /**
    * GtkPicture:can-shrink:
@@ -515,7 +515,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_CAN_SHRINK] =
       g_param_spec_boolean ("can-shrink", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPicture:content-fit:
@@ -528,7 +528,7 @@ gtk_picture_class_init (GtkPictureClass *class)
       g_param_spec_enum ("content-fit", NULL, NULL,
                          GTK_TYPE_CONTENT_FIT,
                          GTK_CONTENT_FIT_CONTAIN,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPicture:isolate-contents:
@@ -540,7 +540,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   properties[PROP_ISOLATE_CONTENTS] =
       g_param_spec_boolean ("isolate-contents", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 

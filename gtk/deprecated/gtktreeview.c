@@ -1003,38 +1003,38 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_TREE_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   tree_view_props[PROP_HEADERS_VISIBLE] =
       g_param_spec_boolean ("headers-visible", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_HEADERS_CLICKABLE] =
       g_param_spec_boolean ("headers-clickable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_EXPANDER_COLUMN] =
       g_param_spec_object ("expander-column", NULL, NULL,
                            GTK_TYPE_TREE_VIEW_COLUMN,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   tree_view_props[PROP_REORDERABLE] =
       g_param_spec_boolean ("reorderable", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_SEARCH] =
       g_param_spec_boolean ("enable-search", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_SEARCH_COLUMN] =
       g_param_spec_int ("search-column", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:fixed-height-mode:
@@ -1048,7 +1048,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_FIXED_HEIGHT_MODE] =
       g_param_spec_boolean ("fixed-height-mode", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:hover-selection:
@@ -1064,7 +1064,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_HOVER_SELECTION] =
       g_param_spec_boolean ("hover-selection", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:hover-expand:
@@ -1079,7 +1079,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_HOVER_EXPAND] =
       g_param_spec_boolean ("hover-expand", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:show-expanders:
@@ -1089,7 +1089,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_SHOW_EXPANDERS] =
       g_param_spec_boolean ("show-expanders", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:level-indentation:
@@ -1100,29 +1100,29 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
       g_param_spec_int ("level-indentation", NULL, NULL,
                         0, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_RUBBER_BANDING] =
       g_param_spec_boolean ("rubber-banding", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_GRID_LINES] =
       g_param_spec_enum ("enable-grid-lines", NULL, NULL,
                          GTK_TYPE_TREE_VIEW_GRID_LINES,
                          GTK_TREE_VIEW_GRID_LINES_NONE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_TREE_LINES] =
       g_param_spec_boolean ("enable-tree-lines", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_TOOLTIP_COLUMN] =
       g_param_spec_int ("tooltip-column", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTreeView:activate-on-single-click:
@@ -1133,7 +1133,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   tree_view_props[PROP_ACTIVATE_ON_SINGLE_CLICK] =
       g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (o_class, LAST_PROP, tree_view_props);
 

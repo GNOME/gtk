@@ -528,7 +528,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_TAG_TABLE] =
       g_param_spec_object ("tag-table", NULL, NULL,
                            GTK_TYPE_TEXT_TAG_TABLE,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /* Normal properties */
 
@@ -543,7 +543,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_TEXT] =
       g_param_spec_string ("text", NULL, NULL,
                            "",
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextBuffer:has-selection:
@@ -583,7 +583,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   text_buffer_props[PROP_ENABLE_UNDO] =
     g_param_spec_boolean ("enable-undo", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextBuffer:cursor-position:

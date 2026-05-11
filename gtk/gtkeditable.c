@@ -393,7 +393,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_string ("text", NULL, NULL,
                            "",
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:complete-text:
@@ -427,7 +427,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("enable-undo", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:selection-bound:
@@ -448,7 +448,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("editable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:width-chars:
@@ -459,7 +459,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:max-width-chars:
@@ -470,7 +470,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkEditable:xalign: (getter get_alignment) (setter set_alignment)
@@ -483,7 +483,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
       g_param_spec_float ("xalign", NULL, NULL,
                           0.0, 1.0,
                           0.0,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /**

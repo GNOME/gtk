@@ -116,7 +116,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                    PROP_CELL_AREA,
                                    g_param_spec_object ("area", NULL, NULL,
                                                         GTK_TYPE_CELL_AREA,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkCellAreaContext:minimum-width:

@@ -130,7 +130,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 				   PROP_ADJUSTMENT,
 				   g_param_spec_object ("adjustment", NULL, NULL,
 							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
 
   /**
@@ -142,7 +142,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 				   PROP_CLIMB_RATE,
 				   g_param_spec_double ("climb-rate", NULL, NULL,
 							0.0, G_MAXDOUBLE, 0.0,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkCellRendererSpin:digits:
    *
@@ -152,7 +152,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 				   PROP_DIGITS,
 				   g_param_spec_uint ("digits", NULL, NULL,
 						      0, 20, 0,
-						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 static void

@@ -180,7 +180,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel:accel-mods:
@@ -192,7 +192,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                    g_param_spec_flags ("accel-mods", NULL, NULL,
                                                        GDK_TYPE_MODIFIER_TYPE,
                                                        GDK_NO_MODIFIER_MASK,
-                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel:keycode:
@@ -207,7 +207,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel:accel-mode:
@@ -222,7 +222,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                    g_param_spec_enum ("accel-mode", NULL, NULL,
                                                       GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
                                                       GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                                                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererAccel::accel-edited:
@@ -678,11 +678,11 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
       g_param_spec_enum ("accel-mode", NULL, NULL,
                          GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
                          GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class, PROP_PATH,
       g_param_spec_string ("path", NULL, NULL,
-                           NULL, GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("acceleditor"));

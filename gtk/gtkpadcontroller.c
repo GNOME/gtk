@@ -387,7 +387,7 @@ gtk_pad_controller_class_init (GtkPadControllerClass *klass)
   pspecs[PROP_ACTION_GROUP] =
     g_param_spec_object ("action-group", NULL, NULL,
                          G_TYPE_ACTION_GROUP,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkPadController:pad:
    *
@@ -396,7 +396,7 @@ gtk_pad_controller_class_init (GtkPadControllerClass *klass)
   pspecs[PROP_PAD] =
     g_param_spec_object ("pad", NULL, NULL,
                          GDK_TYPE_DEVICE,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (object_class, N_PROPS, pspecs);
 }

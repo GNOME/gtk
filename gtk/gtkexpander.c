@@ -317,7 +317,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_EXPANDED,
                                    g_param_spec_boolean ("expanded", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:label:
@@ -328,7 +328,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_LABEL,
                                    g_param_spec_string ("label", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT));
 
   /**
    * GtkExpander:use-underline:
@@ -339,7 +339,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_USE_UNDERLINE,
                                    g_param_spec_boolean ("use-underline", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:use-markup:
@@ -350,7 +350,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_USE_MARKUP,
                                    g_param_spec_boolean ("use-markup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:label-widget:
@@ -361,7 +361,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_LABEL_WIDGET,
                                    g_param_spec_object ("label-widget", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:resize-toplevel:
@@ -373,7 +373,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_RESIZE_TOPLEVEL,
                                    g_param_spec_boolean ("resize-toplevel", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander:child:
@@ -384,7 +384,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                    PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkExpander::activate:

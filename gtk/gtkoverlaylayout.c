@@ -138,7 +138,7 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
   child_props[PROP_MEASURE] =
     g_param_spec_boolean ("measure", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkOverlayLayoutChild:clip-overlay:
@@ -148,7 +148,7 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
   child_props[PROP_CLIP_OVERLAY] =
     g_param_spec_boolean ("clip-overlay", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_CHILD_PROPERTIES, child_props);
 }
