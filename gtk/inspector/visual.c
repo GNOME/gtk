@@ -695,7 +695,7 @@ init_theme (GtkInspectorVisual *vis)
       /* theme is hardcoded, nothing we can do */
       row = gtk_widget_get_parent (vis->theme_combo);
       gtk_widget_unparent (vis->theme_combo);
-      vis->theme_combo = gtk_label_new ("Set via GTK_THEME");
+      vis->theme_combo = gtk_label_new (_("Set via GTK_THEME"));
       gtk_widget_add_css_class (vis->theme_combo, "dim-label");
       gtk_box_append (GTK_BOX (row), vis->theme_combo);
     }
@@ -881,7 +881,7 @@ init_cursors (GtkInspectorVisual *vis)
 
       row = gtk_widget_get_parent (vis->cursor_combo);
       gtk_widget_unparent (vis->cursor_combo);
-      vis->cursor_combo = gtk_label_new ("Set by Compositor");
+      vis->cursor_combo = gtk_label_new (_("Set by Compositor"));
       gtk_widget_add_css_class (vis->cursor_combo, "dim-label");
       gtk_box_append (GTK_BOX (row), vis->cursor_combo);
     }
@@ -918,7 +918,7 @@ init_cursor_size (GtkInspectorVisual *vis)
 
       row = gtk_widget_get_parent (vis->cursor_size_spin);
       gtk_widget_unparent (vis->cursor_size_spin);
-      vis->cursor_size_spin = gtk_label_new ("Set by Compositor");
+      vis->cursor_size_spin = gtk_label_new (_("Set by Compositor"));
       gtk_widget_add_css_class (vis->cursor_size_spin, "dim-label");
       gtk_box_append (GTK_BOX (row), vis->cursor_size_spin);
     }

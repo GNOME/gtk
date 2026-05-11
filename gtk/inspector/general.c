@@ -699,7 +699,7 @@ init_gl (GtkInspectorGeneral *gen)
 
       gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), eglQueryString (egl_display, EGL_VENDOR));
 
-      gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), "EGL extensions");
+      gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), _("EGL extensions"));
       append_extensions (gen->egl_extensions_list, eglQueryString (egl_display, EGL_EXTENSIONS));
     }
   else
@@ -725,7 +725,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       screen = XScreenNumberOfScreen (gdk_x11_display_get_xscreen (gen->display));
 G_GNUC_END_IGNORE_DEPRECATIONS
-      gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), "GLX extensions");
+      gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), _("GLX extensions"));
       append_extensions (gen->egl_extensions_list, glXQueryExtensionsString (dpy, screen));
     }
   else
@@ -739,19 +739,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     {
       PFNWGLGETEXTENSIONSSTRINGARBPROC my_wglGetExtensionsStringARB;
 
-      gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), "Microsoft WGL");
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), _("Microsoft WGL"));
       gtk_widget_set_visible (gen->gl_backend_version, FALSE);
 
       my_wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
 
       if (my_wglGetExtensionsStringARB)
         {
-          gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), "WGL extensions");
+          gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), _("WGL extensions"));
           append_extensions (gen->egl_extensions_list, my_wglGetExtensionsStringARB (wglGetCurrentDC ()));
         }
       else
         {
-          gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), "WGL extensions: none");
+          gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), _("WGL extensions: none"));
         }
     }
   else

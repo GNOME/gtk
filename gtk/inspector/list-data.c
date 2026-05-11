@@ -151,7 +151,7 @@ setup_props (GtkSignalListItemFactory *factory,
 {
   GtkWidget *button;
 
-  button = gtk_button_new_with_label ("Properties");
+  button = gtk_button_new_with_label (_("Properties"));
   gtk_widget_add_css_class (button, "cell");
   gtk_widget_set_halign (button, GTK_ALIGN_START);
   gtk_list_item_set_child (item, button);
