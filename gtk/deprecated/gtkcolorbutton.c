@@ -379,6 +379,8 @@ gtk_color_button_new (void)
  * Creates a new color button showing the given color.
  *
  * Returns: a new color button
+ *
+ * Deprecated: 4.10
  */
 GtkWidget *
 gtk_color_button_new_with_rgba (const GdkRGBA *rgba)

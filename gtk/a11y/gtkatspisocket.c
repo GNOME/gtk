@@ -20,12 +20,14 @@
  */
 
 /**
- * GtkAtApiSocket:
+ * GtkAtSpiSocket:
  *
- * `GtkAtApiSocket` is an AT-SPI specific `GtkAccessible` interface for
+ * `GtkAtSpiSocket` is an AT-SPI specific `GtkAccessible` interface for
  * integrating remote accessible objects. It makes the accessible tree
  * of the remote accessible object appear as part of the accessible tree
  * that it belongs to itself.
+ *
+ * Since: 4.14
  */
 
 #include "config.h"

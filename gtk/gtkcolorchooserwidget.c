@@ -896,6 +896,8 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
  * Creates a new `GtkColorChooserWidget`.
  *
  * Returns: a new `GtkColorChooserWidget`
+ *
+ * Deprecated: 4.10
  */
 GtkWidget *
 gtk_color_chooser_widget_new (void)

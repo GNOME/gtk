@@ -1716,6 +1716,8 @@ gtk_cell_area_foreach (GtkCellArea        *area,
  *
  * Calls @callback for every `GtkCellRenderer` in @area with the
  * allocated rectangle inside @cell_area.
+ *
+ * Deprecated: 4.10
  */
 void
 gtk_cell_area_foreach_alloc (GtkCellArea          *area,
@@ -1999,6 +2001,8 @@ gtk_cell_area_copy_context (GtkCellArea        *area,
  * or a width-for-height layout.
  *
  * Returns: The `GtkSizeRequestMode` preferred by @area.
+ *
+ * Deprecated: 4.10
  */
 GtkSizeRequestMode
 gtk_cell_area_get_request_mode (GtkCellArea *area)
@@ -2357,6 +2361,8 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
  * Returns: The current `GtkTreePath` string for the current
  * attributes applied to @area. This string belongs to the area and
  * should not be freed.
+ *
+ * Deprecated: 4.10
  */
 const char *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)

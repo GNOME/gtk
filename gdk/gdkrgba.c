@@ -414,6 +414,17 @@ gdk_rgba_to_string (const GdkRGBA *rgba)
   return g_string_free (gdk_rgba_print (rgba, g_string_new ("")), FALSE);
 }
 
+/**
+ * gdk_rgba_print:
+ * @rgba: a `GdkRGBA`
+ * @string: the string to print to
+ *
+ * Appends a representation of @rgba to @string.
+ *
+ * Returns: A newly allocated text string
+ *
+ * Since: 4.22
+ */
 GString *
 gdk_rgba_print (const GdkRGBA *rgba,
                 GString       *string)

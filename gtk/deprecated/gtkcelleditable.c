@@ -117,6 +117,8 @@ gtk_cell_editable_default_init (GtkCellEditableInterface *iface)
  *
  * Note that the @cell_editable is created on-demand for the current edit; its
  * lifetime is temporary and does not persist across other edits and/or cells.
+ *
+ * Deprecated: 4.10
  **/
 void
 gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
