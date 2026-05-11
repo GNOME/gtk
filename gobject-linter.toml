@@ -113,3 +113,9 @@ ignore = [
   "gtk/deprecated/gtkfontbutton.c",
   "gtk/gtkfontchooserwidget.c",
 ]
+
+[rules.use_g_set_object]
+level = "ignore"
+
+[rules.use_g_set_str]
+level = "ignore"
