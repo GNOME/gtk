@@ -2368,7 +2368,7 @@ bind_widget_for_recording (GtkListItemFactory *factory,
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      gtk_label_set_label (GTK_LABEL (label), "Frame");
+      gtk_label_set_label (GTK_LABEL (label), _("Frame"));
       gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
 
       text = g_strdup_printf ("%.3f", gtk_inspector_recording_get_timestamp (recording) / 1000.0);
@@ -2391,7 +2391,7 @@ bind_widget_for_recording (GtkListItemFactory *factory,
     }
   else
     {
-      gtk_label_set_label (GTK_LABEL (label), "<b>Start of Recording</b>");
+      gtk_label_set_label (GTK_LABEL (label), _("<b>Start of Recording</b>"));
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_label_set_label (GTK_LABEL (label2), "");
     }
