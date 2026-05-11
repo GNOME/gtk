@@ -694,7 +694,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   properties[PROP_SHOW_DIALOG_ITEM] =
     g_param_spec_boolean ("show-dialog-item", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserButton:show-default-item:
@@ -705,7 +705,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   properties[PROP_SHOW_DEFAULT_ITEM] =
     g_param_spec_boolean ("show-default-item", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserButton:heading:
@@ -718,7 +718,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   properties[PROP_HEADING] =
     g_param_spec_string ("heading", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserButton:modal:
@@ -728,7 +728,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   properties[PROP_MODAL] =
     g_param_spec_boolean ("modal", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 
   /**

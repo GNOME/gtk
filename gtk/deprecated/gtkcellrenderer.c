@@ -285,18 +285,18 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 				   g_param_spec_enum ("mode", NULL, NULL,
 						      GTK_TYPE_CELL_RENDERER_MODE,
 						      GTK_CELL_RENDERER_MODE_INERT,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible", NULL, NULL,
 							 TRUE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (object_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive", NULL, NULL,
 							 TRUE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
@@ -304,7 +304,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_YALIGN,
@@ -312,7 +312,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
@@ -320,7 +320,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
@@ -328,7 +328,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_WIDTH,
@@ -336,7 +336,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_HEIGHT,
@@ -344,20 +344,20 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
 				   g_param_spec_boolean ("is-expander", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDED,
 				   g_param_spec_boolean ("is-expanded", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND,
@@ -383,7 +383,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 GTK_PARAM_READABLE));
 
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY))
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY))
 
   ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET, NULL, NULL);
 

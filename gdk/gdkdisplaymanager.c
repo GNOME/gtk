@@ -163,7 +163,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                                    PROP_DEFAULT_DISPLAY,
                                    g_param_spec_object ("default-display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE|G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static void

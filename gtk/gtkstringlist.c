@@ -523,7 +523,7 @@ gtk_string_list_class_init (GtkStringListClass *class)
   properties[PROP_STRINGS] =
       g_param_spec_boxed ("strings", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_CONSTRUCT_ONLY);
+                          G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

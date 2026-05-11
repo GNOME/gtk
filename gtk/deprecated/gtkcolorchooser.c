@@ -88,7 +88,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_boolean ("use-alpha", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkColorChooser::color-activated:

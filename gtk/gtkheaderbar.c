@@ -590,7 +590,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   header_bar_props[PROP_TITLE_WIDGET] =
       g_param_spec_object ("title-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkHeaderBar:show-title-buttons:

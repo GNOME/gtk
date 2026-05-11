@@ -1107,7 +1107,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_APPLICATION] =
       g_param_spec_object ("application", NULL, NULL,
                            GTK_TYPE_APPLICATION,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:default-widget:
@@ -1117,7 +1117,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DEFAULT_WIDGET] =
       g_param_spec_object ("default-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:focus-widget: (getter get_focus) (setter set_focus)
@@ -1127,7 +1127,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_FOCUS_WIDGET] =
       g_param_spec_object ("focus-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:child:
@@ -1137,7 +1137,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:titlebar:
@@ -1149,7 +1149,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_TITLEBAR] =
       g_param_spec_object ("titlebar", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:handle-menubar-accel:
@@ -1180,7 +1180,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_enum ("gravity", NULL, NULL,
                          GTK_TYPE_WINDOW_GRAVITY,
                          GTK_WINDOW_GRAVITY_TOP_START,
-                         GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
 

@@ -95,7 +95,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   pspec = g_param_spec_enum ("hscroll-policy", NULL, NULL,
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
-			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+			     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
   g_object_interface_install_property (iface, pspec);
 
   /**
@@ -106,7 +106,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   pspec = g_param_spec_enum ("vscroll-policy", NULL, NULL,
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
-			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+			     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
   g_object_interface_install_property (iface, pspec);
 }
 
