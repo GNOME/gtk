@@ -390,7 +390,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
   properties[PROP_N_ITEMS] =
     g_param_spec_uint ("n-items", NULL, NULL,
                        0, G_MAXUINT, 0,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPropertyLookupListModel:property:

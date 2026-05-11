@@ -539,7 +539,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
    */
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native", NULL, NULL,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

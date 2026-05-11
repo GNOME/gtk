@@ -292,7 +292,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
     g_param_spec_object ("permission", NULL, NULL,
                          G_TYPE_PERMISSION,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /**
    * GtkLockButton:text-lock:
@@ -306,7 +306,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          _("Lock"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /**
    * GtkLockButton:text-unlock:
@@ -320,7 +320,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          _("Unlock"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /**
    * GtkLockButton:tooltip-lock:
@@ -334,7 +334,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          _("Dialog is unlocked.\nClick to prevent further changes"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /**
    * GtkLockButton:tooltip-unlock:
@@ -348,7 +348,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          _("Dialog is locked.\nClick to make changes"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /**
    * GtkLockButton:tooltip-not-authorized:
@@ -362,7 +362,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          _("System policy prevents changes.\nContact your system administrator"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
+                         G_PARAM_STATIC_NAME));
 
   /* Bind class to template
    */

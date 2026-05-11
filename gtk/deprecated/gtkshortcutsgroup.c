@@ -291,7 +291,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                          "",
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsGroup:view:
@@ -308,7 +308,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   properties[PROP_VIEW] =
     g_param_spec_string ("view", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsGroup:accel-size-group:
@@ -322,7 +322,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsGroup:title-size-group:
@@ -336,7 +336,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsGroup:height:
@@ -350,7 +350,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
   properties[PROP_HEIGHT] =
     g_param_spec_uint ("height", NULL, NULL,
                        0, G_MAXUINT, 1,
-                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

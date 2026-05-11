@@ -371,7 +371,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          GDK_TYPE_CONTENT_PROVIDER,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -384,7 +384,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          GDK_TYPE_DEVICE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -396,7 +396,7 @@ gdk_drag_class_init (GdkDragClass *klass)
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -409,7 +409,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -422,7 +422,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         GDK_TYPE_DRAG_ACTION,
                         0,
                         G_PARAM_READWRITE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -435,7 +435,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         GDK_TYPE_DRAG_ACTION,
                         GDK_ACTION_NONE,
                         G_PARAM_READWRITE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -448,7 +448,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**

@@ -233,7 +233,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_CONTEXT] =
     g_param_spec_object ("context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:format:
@@ -246,7 +246,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
     g_param_spec_enum ("format", NULL, NULL,
                        GDK_TYPE_MEMORY_FORMAT,
                        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:has-mipmap:
@@ -258,7 +258,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_HAS_MIPMAP] =
     g_param_spec_boolean ("has-mipmap", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:height:
@@ -270,7 +270,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:id:
@@ -282,7 +282,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_ID] =
     g_param_spec_uint ("id", NULL, NULL,
                        0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:sync:
@@ -295,7 +295,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    */
   properties[PROP_SYNC] =
     g_param_spec_pointer ("sync", NULL, NULL,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:color-state:
@@ -307,7 +307,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:update-region:
@@ -319,7 +319,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:update-texture:
@@ -331,7 +331,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkGLTextureBuilder:width:
@@ -343,7 +343,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   properties[PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

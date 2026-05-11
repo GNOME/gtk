@@ -103,17 +103,17 @@ test_object_class_init (TestObjectClass *class)
   g_object_class_install_property (object_class, PROP_STRING,
       g_param_spec_string ("string", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class, PROP_NUMBER,
       g_param_spec_uint ("number", NULL, NULL,
                          0, G_MAXUINT, 0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class, PROP_ALLOW_CHILDREN,
       g_param_spec_boolean ("allow-children", NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static TestObject *

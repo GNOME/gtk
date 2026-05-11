@@ -98,7 +98,7 @@
  *                              "Expression",
  *                              "The expression used by the widget",
  *                              G_PARAM_READWRITE |
- *                              G_PARAM_STATIC_STRINGS |
+ *                              G_PARAM_STATIC_NAME |
  *                              G_PARAM_EXPLICIT_NOTIFY);
  * ```
  *

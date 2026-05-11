@@ -329,7 +329,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression", NULL, NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringSorter:ignore-case:
@@ -339,7 +339,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   properties[PROP_IGNORE_CASE] =
       g_param_spec_boolean ("ignore-case", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringSorter:collation:
@@ -358,7 +358,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
       g_param_spec_enum ("collation", NULL, NULL,
                          GTK_TYPE_COLLATION,
                          GTK_COLLATION_UNICODE,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

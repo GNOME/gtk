@@ -164,7 +164,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   g_object_interface_install_property (iface,
       g_param_spec_flags ("state", NULL, NULL,
                           GDK_TYPE_TOPLEVEL_STATE, 0,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GdkToplevel:title:

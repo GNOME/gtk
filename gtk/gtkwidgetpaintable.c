@@ -244,7 +244,7 @@ gtk_widget_paintable_class_init (GtkWidgetPaintableClass *klass)
   properties[PROP_WIDGET] =
     g_param_spec_object ("widget", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

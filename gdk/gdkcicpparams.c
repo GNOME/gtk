@@ -176,7 +176,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   properties[PROP_COLOR_PRIMARIES] =
     g_param_spec_uint ("color-primaries", NULL, NULL,
                        0, 255, 2,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkCicpParams:transfer-function:
@@ -199,7 +199,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   properties[PROP_TRANSFER_FUNCTION] =
     g_param_spec_uint ("transfer-function", NULL, NULL,
                        0, 255, 2,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkCicpParams:matrix-coefficients:
@@ -219,7 +219,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   properties[PROP_MATRIX_COEFFICIENTS] =
     g_param_spec_uint ("matrix-coefficients", NULL, NULL,
                        0, 255, 2,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkCicpParams:range:
@@ -234,7 +234,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
     g_param_spec_enum ("range", NULL, NULL,
                        GDK_TYPE_CICP_RANGE,
                        GDK_CICP_RANGE_NARROW,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }

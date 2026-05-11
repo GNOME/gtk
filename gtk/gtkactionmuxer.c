@@ -1238,13 +1238,13 @@ gtk_action_muxer_class_init (GObjectClass *class)
   properties[PROP_PARENT] = g_param_spec_object ("parent", NULL, NULL,
                                                  GTK_TYPE_ACTION_MUXER,
                                                  G_PARAM_READWRITE |
-                                                 G_PARAM_STATIC_STRINGS);
+                                                 G_PARAM_STATIC_NAME);
 
   properties[PROP_WIDGET] = g_param_spec_object ("widget", NULL, NULL,
                                                  GTK_TYPE_WIDGET,
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_CONSTRUCT_ONLY |
-                                                 G_PARAM_STATIC_STRINGS);
+                                                 G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }

@@ -598,7 +598,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   properties[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:markup:
@@ -616,7 +616,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   properties[PROP_MARKUP] =
     g_param_spec_string ("markup", NULL, NULL,
                          NULL,
-                         G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:min-chars:
@@ -639,7 +639,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_uint ("min-chars", NULL, NULL,
                          0, G_MAXUINT,
                          DEFAULT_MIN_CHARS,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:min-lines:
@@ -661,7 +661,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_uint ("min-lines", NULL, NULL,
                          0, G_MAXUINT,
                          DEFAULT_MIN_LINES,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:nat-chars:
@@ -681,7 +681,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_uint ("nat-chars", NULL, NULL,
                          0, G_MAXUINT,
                          DEFAULT_NAT_CHARS,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:nat-lines:
@@ -701,7 +701,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_uint ("nat-lines", NULL, NULL,
                          0, G_MAXUINT,
                          DEFAULT_NAT_LINES,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:text:
@@ -713,7 +713,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   properties[PROP_TEXT] =
     g_param_spec_string ("text", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:text-overflow:
@@ -726,7 +726,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
     g_param_spec_enum ("text-overflow", NULL, NULL,
                        GTK_TYPE_INSCRIPTION_OVERFLOW,
                        GTK_INSCRIPTION_OVERFLOW_CLIP,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:wrap-mode:
@@ -741,7 +741,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_enum ("wrap-mode", NULL, NULL,
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_WORD_CHAR,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:xalign:
@@ -757,7 +757,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_float ("xalign", NULL, NULL,
                           0.0, 1.0,
                           DEFAULT_XALIGN,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkInscription:yalign:
@@ -773,7 +773,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_float ("yalign", NULL, NULL,
                           0.0, 1.0,
                           DEFAULT_YALIGN,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

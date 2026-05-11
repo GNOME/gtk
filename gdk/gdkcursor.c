@@ -178,7 +178,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                    g_param_spec_object ("fallback", NULL, NULL,
                                                         GDK_TYPE_CURSOR,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 
   /**
    * GdkCursor:hotspot-x:
@@ -190,7 +190,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                    g_param_spec_int ("hotspot-x", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   /**
    * GdkCursor:hotspot-y:
@@ -202,7 +202,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                    g_param_spec_int ("hotspot-y", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   /**
    * GdkCursor:name:
@@ -216,7 +216,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 
   /**
    * GdkCursor:texture:
@@ -230,7 +230,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                    g_param_spec_object ("texture", NULL, NULL,
                                                         GDK_TYPE_TEXTURE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 }
 
 static void

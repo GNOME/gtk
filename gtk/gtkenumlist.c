@@ -125,7 +125,7 @@ gtk_enum_list_item_class_init (GtkEnumListItemClass *klass)
   value_props[VALUE_PROP_VALUE] =
     g_param_spec_int ("value", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEnumListItem:name:
@@ -137,7 +137,7 @@ gtk_enum_list_item_class_init (GtkEnumListItemClass *klass)
   value_props[VALUE_PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEnumListItem:nick:
@@ -149,7 +149,7 @@ gtk_enum_list_item_class_init (GtkEnumListItemClass *klass)
   value_props[VALUE_PROP_NICK] =
     g_param_spec_string ("nick", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_VALUE_PROP, value_props);
 }
@@ -305,7 +305,7 @@ gtk_enum_list_class_init (GtkEnumListClass *klass)
   props[PROP_ENUM_TYPE] =
     g_param_spec_gtype ("enum-type", NULL, NULL,
                         G_TYPE_ENUM,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEnumList:item-type:
@@ -317,7 +317,7 @@ gtk_enum_list_class_init (GtkEnumListClass *klass)
   props[PROP_ITEM_TYPE] =
     g_param_spec_gtype ("item-type", NULL, NULL,
                         GTK_TYPE_ENUM_LIST_ITEM,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEnumList:n-items:
@@ -329,7 +329,7 @@ gtk_enum_list_class_init (GtkEnumListClass *klass)
   props[PROP_N_ITEMS] =
     g_param_spec_uint ("n-items", NULL, NULL,
                        0, G_MAXUINT, 0,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }

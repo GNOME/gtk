@@ -687,7 +687,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, GDK_ACTION_NONE,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDropTarget:drop:
@@ -748,7 +748,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_PRELOAD] =
        g_param_spec_boolean ("preload", NULL, NULL,
                              FALSE,
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDropTarget:value:

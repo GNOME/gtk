@@ -330,7 +330,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          GDK_ACTION_ALL,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -343,7 +343,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          GDK_TYPE_DEVICE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -355,7 +355,7 @@ gdk_drop_class_init (GdkDropClass *klass)
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -368,7 +368,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          GDK_TYPE_DRAG,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -381,7 +381,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -394,7 +394,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);

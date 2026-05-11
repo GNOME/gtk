@@ -348,13 +348,13 @@ gtk_action_helper_class_init (GtkActionHelperClass *class)
   class->finalize = gtk_action_helper_finalize;
 
   gtk_action_helper_pspecs[PROP_ENABLED] = g_param_spec_boolean ("enabled", NULL, NULL, FALSE,
-                                                                 G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                                                                 G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   gtk_action_helper_pspecs[PROP_ACTIVE] = g_param_spec_boolean ("active", NULL, NULL, FALSE,
-                                                                G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                                                                G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   gtk_action_helper_pspecs[PROP_ROLE] = g_param_spec_enum ("role", NULL, NULL,
                                                            GTK_TYPE_BUTTON_ROLE,
                                                            GTK_BUTTON_ROLE_NORMAL,
-                                                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                                                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
   g_object_class_install_properties (class, N_PROPS, gtk_action_helper_pspecs);
 }
 

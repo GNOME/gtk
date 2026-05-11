@@ -266,7 +266,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                        GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT |
-                       G_PARAM_STATIC_STRINGS);
+                       G_PARAM_STATIC_NAME);
 
   /**
    * GtkATContext:accessible:
@@ -278,7 +278,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                          GTK_TYPE_ACCESSIBLE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_STATIC_NAME);
 
   /**
    * GtkATContext:display:
@@ -289,7 +289,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**

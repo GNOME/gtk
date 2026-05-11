@@ -630,7 +630,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   properties[PROP_INSPECTED_DISPLAY] =
       g_param_spec_object ("inspected-display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
-                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   signals[EVENT] = g_signal_new (g_intern_static_string ("event"),

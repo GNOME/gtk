@@ -167,7 +167,7 @@ gtk_data_viewer_class_init (GtkDataViewerClass *klass)
   properties[PROP_LOADING] =
     g_param_spec_boolean ("loading", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

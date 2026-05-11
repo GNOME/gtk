@@ -341,7 +341,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   properties[PROP_CONTENT] =
        g_param_spec_object ("content", NULL, NULL,
                            GDK_TYPE_CONTENT_PROVIDER,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDragSource:actions:
@@ -354,7 +354,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, GDK_ACTION_COPY,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

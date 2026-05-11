@@ -140,7 +140,7 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
   pspec = g_param_spec_string ("string", NULL, NULL,
                                NULL,
                                G_PARAM_READABLE |
-                               G_PARAM_STATIC_STRINGS);
+                               G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, PROP_STRING, pspec);
 
@@ -499,7 +499,7 @@ gtk_string_list_class_init (GtkStringListClass *class)
   properties[PROP_ITEM_TYPE] =
     g_param_spec_gtype ("item-type", NULL, NULL,
                         G_TYPE_OBJECT,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStringList:n-items:
@@ -511,7 +511,7 @@ gtk_string_list_class_init (GtkStringListClass *class)
   properties[PROP_N_ITEMS] =
     g_param_spec_uint ("n-items", NULL, NULL,
                        0, G_MAXUINT, 0,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStringList:strings:
@@ -523,7 +523,7 @@ gtk_string_list_class_init (GtkStringListClass *class)
   properties[PROP_STRINGS] =
       g_param_spec_boxed ("strings", NULL, NULL,
                           G_TYPE_STRV,
-                          G_PARAM_WRITABLE|G_PARAM_STATIC_STRINGS|G_PARAM_CONSTRUCT_ONLY);
+                          G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

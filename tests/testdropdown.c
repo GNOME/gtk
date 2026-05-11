@@ -329,13 +329,13 @@ gtk_string_pair_class_init (GtkStringPairClass *class)
 
   pspec = g_param_spec_string ("string", NULL, NULL,
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, PROP_STRING, pspec);
 
   pspec = g_param_spec_string ("id", NULL, NULL,
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_property (object_class, PROP_ID, pspec);
 }

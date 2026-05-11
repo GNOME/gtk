@@ -138,49 +138,49 @@ type_data_class_init (TypeDataClass *class)
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_SELF1,
                                    g_param_spec_int ("self1", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_CUMULATIVE1,
                                    g_param_spec_int ("cumulative1", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_SELF2,
                                    g_param_spec_int ("self2", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_CUMULATIVE2,
                                    g_param_spec_int ("cumulative2", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_SELF,
                                    g_param_spec_object ("self", NULL, NULL,
                                                         graph_data_get_type (),
                                                         G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
                                    TYPE_DATA_PROP_CUMULATIVE,
                                    g_param_spec_object ("cumulative", NULL, NULL,
                                                         graph_data_get_type (),
                                                         G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
 }
 
 static TypeData *

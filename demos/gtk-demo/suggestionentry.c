@@ -144,31 +144,31 @@ match_object_class_init (MatchObjectClass *class)
                              G_TYPE_OBJECT,
                              G_PARAM_READWRITE |
                              G_PARAM_CONSTRUCT_ONLY |
-                             G_PARAM_STATIC_STRINGS);
+                             G_PARAM_STATIC_NAME);
   match_properties[PROP_STRING]
       = g_param_spec_string ("string", NULL, NULL,
                              NULL,
                              G_PARAM_READWRITE |
                              G_PARAM_CONSTRUCT_ONLY |
-                             G_PARAM_STATIC_STRINGS);
+                             G_PARAM_STATIC_NAME);
   match_properties[PROP_MATCH_START]
       = g_param_spec_uint ("match-start", NULL, NULL,
                            0, G_MAXUINT, 0,
                            G_PARAM_READWRITE |
                            G_PARAM_EXPLICIT_NOTIFY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_STATIC_NAME);
   match_properties[PROP_MATCH_END]
       = g_param_spec_uint ("match-end", NULL, NULL,
                            0, G_MAXUINT, 0,
                            G_PARAM_READWRITE |
                            G_PARAM_EXPLICIT_NOTIFY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_STATIC_NAME);
   match_properties[PROP_SCORE]
       = g_param_spec_uint ("score", NULL, NULL,
                            0, G_MAXUINT, 0,
                            G_PARAM_READWRITE |
                            G_PARAM_EXPLICIT_NOTIFY |
-                           G_PARAM_STATIC_STRINGS);
+                           G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_MATCH_PROPERTIES, match_properties);
 }
@@ -503,18 +503,18 @@ suggestion_entry_class_init (SuggestionEntryClass *klass)
     g_param_spec_object ("model",
                          NULL, NULL,
                          G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory",
                          NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression",
                                NULL, NULL,
-                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
@@ -526,19 +526,19 @@ suggestion_entry_class_init (SuggestionEntryClass *klass)
       g_param_spec_boolean ("popup-visible",
                             NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_USE_FILTER] =
       g_param_spec_boolean ("use-filter",
                             NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_ARROW] =
       g_param_spec_boolean ("show-arrow",
                             NULL, NULL,
                             FALSE,
-                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
   gtk_editable_install_properties (object_class, N_PROPERTIES);

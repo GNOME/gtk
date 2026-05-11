@@ -894,7 +894,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_DEPRECATED);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_DEPRECATED);
 
   /**
    * GtkApplication:screensaver-active:
@@ -908,7 +908,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_SCREENSAVER_ACTIVE] =
     g_param_spec_boolean ("screensaver-active", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE|G_PARAM_STATIC_NAME);
 
   /**
    * GtkApplication:menubar:
@@ -918,7 +918,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_MENUBAR] =
     g_param_spec_object ("menubar", NULL, NULL,
                          G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE|G_PARAM_STATIC_NAME);
 
   /**
    * GtkApplication:active-window:
@@ -928,7 +928,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_ACTIVE_WINDOW] =
     g_param_spec_object ("active-window", NULL, NULL,
                          GTK_TYPE_WINDOW,
-                         G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE|G_PARAM_STATIC_NAME);
 
   /**
    * GtkApplication:support-save:
@@ -941,7 +941,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_SUPPORT_SAVE] =
     g_param_spec_boolean ("support-save", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_DEPRECATED);
+                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_DEPRECATED);
 
   /**
    * GtkApplication:autosave-interval:
@@ -954,7 +954,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   gtk_application_props[PROP_AUTOSAVE_INTERVAL] =
     g_param_spec_uint ("autosave-interval", NULL, NULL,
                        0, G_MAXUINT, 15,
-                       G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE|G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }

@@ -249,7 +249,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_COLUMN_VIEW] =
     g_param_spec_object ("column-view", NULL, NULL,
                          GTK_TYPE_COLUMN_VIEW,
-                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:factory:
@@ -261,7 +261,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:title:
@@ -281,7 +281,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_SORTER] =
     g_param_spec_object ("sorter", NULL, NULL,
                          GTK_TYPE_SORTER,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:visible:
@@ -291,7 +291,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_VISIBLE] =
     g_param_spec_boolean ("visible", NULL, NULL,
                           TRUE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:header-menu:
@@ -301,7 +301,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_HEADER_MENU] =
     g_param_spec_object ("header-menu", NULL, NULL,
                          G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:resizable:
@@ -311,7 +311,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_RESIZABLE] =
     g_param_spec_boolean ("resizable", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:expand:
@@ -321,7 +321,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_EXPAND] =
     g_param_spec_boolean ("expand", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:fixed-width:
@@ -332,7 +332,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   properties[PROP_FIXED_WIDTH] =
     g_param_spec_int ("fixed-width", NULL, NULL,
                       -1, G_MAXINT, -1,
-                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkColumnViewColumn:id:

@@ -288,7 +288,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   props[PROP_DELAY_FACTOR] =
     g_param_spec_double ("delay-factor", NULL, NULL,
                          0.5, 2.0, 1.0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

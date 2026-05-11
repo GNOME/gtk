@@ -882,7 +882,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_DEPRECATED);
 
   /**
@@ -897,7 +897,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                         GDK_TYPE_GL_API,
                         DEFAULT_ALLOWED_APIS,
                         G_PARAM_READWRITE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -912,7 +912,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                         GDK_TYPE_GL_API,
                         0,
                         G_PARAM_READABLE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   gobject_class->set_property = gdk_gl_context_set_property;

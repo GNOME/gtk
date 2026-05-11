@@ -163,28 +163,28 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                    PROP_ANIMATED,
                                    g_param_spec_boolean ("animated", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_AFFECTS,
                                    g_param_spec_flags ("affects", NULL, NULL,
                                                        GTK_TYPE_CSS_AFFECTS,
                                                        0,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_ID,
                                    g_param_spec_uint ("id", NULL, NULL,
                                                       0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_INHERIT,
                                    g_param_spec_boolean ("inherit", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_INITIAL,
                                    g_param_spec_boxed ("initial-value", NULL, NULL,
                                                        GTK_TYPE_CSS_VALUE,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
 
   property_class->parse_value = gtk_css_style_property_parse_value;
 

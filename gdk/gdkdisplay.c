@@ -237,7 +237,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   props[PROP_COMPOSITED] =
     g_param_spec_boolean ("composited", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkDisplay:rgba: (getter is_rgba)
@@ -247,7 +247,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   props[PROP_RGBA] =
     g_param_spec_boolean ("rgba", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkDisplay:shadow-width: (getter supports_shadow_width)
@@ -259,7 +259,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   props[PROP_SHADOW_WIDTH] =
     g_param_spec_boolean ("shadow-width", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkDisplay:input-shapes: (getter supports_input_shapes)
@@ -269,7 +269,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   props[PROP_INPUT_SHAPES] =
     g_param_spec_boolean ("input-shapes", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkDisplay:dmabuf-formats:
@@ -281,7 +281,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   props[PROP_DMABUF_FORMATS] =
     g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
                         GDK_TYPE_DMABUF_FORMATS,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

@@ -253,7 +253,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression", NULL, NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringFilter:ignore-case:
@@ -263,7 +263,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   properties[PROP_IGNORE_CASE] =
       g_param_spec_boolean ("ignore-case", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringFilter:match-mode:
@@ -274,7 +274,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
       g_param_spec_enum ("match-mode", NULL, NULL,
                          GTK_TYPE_STRING_FILTER_MATCH_MODE,
                          GTK_STRING_FILTER_MATCH_MODE_SUBSTRING,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringFilter:search:
@@ -284,7 +284,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   properties[PROP_SEARCH] =
       g_param_spec_string ("search", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 

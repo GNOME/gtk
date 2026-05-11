@@ -595,7 +595,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:header-factory:
@@ -607,7 +607,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_HEADER_FACTORY] =
     g_param_spec_object ("header-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:list-factory:
@@ -619,7 +619,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_LIST_FACTORY] =
     g_param_spec_object ("list-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:model:
@@ -629,7 +629,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_MODEL] =
     g_param_spec_object ("model", NULL, NULL,
                          G_TYPE_LIST_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:selected:
@@ -642,7 +642,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_SELECTED] =
     g_param_spec_uint ("selected", NULL, NULL,
                        0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:selected-item:
@@ -652,7 +652,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_SELECTED_ITEM] =
     g_param_spec_object ("selected-item", NULL, NULL,
                          G_TYPE_OBJECT,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:enable-search:
@@ -665,7 +665,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_ENABLE_SEARCH] =
     g_param_spec_boolean  ("enable-search", NULL, NULL,
                          FALSE,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:expression: (type GtkExpression)
@@ -679,7 +679,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression", NULL, NULL,
-                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:show-arrow:
@@ -691,7 +691,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
   properties[PROP_SHOW_ARROW] =
     g_param_spec_boolean  ("show-arrow", NULL, NULL,
                            TRUE,
-                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkDropDown:search-match-mode:
@@ -704,7 +704,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
     g_param_spec_enum  ("search-match-mode", NULL, NULL,
                            GTK_TYPE_STRING_FILTER_MATCH_MODE,
                            GTK_STRING_FILTER_MATCH_MODE_PREFIX,
-                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

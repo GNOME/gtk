@@ -316,7 +316,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsSection:view-name:
@@ -334,7 +334,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkShortcutsSection:title:
@@ -350,7 +350,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkShortcutsSection:max-height:
@@ -366,7 +366,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", NULL, NULL,
                        0, G_MAXUINT, 15,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

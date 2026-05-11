@@ -148,25 +148,25 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
                                    g_param_spec_object ("display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_OPCODE,
                                    g_param_spec_int ("opcode", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_MAJOR,
                                    g_param_spec_int ("major", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
   g_object_class_install_property (object_class,
                                    PROP_MINOR,
                                    g_param_spec_int ("minor", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_STRINGS));
+                                                     G_PARAM_STATIC_NAME));
 }
 
 static void

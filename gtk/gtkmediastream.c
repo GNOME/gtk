@@ -298,7 +298,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_PREPARED] =
     g_param_spec_boolean ("prepared", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:error:
@@ -309,7 +309,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_ERROR] =
     g_param_spec_boxed ("error", NULL, NULL,
                         G_TYPE_ERROR,
-                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:has-audio:
@@ -319,7 +319,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_HAS_AUDIO] =
     g_param_spec_boolean ("has-audio", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:has-video:
@@ -329,7 +329,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_HAS_VIDEO] =
     g_param_spec_boolean ("has-video", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:playing:
@@ -339,7 +339,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_PLAYING] =
     g_param_spec_boolean ("playing", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:ended: (getter get_ended)
@@ -349,7 +349,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_ENDED] =
     g_param_spec_boolean ("ended", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:timestamp:
@@ -359,7 +359,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_TIMESTAMP] =
     g_param_spec_int64 ("timestamp", NULL, NULL,
                         0, G_MAXINT64, 0,
-                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:duration:
@@ -369,7 +369,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_DURATION] =
     g_param_spec_int64 ("duration", NULL, NULL,
                         0, G_MAXINT64, 0,
-                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:seekable: (getter is_seekable)
@@ -379,7 +379,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_SEEKABLE] =
     g_param_spec_boolean ("seekable", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:seeking: (getter is_seeking)
@@ -389,7 +389,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_SEEKING] =
     g_param_spec_boolean ("seeking", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:loop:
@@ -399,7 +399,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_LOOP] =
     g_param_spec_boolean ("loop", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:muted:
@@ -409,7 +409,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_MUTED] =
     g_param_spec_boolean ("muted", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMediaStream:volume:
@@ -419,7 +419,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_VOLUME] =
     g_param_spec_double ("volume", NULL, NULL,
                          0.0, 1.0, 1.0,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

@@ -560,7 +560,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeExpander:hide-expander:
@@ -611,7 +611,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_ITEM] =
       g_param_spec_object ("item", NULL, NULL,
                            G_TYPE_OBJECT,
-                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTreeExpander:list-row:
@@ -621,7 +621,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   properties[PROP_LIST_ROW] =
     g_param_spec_object ("list-row", NULL, NULL,
                          GTK_TYPE_TREE_LIST_ROW,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

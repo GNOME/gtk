@@ -160,7 +160,7 @@ gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
     g_param_spec_boxed ("transform", NULL, NULL,
                         GSK_TYPE_TRANSFORM,
                         G_PARAM_READWRITE |
-                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_STATIC_NAME |
                         G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_CHILD_PROPERTIES, child_props);

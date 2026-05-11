@@ -195,7 +195,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_DESCRIPTION] =
     g_param_spec_string ("description", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:display:
@@ -205,7 +205,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:manufacturer:
@@ -215,7 +215,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_MANUFACTURER] =
     g_param_spec_string ("manufacturer", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:model:
@@ -225,7 +225,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_MODEL] =
     g_param_spec_string ("model", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:connector:
@@ -235,7 +235,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_CONNECTOR] =
     g_param_spec_string ("connector", NULL, NULL,
                          NULL,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:scale-factor:
@@ -249,7 +249,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_int ("scale-factor", NULL, NULL,
                       1, G_MAXINT,
                       1,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:scale:
@@ -261,7 +261,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_SCALE] =
       g_param_spec_double ("scale", NULL, NULL,
                         1., G_MAXDOUBLE, 1.,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:geometry:
@@ -271,7 +271,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_GEOMETRY] =
     g_param_spec_boxed ("geometry", NULL, NULL,
                         GDK_TYPE_RECTANGLE,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:width-mm:
@@ -282,7 +282,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_int ("width-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:height-mm:
@@ -293,7 +293,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_int ("height-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:refresh-rate:
@@ -304,7 +304,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_int ("refresh-rate", NULL, NULL,
                       0, G_MAXINT,
                       0,
-                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:subpixel-layout:
@@ -315,7 +315,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_enum ("subpixel-layout", NULL, NULL,
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GdkMonitor:valid: (getter is_valid)
@@ -325,7 +325,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   props[PROP_VALID] =
     g_param_spec_boolean ("valid", NULL, NULL,
                           TRUE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

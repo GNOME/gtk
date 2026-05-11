@@ -191,7 +191,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
     g_param_spec_object ("target", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -204,7 +204,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        GTK_TYPE_CONSTRAINT_ATTRIBUTE,
                        GTK_CONSTRAINT_ATTRIBUTE_NONE,
                        G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
+                       G_PARAM_STATIC_NAME |
                        G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -217,7 +217,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        GTK_TYPE_CONSTRAINT_RELATION,
                        GTK_CONSTRAINT_RELATION_EQ,
                        G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
+                       G_PARAM_STATIC_NAME |
                        G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -233,7 +233,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
     g_param_spec_object ("source", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkConstraint:source-attribute:
@@ -246,7 +246,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        GTK_TYPE_CONSTRAINT_ATTRIBUTE,
                        GTK_CONSTRAINT_ATTRIBUTE_NONE,
                        G_PARAM_READWRITE |
-                       G_PARAM_STATIC_STRINGS |
+                       G_PARAM_STATIC_NAME |
                        G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -259,7 +259,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
     g_param_spec_double ("multiplier", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 1.0,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -271,7 +271,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
     g_param_spec_double ("constant", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
                          G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY);
 
   /**
@@ -288,7 +288,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                       0, GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       G_PARAM_READWRITE |
-                      G_PARAM_STATIC_STRINGS |
+                      G_PARAM_STATIC_NAME |
                       G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (gobject_class, N_PROPERTIES, obj_props);

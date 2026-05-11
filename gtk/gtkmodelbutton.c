@@ -1254,7 +1254,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
     g_param_spec_enum ("role", NULL, NULL,
                        GTK_TYPE_BUTTON_ROLE,
                        GTK_BUTTON_ROLE_NORMAL,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:icon:
@@ -1265,7 +1265,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_ICON] =
     g_param_spec_object ("icon", NULL, NULL,
                          G_TYPE_ICON,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:text:
@@ -1275,7 +1275,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_TEXT] =
     g_param_spec_string ("text", NULL, NULL,
                          "",
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:use-markup:
@@ -1287,7 +1287,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:active:
@@ -1298,7 +1298,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_ACTIVE] =
     g_param_spec_boolean ("active", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:menu-name:
@@ -1308,12 +1308,12 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_MENU_NAME] =
     g_param_spec_string ("menu-name", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
  properties[PROP_POPOVER] =
    g_param_spec_object ("popover", NULL, NULL,
                         GTK_TYPE_POPOVER,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:iconic:
@@ -1325,7 +1325,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_ICONIC] =
     g_param_spec_boolean ("iconic", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkModelButton:indicator-size-group:
@@ -1337,11 +1337,11 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   properties[PROP_INDICATOR_SIZE_GROUP] =
     g_param_spec_object ("indicator-size-group", NULL, NULL,
                           GTK_TYPE_SIZE_GROUP,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   properties[PROP_ACCEL] =
     g_param_spec_string ("accel", NULL, NULL,
                          NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");

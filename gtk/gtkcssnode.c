@@ -579,28 +579,28 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
     g_param_spec_boxed ("classes", NULL, NULL,
                          G_TYPE_STRV,
                          G_PARAM_READWRITE
-                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   cssnode_properties[PROP_ID] =
     g_param_spec_string ("id", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE
-                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   cssnode_properties[PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE
-                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   cssnode_properties[PROP_STATE] =
     g_param_spec_flags ("state", NULL, NULL,
                         GTK_TYPE_STATE_FLAGS,
                         0,
                         G_PARAM_READWRITE
-                        | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                        | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
   cssnode_properties[PROP_VISIBLE] =
     g_param_spec_boolean ("visible", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE
-                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, cssnode_properties);
 

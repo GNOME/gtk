@@ -228,13 +228,13 @@ gtk_renderer_paintable_class_init (GtkRendererPaintableClass *klass)
     g_param_spec_object ("paintable",
                          NULL, NULL,
                          GDK_TYPE_PAINTABLE,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_RENDERER] =
     g_param_spec_object ("renderer",
                          NULL, NULL,
                          GSK_TYPE_RENDERER,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
