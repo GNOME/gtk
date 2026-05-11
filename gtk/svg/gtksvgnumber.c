@@ -456,7 +456,7 @@ svg_number_parse2 (GtkCssParser        *parser,
            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
     {
-      guint i;
+      unsigned int i;
 
       number = token->dimension.value;
 

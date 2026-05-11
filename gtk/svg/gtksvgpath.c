@@ -126,9 +126,9 @@ svg_path_new (GskPath *path)
   return svg_path_new_from_data (svg_path_data_from_gsk (path));
 }
 
-static guint
+static unsigned int
 path_arg (GtkCssParser *parser,
-          guint         n,
+          unsigned int  n,
           gpointer      data)
 {
   char **string = data;
