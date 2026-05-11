@@ -22,6 +22,7 @@
 #pragma once
 
 #include <tgmath.h>
+#include <stdint.h>
 #include <graphene.h>
 #include "gdk/gdkcolorprivate.h"
 #include "gtk/svg/gtksvgtypesprivate.h"

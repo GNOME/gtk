@@ -1878,7 +1878,7 @@ gtk_window_init (GtkWindow *window)
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
-                    "notify::gtk-application-prefer-dark-theme",
+                    "notify::gtk-interface-color-scheme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
@@ -6028,7 +6028,7 @@ gtk_window_set_display (GtkWindow  *window,
   g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
                                         gtk_window_on_theme_variant_changed, window);
   g_signal_connect (gtk_settings_get_for_display (display),
-                    "notify::gtk-application-prefer-dark-theme",
+                    "notify::gtk-interface-color-scheme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
@@ -6053,17 +6053,17 @@ gtk_window_set_theme_variant (GtkWindow *window)
 {
 #ifdef GDK_WINDOWING_X11
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gboolean   dark_theme_requested;
+  GtkInterfaceColorScheme color_scheme;
 
   g_object_get (gtk_settings_get_for_display (priv->display),
-                "gtk-application-prefer-dark-theme", &dark_theme_requested,
+                "gtk-interface-color-scheme", &color_scheme,
                 NULL);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   if (GDK_IS_X11_SURFACE (priv->surface))
     gdk_x11_surface_set_theme_variant (priv->surface,
-                                       dark_theme_requested ? "dark" : NULL);
+                                       color_scheme == GTK_INTERFACE_COLOR_SCHEME_DARK ? "dark" : NULL);
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 

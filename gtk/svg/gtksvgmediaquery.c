@@ -24,6 +24,7 @@
 #include "gtksvgmediaqueryprivate.h"
 #include "gtkcssmediaqueryprivate.h"
 #include "gtksvgprivate.h"
+#include "gtksvgutilsprivate.h"
 
 void
 svg_css_media_condition_free (SvgCssMediaCondition *condition)

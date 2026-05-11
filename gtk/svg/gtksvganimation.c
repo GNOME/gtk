@@ -24,6 +24,13 @@
 #include "gtksvgelementinternal.h"
 #include "gtksvgtimespecprivate.h"
 #include "gtksvgutilsprivate.h"
+#include "gtksvgkeywordprivate.h"
+#include "gtksvgclipprivate.h"
+#include "gtksvgmaskprivate.h"
+#include "gtksvgfilterfunctionsprivate.h"
+#include "gtksvgpaintprivate.h"
+#include "gtksvghrefprivate.h"
+
 
 CalcMode
 svg_animation_type_default_calc_mode (AnimationType type)

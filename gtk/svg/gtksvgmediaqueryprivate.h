@@ -21,6 +21,10 @@
 
 #pragma once
 
+#include <glib.h>
+#include "gtk/css/gtkcssparserprivate.h"
+#include "gtksvg.h"
+
 G_BEGIN_DECLS
 
 typedef union _SvgCssMediaCondition SvgCssMediaCondition;
