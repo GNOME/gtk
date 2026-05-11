@@ -319,7 +319,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /* Cell Properties */
   /**
@@ -333,7 +333,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                              g_param_spec_boolean
                                              ("expand", NULL, NULL,
                                               FALSE,
-                                              GTK_PARAM_READWRITE));
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaBox:align:
@@ -345,7 +345,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                              g_param_spec_boolean
                                              ("align", NULL, NULL,
                                               FALSE,
-                                              GTK_PARAM_READWRITE));
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaBox:fixed-size:
@@ -358,7 +358,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                              g_param_spec_boolean
                                              ("fixed-size", NULL, NULL,
                                               TRUE,
-                                              GTK_PARAM_READWRITE));
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellAreaBox:pack-type:
@@ -371,7 +371,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                              g_param_spec_enum
                                              ("pack-type", NULL, NULL,
                                               GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-                                              GTK_PARAM_READWRITE));
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 

@@ -332,7 +332,7 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   obj_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model", NULL, NULL,
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopoverBin:popover:
@@ -345,7 +345,7 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   obj_props[PROP_POPOVER] =
       g_param_spec_object ("popover", NULL, NULL,
                            GTK_TYPE_POPOVER,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopoverBin:child:
@@ -357,7 +357,7 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   obj_props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPopoverBin:handle-input:
@@ -370,7 +370,7 @@ gtk_popover_bin_class_init (GtkPopoverBinClass *klass)
   obj_props[PROP_HANDLE_INPUT] =
       g_param_spec_boolean ("handle-input", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 

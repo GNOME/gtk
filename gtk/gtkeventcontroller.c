@@ -204,7 +204,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   properties[PROP_WIDGET] =
       g_param_spec_object ("widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkEventController:propagation-phase:
@@ -215,7 +215,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
       g_param_spec_enum ("propagation-phase", NULL, NULL,
                          GTK_TYPE_PROPAGATION_PHASE,
                          GTK_PHASE_BUBBLE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEventController:propagation-limit:
@@ -226,7 +226,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
       g_param_spec_enum ("propagation-limit", NULL, NULL,
                          GTK_TYPE_PROPAGATION_LIMIT,
                          GTK_LIMIT_SAME_NATIVE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEventController:name:
@@ -236,7 +236,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   properties[PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

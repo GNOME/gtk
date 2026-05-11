@@ -262,7 +262,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   properties[PROP_TOUCH_ONLY] =
       g_param_spec_boolean ("touch-only", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGestureSingle:exclusive:
@@ -274,7 +274,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   properties[PROP_EXCLUSIVE] =
       g_param_spec_boolean ("exclusive", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGestureSingle:button:
@@ -285,7 +285,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
       g_param_spec_uint ("button", NULL, NULL,
                          0, G_MAXUINT,
                          GDK_BUTTON_PRIMARY,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

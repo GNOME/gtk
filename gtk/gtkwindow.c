@@ -882,7 +882,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindow:startup-id:
@@ -892,7 +892,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_STARTUP_ID] =
       g_param_spec_string ("startup-id", NULL, NULL,
                            NULL,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindow:resizable:
@@ -902,7 +902,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_RESIZABLE] =
       g_param_spec_boolean ("resizable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:modal:
@@ -912,7 +912,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:default-width:
@@ -923,7 +923,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_int ("default-width", NULL, NULL,
                         -1, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:default-height:
@@ -934,7 +934,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_int ("default-height", NULL, NULL,
                         -1, G_MAXINT,
                         0,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:destroy-with-parent:
@@ -944,7 +944,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DESTROY_WITH_PARENT] =
       g_param_spec_boolean ("destroy-with-parent", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:hide-on-close:
@@ -955,7 +955,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_HIDE_ON_CLOSE] =
       g_param_spec_boolean ("hide-on-close", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:mnemonics-visible:
@@ -968,7 +968,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_MNEMONICS_VISIBLE] =
       g_param_spec_boolean ("mnemonics-visible", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:focus-visible:
@@ -981,7 +981,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_FOCUS_VISIBLE] =
       g_param_spec_boolean ("focus-visible", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:icon-name:
@@ -993,7 +993,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_ICON_NAME] =
       g_param_spec_string ("icon-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:display:
@@ -1003,7 +1003,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:is-active:
@@ -1013,7 +1013,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_IS_ACTIVE] =
       g_param_spec_boolean ("is-active", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindow:decorated:
@@ -1023,7 +1023,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DECORATED] =
       g_param_spec_boolean ("decorated", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:deletable:
@@ -1033,7 +1033,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DELETABLE] =
       g_param_spec_boolean ("deletable", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:transient-for:
@@ -1043,7 +1043,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_TRANSIENT_FOR] =
       g_param_spec_object ("transient-for", NULL, NULL,
                            GTK_TYPE_WINDOW,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:maximized: (getter is_maximized)
@@ -1059,7 +1059,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_MAXIMIZED] =
       g_param_spec_boolean ("maximized", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:fullscreened: (getter is_fullscreen)
@@ -1075,7 +1075,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_FULLSCREENED] =
       g_param_spec_boolean ("fullscreened", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:suspended: (getter is_suspended)
@@ -1089,7 +1089,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_SUSPENDED] =
       g_param_spec_boolean ("suspended", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:application:
@@ -1107,7 +1107,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_APPLICATION] =
       g_param_spec_object ("application", NULL, NULL,
                            GTK_TYPE_APPLICATION,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:default-widget:
@@ -1117,7 +1117,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_DEFAULT_WIDGET] =
       g_param_spec_object ("default-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:focus-widget: (getter get_focus) (setter set_focus)
@@ -1127,7 +1127,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_FOCUS_WIDGET] =
       g_param_spec_object ("focus-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:child:
@@ -1137,7 +1137,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:titlebar:
@@ -1149,7 +1149,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_TITLEBAR] =
       g_param_spec_object ("titlebar", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:handle-menubar-accel:
@@ -1162,7 +1162,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_HANDLE_MENUBAR_ACCEL] =
       g_param_spec_boolean ("handle-menubar-accel", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:gravity:
@@ -1180,7 +1180,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_enum ("gravity", NULL, NULL,
                          GTK_TYPE_WINDOW_GRAVITY,
                          GTK_WINDOW_GRAVITY_TOP_START,
-                         GTK_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
 

@@ -199,19 +199,19 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 				   PROP_PIXBUF,
 				   g_param_spec_object ("pixbuf", NULL, NULL,
 							GDK_TYPE_PIXBUF,
-							GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,
 				   g_param_spec_object ("pixbuf-expander-open", NULL, NULL,
 							GDK_TYPE_PIXBUF,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_CLOSED,
 				   g_param_spec_object ("pixbuf-expander-closed", NULL, NULL,
 							GDK_TYPE_PIXBUF,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererPixbuf:texture:
@@ -220,7 +220,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 				   PROP_TEXTURE,
 				   g_param_spec_object ("texture", NULL, NULL,
                                                         GDK_TYPE_TEXTURE,
-						        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+						        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererPixbuf:icon-size:
@@ -232,7 +232,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 				   g_param_spec_enum ("icon-size", NULL, NULL,
                                                       GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_INHERIT,
-						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererPixbuf:icon-name:
@@ -244,7 +244,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 				   PROP_ICON_NAME,
 				   g_param_spec_string ("icon-name", NULL, NULL,
 							NULL,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererPixbuf:gicon:
@@ -257,7 +257,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
                                    PROP_GICON,
                                    g_param_spec_object ("gicon", NULL, NULL,
                                                         G_TYPE_ICON,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static void

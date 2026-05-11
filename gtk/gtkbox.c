@@ -270,7 +270,7 @@ gtk_box_class_init (GtkBoxClass *class)
   props[PROP_SPACING] =
     g_param_spec_int ("spacing", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkBox:homogeneous:
@@ -280,7 +280,7 @@ gtk_box_class_init (GtkBoxClass *class)
   props[PROP_HOMOGENEOUS] =
     g_param_spec_boolean ("homogeneous", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkBox:baseline-child:
@@ -294,7 +294,7 @@ gtk_box_class_init (GtkBoxClass *class)
   props[PROP_BASELINE_CHILD] =
     g_param_spec_int ("baseline-child", NULL, NULL,
                       -1, G_MAXINT, -1,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkBox:baseline-position:
@@ -305,7 +305,7 @@ gtk_box_class_init (GtkBoxClass *class)
     g_param_spec_enum ("baseline-position", NULL, NULL,
                        GTK_TYPE_BASELINE_POSITION,
                        GTK_BASELINE_POSITION_CENTER,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

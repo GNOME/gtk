@@ -637,7 +637,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model", NULL, NULL,
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, bar_props);
 

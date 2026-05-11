@@ -486,7 +486,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkSearchEntry:input-purpose:
@@ -500,7 +500,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
       g_param_spec_enum ("input-purpose", NULL, NULL,
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchEntry:input-hints:
@@ -514,7 +514,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
       g_param_spec_flags ("input-hints", NULL, NULL,
                           GTK_TYPE_INPUT_HINTS,
                           GTK_INPUT_HINT_NONE,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchEntry:activates-default:
@@ -524,7 +524,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchEntry:search-delay:
@@ -537,7 +537,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   props[PROP_SEARCH_DELAY] =
       g_param_spec_uint ("search-delay", NULL, NULL,
                          0, G_MAXUINT, 150,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSearchEntry:key-capture-widget:
@@ -551,7 +551,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   props[PROP_KEY_CAPTURE_WIDGET] =
       g_param_spec_object ("key-capture-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);

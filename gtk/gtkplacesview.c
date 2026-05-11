@@ -2275,18 +2275,18 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   properties[PROP_LOADING] =
           g_param_spec_boolean ("loading", NULL, NULL,
                                 FALSE,
-                                GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                                G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   properties[PROP_FETCHING_NETWORKS] =
           g_param_spec_boolean ("fetching-networks", NULL, NULL,
                                 FALSE,
-                                GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                                G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags", NULL, NULL,
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
-                              GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

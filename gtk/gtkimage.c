@@ -179,7 +179,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_PAINTABLE] =
       g_param_spec_object ("paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:file: (attributes org.gtk.Property.set=gtk_image_set_from_file)
@@ -189,7 +189,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_FILE] =
       g_param_spec_string ("file", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:icon-size:
@@ -200,7 +200,7 @@ gtk_image_class_init (GtkImageClass *class)
       g_param_spec_enum ("icon-size", NULL, NULL,
                          GTK_TYPE_ICON_SIZE,
                          GTK_ICON_SIZE_INHERIT,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkImage:pixel-size:
@@ -215,7 +215,7 @@ gtk_image_class_init (GtkImageClass *class)
       g_param_spec_int ("pixel-size", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkImage:icon-name: (getter get_icon_name) (setter set_from_icon_name)
@@ -227,7 +227,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_ICON_NAME] =
       g_param_spec_string ("icon-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:gicon: (getter get_gicon) (setter set_from_gicon)
@@ -240,7 +240,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_GICON] =
       g_param_spec_object ("gicon", NULL, NULL,
                            G_TYPE_ICON,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:resource: (attributes org.gtk.Property.set=gtk_image_set_from_resource)
@@ -250,7 +250,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_RESOURCE] =
       g_param_spec_string ("resource", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:storage-type:
@@ -261,7 +261,7 @@ gtk_image_class_init (GtkImageClass *class)
       g_param_spec_enum ("storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
-                         GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkImage:use-fallback:
@@ -275,7 +275,7 @@ gtk_image_class_init (GtkImageClass *class)
   image_props[PROP_USE_FALLBACK] =
       g_param_spec_boolean ("use-fallback", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 

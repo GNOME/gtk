@@ -396,7 +396,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_ACTIVATES_DEFAULT] =
     g_param_spec_boolean ("activates-default", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:adjustment:
@@ -406,7 +406,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_ADJUSTMENT] =
     g_param_spec_object ("adjustment", NULL, NULL,
                          GTK_TYPE_ADJUSTMENT,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:climb-rate:
@@ -416,7 +416,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_CLIMB_RATE] =
     g_param_spec_double ("climb-rate", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:digits:
@@ -426,7 +426,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_DIGITS] =
     g_param_spec_uint ("digits", NULL, NULL,
                        0, MAX_DIGITS, 0,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:snap-to-ticks:
@@ -437,7 +437,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_SNAP_TO_TICKS] =
     g_param_spec_boolean ("snap-to-ticks", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:numeric:
@@ -447,7 +447,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_NUMERIC] =
     g_param_spec_boolean ("numeric", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:wrap:
@@ -457,7 +457,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_WRAP] =
     g_param_spec_boolean ("wrap", NULL, NULL,
                           FALSE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:update-policy:
@@ -469,7 +469,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
     g_param_spec_enum ("update-policy", NULL, NULL,
                        GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
                        GTK_UPDATE_ALWAYS,
-                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:value:
@@ -479,7 +479,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_props[PROP_VALUE] =
     g_param_spec_double ("value", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_SPINBUTTON_PROPS, spinbutton_props);
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");

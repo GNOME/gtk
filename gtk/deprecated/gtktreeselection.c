@@ -136,7 +136,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   properties[PROP_MODE] = g_param_spec_enum ("mode", NULL, NULL,
                                              GTK_TYPE_SELECTION_MODE,
                                              GTK_SELECTION_SINGLE,
-                                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /* Install all properties */
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);

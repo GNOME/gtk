@@ -170,7 +170,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_LABEL] =
       g_param_spec_string ("label", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFrame:label-xalign: (getter get_label_align) (setter set_label_align)
@@ -181,7 +181,7 @@ gtk_frame_class_init (GtkFrameClass *class)
       g_param_spec_float ("label-xalign", NULL, NULL,
                           0.0, 1.0,
                           0.0,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFrame:label-widget:
@@ -191,7 +191,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_LABEL_WIDGET] =
       g_param_spec_object ("label-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFrame:child:
@@ -201,7 +201,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   frame_props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 

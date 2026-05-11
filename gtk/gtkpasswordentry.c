@@ -479,7 +479,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPasswordEntry:activates-default:
@@ -489,7 +489,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPasswordEntry:show-peek-icon:
@@ -499,7 +499,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   props[PROP_SHOW_PEEK_ICON] =
       g_param_spec_boolean ("show-peek-icon", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPasswordEntry:extra-menu:
@@ -510,7 +510,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   props[PROP_EXTRA_MENU] =
       g_param_spec_object ("extra-menu", NULL, NULL,
                            G_TYPE_MENU_MODEL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);

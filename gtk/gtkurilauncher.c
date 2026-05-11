@@ -138,7 +138,7 @@ gtk_uri_launcher_class_init (GtkUriLauncherClass *class)
   properties[PROP_URI] =
       g_param_spec_string ("uri", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

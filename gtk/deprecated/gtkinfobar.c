@@ -368,7 +368,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
     g_param_spec_enum ("message-type", NULL, NULL,
                        GTK_TYPE_MESSAGE_TYPE,
                        GTK_MESSAGE_INFO,
-                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkInfoBar:show-close-button:
@@ -378,7 +378,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   props[PROP_SHOW_CLOSE_BUTTON] =
     g_param_spec_boolean ("show-close-button", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkInfoBar:revealed:
@@ -388,7 +388,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   props[PROP_REVEALED] =
     g_param_spec_boolean ("revealed", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

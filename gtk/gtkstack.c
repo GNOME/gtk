@@ -503,7 +503,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkStackPage:name:
@@ -513,7 +513,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStackPage:title:
@@ -523,7 +523,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStackPage:icon-name:
@@ -533,7 +533,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_ICON_NAME] =
     g_param_spec_string ("icon-name", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStackPage:needs-attention:
@@ -547,7 +547,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_NEEDS_ATTENTION] =
     g_param_spec_boolean ("needs-attention", NULL, NULL,
                          FALSE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStackPage:visible:
@@ -557,7 +557,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_VISIBLE] =
     g_param_spec_boolean ("visible", NULL, NULL,
                          TRUE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStackPage:use-underline:
@@ -567,7 +567,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   stack_page_props[CHILD_PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline", NULL, NULL,
                          FALSE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_page_props);
 
@@ -974,7 +974,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_HHOMOGENEOUS] =
       g_param_spec_boolean ("hhomogeneous", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:vhomogeneous:
@@ -984,7 +984,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_VHOMOGENEOUS] =
       g_param_spec_boolean ("vhomogeneous", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:visible-child:
@@ -994,7 +994,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_VISIBLE_CHILD] =
       g_param_spec_object ("visible-child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:visible-child-name:
@@ -1004,7 +1004,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_VISIBLE_CHILD_NAME] =
       g_param_spec_string ("visible-child-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:transition-duration:
@@ -1014,7 +1014,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_TRANSITION_DURATION] =
       g_param_spec_uint ("transition-duration", NULL, NULL,
                          0, G_MAXUINT, 200,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:transition-type:
@@ -1024,7 +1024,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_TRANSITION_TYPE] =
       g_param_spec_enum ("transition-type", NULL, NULL,
                          GTK_TYPE_STACK_TRANSITION_TYPE, GTK_STACK_TRANSITION_TYPE_NONE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:transition-running:
@@ -1034,7 +1034,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_TRANSITION_RUNNING] =
       g_param_spec_boolean ("transition-running", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkStack:interpolate-size:
@@ -1044,7 +1044,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_INTERPOLATE_SIZE] =
       g_param_spec_boolean ("interpolate-size", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStack:pages:
@@ -1054,7 +1054,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   stack_props[PROP_PAGES] =
       g_param_spec_object ("pages", NULL, NULL,
                            GTK_TYPE_SELECTION_MODEL,
-                           GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 

@@ -135,7 +135,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 				   PROP_MODEL,
 				   g_param_spec_object ("model", NULL, NULL,
 							GTK_TYPE_TREE_MODEL,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRendererCombo:text-column:
@@ -156,7 +156,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCellRendererCombo:has-entry:
@@ -168,7 +168,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                    PROP_HAS_ENTRY,
                                    g_param_spec_boolean ("has-entry", NULL, NULL,
 							 TRUE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**

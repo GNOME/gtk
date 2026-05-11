@@ -217,7 +217,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:modal:
@@ -229,7 +229,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:filters:
@@ -244,7 +244,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_FILTERS] =
       g_param_spec_object ("filters", NULL, NULL,
                            G_TYPE_LIST_MODEL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:default-filter:
@@ -265,7 +265,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_DEFAULT_FILTER] =
       g_param_spec_object ("default-filter", NULL, NULL,
                            GTK_TYPE_FILE_FILTER,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:initial-file:
@@ -282,7 +282,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_INITIAL_FILE] =
       g_param_spec_object ("initial-file", NULL, NULL,
                            G_TYPE_FILE,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:initial-folder:
@@ -296,7 +296,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_INITIAL_FOLDER] =
       g_param_spec_object ("initial-folder", NULL, NULL,
                            G_TYPE_FILE,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:initial-name:
@@ -310,7 +310,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_INITIAL_NAME] =
       g_param_spec_string ("initial-name", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFileDialog:accept-label:
@@ -322,7 +322,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   properties[PROP_ACCEPT_LABEL] =
       g_param_spec_string ("accept-label", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

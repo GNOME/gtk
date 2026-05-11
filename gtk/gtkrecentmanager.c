@@ -275,7 +275,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                                    PROP_FILENAME,
                                    g_param_spec_string ("filename", NULL, NULL,
                                                         NULL,
-                                                        (G_PARAM_CONSTRUCT_ONLY | GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME)));
+                                                        (G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME)));
 
   /**
    * GtkRecentManager:size:
@@ -286,7 +286,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                                    PROP_SIZE,
                                    g_param_spec_int ("size", NULL, NULL,
                                                      -1, G_MAXINT, 0,
-                                                     GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkRecentManager::changed:

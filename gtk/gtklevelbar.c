@@ -965,7 +965,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   properties[PROP_VALUE] =
     g_param_spec_double ("value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:min-value:
@@ -975,7 +975,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   properties[PROP_MIN_VALUE] =
     g_param_spec_double ("min-value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:max-value:
@@ -985,7 +985,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   properties[PROP_MAX_VALUE] =
     g_param_spec_double ("max-value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 1.0,
-                         G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:mode:
@@ -1005,7 +1005,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
     g_param_spec_enum ("mode", NULL, NULL,
                        GTK_TYPE_LEVEL_BAR_MODE,
                        GTK_LEVEL_BAR_MODE_CONTINUOUS,
-                       G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLevelBar:inverted:
@@ -1018,7 +1018,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   properties[PROP_INVERTED] =
     g_param_spec_boolean ("inverted", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 

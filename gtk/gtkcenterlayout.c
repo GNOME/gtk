@@ -623,7 +623,7 @@ gtk_center_layout_class_init (GtkCenterLayoutClass *klass)
   props[PROP_SHRINK_CENTER_LAST] =
       g_param_spec_boolean ("shrink-center-last", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 }

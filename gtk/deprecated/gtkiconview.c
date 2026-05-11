@@ -369,7 +369,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   g_param_spec_enum ("selection-mode", NULL, NULL,
 						      GTK_TYPE_SELECTION_MODE,
 						      GTK_SELECTION_SINGLE,
-						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:pixbuf-column:
@@ -383,7 +383,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_PIXBUF_COLUMN,
 				   g_param_spec_int ("pixbuf-column", NULL, NULL,
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:text-column:
@@ -397,7 +397,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_TEXT_COLUMN,
 				   g_param_spec_int ("text-column", NULL, NULL,
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -413,7 +413,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_MARKUP_COLUMN,
 				   g_param_spec_int ("markup-column", NULL, NULL,
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:model:
@@ -424,7 +424,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_MODEL,
                                    g_param_spec_object ("model", NULL, NULL,
 							GTK_TYPE_TREE_MODEL,
-							GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkIconView:columns:
@@ -437,7 +437,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_COLUMNS,
 				   g_param_spec_int ("columns", NULL, NULL,
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**
@@ -451,7 +451,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_ITEM_WIDTH,
 				   g_param_spec_int ("item-width", NULL, NULL,
 						     -1, G_MAXINT, -1,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:spacing:
@@ -463,7 +463,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing", NULL, NULL,
 						     0, G_MAXINT, 0,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:row-spacing:
@@ -475,7 +475,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_ROW_SPACING,
                                    g_param_spec_int ("row-spacing", NULL, NULL,
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:column-spacing:
@@ -487,7 +487,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_COLUMN_SPACING,
                                    g_param_spec_int ("column-spacing", NULL, NULL,
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:margin:
@@ -499,7 +499,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_MARGIN,
                                    g_param_spec_int ("margin", NULL, NULL,
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:item-orientation:
@@ -512,7 +512,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   g_param_spec_enum ("item-orientation", NULL, NULL,
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_VERTICAL,
-						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:reorderable:
@@ -538,7 +538,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                        -1,
                                                        G_MAXINT,
                                                        -1,
-                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:item-padding:
@@ -550,7 +550,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_ITEM_PADDING,
                                    g_param_spec_int ("item-padding", NULL, NULL,
 						     0, G_MAXINT, 6,
-						     GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkIconView:cell-area:
@@ -564,7 +564,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				   PROP_CELL_AREA,
 				   g_param_spec_object ("cell-area", NULL, NULL,
 							GTK_TYPE_CELL_AREA,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkIconView:activate-on-single-click:
@@ -576,7 +576,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                    PROP_ACTIVATE_ON_SINGLE_CLICK,
                                    g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");

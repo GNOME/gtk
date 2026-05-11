@@ -161,7 +161,7 @@ gtk_color_dialog_class_init (GtkColorDialogClass *class)
   properties[PROP_TITLE] =
       g_param_spec_string ("title", NULL, NULL,
                            NULL,
-                           G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColorDialog:modal:
@@ -173,7 +173,7 @@ gtk_color_dialog_class_init (GtkColorDialogClass *class)
   properties[PROP_MODAL] =
       g_param_spec_boolean ("modal", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColorDialog:with-alpha:
@@ -188,7 +188,7 @@ gtk_color_dialog_class_init (GtkColorDialogClass *class)
   properties[PROP_WITH_ALPHA] =
       g_param_spec_boolean ("with-alpha", NULL, NULL,
                             TRUE,
-                            G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_EXPLICIT_NOTIFY);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }

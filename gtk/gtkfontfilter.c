@@ -179,15 +179,15 @@ gtk_font_filter_class_init (GtkFontFilterClass *klass)
   properties[PROP_PANGO_CONTEXT] =
     g_param_spec_object ("pango-context", NULL, NULL,
                          PANGO_TYPE_CONTEXT,
-                         GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_MONOSPACE] =
     g_param_spec_boolean ("monospace", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   properties[PROP_LANGUAGE] =
     g_param_spec_boxed ("language", NULL, NULL,
                         PANGO_TYPE_LANGUAGE,
-                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

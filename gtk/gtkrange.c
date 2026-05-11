@@ -394,7 +394,7 @@ gtk_range_class_init (GtkRangeClass *class)
   properties[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:inverted:
@@ -404,7 +404,7 @@ gtk_range_class_init (GtkRangeClass *class)
   properties[PROP_INVERTED] =
       g_param_spec_boolean ("inverted", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:show-fill-level:
@@ -415,7 +415,7 @@ gtk_range_class_init (GtkRangeClass *class)
   properties[PROP_SHOW_FILL_LEVEL] =
       g_param_spec_boolean ("show-fill-level", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:restrict-to-fill-level:
@@ -426,7 +426,7 @@ gtk_range_class_init (GtkRangeClass *class)
   properties[PROP_RESTRICT_TO_FILL_LEVEL] =
       g_param_spec_boolean ("restrict-to-fill-level", NULL, NULL,
                             TRUE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:fill-level:
@@ -437,7 +437,7 @@ gtk_range_class_init (GtkRangeClass *class)
       g_param_spec_double ("fill-level", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            G_MAXDOUBLE,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:round-digits:
@@ -451,7 +451,7 @@ gtk_range_class_init (GtkRangeClass *class)
       g_param_spec_int ("round-digits", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
-                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 

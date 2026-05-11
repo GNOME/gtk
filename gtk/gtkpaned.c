@@ -443,7 +443,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_POSITION] =
     g_param_spec_int ("position", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:position-set:
@@ -453,7 +453,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_POSITION_SET] =
     g_param_spec_boolean ("position-set", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:min-position:
@@ -467,7 +467,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_MIN_POSITION] =
     g_param_spec_int ("min-position", NULL, NULL,
                       0, G_MAXINT, 0,
-                      GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:max-position:
@@ -481,7 +481,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_MAX_POSITION] =
     g_param_spec_int ("max-position", NULL, NULL,
                       0, G_MAXINT, G_MAXINT,
-                      GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:wide-handle:
@@ -494,7 +494,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_WIDE_HANDLE] =
     g_param_spec_boolean ("wide-handle", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:resize-start-child:
@@ -505,7 +505,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_RESIZE_START_CHILD] =
     g_param_spec_boolean ("resize-start-child", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:resize-end-child:
@@ -516,7 +516,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_RESIZE_END_CHILD] =
     g_param_spec_boolean ("resize-end-child", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:shrink-start-child:
@@ -527,7 +527,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_SHRINK_START_CHILD] =
     g_param_spec_boolean ("shrink-start-child", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:shrink-end-child:
@@ -538,7 +538,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_SHRINK_END_CHILD] =
     g_param_spec_boolean ("shrink-end-child", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:start-child:
@@ -548,7 +548,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_START_CHILD] =
     g_param_spec_object ("start-child", NULL, NULL,
                           GTK_TYPE_WIDGET,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkPaned:end-child:
@@ -558,7 +558,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   paned_props[PROP_END_CHILD] =
     g_param_spec_object ("end-child", NULL, NULL,
                           GTK_TYPE_WIDGET,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, paned_props);
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");

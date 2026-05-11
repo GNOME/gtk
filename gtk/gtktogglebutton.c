@@ -300,7 +300,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   toggle_button_props[PROP_ACTIVE] =
       g_param_spec_boolean ("active", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkToggleButton:group:
@@ -310,7 +310,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   toggle_button_props[PROP_GROUP] =
       g_param_spec_object ("group", NULL, NULL,
                            GTK_TYPE_TOGGLE_BUTTON,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, toggle_button_props);
 

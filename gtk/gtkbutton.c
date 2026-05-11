@@ -228,7 +228,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_LABEL] =
     g_param_spec_string ("label", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:use-underline:
@@ -239,7 +239,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_USE_UNDERLINE] =
     g_param_spec_boolean ("use-underline", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:has-frame:
@@ -249,7 +249,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_HAS_FRAME] =
     g_param_spec_boolean ("has-frame", NULL, NULL,
                           TRUE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:icon-name:
@@ -259,7 +259,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:child:
@@ -269,7 +269,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_CHILD] =
     g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkButton:can-shrink:
@@ -287,7 +287,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   props[PROP_CAN_SHRINK] =
     g_param_spec_boolean ("can-shrink", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 

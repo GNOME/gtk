@@ -969,7 +969,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   props[PROP_ICON_NAMES] =
       g_param_spec_boxed ("icon-names", NULL, NULL,
                           G_TYPE_STRV,
-                          GTK_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkIconTheme:search-path:
@@ -985,7 +985,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   props[PROP_SEARCH_PATH] =
       g_param_spec_boxed ("search-path", NULL, NULL,
                           G_TYPE_STRV,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconTheme:resource-path:
@@ -1002,7 +1002,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   props[PROP_RESOURCE_PATH] =
       g_param_spec_boxed ("resource-path", NULL, NULL,
                           G_TYPE_STRV,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconTheme:theme-name:
@@ -1016,7 +1016,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   props[PROP_THEME_NAME] =
       g_param_spec_string ("theme-name", NULL, NULL,
                            NULL,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 }

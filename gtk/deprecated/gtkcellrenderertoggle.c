@@ -198,25 +198,25 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 				   PROP_ACTIVE,
 				   g_param_spec_boolean ("active", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 		                   PROP_INCONSISTENT,
 				   g_param_spec_boolean ("inconsistent", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_ACTIVATABLE,
 				   g_param_spec_boolean ("activatable", NULL, NULL,
 							 TRUE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
 				   PROP_RADIO,
 				   g_param_spec_boolean ("radio", NULL, NULL,
 							 FALSE,
-							 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
 
   /**

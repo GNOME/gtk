@@ -369,7 +369,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    g_param_spec_enum ("message-type", NULL, NULL,
                                                       GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:buttons:
    *
@@ -380,7 +380,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    g_param_spec_enum ("buttons", NULL, NULL,
                                                       GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
-                                                      GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
   /**
    * GtkMessageDialog:text:
    *
@@ -392,7 +392,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_TEXT,
                                    g_param_spec_string ("text", NULL, NULL,
                                                         "",
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkMessageDialog:use-markup:
    *
@@ -404,7 +404,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_USE_MARKUP,
                                    g_param_spec_boolean ("use-markup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:secondary-text:
    *
@@ -414,7 +414,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_SECONDARY_TEXT,
                                    g_param_spec_string ("secondary-text", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
   /**
    * GtkMessageDialog:secondary-use-markup:
    *
@@ -426,7 +426,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_SECONDARY_USE_MARKUP,
                                    g_param_spec_boolean ("secondary-use-markup", NULL, NULL,
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
   /**
    * GtkMessageDialog:message-area:
    *
@@ -439,7 +439,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    PROP_MESSAGE_AREA,
                                    g_param_spec_object ("message-area", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmessagedialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);

@@ -585,7 +585,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   switch_props[PROP_ACTIVE] =
     g_param_spec_boolean ("active", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSwitch:state:
@@ -601,7 +601,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   switch_props[PROP_STATE] =
     g_param_spec_boolean ("state", NULL, NULL,
                           FALSE,
-                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   gobject_class->set_property = gtk_switch_set_property;
   gobject_class->get_property = gtk_switch_get_property;

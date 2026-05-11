@@ -330,7 +330,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_SCROLL_TO_FOCUS,
                                    g_param_spec_boolean ("scroll-to-focus", NULL, NULL,
                                                          TRUE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkViewport:child:
@@ -341,7 +341,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_CHILD,
                                    g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);

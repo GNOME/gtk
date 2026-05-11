@@ -662,7 +662,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_ACTIVE] =
       g_param_spec_boolean ("active", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCheckButton:group:
@@ -672,7 +672,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_GROUP] =
       g_param_spec_object ("group", NULL, NULL,
                            GTK_TYPE_CHECK_BUTTON,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCheckButton:label:
@@ -682,7 +682,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_LABEL] =
     g_param_spec_string ("label", NULL, NULL,
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCheckButton:inconsistent:
@@ -695,7 +695,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_INCONSISTENT] =
       g_param_spec_boolean ("inconsistent", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCheckButton:use-underline:
@@ -706,7 +706,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_USE_UNDERLINE] =
       g_param_spec_boolean ("use-underline", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCheckButton:child:
@@ -718,7 +718,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
