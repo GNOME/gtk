@@ -260,7 +260,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_MARKUP] =
       g_param_spec_string ("markup", NULL, NULL,
                            NULL,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   text_cell_renderer_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
@@ -275,7 +275,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_BACKGROUND] =
       g_param_spec_string ("background", NULL, NULL,
                            NULL,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererText:background-rgba:
@@ -289,7 +289,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   text_cell_renderer_props[PROP_FOREGROUND] =
       g_param_spec_string ("foreground", NULL, NULL,
                            NULL,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererText:foreground-rgba:

@@ -380,7 +380,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                    g_param_spec_enum ("buttons", NULL, NULL,
                                                       GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
-                                                      GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
   /**
    * GtkMessageDialog:text:
    *

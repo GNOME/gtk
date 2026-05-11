@@ -672,7 +672,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   props[PROP_GROUP] =
       g_param_spec_object ("group", NULL, NULL,
                            GTK_TYPE_CHECK_BUTTON,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCheckButton:label:

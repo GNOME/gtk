@@ -892,7 +892,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_STARTUP_ID] =
       g_param_spec_string ("startup-id", NULL, NULL,
                            NULL,
-                           GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkWindow:resizable:

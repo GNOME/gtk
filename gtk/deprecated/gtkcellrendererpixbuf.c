@@ -199,7 +199,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 				   PROP_PIXBUF,
 				   g_param_spec_object ("pixbuf", NULL, NULL,
 							GDK_TYPE_PIXBUF,
-							GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,

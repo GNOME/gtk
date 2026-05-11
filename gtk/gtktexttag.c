@@ -231,7 +231,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:background-rgba:
@@ -265,7 +265,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FOREGROUND,
                                    g_param_spec_string ("foreground", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:foreground-rgba:
@@ -693,7 +693,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_PARAGRAPH_BACKGROUND,
                                    g_param_spec_string ("paragraph-background", NULL, NULL,
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:paragraph-background-rgba:

@@ -363,7 +363,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 				   PROP_CELL_BACKGROUND,
 				   g_param_spec_string ("cell-background", NULL, NULL,
 							NULL,
-							GTK_PARAM_WRITABLE));
+							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkCellRenderer:cell-background-rgba:
