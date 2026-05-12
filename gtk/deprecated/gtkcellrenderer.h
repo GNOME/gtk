@@ -296,14 +296,6 @@ void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,
                                                    gboolean              canceled);
 
 
-void            _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
-                                                   const GdkRectangle   *cell_area,
-                                                   GtkTextDirection      direction,
-                                                   int                   width,
-                                                   int                   height,
-                                                   int                  *x_offset,
-                                                   int                  *y_offset);
-
 GDK_DEPRECATED_IN_4_10
 GtkStateFlags   gtk_cell_renderer_get_state       (GtkCellRenderer      *cell,
                                                    GtkWidget            *widget,

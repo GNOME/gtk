@@ -1249,6 +1249,33 @@ gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
 }
 
 
+/* An internal convenience function for some containers to peek at the
+ * cell alignment in a target allocation (used to draw focus and align
+ * cells in the icon view).
+ *
+ * Note this is only a trivial “align * (allocation - request)” operation.
+ */
+static void
+gtk_cell_renderer_calc_offset (GtkCellRenderer    *cell,
+                               const GdkRectangle *cell_area,
+                               GtkTextDirection    direction,
+                               int                 width,
+                               int                 height,
+                               int                *x_offset,
+                               int                *y_offset)
+{
+  GtkCellRendererPrivate *priv = cell->priv;
+
+  *x_offset = (((direction == GTK_TEXT_DIR_RTL) ?
+                (1.0 - priv->xalign) : priv->xalign) *
+               (cell_area->width - width));
+  *x_offset = MAX (*x_offset, 0);
+
+  *y_offset = (priv->yalign *
+               (cell_area->height - height));
+  *y_offset = MAX (*y_offset, 0);
+}
+
 /* Default implementation assumes that a cell renderer will never use more
  * space than its natural size (this is fine for toggles and pixbufs etc
  * but needs to be overridden from wrapping/ellipsizing text renderers) */
@@ -1298,53 +1325,14 @@ gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,
     }
 
   /* offset the cell position */
-  _gtk_cell_renderer_calc_offset (cell, cell_area,
-				  gtk_widget_get_direction (widget),
-				  aligned_area->width,
-				  aligned_area->height,
-				  &x_offset, &y_offset);
+  gtk_cell_renderer_calc_offset (cell, cell_area,
+                                 gtk_widget_get_direction (widget),
+                                 aligned_area->width,
+                                 aligned_area->height,
+                                 &x_offset, &y_offset);
 
   aligned_area->x += x_offset;
   aligned_area->y += y_offset;
-}
-
-
-/* An internal convenience function for some containers to peek at the
- * cell alignment in a target allocation (used to draw focus and align
- * cells in the icon view).
- *
- * Note this is only a trivial “align * (allocation - request)” operation.
- */
-void
-_gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
-				   const GdkRectangle   *cell_area,
-				   GtkTextDirection      direction,
-				   int                   width,
-				   int                   height,
-				   int                  *x_offset,
-				   int                  *y_offset)
-{
-  GtkCellRendererPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-  g_return_if_fail (cell_area != NULL);
-  g_return_if_fail (x_offset || y_offset);
-
-  priv = cell->priv;
-
-  if (x_offset)
-    {
-      *x_offset = (((direction == GTK_TEXT_DIR_RTL) ?
-		    (1.0 - priv->xalign) : priv->xalign) *
-		   (cell_area->width - width));
-      *x_offset = MAX (*x_offset, 0);
-    }
-  if (y_offset)
-    {
-      *y_offset = (priv->yalign *
-		   (cell_area->height - height));
-      *y_offset = MAX (*y_offset, 0);
-    }
 }
 
 /**
