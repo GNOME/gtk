@@ -257,7 +257,7 @@ gtk_svg_invalid_attribute (GtkSvg               *self,
                            const char           *format,
                            ...)
 {
-  GError *error;
+  GError *error = NULL;
   GtkSvgLocation start, end;
 
   if (format)
