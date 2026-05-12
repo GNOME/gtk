@@ -135,6 +135,18 @@ baseline_widget_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_save (snapshot);
 
+  outline = GSK_ROUNDED_RECT_INIT (0, 0,
+                                   gtk_widget_get_width (widget),
+                                   gtk_widget_get_height (widget));
+
+  for (int i = 0; i < 4; i++)
+    {
+      widths[i] = .5;
+      gdk_rgba_parse (&colors[i], "gray");
+    }
+
+  gtk_snapshot_append_border (snapshot, &outline, widths, colors);
+
   if (baseline > -1)
     {
       int y;
