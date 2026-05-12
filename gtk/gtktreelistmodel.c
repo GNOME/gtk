@@ -951,10 +951,10 @@ enum {
   ROW_PROP_EXPANDABLE,
   ROW_PROP_EXPANDED,
   ROW_PROP_ITEM,
-  NUM_ROW_PROPERTIES
+  ROW_NUM_PROPERTIES
 };
 
-static GParamSpec *row_properties[NUM_ROW_PROPERTIES] = { NULL, };
+static GParamSpec *row_properties[ROW_NUM_PROPERTIES] = { NULL, };
 
 G_DEFINE_TYPE (GtkTreeListRow, gtk_tree_list_row, G_TYPE_OBJECT)
 
@@ -1097,7 +1097,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
                            G_TYPE_OBJECT,
                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (gobject_class, NUM_ROW_PROPERTIES, row_properties);
+  g_object_class_install_properties (gobject_class, ROW_NUM_PROPERTIES, row_properties);
 }
 
 static void
