@@ -1049,7 +1049,7 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
   ResponseData *ad;
   guint signal_id;
 
-  if (strcmp (tagname, "action-widgets"))
+  if (strcmp (tagname, "action-widgets") != 0)
     {
       parent_buildable_iface->custom_finished (buildable, builder, child,
                                                tagname, user_data);

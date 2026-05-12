@@ -212,7 +212,7 @@ object_test_property (GObject           *object,
       /* ignore untestable properties */
       ignore_properties = list_ignore_properties (FALSE);
       for (i = 0; ignore_properties[i].name; i++)
-        if (g_strcmp0 ("", ignore_properties[i].name) ||
+        if (g_strcmp0 ("", ignore_properties[i].name) != 0 ||
             (g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
              strcmp (pspec->name, ignore_properties[i].name) == 0 &&
              (MATCH_ANY_VALUE == ignore_properties[i].value ||

@@ -510,7 +510,7 @@ load_file (const char *demoname,
   GBytes *bytes;
   int i;
 
-  if (!g_strcmp0 (current_file, filename))
+  if (g_strcmp0 (current_file, filename) == 0)
     return;
 
   remove_data_tabs ();

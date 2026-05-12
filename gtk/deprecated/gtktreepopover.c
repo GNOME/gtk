@@ -449,10 +449,10 @@ context_size_changed_cb (GtkCellAreaContext *context,
                          GParamSpec         *pspec,
                          GtkWidget          *popover)
 {
-  if (!strcmp (pspec->name, "minimum-width") ||
-      !strcmp (pspec->name, "natural-width") ||
-      !strcmp (pspec->name, "minimum-height") ||
-      !strcmp (pspec->name, "natural-height"))
+  if (strcmp (pspec->name, "minimum-width") == 0 ||
+      strcmp (pspec->name, "natural-width") == 0 ||
+      strcmp (pspec->name, "minimum-height") == 0 ||
+      strcmp (pspec->name, "natural-height") == 0)
     gtk_widget_queue_resize (popover);
 }
 

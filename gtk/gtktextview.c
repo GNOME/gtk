@@ -8834,7 +8834,7 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
         }
     }
 
-  if (!strcmp (str, "\n"))
+  if (strcmp (str, "\n") == 0)
     {
       if (!gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\n", 1,
                                                          priv->editable))

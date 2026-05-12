@@ -1360,7 +1360,7 @@ set_sm_client_id (GdkDisplay  *display,
   if (gdk_display_is_closed (display))
     return;
 
-  if (sm_client_id && strcmp (sm_client_id, ""))
+  if (sm_client_id && strcmp (sm_client_id, "") != 0)
     XChangeProperty (display_x11->xdisplay, display_x11->leader_window,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"),
                      XA_STRING, 8, PropModeReplace, (guchar *)sm_client_id,

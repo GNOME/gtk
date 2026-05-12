@@ -42,7 +42,7 @@ spinbutton_hex_spin_output (GtkSpinButton *spin_button)
     buf = g_strdup ("0x00");
   else
     buf = g_strdup_printf ("0x%.2X", (int) val);
-  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))) != 0)
     gtk_editable_set_text (GTK_EDITABLE (spin_button), buf);
   g_free (buf);
 
@@ -100,7 +100,7 @@ spinbutton_time_spin_output (GtkSpinButton *spin_button)
   hours = gtk_adjustment_get_value (adjustment) / 60.0;
   minutes = (hours - floor (hours)) * 60.0;
   buf = g_strdup_printf ("%02.0f:%02.0f", floor (hours), floor (minutes + 0.5));
-  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button))) != 0)
     gtk_editable_set_text (GTK_EDITABLE (spin_button), buf);
   g_free (buf);
 
@@ -163,7 +163,7 @@ spinbutton_month_spin_output (GtkSpinButton *spin_button)
   for (i = 1; i <= 12; i++)
     if (fabs (value - (double)i) < 1e-5)
       {
-        if (strcmp (month[i-1], gtk_editable_get_text (GTK_EDITABLE (spin_button))))
+        if (strcmp (month[i-1], gtk_editable_get_text (GTK_EDITABLE (spin_button))) != 0)
           gtk_editable_set_text (GTK_EDITABLE (spin_button), month[i-1]);
       }
 

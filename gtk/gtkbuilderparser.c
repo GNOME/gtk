@@ -2184,7 +2184,7 @@ end_element (GtkBuildableParseContext  *context,
        * required versions, possibly throw a signal allowing them
        * to check their library versions here.
        */
-      if (!strcmp (req_info->library, "gtk"))
+      if (strcmp (req_info->library, "gtk") == 0)
         {
           if (req_info->major == 4 && req_info->minor == 0)
             {
