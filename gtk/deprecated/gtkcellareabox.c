@@ -48,9 +48,11 @@
  */
 
 #include "config.h"
+
+#include "gtkcellareaboxprivate.h"
+
 #include "gtkorientable.h"
 #include "deprecated/gtkcelllayout.h"
-#include "gtkcellareabox.h"
 #include "gtkcellareaboxcontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
