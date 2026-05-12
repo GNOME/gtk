@@ -20,8 +20,8 @@
 #include "gtkcellview.h"
 
 #include "gtkbuildable.h"
-#include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
 #include "gtkorientable.h"

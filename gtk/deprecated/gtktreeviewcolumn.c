@@ -23,7 +23,7 @@
 #include "gtkbutton.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
-#include "gtkcelllayout.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkframe.h"
 #include "gtkimage.h"

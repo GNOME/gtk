@@ -21,7 +21,7 @@
 
 #include "gtkbox.h"
 #include "gtkcellareabox.h"
-#include "gtkcelllayout.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
 #include "gtkeventcontrollerkey.h"
