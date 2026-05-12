@@ -1919,6 +1919,8 @@ gdk_x11_display_get_default_group (GdkDisplay *display)
  * To ungrab the display again, use gdk_x11_display_ungrab().
  *
  * gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.
+ *
+ * Deprecated: 4.18
  **/
 void
 gdk_x11_display_grab (GdkDisplay *display)
