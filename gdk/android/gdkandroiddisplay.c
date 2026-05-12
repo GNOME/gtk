@@ -234,7 +234,7 @@ gdk_android_display_get_setting (GdkDisplay *display,
     }
   else if (g_strcmp0 (name, "gtk-decoration-layout") == 0)
     {
-      g_value_set_string (value, ":");
+      g_value_set_static_string (value, ":");
       return TRUE;
     }
   else

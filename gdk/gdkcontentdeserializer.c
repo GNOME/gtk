@@ -726,7 +726,7 @@ string_deserializer_finish (GObject      *source,
   else if (written == 0)
     {
       /* Never return NULL, we only return that on error */
-      g_value_set_string (gdk_content_deserializer_get_value (deserializer), "");
+      g_value_set_static_string (gdk_content_deserializer_get_value (deserializer), "");
     }
   else
     {

@@ -116,7 +116,7 @@ pspec_select_value (GParamSpec *pspec,
       if (dvalue > 0 && sspec->cset_first && sspec->cset_nth)
         g_value_take_string (value, g_strdup_printf ("%c%c", sspec->cset_first[0], sspec->cset_nth[0]));
       else /* if (sspec->ensure_non_null) */
-        g_value_set_string (value, "");
+        g_value_set_static_string (value, "");
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
