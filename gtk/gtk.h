@@ -231,6 +231,7 @@
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>
 #include <gtk/gtkscrollable.h>
+#include <gtk/gtkscrollablebox.h>
 #include <gtk/gtkscrollbar.h>
 #include <gtk/gtkscrollinfo.h>
 #include <gtk/gtkscrolledwindow.h>
