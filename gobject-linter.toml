@@ -20,3 +20,6 @@ extra_propagation_functions = [
 
 [rules.g_source_id_not_stored]
 check_once_functions = false
+
+[rules.gi_missing_since]
+level = "error"
