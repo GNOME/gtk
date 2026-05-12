@@ -30,3 +30,6 @@ ignore = [
   "gdk/deprecated/**",
   "gtk/deprecated/**",
 ]
+
+[rules.include_order]
+level = "ignore"
