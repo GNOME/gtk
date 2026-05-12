@@ -678,6 +678,7 @@ typedef enum {
  * that only exists when parsing the source for introspection.
  */
 #ifdef __GI_SCANNER__
+GDK_AVAILABLE_IN_ALL
 GtkOrdering     gtk_ordering_from_cmpfunc       (int cmpfunc_result);
 #else
 /**
