@@ -66,7 +66,7 @@
 
 #include "gtkentryprivate.h"
 #include "gtktextprivate.h"
-#include "gtkcelllayout.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkcellareabox.h"
 
 #include "gtkcellrenderertext.h"

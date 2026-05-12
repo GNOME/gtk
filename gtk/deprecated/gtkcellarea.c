@@ -346,7 +346,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "deprecated/gtkcelllayout.h"
+#include "deprecated/gtkcelllayoutprivate.h"
 #include "gtkcellarea.h"
 #include "deprecated/gtkcellareacontext.h"
 #include "gtkmarshalers.h"

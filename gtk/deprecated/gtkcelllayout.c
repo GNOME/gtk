@@ -135,7 +135,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "gtkcelllayout.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkbuilderprivate.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
