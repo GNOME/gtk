@@ -117,7 +117,7 @@ _gtk_print_get_default_user_units (void)
 
   if (strcmp (e, "default:inch")==0)
     return GTK_UNIT_INCH;
-  else if (strcmp (e, "default:mm"))
+  else if (strcmp (e, "default:mm") != 0)
     g_warning ("Whoever translated default:mm did so wrongly.");
   return GTK_UNIT_MM;
 }

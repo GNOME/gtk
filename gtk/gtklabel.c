@@ -3766,7 +3766,7 @@ end_element_handler (GMarkupParseContext  *context,
 
   finish_text (pdata);
 
-  if (!strcmp (element_name, "a"))
+  if (strcmp (element_name, "a") == 0)
     {
       GtkLabelLink *link = &g_array_index (pdata->links, GtkLabelLink, pdata->links->len - 1);
 

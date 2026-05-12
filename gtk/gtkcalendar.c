@@ -727,7 +727,7 @@ gtk_calendar_init (GtkCalendar *calendar)
             month_format = "%OB";
             strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));
             /* "%OB" is not supported in Linux with glibc < 2.27  */
-            if (!strcmp (buffer, "%OB") || !strcmp (buffer, "OB") || !strcmp (buffer, ""))
+            if (strcmp (buffer, "%OB") == 0 || strcmp (buffer, "OB") == 0 || strcmp (buffer, "") == 0)
               {
                 month_format = "%B";
                 strftime (buffer, sizeof (buffer), month_format, gmtime (&tmp_time));

@@ -106,12 +106,12 @@ combo_box_changed (GtkComboBox *combo_box,
 
   columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (user_data));
 
-  if (!strcmp (str, NO_EXPAND))
+  if (strcmp (str, NO_EXPAND) == 0)
     {
       for (list = columns; list; list = list->next)
         gtk_tree_view_column_set_expand (list->data, FALSE);
     }
-  else if (!strcmp (str, SINGLE_EXPAND))
+  else if (strcmp (str, SINGLE_EXPAND) == 0)
     {
       for (list = columns; list; list = list->next)
         {
@@ -122,7 +122,7 @@ combo_box_changed (GtkComboBox *combo_box,
             gtk_tree_view_column_set_expand (list->data, FALSE);
         }
     }
-  else if (!strcmp (str, MULTI_EXPAND))
+  else if (strcmp (str, MULTI_EXPAND) == 0)
     {
       for (list = columns; list; list = list->next)
         {
@@ -136,14 +136,14 @@ combo_box_changed (GtkComboBox *combo_box,
             gtk_tree_view_column_set_expand (list->data, FALSE);
         }
     }
-  else if (!strcmp (str, LAST_EXPAND))
+  else if (strcmp (str, LAST_EXPAND) == 0)
     {
       for (list = columns; list->next; list = list->next)
         gtk_tree_view_column_set_expand (list->data, FALSE);
       /* This is the last column */
       gtk_tree_view_column_set_expand (list->data, TRUE);
     }
-  else if (!strcmp (str, BORDER_EXPAND))
+  else if (strcmp (str, BORDER_EXPAND) == 0)
     {
       gtk_tree_view_column_set_expand (columns->data, TRUE);
       for (list = columns->next; list->next; list = list->next)
@@ -151,7 +151,7 @@ combo_box_changed (GtkComboBox *combo_box,
       /* This is the last column */
       gtk_tree_view_column_set_expand (list->data, TRUE);
     }
-  else if (!strcmp (str, ALL_EXPAND))
+  else if (strcmp (str, ALL_EXPAND) == 0)
     {
       for (list = columns; list; list = list->next)
         gtk_tree_view_column_set_expand (list->data, TRUE);

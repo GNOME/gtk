@@ -1758,7 +1758,7 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
   char *buf = gtk_spin_button_format_for_value (spin_button,
                                                  gtk_adjustment_get_value (spin_button->adjustment));
 
-  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button->entry))))
+  if (strcmp (buf, gtk_editable_get_text (GTK_EDITABLE (spin_button->entry))) != 0)
     gtk_editable_set_text (GTK_EDITABLE (spin_button->entry), buf);
 
   g_free (buf);
