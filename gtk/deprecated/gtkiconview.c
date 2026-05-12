@@ -22,7 +22,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
-#include "gtkcelllayout.h"
+#include "gtkcelllayoutprivate.h"
 #include "gtkcellrenderer.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"

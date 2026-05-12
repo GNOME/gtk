@@ -131,12 +131,15 @@
  *   See [class@Gtk.LayoutManager] for layout manager delegate objects
  */
 
+#include "gtkcelllayoutprivate.h"
+
+#include "gtkbuilderprivate.h"
+#include "gtkcellareaprivate.h"
+
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "gtkcelllayout.h"
-#include "gtkbuilderprivate.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
