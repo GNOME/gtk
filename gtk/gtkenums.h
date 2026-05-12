@@ -69,14 +69,14 @@ G_BEGIN_DECLS
 /**
  * GTK_ALIGN_BASELINE_FILL:
  *
- * a different name for `GTK_ALIGN_BASELINE`.
+ * stretch to fill all space, but align the baseline.
  *
  * Since: 4.12
  */
 /**
  * GTK_ALIGN_BASELINE_CENTER:
  *
- * stretch to fill all space, but align the baseline.
+ * align the baseline.
  *
  * Since: 4.12
  */
