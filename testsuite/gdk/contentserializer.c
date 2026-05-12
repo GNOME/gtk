@@ -196,7 +196,7 @@ test_content_text_plain_utf8 (void)
   GValue value = G_VALUE_INIT;
 
   g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "ABCDEF12345");
+  g_value_set_static_string (&value, "ABCDEF12345");
   test_content_roundtrip (&value, "text/plain;charset=utf-8", compare_string_values);
   g_value_unset (&value);
 }
@@ -207,7 +207,7 @@ test_content_text_plain (void)
   GValue value = G_VALUE_INIT;
 
   g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "ABCDEF12345");
+  g_value_set_static_string (&value, "ABCDEF12345");
   test_content_roundtrip (&value, "text/plain", compare_string_values);
   g_value_unset (&value);
 }
@@ -618,7 +618,7 @@ test_override_serializer (void)
                                    NULL);
 
   g_value_init (&value, G_TYPE_STRING);
-  g_value_set_string (&value, "bu ba bla");
+  g_value_set_static_string (&value, "bu ba bla");
 
   stream = g_memory_output_stream_new_resizable ();
 

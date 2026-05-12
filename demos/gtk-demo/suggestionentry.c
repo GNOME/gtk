@@ -976,7 +976,7 @@ map_func (gpointer item, gpointer user_data)
     {
       g_critical ("Either SuggestionEntry:expression must be set "
                   "or SuggestionEntry:model must be a GtkStringList");
-      g_value_set_string (&value, "No value");
+      g_value_set_static_string (&value, "No value");
     }
 
   obj = match_object_new (item, g_value_get_string (&value));
