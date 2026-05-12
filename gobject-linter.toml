@@ -23,3 +23,10 @@ check_once_functions = false
 
 [rules.gi_missing_since]
 level = "error"
+
+[rules.gi_not_bindings_friendly]
+level = "error"
+ignore = [
+  "gdk/deprecated/**",
+  "gtk/deprecated/**",
+]
