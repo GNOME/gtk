@@ -308,6 +308,14 @@ gdk_broadway_display_get_next_serial (GdkDisplay *display)
   return _gdk_broadway_server_get_next_serial (broadway_display->server);
 }
 
+/**
+ * gdk_broadway_display_show_keyboard:
+ * @display: the broadway display
+ *
+ * Shows the keyboard.
+ *
+ * Deprecated: 4.18: The Broadway backend will be removed in GTK 5
+ **/
 void
 gdk_broadway_display_show_keyboard (GdkBroadwayDisplay *display)
 {
@@ -316,6 +324,14 @@ gdk_broadway_display_show_keyboard (GdkBroadwayDisplay *display)
   _gdk_broadway_server_set_show_keyboard (display->server, TRUE);
 }
 
+/**
+ * gdk_broadway_display_hide_keyboard:
+ * @display: the broadway display
+ *
+ * Hides the keyboard.
+ *
+ * Deprecated: 4.18: The Broadway backend will be removed in GTK 5
+ **/
 void
 gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
 {
