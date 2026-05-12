@@ -218,6 +218,7 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
                              int          *natural_baseline)
 {
   GtkWidget *child;
+  int n_visible_children_above_baseline = 0;
   int n_visible_children = 0;
   int required_min = 0, required_nat = 0;
   int largest_min = 0, largest_nat = 0;
@@ -256,6 +257,7 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
             {
               above_min += child_min;
               above_nat += child_nat;
+              n_visible_children_above_baseline += 1;
             }
           else if (pos == self->baseline_child)
             {
@@ -283,15 +285,15 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
           required_min = largest_min * n_visible_children;
           required_nat = largest_nat * n_visible_children;
 
-          above_min = largest_min * MAX (self->baseline_child, 0);
-          above_nat = largest_nat * MAX (self->baseline_child, 0);
+          above_min = largest_min * n_visible_children_above_baseline;
+          above_nat = largest_nat * n_visible_children_above_baseline;
         }
 
       required_min += (n_visible_children - 1) * spacing;
       required_nat += (n_visible_children - 1) * spacing;
 
-      above_min += MAX (self->baseline_child, 0) * spacing;
-      above_nat += MAX (self->baseline_child, 0) * spacing;
+      above_min += n_visible_children_above_baseline * spacing;
+      above_nat += n_visible_children_above_baseline * spacing;
     }
 
   *minimum = required_min;
