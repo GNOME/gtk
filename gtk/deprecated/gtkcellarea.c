@@ -342,13 +342,14 @@
 
 #include "config.h"
 
+#include "gtkcellareaprivate.h"
+
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "deprecated/gtkcelllayoutprivate.h"
-#include "gtkcellarea.h"
-#include "deprecated/gtkcellareacontext.h"
+#include "gtkcelllayoutprivate.h"
+#include "gtkcellareacontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "deprecated/gtkrender.h"
