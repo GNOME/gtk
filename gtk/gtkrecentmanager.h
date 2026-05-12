@@ -246,9 +246,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_recent_info_match                (GtkRecentInfo  *info_a,
 							    GtkRecentInfo  *info_b);
 
-/* private */
-void _gtk_recent_manager_sync (void);
-
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRecentManager, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRecentInfo, gtk_recent_info_unref)
 

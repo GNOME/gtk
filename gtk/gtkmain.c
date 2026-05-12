@@ -56,7 +56,7 @@
 #include "gtkmediafileprivate.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
-#include "gtkrecentmanager.h"
+#include "gtkrecentmanagerprivate.h"
 #include "gtktooltipprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"

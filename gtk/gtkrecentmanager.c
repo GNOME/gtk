@@ -92,7 +92,7 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
-#include "gtkrecentmanager.h"
+#include "gtkrecentmanagerprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
