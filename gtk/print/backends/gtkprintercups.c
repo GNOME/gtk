@@ -28,8 +28,11 @@
 
 enum {
   PROP_0,
-  PROP_PROFILE_TITLE
+  PROP_PROFILE_TITLE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_printer_cups_finalize   (GObject             *object);
 
@@ -55,11 +58,11 @@ gtk_printer_cups_class_init (GtkPrinterCupsClass *class)
 
   gtk_printer_cups_parent_class = g_type_class_peek_parent (class);
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_PROFILE_TITLE,
-                                   g_param_spec_string ("profile-title", NULL, NULL,
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_PROFILE_TITLE] = g_param_spec_string ("profile-title", NULL, NULL,
+                                                   "",
+                                                   G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

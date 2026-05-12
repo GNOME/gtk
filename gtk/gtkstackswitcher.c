@@ -99,6 +99,8 @@ enum {
   PROP_ORIENTATION,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 G_DEFINE_TYPE_WITH_CODE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
@@ -551,11 +553,11 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
    *
    * The stack.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STACK,
-                                   g_param_spec_object ("stack", NULL, NULL,
-                                                        GTK_TYPE_STACK,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT));
+  props[PROP_STACK] = g_param_spec_object ("stack", NULL, NULL,
+                                           GTK_TYPE_STACK,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 

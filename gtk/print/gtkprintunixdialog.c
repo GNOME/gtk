@@ -218,8 +218,11 @@ enum {
   PROP_MANUAL_CAPABILITIES,
   PROP_SUPPORT_SELECTION,
   PROP_HAS_SELECTION,
-  PROP_EMBED_PAGE_SETUP
+  PROP_EMBED_PAGE_SETUP,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef struct _GtkPrintUnixDialogClass    GtkPrintUnixDialogClass;
 
@@ -408,91 +411,77 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
    *
    * The `GtkPageSetup` object to use.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PAGE_SETUP,
-                                   g_param_spec_object ("page-setup", NULL, NULL,
-                                                        GTK_TYPE_PAGE_SETUP,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PAGE_SETUP] = g_param_spec_object ("page-setup", NULL, NULL,
+                                                GTK_TYPE_PAGE_SETUP,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:current-page:
    *
    * The current page in the document.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CURRENT_PAGE,
-                                   g_param_spec_int ("current-page", NULL, NULL,
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_CURRENT_PAGE] = g_param_spec_int ("current-page", NULL, NULL,
+                                               -1,
+                                               G_MAXINT,
+                                               -1,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:print-settings: (getter get_settings) (setter set_settings)
    *
    * The `GtkPrintSettings` object used for this dialog.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PRINT_SETTINGS,
-                                   g_param_spec_object ("print-settings", NULL, NULL,
-                                                        GTK_TYPE_PRINT_SETTINGS,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PRINT_SETTINGS] = g_param_spec_object ("print-settings", NULL, NULL,
+                                                    GTK_TYPE_PRINT_SETTINGS,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:selected-printer:
    *
    * The `GtkPrinter` which is selected.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SELECTED_PRINTER,
-                                   g_param_spec_object ("selected-printer", NULL, NULL,
-                                                        GTK_TYPE_PRINTER,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SELECTED_PRINTER] = g_param_spec_object ("selected-printer", NULL, NULL,
+                                                      GTK_TYPE_PRINTER,
+                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:manual-capabilities:
    *
    * Capabilities the application can handle.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MANUAL_CAPABILITIES,
-                                   g_param_spec_flags ("manual-capabilities", NULL, NULL,
-                                                       GTK_TYPE_PRINT_CAPABILITIES,
-                                                       0,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_MANUAL_CAPABILITIES] = g_param_spec_flags ("manual-capabilities", NULL, NULL,
+                                                        GTK_TYPE_PRINT_CAPABILITIES,
+                                                        0,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:support-selection:
    *
    * Whether the dialog supports selection.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SUPPORT_SELECTION,
-                                   g_param_spec_boolean ("support-selection", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SUPPORT_SELECTION] = g_param_spec_boolean ("support-selection", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrintUnixDialog:has-selection:
    *
    * Whether the application has a selection.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HAS_SELECTION,
-                                   g_param_spec_boolean ("has-selection", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_HAS_SELECTION] = g_param_spec_boolean ("has-selection", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
    /**
     * GtkPrintUnixDialog:embed-page-setup:
     *
     * %TRUE if the page setup controls are embedded.
     */
-   g_object_class_install_property (object_class,
-                                   PROP_EMBED_PAGE_SETUP,
-                                   g_param_spec_boolean ("embed-page-setup", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+   props[PROP_EMBED_PAGE_SETUP] = g_param_spec_boolean ("embed-page-setup", NULL, NULL,
+                                                       FALSE,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /* Bind class to template
    */

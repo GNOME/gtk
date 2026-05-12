@@ -109,6 +109,8 @@ enum {
   OBJECT_PROPERTY_NUM_PROPERTIES
 };
 
+static GParamSpec *obj_props[OBJECT_PROPERTY_NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (ObjectProperty, object_property, G_TYPE_OBJECT);
 
 static void
@@ -161,31 +163,29 @@ static void
 object_property_class_init (ObjectPropertyClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GParamSpec *pspec;
 
   object_class->finalize = object_property_finalize;
   object_class->get_property = object_property_get_property;
 
-  pspec = g_param_spec_string ("name", NULL, NULL,
-                               NULL,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  obj_props[OBJECT_PROPERTY_PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                                              NULL,
+                                                              G_PARAM_READABLE |
+                                                              G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_NAME, pspec);
 
-  pspec = g_param_spec_string ("value", NULL, NULL,
-                               NULL,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  obj_props[OBJECT_PROPERTY_PROP_VALUE] = g_param_spec_string ("value", NULL, NULL,
+                                                               NULL,
+                                                               G_PARAM_READABLE |
+                                                               G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_VALUE, pspec);
 
-  pspec = g_param_spec_object ("texture", NULL, NULL,
-                               GDK_TYPE_TEXTURE,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  obj_props[OBJECT_PROPERTY_PROP_TEXTURE] = g_param_spec_object ("texture", NULL, NULL,
+                                                                 GDK_TYPE_TEXTURE,
+                                                                 G_PARAM_READABLE |
+                                                                 G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, OBJECT_PROPERTY_PROP_TEXTURE, pspec);
+
+  g_object_class_install_properties (object_class, OBJECT_PROPERTY_NUM_PROPERTIES, obj_props);
 }
 
 static ObjectProperty *

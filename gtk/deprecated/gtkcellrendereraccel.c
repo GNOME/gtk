@@ -87,8 +87,11 @@ enum {
   PROP_ACCEL_KEY = 1,
   PROP_ACCEL_MODS,
   PROP_KEYCODE,
-  PROP_ACCEL_MODE
+  PROP_ACCEL_MODE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -174,25 +177,21 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    *
    * The keyval of the accelerator.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ACCEL_KEY,
-                                   g_param_spec_uint ("accel-key", NULL, NULL,
-                                                      0,
-                                                      G_MAXINT,
-                                                      0,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ACCEL_KEY] = g_param_spec_uint ("accel-key", NULL, NULL,
+                                             0,
+                                             G_MAXINT,
+                                             0,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererAccel:accel-mods:
    *
    * The modifier mask of the accelerator.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ACCEL_MODS,
-                                   g_param_spec_flags ("accel-mods", NULL, NULL,
-                                                       GDK_TYPE_MODIFIER_TYPE,
-                                                       GDK_NO_MODIFIER_MASK,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ACCEL_MODS] = g_param_spec_flags ("accel-mods", NULL, NULL,
+                                               GDK_TYPE_MODIFIER_TYPE,
+                                               GDK_NO_MODIFIER_MASK,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererAccel:keycode:
@@ -201,13 +200,11 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * only relevant if the key does not have a keyval. Normally, the keyboard
    * configuration should assign keyvals to all keys.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_KEYCODE,
-                                   g_param_spec_uint ("keycode", NULL, NULL,
-                                                      0,
-                                                      G_MAXINT,
-                                                      0,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_KEYCODE] = g_param_spec_uint ("keycode", NULL, NULL,
+                                           0,
+                                           G_MAXINT,
+                                           0,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererAccel:accel-mode:
@@ -217,12 +214,12 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    * accepted by GTK are allowed, and the accelerators are rendered
    * in the same way as they are in menus.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ACCEL_MODE,
-                                   g_param_spec_enum ("accel-mode", NULL, NULL,
-                                                      GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
-                                                      GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ACCEL_MODE] = g_param_spec_enum ("accel-mode", NULL, NULL,
+                                              GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
+                                              GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /**
    * GtkCellRendererAccel::accel-edited:
@@ -491,13 +488,15 @@ struct _GtkCellEditableWidget
 };
 
 enum {
-  PROP_MODE = 1,
-  PROP_PATH,
-  N_PROPS,
+  EDITABLE_PROP_MODE = 1,
+  EDITABLE_PROP_PATH,
+  EDITABLE_N_PROPS,
 
   /* GtkCellEditable */
-  PROP_EDITING_CANCELED,
+  EDITABLE_PROP_EDITING_CANCELED,
 };
+
+static GParamSpec *editable_props[EDITABLE_N_PROPS] = { NULL, };
 
 GType       gtk_cell_editable_widget_get_type (void);
 static void gtk_cell_editable_widget_cell_editable_init (GtkCellEditableIface *iface);
@@ -600,13 +599,13 @@ gtk_cell_editable_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_EDITING_CANCELED:
+    case EDITABLE_PROP_EDITING_CANCELED:
       box->editing_canceled = g_value_get_boolean (value);
       break;
-    case PROP_MODE:
+    case EDITABLE_PROP_MODE:
       box->accel_mode = g_value_get_enum (value);
       break;
-    case PROP_PATH:
+    case EDITABLE_PROP_PATH:
       box->path = g_value_dup_string (value);
       break;
     default:
@@ -625,13 +624,13 @@ gtk_cell_editable_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_EDITING_CANCELED:
+    case EDITABLE_PROP_EDITING_CANCELED:
       g_value_set_boolean (value, box->editing_canceled);
       break;
-    case PROP_MODE:
+    case EDITABLE_PROP_MODE:
       g_value_set_enum (value, box->accel_mode);
       break;
-    case PROP_PATH:
+    case EDITABLE_PROP_PATH:
       g_value_set_string (value, box->path);
       break;
     default:
@@ -674,18 +673,19 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
   widget_class->unrealize = gtk_cell_editable_widget_unrealize;
 
   g_object_class_override_property (object_class,
-                                    PROP_EDITING_CANCELED,
+                                    EDITABLE_PROP_EDITING_CANCELED,
                                     "editing-canceled");
 
-  g_object_class_install_property (object_class, PROP_MODE,
-      g_param_spec_enum ("accel-mode", NULL, NULL,
-                         GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
-                         GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  editable_props[EDITABLE_PROP_MODE] = g_param_spec_enum ("accel-mode", NULL, NULL,
+                                                          GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
+                                                          GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_PATH,
-      g_param_spec_string ("path", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  editable_props[EDITABLE_PROP_PATH] = g_param_spec_string ("path", NULL, NULL,
+                                                            NULL,
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, EDITABLE_N_PROPS, editable_props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("acceleditor"));

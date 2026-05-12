@@ -18,6 +18,8 @@ enum {
   NUM_PROPERTIES
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 static void
 pixbuf_paintable_snapshot (GdkPaintable *paintable,
                            GdkSnapshot  *snapshot,
@@ -174,9 +176,10 @@ pixbuf_paintable_class_init (PixbufPaintableClass *class)
   object_class->get_property = pixbuf_paintable_get_property;
   object_class->set_property = pixbuf_paintable_set_property;
 
-  g_object_class_install_property (object_class, PROP_RESOURCE_PATH,
-      g_param_spec_string ("resource-path", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RESOURCE_PATH] = g_param_spec_string ("resource-path", NULL, NULL,
+                                                   NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
 }
 

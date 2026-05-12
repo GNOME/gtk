@@ -22,8 +22,11 @@
 enum {
   PROP_0,
   PROP_WEIGHT_ADJUSTMENT,
-  PROP_WIDTH_ADJUSTMENT
+  PROP_WIDTH_ADJUSTMENT,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkFontPlane, gtk_font_plane, GTK_TYPE_WIDGET)
 
@@ -255,21 +258,19 @@ gtk_font_plane_class_init (GtkFontPlaneClass *class)
 
   widget_class->snapshot = plane_snapshot;
 
-  g_object_class_install_property (object_class,
-                                   PROP_WEIGHT_ADJUSTMENT,
-                                   g_param_spec_object ("weight-adjustment",
-                                                        NULL,
-                                                        NULL,
-							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_WEIGHT_ADJUSTMENT] = g_param_spec_object ("weight-adjustment",
+                                                       NULL,
+                                                       NULL,
+                                                       GTK_TYPE_ADJUSTMENT,
+                                                       G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_WIDTH_ADJUSTMENT,
-                                   g_param_spec_object ("width-adjustment",
-                                                        NULL,
-                                                        NULL,
-							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_WIDTH_ADJUSTMENT] = g_param_spec_object ("width-adjustment",
+                                                      NULL,
+                                                      NULL,
+                                                      GTK_TYPE_ADJUSTMENT,
+                                                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 GtkWidget *

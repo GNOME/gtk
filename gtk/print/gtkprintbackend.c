@@ -74,8 +74,11 @@ static guint signals[LAST_SIGNAL] = { 0 };
 enum 
 { 
   PROP_ZERO,
-  PROP_STATUS
+  PROP_STATUS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static GObjectClass *backend_parent_class;
 
@@ -279,13 +282,13 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   class->printer_get_capabilities = fallback_printer_get_capabilities;
   class->request_password = request_password;
   
-  g_object_class_install_property (object_class, 
-                                   PROP_STATUS,
-                                   g_param_spec_int ("status", NULL, NULL,
-                                                     GTK_PRINT_BACKEND_STATUS_UNKNOWN,
-                                                     GTK_PRINT_BACKEND_STATUS_UNAVAILABLE,
-                                                     GTK_PRINT_BACKEND_STATUS_UNKNOWN,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME)); 
+  props[PROP_STATUS] = g_param_spec_int ("status", NULL, NULL,
+                                         GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+                                         GTK_PRINT_BACKEND_STATUS_UNAVAILABLE,
+                                         GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props); 
   
   signals[PRINTER_LIST_CHANGED] =
     g_signal_new ("printer-list-changed",

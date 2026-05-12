@@ -184,6 +184,8 @@ enum {
 
   N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 static void gtk_text_tag_finalize     (GObject         *object);
 static void gtk_text_tag_set_property (GObject         *object,
                                        guint            prop_id,
@@ -214,11 +216,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * %NULL for anonymous tags.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /* Style args */
 
@@ -227,22 +227,18 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Background color as a string.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND,
-                                   g_param_spec_string ("background", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_BACKGROUND] = g_param_spec_string ("background", NULL, NULL,
+                                                NULL,
+                                                G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:background-rgba:
    *
    * Background color as a `GdkRGBA`.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_RGBA,
-                                   g_param_spec_boxed ("background-rgba", NULL, NULL,
-                                                       GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_BACKGROUND_RGBA] = g_param_spec_boxed ("background-rgba", NULL, NULL,
+                                                    GDK_TYPE_RGBA,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:background-full-height:
@@ -250,56 +246,46 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Whether the background color fills the entire line height
    * or only the height of the tagged characters.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_FULL_HEIGHT,
-                                   g_param_spec_boolean ("background-full-height", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_BACKGROUND_FULL_HEIGHT] = g_param_spec_boolean ("background-full-height", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:foreground:
    *
    * Foreground color as a string.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND,
-                                   g_param_spec_string ("foreground", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_FOREGROUND] = g_param_spec_string ("foreground", NULL, NULL,
+                                                NULL,
+                                                G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:foreground-rgba:
    *
    * Foreground color as a `GdkRGBA`.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_RGBA,
-                                   g_param_spec_boxed ("foreground-rgba", NULL, NULL,
-                                                       GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FOREGROUND_RGBA] = g_param_spec_boxed ("foreground-rgba", NULL, NULL,
+                                                    GDK_TYPE_RGBA,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:direction:
    *
    * Text direction, e.g. right-to-left or left-to-right.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DIRECTION,
-                                   g_param_spec_enum ("direction", NULL, NULL,
-                                                      GTK_TYPE_TEXT_DIRECTION,
-                                                      GTK_TEXT_DIR_NONE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_DIRECTION] = g_param_spec_enum ("direction", NULL, NULL,
+                                             GTK_TYPE_TEXT_DIRECTION,
+                                             GTK_TEXT_DIR_NONE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:editable:
    *
    * Whether the text can be modified by the user.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_EDITABLE,
-                                   g_param_spec_boolean ("editable", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_EDITABLE] = g_param_spec_boolean ("editable", NULL, NULL,
+                                               TRUE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:font:
@@ -309,94 +295,78 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Note that the initial value of this property depends on
    * the internals of `PangoFontDescription`.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FONT,
-                                   g_param_spec_string ("font", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FONT] = g_param_spec_string ("font", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:font-desc:
    *
    * Font description as a `PangoFontDescription`.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FONT_DESC,
-                                   g_param_spec_boxed ("font-desc", NULL, NULL,
-                                                       PANGO_TYPE_FONT_DESCRIPTION,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FONT_DESC] = g_param_spec_boxed ("font-desc", NULL, NULL,
+                                              PANGO_TYPE_FONT_DESCRIPTION,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:family:
    *
    * Name of the font family, e.g. Sans, Helvetica, Times, Monospace.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FAMILY,
-                                   g_param_spec_string ("family", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FAMILY] = g_param_spec_string ("family", NULL, NULL,
+                                            NULL,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:style:
    *
    * Font style as a `PangoStyle`, e.g. %PANGO_STYLE_ITALIC.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STYLE,
-                                   g_param_spec_enum ("style", NULL, NULL,
-                                                      PANGO_TYPE_STYLE,
-                                                      PANGO_STYLE_NORMAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STYLE] = g_param_spec_enum ("style", NULL, NULL,
+                                         PANGO_TYPE_STYLE,
+                                         PANGO_STYLE_NORMAL,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:variant:
    *
    * Font variant as a `PangoVariant`, e.g. %PANGO_VARIANT_SMALL_CAPS.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_VARIANT,
-                                   g_param_spec_enum ("variant", NULL, NULL,
-                                                      PANGO_TYPE_VARIANT,
-                                                      PANGO_VARIANT_NORMAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_VARIANT] = g_param_spec_enum ("variant", NULL, NULL,
+                                           PANGO_TYPE_VARIANT,
+                                           PANGO_VARIANT_NORMAL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   /**
    * GtkTextTag:weight:
    *
    * Font weight as an integer.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WEIGHT,
-                                   g_param_spec_int ("weight", NULL, NULL,
-                                                     0,
-                                                     G_MAXINT,
-                                                     PANGO_WEIGHT_NORMAL,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WEIGHT] = g_param_spec_int ("weight", NULL, NULL,
+                                         0,
+                                         G_MAXINT,
+                                         PANGO_WEIGHT_NORMAL,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:stretch:
    *
    * Font stretch as a `PangoStretch`, e.g. %PANGO_STRETCH_CONDENSED.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRETCH,
-                                   g_param_spec_enum ("stretch", NULL, NULL,
-                                                      PANGO_TYPE_STRETCH,
-                                                      PANGO_STRETCH_NORMAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRETCH] = g_param_spec_enum ("stretch", NULL, NULL,
+                                           PANGO_TYPE_STRETCH,
+                                           PANGO_STRETCH_NORMAL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:size:
    *
    * Font size in Pango units.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SIZE,
-                                   g_param_spec_int ("size", NULL, NULL,
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SIZE] = g_param_spec_int ("size", NULL, NULL,
+                                       0,
+                                       G_MAXINT,
+                                       0,
+                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:scale:
@@ -406,38 +376,32 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * This properly adapts to theme changes, etc. so is recommended.
    * Pango predefines some scales such as %PANGO_SCALE_X_LARGE.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SCALE,
-                                   g_param_spec_double ("scale", NULL, NULL,
-                                                        0.0,
-                                                        G_MAXDOUBLE,
-                                                        1.0,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SCALE] = g_param_spec_double ("scale", NULL, NULL,
+                                           0.0,
+                                           G_MAXDOUBLE,
+                                           1.0,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:size-points:
    *
    * Font size in points.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SIZE_POINTS,
-                                   g_param_spec_double ("size-points", NULL, NULL,
-                                                        0.0,
-                                                        G_MAXDOUBLE,
-                                                        0.0,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
+  props[PROP_SIZE_POINTS] = g_param_spec_double ("size-points", NULL, NULL,
+                                                 0.0,
+                                                 G_MAXDOUBLE,
+                                                 0.0,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);  
 
   /**
    * GtkTextTag:justification:
    *
    * Left, right, or center justification.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_JUSTIFICATION,
-                                   g_param_spec_enum ("justification", NULL, NULL,
-                                                      GTK_TYPE_JUSTIFICATION,
-                                                      GTK_JUSTIFY_LEFT,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_JUSTIFICATION] = g_param_spec_enum ("justification", NULL, NULL,
+                                                 GTK_TYPE_JUSTIFICATION,
+                                                 GTK_JUSTIFY_LEFT,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:language:
@@ -450,37 +414,31 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Note that the initial value of this property depends
    * on the current locale, see also [func@Gtk.get_default_language].
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LANGUAGE,
-                                   g_param_spec_string ("language", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
+  props[PROP_LANGUAGE] = g_param_spec_string ("language", NULL, NULL,
+                                              NULL,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);  
 
   /**
    * GtkTextTag:left-margin:
    *
    * Width of the left margin in pixels.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LEFT_MARGIN,
-                                   g_param_spec_int ("left-margin", NULL, NULL,
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LEFT_MARGIN] = g_param_spec_int ("left-margin", NULL, NULL,
+                                              0,
+                                              G_MAXINT,
+                                              0,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:right-margin:
    *
    * Width of the right margin, in pixels.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_RIGHT_MARGIN,
-                                   g_param_spec_int ("right-margin", NULL, NULL,
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RIGHT_MARGIN] = g_param_spec_int ("right-margin", NULL, NULL,
+                                               0,
+                                               G_MAXINT,
+                                               0,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:indent:
@@ -492,13 +450,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * lines will be indented by the absolute value of indent.
    *
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INDENT,
-                                   g_param_spec_int ("indent", NULL, NULL,
-                                                     G_MININT,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INDENT] = g_param_spec_int ("indent", NULL, NULL,
+                                         G_MININT,
+                                         G_MAXINT,
+                                         0,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:rise:
@@ -507,52 +463,44 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Negative values go below the baseline.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_RISE,
-                                   g_param_spec_int ("rise", NULL, NULL,
-						     G_MININT,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RISE] = g_param_spec_int ("rise", NULL, NULL,
+                                       G_MININT,
+                                       G_MAXINT,
+                                       0,
+                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-above-lines:
    *
    * Pixels of blank space above paragraphs.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_ABOVE_LINES,
-                                   g_param_spec_int ("pixels-above-lines", NULL, NULL,
+  props[PROP_PIXELS_ABOVE_LINES] = g_param_spec_int ("pixels-above-lines", NULL, NULL,
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-below-lines:
    *
    * Pixels of blank space below paragraphs.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_BELOW_LINES,
-                                   g_param_spec_int ("pixels-below-lines", NULL, NULL,
+  props[PROP_PIXELS_BELOW_LINES] = g_param_spec_int ("pixels-below-lines", NULL, NULL,
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-inside-wrap:
    *
    * Pixels of blank space between wrapped lines in a paragraph.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_INSIDE_WRAP,
-                                   g_param_spec_int ("pixels-inside-wrap", NULL, NULL,
+  props[PROP_PIXELS_INSIDE_WRAP] = g_param_spec_int ("pixels-inside-wrap", NULL, NULL,
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:line-height:
@@ -561,34 +509,28 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Since: 4.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LINE_HEIGHT,
-                                   g_param_spec_float ("line-height", NULL, NULL,
-                                                       0.0, 10.0, 0.0,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LINE_HEIGHT] = g_param_spec_float ("line-height", NULL, NULL,
+                                                0.0, 10.0, 0.0,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:strikethrough:
    *
    * Whether to strike through the text.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRIKETHROUGH,
-                                   g_param_spec_boolean ("strikethrough", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRIKETHROUGH] = g_param_spec_boolean ("strikethrough", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:underline:
    *
    * Style of underline for this text.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_UNDERLINE,
-                                   g_param_spec_enum ("underline", NULL, NULL,
-                                                      PANGO_TYPE_UNDERLINE,
-                                                      PANGO_UNDERLINE_NONE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_UNDERLINE] = g_param_spec_enum ("underline", NULL, NULL,
+                                             PANGO_TYPE_UNDERLINE,
+                                             PANGO_UNDERLINE_NONE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:underline-rgba:
@@ -601,23 +543,19 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * an alternate color may be applied instead of the foreground. Setting
    * this property will always override those defaults.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_UNDERLINE_RGBA,
-                                   g_param_spec_boxed ("underline-rgba", NULL, NULL,
-                                                       GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_UNDERLINE_RGBA] = g_param_spec_boxed ("underline-rgba", NULL, NULL,
+                                                   GDK_TYPE_RGBA,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:overline:
    *
    * Style of overline for this text.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_OVERLINE,
-                                   g_param_spec_enum ("overline", NULL, NULL,
-                                                      PANGO_TYPE_OVERLINE,
-                                                      PANGO_OVERLINE_NONE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_OVERLINE] = g_param_spec_enum ("overline", NULL, NULL,
+                                            PANGO_TYPE_OVERLINE,
+                                            PANGO_OVERLINE_NONE,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:overline-rgba:
@@ -626,11 +564,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * If not set, overlines will use the foreground color.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_OVERLINE_RGBA,
-                                   g_param_spec_boxed ("overline-rgba", NULL, NULL,
-                                                       GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_OVERLINE_RGBA] = g_param_spec_boxed ("overline-rgba", NULL, NULL,
+                                                  GDK_TYPE_RGBA,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:strikethrough-rgba:
@@ -639,11 +575,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * If not set, strikeouts will use the foreground color.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRIKETHROUGH_RGBA,
-                                   g_param_spec_boxed ("strikethrough-rgba", NULL, NULL,
+  props[PROP_STRIKETHROUGH_RGBA] = g_param_spec_boxed ("strikethrough-rgba", NULL, NULL,
                                                        GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:wrap-mode:
@@ -651,23 +585,19 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Whether to wrap lines never, at word boundaries, or
    * at character boundaries.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap-mode", NULL, NULL,
-                                                      GTK_TYPE_WRAP_MODE,
-                                                      GTK_WRAP_NONE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WRAP_MODE] = g_param_spec_enum ("wrap-mode", NULL, NULL,
+                                             GTK_TYPE_WRAP_MODE,
+                                             GTK_WRAP_NONE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:tabs:
    *
    * Custom tabs for this text.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TABS,
-                                   g_param_spec_boxed ("tabs", NULL, NULL,
-                                                       PANGO_TYPE_TAB_ARRAY,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TABS] = g_param_spec_boxed ("tabs", NULL, NULL,
+                                         PANGO_TYPE_TAB_ARRAY,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   
   /**
    * GtkTextTag:invisible:
@@ -678,33 +608,27 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * text, in particular when navigating programmatically inside a buffer
    * containing invisible segments.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INVISIBLE,
-                                   g_param_spec_boolean ("invisible", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INVISIBLE] = g_param_spec_boolean ("invisible", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:paragraph-background:
    *
    * The paragraph background color as a string.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PARAGRAPH_BACKGROUND,
-                                   g_param_spec_string ("paragraph-background", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_PARAGRAPH_BACKGROUND] = g_param_spec_string ("paragraph-background", NULL, NULL,
+                                                          NULL,
+                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:paragraph-background-rgba:
    *
    * The paragraph background color as a `GdkRGBA`.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PARAGRAPH_BACKGROUND_RGBA,
-                                   g_param_spec_boxed ("paragraph-background-rgba", NULL, NULL,
-                                                       GDK_TYPE_RGBA,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PARAGRAPH_BACKGROUND_RGBA] = g_param_spec_boxed ("paragraph-background-rgba", NULL, NULL,
+                                                              GDK_TYPE_RGBA,
+                                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:fallback:
@@ -714,67 +638,55 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * When set to %TRUE, other fonts will be substituted
    * where the current font is missing glyphs.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FALLBACK,
-                                   g_param_spec_boolean ("fallback", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FALLBACK] = g_param_spec_boolean ("fallback", NULL, NULL,
+                                               TRUE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:letter-spacing:
    *
    * Extra spacing between graphemes, in Pango units.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LETTER_SPACING,
-                                   g_param_spec_int ("letter-spacing", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LETTER_SPACING] = g_param_spec_int ("letter-spacing", NULL, NULL,
+                                                 0, G_MAXINT, 0,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:font-features:
    *
    * OpenType font features, as a string.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FONT_FEATURES,
-                                   g_param_spec_string ("font-features", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FONT_FEATURES] = g_param_spec_string ("font-features", NULL, NULL,
+                                                   NULL,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:allow-breaks:
    *
    * Whether breaks are allowed.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ALLOW_BREAKS,
-                                   g_param_spec_boolean ("allow-breaks", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ALLOW_BREAKS] = g_param_spec_boolean ("allow-breaks", NULL, NULL,
+                                                   TRUE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:show-spaces:
    *
    * How to render invisible characters.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SHOW_SPACES,
-                                   g_param_spec_flags ("show-spaces", NULL, NULL,
-                                                         PANGO_TYPE_SHOW_FLAGS,
-                                                         PANGO_SHOW_NONE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_SPACES] = g_param_spec_flags ("show-spaces", NULL, NULL,
+                                                PANGO_TYPE_SHOW_FLAGS,
+                                                PANGO_SHOW_NONE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:insert-hyphens:
    *
    * Whether to insert hyphens at breaks.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INSERT_HYPHENS,
-                                   g_param_spec_boolean ("insert-hyphens", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INSERT_HYPHENS] = g_param_spec_boolean ("insert-hyphens", NULL, NULL,
+                                                     TRUE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:text-transform:
@@ -783,12 +695,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Since: 4.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT_TRANSFORM,
-                                   g_param_spec_enum ("text-transform", NULL, NULL,
-                                                         PANGO_TYPE_TEXT_TRANSFORM,
-                                                         PANGO_TEXT_TRANSFORM_NONE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXT_TRANSFORM] = g_param_spec_enum ("text-transform", NULL, NULL,
+                                                  PANGO_TYPE_TEXT_TRANSFORM,
+                                                  PANGO_TEXT_TRANSFORM_NONE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:word:
@@ -799,11 +709,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Since: 4.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WORD,
-                                   g_param_spec_boolean ("word", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WORD] = g_param_spec_boolean ("word", NULL, NULL,
+                                           FALSE,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:sentence:
@@ -814,11 +722,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Since: 4.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SENTENCE,
-                                   g_param_spec_boolean ("sentence", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SENTENCE] = g_param_spec_boolean ("sentence", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:accumulative-margin:
@@ -829,11 +735,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * of any other non-accumulative margins present. When set to %FALSE
    * the margins override one another (the default).
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ACCUMULATIVE_MARGIN,
-                                   g_param_spec_boolean ("accumulative-margin", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ACCUMULATIVE_MARGIN] = g_param_spec_boolean ("accumulative-margin", NULL, NULL,
+                                                          FALSE,
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /* Style props are set or not */
 
@@ -842,440 +746,362 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Whether the `background` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_SET,
-                                   g_param_spec_boolean ("background-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_BACKGROUND_SET] = g_param_spec_boolean ("background-set", NULL, NULL,
+                                                     FALSE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:background-full-height-set:
    *
    * Whether the `background-full-height` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_FULL_HEIGHT_SET,
-                                   g_param_spec_boolean ("background-full-height-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_BACKGROUND_FULL_HEIGHT_SET] = g_param_spec_boolean ("background-full-height-set", NULL, NULL,
+                                                                 FALSE,
+                                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:foreground-set:
    *
    * Whether the `foreground` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_SET,
-                                   g_param_spec_boolean ("foreground-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FOREGROUND_SET] = g_param_spec_boolean ("foreground-set", NULL, NULL,
+                                                     FALSE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:editable-set:
    *
    * Whether the `editable` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_EDITABLE_SET,
-                                   g_param_spec_boolean ("editable-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_EDITABLE_SET] = g_param_spec_boolean ("editable-set", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:family-set:
    *
    * Whether the `family` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FAMILY_SET,
-                                   g_param_spec_boolean ("family-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
+  props[PROP_FAMILY_SET] = g_param_spec_boolean ("family-set", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);  
 
   /**
    * GtkTextTag:style-set:
    *
    * Whether the `style` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STYLE_SET,
-                                   g_param_spec_boolean ("style-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STYLE_SET] = g_param_spec_boolean ("style-set", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:variant-set:
    *
    * Whether the `variant` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_VARIANT_SET,
-                                   g_param_spec_boolean ("variant-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_VARIANT_SET] = g_param_spec_boolean ("variant-set", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:weight-set:
    *
    * Whether the `weight` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WEIGHT_SET,
-                                   g_param_spec_boolean ("weight-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WEIGHT_SET] = g_param_spec_boolean ("weight-set", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:stretch-set:
    *
    * Whether the `stretch` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRETCH_SET,
-                                   g_param_spec_boolean ("stretch-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRETCH_SET] = g_param_spec_boolean ("stretch-set", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:size-set:
    *
    * Whether the `size` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SIZE_SET,
-                                   g_param_spec_boolean ("size-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SIZE_SET] = g_param_spec_boolean ("size-set", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:scale-set:
    *
    * Whether the `scale` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SCALE_SET,
-                                   g_param_spec_boolean ("scale-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SCALE_SET] = g_param_spec_boolean ("scale-set", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:justification-set:
    *
    * Whether the `justification` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_JUSTIFICATION_SET,
-                                   g_param_spec_boolean ("justification-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_JUSTIFICATION_SET] = g_param_spec_boolean ("justification-set", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:language-set:
    *
    * Whether the `language` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LANGUAGE_SET,
-                                   g_param_spec_boolean ("language-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LANGUAGE_SET] = g_param_spec_boolean ("language-set", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:left-margin-set:
    *
    * Whether the `left-margin` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LEFT_MARGIN_SET,
-                                   g_param_spec_boolean ("left-margin-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LEFT_MARGIN_SET] = g_param_spec_boolean ("left-margin-set", NULL, NULL,
+                                                      FALSE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:indent-set:
    *
    * Whether the `indent` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INDENT_SET,
-                                   g_param_spec_boolean ("indent-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INDENT_SET] = g_param_spec_boolean ("indent-set", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:rise-set:
    *
    * Whether the `rise` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_RISE_SET,
-                                   g_param_spec_boolean ("rise-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RISE_SET] = g_param_spec_boolean ("rise-set", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-above-lines-set:
    *
    * Whether the `pixels-above-lines` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_ABOVE_LINES_SET,
-                                   g_param_spec_boolean ("pixels-above-lines-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXELS_ABOVE_LINES_SET] = g_param_spec_boolean ("pixels-above-lines-set", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-below-lines-set:
    *
    * Whether the `pixels-below-lines` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_BELOW_LINES_SET,
-                                   g_param_spec_boolean ("pixels-below-lines-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXELS_BELOW_LINES_SET] = g_param_spec_boolean ("pixels-below-lines-set", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:pixels-inside-wrap-set:
    *
    * Whether the `pixels-inside-wrap` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PIXELS_INSIDE_WRAP_SET,
-                                   g_param_spec_boolean ("pixels-inside-wrap-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXELS_INSIDE_WRAP_SET] = g_param_spec_boolean ("pixels-inside-wrap-set", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:line-height-set:
    *
    * Whether the `line-height` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LINE_HEIGHT_SET,
-                                   g_param_spec_boolean ("line-height-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_LINE_HEIGHT_SET] = g_param_spec_boolean ("line-height-set", NULL, NULL,
+                                                      FALSE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:strikethrough-set:
    *
    * Whether the `strikethrough` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRIKETHROUGH_SET,
-                                   g_param_spec_boolean ("strikethrough-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRIKETHROUGH_SET] = g_param_spec_boolean ("strikethrough-set", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:right-margin-set:
    *
    * Whether the `right-margin` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_RIGHT_MARGIN_SET,
-                                   g_param_spec_boolean ("right-margin-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RIGHT_MARGIN_SET] = g_param_spec_boolean ("right-margin-set", NULL, NULL,
+                                                       FALSE,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:underline-set:
    *
    * Whether the `underline` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_UNDERLINE_SET,
-                                   g_param_spec_boolean ("underline-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_UNDERLINE_SET] = g_param_spec_boolean ("underline-set", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:underline-rgba-set:
    *
    * If the `underline-rgba` property has been set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_UNDERLINE_RGBA_SET,
-                                   g_param_spec_boolean ("underline-rgba-set", NULL, NULL,
+  props[PROP_UNDERLINE_RGBA_SET] = g_param_spec_boolean ("underline-rgba-set", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:overline-set:
    *
    * Whether the `overline` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_OVERLINE_SET,
-                                   g_param_spec_boolean ("overline-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_OVERLINE_SET] = g_param_spec_boolean ("overline-set", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:overline-rgba-set:
    *
    * Whether the `overline-rgba` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_OVERLINE_RGBA_SET,
-                                   g_param_spec_boolean ("overline-rgba-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_OVERLINE_RGBA_SET] = g_param_spec_boolean ("overline-rgba-set", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:strikethrough-rgba-set:
    *
    * If the `strikethrough-rgba` property has been set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_STRIKETHROUGH_RGBA_SET,
-                                   g_param_spec_boolean ("strikethrough-rgba-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRIKETHROUGH_RGBA_SET] = g_param_spec_boolean ("strikethrough-rgba-set", NULL, NULL,
+                                                             FALSE,
+                                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:wrap-mode-set:
    *
    * Whether the `wrap-mode` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WRAP_MODE_SET,
-                                   g_param_spec_boolean ("wrap-mode-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WRAP_MODE_SET] = g_param_spec_boolean ("wrap-mode-set", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:tabs-set:
    *
    * Whether the `tabs` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TABS_SET,
-                                   g_param_spec_boolean ("tabs-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TABS_SET] = g_param_spec_boolean ("tabs-set", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:invisible-set:
    *
    * Whether the `invisible` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INVISIBLE_SET,
-                                   g_param_spec_boolean ("invisible-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INVISIBLE_SET] = g_param_spec_boolean ("invisible-set", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:paragraph-background-set:
    *
    * Whether the `paragraph-background` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PARAGRAPH_BACKGROUND_SET,
-                                   g_param_spec_boolean ("paragraph-background-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PARAGRAPH_BACKGROUND_SET] = g_param_spec_boolean ("paragraph-background-set", NULL, NULL,
+                                                               FALSE,
+                                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:fallback-set:
    *
    * Whether the `fallback` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FALLBACK_SET,
-                                   g_param_spec_boolean ("fallback-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FALLBACK_SET] = g_param_spec_boolean ("fallback-set", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:letter-spacing-set:
    *
    * Whether the `letter-spacing` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LETTER_SPACING_SET,
-                                   g_param_spec_boolean ("letter-spacing-set", NULL, NULL,
+  props[PROP_LETTER_SPACING_SET] = g_param_spec_boolean ("letter-spacing-set", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:font-features-set:
    *
    * Whether the `font-features` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FONT_FEATURES_SET,
-                                   g_param_spec_boolean ("font-features-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FONT_FEATURES_SET] = g_param_spec_boolean ("font-features-set", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:allow-breaks-set:
    *
    * Whether the `allow-breaks` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ALLOW_BREAKS_SET,
-                                   g_param_spec_boolean ("allow-breaks-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ALLOW_BREAKS_SET] = g_param_spec_boolean ("allow-breaks-set", NULL, NULL,
+                                                       FALSE,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:show-spaces-set:
    *
    * Whether the `show-spaces` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SHOW_SPACES_SET,
-                                   g_param_spec_boolean ("show-spaces-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_SPACES_SET] = g_param_spec_boolean ("show-spaces-set", NULL, NULL,
+                                                      FALSE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:insert-hyphens-set:
    *
    * Whether the `insert-hyphens` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INSERT_HYPHENS_SET,
-                                   g_param_spec_boolean ("insert-hyphens-set", NULL, NULL,
+  props[PROP_INSERT_HYPHENS_SET] = g_param_spec_boolean ("insert-hyphens-set", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:text-transform-set:
    *
    * Whether the `text-transform` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT_TRANSFORM_SET,
-                                   g_param_spec_boolean ("text-transform-set", NULL, NULL,
+  props[PROP_TEXT_TRANSFORM_SET] = g_param_spec_boolean ("text-transform-set", NULL, NULL,
                                                          FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:word-set:
    *
    * Whether the `word` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WORD_SET,
-                                   g_param_spec_boolean ("word-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_WORD_SET] = g_param_spec_boolean ("word-set", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextTag:sentence-set:
    *
    * Whether the `sentence` property is set.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SENTENCE_SET,
-                                   g_param_spec_boolean ("sentence-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SENTENCE_SET] = g_param_spec_boolean ("sentence-set", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

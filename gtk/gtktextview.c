@@ -429,6 +429,8 @@ enum
   PROP_VSCROLL_POLICY,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 static GQuark quark_text_selection_data = 0;
 static GQuark quark_gtk_signal = 0;
 static GQuark quark_text_view_child = 0;
@@ -962,68 +964,56 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * Pixels of blank space above paragraphs.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PIXELS_ABOVE_LINES,
-                                   g_param_spec_int ("pixels-above-lines", NULL, NULL,
+  props[PROP_PIXELS_ABOVE_LINES] = g_param_spec_int ("pixels-above-lines", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:pixels-below-lines:
    *
    * Pixels of blank space below paragraphs.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PIXELS_BELOW_LINES,
-                                   g_param_spec_int ("pixels-below-lines", NULL, NULL,
+  props[PROP_PIXELS_BELOW_LINES] = g_param_spec_int ("pixels-below-lines", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:pixels-inside-wrap:
    *
    * Pixels of blank space between wrapped lines in a paragraph.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PIXELS_INSIDE_WRAP,
-                                   g_param_spec_int ("pixels-inside-wrap", NULL, NULL,
+  props[PROP_PIXELS_INSIDE_WRAP] = g_param_spec_int ("pixels-inside-wrap", NULL, NULL,
                                                      0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:editable:
    *
    * Whether the text can be modified by the user.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_EDITABLE,
-                                   g_param_spec_boolean ("editable", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_EDITABLE] = g_param_spec_boolean ("editable", NULL, NULL,
+                                               TRUE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:wrap-mode:
    *
    * Whether to wrap lines never, at word boundaries, or at character boundaries.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap-mode", NULL, NULL,
-                                                      GTK_TYPE_WRAP_MODE,
-                                                      GTK_WRAP_NONE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_WRAP_MODE] = g_param_spec_enum ("wrap-mode", NULL, NULL,
+                                             GTK_TYPE_WRAP_MODE,
+                                             GTK_WRAP_NONE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:justification:
    *
    * Left, right, or center justification.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_JUSTIFICATION,
-                                   g_param_spec_enum ("justification", NULL, NULL,
-                                                      GTK_TYPE_JUSTIFICATION,
-                                                      GTK_JUSTIFY_LEFT,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_JUSTIFICATION] = g_param_spec_enum ("justification", NULL, NULL,
+                                                 GTK_TYPE_JUSTIFICATION,
+                                                 GTK_JUSTIFY_LEFT,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:left-margin:
@@ -1036,11 +1026,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * the value set here is padding, and it is applied in addition
    * to the padding from the theme.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LEFT_MARGIN,
-                                   g_param_spec_int ("left-margin", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_LEFT_MARGIN] = g_param_spec_int ("left-margin", NULL, NULL,
+                                              0, G_MAXINT, 0,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:right-margin:
@@ -1053,11 +1041,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * the value set here is padding, and it is applied in addition
    * to the padding from the theme.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RIGHT_MARGIN,
-                                   g_param_spec_int ("right-margin", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_RIGHT_MARGIN] = g_param_spec_int ("right-margin", NULL, NULL,
+                                               0, G_MAXINT, 0,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:top-margin:
@@ -1070,11 +1056,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * Don't confuse this property with [property@Gtk.Widget:margin-top].
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TOP_MARGIN,
-                                   g_param_spec_int ("top-margin", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_TOP_MARGIN] = g_param_spec_int ("top-margin", NULL, NULL,
+                                             0, G_MAXINT, 0,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:bottom-margin:
@@ -1087,11 +1071,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * Don't confuse this property with [property@Gtk.Widget:margin-bottom].
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_BOTTOM_MARGIN,
-                                   g_param_spec_int ("bottom-margin", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_BOTTOM_MARGIN] = g_param_spec_int ("bottom-margin", NULL, NULL,
+                                                0, G_MAXINT, 0,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:indent:
@@ -1103,66 +1085,54 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * lines will be indented by the absolute value of indent.
    *
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_INDENT,
-                                   g_param_spec_int ("indent", NULL, NULL,
-                                                     G_MININT, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_INDENT] = g_param_spec_int ("indent", NULL, NULL,
+                                         G_MININT, G_MAXINT, 0,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:tabs:
    *
    * Custom tabs for this text.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TABS,
-                                   g_param_spec_boxed ("tabs", NULL, NULL,
-                                                       PANGO_TYPE_TAB_ARRAY,
-						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TABS] = g_param_spec_boxed ("tabs", NULL, NULL,
+                                         PANGO_TYPE_TAB_ARRAY,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextView:cursor-visible:
    *
    * If the insertion cursor is shown.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_CURSOR_VISIBLE,
-                                   g_param_spec_boolean ("cursor-visible", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CURSOR_VISIBLE] = g_param_spec_boolean ("cursor-visible", NULL, NULL,
+                                                     TRUE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:buffer:
    *
    * The buffer which is displayed.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_BUFFER,
-                                   g_param_spec_object ("buffer", NULL, NULL,
-							GTK_TYPE_TEXT_BUFFER,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_BUFFER] = g_param_spec_object ("buffer", NULL, NULL,
+                                            GTK_TYPE_TEXT_BUFFER,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextView:overwrite:
    *
    * Whether entered text overwrites existing contents.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_OVERWRITE,
-                                   g_param_spec_boolean ("overwrite", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_OVERWRITE] = g_param_spec_boolean ("overwrite", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:accepts-tab:
    *
    * Whether Tab will result in a tab character being entered.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEPTS_TAB,
-                                   g_param_spec_boolean ("accepts-tab", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ACCEPTS_TAB] = g_param_spec_boolean ("accepts-tab", NULL, NULL,
+                                                  TRUE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
    /**
     * GtkTextView:im-module:
@@ -1174,11 +1144,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
     * Setting this to a non-%NULL value overrides the system-wide IM module
     * setting. See the GtkSettings [property@Gtk.Settings:gtk-im-module] property.
     */
-   g_object_class_install_property (gobject_class,
-                                    PROP_IM_MODULE,
-                                    g_param_spec_string ("im-module", NULL, NULL,
-                                                         NULL,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+   props[PROP_IM_MODULE] = g_param_spec_string ("im-module", NULL, NULL,
+                                               NULL,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkTextView:input-purpose:
@@ -1188,12 +1156,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * This property can be used by on-screen keyboards and other input
    * methods to adjust their behaviour.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_INPUT_PURPOSE,
-                                   g_param_spec_enum ("input-purpose", NULL, NULL,
-                                                      GTK_TYPE_INPUT_PURPOSE,
-                                                      GTK_INPUT_PURPOSE_FREE_FORM,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_INPUT_PURPOSE] = g_param_spec_enum ("input-purpose", NULL, NULL,
+                                                 GTK_TYPE_INPUT_PURPOSE,
+                                                 GTK_INPUT_PURPOSE_FREE_FORM,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
   /**
@@ -1202,12 +1168,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * Additional hints (beyond [property@Gtk.TextView:input-purpose])
    * that allow input methods to fine-tune their behaviour.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_INPUT_HINTS,
-                                   g_param_spec_flags ("input-hints", NULL, NULL,
-                                                       GTK_TYPE_INPUT_HINTS,
-                                                       GTK_INPUT_HINT_NONE,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_INPUT_HINTS] = g_param_spec_flags ("input-hints", NULL, NULL,
+                                                GTK_TYPE_INPUT_HINTS,
+                                                GTK_INPUT_HINT_NONE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
   /**
@@ -1218,22 +1182,20 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * If %TRUE, set the .monospace style class on the
    * text view to indicate that a monospace font is desired.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MONOSPACE,
-                                   g_param_spec_boolean ("monospace", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MONOSPACE] = g_param_spec_boolean ("monospace", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkTextView:extra-menu:
    *
    * A menu model whose contents will be appended to the context menu.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_EXTRA_MENU,
-                                   g_param_spec_object ("extra-menu", NULL, NULL,
-                                                        G_TYPE_MENU_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_EXTRA_MENU] = g_param_spec_object ("extra-menu", NULL, NULL,
+                                                G_TYPE_MENU_MODEL,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");

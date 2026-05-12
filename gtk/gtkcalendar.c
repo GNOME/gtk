@@ -203,7 +203,10 @@ enum
   PROP_SHOW_HEADING,
   PROP_SHOW_DAY_NAMES,
   PROP_SHOW_WEEK_NUMBERS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static guint gtk_calendar_signals[LAST_SIGNAL] = { 0 };
 
@@ -385,11 +388,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    *
    * This property gets initially set to the current date.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DATE,
-                                   g_param_spec_boxed ("date", NULL, NULL,
-                                                       G_TYPE_DATE_TIME,
-                                                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_DATE] = g_param_spec_boxed ("date", NULL, NULL,
+                                         G_TYPE_DATE_TIME,
+                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCalendar:year:
@@ -401,11 +402,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * Deprecated: 4.20: This property will be removed in GTK 5.
    *   Use [property@Calendar:date] instead.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_YEAR,
-                                   g_param_spec_int ("year", NULL, NULL,
-                                                     1, 9999, 1,
-                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_YEAR] = g_param_spec_int ("year", NULL, NULL,
+                                       1, 9999, 1,
+                                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCalendar:month:
@@ -417,11 +416,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * Deprecated: 4.20: This property will be removed in GTK 5.
    *   Use [property@Calendar:date] instead.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MONTH,
-                                   g_param_spec_int ("month", NULL, NULL,
-                                                     0, 11, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_MONTH] = g_param_spec_int ("month", NULL, NULL,
+                                        0, 11, 0,
+                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCalendar:day:
@@ -431,43 +428,37 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * Deprecated: 4.20: This property will be removed in GTK 5.
    *   Use [property@Calendar:date] instead.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DAY,
-                                   g_param_spec_int ("day", NULL, NULL,
-                                                     1, 31, 1,
-                                                     G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_DAY] = g_param_spec_int ("day", NULL, NULL,
+                                      1, 31, 1,
+                                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCalendar:show-heading:
    *
    * Determines whether a heading is displayed.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_HEADING,
-                                   g_param_spec_boolean ("show-heading", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_HEADING] = g_param_spec_boolean ("show-heading", NULL, NULL,
+                                                   TRUE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCalendar:show-day-names:
    *
    * Determines whether day names are displayed.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_DAY_NAMES,
-                                   g_param_spec_boolean ("show-day-names", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_DAY_NAMES] = g_param_spec_boolean ("show-day-names", NULL, NULL,
+                                                     TRUE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkCalendar:show-week-numbers:
    *
    * Determines whether week numbers are displayed.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_WEEK_NUMBERS,
-                                   g_param_spec_boolean ("show-week-numbers", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_WEEK_NUMBERS] = g_param_spec_boolean ("show-week-numbers", NULL, NULL,
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkCalendar::day-selected:

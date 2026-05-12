@@ -88,8 +88,11 @@ enum {
   PROP_ACCEPTS_PDF,
   PROP_ACCEPTS_PS,
   PROP_PAUSED,
-  PROP_ACCEPTING_JOBS
+  PROP_ACCEPTING_JOBS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -120,101 +123,83 @@ gtk_printer_class_init (GtkPrinterClass *class)
    *
    * The name of the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-						        "",
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          "",
+                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:backend:
    *
    * The backend for the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_BACKEND,
-                                   g_param_spec_object ("backend", NULL, NULL,
-						        GTK_TYPE_PRINT_BACKEND,
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_BACKEND] = g_param_spec_object ("backend", NULL, NULL,
+                                             GTK_TYPE_PRINT_BACKEND,
+                                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:is-virtual: (getter is_virtual)
    *
    * %FALSE if this represents a real hardware device.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_IS_VIRTUAL,
-                                   g_param_spec_boolean ("is-virtual", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_IS_VIRTUAL] = g_param_spec_boolean ("is-virtual", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:accepts-pdf: (getter accepts_pdf)
    *
    * %TRUE if this printer can accept PDF.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_ACCEPTS_PDF,
-                                   g_param_spec_boolean ("accepts-pdf", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_ACCEPTS_PDF] = g_param_spec_boolean ("accepts-pdf", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:accepts-ps: (getter accepts_ps)
    *
    * %TRUE if this printer can accept PostScript.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_ACCEPTS_PS,
-                                   g_param_spec_boolean ("accepts-ps", NULL, NULL,
-							 TRUE,
-							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_ACCEPTS_PS] = g_param_spec_boolean ("accepts-ps", NULL, NULL,
+                                                 TRUE,
+                                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:state-message:
    *
    * String giving the current status of the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_STATE_MESSAGE,
-                                   g_param_spec_string ("state-message", NULL, NULL,
-						        "",
-							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_STATE_MESSAGE] = g_param_spec_string ("state-message", NULL, NULL,
+                                                   "",
+                                                   G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:location:
    *
    * Information about the location of the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_LOCATION,
-                                   g_param_spec_string ("location", NULL, NULL,
-						        "",
-							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_LOCATION] = g_param_spec_string ("location", NULL, NULL,
+                                              "",
+                                              G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:icon-name:
    *
    * Icon name to use for the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_ICON_NAME,
-                                   g_param_spec_string ("icon-name", NULL, NULL,
-						        "printer",
-							G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_ICON_NAME] = g_param_spec_string ("icon-name", NULL, NULL,
+                                               "printer",
+                                               G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:job-count:
    *
    * Number of jobs queued in the printer.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_JOB_COUNT,
-				   g_param_spec_int ("job-count", NULL, NULL,
- 						     0,
- 						     G_MAXINT,
- 						     0,
- 						     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_JOB_COUNT] = g_param_spec_int ("job-count", NULL, NULL,
+                                            0,
+                                            G_MAXINT,
+                                            0,
+                                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:paused: (getter is_paused)
@@ -224,22 +209,20 @@ gtk_printer_class_init (GtkPrinterClass *class)
    * A paused printer still accepts jobs, but it does
    * not print them.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_PAUSED,
-                                   g_param_spec_boolean ("paused", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_PAUSED] = g_param_spec_boolean ("paused", NULL, NULL,
+                                             FALSE,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPrinter:accepting-jobs: (getter is_accepting_jobs)
    *
    * %TRUE if the printer is accepting jobs.
    */
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_ACCEPTING_JOBS,
-                                   g_param_spec_boolean ("accepting-jobs", NULL, NULL,
-							 TRUE,
-							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_ACCEPTING_JOBS] = g_param_spec_boolean ("accepting-jobs", NULL, NULL,
+                                                     TRUE,
+                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /**
    * GtkPrinter::details-acquired:

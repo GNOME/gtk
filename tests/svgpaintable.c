@@ -46,6 +46,8 @@ enum {
   NUM_PROPERTIES
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 /* {{{ Utilities */
 
 /* Like gtk_snapshot_append_node, but transforms the node
@@ -287,10 +289,11 @@ svg_paintable_class_init (SvgPaintableClass *class)
   object_class->set_property = svg_paintable_set_property;
   object_class->get_property = svg_paintable_get_property;
 
-  g_object_class_install_property (object_class, PROP_FILE,
-                                   g_param_spec_object ("file", NULL, NULL,
-                                                        G_TYPE_FILE,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FILE] = g_param_spec_object ("file", NULL, NULL,
+                                          G_TYPE_FILE,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 }
 
 /* }}} */

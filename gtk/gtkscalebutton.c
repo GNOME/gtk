@@ -113,6 +113,8 @@ enum
   PROP_ORIENTATION,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 typedef struct
 {
   GtkWidget *button;
@@ -226,24 +228,20 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * The value of the scale.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_VALUE,
-				   g_param_spec_double ("value", NULL, NULL,
-							-G_MAXDOUBLE,
-							G_MAXDOUBLE,
-							0,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_VALUE] = g_param_spec_double ("value", NULL, NULL,
+                                           -G_MAXDOUBLE,
+                                           G_MAXDOUBLE,
+                                           0,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScaleButton:adjustment:
    *
    * The `GtkAdjustment` that is used as the model.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ADJUSTMENT,
-                                   g_param_spec_object ("adjustment", NULL, NULL,
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ADJUSTMENT] = g_param_spec_object ("adjustment", NULL, NULL,
+                                                GTK_TYPE_ADJUSTMENT,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkScaleButton:icons:
@@ -265,11 +263,9 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * `GtkScaleButton` reflects the current value of the scale
    * better for the users.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICONS,
-                                   g_param_spec_boxed ("icons", NULL, NULL,
-                                                       G_TYPE_STRV,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ICONS] = g_param_spec_boxed ("icons", NULL, NULL,
+                                          G_TYPE_STRV,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkScaleButton:active:
@@ -278,11 +274,9 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * Since: 4.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACTIVE,
-                                   g_param_spec_boolean ("active", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_ACTIVE] = g_param_spec_boolean ("active", NULL, NULL,
+                                             FALSE,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkScaleButton:has-frame:
@@ -291,11 +285,11 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * Since: 4.14
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HAS_FRAME,
-                                   g_param_spec_boolean ("has-frame", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_HAS_FRAME] = g_param_spec_boolean ("has-frame", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkScaleButton::value-changed:

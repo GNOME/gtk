@@ -52,8 +52,11 @@ struct _GtkGesturePanPrivate
 };
 
 enum {
-  PROP_ORIENTATION = 1
+  PROP_ORIENTATION = 1,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   PAN,
@@ -227,12 +230,12 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
    *
    * The expected orientation of pan gestures.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ORIENTATION,
-                                   g_param_spec_enum ("orientation", NULL, NULL,
-                                                      GTK_TYPE_ORIENTATION,
-                                                      GTK_ORIENTATION_HORIZONTAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ORIENTATION] = g_param_spec_enum ("orientation", NULL, NULL,
+                                               GTK_TYPE_ORIENTATION,
+                                               GTK_ORIENTATION_HORIZONTAL,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /**
    * GtkGesturePan::pan:

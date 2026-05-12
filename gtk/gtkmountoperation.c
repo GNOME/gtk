@@ -136,9 +136,12 @@ enum {
   PROP_0,
   PROP_PARENT,
   PROP_IS_SHOWING,
-  PROP_DISPLAY
+  PROP_DISPLAY,
+  N_PROPS
 
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMountOperation, gtk_mount_operation, G_TYPE_MOUNT_OPERATION)
 
@@ -162,33 +165,29 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
    *
    * The parent window.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PARENT,
-                                   g_param_spec_object ("parent", NULL, NULL,
-                                                        GTK_TYPE_WINDOW,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PARENT] = g_param_spec_object ("parent", NULL, NULL,
+                                            GTK_TYPE_WINDOW,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMountOperation:is-showing:
    *
    * Whether a dialog is currently shown.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_IS_SHOWING,
-                                   g_param_spec_boolean ("is-showing", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_IS_SHOWING] = g_param_spec_boolean ("is-showing", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkMountOperation:display:
    *
    * The display where dialogs will be shown.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DISPLAY,
-                                   g_param_spec_object ("display", NULL, NULL,
-                                                        GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_DISPLAY] = g_param_spec_object ("display", NULL, NULL,
+                                             GDK_TYPE_DISPLAY,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

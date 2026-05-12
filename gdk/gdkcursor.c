@@ -78,7 +78,10 @@ enum {
   PROP_HOTSPOT_Y,
   PROP_NAME,
   PROP_TEXTURE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
 
@@ -173,36 +176,30 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    *
    * Cursor to fall back to if this cursor cannot be displayed.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FALLBACK,
-                                   g_param_spec_object ("fallback", NULL, NULL,
-                                                        GDK_TYPE_CURSOR,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME));
+  props[PROP_FALLBACK] = g_param_spec_object ("fallback", NULL, NULL,
+                                              GDK_TYPE_CURSOR,
+                                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                              G_PARAM_STATIC_NAME);
 
   /**
    * GdkCursor:hotspot-x:
    *
    * X position of the cursor hotspot in the cursor image.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HOTSPOT_X,
-                                   g_param_spec_int ("hotspot-x", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
+  props[PROP_HOTSPOT_X] = g_param_spec_int ("hotspot-x", NULL, NULL,
+                                            0, G_MAXINT, 0,
+                                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                            G_PARAM_STATIC_NAME);
 
   /**
    * GdkCursor:hotspot-y:
    *
    * Y position of the cursor hotspot in the cursor image.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HOTSPOT_Y,
-                                   g_param_spec_int ("hotspot-y", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
+  props[PROP_HOTSPOT_Y] = g_param_spec_int ("hotspot-y", NULL, NULL,
+                                            0, G_MAXINT, 0,
+                                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                            G_PARAM_STATIC_NAME);
 
   /**
    * GdkCursor:name:
@@ -211,12 +208,10 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    *
    * The name will be %NULL if the cursor was created from a texture.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                          G_PARAM_STATIC_NAME);
 
   /**
    * GdkCursor:texture:
@@ -225,12 +220,12 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    *
    * The texture will be %NULL if the cursor was created from a name.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXTURE,
-                                   g_param_spec_object ("texture", NULL, NULL,
-                                                        GDK_TYPE_TEXTURE,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME));
+  props[PROP_TEXTURE] = g_param_spec_object ("texture", NULL, NULL,
+                                             GDK_TYPE_TEXTURE,
+                                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                             G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

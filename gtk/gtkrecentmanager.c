@@ -173,8 +173,11 @@ enum
   PROP_0,
 
   PROP_FILENAME,
-  PROP_SIZE
+  PROP_SIZE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void     gtk_recent_manager_dispose             (GObject           *object);
 static void     gtk_recent_manager_finalize            (GObject           *object);
@@ -271,22 +274,20 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    * The full path to the file to be used to store and read the
    * recently used resources list
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_FILENAME,
-                                   g_param_spec_string ("filename", NULL, NULL,
-                                                        NULL,
-                                                        (G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME)));
+  props[PROP_FILENAME] = g_param_spec_string ("filename", NULL, NULL,
+                                              NULL,
+                                              (G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkRecentManager:size:
    *
    * The size of the recently used resources list.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SIZE,
-                                   g_param_spec_int ("size", NULL, NULL,
-                                                     -1, G_MAXINT, 0,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SIZE] = g_param_spec_int ("size", NULL, NULL,
+                                       -1, G_MAXINT, 0,
+                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkRecentManager::changed:

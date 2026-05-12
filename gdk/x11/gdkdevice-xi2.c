@@ -98,8 +98,11 @@ static GdkSurface * gdk_x11_device_xi2_surface_at_position (GdkDevice       *dev
 
 enum {
   PROP_0,
-  PROP_DEVICE_ID
+  PROP_DEVICE_ID,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void
 gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
@@ -116,12 +119,12 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   device_class->ungrab = gdk_x11_device_xi2_ungrab;
   device_class->surface_at_position = gdk_x11_device_xi2_surface_at_position;
 
-  g_object_class_install_property (object_class,
-                                   PROP_DEVICE_ID,
-                                   g_param_spec_int ("device-id", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
+  props[PROP_DEVICE_ID] = g_param_spec_int ("device-id", NULL, NULL,
+                                            0, G_MAXINT, 0,
+                                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                            G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

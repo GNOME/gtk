@@ -129,8 +129,11 @@ enum {
   PROP_USE_MARKUP,
   PROP_SECONDARY_TEXT,
   PROP_SECONDARY_USE_MARKUP,
-  PROP_MESSAGE_AREA
+  PROP_MESSAGE_AREA,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
 
@@ -364,23 +367,19 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    *
    * The type of the message.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MESSAGE_TYPE,
-                                   g_param_spec_enum ("message-type", NULL, NULL,
-                                                      GTK_TYPE_MESSAGE_TYPE,
-                                                      GTK_MESSAGE_INFO,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MESSAGE_TYPE] = g_param_spec_enum ("message-type", NULL, NULL,
+                                                GTK_TYPE_MESSAGE_TYPE,
+                                                GTK_MESSAGE_INFO,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkMessageDialog:buttons:
    *
    * Set of buttons to display on the dialog.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_BUTTONS,
-                                   g_param_spec_enum ("buttons", NULL, NULL,
-                                                      GTK_TYPE_BUTTONS_TYPE,
-                                                      GTK_BUTTONS_NONE,
-                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_BUTTONS] = g_param_spec_enum ("buttons", NULL, NULL,
+                                           GTK_TYPE_BUTTONS_TYPE,
+                                           GTK_BUTTONS_NONE,
+                                           G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkMessageDialog:text:
    *
@@ -388,11 +387,9 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    *
    * If the dialog has a secondary text, this will appear as the title.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEXT,
-                                   g_param_spec_string ("text", NULL, NULL,
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXT] = g_param_spec_string ("text", NULL, NULL,
+                                          "",
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   /**
    * GtkMessageDialog:use-markup:
    *
@@ -400,21 +397,17 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    *
    * See [func@Pango.parse_markup].
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_USE_MARKUP] = g_param_spec_boolean ("use-markup", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkMessageDialog:secondary-text:
    *
    * The secondary text of the message dialog.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SECONDARY_TEXT,
-                                   g_param_spec_string ("secondary-text", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SECONDARY_TEXT] = g_param_spec_string ("secondary-text", NULL, NULL,
+                                                    NULL,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   /**
    * GtkMessageDialog:secondary-use-markup:
    *
@@ -422,11 +415,9 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    *
    * See [func@Pango.parse_markup].
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SECONDARY_USE_MARKUP,
-                                   g_param_spec_boolean ("secondary-use-markup", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SECONDARY_USE_MARKUP] = g_param_spec_boolean ("secondary-use-markup", NULL, NULL,
+                                                           FALSE,
+                                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkMessageDialog:message-area:
    *
@@ -435,11 +426,11 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    * See [method@Gtk.MessageDialog.get_message_area] for a detailed
    * description of this area.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MESSAGE_AREA,
-                                   g_param_spec_object ("message-area", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_MESSAGE_AREA] = g_param_spec_object ("message-area", NULL, NULL,
+                                                  GTK_TYPE_WIDGET,
+                                                  G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkmessagedialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);

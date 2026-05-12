@@ -247,7 +247,10 @@ enum
   CHILD_PROP_PAGE_TYPE,
   CHILD_PROP_PAGE_TITLE,
   CHILD_PROP_PAGE_COMPLETE,
+  CHILD_N_PROPS
 };
+
+static GParamSpec *child_props[CHILD_N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkAssistantPage, gtk_assistant_page, G_TYPE_OBJECT)
 
@@ -284,12 +287,10 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   CHILD_PROP_PAGE_TYPE,
-                                   g_param_spec_enum ("page-type", NULL, NULL,
-                                                      GTK_TYPE_ASSISTANT_PAGE_TYPE,
-                                                      GTK_ASSISTANT_PAGE_CONTENT,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  child_props[CHILD_PROP_PAGE_TYPE] = g_param_spec_enum ("page-type", NULL, NULL,
+                                                         GTK_TYPE_ASSISTANT_PAGE_TYPE,
+                                                         GTK_ASSISTANT_PAGE_CONTENT,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAssistantPage:title:
@@ -298,11 +299,9 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   CHILD_PROP_PAGE_TITLE,
-                                   g_param_spec_string ("title", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  child_props[CHILD_PROP_PAGE_TITLE] = g_param_spec_string ("title", NULL, NULL,
+                                                            NULL,
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAssistantPage:complete:
@@ -314,11 +313,9 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   CHILD_PROP_PAGE_COMPLETE,
-                                   g_param_spec_boolean ("complete", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  child_props[CHILD_PROP_PAGE_COMPLETE] = g_param_spec_boolean ("complete", NULL, NULL,
+                                                                FALSE,
+                                                                G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   /**
    * GtkAssistantPage:child:
@@ -327,11 +324,11 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   CHILD_PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  child_props[CHILD_PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                                       GTK_TYPE_WIDGET,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, CHILD_N_PROPS, child_props);
 }
 
 enum
@@ -347,8 +344,11 @@ enum
 enum {
   PROP_0,
   PROP_USE_HEADER_BAR,
-  PROP_PAGES
+  PROP_PAGES,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static guint signals [LAST_SIGNAL] = { 0 };
 
@@ -645,22 +645,20 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_HEADER_BAR,
-                                   g_param_spec_int ("use-header-bar", NULL, NULL,
-                                                     -1, 1, -1,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_USE_HEADER_BAR] = g_param_spec_int ("use-header-bar", NULL, NULL,
+                                                 -1, 1, -1,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkAssistant:pages:
    *
    * `GListModel` containing the pages.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PAGES,
-                                   g_param_spec_object ("pages", NULL, NULL,
-                                                        G_TYPE_LIST_MODEL,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_PAGES] = g_param_spec_object ("pages", NULL, NULL,
+                                           G_TYPE_LIST_MODEL,
+                                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Bind class to template
    */

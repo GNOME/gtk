@@ -589,8 +589,11 @@ enum {
   PROP_0,
   PROP_FOCUS_CELL,
   PROP_EDITED_CELL,
-  PROP_EDIT_WIDGET
+  PROP_EDIT_WIDGET,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   SIGNAL_APPLY_ATTRIBUTES,
@@ -776,11 +779,9 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    *
    * The cell in the area that currently has focus
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FOCUS_CELL,
-                                   g_param_spec_object ("focus-cell", NULL, NULL,
-                                                        GTK_TYPE_CELL_RENDERER,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FOCUS_CELL] = g_param_spec_object ("focus-cell", NULL, NULL,
+                                                GTK_TYPE_CELL_RENDERER,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellArea:edited-cell:
@@ -790,11 +791,9 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    * This property is read-only and only changes as
    * a result of a call gtk_cell_area_activate_cell().
    */
-  g_object_class_install_property (object_class,
-                                   PROP_EDITED_CELL,
-                                   g_param_spec_object ("edited-cell", NULL, NULL,
-                                                        GTK_TYPE_CELL_RENDERER,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_EDITED_CELL] = g_param_spec_object ("edited-cell", NULL, NULL,
+                                                 GTK_TYPE_CELL_RENDERER,
+                                                 G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellArea:edit-widget:
@@ -804,11 +803,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
    * This property is read-only and only changes as
    * a result of a call gtk_cell_area_activate_cell().
    */
-  g_object_class_install_property (object_class,
-                                   PROP_EDIT_WIDGET,
-                                   g_param_spec_object ("edit-widget", NULL, NULL,
-                                                        GTK_TYPE_CELL_EDITABLE,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_EDIT_WIDGET] = g_param_spec_object ("edit-widget", NULL, NULL,
+                                                 GTK_TYPE_CELL_EDITABLE,
+                                                 G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /* Pool for Cell Properties */
   if (!cell_property_pool)

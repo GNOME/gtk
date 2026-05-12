@@ -131,8 +131,11 @@ enum
   PROP_TITLE,
   PROP_MODAL,
   PROP_USE_FONT,
-  PROP_USE_SIZE
+  PROP_USE_SIZE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 /* Prototypes */
 static void gtk_font_button_finalize               (GObject            *object);
@@ -504,44 +507,38 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    *
    * The title of the font chooser dialog.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title", NULL, NULL,
-                                                        _("Pick a Font"),
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TITLE] = g_param_spec_string ("title", NULL, NULL,
+                                           _("Pick a Font"),
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFontButton:use-font:
    *
    * Whether the buttons label will be drawn in the selected font.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_FONT,
-                                   g_param_spec_boolean ("use-font", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_USE_FONT] = g_param_spec_boolean ("use-font", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontButton:use-size:
    *
    * Whether the buttons label will use the selected font size.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_SIZE,
-                                   g_param_spec_boolean ("use-size", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_USE_SIZE] = g_param_spec_boolean ("use-size", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFontButton:modal:
    *
    * Whether the font chooser dialog should be modal.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODAL,
-                                   g_param_spec_boolean ("modal", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MODAL] = g_param_spec_boolean ("modal", NULL, NULL,
+                                            TRUE,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkFontButton::font-set:

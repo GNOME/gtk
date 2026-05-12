@@ -139,6 +139,8 @@ enum
   PROP_VSCROLL_POLICY,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 /* GObject vfuncs */
 static void             gtk_icon_view_cell_layout_init          (GtkCellLayoutIface *iface);
 static void             gtk_icon_view_dispose                   (GObject            *object);
@@ -367,12 +369,10 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * icon view. If the mode is %GTK_SELECTION_MULTIPLE, rubberband selection
    * is enabled, for the other modes, only keyboard selection is possible.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_SELECTION_MODE,
-				   g_param_spec_enum ("selection-mode", NULL, NULL,
-						      GTK_TYPE_SELECTION_MODE,
-						      GTK_SELECTION_SINGLE,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SELECTION_MODE] = g_param_spec_enum ("selection-mode", NULL, NULL,
+                                                  GTK_TYPE_SELECTION_MODE,
+                                                  GTK_SELECTION_SINGLE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:pixbuf-column:
@@ -382,11 +382,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * of type `GDK_TYPE_PIXBUF`. Setting this property to -1 turns off the
    * display of pixbufs.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_PIXBUF_COLUMN,
-				   g_param_spec_int ("pixbuf-column", NULL, NULL,
-						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_PIXBUF_COLUMN] = g_param_spec_int ("pixbuf-column", NULL, NULL,
+                                                -1, G_MAXINT, -1,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:text-column:
@@ -396,11 +394,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * of type `G_TYPE_STRING`. If this property and the :markup-column
    * property are both set to -1, no texts are displayed.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_TEXT_COLUMN,
-				   g_param_spec_int ("text-column", NULL, NULL,
-						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_TEXT_COLUMN] = g_param_spec_int ("text-column", NULL, NULL,
+                                              -1, G_MAXINT, -1,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
   /**
@@ -412,22 +408,18 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * are both set to column numbers, it overrides the text column.
    * If both are set to -1, no texts are displayed.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_MARKUP_COLUMN,
-				   g_param_spec_int ("markup-column", NULL, NULL,
-						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MARKUP_COLUMN] = g_param_spec_int ("markup-column", NULL, NULL,
+                                                -1, G_MAXINT, -1,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:model:
    *
    * The model of the icon view.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODEL,
-                                   g_param_spec_object ("model", NULL, NULL,
-							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_MODEL] = g_param_spec_object ("model", NULL, NULL,
+                                           GTK_TYPE_TREE_MODEL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkIconView:columns:
@@ -436,11 +428,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * items should be displayed. If it is -1, the number of columns will
    * be chosen automatically to fill the available area.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_COLUMNS,
-				   g_param_spec_int ("columns", NULL, NULL,
-						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_COLUMNS] = g_param_spec_int ("columns", NULL, NULL,
+                                          -1, G_MAXINT, -1,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
   /**
@@ -450,11 +440,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * If it is set to -1, the icon view will automatically determine a
    * suitable item size.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_ITEM_WIDTH,
-				   g_param_spec_int ("item-width", NULL, NULL,
-						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ITEM_WIDTH] = g_param_spec_int ("item-width", NULL, NULL,
+                                             -1, G_MAXINT, -1,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:spacing:
@@ -462,11 +450,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The spacing property specifies the space which is inserted between
    * the cells (i.e. the icon and the text) of an item.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing", NULL, NULL,
-						     0, G_MAXINT, 0,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SPACING] = g_param_spec_int ("spacing", NULL, NULL,
+                                          0, G_MAXINT, 0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:row-spacing:
@@ -474,11 +460,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The row-spacing property specifies the space which is inserted between
    * the rows of the icon view.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ROW_SPACING,
-                                   g_param_spec_int ("row-spacing", NULL, NULL,
-						     0, G_MAXINT, 6,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ROW_SPACING] = g_param_spec_int ("row-spacing", NULL, NULL,
+                                              0, G_MAXINT, 6,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:column-spacing:
@@ -486,11 +470,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The column-spacing property specifies the space which is inserted between
    * the columns of the icon view.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_COLUMN_SPACING,
-                                   g_param_spec_int ("column-spacing", NULL, NULL,
-						     0, G_MAXINT, 6,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_COLUMN_SPACING] = g_param_spec_int ("column-spacing", NULL, NULL,
+                                                 0, G_MAXINT, 6,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:margin:
@@ -498,11 +480,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The margin property specifies the space which is inserted
    * at the edges of the icon view.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN,
-                                   g_param_spec_int ("margin", NULL, NULL,
-						     0, G_MAXINT, 6,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MARGIN] = g_param_spec_int ("margin", NULL, NULL,
+                                         0, G_MAXINT, 6,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:item-orientation:
@@ -510,12 +490,10 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The item-orientation property specifies how the cells (i.e. the icon and
    * the text) of the item are positioned relative to each other.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_ITEM_ORIENTATION,
-				   g_param_spec_enum ("item-orientation", NULL, NULL,
-						      GTK_TYPE_ORIENTATION,
-						      GTK_ORIENTATION_VERTICAL,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ITEM_ORIENTATION] = g_param_spec_enum ("item-orientation", NULL, NULL,
+                                                    GTK_TYPE_ORIENTATION,
+                                                    GTK_ORIENTATION_VERTICAL,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:reorderable:
@@ -523,11 +501,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The reorderable property specifies if the items can be reordered
    * by DND.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_REORDERABLE,
-                                   g_param_spec_boolean ("reorderable", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_REORDERABLE] = g_param_spec_boolean ("reorderable", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
     /**
      * GtkIconView:tooltip-column:
@@ -535,13 +511,11 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
      * The column of the icon view model which is being used for displaying
      * tooltips on it's rows.
      */
-    g_object_class_install_property (gobject_class,
-                                     PROP_TOOLTIP_COLUMN,
-                                     g_param_spec_int ("tooltip-column", NULL, NULL,
-                                                       -1,
-                                                       G_MAXINT,
-                                                       -1,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+    props[PROP_TOOLTIP_COLUMN] = g_param_spec_int ("tooltip-column", NULL, NULL,
+                                                 -1,
+                                                 G_MAXINT,
+                                                 -1,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:item-padding:
@@ -549,11 +523,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The item-padding property specifies the padding around each
    * of the icon view's item.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ITEM_PADDING,
-                                   g_param_spec_int ("item-padding", NULL, NULL,
-						     0, G_MAXINT, 6,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ITEM_PADDING] = g_param_spec_int ("item-padding", NULL, NULL,
+                                               0, G_MAXINT, 6,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkIconView:cell-area:
@@ -563,11 +535,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * If no area is specified when creating the icon view with gtk_icon_view_new_with_area()
    * a `GtkCellAreaBox` will be used.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_CELL_AREA,
-				   g_param_spec_object ("cell-area", NULL, NULL,
-							GTK_TYPE_CELL_AREA,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_CELL_AREA] = g_param_spec_object ("cell-area", NULL, NULL,
+                                               GTK_TYPE_CELL_AREA,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkIconView:activate-on-single-click:
@@ -575,11 +545,11 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * The activate-on-single-click property specifies whether the "item-activated" signal
    * will be emitted after a single click.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACTIVATE_ON_SINGLE_CLICK,
-                                   g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ACTIVATE_ON_SINGLE_CLICK] = g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
+                                                               FALSE,
+                                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");

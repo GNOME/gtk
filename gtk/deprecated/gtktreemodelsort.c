@@ -252,8 +252,11 @@ struct _SortData
 enum {
   PROP_0,
   /* Construct args */
-  PROP_MODEL
+  PROP_MODEL,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 
 struct _GtkTreeModelSortPrivate
@@ -485,11 +488,11 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
    *
    * The model of the tree model sort.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MODEL,
-                                   g_param_spec_object ("model", NULL, NULL,
-							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_MODEL] = g_param_spec_object ("model", NULL, NULL,
+                                           GTK_TYPE_TREE_MODEL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

@@ -153,7 +153,8 @@ enum {
   PROP_CELL_BACKGROUND,
   PROP_CELL_BACKGROUND_RGBA,
   PROP_CELL_BACKGROUND_SET,
-  PROP_EDITING
+  PROP_EDITING,
+  N_PROPS
 };
 
 /* Signal IDs */
@@ -165,6 +166,7 @@ enum {
 
 static int GtkCellRenderer_private_offset;
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static inline gpointer
 gtk_cell_renderer_get_instance_private (GtkCellRenderer *self)
@@ -280,113 +282,85 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
                               G_TYPE_FROM_CLASS (object_class),
                               _gtk_marshal_VOID__OBJECT_STRINGv);
 
-  g_object_class_install_property (object_class,
-				   PROP_MODE,
-				   g_param_spec_enum ("mode", NULL, NULL,
-						      GTK_TYPE_CELL_RENDERER_MODE,
-						      GTK_CELL_RENDERER_MODE_INERT,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MODE] = g_param_spec_enum ("mode", NULL, NULL,
+                                        GTK_TYPE_CELL_RENDERER_MODE,
+                                        GTK_CELL_RENDERER_MODE_INERT,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_VISIBLE,
-				   g_param_spec_boolean ("visible", NULL, NULL,
-							 TRUE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (object_class,
-				   PROP_SENSITIVE,
-				   g_param_spec_boolean ("sensitive", NULL, NULL,
-							 TRUE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_VISIBLE] = g_param_spec_boolean ("visible", NULL, NULL,
+                                              TRUE,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_SENSITIVE] = g_param_spec_boolean ("sensitive", NULL, NULL,
+                                                TRUE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_XALIGN,
-				   g_param_spec_float ("xalign", NULL, NULL,
-						       0.0,
-						       1.0,
-						       0.5,
-						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_XALIGN] = g_param_spec_float ("xalign", NULL, NULL,
+                                           0.0,
+                                           1.0,
+                                           0.5,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_YALIGN,
-				   g_param_spec_float ("yalign", NULL, NULL,
-						       0.0,
-						       1.0,
-						       0.5,
-						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_YALIGN] = g_param_spec_float ("yalign", NULL, NULL,
+                                           0.0,
+                                           1.0,
+                                           0.5,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_XPAD,
-				   g_param_spec_uint ("xpad", NULL, NULL,
-						      0,
-						      G_MAXUINT,
-						      0,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_XPAD] = g_param_spec_uint ("xpad", NULL, NULL,
+                                        0,
+                                        G_MAXUINT,
+                                        0,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_YPAD,
-				   g_param_spec_uint ("ypad", NULL, NULL,
-						      0,
-						      G_MAXUINT,
-						      0,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_YPAD] = g_param_spec_uint ("ypad", NULL, NULL,
+                                        0,
+                                        G_MAXUINT,
+                                        0,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_WIDTH,
-				   g_param_spec_int ("width", NULL, NULL,
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_WIDTH] = g_param_spec_int ("width", NULL, NULL,
+                                        -1,
+                                        G_MAXINT,
+                                        -1,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_HEIGHT,
-				   g_param_spec_int ("height", NULL, NULL,
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_HEIGHT] = g_param_spec_int ("height", NULL, NULL,
+                                         -1,
+                                         G_MAXINT,
+                                         -1,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_IS_EXPANDER,
-				   g_param_spec_boolean ("is-expander", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_IS_EXPANDER] = g_param_spec_boolean ("is-expander", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
 
-  g_object_class_install_property (object_class,
-				   PROP_IS_EXPANDED,
-				   g_param_spec_boolean ("is-expanded", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_IS_EXPANDED] = g_param_spec_boolean ("is-expanded", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (object_class,
-				   PROP_CELL_BACKGROUND,
-				   g_param_spec_string ("cell-background", NULL, NULL,
-							NULL,
-							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_CELL_BACKGROUND] = g_param_spec_string ("cell-background", NULL, NULL,
+                                                     NULL,
+                                                     G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRenderer:cell-background-rgba:
    *
    * Cell background as a `GdkRGBA`
    */
-  g_object_class_install_property (object_class,
-				   PROP_CELL_BACKGROUND_RGBA,
-				   g_param_spec_boxed ("cell-background-rgba", NULL, NULL,
-						       GDK_TYPE_RGBA,
-						       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_CELL_BACKGROUND_RGBA] = g_param_spec_boxed ("cell-background-rgba", NULL, NULL,
+                                                         GDK_TYPE_RGBA,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-				   PROP_EDITING,
-				   g_param_spec_boolean ("editing", NULL, NULL,
-							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_EDITING] = g_param_spec_boolean ("editing", NULL, NULL,
+                                              FALSE,
+                                              G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_BACKGROUND_SET,
-                                   g_param_spec_boolean ("cell-background-set", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CELL_BACKGROUND_SET] = g_param_spec_boolean ("cell-background-set", NULL, NULL,
+                                                          FALSE,
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   if (GtkCellRenderer_private_offset != 0)
     g_type_class_adjust_private_offset (class, &GtkCellRenderer_private_offset);

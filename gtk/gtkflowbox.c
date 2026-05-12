@@ -278,8 +278,11 @@ enum {
 static guint child_signals[CHILD_LAST_SIGNAL] = { 0 };
 
 enum {
-  PROP_CHILD = 1
+  PROP_CHILD = 1,
+  N_PROPS
 };
+
+static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 typedef struct _GtkFlowBoxChildPrivate GtkFlowBoxChildPrivate;
 struct _GtkFlowBoxChildPrivate
@@ -536,11 +539,11 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
    *
    * The child widget.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  obj_props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                               GTK_TYPE_WIDGET,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, obj_props);
 
   /**
    * GtkFlowBoxChild::activate:

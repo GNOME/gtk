@@ -113,8 +113,11 @@ G_DEFINE_TYPE (GtkTextMark, gtk_text_mark, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_NAME,
-  PROP_LEFT_GRAVITY
+  PROP_LEFT_GRAVITY,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void
 gtk_text_mark_class_init (GtkTextMarkClass *klass)
@@ -130,11 +133,9 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
    *
    * The name of the mark or %NULL if the mark is anonymous.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkTextMark:left-gravity:
@@ -145,11 +146,11 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
    * has left gravity it will be moved to the left of the newly-inserted
    * text, otherwise to the right.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_LEFT_GRAVITY,
-                                   g_param_spec_boolean ("left-gravity", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_LEFT_GRAVITY] = g_param_spec_boolean ("left-gravity", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

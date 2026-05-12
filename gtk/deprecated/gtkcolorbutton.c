@@ -115,6 +115,8 @@ enum
   PROP_RGBA,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 /* Signals */
 enum
 {
@@ -183,11 +185,9 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    *
    * The title of the color chooser dialog
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title", NULL, NULL,
-                                                        _("Pick a Color"),
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TITLE] = g_param_spec_string ("title", NULL, NULL,
+                                           _("Pick a Color"),
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -242,22 +242,20 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * in the editor would be redundant, such as when the color
    * button is already part of a palette.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_EDITOR,
-                                   g_param_spec_boolean ("show-editor", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_EDITOR] = g_param_spec_boolean ("show-editor", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColorButton:modal:
    *
    * Whether the color chooser dialog should be modal.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODAL,
-                                   g_param_spec_boolean ("modal", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MODAL] = g_param_spec_boolean ("modal", NULL, NULL,
+                                            TRUE,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

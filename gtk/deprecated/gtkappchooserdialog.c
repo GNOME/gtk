@@ -113,6 +113,8 @@ enum {
   PROP_CONTENT_TYPE
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserDialog, gtk_app_chooser_dialog, GTK_TYPE_DIALOG,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
@@ -593,7 +595,6 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GParamSpec *pspec;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
@@ -612,11 +613,10 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    * The dialog's `GtkAppChooserWidget` content type will
    * be guessed from the file, if present.
    */
-  pspec = g_param_spec_object ("gfile", NULL, NULL,
-                               G_TYPE_FILE,
-                               G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-                               G_PARAM_STATIC_NAME);
-  g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
+  props[PROP_GFILE] = g_param_spec_object ("gfile", NULL, NULL,
+                                           G_TYPE_FILE,
+                                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
+                                           G_PARAM_STATIC_NAME);
 
   /**
    * GtkAppChooserDialog:heading:
@@ -625,11 +625,12 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    *
    * The string may contain Pango markup.
    */
-  pspec = g_param_spec_string ("heading", NULL, NULL,
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                               G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
+  props[PROP_HEADING] = g_param_spec_string ("heading", NULL, NULL,
+                                             NULL,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
+                                             G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 

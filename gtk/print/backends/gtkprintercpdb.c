@@ -20,8 +20,11 @@
 
 enum {
   PROP_0,
-  PROP_PRINTER_OBJ
+  PROP_PRINTER_OBJ,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_printer_cpdb_set_property (GObject      *object,
                                            guint         prop_id,
@@ -43,12 +46,12 @@ gtk_printer_cpdb_class_init (GtkPrinterCpdbClass *klass)
   object_class->set_property = gtk_printer_cpdb_set_property;
   object_class->get_property = gtk_printer_cpdb_get_property;
 
-  g_object_class_install_property (G_OBJECT_CLASS (klass),
-                                   PROP_PRINTER_OBJ,
-                                   g_param_spec_pointer ("printer-obj", 
-                                                         NULL, 
-                                                         NULL,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PRINTER_OBJ] = g_param_spec_pointer ("printer-obj", 
+                                                  NULL, 
+                                                  NULL,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

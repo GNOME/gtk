@@ -51,8 +51,11 @@ enum {
   PROP_0,
   PROP_H_ADJUSTMENT,
   PROP_S_ADJUSTMENT,
-  PROP_V_ADJUSTMENT
+  PROP_V_ADJUSTMENT,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_WIDGET)
 
@@ -484,23 +487,19 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->snapshot = plane_snapshot;
   widget_class->size_allocate = plane_size_allocate;
 
-  g_object_class_install_property (object_class,
-                                   PROP_H_ADJUSTMENT,
-                                   g_param_spec_object ("h-adjustment", NULL, NULL,
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_H_ADJUSTMENT] = g_param_spec_object ("h-adjustment", NULL, NULL,
+                                                  GTK_TYPE_ADJUSTMENT,
+                                                  G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
-  g_object_class_install_property (object_class,
-                                   PROP_S_ADJUSTMENT,
-                                   g_param_spec_object ("s-adjustment", NULL, NULL,
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_S_ADJUSTMENT] = g_param_spec_object ("s-adjustment", NULL, NULL,
+                                                  GTK_TYPE_ADJUSTMENT,
+                                                  G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
-  g_object_class_install_property (object_class,
-                                   PROP_V_ADJUSTMENT,
-                                   g_param_spec_object ("v-adjustment", NULL, NULL,
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_V_ADJUSTMENT] = g_param_spec_object ("v-adjustment", NULL, NULL,
+                                                  GTK_TYPE_ADJUSTMENT,
+                                                  G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, "plane");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SLIDER);

@@ -82,8 +82,11 @@ enum
   PROP_SELECTABLE,
   PROP_HAS_MENU,
   PROP_CAN_DROP,
-  PROP_CAN_DRAG
+  PROP_CAN_DRAG,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 
@@ -507,21 +510,18 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
 
-  g_object_class_install_property (object_class, PROP_RGBA,
-      g_param_spec_boxed ("rgba", NULL, NULL,
-                          GDK_TYPE_RGBA, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class, PROP_SELECTABLE,
-      g_param_spec_boolean ("selectable", NULL, NULL,
-                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class, PROP_HAS_MENU,
-      g_param_spec_boolean ("has-menu", NULL, NULL,
-                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class, PROP_CAN_DROP,
-      g_param_spec_boolean ("can-drop", NULL, NULL,
-                            FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class, PROP_CAN_DRAG,
-      g_param_spec_boolean ("can-drag", NULL, NULL,
-                            TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_RGBA] = g_param_spec_boxed ("rgba", NULL, NULL,
+                                         GDK_TYPE_RGBA, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_SELECTABLE] = g_param_spec_boolean ("selectable", NULL, NULL,
+                                                 TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_HAS_MENU] = g_param_spec_boolean ("has-menu", NULL, NULL,
+                                               TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_CAN_DROP] = g_param_spec_boolean ("can-drop", NULL, NULL,
+                                               FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_CAN_DRAG] = g_param_spec_boolean ("can-drag", NULL, NULL,
+                                               TRUE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /**
    * GtkColorSwatch|menu.popup:

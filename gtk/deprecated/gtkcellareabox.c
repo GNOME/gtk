@@ -245,6 +245,8 @@ enum {
   PROP_ORIENTATION,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 enum {
   CELL_PROP_0,
   CELL_PROP_EXPAND,
@@ -318,13 +320,13 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
    *
    * The amount of space to reserve between cells.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing", NULL, NULL,
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SPACING] = g_param_spec_int ("spacing", NULL, NULL,
+                                          0,
+                                          G_MAXINT,
+                                          0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /* Cell Properties */
   /**

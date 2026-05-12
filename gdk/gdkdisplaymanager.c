@@ -107,8 +107,11 @@
 
 enum {
   PROP_0,
-  PROP_DEFAULT_DISPLAY
+  PROP_DEFAULT_DISPLAY,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   DISPLAY_OPENED,
@@ -159,11 +162,11 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    *
    * The default display.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DEFAULT_DISPLAY,
-                                   g_param_spec_object ("default-display", NULL, NULL,
-                                                        GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_DEFAULT_DISPLAY] = g_param_spec_object ("default-display", NULL, NULL,
+                                                     GDK_TYPE_DISPLAY,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

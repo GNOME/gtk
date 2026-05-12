@@ -40,8 +40,11 @@ struct _GtkInspectorTypePopoverPrivate
 enum
 {
   PROP_0,
-  PROP_TYPE
+  PROP_TYPE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorTypePopover, gtk_inspector_type_popover,
                             GTK_TYPE_POPOVER)
@@ -207,9 +210,10 @@ gtk_inspector_type_popover_class_init (GtkInspectorTypePopoverClass *klass)
   object_class->get_property = gtk_inspector_type_popover_get_property;
   object_class->set_property = gtk_inspector_type_popover_set_property;
 
-  g_object_class_install_property (object_class, PROP_TYPE,
-      g_param_spec_gtype ("type", NULL, NULL,
-                          G_TYPE_NONE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TYPE] = g_param_spec_gtype ("type", NULL, NULL,
+                                         G_TYPE_NONE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/type-info.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorTypePopover, parents);

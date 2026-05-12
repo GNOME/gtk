@@ -17,6 +17,8 @@ enum {
   PROP_NUM_PROPERTIES
 };
 
+static GParamSpec *props[PROP_NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (TestObject, test_object, G_TYPE_OBJECT);
 
 static void
@@ -100,20 +102,19 @@ test_object_class_init (TestObjectClass *class)
   object_class->set_property = test_object_set_property;
   object_class->get_property = test_object_get_property;
 
-  g_object_class_install_property (object_class, PROP_STRING,
-      g_param_spec_string ("string", NULL, NULL,
-                           NULL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_STRING] = g_param_spec_string ("string", NULL, NULL,
+                                            NULL,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_NUMBER,
-      g_param_spec_uint ("number", NULL, NULL,
-                         0, G_MAXUINT, 0,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_NUMBER] = g_param_spec_uint ("number", NULL, NULL,
+                                          0, G_MAXUINT, 0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_ALLOW_CHILDREN,
-      g_param_spec_boolean ("allow-children", NULL, NULL,
-                            FALSE,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ALLOW_CHILDREN] = g_param_spec_boolean ("allow-children", NULL, NULL,
+                                                     FALSE,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, PROP_NUM_PROPERTIES, props);
 }
 
 static TestObject *

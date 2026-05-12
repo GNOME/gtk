@@ -116,6 +116,8 @@ enum
   PROP_USE_ALPHA,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 static void gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorChooserWidget, gtk_color_chooser_widget, GTK_TYPE_WIDGET,
@@ -739,9 +741,10 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    *
    * It can be set to switch the color chooser into single-color editing mode.
    */
-  g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
-      g_param_spec_boolean ("show-editor", NULL, NULL,
-                            FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_EDITOR] = g_param_spec_boolean ("show-editor", NULL, NULL,
+                                                  FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("colorchooser"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

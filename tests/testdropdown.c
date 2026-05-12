@@ -249,6 +249,8 @@ enum {
   PROP_NUM_PROPERTIES
 };
 
+static GParamSpec *props[PROP_NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (GtkStringPair, gtk_string_pair, G_TYPE_OBJECT);
 
 static void
@@ -321,23 +323,22 @@ static void
 gtk_string_pair_class_init (GtkStringPairClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GParamSpec *pspec;
 
   object_class->finalize = gtk_string_pair_finalize;
   object_class->set_property = gtk_string_pair_set_property;
   object_class->get_property = gtk_string_pair_get_property;
 
-  pspec = g_param_spec_string ("string", NULL, NULL,
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_STRING] = g_param_spec_string ("string", NULL, NULL,
+                                            NULL,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_STRING, pspec);
 
-  pspec = g_param_spec_string ("id", NULL, NULL,
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_ID] = g_param_spec_string ("id", NULL, NULL,
+                                        NULL,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_ID, pspec);
+
+  g_object_class_install_properties (object_class, PROP_NUM_PROPERTIES, props);
 }
 
 static GtkStringPair *

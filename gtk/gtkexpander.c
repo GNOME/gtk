@@ -144,8 +144,11 @@ enum
   PROP_USE_MARKUP,
   PROP_LABEL_WIDGET,
   PROP_RESIZE_TOPLEVEL,
-  PROP_CHILD
+  PROP_CHILD,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef struct _GtkExpanderClass   GtkExpanderClass;
 
@@ -313,55 +316,45 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    *
    * Whether the expander has been opened to reveal the child.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_EXPANDED,
-                                   g_param_spec_boolean ("expanded", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_EXPANDED] = g_param_spec_boolean ("expanded", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkExpander:label:
    *
    * The text of the expanders label.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL,
-                                   g_param_spec_string ("label", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT));
+  props[PROP_LABEL] = g_param_spec_string ("label", NULL, NULL,
+                                           NULL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT);
 
   /**
    * GtkExpander:use-underline:
    *
    * Whether an underline in the text indicates a mnemonic.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use-underline", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_USE_UNDERLINE] = g_param_spec_boolean ("use-underline", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkExpander:use-markup:
    *
    * Whether the text in the label is Pango markup.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_USE_MARKUP] = g_param_spec_boolean ("use-markup", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkExpander:label-widget:
    *
    * A widget to display instead of the usual expander label.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL_WIDGET,
-                                   g_param_spec_object ("label-widget", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_LABEL_WIDGET] = g_param_spec_object ("label-widget", NULL, NULL,
+                                                  GTK_TYPE_WIDGET,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkExpander:resize-toplevel:
@@ -369,22 +362,20 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    * When this property is %TRUE, the expander will resize the toplevel
    * widget containing the expander upon expanding and collapsing.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESIZE_TOPLEVEL,
-                                   g_param_spec_boolean ("resize-toplevel", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_RESIZE_TOPLEVEL] = g_param_spec_boolean ("resize-toplevel", NULL, NULL,
+                                                      FALSE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkExpander:child:
    *
    * The child widget.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                           GTK_TYPE_WIDGET,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkExpander::activate:

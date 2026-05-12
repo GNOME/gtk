@@ -96,6 +96,8 @@ enum {
   PROP_VSCROLL_POLICY,
 };
 
+static GParamSpec *props[N_PROPS] = { NULL, };
+
 
 static void gtk_viewport_set_property             (GObject         *object,
                                                    guint            prop_id,
@@ -329,22 +331,20 @@ gtk_viewport_class_init (GtkViewportClass *class)
    * code needs to work with older versions, consider setting it explicitly to
    * TRUE.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SCROLL_TO_FOCUS,
-                                   g_param_spec_boolean ("scroll-to-focus", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SCROLL_TO_FOCUS] = g_param_spec_boolean ("scroll-to-focus", NULL, NULL,
+                                                      TRUE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkViewport:child:
    *
    * The child widget.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                           GTK_TYPE_WIDGET,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("viewport"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);

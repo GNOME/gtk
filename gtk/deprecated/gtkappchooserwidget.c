@@ -228,6 +228,8 @@ enum {
   PROP_CONTENT_TYPE,
 };
 
+static GParamSpec *props[N_PROPERTIES] = { NULL, };
+
 enum {
   SIGNAL_APPLICATION_SELECTED,
   SIGNAL_APPLICATION_ACTIVATED,
@@ -581,7 +583,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
 {
   GtkWidgetClass *widget_class;
   GObjectClass *gobject_class;
-  GParamSpec *pspec;
 
   gobject_class = G_OBJECT_CLASS (klass);
   gobject_class->dispose = gtk_app_chooser_widget_dispose;
@@ -606,10 +607,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the default handler is listed among the recommended
    * applications.
    */
-  pspec = g_param_spec_boolean ("show-default", NULL, NULL,
-                                FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
+  props[PROP_SHOW_DEFAULT] = g_param_spec_boolean ("show-default", NULL, NULL,
+                                                   FALSE,
+                                                   G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserWidget:show-recommended:
@@ -620,10 +620,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the recommended applications are listed
    * among the other applications.
    */
-  pspec = g_param_spec_boolean ("show-recommended", NULL, NULL,
-                                TRUE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
+  props[PROP_SHOW_RECOMMENDED] = g_param_spec_boolean ("show-recommended", NULL, NULL,
+                                                       TRUE,
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserWidget:show-fallback:
@@ -634,10 +633,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the fallback applications are listed among the
    * other applications.
    */
-  pspec = g_param_spec_boolean ("show-fallback", NULL, NULL,
-                                FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
+  props[PROP_SHOW_FALLBACK] = g_param_spec_boolean ("show-fallback", NULL, NULL,
+                                                    FALSE,
+                                                    G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserWidget:show-other:
@@ -645,10 +643,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * Determines whether the app chooser should show a section
    * for other applications.
    */
-  pspec = g_param_spec_boolean ("show-other", NULL, NULL,
-                                FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
+  props[PROP_SHOW_OTHER] = g_param_spec_boolean ("show-other", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserWidget:show-all:
@@ -657,10 +654,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * in a single list, without subsections for default,
    * recommended or related applications.
    */
-  pspec = g_param_spec_boolean ("show-all", NULL, NULL,
-                                FALSE,
-                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
+  props[PROP_SHOW_ALL] = g_param_spec_boolean ("show-all", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAppChooserWidget:default-text:
@@ -668,10 +664,11 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * The text that appears in the widget when there are no applications
    * for the given content type.
    */
-  pspec = g_param_spec_string ("default-text", NULL, NULL,
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);
+  props[PROP_DEFAULT_TEXT] = g_param_spec_string ("default-text", NULL, NULL,
+                                                  NULL,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, props);
 
   /**
    * GtkAppChooserWidget::application-selected:

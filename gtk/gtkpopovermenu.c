@@ -183,8 +183,11 @@ struct _GtkPopoverMenuClass
 enum {
   PROP_VISIBLE_SUBMENU = 1,
   PROP_MENU_MODEL,
-  PROP_FLAGS
+  PROP_FLAGS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_popover_menu_buildable_iface_init (GtkBuildableIface *iface);
 
@@ -615,22 +618,18 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
    *
    * The name of the visible submenu.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_VISIBLE_SUBMENU,
-                                   g_param_spec_string ("visible-submenu", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_VISIBLE_SUBMENU] = g_param_spec_string ("visible-submenu", NULL, NULL,
+                                                     NULL,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopoverMenu:menu-model:
    *
    * The model from which the menu is made.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MENU_MODEL,
-                                   g_param_spec_object ("menu-model", NULL, NULL,
-                                                        G_TYPE_MENU_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_MENU_MODEL] = g_param_spec_object ("menu-model", NULL, NULL,
+                                                G_TYPE_MENU_MODEL,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkPopoverMenu:flags:
@@ -642,13 +641,13 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
    *
    * Since: 4.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FLAGS,
-                                   g_param_spec_flags ("flags", NULL, NULL,
-                                                       GTK_TYPE_POPOVER_MENU_FLAGS,
-                                                       GTK_POPOVER_MENU_SLIDING,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME
-                                                         | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_FLAGS] = g_param_spec_flags ("flags", NULL, NULL,
+                                          GTK_TYPE_POPOVER_MENU_FLAGS,
+                                          GTK_POPOVER_MENU_SLIDING,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME
+                                          | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);

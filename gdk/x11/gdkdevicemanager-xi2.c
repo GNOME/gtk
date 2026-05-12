@@ -130,8 +130,11 @@ enum {
   PROP_DISPLAY,
   PROP_OPCODE,
   PROP_MAJOR,
-  PROP_MINOR
+  PROP_MINOR,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void
 gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
@@ -143,30 +146,24 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
   object_class->set_property = gdk_x11_device_manager_xi2_set_property;
   object_class->get_property = gdk_x11_device_manager_xi2_get_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_DISPLAY,
-                                   g_param_spec_object ("display", NULL, NULL,
-                                                        GDK_TYPE_DISPLAY,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                        G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class,
-                                   PROP_OPCODE,
-                                   g_param_spec_int ("opcode", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class,
-                                   PROP_MAJOR,
-                                   g_param_spec_int ("major", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class,
-                                   PROP_MINOR,
-                                   g_param_spec_int ("minor", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-                                                     G_PARAM_STATIC_NAME));
+  props[PROP_DISPLAY] = g_param_spec_object ("display", NULL, NULL,
+                                             GDK_TYPE_DISPLAY,
+                                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                             G_PARAM_STATIC_NAME);
+  props[PROP_OPCODE] = g_param_spec_int ("opcode", NULL, NULL,
+                                         0, G_MAXINT, 0,
+                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                         G_PARAM_STATIC_NAME);
+  props[PROP_MAJOR] = g_param_spec_int ("major", NULL, NULL,
+                                        0, G_MAXINT, 0,
+                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                        G_PARAM_STATIC_NAME);
+  props[PROP_MINOR] = g_param_spec_int ("minor", NULL, NULL,
+                                        0, G_MAXINT, 0,
+                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                        G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

@@ -32,8 +32,11 @@ enum {
 
 enum {
   PROP_0,
-  PROP_VALUE
+  PROP_VALUE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -94,11 +97,11 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
 
-  g_object_class_install_property (G_OBJECT_CLASS (class),
-                                   PROP_VALUE,
-                                   g_param_spec_string ("value", NULL, NULL,
-                                                        "",
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_VALUE] = g_param_spec_string ("value", NULL, NULL,
+                                           "",
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 }
 
 GtkPrinterOption *

@@ -154,7 +154,10 @@ enum {
   PROP_SEARCH_MODE = 1,
   PROP_SUBTITLE,
   PROP_SHOW_TIME,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef enum {
   LOAD_EMPTY,                   /* There is no model */
@@ -6755,20 +6758,18 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * Whether search mode is enabled.
    */
-  g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
-                                   g_param_spec_boolean ("search-mode", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SEARCH_MODE] = g_param_spec_boolean ("search-mode", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileChooserWidget:subtitle:
    *
    * The subtitle of the file chooser widget.
    */
-  g_object_class_install_property (gobject_class, PROP_SUBTITLE,
-                                   g_param_spec_string ("subtitle", NULL, NULL,
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SUBTITLE] = g_param_spec_string ("subtitle", NULL, NULL,
+                                              "",
+                                              G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileChooserWidget:show-time:
@@ -6777,10 +6778,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * Since: 4.10
    */
-  g_object_class_install_property (gobject_class, PROP_SHOW_TIME,
-                                   g_param_spec_boolean ("show-time", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_TIME] = g_param_spec_boolean ("show-time", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   _gtk_file_chooser_install_properties (gobject_class);
 

@@ -61,7 +61,10 @@ enum {
   TYPE_DATA_PROP_CUMULATIVE2,
   TYPE_DATA_PROP_SELF,
   TYPE_DATA_PROP_CUMULATIVE,
+  TYPE_DATA_N_PROPS
 };
+
+static GParamSpec *type_data_props[TYPE_DATA_N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (TypeData, type_data, G_TYPE_OBJECT);
 
@@ -133,54 +136,42 @@ type_data_class_init (TypeDataClass *class)
   object_class->finalize = type_data_finalize;
   object_class->get_property = type_data_get_property;
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                                              NULL,
+                                                              G_PARAM_READABLE |
+                                                              G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_SELF1,
-                                   g_param_spec_int ("self1", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_SELF1] = g_param_spec_int ("self1", NULL, NULL,
+                                                            0, G_MAXINT, 0,
+                                                            G_PARAM_READABLE |
+                                                            G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_CUMULATIVE1,
-                                   g_param_spec_int ("cumulative1", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_CUMULATIVE1] = g_param_spec_int ("cumulative1", NULL, NULL,
+                                                                  0, G_MAXINT, 0,
+                                                                  G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_SELF2,
-                                   g_param_spec_int ("self2", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_SELF2] = g_param_spec_int ("self2", NULL, NULL,
+                                                            0, G_MAXINT, 0,
+                                                            G_PARAM_READABLE |
+                                                            G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_CUMULATIVE2,
-                                   g_param_spec_int ("cumulative2", NULL, NULL,
-                                                     0, G_MAXINT, 0,
-                                                     G_PARAM_READABLE |
-                                                     G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_CUMULATIVE2] = g_param_spec_int ("cumulative2", NULL, NULL,
+                                                                  0, G_MAXINT, 0,
+                                                                  G_PARAM_READABLE |
+                                                                  G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_SELF,
-                                   g_param_spec_object ("self", NULL, NULL,
-                                                        graph_data_get_type (),
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_SELF] = g_param_spec_object ("self", NULL, NULL,
+                                                              graph_data_get_type (),
+                                                              G_PARAM_READABLE |
+                                                              G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   TYPE_DATA_PROP_CUMULATIVE,
-                                   g_param_spec_object ("cumulative", NULL, NULL,
-                                                        graph_data_get_type (),
-                                                        G_PARAM_READABLE |
-                                                        G_PARAM_STATIC_NAME));
+  type_data_props[TYPE_DATA_PROP_CUMULATIVE] = g_param_spec_object ("cumulative", NULL, NULL,
+                                                                    graph_data_get_type (),
+                                                                    G_PARAM_READABLE |
+                                                                    G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, TYPE_DATA_N_PROPS, type_data_props);
 }
 
 static TypeData *
@@ -232,8 +223,11 @@ type_data_update (TypeData *data,
 enum
 {
   PROP_0,
-  PROP_BUTTON
+  PROP_BUTTON,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GtkInspectorStatisticsPrivate
 {
@@ -884,9 +878,10 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   widget_class->root = root;
   widget_class->unroot = unroot;
 
-  g_object_class_install_property (object_class, PROP_BUTTON,
-      g_param_spec_object ("button", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_BUTTON] = g_param_spec_object ("button", NULL, NULL,
+                                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/statistics.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, view);

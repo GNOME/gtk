@@ -25,8 +25,11 @@
 enum {
   PROP_INSPECTED = 1,
   PROP_RESIZE,
-  PROP_MAGNIFICATION
+  PROP_MAGNIFICATION,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GtkMagnifier
 {
@@ -194,21 +197,17 @@ gtk_magnifier_class_init (GtkMagnifierClass *klass)
   widget_class->snapshot = gtk_magnifier_snapshot;
   widget_class->measure = gtk_magnifier_measure;
 
-  g_object_class_install_property (object_class,
-                                   PROP_INSPECTED,
-                                   g_param_spec_object ("inspected", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class,
-                                   PROP_MAGNIFICATION,
-                                   g_param_spec_double ("magnification", NULL, NULL,
-                                                        1, G_MAXDOUBLE, 1,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class,
-                                   PROP_RESIZE,
-                                   g_param_spec_boolean ("resize", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_INSPECTED] = g_param_spec_object ("inspected", NULL, NULL,
+                                               GTK_TYPE_WIDGET,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_MAGNIFICATION] = g_param_spec_double ("magnification", NULL, NULL,
+                                                   1, G_MAXDOUBLE, 1,
+                                                   G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_RESIZE] = g_param_spec_boolean ("resize", NULL, NULL,
+                                             FALSE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, "magnifier");
 }

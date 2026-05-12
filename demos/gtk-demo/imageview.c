@@ -8,7 +8,10 @@ enum
   PROP_FILTER,
   PROP_SCALE,
   PROP_ANGLE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _ImageView
 {
@@ -402,25 +405,23 @@ image_view_class_init (ImageViewClass *class)
   widget_class->measure = image_view_measure;
   widget_class->size_allocate = image_view_size_allocate;
 
-  g_object_class_install_property (object_class, PROP_TEXTURE,
-      g_param_spec_object ("texture", NULL, NULL,
-                           GDK_TYPE_TEXTURE,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXTURE] = g_param_spec_object ("texture", NULL, NULL,
+                                             GDK_TYPE_TEXTURE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_SCALE,
-      g_param_spec_float ("scale", NULL, NULL,
-                          1./1024., 1024., 1.0,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SCALE] = g_param_spec_float ("scale", NULL, NULL,
+                                          1./1024., 1024., 1.0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_ANGLE,
-      g_param_spec_float ("angle", NULL, NULL,
-                          0.0, 360.0, 0.0,
-                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ANGLE] = g_param_spec_float ("angle", NULL, NULL,
+                                          0.0, 360.0, 0.0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_FILTER,
-      g_param_spec_enum ("filter", NULL, NULL,
-                         GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FILTER] = g_param_spec_enum ("filter", NULL, NULL,
+                                          GSK_TYPE_SCALING_FILTER, GSK_SCALING_FILTER_LINEAR,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /* These are the actions that we are using in the menu */
   gtk_widget_class_install_action (widget_class, "zoom.in", NULL, zoom_cb);

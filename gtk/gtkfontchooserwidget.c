@@ -176,8 +176,11 @@ struct _GtkFontChooserWidgetClass
 
 enum {
   PROP_ZERO,
-  PROP_TWEAK_ACTION
+  PROP_TWEAK_ACTION,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_font_chooser_widget_set_property         (GObject         *object,
                                                           guint            prop_id,
@@ -895,7 +898,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GParamSpec *pspec;
 
   g_type_ensure (G_TYPE_THEMED_ICON);
   g_type_ensure (GTK_TYPE_FONT_FILTER);
@@ -920,10 +922,11 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
    * The action will be enabled or disabled depending on whether
    * the selected font has any features or axes.
    */
-  pspec = g_param_spec_object ("tweak-action", NULL, NULL,
-                               G_TYPE_ACTION,
-                               G_PARAM_READABLE | G_PARAM_STATIC_NAME);
-  g_object_class_install_property (gobject_class, PROP_TWEAK_ACTION, pspec);
+  props[PROP_TWEAK_ACTION] = g_param_spec_object ("tweak-action", NULL, NULL,
+                                                  G_TYPE_ACTION,
+                                                  G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   _gtk_font_chooser_install_properties (gobject_class);
 

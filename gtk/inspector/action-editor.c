@@ -54,8 +54,11 @@ enum
 {
   PROP_0,
   PROP_OWNER,
-  PROP_NAME
+  PROP_NAME,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkInspectorActionEditor, gtk_inspector_action_editor, GTK_TYPE_WIDGET)
 
@@ -278,13 +281,13 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
-  g_object_class_install_property (object_class, PROP_OWNER,
-      g_param_spec_object ("owner", NULL, NULL,
-                           G_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_OWNER] = g_param_spec_object ("owner", NULL, NULL,
+                                           G_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_NAME,
-      g_param_spec_string ("name", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }

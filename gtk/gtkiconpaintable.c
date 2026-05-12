@@ -335,7 +335,10 @@ enum
   PROP_IS_SYMBOLIC,
   PROP_SIZE,
   PROP_SCALE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconPaintable, gtk_icon_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
@@ -469,10 +472,9 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
    *
    * The file representing the icon, if any.
    */
-  g_object_class_install_property (gobject_class, PROP_FILE,
-                                   g_param_spec_object ("file", NULL, NULL,
-                                                        G_TYPE_FILE,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_FILE] = g_param_spec_object ("file", NULL, NULL,
+                                          G_TYPE_FILE,
+                                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkIconPaintable:icon-name:
@@ -481,10 +483,9 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
    *
    * Deprecated: 4.20
    */
-  g_object_class_install_property (gobject_class, PROP_ICON_NAME,
-                                   g_param_spec_string ("icon-name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_DEPRECATED));
+  props[PROP_ICON_NAME] = g_param_spec_string ("icon-name", NULL, NULL,
+                                               NULL,
+                                               G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_DEPRECATED);
 
   /**
    * GtkIconPaintable:is-symbolic: (getter is_symbolic)
@@ -493,20 +494,19 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
    *
    * Deprecated: 4.20
    */
-  g_object_class_install_property (gobject_class, PROP_IS_SYMBOLIC,
-                                   g_param_spec_boolean ("is-symbolic", NULL, NULL,
-                                                        FALSE,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED));
+  props[PROP_IS_SYMBOLIC] = g_param_spec_boolean ("is-symbolic", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED);
 
-  g_object_class_install_property (gobject_class, PROP_SIZE,
-                                   g_param_spec_int ("size", NULL, NULL,
-                                                     0, G_MAXINT, 16,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SIZE] = g_param_spec_int ("size", NULL, NULL,
+                                       0, G_MAXINT, 16,
+                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class, PROP_SCALE,
-                                   g_param_spec_int ("scale", NULL, NULL,
-                                                     0, G_MAXINT, 1,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SCALE] = g_param_spec_int ("scale", NULL, NULL,
+                                        0, G_MAXINT, 1,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 }
 
 /* }}} */

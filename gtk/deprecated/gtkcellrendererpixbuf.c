@@ -84,8 +84,11 @@ enum {
   PROP_TEXTURE,
   PROP_ICON_SIZE,
   PROP_ICON_NAME,
-  PROP_GICON
+  PROP_GICON,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef struct _GtkCellRendererPixbufPrivate       GtkCellRendererPixbufPrivate;
 typedef struct _GtkCellRendererPixbufClass         GtkCellRendererPixbufClass;
@@ -195,44 +198,34 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   cell_class->get_preferred_height = gtk_cell_renderer_pixbuf_get_preferred_height;
   cell_class->snapshot = gtk_cell_renderer_pixbuf_snapshot;
 
-  g_object_class_install_property (object_class,
-				   PROP_PIXBUF,
-				   g_param_spec_object ("pixbuf", NULL, NULL,
-							GDK_TYPE_PIXBUF,
-							G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXBUF] = g_param_spec_object ("pixbuf", NULL, NULL,
+                                            GDK_TYPE_PIXBUF,
+                                            G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-				   PROP_PIXBUF_EXPANDER_OPEN,
-				   g_param_spec_object ("pixbuf-expander-open", NULL, NULL,
-							GDK_TYPE_PIXBUF,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXBUF_EXPANDER_OPEN] = g_param_spec_object ("pixbuf-expander-open", NULL, NULL,
+                                                          GDK_TYPE_PIXBUF,
+                                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-				   PROP_PIXBUF_EXPANDER_CLOSED,
-				   g_param_spec_object ("pixbuf-expander-closed", NULL, NULL,
-							GDK_TYPE_PIXBUF,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PIXBUF_EXPANDER_CLOSED] = g_param_spec_object ("pixbuf-expander-closed", NULL, NULL,
+                                                            GDK_TYPE_PIXBUF,
+                                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererPixbuf:texture:
    */
-  g_object_class_install_property (object_class,
-				   PROP_TEXTURE,
-				   g_param_spec_object ("texture", NULL, NULL,
-                                                        GDK_TYPE_TEXTURE,
-						        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXTURE] = g_param_spec_object ("texture", NULL, NULL,
+                                             GDK_TYPE_TEXTURE,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererPixbuf:icon-size:
    *
    * The `GtkIconSize` value that specifies the size of the rendered icon.
    */
-  g_object_class_install_property (object_class,
-				   PROP_ICON_SIZE,
-				   g_param_spec_enum ("icon-size", NULL, NULL,
-                                                      GTK_TYPE_ICON_SIZE,
-						      GTK_ICON_SIZE_INHERIT,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_ICON_SIZE] = g_param_spec_enum ("icon-size", NULL, NULL,
+                                             GTK_TYPE_ICON_SIZE,
+                                             GTK_ICON_SIZE_INHERIT,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererPixbuf:icon-name:
@@ -240,11 +233,9 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * The name of the themed icon to display.
    * This property only has an effect if not overridden by the "pixbuf" property.
    */
-  g_object_class_install_property (object_class,
-				   PROP_ICON_NAME,
-				   g_param_spec_string ("icon-name", NULL, NULL,
-							NULL,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ICON_NAME] = g_param_spec_string ("icon-name", NULL, NULL,
+                                               NULL,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererPixbuf:gicon:
@@ -253,11 +244,11 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * If the icon theme is changed, the image will be updated
    * automatically.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_GICON,
-                                   g_param_spec_object ("gicon", NULL, NULL,
-                                                        G_TYPE_ICON,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_GICON] = g_param_spec_object ("gicon", NULL, NULL,
+                                           G_TYPE_ICON,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void
