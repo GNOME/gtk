@@ -382,10 +382,11 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_STATIC_NAME));
 
-
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY))
-
-  ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_CELL_BACKGROUND_SET,
+                                   g_param_spec_boolean ("cell-background-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 
   if (GtkCellRenderer_private_offset != 0)
     g_type_class_adjust_private_offset (class, &GtkCellRenderer_private_offset);
