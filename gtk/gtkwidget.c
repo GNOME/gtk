@@ -5708,10 +5708,13 @@ gtk_widget_has_default (GtkWidget *widget)
 }
 
 void
-_gtk_widget_set_has_default (GtkWidget *widget,
-                             gboolean   has_default)
+gtk_widget_set_has_default (GtkWidget *widget,
+                            gboolean   has_default)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->has_default == has_default)
+    return;
 
   priv->has_default = has_default;
 
@@ -5719,6 +5722,8 @@ _gtk_widget_set_has_default (GtkWidget *widget,
     gtk_widget_add_css_class (widget, "default");
   else
     gtk_widget_remove_css_class (widget, "default");
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_DEFAULT]);
 }
 
 /**

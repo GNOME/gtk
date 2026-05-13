@@ -2192,18 +2192,14 @@ gtk_popover_set_default_widget (GtkPopover *popover,
 
   if (priv->default_widget)
     {
-      _gtk_widget_set_has_default (priv->default_widget, FALSE);
-      gtk_widget_queue_draw (priv->default_widget);
-      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
+      gtk_widget_set_has_default (priv->default_widget, FALSE);
     }
 
   g_set_object (&priv->default_widget, widget);
 
   if (priv->default_widget)
     {
-      _gtk_widget_set_has_default (priv->default_widget, TRUE);
-      gtk_widget_queue_draw (priv->default_widget);
-      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
+      gtk_widget_set_has_default (priv->default_widget, TRUE);
     }
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);
