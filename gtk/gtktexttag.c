@@ -837,287 +837,445 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
 
   /* Style props are set or not */
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME))
-
   /**
    * GtkTextTag:background-set:
    *
    * Whether the `background` property is set.
    */
-  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_BACKGROUND_SET,
+                                   g_param_spec_boolean ("background-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:background-full-height-set:
    *
    * Whether the `background-full-height` property is set.
    */
-  ADD_SET_PROP ("background-full-height-set", PROP_BACKGROUND_FULL_HEIGHT_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_BACKGROUND_FULL_HEIGHT_SET,
+                                   g_param_spec_boolean ("background-full-height-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:foreground-set:
    *
    * Whether the `foreground` property is set.
    */
-  ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_FOREGROUND_SET,
+                                   g_param_spec_boolean ("foreground-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:editable-set:
    *
    * Whether the `editable` property is set.
    */
-  ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_EDITABLE_SET,
+                                   g_param_spec_boolean ("editable-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:family-set:
    *
    * Whether the `family` property is set.
    */
-  ADD_SET_PROP ("family-set", PROP_FAMILY_SET, NULL, NULL);  
+  g_object_class_install_property (object_class,
+                                   PROP_FAMILY_SET,
+                                   g_param_spec_boolean ("family-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));  
 
   /**
    * GtkTextTag:style-set:
    *
    * Whether the `style` property is set.
    */
-  ADD_SET_PROP ("style-set", PROP_STYLE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_STYLE_SET,
+                                   g_param_spec_boolean ("style-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:variant-set:
    *
    * Whether the `variant` property is set.
    */
-  ADD_SET_PROP ("variant-set", PROP_VARIANT_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_VARIANT_SET,
+                                   g_param_spec_boolean ("variant-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:weight-set:
    *
    * Whether the `weight` property is set.
    */
-  ADD_SET_PROP ("weight-set", PROP_WEIGHT_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_WEIGHT_SET,
+                                   g_param_spec_boolean ("weight-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:stretch-set:
    *
    * Whether the `stretch` property is set.
    */
-  ADD_SET_PROP ("stretch-set", PROP_STRETCH_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_STRETCH_SET,
+                                   g_param_spec_boolean ("stretch-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:size-set:
    *
    * Whether the `size` property is set.
    */
-  ADD_SET_PROP ("size-set", PROP_SIZE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_SIZE_SET,
+                                   g_param_spec_boolean ("size-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:scale-set:
    *
    * Whether the `scale` property is set.
    */
-  ADD_SET_PROP ("scale-set", PROP_SCALE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_SCALE_SET,
+                                   g_param_spec_boolean ("scale-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:justification-set:
    *
    * Whether the `justification` property is set.
    */
-  ADD_SET_PROP ("justification-set", PROP_JUSTIFICATION_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_JUSTIFICATION_SET,
+                                   g_param_spec_boolean ("justification-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:language-set:
    *
    * Whether the `language` property is set.
    */
-  ADD_SET_PROP ("language-set", PROP_LANGUAGE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_LANGUAGE_SET,
+                                   g_param_spec_boolean ("language-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:left-margin-set:
    *
    * Whether the `left-margin` property is set.
    */
-  ADD_SET_PROP ("left-margin-set", PROP_LEFT_MARGIN_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_LEFT_MARGIN_SET,
+                                   g_param_spec_boolean ("left-margin-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:indent-set:
    *
    * Whether the `indent` property is set.
    */
-  ADD_SET_PROP ("indent-set", PROP_INDENT_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_INDENT_SET,
+                                   g_param_spec_boolean ("indent-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:rise-set:
    *
    * Whether the `rise` property is set.
    */
-  ADD_SET_PROP ("rise-set", PROP_RISE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_RISE_SET,
+                                   g_param_spec_boolean ("rise-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-above-lines-set:
    *
    * Whether the `pixels-above-lines` property is set.
    */
-  ADD_SET_PROP ("pixels-above-lines-set", PROP_PIXELS_ABOVE_LINES_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_PIXELS_ABOVE_LINES_SET,
+                                   g_param_spec_boolean ("pixels-above-lines-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-below-lines-set:
    *
    * Whether the `pixels-below-lines` property is set.
    */
-  ADD_SET_PROP ("pixels-below-lines-set", PROP_PIXELS_BELOW_LINES_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_PIXELS_BELOW_LINES_SET,
+                                   g_param_spec_boolean ("pixels-below-lines-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:pixels-inside-wrap-set:
    *
    * Whether the `pixels-inside-wrap` property is set.
    */
-  ADD_SET_PROP ("pixels-inside-wrap-set", PROP_PIXELS_INSIDE_WRAP_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_PIXELS_INSIDE_WRAP_SET,
+                                   g_param_spec_boolean ("pixels-inside-wrap-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:line-height-set:
    *
    * Whether the `line-height` property is set.
    */
-  ADD_SET_PROP ("line-height-set", PROP_LINE_HEIGHT_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_LINE_HEIGHT_SET,
+                                   g_param_spec_boolean ("line-height-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:strikethrough-set:
    *
    * Whether the `strikethrough` property is set.
    */
-  ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_STRIKETHROUGH_SET,
+                                   g_param_spec_boolean ("strikethrough-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:right-margin-set:
    *
    * Whether the `right-margin` property is set.
    */
-  ADD_SET_PROP ("right-margin-set", PROP_RIGHT_MARGIN_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_RIGHT_MARGIN_SET,
+                                   g_param_spec_boolean ("right-margin-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:underline-set:
    *
    * Whether the `underline` property is set.
    */
-  ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_UNDERLINE_SET,
+                                   g_param_spec_boolean ("underline-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:underline-rgba-set:
    *
    * If the `underline-rgba` property has been set.
    */
-  ADD_SET_PROP ("underline-rgba-set", PROP_UNDERLINE_RGBA_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_UNDERLINE_RGBA_SET,
+                                   g_param_spec_boolean ("underline-rgba-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:overline-set:
    *
    * Whether the `overline` property is set.
    */
-  ADD_SET_PROP ("overline-set", PROP_OVERLINE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_OVERLINE_SET,
+                                   g_param_spec_boolean ("overline-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:overline-rgba-set:
    *
    * Whether the `overline-rgba` property is set.
    */
-  ADD_SET_PROP ("overline-rgba-set", PROP_OVERLINE_RGBA_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_OVERLINE_RGBA_SET,
+                                   g_param_spec_boolean ("overline-rgba-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:strikethrough-rgba-set:
    *
    * If the `strikethrough-rgba` property has been set.
    */
-  ADD_SET_PROP ("strikethrough-rgba-set", PROP_STRIKETHROUGH_RGBA_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_STRIKETHROUGH_RGBA_SET,
+                                   g_param_spec_boolean ("strikethrough-rgba-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:wrap-mode-set:
    *
    * Whether the `wrap-mode` property is set.
    */
-  ADD_SET_PROP ("wrap-mode-set", PROP_WRAP_MODE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_WRAP_MODE_SET,
+                                   g_param_spec_boolean ("wrap-mode-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:tabs-set:
    *
    * Whether the `tabs` property is set.
    */
-  ADD_SET_PROP ("tabs-set", PROP_TABS_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_TABS_SET,
+                                   g_param_spec_boolean ("tabs-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:invisible-set:
    *
    * Whether the `invisible` property is set.
    */
-  ADD_SET_PROP ("invisible-set", PROP_INVISIBLE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_INVISIBLE_SET,
+                                   g_param_spec_boolean ("invisible-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:paragraph-background-set:
    *
    * Whether the `paragraph-background` property is set.
    */
-  ADD_SET_PROP ("paragraph-background-set", PROP_PARAGRAPH_BACKGROUND_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_PARAGRAPH_BACKGROUND_SET,
+                                   g_param_spec_boolean ("paragraph-background-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:fallback-set:
    *
    * Whether the `fallback` property is set.
    */
-  ADD_SET_PROP ("fallback-set", PROP_FALLBACK_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_FALLBACK_SET,
+                                   g_param_spec_boolean ("fallback-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:letter-spacing-set:
    *
    * Whether the `letter-spacing` property is set.
    */
-  ADD_SET_PROP ("letter-spacing-set", PROP_LETTER_SPACING_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_LETTER_SPACING_SET,
+                                   g_param_spec_boolean ("letter-spacing-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:font-features-set:
    *
    * Whether the `font-features` property is set.
    */
-  ADD_SET_PROP ("font-features-set", PROP_FONT_FEATURES_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_FONT_FEATURES_SET,
+                                   g_param_spec_boolean ("font-features-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:allow-breaks-set:
    *
    * Whether the `allow-breaks` property is set.
    */
-  ADD_SET_PROP ("allow-breaks-set", PROP_ALLOW_BREAKS_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_ALLOW_BREAKS_SET,
+                                   g_param_spec_boolean ("allow-breaks-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:show-spaces-set:
    *
    * Whether the `show-spaces` property is set.
    */
-  ADD_SET_PROP ("show-spaces-set", PROP_SHOW_SPACES_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_SHOW_SPACES_SET,
+                                   g_param_spec_boolean ("show-spaces-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:insert-hyphens-set:
    *
    * Whether the `insert-hyphens` property is set.
    */
-  ADD_SET_PROP ("insert-hyphens-set", PROP_INSERT_HYPHENS_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_INSERT_HYPHENS_SET,
+                                   g_param_spec_boolean ("insert-hyphens-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:text-transform-set:
    *
    * Whether the `text-transform` property is set.
    */
-  ADD_SET_PROP ("text-transform-set", PROP_TEXT_TRANSFORM_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_TRANSFORM_SET,
+                                   g_param_spec_boolean ("text-transform-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:word-set:
    *
    * Whether the `word` property is set.
    */
-  ADD_SET_PROP ("word-set", PROP_WORD_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_WORD_SET,
+                                   g_param_spec_boolean ("word-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 
   /**
    * GtkTextTag:sentence-set:
    *
    * Whether the `sentence` property is set.
    */
-  ADD_SET_PROP ("sentence-set", PROP_SENTENCE_SET, NULL, NULL);
+  g_object_class_install_property (object_class,
+                                   PROP_SENTENCE_SET,
+                                   g_param_spec_boolean ("sentence-set", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
 }
 
 static void
