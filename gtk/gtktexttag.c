@@ -1117,7 +1117,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * Whether the `sentence` property is set.
    */
-  ADD_SET_PROP ("sentence-set", PROP_WORD_SET, NULL, NULL);
+  ADD_SET_PROP ("sentence-set", PROP_SENTENCE_SET, NULL, NULL);
 }
 
 static void
