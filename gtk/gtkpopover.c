@@ -2193,7 +2193,6 @@ gtk_popover_set_default_widget (GtkPopover *popover,
   if (priv->default_widget)
     {
       gtk_widget_set_has_default (priv->default_widget, FALSE);
-      gtk_widget_queue_draw (priv->default_widget);
     }
 
   g_set_object (&priv->default_widget, widget);
@@ -2201,7 +2200,6 @@ gtk_popover_set_default_widget (GtkPopover *popover,
   if (priv->default_widget)
     {
       gtk_widget_set_has_default (priv->default_widget, TRUE);
-      gtk_widget_queue_draw (priv->default_widget);
     }
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);

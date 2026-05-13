@@ -2495,8 +2495,6 @@ gtk_window_set_default_widget (GtkWindow *window,
           if (priv->focus_widget != priv->default_widget ||
               !gtk_widget_get_receives_default (priv->default_widget))
             gtk_widget_set_has_default (priv->default_widget, FALSE);
-
-          gtk_widget_queue_draw (priv->default_widget);
 	}
 
       priv->default_widget = default_widget;
@@ -2508,8 +2506,6 @@ gtk_window_set_default_widget (GtkWindow *window,
           if (priv->focus_widget == NULL ||
               !gtk_widget_get_receives_default (priv->focus_widget))
             gtk_widget_set_has_default (priv->default_widget, TRUE);
-
-          gtk_widget_queue_draw (priv->default_widget);
 	}
 
       if (default_widget)
