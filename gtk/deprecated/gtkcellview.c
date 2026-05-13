@@ -154,12 +154,15 @@ static GtkBuildableIface *parent_buildable_iface;
 enum
 {
   PROP_0,
-  PROP_ORIENTATION,
   PROP_MODEL,
   PROP_CELL_AREA,
   PROP_CELL_AREA_CONTEXT,
   PROP_DRAW_SENSITIVE,
-  PROP_FIT_MODEL
+  PROP_FIT_MODEL,
+  N_PROPS,
+
+  /* GtkOrientable */
+  PROP_ORIENTATION,
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,

@@ -93,7 +93,10 @@ struct _GtkStackSwitcherClass
 enum {
   PROP_0,
   PROP_STACK,
-  PROP_ORIENTATION
+  N_PROPS,
+
+  /* GtkOrientable */
+  PROP_ORIENTATION,
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET,

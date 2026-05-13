@@ -85,12 +85,15 @@ struct _GtkViewportClass
 
 enum {
   PROP_0,
+  PROP_SCROLL_TO_FOCUS,
+  PROP_CHILD,
+  N_PROPS,
+
+  /* GtkScrollable */
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
-  PROP_SCROLL_TO_FOCUS,
-  PROP_CHILD
 };
 
 

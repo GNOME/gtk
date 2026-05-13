@@ -107,8 +107,10 @@ struct _GtkAppChooserDialogClass {
 
 enum {
   PROP_GFILE = 1,
-  PROP_CONTENT_TYPE,
-  PROP_HEADING
+  PROP_HEADING,
+  N_PROPS,
+
+  PROP_CONTENT_TYPE
 };
 
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);
@@ -602,8 +604,6 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   gobject_class->get_property = gtk_app_chooser_dialog_get_property;
   gobject_class->constructed = gtk_app_chooser_dialog_constructed;
 
-  g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
-
   /**
    * GtkAppChooserDialog:gfile:
    *
@@ -630,6 +630,8 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
+
+  g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
   /* Bind class to template
    */

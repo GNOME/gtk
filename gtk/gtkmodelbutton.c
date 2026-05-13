@@ -230,11 +230,11 @@ enum
   PROP_ICONIC,
   PROP_ACCEL,
   PROP_INDICATOR_SIZE_GROUP,
+  LAST_PROP,
 
-  /* actionable properties */
+  /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
-  LAST_PROP = PROP_ACTION_NAME
 };
 
 enum

@@ -88,8 +88,11 @@ struct _GtkColorEditorClass
 enum
 {
   PROP_ZERO,
+  N_PROPS,
+
+  /* GtkColorChooser */
   PROP_RGBA,
-  PROP_USE_ALPHA
+  PROP_USE_ALPHA,
 };
 
 static void gtk_color_editor_iface_init (GtkColorChooserInterface *iface);

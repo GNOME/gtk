@@ -81,10 +81,10 @@ enum {
   PROP_HOMOGENEOUS,
   PROP_BASELINE_CHILD,
   PROP_BASELINE_POSITION,
+  LAST_PROP,
 
-  /* orientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  LAST_PROP = PROP_ORIENTATION
 };
 
 typedef struct

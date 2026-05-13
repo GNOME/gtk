@@ -238,8 +238,11 @@ struct _GtkCellAreaBoxPrivate
 
 enum {
   PROP_0,
+  PROP_SPACING,
+  N_PROPS,
+
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  PROP_SPACING
 };
 
 enum {

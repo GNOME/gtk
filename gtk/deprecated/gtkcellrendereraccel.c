@@ -491,9 +491,12 @@ struct _GtkCellEditableWidget
 };
 
 enum {
-  PROP_EDITING_CANCELED = 1,
-  PROP_MODE,
-  PROP_PATH
+  PROP_MODE = 1,
+  PROP_PATH,
+  N_PROPS,
+
+  /* GtkCellEditable */
+  PROP_EDITING_CANCELED,
 };
 
 GType       gtk_cell_editable_widget_get_type (void);

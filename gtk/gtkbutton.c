@@ -120,11 +120,11 @@ enum {
   PROP_ICON_NAME,
   PROP_CHILD,
   PROP_CAN_SHRINK,
+  LAST_PROP,
 
-  /* actionable properties */
+  /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
-  LAST_PROP = PROP_ACTION_NAME
 };
 
 enum {

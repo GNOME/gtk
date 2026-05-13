@@ -147,7 +147,9 @@ enum {
   PROP_MODE,
   PROP_INVERTED,
   LAST_PROPERTY,
-  PROP_ORIENTATION /* overridden */
+
+  /* GtkOrientable */
+  PROP_ORIENTATION
 };
 
 enum {

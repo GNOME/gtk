@@ -56,8 +56,11 @@ enum
   PROP_PULSE,
   PROP_TEXT_XALIGN,
   PROP_TEXT_YALIGN,
+  PROP_INVERTED,
+  N_PROPS,
+
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  PROP_INVERTED
 };
 
 typedef struct _GtkCellRendererProgressClass    GtkCellRendererProgressClass;

@@ -102,13 +102,15 @@ enum
 enum
 {
   PROP_0,
-
-  PROP_ORIENTATION,
   PROP_VALUE,
   PROP_ADJUSTMENT,
   PROP_ICONS,
   PROP_ACTIVE,
-  PROP_HAS_FRAME
+  PROP_HAS_FRAME,
+  N_PROPS,
+
+  /* GtkOrientable */
+  PROP_ORIENTATION,
 };
 
 typedef struct

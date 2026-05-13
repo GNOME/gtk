@@ -753,10 +753,10 @@ enum {
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
   PROP_ACCEPT_UNPAIRED_RELEASE,
+  LAST_PROP,
 
-  /* orientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  LAST_PROP = PROP_ORIENTATION
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };

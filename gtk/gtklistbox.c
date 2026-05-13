@@ -226,7 +226,7 @@ enum {
   PROP_ACCEPT_UNPAIRED_RELEASE,
   PROP_SHOW_SEPARATORS,
   PROP_TAB_BEHAVIOR,
-  LAST_PROPERTY
+  N_PROPS,
 };
 
 enum {
@@ -234,12 +234,12 @@ enum {
   ROW_PROP_ACTIVATABLE,
   ROW_PROP_SELECTABLE,
   ROW_PROP_CHILD,
+  ROW_N_PROPS,
 
-  /* actionable properties */
+  /* GtkActionable */
   ROW_PROP_ACTION_NAME,
   ROW_PROP_ACTION_TARGET,
 
-  LAST_ROW_PROPERTY = ROW_PROP_ACTION_NAME
 };
 
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
@@ -354,9 +354,9 @@ static void gtk_list_box_measure (GtkWidget     *widget,
 
 
 
-static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
+static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
-static GParamSpec *row_properties[LAST_ROW_PROPERTY] = { NULL, };
+static GParamSpec *row_properties[ROW_N_PROPS] = { NULL, };
 static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
 
 
@@ -578,7 +578,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                                GTK_LIST_TAB_ALL,
                                                G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
    * GtkListBox::row-selected:
@@ -3962,7 +3962,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
+  g_object_class_install_properties (object_class, ROW_N_PROPS, row_properties);
 
   g_object_class_override_property (object_class, ROW_PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");

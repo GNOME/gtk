@@ -94,10 +94,10 @@ enum {
   PROP_END_WIDGET,
   PROP_BASELINE_POSITION,
   PROP_SHRINK_CENTER_LAST,
+  LAST_PROP,
 
-  /* orientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  LAST_PROP = PROP_ORIENTATION
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };

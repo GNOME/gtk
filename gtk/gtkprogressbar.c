@@ -141,8 +141,10 @@ enum {
   PROP_TEXT,
   PROP_SHOW_TEXT,
   PROP_ELLIPSIZE,
+  NUM_PROPERTIES,
+
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  NUM_PROPERTIES = PROP_ORIENTATION
 };
 
 static GParamSpec *progress_props[NUM_PROPERTIES] = { NULL, };

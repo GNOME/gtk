@@ -135,11 +135,11 @@ enum {
   PROP_INCONSISTENT,
   PROP_USE_UNDERLINE,
   PROP_CHILD,
+  LAST_PROP,
 
-  /* actionable properties */
+  /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
-  LAST_PROP = PROP_ACTION_NAME
 };
 
 enum {

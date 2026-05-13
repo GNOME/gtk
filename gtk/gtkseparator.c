@@ -71,7 +71,10 @@ struct _GtkSeparatorClass
 
 enum {
   PROP_0,
-  PROP_ORIENTATION
+  N_PROPS,
+
+  /* GtkOrientable */
+  PROP_ORIENTATION,
 };
 
 

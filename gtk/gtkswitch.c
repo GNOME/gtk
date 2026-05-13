@@ -129,6 +129,8 @@ enum
   PROP_ACTIVE,
   PROP_STATE,
   LAST_PROP,
+
+  /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET
 };

@@ -65,11 +65,10 @@ enum {
   PROP_SPACING,
   PROP_BASELINE_CHILD,
   PROP_BASELINE_POSITION,
+  N_PROPS,
 
-  /* From GtkOrientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-
-  N_PROPS = PROP_ORIENTATION
 };
 
 static GParamSpec *box_layout_props[N_PROPS];

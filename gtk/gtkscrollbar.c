@@ -106,9 +106,10 @@ typedef struct {
 enum {
   PROP_0,
   PROP_ADJUSTMENT,
+  LAST_PROP,
 
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  LAST_PROP = PROP_ORIENTATION
 };
 
 static void gtk_scrollbar_accessible_range_init (GtkAccessibleRangeInterface *iface);

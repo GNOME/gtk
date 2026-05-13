@@ -105,11 +105,14 @@ struct _GtkColorButtonClass {
 enum
 {
   PROP_0,
-  PROP_USE_ALPHA,
   PROP_TITLE,
-  PROP_RGBA,
   PROP_SHOW_EDITOR,
-  PROP_MODAL
+  PROP_MODAL,
+  N_PROPS,
+
+  /* GtkColorChooser */
+  PROP_USE_ALPHA,
+  PROP_RGBA,
 };
 
 /* Signals */

@@ -203,7 +203,8 @@ enum
   CHILD_PROP_USE_UNDERLINE,
   LAST_CHILD_PROP,
 
-  PROP_ACCESSIBLE_ROLE
+  /* GtkAccessible */
+  PROP_ACCESSIBLE_ROLE,
 };
 
 struct _GtkStackPage

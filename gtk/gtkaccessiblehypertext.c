@@ -107,6 +107,10 @@ gtk_accessible_hypertext_get_link_at (GtkAccessibleHypertext *self,
 /* {{{ GtkAccessibleHyperlink */
 
 enum {
+  PROP_0,
+  N_PROPS,
+
+  /* GtkAccessible */
   PROP_ACCESSIBLE_ROLE = 1,
 };
 
