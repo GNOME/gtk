@@ -620,7 +620,7 @@ parse_view (GtkConstraintVflParser *parser,
       return FALSE;
     }
 
-  while (g_ascii_isalnum (*end))
+  while (g_ascii_isalnum (*end) || *end == '_')
     end += 1;
 
   if (*end == '\0')

@@ -123,6 +123,7 @@ internal_tests = [
   },
   { 'name': 'imcontext' },
   { 'name': 'constraint-solver' },
+  { 'name': 'constraint-vfl-parser' },
   { 'name': 'rbtree-crash' },
   { 'name': 'propertylookuplistmodel' },
   { 'name': 'rbtree' },
