@@ -9101,7 +9101,6 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
     }
   else if (mark == gtk_text_buffer_get_selection_bound (buffer))
     {
-      gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (text_view));
       need_reset = TRUE;
     }
 
@@ -9112,6 +9111,9 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 
       has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), NULL, NULL);
       gtk_css_node_set_visible (text_view->priv->selection_node, has_selection);
+
+      if (has_selection)
+        gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (text_view));
     }
 }
 
