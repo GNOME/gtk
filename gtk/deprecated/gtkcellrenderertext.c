@@ -486,39 +486,85 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
   /* Style props are set or not */
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) text_cell_renderer_props[propval] = g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME)
+  text_cell_renderer_props[PROP_BACKGROUND_SET] = 
+      g_param_spec_boolean ("background-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_FOREGROUND_SET] = 
+      g_param_spec_boolean ("foreground-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_EDITABLE_SET] = 
+      g_param_spec_boolean ("editable-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_FAMILY_SET] = 
+      g_param_spec_boolean ("family-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("family-set", PROP_FAMILY_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_STYLE_SET] = 
+      g_param_spec_boolean ("style-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("style-set", PROP_STYLE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_VARIANT_SET] = 
+      g_param_spec_boolean ("variant-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("variant-set", PROP_VARIANT_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_WEIGHT_SET] = 
+      g_param_spec_boolean ("weight-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("weight-set", PROP_WEIGHT_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_STRETCH_SET] = 
+      g_param_spec_boolean ("stretch-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("stretch-set", PROP_STRETCH_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_SIZE_SET] = 
+      g_param_spec_boolean ("size-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("size-set", PROP_SIZE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_SCALE_SET] = 
+      g_param_spec_boolean ("scale-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("scale-set", PROP_SCALE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_RISE_SET] = 
+      g_param_spec_boolean ("rise-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("rise-set", PROP_RISE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_STRIKETHROUGH_SET] = 
+      g_param_spec_boolean ("strikethrough-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_UNDERLINE_SET] = 
+      g_param_spec_boolean ("underline-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_LANGUAGE_SET] = 
+      g_param_spec_boolean ("language-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("language-set", PROP_LANGUAGE_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_ELLIPSIZE_SET] = 
+      g_param_spec_boolean ("ellipsize-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  ADD_SET_PROP ("ellipsize-set", PROP_ELLIPSIZE_SET, NULL, NULL);
-
-  ADD_SET_PROP ("align-set", PROP_ALIGN_SET, NULL, NULL);
+  text_cell_renderer_props[PROP_ALIGN_SET] = 
+      g_param_spec_boolean ("align-set", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (object_class, LAST_PROP, text_cell_renderer_props);
 
