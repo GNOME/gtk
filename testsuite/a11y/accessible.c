@@ -23,6 +23,8 @@ enum {
   NUM_PROPERTIES
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 static GtkATContext *
 test_object_accessible_get_at_context (GtkAccessible *accessible)
 {
@@ -96,7 +98,10 @@ test_object_class_init (TestObjectClass *class)
   gobject_class->set_property = test_object_set_property;
   gobject_class->get_property = test_object_get_property;
 
-  g_object_class_override_property (gobject_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+  props[PROP_ACCESSIBLE_ROLE] = g_param_spec_override ("accessible-role",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACCESSIBLE), "accessible-role"));
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 }
 
 static TestObject *

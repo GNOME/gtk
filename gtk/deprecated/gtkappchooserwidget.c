@@ -223,9 +223,9 @@ enum {
   PROP_SHOW_OTHER,
   PROP_SHOW_ALL,
   PROP_DEFAULT_TEXT,
-  N_PROPERTIES,
-
+  /* GtkAppChooser */
   PROP_CONTENT_TYPE,
+  N_PROPERTIES,
 };
 
 static GParamSpec *props[N_PROPERTIES] = { NULL, };
@@ -596,7 +596,8 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   widget_class->size_allocate = gtk_app_chooser_widget_size_allocate;
   widget_class->snapshot = gtk_app_chooser_widget_snapshot;
 
-  g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
+  props[PROP_CONTENT_TYPE] = g_param_spec_override ("content-type",
+      g_object_interface_find_property (g_type_default_interface_peek (GTK_TYPE_APP_CHOOSER), "content-type"));
 
   /**
    * GtkAppChooserWidget:show-default:

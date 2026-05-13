@@ -234,11 +234,10 @@ enum {
   ROW_PROP_ACTIVATABLE,
   ROW_PROP_SELECTABLE,
   ROW_PROP_CHILD,
-  ROW_N_PROPS,
-
   /* GtkActionable */
   ROW_PROP_ACTION_NAME,
   ROW_PROP_ACTION_TARGET,
+  ROW_N_PROPS
 
 };
 
@@ -3962,10 +3961,12 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (object_class, ROW_N_PROPS, row_properties);
+  row_properties[ROW_PROP_ACTION_NAME] = g_param_spec_override ("action-name",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-name"));
+  row_properties[ROW_PROP_ACTION_TARGET] = g_param_spec_override ("action-target",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-target"));
 
-  g_object_class_override_property (object_class, ROW_PROP_ACTION_NAME, "action-name");
-  g_object_class_override_property (object_class, ROW_PROP_ACTION_TARGET, "action-target");
+  g_object_class_install_properties (object_class, ROW_N_PROPS, row_properties);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("row"));

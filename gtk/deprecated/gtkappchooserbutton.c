@@ -81,9 +81,8 @@ enum {
   PROP_SHOW_DEFAULT_ITEM,
   PROP_HEADING,
   PROP_MODAL,
-  NUM_PROPERTIES,
-
-  PROP_CONTENT_TYPE = NUM_PROPERTIES
+  PROP_CONTENT_TYPE,
+  NUM_PROPERTIES
 };
 
 enum {
@@ -683,7 +682,8 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
 
   klass->activate = gtk_app_chooser_button_activate;
 
-  g_object_class_override_property (oclass, PROP_CONTENT_TYPE, "content-type");
+  properties[PROP_CONTENT_TYPE] = g_param_spec_override ("content-type",
+      g_object_interface_find_property (g_type_default_interface_peek (GTK_TYPE_APP_CHOOSER), "content-type"));
 
   /**
    * GtkAppChooserButton:show-dialog-item:
@@ -729,6 +729,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
     g_param_spec_boolean ("modal", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 
   /**

@@ -200,10 +200,9 @@ enum {
   PROP_ID_COLUMN,
   PROP_ACTIVE_ID,
   PROP_CHILD,
-  N_PROPS,
-
   /* GtkCellEditable */
   PROP_EDITING_CANCELED,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -656,9 +655,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                        "(i)", GTK_SCROLL_END);
 
   /* properties */
-  g_object_class_override_property (object_class,
-                                    PROP_EDITING_CANCELED,
-                                    "editing-canceled");
+  props[PROP_EDITING_CANCELED] = g_param_spec_override ("editing-canceled",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_CELL_EDITABLE), "editing-canceled"));
 
   /**
    * GtkComboBox:model:

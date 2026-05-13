@@ -108,11 +108,10 @@ enum
   PROP_TITLE,
   PROP_SHOW_EDITOR,
   PROP_MODAL,
-  N_PROPS,
-
   /* GtkColorChooser */
   PROP_USE_ALPHA,
   PROP_RGBA,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -177,8 +176,10 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   klass->color_set = NULL;
   klass->activate = gtk_color_button_activate;
 
-  g_object_class_override_property (gobject_class, PROP_RGBA, "rgba");
-  g_object_class_override_property (gobject_class, PROP_USE_ALPHA, "use-alpha");
+  props[PROP_RGBA] = g_param_spec_override ("rgba",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "rgba"));
+  props[PROP_USE_ALPHA] = g_param_spec_override ("use-alpha",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "use-alpha"));
 
   /**
    * GtkColorButton:title:

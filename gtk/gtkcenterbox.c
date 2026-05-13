@@ -94,10 +94,9 @@ enum {
   PROP_END_WIDGET,
   PROP_BASELINE_POSITION,
   PROP_SHRINK_CENTER_LAST,
-  LAST_PROP,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  LAST_PROP,
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
@@ -254,12 +253,11 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  gpointer iface;
 
   object_class->set_property = gtk_center_box_set_property;
   object_class->get_property = gtk_center_box_get_property;
   object_class->dispose = gtk_center_box_dispose;
-
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
    * GtkCenterBox:baseline-position:
@@ -334,6 +332,12 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
       g_param_spec_boolean ("shrink-center-last", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  props[PROP_ORIENTATION] =
+      g_param_spec_override ("orientation",
+                             g_object_interface_find_property (iface, "orientation"));
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

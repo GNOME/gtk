@@ -490,10 +490,9 @@ struct _GtkCellEditableWidget
 enum {
   EDITABLE_PROP_MODE = 1,
   EDITABLE_PROP_PATH,
-  EDITABLE_N_PROPS,
-
   /* GtkCellEditable */
   EDITABLE_PROP_EDITING_CANCELED,
+  EDITABLE_N_PROPS
 };
 
 static GParamSpec *editable_props[EDITABLE_N_PROPS] = { NULL, };
@@ -672,9 +671,8 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
 
   widget_class->unrealize = gtk_cell_editable_widget_unrealize;
 
-  g_object_class_override_property (object_class,
-                                    EDITABLE_PROP_EDITING_CANCELED,
-                                    "editing-canceled");
+  editable_props[EDITABLE_PROP_EDITING_CANCELED] = g_param_spec_override ("editing-canceled",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_CELL_EDITABLE), "editing-canceled"));
 
   editable_props[EDITABLE_PROP_MODE] = g_param_spec_enum ("accel-mode", NULL, NULL,
                                                           GTK_TYPE_CELL_RENDERER_ACCEL_MODE,

@@ -120,11 +120,10 @@ enum {
   PROP_ICON_NAME,
   PROP_CHILD,
   PROP_CAN_SHRINK,
-  LAST_PROP,
-
   /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
+  LAST_PROP
 };
 
 enum {
@@ -289,10 +288,12 @@ gtk_button_class_init (GtkButtonClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, props);
+  props[PROP_ACTION_NAME] = g_param_spec_override ("action-name",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-name"));
+  props[PROP_ACTION_TARGET] = g_param_spec_override ("action-target",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-target"));
 
-  g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
-  g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
+  g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
   /**
    * GtkButton::clicked:

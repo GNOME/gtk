@@ -130,13 +130,12 @@ enum
   PROP_ITEM_PADDING,
   PROP_CELL_AREA,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
-  N_PROPS,
-
   /* GtkScrollable */
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -549,13 +548,17 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                                FALSE,
                                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, props);
-
   /* Scrollable interface properties */
-  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
-  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
-  g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
-  g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
+  props[PROP_HADJUSTMENT] = g_param_spec_override ("hadjustment",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "hadjustment"));
+  props[PROP_VADJUSTMENT] = g_param_spec_override ("vadjustment",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "vadjustment"));
+  props[PROP_HSCROLL_POLICY] = g_param_spec_override ("hscroll-policy",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "hscroll-policy"));
+  props[PROP_VSCROLL_POLICY] = g_param_spec_override ("vscroll-policy",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "vscroll-policy"));
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Signals */
   /**

@@ -193,10 +193,9 @@ enum {
   PROP_SHRINK_END_CHILD,
   PROP_START_CHILD,
   PROP_END_CHILD,
-  LAST_PROP,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  LAST_PROP,
 };
 
 enum {
@@ -414,6 +413,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  gpointer iface;
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
@@ -560,8 +560,13 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_TYPE_WIDGET,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  paned_props[PROP_ORIENTATION] =
+    g_param_spec_override ("orientation",
+                           g_object_interface_find_property (iface, "orientation"));
+
   g_object_class_install_properties (object_class, LAST_PROP, paned_props);
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
    * GtkPaned::cycle-child-focus:

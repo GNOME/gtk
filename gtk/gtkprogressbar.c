@@ -141,10 +141,9 @@ enum {
   PROP_TEXT,
   PROP_SHOW_TEXT,
   PROP_ELLIPSIZE,
-  NUM_PROPERTIES,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  NUM_PROPERTIES
 };
 
 static GParamSpec *progress_props[NUM_PROPERTIES] = { NULL, };
@@ -186,7 +185,8 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   widget_class->direction_changed = gtk_progress_bar_direction_changed;
 
-  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+  progress_props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkProgressBar:inverted:

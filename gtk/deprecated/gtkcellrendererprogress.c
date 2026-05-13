@@ -57,10 +57,9 @@ enum
   PROP_TEXT_XALIGN,
   PROP_TEXT_YALIGN,
   PROP_INVERTED,
-  N_PROPS,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -680,9 +679,8 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                 0.0, 1.0, 0.5,
                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkCellRendererProgress:inverted:

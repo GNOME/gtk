@@ -244,10 +244,9 @@ enum {
   PROP_ENABLE_EMOJI_COMPLETION,
   PROP_MENU_ENTRY_ICON_PRIMARY_TEXT,
   PROP_MENU_ENTRY_ICON_SECONDARY_TEXT,
-  NUM_PROPERTIES,
-
   /* GtkCellEditable */
   PROP_EDITING_CANCELED,
+  NUM_PROPERTIES
 };
 
 static GParamSpec *entry_props[NUM_PROPERTIES] = { NULL, };
@@ -991,9 +990,12 @@ gtk_entry_class_init (GtkEntryClass *class)
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  entry_props[PROP_EDITING_CANCELED] = g_param_spec_override ("editing-canceled",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_CELL_EDITABLE), "editing-canceled"));
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
-  g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
-  gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
+
+  gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
 
   /**
    * GtkEntry::activate:
@@ -1088,7 +1090,7 @@ gtk_entry_set_property (GObject         *object,
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     {
-      if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_EDITABLE)
+      if (prop_id == NUM_PROPERTIES + GTK_EDITABLE_PROP_EDITABLE)
         {
           gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
                                           GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !g_value_get_boolean (value),

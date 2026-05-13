@@ -78,11 +78,10 @@ enum
 {
   PROP_ZERO,
   PROP_SHOW_EDITOR,
-  N_PROPS,
-
   /* GtkColorChooser */
   PROP_RGBA,
   PROP_USE_ALPHA,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -239,8 +238,10 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 
   widget_class->unmap = gtk_color_chooser_dialog_unmap;
 
-  g_object_class_override_property (object_class, PROP_RGBA, "rgba");
-  g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
+  props[PROP_RGBA] = g_param_spec_override ("rgba",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "rgba"));
+  props[PROP_USE_ALPHA] = g_param_spec_override ("use-alpha",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "use-alpha"));
 
   /**
    * GtkColorChooserDialog:show-editor:

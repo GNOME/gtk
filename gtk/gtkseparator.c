@@ -71,11 +71,12 @@ struct _GtkSeparatorClass
 
 enum {
   PROP_0,
-  N_PROPS,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
@@ -156,7 +157,10 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;
 
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("separator"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_SEPARATOR);

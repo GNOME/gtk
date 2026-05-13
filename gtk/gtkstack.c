@@ -201,10 +201,9 @@ enum
   CHILD_PROP_NEEDS_ATTENTION,
   CHILD_PROP_VISIBLE,
   CHILD_PROP_USE_UNDERLINE,
-  LAST_CHILD_PROP,
-
   /* GtkAccessible */
   PROP_ACCESSIBLE_ROLE,
+  LAST_CHILD_PROP,
 };
 
 struct _GtkStackPage
@@ -489,6 +488,7 @@ static void
 gtk_stack_page_class_init (GtkStackPageClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  gpointer iface;
 
   object_class->finalize = gtk_stack_page_finalize;
   object_class->dispose = gtk_stack_page_dispose;
@@ -570,9 +570,13 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          FALSE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_page_props);
+  /* GtkAccessible */
+  iface = g_type_default_interface_peek (GTK_TYPE_ACCESSIBLE);
+  stack_page_props[PROP_ACCESSIBLE_ROLE] =
+    g_param_spec_override ("accessible-role",
+                           g_object_interface_find_property (iface, "accessible-role"));
 
-  g_object_class_override_property (object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+  g_object_class_install_properties (object_class, LAST_CHILD_PROP, stack_page_props);
 }
 
 #define GTK_TYPE_STACK_PAGES (gtk_stack_pages_get_type ())

@@ -63,10 +63,9 @@ enum {
   PROP_0,
   PROP_BUS_NAME,
   PROP_OBJECT_PATH,
-  N_PROPS,
-
   /* GtkAccessible */
   PROP_ACCESSIBLE_ROLE,
+  N_PROPS,
 };
 
 static GParamSpec *properties [N_PROPS];
@@ -283,6 +282,7 @@ static void
 gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  gpointer iface;
 
   object_class->dispose = gtk_at_spi_socket_dispose;
   object_class->get_property = gtk_at_spi_socket_get_property;
@@ -319,9 +319,13 @@ gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
                          G_PARAM_STATIC_NAME |
                          G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  /* GtkAccessible */
+  iface = g_type_default_interface_peek (GTK_TYPE_ACCESSIBLE);
+  properties[PROP_ACCESSIBLE_ROLE] =
+    g_param_spec_override ("accessible-role",
+                           g_object_interface_find_property (iface, "accessible-role"));
 
-  g_object_class_override_property (object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void

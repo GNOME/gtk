@@ -230,11 +230,10 @@ enum
   PROP_ICONIC,
   PROP_ACCEL,
   PROP_INDICATOR_SIZE_GROUP,
-  LAST_PROP,
-
   /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
+  LAST_PROP
 };
 
 enum
@@ -1342,10 +1341,12 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
     g_param_spec_string ("accel", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  properties[PROP_ACTION_NAME] = g_param_spec_override ("action-name",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-name"));
+  properties[PROP_ACTION_TARGET] = g_param_spec_override ("action-target",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-target"));
 
-  g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");
-  g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   signals[SIGNAL_CLICKED] = g_signal_new (I_("clicked"),
                                           G_OBJECT_CLASS_TYPE (object_class),

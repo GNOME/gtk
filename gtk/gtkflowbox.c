@@ -756,10 +756,9 @@ enum {
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
   PROP_ACCEPT_UNPAIRED_RELEASE,
-  LAST_PROP,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  LAST_PROP
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
@@ -3698,7 +3697,8 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   class->unselect_all = gtk_flow_box_unselect_all;
   class->selected_children_changed = gtk_flow_box_selected_children_changed;
 
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkFlowBox:selection-mode:

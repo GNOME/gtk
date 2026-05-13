@@ -258,13 +258,12 @@ enum {
   PROP_WRAP,
   PROP_UPDATE_POLICY,
   PROP_VALUE,
-  NUM_SPINBUTTON_PROPS,
-
   /* GtkCellEditable */
   PROP_EDITING_CANCELED,
 
   /* GtkOrientable */
   PROP_ORIENTATION,
+  NUM_SPINBUTTON_PROPS
 };
 
 /* Signals */
@@ -485,10 +484,14 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  spinbutton_props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
+  spinbutton_props[PROP_EDITING_CANCELED] = g_param_spec_override ("editing-canceled",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_CELL_EDITABLE), "editing-canceled"));
+
   g_object_class_install_properties (gobject_class, NUM_SPINBUTTON_PROPS, spinbutton_props);
-  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
-  g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
-  gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
+
+  gtk_editable_install_properties (gobject_class, NUM_SPINBUTTON_PROPS);
 
   /**
    * GtkSpinButton::input:
@@ -773,7 +776,7 @@ gtk_spin_button_set_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
-  if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_WIDTH_CHARS)
+  if (prop_id == NUM_SPINBUTTON_PROPS + GTK_EDITABLE_PROP_WIDTH_CHARS)
     {
       spin_button->width_chars = g_value_get_int (value);
       gtk_spin_button_update_width_chars (spin_button);
@@ -845,7 +848,7 @@ gtk_spin_button_get_property (GObject      *object,
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
-  if (prop_id == PROP_EDITING_CANCELED + 1 + GTK_EDITABLE_PROP_WIDTH_CHARS)
+  if (prop_id == NUM_SPINBUTTON_PROPS + GTK_EDITABLE_PROP_WIDTH_CHARS)
     {
       g_value_set_int (value, spin_button->width_chars);
       return;

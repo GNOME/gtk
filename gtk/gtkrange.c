@@ -140,10 +140,9 @@ enum {
   PROP_RESTRICT_TO_FILL_LEVEL,
   PROP_FILL_LEVEL,
   PROP_ROUND_DIGITS,
-  LAST_PROP,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  LAST_PROP
 };
 
 enum {
@@ -386,7 +385,8 @@ gtk_range_class_init (GtkRangeClass *class)
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_BOOLEAN__ENUM_DOUBLEv);
 
-  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+  properties[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkRange:adjustment:

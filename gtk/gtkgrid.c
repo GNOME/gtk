@@ -138,10 +138,9 @@ enum
   PROP_ROW_HOMOGENEOUS,
   PROP_COLUMN_HOMOGENEOUS,
   PROP_BASELINE_ROW,
-  N_PROPERTIES,
-
   /* GtkOrientable */
-  PROP_ORIENTATION
+  PROP_ORIENTATION,
+  N_PROPERTIES,
 };
 
 static void gtk_grid_buildable_iface_init (GtkBuildableIface *iface);
@@ -417,6 +416,7 @@ gtk_grid_class_init (GtkGridClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  gpointer iface;
 
   object_class->dispose = gtk_grid_dispose;
   object_class->get_property = gtk_grid_get_property;
@@ -424,8 +424,6 @@ gtk_grid_class_init (GtkGridClass *class)
 
   widget_class->compute_expand = gtk_grid_compute_expand;
   widget_class->get_request_mode = gtk_grid_get_request_mode;
-
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
    * GtkGrid:row-spacing:
@@ -476,6 +474,12 @@ gtk_grid_class_init (GtkGridClass *class)
     g_param_spec_int ("baseline-row", NULL, NULL,
                       0, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  obj_properties[PROP_ORIENTATION] =
+    g_param_spec_override ("orientation",
+                           g_object_interface_find_property (iface, "orientation"));
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 

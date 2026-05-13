@@ -420,13 +420,12 @@ enum
   PROP_INPUT_HINTS,
   PROP_MONOSPACE,
   PROP_EXTRA_MENU,
-  N_PROPS,
-
   /* GtkScrollable */
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -922,6 +921,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  gpointer iface;
 
   /* Default handlers and virtual methods
    */
@@ -1195,13 +1195,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                 G_TYPE_MENU_MODEL,
                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, props);
-
    /* GtkScrollable interface */
-   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
-   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
-   g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
-   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
+   iface = g_type_default_interface_ref (GTK_TYPE_SCROLLABLE);
+   props[PROP_HADJUSTMENT] = g_param_spec_override ("hadjustment",
+                                                    g_object_interface_find_property (iface, "hadjustment"));
+   props[PROP_VADJUSTMENT] = g_param_spec_override ("vadjustment",
+                                                    g_object_interface_find_property (iface, "vadjustment"));
+   props[PROP_HSCROLL_POLICY] = g_param_spec_override ("hscroll-policy",
+                                                       g_object_interface_find_property (iface, "hscroll-policy"));
+   props[PROP_VSCROLL_POLICY] = g_param_spec_override ("vscroll-policy",
+                                                       g_object_interface_find_property (iface, "vscroll-policy"));
+
+   g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /*
    * Signals

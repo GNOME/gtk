@@ -159,10 +159,9 @@ enum
   PROP_CELL_AREA_CONTEXT,
   PROP_DRAW_SENSITIVE,
   PROP_FIT_MODEL,
-  N_PROPS,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -193,7 +192,8 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   widget_class->measure                        = gtk_cell_view_measure;
 
   /* properties */
-  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkCellView:model:

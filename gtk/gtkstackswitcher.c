@@ -93,10 +93,9 @@ struct _GtkStackSwitcherClass
 enum {
   PROP_0,
   PROP_STACK,
-  N_PROPS,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  N_PROPS
 };
 
 static GParamSpec *props[N_PROPS] = { NULL, };
@@ -557,9 +556,10 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                            GTK_TYPE_STACK,
                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT);
 
-  g_object_class_install_properties (object_class, N_PROPS, props);
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
