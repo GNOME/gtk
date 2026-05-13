@@ -38,7 +38,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * [class@Gtk.FontButton].
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 
 enum
@@ -190,7 +190,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  *   selected font family
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 PangoFontFamily *
 gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
@@ -213,7 +213,7 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
  *   selected font group details
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 PangoFontFace *
 gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
@@ -233,7 +233,7 @@ gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
  *   or -1 if no font size is selected.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 int
 gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
@@ -262,7 +262,7 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
  *   of the current font
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 char *
 gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
@@ -285,7 +285,7 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
  * Sets the currently-selected font.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
@@ -316,7 +316,7 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
  *   current font
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 PangoFontDescription *
 gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
@@ -338,7 +338,7 @@ gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
  * Sets the currently-selected font from @font_desc.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
@@ -359,7 +359,7 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
  * Returns: (transfer full): the text displayed in the preview area
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 char *
 gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
@@ -383,7 +383,7 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
  * The @text is used to show how the selected font looks.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
@@ -404,7 +404,7 @@ gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
  * Returns: %TRUE if the preview entry is shown or %FALSE if it is hidden.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 gboolean
 gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
@@ -426,7 +426,7 @@ gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
  * Shows or hides the editable preview entry.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
@@ -449,7 +449,7 @@ gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
  * in the font chooser.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_filter_func (GtkFontChooser   *fontchooser,
@@ -506,7 +506,7 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
  * ```
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
@@ -529,7 +529,7 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
  * Returns: (nullable) (transfer full): a `PangoFontMap`
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 PangoFontMap *
 gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
@@ -552,7 +552,7 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
  * Sets the desired level of granularity for selecting fonts.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
@@ -572,7 +572,7 @@ gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
  * Returns: the current granularity level
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 GtkFontChooserLevel
 gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
@@ -599,7 +599,7 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
  * Returns: the currently selected font features
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 char *
 gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
@@ -622,7 +622,7 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
  * Returns: the currently selected language
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 char *
 gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
@@ -644,7 +644,7 @@ gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
  * Sets the language to use for font features.
  *
  * Deprecated: 4.10: Use [class@Gtk.FontDialog] and [class@Gtk.FontDialogButton]
- * instead
+ *   instead
  */
 void
 gtk_font_chooser_set_language (GtkFontChooser *fontchooser,
