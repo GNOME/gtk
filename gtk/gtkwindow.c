@@ -2487,18 +2487,14 @@ gtk_window_set_default_widget (GtkWindow *window,
 
   if (priv->default_widget != default_widget)
     {
-      GtkWidget *old_default_widget = NULL;
-
       if (default_widget)
 	g_object_ref (default_widget);
 
       if (priv->default_widget)
 	{
-          old_default_widget = priv->default_widget;
-
           if (priv->focus_widget != priv->default_widget ||
               !gtk_widget_get_receives_default (priv->default_widget))
-            _gtk_widget_set_has_default (priv->default_widget, FALSE);
+            gtk_widget_set_has_default (priv->default_widget, FALSE);
 
           gtk_widget_queue_draw (priv->default_widget);
 	}
@@ -2511,19 +2507,13 @@ gtk_window_set_default_widget (GtkWindow *window,
 	{
           if (priv->focus_widget == NULL ||
               !gtk_widget_get_receives_default (priv->focus_widget))
-            _gtk_widget_set_has_default (priv->default_widget, TRUE);
+            gtk_widget_set_has_default (priv->default_widget, TRUE);
 
           gtk_widget_queue_draw (priv->default_widget);
 	}
 
-      if (old_default_widget)
-	g_object_notify (G_OBJECT (old_default_widget), "has-default");
-
       if (default_widget)
-	{
-	  g_object_notify (G_OBJECT (default_widget), "has-default");
-	  g_object_unref (default_widget);
-	}
+	g_object_unref (default_widget);
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_WIDGET]);
     }
