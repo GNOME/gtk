@@ -678,7 +678,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
    * The key value for the trigger.
    */
   keyval_props[KEYVAL_PROP_KEYVAL] =
-    g_param_spec_uint (I_("keyval"), NULL, NULL,
+    g_param_spec_uint ("keyval", NULL, NULL,
                        0, G_MAXINT,
                        0,
                        G_PARAM_STATIC_NAME |
@@ -691,7 +691,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
    * The key modifiers for the trigger.
    */
   keyval_props[KEYVAL_PROP_MODIFIERS] =
-    g_param_spec_flags (I_("modifiers"), NULL, NULL,
+    g_param_spec_flags ("modifiers", NULL, NULL,
                         GDK_TYPE_MODIFIER_TYPE,
                         GDK_NO_MODIFIER_MASK,
                         G_PARAM_STATIC_NAME |
@@ -930,7 +930,7 @@ gtk_mnemonic_trigger_class_init (GtkMnemonicTriggerClass *klass)
    * The key value for the trigger.
    */
   mnemonic_props[MNEMONIC_PROP_KEYVAL] =
-    g_param_spec_uint (I_("keyval"), NULL, NULL,
+    g_param_spec_uint ("keyval", NULL, NULL,
                        0, G_MAXINT,
                        0,
                        G_PARAM_STATIC_NAME |
@@ -1174,7 +1174,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
    * The first `GtkShortcutTrigger` to check.
    */
   alternative_props[ALTERNATIVE_PROP_FIRST] =
-    g_param_spec_object (I_("first"), NULL, NULL,
+    g_param_spec_object ("first", NULL, NULL,
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -1186,7 +1186,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
    * The second `GtkShortcutTrigger` to check.
    */
   alternative_props[ALTERNATIVE_PROP_SECOND] =
-    g_param_spec_object (I_("second"), NULL, NULL,
+    g_param_spec_object ("second", NULL, NULL,
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_STATIC_NAME |
                          G_PARAM_CONSTRUCT_ONLY |
