@@ -594,7 +594,7 @@ bloat_pad_startup (GApplication *application)
 
   menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/insert-image.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/insert-image-symbolic.svg");
   icon = g_file_icon_new (file);
   item = g_menu_item_new ("File Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -610,7 +610,7 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png", 0, NULL);
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/media-eject-symbolic.svg", 0, NULL);
   icon = g_bytes_icon_new (bytes);
   item = g_menu_item_new ("Bytes Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -619,19 +619,19 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (icon);
   g_bytes_unref (bytes);
 
-  icon = G_ICON (gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/folder-new.png"));
+  icon = G_ICON (gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/folder-new-symbolic.svg"));
   item = g_menu_item_new ("Texture", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);
   g_object_unref (icon);
 
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/bookmark-new.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/bookmark-new-symbolic.svg");
   icon = g_file_icon_new (file);
   emblem = g_emblem_new (icon);
   g_object_unref (icon);
   g_object_unref (file);
-  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/dialog-warning.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/dialog-warning-symbolic.svg");
   icon2 = g_file_icon_new (file);
   icon = g_emblemed_icon_new (icon2, emblem);
   item = g_menu_item_new ("Emblemed Icon", NULL);
