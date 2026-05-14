@@ -106,7 +106,8 @@
  * - "submenu-action": name of an action that may be used to track
  *      whether a submenu is open
  * - "hidden-when": a string used to determine when the item will be hidden.
- *      Possible values include "action-disabled", "action-missing", "macos-menubar".
+ *      Possible values include "action-disabled", "action-missing", "macos-menubar",
+ *      "state-matches", "state-differs".
  *      This is mainly useful for exported menus, see [method@Gtk.Application.set_menubar].
  * - "custom": a string used to match against the ID of a custom child added with
  *      [method@Gtk.PopoverMenu.add_child], [method@Gtk.PopoverMenuBar.add_child],
