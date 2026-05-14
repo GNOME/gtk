@@ -93,7 +93,7 @@ struct _GtkMenuTrackerItem
   guint is_active : 1;
   guint submenu_shown : 1;
   guint submenu_requested : 1;
-  guint hidden_when : 2;
+  guint hidden_when : 3;
   guint is_visible : 1;
 };
 
@@ -101,6 +101,8 @@ struct _GtkMenuTrackerItem
 #define HIDDEN_WHEN_MISSING  1
 #define HIDDEN_WHEN_DISABLED 2
 #define HIDDEN_WHEN_ALWAYS   3
+#define HIDDEN_WHEN_STATE_MATCHES 4
+#define HIDDEN_WHEN_STATE_DIFFERS 5
 
 enum {
   PROP_0,
@@ -276,6 +278,14 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
       visible = FALSE;
       break;
 
+    case HIDDEN_WHEN_STATE_MATCHES:
+      visible = !self->is_active;
+      break;
+
+    case HIDDEN_WHEN_STATE_DIFFERS:
+      visible = self->is_active;
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -433,7 +443,10 @@ gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
     self->is_active = FALSE;
 
   if (self->is_active != was_active)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACTIVE]);
+    {
+      gtk_menu_tracker_item_update_visibility (self);
+      g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACTIVE]);
+    }
 }
 
 static void
@@ -533,6 +546,10 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
         self->hidden_when = HIDDEN_WHEN_MISSING;
       else if (mac_os_mode && g_str_equal (hidden_when, "macos-menubar"))
         self->hidden_when = HIDDEN_WHEN_ALWAYS;
+      else if (g_str_equal (hidden_when, "state-matches"))
+        self->hidden_when = HIDDEN_WHEN_STATE_MATCHES;
+      else if (g_str_equal (hidden_when, "state-differs"))
+        self->hidden_when = HIDDEN_WHEN_STATE_DIFFERS;
 
       /* Ignore other values -- this code may be running in context of a
        * desktop shell or the like and should not spew criticals due to
