@@ -91,7 +91,6 @@ enum
   PROP_INVERT_COLORS,
   PROP_WEIGHT,
   PROP_STATE,
-  PROP_INITIAL_STATE,
   PROP_PLAYING,
   PROP_COMPAT_CLASSES,
   NUM_PROPERTIES,
@@ -1392,11 +1391,6 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
 
   properties[PROP_STATE] =
     g_param_spec_uint ("state", NULL, NULL,
-                       0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
-
-  properties[PROP_INITIAL_STATE] =
-    g_param_spec_uint ("initial-state", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
