@@ -40,11 +40,11 @@
  * Implementing the appearance of the menu item is up to toolkits, and certain
  * toolkits may choose to ignore certain properties, like icon or accel. The
  * role of the item determines its accessibility role, along with its
- * decoration if the GtkMenuTrackerItem::toggled property is true. As an
+ * decoration if the GtkMenuTrackerItem::is-active property is true. As an
  * example, if the item has the role %GTK_MENU_TRACKER_ITEM_ROLE_CHECK and
- * GtkMenuTrackerItem::toggled is %FALSE, its accessible role should be that of
+ * GtkMenuTrackerItem::is-active is %FALSE, its accessible role should be that of
  * a check menu item, and no decoration should be drawn. But if
- * GtkMenuTrackerItem::toggled is %TRUE, a checkmark should be drawn.
+ * GtkMenuTrackerItem::is-active is %TRUE, a checkmark should be drawn.
  *
  * All properties except for the two class-determining properties,
  * GtkMenuTrackerItem::is-separator and GtkMenuTrackerItem::has-submenu are
@@ -90,7 +90,7 @@ struct _GtkMenuTrackerItem
   guint is_separator : 1;
   guint can_activate : 1;
   guint sensitive : 1;
-  guint toggled : 1;
+  guint is_active : 1;
   guint submenu_shown : 1;
   guint submenu_requested : 1;
   guint hidden_when : 2;
@@ -111,7 +111,7 @@ enum {
   PROP_VERB_ICON,
   PROP_SENSITIVE,
   PROP_ROLE,
-  PROP_TOGGLED,
+  PROP_ACTIVE,
   PROP_ACCEL,
   PROP_SUBMENU_SHOWN,
   PROP_IS_VISIBLE,
@@ -178,8 +178,8 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_ROLE:
       g_value_set_enum (value, gtk_menu_tracker_item_get_role (self));
       break;
-    case PROP_TOGGLED:
-      g_value_set_boolean (value, gtk_menu_tracker_item_get_toggled (self));
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_active (self));
       break;
     case PROP_ACCEL:
       g_value_set_string (value, gtk_menu_tracker_item_get_accel (self));
@@ -236,8 +236,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_enum ("role", NULL, NULL,
                        GTK_TYPE_MENU_TRACKER_ITEM_ROLE, GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
                        G_PARAM_STATIC_NAME | G_PARAM_READABLE);
-  gtk_menu_tracker_item_pspecs[PROP_TOGGLED] =
-    g_param_spec_boolean ("toggled", NULL, NULL, FALSE, G_PARAM_STATIC_NAME | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_ACTIVE] =
+    g_param_spec_boolean ("is-active", NULL, NULL, FALSE, G_PARAM_STATIC_NAME | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ACCEL] =
     g_param_spec_string ("accel", NULL, NULL, NULL, G_PARAM_STATIC_NAME | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU_SHOWN] =
@@ -298,14 +298,14 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
   gboolean old_sensitive;
-  gboolean old_toggled;
+  gboolean was_active;
   GtkMenuTrackerItemRole old_role;
   guint n_changed;
 
   GTK_DEBUG (ACTIONS, "menutracker: action %s added", action_name);
 
   old_sensitive = self->sensitive;
-  old_toggled = self->toggled;
+  was_active = self->is_active;
   old_role = self->role;
 
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
@@ -335,13 +335,13 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
 
   if (action_target != NULL && state != NULL)
     {
-      self->toggled = g_variant_equal (state, action_target);
+      self->is_active = g_variant_equal (state, action_target);
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_RADIO;
     }
 
   else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
     {
-      self->toggled = g_variant_get_boolean (state);
+      self->is_active = g_variant_get_boolean (state);
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_CHECK;
     }
 
@@ -351,7 +351,7 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
    * emission. This code can get run a lot!
    */
   n_changed = (old_role != self->role)
-            + (old_toggled != self->toggled)
+            + (was_active != self->is_active)
             + (old_sensitive != self->sensitive);
 
   if (n_changed > 1)
@@ -360,8 +360,8 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
   if (self->sensitive != old_sensitive)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
 
-  if (self->toggled != old_toggled)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
+  if (self->is_active != was_active)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACTIVE]);
 
   if (self->role != old_role)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
@@ -410,7 +410,7 @@ gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
-  gboolean was_toggled;
+  gboolean was_active;
 
   GTK_DEBUG (ACTIONS, "menutracker: action %s: state changed", action_name);
 
@@ -418,22 +418,22 @@ gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
     return;
 
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
-  was_toggled = self->toggled;
+  was_active = self->is_active;
 
   if (action_target)
     {
-      self->toggled = g_variant_equal (state, action_target);
+      self->is_active = g_variant_equal (state, action_target);
       g_variant_unref (action_target);
     }
 
   else if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-    self->toggled = g_variant_get_boolean (state);
+    self->is_active = g_variant_get_boolean (state);
 
   else
-    self->toggled = FALSE;
+    self->is_active = FALSE;
 
-  if (self->toggled != was_toggled)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
+  if (self->is_active != was_active)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACTIVE]);
 }
 
 static void
@@ -442,7 +442,7 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
                                       const char          *action_name)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-  gboolean was_sensitive, was_toggled;
+  gboolean was_sensitive, was_active;
   GtkMenuTrackerItemRole old_role;
 
   GTK_DEBUG (ACTIONS, "menutracker: action %s was removed", action_name);
@@ -451,12 +451,12 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
     return;
 
   was_sensitive = self->sensitive;
-  was_toggled = self->toggled;
+  was_active = self->is_active;
   old_role = self->role;
 
   self->can_activate = FALSE;
   self->sensitive = FALSE;
-  self->toggled = FALSE;
+  self->is_active = FALSE;
   self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
 
   /* Backwards from adding: we want to remove ourselves from the menu
@@ -469,8 +469,8 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
   if (was_sensitive)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
 
-  if (was_toggled)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
+  if (was_active)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACTIVE]);
 
   if (old_role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
@@ -715,9 +715,9 @@ gtk_menu_tracker_item_get_role (GtkMenuTrackerItem *self)
 }
 
 gboolean
-gtk_menu_tracker_item_get_toggled (GtkMenuTrackerItem *self)
+gtk_menu_tracker_item_get_active (GtkMenuTrackerItem *self)
 {
-  return self->toggled;
+  return self->is_active;
 }
 
 const char *
