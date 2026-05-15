@@ -199,7 +199,7 @@ hsv_changed (GtkColorEditor *editor)
 
   update_color (editor, &color);
 
-  g_object_notify (G_OBJECT (editor), "rgba");
+  g_object_notify_by_pspec (G_OBJECT (editor), props[PROP_RGBA]);
 }
 
 static void
@@ -628,7 +628,7 @@ gtk_color_editor_set_rgba (GtkColorChooser *chooser,
 
   update_color (editor, color);
 
-  g_object_notify (G_OBJECT (editor), "rgba");
+  g_object_notify_by_pspec (G_OBJECT (editor), props[PROP_RGBA]);
 }
 
 static void

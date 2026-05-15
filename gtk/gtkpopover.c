@@ -2675,7 +2675,7 @@ gtk_popover_set_cascade_popdown (GtkPopover *popover,
   if (priv->cascade_popdown != !!cascade_popdown)
     {
       priv->cascade_popdown = !!cascade_popdown;
-      g_object_notify (G_OBJECT (popover), "cascade-popdown");
+      g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_CASCADE_POPDOWN]);
     }
 }
 

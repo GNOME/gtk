@@ -1146,7 +1146,7 @@ gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
     {
       priv->draw_sensitive = draw_sensitive;
 
-      g_object_notify (G_OBJECT (cell_view), "draw-sensitive");
+      g_object_notify_by_pspec (G_OBJECT (cell_view), props[PROP_DRAW_SENSITIVE]);
     }
 }
 
@@ -1199,6 +1199,6 @@ gtk_cell_view_set_fit_model (GtkCellView *cell_view,
 
       gtk_cell_area_context_reset (priv->context);
 
-      g_object_notify (G_OBJECT (cell_view), "fit-model");
+      g_object_notify_by_pspec (G_OBJECT (cell_view), props[PROP_FIT_MODEL]);
     }
 }

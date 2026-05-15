@@ -420,7 +420,7 @@ dialog_response (GtkDialog *dialog,
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
       g_object_freeze_notify (G_OBJECT (button));
-      g_object_notify (G_OBJECT (button), "rgba");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RGBA]);
       g_object_thaw_notify (G_OBJECT (button));
       g_object_unref (button);
     }
@@ -540,7 +540,7 @@ gtk_color_button_set_rgba (GtkColorChooser *chooser,
                                   -1);
   g_free (text);
 
-  g_object_notify (G_OBJECT (chooser), "rgba");
+  g_object_notify_by_pspec (G_OBJECT (chooser), props[PROP_RGBA]);
 }
 
 static void
@@ -567,7 +567,7 @@ set_use_alpha (GtkColorButton *button,
 
       gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (button->swatch), use_alpha);
 
-      g_object_notify (G_OBJECT (button), "use-alpha");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_ALPHA]);
     }
 }
 
@@ -595,7 +595,7 @@ gtk_color_button_set_title (GtkColorButton *button,
   if (button->cs_dialog)
     gtk_window_set_title (GTK_WINDOW (button->cs_dialog), button->title);
 
-  g_object_notify (G_OBJECT (button), "title");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_TITLE]);
 }
 
 /**
@@ -639,7 +639,7 @@ gtk_color_button_set_modal (GtkColorButton *button,
   if (button->cs_dialog)
     gtk_window_set_modal (GTK_WINDOW (button->cs_dialog), button->modal);
 
-  g_object_notify (G_OBJECT (button), "modal");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_MODAL]);
 }
 
 /**
@@ -685,7 +685,7 @@ gtk_color_button_set_property (GObject      *object,
         if (button->show_editor != show_editor)
           {
             button->show_editor = show_editor;
-            g_object_notify (object, "show-editor");
+            g_object_notify_by_pspec (object, props[PROP_SHOW_EDITOR]);
           }
       }
       break;

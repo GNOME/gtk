@@ -692,7 +692,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
   g_free (link_button->uri);
   link_button->uri = g_strdup (uri);
 
-  g_object_notify (G_OBJECT (link_button), "uri");
+  g_object_notify_by_pspec (G_OBJECT (link_button), props[PROP_URI]);
 
   gtk_link_button_set_visited (link_button, FALSE);
 }
@@ -750,7 +750,7 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
           gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
         }
 
-      g_object_notify (G_OBJECT (link_button), "visited");
+      g_object_notify_by_pspec (G_OBJECT (link_button), props[PROP_VISITED]);
     }
 }
 

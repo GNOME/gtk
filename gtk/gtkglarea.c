@@ -1393,7 +1393,7 @@ gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
     {
       priv->has_depth_buffer = has_depth_buffer;
 
-      g_object_notify (G_OBJECT (area), "has-depth-buffer");
+      g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_HAS_DEPTH_BUFFER]);
 
       priv->have_buffers = FALSE;
     }
@@ -1442,7 +1442,7 @@ gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
     {
       priv->has_stencil_buffer = has_stencil_buffer;
 
-      g_object_notify (G_OBJECT (area), "has-stencil-buffer");
+      g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_HAS_STENCIL_BUFFER]);
 
       priv->have_buffers = FALSE;
     }
@@ -1524,7 +1524,7 @@ gtk_gl_area_set_auto_render (GtkGLArea *area,
     {
       priv->auto_render = auto_render;
 
-      g_object_notify (G_OBJECT (area), "auto-render");
+      g_object_notify_by_pspec (G_OBJECT (area), obj_props[PROP_AUTO_RENDER]);
 
       if (auto_render)
         gtk_widget_queue_draw (GTK_WIDGET (area));

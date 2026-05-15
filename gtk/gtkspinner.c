@@ -235,7 +235,7 @@ gtk_spinner_set_spinning (GtkSpinner *spinner,
 
   update_state_flags (spinner);
 
-  g_object_notify (G_OBJECT (spinner), "spinning");
+  g_object_notify_by_pspec (G_OBJECT (spinner), props[PROP_SPINNING]);
 }
 
 static void

@@ -371,7 +371,7 @@ gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
 
   self->xalign = xalign;
 
-  g_object_notify (G_OBJECT (self), "xalign");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_XALIGN]);
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
@@ -413,7 +413,7 @@ gtk_aspect_frame_set_yalign (GtkAspectFrame *self,
 
   self->yalign = yalign;
 
-  g_object_notify (G_OBJECT (self), "yalign");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_YALIGN]);
   if (self->cached_min_baseline != -1)
     gtk_widget_queue_resize (GTK_WIDGET (self));
   else
@@ -457,7 +457,7 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
 
   self->ratio = ratio;
 
-  g_object_notify (G_OBJECT (self), "ratio");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_RATIO]);
   if (!self->obey_child)
     gtk_widget_queue_resize (GTK_WIDGET (self));
 }
@@ -499,7 +499,7 @@ gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
 
   self->obey_child = obey_child;
 
-  g_object_notify (G_OBJECT (self), "obey-child");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_OBEY_CHILD]);
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
 }
@@ -871,7 +871,7 @@ gtk_aspect_frame_set_child (GtkAspectFrame  *self,
       gtk_widget_set_parent (child, GTK_WIDGET (self));
     }
 
-  g_object_notify (G_OBJECT (self), "child");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 }
 
 /**

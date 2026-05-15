@@ -327,5 +327,5 @@ gtk_gesture_pan_set_orientation (GtkGesturePan  *gesture,
     return;
 
   priv->orientation = orientation;
-  g_object_notify (G_OBJECT (gesture), "orientation");
+  g_object_notify_by_pspec (G_OBJECT (gesture), props[PROP_ORIENTATION]);
 }

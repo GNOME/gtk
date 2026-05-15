@@ -439,7 +439,7 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
 
   gtk_widget_queue_resize (GTK_WIDGET (switcher));
 
-  g_object_notify (G_OBJECT (switcher), "stack");
+  g_object_notify_by_pspec (G_OBJECT (switcher), props[PROP_STACK]);
 }
 
 /**

@@ -1403,7 +1403,7 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
       
       priv->default_page_setup = default_page_setup;
      
-      g_object_notify (G_OBJECT (op), "default-page-setup");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_DEFAULT_PAGE_SETUP]);
     }
 }
 
@@ -1454,7 +1454,7 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
   
       priv->print_settings = print_settings;
 
-      g_object_notify (G_OBJECT (op), "print-settings");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_PRINT_SETTINGS]);
     }
 }
 
@@ -1506,7 +1506,7 @@ gtk_print_operation_set_job_name (GtkPrintOperation *op,
   g_free (priv->job_name);
   priv->job_name = g_strdup (job_name);
 
-  g_object_notify (G_OBJECT (op), "job-name");
+  g_object_notify_by_pspec (G_OBJECT (op), props[PROP_JOB_NAME]);
 }
 
 /**
@@ -1541,7 +1541,7 @@ gtk_print_operation_set_n_pages (GtkPrintOperation *op,
     {
       priv->nr_of_pages = n_pages;
 
-      g_object_notify (G_OBJECT (op), "n-pages");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_N_PAGES]);
     }
 }
 
@@ -1572,7 +1572,7 @@ gtk_print_operation_set_current_page (GtkPrintOperation *op,
     {
       priv->current_page = current_page;
 
-      g_object_notify (G_OBJECT (op), "current-page");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_CURRENT_PAGE]);
     }
 }
 
@@ -1603,7 +1603,7 @@ gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
     {
       priv->use_full_page = full_page;
    
-      g_object_notify (G_OBJECT (op), "use-full-page");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_USE_FULL_PAGE]);
     }
 }
 
@@ -1628,7 +1628,7 @@ gtk_print_operation_set_unit (GtkPrintOperation *op,
     {
       priv->unit = unit;
 
-      g_object_notify (G_OBJECT (op), "unit");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_UNIT]);
     }
 }
 
@@ -1658,7 +1658,7 @@ gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
     {
       priv->track_print_status = track_status;
 
-      g_object_notify (G_OBJECT (op), "track-print-status");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_TRACK_PRINT_STATUS]);
     }
 }
 
@@ -1694,8 +1694,8 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
   priv->status_string = g_strdup (string);
   priv->status = status;
 
-  g_object_notify (G_OBJECT (op), "status");
-  g_object_notify (G_OBJECT (op), "status-string");
+  g_object_notify_by_pspec (G_OBJECT (op), props[PROP_STATUS]);
+  g_object_notify_by_pspec (G_OBJECT (op), props[PROP_STATUS_STRING]);
 
   g_signal_emit (op, signals[STATUS_CHANGED], 0);
 }
@@ -1794,7 +1794,7 @@ gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
     {
       priv->show_progress = show_progress;
 
-      g_object_notify (G_OBJECT (op), "show-progress");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_SHOW_PROGRESS]);
     }
 }
 
@@ -1823,7 +1823,7 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
     {
       priv->allow_async = allow_async;
 
-      g_object_notify (G_OBJECT (op), "allow-async");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_ALLOW_ASYNC]);
     }
 }
 
@@ -1846,7 +1846,7 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
   g_free (priv->custom_tab_label);
   priv->custom_tab_label = g_strdup (label);
 
-  g_object_notify (G_OBJECT (op), "custom-tab-label");
+  g_object_notify_by_pspec (G_OBJECT (op), props[PROP_CUSTOM_TAB_LABEL]);
 }
 
 
@@ -1877,7 +1877,7 @@ gtk_print_operation_set_export_filename (GtkPrintOperation *op,
   g_free (priv->export_filename);
   priv->export_filename = g_strdup (filename);
 
-  g_object_notify (G_OBJECT (op), "export-filename");
+  g_object_notify_by_pspec (G_OBJECT (op), props[PROP_EXPORT_FILENAME]);
 }
 
 /* Creates the initial page setup used for printing unless the
@@ -2279,7 +2279,7 @@ gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
   if (priv->embed_page_setup != embed)
     {
       priv->embed_page_setup = embed;
-      g_object_notify (G_OBJECT (op), "embed-page-setup");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_EMBED_PAGE_SETUP]);
     }
 }
 
@@ -3163,7 +3163,7 @@ gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
   if (priv->support_selection != support_selection)
     {
       priv->support_selection = support_selection;
-      g_object_notify (G_OBJECT (op), "support-selection");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_SUPPORT_SELECTION]);
     }
 }
 
@@ -3208,7 +3208,7 @@ gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
   if (priv->has_selection != has_selection)
     {
       priv->has_selection = has_selection;
-      g_object_notify (G_OBJECT (op), "has-selection");
+      g_object_notify_by_pspec (G_OBJECT (op), props[PROP_HAS_SELECTION]);
     }
 }
 

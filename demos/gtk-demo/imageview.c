@@ -237,9 +237,9 @@ image_view_set_property (GObject      *object,
       self->filter = GSK_SCALING_FILTER_LINEAR;
       update_actions (self);
       gtk_widget_queue_resize (GTK_WIDGET (object));
-      g_object_notify (object, "scale");
-      g_object_notify (object, "angle");
-      g_object_notify (object, "filter");
+      g_object_notify_by_pspec (object, props[PROP_SCALE]);
+      g_object_notify_by_pspec (object, props[PROP_ANGLE]);
+      g_object_notify_by_pspec (object, props[PROP_FILTER]);
       break;
 
     case PROP_SCALE:

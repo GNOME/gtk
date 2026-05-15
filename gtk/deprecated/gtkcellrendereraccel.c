@@ -366,7 +366,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
           {
             priv->accel_key = accel_key;
             changed = TRUE;
-            g_object_notify (object, "accel-key");
+            g_object_notify_by_pspec (object, props[PROP_ACCEL_KEY]);
           }
       }
       break;
@@ -379,7 +379,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
           {
             priv->accel_mods = accel_mods;
             changed = TRUE;
-            g_object_notify (object, "accel-mods");
+            g_object_notify_by_pspec (object, props[PROP_ACCEL_MODS]);
           }
       }
       break;
@@ -391,7 +391,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
           {
             priv->keycode = keycode;
             changed = TRUE;
-            g_object_notify (object, "keycode");
+            g_object_notify_by_pspec (object, props[PROP_KEYCODE]);
           }
       }
       break;
@@ -400,7 +400,7 @@ gtk_cell_renderer_accel_set_property (GObject      *object,
       if (priv->accel_mode != g_value_get_enum (value))
         {
           priv->accel_mode = g_value_get_enum (value);
-          g_object_notify (object, "accel-mode");
+          g_object_notify_by_pspec (object, props[PROP_ACCEL_MODE]);
         }
       break;
 

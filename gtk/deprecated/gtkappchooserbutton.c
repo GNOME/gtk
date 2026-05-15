@@ -1143,7 +1143,7 @@ gtk_app_chooser_button_set_modal (GtkAppChooserButton *self,
 
   self->modal = modal;
 
-  g_object_notify (G_OBJECT (self), "modal");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODAL]);
 }
 
 /**

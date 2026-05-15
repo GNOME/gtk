@@ -247,7 +247,7 @@ graph_renderer_set_data (GraphRenderer *self,
                          GraphData     *data)
 {
   if (g_set_object (&self->data, data))
-    g_object_notify (G_OBJECT (self), "data");
+    g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DATA]);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }

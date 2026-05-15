@@ -981,7 +981,7 @@ gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
     {
       self->show_default = setting;
 
-      g_object_notify (G_OBJECT (self), "show-default");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_DEFAULT]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -1026,7 +1026,7 @@ gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
     {
       self->show_recommended = setting;
 
-      g_object_notify (G_OBJECT (self), "show-recommended");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_RECOMMENDED]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -1071,7 +1071,7 @@ gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
     {
       self->show_fallback = setting;
 
-      g_object_notify (G_OBJECT (self), "show-fallback");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_FALLBACK]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -1116,7 +1116,7 @@ gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
     {
       self->show_other = setting;
 
-      g_object_notify (G_OBJECT (self), "show-other");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_OTHER]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -1161,7 +1161,7 @@ gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
     {
       self->show_all = setting;
 
-      g_object_notify (G_OBJECT (self), "show-all");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_ALL]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -1207,7 +1207,7 @@ gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
       g_free (self->default_text);
       self->default_text = g_strdup (text);
 
-      g_object_notify (G_OBJECT (self), "default-text");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DEFAULT_TEXT]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }

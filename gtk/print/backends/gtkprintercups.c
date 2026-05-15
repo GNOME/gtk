@@ -278,7 +278,7 @@ out:
     {
       g_free (printer->colord_title);
       printer->colord_title = g_strdup (title);
-      g_object_notify (G_OBJECT (printer), "profile-title");
+      g_object_notify_by_pspec (G_OBJECT (printer), props[PROP_PROFILE_TITLE]);
     }
   return;
 }

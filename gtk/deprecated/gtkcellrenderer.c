@@ -556,7 +556,7 @@ gtk_cell_renderer_set_property (GObject      *object,
         else
           g_warning ("Don't know color '%s'", g_value_get_string (value));
 
-        g_object_notify (object, "cell-background");
+        g_object_notify_by_pspec (object, props[PROP_CELL_BACKGROUND]);
       }
       break;
     case PROP_CELL_BACKGROUND_RGBA:
@@ -566,7 +566,7 @@ gtk_cell_renderer_set_property (GObject      *object,
       if (priv->cell_background_set != g_value_get_boolean (value))
         {
           priv->cell_background_set = g_value_get_boolean (value);
-          g_object_notify (object, "cell-background-set");
+          g_object_notify_by_pspec (object, props[PROP_CELL_BACKGROUND_SET]);
         }
       break;
     default:
@@ -586,7 +586,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (!priv->cell_background_set)
         {
           priv->cell_background_set = TRUE;
-          g_object_notify (G_OBJECT (cell), "cell-background-set");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_CELL_BACKGROUND_SET]);
         }
 
       priv->cell_background = *rgba;
@@ -596,10 +596,10 @@ set_cell_bg_color (GtkCellRenderer *cell,
       if (priv->cell_background_set)
         {
 	  priv->cell_background_set = FALSE;
-	  g_object_notify (G_OBJECT (cell), "cell-background-set");
+	  g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_CELL_BACKGROUND_SET]);
 	}
     }
-  g_object_notify (G_OBJECT (cell), "cell-background-rgba");
+  g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_CELL_BACKGROUND_RGBA]);
 }
 
 /**
@@ -819,13 +819,13 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
       if (width != priv->width)
         {
           priv->width = width;
-          g_object_notify (G_OBJECT (cell), "width");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_WIDTH]);
         }
 
       if (height != priv->height)
         {
           priv->height = height;
-          g_object_notify (G_OBJECT (cell), "height");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_HEIGHT]);
         }
 
       g_object_thaw_notify (G_OBJECT (cell));
@@ -889,13 +889,13 @@ gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
       if (xalign != priv->xalign)
         {
           priv->xalign = xalign;
-          g_object_notify (G_OBJECT (cell), "xalign");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_XALIGN]);
         }
 
       if (yalign != priv->yalign)
         {
           priv->yalign = yalign;
-          g_object_notify (G_OBJECT (cell), "yalign");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_YALIGN]);
         }
 
       g_object_thaw_notify (G_OBJECT (cell));
@@ -958,13 +958,13 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
       if (xpad != priv->xpad)
         {
           priv->xpad = xpad;
-          g_object_notify (G_OBJECT (cell), "xpad");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_XPAD]);
         }
 
       if (ypad != priv->ypad)
         {
           priv->ypad = ypad;
-          g_object_notify (G_OBJECT (cell), "ypad");
+          g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_YPAD]);
         }
 
       g_object_thaw_notify (G_OBJECT (cell));
@@ -1020,7 +1020,7 @@ gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
   if (priv->visible != visible)
     {
       priv->visible = visible ? TRUE : FALSE;
-      g_object_notify (G_OBJECT (cell), "visible");
+      g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_VISIBLE]);
     }
 }
 
@@ -1064,7 +1064,7 @@ gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
   if (priv->sensitive != sensitive)
     {
       priv->sensitive = sensitive ? TRUE : FALSE;
-      g_object_notify (G_OBJECT (cell), "sensitive");
+      g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_SENSITIVE]);
     }
 }
 
@@ -1697,7 +1697,7 @@ gtk_cell_renderer_set_is_expander (GtkCellRenderer *cell,
     {
       priv->is_expander = is_expander;
 
-      g_object_notify (G_OBJECT (cell), "is-expander");
+      g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_IS_EXPANDER]);
     }
 }
 
@@ -1744,7 +1744,7 @@ gtk_cell_renderer_set_is_expanded (GtkCellRenderer *cell,
     {
       priv->is_expanded = is_expanded;
 
-      g_object_notify (G_OBJECT (cell), "is-expanded");
+      g_object_notify_by_pspec (G_OBJECT (cell), props[PROP_IS_EXPANDED]);
     }
 }
 

@@ -430,7 +430,7 @@ gtk_scale_button_toggled (GtkScaleButton *button)
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
   gboolean active;
 
-  g_object_notify (G_OBJECT (button), "active");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ACTIVE]);
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
 
@@ -670,7 +670,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
 
   gtk_range_set_value (GTK_RANGE (priv->scale), value);
-  g_object_notify (G_OBJECT (button), "value");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_VALUE]);
 }
 
 /**
@@ -694,7 +694,7 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
   g_strfreev (tmp);
   gtk_scale_button_update_icon (button);
 
-  g_object_notify (G_OBJECT (button), "icons");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ICONS]);
 }
 
 /**
@@ -749,7 +749,7 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
       if (priv->scale)
         gtk_range_set_adjustment (GTK_RANGE (priv->scale), adjustment);
 
-      g_object_notify (G_OBJECT (button), "adjustment");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ADJUSTMENT]);
 
       gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                       GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, gtk_adjustment_get_upper (adjustment) -
@@ -881,7 +881,7 @@ gtk_scale_button_set_has_frame (GtkScaleButton *button,
     return;
 
   gtk_button_set_has_frame (GTK_BUTTON (priv->button), has_frame);
-  g_object_notify (G_OBJECT (button), "has-frame");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_HAS_FRAME]);
 }
 
 static void
@@ -930,7 +930,7 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
 
       apply_orientation (button, priv->orientation);
 
-      g_object_notify (G_OBJECT (button), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_ORIENTATION]);
     }
 }
 
@@ -1127,7 +1127,7 @@ cb_scale_value_changed (GtkRange *range,
   gtk_widget_set_sensitive (priv->minus_button, lower < value);
 
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
-  g_object_notify (G_OBJECT (button), "value");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_VALUE]);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (button),
                                   GTK_ACCESSIBLE_PROPERTY_VALUE_NOW, value,

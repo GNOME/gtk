@@ -151,7 +151,7 @@ select_swatch (GtkColorChooserWidget *cc,
   if (gtk_widget_get_visible (GTK_WIDGET (cc->editor)))
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->editor), &color);
   else
-    g_object_notify (G_OBJECT (cc), "rgba");
+    g_object_notify_by_pspec (G_OBJECT (cc), props[PROP_RGBA]);
 }
 
 static void
@@ -251,7 +251,7 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (cc));
-  g_object_notify (G_OBJECT (cc), "use-alpha");
+  g_object_notify_by_pspec (G_OBJECT (cc), props[PROP_USE_ALPHA]);
 }
 
 static void
@@ -279,7 +279,7 @@ update_from_editor (GtkColorEditor        *editor,
                     GtkColorChooserWidget *widget)
 {
   if (gtk_widget_get_visible (GTK_WIDGET (editor)))
-    g_object_notify (G_OBJECT (widget), "rgba");
+    g_object_notify_by_pspec (G_OBJECT (widget), props[PROP_RGBA]);
 }
 
 /* UI construction {{{1 */
@@ -524,7 +524,7 @@ gtk_color_chooser_widget_activate_color_customize (GtkWidget  *widget,
   gtk_widget_set_visible (cc->palette, FALSE);
   gtk_widget_set_visible (cc->editor, TRUE);
   gtk_widget_grab_focus (cc->editor);
-  g_object_notify (G_OBJECT (cc), "show-editor");
+  g_object_notify_by_pspec (G_OBJECT (cc), props[PROP_SHOW_EDITOR]);
 }
 
 static void

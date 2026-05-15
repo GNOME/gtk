@@ -650,6 +650,6 @@ gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
   if (priv->activatable != setting)
     {
       priv->activatable = setting ? TRUE : FALSE;
-      g_object_notify (G_OBJECT (toggle), "activatable");
+      g_object_notify_by_pspec (G_OBJECT (toggle), props[PROP_ACTIVATABLE]);
     }
 }

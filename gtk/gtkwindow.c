@@ -2289,7 +2289,7 @@ gtk_window_root_set_focus (GtkRoot   *root,
       g_clear_object (&priv->move_focus_widget);
     }
 
-  g_object_notify (G_OBJECT (self), "focus-widget");
+  g_object_notify_by_pspec (G_OBJECT (self), window_props[PROP_FOCUS_WIDGET]);
 }
 
 static void

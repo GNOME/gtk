@@ -831,7 +831,7 @@ gtk_spin_button_set_property (GObject      *object,
       if (spin_button->editing_canceled != g_value_get_boolean (value))
         {
           spin_button->editing_canceled = g_value_get_boolean (value);
-          g_object_notify (object, "editing-canceled");
+          g_object_notify_by_pspec (object, spinbutton_props[PROP_EDITING_CANCELED]);
         }
       break;
     default:
@@ -1300,7 +1300,7 @@ gtk_spin_button_set_orientation (GtkSpinButton  *spin,
       gtk_box_layout_set_baseline_child (layout_manager, 1);
     }
 
-  g_object_notify (G_OBJECT (spin), "orientation");
+  g_object_notify_by_pspec (G_OBJECT (spin), spinbutton_props[PROP_ORIENTATION]);
 }
 
 static char *

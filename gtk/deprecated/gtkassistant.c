@@ -1255,7 +1255,7 @@ gtk_assistant_page_set_property (GObject      *object,
            */
           if (assistant)
             update_buttons_state (GTK_ASSISTANT (assistant));
-          g_object_notify (G_OBJECT (page), "page-type");
+          g_object_notify_by_pspec (G_OBJECT (page), child_props[CHILD_PROP_PAGE_TYPE]);
         }
       break;
 
@@ -1270,7 +1270,7 @@ gtk_assistant_page_set_property (GObject      *object,
           update_title_state (GTK_ASSISTANT (assistant));
         }
 
-      g_object_notify (G_OBJECT (page), "title");
+      g_object_notify_by_pspec (G_OBJECT (page), child_props[CHILD_PROP_PAGE_TITLE]);
 
       break;
 
@@ -1285,7 +1285,7 @@ gtk_assistant_page_set_property (GObject      *object,
            */
           if (assistant)
             update_buttons_state (GTK_ASSISTANT (assistant));
-          g_object_notify (G_OBJECT (page), "complete");
+          g_object_notify_by_pspec (G_OBJECT (page), child_props[CHILD_PROP_PAGE_COMPLETE]);
         }
       break;
 

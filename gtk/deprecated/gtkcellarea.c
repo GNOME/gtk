@@ -2953,7 +2953,7 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
       if (priv->focus_cell)
         g_object_ref (priv->focus_cell);
 
-      g_object_notify (G_OBJECT (area), "focus-cell");
+      g_object_notify_by_pspec (G_OBJECT (area), props[PROP_FOCUS_CELL]);
     }
 
   /* Signal that the current focus renderer for this path changed
@@ -3246,7 +3246,7 @@ gtk_cell_area_set_edited_cell (GtkCellArea     *area,
       if (priv->edited_cell)
         g_object_ref (priv->edited_cell);
 
-      g_object_notify (G_OBJECT (area), "edited-cell");
+      g_object_notify_by_pspec (G_OBJECT (area), props[PROP_EDITED_CELL]);
     }
 }
 
@@ -3279,7 +3279,7 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
           g_object_ref (priv->edit_widget);
         }
 
-      g_object_notify (G_OBJECT (area), "edit-widget");
+      g_object_notify_by_pspec (G_OBJECT (area), props[PROP_EDIT_WIDGET]);
     }
 }
 

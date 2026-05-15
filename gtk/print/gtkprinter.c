@@ -513,7 +513,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
 
   g_free (priv->state_message);
   priv->state_message = g_strdup (message);
-  g_object_notify (G_OBJECT (printer), "state-message");
+  g_object_notify_by_pspec (G_OBJECT (printer), props[PROP_STATE_MESSAGE]);
 
   return TRUE;
 }
@@ -549,7 +549,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
 
   g_free (priv->location);
   priv->location = g_strdup (location);
-  g_object_notify (G_OBJECT (printer), "location");
+  g_object_notify_by_pspec (G_OBJECT (printer), props[PROP_LOCATION]);
   
   return TRUE;
 }
@@ -582,7 +582,7 @@ gtk_printer_set_icon_name (GtkPrinter  *printer,
 
   g_free (priv->icon_name);
   priv->icon_name = g_strdup (icon);
-  g_object_notify (G_OBJECT (printer), "icon-name");
+  g_object_notify_by_pspec (G_OBJECT (printer), props[PROP_ICON_NAME]);
 }
 
 /**
@@ -616,7 +616,7 @@ gtk_printer_set_job_count (GtkPrinter *printer,
 
   priv->job_count = count;
   
-  g_object_notify (G_OBJECT (printer), "job-count");
+  g_object_notify_by_pspec (G_OBJECT (printer), props[PROP_JOB_COUNT]);
   
   return TRUE;
 }

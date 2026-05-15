@@ -602,7 +602,7 @@ gtk_lock_button_set_permission (GtkLockButton *button,
 
       update_state (button);
 
-      g_object_notify (G_OBJECT (button), "permission");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_PERMISSION]);
     }
 }
 

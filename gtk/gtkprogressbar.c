@@ -1015,7 +1015,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
   layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
 
-  g_object_notify (G_OBJECT (pbar), "orientation");
+  g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_ORIENTATION]);
 }
 
 /**

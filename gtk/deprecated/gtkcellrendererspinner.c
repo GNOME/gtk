@@ -298,21 +298,21 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
         if (priv->active != g_value_get_boolean (value))
           {
             priv->active = g_value_get_boolean (value);
-            g_object_notify (object, "active");
+            g_object_notify_by_pspec (object, props[PROP_ACTIVE]);
           }
         break;
       case PROP_PULSE:
         if (priv->pulse != g_value_get_uint (value))
           {
             priv->pulse = g_value_get_uint (value);
-            g_object_notify (object, "pulse");
+            g_object_notify_by_pspec (object, props[PROP_PULSE]);
           }
         break;
       case PROP_SIZE:
         if (priv->icon_size != g_value_get_enum (value))
           {
             priv->icon_size = g_value_get_enum (value);
-            g_object_notify (object, "size");
+            g_object_notify_by_pspec (object, props[PROP_SIZE]);
           }
         break;
       default:

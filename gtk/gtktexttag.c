@@ -1166,7 +1166,7 @@ set_underline_rgba (GtkTextTag    *tag,
       if (!priv->underline_rgba_set)
         {
           priv->underline_rgba_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "underline-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_UNDERLINE_RGBA_SET]);
         }
     }
   else
@@ -1174,7 +1174,7 @@ set_underline_rgba (GtkTextTag    *tag,
       if (priv->underline_rgba_set)
         {
           priv->underline_rgba_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "underline-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_UNDERLINE_RGBA_SET]);
         }
     }
 }
@@ -1196,7 +1196,7 @@ set_overline_rgba (GtkTextTag    *tag,
       if (!priv->overline_rgba_set)
         {
           priv->overline_rgba_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "overline-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_OVERLINE_RGBA_SET]);
         }
     }
   else
@@ -1204,7 +1204,7 @@ set_overline_rgba (GtkTextTag    *tag,
       if (priv->overline_rgba_set)
         {
           priv->overline_rgba_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "overline-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_OVERLINE_RGBA_SET]);
         }
     }
 }
@@ -1226,7 +1226,7 @@ set_strikethrough_rgba (GtkTextTag    *tag,
       if (!priv->strikethrough_rgba_set)
         {
           priv->strikethrough_rgba_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "strikethrough-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_STRIKETHROUGH_RGBA_SET]);
         }
     }
   else
@@ -1234,7 +1234,7 @@ set_strikethrough_rgba (GtkTextTag    *tag,
       if (priv->strikethrough_rgba_set)
         {
           priv->strikethrough_rgba_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "strikethrough-rgba-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_STRIKETHROUGH_RGBA_SET]);
         }
     }
 }
@@ -1253,7 +1253,7 @@ set_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (!priv->bg_color_set)
         {
           priv->bg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "background-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_BACKGROUND_SET]);
         }
 
       priv->values->appearance.bg_rgba = gdk_rgba_copy (rgba);
@@ -1263,7 +1263,7 @@ set_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (priv->bg_color_set)
         {
           priv->bg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "background-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_BACKGROUND_SET]);
         }
     }
 }
@@ -1282,7 +1282,7 @@ set_fg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (!priv->fg_color_set)
         {
           priv->fg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "foreground-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_FOREGROUND_SET]);
         }
 
       priv->values->appearance.fg_rgba = gdk_rgba_copy (rgba);
@@ -1292,7 +1292,7 @@ set_fg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (priv->fg_color_set)
         {
           priv->fg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "foreground-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_FOREGROUND_SET]);
         }
     }
 }
@@ -1311,7 +1311,7 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (!priv->pg_bg_color_set)
         {
           priv->pg_bg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "paragraph-background-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_PARAGRAPH_BACKGROUND_SET]);
         }
 
       priv->values->pg_bg_rgba = gdk_rgba_copy (rgba);
@@ -1321,7 +1321,7 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
       if (priv->pg_bg_color_set)
         {
           priv->pg_bg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "paragraph-background-set");
+          g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_PARAGRAPH_BACKGROUND_SET]);
         }
     }
 }
@@ -1393,17 +1393,17 @@ notify_set_changed (GObject       *object,
 		    PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family-set");
+    g_object_notify_by_pspec (object, props[PROP_FAMILY_SET]);
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style-set");
+    g_object_notify_by_pspec (object, props[PROP_STYLE_SET]);
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant-set");
+    g_object_notify_by_pspec (object, props[PROP_VARIANT_SET]);
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight-set");
+    g_object_notify_by_pspec (object, props[PROP_WEIGHT_SET]);
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch-set");
+    g_object_notify_by_pspec (object, props[PROP_STRETCH_SET]);
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size-set");
+    g_object_notify_by_pspec (object, props[PROP_SIZE_SET]);
 }
 
 static void
@@ -1411,17 +1411,17 @@ notify_fields_changed (GObject       *object,
 		       PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family");
+    g_object_notify_by_pspec (object, props[PROP_FAMILY]);
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style");
+    g_object_notify_by_pspec (object, props[PROP_STYLE]);
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant");
+    g_object_notify_by_pspec (object, props[PROP_VARIANT]);
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight");
+    g_object_notify_by_pspec (object, props[PROP_WEIGHT]);
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch");
+    g_object_notify_by_pspec (object, props[PROP_STRETCH]);
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size");
+    g_object_notify_by_pspec (object, props[PROP_SIZE]);
 }
 
 static void
@@ -1454,23 +1454,23 @@ set_font_description (GtkTextTag           *text_tag,
 
   g_object_freeze_notify (object);
 
-  g_object_notify (object, "font-desc");
-  g_object_notify (object, "font");
+  g_object_notify_by_pspec (object, props[PROP_FONT_DESC]);
+  g_object_notify_by_pspec (object, props[PROP_FONT]);
   
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family");
+    g_object_notify_by_pspec (object, props[PROP_FAMILY]);
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style");
+    g_object_notify_by_pspec (object, props[PROP_STYLE]);
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant");
+    g_object_notify_by_pspec (object, props[PROP_VARIANT]);
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight");
+    g_object_notify_by_pspec (object, props[PROP_WEIGHT]);
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch");
+    g_object_notify_by_pspec (object, props[PROP_STRETCH]);
   if (changed_mask & PANGO_FONT_MASK_SIZE)
     {
-      g_object_notify (object, "size");
-      g_object_notify (object, "size-points");
+      g_object_notify_by_pspec (object, props[PROP_SIZE]);
+      g_object_notify_by_pspec (object, props[PROP_SIZE_POINTS]);
     }
 
   notify_set_changed (object, set_changed_mask);
@@ -1614,12 +1614,12 @@ gtk_text_tag_set_property (GObject      *object,
 	  case PROP_SIZE:
 	    pango_font_description_set_size (priv->values->font,
 					     g_value_get_int (value));
-	    g_object_notify (object, "size-points");
+	    g_object_notify_by_pspec (object, props[PROP_SIZE_POINTS]);
 	    break;
 	  case PROP_SIZE_POINTS:
 	    pango_font_description_set_size (priv->values->font,
 					     g_value_get_double (value) * PANGO_SCALE);
-	    g_object_notify (object, "size");
+	    g_object_notify_by_pspec (object, props[PROP_SIZE]);
 	    break;
 
           default:
@@ -1628,8 +1628,8 @@ gtk_text_tag_set_property (GObject      *object,
 
 	size_changed = TRUE;
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (priv->values->font));
-	g_object_notify (object, "font-desc");
-	g_object_notify (object, "font");
+	g_object_notify_by_pspec (object, props[PROP_FONT_DESC]);
+	g_object_notify_by_pspec (object, props[PROP_FONT]);
 
 	break;
       }
@@ -1637,55 +1637,55 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_SCALE:
       priv->values->font_scale = g_value_get_double (value);
       priv->scale_set = TRUE;
-      g_object_notify (object, "scale-set");
+      g_object_notify_by_pspec (object, props[PROP_SCALE_SET]);
       size_changed = TRUE;
       break;
       
     case PROP_PIXELS_ABOVE_LINES:
       priv->pixels_above_lines_set = TRUE;
       priv->values->pixels_above_lines = g_value_get_int (value);
-      g_object_notify (object, "pixels-above-lines-set");
+      g_object_notify_by_pspec (object, props[PROP_PIXELS_ABOVE_LINES_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_BELOW_LINES:
       priv->pixels_below_lines_set = TRUE;
       priv->values->pixels_below_lines = g_value_get_int (value);
-      g_object_notify (object, "pixels-below-lines-set");
+      g_object_notify_by_pspec (object, props[PROP_PIXELS_BELOW_LINES_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
       priv->pixels_inside_wrap_set = TRUE;
       priv->values->pixels_inside_wrap = g_value_get_int (value);
-      g_object_notify (object, "pixels-inside-wrap-set");
+      g_object_notify_by_pspec (object, props[PROP_PIXELS_INSIDE_WRAP_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_LINE_HEIGHT:
       priv->line_height_set = TRUE;
       priv->values->line_height = g_value_get_float (value);
-      g_object_notify (object, "line-height-set");
+      g_object_notify_by_pspec (object, props[PROP_LINE_HEIGHT_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_EDITABLE:
       priv->editable_set = TRUE;
       priv->values->editable = g_value_get_boolean (value);
-      g_object_notify (object, "editable-set");
+      g_object_notify_by_pspec (object, props[PROP_EDITABLE_SET]);
       break;
 
     case PROP_WRAP_MODE:
       priv->wrap_mode_set = TRUE;
       priv->values->wrap_mode = g_value_get_enum (value);
-      g_object_notify (object, "wrap-mode-set");
+      g_object_notify_by_pspec (object, props[PROP_WRAP_MODE_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_JUSTIFICATION:
       priv->justification_set = TRUE;
       priv->values->justification = g_value_get_enum (value);
-      g_object_notify (object, "justification-set");
+      g_object_notify_by_pspec (object, props[PROP_JUSTIFICATION_SET]);
       size_changed = TRUE;
       break;
 
@@ -1696,21 +1696,21 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_LEFT_MARGIN:
       priv->left_margin_set = TRUE;
       priv->values->left_margin = g_value_get_int (value);
-      g_object_notify (object, "left-margin-set");
+      g_object_notify_by_pspec (object, props[PROP_LEFT_MARGIN_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_INDENT:
       priv->indent_set = TRUE;
       priv->values->indent = g_value_get_int (value);
-      g_object_notify (object, "indent-set");
+      g_object_notify_by_pspec (object, props[PROP_INDENT_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_STRIKETHROUGH:
       priv->strikethrough_set = TRUE;
       priv->values->appearance.strikethrough = g_value_get_boolean (value);
-      g_object_notify (object, "strikethrough-set");
+      g_object_notify_by_pspec (object, props[PROP_STRIKETHROUGH_SET]);
       break;
 
     case PROP_STRIKETHROUGH_RGBA:
@@ -1723,14 +1723,14 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_RIGHT_MARGIN:
       priv->right_margin_set = TRUE;
       priv->values->right_margin = g_value_get_int (value);
-      g_object_notify (object, "right-margin-set");
+      g_object_notify_by_pspec (object, props[PROP_RIGHT_MARGIN_SET]);
       size_changed = TRUE;
       break;
 
     case PROP_UNDERLINE:
       priv->underline_set = TRUE;
       priv->values->appearance.underline = g_value_get_enum (value);
-      g_object_notify (object, "underline-set");
+      g_object_notify_by_pspec (object, props[PROP_UNDERLINE_SET]);
       break;
 
     case PROP_UNDERLINE_RGBA:
@@ -1743,7 +1743,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_OVERLINE:
       priv->overline_set = TRUE;
       priv->values->appearance.overline = g_value_get_enum (value);
-      g_object_notify (object, "overline-set");
+      g_object_notify_by_pspec (object, props[PROP_OVERLINE_SET]);
       break;
 
     case PROP_OVERLINE_RGBA:
@@ -1756,20 +1756,20 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_RISE:
       priv->rise_set = TRUE;
       priv->values->appearance.rise = g_value_get_int (value);
-      g_object_notify (object, "rise-set");
+      g_object_notify_by_pspec (object, props[PROP_RISE_SET]);
       size_changed = TRUE;      
       break;
 
     case PROP_BACKGROUND_FULL_HEIGHT:
       priv->bg_full_height_set = TRUE;
       priv->values->bg_full_height = g_value_get_boolean (value);
-      g_object_notify (object, "background-full-height-set");
+      g_object_notify_by_pspec (object, props[PROP_BACKGROUND_FULL_HEIGHT_SET]);
       break;
 
     case PROP_LANGUAGE:
       priv->language_set = TRUE;
       priv->values->language = pango_language_from_string (g_value_get_string (value));
-      g_object_notify (object, "language-set");
+      g_object_notify_by_pspec (object, props[PROP_LANGUAGE_SET]);
       break;
 
     case PROP_TABS:
@@ -1782,7 +1782,7 @@ gtk_text_tag_set_property (GObject      *object,
       priv->values->tabs =
         pango_tab_array_copy (g_value_get_boxed (value));
 
-      g_object_notify (object, "tabs-set");
+      g_object_notify_by_pspec (object, props[PROP_TABS_SET]);
       
       size_changed = TRUE;
       break;
@@ -1790,7 +1790,7 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_INVISIBLE:
       priv->invisible_set = TRUE;
       priv->values->invisible = g_value_get_boolean (value);
-      g_object_notify (object, "invisible-set");
+      g_object_notify_by_pspec (object, props[PROP_INVISIBLE_SET]);
       size_changed = TRUE;
       break;
       
@@ -1818,60 +1818,60 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_FALLBACK:
       priv->fallback_set = TRUE;
       priv->values->no_fallback = !g_value_get_boolean (value);
-      g_object_notify (object, "fallback-set");
+      g_object_notify_by_pspec (object, props[PROP_FALLBACK_SET]);
       break;
 
     case PROP_LETTER_SPACING:
       priv->letter_spacing_set = TRUE;
       priv->values->letter_spacing = g_value_get_int (value);
-      g_object_notify (object, "letter-spacing-set");
+      g_object_notify_by_pspec (object, props[PROP_LETTER_SPACING_SET]);
       break;
 
     case PROP_FONT_FEATURES:
       priv->font_features_set = TRUE;
       priv->values->font_features = g_value_dup_string (value);
-      g_object_notify (object, "font-features-set");
+      g_object_notify_by_pspec (object, props[PROP_FONT_FEATURES_SET]);
       break;
 
     case PROP_ALLOW_BREAKS:
       priv->allow_breaks_set = TRUE;
       priv->values->no_breaks = !g_value_get_boolean (value);
-      g_object_notify (object, "allow-breaks-set");
+      g_object_notify_by_pspec (object, props[PROP_ALLOW_BREAKS_SET]);
       break;
 
     case PROP_SHOW_SPACES:
       priv->show_spaces_set = TRUE;
       priv->values->show_spaces = g_value_get_flags (value);
-      g_object_notify (object, "show-spaces-set");
+      g_object_notify_by_pspec (object, props[PROP_SHOW_SPACES_SET]);
       break;
 
     case PROP_INSERT_HYPHENS:
       priv->insert_hyphens_set = TRUE;
       priv->values->no_hyphens = !g_value_get_boolean (value);
-      g_object_notify (object, "insert-hyphens-set");
+      g_object_notify_by_pspec (object, props[PROP_INSERT_HYPHENS_SET]);
       break;
 
     case PROP_TEXT_TRANSFORM:
       priv->text_transform_set = TRUE;
       priv->values->text_transform = g_value_get_enum (value);
-      g_object_notify (object, "text-transform-set");
+      g_object_notify_by_pspec (object, props[PROP_TEXT_TRANSFORM_SET]);
       break;
 
     case PROP_WORD:
       priv->word_set = TRUE;
       priv->values->word = g_value_get_boolean (value);
-      g_object_notify (object, "word-set");
+      g_object_notify_by_pspec (object, props[PROP_WORD_SET]);
       break;
 
     case PROP_SENTENCE:
       priv->sentence_set = TRUE;
       priv->values->sentence = g_value_get_boolean (value);
-      g_object_notify (object, "sentence-set");
+      g_object_notify_by_pspec (object, props[PROP_SENTENCE_SET]);
       break;
 
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
-      g_object_notify (object, "accumulative-margin");
+      g_object_notify_by_pspec (object, props[PROP_ACCUMULATIVE_MARGIN]);
       size_changed = TRUE;
       break;
 

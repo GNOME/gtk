@@ -258,25 +258,25 @@ gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
   if (priv->min_width != 0)
     {
       priv->min_width = 0;
-      g_object_notify (G_OBJECT (context), "minimum-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_WIDTH]);
     }
 
   if (priv->nat_width != 0)
     {
       priv->nat_width = 0;
-      g_object_notify (G_OBJECT (context), "natural-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_WIDTH]);
     }
 
   if (priv->min_height != 0)
     {
       priv->min_height = 0;
-      g_object_notify (G_OBJECT (context), "minimum-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_HEIGHT]);
     }
 
   if (priv->nat_height != 0)
     {
       priv->nat_height = 0;
-      g_object_notify (G_OBJECT (context), "natural-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_HEIGHT]);
     }
 
   priv->alloc_width  = 0;
@@ -577,14 +577,14 @@ gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
     {
       priv->min_width = minimum_width;
 
-      g_object_notify (G_OBJECT (context), "minimum-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_WIDTH]);
     }
 
   if (natural_width > priv->nat_width)
     {
       priv->nat_width = natural_width;
 
-      g_object_notify (G_OBJECT (context), "natural-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_WIDTH]);
     }
 
   g_object_thaw_notify (G_OBJECT (context));
@@ -621,14 +621,14 @@ gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,
     {
       priv->min_height = minimum_height;
 
-      g_object_notify (G_OBJECT (context), "minimum-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_HEIGHT]);
     }
 
   if (natural_height > priv->nat_height)
     {
       priv->nat_height = natural_height;
 
-      g_object_notify (G_OBJECT (context), "natural-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_HEIGHT]);
     }
 
   g_object_thaw_notify (G_OBJECT (context));

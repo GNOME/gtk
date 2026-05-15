@@ -569,7 +569,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
     {
       job->track_print_status = track_status;
 
-      g_object_notify (G_OBJECT (job), "track-print-status");
+      g_object_notify_by_pspec (G_OBJECT (job), props[PROP_TRACK_PRINT_STATUS]);
     }
 }
 

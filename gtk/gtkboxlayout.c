@@ -90,7 +90,7 @@ gtk_box_layout_set_orientation (GtkBoxLayout   *self,
 
   gtk_layout_manager_layout_changed (layout_manager);
 
-  g_object_notify (G_OBJECT (self), "orientation");
+  g_object_notify_by_pspec (G_OBJECT (self), box_layout_props[PROP_ORIENTATION]);
 }
 
 static void

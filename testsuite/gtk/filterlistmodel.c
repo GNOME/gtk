@@ -592,7 +592,7 @@ gtk_mutable_string_object_set_string (GtkMutableStringObject *self,
   g_clear_pointer (&self->string, g_free);
   self->string = g_strdup (string);
 
-  g_object_notify (G_OBJECT (self), "string");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STRING]);
 }
 
 static void
@@ -765,13 +765,13 @@ gtk_bool_object_set_values (GtkBoolObject *self,
   if (self->value != value)
     {
       self->value = value;
-      g_object_notify (G_OBJECT (self), "value");
+      g_object_notify_by_pspec (G_OBJECT (self), bool_props[PROP_VALUE]);
     }
 
   if (self->value2 != value2)
     {
       self->value2 = value2;
-      g_object_notify (G_OBJECT (self), "value2");
+      g_object_notify_by_pspec (G_OBJECT (self), bool_props[PROP_VALUE2]);
     }
 }
 

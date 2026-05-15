@@ -253,7 +253,7 @@ _gtk_magnifier_set_inspected (GtkMagnifier *magnifier,
 
   gtk_widget_paintable_set_widget (GTK_WIDGET_PAINTABLE (magnifier->paintable), inspected);
 
-  g_object_notify (G_OBJECT (magnifier), "inspected");
+  g_object_notify_by_pspec (G_OBJECT (magnifier), props[PROP_INSPECTED]);
 }
 
 void
@@ -296,7 +296,7 @@ _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
     return;
 
   magnifier->magnification = magnification;
-  g_object_notify (G_OBJECT (magnifier), "magnification");
+  g_object_notify_by_pspec (G_OBJECT (magnifier), props[PROP_MAGNIFICATION]);
 
   if (magnifier->resize)
     gtk_widget_queue_resize (GTK_WIDGET (magnifier));

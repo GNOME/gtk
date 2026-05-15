@@ -250,7 +250,7 @@ gtk_printer_option_widget_set_source (GtkPrinterOptionWidget *widget,
   construct_widgets (widget);
   update_widgets (widget);
 
-  g_object_notify (G_OBJECT (widget), "source");
+  g_object_notify_by_pspec (G_OBJECT (widget), props[PROP_SOURCE]);
 }
 
 static void

@@ -2607,7 +2607,7 @@ gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
   priv->hadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_hadjustment_values (icon_view);
 
-  g_object_notify (G_OBJECT (icon_view), "hadjustment");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_HADJUSTMENT]);
 }
 
 static void
@@ -2636,7 +2636,7 @@ gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
   priv->vadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_vadjustment_values (icon_view);
 
-  g_object_notify (G_OBJECT (icon_view), "vadjustment");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_VADJUSTMENT]);
 }
 
 static void
@@ -4408,7 +4408,7 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
     }
 
   icon_view->priv->tooltip_column = column;
-  g_object_notify (G_OBJECT (icon_view), "tooltip-column");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_TOOLTIP_COLUMN]);
 }
 
 /**
@@ -4546,7 +4546,7 @@ gtk_icon_view_set_selection_mode (GtkIconView      *icon_view,
 
   icon_view->priv->selection_mode = mode;
 
-  g_object_notify (G_OBJECT (icon_view), "selection-mode");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_SELECTION_MODE]);
 }
 
 /**
@@ -4674,7 +4674,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       gtk_icon_view_build_items (icon_view);
     }
 
-  g_object_notify (G_OBJECT (icon_view), "model");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_MODEL]);
 
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
@@ -4833,7 +4833,7 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
 
   gtk_icon_view_invalidate_sizes (icon_view);
 
-  g_object_notify (G_OBJECT (icon_view), "text-column");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_TEXT_COLUMN]);
 }
 
 /**
@@ -4892,7 +4892,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
 
   gtk_icon_view_invalidate_sizes (icon_view);
 
-  g_object_notify (G_OBJECT (icon_view), "markup-column");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_MARKUP_COLUMN]);
 }
 
 /**
@@ -4949,7 +4949,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
 
   gtk_icon_view_invalidate_sizes (icon_view);
 
-  g_object_notify (G_OBJECT (icon_view), "pixbuf-column");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_PIXBUF_COLUMN]);
 
 }
 
@@ -5281,7 +5281,7 @@ gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
       update_text_cell (icon_view);
       update_pixbuf_cell (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "item-orientation");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_ITEM_ORIENTATION]);
     }
 }
 
@@ -5332,7 +5332,7 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
 
       gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 
-      g_object_notify (G_OBJECT (icon_view), "columns");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_COLUMNS]);
     }
 }
 
@@ -5382,7 +5382,7 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
 
       update_text_cell (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "item-width");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_ITEM_WIDTH]);
     }
 }
 
@@ -5431,7 +5431,7 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
 
       gtk_icon_view_invalidate_sizes (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "spacing");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_SPACING]);
     }
 }
 
@@ -5478,7 +5478,7 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
 
       gtk_icon_view_invalidate_sizes (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "row-spacing");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_ROW_SPACING]);
     }
 }
 
@@ -5525,7 +5525,7 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
 
       gtk_icon_view_invalidate_sizes (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "column-spacing");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_COLUMN_SPACING]);
     }
 }
 
@@ -5573,7 +5573,7 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
 
       gtk_icon_view_invalidate_sizes (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "margin");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_MARGIN]);
     }
 }
 
@@ -5620,7 +5620,7 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
 
       gtk_icon_view_invalidate_sizes (icon_view);
 
-      g_object_notify (G_OBJECT (icon_view), "item-padding");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_ITEM_PADDING]);
     }
 }
 
@@ -5668,7 +5668,7 @@ unset_reorderable (GtkIconView *icon_view)
   if (icon_view->priv->reorderable)
     {
       icon_view->priv->reorderable = FALSE;
-      g_object_notify (G_OBJECT (icon_view), "reorderable");
+      g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_REORDERABLE]);
     }
 }
 
@@ -6744,7 +6744,7 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
 
   icon_view->priv->reorderable = reorderable;
 
-  g_object_notify (G_OBJECT (icon_view), "reorderable");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_REORDERABLE]);
 }
 
 /**
@@ -6769,7 +6769,7 @@ gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
     return;
 
   icon_view->priv->activate_on_single_click = single;
-  g_object_notify (G_OBJECT (icon_view), "activate-on-single-click");
+  g_object_notify_by_pspec (G_OBJECT (icon_view), props[PROP_ACTIVATE_ON_SINGLE_CLICK]);
 }
 
 /**

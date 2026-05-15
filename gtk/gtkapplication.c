@@ -1541,7 +1541,7 @@ gtk_application_set_screensaver_active (GtkApplication *application,
   if (priv->screensaver_active != active)
     {
       priv->screensaver_active = active;
-      g_object_notify (G_OBJECT (application), "screensaver-active");
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_SCREENSAVER_ACTIVE]);
     }
 }
 

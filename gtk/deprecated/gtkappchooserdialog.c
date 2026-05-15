@@ -792,7 +792,7 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
         }
     }
 
-  g_object_notify (G_OBJECT (self), "heading");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_HEADING]);
 }
 
 /**

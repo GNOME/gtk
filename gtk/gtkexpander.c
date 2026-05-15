@@ -936,7 +936,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
                                GTK_ACCESSIBLE_STATE_EXPANDED, expanded,
                                -1);
 
-  g_object_notify (G_OBJECT (expander), "expanded");
+  g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_EXPANDED]);
 }
 
 /**
@@ -987,7 +987,7 @@ gtk_expander_set_label (GtkExpander *expander,
       gtk_expander_set_label_widget (expander, child);
     }
 
-  g_object_notify (G_OBJECT (expander), "label");
+  g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_LABEL]);
 }
 
 /**
@@ -1040,7 +1040,7 @@ gtk_expander_set_use_underline (GtkExpander *expander,
 
       update_accessible_mnemonic (expander);
 
-      g_object_notify (G_OBJECT (expander), "use-underline");
+      g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_USE_UNDERLINE]);
     }
 }
 
@@ -1083,7 +1083,7 @@ gtk_expander_set_use_markup (GtkExpander *expander,
       if (GTK_IS_LABEL (expander->label_widget))
         gtk_label_set_use_markup (GTK_LABEL (expander->label_widget), use_markup);
 
-      g_object_notify (G_OBJECT (expander), "use-markup");
+      g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_USE_MARKUP]);
     }
 }
 
@@ -1144,8 +1144,8 @@ gtk_expander_set_label_widget (GtkExpander *expander,
   update_accessible_mnemonic (expander);
 
   g_object_freeze_notify (G_OBJECT (expander));
-  g_object_notify (G_OBJECT (expander), "label-widget");
-  g_object_notify (G_OBJECT (expander), "label");
+  g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_LABEL_WIDGET]);
+  g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_LABEL]);
   g_object_thaw_notify (G_OBJECT (expander));
 }
 
@@ -1182,7 +1182,7 @@ gtk_expander_set_resize_toplevel (GtkExpander *expander,
   if (expander->resize_toplevel != resize_toplevel)
     {
       expander->resize_toplevel = resize_toplevel ? TRUE : FALSE;
-      g_object_notify (G_OBJECT (expander), "resize-toplevel");
+      g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_RESIZE_TOPLEVEL]);
     }
 }
 
@@ -1258,7 +1258,7 @@ gtk_expander_set_child (GtkExpander *expander,
                                      GTK_ACCESSIBLE_RELATION_CONTROLS);
     }
 
-  g_object_notify (G_OBJECT (expander), "child");
+  g_object_notify_by_pspec (G_OBJECT (expander), props[PROP_CHILD]);
 }
 
 /**

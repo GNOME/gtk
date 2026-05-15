@@ -293,13 +293,13 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
   switch (storage_type)
     {
     case GTK_IMAGE_PAINTABLE:
-      g_object_notify (G_OBJECT (cellpixbuf), "texture");
+      g_object_notify_by_pspec (G_OBJECT (cellpixbuf), props[PROP_TEXTURE]);
       break;
     case GTK_IMAGE_ICON_NAME:
-      g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
+      g_object_notify_by_pspec (G_OBJECT (cellpixbuf), props[PROP_ICON_NAME]);
       break;
     case GTK_IMAGE_GICON:
-      g_object_notify (G_OBJECT (cellpixbuf), "gicon");
+      g_object_notify_by_pspec (G_OBJECT (cellpixbuf), props[PROP_GICON]);
       break;
     default:
       g_assert_not_reached ();
@@ -338,7 +338,7 @@ gtk_cell_renderer_pixbuf_set_icon_size (GtkCellRendererPixbuf *cellpixbuf,
     return;
 
   priv->icon_size = icon_size;
-  g_object_notify (G_OBJECT (cellpixbuf), "icon-size");
+  g_object_notify_by_pspec (G_OBJECT (cellpixbuf), props[PROP_ICON_SIZE]);
 }
 
 static void

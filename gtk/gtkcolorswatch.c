@@ -627,7 +627,7 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
-  g_object_notify (G_OBJECT (swatch), "rgba");
+  g_object_notify_by_pspec (G_OBJECT (swatch), props[PROP_RGBA]);
 }
 
 gboolean
@@ -682,7 +682,7 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
       swatch->dest = NULL;
     }
 
-  g_object_notify (G_OBJECT (swatch), "can-drop");
+  g_object_notify_by_pspec (G_OBJECT (swatch), props[PROP_CAN_DROP]);
 }
 
 void
@@ -706,7 +706,7 @@ gtk_color_swatch_set_can_drag (GtkColorSwatch *swatch,
       swatch->source = NULL;
     }
 
-  g_object_notify (G_OBJECT (swatch), "can-drag");
+  g_object_notify_by_pspec (G_OBJECT (swatch), props[PROP_CAN_DRAG]);
 }
 
 void
@@ -727,7 +727,7 @@ gtk_color_swatch_set_selectable (GtkColorSwatch *swatch,
   swatch->selectable = selectable;
 
   update_accessible_properties (swatch);
-  g_object_notify (G_OBJECT (swatch), "selectable");
+  g_object_notify_by_pspec (G_OBJECT (swatch), props[PROP_SELECTABLE]);
 }
 
 gboolean

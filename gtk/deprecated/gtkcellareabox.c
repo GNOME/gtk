@@ -2251,7 +2251,7 @@ gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
     {
       priv->spacing = spacing;
 
-      g_object_notify (G_OBJECT (box), "spacing");
+      g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SPACING]);
 
       /* Notify that size needs to be requested again */
       reset_contexts (box);

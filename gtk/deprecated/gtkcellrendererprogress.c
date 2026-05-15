@@ -151,7 +151,7 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
     {
       priv->value = value;
       recompute_label (cellprogress);
-      g_object_notify (G_OBJECT (cellprogress), "value");
+      g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_VALUE]);
     }
 }
 
@@ -166,7 +166,7 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
   g_free (priv->text);
   priv->text = new_text;
   recompute_label (cellprogress);
-  g_object_notify (G_OBJECT (cellprogress), "text");
+  g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_TEXT]);
 }
 
 static void
@@ -181,7 +181,7 @@ gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress,
         priv->offset = 0;
       else
         priv->offset = pulse;
-      g_object_notify (G_OBJECT (cellprogress), "pulse");
+      g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_PULSE]);
     }
 
   priv->pulse = pulse;

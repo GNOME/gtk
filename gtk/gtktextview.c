@@ -2426,7 +2426,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
   if (old_buffer)
     g_object_unref (old_buffer);
 
-  g_object_notify (G_OBJECT (text_view), "buffer");
+  g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_BUFFER]);
 
   if (gtk_widget_get_visible (GTK_WIDGET (text_view)))
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
@@ -3400,7 +3400,7 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
           priv->layout->default_style->wrap_mode = wrap_mode;
           gtk_text_layout_default_style_changed (priv->layout);
         }
-      g_object_notify (G_OBJECT (text_view), "wrap-mode");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_WRAP_MODE]);
     }
 }
 
@@ -3474,7 +3474,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
       gtk_text_view_update_redo_action (text_view);
       gtk_text_view_update_undo_action (text_view);
 
-      g_object_notify (G_OBJECT (text_view), "editable");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_EDITABLE]);
     }
 }
 
@@ -3525,7 +3525,7 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels-above-lines");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_PIXELS_ABOVE_LINES]);
     }
 }
 
@@ -3578,7 +3578,7 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels-below-lines");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_PIXELS_BELOW_LINES]);
     }
 }
 
@@ -3631,7 +3631,7 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "pixels-inside-wrap");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_PIXELS_INSIDE_WRAP]);
     }
 }
 
@@ -3681,7 +3681,7 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "justification");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_JUSTIFICATION]);
     }
 }
 
@@ -3733,7 +3733,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "left-margin");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_LEFT_MARGIN]);
     }
 }
 
@@ -3785,7 +3785,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "right-margin");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_RIGHT_MARGIN]);
     }
 }
 
@@ -3836,7 +3836,7 @@ gtk_text_view_set_top_margin (GtkTextView *text_view,
 
       gtk_text_view_invalidate (text_view);
 
-      g_object_notify (G_OBJECT (text_view), "top-margin");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_TOP_MARGIN]);
     }
 }
 
@@ -3881,7 +3881,7 @@ gtk_text_view_set_bottom_margin (GtkTextView *text_view,
       if (priv->layout && priv->layout->default_style)
         gtk_text_layout_default_style_changed (priv->layout);
 
-      g_object_notify (G_OBJECT (text_view), "bottom-margin");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_BOTTOM_MARGIN]);
     }
 }
 
@@ -3930,7 +3930,7 @@ gtk_text_view_set_indent (GtkTextView *text_view,
           gtk_text_layout_default_style_changed (priv->layout);
         }
 
-      g_object_notify (G_OBJECT (text_view), "indent");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_INDENT]);
     }
 }
 
@@ -3989,7 +3989,7 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
       gtk_text_layout_default_style_changed (priv->layout);
     }
 
-  g_object_notify (G_OBJECT (text_view), "tabs");
+  g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_TABS]);
 }
 
 /**
@@ -4057,7 +4057,7 @@ gtk_text_view_set_cursor_visible (GtkTextView *text_view,
             }
         }
 
-      g_object_notify (G_OBJECT (text_view), "cursor-visible");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_CURSOR_VISIBLE]);
     }
 }
 
@@ -7420,7 +7420,7 @@ gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 
   gtk_text_view_pend_cursor_blink (text_view);
 
-  g_object_notify (G_OBJECT (text_view), "overwrite");
+  g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_OVERWRITE]);
 }
 
 /**
@@ -7484,7 +7484,7 @@ gtk_text_view_set_accepts_tab (GtkTextView *text_view,
     {
       text_view->priv->accepts_tab = accepts_tab;
 
-      g_object_notify (G_OBJECT (text_view), "accepts-tab");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_ACCEPTS_TAB]);
     }
 }
 
@@ -8599,7 +8599,7 @@ gtk_text_view_set_hadjustment (GtkTextView   *text_view,
   priv->hadjustment = g_object_ref_sink (adjustment);
   gtk_text_view_set_hadjustment_values (text_view);
 
-  g_object_notify (G_OBJECT (text_view), "hadjustment");
+  g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_HADJUSTMENT]);
 }
 
 static void
@@ -8627,7 +8627,7 @@ gtk_text_view_set_vadjustment (GtkTextView   *text_view,
   priv->vadjustment = g_object_ref_sink (adjustment);
   gtk_text_view_set_vadjustment_values (text_view);
 
-  g_object_notify (G_OBJECT (text_view), "vadjustment");
+  g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_VADJUSTMENT]);
 }
 
 static void
@@ -10308,7 +10308,7 @@ gtk_text_view_set_input_purpose (GtkTextView     *text_view,
                     "input-purpose", purpose,
                     NULL);
 
-      g_object_notify (G_OBJECT (text_view), "input-purpose");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_INPUT_PURPOSE]);
     }
 }
 
@@ -10357,7 +10357,7 @@ gtk_text_view_set_input_hints (GtkTextView   *text_view,
                     "input-hints", hints,
                     NULL);
 
-      g_object_notify (G_OBJECT (text_view), "input-hints");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_INPUT_HINTS]);
       gtk_text_view_update_emoji_action (text_view);
     }
 }
@@ -10409,7 +10409,7 @@ gtk_text_view_set_monospace (GtkTextView *text_view,
       else
         gtk_widget_remove_css_class (GTK_WIDGET (text_view), "monospace");
 
-      g_object_notify (G_OBJECT (text_view), "monospace");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_MONOSPACE]);
     }
 }
 
@@ -10518,7 +10518,7 @@ gtk_text_view_set_extra_menu (GtkTextView *text_view,
   if (g_set_object (&priv->extra_menu, model))
     {
       g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
-      g_object_notify (G_OBJECT (text_view), "extra-menu");
+      g_object_notify_by_pspec (G_OBJECT (text_view), props[PROP_EXTRA_MENU]);
     }
 }
 

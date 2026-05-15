@@ -1174,19 +1174,19 @@ calendar_select_day_internal (GtkCalendar *calendar,
 
   if (day_changed)
     {
-      g_object_notify (G_OBJECT (calendar), "day");
+      g_object_notify_by_pspec (G_OBJECT (calendar), props[PROP_DAY]);
 
       if (emit_day_signal)
         g_signal_emit (calendar, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
     }
 
   if (month_changed)
-    g_object_notify (G_OBJECT (calendar), "month");
+    g_object_notify_by_pspec (G_OBJECT (calendar), props[PROP_MONTH]);
 
   if (year_changed)
-    g_object_notify (G_OBJECT (calendar), "year");
+    g_object_notify_by_pspec (G_OBJECT (calendar), props[PROP_YEAR]);
 
-  g_object_notify (G_OBJECT (calendar), "date");
+  g_object_notify_by_pspec (G_OBJECT (calendar), props[PROP_DATE]);
 }
 
 static void
@@ -1762,7 +1762,7 @@ gtk_calendar_set_show_week_numbers (GtkCalendar *self,
   for (i = 0; i < 6; i ++)
     gtk_widget_set_visible (self->week_number_labels[i], value);
 
-  g_object_notify (G_OBJECT (self), "show-week-numbers");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_WEEK_NUMBERS]);
 }
 
 /**
@@ -1808,7 +1808,7 @@ gtk_calendar_set_show_heading (GtkCalendar *self,
 
   gtk_widget_set_visible (self->header_box, value);
 
-  g_object_notify (G_OBJECT (self), "show-heading");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_HEADING]);
 }
 
 /**
@@ -1853,7 +1853,7 @@ gtk_calendar_set_show_day_names (GtkCalendar *self,
   for (i = 0; i < 7; i ++)
     gtk_widget_set_visible (self->day_name_labels[i], value);
 
-  g_object_notify (G_OBJECT (self), "show-day-names");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_SHOW_DAY_NAMES]);
 }
 
 /**
@@ -1909,7 +1909,7 @@ gtk_calendar_set_day (GtkCalendar *self,
   calendar_select_day_internal (self, date, TRUE);
   g_date_time_unref (date);
 
-  g_object_notify (G_OBJECT (self), "day");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DAY]);
 }
 
 /**
@@ -1963,7 +1963,7 @@ gtk_calendar_set_month (GtkCalendar *self,
   calendar_select_day_internal (self, date, TRUE);
   g_date_time_unref (date);
 
-  g_object_notify (G_OBJECT (self), "month");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_MONTH]);
 }
 
 /**
@@ -2018,7 +2018,7 @@ gtk_calendar_set_year (GtkCalendar *self,
   calendar_select_day_internal (self, date, TRUE);
   g_date_time_unref (date);
 
-  g_object_notify (G_OBJECT (self), "year");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_YEAR]);
 }
 
 /**

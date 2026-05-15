@@ -83,7 +83,7 @@ set_accessible_role (GtkAtSpiSocket    *self,
       if (self->at_context != NULL)
         gtk_at_context_set_accessible_role (self->at_context, role);
 
-      g_object_notify (G_OBJECT (self), "accessible-role");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCESSIBLE_ROLE]);
     }
   else
     {

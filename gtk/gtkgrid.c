@@ -207,7 +207,7 @@ gtk_grid_set_orientation (GtkGrid        *grid,
 
       gtk_widget_update_orientation (GTK_WIDGET (grid), priv->orientation);
 
-      g_object_notify (G_OBJECT (grid), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties[PROP_ORIENTATION]);
     }
 }
 
@@ -1208,7 +1208,7 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
   if (old_row != row)
     {
       gtk_grid_layout_set_baseline_row (GTK_GRID_LAYOUT (priv->layout_manager), row);
-      g_object_notify (G_OBJECT (grid), "baseline-row");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties[PROP_BASELINE_ROW]);
     }
 }
 

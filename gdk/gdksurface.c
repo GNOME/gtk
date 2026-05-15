@@ -918,8 +918,8 @@ _gdk_surface_update_size (GdkSurface *surface)
   if (priv->attached_context)
     gdk_draw_context_surface_resized (priv->attached_context);
 
-  g_object_notify (G_OBJECT (surface), "width");
-  g_object_notify (G_OBJECT (surface), "height");
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_HEIGHT]);
 }
 
 /**
@@ -2795,7 +2795,7 @@ set_is_mapped_idle (gpointer user_data)
   if (surface->is_mapped)
     gdk_surface_invalidate_rect (surface, NULL);
 
-  g_object_notify (G_OBJECT (surface), "mapped");
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   return G_SOURCE_REMOVE;
 }
@@ -2817,7 +2817,7 @@ gdk_surface_set_is_mapped (GdkSurface *surface,
     gdk_surface_invalidate_rect (surface, NULL);
 
   if (was_mapped != is_mapped)
-    g_object_notify (G_OBJECT (surface), "mapped");
+    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
 static void

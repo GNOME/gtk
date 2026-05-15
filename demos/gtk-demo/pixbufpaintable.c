@@ -109,7 +109,7 @@ pixbuf_paintable_set_resource_path (PixbufPaintable *self,
 
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
-  g_object_notify (G_OBJECT (self), "resource-path");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_RESOURCE_PATH]);
 }
 
 static void

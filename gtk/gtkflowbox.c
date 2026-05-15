@@ -621,7 +621,7 @@ gtk_flow_box_child_set_child (GtkFlowBoxChild *self,
   priv->child = child;
   if (child)
     gtk_widget_set_parent (child, GTK_WIDGET (self));
-  g_object_notify (G_OBJECT (self), "child");
+  g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_CHILD]);
 }
 
 /**

@@ -919,7 +919,7 @@ gtk_widget_set_accessible_role (GtkWidget         *self,
       if (priv->at_context != NULL)
         gtk_at_context_set_accessible_role (priv->at_context, role);
 
-      g_object_notify (G_OBJECT (self), "accessible-role");
+      g_object_notify_by_pspec (G_OBJECT (self), widget_props[PROP_ACCESSIBLE_ROLE]);
     }
   else
     {

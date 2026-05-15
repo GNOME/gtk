@@ -148,7 +148,7 @@ setup_type (GtkMessageDialog *dialog,
 
   priv->message_type = type;
 
-  g_object_notify (G_OBJECT (dialog), "message-type");
+  g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_MESSAGE_TYPE]);
 }
 
 static void
@@ -190,7 +190,7 @@ gtk_message_dialog_add_buttons (GtkMessageDialog *message_dialog,
       break;
     }
 
-  g_object_notify (G_OBJECT (message_dialog), "buttons");
+  g_object_notify_by_pspec (G_OBJECT (message_dialog), props[PROP_BUTTONS]);
 }
 
 static void

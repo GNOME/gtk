@@ -369,7 +369,7 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
   if (display)
     GDK_DISPLAY_GET_CLASS (display)->make_default (display);
 
-  g_object_notify (G_OBJECT (manager), "default-display");
+  g_object_notify_by_pspec (G_OBJECT (manager), props[PROP_DEFAULT_DISPLAY]);
 }
 
 /**

@@ -799,7 +799,7 @@ gtk_font_button_set_title (GtkFontButton *font_button,
   if (font_button->font_dialog)
     gtk_window_set_title (GTK_WINDOW (font_button->font_dialog), font_button->title);
 
-  g_object_notify (G_OBJECT (font_button), "title");
+  g_object_notify_by_pspec (G_OBJECT (font_button), props[PROP_TITLE]);
 }
 
 /**
@@ -844,7 +844,7 @@ gtk_font_button_set_modal (GtkFontButton *font_button,
   if (font_button->font_dialog)
     gtk_window_set_modal (GTK_WINDOW (font_button->font_dialog), font_button->modal);
 
-  g_object_notify (G_OBJECT (font_button), "modal");
+  g_object_notify_by_pspec (G_OBJECT (font_button), props[PROP_MODAL]);
 }
 
 /**
@@ -907,7 +907,7 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
 
       gtk_font_button_label_use_font (font_button);
 
-      g_object_notify (G_OBJECT (font_button), "use-font");
+      g_object_notify_by_pspec (G_OBJECT (font_button), props[PROP_USE_FONT]);
     }
 }
 
@@ -954,7 +954,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
 
       gtk_font_button_label_use_font (font_button);
 
-      g_object_notify (G_OBJECT (font_button), "use-size");
+      g_object_notify_by_pspec (G_OBJECT (font_button), props[PROP_USE_SIZE]);
     }
 }
 

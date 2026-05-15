@@ -442,7 +442,7 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
       g_signal_connect (tag->button, "clicked", G_CALLBACK (on_button_clicked), tag);
     }
 
-  g_object_notify (G_OBJECT (tag), "has-close-button");
+  g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_HAS_CLOSE_BUTTON]);
 }
 
 gboolean

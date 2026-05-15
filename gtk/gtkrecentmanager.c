@@ -698,7 +698,7 @@ build_recent_items_list (GtkRecentManager *manager)
             {
               priv->size = size;
 
-              g_object_notify (G_OBJECT (manager), "size");
+              g_object_notify_by_pspec (G_OBJECT (manager), props[PROP_SIZE]);
             }
         }
     }

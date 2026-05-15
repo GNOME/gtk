@@ -154,7 +154,7 @@ update_component_transfer (ComponentFilter *self)
       g_assert_not_reached ();
     }
 
-  g_object_notify (G_OBJECT (self), "transfer");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TRANSFER]);
 }
 
 static void

@@ -382,7 +382,7 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
       if (priv->mode != GTK_SIZE_GROUP_NONE)
 	queue_resize_on_group (size_group);
 
-      g_object_notify (G_OBJECT (size_group), "mode");
+      g_object_notify_by_pspec (G_OBJECT (size_group), props[PROP_MODE]);
     }
 }
 

@@ -1223,7 +1223,7 @@ gtk_entry_set_property (GObject         *object,
       if (priv->editing_canceled != g_value_get_boolean (value))
         {
           priv->editing_canceled = g_value_get_boolean (value);
-          g_object_notify (object, "editing-canceled");
+          g_object_notify_by_pspec (object, entry_props[PROP_EDITING_CANCELED]);
         }
       break;
 

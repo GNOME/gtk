@@ -830,7 +830,7 @@ gtk_level_bar_set_orientation (GtkLevelBar    *self,
       self->orientation = orientation;
       gtk_widget_update_orientation (GTK_WIDGET (self), self->orientation);
       gtk_widget_queue_resize (GTK_WIDGET (self));
-      g_object_notify (G_OBJECT (self), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ORIENTATION]);
     }
 }
 

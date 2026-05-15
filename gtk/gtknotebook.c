@@ -1910,7 +1910,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
   for (element = notebook->children, i = 0; element; element = element->next, i++)
     {
       if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-        g_object_notify (G_OBJECT (element->data), "position");
+        g_object_notify_by_pspec (G_OBJECT (element->data), props[CHILD_PROP_POSITION]);
     }
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REORDERED],
@@ -2849,7 +2849,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
               for (element = notebook->children, i = 0; element; element = element->next, i++)
                 {
                   if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
-                    g_object_notify (G_OBJECT (element->data), "position");
+                    g_object_notify_by_pspec (G_OBJECT (element->data), props[CHILD_PROP_POSITION]);
                 }
               g_signal_emit (notebook,
                              notebook_signals[PAGE_REORDERED], 0,
@@ -3577,7 +3577,7 @@ gtk_notebook_remove (GtkNotebook *notebook,
 
   while (list)
     {
-      g_object_notify (G_OBJECT (list->data), "position");
+      g_object_notify_by_pspec (G_OBJECT (list->data), props[CHILD_PROP_POSITION]);
       list = list->next;
     }
 
@@ -4170,15 +4170,15 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
       gtk_notebook_switch_focus_tab (notebook, notebook->focus_tab);
     }
 
-  g_object_notify (G_OBJECT (page), "tab-expand");
-  g_object_notify (G_OBJECT (page), "tab-fill");
-  g_object_notify (G_OBJECT (page), "tab-label");
-  g_object_notify (G_OBJECT (page), "menu-label");
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_TAB_EXPAND]);
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_TAB_FILL]);
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_TAB_LABEL]);
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_MENU_LABEL]);
 
   list = g_list_nth (notebook->children, position);
   while (list)
     {
-      g_object_notify (G_OBJECT (list->data), "position");
+      g_object_notify_by_pspec (G_OBJECT (list->data), props[CHILD_PROP_POSITION]);
       list = list->next;
     }
 
@@ -6642,7 +6642,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (notebook->menu)
     gtk_notebook_menu_item_recreate (notebook, list);
 
-  g_object_notify (G_OBJECT (page), "tab-label");
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_TAB_LABEL]);
 }
 
 /**
@@ -6768,7 +6768,7 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 
   if (notebook->menu)
     gtk_notebook_menu_item_create (notebook, page);
-  g_object_notify (G_OBJECT (page), "menu-label");
+  g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_MENU_LABEL]);
 }
 
 /**
@@ -6913,7 +6913,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   for (list = notebook->children, i = 0; list; list = list->next, i++)
     {
       if (MIN (old_pos, position) <= i && i <= MAX (old_pos, position))
-        g_object_notify (G_OBJECT (list->data), "position");
+        g_object_notify_by_pspec (G_OBJECT (list->data), props[CHILD_PROP_POSITION]);
     }
 
   g_signal_emit (notebook,
@@ -7028,7 +7028,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
       else
         gtk_widget_remove_css_class (page->tab_widget, "reorderable-page");
 
-      g_object_notify (G_OBJECT (page), "reorderable");
+      g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_REORDERABLE]);
     }
 }
 
@@ -7128,7 +7128,7 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
   if (page->detachable != detachable)
     {
       page->detachable = detachable;
-      g_object_notify (G_OBJECT (page), "detachable");
+      g_object_notify_by_pspec (G_OBJECT (page), props[CHILD_PROP_DETACHABLE]);
     }
 }
 

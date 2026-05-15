@@ -199,20 +199,20 @@ type_data_update (TypeData *data,
 
   value = graph_data_get_value (data->self, 0);
   if (value != self)
-    g_object_notify (G_OBJECT (data), "self2");
+    g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_SELF2]);
   if (value != graph_data_get_value (data->self, 1))
-    g_object_notify (G_OBJECT (data), "self1");
+    g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_SELF1]);
 
-  g_object_notify (G_OBJECT (data), "self");
+  g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_SELF]);
   graph_data_prepend_value (data->self, self);
 
   value = graph_data_get_value (data->cumulative, 0);
   if (value != cumulative)
-    g_object_notify (G_OBJECT (data), "cumulative2");
+    g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_CUMULATIVE2]);
   if (value != graph_data_get_value (data->cumulative, 1))
-    g_object_notify (G_OBJECT (data), "cumulative1");
+    g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_CUMULATIVE1]);
 
-  g_object_notify (G_OBJECT (data), "cumulative");
+  g_object_notify_by_pspec (G_OBJECT (data), type_data_props[TYPE_DATA_PROP_CUMULATIVE]);
   graph_data_prepend_value (data->cumulative, cumulative);
 
   g_object_thaw_notify (G_OBJECT (data));

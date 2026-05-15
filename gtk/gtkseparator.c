@@ -97,7 +97,7 @@ gtk_separator_set_orientation (GtkSeparator   *self,
                                       GTK_ACCESSIBLE_PROPERTY_ORIENTATION, orientation,
                                       -1);
 
-      g_object_notify (G_OBJECT (self), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ORIENTATION]);
     }
 }
 

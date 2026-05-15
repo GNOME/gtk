@@ -434,7 +434,7 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
-  g_object_notify (G_OBJECT (self), "stack");
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_STACK]);
 }
 
 /**

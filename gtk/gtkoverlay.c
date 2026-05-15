@@ -606,7 +606,7 @@ gtk_overlay_set_child (GtkOverlay *overlay,
       gtk_widget_insert_after (child, GTK_WIDGET (overlay), NULL);
     }
 
-  g_object_notify (G_OBJECT (overlay), "child");
+  g_object_notify_by_pspec (G_OBJECT (overlay), props[PROP_CHILD]);
 }
 
 /**

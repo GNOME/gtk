@@ -1925,7 +1925,7 @@ selected_printer_changed (GtkPrintUnixDialog *dialog)
   update_paper_sizes (dialog);
   dialog->internal_page_setup_change = FALSE;
 
-  g_object_notify (G_OBJECT (dialog), "selected-printer");
+  g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_SELECTED_PRINTER]);
 }
 
 static void
@@ -3021,7 +3021,7 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
 
       dialog->page_setup_set = TRUE;
 
-      g_object_notify (G_OBJECT (dialog), "page-setup");
+      g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_PAGE_SETUP]);
     }
 }
 
@@ -3080,7 +3080,7 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
       if (dialog->current_page_radio)
         gtk_widget_set_sensitive (dialog->current_page_radio, current_page != -1);
 
-      g_object_notify (G_OBJECT (dialog), "current-page");
+      g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_CURRENT_PAGE]);
     }
 }
 
@@ -3190,7 +3190,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
         dialog->waiting_for_printer = g_strdup (printer);
     }
 
-  g_object_notify (G_OBJECT (dialog), "print-settings");
+  g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_PRINT_SETTINGS]);
 }
 
 /**
@@ -3308,7 +3308,7 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
           selected_printer_changed (dialog);
        }
 
-      g_object_notify (G_OBJECT (dialog), "manual-capabilities");
+      g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_MANUAL_CAPABILITIES]);
     }
 }
 
@@ -3352,7 +3352,7 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
           gtk_widget_set_sensitive (dialog->selection_radio, support_selection && dialog->has_selection);
         }
 
-      g_object_notify (G_OBJECT (dialog), "support-selection");
+      g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_SUPPORT_SELECTION]);
     }
 }
 
@@ -3398,7 +3398,7 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
             gtk_widget_set_sensitive (dialog->selection_radio, FALSE);
         }
 
-      g_object_notify (G_OBJECT (dialog), "has-selection");
+      g_object_notify_by_pspec (G_OBJECT (dialog), props[PROP_HAS_SELECTION]);
     }
 }
 

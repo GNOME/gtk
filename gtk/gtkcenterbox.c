@@ -168,7 +168,7 @@ gtk_center_box_set_property (GObject      *object,
             gtk_center_layout_set_orientation (GTK_CENTER_LAYOUT (layout), orientation);
             gtk_widget_update_orientation (GTK_WIDGET (self), orientation);
             gtk_widget_queue_resize (GTK_WIDGET (self));
-            g_object_notify (object, "orientation");
+            g_object_notify_by_pspec (object, props[PROP_ORIENTATION]);
           }
       }
       break;

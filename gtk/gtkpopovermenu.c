@@ -280,7 +280,7 @@ visible_submenu_changed (GObject        *object,
                          GParamSpec     *pspec,
                          GtkPopoverMenu *popover)
 {
-  g_object_notify (G_OBJECT (popover), "visible-submenu");
+  g_object_notify_by_pspec (G_OBJECT (popover), props[PROP_VISIBLE_SUBMENU]);
 }
 
 static void
@@ -845,7 +845,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
   if (g_set_object (&popover->model, model))
     {
       gtk_popover_menu_rebuild_contents (popover);
-      g_object_notify (G_OBJECT (popover), "menu-model");
+      g_object_notify_by_pspec (G_OBJECT (popover), props[PROP_MENU_MODEL]);
     }
 }
 
@@ -876,7 +876,7 @@ gtk_popover_menu_set_flags (GtkPopoverMenu      *popover,
   if (gtk_popover_get_child (GTK_POPOVER (popover)) != NULL)
     gtk_popover_menu_rebuild_contents (popover);
 
-  g_object_notify (G_OBJECT (popover), "flags");
+  g_object_notify_by_pspec (G_OBJECT (popover), props[PROP_FLAGS]);
 }
 
 /**

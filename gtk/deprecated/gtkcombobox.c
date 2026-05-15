@@ -912,7 +912,7 @@ gtk_combo_box_set_property (GObject      *object,
           priv->has_frame = g_value_get_boolean (value);
           if (priv->has_entry)
             gtk_entry_set_has_frame (GTK_ENTRY (priv->child), priv->has_frame);
-          g_object_notify (object, "has-frame");
+          g_object_notify_by_pspec (object, props[PROP_HAS_FRAME]);
         }
       break;
 
@@ -937,7 +937,7 @@ gtk_combo_box_set_property (GObject      *object,
       if (priv->editing_canceled != g_value_get_boolean (value))
         {
           priv->editing_canceled = g_value_get_boolean (value);
-          g_object_notify (object, "editing-canceled");
+          g_object_notify_by_pspec (object, props[PROP_EDITING_CANCELED]);
         }
       break;
 
@@ -1480,7 +1480,7 @@ gtk_combo_box_child_show (GtkWidget *widget,
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
   priv->popup_shown = TRUE;
-  g_object_notify (G_OBJECT (combo_box), "popup-shown");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_POPUP_SHOWN]);
 }
 
 static void
@@ -1490,7 +1490,7 @@ gtk_combo_box_child_hide (GtkWidget *widget,
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
   priv->popup_shown = FALSE;
-  g_object_notify (G_OBJECT (combo_box), "popup-shown");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_POPUP_SHOWN]);
 }
 
 typedef struct {
@@ -2029,9 +2029,9 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
     }
 
   g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
-  g_object_notify (G_OBJECT (combo_box), "active");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ACTIVE]);
   if (priv->id_column >= 0)
-    g_object_notify (G_OBJECT (combo_box), "active-id");
+    g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ACTIVE_ID]);
 }
 
 
@@ -2159,7 +2159,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
 out:
   gtk_combo_box_update_sensitivity (combo_box);
 
-  g_object_notify (G_OBJECT (combo_box), "model");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_MODEL]);
 }
 
 /**
@@ -2544,7 +2544,7 @@ gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
     {
       priv->popup_fixed_width = fixed;
 
-      g_object_notify (G_OBJECT (combo_box), "popup-fixed-width");
+      g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_POPUP_FIXED_WIDTH]);
     }
 }
 
@@ -2650,7 +2650,7 @@ gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
       priv->button_sensitivity = sensitivity;
       gtk_combo_box_update_sensitivity (combo_box);
 
-      g_object_notify (G_OBJECT (combo_box), "button-sensitivity");
+      g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_BUTTON_SENSITIVITY]);
     }
 }
 
@@ -2738,7 +2738,7 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
                                         "text", text_column,
                                         NULL);
 
-      g_object_notify (G_OBJECT (combo_box), "entry-text-column");
+      g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ENTRY_TEXT_COLUMN]);
     }
 }
 
@@ -2846,8 +2846,8 @@ gtk_combo_box_set_id_column (GtkComboBox *combo_box,
 
       priv->id_column = id_column;
 
-      g_object_notify (G_OBJECT (combo_box), "id-column");
-      g_object_notify (G_OBJECT (combo_box), "active-id");
+      g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ID_COLUMN]);
+      g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ACTIVE_ID]);
     }
 }
 
@@ -2992,7 +2992,7 @@ gtk_combo_box_set_active_id (GtkComboBox *combo_box,
         }
     } while (gtk_tree_model_iter_next (model, &iter));
 
-  g_object_notify (G_OBJECT (combo_box), "active-id");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_ACTIVE_ID]);
 
   return match;
 }
@@ -3029,7 +3029,7 @@ gtk_combo_box_set_child (GtkComboBox *combo_box,
   if (child)
     gtk_combo_box_add (combo_box, child);
 
-  g_object_notify (G_OBJECT (combo_box), "child");
+  g_object_notify_by_pspec (G_OBJECT (combo_box), props[PROP_CHILD]);
 }
 
 /**

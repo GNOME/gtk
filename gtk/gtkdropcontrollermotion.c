@@ -139,7 +139,7 @@ update_pointer_focus (GtkEventController    *controller,
   if (self->is_pointer != is_pointer)
     {
       self->is_pointer = is_pointer;
-      g_object_notify (G_OBJECT (self), "is-pointer");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_IS_POINTER]);
     }
   if (self->contains_pointer != contains_pointer)
     {
@@ -148,8 +148,8 @@ update_pointer_focus (GtkEventController    *controller,
         self->drop = g_object_ref (crossing->drop);
       else
         g_clear_object (&self->drop);
-      g_object_notify (G_OBJECT (self), "contains-pointer");
-      g_object_notify (G_OBJECT (self), "drop");
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CONTAINS_POINTER]);
+      g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DROP]);
     }
   g_object_thaw_notify (G_OBJECT (self));
 

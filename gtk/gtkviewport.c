@@ -615,7 +615,7 @@ gtk_viewport_set_scroll_to_focus (GtkViewport *viewport,
         clear_focus_change_handler (viewport);
     }
 
-  g_object_notify (G_OBJECT (viewport), "scroll-to-focus");
+  g_object_notify_by_pspec (G_OBJECT (viewport), props[PROP_SCROLL_TO_FOCUS]);
 }
 
 static void
@@ -693,7 +693,7 @@ gtk_viewport_set_child (GtkViewport *viewport,
       gtk_widget_set_parent (child, GTK_WIDGET (viewport));
     }
 
-  g_object_notify (G_OBJECT (viewport), "child");
+  g_object_notify_by_pspec (G_OBJECT (viewport), props[PROP_CHILD]);
 }
 
 /**

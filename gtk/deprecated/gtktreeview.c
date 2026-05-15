@@ -10441,7 +10441,7 @@ gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
    */
   gtk_tree_view_adjustment_changed (NULL, tree_view);
 
-  g_object_notify (G_OBJECT (tree_view), "hadjustment");
+  g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_HADJUSTMENT]);
 }
 
 static void
@@ -10472,7 +10472,7 @@ gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
    * internal details are too complicated for me to decipher right now.
    */
   gtk_tree_view_adjustment_changed (NULL, tree_view);
-  g_object_notify (G_OBJECT (tree_view), "vadjustment");
+  g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_VADJUSTMENT]);
 }
 
 /* Column and header operations */

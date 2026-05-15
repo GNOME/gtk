@@ -636,7 +636,7 @@ gtk_range_set_orientation (GtkRange       *range,
       gtk_widget_update_orientation (GTK_WIDGET (range), priv->orientation);
       gtk_widget_queue_resize (GTK_WIDGET (range));
 
-      g_object_notify (G_OBJECT (range), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ORIENTATION]);
     }
 }
 
