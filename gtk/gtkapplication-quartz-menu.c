@@ -70,8 +70,8 @@ tracker_item_changed (GObject    *object,
         [item didChangeIcon];
       else if (g_str_equal (name, "is-visible"))
         [item didChangeVisible];
-      else if (g_str_equal (name, "toggled"))
-        [item didChangeToggled];
+      else if (g_str_equal (name, "is-active"))
+        [item didChangeActive];
       else if (g_str_equal (name, "accel"))
         [item didChangeAccel];
     }
@@ -133,7 +133,7 @@ tracker_item_changed (GObject    *object,
       [self didChangeLabel];
       [self didChangeIcon];
       [self didChangeVisible];
-      [self didChangeToggled];
+      [self didChangeActive];
       [self didChangeAccel];
 
       if (gtk_menu_tracker_item_get_has_link (trackerItem, G_MENU_LINK_SUBMENU))
@@ -258,10 +258,10 @@ tracker_item_changed (GObject    *object,
   [self setHidden:gtk_menu_tracker_item_get_is_visible (trackerItem) ? NO : YES];
 }
 
-- (void)didChangeToggled
+- (void)didChangeActive
 {
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  [self setState:gtk_menu_tracker_item_get_toggled (trackerItem) ? NSOnState : NSOffState];
+  [self setState:gtk_menu_tracker_item_get_active (trackerItem) ? NSOnState : NSOffState];
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
 

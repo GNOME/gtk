@@ -79,7 +79,7 @@ gboolean                gtk_menu_tracker_item_get_sensitive             (GtkMenu
 
 GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenuTrackerItem *self);
 
-gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_active                (GtkMenuTrackerItem *self);
 
 const char *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
 
