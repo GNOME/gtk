@@ -629,7 +629,7 @@ gdk_display_should_use_portal (GdkDisplay *display,
   if (portals_disabled)
     return FALSE;
 
-  if (disabled_portals != NULL &&
+  if (disabled_portals != NULL && portal_interface != NULL &&
       g_hash_table_contains (disabled_portals, portal_interface))
     return FALSE;
 
