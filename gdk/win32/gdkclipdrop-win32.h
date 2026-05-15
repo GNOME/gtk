@@ -234,9 +234,6 @@ int      _gdk_win32_add_contentformat_to_pairs                     (GdkWin32Clip
                                                                     const char                  *target,
                                                                     GArray                      *array);
 
-void     _gdk_win32_clipboard_default_output_done                  (GObject                     *clipboard,
-                                                                    GAsyncResult                *result,
-                                                                    gpointer                     user_data);
 gboolean gdk_win32_clipdrop_transmute_contentformat                (GdkWin32Clipdrop            *clipdrop,
                                                                     const char                  *from_contentformat,
                                                                     UINT                         to_w32format,
