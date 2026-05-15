@@ -95,3 +95,21 @@ ignore = [
   # external sources should stay unmodified
   "testsuite/diff/diffreg.c",
 ]
+
+[rules.use_g_object_notify_by_pspec]
+ignore = [
+  # GdkDevice
+  "gdk/wayland/gdkseat-wayland.c",
+  "gdk/win32/gdkkeys-win32.c",
+  "gdk/x11/gdkkeys-x11.c",
+  # GdkToplevel
+  "gdk/wayland/gdktoplevel-wayland.c",
+  "gdk/x11/gdksurface-x11.c",
+  # GtkEditable
+  "gtk/gtktext.c",
+  # GtkFileChooser
+  "gtk/gtkfilechooserwidget.c",
+  # GtkFontChooser
+  "gtk/deprecated/gtkfontbutton.c",
+  "gtk/gtkfontchooserwidget.c",
+]

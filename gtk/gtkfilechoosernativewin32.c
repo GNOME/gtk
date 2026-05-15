@@ -244,6 +244,7 @@ ifiledialogevents_OnTypeChange (IFileDialogEvents * self,
   events->data->self->current_filter = filter;
   g_object_unref (filter);
   g_object_unref (filters);
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (events->data->self), "filter");
   return S_OK;
 }

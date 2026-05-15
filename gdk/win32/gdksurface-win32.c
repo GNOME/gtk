@@ -3401,6 +3401,7 @@ gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
 
   surface->shortcuts_inhibited = TRUE;
   surface->current_shortcuts_inhibited_seat = gdk_seat;
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
 }
 
@@ -3418,6 +3419,7 @@ gdk_win32_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
   surface->current_shortcuts_inhibited_seat = NULL;
 
   surface->shortcuts_inhibited = FALSE;
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (toplevel), "shortcuts-inhibited");
 }
 
