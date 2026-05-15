@@ -33,3 +33,6 @@ ignore = [
 
 [rules.include_order]
 level = "ignore"
+
+[rules.matching_declare_define]
+level = "ignore"
