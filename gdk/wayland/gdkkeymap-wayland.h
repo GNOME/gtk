@@ -29,8 +29,6 @@ struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap);
 struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap);
 gboolean           _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
                                                         uint32_t   keycode);
-int        _gdk_wayland_keymap_get_active_layout_index (GdkKeymap *keymap);
-char **    _gdk_wayland_keymap_get_layout_names (GdkKeymap *keymap);
 
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       uint32_t   mods);
