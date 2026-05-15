@@ -135,11 +135,10 @@ enum {
   PROP_INCONSISTENT,
   PROP_USE_UNDERLINE,
   PROP_CHILD,
-
-  /* actionable properties */
+  /* GtkActionable */
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
-  LAST_PROP = PROP_ACTION_NAME
+  LAST_PROP
 };
 
 enum {
@@ -720,10 +719,12 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                            GTK_TYPE_WIDGET,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  props[PROP_ACTION_NAME] = g_param_spec_override ("action-name",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-name"));
+  props[PROP_ACTION_TARGET] = g_param_spec_override ("action-target",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ACTIONABLE), "action-target"));
 
-  g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");
-  g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
   /**
    * GtkCheckButton::toggled:

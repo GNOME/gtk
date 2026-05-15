@@ -211,7 +211,7 @@ gtk_shortcuts_group_direction_changed (GtkWidget        *widget,
                                        GtkTextDirection  previous_dir)
 {
   GTK_WIDGET_CLASS (gtk_shortcuts_group_parent_class)->direction_changed (widget, previous_dir);
-  g_object_notify (G_OBJECT (widget), "height");
+  g_object_notify_by_pspec (G_OBJECT (widget), properties[PROP_HEIGHT]);
 }
 
 static void

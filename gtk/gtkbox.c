@@ -81,10 +81,9 @@ enum {
   PROP_HOMOGENEOUS,
   PROP_BASELINE_CHILD,
   PROP_BASELINE_POSITION,
-
-  /* orientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  LAST_PROP = PROP_ORIENTATION
+  LAST_PROP,
 };
 
 typedef struct
@@ -249,6 +248,7 @@ gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  gpointer iface;
 
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
@@ -257,10 +257,6 @@ gtk_box_class_init (GtkBoxClass *class)
   widget_class->focus = gtk_widget_focus_child;
   widget_class->compute_expand = gtk_box_compute_expand;
   widget_class->get_request_mode = gtk_box_get_request_mode;
-
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
 
   /**
    * GtkBox:spacing:
@@ -306,6 +302,12 @@ gtk_box_class_init (GtkBoxClass *class)
                        GTK_TYPE_BASELINE_POSITION,
                        GTK_BASELINE_POSITION_CENTER,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  props[PROP_ORIENTATION] =
+    g_param_spec_override ("orientation",
+                           g_object_interface_find_property (iface, "orientation"));
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

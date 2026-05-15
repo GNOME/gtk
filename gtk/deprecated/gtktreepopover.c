@@ -68,6 +68,8 @@ enum {
   NUM_PROPERTIES
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 enum {
   MENU_ACTIVATE,
   NUM_SIGNALS
@@ -203,17 +205,15 @@ gtk_tree_popover_class_init (GtkTreePopoverClass *class)
   object_class->set_property = gtk_tree_popover_set_property;
   object_class->get_property = gtk_tree_popover_get_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_MODEL,
-                                   g_param_spec_object ("model", NULL, NULL,
-                                                        GTK_TYPE_TREE_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_MODEL] = g_param_spec_object ("model", NULL, NULL,
+                                           GTK_TYPE_TREE_MODEL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_AREA,
-                                   g_param_spec_object ("cell-area", NULL, NULL,
-                                                        GTK_TYPE_CELL_AREA,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_CELL_AREA] = g_param_spec_object ("cell-area", NULL, NULL,
+                                               GTK_TYPE_CELL_AREA,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   signals[MENU_ACTIVATE] =
     g_signal_new (I_("menu-activate"),

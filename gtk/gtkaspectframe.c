@@ -86,8 +86,11 @@ enum {
   PROP_YALIGN,
   PROP_RATIO,
   PROP_OBEY_CHILD,
-  PROP_CHILD
+  PROP_CHILD,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_aspect_frame_dispose      (GObject         *object);
 static void gtk_aspect_frame_set_property (GObject         *object,
@@ -147,21 +150,17 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    *
    * The horizontal alignment of the child.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_XALIGN,
-                                   g_param_spec_float ("xalign", NULL, NULL,
-                                                       0.0, 1.0, 0.5,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_XALIGN] = g_param_spec_float ("xalign", NULL, NULL,
+                                           0.0, 1.0, 0.5,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkAspectFrame:yalign:
    *
    * The vertical alignment of the child.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_YALIGN,
-                                   g_param_spec_float ("yalign", NULL, NULL,
-                                                       0.0, 1.0, 0.5,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_YALIGN] = g_param_spec_float ("yalign", NULL, NULL,
+                                           0.0, 1.0, 0.5,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkAspectFrame:ratio:
    *
@@ -170,31 +169,27 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    * This property is only used if
    * [property@Gtk.AspectFrame:obey-child] is set to %FALSE.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RATIO,
-                                   g_param_spec_float ("ratio", NULL, NULL,
-                                                       MIN_RATIO, MAX_RATIO, 1.0,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_RATIO] = g_param_spec_float ("ratio", NULL, NULL,
+                                          MIN_RATIO, MAX_RATIO, 1.0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkAspectFrame:obey-child:
    *
    * Whether the `GtkAspectFrame` should use the aspect ratio of its child.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_OBEY_CHILD,
-                                   g_param_spec_boolean ("obey-child", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_OBEY_CHILD] = g_param_spec_boolean ("obey-child", NULL, NULL,
+                                                 TRUE,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
   /**
    * GtkAspectFrame:child:
    *
    * The child widget.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                           GTK_TYPE_WIDGET,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("aspectframe"));
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), GTK_ACCESSIBLE_ROLE_GENERIC);
@@ -376,7 +371,7 @@ gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
 
   self->xalign = xalign;
 
-  g_object_notify (G_OBJECT (self), "xalign");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_XALIGN]);
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
@@ -418,7 +413,7 @@ gtk_aspect_frame_set_yalign (GtkAspectFrame *self,
 
   self->yalign = yalign;
 
-  g_object_notify (G_OBJECT (self), "yalign");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_YALIGN]);
   if (self->cached_min_baseline != -1)
     gtk_widget_queue_resize (GTK_WIDGET (self));
   else
@@ -462,7 +457,7 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
 
   self->ratio = ratio;
 
-  g_object_notify (G_OBJECT (self), "ratio");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_RATIO]);
   if (!self->obey_child)
     gtk_widget_queue_resize (GTK_WIDGET (self));
 }
@@ -504,7 +499,7 @@ gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
 
   self->obey_child = obey_child;
 
-  g_object_notify (G_OBJECT (self), "obey-child");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_OBEY_CHILD]);
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
 }
@@ -876,7 +871,7 @@ gtk_aspect_frame_set_child (GtkAspectFrame  *self,
       gtk_widget_set_parent (child, GTK_WIDGET (self));
     }
 
-  g_object_notify (G_OBJECT (self), "child");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
 }
 
 /**

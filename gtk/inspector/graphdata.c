@@ -21,8 +21,11 @@
 
 enum {
   PROP_0,
-  PROP_N_VALUES
+  PROP_N_VALUES,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GraphData
 {
@@ -92,11 +95,11 @@ graph_data_class_init (GraphDataClass *klass)
   object_class->get_property = graph_data_get_property;
   object_class->set_property = graph_data_set_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_N_VALUES,
-                                   g_param_spec_uint ("n-values", NULL, NULL,
-                                                      1, G_MAXUINT, 1,
-                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_N_VALUES] = g_param_spec_uint ("n-values", NULL, NULL,
+                                            1, G_MAXUINT, 1,
+                                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

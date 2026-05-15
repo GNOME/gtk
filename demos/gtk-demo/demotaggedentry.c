@@ -203,7 +203,10 @@ enum {
   PROP_0,
   PROP_LABEL,
   PROP_HAS_CLOSE_BUTTON,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   SIGNAL_CLICKED,
@@ -365,12 +368,12 @@ demo_tagged_entry_tag_class_init (DemoTaggedEntryTagClass *class)
                     0, NULL, NULL, NULL,
                     G_TYPE_NONE, 0);
 
-  g_object_class_install_property (object_class, PROP_LABEL,
-      g_param_spec_string ("label", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
-  g_object_class_install_property (object_class, PROP_HAS_CLOSE_BUTTON,
-      g_param_spec_boolean ("has-close-button", NULL, NULL,
-                            FALSE, G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_LABEL] = g_param_spec_string ("label", NULL, NULL,
+                                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+  props[PROP_HAS_CLOSE_BUTTON] = g_param_spec_boolean ("has-close-button", NULL, NULL,
+                                                       FALSE, G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, "tag");
 }
@@ -439,7 +442,7 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
       g_signal_connect (tag->button, "clicked", G_CALLBACK (on_button_clicked), tag);
     }
 
-  g_object_notify (G_OBJECT (tag), "has-close-button");
+  g_object_notify_by_pspec (G_OBJECT (tag), props[PROP_HAS_CLOSE_BUTTON]);
 }
 
 gboolean

@@ -9,8 +9,11 @@ struct _DemoImage {
 };
 
 enum {
-  PROP_ICON_NAME = 1
+  PROP_ICON_NAME = 1,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE(DemoImage, demo_image, GTK_TYPE_WIDGET)
 
@@ -298,9 +301,10 @@ demo_image_class_init (DemoImageClass *class)
   object_class->get_property = demo_image_get_property;
   object_class->set_property = demo_image_set_property;
 
-  g_object_class_install_property (object_class, PROP_ICON_NAME,
-      g_param_spec_string ("icon-name", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ICON_NAME] = g_param_spec_string ("icon-name", NULL, NULL,
+                                               NULL, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
                        
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 

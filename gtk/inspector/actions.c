@@ -58,8 +58,11 @@ typedef struct _GtkInspectorActionsClass
 
 enum {
   PROP_0,
-  PROP_BUTTON
+  PROP_BUTTON,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_inspector_actions_observer_iface_init (GtkActionObserverInterface *iface);
 
@@ -645,9 +648,10 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
 
-  g_object_class_install_property (object_class, PROP_BUTTON,
-      g_param_spec_object ("button", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_BUTTON] = g_param_spec_object ("button", NULL, NULL,
+                                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorActions, swin);

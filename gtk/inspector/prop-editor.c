@@ -62,8 +62,11 @@ enum
   PROP_0,
   PROP_OBJECT,
   PROP_NAME,
-  PROP_SIZE_GROUP
+  PROP_SIZE_GROUP,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum
 {
@@ -1949,17 +1952,16 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 3, G_TYPE_OBJECT, G_TYPE_STRING, G_TYPE_STRING);
 
-  g_object_class_install_property (object_class, PROP_OBJECT,
-      g_param_spec_object ("object", NULL, NULL,
-                           G_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
+  props[PROP_OBJECT] = g_param_spec_object ("object", NULL, NULL,
+                                            G_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_NAME,
-      g_param_spec_string ("name", NULL, NULL,
-                           NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_SIZE_GROUP,
-      g_param_spec_object ("size-group", NULL, NULL,
-                           GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME));
+  props[PROP_SIZE_GROUP] = g_param_spec_object ("size-group", NULL, NULL,
+                                                GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 GtkWidget *

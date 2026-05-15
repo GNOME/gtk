@@ -203,10 +203,10 @@ enum {
   PROP_0,
   PROP_ACCEPT_LABEL,
   PROP_CANCEL_LABEL,
-  LAST_ARG,
+  N_PROPS,
 };
 
-static GParamSpec *native_props[LAST_ARG] = { NULL, };
+static GParamSpec *native_props[N_PROPS] = { NULL, };
 
 static void    _gtk_file_chooser_native_iface_init   (GtkFileChooserIface  *iface);
 
@@ -454,7 +454,7 @@ gtk_file_chooser_native_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_FILTER:
       self->current_filter = g_value_get_object (value);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (self->dialog), self->current_filter);
-      g_object_notify (G_OBJECT (self), "filter");
+      g_object_notify_by_pspec (G_OBJECT (self), pspec);
       break;
 
     default:
@@ -805,7 +805,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_properties (gobject_class, LAST_ARG, native_props);
+  g_object_class_install_properties (gobject_class, N_PROPS, native_props);
 }
 
 static void

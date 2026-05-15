@@ -51,7 +51,10 @@ enum
 {
   PROP_ITEM = 1,
   PROP_LIST_ITEM,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 #define ICON_SIZE 16
 
@@ -248,15 +251,15 @@ gtk_file_chooser_cell_class_init (GtkFileChooserCellClass *klass)
   object_class->set_property = gtk_file_chooser_cell_set_property;
   object_class->get_property = gtk_file_chooser_cell_get_property;
 
-  g_object_class_install_property (object_class, PROP_ITEM,
-                                   g_param_spec_object ("item", NULL, NULL,
-                                                        G_TYPE_FILE_INFO,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ITEM] = g_param_spec_object ("item", NULL, NULL,
+                                          G_TYPE_FILE_INFO,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, PROP_LIST_ITEM,
-                                   g_param_spec_object ("list-item", NULL, NULL,
-                                                        GTK_TYPE_LIST_ITEM,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_NAME));
+  props[PROP_LIST_ITEM] = g_param_spec_object ("list-item", NULL, NULL,
+                                               GTK_TYPE_LIST_ITEM,
+                                               G_PARAM_WRITABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("filelistcell"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

@@ -1196,7 +1196,7 @@ gdk_device_set_seat (GdkDevice *device,
     return;
 
   device->seat = seat;
-  g_object_notify (G_OBJECT (device), "seat");
+  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_SEAT]);
 }
 
 /**
@@ -1223,7 +1223,7 @@ gdk_device_update_tool (GdkDevice     *device,
 
   if (g_set_object (&device->last_tool, tool))
     {
-      g_object_notify (G_OBJECT (device), "tool");
+      g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_TOOL]);
       g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
     }
 }

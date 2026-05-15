@@ -146,8 +146,9 @@ enum {
   PROP_MAX_VALUE,
   PROP_MODE,
   PROP_INVERTED,
+  /* GtkOrientable */
+  PROP_ORIENTATION,
   LAST_PROPERTY,
-  PROP_ORIENTATION /* overridden */
 };
 
 enum {
@@ -829,7 +830,7 @@ gtk_level_bar_set_orientation (GtkLevelBar    *self,
       self->orientation = orientation;
       gtk_widget_update_orientation (GTK_WIDGET (self), self->orientation);
       gtk_widget_queue_resize (GTK_WIDGET (self));
-      g_object_notify (G_OBJECT (self), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ORIENTATION]);
     }
 }
 
@@ -924,14 +925,13 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
+  gpointer iface;
 
   oclass->get_property = gtk_level_bar_get_property;
   oclass->set_property = gtk_level_bar_set_property;
   oclass->finalize = gtk_level_bar_finalize;
 
   wclass->direction_changed = gtk_level_bar_direction_changed;
-
-  g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
 
   /**
    * GtkLevelBar::offset-changed:
@@ -1019,6 +1019,12 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
     g_param_spec_boolean ("inverted", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  properties[PROP_ORIENTATION] =
+    g_param_spec_override ("orientation",
+                           g_object_interface_find_property (iface, "orientation"));
 
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 

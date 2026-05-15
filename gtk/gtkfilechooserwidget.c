@@ -154,7 +154,10 @@ enum {
   PROP_SEARCH_MODE = 1,
   PROP_SUBTITLE,
   PROP_SHOW_TIME,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef enum {
   LOAD_EMPTY,                   /* There is no model */
@@ -1526,7 +1529,7 @@ change_show_time_state (GSimpleAction *action,
 
   g_simple_action_set_state (action, state);
   impl->show_time = g_variant_get_boolean (state);
-  g_object_notify (G_OBJECT (impl), "show-time");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SHOW_TIME]);
 }
 
 /* Shows an error dialog about not being able to select a dragged file */
@@ -2457,7 +2460,7 @@ location_mode_set (GtkFileChooserWidget *impl,
     }
 
   impl->location_mode = new_mode;
-  g_object_notify (G_OBJECT (impl), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SUBTITLE]);
 }
 
 /* Callback used when the places sidebar asks us to show other locations */
@@ -2729,7 +2732,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
                                     old_revealer_transition_type);
 
   gtk_widget_set_sensitive (impl->filter_combo, TRUE);
-  g_object_notify (G_OBJECT (impl), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SUBTITLE]);
 }
 
 static void
@@ -2780,7 +2783,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   file = g_file_new_for_uri ("recent:///");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE);
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
-  g_object_notify (G_OBJECT (impl), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SUBTITLE]);
   g_object_unref (file);
   gtk_widget_set_sensitive (impl->filter_combo, TRUE);
 }
@@ -2837,9 +2840,9 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
     }
 
   if ((old_mode == OPERATION_MODE_SEARCH) != (mode == OPERATION_MODE_SEARCH))
-    g_object_notify (G_OBJECT (impl), "search-mode");
+    g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SEARCH_MODE]);
 
-  g_object_notify (G_OBJECT (impl), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SUBTITLE]);
 }
 
 /* This function is basically a do_all function.
@@ -4340,7 +4343,7 @@ update_current_folder_get_info_cb (GObject      *source,
 
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), impl->current_folder);
 
-  g_object_notify (G_OBJECT (impl), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (impl), props[PROP_SUBTITLE]);
 
   update_default (impl);
 
@@ -6755,20 +6758,18 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * Whether search mode is enabled.
    */
-  g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
-                                   g_param_spec_boolean ("search-mode", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SEARCH_MODE] = g_param_spec_boolean ("search-mode", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileChooserWidget:subtitle:
    *
    * The subtitle of the file chooser widget.
    */
-  g_object_class_install_property (gobject_class, PROP_SUBTITLE,
-                                   g_param_spec_string ("subtitle", NULL, NULL,
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SUBTITLE] = g_param_spec_string ("subtitle", NULL, NULL,
+                                              "",
+                                              G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkFileChooserWidget:show-time:
@@ -6777,10 +6778,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    *
    * Since: 4.10
    */
-  g_object_class_install_property (gobject_class, PROP_SHOW_TIME,
-                                   g_param_spec_boolean ("show-time", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_TIME] = g_param_spec_boolean ("show-time", NULL, NULL,
+                                                FALSE,
+                                                G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   _gtk_file_chooser_install_properties (gobject_class);
 

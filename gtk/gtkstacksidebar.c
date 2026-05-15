@@ -385,7 +385,7 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
    * The stack.
    */
   obj_properties[PROP_STACK] =
-      g_param_spec_object (I_("stack"), NULL, NULL,
+      g_param_spec_object ("stack", NULL, NULL,
                            GTK_TYPE_STACK,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -434,7 +434,7 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
-  g_object_notify (G_OBJECT (self), "stack");
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_STACK]);
 }
 
 /**

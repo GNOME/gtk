@@ -114,8 +114,11 @@ enum
 {
   PROP_0,
   PROP_URI,
-  PROP_VISITED
+  PROP_VISITED,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum
 {
@@ -190,11 +193,9 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    *
    * The URI bound to this button.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_URI,
-                                   g_param_spec_string ("uri", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_URI] = g_param_spec_string ("uri", NULL, NULL,
+                                         NULL,
+                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkLinkButton:visited:
@@ -203,11 +204,11 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    *
    * A visited link is drawn in a different color.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_VISITED,
-                                   g_param_spec_boolean ("visited", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_VISITED] = g_param_spec_boolean ("visited", NULL, NULL,
+                                              FALSE,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /**
    * GtkLinkButton::activate-link:
@@ -691,7 +692,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
   g_free (link_button->uri);
   link_button->uri = g_strdup (uri);
 
-  g_object_notify (G_OBJECT (link_button), "uri");
+  g_object_notify_by_pspec (G_OBJECT (link_button), props[PROP_URI]);
 
   gtk_link_button_set_visited (link_button, FALSE);
 }
@@ -749,7 +750,7 @@ gtk_link_button_set_visited (GtkLinkButton *link_button,
           gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
         }
 
-      g_object_notify (G_OBJECT (link_button), "visited");
+      g_object_notify_by_pspec (G_OBJECT (link_button), props[PROP_VISITED]);
     }
 }
 

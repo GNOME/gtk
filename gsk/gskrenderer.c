@@ -261,9 +261,9 @@ gsk_renderer_do_realize (GskRenderer  *renderer,
 
   priv->is_realized = TRUE;
 
-  g_object_notify (G_OBJECT (renderer), "realized");
+  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_REALIZED]);
   if (surface)
-    g_object_notify (G_OBJECT (renderer), "surface");
+    g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_SURFACE]);
 
   return TRUE;
 }
@@ -368,9 +368,9 @@ gsk_renderer_unrealize (GskRenderer *renderer)
 
   priv->is_realized = FALSE;
 
-  g_object_notify (G_OBJECT (renderer), "realized");
+  g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_REALIZED]);
   if (has_surface)
-    g_object_notify (G_OBJECT (renderer), "surface");
+    g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_SURFACE]);
 }
 
 /**

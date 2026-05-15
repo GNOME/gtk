@@ -81,8 +81,11 @@ static const char * const icons_symbolic[] =
 enum
 {
   PROP_0,
-  PROP_SYMBOLIC
+  PROP_SYMBOLIC,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static gboolean cb_query_tooltip (GtkWidget       *button,
                                   int              x,
@@ -176,11 +179,11 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SYMBOLIC,
-                                   g_param_spec_boolean ("use-symbolic", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SYMBOLIC] = g_param_spec_boolean ("use-symbolic", NULL, NULL,
+                                               TRUE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Bind class to template
    */

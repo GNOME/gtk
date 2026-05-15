@@ -6,7 +6,10 @@ enum
 {
   PROP_0,
   PROP_PROGRESS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _Demo4Widget
 {
@@ -216,10 +219,11 @@ demo4_widget_class_init (Demo4WidgetClass *class)
 
   widget_class->snapshot = demo4_widget_snapshot;
 
-  g_object_class_install_property (object_class, PROP_PROGRESS,
-      g_param_spec_double ("progress", NULL, NULL,
-                           0.0, 1.0, 0.5,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_PROGRESS] = g_param_spec_double ("progress", NULL, NULL,
+                                              0.0, 1.0, 0.5,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 GtkWidget *

@@ -77,10 +77,14 @@ struct _GtkColorChooserDialogClass
 enum
 {
   PROP_ZERO,
+  PROP_SHOW_EDITOR,
+  /* GtkColorChooser */
   PROP_RGBA,
   PROP_USE_ALPHA,
-  PROP_SHOW_EDITOR
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface);
 
@@ -234,8 +238,10 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 
   widget_class->unmap = gtk_color_chooser_dialog_unmap;
 
-  g_object_class_override_property (object_class, PROP_RGBA, "rgba");
-  g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
+  props[PROP_RGBA] = g_param_spec_override ("rgba",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "rgba"));
+  props[PROP_USE_ALPHA] = g_param_spec_override ("use-alpha",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "use-alpha"));
 
   /**
    * GtkColorChooserDialog:show-editor:
@@ -244,9 +250,10 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
    *
    * It can be set to switch the color chooser into single-color editing mode.
    */
-  g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
-      g_param_spec_boolean ("show-editor", NULL, NULL,
-                            FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_SHOW_EDITOR] = g_param_spec_boolean ("show-editor", NULL, NULL,
+                                                  FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /* Bind class to template
    */

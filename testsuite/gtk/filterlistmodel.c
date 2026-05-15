@@ -570,7 +570,10 @@ struct _GtkMutableStringObject
 enum
 {
   PROP_STRING = 1,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 #define GTK_TYPE_MUTABLE_STRING_OBJECT (gtk_mutable_string_object_get_type ())
 G_DECLARE_FINAL_TYPE (GtkMutableStringObject, gtk_mutable_string_object, GTK, MUTABLE_STRING_OBJECT, GObject)
@@ -589,7 +592,7 @@ gtk_mutable_string_object_set_string (GtkMutableStringObject *self,
   g_clear_pointer (&self->string, g_free);
   self->string = g_strdup (string);
 
-  g_object_notify (G_OBJECT (self), "string");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_STRING]);
 }
 
 static void
@@ -640,10 +643,10 @@ gtk_mutable_string_object_class_init (GtkMutableStringObjectClass *klass)
   object_class->get_property = gtk_mutable_string_object_get_property;
   object_class->set_property = gtk_mutable_string_object_set_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_STRING,
-                                   g_param_spec_string ("string", NULL, NULL, NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  props[PROP_STRING] = g_param_spec_string ("string", NULL, NULL, NULL,
+                                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void
@@ -739,7 +742,10 @@ enum
 {
   PROP_VALUE = 1,
   PROP_VALUE2,
+  BOOL_N_PROPS
 };
+
+static GParamSpec *bool_props[BOOL_N_PROPS] = { NULL, };
 
 #define GTK_TYPE_BOOL_OBJECT (gtk_bool_object_get_type ())
 G_DECLARE_FINAL_TYPE (GtkBoolObject, gtk_bool_object, GTK, BOOL_OBJECT, GObject)
@@ -759,13 +765,13 @@ gtk_bool_object_set_values (GtkBoolObject *self,
   if (self->value != value)
     {
       self->value = value;
-      g_object_notify (G_OBJECT (self), "value");
+      g_object_notify_by_pspec (G_OBJECT (self), bool_props[PROP_VALUE]);
     }
 
   if (self->value2 != value2)
     {
       self->value2 = value2;
-      g_object_notify (G_OBJECT (self), "value2");
+      g_object_notify_by_pspec (G_OBJECT (self), bool_props[PROP_VALUE2]);
     }
 }
 
@@ -825,17 +831,15 @@ gtk_bool_object_class_init (GtkBoolObjectClass *klass)
   object_class->get_property = gtk_bool_object_get_property;
   object_class->set_property = gtk_bool_object_set_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_VALUE,
-                                   g_param_spec_boolean ("value", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  bool_props[PROP_VALUE] = g_param_spec_boolean ("value", NULL, NULL,
+                                                 FALSE,
+                                                 G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_VALUE2,
-                                   g_param_spec_boolean ("value2", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME));
+  bool_props[PROP_VALUE2] = g_param_spec_boolean ("value2", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, BOOL_N_PROPS, bool_props);
 }
 
 static void

@@ -29,8 +29,11 @@
 enum
 {
   PROP_0,
-  PROP_ADJUSTMENT
+  PROP_ADJUSTMENT,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GtkInspectorMagnifierPrivate
 {
@@ -135,9 +138,10 @@ gtk_inspector_magnifier_class_init (GtkInspectorMagnifierClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
 
-  g_object_class_install_property (object_class, PROP_ADJUSTMENT,
-      g_param_spec_object ("adjustment", NULL, NULL,
-                           GTK_TYPE_ADJUSTMENT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_ADJUSTMENT] = g_param_spec_object ("adjustment", NULL, NULL,
+                                                GTK_TYPE_ADJUSTMENT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/magnifier.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMagnifier, magnifier);

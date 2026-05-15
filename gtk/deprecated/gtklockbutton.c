@@ -120,8 +120,11 @@ enum
   PROP_TEXT_UNLOCK,
   PROP_TOOLTIP_LOCK,
   PROP_TOOLTIP_UNLOCK,
-  PROP_TOOLTIP_NOT_AUTHORIZED
+  PROP_TOOLTIP_NOT_AUTHORIZED,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void update_state (GtkLockButton *button);
 static void gtk_lock_button_clicked (GtkButton *button);
@@ -288,11 +291,10 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_PERMISSION,
-    g_param_spec_object ("permission", NULL, NULL,
-                         G_TYPE_PERMISSION,
-                         G_PARAM_READWRITE |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_PERMISSION] = g_param_spec_object ("permission", NULL, NULL,
+                                                G_TYPE_PERMISSION,
+                                                G_PARAM_READWRITE |
+                                                G_PARAM_STATIC_NAME);
 
   /**
    * GtkLockButton:text-lock:
@@ -301,12 +303,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_TEXT_LOCK,
-    g_param_spec_string ("text-lock", NULL, NULL,
-                         _("Lock"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_TEXT_LOCK] = g_param_spec_string ("text-lock", NULL, NULL,
+                                               _("Lock"),
+                                               G_PARAM_READWRITE |
+                                               G_PARAM_CONSTRUCT |
+                                               G_PARAM_STATIC_NAME);
 
   /**
    * GtkLockButton:text-unlock:
@@ -315,12 +316,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_TEXT_UNLOCK,
-    g_param_spec_string ("text-unlock", NULL, NULL,
-                         _("Unlock"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_TEXT_UNLOCK] = g_param_spec_string ("text-unlock", NULL, NULL,
+                                                 _("Unlock"),
+                                                 G_PARAM_READWRITE |
+                                                 G_PARAM_CONSTRUCT |
+                                                 G_PARAM_STATIC_NAME);
 
   /**
    * GtkLockButton:tooltip-lock:
@@ -329,12 +329,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_TOOLTIP_LOCK,
-    g_param_spec_string ("tooltip-lock", NULL, NULL,
-                         _("Dialog is unlocked.\nClick to prevent further changes"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_TOOLTIP_LOCK] = g_param_spec_string ("tooltip-lock", NULL, NULL,
+                                                  _("Dialog is unlocked.\nClick to prevent further changes"),
+                                                  G_PARAM_READWRITE |
+                                                  G_PARAM_CONSTRUCT |
+                                                  G_PARAM_STATIC_NAME);
 
   /**
    * GtkLockButton:tooltip-unlock:
@@ -343,12 +342,11 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_TOOLTIP_UNLOCK,
-    g_param_spec_string ("tooltip-unlock", NULL, NULL,
-                         _("Dialog is locked.\nClick to make changes"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_TOOLTIP_UNLOCK] = g_param_spec_string ("tooltip-unlock", NULL, NULL,
+                                                    _("Dialog is locked.\nClick to make changes"),
+                                                    G_PARAM_READWRITE |
+                                                    G_PARAM_CONSTRUCT |
+                                                    G_PARAM_STATIC_NAME);
 
   /**
    * GtkLockButton:tooltip-not-authorized:
@@ -357,12 +355,13 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    *
    * Deprecated: 4.10: This widget will be removed in GTK 5
    */
-  g_object_class_install_property (gobject_class, PROP_TOOLTIP_NOT_AUTHORIZED,
-    g_param_spec_string ("tooltip-not-authorized", NULL, NULL,
-                         _("System policy prevents changes.\nContact your system administrator"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_NAME));
+  props[PROP_TOOLTIP_NOT_AUTHORIZED] = g_param_spec_string ("tooltip-not-authorized", NULL, NULL,
+                                                            _("System policy prevents changes.\nContact your system administrator"),
+                                                            G_PARAM_READWRITE |
+                                                            G_PARAM_CONSTRUCT |
+                                                            G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Bind class to template
    */
@@ -603,7 +602,7 @@ gtk_lock_button_set_permission (GtkLockButton *button,
 
       update_state (button);
 
-      g_object_notify (G_OBJECT (button), "permission");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_PERMISSION]);
     }
 }
 

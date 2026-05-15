@@ -107,9 +107,12 @@ struct _GtkAppChooserDialogClass {
 
 enum {
   PROP_GFILE = 1,
+  PROP_HEADING,
   PROP_CONTENT_TYPE,
-  PROP_HEADING
+  N_PROPS,
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserDialog, gtk_app_chooser_dialog, GTK_TYPE_DIALOG,
@@ -591,7 +594,6 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GParamSpec *pspec;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = GTK_WIDGET_CLASS (klass);
@@ -602,8 +604,6 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   gobject_class->get_property = gtk_app_chooser_dialog_get_property;
   gobject_class->constructed = gtk_app_chooser_dialog_constructed;
 
-  g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
-
   /**
    * GtkAppChooserDialog:gfile:
    *
@@ -612,11 +612,10 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    * The dialog's `GtkAppChooserWidget` content type will
    * be guessed from the file, if present.
    */
-  pspec = g_param_spec_object ("gfile", NULL, NULL,
-                               G_TYPE_FILE,
-                               G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-                               G_PARAM_STATIC_NAME);
-  g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
+  props[PROP_GFILE] = g_param_spec_object ("gfile", NULL, NULL,
+                                           G_TYPE_FILE,
+                                           G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
+                                           G_PARAM_STATIC_NAME);
 
   /**
    * GtkAppChooserDialog:heading:
@@ -625,11 +624,15 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    *
    * The string may contain Pango markup.
    */
-  pspec = g_param_spec_string ("heading", NULL, NULL,
-                               NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                               G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
+  props[PROP_HEADING] = g_param_spec_string ("heading", NULL, NULL,
+                                             NULL,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
+                                             G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_CONTENT_TYPE] = g_param_spec_override ("content-type",
+      g_object_interface_find_property (g_type_default_interface_peek (GTK_TYPE_APP_CHOOSER), "content-type"));
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   /* Bind class to template
    */
@@ -789,7 +792,7 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
         }
     }
 
-  g_object_notify (G_OBJECT (self), "heading");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_HEADING]);
 }
 
 /**

@@ -193,10 +193,9 @@ enum {
   PROP_SHRINK_END_CHILD,
   PROP_START_CHILD,
   PROP_END_CHILD,
-  LAST_PROP,
-
   /* GtkOrientable */
   PROP_ORIENTATION,
+  LAST_PROP,
 };
 
 enum {
@@ -405,7 +404,7 @@ gtk_paned_set_orientation (GtkPaned       *self,
                                        orientation);
 
       gtk_widget_queue_resize (GTK_WIDGET (self));
-      g_object_notify (G_OBJECT (self), "orientation");
+      g_object_notify_by_pspec (G_OBJECT (self), paned_props[PROP_ORIENTATION]);
     }
 }
 
@@ -414,6 +413,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  gpointer iface;
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
@@ -560,8 +560,13 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_TYPE_WIDGET,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  paned_props[PROP_ORIENTATION] =
+    g_param_spec_override ("orientation",
+                           g_object_interface_find_property (iface, "orientation"));
+
   g_object_class_install_properties (object_class, LAST_PROP, paned_props);
-  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
    * GtkPaned::cycle-child-focus:
@@ -1657,7 +1662,7 @@ gtk_paned_set_start_child (GtkPaned  *paned,
       gtk_widget_insert_before (child, GTK_WIDGET (paned), paned->handle_widget);
     }
 
-  g_object_notify (G_OBJECT (paned), "start-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_START_CHILD]);
 }
 
 /**
@@ -1694,7 +1699,7 @@ gtk_paned_set_resize_start_child (GtkPaned *paned,
 
   paned->resize_start_child = resize;
 
-  g_object_notify (G_OBJECT (paned), "resize-start-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_RESIZE_START_CHILD]);
 }
 
 /**
@@ -1731,7 +1736,7 @@ gtk_paned_set_shrink_start_child (GtkPaned *paned,
 
   paned->shrink_start_child = shrink;
 
-  g_object_notify (G_OBJECT (paned), "shrink-start-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_SHRINK_START_CHILD]);
 }
 
 /**
@@ -1777,7 +1782,7 @@ gtk_paned_set_end_child (GtkPaned  *paned,
       gtk_widget_insert_after (child, GTK_WIDGET (paned), paned->handle_widget);
     }
 
-  g_object_notify (G_OBJECT (paned), "end-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_END_CHILD]);
 }
 
 /**
@@ -1814,7 +1819,7 @@ gtk_paned_set_resize_end_child (GtkPaned *paned,
 
   paned->resize_end_child = resize;
 
-  g_object_notify (G_OBJECT (paned), "resize-end-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_RESIZE_END_CHILD]);
 }
 
 /**
@@ -1851,7 +1856,7 @@ gtk_paned_set_shrink_end_child (GtkPaned *paned,
 
   paned->shrink_end_child = shrink;
 
-  g_object_notify (G_OBJECT (paned), "shrink-end-child");
+  g_object_notify_by_pspec (G_OBJECT (paned), paned_props[PROP_SHRINK_END_CHILD]);
 }
 
 /**

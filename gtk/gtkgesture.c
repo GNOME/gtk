@@ -128,7 +128,10 @@ typedef struct _PointData PointData;
 
 enum {
   PROP_N_POINTS = 1,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   BEGIN,
@@ -772,11 +775,11 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * The number of touch points that trigger
    * recognition on this gesture.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_N_POINTS,
-                                   g_param_spec_uint ("n-points", NULL, NULL,
-                                                      1, G_MAXUINT, 1,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_N_POINTS] = g_param_spec_uint ("n-points", NULL, NULL,
+                                            1, G_MAXUINT, 1,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal

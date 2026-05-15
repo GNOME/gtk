@@ -862,8 +862,6 @@ gdk_surface_set_property (GObject      *object,
     }
 }
 
-#define GDK_SURFACE_IS_STICKY(surface) (((surface)->state & GDK_TOPLEVEL_STATE_STICKY))
-
 static void
 gdk_surface_get_property (GObject    *object,
                           guint       prop_id,
@@ -920,8 +918,8 @@ _gdk_surface_update_size (GdkSurface *surface)
   if (priv->attached_context)
     gdk_draw_context_surface_resized (priv->attached_context);
 
-  g_object_notify (G_OBJECT (surface), "width");
-  g_object_notify (G_OBJECT (surface), "height");
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_HEIGHT]);
 }
 
 /**
@@ -1045,8 +1043,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   g_object_ref (surface);
 
-  if (GDK_IS_TOPLEVEL (surface))
-    g_object_notify (G_OBJECT (surface), "state");
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   if (surface->gl_paint_context)
@@ -2728,13 +2724,10 @@ gdk_surface_is_opaque (GdkSurface *self)
   return FALSE;
 }
 
-void
+static void
 gdk_surface_set_state (GdkSurface      *surface,
                        GdkToplevelState new_state)
 {
-  gboolean was_sticky, sticky;
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
   if (new_state == surface->state)
     return; /* No actual work to do, nothing changed. */
 
@@ -2743,17 +2736,10 @@ gdk_surface_set_state (GdkSurface      *surface,
    * inconsistent state to the user.
    */
 
-  was_sticky = GDK_SURFACE_IS_STICKY (surface);
-
   surface->state = new_state;
-
-  sticky = GDK_SURFACE_IS_STICKY (surface);
 
   if (GDK_IS_TOPLEVEL (surface))
     g_object_notify (G_OBJECT (surface), "state");
-
-  if (was_sticky != sticky)
-    g_object_notify (G_OBJECT (surface), "sticky");
 }
 
 void
@@ -2809,7 +2795,7 @@ set_is_mapped_idle (gpointer user_data)
   if (surface->is_mapped)
     gdk_surface_invalidate_rect (surface, NULL);
 
-  g_object_notify (G_OBJECT (surface), "mapped");
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   return G_SOURCE_REMOVE;
 }
@@ -2831,7 +2817,7 @@ gdk_surface_set_is_mapped (GdkSurface *surface,
     gdk_surface_invalidate_rect (surface, NULL);
 
   if (was_mapped != is_mapped)
-    g_object_notify (G_OBJECT (surface), "mapped");
+    g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
 static void

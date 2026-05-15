@@ -182,7 +182,7 @@ update_subtitle_from_type (GtkShortcutsShortcut *self)
 
   gtk_label_set_label (self->subtitle, subtitle);
   gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle != NULL);
-  g_object_notify (G_OBJECT (self), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUBTITLE]);
 }
 
 static void
@@ -192,7 +192,7 @@ gtk_shortcuts_shortcut_set_subtitle_set (GtkShortcutsShortcut *self,
   if (self->subtitle_set != subtitle_set)
     {
       self->subtitle_set = subtitle_set;
-      g_object_notify (G_OBJECT (self), "subtitle-set");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUBTITLE_SET]);
     }
   update_subtitle_from_type (self);
 }
@@ -205,7 +205,7 @@ gtk_shortcuts_shortcut_set_subtitle (GtkShortcutsShortcut *self,
   gtk_widget_set_visible (GTK_WIDGET (self->subtitle), subtitle && subtitle[0]);
   gtk_shortcuts_shortcut_set_subtitle_set (self, subtitle && subtitle[0]);
 
-  g_object_notify (G_OBJECT (self), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUBTITLE]);
 }
 
 static void
@@ -272,7 +272,7 @@ gtk_shortcuts_shortcut_set_icon_set (GtkShortcutsShortcut *self,
   if (self->icon_set != icon_set)
     {
       self->icon_set = icon_set;
-      g_object_notify (G_OBJECT (self), "icon-set");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_SET]);
     }
   update_icon_from_type (self);
 }
@@ -283,7 +283,7 @@ gtk_shortcuts_shortcut_set_icon (GtkShortcutsShortcut *self,
 {
   gtk_image_set_from_gicon (self->image, gicon);
   gtk_shortcuts_shortcut_set_icon_set (self, gicon != NULL);
-  g_object_notify (G_OBJECT (self), "icon");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON]);
 }
 
 static void
@@ -305,7 +305,7 @@ gtk_shortcuts_shortcut_set_direction (GtkShortcutsShortcut *self,
 
   update_visible_from_direction (self);
 
-  g_object_notify (G_OBJECT (self), "direction");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DIRECTION]);
 }
 
 static void
@@ -333,7 +333,7 @@ gtk_shortcuts_shortcut_set_type (GtkShortcutsShortcut *self,
   gtk_widget_set_visible (GTK_WIDGET (self->image), type != GTK_SHORTCUT_ACCELERATOR);
 
 
-  g_object_notify (G_OBJECT (self), "shortcut-type");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHORTCUT_TYPE]);
 }
 
 static void
@@ -343,7 +343,7 @@ gtk_shortcuts_shortcut_set_action_name (GtkShortcutsShortcut *self,
   g_free (self->action_name);
   self->action_name = g_strdup (action_name);
 
-  g_object_notify (G_OBJECT (self), "action-name");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION_NAME]);
 }
 
 static void

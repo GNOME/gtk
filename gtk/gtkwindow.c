@@ -344,10 +344,10 @@ enum {
   PROP_MAXIMIZED,
   PROP_FULLSCREENED,
 
-  LAST_ARG
+  N_PROPS
 };
 
-static GParamSpec *window_props[LAST_ARG] = { NULL, };
+static GParamSpec *window_props[N_PROPS] = { NULL, };
 
 /* Must be kept in sync with GdkSurfaceEdge ! */
 typedef enum
@@ -1182,7 +1182,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                          GTK_WINDOW_GRAVITY_TOP_START,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
+  g_object_class_install_properties (gobject_class, N_PROPS, window_props);
 
   /**
    * GtkWindow::activate-focus:
@@ -2289,7 +2289,7 @@ gtk_window_root_set_focus (GtkRoot   *root,
       g_clear_object (&priv->move_focus_widget);
     }
 
-  g_object_notify (G_OBJECT (self), "focus-widget");
+  g_object_notify_by_pspec (G_OBJECT (self), window_props[PROP_FOCUS_WIDGET]);
 }
 
 static void

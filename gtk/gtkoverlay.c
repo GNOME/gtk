@@ -78,8 +78,11 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 enum {
-  PROP_CHILD = 1
+  PROP_CHILD = 1,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
 
@@ -325,11 +328,11 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    *
    * The main child widget.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child", NULL, NULL,
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
+                                           GTK_TYPE_WIDGET,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   /**
    * GtkOverlay::get-child-position:
@@ -603,7 +606,7 @@ gtk_overlay_set_child (GtkOverlay *overlay,
       gtk_widget_insert_after (child, GTK_WIDGET (overlay), NULL);
     }
 
-  g_object_notify (G_OBJECT (overlay), "child");
+  g_object_notify_by_pspec (G_OBJECT (overlay), props[PROP_CHILD]);
 }
 
 /**

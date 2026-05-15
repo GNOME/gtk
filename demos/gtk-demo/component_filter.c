@@ -52,6 +52,8 @@ enum {
   NUM_PROPERTIES,
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (ComponentFilter, component_filter, GTK_TYPE_WIDGET)
 
 static void
@@ -152,7 +154,7 @@ update_component_transfer (ComponentFilter *self)
       g_assert_not_reached ();
     }
 
-  g_object_notify (G_OBJECT (self), "transfer");
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_TRANSFER]);
 }
 
 static void
@@ -187,11 +189,11 @@ component_filter_class_init (ComponentFilterClass *class)
   object_class->finalize = component_filter_finalize;
   object_class->get_property = component_filter_get_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_TRANSFER,
-                                   g_param_spec_boxed ("transfer", NULL, NULL,
-                                                       GSK_TYPE_COMPONENT_TRANSFER,
-                                                       G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_TRANSFER] = g_param_spec_boxed ("transfer", NULL, NULL,
+                                             GSK_TYPE_COMPONENT_TRANSFER,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/image_filter/component_filter.ui");
 

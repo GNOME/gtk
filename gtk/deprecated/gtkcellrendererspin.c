@@ -100,8 +100,11 @@ enum {
   PROP_0,
   PROP_ADJUSTMENT,
   PROP_CLIMB_RATE,
-  PROP_DIGITS
+  PROP_DIGITS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 #define GTK_CELL_RENDERER_SPIN_PATH "gtk-cell-renderer-spin-path"
 
@@ -126,11 +129,9 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    * The adjustment that holds the value of the spinbutton.
    * This must be non-%NULL for the cell renderer to be editable.
    */
-  g_object_class_install_property (object_class,
-				   PROP_ADJUSTMENT,
-				   g_param_spec_object ("adjustment", NULL, NULL,
-							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_ADJUSTMENT] = g_param_spec_object ("adjustment", NULL, NULL,
+                                                GTK_TYPE_ADJUSTMENT,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -138,21 +139,19 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    *
    * The acceleration rate when you hold down a button.
    */
-  g_object_class_install_property (object_class,
-				   PROP_CLIMB_RATE,
-				   g_param_spec_double ("climb-rate", NULL, NULL,
-							0.0, G_MAXDOUBLE, 0.0,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_CLIMB_RATE] = g_param_spec_double ("climb-rate", NULL, NULL,
+                                                0.0, G_MAXDOUBLE, 0.0,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
   /**
    * GtkCellRendererSpin:digits:
    *
    * The number of decimal places to display.
    */
-  g_object_class_install_property (object_class,
-				   PROP_DIGITS,
-				   g_param_spec_uint ("digits", NULL, NULL,
-						      0, 20, 0,
-						      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_DIGITS] = g_param_spec_uint ("digits", NULL, NULL,
+                                          0, 20, 0,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

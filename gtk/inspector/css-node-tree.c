@@ -67,6 +67,8 @@ enum {
   Css_PROPERTY_NUM_PROPERTIES
 };
 
+static GParamSpec *props[Css_PROPERTY_NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (CssProperty, css_property, G_TYPE_OBJECT);
 
 static void
@@ -118,31 +120,29 @@ static void
 css_property_class_init (CssPropertyClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GParamSpec *pspec;
 
   object_class->finalize = css_property_finalize;
   object_class->get_property = css_property_get_property;
 
-  pspec = g_param_spec_string ("name", NULL, NULL,
-                               NULL,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  props[CSS_PROPERTY_PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                                       NULL,
+                                                       G_PARAM_READABLE |
+                                                       G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_NAME, pspec);
 
-  pspec = g_param_spec_string ("value", NULL, NULL,
-                               NULL,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  props[CSS_PROPERTY_PROP_VALUE] = g_param_spec_string ("value", NULL, NULL,
+                                                        NULL,
+                                                        G_PARAM_READABLE |
+                                                        G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_VALUE, pspec);
 
-  pspec = g_param_spec_string ("location", NULL, NULL,
-                               NULL,
-                               G_PARAM_READABLE |
-                               G_PARAM_STATIC_NAME);
+  props[CSS_PROPERTY_PROP_LOCATION] = g_param_spec_string ("location", NULL, NULL,
+                                                           NULL,
+                                                           G_PARAM_READABLE |
+                                                           G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class, CSS_PROPERTY_PROP_LOCATION, pspec);
+
+  g_object_class_install_properties (object_class, Css_PROPERTY_NUM_PROPERTIES, props);
 }
 
 static CssProperty *

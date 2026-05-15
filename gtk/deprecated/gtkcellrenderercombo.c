@@ -99,8 +99,11 @@ enum {
   PROP_0,
   PROP_MODEL,
   PROP_TEXT_COLUMN,
-  PROP_HAS_ENTRY
+  PROP_HAS_ENTRY,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 enum {
   CHANGED,
@@ -131,11 +134,9 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * Holds a tree model containing the possible values for the combo box.
    * Use the text_column property to specify the column holding the values.
    */
-  g_object_class_install_property (object_class,
-				   PROP_MODEL,
-				   g_param_spec_object ("model", NULL, NULL,
-							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_MODEL] = g_param_spec_object ("model", NULL, NULL,
+                                           GTK_TYPE_TREE_MODEL,
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererCombo:text-column:
@@ -150,13 +151,11 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * `GtkCellRendererCombo` automatically adds a text cell renderer for
    * this column to its combo box.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT_COLUMN,
-                                   g_param_spec_int ("text-column", NULL, NULL,
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_TEXT_COLUMN] = g_param_spec_int ("text-column", NULL, NULL,
+                                              -1,
+                                              G_MAXINT,
+                                              -1,
+                                              G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererCombo:has-entry:
@@ -164,11 +163,11 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    * If %TRUE, the cell renderer will include an entry and allow to enter
    * values other than the ones in the popup list.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HAS_ENTRY,
-                                   g_param_spec_boolean ("has-entry", NULL, NULL,
-							 TRUE,
-							 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_HAS_ENTRY] = g_param_spec_boolean ("has-entry", NULL, NULL,
+                                                TRUE,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
 
   /**

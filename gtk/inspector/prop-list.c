@@ -43,8 +43,11 @@
 enum
 {
   PROP_0,
-  PROP_SEARCH_ENTRY
+  PROP_SEARCH_ENTRY,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GtkInspectorPropListPrivate
 {
@@ -436,9 +439,10 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   widget_class->root = root;
   widget_class->unroot = unroot;
 
-  g_object_class_install_property (object_class, PROP_SEARCH_ENTRY,
-      g_param_spec_object ("search-entry", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_SEARCH_ENTRY] = g_param_spec_object ("search-entry", NULL, NULL,
+                                                  GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, list);
@@ -573,7 +577,7 @@ gboolean
 gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                                     GObject              *object)
 {
-  GParamSpec **props;
+  GParamSpec **properties;
   guint num_properties;
   guint i;
   GListStore *store;
@@ -592,7 +596,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   gtk_editable_set_text (GTK_EDITABLE (pl->priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
 
-  props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
+  properties = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
 
   pl->priv->object = object;
 
@@ -600,7 +604,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   for (i = 0; i < num_properties; i++)
     {
-      GParamSpec *prop = props[i];
+      GParamSpec *prop = properties[i];
       PropHolder *holder;
 
       if (! (prop->flags & G_PARAM_READABLE))
@@ -611,7 +615,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
       g_object_unref (holder);
     }
 
-  g_free (props);
+  g_free (properties);
 
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);

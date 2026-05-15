@@ -105,12 +105,16 @@ struct _GtkColorButtonClass {
 enum
 {
   PROP_0,
-  PROP_USE_ALPHA,
   PROP_TITLE,
-  PROP_RGBA,
   PROP_SHOW_EDITOR,
-  PROP_MODAL
+  PROP_MODAL,
+  /* GtkColorChooser */
+  PROP_USE_ALPHA,
+  PROP_RGBA,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 /* Signals */
 enum
@@ -172,19 +176,19 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   klass->color_set = NULL;
   klass->activate = gtk_color_button_activate;
 
-  g_object_class_override_property (gobject_class, PROP_RGBA, "rgba");
-  g_object_class_override_property (gobject_class, PROP_USE_ALPHA, "use-alpha");
+  props[PROP_RGBA] = g_param_spec_override ("rgba",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "rgba"));
+  props[PROP_USE_ALPHA] = g_param_spec_override ("use-alpha",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_COLOR_CHOOSER), "use-alpha"));
 
   /**
    * GtkColorButton:title:
    *
    * The title of the color chooser dialog
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title", NULL, NULL,
-                                                        _("Pick a Color"),
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TITLE] = g_param_spec_string ("title", NULL, NULL,
+                                           _("Pick a Color"),
+                                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
 
   /**
@@ -239,22 +243,20 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * in the editor would be redundant, such as when the color
    * button is already part of a palette.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_EDITOR,
-                                   g_param_spec_boolean ("show-editor", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SHOW_EDITOR] = g_param_spec_boolean ("show-editor", NULL, NULL,
+                                                  FALSE,
+                                                  G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColorButton:modal:
    *
    * Whether the color chooser dialog should be modal.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODAL,
-                                   g_param_spec_boolean ("modal", NULL, NULL,
-                                                         TRUE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MODAL] = g_param_spec_boolean ("modal", NULL, NULL,
+                                            TRUE,
+                                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -418,7 +420,7 @@ dialog_response (GtkDialog *dialog,
       g_signal_emit (button, color_button_signals[COLOR_SET], 0);
 
       g_object_freeze_notify (G_OBJECT (button));
-      g_object_notify (G_OBJECT (button), "rgba");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RGBA]);
       g_object_thaw_notify (G_OBJECT (button));
       g_object_unref (button);
     }
@@ -538,7 +540,7 @@ gtk_color_button_set_rgba (GtkColorChooser *chooser,
                                   -1);
   g_free (text);
 
-  g_object_notify (G_OBJECT (chooser), "rgba");
+  g_object_notify_by_pspec (G_OBJECT (chooser), props[PROP_RGBA]);
 }
 
 static void
@@ -565,7 +567,7 @@ set_use_alpha (GtkColorButton *button,
 
       gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (button->swatch), use_alpha);
 
-      g_object_notify (G_OBJECT (button), "use-alpha");
+      g_object_notify_by_pspec (G_OBJECT (button), props[PROP_USE_ALPHA]);
     }
 }
 
@@ -593,7 +595,7 @@ gtk_color_button_set_title (GtkColorButton *button,
   if (button->cs_dialog)
     gtk_window_set_title (GTK_WINDOW (button->cs_dialog), button->title);
 
-  g_object_notify (G_OBJECT (button), "title");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_TITLE]);
 }
 
 /**
@@ -637,7 +639,7 @@ gtk_color_button_set_modal (GtkColorButton *button,
   if (button->cs_dialog)
     gtk_window_set_modal (GTK_WINDOW (button->cs_dialog), button->modal);
 
-  g_object_notify (G_OBJECT (button), "modal");
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_MODAL]);
 }
 
 /**
@@ -683,7 +685,7 @@ gtk_color_button_set_property (GObject      *object,
         if (button->show_editor != show_editor)
           {
             button->show_editor = show_editor;
-            g_object_notify (object, "show-editor");
+            g_object_notify_by_pspec (object, props[PROP_SHOW_EDITOR]);
           }
       }
       break;

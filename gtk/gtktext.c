@@ -5936,7 +5936,7 @@ gtk_text_set_visibility (GtkText  *self,
     {
       priv->visible = visible;
 
-      g_object_notify (G_OBJECT (self), "visibility");
+      g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_VISIBILITY]);
       gtk_text_update_cached_style_values (self);
       gtk_text_recompute (self);
 

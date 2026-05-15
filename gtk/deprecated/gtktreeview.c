@@ -583,12 +583,12 @@ enum {
   PROP_ENABLE_TREE_LINES,
   PROP_TOOLTIP_COLUMN,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
-  LAST_PROP,
   /* overridden */
-  PROP_HADJUSTMENT = LAST_PROP,
+  PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
+  LAST_PROP
 };
 
 /* object signals */
@@ -995,10 +995,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   /* Properties */
 
-  g_object_class_override_property (o_class, PROP_HADJUSTMENT,    "hadjustment");
-  g_object_class_override_property (o_class, PROP_VADJUSTMENT,    "vadjustment");
-  g_object_class_override_property (o_class, PROP_HSCROLL_POLICY, "hscroll-policy");
-  g_object_class_override_property (o_class, PROP_VSCROLL_POLICY, "vscroll-policy");
+  tree_view_props[PROP_HADJUSTMENT] = g_param_spec_override ("hadjustment",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "hadjustment"));
+  tree_view_props[PROP_VADJUSTMENT] = g_param_spec_override ("vadjustment",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "vadjustment"));
+  tree_view_props[PROP_HSCROLL_POLICY] = g_param_spec_override ("hscroll-policy",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "hscroll-policy"));
+  tree_view_props[PROP_VSCROLL_POLICY] = g_param_spec_override ("vscroll-policy",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_SCROLLABLE), "vscroll-policy"));
 
   tree_view_props[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
@@ -10437,7 +10441,7 @@ gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
    */
   gtk_tree_view_adjustment_changed (NULL, tree_view);
 
-  g_object_notify (G_OBJECT (tree_view), "hadjustment");
+  g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_HADJUSTMENT]);
 }
 
 static void
@@ -10468,7 +10472,7 @@ gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
    * internal details are too complicated for me to decipher right now.
    */
   gtk_tree_view_adjustment_changed (NULL, tree_view);
-  g_object_notify (G_OBJECT (tree_view), "vadjustment");
+  g_object_notify_by_pspec (G_OBJECT (tree_view), tree_view_props[PROP_VADJUSTMENT]);
 }
 
 /* Column and header operations */

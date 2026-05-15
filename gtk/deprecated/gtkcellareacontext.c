@@ -81,8 +81,11 @@ enum {
   PROP_MIN_WIDTH,
   PROP_NAT_WIDTH,
   PROP_MIN_HEIGHT,
-  PROP_NAT_HEIGHT
+  PROP_NAT_HEIGHT,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellAreaContext, gtk_cell_area_context, G_TYPE_OBJECT)
 
@@ -112,11 +115,9 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_AREA,
-                                   g_param_spec_object ("area", NULL, NULL,
-                                                        GTK_TYPE_CELL_AREA,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_CELL_AREA] = g_param_spec_object ("area", NULL, NULL,
+                                               GTK_TYPE_CELL_AREA,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkCellAreaContext:minimum-width:
@@ -127,11 +128,9 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MIN_WIDTH,
-                                   g_param_spec_int ("minimum-width", NULL, NULL,
-                                                     -1, G_MAXINT, -1,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_MIN_WIDTH] = g_param_spec_int ("minimum-width", NULL, NULL,
+                                            -1, G_MAXINT, -1,
+                                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellAreaContext:natural-width:
@@ -142,11 +141,9 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAT_WIDTH,
-                                   g_param_spec_int ("natural-width", NULL, NULL,
-                                                     -1, G_MAXINT, -1,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_NAT_WIDTH] = g_param_spec_int ("natural-width", NULL, NULL,
+                                            -1, G_MAXINT, -1,
+                                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellAreaContext:minimum-height:
@@ -157,11 +154,9 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   PROP_MIN_HEIGHT,
-                                   g_param_spec_int ("minimum-height", NULL, NULL,
-                                                     -1, G_MAXINT, -1,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_MIN_HEIGHT] = g_param_spec_int ("minimum-height", NULL, NULL,
+                                             -1, G_MAXINT, -1,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellAreaContext:natural-height:
@@ -172,11 +167,11 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    *
    * Deprecated: 4.10: This object will be removed in GTK 5
    */
-  g_object_class_install_property (object_class,
-                                   PROP_NAT_HEIGHT,
-                                   g_param_spec_int ("natural-height", NULL, NULL,
-                                                     -1, G_MAXINT, -1,
-                                                     G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_NAT_HEIGHT] = g_param_spec_int ("natural-height", NULL, NULL,
+                                             -1, G_MAXINT, -1,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 /*************************************************************
@@ -263,25 +258,25 @@ gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
   if (priv->min_width != 0)
     {
       priv->min_width = 0;
-      g_object_notify (G_OBJECT (context), "minimum-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_WIDTH]);
     }
 
   if (priv->nat_width != 0)
     {
       priv->nat_width = 0;
-      g_object_notify (G_OBJECT (context), "natural-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_WIDTH]);
     }
 
   if (priv->min_height != 0)
     {
       priv->min_height = 0;
-      g_object_notify (G_OBJECT (context), "minimum-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_HEIGHT]);
     }
 
   if (priv->nat_height != 0)
     {
       priv->nat_height = 0;
-      g_object_notify (G_OBJECT (context), "natural-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_HEIGHT]);
     }
 
   priv->alloc_width  = 0;
@@ -582,14 +577,14 @@ gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
     {
       priv->min_width = minimum_width;
 
-      g_object_notify (G_OBJECT (context), "minimum-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_WIDTH]);
     }
 
   if (natural_width > priv->nat_width)
     {
       priv->nat_width = natural_width;
 
-      g_object_notify (G_OBJECT (context), "natural-width");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_WIDTH]);
     }
 
   g_object_thaw_notify (G_OBJECT (context));
@@ -626,14 +621,14 @@ gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,
     {
       priv->min_height = minimum_height;
 
-      g_object_notify (G_OBJECT (context), "minimum-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_MIN_HEIGHT]);
     }
 
   if (natural_height > priv->nat_height)
     {
       priv->nat_height = natural_height;
 
-      g_object_notify (G_OBJECT (context), "natural-height");
+      g_object_notify_by_pspec (G_OBJECT (context), props[PROP_NAT_HEIGHT]);
     }
 
   g_object_thaw_notify (G_OBJECT (context));

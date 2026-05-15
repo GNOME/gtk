@@ -107,8 +107,13 @@ gtk_accessible_hypertext_get_link_at (GtkAccessibleHypertext *self,
 /* {{{ GtkAccessibleHyperlink */
 
 enum {
+  PROP_0,
+  /* GtkAccessible */
   PROP_ACCESSIBLE_ROLE = 1,
+  N_PROPS,
 };
+
+static GParamSpec *properties [N_PROPS];
 
 /**
  * GtkAccessibleHyperlink:
@@ -273,13 +278,20 @@ static void
 gtk_accessible_hyperlink_class_init (GtkAccessibleHyperlinkClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  gpointer iface;
 
   object_class->dispose = gtk_accessible_hyperlink_dispose;
   object_class->finalize = gtk_accessible_hyperlink_finalize;
   object_class->get_property = gtk_accessible_hyperlink_get_property;
   object_class->set_property = gtk_accessible_hyperlink_set_property;
 
-  g_object_class_override_property (object_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+  /* GtkAccessible */
+  iface = g_type_default_interface_peek (GTK_TYPE_ACCESSIBLE);
+  properties[PROP_ACCESSIBLE_ROLE] =
+    g_param_spec_override ("accessible-role",
+                           g_object_interface_find_property (iface, "accessible-role"));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 /**

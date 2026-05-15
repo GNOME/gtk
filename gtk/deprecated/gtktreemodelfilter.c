@@ -302,8 +302,11 @@ enum
 {
   PROP_0,
   PROP_CHILD_MODEL,
-  PROP_VIRTUAL_ROOT
+  PROP_VIRTUAL_ROOT,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 /* Set this to 0 to disable caching of child iterators.  This
  * allows for more stringent testing.  It is recommended to set this
@@ -532,22 +535,20 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
    *
    * The child model of the tree model filter.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CHILD_MODEL,
-                                   g_param_spec_object ("child-model", NULL, NULL,
-                                                        GTK_TYPE_TREE_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_CHILD_MODEL] = g_param_spec_object ("child-model", NULL, NULL,
+                                                 GTK_TYPE_TREE_MODEL,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkTreeModelFilter:virtual-root:
    *
    * The virtual root of the tree model filter.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_VIRTUAL_ROOT,
-                                   g_param_spec_boxed ("virtual-root", NULL, NULL,
-                                                       GTK_TYPE_TREE_PATH,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_VIRTUAL_ROOT] = g_param_spec_boxed ("virtual-root", NULL, NULL,
+                                                 GTK_TYPE_TREE_PATH,
+                                                 G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void

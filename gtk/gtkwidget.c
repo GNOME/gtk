@@ -575,10 +575,9 @@ enum {
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
   PROP_LIMIT_EVENTS,
-  NUM_PROPERTIES,
-
   /* GtkAccessible */
-  PROP_ACCESSIBLE_ROLE
+  PROP_ACCESSIBLE_ROLE,
+  NUM_PROPERTIES,
 };
 
 
@@ -920,7 +919,7 @@ gtk_widget_set_accessible_role (GtkWidget         *self,
       if (priv->at_context != NULL)
         gtk_at_context_set_accessible_role (priv->at_context, role);
 
-      g_object_notify (G_OBJECT (self), "accessible-role");
+      g_object_notify_by_pspec (G_OBJECT (self), widget_props[PROP_ACCESSIBLE_ROLE]);
     }
   else
     {
@@ -1212,6 +1211,7 @@ static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  gpointer iface;
 
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
@@ -1694,9 +1694,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
+  /* GtkAccessible */
+  iface = g_type_default_interface_peek (GTK_TYPE_ACCESSIBLE);
+  widget_props[PROP_ACCESSIBLE_ROLE] =
+      g_param_spec_override ("accessible-role",
+                             g_object_interface_find_property (iface, "accessible-role"));
 
-  g_object_class_override_property (gobject_class, PROP_ACCESSIBLE_ROLE, "accessible-role");
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
   /**
    * GtkWidget::destroy:

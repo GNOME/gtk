@@ -154,8 +154,11 @@ struct _GtkSizeGroupPrivate
 
 enum {
   PROP_0,
-  PROP_MODE
+  PROP_MODE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void gtk_size_group_set_property (GObject      *object,
 					 guint         prop_id,
@@ -266,12 +269,12 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
    *
    * The direction in which the size group affects requested sizes.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODE,
-                                   g_param_spec_enum ("mode", NULL, NULL,
-                                                      GTK_TYPE_SIZE_GROUP_MODE,
-                                                      GTK_SIZE_GROUP_HORIZONTAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_MODE] = g_param_spec_enum ("mode", NULL, NULL,
+                                        GTK_TYPE_SIZE_GROUP_MODE,
+                                        GTK_SIZE_GROUP_HORIZONTAL,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 }
 
 static void
@@ -379,7 +382,7 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
       if (priv->mode != GTK_SIZE_GROUP_NONE)
 	queue_resize_on_group (size_group);
 
-      g_object_notify (G_OBJECT (size_group), "mode");
+      g_object_notify_by_pspec (G_OBJECT (size_group), props[PROP_MODE]);
     }
 }
 

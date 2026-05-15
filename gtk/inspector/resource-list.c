@@ -36,8 +36,11 @@
 enum
 {
   PROP_0,
-  PROP_BUTTONS
+  PROP_BUTTONS,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 struct _GtkInspectorResourceList
 {
@@ -891,9 +894,10 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   widget_class->root = root;
   widget_class->unroot = unroot;
 
-  g_object_class_install_property (object_class, PROP_BUTTONS,
-      g_param_spec_object ("buttons", NULL, NULL,
-                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME));
+  props[PROP_BUTTONS] = g_param_spec_object ("buttons", NULL, NULL,
+                                             GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/resource-list.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorResourceList, buffer);

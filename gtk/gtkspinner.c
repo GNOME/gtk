@@ -85,8 +85,11 @@ struct _GtkSpinnerClass
 
 enum {
   PROP_0,
-  PROP_SPINNING
+  PROP_SPINNING,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
@@ -232,7 +235,7 @@ gtk_spinner_set_spinning (GtkSpinner *spinner,
 
   update_state_flags (spinner);
 
-  g_object_notify (G_OBJECT (spinner), "spinning");
+  g_object_notify_by_pspec (G_OBJECT (spinner), props[PROP_SPINNING]);
 }
 
 static void
@@ -303,11 +306,11 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
    *
    * Whether the spinner is spinning
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SPINNING,
-                                   g_param_spec_boolean ("spinning", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_SPINNING] = g_param_spec_boolean ("spinning", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, props);
 
   gtk_widget_class_set_css_name (widget_class, I_("spinner"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_PROGRESS_BAR);

@@ -51,8 +51,11 @@ typedef struct
 enum
 {
   PROP_ZERO,
-  PROP_SCALE_TYPE
+  PROP_SCALE_TYPE,
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 static void hold_action (GtkGestureLongPress *gesture,
                          double               x,
@@ -283,10 +286,11 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
   object_class->get_property = scale_get_property;
   object_class->set_property = scale_set_property;
 
-  g_object_class_install_property (object_class, PROP_SCALE_TYPE,
-      g_param_spec_int ("scale-type", NULL, NULL,
-                        0, 1, 0,
-                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY));
+  props[PROP_SCALE_TYPE] = g_param_spec_int ("scale-type", NULL, NULL,
+                                             0, 1, 0,
+                                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 void

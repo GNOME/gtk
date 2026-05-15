@@ -171,9 +171,6 @@ struct _GdkSurfaceClass
 
 #define GDK_SURFACE_IS_MAPPED(surface) ((surface)->pending_is_mapped)
 
-void gdk_surface_set_state (GdkSurface      *surface,
-                            GdkToplevelState  new_state);
-
 void gdk_surface_set_is_mapped (GdkSurface *surface,
                                 gboolean    is_mapped);
 

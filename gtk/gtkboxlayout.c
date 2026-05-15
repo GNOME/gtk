@@ -65,11 +65,9 @@ enum {
   PROP_SPACING,
   PROP_BASELINE_CHILD,
   PROP_BASELINE_POSITION,
-
-  /* From GtkOrientable */
+  /* GtkOrientable */
   PROP_ORIENTATION,
-
-  N_PROPS = PROP_ORIENTATION
+  N_PROPS,
 };
 
 static GParamSpec *box_layout_props[N_PROPS];
@@ -92,7 +90,7 @@ gtk_box_layout_set_orientation (GtkBoxLayout   *self,
 
   gtk_layout_manager_layout_changed (layout_manager);
 
-  g_object_notify (G_OBJECT (self), "orientation");
+  g_object_notify_by_pspec (G_OBJECT (self), box_layout_props[PROP_ORIENTATION]);
 }
 
 static void
@@ -1181,6 +1179,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkLayoutManagerClass *layout_manager_class = GTK_LAYOUT_MANAGER_CLASS (klass);
+  gpointer iface;
 
   gobject_class->set_property = gtk_box_layout_set_property;
   gobject_class->get_property = gtk_box_layout_get_property;
@@ -1241,8 +1240,13 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                        GTK_BASELINE_POSITION_CENTER,
                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  /* GtkOrientable */
+  iface = g_type_default_interface_peek (GTK_TYPE_ORIENTABLE);
+  box_layout_props[PROP_ORIENTATION] =
+      g_param_spec_override ("orientation",
+                             g_object_interface_find_property (iface, "orientation"));
+
   g_object_class_install_properties (gobject_class, N_PROPS, box_layout_props);
-  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 }
 
 static void

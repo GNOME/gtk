@@ -35,6 +35,8 @@ enum
   NUM_PROPERTIES,
 };
 
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE (UcdItem, ucd_item, G_TYPE_OBJECT)
 
 static void
@@ -77,23 +79,19 @@ ucd_item_class_init (UcdItemClass *class)
 
   object_class->get_property = ucd_item_get_property;
 
-  g_object_class_install_property (object_class,
-                                   PROP_CODEPOINT,
-                                   g_param_spec_uint ("codepoint", NULL, NULL,
-                                                      0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_CODEPOINT] = g_param_spec_uint ("codepoint", NULL, NULL,
+                                             0, G_MAXUINT, 0,
+                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_NAME] = g_param_spec_string ("name", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SCRIPT,
-                                   g_param_spec_uint ("script", NULL, NULL,
-                                                      0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE | G_PARAM_STATIC_NAME));
+  props[PROP_SCRIPT] = g_param_spec_uint ("script", NULL, NULL,
+                                          0, G_MAXUINT, 0,
+                                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
 }
 
 static UcdItem *

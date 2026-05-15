@@ -56,9 +56,13 @@ enum
   PROP_PULSE,
   PROP_TEXT_XALIGN,
   PROP_TEXT_YALIGN,
+  PROP_INVERTED,
+  /* GtkOrientable */
   PROP_ORIENTATION,
-  PROP_INVERTED
+  N_PROPS
 };
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 typedef struct _GtkCellRendererProgressClass    GtkCellRendererProgressClass;
 typedef struct _GtkCellRendererProgressPrivate  GtkCellRendererProgressPrivate;
@@ -147,7 +151,7 @@ gtk_cell_renderer_progress_set_value (GtkCellRendererProgress *cellprogress,
     {
       priv->value = value;
       recompute_label (cellprogress);
-      g_object_notify (G_OBJECT (cellprogress), "value");
+      g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_VALUE]);
     }
 }
 
@@ -162,7 +166,7 @@ gtk_cell_renderer_progress_set_text (GtkCellRendererProgress *cellprogress,
   g_free (priv->text);
   priv->text = new_text;
   recompute_label (cellprogress);
-  g_object_notify (G_OBJECT (cellprogress), "text");
+  g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_TEXT]);
 }
 
 static void
@@ -177,7 +181,7 @@ gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress,
         priv->offset = 0;
       else
         priv->offset = pulse;
-      g_object_notify (G_OBJECT (cellprogress), "pulse");
+      g_object_notify_by_pspec (G_OBJECT (cellprogress), props[PROP_PULSE]);
     }
 
   priv->pulse = pulse;
@@ -619,11 +623,9 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * The "value" property determines the percentage to which the
    * progress bar will be "filled in".
    **/
-  g_object_class_install_property (object_class,
-				   PROP_VALUE,
-				   g_param_spec_int ("value", NULL, NULL,
-						     0, 100, 0,
-						     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_VALUE] = g_param_spec_int ("value", NULL, NULL,
+                                        0, 100, 0,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererProgress:text:
@@ -633,11 +635,9 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * label to be displayed. Setting this property to an empty string causes
    * no label to be displayed.
    **/
-  g_object_class_install_property (object_class,
-				   PROP_TEXT,
-				   g_param_spec_string ("text", NULL, NULL,
-							NULL,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXT] = g_param_spec_string ("text", NULL, NULL,
+                                          NULL,
+                                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererProgress:pulse:
@@ -653,11 +653,9 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * To indicate that the activity has not started yet, set the property
    * to zero. To indicate completion, set the property to %G_MAXINT.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PULSE,
-                                   g_param_spec_int ("pulse", NULL, NULL,
-                                                     -1, G_MAXINT, -1,
-                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_PULSE] = g_param_spec_int ("pulse", NULL, NULL,
+                                        -1, G_MAXINT, -1,
+                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererProgress:text-xalign:
@@ -666,11 +664,9 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * text in the progress bar.  Valid values range from 0 (left) to 1
    * (right).  Reserved for RTL layouts.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT_XALIGN,
-                                   g_param_spec_float ("text-xalign", NULL, NULL,
-                                                       0.0, 1.0, 0.5,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXT_XALIGN] = g_param_spec_float ("text-xalign", NULL, NULL,
+                                                0.0, 1.0, 0.5,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   /**
    * GtkCellRendererProgress:text-yalign:
@@ -679,26 +675,23 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    * text in the progress bar.  Valid values range from 0 (top) to 1
    * (bottom).
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT_YALIGN,
-                                   g_param_spec_float ("text-yalign", NULL, NULL,
-                                                       0.0, 1.0, 0.5,
-                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME));
+  props[PROP_TEXT_YALIGN] = g_param_spec_float ("text-yalign", NULL, NULL,
+                                                0.0, 1.0, 0.5,
+                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  props[PROP_ORIENTATION] = g_param_spec_override ("orientation",
+      g_object_interface_find_property (g_type_default_interface_ref (GTK_TYPE_ORIENTABLE), "orientation"));
 
   /**
    * GtkCellRendererProgress:inverted:
    *
    * Whether progess is inverted.
    */
-  g_object_class_install_property (object_class,
-                                   PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted", NULL, NULL,
-                                                         FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+  props[PROP_INVERTED] = g_param_spec_boolean ("inverted", NULL, NULL,
+                                               FALSE,
+                                               G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 }
 
 static void
