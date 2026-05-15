@@ -418,8 +418,6 @@ gdk_android_toplevel_set_title (GdkAndroidToplevel *self, const gchar *title)
   g_clear_pointer (&self->title, g_free);
   self->title = g_strdup (title);
   gdk_android_toplevel_update_title (self);
-
-  g_object_notify ((GObject *) self, "title");
 }
 
 static void
@@ -501,6 +499,7 @@ gdk_android_toplevel_set_property (GObject      *object,
     {
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_TITLE:
       gdk_android_toplevel_set_title (self, g_value_get_string (value));
+      g_object_notify_by_pspec (object, pspec);
       break;
 
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_STARTUP_ID:
