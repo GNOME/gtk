@@ -37,7 +37,6 @@ struct _PaintableEditor
   GtkWidget parent_instance;
 
   PathPaintable *paintable;
-  unsigned int state;
   gboolean compat_classes;
 
   GtkScrolledWindow *swin;
@@ -75,7 +74,6 @@ struct _PaintableEditorClass
 enum
 {
   PROP_PAINTABLE = 1,
-  PROP_INITIAL_STATE,
   PROP_COMPAT_CLASSES,
   NUM_PROPERTIES,
 };
@@ -629,10 +627,6 @@ paintable_editor_get_property (GObject      *object,
       g_value_set_object (value, self->paintable);
       break;
 
-    case PROP_INITIAL_STATE:
-      g_value_set_uint (value, self->state);
-      break;
-
     case PROP_COMPAT_CLASSES:
       g_value_set_boolean (value, self->compat_classes);
       break;
@@ -692,11 +686,6 @@ paintable_editor_class_init (PaintableEditorClass *class)
     g_param_spec_object ("paintable", NULL, NULL,
                         PATH_PAINTABLE_TYPE,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
-
-  properties[PROP_INITIAL_STATE] =
-    g_param_spec_uint ("initial-state", NULL, NULL,
-                       0, 64, 0,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_COMPAT_CLASSES] =
     g_param_spec_boolean ("compat-classes", NULL, NULL,
@@ -787,8 +776,6 @@ paintable_editor_set_paintable (PaintableEditor *self,
                                 G_CALLBACK (paths_changed), self);
       g_signal_connect_swapped (paintable, "changed",
                                 G_CALLBACK (changed), self);
-      g_signal_connect_swapped (paintable, "notify::state",
-                                G_CALLBACK (update_summary), self);
 
       create_shape_editors (self);
       update_summary (self);
