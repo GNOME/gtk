@@ -1043,8 +1043,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   g_object_ref (surface);
 
-  if (GDK_IS_TOPLEVEL (surface))
-    g_object_notify (G_OBJECT (surface), "state");
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 
   if (surface->gl_paint_context)
