@@ -61,7 +61,7 @@ GIcon                  *gtk_menu_tracker_item_get_icon                (GtkMenuTr
 GIcon                  *gtk_menu_tracker_item_get_verb_icon           (GtkMenuTrackerItem *self);
 gboolean                gtk_menu_tracker_item_get_sensitive           (GtkMenuTrackerItem *self);
 GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                (GtkMenuTrackerItem *self);
-gboolean                gtk_menu_tracker_item_get_toggled             (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_active              (GtkMenuTrackerItem *self);
 const char             *gtk_menu_tracker_item_get_accel               (GtkMenuTrackerItem *self);
 GMenuModel             *_gtk_menu_tracker_item_get_link               (GtkMenuTrackerItem *self,
                                                                        const char         *link_name);

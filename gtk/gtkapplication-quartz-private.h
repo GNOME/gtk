@@ -34,7 +34,7 @@
 - (void)didChangeLabel;
 - (void)didChangeIcon;
 - (void)didChangeVisible;
-- (void)didChangeToggled;
+- (void)didChangeActive;
 - (void)didChangeAccel;
 
 - (void)didSelectItem:(id)sender;
