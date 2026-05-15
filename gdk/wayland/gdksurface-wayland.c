@@ -237,10 +237,6 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
 
   gdk_surface_invalidate_rect (surface, NULL);
 
-  if (width_changed)
-    g_object_notify (G_OBJECT (surface), "width");
-  if (height_changed)
-    g_object_notify (G_OBJECT (surface), "height");
   if (scale_changed)
     g_object_notify (G_OBJECT (surface), "scale");
   if (scale_factor_changed)
