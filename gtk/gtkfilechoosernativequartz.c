@@ -108,6 +108,7 @@ typedef struct {
   data->self->current_filter = g_list_model_get_item (filters, selected_index);
   g_object_unref (data->self->current_filter);
   g_object_unref (filters);
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (data->self), "filter");
 }
 @end

@@ -2733,6 +2733,7 @@ gdk_surface_set_state (GdkSurface      *surface,
   surface->state = new_state;
 
   if (GDK_IS_TOPLEVEL (surface))
+    /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
     g_object_notify (G_OBJECT (surface), "state");
 }
 

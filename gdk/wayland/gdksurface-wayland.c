@@ -238,8 +238,10 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   gdk_surface_invalidate_rect (surface, NULL);
 
   if (scale_changed)
+    /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
     g_object_notify (G_OBJECT (surface), "scale");
   if (scale_factor_changed)
+    /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
     g_object_notify (G_OBJECT (surface), "scale-factor");
 
   _gdk_surface_update_size (surface);
