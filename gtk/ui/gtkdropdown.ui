@@ -4,6 +4,7 @@
     <accessibility>
       <property name="has-popup">1</property>
       <relation name="labelled-by">button_item</relation>
+      <relation name="controls">popup</relation>
       <state name="expanded">0</state>
     </accessibility>
     <child>
