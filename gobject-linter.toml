@@ -125,3 +125,6 @@ level = "ignore"
 
 [rules.use_g_strcmp0]
 level = "ignore"
+
+[rules.use_g_string_free_and_steal]
+level = "ignore"
