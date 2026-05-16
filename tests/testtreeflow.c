@@ -117,7 +117,7 @@ futz (void)
   for (i = 0; i < 15; i++)
     futz_row ();
   g_print ("Number of rows: %d\n", gtk_tree_model_iter_n_children (model, NULL));
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

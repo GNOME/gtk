@@ -132,7 +132,7 @@ callback_idle (gpointer data)
 
   g_free (state);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static Bool
@@ -676,7 +676,7 @@ roundtrip_callback_idle (gpointer data)
 
   g_free (state);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static Bool

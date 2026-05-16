@@ -239,7 +239,7 @@ animation_timer (GtkEntryCompletion *completion)
 	}
 
       timer_count ++;
-      return TRUE;
+      return G_SOURCE_CONTINUE;
     }
 
   if (!old_store)
@@ -259,7 +259,7 @@ animation_timer (GtkEntryCompletion *completion)
     }
   
   timer_count++;
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean

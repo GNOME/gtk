@@ -464,7 +464,7 @@ flush_idle (gpointer data)
   broadway_display->idle_flush_id = 0;
   gdk_display_flush (display);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 void

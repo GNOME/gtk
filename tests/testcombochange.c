@@ -171,7 +171,7 @@ animation_timer (gpointer data)
     }
 
   n_animations--;
-  return n_animations > 0;
+  return n_animations > G_SOURCE_REMOVE;
 }
 
 static void

@@ -5027,7 +5027,7 @@ progress_timeout (gpointer data)
   gtk_label_set_text (GTK_LABEL (pdata->label), text);
   g_free (text);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -5277,7 +5277,7 @@ timeout_test (GtkWidget *label)
   sprintf (buffer, "count: %d", ++count);
   gtk_label_set_text (GTK_LABEL (label), buffer);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

@@ -806,7 +806,7 @@ capital_animation (gpointer data)
     }
   insert_count++;
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

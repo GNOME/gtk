@@ -3341,7 +3341,7 @@ auto_expand_timeout (gpointer data)
 
   priv->auto_expand_timeout = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -6391,7 +6391,7 @@ scroll_sync_handler (GtkTreeView *tree_view)
 
   priv->scroll_sync_timer = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -6807,7 +6807,7 @@ scroll_row_timeout (gpointer data)
   if (priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     gtk_tree_view_update_rubber_band (tree_view);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GdkDragAction
@@ -9968,7 +9968,7 @@ gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
   gtk_tree_view_search_popover_hide (priv->search_popover, tree_view);
   priv->typeselect_flush_timeout = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

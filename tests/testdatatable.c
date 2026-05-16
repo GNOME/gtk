@@ -79,7 +79,7 @@ scroll_column_view (GtkWidget     *column_view,
   else
     move_adjustment_by_pages (vadjustment, (g_random_double () * 2 - 1) * scroll_pages);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 enum WidgetType

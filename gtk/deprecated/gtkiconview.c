@@ -1740,7 +1740,7 @@ rubberband_scroll_timeout (gpointer data)
 
   gtk_icon_view_update_rubberband (icon_view);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GtkIconViewItem *
@@ -5794,7 +5794,7 @@ drag_scroll_timeout (gpointer data)
 {
   gtk_icon_view_autoscroll (data);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GdkDragAction
