@@ -10,7 +10,7 @@ static GtkWidget *default_width_spin;
 static GtkWidget *default_height_spin;
 static GtkWidget *resizable_check;
 
-static gboolean
+static void
 set_label_idle (gpointer user_data)
 {
   GtkLabel *label = user_data;
@@ -23,14 +23,12 @@ set_label_idle (gpointer user_data)
                          gdk_surface_get_height (surface));
   gtk_label_set_label (label, str);
   g_free (str);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
 layout_cb (GdkSurface *surface, int width, int height, GtkLabel *label)
 {
-  g_idle_add (set_label_idle, label);
+  g_idle_add_once (set_label_idle, label);
 }
 
 static void

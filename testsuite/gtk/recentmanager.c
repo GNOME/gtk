@@ -167,7 +167,7 @@ check_bulk (GtkRecentManager *manager,
     g_main_loop_quit (closure->main_loop);
 }
 
-static gboolean
+static void
 add_bulk (gpointer data_)
 {
   AddManyClosure *closure = data_;
@@ -193,8 +193,6 @@ add_bulk (gpointer data_)
     }
 
   g_free (data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -211,7 +209,7 @@ recent_manager_add_many (void)
 
   g_signal_connect (manager, "changed", G_CALLBACK (check_bulk), closure);
 
-  g_idle_add (add_bulk, closure);
+  g_idle_add_once (add_bulk, closure);
 
   g_main_loop_run (closure->main_loop);
 

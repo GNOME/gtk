@@ -24,11 +24,10 @@
 
 #include "gtk-reftest.h"
 
-static gboolean
+static void
 unblock (gpointer data)
 {
   reftest_uninhibit_snapshot ();
-  return G_SOURCE_REMOVE;
 }
 
 G_MODULE_EXPORT void
@@ -44,5 +43,5 @@ strip_attributes_if_no_animation (GtkWidget *widget)
 
   reftest_inhibit_snapshot ();
   gtk_label_set_attributes (GTK_LABEL (widget), NULL);
-  g_timeout_add (500, unblock, NULL);
+  g_timeout_add_once (500, unblock, NULL);
 }

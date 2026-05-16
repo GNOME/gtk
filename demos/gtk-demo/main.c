@@ -966,18 +966,16 @@ save_state_cb (GtkApplicationWindow *window,
   return TRUE;
 }
 
-static gboolean
+static void
 select_item (gpointer data)
 {
   gtk_single_selection_set_selected (selection, GPOINTER_TO_UINT (data));
-  return G_SOURCE_REMOVE;
 }
 
-static gboolean
+static void
 select_page (gpointer data)
 {
   gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), GPOINTER_TO_INT (data));
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1010,13 +1008,13 @@ restore_state (GtkApplicationWindow *window,
    * applying the selected-item
    */
   g_variant_lookup (state, "selected-item", "u", &selected);
-  g_timeout_add (160, select_item, GUINT_TO_POINTER (selected));
+  g_timeout_add_once (160, select_item, GUINT_TO_POINTER (selected));
 
   /* Wait for the selected-item to update the notebook before
    * applying the current-page
    */
   g_variant_lookup (state, "current-page", "i", &current);
-  g_timeout_add (320, select_page , GINT_TO_POINTER (current));
+  g_timeout_add_once (320, select_page, GINT_TO_POINTER (current));
 }
 
 static GtkWindow *
@@ -1111,11 +1109,10 @@ activate (GApplication *gapp)
   gtk_window_present (window);
 }
 
-static gboolean
+static void
 auto_quit (gpointer data)
 {
   g_application_quit (G_APPLICATION (data));
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1161,7 +1158,7 @@ command_line (GApplication            *app,
     g_object_set (app, "support-save", FALSE, NULL);
     
   if (autoquit)
-    g_timeout_add_seconds (1, auto_quit, app);
+    g_timeout_add_seconds_once (1, auto_quit, app);
 
   if (!name && !list)
     {

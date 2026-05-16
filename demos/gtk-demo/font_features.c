@@ -202,7 +202,7 @@ typedef struct {
   GtkEntry *entry;
 } BasicData;
 
-static gboolean
+static void
 update_in_idle (gpointer data)
 {
   BasicData *bd = data;
@@ -215,8 +215,6 @@ update_in_idle (gpointer data)
   update_display ();
 
   g_free (bd);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -229,7 +227,7 @@ basic_value_changed (GtkAdjustment *adjustment,
   bd->adjustment = adjustment;
   bd->entry = GTK_ENTRY (data);
 
-  g_idle_add (update_in_idle, bd);
+  g_idle_add_once (update_in_idle, bd);
 }
 
 static void

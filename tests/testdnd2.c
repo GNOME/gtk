@@ -191,7 +191,7 @@ ask_actions (GdkDrop *drop,
   gtk_popover_popup (GTK_POPOVER (popover));
 }
 
-static gboolean
+static void
 delayed_deny (gpointer data)
 {
   GtkDropTargetAsync *dest = data;
@@ -203,8 +203,6 @@ delayed_deny (gpointer data)
       g_print ("denying drop, late\n");
       gtk_drop_target_async_reject_drop (dest, drop);
     }
-
-  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -217,7 +215,7 @@ image_drag_accept (GtkDropTargetAsync *dest,
 
   g_print ("accept\n");
 
-  g_timeout_add (1000, delayed_deny, dest);
+  g_timeout_add_once (1000, delayed_deny, dest);
 
   return TRUE;
 }

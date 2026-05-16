@@ -993,14 +993,12 @@ idropsource_queryinterface (LPDROPSOURCE This,
     }
 }
 
-static gboolean
+static void
 unref_context_in_main_thread (gpointer opaque_context)
 {
   GdkDrag *drag = GDK_DRAG (opaque_context);
 
   g_clear_object (&drag);
-
-  return G_SOURCE_REMOVE;
 }
 
 static ULONG STDMETHODCALLTYPE
@@ -1014,7 +1012,7 @@ idropsource_release (LPDROPSOURCE This)
 
   if (ref_count == 0)
   {
-    g_idle_add (unref_context_in_main_thread, ctx->drag);
+    g_idle_add_once (unref_context_in_main_thread, ctx->drag);
     g_free (This);
   }
 
