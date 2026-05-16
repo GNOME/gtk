@@ -265,10 +265,10 @@ gtk_revealer_animate_cb (GtkWidget     *widget,
   if (gtk_progress_tracker_get_state (&revealer->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
       revealer->tick_id = 0;
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

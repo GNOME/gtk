@@ -1283,10 +1283,10 @@ gtk_stack_transition_cb (GtkWidget     *widget,
       priv->tick_id = 0;
       g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
 
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

@@ -33,7 +33,7 @@ main_loop_quit_cb (gpointer data)
 
   g_main_context_wakeup (NULL);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

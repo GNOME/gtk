@@ -534,7 +534,7 @@ win32_poll_status_timeout (GtkPrintOperation *op)
     gdk_source_set_static_name_by_id (op_win32->timeout_id, "[gtk] win32_poll_status_timeout");
   }
   g_object_unref (op);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 

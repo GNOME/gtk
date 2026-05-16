@@ -3496,7 +3496,7 @@ load_timeout_cb (gpointer data)
 
   load_set_model (impl);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /* Sets up a new load timer for the model and switches to the LOAD_PRELOAD state */

@@ -123,10 +123,10 @@ progress_timeout (GtkWidget *assistant)
   if (value >= 1.0)
     {
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), progress, TRUE);
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

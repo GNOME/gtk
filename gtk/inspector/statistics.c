@@ -298,7 +298,7 @@ update_type_counts (gpointer data)
       add_type_count (sl, type);
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

@@ -1253,7 +1253,7 @@ theme_changed_idle__mainthread_unlocked (gpointer user_data)
       g_object_unref (self);
     }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

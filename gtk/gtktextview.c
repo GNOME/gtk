@@ -3152,7 +3152,7 @@ do_update_im_spot_location (gpointer text_view)
   priv->im_spot_idle = 0;
 
   gtk_text_view_update_im_spot_location (text_view);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -5050,7 +5050,7 @@ first_validate_callback (gpointer data)
 
   gtk_text_view_flush_first_validate (text_view);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -7545,7 +7545,7 @@ selection_scan_timeout (gpointer data)
   gtk_text_view_scroll_mark_onscreen (text_view,
 				      gtk_text_buffer_get_insert (get_buffer (text_view)));
 
-  return TRUE; /* remain installed. */
+  return G_SOURCE_CONTINUE; /* remain installed. */
 }
 
 static void

@@ -302,7 +302,7 @@ stop_editing_soon (gpointer data)
 
   self->stop_editing_soon_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

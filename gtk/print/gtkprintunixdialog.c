@@ -1759,7 +1759,7 @@ mark_conflicts_callback (gpointer data)
 
   mark_conflicts (dialog);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

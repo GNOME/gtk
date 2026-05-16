@@ -2549,7 +2549,7 @@ handle_keys_changed (gpointer data)
     gtk_shortcut_controller_update_accels (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller));
   g_signal_emit (window, window_signals[KEYS_CHANGED], 0);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 void
@@ -6313,7 +6313,7 @@ schedule_mnemonics_visible_cb (gpointer data)
 
   gtk_window_set_mnemonics_visible (window, TRUE);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 void

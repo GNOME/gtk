@@ -463,7 +463,7 @@ tooltip_browse_mode_expired (gpointer data)
   display = gtk_widget_get_display (tooltip->window);
   g_object_set_qdata (G_OBJECT (display), quark_current_tooltip, NULL);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -798,13 +798,13 @@ tooltip_popup_timeout (gpointer data)
    * bindings were reference counting of objects behaves differently.
    */
   if (!tooltip)
-    return FALSE;
+    return G_SOURCE_REMOVE;
 
   gtk_tooltip_show_tooltip (display);
 
   tooltip->timeout_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

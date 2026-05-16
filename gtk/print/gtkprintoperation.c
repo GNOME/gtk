@@ -2789,7 +2789,7 @@ show_progress_timeout (PrintPagesData *data)
 
   data->op->priv->show_progress_timeout_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

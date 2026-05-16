@@ -83,7 +83,7 @@ scroll_viewport (GtkWidget     *viewport,
   set_adjustment_to_fraction (hadjustment, 0.5 + 0.5 * sin (elapsed));
   set_adjustment_to_fraction (vadjustment, 0.5 + 0.5 * cos (elapsed));
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GOptionEntry options[] = {

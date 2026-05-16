@@ -234,7 +234,7 @@ expand_timeout (gpointer data)
   expander->expand_timer = 0;
   gtk_expander_set_expanded (expander, TRUE);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
