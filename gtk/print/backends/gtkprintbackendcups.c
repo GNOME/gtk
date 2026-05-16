@@ -1107,7 +1107,7 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
     }
 }
 
-static gboolean
+static void
 request_password (gpointer data)
 {
   GtkPrintCupsDispatchWatch *dispatch = data;
@@ -1124,7 +1124,7 @@ request_password (gpointer data)
   int                        i;
 
   if (dispatch->backend->authentication_lock)
-    return G_SOURCE_REMOVE;
+    return;
 
   httpGetHostname (dispatch->request->http, hostname, sizeof (hostname));
   if (is_address_local (hostname))
@@ -1237,8 +1237,6 @@ request_password (gpointer data)
   g_free (auth_info_display);
   g_free (auth_info_visible);
   g_free (key);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1534,7 +1532,7 @@ cups_dispatch_watch_check (GSource *source)
   if (dispatch->request->need_password && dispatch->request->password_state != GTK_CUPS_PASSWORD_REQUESTED)
     {
       dispatch->request->need_password = FALSE;
-      g_idle_add (request_password, dispatch);
+      g_idle_add_once (request_password, dispatch);
       result = FALSE;
     }
 

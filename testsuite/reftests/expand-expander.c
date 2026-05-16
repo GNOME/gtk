@@ -24,11 +24,10 @@
 
 #include "gtk-reftest.h"
 
-static gboolean
+static void
 unblock (gpointer data)
 {
   reftest_uninhibit_snapshot ();
-  return G_SOURCE_REMOVE;
 }
 
 G_MODULE_EXPORT void
@@ -36,5 +35,5 @@ expand_expander (GtkWidget *widget)
 {
   reftest_inhibit_snapshot ();
   gtk_expander_set_expanded (GTK_EXPANDER (widget), TRUE);
-  g_timeout_add (500, unblock, NULL);
+  g_timeout_add_once (500, unblock, NULL);
 }

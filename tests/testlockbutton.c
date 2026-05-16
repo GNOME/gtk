@@ -276,7 +276,7 @@ draw_paintable (GdkPaintable *paintable)
   g_object_unref (paintable);
 }
 
-static gboolean
+static void
 do_snapshot (gpointer data)
 {
   GtkWidget *widget = data;
@@ -286,8 +286,6 @@ do_snapshot (gpointer data)
   g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), NULL);
 
   gtk_widget_queue_draw (widget);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -298,7 +296,7 @@ screenshot_clicked (GtkButton *button,
 
   gtk_widget_grab_focus (GTK_WIDGET (gtk_widget_get_root (widget)));
 
-  g_idle_add (do_snapshot, gtk_widget_get_root (widget));
+  g_idle_add_once (do_snapshot, gtk_widget_get_root (widget));
 }
 
 int

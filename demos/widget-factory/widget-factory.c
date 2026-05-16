@@ -135,7 +135,7 @@ change_transition_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-static gboolean
+static void
 get_idle (gpointer data)
 {
   GtkWidget *window = data;
@@ -144,8 +144,6 @@ get_idle (gpointer data)
   gtk_widget_set_sensitive (window, TRUE);
   gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), NULL);
   g_application_unmark_busy (G_APPLICATION (app));
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -161,7 +159,7 @@ get_busy (GSimpleAction *action,
   cursor = gdk_cursor_new_from_name ("wait", NULL);
   gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), cursor);
   g_object_unref (cursor);
-  g_timeout_add (5000, get_idle, window);
+  g_timeout_add_once (5000, get_idle, window);
 
   gtk_widget_set_sensitive (window, FALSE);
 }
@@ -819,21 +817,19 @@ set_needs_attention (GtkWidget *page, gboolean needs_attention)
                            NULL);
 }
 
-static gboolean
+static void
 demand_attention (gpointer stack)
 {
   GtkWidget *page;
 
   page = gtk_stack_get_child_by_name (GTK_STACK (stack), "page3");
   set_needs_attention (page, TRUE);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
 action_dialog_button_clicked (GtkButton *button, GtkWidget *page)
 {
-  g_timeout_add (1000, demand_attention, page);
+  g_timeout_add_once (1000, demand_attention, page);
 }
 
 static void
@@ -1768,18 +1764,17 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
   gtk_widget_set_sensitive (button, strlen (text) > 0);
 }
 
-static gboolean
+static void
 show_page_again (gpointer data)
 {
   gtk_widget_set_visible (GTK_WIDGET (data), TRUE);
-  return G_SOURCE_REMOVE;
 }
 
 static void
 tab_close_cb (GtkWidget *page)
 {
   gtk_widget_set_visible (page, FALSE);
-  g_timeout_add (2500, show_page_again, page);
+  g_timeout_add_once (2500, show_page_again, page);
 }
 
 typedef struct _GTestPermission GTestPermission;
@@ -2676,11 +2671,10 @@ toggle_action (GSimpleAction *action,
                              g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
-static gboolean
+static void
 quit_timeout (gpointer data)
 {
-  exit (0);
-  return G_SOURCE_REMOVE;
+  g_application_quit (G_APPLICATION (data));
 }
 
 G_MODULE_EXPORT
@@ -2755,7 +2749,7 @@ main (int argc, char *argv[])
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   if (g_getenv ("GTK_DEBUG_AUTO_QUIT"))
-    g_timeout_add (500, quit_timeout, NULL);
+    g_timeout_add_seconds_once (1, quit_timeout, app);
 
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);

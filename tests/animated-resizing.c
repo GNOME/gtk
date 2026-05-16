@@ -129,7 +129,7 @@ on_frame (double progress)
   gtk_widget_queue_draw (window);
 }
 
-static gboolean
+static void
 resize_idle (gpointer user_data)
 {
   GdkFrameClock *frame_clock = user_data;
@@ -141,8 +141,6 @@ resize_idle (gpointer user_data)
 
   scaled_time = (frame_time - start_frame_time) / (CYCLE_TIME * 1000000);
   on_frame (scaled_time - floor (scaled_time));
-
-  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -150,7 +148,7 @@ tick_callback (GtkWidget     *widget,
                GdkFrameClock *frame_clock,
                gpointer       user_data)
 {
-  g_idle_add (resize_idle, frame_clock);
+  g_idle_add_once (resize_idle, frame_clock);
 
   return G_SOURCE_CONTINUE;
 }
