@@ -5505,6 +5505,7 @@ gdk_x11_toplevel_export_handle (GdkToplevel          *toplevel,
   xid = (guint32) gdk_x11_surface_get_xid (GDK_SURFACE (toplevel));
 
   task = g_task_new (toplevel, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gdk_x11_toplevel_export_handle);
   g_task_return_pointer (task, g_strdup_printf ("%x", xid), g_free);
   g_object_unref (task);
 }

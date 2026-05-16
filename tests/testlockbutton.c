@@ -107,6 +107,7 @@ acquire_async (GPermission         *permission,
                        cancellable,
                        callback,
                        user_data);
+  g_task_set_source_tag (result, acquire_async);
   g_task_return_boolean (result, TRUE);
   g_object_unref (result);
 }
@@ -141,6 +142,7 @@ release_async (GPermission         *permission,
                        cancellable,
                        callback,
                        user_data);
+  g_task_set_source_tag (result, release_async);
   g_task_return_boolean (result, TRUE);
   g_object_unref (result);
 }

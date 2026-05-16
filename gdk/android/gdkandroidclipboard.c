@@ -333,6 +333,7 @@ gdk_android_clipboard_clipdata_from_provider_async (GdkContentProvider *provider
                                                     gpointer            user_data)
 {
   GTask *task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gdk_android_clipboard_clipdata_from_provider_async);
 
   JNIEnv *env = gdk_android_get_env();
 

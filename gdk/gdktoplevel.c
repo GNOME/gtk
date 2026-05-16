@@ -122,6 +122,7 @@ gdk_toplevel_default_export_handle (GdkToplevel          *toplevel,
   GTask *task;
 
   task = g_task_new (toplevel, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gdk_toplevel_default_export_handle);
   g_task_return_pointer (task, NULL, NULL);
   g_object_unref (task);
 }

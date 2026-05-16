@@ -721,6 +721,7 @@ texture_serializer (GdkContentSerializer *serializer)
                      gdk_content_serializer_get_cancellable (serializer),
                      texture_serializer_finish,
                      NULL);
+  g_task_set_source_tag (task, texture_serializer);
   g_task_run_in_thread (task, serialize_texture_in_thread);
   g_object_unref (task);
 }

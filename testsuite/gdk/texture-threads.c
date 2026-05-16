@@ -95,6 +95,7 @@ texture_threads (void)
   /* 5. Run a thread trying to download the texture */
   loop = g_main_loop_new (NULL, TRUE);
   task = g_task_new (texture, NULL, texture_download_done, loop);
+  g_task_set_source_tag (task, texture_threads);
   g_task_run_in_thread (task, texture_download_thread);
   g_clear_object (&task);
 

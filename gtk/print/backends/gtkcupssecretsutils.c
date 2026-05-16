@@ -1004,6 +1004,7 @@ gtk_cups_secrets_service_query_task (gpointer              source_object,
   task_data->auth_info_required = g_strdupv (auth_info_required);
 
   task = g_task_new (source_object, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_cups_secrets_service_query_task);
 
   g_task_set_task_data (task, task_data, cleanup_task_data);
 
@@ -1060,6 +1061,7 @@ gtk_cups_secrets_service_store (char        **auth_info,
   task_data->auth_info_labels = g_strdupv (auth_info_labels);
 
   task = g_task_new (NULL, NULL, store_done_cb, NULL);
+  g_task_set_source_tag (task, gtk_cups_secrets_service_store);
 
   g_task_set_task_data (task, task_data, cleanup_task_data);
 

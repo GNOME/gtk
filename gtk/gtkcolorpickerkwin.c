@@ -158,6 +158,7 @@ gtk_color_picker_kwin_pick (GtkColorPicker      *cp,
     return;
 
   picker->task = g_task_new (picker, NULL, callback, user_data);
+  g_task_set_source_tag (picker->task, gtk_color_picker_kwin_pick);
 
   g_dbus_proxy_call (picker->kwin_proxy,
                      "pick",
