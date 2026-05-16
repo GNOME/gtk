@@ -119,3 +119,6 @@ level = "ignore"
 
 [rules.use_g_set_str]
 level = "ignore"
+
+[rules.use_g_steal_pointer]
+level = "ignore"
