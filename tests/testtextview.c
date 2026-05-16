@@ -58,7 +58,7 @@ create_tags (GtkTextBuffer *buffer)
                               "paragraph-background", "rgba(255,165,0,0.5)", NULL);
 
   gtk_text_buffer_create_tag (buffer, "word_wrap",
-                              "wrap_mode", GTK_WRAP_WORD, NULL);
+                              "wrap-mode", GTK_WRAP_WORD, NULL);
 }
 
 
