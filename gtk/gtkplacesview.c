@@ -814,7 +814,7 @@ add_file (GtkPlacesView *view,
                       "volume", NULL,
                       "mount", NULL,
                       "file", file,
-                      "is_network", is_network,
+                      "is-network", is_network,
                       NULL);
 
   insert_row (view, row, is_network);
@@ -2061,7 +2061,7 @@ listbox_header_func (GtkListBoxRow *row,
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
       label = g_object_new (GTK_TYPE_LABEL,
-                            "use_markup", TRUE,
+                            "use-markup", TRUE,
                             "margin-start", 12,
                             "label", text,
                             "xalign", 0.0f,

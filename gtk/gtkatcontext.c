@@ -773,7 +773,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   /* Fall back to the test context, so we can get debugging data */
   if (res == NULL)
     res = g_object_new (GTK_TYPE_TEST_AT_CONTEXT,
-                        "accessible_role", accessible_role,
+                        "accessible-role", accessible_role,
                         "accessible", accessible,
                         "display", display,
                         NULL);

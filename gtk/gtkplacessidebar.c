@@ -1492,7 +1492,7 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
 
   g_object_get (row,
                 "place-type", &place_type,
-                "section_type", &section_type,
+                "section-type", &section_type,
                 "uri", &uri,
                 NULL);
 
@@ -3403,7 +3403,7 @@ on_row_pressed (GtkGestureClick *gesture,
 
   g_object_get (row,
                 "sidebar", &sidebar,
-                "section_type", &section_type,
+                "section-type", &section_type,
                 "place-type", &row_type,
                 NULL);
 
@@ -3431,7 +3431,7 @@ on_row_released (GtkGestureClick *gesture,
 
   g_object_get (row,
                 "sidebar", &sidebar,
-                "section_type", &section_type,
+                "section-type", &section_type,
                 "place-type", &row_type,
                 NULL);
 

@@ -1330,7 +1330,7 @@ create_tooltips (GtkWidget *widget)
 
       frame = g_object_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",
-			      "label_xalign", (double) 0.5,
+			      "label-xalign", (double) 0.5,
 			      NULL);
       gtk_box_append (GTK_BOX (box2), frame);
       gtk_frame_set_child (GTK_FRAME (frame), box3);
@@ -2954,7 +2954,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       frame =
 	g_object_new (gtk_frame_get_type (),
-			"label_xalign", 0.5,
+			"label-xalign", 0.5,
 			"label", "Cursor Area",
 			NULL);
       gtk_box_append (GTK_BOX (vbox), frame);

@@ -219,13 +219,13 @@ create_tree (gboolean rtl)
 						     "sensitive", 6,
 						     "width", 7,
 						     "height", 8,
-						     "width_chars", 9,
-						     "wrap_width", 10,
-						     "wrap_mode", 11,
-						     "single_paragraph_mode", 12,
+						     "width-chars", 9,
+						     "wrap-width", 10,
+						     "wrap-mode", 11,
+						     "single-paragraph-mode", 12,
 						     "ellipsize", 13,
 						     "alignment", 14,
-						     "cell_background", 15,
+						     "cell-background", 15,
 						     NULL);
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
