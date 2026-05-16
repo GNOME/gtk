@@ -286,6 +286,7 @@ open_uri (OpenUriData         *data,
   data->connection = g_object_ref (connection);
 
   task = g_task_new (NULL, NULL, callback, data);
+  g_task_set_source_tag (task, open_uri);
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_task_data (task, data, NULL);
   if (data->cancellable)

@@ -80,6 +80,7 @@ open_file_async (GFile    *file,
   set_wait_cursor (GTK_WIDGET (data));
 
   task = g_task_new (G_OBJECT (data), NULL, texture_loaded, NULL);
+  g_task_set_source_tag (task, open_file_async);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
   g_task_run_in_thread (task, load_texture);
   g_object_unref (task);

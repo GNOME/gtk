@@ -199,6 +199,7 @@ gtk_color_picker_portal_pick (GtkColorPicker      *cp,
     return;
 
   picker->task = g_task_new (picker, NULL, callback, user_data);
+  g_task_set_source_tag (picker->task, gtk_color_picker_portal_pick);
 
   connection = g_dbus_proxy_get_connection (picker->portal_proxy);
 

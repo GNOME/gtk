@@ -1825,6 +1825,7 @@ acquire_async (GPermission         *permission,
   GTask *task;
 
   task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_set_source_tag (task, acquire_async);
   g_task_return_boolean (task, update_allowed (permission, TRUE));
   g_object_unref (task);
 }
@@ -1854,6 +1855,7 @@ release_async (GPermission         *permission,
   GTask *task;
 
   task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_set_source_tag (task, release_async);
   g_task_return_boolean (task, update_allowed (permission, FALSE));
   g_object_unref (task);
 }
@@ -2167,6 +2169,7 @@ load_texture_in_thread (GtkWidget  *picture,
                         const char *resource_path)
 {
   GTask *task = g_task_new (picture, NULL, load_texture_done, NULL);
+  g_task_set_source_tag (task, load_texture_in_thread);
   g_task_set_task_data (task, (gpointer)resource_path, NULL);
   g_task_run_in_thread (task, load_texture_thread);
   g_object_unref (task);

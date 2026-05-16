@@ -2031,6 +2031,7 @@ gdk_wayland_toplevel_real_export_handle (GdkToplevel          *toplevel,
   GTask *task;
 
   task = g_task_new (toplevel, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gdk_wayland_toplevel_real_export_handle);
 
   if (display_wayland->xdg_exporter_v2)
     {
