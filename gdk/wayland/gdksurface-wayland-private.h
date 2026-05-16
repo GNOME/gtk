@@ -118,7 +118,6 @@ void gdk_wayland_surface_update_size       (GdkSurface               *surface,
                                             int32_t                   height,
                                             const GdkFractionalScale *scale);
 void gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface);
-void _gdk_wayland_surface_save_size (GdkSurface *surface);
 
 void gdk_wayland_surface_hide_surface (GdkSurface *surface);
 void gdk_wayland_surface_move_resize (GdkSurface *surface,

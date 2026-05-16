@@ -87,9 +87,6 @@ const char        *_gdk_macos_surface_get_title               (GdkMacosSurface  
 void               _gdk_macos_surface_set_title               (GdkMacosSurface      *self,
                                                                const char           *title);
 NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface      *self);
-gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface      *self);
-void               _gdk_macos_surface_set_modal_hint          (GdkMacosSurface      *self,
-                                                               gboolean              modal_hint);
 void               _gdk_macos_surface_set_geometry_hints      (GdkMacosSurface      *self,
                                                                const GdkGeometry    *geometry,
                                                                GdkSurfaceHints       geom_mask);

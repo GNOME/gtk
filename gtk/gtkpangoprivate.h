@@ -34,13 +34,6 @@ G_BEGIN_DECLS
 PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
                                            PangoAttrList *from) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean gtk_buildable_attribute_tag_start (GtkBuildable       *buildable,
-                                            GtkBuilder         *builder,
-                                            GObject            *child,
-                                            const char         *tagname,
-                                            GtkBuildableParser *parser,
-                                            gpointer           *data);
-
 typedef struct {
   GtkBuilder    *builder;
   GObject       *object;

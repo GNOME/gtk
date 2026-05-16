@@ -445,7 +445,7 @@ gsk_vulkan_frame_init (GskVulkanFrame *self)
 void
 gsk_vulkan_semaphores_add_wait (GskVulkanSemaphores  *self,
                                 VkSemaphore           semaphore,
-                                guint64               semaphore_wait,
+                                uint64_t              semaphore_wait,
                                 VkPipelineStageFlags  stage)
 {
   gsk_semaphores_append (&self->wait_semaphores, semaphore);

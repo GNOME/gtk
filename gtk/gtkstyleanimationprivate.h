@@ -44,8 +44,6 @@ struct _GtkStyleAnimationClass
                                                          gint64                  timestamp);
 };
 
-GType           _gtk_style_animation_get_type           (void) G_GNUC_CONST;
-
 GtkStyleAnimation * _gtk_style_animation_advance        (GtkStyleAnimation      *animation,
                                                          gint64                  timestamp);
 void            _gtk_style_animation_apply_values       (GtkStyleAnimation      *animation,

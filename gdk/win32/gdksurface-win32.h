@@ -209,8 +209,6 @@ struct _GdkWin32SurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GType _gdk_win32_surface_get_type (void);
-
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 
 void gdk_win32_surface_move (GdkSurface *surface,
@@ -227,12 +225,6 @@ GdkSurface *    gdk_win32_drag_surface_new                      (GdkDisplay     
 
 void            gdk_win32_surface_set_dcomp_content             (GdkWin32Surface        *self,
                                                                  IUnknown               *dcomp_content);
-
-#ifdef HAVE_EGL
-EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
-                                              EGLConfig   config,
-                                              gboolean    is_dummy);
-#endif
 
 G_END_DECLS
 

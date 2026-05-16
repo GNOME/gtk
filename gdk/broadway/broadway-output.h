@@ -20,7 +20,6 @@ BroadwayOutput *broadway_output_new                 (GOutputStream  *out,
                                                      guint32         serial);
 void            broadway_output_free                (BroadwayOutput *output);
 int             broadway_output_flush               (BroadwayOutput *output);
-int             broadway_output_has_error           (BroadwayOutput *output);
 void            broadway_output_set_next_serial     (BroadwayOutput *output,
                                                      guint32         serial);
 guint32         broadway_output_get_next_serial     (BroadwayOutput *output);

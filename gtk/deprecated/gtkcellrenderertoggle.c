@@ -503,7 +503,7 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   gtk_snapshot_pop (snapshot);
 }
 
-static int
+static gboolean
 gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,

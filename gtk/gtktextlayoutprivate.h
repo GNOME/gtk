@@ -246,9 +246,6 @@ void    gtk_text_layout_get_size  (GtkTextLayout  *layout,
                                    int            *width,
                                    int            *height);
 
-void gtk_text_layout_wrap_loop_start (GtkTextLayout *layout);
-void gtk_text_layout_wrap_loop_end   (GtkTextLayout *layout);
-
 GtkTextLineDisplay* gtk_text_layout_get_line_display  (GtkTextLayout      *layout,
                                                        GtkTextLine        *line,
                                                        gboolean            size_only);

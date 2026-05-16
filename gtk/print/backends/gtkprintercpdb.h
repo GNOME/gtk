@@ -32,8 +32,6 @@ struct _GtkPrinterCpdb
   cpdb_printer_obj_t *printer_obj;
 };
 
-void                  gtk_printer_cpdb_register_type          (GTypeModule          *module);
-
 cpdb_printer_obj_t   *gtk_printer_cpdb_get_printer_obj        (GtkPrinterCpdb       *cpdb_printer);
 
 void                  gtk_printer_cpdb_set_printer_obj        (GtkPrinterCpdb       *cpdb_printer,

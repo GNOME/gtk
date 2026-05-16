@@ -19,7 +19,6 @@ gdk_broadway_sources = files([
 gdk_broadway_public_headers = [
   'gdkbroadwaydisplay.h',
   'gdkbroadwaysurface.h',
-  'gdkbroadwaycursor.h',
   'gdkbroadwaymonitor.h',
 ]
 

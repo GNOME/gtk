@@ -890,7 +890,7 @@ static void     gtk_notebook_snapshot_tabs   (GtkGizmo         *gizmo,
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
                                               GList            *list);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook);
-static int gtk_notebook_timer                (GtkNotebook      *notebook);
+static gboolean gtk_notebook_timer           (GtkNotebook      *notebook);
 static void gtk_notebook_set_scroll_timer    (GtkNotebook *notebook);
 static int gtk_notebook_page_compare         (gconstpointer     a,
                                               gconstpointer     b);

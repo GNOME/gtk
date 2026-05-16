@@ -64,7 +64,6 @@ gpointer                gtk_list_factory_widget_get_object      (GtkListFactoryW
 
 void                    gtk_list_factory_widget_set_factory     (GtkListFactoryWidget   *self,
                                                                  GtkListItemFactory     *factory);
-GtkListItemFactory *    gtk_list_factory_widget_get_factory     (GtkListFactoryWidget   *self);
 
 void                    gtk_list_factory_widget_set_single_click_activate
                                                                 (GtkListFactoryWidget   *self,

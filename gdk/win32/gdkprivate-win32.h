@@ -253,7 +253,6 @@ HICON _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
                                            int         x,
                                            int         y);
 
-gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
 
 guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
@@ -292,8 +291,6 @@ void _gdk_win32_append_event (GdkEvent *event);
 
 gboolean gdk_win32_get_surface_hwnd_rect        (GdkSurface  *surface,
                                                  RECT       *rect);
-void     _gdk_win32_do_emit_configure_event     (GdkSurface  *surface,
-                                                 RECT        rect);
 void      gdk_win32_surface_do_move_resize_drag  (GdkSurface  *surface,
                                                   int         x,
                                                   int         y);
@@ -306,8 +303,6 @@ gboolean _gdk_win32_surface_lacks_wm_decorations (GdkSurface *surface);
 void gdk_win32_surface_show (GdkSurface *surface,
                              gboolean    already_mapped);
 void gdk_win32_surface_raise (GdkSurface *surface);
-void gdk_win32_surface_set_opacity (GdkSurface *surface,
-                                    double      opacity);
 void gdk_win32_surface_resize (GdkSurface *surface,
                                int         width,
                                int         height);
@@ -324,7 +319,6 @@ gboolean gdk_win32_surface_inhibit_logout        (GdkSurface    *surface,
 void     gdk_win32_surface_uninhibit_logout      (GdkSurface *surface);
 
 /* Initialization */
-void _gdk_win32_surfaceing_init (void);
 void _gdk_drag_init    (void);
 void _gdk_events_init (GdkDisplay *display);
 

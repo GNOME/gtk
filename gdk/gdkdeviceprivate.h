@@ -153,9 +153,6 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
                                                double     value,
                                                double    *axis_value);
 
-GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
-                                               int        n_events);
-
 GList * gdk_device_list_physical_devices        (GdkDevice *device);
 
 void    _gdk_device_add_physical_device         (GdkDevice *device,

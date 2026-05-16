@@ -33,7 +33,6 @@
 #include "gdkdisplay-broadway.h"
 #include "gdkdrawcontext-broadway.h"
 
-#include "gdkbroadwaycursor.h"
 #include "gdkbroadwaysurface.h"
 
 guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
@@ -51,10 +50,6 @@ GdkDrag * _gdk_broadway_surface_drag_begin        (GdkSurface          *surface,
                                                    GdkDragAction       actions,
                                                    double              dx,
                                                    double              dy);
-void     _gdk_broadway_surface_translate          (GdkSurface *surface,
-                                                   cairo_region_t *area,
-                                                   int        dx,
-                                                   int        dy);
 gboolean _gdk_broadway_moveresize_handle_event    (GdkDisplay *display,
                                                    BroadwayInputMsg *event);
 gboolean _gdk_broadway_moveresize_configure_done  (GdkDisplay *display,
@@ -72,46 +67,15 @@ void gdk_broadway_surface_move_resize (GdkSurface *surface,
                                        int         width,
                                        int         height);
 
-void _gdk_keymap_keys_changed     (GdkDisplay      *display);
-int  _gdk_broadway_get_group_for_state (GdkDisplay      *display,
-                                        GdkModifierType  state);
-void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
-                                               GdkModifierType *modifiers);
-gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
-                                        guint            keycode);
-
 void _gdk_broadway_display_size_changed (GdkDisplay *display,
                                          BroadwayInputScreenResizeNotify *msg);
 
 void _gdk_broadway_events_got_input      (GdkDisplay *display,
                                           BroadwayInputMsg *message);
 
-void _gdk_broadway_display_init_root_window (GdkDisplay *display);
 GdkDisplay * _gdk_broadway_display_open (const char *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);
-GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
-                                                     const char *name);
-GdkCursor *_gdk_broadway_display_get_cursor_for_texture (GdkDisplay *display,
-                                                         GdkTexture *texture,
-                                                         int         x,
-                                                         int         y);
-gboolean _gdk_broadway_display_supports_cursor_alpha (GdkDisplay *display);
-gboolean _gdk_broadway_display_supports_cursor_color (GdkDisplay *display);
-void _gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,
-                                                    guint       *width,
-                                                    guint       *height);
-void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
-                                                    guint       *width,
-                                                    guint       *height);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
-void _gdk_broadway_display_consume_all_input (GdkDisplay *display);
-BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,
-                                                          char op,
-                                                          guint32 serial,
-                                                          gboolean remove);
-
-/* Surface methods - testing */
-void _gdk_broadway_surface_resize_surface        (GdkSurface *surface);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);

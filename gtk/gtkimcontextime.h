@@ -56,5 +56,4 @@ struct _GtkIMContextIMEClass
 GDK_AVAILABLE_IN_ALL
 GType         gtk_im_context_ime_get_type      (void) G_GNUC_CONST;
 
-void          gtk_im_context_ime_register_type (GTypeModule * type_module);
 GtkIMContext *gtk_im_context_ime_new           (void);

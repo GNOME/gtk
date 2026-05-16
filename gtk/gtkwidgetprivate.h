@@ -250,12 +250,6 @@ void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
 
 gboolean          gtk_widget_has_grab                      (GtkWidget *widget);
 
-void              _gtk_widget_propagate_display_changed    (GtkWidget  *widget,
-                                                            GdkDisplay *previous_display);
-
-void              _gtk_widget_set_device_surface           (GtkWidget *widget,
-                                                            GdkDevice *device,
-                                                            GdkSurface *pointer_window);
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
                                                             GtkWidget       *to,
                                                             GdkDevice       *device,

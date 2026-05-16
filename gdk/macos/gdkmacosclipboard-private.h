@@ -33,10 +33,6 @@ G_DECLARE_FINAL_TYPE (GdkMacosClipboard, _gdk_macos_clipboard, GDK, MACOS_CLIPBO
 
 GdkClipboard      *_gdk_macos_clipboard_new                       (GdkMacosDisplay      *display);
 void               _gdk_macos_clipboard_check_externally_modified (GdkMacosClipboard    *self);
-NSPasteboardType   _gdk_macos_clipboard_to_ns_type                (const char           *mime_type,
-                                                                   NSPasteboardType     *alternate);
-const char        *_gdk_macos_clipboard_from_ns_type              (NSPasteboardType      ns_type);
-void               _gdk_macos_clipboard_register_drag_types       (NSWindow             *window);
 
 G_END_DECLS
 

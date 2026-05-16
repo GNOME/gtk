@@ -66,8 +66,6 @@
 #include "color-representation-v1-client-protocol.h"
 #include "xdg-session-management-v1-client-protocol.h"
 
-#include "wm-button-layout-translation.h"
-
 #include "gdk/gdkprivate.h"
 
 /* Keep g_assert() defined even if we disable it globally,

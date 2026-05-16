@@ -1371,7 +1371,7 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->state_flags_changed (widget, previous_state);
 }
 
-static int
+static gboolean
 gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
   gboolean retval = FALSE;

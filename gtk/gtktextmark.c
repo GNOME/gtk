@@ -421,9 +421,9 @@ _gtk_mark_segment_set_tree (GtkTextLineSegment *mark,
   mark->body.mark.not_deleteable = FALSE;
 }
 
-static int                 mark_segment_delete_func  (GtkTextLineSegment *segPtr,
+static gboolean            mark_segment_delete_func  (GtkTextLineSegment *segPtr,
                                                       GtkTextLine        *line,
-                                                      int                 treeGone);
+                                                      gboolean            tree_gone);
 static GtkTextLineSegment *mark_segment_cleanup_func (GtkTextLineSegment *segPtr,
                                                       GtkTextLine        *line);
 static void                mark_segment_check_func   (GtkTextLineSegment *segPtr,

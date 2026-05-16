@@ -129,8 +129,6 @@ int         _gdk_x11_display_text_property_to_utf8_list (GdkDisplay     *display
 char *      gdk_x11_utf8_to_string_target               (const char     *utf8_str,
                                                          gboolean        return_latin1);
 
-void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
-
 GdkX11DeviceManagerXI2 *_gdk_x11_device_manager_new (GdkDisplay *display);
 
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
@@ -164,14 +162,6 @@ void     gdk_x11_device_xi2_store_axes          (GdkX11DeviceXI2 *device,
                                                  double          *axes,
                                                  int              n_axes);
 
-gboolean   _gdk_x11_display_supports_cursor_alpha   (GdkDisplay    *display);
-gboolean   _gdk_x11_display_supports_cursor_color   (GdkDisplay    *display);
-void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
-                                                     guint      *width,
-                                                     guint      *height);
-void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
-                                                     guint      *width,
-                                                     guint      *height);
 Cursor     _gdk_x11_display_get_xcursor_with_scale  (GdkDisplay *display,
                                                      GdkCursor  *cursor,
                                                      int scale);

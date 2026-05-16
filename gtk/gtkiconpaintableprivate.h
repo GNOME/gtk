@@ -57,10 +57,6 @@ GtkIconPaintable *gtk_icon_paintable_new_for_loadable (GLoadableIcon *loadable,
                                                        int            desired_size,
                                                        int            desired_scale);
 
-void gtk_icon_paintable_set_debug (GtkIconPaintable *icon,
-                                   gboolean          allow_node,
-                                   gboolean          allow_recolor,
-                                   gboolean          allow_mask);
 void gtk_icon_paintable_set_icon_name (GtkIconPaintable *icon,
                                        const char       *name);
 

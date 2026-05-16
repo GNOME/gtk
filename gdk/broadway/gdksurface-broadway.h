@@ -90,7 +90,5 @@ struct _GdkBroadwaySurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-GType gdk_surface_broadway_get_type (void);
-
 G_END_DECLS
 
