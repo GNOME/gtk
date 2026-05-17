@@ -112,6 +112,8 @@ gdk_win32_keymap_constructed (GObject *object)
 {
   GdkWin32Keymap *keymap;
 
+  G_OBJECT_CLASS (gdk_win32_keymap_parent_class)->constructed (object);
+
   keymap = GDK_WIN32_KEYMAP (object);
   update_keymap (keymap);
 }

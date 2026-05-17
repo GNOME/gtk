@@ -364,6 +364,8 @@ gsk_gl_shader_constructed (GObject *object)
   GMatchInfo *match_info;
   int max_texture_seen = 0;
 
+  G_OBJECT_CLASS (gsk_gl_shader_parent_class)->constructed (object);
+
   g_regex_match_full (uniform_regexp,
                       string, string_len, 0, 0,
                       &match_info, NULL);

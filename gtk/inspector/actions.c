@@ -601,6 +601,8 @@ constructed (GObject *object)
   GtkSorter *sorter;
   GListModel *model;
 
+  G_OBJECT_CLASS (gtk_inspector_actions_parent_class)->constructed (object);
+
   g_signal_connect_swapped (sl->button, "clicked",
                             G_CALLBACK (refresh_all), sl);
 

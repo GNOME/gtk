@@ -736,6 +736,8 @@ gdk_device_manager_win32_constructed (GObject *object)
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   display_win32 = GDK_WIN32_DISPLAY (device_manager->display);
 
+  G_OBJECT_CLASS (gdk_device_manager_win32_parent_class)->constructed (object);
+
   device_manager->core_pointer =
     create_pointer (device_manager->display,
 		    GDK_TYPE_DEVICE_VIRTUAL,

@@ -205,6 +205,8 @@ gdk_win32_hcursor_constructed (GObject *object)
 {
   GdkWin32HCursor *win32_hcursor;
 
+  G_OBJECT_CLASS (gdk_win32_hcursor_parent_class)->constructed (object);
+
   win32_hcursor = GDK_WIN32_HCURSOR (object);
 
   g_assert_nonnull (win32_hcursor->display);
