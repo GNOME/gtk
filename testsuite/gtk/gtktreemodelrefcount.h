@@ -19,8 +19,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
 #define GTK_TYPE_TREE_MODEL_REF_COUNT              (gtk_tree_model_ref_count_get_type ())
 #define GTK_TREE_MODEL_REF_COUNT(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_MODEL_REF_COUNT, GtkTreeModelRefCount))
 #define GTK_TREE_MODEL_REF_COUNT_CLASS(vtable)     (G_TYPE_CHECK_CLASS_CAST ((vtable), GTK_TYPE_TREE_MODEL_REF_COUNT, GtkTreeModelRefCountClass))

@@ -18,7 +18,7 @@ import requests  # type: ignore[import-untyped]
 KEYSYMDEF_URL = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/raw/master/include/X11/keysymdef.h"
 XF86KEYSYM_URL = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/raw/master/include/X11/XF86keysym.h"
 
-LICENSE_HEADER = f"""/* GDK - The GIMP Drawing Kit
+HEADER = f"""/* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 2005, 2006, 2007, 2009 GNOME Foundation
  *
@@ -47,7 +47,18 @@ LICENSE_HEADER = f"""/* GDK - The GIMP Drawing Kit
  */
 
 #pragma once
+
+#if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 """
+
+FOOTER = f"""
+G_END_DECLS"""
 
 GDK_KEYSYMS_H = "gdkkeysyms.h"
 
@@ -115,7 +126,7 @@ Exiting...""",
         )
 
     with open(GDK_KEYSYMS_H, "x", encoding="utf8") as output_file:
-        print(LICENSE_HEADER, file=output_file)
+        print(HEADER, file=output_file)
 
         get_and_filter_header(KEYSYMDEF_URL, "XK_", output_file)
 
@@ -134,3 +145,5 @@ Exiting...""",
                 "XF86XK_Select": "XF86XK_SelectButton",
             },
         )
+
+        print(FOOTER, file=output_file)

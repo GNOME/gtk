@@ -66,5 +66,3 @@ const GdkColor *
 gboolean     paint_is_server               (PaintKind         kind);
 gboolean     parse_symbolic_color          (const char       *string,
                                             GtkSymbolicColor *sym);
-
-G_END_DECLS

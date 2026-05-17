@@ -28,6 +28,14 @@
 
 #pragma once
 
+#if !defined (__GDK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #define GDK_KEY_VoidSymbol 0xffffff
 #define GDK_KEY_BackSpace 0xff08
 #define GDK_KEY_Tab 0xff09
@@ -2478,3 +2486,5 @@
 #define GDK_KEY_KbdLcdMenu3 0x100812ba
 #define GDK_KEY_KbdLcdMenu4 0x100812bb
 #define GDK_KEY_KbdLcdMenu5 0x100812bc
+
+G_END_DECLS

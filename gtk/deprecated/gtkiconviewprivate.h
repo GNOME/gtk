@@ -189,5 +189,3 @@ void                 _gtk_icon_view_select_item                    (GtkIconView 
 void                 _gtk_icon_view_unselect_item                  (GtkIconView            *icon_view,
                                                                     GtkIconViewItem        *item);
 
-G_END_DECLS
-

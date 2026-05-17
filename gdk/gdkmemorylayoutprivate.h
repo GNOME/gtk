@@ -100,5 +100,3 @@ void                    gdk_memory_copy                         (guchar         
                                                                  const guchar                   *src_data,
                                                                  const GdkMemoryLayout          *src_layout);
 
-G_END_DECLS
-

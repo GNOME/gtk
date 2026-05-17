@@ -19,6 +19,10 @@
 #error "Only <gdk/x11/gdkx.h> can be included directly."
 #endif
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 #ifndef __GI_SCANNER__
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11AppLaunchContext, g_object_unref)
@@ -31,3 +35,5 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Screen, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkX11Surface, g_object_unref)
 
 #endif
+
+G_END_DECLS
