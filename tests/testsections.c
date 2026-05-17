@@ -378,6 +378,7 @@ main (int argc, char *argv[])
 
   gtk_window_present (GTK_WINDOW (window));
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_timeout_add (500, dump_sections, selection);
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)

@@ -1198,6 +1198,7 @@ update_fontlist (GtkFontChooserWidget *self)
         }
     }
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
 
   gtk_filter_list_model_set_model (self->filter_model, model);
