@@ -30,6 +30,7 @@ typedef struct _GdkToplevelSize GdkToplevelSize;
 
 #define GDK_TYPE_TOPLEVEL_SIZE (gdk_toplevel_size_get_type ())
 
+/* gobject-linter-ignore-next-line: missing_autoptr_cleanup */
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_toplevel_size_get_type      (void);
 

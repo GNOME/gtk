@@ -30,6 +30,7 @@ typedef struct _GdkDragSurfaceSize GdkDragSurfaceSize;
 
 #define GDK_TYPE_DRAG_SURFACE_SIZE (gdk_drag_surface_size_get_type ())
 
+/* gobject-linter-ignore-next-line: missing_autoptr_cleanup */
 GDK_AVAILABLE_IN_4_12
 GType                   gdk_drag_surface_size_get_type  (void);
 

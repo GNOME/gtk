@@ -36,3 +36,25 @@ level = "ignore"
 
 [rules.matching_declare_define]
 level = "ignore"
+
+[rules.missing_autoptr_cleanup]
+ignore = [
+  # We don't use autoptrs ourselves, so private
+  # headers and source files don't need it.
+  "**/*.c",
+  "**/*private.h",
+  # weird naming convention for private headers in the backend
+  "gdk/broadway/*-broadway.h",
+  "gdk/wayland/*-wayland.h",
+  "gdk/win32/*-win32.h",
+  "gdk/win32/gdkdevice-virtual.h",
+  "gdk/win32/gdkdevice-winpointer.h",
+  "gdk/win32/gdkdevice-wintab.h",
+  "gdk/x11/*-x11.h",
+  # directories that don't install anything
+  "gtk/inspector/**",
+  "demos/**",
+  "examples/**",
+  "tests/**",
+  "testsuite/**",
+]
