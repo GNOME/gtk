@@ -235,8 +235,7 @@ animation_timer (GtkEntryCompletion *completion)
 	  g_print ("readding model!\n");
 	  
 	  gtk_entry_completion_set_model (completion, GTK_TREE_MODEL (old_store));
-	  g_object_unref (old_store);
-	  old_store = NULL;
+	  g_clear_object (&old_store);
 	}
 
       timer_count ++;

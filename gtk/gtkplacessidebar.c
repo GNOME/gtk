@@ -3975,8 +3975,7 @@ gtk_places_sidebar_dispose (GObject *object)
   if (sidebar->cancellable)
     {
       g_cancellable_cancel (sidebar->cancellable);
-      g_object_unref (sidebar->cancellable);
-      sidebar->cancellable = NULL;
+      g_clear_object (&sidebar->cancellable);
     }
 
   if (sidebar->bookmarks_manager != NULL)
@@ -3998,16 +3997,13 @@ gtk_places_sidebar_dispose (GObject *object)
 
   if (sidebar->trash_monitor)
     {
-      g_signal_handler_disconnect (sidebar->trash_monitor, sidebar->trash_monitor_changed_id);
-      sidebar->trash_monitor_changed_id = 0;
+      g_clear_signal_handler (&sidebar->trash_monitor_changed_id, sidebar->trash_monitor);
       g_clear_object (&sidebar->trash_monitor);
     }
 
   if (sidebar->trash_row)
     {
-      g_object_remove_weak_pointer (G_OBJECT (sidebar->trash_row),
-                                    (gpointer *) &sidebar->trash_row);
-      sidebar->trash_row = NULL;
+      g_clear_weak_pointer (&sidebar->trash_row);
     }
 
   if (sidebar->volume_monitor != NULL)
@@ -4024,8 +4020,7 @@ gtk_places_sidebar_dispose (GObject *object)
     }
 
   g_clear_object (&sidebar->hostnamed_proxy);
-  g_free (sidebar->hostname);
-  sidebar->hostname = NULL;
+  g_clear_pointer (&sidebar->hostname, g_free);
 
   if (sidebar->gtk_settings)
     {
@@ -4052,8 +4047,7 @@ gtk_places_sidebar_dispose (GObject *object)
         {
           g_signal_handlers_disconnect_by_data (l->data, sidebar);
         }
-      g_object_unref (sidebar->cloud_manager);
-      sidebar->cloud_manager = NULL;
+      g_clear_object (&sidebar->cloud_manager);
     }
 #endif
 

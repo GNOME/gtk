@@ -983,8 +983,7 @@ update_pointer_info_foreach (GdkDisplay           *display,
 
   if (pointer_info->surface_under_pointer == surface)
     {
-      g_object_unref (pointer_info->surface_under_pointer);
-      pointer_info->surface_under_pointer = NULL;
+      g_clear_object (&pointer_info->surface_under_pointer);
     }
 }
 
@@ -1049,8 +1048,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     {
       /* Make sure to destroy if current */
       g_object_run_dispose (G_OBJECT (surface->gl_paint_context));
-      g_object_unref (surface->gl_paint_context);
-      surface->gl_paint_context = NULL;
+      g_clear_object (&surface->gl_paint_context);
     }
 
   if (surface->frame_clock)
@@ -1824,11 +1822,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (surface->cursor)
-    {
-      g_object_unref (surface->cursor);
-      surface->cursor = NULL;
-    }
+  g_clear_object (&surface->cursor);
 
   if (!GDK_SURFACE_DESTROYED (surface))
     {

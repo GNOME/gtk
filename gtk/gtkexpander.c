@@ -254,11 +254,7 @@ static void
 gtk_expander_drag_leave (GtkDropControllerMotion *motion,
                          GtkExpander             *expander)
 {
-  if (expander->expand_timer)
-    {
-      g_source_remove (expander->expand_timer);
-      expander->expand_timer = 0;
-    }
+  g_clear_handle_id (&expander->expand_timer, g_source_remove);
 }
 
 static GtkSizeRequestMode
@@ -560,11 +556,7 @@ gtk_expander_dispose (GObject *object)
 {
   GtkExpander *expander = GTK_EXPANDER (object);
 
-  if (expander->expand_timer)
-    {
-      g_source_remove (expander->expand_timer);
-      expander->expand_timer = 0;
-    }
+  g_clear_handle_id (&expander->expand_timer, g_source_remove);
 
   /* If the expander is not expanded, we own the child */
   if (!expander->expanded)

@@ -464,8 +464,7 @@ gtk_cell_view_dispose (GObject *object)
     {
       g_signal_handler_disconnect (priv->context, priv->size_changed_id);
 
-      g_object_unref (priv->context);
-      priv->context = NULL;
+      g_clear_object (&priv->context);
       priv->size_changed_id = 0;
     }
 
@@ -996,8 +995,7 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
 
   if (priv->model)
     {
-      g_signal_handler_disconnect (priv->model, priv->row_changed_id);
-      priv->row_changed_id = 0;
+      g_clear_signal_handler (&priv->row_changed_id, priv->model);
 
       if (priv->displayed_row)
         gtk_tree_row_reference_free (priv->displayed_row);

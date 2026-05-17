@@ -1612,8 +1612,7 @@ gtk_print_settings_new_from_file (const char   *file_name,
 
   if (!gtk_print_settings_load_file (settings, file_name, error))
     {
-      g_object_unref (settings);
-      settings = NULL;
+      g_clear_object (&settings);
     }
 
   return settings;
@@ -1705,8 +1704,7 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
   if (!gtk_print_settings_load_key_file (settings, key_file,
                                          group_name, error))
     {
-      g_object_unref (settings);
-      settings = NULL;
+      g_clear_object (&settings);
     }
 
   return settings;

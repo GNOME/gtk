@@ -868,11 +868,7 @@ gdk_x11_device_manager_xi2_dispose (GObject *object)
   g_list_free_full (device_manager->devices, g_object_unref);
   device_manager->devices = NULL;
 
-  if (device_manager->id_table)
-    {
-      g_hash_table_destroy (device_manager->id_table);
-      device_manager->id_table = NULL;
-    }
+  g_clear_pointer (&device_manager->id_table, g_hash_table_destroy);
 
   G_OBJECT_CLASS (gdk_x11_device_manager_xi2_parent_class)->dispose (object);
 }

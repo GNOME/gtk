@@ -363,8 +363,7 @@ preview_end_run (GtkPrintOperation *op,
 		 gboolean           wait,
 		 gboolean           cancelled)
 {
-  g_free (op->priv->page_ranges);
-  op->priv->page_ranges = NULL;
+  g_clear_pointer (&op->priv->page_ranges, g_free);
 }
 
 
@@ -705,11 +704,7 @@ gtk_print_operation_done (GtkPrintOperation       *operation,
 {
   GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (operation);
 
-  if (priv->print_context)
-    {
-      g_object_unref (priv->print_context);
-      priv->print_context = NULL;
-    } 
+  g_clear_object (&priv->print_context); 
 }
 
 static gboolean
@@ -2179,11 +2174,7 @@ print_pages_idle_done (gpointer user_data)
 
   priv->print_pages_idle_id = 0;
 
-  if (priv->show_progress_timeout_id > 0)
-    {
-      g_source_remove (priv->show_progress_timeout_id);
-      priv->show_progress_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->show_progress_timeout_id, g_source_remove);
  
   if (data->progress)
     gtk_window_destroy (GTK_WINDOW (data->progress));

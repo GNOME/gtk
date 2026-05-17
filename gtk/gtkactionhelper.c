@@ -502,11 +502,7 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
       return;
     }
 
-  if (helper->target)
-    {
-      g_variant_unref (helper->target);
-      helper->target = NULL;
-    }
+  g_clear_pointer (&helper->target, g_variant_unref);
 
   if (target_value)
     helper->target = g_variant_ref_sink (target_value);

@@ -96,7 +96,7 @@ disconnect_func (gpointer data)
 {
   DisconnectData *dd = data;
 
-  g_signal_handler_disconnect (dd->instance, dd->id);
+  g_clear_signal_handler (&dd->id, dd->instance);
 }
 
 static void

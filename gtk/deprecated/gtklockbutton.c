@@ -465,8 +465,7 @@ acquire_cb (GObject      *source,
       g_error_free (error);
     }
 
-  g_object_unref (button->cancellable);
-  button->cancellable = NULL;
+  g_clear_object (&button->cancellable);
 
   update_state (button);
 }
@@ -486,8 +485,7 @@ release_cb (GObject      *source,
       g_error_free (error);
     }
 
-  g_object_unref (button->cancellable);
-  button->cancellable = NULL;
+  g_clear_object (&button->cancellable);
 
   update_state (button);
 }

@@ -249,11 +249,7 @@ gtk_window_buttons_quartz_unroot (GtkWidget *widget)
 {
   GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
 
-  if (self->fullscreen_binding)
-    {
-      g_object_unref (self->fullscreen_binding);
-      self->fullscreen_binding = NULL;
-    }
+  g_clear_object (&self->fullscreen_binding);
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unroot (widget);
 }

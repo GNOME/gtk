@@ -69,8 +69,7 @@ gtk_trash_monitor_dispose (GObject *object)
 
   if (monitor->file_monitor)
     {
-      g_signal_handler_disconnect (monitor->file_monitor, monitor->file_monitor_changed_id);
-      monitor->file_monitor_changed_id = 0;
+      g_clear_signal_handler (&monitor->file_monitor_changed_id, monitor->file_monitor);
 
       g_clear_object (&monitor->file_monitor);
     }

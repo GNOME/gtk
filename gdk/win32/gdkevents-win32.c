@@ -1817,8 +1817,7 @@ gdk_event_translate (MSG *msg,
           composed = g_utf16_to_utf8 ((gunichar2*)translation->data,
                                       translation->len, NULL, NULL, NULL);
 
-        g_array_unref (translation);
-        translation = NULL;
+        g_clear_pointer (&translation, g_array_unref);
 
         /* Ignore control sequences like Backspace */
         if (composed && g_unichar_iscntrl (g_utf8_get_char (composed)))

@@ -981,23 +981,11 @@ gtk_icon_view_dispose (GObject *object)
 
   remove_scroll_timeout (icon_view);
 
-  if (icon_view->priv->hadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->hadjustment);
-      icon_view->priv->hadjustment = NULL;
-    }
+  g_clear_object (&icon_view->priv->hadjustment);
 
-  if (icon_view->priv->vadjustment != NULL)
-    {
-      g_object_unref (icon_view->priv->vadjustment);
-      icon_view->priv->vadjustment = NULL;
-    }
+  g_clear_object (&icon_view->priv->vadjustment);
 
-  if (priv->cell_area_context)
-    {
-      g_object_unref (priv->cell_area_context);
-      priv->cell_area_context = NULL;
-    }
+  g_clear_object (&priv->cell_area_context);
 
   if (priv->row_contexts)
     {
@@ -1014,8 +1002,7 @@ gtk_icon_view_dispose (GObject *object)
       priv->add_editable_id = 0;
       priv->remove_editable_id = 0;
 
-      g_object_unref (priv->cell_area);
-      priv->cell_area = NULL;
+      g_clear_object (&priv->cell_area);
     }
 
   g_clear_object (&priv->key_controller);
@@ -5769,12 +5756,7 @@ check_model_dnd (GtkTreeModel *model,
 static void
 remove_scroll_timeout (GtkIconView *icon_view)
 {
-  if (icon_view->priv->scroll_timeout_id != 0)
-    {
-      g_source_remove (icon_view->priv->scroll_timeout_id);
-
-      icon_view->priv->scroll_timeout_id = 0;
-    }
+  g_clear_handle_id (&icon_view->priv->scroll_timeout_id, g_source_remove);
 }
 
 static void

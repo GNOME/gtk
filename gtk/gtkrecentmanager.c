@@ -395,14 +395,12 @@ gtk_recent_manager_dispose (GObject *gobject)
       g_signal_handlers_disconnect_by_func (priv->monitor,
                                             G_CALLBACK (gtk_recent_manager_monitor_changed),
                                             manager);
-      g_object_unref (priv->monitor);
-      priv->monitor = NULL;
+      g_clear_object (&priv->monitor);
     }
 
   if (priv->changed_timeout != 0)
     {
-      g_source_remove (priv->changed_timeout);
-      priv->changed_timeout = 0;
+      g_clear_handle_id (&priv->changed_timeout, g_source_remove);
       priv->changed_age = 0;
     }
 
@@ -597,8 +595,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
           g_signal_handlers_disconnect_by_func (priv->monitor,
                                                 G_CALLBACK (gtk_recent_manager_monitor_changed),
                                                 manager);
-          g_object_unref (priv->monitor);
-          priv->monitor = NULL;
+          g_clear_object (&priv->monitor);
         }
 
       if (!filename || *filename == '\0')

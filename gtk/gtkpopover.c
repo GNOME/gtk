@@ -1299,11 +1299,7 @@ gtk_popover_finalize (GObject *object)
 
   g_clear_pointer (&priv->layout, gdk_popup_layout_unref);
 
-  if (priv->mnemonics_display_timeout_id)
-    {
-      g_source_remove (priv->mnemonics_display_timeout_id);
-      priv->mnemonics_display_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->mnemonics_display_timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
@@ -2576,11 +2572,7 @@ gtk_popover_set_mnemonics_visible (GtkPopover *popover,
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MNEMONICS_VISIBLE]);
   gtk_widget_queue_resize (GTK_WIDGET (popover));
 
-  if (priv->mnemonics_display_timeout_id)
-    {
-      g_source_remove (priv->mnemonics_display_timeout_id);
-      priv->mnemonics_display_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->mnemonics_display_timeout_id, g_source_remove);
 }
 
 /**

@@ -481,9 +481,8 @@ gtk_tree_view_column_dispose (GObject *object)
       g_signal_handler_disconnect (priv->cell_area_context,
 				   priv->context_changed_signal);
 
-      g_object_unref (priv->cell_area_context);
+      g_clear_object (&priv->cell_area_context);
 
-      priv->cell_area_context = NULL;
       priv->context_changed_signal = 0;
     }
 
@@ -494,17 +493,12 @@ gtk_tree_view_column_dispose (GObject *object)
       g_signal_handler_disconnect (priv->cell_area,
 				   priv->remove_editable_signal);
 
-      g_object_unref (priv->cell_area);
-      priv->cell_area = NULL;
+      g_clear_object (&priv->cell_area);
       priv->add_editable_signal = 0;
       priv->remove_editable_signal = 0;
     }
 
-  if (priv->child)
-    {
-      g_object_unref (priv->child);
-      priv->child = NULL;
-    }
+  g_clear_object (&priv->child);
 
   g_clear_object (&priv->button);
 
@@ -1269,12 +1263,7 @@ _gtk_tree_view_column_unset_model (GtkTreeViewColumn *column,
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
 
-  if (priv->sort_column_changed_signal)
-    {
-      g_signal_handler_disconnect (old_model,
-				   priv->sort_column_changed_signal);
-      priv->sort_column_changed_signal = 0;
-    }
+  g_clear_signal_handler (&priv->sort_column_changed_signal, old_model);
   gtk_tree_view_column_set_sort_indicator (column, FALSE);
 }
 
@@ -1310,11 +1299,7 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 
   gtk_widget_unparent (priv->button);
 
-  if (priv->property_changed_signal)
-    {
-      g_signal_handler_disconnect (priv->tree_view, priv->property_changed_signal);
-      priv->property_changed_signal = 0;
-    }
+  g_clear_signal_handler (&priv->property_changed_signal, priv->tree_view);
 
   if (priv->sort_column_changed_signal)
     {
@@ -2613,17 +2598,9 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
     {
       GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->tree_view));
 
-      if (priv->sort_clicked_signal)
-	{
-	  g_signal_handler_disconnect (tree_column, priv->sort_clicked_signal);
-	  priv->sort_clicked_signal = 0;
-	}
+      g_clear_signal_handler (&priv->sort_clicked_signal, tree_column);
 
-      if (priv->sort_column_changed_signal)
-	{
-	  g_signal_handler_disconnect (model, priv->sort_column_changed_signal);
-	  priv->sort_column_changed_signal = 0;
-	}
+      g_clear_signal_handler (&priv->sort_column_changed_signal, model);
 
       gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
       gtk_tree_view_column_set_sort_indicator (tree_column, FALSE);

@@ -199,11 +199,7 @@ gtk_widget_paintable_unset_widget (GtkWidgetPaintable *self)
   self->widget = NULL;
 
   g_clear_object (&self->pending_image);
-  if (self->pending_update_cb)
-    {
-      g_source_remove (self->pending_update_cb);
-      self->pending_update_cb = 0;
-    }
+  g_clear_handle_id (&self->pending_update_cb, g_source_remove);
 }
 
 static void

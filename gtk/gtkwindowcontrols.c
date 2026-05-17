@@ -337,8 +337,7 @@ update_window_buttons (GtkWindowControls *self)
           if (!update_window_icon (window, button))
             {
               g_object_ref_sink (button);
-              g_object_unref (button);
-              button = NULL;
+              g_clear_object (&button);
             }
         }
       else if (strcmp (tokens[i], "minimize") == 0 &&

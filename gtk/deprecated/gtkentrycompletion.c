@@ -1771,11 +1771,7 @@ gtk_entry_completion_key_pressed (GtkEventControllerKey *controller,
       keyval == GDK_KEY_ISO_Enter ||
       keyval == GDK_KEY_Escape)
     {
-      if (completion->completion_timeout)
-        {
-          g_source_remove (completion->completion_timeout);
-          completion->completion_timeout = 0;
-        }
+      g_clear_handle_id (&completion->completion_timeout, g_source_remove);
     }
 
   if (!gtk_widget_get_mapped (completion->popup_window))
@@ -2010,11 +2006,7 @@ gtk_entry_completion_changed (GtkWidget *widget,
     return;
 
   /* (re)install completion timeout */
-  if (completion->completion_timeout)
-    {
-      g_source_remove (completion->completion_timeout);
-      completion->completion_timeout = 0;
-    }
+  g_clear_handle_id (&completion->completion_timeout, g_source_remove);
 
   if (!gtk_editable_get_text (GTK_EDITABLE (widget)))
     return;
@@ -2140,8 +2132,7 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
   if (completion->changed_id > 0 &&
       g_signal_handler_is_connected (text, completion->changed_id))
     {
-      g_signal_handler_disconnect (text, completion->changed_id);
-      completion->changed_id = 0;
+      g_clear_signal_handler (&completion->changed_id, text);
     }
 
   g_clear_object (&completion->insert_text_signal_group);
@@ -2153,16 +2144,8 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
 void
 _gtk_entry_completion_disconnect (GtkEntryCompletion *completion)
 {
-  if (completion->completion_timeout)
-    {
-      g_source_remove (completion->completion_timeout);
-      completion->completion_timeout = 0;
-    }
-  if (completion->check_completion_idle)
-    {
-      g_source_destroy (completion->check_completion_idle);
-      completion->check_completion_idle = NULL;
-    }
+  g_clear_handle_id (&completion->completion_timeout, g_source_remove);
+  g_clear_pointer (&completion->check_completion_idle, g_source_destroy);
 
   if (gtk_widget_get_mapped (completion->popup_window))
     _gtk_entry_completion_popdown (completion);

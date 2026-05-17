@@ -136,8 +136,7 @@ gtk_css_animated_style_dispose (GObject *object)
     gtk_style_animation_unref (style->animations[i]);
 
   style->n_animations = 0;
-  g_free (style->animations);
-  style->animations = NULL;
+  g_clear_pointer (&style->animations, g_free);
 
   G_OBJECT_CLASS (gtk_css_animated_style_parent_class)->dispose (object);
 }

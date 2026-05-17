@@ -243,11 +243,7 @@ gtk_cell_renderer_combo_finalize (GObject *object)
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
   GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
 
-  if (priv->model)
-    {
-      g_object_unref (priv->model);
-      priv->model = NULL;
-    }
+  g_clear_object (&priv->model);
 
   G_OBJECT_CLASS (gtk_cell_renderer_combo_parent_class)->finalize (object);
 }
@@ -350,11 +346,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   GtkEntry *entry;
   gboolean canceled;
 
-  if (priv->focus_out_id > 0)
-    {
-      g_signal_handler_disconnect (combo, priv->focus_out_id);
-      priv->focus_out_id = 0;
-    }
+  g_clear_signal_handler (&priv->focus_out_id, combo);
 
   g_object_get (combo,
                 "editing-canceled", &canceled,

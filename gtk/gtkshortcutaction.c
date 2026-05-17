@@ -753,8 +753,7 @@ binding_compose_params (GtkWidget     *widget,
       for (j = 0; j < i; j++)
         g_value_unset (&(*params_p)[j]);
 
-      g_free (*params_p);
-      *params_p = NULL;
+      g_clear_pointer (params_p, g_free);
     }
 
   return valid;

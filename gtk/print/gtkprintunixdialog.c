@@ -323,7 +323,7 @@ struct _GtkPrintUnixDialog
   gulong request_details_tag;
   GtkPrinterOptionSet *options;
   gulong options_changed_handler;
-  gulong mark_conflicts_id;
+  guint mark_conflicts_id;
 
   char *format_for_printer;
 
@@ -938,9 +938,7 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog,
 {
   if (dialog->request_details_tag)
     {
-      g_signal_handler_disconnect (dialog->request_details_printer,
-                                   dialog->request_details_tag);
-      dialog->request_details_tag = 0;
+      g_clear_signal_handler (&dialog->request_details_tag, dialog->request_details_printer);
       set_busy_cursor (dialog, FALSE);
       if (details_failed)
         gtk_printer_set_state_message (dialog->request_details_printer, _("Getting printer information failed"));
@@ -968,8 +966,7 @@ gtk_print_unix_dialog_finalize (GObject *object)
       g_free (dialog->number_up_layout_2_option->choices_display[1]);
       dialog->number_up_layout_2_option->choices_display[0] = NULL;
       dialog->number_up_layout_2_option->choices_display[1] = NULL;
-      g_object_unref (dialog->number_up_layout_2_option);
-      dialog->number_up_layout_2_option = NULL;
+      g_clear_object (&dialog->number_up_layout_2_option);
     }
 
   g_clear_object (&dialog->number_up_layout_n_option);
@@ -1048,8 +1045,7 @@ printer_added_cb (GListModel         *model,
           strcmp (gtk_printer_get_name (printer), dialog->waiting_for_printer) == 0)
         {
           gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (model), i);
-          g_free (dialog->waiting_for_printer);
-          dialog->waiting_for_printer = NULL;
+          g_clear_pointer (&dialog->waiting_for_printer, g_free);
           g_object_unref (printer);
           return;
         }
@@ -1770,11 +1766,7 @@ mark_conflicts_callback (gpointer data)
 static void
 unschedule_idle_mark_conflicts (GtkPrintUnixDialog *dialog)
 {
-  if (dialog->mark_conflicts_id != 0)
-    {
-      g_source_remove (dialog->mark_conflicts_id);
-      dialog->mark_conflicts_id = 0;
-    }
+  g_clear_handle_id (&dialog->mark_conflicts_id, g_source_remove);
 }
 
 static void
@@ -1793,8 +1785,7 @@ options_changed_cb (GtkPrintUnixDialog *dialog)
 {
   schedule_idle_mark_conflicts (dialog);
 
-  g_free (dialog->waiting_for_printer);
-  dialog->waiting_for_printer = NULL;
+  g_clear_pointer (&dialog->waiting_for_printer, g_free);
 }
 
 static void
@@ -1840,8 +1831,7 @@ selected_printer_changed (GtkPrintUnixDialog *dialog)
   if (dialog->waiting_for_printer &&
       !dialog->internal_printer_change)
     {
-      g_free (dialog->waiting_for_printer);
-      dialog->waiting_for_printer = NULL;
+      g_clear_pointer (&dialog->waiting_for_printer, g_free);
     }
 
   disconnect_printer_details_request (dialog, FALSE);
@@ -3118,8 +3108,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
         {
           gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (model), i);
 
-          g_free (dialog->waiting_for_printer);
-          dialog->waiting_for_printer = NULL;
+          g_clear_pointer (&dialog->waiting_for_printer, g_free);
 
           g_object_unref (printer);
           return TRUE;
@@ -3177,8 +3166,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 
   dialog->initial_settings = settings;
 
-  g_free (dialog->waiting_for_printer);
-  dialog->waiting_for_printer = NULL;
+  g_clear_pointer (&dialog->waiting_for_printer, g_free);
 
   if (settings)
     {

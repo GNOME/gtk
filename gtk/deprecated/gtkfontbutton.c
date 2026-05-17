@@ -1006,8 +1006,7 @@ gtk_font_button_clicked (GtkButton *button,
       if (font_button->preview_text)
         {
           gtk_font_chooser_set_preview_text (font_dialog, font_button->preview_text);
-          g_free (font_button->preview_text);
-          font_button->preview_text = NULL;
+          g_clear_pointer (&font_button->preview_text, g_free);
         }
 
       if (font_button->font_filter)

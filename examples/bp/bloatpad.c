@@ -517,11 +517,7 @@ time_active_changed (GSimpleAction *action,
     }
   else
     {
-      if (bloatpad->timeout)
-        {
-          g_source_remove (bloatpad->timeout);
-          bloatpad->timeout = 0;
-        }
+      g_clear_handle_id (&bloatpad->timeout, g_source_remove);
     }
 
   g_simple_action_set_state (action, state);
@@ -663,11 +659,7 @@ bloat_pad_shutdown (GApplication *application)
 {
   BloatPad *bloatpad = (BloatPad *) application;
 
-  if (bloatpad->timeout)
-    {
-      g_source_remove (bloatpad->timeout);
-      bloatpad->timeout = 0;
-    }
+  g_clear_handle_id (&bloatpad->timeout, g_source_remove);
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
     ->shutdown (application);

@@ -2230,8 +2230,7 @@ gtk_text_dispose (GObject *object)
   if (priv->buffer)
     {
       buffer_disconnect_signals (self);
-      g_object_unref (priv->buffer);
-      priv->buffer = NULL;
+      g_clear_object (&priv->buffer);
     }
 
   g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
@@ -4767,11 +4766,7 @@ gtk_text_reset_layout (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (priv->cached_layout)
-    {
-      g_object_unref (priv->cached_layout);
-      priv->cached_layout = NULL;
-    }
+  g_clear_object (&priv->cached_layout);
 }
 
 static void
@@ -6691,11 +6686,7 @@ gtk_text_selection_bubble_popup_unset (GtkText *self)
   if (priv->selection_bubble)
     gtk_widget_set_visible (priv->selection_bubble, FALSE);
 
-  if (priv->selection_bubble_timeout_id)
-    {
-      g_source_remove (priv->selection_bubble_timeout_id);
-      priv->selection_bubble_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->selection_bubble_timeout_id, g_source_remove);
 }
 
 static void

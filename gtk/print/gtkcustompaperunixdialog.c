@@ -335,16 +335,14 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
   if (dialog->printer_list)
     {
       g_signal_handler_disconnect (dialog->printer_list, dialog->printer_inserted_tag);
-      g_object_unref (dialog->printer_list);
-      dialog->printer_list = NULL;
+      g_clear_object (&dialog->printer_list);
     }
 
   if (dialog->request_details_tag)
     {
       g_signal_handler_disconnect (dialog->request_details_printer,
                                    dialog->request_details_tag);
-      g_object_unref (dialog->request_details_printer);
-      dialog->request_details_printer = NULL;
+      g_clear_object (&dialog->request_details_printer);
       dialog->request_details_tag = 0;
     }
 
@@ -675,8 +673,7 @@ margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
     {
       g_signal_handler_disconnect (dialog->request_details_printer,
                                    dialog->request_details_tag);
-      g_object_unref (dialog->request_details_printer);
-      dialog->request_details_printer = NULL;
+      g_clear_object (&dialog->request_details_printer);
       dialog->request_details_tag = 0;
     }
 

@@ -1130,8 +1130,7 @@ gtk_image_clear_internal (GtkImage *self,
 
   if (self->filename)
     {
-      g_free (self->filename);
-      self->filename = NULL;
+      g_clear_pointer (&self->filename, g_free);
 
       if (notify)
         g_object_notify_by_pspec (gobject, image_props[PROP_FILE]);
@@ -1139,8 +1138,7 @@ gtk_image_clear_internal (GtkImage *self,
 
   if (self->resource_path)
     {
-      g_free (self->resource_path);
-      self->resource_path = NULL;
+      g_clear_pointer (&self->resource_path, g_free);
 
       if (notify)
         g_object_notify_by_pspec (gobject, image_props[PROP_RESOURCE]);

@@ -1153,8 +1153,7 @@ gtk_text_buffer_finalize (GObject *object)
   if (priv->tag_table)
     {
       _gtk_text_tag_table_remove_buffer (priv->tag_table, buffer);
-      g_object_unref (priv->tag_table);
-      priv->tag_table = NULL;
+      g_clear_object (&priv->tag_table);
     }
 
   if (priv->btree)
@@ -4042,8 +4041,7 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
       g_free (selection_clipboard);
     }
 
-  g_slist_free (priv->selection_clipboards);
-  priv->selection_clipboards = NULL;
+  g_clear_slist (&priv->selection_clipboards, NULL);
 }
 
 /**
@@ -4460,8 +4458,7 @@ clear_log_attr_cache (GtkTextLogAttrCache *cache)
 
   for (i = 0; i < ATTR_CACHE_SIZE; i++)
     {
-      g_free (cache->entries[i].attrs);
-      cache->entries[i].attrs = NULL;
+      g_clear_pointer (&cache->entries[i].attrs, g_free);
     }
 }
 

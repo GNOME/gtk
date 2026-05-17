@@ -217,11 +217,7 @@ gtk_inspector_flash_widget (GtkInspectorWindow *iw,
   if (!gtk_widget_get_visible (widget) || !gtk_widget_get_mapped (widget))
     return;
 
-  if (iw->flash_cnx != 0)
-    {
-      g_source_remove (iw->flash_cnx);
-      iw->flash_cnx = 0;
-    }
+  g_clear_handle_id (&iw->flash_cnx, g_source_remove);
 
   start_flash (iw, widget);
   iw->flash_cnx = g_timeout_add (150, (GSourceFunc) on_flash_timeout, iw);

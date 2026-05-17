@@ -154,8 +154,7 @@ make_list (const char   *text,
           if (!g_utf8_validate (str, -1, NULL))
             {
               g_warning ("Error converting selection from UTF8_STRING");
-              g_free (str);
-              str = NULL;
+              g_clear_pointer (&str, g_free);
             }
         }
 
@@ -248,8 +247,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
                 {
                   g_warning ("Error converting to UTF-8 from '%s': %s",
                              charset, error->message);
-                  g_error_free (error);
-                  error = NULL;
+                  g_clear_error (&error);
                 }
             }
           else

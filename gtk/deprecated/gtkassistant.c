@@ -1365,11 +1365,7 @@ gtk_assistant_dispose (GObject *object)
       assistant->forward_data_destroy = NULL;
     }
 
-  if (assistant->visited_pages)
-    {
-      g_slist_free (assistant->visited_pages);
-      assistant->visited_pages = NULL;
-    }
+  g_clear_slist (&assistant->visited_pages, NULL);
 
   G_OBJECT_CLASS (gtk_assistant_parent_class)->dispose (object);
 }
@@ -1432,8 +1428,7 @@ gtk_assistant_unmap (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
 
-  g_slist_free (assistant->visited_pages);
-  assistant->visited_pages = NULL;
+  g_clear_slist (&assistant->visited_pages, NULL);
   assistant->current_page  = NULL;
 
   GTK_WIDGET_CLASS (gtk_assistant_parent_class)->unmap (widget);
@@ -2186,8 +2181,7 @@ gtk_assistant_commit (GtkAssistant *assistant)
 {
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
 
-  g_slist_free (assistant->visited_pages);
-  assistant->visited_pages = NULL;
+  g_clear_slist (&assistant->visited_pages, NULL);
 
   assistant->committed = TRUE;
 

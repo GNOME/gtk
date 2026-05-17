@@ -158,11 +158,7 @@ pixbuf_paintable_dispose (GObject *object)
   g_clear_pointer (&self->resource_path, g_free);
   g_clear_object (&self->anim);
   g_clear_object (&self->iter);
-  if (self->timeout)
-    {
-      g_source_remove (self->timeout);
-      self->timeout = 0;
-    }
+  g_clear_handle_id (&self->timeout, g_source_remove);
 
   G_OBJECT_CLASS (pixbuf_paintable_parent_class)->dispose (object);
 }

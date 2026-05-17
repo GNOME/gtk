@@ -209,7 +209,7 @@ struct _GtkCellRendererTextPrivate
   guint align_set         : 1;
 
   gulong focus_out_id;
-  gulong entry_menu_popdown_timeout;
+  guint entry_menu_popdown_timeout;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
@@ -1710,17 +1710,9 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 
   g_clear_object (&priv->entry);
 
-  if (priv->focus_out_id > 0)
-    {
-      g_signal_handler_disconnect (entry, priv->focus_out_id);
-      priv->focus_out_id = 0;
-    }
+  g_clear_signal_handler (&priv->focus_out_id, entry);
 
-  if (priv->entry_menu_popdown_timeout)
-    {
-      g_source_remove (priv->entry_menu_popdown_timeout);
-      priv->entry_menu_popdown_timeout = 0;
-    }
+  g_clear_handle_id (&priv->entry_menu_popdown_timeout, g_source_remove);
 
   g_object_get (entry,
                 "editing-canceled", &canceled,
@@ -1784,11 +1776,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
 
   priv->in_entry_menu = FALSE;
-  if (priv->entry_menu_popdown_timeout)
-    {
-      g_source_remove (priv->entry_menu_popdown_timeout);
-      priv->entry_menu_popdown_timeout = 0;
-    }
+  g_clear_handle_id (&priv->entry_menu_popdown_timeout, g_source_remove);
 
   g_signal_connect (priv->entry, "editing-done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done), celltext);

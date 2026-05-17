@@ -1191,8 +1191,7 @@ gtk_list_box_parent_cb (GObject    *object,
   if (box->adjustment_changed_id != 0 &&
       box->scrollable_parent != NULL)
     {
-      g_signal_handler_disconnect (box->scrollable_parent,
-                                   box->adjustment_changed_id);
+      g_clear_signal_handler (&box->adjustment_changed_id, box->scrollable_parent);
     }
 
   if (parent && GTK_IS_SCROLLABLE (parent))

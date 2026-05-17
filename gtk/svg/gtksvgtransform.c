@@ -1120,9 +1120,8 @@ svg_transform_interpolate (const SvgValue    *value0,
           for (unsigned int j = i; j < tf0->n_transforms; j++)
             transform = primitive_transform_apply (&tf0->transforms[j], transform);
           gsk_transform_to_matrix (transform, &mat1);
-          gsk_transform_unref (transform);
+          g_clear_pointer (&transform, gsk_transform_unref);
 
-          transform = NULL;
           for (unsigned int j = i; j < tf1->n_transforms; j++)
             transform = primitive_transform_apply (&tf1->transforms[j], transform);
           gsk_transform_to_matrix (transform, &mat2);

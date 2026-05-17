@@ -324,8 +324,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
   if (priv->pending_task)
     {
       g_task_return_int (priv->pending_task, GPOINTER_TO_SIZE (g_task_get_task_data (priv->pending_task)));
-      g_object_unref (priv->pending_task);
-      priv->pending_task = NULL;
+      g_clear_object (&priv->pending_task);
     }
 }
 

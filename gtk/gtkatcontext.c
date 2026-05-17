@@ -102,16 +102,12 @@ gtk_at_context_dispose (GObject *gobject)
 
   if (self->accessible_parent != NULL)
     {
-      g_object_remove_weak_pointer (G_OBJECT (self->accessible_parent),
-                                    (gpointer *) &self->accessible_parent);
-      self->accessible_parent = NULL;
+      g_clear_weak_pointer (&self->accessible_parent);
     }
 
   if (self->next_accessible_sibling != NULL)
     {
-      g_object_remove_weak_pointer (G_OBJECT (self->next_accessible_sibling),
-                                    (gpointer *) &self->next_accessible_sibling);
-      self->next_accessible_sibling = NULL;
+      g_clear_weak_pointer (&self->next_accessible_sibling);
     }
 
   G_OBJECT_CLASS (gtk_at_context_parent_class)->dispose (gobject);

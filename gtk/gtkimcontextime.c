@@ -180,8 +180,7 @@ gtk_im_context_ime_finalize (GObject *obj)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (obj);
 
-  g_free (context_ime->priv);
-  context_ime->priv = NULL;
+  g_clear_pointer (&context_ime->priv, g_free);
 
   G_OBJECT_CLASS (gtk_im_context_ime_parent_class)->finalize (obj);
 }

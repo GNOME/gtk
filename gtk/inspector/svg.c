@@ -353,11 +353,7 @@ dispose (GObject *o)
   g_list_free_full (self->errors, svg_error_free);
   self->errors = NULL;
 
-  if (self->timeout)
-    {
-      g_source_remove (self->timeout);
-      self->timeout = 0;
-    }
+  g_clear_handle_id (&self->timeout, g_source_remove);
 
   g_clear_object (&self->object);
 

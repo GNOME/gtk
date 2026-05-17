@@ -195,8 +195,7 @@ gtk_css_image_icon_theme_dispose (GObject *object)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (object);
 
-  g_free (icon_theme->name);
-  icon_theme->name = NULL;
+  g_clear_pointer (&icon_theme->name, g_free);
 
   g_clear_object (&icon_theme->cached_icon);
   g_clear_pointer (&icon_theme->colors[0], gtk_css_value_unref);

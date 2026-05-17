@@ -84,8 +84,7 @@ style_elt_free (gpointer p)
 static void
 lang_string_clear (LangString *l)
 {
-  g_free (l->string);
-  l->string = NULL;
+  g_clear_pointer (&l->string, g_free);
   l->lang = NULL;
   l->type = NULL;
 }

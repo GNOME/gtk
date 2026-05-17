@@ -83,7 +83,7 @@ struct _GtkStyleContextPrivate
 {
   GdkDisplay *display;
 
-  guint cascade_changed_id;
+  gulong cascade_changed_id;
   GtkStyleCascade *cascade;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
@@ -167,8 +167,7 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
 
   if (priv->cascade)
     {
-      g_signal_handler_disconnect (priv->cascade, priv->cascade_changed_id);
-      priv->cascade_changed_id = 0;
+      g_clear_signal_handler (&priv->cascade_changed_id, priv->cascade);
       g_object_unref (priv->cascade);
     }
 

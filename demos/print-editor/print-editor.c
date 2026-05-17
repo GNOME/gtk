@@ -404,10 +404,8 @@ print_done (GtkPrintOperation *op,
 static void
 end_print (GtkPrintOperation *op, GtkPrintContext *context, PrintData *print_data)
 {
-  g_list_free (print_data->page_breaks);
-  print_data->page_breaks = NULL;
-  g_object_unref (print_data->layout);
-  print_data->layout = NULL;
+  g_clear_list (&print_data->page_breaks, NULL);
+  g_clear_object (&print_data->layout);
 }
 
 static void

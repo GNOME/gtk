@@ -196,8 +196,7 @@ gtk_nuclear_media_stream_pause (GtkMediaStream *stream)
    * back to 0 so that the finalize function doesn't try
    * to remove it again.
    */
-  g_source_remove (nuclear->source_id);
-  nuclear->source_id = 0;
+  g_clear_handle_id (&nuclear->source_id, g_source_remove);
   nuclear->last_time = 0;
 }
 

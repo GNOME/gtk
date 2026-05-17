@@ -573,11 +573,7 @@ clear_color_state (gpointer inout_color_state)
 {
   GdkColorState **cs = inout_color_state;
 
-  if (*cs)
-    {
-      gdk_color_state_unref (*cs);
-      *cs = NULL;
-    }
+  g_clear_pointer (cs, gdk_color_state_unref);
 }
 
 static gboolean

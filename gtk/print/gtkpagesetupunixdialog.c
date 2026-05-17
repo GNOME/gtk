@@ -355,8 +355,7 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
     {
       g_signal_handler_disconnect (dialog->request_details_printer,
                                    dialog->request_details_tag);
-      g_object_unref (dialog->request_details_printer);
-      dialog->request_details_printer = NULL;
+      g_clear_object (&dialog->request_details_printer);
       dialog->request_details_tag = 0;
     }
 
@@ -365,11 +364,7 @@ gtk_page_setup_unix_dialog_finalize (GObject *object)
   g_clear_object (&dialog->custom_paper_list);
   g_clear_object (&dialog->manage_papers_list);
 
-  if (dialog->print_settings)
-    {
-      g_object_unref (dialog->print_settings);
-      dialog->print_settings = NULL;
-    }
+  g_clear_object (&dialog->print_settings);
 
   for (node = dialog->print_backends; node != NULL; node = node->next)
     gtk_print_backend_destroy (GTK_PRINT_BACKEND (node->data));
@@ -558,8 +553,7 @@ printer_changed_callback (GtkDropDown            *combo_box,
     {
       g_signal_handler_disconnect (dialog->request_details_printer,
                                    dialog->request_details_tag);
-      g_object_unref (dialog->request_details_printer);
-      dialog->request_details_printer = NULL;
+      g_clear_object (&dialog->request_details_printer);
       dialog->request_details_tag = 0;
     }
 

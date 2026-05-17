@@ -455,8 +455,7 @@ gtk_accelerator_parse_with_keycode (const char      *accelerator,
 
                   if (j == 0)
                     {
-                      g_free (*accelerator_codes);
-                      *accelerator_codes = NULL;
+                      g_clear_pointer (accelerator_codes, g_free);
                       /* Not in keymap */
                       error = TRUE;
                       goto out;

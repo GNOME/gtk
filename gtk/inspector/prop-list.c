@@ -567,7 +567,7 @@ cleanup_object (GtkInspectorPropList *pl)
 {
   if (pl->priv->object &&
       g_signal_handler_is_connected (pl->priv->object, pl->priv->notify_handler_id))
-    g_signal_handler_disconnect (pl->priv->object, pl->priv->notify_handler_id);
+    g_clear_signal_handler (&pl->priv->notify_handler_id, pl->priv->object);
 
   pl->priv->object = NULL;
   pl->priv->notify_handler_id = 0;

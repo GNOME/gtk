@@ -211,17 +211,9 @@ gtk_css_static_style_dispose (GObject *object)
 {
   GtkCssStaticStyle *style = GTK_CSS_STATIC_STYLE (object);
 
-  if (style->sections)
-    {
-      g_ptr_array_unref (style->sections);
-      style->sections = NULL;
-    }
+  g_clear_pointer (&style->sections, g_ptr_array_unref);
 
-  if (style->original_values)
-    {
-      g_ptr_array_unref (style->original_values);
-      style->original_values = NULL;
-    }
+  g_clear_pointer (&style->original_values, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }

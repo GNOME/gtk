@@ -87,10 +87,8 @@ gtk_css_image_scaled_dispose (GObject *object)
 
   for (i = 0; i < scaled->n_images; i++)
     g_object_unref (scaled->images[i]);
-  g_free (scaled->images);
-  scaled->images = NULL;
-  g_free (scaled->scales);
-  scaled->scales = NULL;
+  g_clear_pointer (&scaled->images, g_free);
+  g_clear_pointer (&scaled->scales, g_free);
 
   G_OBJECT_CLASS (_gtk_css_image_scaled_parent_class)->dispose (object);
 }

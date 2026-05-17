@@ -137,11 +137,7 @@ gtk_search_engine_model_stop (GtkSearchEngine *engine)
 
   model = GTK_SEARCH_ENGINE_MODEL (engine);
 
-  if (model->idle != 0)
-    {
-      g_source_remove (model->idle);
-      model->idle = 0;
-    }
+  g_clear_handle_id (&model->idle, g_source_remove);
 }
 
 static void

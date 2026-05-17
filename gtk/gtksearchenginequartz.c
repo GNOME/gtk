@@ -154,11 +154,7 @@ gtk_search_engine_quartz_finalize (GObject *object)
 
   QUARTZ_POOL_RELEASE;
 
-  if (quartz->priv->query)
-    {
-      g_object_unref (quartz->priv->query);
-      quartz->priv->query = NULL;
-    }
+  g_clear_object (&quartz->priv->query);
 
   G_OBJECT_CLASS (_gtk_search_engine_quartz_parent_class)->finalize (object);
 }

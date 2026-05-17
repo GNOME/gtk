@@ -942,8 +942,7 @@ gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 
   if (spin->timer)
     {
-      g_source_remove (spin->timer);
-      spin->timer = 0;
+      g_clear_handle_id (&spin->timer, g_source_remove);
       spin->need_timer = FALSE;
 
       did_spin = TRUE;

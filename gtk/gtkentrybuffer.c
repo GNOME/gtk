@@ -267,8 +267,7 @@ gtk_entry_buffer_finalize (GObject *obj)
   if (pv->normal_text)
     {
       trash_area (pv->normal_text, pv->normal_text_size);
-      g_free (pv->normal_text);
-      pv->normal_text = NULL;
+      g_clear_pointer (&pv->normal_text, g_free);
       pv->normal_text_bytes = pv->normal_text_size = 0;
       pv->normal_text_chars = 0;
     }

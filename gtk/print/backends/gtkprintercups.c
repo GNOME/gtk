@@ -483,18 +483,10 @@ colord_update_device (GtkPrinterCups *printer)
 #endif
 
   /* old cached profile no longer valid */
-  if (printer->colord_profile)
-    {
-      g_object_unref (printer->colord_profile);
-      printer->colord_profile = NULL;
-    }
+  g_clear_object (&printer->colord_profile);
 
   /* old cached device no longer valid */
-  if (printer->colord_device)
-    {
-      g_object_unref (printer->colord_device);
-      printer->colord_device = NULL;
-    }
+  g_clear_object (&printer->colord_device);
 
   /* generate a known ID */
   colord_device_id = g_strdup_printf ("cups-%s", gtk_printer_get_name (GTK_PRINTER (printer)));

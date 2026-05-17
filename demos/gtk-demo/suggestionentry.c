@@ -308,11 +308,7 @@ suggestion_entry_dispose (GObject *object)
 {
   SuggestionEntry *self = SUGGESTION_ENTRY (object);
 
-  if (self->changed_id)
-    {
-      g_signal_handler_disconnect (self->entry, self->changed_id);
-      self->changed_id = 0;
-    }
+  g_clear_signal_handler (&self->changed_id, self->entry);
   g_clear_pointer (&self->entry, gtk_widget_unparent);
   g_clear_pointer (&self->arrow, gtk_widget_unparent);
   g_clear_pointer (&self->popup, gtk_widget_unparent);

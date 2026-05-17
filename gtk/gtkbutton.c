@@ -850,8 +850,7 @@ gtk_button_finish_activate (GtkButton *button,
 
   gtk_widget_remove_css_class (GTK_WIDGET (button), "keyboard-activating");
 
-  g_source_remove (priv->activate_timeout);
-  priv->activate_timeout = 0;
+  g_clear_handle_id (&priv->activate_timeout, g_source_remove);
 
   priv->button_down = FALSE;
 

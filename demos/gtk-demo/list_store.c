@@ -235,11 +235,7 @@ window_closed (GtkWidget *widget,
 {
   model = NULL;
   window = NULL;
-  if (timeout != 0)
-    {
-      g_source_remove (timeout);
-      timeout = 0;
-    }
+  g_clear_handle_id (&timeout, g_source_remove);
   return FALSE;
 }
 
@@ -310,11 +306,7 @@ do_list_store (GtkWidget *do_widget)
     {
       gtk_window_destroy (GTK_WINDOW (window));
       window = NULL;
-      if (timeout != 0)
-        {
-          g_source_remove (timeout);
-          timeout = 0;
-        }
+      g_clear_handle_id (&timeout, g_source_remove);
     }
 
   return window;

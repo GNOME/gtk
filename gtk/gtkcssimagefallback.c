@@ -122,8 +122,7 @@ gtk_css_image_fallback_dispose (GObject *object)
 
   for (i = 0; i < fallback->n_images; i++)
     g_object_unref (fallback->images[i]);
-  g_free (fallback->images);
-  fallback->images = NULL;
+  g_clear_pointer (&fallback->images, g_free);
 
   if (fallback->color)
     {

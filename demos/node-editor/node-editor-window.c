@@ -1345,8 +1345,7 @@ node_editor_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (gtk_widget_get_clipboard (widget), update_paste_action, widget);
 
   frameclock = gtk_widget_get_frame_clock (widget);
-  g_signal_handler_disconnect (frameclock, self->after_paint_handler);
-  self->after_paint_handler = 0;
+  g_clear_signal_handler (&self->after_paint_handler, frameclock);
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i ++)
     {

@@ -1459,8 +1459,7 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
                                             gtk_combo_box_model_row_changed,
                                             combo_box);
 
-      g_object_unref (priv->model);
-      priv->model = NULL;
+      g_clear_object (&priv->model);
     }
 
   if (priv->active_row)
@@ -2421,11 +2420,7 @@ gtk_combo_box_dispose (GObject* object)
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
 
-  if (priv->popup_idle_id > 0)
-    {
-      g_source_remove (priv->popup_idle_id);
-      priv->popup_idle_id = 0;
-    }
+  g_clear_handle_id (&priv->popup_idle_id, g_source_remove);
 
   if (priv->box)
     {

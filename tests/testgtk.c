@@ -5034,14 +5034,9 @@ static void
 destroy_progress (GtkWidget     *widget,
 		  ProgressData **pdata)
 {
-  if ((*pdata)->timer)
-    {
-      g_source_remove ((*pdata)->timer);
-      (*pdata)->timer = 0;
-    }
+  g_clear_handle_id (&(*pdata)->timer, g_source_remove);
   (*pdata)->window = NULL;
-  g_free (*pdata);
-  *pdata = NULL;
+  g_clear_pointer (pdata, g_free);
 }
 
 static void
@@ -5105,11 +5100,7 @@ toggle_running (GtkWidget *widget, ProgressData *pdata)
     }
   else
     {
-      if (pdata->timer != 0)
-        {
-          g_source_remove (pdata->timer);
-          pdata->timer = 0;
-        }
+      g_clear_handle_id (&pdata->timer, g_source_remove);
     }
 }
 
@@ -5303,11 +5294,7 @@ static void
 stop_timeout_test (GtkWidget *widget,
 		   gpointer   data)
 {
-  if (timer)
-    {
-      g_source_remove (timer);
-      timer = 0;
-    }
+  g_clear_handle_id (&timer, g_source_remove);
 }
 
 static void

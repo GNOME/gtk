@@ -204,8 +204,7 @@ gtk_shortcuts_section_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **)&self->stack, gtk_widget_unparent);
   g_clear_pointer (&self->footer, gtk_widget_unparent);
 
-  g_list_free (self->groups);
-  self->groups = NULL;
+  g_clear_list (&self->groups, NULL);
 
   G_OBJECT_CLASS (gtk_shortcuts_section_parent_class)->dispose (object);
 }

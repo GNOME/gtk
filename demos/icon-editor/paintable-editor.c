@@ -645,11 +645,7 @@ paintable_editor_dispose (GObject *object)
   g_list_free_full (self->errors, svg_error_free);
   self->errors = NULL;
 
-  if (self->timeout)
-    {
-      g_source_remove (self->timeout);
-      self->timeout = 0;
-    }
+  g_clear_handle_id (&self->timeout, g_source_remove);
 
   if (self->paintable)
     g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);

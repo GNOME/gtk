@@ -2129,8 +2129,7 @@ gdk_x11_display_make_default (GdkDisplay *display)
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   const char *startup_id;
 
-  g_free (display_x11->startup_notification_id);
-  display_x11->startup_notification_id = NULL;
+  g_clear_pointer (&display_x11->startup_notification_id, g_free);
 
   startup_id = gdk_get_startup_notification_id ();
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS

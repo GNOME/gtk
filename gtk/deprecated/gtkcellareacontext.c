@@ -183,12 +183,7 @@ gtk_cell_area_context_dispose (GObject *object)
   GtkCellAreaContext        *context = GTK_CELL_AREA_CONTEXT (object);
   GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
-  if (priv->cell_area)
-    {
-      g_object_unref (priv->cell_area);
-
-      priv->cell_area = NULL;
-    }
+  g_clear_object (&priv->cell_area);
 
   G_OBJECT_CLASS (gtk_cell_area_context_parent_class)->dispose (object);
 }
