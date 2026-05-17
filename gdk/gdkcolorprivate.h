@@ -22,6 +22,7 @@
 #include <gdk/gdkcolorstate.h>
 #include <gdk/gdkrgba.h>
 
+G_BEGIN_DECLS
 
 typedef struct _GdkColor GdkColor;
 
