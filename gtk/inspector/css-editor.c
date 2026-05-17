@@ -468,6 +468,8 @@ constructed (GObject *object)
 {
   GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (object);
 
+  G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->constructed (object);
+
   create_provider (ce);
 }
 

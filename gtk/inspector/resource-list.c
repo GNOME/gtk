@@ -697,6 +697,8 @@ constructed (GObject *object)
   GtkSorter *column_sorter;
   GtkSorter *sorter;
 
+  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->constructed (object);
+
   g_signal_connect (rl->open_details_button, "clicked",
                     G_CALLBACK (open_details), rl);
   g_signal_connect (rl->close_details_button, "clicked",

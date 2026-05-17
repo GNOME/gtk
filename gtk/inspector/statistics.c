@@ -797,6 +797,8 @@ constructed (GObject *object)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
 
+  G_OBJECT_CLASS (gtk_inspector_statistics_parent_class)->constructed (object);
+
   g_signal_connect (sl->priv->button, "toggled", G_CALLBACK (toggle_record), sl);
 
   if (has_instance_counts ())

@@ -1814,6 +1814,8 @@ constructed (GObject *object)
   gboolean can_modify;
   GtkWidget *box;
 
+  G_OBJECT_CLASS (gtk_inspector_prop_editor_parent_class)->constructed (object);
+
   spec = find_property (self);
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
