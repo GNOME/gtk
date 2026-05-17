@@ -3186,7 +3186,9 @@ static guint tick_callback_id;
  * don't have to worry about when a frame clock is assigned to a widget.
  *
  * To remove a tick callback, pass the ID that is returned by this function
- * to [method@Gtk.Widget.remove_tick_callback].
+ * to [method@Gtk.Widget.remove_tick_callback]. Tick callbacks will be
+ * removed automatically when the widget is destroyed, so you do not have
+ * to remove it yourself.
  *
  * Returns: an ID for this callback
  */
