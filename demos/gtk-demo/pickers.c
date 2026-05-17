@@ -74,14 +74,13 @@ file_opened (GObject *source,
   set_file (file, data);
 }
 
-static gboolean
+static void
 abort_mission (gpointer data)
 {
   GCancellable *cancellable = data;
 
   g_cancellable_cancel (cancellable);
-
-  return G_SOURCE_REMOVE;
+  g_object_unref (cancellable);
 }
 
 static void
@@ -96,9 +95,9 @@ open_file (GtkButton *picker,
 
   cancellable = g_cancellable_new ();
 
-  g_timeout_add_seconds_full (G_PRIORITY_DEFAULT,
-                              20,
-                              abort_mission, g_object_ref (cancellable), g_object_unref);
+  g_timeout_add_seconds_once (20,
+                              abort_mission,
+                              g_object_ref (cancellable));
 
   gtk_file_dialog_open (dialog, parent, cancellable, file_opened, label);
 
@@ -202,9 +201,9 @@ print_file (GtkButton *picker)
 
   cancellable = g_cancellable_new ();
 
-  id = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT,
-                                   20,
-                                   abort_mission, g_object_ref (cancellable), g_object_unref);
+  id = g_timeout_add_seconds_once (20,
+                                   abort_mission,
+                                   g_object_ref (cancellable));
   g_object_set_data (G_OBJECT (cancellable), "timeout", GUINT_TO_POINTER (id));
 
   gtk_print_dialog_print_file (dialog, parent, NULL, file, cancellable, print_file_done, NULL);
