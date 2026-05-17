@@ -36,3 +36,5 @@ typedef struct _GdkAndroidSeatClass GdkAndroidSeatClass;
 
 GDK_AVAILABLE_IN_4_18
 GType gdk_android_seat_get_type (void);
+
+G_END_DECLS
