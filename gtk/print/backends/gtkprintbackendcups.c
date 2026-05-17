@@ -1394,6 +1394,7 @@ lookup_auth_info (gpointer user_data)
         }
     }
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_idle_add (check_auth_info, user_data);
 
   if (dispatch->backend->secrets_service_available && need_secret_auth_info)

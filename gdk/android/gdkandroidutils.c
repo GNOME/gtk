@@ -39,6 +39,7 @@ gdk_android_glib_context_run_on_main_data_destroy (jobject runnable)
 void
 _gdk_android_glib_context_run_on_main (JNIEnv *env, jclass klass, jobject runnable)
 {
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_idle_add_full (
       G_PRIORITY_DEFAULT,
       (GSourceFunc) gdk_android_glib_context_run_on_main_cb,

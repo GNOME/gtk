@@ -521,6 +521,7 @@ main (int    argc,
 
   gtk_window_present (GTK_WINDOW (window));
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_idle_add (dance, treeview);
   
   while (!done)
