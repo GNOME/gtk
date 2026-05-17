@@ -300,6 +300,7 @@ main (int argc, char *argv[])
   GtkTreeModel *completion_model;
   GtkCellRenderer *cell;
   gboolean done = FALSE;
+  guint timer_id;
 
   gtk_init ();
 
@@ -394,7 +395,7 @@ main (int argc, char *argv[])
   gtk_entry_completion_set_text_column (completion, 0);
 
   /* Fill the completion dynamically */
-  g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
+  timer_id = g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
   gtk_box_append (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"));
@@ -414,6 +415,8 @@ main (int argc, char *argv[])
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);
+
+  g_clear_handle_id (&timer_id, g_source_remove);
 
   return 0;
 }

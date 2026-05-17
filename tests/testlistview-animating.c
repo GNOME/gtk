@@ -117,7 +117,7 @@ main (int   argc,
   GListModel *toplevels;
   GtkSortListModel *sort;
   GtkSorter *sorter;
-  guint i;
+  guint do_stuff_id, revert_sort_id, i;
   GtkListItemFactory *factory;
   GtkSelectionModel *selection;
 
@@ -175,14 +175,17 @@ main (int   argc,
                            create_widget_for_listbox,
                            NULL, NULL);
 
-  g_timeout_add (100, do_stuff, store);
-  g_timeout_add_seconds (3, revert_sort, sorter);
+  do_stuff_id = g_timeout_add (100, do_stuff, store);
+  revert_sort_id = g_timeout_add_seconds (3, revert_sort, sorter);
 
   gtk_window_present (GTK_WINDOW (win));
 
   toplevels = gtk_window_get_toplevels ();
   while (g_list_model_get_n_items (toplevels))
     g_main_context_iteration (NULL, TRUE);
+
+  g_clear_handle_id (&do_stuff_id, g_source_remove);
+  g_clear_handle_id (&revert_sort_id, g_source_remove);
 
   return 0;
 }
