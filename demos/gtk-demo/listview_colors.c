@@ -711,6 +711,7 @@ refill (GtkWidget    *button,
         GtkColorList *colors)
 {
   gtk_color_list_set_size (colors, 0);
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   gtk_widget_add_tick_callback (button, add_colors, g_object_ref (colors), g_object_unref);
 }
  

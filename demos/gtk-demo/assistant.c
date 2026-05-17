@@ -37,6 +37,7 @@ static void
 on_assistant_apply (GtkWidget *widget, gpointer data)
 {
   /* Start a timer to simulate changes taking a few seconds to apply. */
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_timeout_add (100, apply_changes_gradually, widget);
 }
 

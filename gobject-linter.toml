@@ -17,3 +17,6 @@ extra_propagation_functions = [
   "error_selecting_dragged_file_dialog",
   "error_trashing_file",
 ]
+
+[rules.g_source_id_not_stored]
+check_once_functions = false
