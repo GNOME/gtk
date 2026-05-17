@@ -104,5 +104,3 @@ unsigned int css_parser_parse_number_percentage (GtkCssParser *parser,
                                                  unsigned int  n,
                                                  gpointer      data);
 
-G_END_DECLS
-

@@ -64,5 +64,3 @@ void         color_matrix_type_get_color_matrix    (ColorMatrixType    type,
                                                     SvgValue          *values,
                                                     graphene_matrix_t *matrix,
                                                     graphene_vec4_t   *offset);
-
-G_END_DECLS

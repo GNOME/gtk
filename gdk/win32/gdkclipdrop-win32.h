@@ -20,8 +20,6 @@
 
 #pragma once
 
-G_BEGIN_DECLS
-
 #define _gdk_atom_array_index(a, i) (g_array_index (a, const char *, i))
 #define _gdk_win32_clipdrop_atom(c, i) (_gdk_atom_array_index (c->known_atoms, i))
 #define _gdk_cf_array_index(a, i) (g_array_index (a, UINT, i))
