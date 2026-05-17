@@ -560,9 +560,10 @@ remove_pulse (gpointer pulse_id)
   g_source_remove (GPOINTER_TO_UINT (pulse_id));
 }
 
-static gboolean
-pulse_it (GtkWidget *widget)
+static void
+pulse_it (gpointer data)
 {
+  GtkWidget *widget = data;
   guint pulse_id;
 
   if (GTK_IS_ENTRY (widget))
@@ -570,10 +571,8 @@ pulse_it (GtkWidget *widget)
   else
     gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
 
-  pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+  pulse_id = g_timeout_add_once (pulse_time, pulse_it, widget);
   g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -597,7 +596,7 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
     {
       if (pulse_id == 0 && (GTK_IS_PROGRESS_BAR (widget) || pulse_entry_mode % 3 == 2))
         {
-          pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+          pulse_id = g_timeout_add_once (pulse_time, pulse_it, widget);
           g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
         }
     }
@@ -2275,6 +2274,7 @@ activate (GApplication *app)
   GAction *action;
   GError *error = NULL;
   GtkEventController *controller;
+  guint pulse_id;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -2604,7 +2604,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
-  g_timeout_add (100, (GSourceFunc)pulse_it, widget);
+  pulse_id = g_timeout_add_once (100, pulse_it, widget);
+  g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "scale3");
   gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL, NULL);
