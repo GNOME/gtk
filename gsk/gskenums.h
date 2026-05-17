@@ -21,6 +21,11 @@
 #error "Only <gsk/gsk.h> can be included directly."
 #endif
 
+#include <glib.h>
+#include <gdk/version/gdkversionmacros.h>
+
+G_BEGIN_DECLS
+
 /**
  * GskRenderNodeType:
  * @GSK_NOT_A_RENDER_NODE: Error type. No node will ever have this type.
@@ -602,3 +607,5 @@ typedef enum
   GSK_MASK_MODE_LUMINANCE,
   GSK_MASK_MODE_INVERTED_LUMINANCE
 } GskMaskMode;
+
+G_END_DECLS

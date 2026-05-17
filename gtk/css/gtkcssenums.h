@@ -31,6 +31,8 @@
 #include <glib.h>
 #include <gdk/version/gdkversionmacros.h>
 
+G_BEGIN_DECLS
+
 /**
  * GtkCssParserError:
  * @GTK_CSS_PARSER_ERROR_FAILED: Unknown failure.
@@ -73,3 +75,4 @@ typedef enum
   GTK_CSS_PARSER_WARNING_UNIMPLEMENTED
 } GtkCssParserWarning;
 
+G_END_DECLS
