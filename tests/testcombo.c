@@ -65,15 +65,6 @@ create_tree_blaat (void)
 			    2, FALSE,
                             -1);
 
-#if 0
-        gtk_tree_store_append (store, &iter, NULL);
-        gtk_tree_store_set (store, &iter,
-                            0, NULL,
-                            1, "separator",
-			    2, TRUE,
-                            -1);
-#endif
-
         gtk_tree_store_append (store, &iter, NULL);
         gtk_tree_store_set (store, &iter,
                             0, "document-open",
@@ -946,6 +937,7 @@ main (int argc, char **argv)
         char *text;
         int i;
         gboolean done = FALSE;
+        guint capital_animation_id;
 
         gtk_init ();
 
@@ -1154,9 +1146,6 @@ main (int argc, char **argv)
 					      is_separator, NULL, NULL);
 						
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
-#if 0
-	g_timeout_add (1000, (GSourceFunc) animation_timer, model);
-#endif
 
         /* GtkComboBox (grid mode) */
         tmp = gtk_frame_new ("GtkComboBox (grid mode)");
@@ -1227,9 +1216,7 @@ main (int argc, char **argv)
 	gtk_tree_path_free (path);
         gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combobox), &iter);
 
-#if 1
-	g_timeout_add (1000, (GSourceFunc) capital_animation, model);
-#endif
+	capital_animation_id = g_timeout_add (1000, (GSourceFunc) capital_animation, model);
 
         /* Aligned Food */
         tmp = gtk_frame_new ("Hungry ?");
@@ -1301,6 +1288,8 @@ main (int argc, char **argv)
 
         while (!done)
           g_main_context_iteration (NULL, TRUE);
+
+        g_clear_handle_id (&capital_animation_id, g_source_remove);
 
         return 0;
 }

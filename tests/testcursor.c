@@ -66,6 +66,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *label;
   gboolean done = FALSE;
+  guint change_cursor_id;
 
   gtk_init ();
 
@@ -76,12 +77,14 @@ main (int argc, char *argv[])
   label = gtk_label_new ("");
   gtk_window_set_child (GTK_WINDOW (window), label);
 
-  gtk_widget_add_tick_callback (window, change_cursor, NULL, NULL);
+  change_cursor_id = gtk_widget_add_tick_callback (window, change_cursor, NULL, NULL);
 
   gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);
+
+  gtk_widget_remove_tick_callback (window, change_cursor_id);
 
   return 0;
 }

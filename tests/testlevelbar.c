@@ -84,6 +84,7 @@ main (int argc, char *argv[])
   GtkWidget *box2;
   GtkWidget *sw;
   gboolean done = FALSE;
+  guint increase_level_id;
 
   gtk_init ();
 
@@ -110,9 +111,10 @@ main (int argc, char *argv[])
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
-  g_timeout_add (100, increase_level, bar);
+  increase_level_id = g_timeout_add (100, increase_level, bar);
   while (!done)
     g_main_context_iteration (NULL, TRUE);
+  g_clear_handle_id (&increase_level_id, g_source_remove);
 
   return 0;
 }
