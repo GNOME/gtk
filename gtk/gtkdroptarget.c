@@ -898,7 +898,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
       g_signal_new (I_("drop"),
                     G_TYPE_FROM_CLASS (class),
                     G_SIGNAL_RUN_LAST,
-                    0,
+                    G_STRUCT_OFFSET (GtkDropTargetClass, drop),
                     g_signal_accumulator_first_wins, NULL,
                     _gtk_marshal_BOOLEAN__BOXED_DOUBLE_DOUBLE,
                     G_TYPE_BOOLEAN, 3,
