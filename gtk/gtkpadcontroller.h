@@ -94,5 +94,7 @@ void  gtk_pad_controller_set_action         (GtkPadController *controller,
                                              const char       *label,
                                              const char       *action_name);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPadController, g_object_unref)
+
 G_END_DECLS
 

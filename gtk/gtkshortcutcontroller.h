@@ -64,5 +64,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_shortcut_controller_remove_shortcut         (GtkShortcutController  *self,
                                                                          GtkShortcut            *shortcut);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutController, g_object_unref)
+
 G_END_DECLS
 

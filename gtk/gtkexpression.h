@@ -82,6 +82,7 @@ gboolean                gtk_expression_watch_evaluate           (GtkExpressionWa
                                                                  GValue                         *value);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_expression_watch_unwatch            (GtkExpressionWatch             *watch);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkExpressionWatch, gtk_expression_watch_unref)
 
 #define GTK_TYPE_PROPERTY_EXPRESSION (gtk_property_expression_get_type())
 typedef struct _GtkPropertyExpression   GtkPropertyExpression;

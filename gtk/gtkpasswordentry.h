@@ -53,5 +53,7 @@ void            gtk_password_entry_set_extra_menu     (GtkPasswordEntry *entry,
 GDK_AVAILABLE_IN_ALL
 GMenuModel *    gtk_password_entry_get_extra_menu     (GtkPasswordEntry *entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPasswordEntry, g_object_unref)
+
 G_END_DECLS
 

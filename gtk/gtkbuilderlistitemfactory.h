@@ -54,5 +54,7 @@ const char *            gtk_builder_list_item_factory_get_resource      (GtkBuil
 GDK_AVAILABLE_IN_ALL
 GtkBuilderScope *       gtk_builder_list_item_factory_get_scope         (GtkBuilderListItemFactory      *self) G_GNUC_PURE;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBuilderListItemFactory, g_object_unref)
+
 G_END_DECLS
 

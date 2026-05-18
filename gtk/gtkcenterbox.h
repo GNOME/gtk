@@ -73,5 +73,7 @@ void        gtk_center_box_set_shrink_center_last (GtkCenterBox *self,
 GDK_AVAILABLE_IN_4_12
 gboolean    gtk_center_box_get_shrink_center_last (GtkCenterBox *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCenterBox, g_object_unref)
+
 G_END_DECLS
 

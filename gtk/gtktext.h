@@ -165,5 +165,7 @@ void            gtk_text_compute_cursor_extents         (GtkText         *self,
                                                          graphene_rect_t *weak);
 
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkText, g_object_unref)
+
 G_END_DECLS
 

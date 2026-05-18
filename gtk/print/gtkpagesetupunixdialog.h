@@ -49,5 +49,7 @@ void              gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUni
 GDK_AVAILABLE_IN_ALL
 GtkPrintSettings *gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkPageSetupUnixDialog, g_object_unref)
+
 G_END_DECLS
 

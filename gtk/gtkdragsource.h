@@ -81,6 +81,7 @@ gboolean           gtk_drag_check_threshold    (GtkWidget         *widget,
                                                 int                current_x,
                                                 int                current_y);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDragSource, g_object_unref)
 
 G_END_DECLS
 

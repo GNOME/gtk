@@ -63,5 +63,7 @@ gboolean          gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
 GDK_AVAILABLE_IN_ALL
 GdkDeviceTool *   gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGestureStylus, g_object_unref)
+
 G_END_DECLS
 

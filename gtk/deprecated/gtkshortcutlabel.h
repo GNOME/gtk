@@ -50,5 +50,7 @@ GDK_AVAILABLE_IN_ALL
 void         gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,
                                                    const char       *disabled_text);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutLabel, g_object_unref)
+
 G_END_DECLS
 

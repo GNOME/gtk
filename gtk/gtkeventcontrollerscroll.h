@@ -83,5 +83,7 @@ GtkEventControllerScrollFlags
 GDK_AVAILABLE_IN_4_8
 GdkScrollUnit       gtk_event_controller_scroll_get_unit (GtkEventControllerScroll       *scroll);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventControllerScroll, g_object_unref)
+
 G_END_DECLS
 

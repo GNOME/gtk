@@ -35,6 +35,7 @@ GtkUnit           _gtk_print_get_default_user_units                (void);
 void               gtk_print_load_custom_papers                    (GListStore *store);
 GList *           _gtk_load_custom_papers                          (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkCustomPaperUnixDialog, g_object_unref)
 
 G_END_DECLS
 

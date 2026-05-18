@@ -41,5 +41,7 @@ GDK_DEPRECATED_IN_4_18
 void gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,
                                        GtkShortcutsShortcut *shortcut);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutsGroup, g_object_unref)
+
 G_END_DECLS
 
