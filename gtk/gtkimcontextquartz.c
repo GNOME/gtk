@@ -21,7 +21,7 @@
 #include "config.h"
 #include <string.h>
 
-#include "gtk/gtkimcontextquartz.h"
+#include "gtk/gtkimcontextquartzprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
 #include "gtk/gtkprivate.h"
 

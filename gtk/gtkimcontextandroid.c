@@ -21,7 +21,7 @@
 #include "config.h"
 #include <string.h>
 
-#include "gtk/gtkimcontextandroid.h"
+#include "gtk/gtkimcontextandroidprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
 #include "gtk/gtkprivate.h"
 
