@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilechooserentry.h: Entry with filename completion
+ * gtkfilechooserentryprivate.h: Entry with filename completion
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

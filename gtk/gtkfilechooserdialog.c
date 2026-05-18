@@ -33,7 +33,7 @@
 #include "gtkheaderbar.h"
 #include "deprecated/gtkdialogprivate.h"
 #include "gtklabel.h"
-#include "gtkfilechooserentry.h"
+#include "gtkfilechooserentryprivate.h"
 #include "gtkbox.h"
 
 #include <stdarg.h>
