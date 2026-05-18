@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "gtkquery.h"
+#include "gtkqueryprivate.h"
 #include "gtkfilesystemmodelprivate.h"
 #include <gio/gio.h>
 

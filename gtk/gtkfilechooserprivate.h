@@ -23,7 +23,7 @@
 #include "deprecated/gtkliststore.h"
 #include "gtkrecentmanager.h"
 #include "gtksearchengineprivate.h"
-#include "gtkquery.h"
+#include "gtkqueryprivate.h"
 #include "gtksizegroup.h"
 #include "deprecated/gtktreemodelsort.h"
 #include "deprecated/gtktreestore.h"
