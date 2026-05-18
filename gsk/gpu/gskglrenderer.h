@@ -45,4 +45,6 @@ GType        gsk_ngl_renderer_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_4_18_FOR (gsk_gl_renderer_new)
 GskRenderer *gsk_ngl_renderer_new      (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGLRenderer, g_object_unref)
+
 G_END_DECLS

@@ -44,6 +44,8 @@ GType                   gsk_broadway_renderer_get_type          (void) G_GNUC_CO
 GDK_DEPRECATED_IN_4_20
 GskRenderer *           gsk_broadway_renderer_new               (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskBroadwayRenderer, g_object_unref)
+
 G_END_DECLS
 
 #endif /* GDK_WINDOWING_BROADWAY */
