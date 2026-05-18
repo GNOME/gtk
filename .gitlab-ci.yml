@@ -13,6 +13,12 @@ include:
   - component: "gitlab.gnome.org/GNOME/citemplates/goblint@master"
     inputs:
       job-stage: "analysis"
+  - component: "gitlab.gnome.org/GNOME/citemplates/goblint@master"
+    inputs:
+      job-stage: "analysis"
+      job-name: "gobject-linter-latest"
+      image-ref: "ghcr.io/bilelmoussaoui/gobject-linter:latest"
+      allow-failure: true
 
 stages:
   - prepare
