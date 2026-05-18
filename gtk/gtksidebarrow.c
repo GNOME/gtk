@@ -323,16 +323,13 @@ gtk_sidebar_row_set_property (GObject      *object,
           {
             g_clear_object (&self->start_icon);
             g_clear_object (&self->end_icon);
-            g_free (self->label);
-            self->label = NULL;
-            g_free (self->tooltip);
-            self->tooltip = NULL;
+            g_clear_pointer (&self->label, g_free);
+            g_clear_pointer (&self->tooltip, g_free);
             gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
             self->ejectable = FALSE;
             self->section_type = GTK_PLACES_SECTION_BOOKMARKS;
             self->place_type = GTK_PLACES_BOOKMARK_PLACEHOLDER;
-            g_free (self->uri);
-            self->uri = NULL;
+            g_clear_pointer (&self->uri, g_free);
             g_clear_object (&self->drive);
             g_clear_object (&self->volume);
             g_clear_object (&self->mount);
@@ -429,12 +426,9 @@ gtk_sidebar_row_finalize (GObject *object)
 
   g_clear_object (&self->start_icon);
   g_clear_object (&self->end_icon);
-  g_free (self->label);
-  self->label = NULL;
-  g_free (self->tooltip);
-  self->tooltip = NULL;
-  g_free (self->uri);
-  self->uri = NULL;
+  g_clear_pointer (&self->label, g_free);
+  g_clear_pointer (&self->tooltip, g_free);
+  g_clear_pointer (&self->uri, g_free);
   g_clear_object (&self->drive);
   g_clear_object (&self->volume);
   g_clear_object (&self->mount);

@@ -487,8 +487,7 @@ select_thread_start_poll (GPollFD *ufds,
        */
       if (!pollfds_equal (ufds, nfds, next_pollfds, next_n_pollfds - 1))
         {
-          g_free (next_pollfds);
-          next_pollfds = NULL;
+          g_clear_pointer (&next_pollfds, g_free);
           next_n_pollfds = 0;
 
           have_new_pollfds = TRUE;

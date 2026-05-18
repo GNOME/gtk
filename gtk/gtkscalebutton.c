@@ -1028,11 +1028,7 @@ cb_button_clicked (GtkWidget *widget,
   GtkScaleButton *button = GTK_SCALE_BUTTON (user_data);
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
 
-  if (priv->autoscroll_timeout)
-    {
-      g_source_remove (priv->autoscroll_timeout);
-      priv->autoscroll_timeout = 0;
-    }
+  g_clear_handle_id (&priv->autoscroll_timeout, g_source_remove);
 
   if (priv->autoscrolling)
     {

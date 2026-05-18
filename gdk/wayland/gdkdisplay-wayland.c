@@ -905,11 +905,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_list (&display_wayland->async_roundtrips,
                 (GDestroyNotify) wl_callback_destroy);
 
-  if (display_wayland->known_globals)
-    {
-      g_hash_table_destroy (display_wayland->known_globals);
-      display_wayland->known_globals = NULL;
-    }
+  g_clear_pointer (&display_wayland->known_globals, g_hash_table_destroy);
 
   g_clear_list (&display_wayland->on_has_globals_closures, g_free);
 
@@ -1015,8 +1011,7 @@ gdk_wayland_display_make_default (GdkDisplay *display)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   const char *startup_id;
 
-  g_free (display_wayland->startup_notification_id);
-  display_wayland->startup_notification_id = NULL;
+  g_clear_pointer (&display_wayland->startup_notification_id, g_free);
 
   startup_id = gdk_get_startup_notification_id ();
   if (startup_id)
@@ -1069,8 +1064,7 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
 
   if (core_keyboard && tmp_keymap)
     {
-      g_object_unref (tmp_keymap);
-      tmp_keymap = NULL;
+      g_clear_object (&tmp_keymap);
     }
 
   if (core_keyboard)

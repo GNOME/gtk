@@ -126,8 +126,7 @@ output_result (GtkIMContext *context,
   if (fixed_str)
     {
       GTK_DEBUG (MODULES, "tic-insert-text: %s", fixed_str);
-      g_free (qc->preedit_str);
-      qc->preedit_str = NULL;
+      g_clear_pointer (&qc->preedit_str, g_free);
       g_object_set_data (G_OBJECT (surface), TIC_INSERT_TEXT, NULL);
       g_signal_emit_by_name (context, "commit", fixed_str);
       g_signal_emit_by_name (context, "preedit_changed");
@@ -247,8 +246,7 @@ discard_preedit (GtkIMContext *context)
     {
       g_signal_emit_by_name (context, "commit", qc->preedit_str);
 
-      g_free (qc->preedit_str);
-      qc->preedit_str = NULL;
+      g_clear_pointer (&qc->preedit_str, g_free);
       g_signal_emit_by_name (context, "preedit_changed");
     }
 }
@@ -356,10 +354,8 @@ imquartz_finalize (GObject *obj)
   GTK_DEBUG (MODULES, "imquartz_finalize");
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (obj);
-  g_free (qc->preedit_str);
-  qc->preedit_str = NULL;
-  g_free (qc->cursor_rect);
-  qc->cursor_rect = NULL;
+  g_clear_pointer (&qc->preedit_str, g_free);
+  g_clear_pointer (&qc->cursor_rect, g_free);
 
   g_signal_handlers_disconnect_by_func (qc->helper, (gpointer)commit_cb, qc);
   g_object_unref (qc->helper);

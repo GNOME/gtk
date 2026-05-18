@@ -126,8 +126,7 @@ gtk_tree_popover_dispose (GObject *object)
 
   if (popover->context)
     {
-      g_signal_handler_disconnect (popover->context, popover->size_changed_id);
-      popover->size_changed_id = 0;
+      g_clear_signal_handler (&popover->size_changed_id, popover->context);
 
       g_clear_object (&popover->context);
     }
@@ -564,8 +563,7 @@ gtk_tree_popover_set_area (GtkTreePopover *popover,
 {
   if (popover->area)
     {
-      g_signal_handler_disconnect (popover->area, popover->apply_attributes_id);
-      popover->apply_attributes_id = 0;
+      g_clear_signal_handler (&popover->apply_attributes_id, popover->area);
       g_clear_object (&popover->area);
     }
 

@@ -221,8 +221,7 @@ gtk_inspector_css_node_tree_unset_node (GtkInspectorCssNodeTree *cnt)
                                             G_SIGNAL_MATCH_DATA,
                                             0, 0, NULL, NULL,
                                             cnt);
-      g_object_unref (priv->node);
-      priv->node = NULL;
+      g_clear_object (&priv->node);
     }
 }
 

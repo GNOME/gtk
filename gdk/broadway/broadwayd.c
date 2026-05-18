@@ -88,22 +88,13 @@ client_disconnected (BroadwayClient *client)
   gpointer key, value;
   GList *l;
 
-  if (client->disconnect_idle != 0)
-    {
-      g_source_remove (client->disconnect_idle);
-      client->disconnect_idle = 0;
-    }
+  g_clear_handle_id (&client->disconnect_idle, g_source_remove);
 
-  if (client->source != 0)
-    {
-      g_source_destroy (client->source);
-      client->source = 0;
-    }
+  g_clear_pointer (&client->source, g_source_destroy);
 
   for (l = client->surfaces; l != NULL; l = l->next)
     broadway_server_destroy_surface (server, GPOINTER_TO_UINT (l->data), TRUE);
-  g_list_free (client->surfaces);
-  client->surfaces = NULL;
+  g_clear_list (&client->surfaces, NULL);
 
   g_hash_table_iter_init (&iter, client->textures);
   while (g_hash_table_iter_next (&iter, &key, &value))

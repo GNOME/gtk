@@ -381,8 +381,7 @@ gtk_popover_menu_dispose (GObject *object)
 
   if (popover->active_item)
     {
-      g_object_remove_weak_pointer (G_OBJECT (popover->active_item), (gpointer *)&popover->active_item);
-      popover->active_item = NULL;
+      g_clear_weak_pointer (&popover->active_item);
     }
 
   g_clear_object (&popover->model);

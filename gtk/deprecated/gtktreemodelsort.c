@@ -2656,11 +2656,9 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
   else
     priv->root = NULL;
 
-  g_sequence_free (sort_level->seq);
-  sort_level->seq = NULL;
+  g_clear_pointer (&sort_level->seq, g_sequence_free);
 
-  g_free (sort_level);
-  sort_level = NULL;
+  g_clear_pointer (&sort_level, g_free);
 }
 
 static void

@@ -274,8 +274,7 @@ text_input_commit_apply (GtkIMContextWaylandGlobal *global)
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
   if (context->pending_commit)
     g_signal_emit_by_name (global->current, "commit", context->pending_commit);
-  g_free (context->pending_commit);
-  context->pending_commit = NULL;
+  g_clear_pointer (&context->pending_commit, g_free);
 }
 
 static void

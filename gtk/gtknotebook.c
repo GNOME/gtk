@@ -2722,8 +2722,7 @@ stop_scrolling (GtkNotebook *notebook)
 
   if (notebook->timer)
     {
-      g_source_remove (notebook->timer);
-      notebook->timer = 0;
+      g_clear_handle_id (&notebook->timer, g_source_remove);
       notebook->need_timer = FALSE;
     }
   notebook->click_child = ARROW_NONE;
@@ -2863,11 +2862,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
       notebook->operation = DRAG_OPERATION_NONE;
 
-      if (notebook->dnd_timer)
-        {
-          g_source_remove (notebook->dnd_timer);
-          notebook->dnd_timer = 0;
-        }
+      g_clear_handle_id (&notebook->dnd_timer, g_source_remove);
 
       gtk_widget_queue_allocate (GTK_WIDGET (notebook));
     }
@@ -3058,11 +3053,7 @@ gtk_notebook_motion (GtkEventController *controller,
       gtk_drag_icon_set_from_paintable (drag, paintable, -2, -2);
       g_object_unref (paintable);
 
-      if (notebook->dnd_timer)
-        {
-          g_source_remove (notebook->dnd_timer);
-          notebook->dnd_timer = 0;
-        }
+      g_clear_handle_id (&notebook->dnd_timer, g_source_remove);
 
       notebook->operation = DRAG_OPERATION_DETACH;
       tab_drag_end (notebook, notebook->cur_page);
@@ -3099,11 +3090,7 @@ gtk_notebook_motion (GtkEventController *controller,
         }
       else
         {
-          if (notebook->dnd_timer)
-            {
-              g_source_remove (notebook->dnd_timer);
-              notebook->dnd_timer = 0;
-            }
+          g_clear_handle_id (&notebook->dnd_timer, g_source_remove);
         }
 
       if (notebook->operation != DRAG_OPERATION_REORDER)
@@ -4274,8 +4261,7 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
   if (page->tab_label)
     {
       if (page->mnemonic_activate_signal)
-        g_signal_handler_disconnect (page->tab_label,
-                                     page->mnemonic_activate_signal);
+        g_clear_signal_handler (&page->mnemonic_activate_signal, page->tab_label);
       page->mnemonic_activate_signal = 0;
 
       if (gtk_widget_get_native (page->tab_label) != gtk_widget_get_native (GTK_WIDGET (notebook)) ||
@@ -4375,8 +4361,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   if (page->last_focus_child)
     {
-      g_object_remove_weak_pointer (G_OBJECT (page->last_focus_child), (gpointer *)&page->last_focus_child);
-      page->last_focus_child = NULL;
+      g_clear_weak_pointer (&page->last_focus_child);
     }
 
   gtk_widget_unparent (page->tab_widget);

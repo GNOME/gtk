@@ -120,7 +120,7 @@ struct _GtkWidgetPrivate
   int height_request;
 
   /* Animations and other things to update on clock ticks */
-  guint clock_tick_id;
+  gulong clock_tick_id;
   guint8 n_active;
   GList *tick_callbacks;
 

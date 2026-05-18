@@ -1838,8 +1838,7 @@ gtk_list_base_stop_rubberband (GtkListBase *self)
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
   g_clear_pointer (&priv->rubberband->widget, gtk_widget_unparent);
-  g_free (priv->rubberband);
-  priv->rubberband = NULL;
+  g_clear_pointer (&priv->rubberband, g_free);
 
   remove_autoscroll (self);
 }

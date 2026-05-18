@@ -1347,8 +1347,7 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
         g_assert_not_reached ();
     }
 
-  g_slist_free (priv->bindings);
-  priv->bindings = NULL;
+  g_clear_slist (&priv->bindings, NULL);
   return result;
 }
 

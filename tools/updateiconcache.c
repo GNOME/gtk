@@ -450,8 +450,7 @@ follow_links (const char *path)
 
   if (strcmp (path, path2) == 0)
     {
-      g_free (path2);
-      path2 = NULL;
+      g_clear_pointer (&path2, g_free);
     }
 
   return path2;

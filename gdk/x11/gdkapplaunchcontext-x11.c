@@ -167,11 +167,7 @@ free_startup_timeout (void *data)
 
   g_slist_free_full (std->contexts, free_startup_notification_data);
 
-  if (std->timeout_id != 0)
-    {
-      g_source_remove (std->timeout_id);
-      std->timeout_id = 0;
-    }
+  g_clear_handle_id (&std->timeout_id, g_source_remove);
 
   g_free (std);
 }
@@ -426,10 +422,7 @@ gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
         }
 
       if (data->contexts == NULL)
-        {
-          g_source_remove (data->timeout_id);
-          data->timeout_id = 0;
-        }
+        g_clear_handle_id (&data->timeout_id, g_source_remove);
     }
 }
 

@@ -318,8 +318,7 @@ _gtk_bookmarks_manager_free (GtkBookmarksManager *manager)
   if (manager->bookmarks_monitor)
     {
       g_file_monitor_cancel (manager->bookmarks_monitor);
-      g_signal_handler_disconnect (manager->bookmarks_monitor, manager->bookmarks_monitor_changed_id);
-      manager->bookmarks_monitor_changed_id = 0;
+      g_clear_signal_handler (&manager->bookmarks_monitor_changed_id, manager->bookmarks_monitor);
       g_object_unref (manager->bookmarks_monitor);
     }
 

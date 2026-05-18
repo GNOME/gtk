@@ -1648,8 +1648,7 @@ settings_update_provider (GdkDisplay      *display,
         {
           gtk_style_context_remove_provider_for_display (display,
                                                          GTK_STYLE_PROVIDER (*old));
-          g_object_unref (*old);
-          *old = NULL;
+          g_clear_object (old);
         }
 
       if (new)
@@ -1906,8 +1905,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
       if (error)
         {
           g_warning ("Error setting %s in %s: %s", key, path, error->message);
-          g_error_free (error);
-          error = NULL;
+          g_clear_error (&error);
         }
       else
         {

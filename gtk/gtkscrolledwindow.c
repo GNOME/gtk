@@ -3777,10 +3777,7 @@ indicator_set_fade (Indicator *indicator,
       gdk_source_set_static_name_by_id (indicator->conceil_timer, "[gtk] maybe_hide_indicator");
     }
   if (!visible && indicator->conceil_timer != 0)
-    {
-      g_source_remove (indicator->conceil_timer);
-      indicator->conceil_timer = 0;
-    }
+    g_clear_handle_id (&indicator->conceil_timer, g_source_remove);
 
   if (changed)
     {
@@ -3895,17 +3892,9 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
   g_signal_handlers_disconnect_by_data (adjustment, indicator);
 
-  if (indicator->conceil_timer)
-    {
-      g_source_remove (indicator->conceil_timer);
-      indicator->conceil_timer = 0;
-    }
+  g_clear_handle_id (&indicator->conceil_timer, g_source_remove);
 
-  if (indicator->over_timeout_id)
-    {
-      g_source_remove (indicator->over_timeout_id);
-      indicator->over_timeout_id = 0;
-    }
+  g_clear_handle_id (&indicator->over_timeout_id, g_source_remove);
 
   if (indicator->tick_id)
     {

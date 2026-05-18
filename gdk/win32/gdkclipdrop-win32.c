@@ -2832,8 +2832,7 @@ clipboard_store_hdata_ready (GObject      *clipboard,
         {
           g_output_stream_close (el->stream, NULL, NULL);
           el->handle = gdk_win32_hdata_output_stream_get_handle (GDK_WIN32_HDATA_OUTPUT_STREAM (el->stream), NULL);
-          g_object_unref (el->stream);
-          el->stream = NULL;
+          g_clear_object (&el->stream);
         }
       else if (el->stream != NULL)
         no_other_streams = FALSE;

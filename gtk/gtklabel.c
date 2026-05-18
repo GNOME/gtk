@@ -1597,8 +1597,7 @@ gtk_label_clear_links (GtkLabel *self)
       g_free (link->uri);
       g_free (link->title);
     }
-  g_free (self->select_info->links);
-  self->select_info->links = NULL;
+  g_clear_pointer (&self->select_info->links, g_free);
   self->select_info->n_links = 0;
   self->select_info->active_link = NULL;
   gtk_widget_remove_css_class (GTK_WIDGET (self), "link");
@@ -5157,8 +5156,7 @@ gtk_label_clear_select_info (GtkLabel *self)
       GTK_LABEL_CONTENT (self->select_info->provider)->label = NULL;
       g_clear_object (&self->select_info->provider);
 
-      g_free (self->select_info);
-      self->select_info = NULL;
+      g_clear_pointer (&self->select_info, g_free);
 
       gtk_widget_set_cursor (GTK_WIDGET (self), NULL);
 

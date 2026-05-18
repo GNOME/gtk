@@ -1143,8 +1143,7 @@ gtk_text_tag_finalize (GObject *object)
   gtk_text_attributes_unref (priv->values);
   priv->values = NULL;
 
-  g_free (priv->name);
-  priv->name = NULL;
+  g_clear_pointer (&priv->name, g_free);
 
   G_OBJECT_CLASS (gtk_text_tag_parent_class)->finalize (object);
 }

@@ -278,11 +278,9 @@ gtk_print_job_finalize (GObject *object)
   if (job->page_setup)
     g_object_unref (job->page_setup);
 
-  g_free (job->page_ranges);
-  job->page_ranges = NULL;
+  g_clear_pointer (&job->page_ranges, g_free);
 
-  g_free (job->title);
-  job->title = NULL;
+  g_clear_pointer (&job->title, g_free);
 
   G_OBJECT_CLASS (gtk_print_job_parent_class)->finalize (object);
 }

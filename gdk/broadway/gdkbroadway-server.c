@@ -328,11 +328,7 @@ process_input_messages (GdkBroadwayServer *server)
 {
   BroadwayReply *reply;
 
-  if (server->process_input_idle != 0)
-    {
-      g_source_remove (server->process_input_idle);
-      server->process_input_idle = 0;
-    }
+  g_clear_handle_id (&server->process_input_idle, g_source_remove);
 
   while (server->incoming)
     {

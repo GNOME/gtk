@@ -613,8 +613,7 @@ password_dialog_response (GtkWidget       *dialog,
       if (priv->auth_info[i] != NULL)
         {
           memset (priv->auth_info[i], 0, strlen (priv->auth_info[i]));
-          g_free (priv->auth_info[i]);
-          priv->auth_info[i] = NULL;
+          g_clear_pointer (&priv->auth_info[i], g_free);
         }
     }
 

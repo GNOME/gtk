@@ -120,7 +120,7 @@ struct _GtkTreeExpander
   GtkWidget *child;
 
   GtkWidget *expander_icon;
-  guint notify_handler;
+  gulong notify_handler;
 
   gboolean hide_expander;
   gboolean indent_for_depth;
@@ -362,8 +362,7 @@ gtk_tree_expander_clear_list_row (GtkTreeExpander *self)
   if (self->list_row == NULL)
     return;
 
-  g_signal_handler_disconnect (self->list_row, self->notify_handler);
-  self->notify_handler = 0;
+  g_clear_signal_handler (&self->notify_handler, self->list_row);
   g_clear_object (&self->list_row);
 }
 
@@ -372,11 +371,7 @@ gtk_tree_expander_dispose (GObject *object)
 {
   GtkTreeExpander *self = GTK_TREE_EXPANDER (object);
 
-  if (self->expand_timer)
-    {
-      g_source_remove (self->expand_timer);
-      self->expand_timer = 0;
-    }
+  g_clear_handle_id (&self->expand_timer, g_source_remove);
 
   gtk_tree_expander_clear_list_row (self);
   gtk_tree_expander_update_for_list_row (self);
@@ -742,11 +737,7 @@ static void
 gtk_tree_expander_drag_leave (GtkDropControllerMotion *motion,
                               GtkTreeExpander         *self)
 {
-  if (self->expand_timer)
-    {
-      g_source_remove (self->expand_timer);
-      self->expand_timer = 0;
-    }
+  g_clear_handle_id (&self->expand_timer, g_source_remove);
 }
 
 static void

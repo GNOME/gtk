@@ -496,8 +496,7 @@ gtk_application_impl_dbus_publish_menu (GtkApplicationImplDBus  *dbus,
   if (*id)
     {
       g_dbus_connection_unexport_menu_model (dbus->session, *id);
-      g_free (*path);
-      *path = NULL;
+      g_clear_pointer (path, g_free);
       *id = 0;
     }
 

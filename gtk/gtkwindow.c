@@ -2539,11 +2539,7 @@ handle_keys_changed (gpointer data)
   GtkWindow *window = GTK_WINDOW (data);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (priv->keys_changed_handler)
-    {
-      g_source_remove (priv->keys_changed_handler);
-      priv->keys_changed_handler = 0;
-    }
+  g_clear_handle_id (&priv->keys_changed_handler, g_source_remove);
 
   if (priv->application_shortcut_controller)
     gtk_shortcut_controller_update_accels (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller));
@@ -3942,11 +3938,7 @@ gtk_window_finalize (GObject *object)
       g_free (priv->geometry_info);
     }
 
-  if (priv->keys_changed_handler)
-    {
-      g_source_remove (priv->keys_changed_handler);
-      priv->keys_changed_handler = 0;
-    }
+  g_clear_handle_id (&priv->keys_changed_handler, g_source_remove);
 
   seat = gdk_display_get_default_seat (priv->display);
   if (seat)
@@ -3960,17 +3952,9 @@ gtk_window_finalize (GObject *object)
 
   g_free (priv->startup_id);
 
-  if (priv->mnemonics_display_timeout_id)
-    {
-      g_source_remove (priv->mnemonics_display_timeout_id);
-      priv->mnemonics_display_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->mnemonics_display_timeout_id, g_source_remove);
 
-  if (priv->focus_visible_timeout)
-    {
-      g_source_remove (priv->focus_visible_timeout);
-      priv->focus_visible_timeout = 0;
-    }
+  g_clear_handle_id (&priv->focus_visible_timeout, g_source_remove);
 
   g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
@@ -4146,8 +4130,7 @@ gtk_window_notify_startup (GtkWindow *window)
           if (!startup_id_is_fake (priv->startup_id))
             gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
 
-          g_free (priv->startup_id);
-          priv->startup_id = NULL;
+          g_clear_pointer (&priv->startup_id, g_free);
         }
       else
         gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), NULL);
@@ -5773,8 +5756,7 @@ unset_fullscreen_monitor (GtkWindow *window)
   if (priv->initial_fullscreen_monitor)
     {
       g_signal_handlers_disconnect_by_func (priv->initial_fullscreen_monitor, unset_fullscreen_monitor, window);
-      g_object_unref (priv->initial_fullscreen_monitor);
-      priv->initial_fullscreen_monitor = NULL;
+      g_clear_object (&priv->initial_fullscreen_monitor);
     }
 }
 
@@ -6314,11 +6296,7 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MNEMONICS_VISIBLE]);
     }
 
-  if (priv->mnemonics_display_timeout_id)
-    {
-      g_source_remove (priv->mnemonics_display_timeout_id);
-      priv->mnemonics_display_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->mnemonics_display_timeout_id, g_source_remove);
 }
 
 static gboolean
@@ -6405,11 +6383,7 @@ gtk_window_set_focus_visible (GtkWindow *window,
 
   priv->focus_visible = setting;
 
-  if (priv->focus_visible_timeout)
-    {
-      g_source_remove (priv->focus_visible_timeout);
-      priv->focus_visible_timeout = 0;
-    }
+  g_clear_handle_id (&priv->focus_visible_timeout, g_source_remove);
 
   if (priv->focus_visible)
     {

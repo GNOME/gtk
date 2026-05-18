@@ -1005,11 +1005,7 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
       priv->resource = NULL;
     }
 
-  if (priv->path)
-    {
-      g_free (priv->path);
-      priv->path = NULL;
-    }
+  g_clear_pointer (&priv->path, g_free);
 
   g_hash_table_remove_all (priv->symbolic_colors);
   g_hash_table_remove_all (priv->keyframes);
@@ -1905,8 +1901,7 @@ _gtk_css_find_theme_dir (const char *dir,
       if (g_file_test (path, G_FILE_TEST_EXISTS))
         break;
 
-      g_free (path);
-      path = NULL;
+      g_clear_pointer (&path, g_free);
     }
 
   g_free (base);

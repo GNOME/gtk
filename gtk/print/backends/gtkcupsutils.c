@@ -1052,8 +1052,7 @@ _post_check (GtkCupsRequest *request)
               if (request->password != NULL)
                 {
                   memset (request->password, 0, strlen (request->password));
-                  g_free (request->password);
-                  request->password = NULL;
+                  g_clear_pointer (&request->password, g_free);
                 }
 
               request->password_state = GTK_CUPS_PASSWORD_APPLIED;
@@ -1348,8 +1347,7 @@ _get_check (GtkCupsRequest *request)
               if (request->password != NULL)
                 {
                   memset (request->password, 0, strlen (request->password));
-                  g_free (request->password);
-                  request->password = NULL;
+                  g_clear_pointer (&request->password, g_free);
                 }
 
               request->password_state = GTK_CUPS_PASSWORD_APPLIED;

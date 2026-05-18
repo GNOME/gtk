@@ -1363,16 +1363,13 @@ gtk_range_dispose (GObject *object)
       g_signal_handlers_disconnect_by_func (priv->adjustment,
 					    gtk_range_adjustment_value_changed,
 					    range);
-      g_object_unref (priv->adjustment);
-      priv->adjustment = NULL;
+      g_clear_object (&priv->adjustment);
     }
 
   if (priv->n_marks)
     {
-      g_free (priv->marks);
-      priv->marks = NULL;
-      g_free (priv->mark_pos);
-      priv->mark_pos = NULL;
+      g_clear_pointer (&priv->marks, g_free);
+      g_clear_pointer (&priv->mark_pos, g_free);
       priv->n_marks = 0;
     }
 
@@ -2956,9 +2953,8 @@ gtk_range_remove_step_timer (GtkRange *range)
       if (priv->timer->timeout_id != 0)
         g_source_remove (priv->timer->timeout_id);
 
-      g_free (priv->timer);
+      g_clear_pointer (&priv->timer, g_free);
 
-      priv->timer = NULL;
     }
 }
 

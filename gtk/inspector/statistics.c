@@ -315,8 +315,7 @@ toggle_record (GtkToggleButton        *button,
     }
   else
     {
-      g_source_remove (sl->priv->update_source_id);
-      sl->priv->update_source_id = 0;
+      g_clear_handle_id (&sl->priv->update_source_id, g_source_remove);
     }
 }
 

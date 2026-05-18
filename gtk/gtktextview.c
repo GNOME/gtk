@@ -3183,8 +3183,7 @@ flush_update_im_spot_location (GtkTextView *text_view)
 
   if (priv->im_spot_idle)
     {
-      g_source_remove (priv->im_spot_idle);
-      priv->im_spot_idle = 0;
+      g_clear_handle_id (&priv->im_spot_idle, g_source_remove);
       gtk_text_view_update_im_spot_location (text_view);
     }
 }
@@ -4135,15 +4134,10 @@ gtk_text_view_remove_validate_idles (GtkTextView *text_view)
   if (priv->first_validate_idle != 0)
     {
       DV (g_print ("Removing first validate idle: %s\n", G_STRLOC));
-      g_source_remove (priv->first_validate_idle);
-      priv->first_validate_idle = 0;
+      g_clear_handle_id (&priv->first_validate_idle, g_source_remove);
     }
 
-  if (priv->incremental_validate_idle != 0)
-    {
-      g_source_remove (priv->incremental_validate_idle);
-      priv->incremental_validate_idle = 0;
-    }
+  g_clear_handle_id (&priv->incremental_validate_idle, g_source_remove);
 }
 
 static void
@@ -4164,17 +4158,9 @@ gtk_text_view_dispose (GObject *object)
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
 
-  if (text_view->priv->scroll_timeout)
-    {
-      g_source_remove (text_view->priv->scroll_timeout);
-      text_view->priv->scroll_timeout = 0;
-    }
+  g_clear_handle_id (&text_view->priv->scroll_timeout, g_source_remove);
 
-  if (priv->im_spot_idle)
-    {
-      g_source_remove (priv->im_spot_idle);
-      priv->im_spot_idle = 0;
-    }
+  g_clear_handle_id (&priv->im_spot_idle, g_source_remove);
 
   if (priv->magnifier)
     _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
@@ -5019,8 +5005,7 @@ gtk_text_view_flush_first_validate (GtkTextView *text_view)
    * will be installed, and we'll start again.
    */
   DV (g_print ("removing first validate in %s\n", G_STRLOC));
-  g_source_remove (priv->first_validate_idle);
-  priv->first_validate_idle = 0;
+  g_clear_handle_id (&priv->first_validate_idle, g_source_remove);
 
   /* be sure we have up-to-date screen size set on the
    * layout.
@@ -7879,11 +7864,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   g_object_set_qdata (G_OBJECT (gesture), quark_text_selection_data, NULL);
   gtk_text_view_unobscure_mouse_cursor (text_view, timestamp);
 
-  if (priv->scroll_timeout != 0)
-    {
-      g_source_remove (priv->scroll_timeout);
-      priv->scroll_timeout = 0;
-    }
+  g_clear_handle_id (&priv->scroll_timeout, g_source_remove);
 
   if (priv->magnifier_popover)
     gtk_widget_set_visible (priv->magnifier_popover, FALSE);
@@ -8004,11 +7985,7 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
   if (!gtk_gesture_is_active (priv->drag_gesture))
     return FALSE;
 
-  if (priv->scroll_timeout != 0)
-    {
-      g_source_remove (priv->scroll_timeout);
-      priv->scroll_timeout = 0;
-    }
+  g_clear_handle_id (&priv->scroll_timeout, g_source_remove);
 
   if (priv->magnifier_popover)
     gtk_widget_set_visible (priv->magnifier_popover, FALSE);
@@ -8312,8 +8289,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view);
 
-      g_object_unref (priv->layout);
-      priv->layout = NULL;
+      g_clear_object (&priv->layout);
     }
 }
 
@@ -8770,11 +8746,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   gtk_text_view_validate_onscreen (text_view);
 
   /* If this got installed, get rid of it, it's just a waste of time. */
-  if (priv->first_validate_idle != 0)
-    {
-      g_source_remove (priv->first_validate_idle);
-      priv->first_validate_idle = 0;
-    }
+  g_clear_handle_id (&priv->first_validate_idle, g_source_remove);
 
   /* Allow to extend selection with mouse scrollwheel. Bug 710612 */
   if (gtk_gesture_is_active (priv->drag_gesture))
@@ -9688,11 +9660,7 @@ gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view)
   if (priv->selection_bubble)
     gtk_widget_set_visible (priv->selection_bubble, FALSE);
 
-  if (priv->selection_bubble_timeout_id)
-    {
-      g_source_remove (priv->selection_bubble_timeout_id);
-      priv->selection_bubble_timeout_id = 0;
-    }
+  g_clear_handle_id (&priv->selection_bubble_timeout_id, g_source_remove);
 }
 
 static void

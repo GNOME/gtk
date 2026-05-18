@@ -424,8 +424,7 @@ data_device_leave (void                  *data,
   if (seat->drop == NULL)
     return;
 
-  g_object_unref (seat->pointer_info.focus);
-  seat->pointer_info.focus = NULL;
+  g_clear_object (&seat->pointer_info.focus);
 
   gdk_drop_emit_leave_event (seat->drop,
                              FALSE,
@@ -770,8 +769,7 @@ pointer_handle_leave (void              *data,
                   "leave, seat %p surface %p",
                   seat, seat->pointer_info.focus);
 
-  g_object_unref (seat->pointer_info.focus);
-  seat->pointer_info.focus = NULL;
+  g_clear_object (&seat->pointer_info.focus);
   seat->pointer_info.cursor_shape = 0;
 
   seat->pointer_info.has_cursor_surface = FALSE;
@@ -1160,11 +1158,7 @@ get_key_repeat (GdkWaylandSeat *seat,
 static void
 stop_key_repeat (GdkWaylandSeat *seat)
 {
-  if (seat->repeat_timer)
-    {
-      g_source_remove (seat->repeat_timer);
-      seat->repeat_timer = 0;
-    }
+  g_clear_handle_id (&seat->repeat_timer, g_source_remove);
 
   g_clear_pointer (&seat->repeat_callback, wl_callback_destroy);
 }
@@ -1471,8 +1465,7 @@ keyboard_handle_leave (void               *data,
                                seat->logical_keyboard,
                                FALSE);
 
-  g_object_unref (seat->keyboard_focus);
-  seat->keyboard_focus = NULL;
+  g_clear_object (&seat->keyboard_focus);
   seat->repeat_key = 0;
   seat->key_modifiers = 0;
 
@@ -2865,8 +2858,7 @@ gdk_wayland_tablet_flush_frame_events (GdkWaylandTabletData *tablet,
                           GDK_CROSSING_NORMAL, time);
       else if (tablet_event->event_type == GDK_PROXIMITY_OUT)
         {
-          g_object_unref (tablet->pointer_info.focus);
-          tablet->pointer_info.focus = NULL;
+          g_clear_object (&tablet->pointer_info.focus);
           tablet->pointer_info.has_cursor_surface = FALSE;
 
           tablet->pointer_info.button_modifiers &=
@@ -4162,9 +4154,7 @@ gdk_wayland_seat_set_grab_surface (GdkWaylandSeat *seat,
   if (seat->grab_surface)
     {
       _gdk_wayland_surface_set_grab_seat (seat->grab_surface, NULL);
-      g_object_remove_weak_pointer (G_OBJECT (seat->grab_surface),
-                                    (gpointer *) &seat->grab_surface);
-      seat->grab_surface = NULL;
+      g_clear_weak_pointer (&seat->grab_surface);
     }
 
   if (surface)

@@ -1249,11 +1249,7 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
       cairo_surface_destroy (toplevel->icon_mask);
       toplevel->icon_mask = NULL;
     }
-  if (toplevel->group_leader)
-    {
-      g_object_unref (toplevel->group_leader);
-      toplevel->group_leader = NULL;
-    }
+  g_clear_object (&toplevel->group_leader);
 #ifdef HAVE_XSYNC
   if (toplevel->update_counter != None)
     {

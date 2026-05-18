@@ -1680,8 +1680,7 @@ insert_theme (GtkIconTheme *self,
                   g_key_file_set_list_separator (theme_file, ',');
                   if (!g_key_file_load_from_file (theme_file, file, 0, NULL))
                     {
-                      g_key_file_free (theme_file);
-                      theme_file = NULL;
+                      g_clear_pointer (&theme_file, g_key_file_free);
                     }
                 }
               g_free (file);

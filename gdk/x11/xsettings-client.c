@@ -352,8 +352,7 @@ parse_settings (unsigned char *data,
 	}
 
       gdk_name = gdk_from_xsettings_name (x_name);
-      g_free (x_name);
-      x_name = NULL;
+      g_clear_pointer (&x_name, g_free);
 
       if (gdk_name == NULL)
         {
@@ -581,9 +580,5 @@ _gdk_x11_xsettings_finish (GdkX11Screen *x11_screen)
   if (x11_screen->xsettings_manager_window)
     x11_screen->xsettings_manager_window = 0;
 
-  if (x11_screen->xsettings)
-    {
-      g_hash_table_unref (x11_screen->xsettings);
-      x11_screen->xsettings = NULL;
-    }
+  g_clear_pointer (&x11_screen->xsettings, g_hash_table_unref);
 }

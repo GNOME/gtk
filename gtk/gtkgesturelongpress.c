@@ -168,8 +168,7 @@ gtk_gesture_long_press_update (GtkGesture       *gesture,
     {
       if (priv->timeout_id)
         {
-          g_source_remove (priv->timeout_id);
-          priv->timeout_id = 0;
+          g_clear_handle_id (&priv->timeout_id, g_source_remove);
           g_signal_emit (gesture, signals[CANCELLED], 0);
         }
 
@@ -188,8 +187,7 @@ gtk_gesture_long_press_end (GtkGesture       *gesture,
 
   if (priv->timeout_id)
     {
-      g_source_remove (priv->timeout_id);
-      priv->timeout_id = 0;
+      g_clear_handle_id (&priv->timeout_id, g_source_remove);
       g_signal_emit (gesture, signals[CANCELLED], 0);
     }
 

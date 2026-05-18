@@ -1023,8 +1023,7 @@ gtk_cell_area_box_finalize (GObject *object)
   for (l = priv->contexts; l; l = l->next)
     g_object_weak_unref (G_OBJECT (l->data), (GWeakNotify)context_weak_notify, box);
 
-  g_slist_free (priv->contexts);
-  priv->contexts = NULL;
+  g_clear_slist (&priv->contexts, NULL);
 
   /* Free the cell grouping info */
   cell_groups_clear (box);

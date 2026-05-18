@@ -257,15 +257,13 @@ gtk_video_unmap (GtkWidget *widget)
 
   if (self->controls_hide_source)
     {
-      g_source_remove (self->controls_hide_source);
-      self->controls_hide_source = 0;
+      g_clear_handle_id (&self->controls_hide_source, g_source_remove);
       gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls_revealer), FALSE);
     }
 
   if (self->cursor_hide_source)
     {
-      g_source_remove (self->cursor_hide_source);
-      self->cursor_hide_source = 0;
+      g_clear_handle_id (&self->cursor_hide_source, g_source_remove);
       gtk_widget_set_cursor (widget, NULL);
     }
 
@@ -735,8 +733,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
           surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
           gtk_media_stream_unrealize (self->media_stream, surface);
         }
-      g_object_unref (self->media_stream);
-      self->media_stream = NULL;
+      g_clear_object (&self->media_stream);
     }
 
   if (stream)

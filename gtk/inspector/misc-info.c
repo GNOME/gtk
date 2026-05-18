@@ -607,8 +607,7 @@ unmap (GtkWidget *widget)
 {
   GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
 
-  g_source_remove (sl->update_source_id);
-  sl->update_source_id = 0;
+  g_clear_handle_id (&sl->update_source_id, g_source_remove);
 
   GTK_WIDGET_CLASS (gtk_inspector_misc_info_parent_class)->unmap (widget);
 }

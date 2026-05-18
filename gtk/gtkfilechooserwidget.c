@@ -3179,8 +3179,7 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
   toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (toplevel && impl->toplevel_set_focus_id != 0)
     {
-      g_signal_handler_disconnect (toplevel, impl->toplevel_set_focus_id);
-      impl->toplevel_set_focus_id = 0;
+      g_clear_signal_handler (&impl->toplevel_set_focus_id, toplevel);
       impl->toplevel_last_focus_widget = NULL;
       impl->toplevel_current_focus_widget = NULL;
     }
@@ -3520,8 +3519,7 @@ load_remove_timer (GtkFileChooserWidget *impl, LoadState new_load_state)
     {
       g_assert (impl->load_state == LOAD_PRELOAD);
 
-      g_source_remove (impl->load_timeout_id);
-      impl->load_timeout_id = 0;
+      g_clear_handle_id (&impl->load_timeout_id, g_source_remove);
     }
   else
     g_assert (impl->load_state == LOAD_EMPTY ||
@@ -4090,8 +4088,7 @@ update_chooser_entry (GtkFileChooserWidget *impl)
       g_assert (impl->action != GTK_FILE_CHOOSER_ACTION_SAVE);
 
       /* Multiple selection, so just clear the entry. */
-      g_free (impl->browse_files_last_selected_name);
-      impl->browse_files_last_selected_name = NULL;
+      g_clear_pointer (&impl->browse_files_last_selected_name, g_free);
 
       g_signal_handlers_block_by_func (impl->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
       gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), "");
@@ -5747,11 +5744,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
   set_busy_cursor (impl, FALSE);
   gtk_widget_set_visible (impl->search_spinner, FALSE);
 
-  if (impl->show_progress_timeout)
-    {
-      g_source_remove (impl->show_progress_timeout);
-      impl->show_progress_timeout = 0;
-    }
+  g_clear_handle_id (&impl->show_progress_timeout, g_source_remove);
 
   if (!got_results)
     {
@@ -5803,11 +5796,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
       gtk_widget_set_visible (impl->search_spinner, FALSE);
     }
 
-  if (impl->show_progress_timeout)
-    {
-      g_source_remove (impl->show_progress_timeout);
-      impl->show_progress_timeout = 0;
-    }
+  g_clear_handle_id (&impl->show_progress_timeout, g_source_remove);
 }
 
 /* Creates the search_model and puts it in the tree view */
@@ -5949,8 +5938,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
         }
       else
         {
-          g_object_unref (impl->search_query);
-          impl->search_query = NULL;
+          g_clear_object (&impl->search_query);
         }
     }
 }
@@ -7666,8 +7654,7 @@ gtk_file_chooser_widget_remove_choice (GtkFileChooser  *chooser,
   if (g_hash_table_size (impl->choices) == 0)
     {
       set_extra_widget (impl, NULL);
-      g_hash_table_unref (impl->choices);
-      impl->choices = NULL;
+      g_clear_pointer (&impl->choices, g_hash_table_unref);
       impl->choice_box = NULL;
     }
 }

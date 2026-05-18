@@ -706,8 +706,7 @@ gtk_compose_hash_get_cache_path (guint32 hash)
   if (g_mkdir_with_parents (dir, 0755) != 0)
     {
       g_warning ("Failed to mkdir %s", dir);
-      g_free (path);
-      path = NULL;
+      g_clear_pointer (&path, g_free);
     }
 
   g_free (dir);

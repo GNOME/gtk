@@ -5268,8 +5268,7 @@ lines_window_back (LinesWindow *win)
   *win->lines = line_text;
 
   /* Free old last line and NULL-terminate */
-  g_free (win->lines[win->n_lines]);
-  win->lines[win->n_lines] = NULL;
+  g_clear_pointer (&win->lines[win->n_lines], g_free);
 
   return TRUE;
 }

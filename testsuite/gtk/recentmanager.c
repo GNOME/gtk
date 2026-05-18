@@ -253,9 +253,8 @@ recent_manager_move_item (void)
                                       &error);
   g_assert_false (res);
   g_assert_error (error, GTK_RECENT_MANAGER_ERROR, GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
-  g_error_free (error);
+  g_clear_error (&error);
 
-  error = NULL;
   res = gtk_recent_manager_move_item (manager, uri, uri2, &error);
   g_assert_true (res);
   g_assert_null (error);
@@ -282,9 +281,8 @@ recent_manager_lookup_item (void)
                                          &error);
   g_assert_null (info);
   g_assert_error (error, GTK_RECENT_MANAGER_ERROR, GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
-  g_error_free (error);
+  g_clear_error (&error);
 
-  error = NULL;
   info = gtk_recent_manager_lookup_item (manager, uri2, &error);
   g_assert_nonnull (info);
   g_assert_null (error);

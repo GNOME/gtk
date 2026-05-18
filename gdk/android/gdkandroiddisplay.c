@@ -98,8 +98,7 @@ gdk_android_display_finalize (GObject *object)
       self->choreographer_source = NULL;
     }
 
-  g_list_free (self->visible_surfaces);
-  self->visible_surfaces = NULL;
+  g_clear_list (&self->visible_surfaces, NULL);
 
   g_clear_object (&display->clipboard);
 

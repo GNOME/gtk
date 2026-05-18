@@ -1439,11 +1439,7 @@ start_open (GtkModelButton *button)
 static void
 stop_open (GtkModelButton *button)
 {
-  if (button->open_timeout)
-    {
-      g_source_remove (button->open_timeout);
-      button->open_timeout = 0;
-    }
+  g_clear_handle_id (&button->open_timeout, g_source_remove);
 }
 
 static void

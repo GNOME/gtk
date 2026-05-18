@@ -785,11 +785,7 @@ gtk_search_entry_changed (GtkEditable    *editable,
       gtk_widget_set_child_visible (entry->clear_icon, FALSE);
       gtk_widget_queue_allocate (GTK_WIDGET (entry));
 
-      if (entry->delayed_changed_id > 0)
-        {
-          g_source_remove (entry->delayed_changed_id);
-          entry->delayed_changed_id = 0;
-        }
+      g_clear_handle_id (&entry->delayed_changed_id, g_source_remove);
       g_signal_emit (entry, signals[SEARCH_CHANGED], 0);
     }
   else

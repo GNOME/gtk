@@ -149,17 +149,9 @@ gdk_frame_clock_idle_dispose (GObject *object)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (object)->priv;
 
-  if (priv->flush_idle_id != 0)
-    {
-      g_source_remove (priv->flush_idle_id);
-      priv->flush_idle_id = 0;
-    }
+  g_clear_handle_id (&priv->flush_idle_id, g_source_remove);
 
-  if (priv->paint_idle_id != 0)
-    {
-      g_source_remove (priv->paint_idle_id);
-      priv->paint_idle_id = 0;
-    }
+  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
 
 #ifdef G_OS_WIN32
   if (priv->begin_period) 
@@ -361,16 +353,10 @@ maybe_stop_idle (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = self->priv;
 
   if (priv->flush_idle_id != 0 && !should_run_flush_idle (self))
-    {
-      g_source_remove (priv->flush_idle_id);
-      priv->flush_idle_id = 0;
-    }
+    g_clear_handle_id (&priv->flush_idle_id, g_source_remove);
 
   if (priv->paint_idle_id != 0 && !should_run_paint_idle (self))
-    {
-      g_source_remove (priv->paint_idle_id);
-      priv->paint_idle_id = 0;
-    }
+    g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
 }
 
 static gboolean

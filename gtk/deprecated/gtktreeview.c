@@ -2047,8 +2047,7 @@ gtk_tree_view_dispose (GObject *object)
   if (priv->selection != NULL)
     {
       _gtk_tree_selection_set_tree_view (priv->selection, NULL);
-      g_object_unref (priv->selection);
-      priv->selection = NULL;
+      g_clear_object (&priv->selection);
     }
 
   g_clear_pointer (&priv->scroll_to_path, gtk_tree_row_reference_free);
@@ -2069,11 +2068,7 @@ gtk_tree_view_dispose (GObject *object)
   if (priv->search_popover)
     {
       gtk_tree_view_destroy_search_popover (tree_view);
-      if (priv->typeselect_flush_timeout)
-	{
-	  g_source_remove (priv->typeselect_flush_timeout);
-	  priv->typeselect_flush_timeout = 0;
-	}
+      g_clear_handle_id (&priv->typeselect_flush_timeout, g_source_remove);
     }
 
   if (priv->search_custom_entry_set)
@@ -2092,9 +2087,8 @@ gtk_tree_view_dispose (GObject *object)
                                             G_CALLBACK (gtk_tree_view_search_key_pressed),
                                             tree_view);
 
-      g_object_unref (priv->search_entry);
+      g_clear_object (&priv->search_entry);
 
-      priv->search_entry = NULL;
       priv->search_custom_entry_set = FALSE;
     }
 
@@ -2207,23 +2201,11 @@ gtk_tree_view_unrealize (GtkWidget *widget)
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
 
-  if (priv->scroll_timeout != 0)
-    {
-      g_source_remove (priv->scroll_timeout);
-      priv->scroll_timeout = 0;
-    }
+  g_clear_handle_id (&priv->scroll_timeout, g_source_remove);
 
-  if (priv->auto_expand_timeout != 0)
-    {
-      g_source_remove (priv->auto_expand_timeout);
-      priv->auto_expand_timeout = 0;
-    }
+  g_clear_handle_id (&priv->auto_expand_timeout, g_source_remove);
 
-  if (priv->open_dest_timeout != 0)
-    {
-      g_source_remove (priv->open_dest_timeout);
-      priv->open_dest_timeout = 0;
-    }
+  g_clear_handle_id (&priv->open_dest_timeout, g_source_remove);
 
   if (priv->presize_handler_tick_cb != 0)
     {
@@ -2231,23 +2213,11 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->presize_handler_tick_cb = 0;
     }
 
-  if (priv->validate_rows_timer != 0)
-    {
-      g_source_remove (priv->validate_rows_timer);
-      priv->validate_rows_timer = 0;
-    }
+  g_clear_handle_id (&priv->validate_rows_timer, g_source_remove);
 
-  if (priv->scroll_sync_timer != 0)
-    {
-      g_source_remove (priv->scroll_sync_timer);
-      priv->scroll_sync_timer = 0;
-    }
+  g_clear_handle_id (&priv->scroll_sync_timer, g_source_remove);
 
-  if (priv->typeselect_flush_timeout)
-    {
-      g_source_remove (priv->typeselect_flush_timeout);
-      priv->typeselect_flush_timeout = 0;
-    }
+  g_clear_handle_id (&priv->typeselect_flush_timeout, g_source_remove);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
@@ -3198,8 +3168,7 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
 
   for (l = priv->column_drag_info; l != NULL; l = l->next)
     g_slice_free (GtkTreeViewColumnReorder, l->data);
-  g_list_free (priv->column_drag_info);
-  priv->column_drag_info = NULL;
+  g_clear_list (&priv->column_drag_info, NULL);
   priv->cur_reorder = NULL;
 
   /* Reset our flags */
@@ -6378,8 +6347,7 @@ validate_rows (GtkTreeView *tree_view)
 
   if (! retval && priv->validate_rows_timer)
     {
-      g_source_remove (priv->validate_rows_timer);
-      priv->validate_rows_timer = 0;
+      g_clear_handle_id (&priv->validate_rows_timer, g_source_remove);
       maybe_reenable_adjustment_animation (tree_view);
     }
 
@@ -9039,8 +9007,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
     {
       for (tmp_list = priv->column_drag_info; tmp_list; tmp_list = tmp_list->next)
 	g_slice_free (GtkTreeViewColumnReorder, tmp_list->data);
-      g_list_free (priv->column_drag_info);
-      priv->column_drag_info = NULL;
+      g_clear_list (&priv->column_drag_info, NULL);
       return;
     }
   /* We fill in the ranges for the columns, now that we've isolated them */
@@ -13659,12 +13626,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 
   if (priv->search_custom_entry_set)
     {
-      if (priv->search_entry_changed_id)
-        {
-	  g_signal_handler_disconnect (priv->search_entry,
-				       priv->search_entry_changed_id);
-	  priv->search_entry_changed_id = 0;
-	}
+      g_clear_signal_handler (&priv->search_entry_changed_id, priv->search_entry);
 
       g_signal_handlers_disconnect_by_func (gtk_entry_get_key_controller (GTK_ENTRY (priv->search_entry)),
 					    G_CALLBACK (gtk_tree_view_search_key_pressed),
@@ -13717,17 +13679,8 @@ gtk_tree_view_search_popover_hide (GtkWidget   *search_popover,
   if (priv->disable_popdown)
     return;
 
-  if (priv->search_entry_changed_id)
-    {
-      g_signal_handler_disconnect (priv->search_entry,
-				   priv->search_entry_changed_id);
-      priv->search_entry_changed_id = 0;
-    }
-  if (priv->typeselect_flush_timeout)
-    {
-      g_source_remove (priv->typeselect_flush_timeout);
-      priv->typeselect_flush_timeout = 0;
-    }
+  g_clear_signal_handler (&priv->search_entry_changed_id, priv->search_entry);
+  g_clear_handle_id (&priv->typeselect_flush_timeout, g_source_remove);
 
   if (gtk_widget_get_visible (search_popover))
     {

@@ -544,8 +544,7 @@ gtk_page_setup_new_from_file (const char   *file_name,
 
   if (!gtk_page_setup_load_file (setup, file_name, error))
     {
-      g_object_unref (setup);
-      setup = NULL;
+      g_clear_object (&setup);
     }
 
   return setup;
@@ -683,8 +682,7 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
 
   if (!gtk_page_setup_load_key_file (setup, key_file, group_name, error))
     {
-      g_object_unref (setup);
-      setup = NULL;
+      g_clear_object (&setup);
     }
 
   return setup;

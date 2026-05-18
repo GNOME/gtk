@@ -3087,8 +3087,7 @@ unref_tick_callback_info (GtkWidget           *widget,
   if (priv->tick_callbacks == NULL && priv->clock_tick_id)
     {
       GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
-      priv->clock_tick_id = 0;
+      g_clear_signal_handler (&priv->clock_tick_id, frame_clock);
       gdk_frame_clock_end_updating (frame_clock);
     }
 }
@@ -8043,8 +8042,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     {
       GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
 
-      g_signal_handler_disconnect (frame_clock, priv->clock_tick_id);
-      priv->clock_tick_id = 0;
+      g_clear_signal_handler (&priv->clock_tick_id, frame_clock);
       gdk_frame_clock_end_updating (frame_clock);
     }
 

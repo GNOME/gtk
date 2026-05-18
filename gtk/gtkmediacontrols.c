@@ -509,8 +509,7 @@ gtk_media_controls_set_media_stream (GtkMediaControls *controls,
       g_signal_handlers_disconnect_by_func (controls->stream,
                                             gtk_media_controls_notify_cb,
                                             controls);
-      g_object_unref (controls->stream);
-      controls->stream = NULL;
+      g_clear_object (&controls->stream);
     }
 
   if (stream)

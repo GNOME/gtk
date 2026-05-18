@@ -214,11 +214,7 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
     case PROP_ADJUSTMENT:
       obj = g_value_get_object (value);
 
-      if (priv->adjustment)
-	{
-	  g_object_unref (priv->adjustment);
-	  priv->adjustment = NULL;
-	}
+      g_clear_object (&priv->adjustment);
 
       if (obj)
 	priv->adjustment = GTK_ADJUSTMENT (g_object_ref_sink (obj));

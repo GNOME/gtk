@@ -924,8 +924,7 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   backend_cups = GTK_PRINT_BACKEND_CUPS (object);
 
-  g_free (backend_cups->default_printer);
-  backend_cups->default_printer = NULL;
+  g_clear_pointer (&backend_cups->default_printer, g_free);
 
   gtk_cups_connection_test_free (backend_cups->cups_connection_test);
   backend_cups->cups_connection_test = NULL;
@@ -1012,11 +1011,7 @@ gtk_print_backend_cups_dispose (GObject *object)
       backend_cups->avahi_service_browser_subscription_id = 0;
     }
 
-  if (backend_cups->unsubscribe_general_subscription_id > 0)
-    {
-      g_source_remove (backend_cups->unsubscribe_general_subscription_id);
-      backend_cups->unsubscribe_general_subscription_id = 0;
-    }
+  g_clear_handle_id (&backend_cups->unsubscribe_general_subscription_id, g_source_remove);
 
   backend_parent_class->dispose (object);
 }
@@ -1261,8 +1256,7 @@ cups_dispatch_add_poll (GSource *source)
   if (poll_state != dispatch->poll_state && dispatch->data_poll != NULL)
     {
       g_source_remove_poll (source, dispatch->data_poll);
-      g_free (dispatch->data_poll);
-      dispatch->data_poll = NULL;
+      g_clear_pointer (&dispatch->data_poll, g_free);
     }
 
   if (dispatch->request->http != NULL)
@@ -1320,8 +1314,7 @@ check_auth_info (gpointer user_data)
 
           for (i = 0; i < length; i++)
             overwrite_and_free (dispatch->request->auth_info[i]);
-          g_free (dispatch->request->auth_info);
-          dispatch->request->auth_info = NULL;
+          g_clear_pointer (&dispatch->request->auth_info, g_free);
         }
 
       return G_SOURCE_REMOVE;
@@ -1535,8 +1528,7 @@ cups_dispatch_watch_check (GSource *source)
   if (result && dispatch->data_poll != NULL)
     {
       g_source_remove_poll (source, dispatch->data_poll);
-      g_free (dispatch->data_poll);
-      dispatch->data_poll = NULL;
+      g_clear_pointer (&dispatch->data_poll, g_free);
     }
 
   if (dispatch->request->need_password && dispatch->request->password_state != GTK_CUPS_PASSWORD_REQUESTED)
@@ -1654,15 +1646,13 @@ cups_dispatch_watch_finalize (GSource *source)
       dispatch->backend->requests = g_list_remove (dispatch->backend->requests, dispatch);
 
 
-      g_object_unref (dispatch->backend);
-      dispatch->backend = NULL;
+      g_clear_object (&dispatch->backend);
     }
 
   if (dispatch->data_poll)
     {
       g_source_remove_poll (source, dispatch->data_poll);
-      g_free (dispatch->data_poll);
-      dispatch->data_poll = NULL;
+      g_clear_pointer (&dispatch->data_poll, g_free);
     }
 }
 

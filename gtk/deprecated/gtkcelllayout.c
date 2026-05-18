@@ -722,8 +722,7 @@ attributes_end_element (GtkBuildableParseContext  *context,
 				 data->attr_name,
                                  g_value_get_int (&val));
 
-  g_free (data->attr_name);
-  data->attr_name = NULL;
+  g_clear_pointer (&data->attr_name, g_free);
 
   g_string_set_size (data->string, 0);
 }

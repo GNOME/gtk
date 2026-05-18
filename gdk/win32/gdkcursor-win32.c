@@ -310,8 +310,7 @@ delayed_cursor_destruction (gpointer user_data)
         g_warning (G_STRLOC ": DestroyCursor (%p) failed: %lu", handle, GetLastError ());
     }
 
-  g_list_free (win32_display->cursors_for_destruction);
-  win32_display->cursors_for_destruction = NULL;
+  g_clear_list (&win32_display->cursors_for_destruction, NULL);
 
   return G_SOURCE_REMOVE;
 }
@@ -750,8 +749,7 @@ _gdk_win32_display_finalize_cursors (GdkWin32Display *display)
 
   g_free (display->cursor_theme_name);
 
-  g_list_free (display->cursors_for_destruction);
-  display->cursors_for_destruction = NULL;
+  g_clear_list (&display->cursors_for_destruction, NULL);
 
   if (display->cursor_theme)
     win32_cursor_theme_destroy (display->cursor_theme);

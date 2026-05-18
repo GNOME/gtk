@@ -252,8 +252,7 @@ viewport_disconnect_adjustment (GtkViewport    *viewport,
       g_signal_handlers_disconnect_by_func (*adjustmentp,
                                             gtk_viewport_adjustment_value_changed,
                                             viewport);
-      g_object_unref (*adjustmentp);
-      *adjustmentp = NULL;
+      g_clear_object (adjustmentp);
     }
 }
 
@@ -661,11 +660,7 @@ clear_focus_change_handler (GtkViewport *viewport)
 
   root = gtk_widget_get_root (GTK_WIDGET (viewport));
 
-  if (viewport->focus_handler)
-    {
-      g_signal_handler_disconnect (root, viewport->focus_handler);
-      viewport->focus_handler = 0;
-    }
+  g_clear_signal_handler (&viewport->focus_handler, root);
 }
 
 /**

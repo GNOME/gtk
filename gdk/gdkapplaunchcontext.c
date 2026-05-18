@@ -260,11 +260,7 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (icon == NULL || G_IS_ICON (icon));
 
-  if (context->icon)
-    {
-      g_object_unref (context->icon);
-      context->icon = NULL;
-    }
+  g_clear_object (&context->icon);
 
   if (icon)
     context->icon = g_object_ref (icon);
