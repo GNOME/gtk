@@ -46,7 +46,7 @@
 #include "gtk/gtkprivate.h"
 #include "gtk/gtkmodulesprivate.h"
 
-#include "gtkprintbackendfile.h"
+#include "gtkprintbackendfileprivate.h"
 
 typedef struct _GtkPrintBackendFileClass GtkPrintBackendFileClass;
 

@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkprintbackendcups.h: Default implementation of GtkPrintBackend
+ * gtkprintbackendcupsprivate.h: Default implementation of GtkPrintBackend
  * for the Common Unix Print System (CUPS)
  * Copyright (C) 2006, 2007 Red Hat, Inc.
  *
@@ -20,7 +20,7 @@
 
 #include <glib.h>
 
-#include "gtkprintbackendutils.h"
+#include "gtkprintbackendutilsprivate.h"
 
 /* Converts local time to UTC time. Local time has to be in one of these
  * formats:  HH:MM:SS, HH:MM, HH:MM:SS {am, pm}, HH:MM {am, pm}, HH {am, pm},

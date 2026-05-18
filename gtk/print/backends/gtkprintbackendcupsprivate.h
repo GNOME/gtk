@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkprintbackendcups.h: Default implementation of GtkPrintBackend for the Common Unix Print System (CUPS)
+ * gtkprintbackendcupsprivate.h: Default implementation of GtkPrintBackend for the Common Unix Print System (CUPS)
  * Copyright (C) 2006, 2007 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

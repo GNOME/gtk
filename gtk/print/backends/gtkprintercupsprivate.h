@@ -20,7 +20,7 @@
 #include <glib-object.h>
 #include <cups/cups.h>
 #include <cups/ppd.h>
-#include "gtkcupsutils.h"
+#include "gtkcupsutilsprivate.h"
 
 #include <gtk/gtkunixprint.h>
 #include <gtk/print/gtkprinterprivate.h>

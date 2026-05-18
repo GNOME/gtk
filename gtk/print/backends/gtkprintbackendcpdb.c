@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkprintbackendcpdb.h: Default implementation of GtkPrintBackend
+ * gtkprintbackendcpdbprivate.h: Default implementation of GtkPrintBackend
  * for the Common Print Dialog Backends (CPDB)
  * Copyright (C) 2022, 2023 TinyTrebuchet <tinytrebuchet@protonmail.com>
  *
@@ -23,9 +23,9 @@
 
 #include <gtk/gtkprivate.h>
 #include <gtk/gtkmodulesprivate.h>
-#include "gtkprintbackendcpdb.h"
-#include "gtkprintbackendutils.h"
-#include "gtkprintercpdb.h"
+#include "gtkprintbackendcpdbprivate.h"
+#include "gtkprintbackendutilsprivate.h"
+#include "gtkprintercpdbprivate.h"
 
 #include <cairo.h>
 #include <cairo-pdf.h>
