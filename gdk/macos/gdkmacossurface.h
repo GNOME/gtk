@@ -39,5 +39,7 @@ GType    gdk_macos_surface_get_type          (void);
 GDK_AVAILABLE_IN_4_8
 gpointer gdk_macos_surface_get_native_window (GdkMacosSurface *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkMacosSurface, g_object_unref)
+
 G_END_DECLS
 

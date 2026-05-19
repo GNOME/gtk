@@ -40,5 +40,7 @@ GDK_AVAILABLE_IN_ALL
 void  gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
                                       GdkRectangle *geometry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkMacosMonitor, g_object_unref)
+
 G_END_DECLS
 

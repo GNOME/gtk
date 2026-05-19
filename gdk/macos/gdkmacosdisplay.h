@@ -41,5 +41,7 @@ typedef struct _GdkMacosDisplayClass GdkMacosDisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_macos_display_get_type (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkMacosDisplay, g_object_unref)
+
 G_END_DECLS
 

@@ -37,5 +37,7 @@ typedef struct _GdkMacosKeymapClass GdkMacosKeymapClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_macos_keymap_get_type (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkMacosKeymap, g_object_unref)
+
 G_END_DECLS
 

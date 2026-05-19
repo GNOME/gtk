@@ -37,5 +37,7 @@ typedef struct _GdkMacosGLContextClass GdkMacosGLContextClass;
 GDK_AVAILABLE_IN_ALL
 GType gdk_macos_gl_context_get_type (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkMacosGLContext, g_object_unref)
+
 G_END_DECLS
 
