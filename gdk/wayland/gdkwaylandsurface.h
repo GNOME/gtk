@@ -46,5 +46,7 @@ struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *s
 GDK_AVAILABLE_IN_4_18
 void                     gdk_wayland_surface_force_next_commit    (GdkSurface *surface);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandSurface, g_object_unref)
+
 G_END_DECLS
 

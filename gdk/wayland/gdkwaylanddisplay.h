@@ -65,5 +65,7 @@ gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *di
 GDK_AVAILABLE_IN_4_4
 gpointer                gdk_wayland_display_get_egl_display     (GdkDisplay  *display);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandDisplay, g_object_unref)
+
 G_END_DECLS
 

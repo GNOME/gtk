@@ -67,4 +67,6 @@ GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
                                                                   const char  *application_id);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandToplevel, g_object_unref)
+
 G_END_DECLS
