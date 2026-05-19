@@ -429,14 +429,14 @@ set_size (PaintableEditor *self,
   svg->width = width;
   svg->height = height;
 
-  svg_element_take_base_value (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
-  svg_element_take_base_value (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
+  svg_element_take_specified_value (svg->content, SVG_PROPERTY_WIDTH, svg_number_new (width));
+  svg_element_take_specified_value (svg->content, SVG_PROPERTY_HEIGHT, svg_number_new (height));
 
   value = ref_value (svg->content, SVG_PROPERTY_VIEW_BOX);
 
   if (!svg_view_box_get (value, &rect))
-    svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
-                        svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
+    svg_element_take_specified_value (svg->content, SVG_PROPERTY_VIEW_BOX,
+                                      svg_view_box_new (&GRAPHENE_RECT_INIT (0, 0, width, height)));
   svg_value_unref (value);
 
   path_paintable_changed (self->paintable);
@@ -476,8 +476,8 @@ viewbox_changed (PaintableEditor *self)
   res += sscanf (text, "%lf", &h);
   if (res == 4 && w > 0 && h > 0)
     {
-      svg_element_take_base_value (svg->content, SVG_PROPERTY_VIEW_BOX,
-                                   svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
+      svg_element_take_specified_value (svg->content, SVG_PROPERTY_VIEW_BOX,
+                                        svg_view_box_new (&GRAPHENE_RECT_INIT (x, y, w, h)));
 
       path_paintable_changed (self->paintable);
       gdk_paintable_invalidate_size (GDK_PAINTABLE (self->paintable));
@@ -827,7 +827,7 @@ paintable_editor_add_path (PaintableEditor *self)
   shape = svg_element_new (svg->content, SVG_ELEMENT_PATH);
   svg_element_add_child (svg->content, shape);
   shape_set_default_attrs (shape);
-  svg_element_take_base_value (shape, SVG_PROPERTY_PATH, svg_path_new (path));
+  svg_element_take_specified_value (shape, SVG_PROPERTY_PATH, svg_path_new (path));
   id = path_paintable_find_unused_id (self->paintable, "path");
   svg_element_set_id (shape, id);
   g_free (id);

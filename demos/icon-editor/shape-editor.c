@@ -39,6 +39,7 @@
 #include "gtk/svg/gtksvgmaskprivate.h"
 #include "gtk/svg/gtksvgelementprivate.h"
 #include "gtk/svg/gtksvgkeywordprivate.h"
+#include "gtk/svg/gtksvgparserprivate.h"
 
 struct _ShapeEditor
 {
@@ -132,45 +133,49 @@ shape_changed (ShapeEditor *self)
     return;
 
   old_type = svg_element_get_type (self->shape);
-  switch (old_type)
+  type = gtk_drop_down_get_selected (self->shape_dropdown);
+
+  if (type != old_type)
     {
-    case SVG_ELEMENT_LINE:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X1, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y1, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X2, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y2, NULL);
-      break;
-    case SVG_ELEMENT_CIRCLE:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_R, NULL);
-      break;
-    case SVG_ELEMENT_ELLIPSE:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
-      break;
-    case SVG_ELEMENT_RECT:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_X, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_WIDTH, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_HEIGHT, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
-      break;
-    case SVG_ELEMENT_POLYLINE:
-    case SVG_ELEMENT_POLYGON:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_POINTS, NULL);
-      break;
-    case SVG_ELEMENT_PATH:
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_PATH, NULL);
-      break;
-    default:
-      break;
+      switch (old_type)
+        {
+        case SVG_ELEMENT_LINE:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_X1, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y1, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_X2, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y2, NULL);
+          break;
+        case SVG_ELEMENT_CIRCLE:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_R, NULL);
+          break;
+        case SVG_ELEMENT_ELLIPSE:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_CX, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_CY, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
+          break;
+        case SVG_ELEMENT_RECT:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_X, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_Y, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_WIDTH, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_HEIGHT, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_RX, NULL);
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_RY, NULL);
+          break;
+        case SVG_ELEMENT_POLYLINE:
+        case SVG_ELEMENT_POLYGON:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_POINTS, NULL);
+          break;
+        case SVG_ELEMENT_PATH:
+          svg_element_take_specified_value (self->shape, SVG_PROPERTY_PATH, NULL);
+          break;
+        default:
+          break;
+        }
     }
 
-  type = gtk_drop_down_get_selected (self->shape_dropdown);
   svg_element_set_type (self->shape, (SvgElementType) type);
   switch (type)
     {
@@ -298,8 +303,10 @@ shape_changed (ShapeEditor *self)
       g_assert_not_reached ();
     }
 
+#if 0
   if (type != old_type)
     path_paintable_paths_changed (self->paintable);
+#endif
 
   g_clear_object (&self->path_image);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PATH_IMAGE]);
@@ -969,7 +976,7 @@ fill_changed (ShapeEditor *self)
   svg_element_set_gpa_fill (self->shape, NULL);
   if (!do_fill)
     {
-      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL, NULL);
+      svg_element_take_specified_value (self->shape, SVG_PROPERTY_FILL, svg_paint_new_none ());
     }
   else if (symbolic != 0xffff)
     {
@@ -1342,7 +1349,7 @@ paths_changed (ShapeEditor *self)
 
 static void
 append_shape_editor (ShapeEditor *self,
-                     SvgElement       *shape)
+                     SvgElement  *shape)
 {
   ShapeEditor *pe;
 
