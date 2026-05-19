@@ -51,7 +51,7 @@
 #include "gdkshm-private.h"
 #include "gdksettings-wayland.h"
 #include "gdkapplaunchcontext-wayland.h"
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 #include "gdkwaylandprivate.h"
 
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
