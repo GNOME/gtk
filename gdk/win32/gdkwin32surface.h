@@ -53,5 +53,7 @@ GDK_AVAILABLE_IN_ALL
 void gdk_win32_surface_set_urgency_hint    (GdkSurface *surface,
                                             gboolean    urgent);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32Surface, g_object_unref)
+
 G_END_DECLS
 

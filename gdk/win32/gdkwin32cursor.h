@@ -80,5 +80,7 @@ GDK_AVAILABLE_IN_ALL
 void             _gdk_win32_display_hcursor_unref      (GdkWin32Display *display,
                                                         HCURSOR          handle);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32HCursor, g_object_unref)
+
 G_END_DECLS
 

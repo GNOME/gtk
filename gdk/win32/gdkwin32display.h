@@ -107,5 +107,7 @@ GDK_AVAILABLE_IN_4_4
 gpointer gdk_win32_display_get_egl_display         (GdkDisplay  *display);
 
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32Display, g_object_unref)
+
 G_END_DECLS
 
