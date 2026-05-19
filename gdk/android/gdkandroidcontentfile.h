@@ -44,4 +44,6 @@ GFile *gdk_android_content_file_from_uri (jobject uri);
 GDK_AVAILABLE_IN_4_18
 jobject gdk_android_content_file_get_uri_object (GdkAndroidContentFile *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkAndroidContentFile, g_object_unref)
+
 G_END_DECLS

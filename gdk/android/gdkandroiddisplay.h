@@ -71,4 +71,6 @@ const GdkRGBA              *gdk_android_display_get_accent_color (GdkAndroidDisp
 GDK_AVAILABLE_IN_4_18
 gpointer gdk_android_display_get_egl_display (GdkAndroidDisplay *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkAndroidDisplay, g_object_unref)
+
 G_END_DECLS
