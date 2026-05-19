@@ -27,12 +27,12 @@
 #include "gtkprivate.h"
 
 #ifdef HAVE_PRINTBACKEND_CPDB
-#include "print/backends/gtkprintbackendcpdb.h"
+#include "print/backends/gtkprintbackendcpdbprivate.h"
 #endif
 #ifdef HAVE_PRINTBACKEND_CUPS
-#include "print/backends/gtkprintbackendcups.h"
+#include "print/backends/gtkprintbackendcupsprivate.h"
 #endif
-#include "print/backends/gtkprintbackendfile.h"
+#include "print/backends/gtkprintbackendfileprivate.h"
 
 #include "gtkprintbackendprivate.h"
 

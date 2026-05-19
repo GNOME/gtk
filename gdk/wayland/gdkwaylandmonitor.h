@@ -42,5 +42,7 @@ GType             gdk_wayland_monitor_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 struct wl_output *gdk_wayland_monitor_get_wl_output       (GdkMonitor *monitor);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandMonitor, g_object_unref)
+
 G_END_DECLS
 

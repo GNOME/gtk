@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkfilethumbnail.h"
+#include "gtkfilethumbnailprivate.h"
 
 #include "gtkbinlayout.h"
 #include "gtkfilechooserutils.h"

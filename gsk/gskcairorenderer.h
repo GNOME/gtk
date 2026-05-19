@@ -54,5 +54,7 @@ GType                   gsk_cairo_renderer_get_type             (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderer *           gsk_cairo_renderer_new                  (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskCairoRenderer, g_object_unref)
+
 G_END_DECLS
 

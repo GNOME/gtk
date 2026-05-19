@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkfilechooserentry.h"
+#include "gtkfilechooserentryprivate.h"
 
 #include <string.h>
 

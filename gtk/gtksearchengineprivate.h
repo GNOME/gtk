@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "gtkquery.h"
+#include "gtkqueryprivate.h"
 #include "gtkfilesystemmodelprivate.h"
 #include <gio/gio.h>
 
@@ -38,8 +38,6 @@ typedef struct _GtkSearchEngine GtkSearchEngine;
 typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
 typedef struct _GtkSearchHit GtkSearchHit;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkSearchEngine, g_object_unref)
 
 struct _GtkSearchHit
 {

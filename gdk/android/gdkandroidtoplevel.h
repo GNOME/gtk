@@ -51,4 +51,6 @@ void gdk_android_toplevel_launch_activity_for_result_async (GdkAndroidToplevel *
 GDK_AVAILABLE_IN_4_18
 gboolean gdk_android_toplevel_launch_activity_for_result_finish (GdkAndroidToplevel *self, GAsyncResult *result, jint *response, jobject *data, GError **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkAndroidToplevel, g_object_unref)
+
 G_END_DECLS

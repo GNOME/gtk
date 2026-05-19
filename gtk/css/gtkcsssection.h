@@ -75,5 +75,7 @@ GDK_AVAILABLE_IN_ALL
 const GtkCssLocation *
                    gtk_css_section_get_end_location    (const GtkCssSection  *section);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssSection, gtk_css_section_unref)
+
 G_END_DECLS
 

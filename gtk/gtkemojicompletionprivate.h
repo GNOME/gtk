@@ -1,4 +1,4 @@
-/* gtkemojicompletion.h: An Emoji picker widget
+/* gtkemojicompletionprivate.h: An Emoji picker widget
  * Copyright 2017, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

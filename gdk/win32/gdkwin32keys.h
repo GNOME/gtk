@@ -60,5 +60,7 @@ typedef struct _GdkWin32KeymapClass GdkWin32KeymapClass;
 
 GType gdk_win32_keymap_get_type (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32Keymap, g_object_unref)
+
 G_END_DECLS
 

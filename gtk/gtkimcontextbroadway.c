@@ -21,7 +21,7 @@
 #include "config.h"
 #include <string.h>
 
-#include "gtk/gtkimcontextbroadway.h"
+#include "gtk/gtkimcontextbroadwayprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/broadway/gdkbroadway.h"

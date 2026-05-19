@@ -131,5 +131,7 @@ GDK_AVAILABLE_IN_4_8
 GdkFileList *   gdk_file_list_new_from_array (GFile **files,
                                               gsize   n_files);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkContentFormatsBuilder, gdk_content_formats_builder_unref)
+
 G_END_DECLS
 

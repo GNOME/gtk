@@ -49,21 +49,21 @@
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkbroadway.h"
-#include "gtkimcontextbroadway.h"
+#include "gtkimcontextbroadwayprivate.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
-#include "gtkimcontextime.h"
+#include "gtkimcontextimeprivate.h"
 #endif
 
 #ifdef GDK_WINDOWING_MACOS
 #include "macos/gdkmacos.h"
-#include "gtkimcontextquartz.h"
+#include "gtkimcontextquartzprivate.h"
 #endif
 
 #ifdef GDK_WINDOWING_ANDROID
-#include "gtkimcontextandroid.h"
+#include "gtkimcontextandroidprivate.h"
 #endif
 
 #ifdef G_OS_WIN32

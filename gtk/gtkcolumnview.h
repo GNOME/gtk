@@ -136,5 +136,7 @@ void            gtk_column_view_scroll_to                       (GtkColumnView  
                                                                  GtkListScrollFlags      flags,
                                                                  GtkScrollInfo          *scroll);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkColumnView, g_object_unref)
+
 G_END_DECLS
 

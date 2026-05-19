@@ -40,5 +40,7 @@ GType                   gdk_cairo_context_get_type                      (void) G
 GDK_DEPRECATED_IN_4_18_FOR(gsk_cairo_node_get_draw_context)
 cairo_t *               gdk_cairo_context_cairo_create                  (GdkCairoContext        *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkCairoContext, g_object_unref)
+
 G_END_DECLS
 

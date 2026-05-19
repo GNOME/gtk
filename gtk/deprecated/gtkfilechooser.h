@@ -186,5 +186,7 @@ GDK_DEPRECATED_IN_4_10
 const char *         gtk_file_chooser_get_choice           (GtkFileChooser      *chooser,
                                                             const char          *id);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFileChooser, g_object_unref)
+
 G_END_DECLS
 

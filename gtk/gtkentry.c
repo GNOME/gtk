@@ -36,7 +36,7 @@
 #include "gtkdebug.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
-#include "gtkemojicompletion.h"
+#include "gtkemojicompletionprivate.h"
 #include "gtkentrybuffer.h"
 #include "gtkgesturedrag.h"
 #include <glib/gi18n-lib.h>

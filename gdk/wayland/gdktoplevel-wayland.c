@@ -31,7 +31,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdevice-wayland-private.h"
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 
 #include <wayland/presentation-time-client-protocol.h>
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>

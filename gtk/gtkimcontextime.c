@@ -27,7 +27,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
-#include "gtkimcontextime.h"
+#include "gtkimcontextimeprivate.h"
 #include "gtkimmoduleprivate.h"
 #include "gtkroot.h"
 

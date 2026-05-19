@@ -57,6 +57,7 @@ gboolean            gtk_event_controller_key_forward        (GtkEventControllerK
 GDK_AVAILABLE_IN_ALL
 guint               gtk_event_controller_key_get_group      (GtkEventControllerKey *controller);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventControllerKey, g_object_unref)
 
 G_END_DECLS
 

@@ -89,5 +89,7 @@ typedef struct _GtkListBaseClass GtkListBaseClass;
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_list_base_get_type                  (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListBase, g_object_unref)
+
 G_END_DECLS
 

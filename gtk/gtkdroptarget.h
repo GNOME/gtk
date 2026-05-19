@@ -82,6 +82,7 @@ const GValue *          gtk_drop_target_get_value        (GtkDropTarget         
 GDK_AVAILABLE_IN_ALL
 void                    gtk_drop_target_reject           (GtkDropTarget         *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDropTarget, g_object_unref)
 
 G_END_DECLS
 

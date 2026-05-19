@@ -49,5 +49,7 @@ gboolean            gtk_event_controller_motion_contains_pointer   (GtkEventCont
 GDK_AVAILABLE_IN_ALL
 gboolean            gtk_event_controller_motion_is_pointer         (GtkEventControllerMotion *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventControllerMotion, g_object_unref)
+
 G_END_DECLS
 

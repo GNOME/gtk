@@ -1,4 +1,4 @@
-/* gtkfilethumbnail.h
+/* gtkfilethumbnailprivate.h
  *
  * Copyright 2022 Georges Basile Stavracas Neto <georges.stavracas@gmail.com>
  *

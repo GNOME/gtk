@@ -41,4 +41,6 @@ typedef GdkPopup GdkWaylandPopup;
 GDK_AVAILABLE_IN_ALL
 GType                    gdk_wayland_popup_get_type               (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandPopup, g_object_unref)
+
 G_END_DECLS

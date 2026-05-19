@@ -35,7 +35,7 @@
 #include "gtkdroptarget.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
-#include "gtkemojicompletion.h"
+#include "gtkemojicompletionprivate.h"
 #include "gtkentrybuffer.h"
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollerkey.h"

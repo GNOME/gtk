@@ -166,6 +166,8 @@ void    gsk_shader_args_builder_set_vec4  (GskShaderArgsBuilder *builder,
                                            const graphene_vec4_t *value);
 
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskShaderArgsBuilder, gsk_shader_args_builder_unref)
+
 G_END_DECLS
 
 G_GNUC_END_IGNORE_DEPRECATIONS

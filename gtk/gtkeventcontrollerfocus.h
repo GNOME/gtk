@@ -50,6 +50,7 @@ gboolean            gtk_event_controller_focus_contains_focus     (GtkEventContr
 GDK_AVAILABLE_IN_ALL
 gboolean            gtk_event_controller_focus_is_focus           (GtkEventControllerFocus  *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventControllerFocus, g_object_unref)
 
 G_END_DECLS
 

@@ -43,5 +43,7 @@ gboolean        gdk_win32_display_get_wgl_version (GdkDisplay *display,
                                                    int        *major,
                                                    int        *minor);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32GLContext, g_object_unref)
+
 G_END_DECLS
 

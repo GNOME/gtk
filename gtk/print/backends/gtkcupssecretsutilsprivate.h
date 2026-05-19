@@ -1,4 +1,4 @@
-/* gtkcupssecretsutils.h: Helper to use a secrets service for printer passwords
+/* gtkcupssecretsutilsprivate.h: Helper to use a secrets service for printer passwords
  * Copyright (C) 2014 Intevation GmbH
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include <glib.h>
 
-#include "gtkcupsutils.h"
+#include "gtkcupsutilsprivate.h"
 
 G_BEGIN_DECLS
 

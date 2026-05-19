@@ -24,7 +24,7 @@
 #include <colord.h>
 #endif
 
-#include "gtkprintercups.h"
+#include "gtkprintercupsprivate.h"
 
 enum {
   PROP_0,

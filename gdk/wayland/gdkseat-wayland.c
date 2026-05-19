@@ -20,7 +20,7 @@
 #include "gdkdevice-wayland-private.h"
 #include "gdksurface-wayland-private.h"
 
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 #include "gdkclipboard-wayland.h"
 #include "gdkclipboardprivate.h"
 #include "gdkcursorprivate.h"

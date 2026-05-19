@@ -40,4 +40,6 @@ typedef struct _GdkAndroidSurfaceClass GdkAndroidSurfaceClass;
 GDK_AVAILABLE_IN_4_18
 GType gdk_android_surface_get_type (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkAndroidSurface, g_object_unref)
+
 G_END_DECLS

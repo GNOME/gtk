@@ -44,6 +44,7 @@ GType                   gtk_signal_list_item_factory_get_type   (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *    gtk_signal_list_item_factory_new        (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSignalListItemFactory, g_object_unref)
 
 G_END_DECLS
 

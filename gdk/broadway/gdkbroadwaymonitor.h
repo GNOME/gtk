@@ -39,6 +39,8 @@ typedef struct _GdkBroadwayMonitorClass GdkBroadwayMonitorClass;
 GDK_AVAILABLE_IN_ALL
 GType             gdk_broadway_monitor_get_type            (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkBroadwayMonitor, g_object_unref)
+
 G_END_DECLS
 
 

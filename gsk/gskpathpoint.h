@@ -89,4 +89,6 @@ GDK_AVAILABLE_IN_4_14
 float                   gsk_path_point_get_distance    (const GskPathPoint *point,
                                                         GskPathMeasure     *measure);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathPoint, gsk_path_point_free)
+
 G_END_DECLS

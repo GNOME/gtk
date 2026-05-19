@@ -16,7 +16,7 @@
  */
  
 
-#include "gtkprintercpdb.h"
+#include "gtkprintercpdbprivate.h"
 
 enum {
   PROP_0,

@@ -48,5 +48,7 @@ GDK_AVAILABLE_IN_ALL
 void gdk_win32_monitor_get_workarea (GdkMonitor   *monitor,
                                      GdkRectangle *workarea);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWin32Monitor, g_object_unref)
+
 G_END_DECLS
 

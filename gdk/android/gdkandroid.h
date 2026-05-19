@@ -23,18 +23,18 @@
 
 #define __GDKANDROID_H_INSIDE__
 
-#include "gdkandroidinit.h"
-#include "gdkandroiddisplay.h"
+#include <gdk/android/gdkandroidinit.h>
+#include <gdk/android/gdkandroiddisplay.h>
 
-#include "gdkandroiddevice.h"
-#include "gdkandroidseat.h"
+#include <gdk/android/gdkandroiddevice.h>
+#include <gdk/android/gdkandroidseat.h>
 
-#include "gdkandroidmonitor.h"
+#include <gdk/android/gdkandroidmonitor.h>
 
-#include "gdkandroidsurface.h"
-#include "gdkandroidtoplevel.h"
-#include "gdkandroidpopup.h"
+#include <gdk/android/gdkandroidsurface.h>
+#include <gdk/android/gdkandroidtoplevel.h>
+#include <gdk/android/gdkandroidpopup.h>
 
-#include "gdkandroidcontentfile.h"
+#include <gdk/android/gdkandroidcontentfile.h>
 
 #undef __GDKANDROID_H_INSIDE__

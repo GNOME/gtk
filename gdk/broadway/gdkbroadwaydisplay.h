@@ -53,5 +53,7 @@ GDK_DEPRECATED_IN_4_18
 void                    gdk_broadway_display_set_surface_scale   (GdkDisplay *display,
                                                                   int         scale);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkBroadwayDisplay, g_object_unref)
+
 G_END_DECLS
 

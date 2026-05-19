@@ -57,5 +57,7 @@ struct xkb_keymap   *gdk_wayland_device_get_xkb_keymap      (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 const char          *gdk_wayland_device_get_node_path       (GdkDevice *device);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkWaylandDevice, g_object_unref)
+
 G_END_DECLS
 

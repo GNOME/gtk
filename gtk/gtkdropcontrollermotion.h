@@ -51,5 +51,7 @@ GdkDrop *               gtk_drop_controller_motion_get_drop             (GtkDrop
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_drop_controller_motion_is_pointer           (GtkDropControllerMotion        *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDropControllerMotion, g_object_unref)
+
 G_END_DECLS
 
