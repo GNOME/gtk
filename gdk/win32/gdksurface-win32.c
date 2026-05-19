@@ -43,7 +43,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkwin32surface.h"
-#include "gdkwin32cursor.h"
+#include "gdkwin32cursorprivate.h"
 #include "gdkinput-dmanipulation.h"
 #include "gdkinput-winpointer.h"
 #include "gdkglcontext-win32.h"

@@ -28,7 +28,6 @@
 
 #include <gdk/win32/gdkd3d12texture.h>
 #include <gdk/win32/gdkd3d12texturebuilder.h>
-#include <gdk/win32/gdkwin32cursor.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32dnd.h>
 #include <gdk/win32/gdkwin32surface.h>
