@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gdkeventtranslator.h"
+#include "gdkeventtranslatorprivate.h"
 #include "gdksurface-x11.h"
 
 typedef GdkEventTranslatorIface GdkEventTranslatorInterface;

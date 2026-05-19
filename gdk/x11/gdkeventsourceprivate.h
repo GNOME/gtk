@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "gdkeventtranslator.h"
+#include "gdkeventtranslatorprivate.h"
 #include "gdkx11display.h"
 
 G_BEGIN_DECLS
