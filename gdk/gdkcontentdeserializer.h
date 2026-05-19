@@ -98,5 +98,7 @@ gboolean                gdk_content_deserialize_finish                  (GAsyncR
                                                                          GError                **error);
 
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkContentDeserializer, g_object_unref)
+
 G_END_DECLS
 

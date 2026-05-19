@@ -71,5 +71,7 @@ GdkDeviceToolType   gdk_device_tool_get_tool_type   (GdkDeviceTool *tool);
 GDK_AVAILABLE_IN_ALL
 GdkAxisFlags        gdk_device_tool_get_axes        (GdkDeviceTool *tool);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkDeviceTool, g_object_unref)
+
 G_END_DECLS
 

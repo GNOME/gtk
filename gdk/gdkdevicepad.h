@@ -67,5 +67,7 @@ int   gdk_device_pad_get_feature_group (GdkDevicePad        *pad,
                                         GdkDevicePadFeature  feature,
                                         int                  feature_idx);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkDevicePad, g_object_unref)
+
 G_END_DECLS
 
