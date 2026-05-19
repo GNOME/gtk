@@ -19,7 +19,7 @@
 #pragma once
 
 #include "gdk/win32/gdkprivate-win32.h"
-#include "gdk/win32/gdkwin32cursor.h"
+#include "gdk/win32/gdkwin32cursorprivate.h"
 #include "gdk/win32/gdkwin32surface.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"

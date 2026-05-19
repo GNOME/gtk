@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "gdkwin32cursor.h"
+#include "gdkwin32cursorprivate.h"
 #include "gdkprivate-win32.h"
  
 #include "gdkglversionprivate.h"
