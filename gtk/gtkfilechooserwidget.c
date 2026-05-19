@@ -6719,19 +6719,19 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        "places-shortcut",
                                        NULL);
   gtk_widget_class_add_binding (widget_class,
-                                GDK_KEY_slash, 0,
+                                GDK_KEY_slash, GDK_NO_MODIFIER_MASK,
                                 trigger_location_entry,
                                 "s", "/");
   gtk_widget_class_add_binding (widget_class,
-                                GDK_KEY_KP_Divide, 0,
+                                GDK_KEY_KP_Divide, GDK_NO_MODIFIER_MASK,
                                 trigger_location_entry,
                                 "s", "/");
   gtk_widget_class_add_binding (widget_class,
-                                GDK_KEY_period, 0,
+                                GDK_KEY_period, GDK_NO_MODIFIER_MASK,
                                 trigger_location_entry,
                                 "s", ".");
   gtk_widget_class_add_binding (widget_class,
-                                GDK_KEY_asciitilde, 0,
+                                GDK_KEY_asciitilde, GDK_NO_MODIFIER_MASK,
                                 trigger_location_entry,
                                 "s", "~");
 

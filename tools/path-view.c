@@ -555,12 +555,12 @@ path_view_class_init (PathViewClass *class)
   gtk_widget_class_install_action (widget_class, "fill-rule", NULL,
                                    path_view_toggle_fill_rule);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, 0, "zoom", "d", 1.2);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, 0, "zoom", "d", 1/1.2);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, 0, "points", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, 0, "controls", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_i, 0, "intersections", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, 0, "fill-rule", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, GDK_NO_MODIFIER_MASK, "zoom", "d", 1.2);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_NO_MODIFIER_MASK, "zoom", "d", 1/1.2);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, GDK_NO_MODIFIER_MASK, "points", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, GDK_NO_MODIFIER_MASK, "controls", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_i, GDK_NO_MODIFIER_MASK, "intersections", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, GDK_NO_MODIFIER_MASK, "fill-rule", NULL);
 }
 
 GtkWidget *

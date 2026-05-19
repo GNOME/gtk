@@ -174,19 +174,19 @@ demo2_widget_class_init (Demo2WidgetClass *class)
   gtk_widget_class_install_action (widget_class, "stop", NULL, stop_animation);
 
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Left, 0,
+                                       GDK_KEY_Left, GDK_NO_MODIFIER_MASK,
                                        "rotate",
                                        "(ii)", GTK_ORIENTATION_HORIZONTAL, -1);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Right, 0,
+                                       GDK_KEY_Right, GDK_NO_MODIFIER_MASK,
                                        "rotate",
                                        "(ii)", GTK_ORIENTATION_HORIZONTAL, 1);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Up, 0,
+                                       GDK_KEY_Up, GDK_NO_MODIFIER_MASK,
                                        "rotate",
                                        "(ii)", GTK_ORIENTATION_VERTICAL, 1);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Down, 0,
+                                       GDK_KEY_Down, GDK_NO_MODIFIER_MASK,
                                        "rotate",
                                        "(ii)", GTK_ORIENTATION_VERTICAL, -1);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "stop", NULL);

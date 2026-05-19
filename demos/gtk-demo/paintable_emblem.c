@@ -105,7 +105,7 @@ demo_icon_new_with_paintable (const char   *icon_name,
   icon = gtk_icon_theme_lookup_icon (theme,
                                      icon_name, NULL,
                                      128, 1,
-                                     GTK_TEXT_DIR_LTR, 0);
+                                     GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_NONE);
 
   self = g_object_new (DEMO_TYPE_ICON, NULL);
 
@@ -135,7 +135,7 @@ demo_icon_new (const char *icon_name,
   emblem = gtk_icon_theme_lookup_icon (theme,
                                        emblem_name, NULL,
                                        128, 1,
-                                       GTK_TEXT_DIR_LTR, 0);
+                                       GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_NONE);
 
   return GDK_PAINTABLE (demo_icon_new_with_paintable (icon_name,
                                                       GDK_PAINTABLE (emblem)));

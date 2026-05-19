@@ -251,7 +251,10 @@ gtk_css_section_print (const GtkCssSection  *section,
     {
       GFileInfo *info;
 
-      info = g_file_query_info (section->file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
+      info = g_file_query_info (section->file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                G_FILE_QUERY_INFO_NONE,
+                                NULL,
+                                NULL);
 
       if (info)
         {

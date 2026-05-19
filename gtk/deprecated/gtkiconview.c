@@ -792,23 +792,23 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                        NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_space, 0,
+                                       GDK_KEY_space, GDK_NO_MODIFIER_MASK,
 				       "activate-cursor-item",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, 0,
+                                       GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
 				       "activate-cursor-item",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Return, 0,
+                                       GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
 				       "activate-cursor-item",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, 0,
+                                       GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
 				       "activate-cursor-item",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, 0,
+                                       GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
 				       "activate-cursor-item",
                                        NULL);
 

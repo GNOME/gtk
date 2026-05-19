@@ -98,7 +98,9 @@ prepare_dialog (void)
 
       info = g_file_query_info (file,
                                 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                0, NULL, NULL);
+                                G_FILE_QUERY_INFO_NONE,
+                                NULL,
+                                NULL);
       content_type = g_strdup (g_file_info_get_content_type (info));
 
       g_object_unref (info);

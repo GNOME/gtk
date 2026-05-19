@@ -40,7 +40,10 @@ set_file (GFile    *file,
   gtk_widget_set_sensitive (open_folder_button, TRUE);
   g_object_set_data_full (G_OBJECT (open_folder_button), "file", g_object_ref (file), g_object_unref);
 
-  info = g_file_query_info (file, "standard::content-type", 0, NULL, NULL);
+  info = g_file_query_info (file, "standard::content-type",
+                            G_FILE_QUERY_INFO_NONE,
+                            NULL,
+                            NULL);
   if (strcmp (g_file_info_get_content_type (info), "application/pdf") == 0)
     {
       gtk_widget_set_sensitive (print_button, TRUE);

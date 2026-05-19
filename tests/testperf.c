@@ -79,7 +79,7 @@ main (int argc, char *argv[])
       if (error)
         g_error ("Create syscap file: %s", error->message);
 
-      launcher = g_subprocess_launcher_new (0);
+      launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
       g_subprocess_launcher_take_fd (launcher, fd, fd);
       g_snprintf (fd_str, sizeof (fd_str), "%d", fd);
       g_subprocess_launcher_setenv (launcher, "GTK_TRACE_FD", fd_str, TRUE);

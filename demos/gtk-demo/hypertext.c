@@ -105,7 +105,7 @@ show_page (GtkTextView *text_view,
                                          16,
                                          1,
                                          GTK_TEXT_DIR_LTR,
-                                         0);
+                                         GTK_ICON_LOOKUP_NONE);
       gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
       g_object_unref (icon);
       gtk_text_buffer_insert (buffer, &iter, ", or even widgets ", -1);

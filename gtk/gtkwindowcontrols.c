@@ -186,7 +186,7 @@ get_default_icon (GtkWidget *widget)
                                      WINDOW_ICON_SIZE,
                                      scale,
                                      gtk_widget_get_direction (widget),
-                                     0);
+                                     GTK_ICON_LOOKUP_NONE);
 
   return GDK_PAINTABLE (info);
 }

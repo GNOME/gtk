@@ -568,7 +568,10 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       GFileInfo *info;
       GtkWidget *image;
 
-      info = g_file_query_info (G_FILE (g_value_get_object (value)), "standard::icon", 0, NULL, NULL);
+      info = g_file_query_info (G_FILE (g_value_get_object (value)), "standard::icon",
+                                G_FILE_QUERY_INFO_NONE,
+                                NULL,
+                                NULL);
       if (!info)
         return NULL;
 

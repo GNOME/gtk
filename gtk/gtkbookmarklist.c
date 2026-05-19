@@ -401,7 +401,7 @@ gtk_bookmark_list_start_loading (GtkBookmarkList *self)
           file = g_file_new_for_uri (uri);
           g_file_query_info_async (file,
                                    self->attributes,
-                                   0,
+                                   G_FILE_QUERY_INFO_NONE,
                                    self->io_priority,
                                    self->cancellable,
                                    got_file_info,

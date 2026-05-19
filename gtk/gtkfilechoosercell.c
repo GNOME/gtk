@@ -137,7 +137,7 @@ drag_prepare_cb (GtkDragSource *source,
 
   icon = _gtk_file_info_get_icon (self->item, ICON_SIZE, scale, icon_theme);
 
-  paintable = gtk_icon_theme_lookup_by_gicon (icon_theme,icon, ICON_SIZE, scale, GTK_TEXT_DIR_NONE, 0);
+  paintable = gtk_icon_theme_lookup_by_gicon (icon_theme,icon, ICON_SIZE, scale, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_NONE);
 
   gtk_drag_source_set_icon (source, GDK_PAINTABLE (paintable), x, y);
 

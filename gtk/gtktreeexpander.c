@@ -651,21 +651,21 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                                    NULL,
                                    gtk_tree_expander_toggle_expand);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, GDK_NO_MODIFIER_MASK,
                                        "listitem.expand", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Add, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Add, GDK_NO_MODIFIER_MASK,
                                        "listitem.expand", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_asterisk, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_asterisk, GDK_NO_MODIFIER_MASK,
                                        "listitem.expand", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Multiply, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Multiply, GDK_NO_MODIFIER_MASK,
                                        "listitem.expand", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_NO_MODIFIER_MASK,
                                        "listitem.collapse", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Subtract, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Subtract, GDK_NO_MODIFIER_MASK,
                                        "listitem.collapse", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_NO_MODIFIER_MASK,
                                        "listitem.collapse", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Divide, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Divide, GDK_NO_MODIFIER_MASK,
                                        "listitem.collapse", NULL);
 
   gtk_widget_class_add_binding (widget_class, GDK_KEY_Right, GDK_SHIFT_MASK,
@@ -692,7 +692,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
 
 #if 0
   /* These can't be implements yet. */
-  gtk_widget_class_add_binding (widget_class, GDK_KEY_BackSpace, 0, go_to_parent_row, NULL, NULL);
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_BackSpace, GDK_NO_MODIFIER_MASK, go_to_parent_row, NULL, NULL);
   gtk_widget_class_add_binding (widget_class, GDK_KEY_BackSpace, GDK_CONTROL_MASK, go_to_parent_row, NULL, NULL);
 #endif
 

@@ -372,16 +372,16 @@ gtk_list_factory_widget_class_init (GtkListFactoryWidgetClass *klass)
                                    NULL,
                                    gtk_list_factory_widget_scroll_to_action);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "activate-keybinding", 0);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-keybinding", 0);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-keybinding", 0);
 
   /* note that some of these may get overwritten by child widgets,
    * such as GtkTreeExpander */
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_space, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "listitem.select", "(bb)", TRUE, FALSE);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_space, GDK_CONTROL_MASK,
                                        "listitem.select", "(bb)", TRUE, FALSE);
@@ -389,7 +389,7 @@ gtk_list_factory_widget_class_init (GtkListFactoryWidgetClass *klass)
                                        "listitem.select", "(bb)", TRUE, FALSE);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Space, 0,
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
                                        "listitem.select", "(bb)", TRUE, FALSE);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
                                        "listitem.select", "(bb)", TRUE, FALSE);

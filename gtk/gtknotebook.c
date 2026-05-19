@@ -1444,28 +1444,28 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_notebook_popup_menu);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_space, 0,
+                                       GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "select-page",
                                        "(b)", FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, 0,
+                                       GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
                                        "select-page",
                                        "(b)", FALSE);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Home, 0,
+                                       GDK_KEY_Home, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_FIRST);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Home, 0,
+                                       GDK_KEY_KP_Home, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_FIRST);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_End, 0,
+                                       GDK_KEY_End, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_LAST);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_End, 0,
+                                       GDK_KEY_KP_End, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_LAST);
 
@@ -1474,7 +1474,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                        "menu.popup",
                                        NULL);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, 0,
+                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
                                        "menu.popup",
                                        NULL);
 

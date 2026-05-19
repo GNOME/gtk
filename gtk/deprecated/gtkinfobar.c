@@ -430,7 +430,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                   G_TYPE_NONE, 0);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Escape, 0,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
                                        "close",
                                        NULL);
 

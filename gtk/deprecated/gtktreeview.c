@@ -1496,33 +1496,33 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_SHIFT_MASK, "select-cursor-row", "(b)", TRUE);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_SHIFT_MASK, "select-cursor-row", "(b)", TRUE);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0, "select-cursor-row", "(b)", TRUE);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0, "select-cursor-row", "(b)", TRUE);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0, "select-cursor-row", "(b)", TRUE);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0, "select-cursor-row", "(b)", TRUE);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0, "select-cursor-row", "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_NO_MODIFIER_MASK, "select-cursor-row", "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK, "select-cursor-row", "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK, "select-cursor-row", "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK, "select-cursor-row", "(b)", TRUE);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK, "select-cursor-row", "(b)", TRUE);
 
   /* expand and collapse rows */
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_plus, 0,
+                                       GDK_KEY_plus, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, TRUE, FALSE);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_asterisk, 0,
+                                       GDK_KEY_asterisk, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, TRUE, TRUE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Multiply, 0,
+                                       GDK_KEY_KP_Multiply, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, TRUE, TRUE);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_slash, 0,
+                                       GDK_KEY_slash, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, FALSE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Divide, 0,
+                                       GDK_KEY_KP_Divide, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, FALSE, FALSE);
 
@@ -1532,7 +1532,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, TRUE, TRUE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Add, 0,
+                                       GDK_KEY_KP_Add, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, TRUE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1561,7 +1561,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                        "(bbb)", FALSE, TRUE, TRUE);
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_minus, 0,
+                                       GDK_KEY_minus, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, FALSE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1569,7 +1569,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, FALSE, TRUE);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Subtract, 0,
+                                       GDK_KEY_KP_Subtract, GDK_NO_MODIFIER_MASK,
                                        "expand-collapse-cursor-row",
                                        "(bbb)", TRUE, FALSE, FALSE);
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1593,7 +1593,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                        "expand-collapse-cursor-row",
                                        "(bbb)", FALSE, FALSE, TRUE);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_BackSpace, 0, "select-cursor-parent", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_BackSpace, GDK_NO_MODIFIER_MASK, "select-cursor-parent", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_BackSpace, GDK_CONTROL_MASK, "select-cursor-parent", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_f, GDK_CONTROL_MASK, "start-interactive-search", NULL);

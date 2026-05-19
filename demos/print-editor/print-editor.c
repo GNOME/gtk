@@ -114,7 +114,10 @@ load_file (GFile *open_filename)
 	}
       else
 	{
-          GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
+          GFileInfo *info = g_file_query_info (open_filename, "standard::display-name",
+                                               G_FILE_QUERY_INFO_NONE,
+                                               NULL,
+                                               &error);
           const char *display_name = g_file_info_get_display_name (info);
           GtkAlertDialog *alert;
 
@@ -127,7 +130,10 @@ load_file (GFile *open_filename)
     }
   else
     {
-      GFileInfo *info = g_file_query_info (open_filename, "standard::display-name", 0, NULL, &error);
+      GFileInfo *info = g_file_query_info (open_filename, "standard::display-name",
+                                           G_FILE_QUERY_INFO_NONE,
+                                           NULL,
+                                           &error);
       const char *display_name = g_file_info_get_display_name (info);
       GtkAlertDialog *alert;
 
@@ -168,7 +174,10 @@ save_file (GFile *save_filename)
     }
   else
     {
-      GFileInfo *info = g_file_query_info (save_filename, "standard::display-name", 0, NULL, NULL);
+      GFileInfo *info = g_file_query_info (save_filename, "standard::display-name",
+                                           G_FILE_QUERY_INFO_NONE,
+                                           NULL,
+                                           NULL);
       const char *display_name = g_file_info_get_display_name (info);
       GtkAlertDialog *alert;
 

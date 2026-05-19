@@ -2761,7 +2761,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                        "menu.popup",
                                        NULL);
   gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, 0,
+                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
                                        "menu.popup",
                                        NULL);
 
@@ -2913,15 +2913,15 @@ gtk_label_class_init (GtkLabelClass *class)
 #endif
 
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Return, 0,
+                                       GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
                                        "activate-current-link",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, 0,
+                                       GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-current-link",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, 0,
+                                       GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-current-link",
                                        NULL);
 
