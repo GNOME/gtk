@@ -89,3 +89,9 @@ ignore = [
   "tests/**",
   "testsuite/**",
 ]
+
+[rules.use_g_ascii_functions]
+ignore = [
+  # external sources should stay unmodified
+  "testsuite/diff/diffreg.c",
+]
