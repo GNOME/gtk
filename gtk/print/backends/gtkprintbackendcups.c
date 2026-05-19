@@ -18,7 +18,6 @@
  */
 
 #include "config.h"
-#include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -4261,18 +4260,18 @@ cups_parse_user_default_printer (const char  *filename,
 
   while (fgets (line, sizeof (line), fp) != NULL)
     {
-      if (strncasecmp (line, "default", 7) != 0 || !isspace (line[7]))
+      if (strncasecmp (line, "default", 7) != 0 || !g_ascii_isspace (line[7]))
         continue;
 
       lineptr = line + 8;
-      while (isspace (*lineptr))
+      while (g_ascii_isspace (*lineptr))
         lineptr++;
 
       if (!*lineptr)
         continue;
 
       defname = lineptr;
-      while (!isspace (*lineptr) && *lineptr && *lineptr != '/')
+      while (!g_ascii_isspace (*lineptr) && *lineptr && *lineptr != '/')
         lineptr++;
 
       *lineptr = '\0';
@@ -4323,22 +4322,22 @@ cups_parse_user_options (const char     *filename,
 
   while (fgets (line, sizeof (line), fp) != NULL)
     {
-      if (strncasecmp (line, "dest", 4) == 0 && isspace (line[4]))
+      if (strncasecmp (line, "dest", 4) == 0 && g_ascii_isspace (line[4]))
         lineptr = line + 4;
-      else if (strncasecmp (line, "default", 7) == 0 && isspace (line[7]))
+      else if (strncasecmp (line, "default", 7) == 0 && g_ascii_isspace (line[7]))
         lineptr = line + 7;
       else
         continue;
 
       /* Skip leading whitespace */
-      while (isspace (*lineptr))
+      while (g_ascii_isspace (*lineptr))
         lineptr++;
 
       if (!*lineptr)
         continue;
 
       name = lineptr;
-      while (!isspace (*lineptr) && *lineptr)
+      while (!g_ascii_isspace (*lineptr) && *lineptr)
         {
           lineptr++;
         }
