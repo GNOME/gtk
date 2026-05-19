@@ -21,7 +21,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -2025,7 +2024,7 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
   p = text;
   while (*p)
     {
-      while (isspace (*p)) p++;
+      while (g_ascii_isspace (*p)) p++;
 
       if (*p == '-')
         {
@@ -2042,7 +2041,7 @@ dialog_get_page_ranges (GtkPrintUnixDialog *dialog,
 
       end = start;
 
-      while (isspace (*p)) p++;
+      while (g_ascii_isspace (*p)) p++;
 
       if (*p == '-')
         {
