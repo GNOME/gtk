@@ -26,7 +26,7 @@
 
 #include "gdkcairocontext-broadway.h"
 #include "gdkdisplay.h"
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 #include "gdkmonitor-broadway.h"
 #include "gdkseatdefaultprivate.h"
 #include "gdkdevice-broadway.h"

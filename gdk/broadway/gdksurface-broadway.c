@@ -33,7 +33,7 @@
 #include "gdkdevice-broadway.h"
 #include "gdkdisplay.h"
 #include "gdkdragsurfaceprivate.h"
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkpopupprivate.h"
 #include "gdkprivate-broadway.h"

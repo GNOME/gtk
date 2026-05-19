@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gdkeventsource.h"
+#include "gdkeventsourceprivate.h"
 
 #include "gdkeventsprivate.h"
 #include "gdkframeclockprivate.h"
