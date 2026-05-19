@@ -189,7 +189,9 @@ demo2_widget_class_init (Demo2WidgetClass *class)
                                        GDK_KEY_Down, GDK_NO_MODIFIER_MASK,
                                        "rotate",
                                        "(ii)", GTK_ORIENTATION_VERTICAL, -1);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "stop", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Escape, GDK_NO_MODIFIER_MASK,
+                                       "stop", NULL);
 
   /* here is where we use our custom layout manager */
   gtk_widget_class_set_layout_manager_type (widget_class, DEMO2_TYPE_LAYOUT);
