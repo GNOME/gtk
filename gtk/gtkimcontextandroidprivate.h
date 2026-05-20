@@ -23,6 +23,7 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_4_24
 GType gtk_im_context_android_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
