@@ -438,10 +438,13 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
     }
 
   if (!G_IS_DIR_SEPARATOR (wintab32_dll_path[strlen (wintab32_dll_path) -1]))
-    strcat (wintab32_dll_path, G_DIR_SEPARATOR_S);
-  strcat (wintab32_dll_path, WINTAB32_DLL);
+    g_strlcat (wintab32_dll_path, G_DIR_SEPARATOR_S, n + 1 + strlen (WINTAB32_DLL));
+  g_strlcat (wintab32_dll_path, WINTAB32_DLL, n + 1 + strlen (WINTAB32_DLL));;
 
-  if ((wintab32 = LoadLibraryA (wintab32_dll_path)) == NULL)
+  wintab32 = LoadLibraryA (wintab32_dll_path);
+  g_free (wintab32_dll_path);
+
+  if (wintab32 == NULL)
     return;
 
   device_manager->wintab_items->wintab32 = wintab32;
@@ -735,6 +738,8 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   display_win32 = GDK_WIN32_DISPLAY (device_manager->display);
+
+  G_OBJECT_CLASS (gdk_device_manager_win32_parent_class)->constructed (object);
 
   device_manager->core_pointer =
     create_pointer (device_manager->display,

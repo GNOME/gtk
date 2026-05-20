@@ -44,9 +44,10 @@ static const char *names[] = {
 static int count = 0;
 
 static gboolean
-change_cursor (gpointer data)
+change_cursor (GtkWidget     *window,
+               GdkFrameClock *frame_clock,
+               gpointer       unused)
 {
-  GtkWidget *window = data;
   GtkWidget *label;
   char buffer[128];
 
@@ -65,6 +66,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *label;
   gboolean done = FALSE;
+  guint change_cursor_id;
 
   gtk_init ();
 
@@ -75,12 +77,14 @@ main (int argc, char *argv[])
   label = gtk_label_new ("");
   gtk_window_set_child (GTK_WINDOW (window), label);
 
-  g_timeout_add (4, change_cursor, window);
+  change_cursor_id = gtk_widget_add_tick_callback (window, change_cursor, NULL, NULL);
 
   gtk_window_present (GTK_WINDOW (window));
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);
+
+  gtk_widget_remove_tick_callback (window, change_cursor_id);
 
   return 0;
 }

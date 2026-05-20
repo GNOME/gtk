@@ -286,6 +286,7 @@ open_uri (OpenUriData         *data,
   data->connection = g_object_ref (connection);
 
   task = g_task_new (NULL, NULL, callback, data);
+  g_task_set_source_tag (task, open_uri);
   g_task_set_check_cancellable (task, FALSE);
   g_task_set_task_data (task, data, NULL);
   if (data->cancellable)
@@ -361,7 +362,7 @@ open_uri (OpenUriData         *data,
           data->call = OPEN_FOLDER;
           gtk_xdp_open_uri_call_open_directory (openuri,
                                              parent_window ? parent_window : "",
-                                             g_variant_new ("h", fd_id),
+                                             g_variant_new_handle (fd_id),
                                              opts,
                                              fd_list,
                                              NULL,
@@ -373,7 +374,7 @@ open_uri (OpenUriData         *data,
           data->call = OPEN_FILE;
           gtk_xdp_open_uri_call_open_file (openuri,
                                         parent_window ? parent_window : "",
-                                        g_variant_new ("h", fd_id),
+                                        g_variant_new_handle (fd_id),
                                         opts,
                                         fd_list,
                                         NULL,

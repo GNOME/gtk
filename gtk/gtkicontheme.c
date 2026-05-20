@@ -798,6 +798,7 @@ gtk_icon_theme_load_in_thread (GtkIconTheme *self)
   GTask *task;
 
   task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_source_tag (task, gtk_icon_theme_load_in_thread);
   g_task_set_task_data (task, g_object_ref (self), g_object_unref);
   g_task_run_in_thread (task, load_theme_thread);
   g_object_unref (task);
@@ -1253,7 +1254,7 @@ theme_changed_idle__mainthread_unlocked (gpointer user_data)
       g_object_unref (self);
     }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -2384,6 +2385,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
           if (!has_paintable)
             {
               GTask *task = g_task_new (icon, NULL, NULL, NULL);
+              g_task_set_source_tag (task, gtk_icon_theme_lookup_icon);
               g_task_run_in_thread (task, load_icon_thread);
               g_object_unref (task);
             }

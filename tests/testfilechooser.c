@@ -264,11 +264,11 @@ main (int argc, char **argv)
 
   if (action_arg != NULL)
     {
-      if (! strcmp ("open", action_arg))
+      if (strcmp ("open", action_arg) == 0)
 	action = GTK_FILE_CHOOSER_ACTION_OPEN;
-      else if (! strcmp ("save", action_arg))
+      else if (strcmp ("save", action_arg) == 0)
 	action = GTK_FILE_CHOOSER_ACTION_SAVE;
-      else if (! strcmp ("select_folder", action_arg))
+      else if (strcmp ("select_folder", action_arg) == 0)
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
       else
 	{

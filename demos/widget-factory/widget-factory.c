@@ -135,7 +135,7 @@ change_transition_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
-static gboolean
+static void
 get_idle (gpointer data)
 {
   GtkWidget *window = data;
@@ -144,8 +144,6 @@ get_idle (gpointer data)
   gtk_widget_set_sensitive (window, TRUE);
   gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), NULL);
   g_application_unmark_busy (G_APPLICATION (app));
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -161,7 +159,7 @@ get_busy (GSimpleAction *action,
   cursor = gdk_cursor_new_from_name ("wait", NULL);
   gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), cursor);
   g_object_unref (cursor);
-  g_timeout_add (5000, get_idle, window);
+  g_timeout_add_once (5000, get_idle, window);
 
   gtk_widget_set_sensitive (window, FALSE);
 }
@@ -560,9 +558,10 @@ remove_pulse (gpointer pulse_id)
   g_source_remove (GPOINTER_TO_UINT (pulse_id));
 }
 
-static gboolean
-pulse_it (GtkWidget *widget)
+static void
+pulse_it (gpointer data)
 {
+  GtkWidget *widget = data;
   guint pulse_id;
 
   if (GTK_IS_ENTRY (widget))
@@ -570,10 +569,8 @@ pulse_it (GtkWidget *widget)
   else
     gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
 
-  pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+  pulse_id = g_timeout_add_once (pulse_time, pulse_it, widget);
   g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -597,7 +594,7 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
     {
       if (pulse_id == 0 && (GTK_IS_PROGRESS_BAR (widget) || pulse_entry_mode % 3 == 2))
         {
-          pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+          pulse_id = g_timeout_add_once (pulse_time, pulse_it, widget);
           g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
         }
     }
@@ -820,21 +817,19 @@ set_needs_attention (GtkWidget *page, gboolean needs_attention)
                            NULL);
 }
 
-static gboolean
+static void
 demand_attention (gpointer stack)
 {
   GtkWidget *page;
 
   page = gtk_stack_get_child_by_name (GTK_STACK (stack), "page3");
   set_needs_attention (page, TRUE);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
 action_dialog_button_clicked (GtkButton *button, GtkWidget *page)
 {
-  g_timeout_add (1000, demand_attention, page);
+  g_timeout_add_once (1000, demand_attention, page);
 }
 
 static void
@@ -1769,18 +1764,17 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
   gtk_widget_set_sensitive (button, strlen (text) > 0);
 }
 
-static gboolean
+static void
 show_page_again (gpointer data)
 {
   gtk_widget_set_visible (GTK_WIDGET (data), TRUE);
-  return G_SOURCE_REMOVE;
 }
 
 static void
 tab_close_cb (GtkWidget *page)
 {
   gtk_widget_set_visible (page, FALSE);
-  g_timeout_add (2500, show_page_again, page);
+  g_timeout_add_once (2500, show_page_again, page);
 }
 
 typedef struct _GTestPermission GTestPermission;
@@ -1831,6 +1825,7 @@ acquire_async (GPermission         *permission,
   GTask *task;
 
   task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_set_source_tag (task, acquire_async);
   g_task_return_boolean (task, update_allowed (permission, TRUE));
   g_object_unref (task);
 }
@@ -1860,6 +1855,7 @@ release_async (GPermission         *permission,
   GTask *task;
 
   task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_set_source_tag (task, release_async);
   g_task_return_boolean (task, update_allowed (permission, FALSE));
   g_object_unref (task);
 }
@@ -2173,6 +2169,7 @@ load_texture_in_thread (GtkWidget  *picture,
                         const char *resource_path)
 {
   GTask *task = g_task_new (picture, NULL, load_texture_done, NULL);
+  g_task_set_source_tag (task, load_texture_in_thread);
   g_task_set_task_data (task, (gpointer)resource_path, NULL);
   g_task_run_in_thread (task, load_texture_thread);
   g_object_unref (task);
@@ -2275,6 +2272,7 @@ activate (GApplication *app)
   GAction *action;
   GError *error = NULL;
   GtkEventController *controller;
+  guint pulse_id;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -2604,7 +2602,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
-  g_timeout_add (100, (GSourceFunc)pulse_it, widget);
+  pulse_id = g_timeout_add_once (100, pulse_it, widget);
+  g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "scale3");
   gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL, NULL);
@@ -2675,11 +2674,10 @@ toggle_action (GSimpleAction *action,
                              g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
-static gboolean
+static void
 quit_timeout (gpointer data)
 {
-  exit (0);
-  return G_SOURCE_REMOVE;
+  g_application_quit (G_APPLICATION (data));
 }
 
 G_MODULE_EXPORT
@@ -2754,7 +2752,7 @@ main (int argc, char *argv[])
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   if (g_getenv ("GTK_DEBUG_AUTO_QUIT"))
-    g_timeout_add (500, quit_timeout, NULL);
+    g_timeout_add_seconds_once (1, quit_timeout, app);
 
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);

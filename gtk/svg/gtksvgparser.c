@@ -169,32 +169,17 @@ gtk_svg_markup_error (GtkSvg              *self,
   g_clear_error (&error);
 }
 
-G_GNUC_PRINTF (4, 5)
 static void
 gtk_svg_missing_attribute (GtkSvg              *self,
                            GMarkupParseContext *context,
-                           const char          *attr_name,
-                           const char          *format,
-                           ...)
+                           const char          *attr_name)
 {
   GError *error;
   GtkSvgLocation start, end;
 
-  if (format)
-    {
-      va_list args;
-      va_start (args, format);
-      error = g_error_new_valist (GTK_SVG_ERROR,
-                                  GTK_SVG_ERROR_MISSING_ATTRIBUTE,
-                                  format, args);
-      va_end (args);
-    }
-  else
-    {
-      error = g_error_new (GTK_SVG_ERROR,
-                           GTK_SVG_ERROR_MISSING_ATTRIBUTE,
-                           "Missing attribute: %s", attr_name);
-    }
+  error = g_error_new (GTK_SVG_ERROR,
+                       GTK_SVG_ERROR_MISSING_ATTRIBUTE,
+                       "Missing attribute: %s", attr_name);
 
   gtk_svg_error_set_input (error, "svg");
   gtk_svg_error_set_element (error, g_markup_parse_context_get_element (context));
@@ -632,7 +617,7 @@ parse_base_animation_attrs (SvgAnimation         *a,
     }
   else if (!attr_name_attr)
     {
-      gtk_svg_missing_attribute (data->svg, context, "attributeName", NULL);
+      gtk_svg_missing_attribute (data->svg, context, "attributeName");
       return FALSE;
     }
   /* FIXME: if href is set, current_shape might be the wrong shape */
@@ -772,7 +757,7 @@ parse_value_animation_attrs (SvgAnimation         *a,
         }
       else
         {
-          gtk_svg_missing_attribute (data->svg, context, "type", NULL);
+          gtk_svg_missing_attribute (data->svg, context, "type");
           return FALSE;
         }
     }
@@ -2381,7 +2366,7 @@ start_element_cb (GMarkupParseContext  *context,
 
       if (!to_attr)
         {
-          gtk_svg_missing_attribute (data->svg, context, "to", NULL);
+          gtk_svg_missing_attribute (data->svg, context, "to");
           svg_animation_drop_and_free (a);
           skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Dropping <set> without 'to'");
           return;
@@ -2566,7 +2551,7 @@ start_element_cb (GMarkupParseContext  *context,
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
       if (!data->current_animation->motion.path_ref)
-        gtk_svg_missing_attribute (data->svg, context, "href", NULL);
+        gtk_svg_missing_attribute (data->svg, context, "href");
 
       return;
     }

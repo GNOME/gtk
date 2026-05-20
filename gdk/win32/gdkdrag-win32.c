@@ -605,6 +605,11 @@ get_data_response (gpointer user_data)
 
           return G_SOURCE_REMOVE;
         }
+      else
+        {
+          GDK_NOTE (DND, g_print ("Error creeating output stream: %s", error->message));
+          g_clear_error (&error);
+        }
     }
 
   increment_dnd_queue_counter (gdk_surface_get_display (GDK_WIN32_DRAG (drag)->drag_surface));
@@ -988,14 +993,12 @@ idropsource_queryinterface (LPDROPSOURCE This,
     }
 }
 
-static gboolean
+static void
 unref_context_in_main_thread (gpointer opaque_context)
 {
   GdkDrag *drag = GDK_DRAG (opaque_context);
 
   g_clear_object (&drag);
-
-  return G_SOURCE_REMOVE;
 }
 
 static ULONG STDMETHODCALLTYPE
@@ -1009,7 +1012,7 @@ idropsource_release (LPDROPSOURCE This)
 
   if (ref_count == 0)
   {
-    g_idle_add (unref_context_in_main_thread, ctx->drag);
+    g_idle_add_once (unref_context_in_main_thread, ctx->drag);
     g_free (This);
   }
 

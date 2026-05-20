@@ -279,7 +279,7 @@ typedef struct _DoActionData {
   GtkAccessKitRoot *root;
 } DoActionData;
 
-static gboolean
+static void
 do_action_main_thread (gpointer data_generic)
 {
   DoActionData *data = data_generic;
@@ -297,8 +297,6 @@ do_action_main_thread (gpointer data_generic)
   g_object_unref (data->root);
   accesskit_action_request_free (data->request);
   g_free (data);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -309,7 +307,7 @@ do_action (accesskit_action_request *request, void *data)
 
   main_thread_data->request = request;
   main_thread_data->root = g_object_ref (root);
-  g_idle_add (do_action_main_thread, main_thread_data);
+  g_idle_add_once (do_action_main_thread, main_thread_data);
 }
 
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
@@ -325,7 +323,7 @@ add_context_to_unrealize_queue (gpointer key,
     g_ptr_array_add (contexts_to_unrealize, ctx);
 }
 
-static gboolean
+static void
 deactivate_accessibility_main_thread (gpointer data)
 {
   GtkAccessKitRoot *self = data;
@@ -343,14 +341,13 @@ deactivate_accessibility_main_thread (gpointer data)
 
   g_ptr_array_unref (contexts_to_unrealize);
   g_object_unref (self);
-  return G_SOURCE_REMOVE;
 }
 
 static void
 deactivate_accessibility (void *data)
 {
   GtkAccessKitRoot *self = data;
-  g_idle_add (deactivate_accessibility_main_thread, g_object_ref (self));
+  g_idle_add_once (deactivate_accessibility_main_thread, g_object_ref (self));
 }
 #endif
 

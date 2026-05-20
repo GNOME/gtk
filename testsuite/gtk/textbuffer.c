@@ -626,8 +626,8 @@ fill_buffer (GtkTextBuffer *buffer)
   color2.alpha = 1.0;
 
   gtk_text_buffer_create_tag (buffer, "fg_blue",
-                              "foreground_rgba", &color,
-                              "background_rgba", &color2,
+                              "foreground-rgba", &color,
+                              "background-rgba", &color2,
                               "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
                               NULL);
 
@@ -637,7 +637,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   gtk_text_buffer_create_tag (buffer, "fg_red",
                               "rise", -4,
-                              "foreground_rgba", &color,
+                              "foreground-rgba", &color,
                               NULL);
 
   color.red = 0.0;
@@ -645,7 +645,7 @@ fill_buffer (GtkTextBuffer *buffer)
   color.blue = 0.0;
 
   gtk_text_buffer_create_tag (buffer, "bg_green",
-                              "background_rgba", &color,
+                              "background-rgba", &color,
                               "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
                               NULL);
 

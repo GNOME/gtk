@@ -201,6 +201,7 @@ file_transfer_portal_register_files (const char          **files,
   GVariantBuilder options;
 
   task = g_task_new (NULL, NULL, callback, data);
+  g_task_set_source_tag (task, file_transfer_portal_register_files);
 
   if (file_transfer_proxy == NULL)
     {
@@ -279,6 +280,7 @@ file_transfer_portal_retrieve_files (const char          *key,
   GVariantBuilder options;
 
   task = g_task_new (NULL, NULL, callback, data);
+  g_task_set_source_tag (task, file_transfer_portal_retrieve_files);
 
   if (file_transfer_proxy == NULL)
     {

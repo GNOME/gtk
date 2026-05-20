@@ -79,7 +79,7 @@ scroll_column_view (GtkWidget     *column_view,
   else
     move_adjustment_by_pages (vadjustment, (g_random_double () * 2 - 1) * scroll_pages);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 enum WidgetType
@@ -164,22 +164,22 @@ parse_widget_arg (const gchar* option_name,
                   gpointer data,
                   GError** error)
 {
-  if (!g_strcmp0 (value, "none"))
+  if (g_strcmp0 (value, "none") == 0)
     {
       widget_type = WIDGET_TYPE_NONE;
       return TRUE;
     }
-  else if (!g_strcmp0 (value, "label"))
+  else if (g_strcmp0 (value, "label") == 0)
     {
       widget_type = WIDGET_TYPE_LABEL;
       return TRUE;
     }
-  else if (!g_strcmp0 (value, "text"))
+  else if (g_strcmp0 (value, "text") == 0)
     {
       widget_type = WIDGET_TYPE_TEXT;
       return TRUE;
     }
-  else if (!g_strcmp0 (value, "inscription"))
+  else if (g_strcmp0 (value, "inscription") == 0)
     {
       widget_type = WIDGET_TYPE_INSCRIPTION;
       return TRUE;
@@ -262,6 +262,7 @@ main (int argc, char **argv)
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
+      g_clear_error (&error);
       return 1;
     }
 

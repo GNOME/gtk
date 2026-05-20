@@ -356,7 +356,7 @@ output_cb (GtkSpinButton *spin,
   return TRUE;
 }
 
-static gboolean
+static void
 update_filter_language_idle (gpointer user_data)
 {
   GtkFontChooserWidget *self = user_data;
@@ -378,14 +378,12 @@ update_filter_language_idle (gpointer user_data)
     }
 
   g_object_unref (self);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
 update_filter_language (GtkFontChooserWidget *self)
 {
-  g_idle_add (update_filter_language_idle, g_object_ref (self));
+  g_idle_add_once (update_filter_language_idle, g_object_ref (self));
 }
 
 static void
@@ -1198,6 +1196,7 @@ update_fontlist (GtkFontChooserWidget *self)
         }
     }
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
 
   gtk_filter_list_model_set_model (self->filter_model, model);
@@ -1254,7 +1253,7 @@ lang_code_to_name (GtkStringObject *obj)
   return g_strdup ("");
 }
 
-static gboolean
+static void
 update_language_filters_idle (gpointer user_data)
 {
   GtkFontChooserWidget *self = user_data;
@@ -1265,15 +1264,13 @@ update_language_filters_idle (gpointer user_data)
   gtk_string_filter_set_search (self->language_code_filter, text);
 
   g_object_unref (self);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
 on_language_search_changed (GtkSearchEntry *entry, gpointer user_data)
 {
   GtkFontChooserWidget *self = user_data;
-  g_idle_add (update_language_filters_idle, g_object_ref (self));
+  g_idle_add_once (update_language_filters_idle, g_object_ref (self));
 }
 
 static void

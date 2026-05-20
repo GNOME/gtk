@@ -322,19 +322,16 @@ update_frame_clock (GtkInspectorMiscInfo *sl)
   if (GTK_IS_ROOT (sl->object))
     {
       GObject *clock;
+      char *tmp;
 
       clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (sl->object));
       gtk_widget_set_sensitive (sl->frame_clock_button, clock != NULL);
       if (clock)
-        {
-          char *tmp = g_strdup_printf ("%p", clock);
-          gtk_label_set_label (GTK_LABEL (sl->frame_clock), tmp);
-          g_free (tmp);
-        }
+        tmp = g_strdup_printf ("%p", clock);
       else
-        {
-          gtk_label_set_label (GTK_LABEL (sl->frame_clock), "NULL");
-        }
+        tmp = g_strdup ("NULL");
+      gtk_label_set_label (GTK_LABEL (sl->frame_clock), tmp);
+      g_free (tmp);
     }
 }
 
@@ -346,16 +343,16 @@ update_direction (GtkInspectorMiscInfo *sl)
   switch (widget->priv->direction)
     {
     case GTK_TEXT_DIR_LTR:
-      gtk_label_set_label (GTK_LABEL (sl->direction), "Left-to-Right");
+      gtk_label_set_label (GTK_LABEL (sl->direction), _("Left-to-Right"));
       break;
     case GTK_TEXT_DIR_RTL:
-      gtk_label_set_label (GTK_LABEL (sl->direction), "Right-to-Left");
+      gtk_label_set_label (GTK_LABEL (sl->direction), _("Right-to-Left"));
       break;
     case GTK_TEXT_DIR_NONE:
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        gtk_label_set_label (GTK_LABEL (sl->direction), "Left-to-Right (inherited)");
+        gtk_label_set_label (GTK_LABEL (sl->direction), _("Left-to-Right (inherited)"));
       else
-        gtk_label_set_label (GTK_LABEL (sl->direction), "Right-to-Left (inherited)");
+        gtk_label_set_label (GTK_LABEL (sl->direction), _("Right-to-Left (inherited)"));
       break;
     default:
       g_assert_not_reached ();
@@ -458,7 +455,8 @@ update_info (gpointer data)
         }
       else
         {
-          gtk_label_set_label (GTK_LABEL (sl->framerate), "—");
+          /* translators: string is used to indicate an unknown frame rate */
+          gtk_label_set_label (GTK_LABEL (sl->framerate), _("—"));
         }
 
       sl->last_frame = frame;

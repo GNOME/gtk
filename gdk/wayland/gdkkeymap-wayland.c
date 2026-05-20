@@ -645,7 +645,7 @@ _gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap)
 
 gboolean
 _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
-                                     guint      keycode)
+                                     uint32_t   keycode)
 {
   struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
   struct xkb_state *xkb_state;

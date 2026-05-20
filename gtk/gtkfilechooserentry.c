@@ -786,7 +786,7 @@ insert_text_callback (GtkFileChooserEntry *chooser_entry,
        gtk_editable_get_text (GTK_EDITABLE (chooser_entry))[1] == ':'))
     {
       gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
-      g_signal_stop_emission_by_name (chooser_entry, "insert_text");
+      g_signal_stop_emission_by_name (chooser_entry, "insert-text");
       return FALSE;
     }
 

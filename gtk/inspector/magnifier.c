@@ -123,6 +123,8 @@ constructed (GObject *object)
 {
   GtkInspectorMagnifier *sl = GTK_INSPECTOR_MAGNIFIER (object);
 
+  G_OBJECT_CLASS (gtk_inspector_magnifier_parent_class)->constructed (object);
+
   g_object_bind_property (sl->priv->adjustment, "value",
                           sl->priv->magnifier, "magnification",
                           G_BINDING_SYNC_CREATE);

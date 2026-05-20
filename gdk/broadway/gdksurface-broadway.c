@@ -308,13 +308,12 @@ gdk_broadway_surface_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_broadway_surface_parent_class)->finalize (object);
 }
 
-static gboolean
+static void
 thaw_updates_cb (GdkSurface *surface)
 {
   if (!GDK_SURFACE_DESTROYED (surface))
     gdk_surface_thaw_updates (surface);
   g_object_unref (surface);
-  return G_SOURCE_REMOVE;
 }
 
 void
@@ -331,7 +330,7 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
 
   /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
-    g_timeout_add_seconds (1, (GSourceFunc)thaw_updates_cb, g_object_ref (surface));
+    g_timeout_add_seconds_once (1, (GSourceOnceFunc) thaw_updates_cb, g_object_ref (surface));
   else
     gdk_surface_thaw_updates (surface);
 
@@ -1612,11 +1611,11 @@ gdk_broadway_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TITLE:
-      g_value_set_string (value, "");
+      g_value_set_static_string (value, "");
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_STARTUP_ID:
-      g_value_set_string (value, "");
+      g_value_set_static_string (value, "");
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:

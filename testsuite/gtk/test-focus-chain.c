@@ -82,6 +82,7 @@ timed_loop (guint millis)
 {
   gboolean keep_running = TRUE;
 
+  /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   g_timeout_add (millis, quit_iteration_loop, &keep_running);
   while (keep_running)
     g_main_context_iteration (NULL, TRUE);

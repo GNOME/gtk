@@ -1196,10 +1196,10 @@ gtk_tree_view_column_context_changed  (GtkCellAreaContext      *context,
    * we also block the handler when explicitly resetting the context
    * so as to avoid some infinite stack recursion.
    */
-  if (!strcmp (pspec->name, "minimum-width") ||
-      !strcmp (pspec->name, "natural-width") ||
-      !strcmp (pspec->name, "minimum-height") ||
-      !strcmp (pspec->name, "natural-height"))
+  if (strcmp (pspec->name, "minimum-width") == 0 ||
+      strcmp (pspec->name, "natural-width") == 0 ||
+      strcmp (pspec->name, "minimum-height") == 0 ||
+      strcmp (pspec->name, "natural-height") == 0)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 }
 

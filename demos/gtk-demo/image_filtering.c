@@ -80,6 +80,7 @@ open_file_async (GFile    *file,
   set_wait_cursor (GTK_WIDGET (data));
 
   task = g_task_new (G_OBJECT (data), NULL, texture_loaded, NULL);
+  g_task_set_source_tag (task, open_file_async);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
   g_task_run_in_thread (task, load_texture);
   g_object_unref (task);
@@ -153,6 +154,7 @@ do_image_filtering (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
       GtkBuilderScope *scope;
+      GError *error = NULL;
 
       g_type_ensure (gtk_filter_paintable_get_type ());
       g_type_ensure (component_filter_get_type ());
@@ -163,9 +165,11 @@ do_image_filtering (GtkWidget *do_widget)
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
 
-      GError *error = NULL;
       if (!gtk_builder_add_from_resource (builder, "/image_filtering/image_filtering.ui", &error))
-        g_print ("%s", error->message);
+        {
+          g_print ("%s", error->message);
+          g_clear_error (&error);
+        }
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);

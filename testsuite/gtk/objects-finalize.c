@@ -28,7 +28,7 @@ typedef GType (*GTypeGetFunc) (void);
 
 static gboolean finalized = FALSE;
 
-static gboolean
+static void
 main_loop_quit_cb (gpointer data)
 {
   gboolean *done = data;
@@ -38,7 +38,6 @@ main_loop_quit_cb (gpointer data)
   g_main_context_wakeup (NULL);
 
   g_assert_true (finalized);
-  return FALSE;
 }
 
 static void
@@ -124,7 +123,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Even if the object did finalize, it may have left some dangerous stuff in the GMainContext */
   done = FALSE;
-  g_timeout_add (50, main_loop_quit_cb, &done);
+  g_timeout_add_once (50, main_loop_quit_cb, &done);
   while (!done)
     g_main_context_iteration (NULL, TRUE);
 }

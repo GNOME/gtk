@@ -476,6 +476,7 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   if (helper->active != was_active)
     gtk_action_helper_report_change (helper, PROP_ACTIVE);
 
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (helper->widget), "action-name");
 }
 
@@ -548,6 +549,7 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
   if (helper->active != was_active)
     gtk_action_helper_report_change (helper, PROP_ACTIVE);
 
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (helper->widget), "action-target");
 }
 

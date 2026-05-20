@@ -2970,7 +2970,7 @@ scroll_notebook_timer (gpointer data)
       gtk_widget_queue_allocate (notebook->tabs_widget);
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean
@@ -3374,7 +3374,7 @@ gtk_notebook_switch_page_timeout (gpointer data)
                                                   switch_page));
     }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean

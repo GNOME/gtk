@@ -1344,7 +1344,7 @@ start_scroll_deceleration_cb (gpointer user_data)
   if (!priv->deceleration_id)
     gtk_scrolled_window_start_deceleration (scrolled_window);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -3803,10 +3803,10 @@ indicator_fade_cb (GtkWidget     *widget,
   if (gtk_progress_tracker_get_state (&indicator->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
       indicator->tick_id = 0;
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

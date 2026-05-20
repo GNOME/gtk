@@ -1026,7 +1026,7 @@ widget_handle_get_property (GDBusConnection  *connection,
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   if (g_strcmp0 (property_name, "NActions") == 0)
-    res = g_variant_new ("i", get_valid_actions (muxer, actions, n_actions));
+    res = g_variant_new_int32 (get_valid_actions (muxer, actions, n_actions));
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);

@@ -3496,7 +3496,7 @@ load_timeout_cb (gpointer data)
 
   load_set_model (impl);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /* Sets up a new load timer for the model and switches to the LOAD_PRELOAD state */
@@ -6258,7 +6258,7 @@ desktop_folder_handler (GtkFileChooserWidget *impl)
    * See http://freedesktop.org/wiki/Software/xdg-user-dirs
    */
   name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-  if (!g_strcmp0 (name, g_get_home_dir ()))
+  if (g_strcmp0 (name, g_get_home_dir ()) == 0)
     return;
 
   file = g_file_new_for_path (name);

@@ -146,7 +146,9 @@ gtk_password_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
   self->text_chars -= n_chars;
   self->text_bytes -= (end - start);
 
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (buffer), "text");
+  /* gobject-linter-ignore-next-line: use_g_object_notify_by_pspec */
   g_object_notify (G_OBJECT (buffer), "length");
 }
 

@@ -57,22 +57,21 @@ show_path (GskPath       *path1,
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_window_set_child (GTK_WINDOW (window), sw);
 
-  child = g_object_new (PATH_TYPE_VIEW, NULL);
-  g_object_set (child,
-                "path1", path1,
-                "path2", path2,
-                "do-fill", do_fill,
-                "fill-rule", fill_rule,
-                "stroke", stroke,
-                "fg-color", fg_color,
-                "bg-color", bg_color,
-                "point-color", point_color,
-                "intersection-color", intersection_color,
-                "show-points", show_points,
-                "show-controls", show_controls,
-                "show-intersections", show_intersections,
-                "zoom", zoom,
-                NULL);
+  child = g_object_new (PATH_TYPE_VIEW,
+                        "path1", path1,
+                        "path2", path2,
+                        "do-fill", do_fill,
+                        "fill-rule", fill_rule,
+                        "stroke", stroke,
+                        "fg-color", fg_color,
+                        "bg-color", bg_color,
+                        "point-color", point_color,
+                        "intersection-color", intersection_color,
+                        "show-points", show_points,
+                        "show-controls", show_controls,
+                        "show-intersections", show_intersections,
+                        "zoom", zoom,
+                        NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);

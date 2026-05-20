@@ -823,7 +823,7 @@ button_activate_timeout (gpointer data)
 {
   gtk_button_finish_activate (data, TRUE);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

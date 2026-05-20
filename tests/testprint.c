@@ -105,8 +105,8 @@ main (int argc, char **argv)
   gtk_print_operation_set_n_pages (print, 2);
   gtk_print_operation_set_unit (print, GTK_UNIT_MM);
   gtk_print_operation_set_export_filename (print, "test.pdf");
-  g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);
-  g_signal_connect (print, "request_page_setup", G_CALLBACK (request_page_setup), NULL);
+  g_signal_connect (print, "draw-page", G_CALLBACK (draw_page), NULL);
+  g_signal_connect (print, "request-page-setup", G_CALLBACK (request_page_setup), NULL);
   gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_EXPORT, NULL, NULL);
 
   /* Test subclassing of GtkPrintOperation */

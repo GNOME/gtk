@@ -204,24 +204,30 @@ static_printf (const char *format,
 	       ...)
 {
   static char buf[10000];
-  char *msg;
   static char *bufp = buf;
   char *retval;
+  int len;
+  gulong used;
   va_list args;
 
+  used = bufp - buf;
+  /* 8000以上だ…! */
+  if (used > 9000)
+    {
+      bufp = buf;
+      used = 0;
+    }
   va_start (args, format);
-  msg = g_strdup_vprintf (format, args);
+  len = g_vsnprintf (bufp, sizeof (buf) - used, format, args);
+  if (len < 0)
+    {
+      bufp[0] = 0;
+      len = 1;
+    }
   va_end (args);
 
-  g_assert (strlen (msg) < sizeof (buf));
-
-  if (bufp + strlen (msg) + 1 > buf + sizeof (buf))
-    bufp = buf;
   retval = bufp;
-
-  strcpy (bufp, msg);
-  bufp += strlen (msg) + 1;
-  g_free (msg);
+  bufp += len;
 
   return retval;
 }

@@ -116,7 +116,7 @@ pspec_select_value (GParamSpec *pspec,
       if (dvalue > 0 && sspec->cset_first && sspec->cset_nth)
         g_value_take_string (value, g_strdup_printf ("%c%c", sspec->cset_first[0], sspec->cset_nth[0]));
       else /* if (sspec->ensure_non_null) */
-        g_value_set_string (value, "");
+        g_value_set_static_string (value, "");
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
@@ -212,7 +212,7 @@ object_test_property (GObject           *object,
       /* ignore untestable properties */
       ignore_properties = list_ignore_properties (FALSE);
       for (i = 0; ignore_properties[i].name; i++)
-        if (g_strcmp0 ("", ignore_properties[i].name) ||
+        if (g_strcmp0 ("", ignore_properties[i].name) != 0 ||
             (g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
              strcmp (pspec->name, ignore_properties[i].name) == 0 &&
              (MATCH_ANY_VALUE == ignore_properties[i].value ||

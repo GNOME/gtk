@@ -86,7 +86,7 @@ on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpoi
   g_print ("page %d reordered\n", page_num);
 }
 
-static gboolean
+static void
 remove_in_idle (gpointer data)
 {
   GtkNotebookPage *page = data;
@@ -97,8 +97,6 @@ remove_in_idle (gpointer data)
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (parent), child);
   g_print ("Removing tab: %s\n", gtk_label_get_text (GTK_LABEL (tab_label)));
   gtk_box_remove (GTK_BOX (parent), child);
-
-  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -111,7 +109,7 @@ on_button_drag_drop (GtkDropTarget *dest,
   GtkNotebookPage *page;
 
   page = g_value_get_object (value);
-  g_idle_add (remove_in_idle, page);
+  g_idle_add_once (remove_in_idle, page);
 
   return TRUE;
 }

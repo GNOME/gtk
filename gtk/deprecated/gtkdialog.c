@@ -658,7 +658,7 @@ gtk_dialog_map (GtkWidget *widget)
 
       do
         {
-          g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
+          g_signal_emit_by_name (window, "move-focus", GTK_DIR_TAB_FORWARD);
 
           focus = gtk_window_get_focus (window);
           if (GTK_IS_LABEL (focus) &&

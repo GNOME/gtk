@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -611,7 +610,7 @@ filter_numeric (const char *val,
 
   for (i = 0, j = 0; i < len; i++)
     {
-      if (isdigit (val[i]))
+      if (g_ascii_isdigit (val[i]))
         {
           filtered_val[j] = val[i];
 	  j++;

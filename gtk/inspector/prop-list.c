@@ -222,6 +222,8 @@ constructed (GObject *object)
 {
   GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (object);
 
+  G_OBJECT_CLASS (gtk_inspector_prop_list_parent_class)->constructed (object);
+
   pl->priv->search_stack = gtk_widget_get_parent (pl->priv->search_entry);
 
   g_signal_connect (pl->priv->search_entry, "stop-search",

@@ -604,7 +604,7 @@ suggestion_entry_set_popup_visible (SuggestionEntry *self,
 
 static void update_map (SuggestionEntry *self);
 
-static gboolean
+static void
 text_changed_idle (gpointer data)
 {
   SuggestionEntry *self = data;
@@ -612,7 +612,7 @@ text_changed_idle (gpointer data)
   guint matches;
 
   if (!self->map_model)
-    return G_SOURCE_REMOVE;
+    return;
 
   text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
 
@@ -624,8 +624,6 @@ text_changed_idle (gpointer data)
   matches = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
 
   suggestion_entry_set_popup_visible (self, matches > 0);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -636,7 +634,7 @@ text_changed (GtkEditable        *editable,
   /* We need to defer to an idle since GtkText sets selection bounds
    * after notify::text
    */
-  g_idle_add (text_changed_idle, self);
+  g_idle_add_once (text_changed_idle, self);
 }
 
 static void
@@ -976,7 +974,7 @@ map_func (gpointer item, gpointer user_data)
     {
       g_critical ("Either SuggestionEntry:expression must be set "
                   "or SuggestionEntry:model must be a GtkStringList");
-      g_value_set_string (&value, "No value");
+      g_value_set_static_string (&value, "No value");
     }
 
   obj = match_object_new (item, g_value_get_string (&value));

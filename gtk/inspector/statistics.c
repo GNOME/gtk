@@ -298,7 +298,7 @@ update_type_counts (gpointer data)
       add_type_count (sl, type);
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -796,6 +796,8 @@ static void
 constructed (GObject *object)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
+
+  G_OBJECT_CLASS (gtk_inspector_statistics_parent_class)->constructed (object);
 
   g_signal_connect (sl->priv->button, "toggled", G_CALLBACK (toggle_record), sl);
 

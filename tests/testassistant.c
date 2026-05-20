@@ -123,10 +123,10 @@ progress_timeout (GtkWidget *assistant)
   if (value >= 1.0)
     {
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), progress, TRUE);
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -138,6 +138,7 @@ prepare_callback (GtkWidget *widget, GtkWidget *page)
     {
       gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page, FALSE);
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (page), 0.0);
+      /* gobject-linter-ignore-next-line: g_source_id_not_stored */
       g_timeout_add (300, (GSourceFunc) progress_timeout, widget);
     }
   else

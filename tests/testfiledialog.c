@@ -193,14 +193,12 @@ select_multiple_done (GObject *source,
   done = TRUE;
 }
 
-static int
+static void
 cancel_dialog (gpointer data)
 {
   GCancellable *cancellable = data;
 
   g_cancellable_cancel (cancellable);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -293,7 +291,7 @@ main (int argc, char *argv[])
   cancellable = g_cancellable_new ();
 
   if (timeout > 0)
-    g_timeout_add_seconds (timeout, cancel_dialog, cancellable);
+    g_timeout_add_seconds_once (timeout, cancel_dialog, cancellable);
 
   if (action == NULL)
     {

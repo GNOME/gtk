@@ -1814,6 +1814,8 @@ constructed (GObject *object)
   gboolean can_modify;
   GtkWidget *box;
 
+  G_OBJECT_CLASS (gtk_inspector_prop_editor_parent_class)->constructed (object);
+
   spec = find_property (self);
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
@@ -1822,9 +1824,9 @@ constructed (GObject *object)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   if ((spec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
-    label = gtk_label_new ("(construct-only)");
+    label = gtk_label_new (_("(construct-only)"));
   else if ((spec->flags & G_PARAM_WRITABLE) == 0)
-    label = gtk_label_new ("(not writable)");
+    label = gtk_label_new (_("(not writable)"));
   else
     label = NULL;
 

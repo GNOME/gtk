@@ -228,6 +228,7 @@ gdk_texture_loadable_icon_load_async (GLoadableIcon       *icon,
   GTask *task;
 
   task = g_task_new (icon, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gdk_texture_loadable_icon_load_async);
   g_task_run_in_thread (task, gdk_texture_loadable_icon_load_in_thread);
   g_object_unref (task);
 }

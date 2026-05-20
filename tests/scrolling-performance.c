@@ -83,7 +83,7 @@ scroll_viewport (GtkWidget     *viewport,
   set_adjustment_to_fraction (hadjustment, 0.5 + 0.5 * sin (elapsed));
   set_adjustment_to_fraction (vadjustment, 0.5 + 0.5 * cos (elapsed));
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GOptionEntry options[] = {
@@ -119,6 +119,7 @@ main (int argc, char **argv)
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
+      g_clear_error (&error);
       return 1;
     }
 

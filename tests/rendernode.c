@@ -56,6 +56,7 @@ main(int argc, char **argv)
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
+      g_clear_error (&error);
       return 1;
     }
 
@@ -75,6 +76,7 @@ main(int argc, char **argv)
   if (!g_file_get_contents (argv[1], &contents, &len, &error))
     {
       g_printerr ("Could not open node file: %s\n", error->message);
+      g_clear_error (&error);
       return 1;
     }
 

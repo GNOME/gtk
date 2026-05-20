@@ -8,9 +8,9 @@ boolean_to_text (GBinding *binding,
                  gpointer dummy G_GNUC_UNUSED)
 {
   if (g_value_get_boolean (source))
-    g_value_set_string (target, "Enabled");
+    g_value_set_static_string (target, "Enabled");
   else
-    g_value_set_string (target, "Disabled");
+    g_value_set_static_string (target, "Disabled");
 
   return TRUE;
 }

@@ -205,7 +205,7 @@ translate_visible_child_name (GBinding     *binding,
   if (gtk_stack_get_child_by_name (GTK_STACK (iw->object_start_stack), name))
     g_value_set_string (to, name);
   else
-    g_value_set_string (to, "empty");
+    g_value_set_static_string (to, "empty");
 
   return TRUE;
 }

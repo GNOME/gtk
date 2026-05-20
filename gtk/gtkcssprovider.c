@@ -1924,7 +1924,7 @@ _gtk_css_find_theme (const char *name,
   if (variant && *variant)
     g_snprintf (file, sizeof (file), "gtk-%s.css", variant);
   else
-    strcpy (file, "gtk.css");
+    g_strlcpy (file, "gtk.css", sizeof (file));
 
   /* First look in the user's data directory */
   path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, file);

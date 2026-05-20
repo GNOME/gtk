@@ -1373,7 +1373,7 @@ emit_manager_changed (gpointer data)
 
   g_signal_emit (manager, signal_changed, 0);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

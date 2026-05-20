@@ -4198,7 +4198,7 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
 					  default_editable))
     {
       /* special case \r\n, since we never want to reinsert \r */
-      if (backspace_deletes_character && strcmp ("\r\n", cluster_text))
+      if (backspace_deletes_character && strcmp ("\r\n", cluster_text) != 0)
 	{
 	  char *normalized_text = g_utf8_normalize (cluster_text,
 						     strlen (cluster_text),

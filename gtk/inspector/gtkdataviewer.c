@@ -145,6 +145,7 @@ gtk_data_viewer_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_LOADING:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -167,7 +168,7 @@ gtk_data_viewer_class_init (GtkDataViewerClass *klass)
   properties[PROP_LOADING] =
     g_param_spec_boolean ("loading", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

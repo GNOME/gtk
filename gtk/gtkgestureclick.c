@@ -120,7 +120,7 @@ _double_click_timeout_cb (gpointer user_data)
   priv->double_click_timeout_id = 0;
   _gtk_gesture_click_stop (gesture);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

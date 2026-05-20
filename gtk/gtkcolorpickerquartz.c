@@ -109,6 +109,7 @@ gtk_color_picker_quartz_pick (GtkColorPicker      *cp,
     return;
 
   picker->task = g_task_new (picker, NULL, callback, user_data);
+  g_task_set_source_tag (picker->task, gtk_color_picker_quartz_pick);
 
   [picker->sampler showSamplerWithSelectionHandler:^(NSColor *selectedColor) {
     if (selectedColor == NULL)

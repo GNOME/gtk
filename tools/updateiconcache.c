@@ -792,7 +792,7 @@ write_string (FILE *cache, const char *n)
   l = ALIGN_VALUE (strlen (n) + 1, 4);
 
   s = g_malloc0 (l);
-  strcpy (s, n);
+  g_strlcpy (s, n, l);
 
   i = fwrite (s, l, 1, cache);
 
