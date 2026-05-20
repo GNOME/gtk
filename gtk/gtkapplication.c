@@ -752,6 +752,9 @@ gtk_application_dbus_register (GApplication     *application,
                                                          NULL,
                                                          error);
 
+  if (priv->profiler_id == 0)
+    return FALSE;
+
   return TRUE;
 }
 
