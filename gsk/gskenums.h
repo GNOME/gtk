@@ -320,6 +320,26 @@ typedef enum {
 } GskCorner;
 
 /**
+ * GskSide:
+ * @GSK_SIDE_TOP: The top side
+ * @GSK_SIDE_RIGHT: The right side
+ * @GSK_SIDE_BOTTOM: The bottom side
+ * @GSK_SIDE_LEFT: The left side
+ *
+ * The sides of a rectangle as used by `GskRectSnap` or `GskBorderNode`.
+ * 
+ * This is the order used by CSS shorthand arguments.
+ *
+ * Since: 4.24
+ */
+typedef enum {
+  GSK_SIDE_TOP GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 0,
+  GSK_SIDE_RIGHT GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 1,
+  GSK_SIDE_BOTTOM GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 2,
+  GSK_SIDE_LEFT GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 3
+} GskSide;
+
+/**
  * GskFillRule:
  * @GSK_FILL_RULE_WINDING: If the path crosses the ray from
  *   left-to-right, counts +1. If the path crosses the ray
