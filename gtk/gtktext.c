@@ -2037,6 +2037,7 @@ gtk_text_init (GtkText *self)
    * to it; so we create it here and destroy it in finalize().
    */
   priv->im_context = gtk_im_multicontext_new ();
+  gtk_im_context_set_client_widget (priv->im_context, GTK_WIDGET (self));
 
   g_signal_connect (priv->im_context, "preedit-start",
                     G_CALLBACK (gtk_text_preedit_start_cb), self);
@@ -2144,6 +2145,8 @@ gtk_text_dispose (GObject *object)
   chooser = g_object_get_data (object, "gtk-emoji-chooser");
   if (chooser)
     gtk_widget_unparent (chooser);
+
+  gtk_im_context_set_client_widget (priv->im_context, NULL);
 
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
@@ -2363,13 +2366,8 @@ static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   GTK_WIDGET_CLASS (gtk_text_parent_class)->realize (widget);
-
-  gtk_im_context_set_client_widget (priv->im_context, widget);
-  if (gtk_widget_is_focus (GTK_WIDGET (self)))
-    gtk_text_im_set_focus_in (self);
 
   gtk_text_adjust_scroll (self);
   gtk_text_update_primary_selection (self);
@@ -2383,8 +2381,6 @@ gtk_text_unrealize (GtkWidget *widget)
   GdkClipboard *clipboard;
 
   gtk_text_reset_layout (self);
-
-  gtk_im_context_set_client_widget (priv->im_context, NULL);
 
   clipboard = gtk_widget_get_primary_clipboard (widget);
   if (gdk_clipboard_get_content (clipboard) == priv->selection_content)
