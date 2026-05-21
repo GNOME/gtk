@@ -206,6 +206,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "css", GTK_DEBUG_CSS, "Information about deprecated CSS features" },
   { "builder", GTK_DEBUG_BUILDER, "Information about deprecated GtkBuilder features" },
   { "session-mgmt", GTK_DEBUG_SESSION, "Information about session saving" },
+  { "general-info", GTK_DEBUG_GENERAL_INFO, "General information (in markdown)" },
 };
 
 /* This checks to see if the process is running suid or sgid
@@ -694,6 +695,9 @@ gtk_init_check (void)
 
   if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
     gtk_window_set_interactive_debugging (TRUE);
+
+  if (ret && (gtk_get_debug_flags () & GTK_DEBUG_GENERAL_INFO))
+    gtk_inspector_print_general_info (gdk_display_get_default ());
 
   return ret;
 }

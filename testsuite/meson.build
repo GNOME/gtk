@@ -92,6 +92,18 @@ foreach setup : setups
   endif
 endforeach
 
+if get_option('build-demos') and not os_android
+  test('general info', gtk4_demo,
+       args: [ '--autoquit' ],
+       protocol: 'exitcode',
+       env: common_env + [
+         'GTK_DEBUG=general-info',
+         'GTK_INSPECTOR_GENERAL_INFO_FILE=@0@'.format(join_paths(meson.current_build_dir(), 'general-info.md')),
+          ] + setup.get('env', []),
+       suite: [ 'info' ],
+  )
+endif
+
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')

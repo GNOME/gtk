@@ -2312,4 +2312,21 @@ gtk_inspector_general_clip (GtkButton           *button,
   g_free (text);
 }
 
+void
+gtk_inspector_print_general_info (GdkDisplay *display)
+{
+  char *text;
+  const char *file;
+
+  text = generate_dump (display);
+
+  file = g_getenv ("GTK_INSPECTOR_GENERAL_INFO_FILE");
+  if (file)
+    g_file_set_contents (file, text, strlen (text), NULL);
+  else
+    g_print ("%s\n", text);
+
+  g_free (text);
+}
+
 /* vim:set foldmethod=marker: */
