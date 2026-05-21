@@ -2025,6 +2025,7 @@ gtk_text_view_init (GtkTextView *text_view)
    * to it; so we create it here and destroy it in finalize ().
    */
   priv->im_context = gtk_im_multicontext_new ();
+  gtk_im_context_set_client_widget (priv->im_context, GTK_WIDGET (text_view));
 
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
@@ -4047,6 +4048,7 @@ gtk_text_view_dispose (GObject *object)
       g_object_set_data (object, "gtk-emoji-chooser", NULL);
     }
 
+  gtk_im_context_set_client_widget (priv->im_context, NULL);
   gtk_text_view_remove_validate_idles (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
   gtk_text_view_destroy_layout (text_view);
@@ -5095,7 +5097,6 @@ gtk_text_view_realize (GtkWidget *widget)
     {
       gtk_im_context_set_parent_node (priv->im_context,
                                       priv->text_window->css_node);
-      gtk_im_context_set_client_widget (priv->im_context, widget);
     }
 
   gtk_text_view_ensure_layout (text_view);
@@ -5130,7 +5131,6 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
-  gtk_im_context_set_client_widget (priv->im_context, NULL);
   gtk_im_context_set_parent_node (priv->im_context, NULL);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
