@@ -179,7 +179,7 @@ demo_cflags += [ '-DGTK_COMPILATION=1' ]
 
 gtkdemo_deps += [ profile_conf_h ]
 
-executable('gtk4-demo',
+gtk4_demo = executable('gtk4-demo',
   sources: [demos, demos_h, extra_demo_sources, gtkdemo_resources],
   c_args: demo_cflags,
   dependencies: gtkdemo_deps,
