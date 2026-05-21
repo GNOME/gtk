@@ -262,6 +262,9 @@ struct _GtkTextPrivate
 
   GdkDrag       *drag;
 
+  GtkWidget          *input_interceptor;
+  GtkEventController *key_capture;
+
   float         xalign;
 
   int           ascent;                     /* font ascent in pango units  */
@@ -467,6 +470,11 @@ static void        gtk_text_set_alignment        (GtkText    *self,
 
 static void        gtk_text_set_enable_undo      (GtkText    *self,
                                                   gboolean    enable_undo);
+
+static void        gtk_text_set_input_interceptor (GtkText   *self,
+                                                   GtkWidget *widget);
+
+static GtkWidget * gtk_text_get_input_interceptor (GtkText   *self);
 
 /* Default signal handlers
  */
@@ -1753,6 +1761,10 @@ gtk_text_set_property (GObject      *object,
       gtk_text_set_enable_undo (self, g_value_get_boolean (value));
       break;
 
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_INPUT_INTERCEPTOR:
+      gtk_text_set_input_interceptor (self, g_value_get_object (value));
+      break;
+
     /* GtkText properties */
     case PROP_BUFFER:
       gtk_text_set_buffer (self, g_value_get_object (value));
@@ -1881,6 +1893,10 @@ gtk_text_get_property (GObject    *object,
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_COMPLETE_TEXT:
       g_value_take_string (value, editable_get_complete_text ((GtkEditable *)self));
+      break;
+
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_INPUT_INTERCEPTOR:
+      g_value_set_object (value, gtk_text_get_input_interceptor (self));
       break;
 
     /* GtkText properties */
@@ -2156,6 +2172,8 @@ gtk_text_dispose (GObject *object)
 
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_unparent);
   g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
+
+  gtk_text_set_input_interceptor (self, NULL);
 
   G_OBJECT_CLASS (gtk_text_parent_class)->dispose (object);
 }
@@ -4518,6 +4536,9 @@ gtk_text_preedit_changed_cb (GtkIMContext *context,
       emit_changed (self);
       update_placeholder_visibility (self);
       g_object_notify (G_OBJECT (self), "complete-text");
+
+      if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+        g_signal_emit_by_name (self, "input-intercepted");
     }
 }
 
@@ -7617,6 +7638,60 @@ gtk_text_update_history (GtkText *self)
                                 priv->enable_undo &&
                                 priv->visible &&
                                 priv->editable);
+}
+
+static void
+input_interceptor_im_update (GtkEventControllerKey *controller,
+                             GtkText               *self)
+{
+  g_signal_emit_by_name (self, "input-intercepted");
+}
+
+static void
+gtk_text_set_input_interceptor (GtkText   *self,
+                                GtkWidget *widget)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (priv->input_interceptor == widget)
+    return;
+
+  if (priv->input_interceptor)
+    {
+      gtk_widget_remove_controller (priv->input_interceptor,
+                                    priv->key_capture);
+      g_object_remove_weak_pointer (G_OBJECT (priv->input_interceptor),
+                                    (gpointer*) &priv->input_interceptor);
+    }
+
+  priv->input_interceptor = widget;
+
+  if (widget)
+    {
+      g_object_add_weak_pointer (G_OBJECT (priv->input_interceptor),
+                                 (gpointer*) &priv->input_interceptor);
+
+      priv->key_capture = gtk_event_controller_key_new ();
+      gtk_event_controller_set_static_name (priv->key_capture,
+                                            "gtk-text-key-capture");
+      gtk_event_controller_set_propagation_phase (priv->key_capture,
+                                                  GTK_PHASE_BUBBLE);
+      g_signal_connect (priv->key_capture, "im-update",
+                        G_CALLBACK (input_interceptor_im_update), self);
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_capture),
+                                               priv->im_context);
+      gtk_widget_add_controller (widget, priv->key_capture);
+    }
+
+  g_object_notify (G_OBJECT (self), "input-interceptor");
+}
+
+static GtkWidget *
+gtk_text_get_input_interceptor (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  return priv->input_interceptor;
 }
 
  /* {{{ GtkAccessibleText implementation */
