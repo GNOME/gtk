@@ -15,4 +15,6 @@ GskRenderNode *         gsk_outset_shadow_node_new2             (const GskRounde
 const GdkColor *        gsk_outset_shadow_node_get_gdk_color    (const GskRenderNode    *node);
 const graphene_point_t *gsk_outset_shadow_node_get_offset       (const GskRenderNode    *node);
 
+void                    gsk_outset_shadow_node_get_extents      (const GskRenderNode    *node,
+                                                                 float                   sides[4]);
 G_END_DECLS
