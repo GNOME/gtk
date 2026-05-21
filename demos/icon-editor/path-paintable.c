@@ -758,7 +758,7 @@ shape_get_path_image (SvgElement *shape,
   value = svg_element_get_specified_value (orig->content, SVG_PROPERTY_VIEW_BOX);
   svg_element_set_specified_value (svg->content, SVG_PROPERTY_VIEW_BOX, value);
 
-  if (svg_element_type_is_graphical (svg_element_get_type (shape)))
+  if (svg_element_type_is_path (svg_element_get_type (shape)))
     {
       SvgElement *clone = svg_element_duplicate (shape, svg->content);
       svg_element_set_specified_value (clone, SVG_PROPERTY_VISIBILITY, NULL);
