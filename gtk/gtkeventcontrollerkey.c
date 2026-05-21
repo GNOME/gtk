@@ -149,6 +149,9 @@ gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
   gboolean start_crossing, end_crossing;
   gboolean is_focus;
 
+  if (!key->im_context)
+    return;
+
   if (crossing->type != GTK_CROSSING_FOCUS &&
       crossing->type != GTK_CROSSING_ACTIVE)
     return;
@@ -167,13 +170,10 @@ gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
     {
       key->is_focus = is_focus;
 
-      if (key->im_context)
-        {
-          if (is_focus)
-            gtk_im_context_focus_in (key->im_context);
-          else
-            gtk_im_context_focus_out (key->im_context);
-        }
+      if (is_focus)
+        gtk_im_context_focus_in (key->im_context);
+      else
+        gtk_im_context_focus_out (key->im_context);
     }
 }
 
