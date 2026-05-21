@@ -84,6 +84,7 @@ struct _GtkIMContextPrivate {
   GtkInputPurpose purpose;
   GtkInputHints hints;
   GtkCssNode *parent_node;
+  GtkWidget *client_widget;
 };
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
@@ -131,8 +132,8 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  * @delete_surrounding: Default handler of the
  *   [signal@Gtk.IMContext::delete-surrounding] signal.
  * @set_client_widget: Called via [method@Gtk.IMContext.set_client_widget] when
- *   the input window where the entered text will appear changes. Override this
- *   to keep track of the current input window, for instance for the purpose of
+ *   the text input widget attached to the IM context changes. Override this
+ *   to keep track of the current text input widget, for instance for the purpose of
  *   positioning a status display of your input method.
  * @get_preedit_string: Called via [method@Gtk.IMContext.get_preedit_string]
  *   to retrieve the text currently being preedited for display at the cursor
@@ -512,13 +513,48 @@ void
 gtk_im_context_set_client_widget (GtkIMContext *context,
                                   GtkWidget    *widget)
 {
+  GtkIMContextPrivate *priv =
+    gtk_im_context_get_instance_private (context);
   GtkIMContextClass *klass;
-  
+
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+
+  if (priv->client_widget == widget)
+    return;
+
+  if (priv->client_widget)
+      g_clear_weak_pointer (&priv->client_widget);
+
+  priv->client_widget = widget;
+
+  if (priv->client_widget)
+    {
+      g_object_add_weak_pointer (G_OBJECT (priv->client_widget),
+                                 (gpointer*) &priv->client_widget);
+    }
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   if (klass->set_client_widget)
     klass->set_client_widget (context, widget);
+}
+
+/**
+ * gtk_im_context_get_client_widget:
+ * @context: a `GtkIMContext`
+ *
+ * Retrieves the client widget for the input context.
+ *
+ * Returns: (nullable): The client widget
+ *
+ * Since: 4.24
+ **/
+GtkWidget *
+gtk_im_context_get_client_widget (GtkIMContext *context)
+{
+  GtkIMContextPrivate *priv =
+    gtk_im_context_get_instance_private (context);
+
+  return priv->client_widget;
 }
 
 /**
@@ -1058,7 +1094,9 @@ gtk_im_context_finalize (GObject *object)
   GtkIMContextPrivate *priv =
     gtk_im_context_get_instance_private (GTK_IM_CONTEXT (object));
 
+  gtk_im_context_set_client_widget (GTK_IM_CONTEXT (object), NULL);
   g_clear_object (&priv->parent_node);
+  g_clear_object (&priv->client_widget);
 
   G_OBJECT_CLASS (gtk_im_context_parent_class)->finalize (object);
 }
