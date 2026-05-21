@@ -224,6 +224,7 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/gtk/GdkX11-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWayland-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
+      - "${CI_PROJECT_DIR}/_build/testsuite/*.md"
 
 .build-fedora-default:
   extends:
@@ -254,6 +255,7 @@ gnomeos-x86_64:
             ${EXTRA_MESON_FLAGS}
             _build
     - meson compile -C _build
+    - .gitlab-ci/collect-info-gtk.sh _build
     - .gitlab-ci/run-tests.sh _build wayland gtk failing
 
 fedora-x86_64:
@@ -275,6 +277,7 @@ fedora-x86_64:
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
+    - .gitlab-ci/collect-info-gtk.sh _build
     - .gitlab-ci/run-tests.sh _build x11 gtk failing
     # only repeat test runs that are likely affected by test setups
     - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk-gl failing
@@ -303,6 +306,7 @@ release-build:
             _build
     - meson compile -C _build
     - meson install -C _build
+    - .gitlab-ci/collect-info-gtk.sh _build
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build wayland gtk failing
@@ -328,6 +332,7 @@ fedora-clang:
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
+    - .gitlab-ci/collect-info-gtk.sh _build
     - .gitlab-ci/run-tests.sh _build wayland_minimal gtk:gsk failing
 
 fedora-mingw64:

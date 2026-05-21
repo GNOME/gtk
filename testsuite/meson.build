@@ -92,7 +92,7 @@ foreach setup : setups
   endif
 endforeach
 
-if get_option('build-demos')
+if get_option('build-demos') and not os_android
   test('general info', gtk4_demo,
        args: [ '--autoquit' ],
        protocol: 'exitcode',
