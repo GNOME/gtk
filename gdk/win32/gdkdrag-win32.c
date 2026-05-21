@@ -498,7 +498,7 @@ do_drag_drop_response (gpointer user_data)
                                 (hr == E_UNEXPECTED ? "E_UNEXPECTED" :
                                  g_strdup_printf ("%#.8lx", hr)))), ddd->received_drop_effect));
 
-      drag_win32->drop_failed = !(SUCCEEDED (hr) || hr == DRAGDROP_S_DROP);
+      drag_win32->drop_failed = hr != DRAGDROP_S_DROP;
 
       /* We used to delete the selection here,
        * now GTK does that automatically in response to 
@@ -508,8 +508,15 @@ do_drag_drop_response (gpointer user_data)
       GDK_NOTE (DND, g_print ("gdk_dnd_handle_drop_finished: 0x%p\n",
                               drag));
 
-      g_signal_emit_by_name (drag, "dnd-finished");
-      gdk_drag_drop_done (drag, !drag_win32->drop_failed);
+      if (drag_win32->drop_failed)
+        {
+          gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
+        }
+      else
+        {
+          g_signal_emit_by_name (drag, "dnd-finished");
+          gdk_drag_drop_done (drag, TRUE);
+        }
     }
   else
     {

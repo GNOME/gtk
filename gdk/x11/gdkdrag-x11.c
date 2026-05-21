@@ -858,8 +858,15 @@ gdk_x11_drag_handle_finished (GdkDisplay   *display,
         drag_x11->drop_failed = xevent->xclient.data.l[1] == 0;
 
       g_object_ref (drag);
-      g_signal_emit_by_name (drag, "dnd-finished");
-      gdk_drag_drop_done (drag, !drag_x11->drop_failed);
+      if (drag_x11->drop_failed)
+        {
+          gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
+        }
+      else
+        {
+          g_signal_emit_by_name (drag, "dnd-finished");
+          gdk_drag_drop_done (drag, TRUE);
+        }
       g_object_unref (drag);
     }
 }
