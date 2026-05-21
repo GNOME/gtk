@@ -168,6 +168,8 @@ void                    gtk_inspector_add_profile_node       (GdkDisplay        
                                                               GskRenderNode        *node,
                                                               GskRenderNode        *profile_node);
 
+void                    gtk_inspector_print_general_info     (GdkDisplay           *display);
+
 
 G_END_DECLS
 
