@@ -110,6 +110,8 @@ struct _ShapeEditor
   GtkBox *children;
   GtkDropDown *mask_type;
   GtkDropDown *mask_dropdown;
+  GtkEntry *class_entry;
+  GtkEntry *style_entry;
 };
 
 enum
@@ -1047,6 +1049,30 @@ mask_type_changed (ShapeEditor *self)
   path_paintable_changed (self->paintable);
 }
 
+static void
+class_changed (ShapeEditor *self)
+{
+  if (self->updating)
+    return;
+
+  svg_element_parse_classes (self->shape, gtk_editable_get_text (GTK_EDITABLE (self->class_entry)));
+
+  path_paintable_changed (self->paintable);
+}
+
+static void
+style_changed (ShapeEditor *self)
+{
+  GtkSvgLocation loc = { 0, };
+
+  if (self->updating)
+    return;
+
+  svg_element_set_style (self->shape, gtk_editable_get_text (GTK_EDITABLE (self->style_entry)), &loc);
+
+  path_paintable_changed (self->paintable);
+}
+
 static gboolean
 can_edit_shape (SvgElement *shape)
 {
@@ -1385,6 +1411,9 @@ shape_editor_update (ShapeEditor *self)
       const char *id;
       SvgElementType type;
       SvgValue *value;
+      GStrv classes;
+      const char *style;
+      GtkSvgLocation loc;
 
       id = svg_element_get_id (self->shape);
       type = svg_element_get_type (self->shape);
@@ -1392,6 +1421,21 @@ shape_editor_update (ShapeEditor *self)
       gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
 
       self->updating = TRUE;
+
+      classes = svg_element_get_classes (self->shape);
+      style = svg_element_get_style (self->shape, &loc);
+
+      if (classes)
+        {
+          g_autofree char *class = g_strjoinv (" ", classes);
+          gtk_editable_set_text (GTK_EDITABLE (self->class_entry), class);
+        }
+      else
+        {
+          gtk_editable_set_text (GTK_EDITABLE (self->class_entry), "");
+        }
+
+      gtk_editable_set_text (GTK_EDITABLE (self->style_entry), style ? style : "");
 
       if (!can_edit_shape (self->shape))
         {
@@ -1943,6 +1987,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, transform_box);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, mask_type);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, mask_dropdown);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, class_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, style_entry);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -1976,6 +2022,8 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, clip_path_changed);
   gtk_widget_class_bind_template_callback (widget_class, mask_type_changed);
   gtk_widget_class_bind_template_callback (widget_class, mask_changed);
+  gtk_widget_class_bind_template_callback (widget_class, class_changed);
+  gtk_widget_class_bind_template_callback (widget_class, style_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
