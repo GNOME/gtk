@@ -1719,6 +1719,19 @@ pointer_handle_leave (void              *data,
 
   _gdk_wayland_display_update_serial (display_wayland, serial);
 
+  if (seat->pointer_info.button_modifiers)
+    {
+      seat->pointer_info.button_modifiers = 0;
+
+      GDK_NOTE (EVENTS,
+                g_message ("ending implicit grab, seat %p", seat));
+      _gdk_display_end_device_grab (seat->display,
+                                    seat->master_pointer,
+                                    _gdk_display_get_next_serial (seat->display),
+                                    seat->pointer_info.focus,
+                                    TRUE);
+    }
+
   event = gdk_wayland_seat_get_frame_event (seat, GDK_LEAVE_NOTIFY);
   event->crossing.window = g_object_ref (seat->pointer_info.focus);
   gdk_event_set_device (event, seat->master_pointer);
