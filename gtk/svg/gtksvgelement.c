@@ -1754,6 +1754,13 @@ svg_element_set_type (SvgElement     *element,
       svg_element_type_is_container (type))
     element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
 
+  if (svg_element_type_is_text (old_type) &&
+      !svg_element_type_is_text (type))
+    g_clear_pointer (&element->text, g_array_unref);
+  if (!svg_element_type_is_text (old_type) &&
+      svg_element_type_is_text (type))
+    element->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
+
   for (unsigned int attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
       if (!svg_property_applies_to (attr, type))
