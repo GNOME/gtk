@@ -1607,26 +1607,44 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuRenderPass *self,
   float spread, blur_radius;
   const GdkColor *color;
   const graphene_point_t *offset;
+  GskRoundedRect outline;
+  GskRectSnap snap;
+  graphene_rect_t bounds;
 
   color = gsk_outset_shadow_node_get_gdk_color (node);
   spread = gsk_outset_shadow_node_get_spread (node);
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   offset = gsk_outset_shadow_node_get_offset (node);
+  snap = gsk_outset_shadow_node_get_snap (node);
+  outline = *gsk_inset_shadow_node_get_outline (node);
+  bounds = node->bounds;
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &outline.bounds,
+                                      snap,
+                                      &outline.bounds))
+    return;
+  if (snap != GSK_RECT_SNAP_NONE)
+    {
+      float extents[4];
+      gsk_outset_shadow_node_get_extents (node, extents);
+      bounds.origin.x -= extents[GSK_SIDE_LEFT];
+      bounds.origin.y -= extents[GSK_SIDE_TOP];
+      bounds.size.width += extents[GSK_SIDE_LEFT] + extents[GSK_SIDE_RIGHT];
+      bounds.size.height += extents[GSK_SIDE_TOP] + extents[GSK_SIDE_BOTTOM];
+    }
 
   if (blur_radius < 0.01)
     {
       graphene_vec4_t widths;
-      GskRoundedRect outline;
 
       graphene_vec4_init (&widths, spread, spread, spread, spread);
-      gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
       gsk_rect_init_offset (&outline.bounds, &outline.bounds, offset);
 
       gsk_gpu_border_op (self,
                          self->ccs,
                          gsk_gpu_color_states_find (self->ccs, color),
-                         &node->bounds,
+                         &bounds,
                          &outline,
                          color,
                          color,
@@ -1640,9 +1658,9 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuRenderPass *self,
       gsk_gpu_box_shadow_op (self,
                              self->ccs,
                              gsk_gpu_color_states_find (self->ccs, color),
-                             &node->bounds,
+                             &bounds,
                              FALSE,
-                             gsk_outset_shadow_node_get_outline (node),
+                             &outline,
                              &GRAPHENE_SIZE_INIT (offset->x, offset->y),
                              spread,
                              blur_radius,

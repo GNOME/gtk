@@ -482,6 +482,7 @@ Creates a node like `gsk_transform_node_new()` with the given properties.
 | dx       | `<number>`       | 1                      | non-default |
 | dy       | `<number>`       | 1                      | non-default |
 | outline  | `<rounded-rect>` | 50                     | always      |
+| snap     | `<snap>`         | none                   | non-default |
 | spread   | `<number>`       | 0                      | non-default |
 
 Creates a node like `gsk_outset_shadow_node_new()` with the given properties.

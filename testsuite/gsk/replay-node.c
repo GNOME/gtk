@@ -169,9 +169,16 @@ replay_outset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
   const graphene_point_t *offset = gsk_outset_shadow_node_get_offset (node);
   float spread = gsk_outset_shadow_node_get_spread (node);
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
+  GskRectSnap snap = gsk_outset_shadow_node_get_snap (node);
+
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, snap);
 
   gtk_snapshot_add_outset_shadow (snapshot, outline, color,
                                   offset, spread, blur_radius);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void

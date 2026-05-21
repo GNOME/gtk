@@ -1444,6 +1444,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
         gsk_rounded_rect_to_float (outline, graphene_point_zero (), rect);
         add_rect_row (store, "Outline", &outline->bounds);
+        add_snap_row (store, "Snap", gsk_outset_shadow_node_get_snap (node));
 
         add_color_row (store, "Color", color);
 
