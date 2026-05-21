@@ -2213,6 +2213,56 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="class_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="label" translatable="yes">_Classes</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">class_entry</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">47</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="class_entry">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">1</property>
+            <signal name="activate" handler="class_changed" swapped="yes"/>
+            <layout>
+              <property name="row">47</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="style_label">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="label" translatable="yes">_Style</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">style_entry</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">48</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="style_entry">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="hexpand">1</property>
+            <signal name="activate" handler="style_changed" swapped="yes"/>
+            <layout>
+              <property name="row">48</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="no_edit">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_no_edit">
@@ -2225,7 +2275,7 @@
             <property name="margin-top">20</property>
             <property name="margin-bottom">20</property>
             <layout>
-              <property name="row">47</property>
+              <property name="row">100</property>
               <property name="column">0</property>
               <property name="column-span">2</property>
             </layout>
@@ -2271,6 +2321,9 @@
       <widget name="fill_rule_label"/>
       <widget name="attach_expander"/>
       <widget name="attach_at_label"/>
+      <widget name="mask_label"/>
+      <widget name="mask_type_label"/>
+      <widget name="class_label"/>
     </widgets>
   </object>
 </interface>
