@@ -21,6 +21,7 @@
 
 #include "paintable-editor.h"
 #include "shape-editor.h"
+#include "style-editor.h"
 #include "path-paintable.h"
 #include "gtk/svg/gtksvgnumberprivate.h"
 #include "gtk/svg/gtksvgviewboxprivate.h"
@@ -63,6 +64,7 @@ struct _PaintableEditor
   GList *errors;
 
   GtkBox *elements;
+  StyleEditor *stylesheet;
 };
 
 struct _PaintableEditorClass
@@ -118,6 +120,32 @@ create_shape_editors (PaintableEditor *self)
       SvgElement *shape = svg_element_get_child (svg->content, i);
       append_shape_editor (self, shape);
     }
+}
+
+static void
+append_styles (SvgElement *element,
+               gpointer    data)
+{
+  GString *s = data;
+
+  for (unsigned int i = 0; i < svg_element_get_n_styles (element); i++)
+    {
+      if (s->len > 0)
+        g_string_append (s, "\n");
+      g_string_append (s, svg_element_get_style (element, i));
+    }
+
+  svg_element_clear_style (element);
+}
+
+static void
+populate_style_editor (PaintableEditor *self)
+{
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  g_autoptr (GString) s = g_string_new ("");
+
+  svg_element_foreach (svg->content, append_styles, s);
+  style_editor_set_style (self->stylesheet, s->str);
 }
 
 static void
@@ -380,6 +408,17 @@ xml_changed (PaintableEditor *self)
   if (self->timeout != 0)
     g_source_remove (self->timeout);
   self->timeout = g_timeout_add_once (100, update_timeout, self);
+}
+
+static void
+style_changed (PaintableEditor *self)
+{
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  const char *style = style_editor_get_style (self->stylesheet);
+
+  svg_element_clear_style (svg->content);
+  svg_element_set_style (svg->content, 0, style);
+  path_paintable_changed (self->paintable);
 }
 
 /* }}} */
@@ -670,6 +709,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   g_type_ensure (SHAPE_EDITOR_TYPE);
+  g_type_ensure (STYLE_EDITOR_TYPE);
 
   object_class->dispose = paintable_editor_dispose;
   object_class->finalize = paintable_editor_finalize;
@@ -707,6 +747,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary2);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, icon_image);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, elements);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, stylesheet);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat_check);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, stack);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_view);
@@ -720,6 +761,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
   gtk_widget_class_bind_template_callback (widget_class, xml_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
+  gtk_widget_class_bind_template_callback (widget_class, style_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "PaintableEditor");
@@ -770,6 +812,7 @@ paintable_editor_set_paintable (PaintableEditor *self,
                                 G_CALLBACK (changed), self);
 
       create_shape_editors (self);
+      populate_style_editor (self);
       update_summary (self);
       update_metadata (self);
       update_size (self);
