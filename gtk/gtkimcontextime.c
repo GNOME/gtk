@@ -138,6 +138,87 @@ surface_from_widget (GtkIMContext *context)
 }
 
 static void
+after_layout_cb (GtkIMContext *context)
+{
+  GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
+  cairo_rectangle_int_t rect;
+  GtkNative *native;
+  graphene_point_t p;
+  double nx, ny;
+
+  native = gtk_widget_get_native (context_ime->client_widget);
+  if (!native)
+    return;
+
+  /* Compute surface-local coordinates */
+  rect = context_ime->cursor_location;
+
+  if (!gtk_widget_compute_point (context_ime->client_widget,
+                                 GTK_WIDGET (native),
+                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
+                                 &p))
+    graphene_point_init (&p, rect.x, rect.y);
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  rect.x = p.x + nx;
+  rect.y = p.y + ny;
+
+  if (context_ime->surface_cursor_location.x != rect.x ||
+      context_ime->surface_cursor_location.y != rect.y ||
+      context_ime->surface_cursor_location.width != rect.width ||
+      context_ime->surface_cursor_location.height != rect.height)
+    {
+      GdkSurface *surface;
+      COMPOSITIONFORM cf;
+      HWND hwnd;
+      HIMC himc;
+
+      context_ime->surface_cursor_location = rect;
+
+      surface = surface_from_widget (context);
+      if (!surface)
+        return;
+
+      hwnd = gdk_win32_surface_get_handle (surface);
+      himc = ImmGetContext (hwnd);
+      if (!himc)
+        return;
+
+      cf.dwStyle = CFS_POINT;
+      cf.ptCurrentPos.x = context_ime->surface_cursor_location.x;
+      cf.ptCurrentPos.y = context_ime->surface_cursor_location.y;
+      ImmSetCompositionWindow (himc, &cf);
+      ImmReleaseContext (hwnd, himc);
+    }
+}
+
+static void
+on_widget_realize (GtkWidget       *widget,
+                   GtkIMContextIME *context)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  if (frame_clock)
+    {
+      context->after_layout_id =
+        g_signal_connect_object (frame_clock, "layout",
+                                 G_CALLBACK (after_layout_cb), context,
+                                 G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+    }
+}
+
+static void
+on_widget_unrealize (GtkWidget       *widget,
+                     GtkIMContextIME *context)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (context->client_widget);
+  g_clear_signal_handler (&context->after_layout_id, frame_clock);
+}
+
+static void
 gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
 {
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
@@ -249,7 +330,33 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
+
+  if (context_ime->client_widget)
+    {
+      on_widget_unrealize (widget, context_ime);
+      g_signal_handlers_disconnect_by_func (context_ime->client_widget,
+                                            on_widget_realize,
+                                            context);
+      g_signal_handlers_disconnect_by_func (context_ime->client_widget,
+                                            on_widget_unrealize,
+                                            context);
+
+      g_clear_weak_pointer (&context_ime->client_widget);
+    }
+
   context_ime->client_widget = widget;
+
+  if (widget)
+    {
+      g_object_add_weak_pointer (G_OBJECT (context_ime->client_widget),
+                                 (gpointer*) &context_ime->client_widget);
+
+      g_signal_connect (context_ime->client_widget, "realize",
+                        G_CALLBACK (on_widget_realize), context);
+      g_signal_connect (context_ime->client_widget, "unrealize",
+                        G_CALLBACK (on_widget_unrealize), context);
+      on_widget_realize (widget, context_ime);
+    }
 }
 
 static gboolean
@@ -553,8 +660,13 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
           gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
           if (utf8str != NULL && strlen(utf8str) > 0)
             {
+              GdkFrameClock *frame_clock;
+
               context_ime->preediting = TRUE;
-              gtk_im_context_ime_set_cursor_location (context, NULL);
+              frame_clock = gtk_widget_get_frame_clock (context_ime->client_widget);
+              if (frame_clock)
+                gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+
               g_signal_emit_by_name (context, "preedit-start");
               g_signal_emit_by_name (context, "preedit-changed");
             }
@@ -647,11 +759,6 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
                                         GdkRectangle *area)
 {
   GtkIMContextIME *context_ime;
-  GdkSurface *surface;
-  COMPOSITIONFORM cf;
-  HWND hwnd;
-  HIMC himc;
-  int scale;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
@@ -659,24 +766,14 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (area)
     context_ime->cursor_location = *area;
 
-  surface = surface_from_widget (context);
+  if (context_ime->client_widget)
+    {
+      GdkFrameClock *frame_clock;
 
-  if (!surface)
-    return;
-
-  hwnd = gdk_win32_surface_get_handle (surface);
-  himc = ImmGetContext (hwnd);
-  if (!himc)
-    return;
-
-  scale = gdk_surface_get_scale_factor (surface);
-
-  cf.dwStyle = CFS_POINT;
-  cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;
-  cf.ptCurrentPos.y = context_ime->cursor_location.y * scale;
-  ImmSetCompositionWindow (himc, &cf);
-
-  ImmReleaseContext (hwnd, himc);
+      frame_clock = gtk_widget_get_frame_clock (context_ime->client_widget);
+      if (frame_clock)
+        gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+    }
 }
 
 
