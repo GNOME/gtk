@@ -1087,9 +1087,9 @@ href_changed (ShapeEditor *self)
 }
 
 static gboolean
-can_edit_shape (SvgElement *shape)
+can_edit_shape_type (SvgElementType type)
 {
-  switch (svg_element_get_type (shape))
+  switch (type)
     {
     case SVG_ELEMENT_LINE:
     case SVG_ELEMENT_POLYLINE:
@@ -1121,6 +1121,12 @@ can_edit_shape (SvgElement *shape)
     default:
       g_assert_not_reached ();
     }
+}
+
+static gboolean
+can_edit_shape (SvgElement *shape)
+{
+  return can_edit_shape_type (svg_element_get_type (shape));
 }
 
 static gboolean
@@ -1872,9 +1878,96 @@ struct _ShapeEditorClass
 G_DEFINE_TYPE (ShapeEditor, shape_editor, GTK_TYPE_WIDGET)
 
 static void
+setup_item (GtkSignalListItemFactory *factory,
+            GtkListItem              *list_item,
+            gpointer                  data)
+{
+  GtkWidget *box;
+  GtkWidget *label;
+  GtkWidget *icon;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  icon = g_object_new (GTK_TYPE_IMAGE,
+                       "icon-name", "object-select-symbolic",
+                       "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
+                       NULL);
+  gtk_box_append (GTK_BOX (box), icon);
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_box_append (GTK_BOX (box), label);
+  gtk_list_item_set_child (list_item, box);
+}
+
+static void
+selected_item_changed (GtkDropDown *dropdown,
+                       GParamSpec  *pspec,
+                       GtkListItem *list_item)
+{
+  GtkWidget *box;
+  GtkWidget *icon;
+
+  box = gtk_list_item_get_child (list_item);
+  icon = gtk_widget_get_first_child (box);
+
+  if (gtk_drop_down_get_selected_item (dropdown) == gtk_list_item_get_item (list_item))
+    gtk_widget_set_opacity (icon, 1.0);
+  else
+    gtk_widget_set_opacity (icon, 0.0);
+}
+
+static void
+bind_item (GtkSignalListItemFactory *factory,
+           GtkListItem              *list_item,
+           gpointer                  data)
+{
+  GtkDropDown *dropdown = data;
+  gpointer item;
+  GtkWidget *box;
+  GtkWidget *label;
+  const char *string;
+
+  item = gtk_list_item_get_item (list_item);
+  box = gtk_list_item_get_child (list_item);
+  label = gtk_widget_get_last_child (box);
+
+  string = gtk_string_object_get_string (GTK_STRING_OBJECT (item));
+  gtk_label_set_label (GTK_LABEL (label), string);
+
+  if (can_edit_shape_type ((SvgElementType) gtk_list_item_get_position (list_item)))
+    gtk_widget_remove_css_class (box, "dim-label");
+  else
+    gtk_widget_add_css_class (box, "dim-label");
+
+  g_signal_connect (dropdown, "notify::selected-item",
+                    G_CALLBACK (selected_item_changed), list_item);
+  selected_item_changed (dropdown, NULL, list_item);
+}
+
+static void
+unbind_item (GtkSignalListItemFactory *factory,
+             GtkListItem              *list_item,
+             gpointer                  data)
+{
+  GtkDropDown *dropdown = data;
+
+  g_signal_handlers_disconnect_by_func (dropdown, selected_item_changed, list_item);
+}
+
+static void
 shape_editor_init (ShapeEditor *self)
 {
+  GtkListItemFactory *factory;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  factory = gtk_signal_list_item_factory_new ();
+
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_item), self->shape_dropdown);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_item), self->shape_dropdown);
+  g_signal_connect (factory, "unbind", G_CALLBACK (unbind_item), self->shape_dropdown);
+
+  gtk_drop_down_set_list_factory (self->shape_dropdown, factory);
+  g_object_unref (factory);
 }
 
 static void
