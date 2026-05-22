@@ -2213,6 +2213,47 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="href_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bb_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>23</constant> <!-- a -->
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_URL</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">href_entry</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">49</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="href_entry">
+            <binding name="visible">
+              <closure type="gboolean" function="bb_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>23</constant> <!-- a -->
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
+            <property name="hexpand">1</property>
+            <signal name="activate" handler="href_changed" swapped="yes"/>
+            <layout>
+              <property name="row">49</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="class_label">
             <binding name="visible">
               <closure type="gboolean" function="bool_and_edit">
@@ -2255,7 +2296,6 @@
                 <lookup name="update-counter">ShapeEditor</lookup>
               </closure>
             </binding>
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="label" translatable="yes">_Style</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">style_entry</property>

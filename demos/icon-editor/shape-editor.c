@@ -40,6 +40,7 @@
 #include "gtk/svg/gtksvgelementprivate.h"
 #include "gtk/svg/gtksvgkeywordprivate.h"
 #include "gtk/svg/gtksvgparserprivate.h"
+#include "gtk/svg/gtksvghrefprivate.h"
 
 struct _ShapeEditor
 {
@@ -112,6 +113,7 @@ struct _ShapeEditor
   GtkDropDown *mask_dropdown;
   GtkEntry *class_entry;
   GtkEntry *style_entry;
+  GtkEntry *href_entry;
 };
 
 enum
@@ -1073,6 +1075,17 @@ style_changed (ShapeEditor *self)
   path_paintable_changed (self->paintable);
 }
 
+static void
+href_changed (ShapeEditor *self)
+{
+  if (self->updating)
+    return;
+
+  svg_element_take_specified_value (self->shape, SVG_PROPERTY_HREF, svg_href_new_plain (gtk_editable_get_text (GTK_EDITABLE (self->href_entry))));
+
+  path_paintable_changed (self->paintable);
+}
+
 static gboolean
 can_edit_shape (SvgElement *shape)
 {
@@ -1089,6 +1102,7 @@ can_edit_shape (SvgElement *shape)
     case SVG_ELEMENT_DEFS:
     case SVG_ELEMENT_CLIP_PATH:
     case SVG_ELEMENT_MASK:
+    case SVG_ELEMENT_LINK:
       return TRUE;
     case SVG_ELEMENT_USE:
     case SVG_ELEMENT_LINEAR_GRADIENT:
@@ -1102,7 +1116,6 @@ can_edit_shape (SvgElement *shape)
     case SVG_ELEMENT_FILTER:
     case SVG_ELEMENT_SYMBOL:
     case SVG_ELEMENT_SWITCH:
-    case SVG_ELEMENT_LINK:
     case SVG_ELEMENT_VIEW:
       return FALSE;
     default:
@@ -1424,6 +1437,7 @@ shape_editor_update (ShapeEditor *self)
       GStrv classes;
       const char *style;
       GtkSvgLocation loc;
+      SvgValue *href;
 
       id = svg_element_get_id (self->shape);
       type = svg_element_get_type (self->shape);
@@ -1431,6 +1445,15 @@ shape_editor_update (ShapeEditor *self)
       gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
 
       self->updating = TRUE;
+
+      if (!can_edit_shape (self->shape))
+        {
+          gtk_drop_down_set_selected (self->shape_dropdown, svg_element_get_type (self->shape));
+
+          self->updating = FALSE;
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_COUNTER]);
+          return;
+        }
 
       classes = svg_element_get_classes (self->shape);
       style = svg_element_get_style (self->shape, &loc);
@@ -1447,14 +1470,12 @@ shape_editor_update (ShapeEditor *self)
 
       gtk_editable_set_text (GTK_EDITABLE (self->style_entry), style ? style : "");
 
-      if (!can_edit_shape (self->shape))
-        {
-          gtk_drop_down_set_selected (self->shape_dropdown, svg_element_get_type (self->shape));
-
-          self->updating = FALSE;
-          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_COUNTER]);
-          return;
-        }
+      href = ref_value (self->shape, SVG_PROPERTY_HREF);
+      if (svg_href_get_kind (href) == HREF_NONE)
+        gtk_editable_set_text (GTK_EDITABLE (self->href_entry), "");
+      else
+        gtk_editable_set_text (GTK_EDITABLE (self->href_entry), svg_href_get_ref (href));
+      svg_value_unref (href);
 
       graphene_rect_init (&viewport, 0, 0, svg->width, svg->height);
 
@@ -1583,6 +1604,7 @@ shape_editor_update (ShapeEditor *self)
         case SVG_ELEMENT_DEFS:
         case SVG_ELEMENT_CLIP_PATH:
         case SVG_ELEMENT_MASK:
+        case SVG_ELEMENT_LINK:
           populate_children (self);
           break;
         default:
@@ -1999,6 +2021,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, mask_dropdown);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, class_entry);
   gtk_widget_class_bind_template_child (widget_class, ShapeEditor, style_entry);
+  gtk_widget_class_bind_template_child (widget_class, ShapeEditor, href_entry);
 
   gtk_widget_class_bind_template_callback (widget_class, transition_changed);
   gtk_widget_class_bind_template_callback (widget_class, animation_changed);
@@ -2035,6 +2058,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, mask_changed);
   gtk_widget_class_bind_template_callback (widget_class, class_changed);
   gtk_widget_class_bind_template_callback (widget_class, style_changed);
+  gtk_widget_class_bind_template_callback (widget_class, href_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
