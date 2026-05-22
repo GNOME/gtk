@@ -2275,7 +2275,9 @@ forward_key (GtkEventControllerKey *key,
   /* Since the entry is not a descendent of the file chooser widget
    * in this case, we need to manually make our bindings apply.
    */
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   return gtk_event_controller_key_forward (key, GTK_WIDGET (impl));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -6868,7 +6870,9 @@ captured_key (GtkEventControllerKey *controller,
         return GDK_EVENT_PROPAGATE;
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
+  G_GNUC_END_IGNORE_DEPRECATIONS
   if (handled == GDK_EVENT_STOP)
     operation_mode_set (impl, OPERATION_MODE_SEARCH);
 

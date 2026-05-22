@@ -347,6 +347,8 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
  * or [signal@Gtk.EventControllerKey::modifiers] signals.
  *
  * Returns: whether the @widget handled the event
+ *
+ * Deprecated: 4.24: Use [method@Gtk.Editable.set_input_interceptor] instead
  */
 gboolean
 gtk_event_controller_key_forward (GtkEventControllerKey *controller,

@@ -51,7 +51,7 @@ void                gtk_event_controller_key_set_im_context (GtkEventControllerK
 GDK_AVAILABLE_IN_ALL
 GtkIMContext *      gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_24_FOR(gtk_editable_set_input_interceptor)
 gboolean            gtk_event_controller_key_forward        (GtkEventControllerKey *controller,
                                                              GtkWidget             *widget);
 GDK_AVAILABLE_IN_ALL
@@ -60,4 +60,3 @@ guint               gtk_event_controller_key_get_group      (GtkEventControllerK
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventControllerKey, g_object_unref)
 
 G_END_DECLS
-
