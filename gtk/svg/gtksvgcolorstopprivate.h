@@ -66,9 +66,9 @@ void           svg_color_stop_set_id            (SvgColorStop   *stop,
                                                  const char     *id);
 const char *   svg_color_stop_get_id            (SvgColorStop   *stop);
 
-void           svg_color_stop_set_style         (SvgColorStop   *stop,
+void           svg_color_stop_set_inline_style  (SvgColorStop   *stop,
                                                  const char     *style);
-const char *   svg_color_stop_get_style         (SvgColorStop   *stop);
+const char *   svg_color_stop_get_inline_style  (SvgColorStop   *stop);
 
 void           svg_color_stop_parse_classes     (SvgColorStop   *stop,
                                                  const char     *classes);

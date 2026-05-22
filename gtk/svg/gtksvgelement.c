@@ -1178,17 +1178,17 @@ svg_element_get_id (SvgElement *element)
 }
 
 void
-svg_element_set_style (SvgElement           *element,
-                       const char           *style,
-                       const GtkSvgLocation *location)
+svg_element_set_inline_style (SvgElement           *element,
+                              const char           *style,
+                              const GtkSvgLocation *location)
 {
   g_set_str (&element->style, style);
   element->style_loc = *location;
 }
 
 const char *
-svg_element_get_style (SvgElement     *element,
-                       GtkSvgLocation *location)
+svg_element_get_inline_style (SvgElement     *element,
+                              GtkSvgLocation *location)
 {
   *location = element->style_loc;
   return element->style;

@@ -1070,7 +1070,7 @@ style_changed (ShapeEditor *self)
   if (self->updating)
     return;
 
-  svg_element_set_style (self->shape, gtk_editable_get_text (GTK_EDITABLE (self->style_entry)), &loc);
+  svg_element_set_inline_style (self->shape, gtk_editable_get_text (GTK_EDITABLE (self->style_entry)), &loc);
 
   path_paintable_changed (self->paintable);
 }
@@ -1462,7 +1462,7 @@ shape_editor_update (ShapeEditor *self)
         }
 
       classes = svg_element_get_classes (self->shape);
-      style = svg_element_get_style (self->shape, &loc);
+      style = svg_element_get_inline_style (self->shape, &loc);
 
       if (classes)
         {

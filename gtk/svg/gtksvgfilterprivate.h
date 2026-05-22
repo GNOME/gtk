@@ -70,9 +70,9 @@ void           svg_filter_set_id            (SvgFilter      *filter,
                                              const char     *id);
 const char *   svg_filter_get_id            (SvgFilter      *filter);
 
-void           svg_filter_set_style         (SvgFilter      *filter,
+void           svg_filter_set_inline_style  (SvgFilter      *filter,
                                              const char     *style);
-const char *   svg_filter_get_style         (SvgFilter      *filter);
+const char *   svg_filter_get_inline_style  (SvgFilter      *filter);
 
 void           svg_filter_parse_classes     (SvgFilter      *filter,
                                              const char     *classes);

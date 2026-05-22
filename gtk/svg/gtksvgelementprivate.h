@@ -94,10 +94,10 @@ SvgValue *   svg_element_get_current_value   (SvgElement            *element,
 void         svg_element_set_id              (SvgElement            *element,
                                               const char            *id);
 const char * svg_element_get_id              (SvgElement            *element);
-void         svg_element_set_style           (SvgElement            *element,
+void         svg_element_set_inline_style    (SvgElement            *element,
                                               const char            *style,
                                               const GtkSvgLocation  *location);
-const char * svg_element_get_style           (SvgElement            *element,
+const char * svg_element_get_inline_style    (SvgElement            *element,
                                               GtkSvgLocation        *location);
 void         svg_element_parse_classes       (SvgElement            *element,
                                               const char            *classes);

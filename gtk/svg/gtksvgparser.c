@@ -1370,7 +1370,7 @@ parse_shape_attrs (SvgElement           *shape,
 
           gtk_svg_location_init_attr_range (&start, &end, context, i);
           *handled |= BIT (i);
-          svg_element_set_style (shape, attr_values[i], &start);
+          svg_element_set_inline_style (shape, attr_values[i], &start);
         }
       else if (strcmp (attr_names[i], "id") == 0)
         {
@@ -1873,7 +1873,7 @@ parse_color_stop_attrs (SvgElement           *shape,
       else if (strcmp (attr_names[i], "style") == 0)
         {
           *handled |= BIT (i);
-          svg_color_stop_set_style (stop, attr_values[i]);
+          svg_color_stop_set_inline_style (stop, attr_values[i]);
         }
       else if (strcmp (attr_names[i], "class") == 0)
         {
@@ -1933,7 +1933,7 @@ parse_filter_attrs (SvgElement           *shape,
       else if (strcmp (attr_names[i], "style") == 0)
         {
           *handled |= BIT (i);
-          svg_filter_set_style (f, attr_values[i]);
+          svg_filter_set_inline_style (f, attr_values[i]);
         }
       else if (strcmp (attr_names[i], "class") == 0)
         {
@@ -4087,7 +4087,7 @@ load_inline_style_here (SvgElement *element,
 
   data->current_shape = element;
 
-  style = svg_element_get_style (element, &data->text.start);
+  style = svg_element_get_inline_style (element, &data->text.start);
   data->text.start.line_chars += strlen ("style='");
   data->text.start.bytes += strlen ("style='");
   parse_style_into_properties (element->inline_styles, style, data);
@@ -4098,7 +4098,7 @@ load_inline_style_here (SvgElement *element,
         {
           SvgColorStop *stop = g_ptr_array_index (element->color_stops, idx);
 
-          style = svg_color_stop_get_style (stop);
+          style = svg_color_stop_get_inline_style (stop);
           svg_color_stop_get_origin (stop, &data->text.start);
           data->text.start.line_chars += strlen ("style='");
           data->text.start.bytes += strlen ("style='");
@@ -4114,7 +4114,7 @@ load_inline_style_here (SvgElement *element,
         {
           SvgFilter *f = g_ptr_array_index (element->filters, idx);
 
-          style = svg_filter_get_style (f);
+          style = svg_filter_get_inline_style (f);
           svg_filter_get_origin (f, &data->text.start);
           data->text.start.line_chars += strlen ("style='");
           data->text.start.bytes += strlen ("style='");

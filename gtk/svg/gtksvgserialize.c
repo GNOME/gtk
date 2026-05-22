@@ -145,8 +145,8 @@ serialize_shape_attrs (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  if (svg_element_get_style (shape, &loc))
-    append_string_attr (s, indent, "style", svg_element_get_style (shape, &loc));
+  if (svg_element_get_inline_style (shape, &loc))
+    append_string_attr (s, indent, "style", svg_element_get_inline_style (shape, &loc));
 
   if (svg_element_get_focusable (shape) != svg_element_get_initial_focusable (shape))
     append_string_attr (s, indent, "tabindex", svg_element_get_focusable (shape) ? "0" : "-1");
@@ -690,8 +690,8 @@ serialize_color_stop (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  if (svg_color_stop_get_style (stop))
-    append_string_attr (s, indent, "style", svg_color_stop_get_style (stop));
+  if (svg_color_stop_get_inline_style (stop))
+    append_string_attr (s, indent, "style", svg_color_stop_get_inline_style (stop));
 
   for (unsigned int i = 0; i < N_STOP_PROPERTIES; i++)
     {
@@ -752,8 +752,8 @@ serialize_filter_begin (GString              *s,
       g_string_append_c (s, '\'');
     }
 
-  if (svg_filter_get_style (f))
-    append_string_attr (s, indent, "style", svg_filter_get_style (f));
+  if (svg_filter_get_inline_style (f))
+    append_string_attr (s, indent, "style", svg_filter_get_inline_style (f));
 
   for (unsigned int i = 0; i < svg_filter_type_get_n_attrs (type); i++)
     {
