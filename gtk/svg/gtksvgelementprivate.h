@@ -99,6 +99,13 @@ void         svg_element_set_inline_style    (SvgElement            *element,
                                               const GtkSvgLocation  *location);
 const char * svg_element_get_inline_style    (SvgElement            *element,
                                               GtkSvgLocation        *location);
+unsigned int svg_element_get_n_styles        (SvgElement            *element);
+const char * svg_element_get_style           (SvgElement            *element,
+                                              unsigned int           pos);
+void         svg_element_set_style           (SvgElement            *element,
+                                              unsigned int           pos,
+                                              const char            *style);
+void         svg_element_clear_style         (SvgElement            *element);
 void         svg_element_parse_classes       (SvgElement            *element,
                                               const char            *classes);
 void         svg_element_take_classes        (SvgElement            *element,
