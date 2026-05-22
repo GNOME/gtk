@@ -1228,6 +1228,16 @@ bb_and_shape_has_attr (GObject    *object,
 }
 
 static gboolean
+bool_and_edit (GObject  *object,
+               gboolean  b1,
+               int       dummy)
+{
+  ShapeEditor *self = SHAPE_EDITOR (object);
+
+  return b1 && can_edit_shape (self->shape);
+}
+
+static gboolean
 bool_and_no_edit (GObject  *object,
                   gboolean  b1,
                   int       dummy)
@@ -2008,6 +2018,7 @@ shape_editor_class_init (ShapeEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, bb_and_shape_has_gpa);
   gtk_widget_class_bind_template_callback (widget_class, bb_and_shape_has_attr);
   gtk_widget_class_bind_template_callback (widget_class, bool_and_no_edit);
+  gtk_widget_class_bind_template_callback (widget_class, bool_and_edit);
   gtk_widget_class_bind_template_callback (widget_class, duplicate_shape);
   gtk_widget_class_bind_template_callback (widget_class, move_shape_down);
   gtk_widget_class_bind_template_callback (widget_class, delete_shape);

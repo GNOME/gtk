@@ -2214,7 +2214,12 @@
 
         <child>
           <object class="GtkLabel" id="class_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="label" translatable="yes">_Classes</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">class_entry</property>
@@ -2227,7 +2232,12 @@
         </child>
         <child>
           <object class="GtkEntry" id="class_entry">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <signal name="activate" handler="class_changed" swapped="yes"/>
             <layout>
@@ -2239,6 +2249,12 @@
 
         <child>
           <object class="GtkLabel" id="style_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
             <property name="label" translatable="yes">_Style</property>
             <property name="use-underline">1</property>
@@ -2252,7 +2268,12 @@
         </child>
         <child>
           <object class="GtkEntry" id="style_entry">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <signal name="activate" handler="style_changed" swapped="yes"/>
             <layout>
