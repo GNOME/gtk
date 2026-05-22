@@ -156,19 +156,43 @@
           </object>
         </child>
         <child type="end">
-          <object class="GtkToggleButton" id="open_menu">
-            <property name="focus-on-click">0</property>
-            <property name="tooltip-text" translatable="yes">Show Sidebar</property>
-            <property name="active" bind-source="IconEditorWindow" bind-property="show-sidebar" bind-flags="bidirectional|sync-create"/>
-            <property name="child">
-              <object class="GtkImage">
-                <property name="paintable">
-                  <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/info-outline-symbolic.svg</property>
+          <object class="GtkBox">
+            <style><class name="linked"/></style>
+            <child>
+              <object class="GtkToggleButton" id="open_menu">
+                <property name="focus-on-click">0</property>
+                <property name="tooltip-text" translatable="yes">Show Sidebar</property>
+                <property name="active" bind-source="IconEditorWindow" bind-property="show-sidebar" bind-flags="bidirectional|sync-create"/>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/info-outline-symbolic.svg</property>
+                      </object>
+                    </property>
                   </object>
                 </property>
               </object>
-            </property>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <style><class name="narrow"/></style>
+                <property name="menu-model">
+                  <menu>
+                    <item>
+                      <attribute name="label" translatable="yes">Show Controls</attribute>
+                      <attribute name="action">win.set-sidebar-contents</attribute>
+                      <attribute name="target">controls</attribute>
+                    </item>
+                    <item>
+                      <attribute name="label" translatable="yes">Show XML</attribute>
+                      <attribute name="action">win.set-sidebar-contents</attribute>
+                      <attribute name="target">xml</attribute>
+                    </item>
+                  </menu>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

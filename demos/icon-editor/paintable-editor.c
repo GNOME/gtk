@@ -56,7 +56,6 @@ struct _PaintableEditor
   GtkImage *icon_image;
   GtkCheckButton *compat_check;
   GtkStack *stack;
-  GtkToggleButton *xml_toggle;
   GtkTextView *xml_view;
   GtkTextBuffer *xml_buffer;
 
@@ -520,19 +519,18 @@ keywords_changed (PaintableEditor *self)
     path_paintable_changed (self->paintable);
 }
 
-static void
-xml_toggled (PaintableEditor *self)
+void
+paintable_editor_set_show_xml (PaintableEditor *self,
+                               gboolean         xml)
 {
-  if (gtk_toggle_button_get_active (self->xml_toggle))
+  if (xml)
     {
       update_xml (self);
       gtk_stack_set_visible_child_name (self->stack, "xml");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (self->xml_toggle), "View Controls");
     }
   else
     {
       gtk_stack_set_visible_child_name (self->stack, "controls");
-      gtk_widget_set_tooltip_text (GTK_WIDGET (self->xml_toggle), "View XML");
     }
 }
 
@@ -546,7 +544,7 @@ query_tooltip_cb (GtkWidget       *widget,
 {
   GtkTextIter iter;
 
-  if (!gtk_toggle_button_get_active (self->xml_toggle))
+  if (strcmp (gtk_stack_get_visible_child_name (self->stack), "controls") == 0)
     return FALSE;
 
   if (keyboard_tip)
@@ -711,7 +709,6 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, elements);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat_check);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, stack);
-  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_toggle);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_view);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_buffer);
 
@@ -721,7 +718,6 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, license_changed);
   gtk_widget_class_bind_template_callback (widget_class, description_changed);
   gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
-  gtk_widget_class_bind_template_callback (widget_class, xml_toggled);
   gtk_widget_class_bind_template_callback (widget_class, xml_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
 

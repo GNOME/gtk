@@ -36,3 +36,5 @@ void              paintable_editor_set_paintable (PaintableEditor *self,
                                                   PathPaintable   *paintable);
 PathPaintable *   paintable_editor_get_paintable (PaintableEditor *self);
 void              paintable_editor_add_element   (PaintableEditor *self);
+void              paintable_editor_set_show_xml  (PaintableEditor *self,
+                                                  gboolean         xml);

@@ -1105,6 +1105,17 @@ reshuffle (GSimpleAction *action,
   set_random_icons (self);
 }
 
+static void
+set_sidebar_contents (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+
+  paintable_editor_set_show_xml (self->paintable_editor, strcmp (g_variant_get_string (parameter, NULL), "xml") == 0);
+  g_simple_action_set_state (action, parameter);
+}
+
 static GActionEntry win_entries[] = {
   { "open", file_open, NULL, NULL, NULL },
   { "save", file_save, NULL, NULL, NULL },
@@ -1117,6 +1128,7 @@ static GActionEntry win_entries[] = {
   { "show-sidebar", show_sidebar, NULL, NULL, NULL },
   { "open-example", open_example, "s", NULL, NULL },
   { "reshuffle", reshuffle, NULL, NULL, NULL },
+  { "set-sidebar-contents", NULL, "s", "'controls'", set_sidebar_contents },
 };
 
 /* }}} */
@@ -1479,4 +1491,3 @@ icon_editor_window_load (IconEditorWindow *self,
 /* }}} */
 
 /* vim:set foldmethod=marker: */
-

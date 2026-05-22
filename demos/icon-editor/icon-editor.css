@@ -181,3 +181,7 @@ textview.editor {
 textview.editor > text {
   background-color: rgb(43, 48, 59);
 }
+
+menubutton.narrow button.toggle {
+  padding: 0px;
+}
