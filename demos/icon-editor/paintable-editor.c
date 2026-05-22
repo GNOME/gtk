@@ -63,7 +63,7 @@ struct _PaintableEditor
   guint timeout;
   GList *errors;
 
-  GtkBox *path_elts;
+  GtkBox *elements;
 };
 
 struct _PaintableEditorClass
@@ -89,8 +89,8 @@ clear_shape_editors (PaintableEditor *self)
 {
   GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->path_elts))) != NULL)
-    gtk_box_remove (self->path_elts, child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->elements))) != NULL)
+    gtk_box_remove (self->elements, child);
 }
 
 static void
@@ -102,8 +102,8 @@ append_shape_editor (PaintableEditor *self,
   pe = shape_editor_new (self->paintable, shape);
   if (pe)
     {
-      gtk_box_append (self->path_elts, GTK_WIDGET (pe));
-      gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+      gtk_box_append (self->elements, GTK_WIDGET (pe));
+      gtk_box_append (self->elements, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
     }
 }
 
@@ -112,7 +112,7 @@ create_shape_editors (PaintableEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
 
-  gtk_box_append (self->path_elts, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_box_append (self->elements, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
   for (unsigned int i = 0; i < svg_element_get_n_children (svg->content); i++)
     {
@@ -708,7 +708,7 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary1);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, summary2);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, icon_image);
-  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, path_elts);
+  gtk_widget_class_bind_template_child (widget_class, PaintableEditor, elements);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, compat_check);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, stack);
   gtk_widget_class_bind_template_child (widget_class, PaintableEditor, xml_toggle);
@@ -801,7 +801,7 @@ paintable_editor_set_compat_classes (PaintableEditor *self,
 }
 
 void
-paintable_editor_add_path (PaintableEditor *self)
+paintable_editor_add_element (PaintableEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   GskPathBuilder *builder;

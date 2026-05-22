@@ -292,7 +292,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox" id="path_elts">
+                          <object class="GtkBox" id="elements">
                             <property name="orientation">vertical</property>
                           </object>
                         </child>
@@ -301,9 +301,9 @@
                             <property name="hexpand">0</property>
                             <child>
                               <object class="GtkButton">
-                                <property name="label" translatable="yes">Add path</property>
+                                <property name="label" translatable="yes">Add Element</property>
                                 <property name="hexpand">1</property>
-                                <property name="action-name">win.add-path</property>
+                                <property name="action-name">win.add-element</property>
                               </object>
                             </child>
                             <child>
