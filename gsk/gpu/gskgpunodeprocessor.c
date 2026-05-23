@@ -2813,7 +2813,9 @@ static void
 gsk_gpu_node_processor_repeat_tile (GskGpuRenderPass    *self,
                                     const graphene_rect_t  *rect,
                                     float                   x,
+                                    gboolean                snap_x,
                                     float                   y,
+                                    gboolean                snap_y,
                                     GskRenderNode          *child,
                                     const graphene_rect_t  *child_bounds)
 {
@@ -2828,6 +2830,23 @@ gsk_gpu_node_processor_repeat_tile (GskGpuRenderPass    *self,
     {
       /* rounding error hits again */
       return;
+    }
+  if (snap_x || snap_y)
+    {
+      graphene_rect_t snapped;
+      if (!gsk_gpu_render_pass_snap_rect (self, &clipped_child_bounds, GSK_RECT_SNAP_GROW, &snapped))
+        return;
+
+      if (snap_x)
+        {
+          clipped_child_bounds.origin.x = snapped.origin.x;
+          clipped_child_bounds.size.width = snapped.size.width;
+        }
+      if (snap_y)
+        {
+          clipped_child_bounds.origin.y = snapped.origin.y;
+          clipped_child_bounds.size.height = snapped.size.height;
+        }
     }
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
@@ -2960,7 +2979,9 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
               gsk_gpu_node_processor_repeat_tile (self,
                                                   &bounds,
                                                   ceilf (tile_left),
+                                                  FALSE,
                                                   ceilf (tile_top),
+                                                  FALSE,
                                                   child,
                                                   &child_bounds);
             }
@@ -2982,7 +3003,9 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                                                         end_y - start_y
                                                       ),
                                                       ceilf (tile_left),
+                                                      FALSE,
                                                       y,
+                                                      TRUE,
                                                       child,
                                                       &child_bounds);
                 }
@@ -3008,7 +3031,9 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                                                     bounds.size.height
                                                   ),
                                                   x,
+                                                  TRUE,
                                                   ceilf (tile_top),
+                                                  FALSE,
                                                   child,
                                                   &child_bounds);
             }

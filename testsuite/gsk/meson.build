@@ -224,6 +224,7 @@ compare_render_tests = [
   'repeat-snap',
   'repeat-texture',
   'repeat-tiny-nocairo',
+  'repeat-unaligned-bounds',
   'repeating-gradient-scaled',
   'reuse-of-texture-nested-in-offscreens',
   'rounded-clip-intersection-background',

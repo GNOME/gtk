@@ -228,10 +228,22 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
           float y;
           for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
             {
+              graphene_rect_t strip, snapped;
               float start_y = MAX (clip_bounds.origin.y,
                                    child_bounds.origin.y + y * child_bounds.size.height);
               float end_y = MAX (clip_bounds.origin.y + clip_bounds.size.height,
                                  child_bounds.origin.y + (y + 1) * child_bounds.size.height);
+
+              strip = GRAPHENE_RECT_INIT (child_bounds.origin.x,
+                                          start_y - y * child_bounds.size.height,
+                                          child_bounds.size.width,
+                                          end_y - start_y);
+              if (gsk_cairo_rect_snap (cr, &strip, GSK_RECT_SNAP_GROW, &snapped))
+                {
+                  strip.origin.y = snapped.origin.y;
+                  strip.size.height = snapped.size.height;
+                }
+
               gsk_repeat_node_draw_tiled (cr,
                                           data,
                                           &GRAPHENE_RECT_INIT (
@@ -242,15 +254,10 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                           ),
                                           self->repeat,
                                           self->child,
-                                          &GRAPHENE_RECT_INIT (
-                                              child_bounds.origin.x,
-                                              start_y - y * child_bounds.size.height,
-                                              child_bounds.size.width,
-                                              end_y - start_y
-                                          ),
+                                          &strip,
                                           &GRAPHENE_POINT_INIT (
                                             child_bounds.origin.x,
-                                            start_y
+                                            strip.origin.y + y * child_bounds.size.height
                                           ));
             }
         }
@@ -262,10 +269,22 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
       float x;
       for (x = floorf (tile_left); x < ceilf (tile_right); x++)
         {
+          graphene_rect_t strip, snapped;
           float start_x = MAX (clip_bounds.origin.x,
                                child_bounds.origin.x + x * child_bounds.size.width);
           float end_x = MIN (clip_bounds.origin.x + clip_bounds.size.width,
                              child_bounds.origin.x + (x + 1) * child_bounds.size.width);
+
+          strip = GRAPHENE_RECT_INIT (start_x - x * child_bounds.size.width,
+                                      child_bounds.origin.y,
+                                      end_x - start_x,
+                                      child_bounds.size.height);
+          if (gsk_cairo_rect_snap (cr, &strip, GSK_RECT_SNAP_GROW, &snapped))
+            {
+              strip.origin.x = snapped.origin.x;
+              strip.size.width = snapped.size.width;
+            }
+
           gsk_repeat_node_draw_tiled (cr,
                                       data,
                                       &GRAPHENE_RECT_INIT (
@@ -276,14 +295,9 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                       ),
                                       self->repeat,
                                       self->child,
-                                      &GRAPHENE_RECT_INIT (
-                                          start_x - x * child_bounds.size.width,
-                                          child_bounds.origin.y,
-                                          end_x - start_x,
-                                          child_bounds.size.height
-                                      ),
+                                      &strip,
                                       &GRAPHENE_POINT_INIT (
-                                        start_x,
+                                        strip.origin.x + x * child_bounds.size.width,
                                         child_bounds.origin.y
                                       ));
         }
