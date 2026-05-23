@@ -6621,14 +6621,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         GskRenderNode *child = gsk_repeat_node_get_child (node);
         GskRepeat repeat = gsk_repeat_node_get_repeat (node);
-        const graphene_rect_t *child_bounds = gsk_repeat_node_get_child_bounds (node);
 
         start_node (p, "repeat", node_name);
 
         if (!graphene_rect_equal (&node->bounds, &child->bounds))
           append_rect_param (p, "bounds", &node->bounds);
-        if (!graphene_rect_equal (child_bounds, &child->bounds))
-          append_rect_param (p, "child-bounds", child_bounds);
+        append_rect_param (p, "child-bounds", gsk_repeat_node_get_child_bounds (node));
         append_node_param (p, "child", gsk_repeat_node_get_child (node));
         if (repeat != GSK_REPEAT_REPEAT)
           append_repeat_param (p, "repeat", repeat);
