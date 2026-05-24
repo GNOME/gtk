@@ -34,7 +34,7 @@ struct _GskVulkanDevice
   gsize last_pool;
   VkSampler vk_samplers[GSK_GPU_SAMPLER_N_SAMPLERS];
   VkDescriptorSetLayout vk_image_set_layout;
-  VkDescriptorSetLayout vk_image_set_layout_for_mask;
+  VkDescriptorSetLayout vk_mask_set_layout;
   VkPipelineLayout default_vk_pipeline_layout;
 };
 
@@ -149,7 +149,7 @@ gsk_vulkan_device_create_vk_pipeline_layout (GskVulkanDevice       *self,
                                             .pSetLayouts = (VkDescriptorSetLayout[3]) {
                                                 image1_layout,
                                                 image2_layout,
-                                                self->vk_image_set_layout_for_mask,
+                                                self->vk_mask_set_layout,
                                             },
                                             .pushConstantRangeCount = 1,
                                             .pPushConstantRanges = (VkPushConstantRange[1]) {
@@ -289,7 +289,7 @@ gsk_vulkan_device_finalize (GObject *object)
                                 self->vk_image_set_layout,
                                 NULL);
   vkDestroyDescriptorSetLayout (vk_device,
-                                self->vk_image_set_layout_for_mask,
+                                self->vk_mask_set_layout,
                                 NULL);
   for (i = 0; i < descriptor_pools_get_size (&self->descriptor_pools); i++)
     vkDestroyDescriptorPool (vk_device,
@@ -347,7 +347,7 @@ gsk_vulkan_device_create_vk_objects (GskVulkanDevice *self)
                                      &self->vk_command_pool);
 
   self->vk_image_set_layout = gsk_vulkan_device_create_vk_image_set_layout (self, 3);
-  self->vk_image_set_layout_for_mask = gsk_vulkan_device_create_vk_image_set_layout (self, 1);
+  self->vk_mask_set_layout = gsk_vulkan_device_create_vk_image_set_layout (self, 1);
 
   self->default_vk_pipeline_layout = gsk_vulkan_device_create_vk_pipeline_layout (self,
                                                                                   self->vk_image_set_layout,
@@ -431,6 +431,12 @@ VkDescriptorSetLayout
 gsk_vulkan_device_get_vk_image_set_layout (GskVulkanDevice *self)
 {
   return self->vk_image_set_layout;
+}
+
+VkDescriptorSetLayout
+gsk_vulkan_device_get_vk_mask_set_layout (GskVulkanDevice *self)
+{
+  return self->vk_mask_set_layout;
 }
 
 VkPipelineLayout

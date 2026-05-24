@@ -38,6 +38,7 @@ void                    gsk_vulkan_device_free_descriptor               (GskVulk
                                                                          gsize                   pool_id,
                                                                          VkDescriptorSet         set);
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self) G_GNUC_PURE;
+VkDescriptorSetLayout   gsk_vulkan_device_get_vk_mask_set_layout        (GskVulkanDevice        *self) G_GNUC_PURE;
 VkPipelineLayout        gsk_vulkan_device_create_vk_pipeline_layout     (GskVulkanDevice        *self,
                                                                          VkDescriptorSetLayout   image1_layout,
                                                                          VkDescriptorSetLayout   image2_layout);

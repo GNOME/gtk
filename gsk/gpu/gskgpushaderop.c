@@ -116,7 +116,9 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
                                    i,
                                    1,
                                    (VkDescriptorSet[1]) {
-                                       gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]), self->samplers[i]),
+                                       gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]),
+                                                                               self->samplers[i],
+                                                                               FALSE),
                                    },
                                    0,
                                    NULL);
@@ -132,7 +134,9 @@ gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
                                2,
                                1,
                                (VkDescriptorSet[1]) {
-                                   gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->clip_mask), GSK_GPU_SAMPLER_DEFAULT),
+                                   gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->clip_mask),
+                                                                           GSK_GPU_SAMPLER_DEFAULT,
+                                                                           TRUE),
                                },
                                0,
                                NULL);

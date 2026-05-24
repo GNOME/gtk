@@ -1903,14 +1903,34 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
 
 VkDescriptorSet
 gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
-                                        GskGpuSampler   sampler)
+                                        GskGpuSampler   sampler,
+                                        gboolean        as_mask)
 {
   if (!self->descriptor_sets[sampler].vk_descriptor_set)
     {
+      VkDescriptorSetLayout desc_layout;
+      uint32_t n_descriptors;
+
+      if (self->ycbcr)
+        {
+          g_assert (!as_mask);
+          desc_layout = gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr);
+          n_descriptors = 3;
+        }
+      else if (as_mask)
+        {
+          desc_layout = gsk_vulkan_device_get_vk_mask_set_layout (self->device);
+          n_descriptors = 1;
+        }
+      else
+        {
+          desc_layout = gsk_vulkan_device_get_vk_image_set_layout (self->device);
+          n_descriptors = 3;
+        }
+
       self->descriptor_sets[sampler].vk_descriptor_set =
         gsk_vulkan_device_allocate_descriptor (self->device,
-                                               self->ycbcr ? gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr)
-                                                           : gsk_vulkan_device_get_vk_image_set_layout (self->device),
+                                               desc_layout,
                                                &self->descriptor_sets[sampler].pool_id);
 
       vkUpdateDescriptorSets (gsk_vulkan_device_get_vk_device (self->device),
@@ -1920,7 +1940,7 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                   .dstSet = self->descriptor_sets[sampler].vk_descriptor_set,
                                   .dstBinding = 0,
                                   .dstArrayElement = 0,
-                                  .descriptorCount = 3,
+                                  .descriptorCount = n_descriptors,
                                   .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                   .pImageInfo = (VkDescriptorImageInfo[3]) {
                                     {
