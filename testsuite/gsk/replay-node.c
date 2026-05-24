@@ -12,7 +12,6 @@
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskrepeatnodeprivate.h>
 #include <gtk/gtksnapshotprivate.h>
-#include "../gdk/udmabuf.h"
 
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -109,23 +108,7 @@ replay_texture_node (GskRenderNode *node, GtkSnapshot *snapshot)
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
 
-  g_object_ref (texture);
-
-  if (g_test_rand_bit ())
-    {
-      GdkTexture *t;
-
-      t = udmabuf_texture_from_texture (texture, NULL);
-      if (t)
-        {
-          g_object_unref (texture);
-          texture = t;
-        }
-    }
-
   gtk_snapshot_append_texture (snapshot, texture, &bounds);
-
-  g_object_unref (texture);
 }
 
 static void
@@ -349,30 +332,7 @@ replay_texture_scale_node (GskRenderNode *node, GtkSnapshot *snapshot)
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
 
-  g_object_ref (texture);
-
-  if (g_test_rand_bit ())
-    {
-      GdkTexture *t;
-      GError *error = NULL;
-
-      t = udmabuf_texture_from_texture (texture, &error);
-      if (t)
-        {
-          g_test_message ("Using dmabuf texture");
-          g_object_unref (texture);
-          texture = t;
-        }
-      else
-        {
-          g_test_message ("Creating dmabuf texture failed: %s", error->message);
-          g_error_free (error);
-        }
-    }
-
   gtk_snapshot_append_scaled_texture (snapshot, texture, filter, &bounds);
-
-  g_object_unref (texture);
 }
 
 static void
