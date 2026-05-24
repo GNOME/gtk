@@ -650,8 +650,10 @@ _gdk_macos_display_open (const char *display_name)
 
   /* Make the current process a foreground application, i.e. an app
    * with a user interface, in case we're not running from a .app bundle
+   * unless running as unit-test
    */
-  TransformProcessType (&psn, kProcessTransformToForegroundApplication);
+  if (!g_test_initialized ())
+    TransformProcessType (&psn, kProcessTransformToForegroundApplication);
 
   [NSApplication sharedApplication];
 
