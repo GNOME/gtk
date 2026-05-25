@@ -1151,12 +1151,16 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  vk_features = gsk_vulkan_device_get_format_features (device,
-                                                       vk_format,
-                                                       dmabuf->modifier,
-                                                       dmabuf->n_planes,
-                                                       VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
-                                                       VK_IMAGE_USAGE_SAMPLED_BIT);
+  vk_features = gsk_vulkan_device_supports_format (device,
+                                                   vk_format,
+                                                   dmabuf->modifier,
+                                                   dmabuf->n_planes,
+                                                   needs_conversion,
+                                                   VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                                   VK_IMAGE_USAGE_SAMPLED_BIT,
+                                                   width,
+                                                   height,
+                                                   &flags);
   if (!(vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
     {
       GDK_DEBUG (DMABUF, "Vulkan driver does not support format %.4s::%016llx with %u planes",
@@ -1173,7 +1177,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
         }
       conv = GSK_GPU_CONVERSION_NONE;
     }
-  flags = gsk_vulkan_image_flags_for_features (vk_features) & ~(GSK_GPU_IMAGE_RENDERABLE);
+  flags &= ~(GSK_GPU_IMAGE_RENDERABLE);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
