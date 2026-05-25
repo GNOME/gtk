@@ -269,7 +269,7 @@ typedef struct _GtkTreeRowData GtkTreeRowData;
 struct _GtkTreeRowData
 {
   GtkTreeModel *model;
-  char path[4];
+  char path[];
 };
 
 static GtkTreeRowData *
