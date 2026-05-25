@@ -375,8 +375,11 @@ test_ui_file (GFile *file)
 
   diff_image = reftest_compare_textures (ui_image, reference_image);
 
-  save_image (ui_image, ui_file, ".out.png");
-  save_image (reference_image, ui_file, ".ref.png");
+  if (diff_image || g_test_verbose ())
+    {
+      save_image (ui_image, ui_file, ".out.png");
+      save_image (reference_image, ui_file, ".ref.png");
+    }
   if (diff_image)
     {
       save_node (g_object_get_data (G_OBJECT (ui_image), "source-render-node"), ui_file, ".out.node");
