@@ -156,17 +156,17 @@ serialize_shape_attrs (GString              *s,
 
   for (SvgProperty attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
+      if (svg->gpa_version == 0 &&
+          (attr == SVG_PROPERTY_STROKE_MINWIDTH ||
+          attr == SVG_PROPERTY_STROKE_MAXWIDTH))
+        continue;
+
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
           svg->gpa_version > 0 &&
           svg_element_type_is_path (svg_element_get_type (shape)) &&
           attr == SVG_PROPERTY_VISIBILITY)
         {
           unsigned int state;
-
-          if (svg->gpa_version == 0 &&
-              (attr == SVG_PROPERTY_STROKE_MINWIDTH ||
-               attr == SVG_PROPERTY_STROKE_MAXWIDTH))
-            continue;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
             state = svg->state;
