@@ -244,7 +244,7 @@ typedef struct _TreeRowData TreeRowData;
 struct _TreeRowData
 {
   GtkTreeModel *model;
-  gchar path[4];
+  gchar path[];
 };
 
 /**
