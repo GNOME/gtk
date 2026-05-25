@@ -14,6 +14,7 @@ icon_editor_sources = [
   'path-paintable.c',
   'shape-editor.c',
   'state-editor.c',
+  'style-editor.c',
   'transform-editor.c',
 ]
 

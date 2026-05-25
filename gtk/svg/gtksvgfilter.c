@@ -370,15 +370,15 @@ svg_filter_get_id (SvgFilter *filter)
 }
 
 void
-svg_filter_set_style (SvgFilter  *filter,
-                      const char *style)
+svg_filter_set_inline_style (SvgFilter  *filter,
+                             const char *style)
 {
   g_free (filter->style);
   filter->style = g_strdup (style);
 }
 
 const char *
-svg_filter_get_style (SvgFilter *filter)
+svg_filter_get_inline_style (SvgFilter *filter)
 {
   return filter->style;
 }

@@ -156,19 +156,43 @@
           </object>
         </child>
         <child type="end">
-          <object class="GtkToggleButton" id="open_menu">
-            <property name="focus-on-click">0</property>
-            <property name="tooltip-text" translatable="yes">Show controls</property>
-            <property name="active" bind-source="IconEditorWindow" bind-property="show-controls" bind-flags="bidirectional|sync-create"/>
-            <property name="child">
-              <object class="GtkImage">
-                <property name="paintable">
-                  <object class="GtkIconPaintable">
-                    <property name="file">resource:///org/gtk/libgtk/icons/info-outline-symbolic.svg</property>
+          <object class="GtkBox">
+            <style><class name="linked"/></style>
+            <child>
+              <object class="GtkToggleButton" id="open_menu">
+                <property name="focus-on-click">0</property>
+                <property name="tooltip-text" translatable="yes">Show Sidebar</property>
+                <property name="active" bind-source="IconEditorWindow" bind-property="show-sidebar" bind-flags="bidirectional|sync-create"/>
+                <property name="child">
+                  <object class="GtkImage">
+                    <property name="paintable">
+                      <object class="GtkIconPaintable">
+                        <property name="file">resource:///org/gtk/libgtk/icons/info-outline-symbolic.svg</property>
+                      </object>
+                    </property>
                   </object>
                 </property>
               </object>
-            </property>
+            </child>
+            <child>
+              <object class="GtkMenuButton">
+                <style><class name="narrow"/></style>
+                <property name="menu-model">
+                  <menu>
+                    <item>
+                      <attribute name="label" translatable="yes">Show Controls</attribute>
+                      <attribute name="action">win.set-sidebar-contents</attribute>
+                      <attribute name="target">controls</attribute>
+                    </item>
+                    <item>
+                      <attribute name="label" translatable="yes">Show XML</attribute>
+                      <attribute name="action">win.set-sidebar-contents</attribute>
+                      <attribute name="target">xml</attribute>
+                    </item>
+                  </menu>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -213,7 +237,7 @@
                     <property name="focus-on-click">0</property>
                     <property name="halign">center</property>
                     <property name="label" translatable="yes">New Icon</property>
-                    <property name="action-name">win.show-controls</property>
+                    <property name="action-name">win.show-sidebar</property>
                   </object>
                 </child>
                 <child>
@@ -366,7 +390,7 @@
                 <child>
                   <object class="GtkGestureClick">
                     <property name="button">3</property>
-                    <signal name="pressed" handler="toggle_controls" swapped="yes"/>
+                    <signal name="pressed" handler="toggle_sidebar" swapped="yes"/>
                   </object>
                 </child>
                 <child>
@@ -939,7 +963,7 @@
                     <property name="halign">end</property>
                     <property name="valign">fill</property>
                     <property name="transition-type">slide-left</property>
-                    <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-controls" bind-flags="sync-create"/>
+                    <property name="reveal-child" bind-source="IconEditorWindow" bind-property="show-sidebar" bind-flags="sync-create"/>
                     <property name="child">
                       <object class="PaintableEditor" id="paintable_editor">
                         <property name="paintable" bind-source="IconEditorWindow" bind-property="paintable" bind-flags="sync-create"/>

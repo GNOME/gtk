@@ -41,7 +41,7 @@ struct _IconEditorWindow
   PathPaintable *orig_paintable;
   GBinding *playing_binding;
   gboolean changed;
-  gboolean show_controls;
+  gboolean show_sidebar;
   gboolean show_thumbnails;
   gboolean show_bounds;
   gboolean show_spines;
@@ -84,7 +84,7 @@ enum
 {
   PROP_PAINTABLE = 1,
   PROP_CHANGED,
-  PROP_SHOW_CONTROLS,
+  PROP_SHOW_SIDEBAR,
   PROP_SHOW_BOUNDS,
   PROP_SHOW_SPINES,
   PROP_SHOW_GRID,
@@ -103,13 +103,13 @@ G_DEFINE_TYPE(IconEditorWindow, icon_editor_window, GTK_TYPE_APPLICATION_WINDOW)
 /* {{{ Setters */
 
 static void
-icon_editor_window_set_show_controls (IconEditorWindow *self,
-                                      gboolean          show_controls)
+icon_editor_window_set_show_sidebar (IconEditorWindow *self,
+                                     gboolean          show_sidebar)
 {
-  if (self->show_controls == show_controls)
+  if (self->show_sidebar == show_sidebar)
     return;
 
-  if (show_controls)
+  if (show_sidebar)
     {
       GAction *action;
 
@@ -118,9 +118,9 @@ icon_editor_window_set_show_controls (IconEditorWindow *self,
       gtk_stack_set_visible_child_name (self->main_stack, "content");
     }
 
-  self->show_controls = show_controls;
+  self->show_sidebar = show_sidebar;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_CONTROLS]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SIDEBAR]);
 }
 
 static void
@@ -285,9 +285,9 @@ icon_editor_window_set_compat_classes (IconEditorWindow *self,
 /* {{{ Callbacks, utilities */
 
 static void
-toggle_controls (IconEditorWindow *self)
+toggle_sidebar (IconEditorWindow *self)
 {
-  icon_editor_window_set_show_controls (self, !self->show_controls);
+  icon_editor_window_set_show_sidebar (self, !self->show_sidebar);
 }
 
 static void
@@ -480,7 +480,7 @@ icon_editor_window_set_paintable (IconEditorWindow *self,
       set_random_icons (self);
 
       if (svg_element_get_n_children (path_paintable_get_svg (self->paintable)->content) > 0)
-        icon_editor_window_set_show_controls (self, TRUE);
+        icon_editor_window_set_show_sidebar (self, TRUE);
     }
 
   g_clear_object (&self->orig_paintable);
@@ -968,7 +968,7 @@ back_to_empty (IconEditorWindow *self)
   GAction *action;
 
   icon_editor_window_set_paintable (self, paintable);
-  icon_editor_window_set_show_controls (self, FALSE);
+  icon_editor_window_set_show_sidebar (self, FALSE);
 
   gtk_stack_set_visible_child_name (self->main_stack, "empty");
   action = g_action_map_lookup_action (G_ACTION_MAP (self), "close");
@@ -1042,13 +1042,13 @@ revert_changes (GSimpleAction *action,
 }
 
 static void
-add_path (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
+add_element (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
 {
   IconEditorWindow *self = user_data;
 
-  paintable_editor_add_path (self->paintable_editor);
+  paintable_editor_add_element (self->paintable_editor);
 }
 
 static void
@@ -1068,13 +1068,13 @@ edit_states (GSimpleAction *action,
 }
 
 static void
-show_controls (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
+show_sidebar (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   IconEditorWindow *self = user_data;
 
-  icon_editor_window_set_show_controls (self, TRUE);
+  icon_editor_window_set_show_sidebar (self, TRUE);
 }
 
 static void
@@ -1105,6 +1105,17 @@ reshuffle (GSimpleAction *action,
   set_random_icons (self);
 }
 
+static void
+set_sidebar_contents (GSimpleAction *action,
+                      GVariant      *parameter,
+                      gpointer       user_data)
+{
+  IconEditorWindow *self = user_data;
+
+  paintable_editor_set_show_xml (self->paintable_editor, strcmp (g_variant_get_string (parameter, NULL), "xml") == 0);
+  g_simple_action_set_state (action, parameter);
+}
+
 static GActionEntry win_entries[] = {
   { "open", file_open, NULL, NULL, NULL },
   { "save", file_save, NULL, NULL, NULL },
@@ -1112,11 +1123,12 @@ static GActionEntry win_entries[] = {
   { "export", file_export, NULL, NULL, NULL },
   { "revert", revert_changes, NULL, NULL, NULL },
   { "close", file_close, NULL, NULL, NULL },
-  { "add-path", add_path, NULL, NULL, NULL },
+  { "add-element", add_element, NULL, NULL, NULL },
   { "edit-states", edit_states, NULL, NULL, NULL },
-  { "show-controls", show_controls, NULL, NULL, NULL },
+  { "show-sidebar", show_sidebar, NULL, NULL, NULL },
   { "open-example", open_example, "s", NULL, NULL },
   { "reshuffle", reshuffle, NULL, NULL, NULL },
+  { "set-sidebar-contents", NULL, "s", "'controls'", set_sidebar_contents },
 };
 
 /* }}} */
@@ -1177,8 +1189,8 @@ icon_editor_window_set_property (GObject      *object,
       icon_editor_window_set_paintable (self, g_value_get_object (value));
       break;
 
-    case PROP_SHOW_CONTROLS:
-      icon_editor_window_set_show_controls (self, g_value_get_boolean (value));
+    case PROP_SHOW_SIDEBAR:
+      icon_editor_window_set_show_sidebar (self, g_value_get_boolean (value));
       break;
 
     case PROP_SHOW_BOUNDS:
@@ -1237,8 +1249,8 @@ icon_editor_window_get_property (GObject      *object,
       g_value_set_boolean (value, self->changed);
       break;
 
-    case PROP_SHOW_CONTROLS:
-      g_value_set_boolean (value, self->show_controls);
+    case PROP_SHOW_SIDEBAR:
+      g_value_set_boolean (value, self->show_sidebar);
       break;
 
     case PROP_SHOW_BOUNDS:
@@ -1359,8 +1371,8 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_STATIC_NAME);
 
-  properties[PROP_SHOW_CONTROLS] =
-    g_param_spec_boolean ("show-controls", NULL, NULL,
+  properties[PROP_SHOW_SIDEBAR] =
+    g_param_spec_boolean ("show-sidebar", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
@@ -1443,7 +1455,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, IconEditorWindow, example6);
 
   gtk_widget_class_bind_template_callback (widget_class, show_open_filechooser);
-  gtk_widget_class_bind_template_callback (widget_class, toggle_controls);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
   gtk_widget_class_bind_template_callback (widget_class, file_drop);
   gtk_widget_class_bind_template_callback (widget_class, gtk_widget_activate);
 }
@@ -1479,4 +1491,3 @@ icon_editor_window_load (IconEditorWindow *self,
 /* }}} */
 
 /* vim:set foldmethod=marker: */
-

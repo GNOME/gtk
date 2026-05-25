@@ -1178,20 +1178,78 @@ svg_element_get_id (SvgElement *element)
 }
 
 void
-svg_element_set_style (SvgElement           *element,
-                       const char           *style,
-                       const GtkSvgLocation *location)
+svg_element_set_inline_style (SvgElement           *element,
+                              const char           *style,
+                              const GtkSvgLocation *location)
 {
   g_set_str (&element->style, style);
   element->style_loc = *location;
 }
 
 const char *
-svg_element_get_style (SvgElement     *element,
-                       GtkSvgLocation *location)
+svg_element_get_inline_style (SvgElement     *element,
+                              GtkSvgLocation *location)
 {
   *location = element->style_loc;
   return element->style;
+}
+
+unsigned int
+svg_element_get_n_styles (SvgElement *element)
+{
+  return element->styles->len;
+}
+
+const char *
+svg_element_get_style (SvgElement   *element,
+                       unsigned int  pos)
+{
+  StyleElt *elt;
+
+  g_return_val_if_fail (pos < element->styles->len, NULL);
+
+  elt = g_ptr_array_index (element->styles, pos);
+
+  return g_bytes_get_data (elt->content, NULL);
+}
+
+void
+svg_element_set_style (SvgElement   *element,
+                       unsigned int  pos,
+                       const char   *style)
+{
+  StyleElt *elt;
+  unsigned int i;
+
+  g_return_if_fail (pos <= element->styles->len);
+
+  if (pos < element->styles->len)
+    {
+      elt = g_ptr_array_index (element->styles, pos);
+      g_bytes_unref (elt->content);
+    }
+  else
+    {
+      elt = g_new0 (StyleElt, 1);
+      g_ptr_array_add (element->styles, elt);
+    }
+
+  elt->content = g_bytes_new_take (g_strdup (style), strlen (style));
+
+  for (i = element->styles->len; i > 0; i--)
+    {
+      elt = g_ptr_array_index (element->styles, i - 1);
+      if (g_bytes_get_size (elt->content) > 0)
+        break;
+    }
+
+  g_ptr_array_set_size (element->styles, i);
+}
+
+void
+svg_element_clear_style (SvgElement *element)
+{
+  g_ptr_array_set_size (element->styles, 0);
 }
 
 void

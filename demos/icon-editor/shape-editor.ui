@@ -35,7 +35,7 @@
                         </style>
                         <property name="focus-on-click">0</property>
                         <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Duplicate path</property>
+                        <property name="tooltip-text" translatable="yes">Duplicate Element</property>
                         <property name="child">
                           <object class="GtkImage">
                             <property name="paintable">
@@ -56,7 +56,7 @@
                         </style>
                         <property name="focus-on-click">0</property>
                         <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Move shape down</property>
+                        <property name="tooltip-text" translatable="yes">Move Down</property>
                         <property name="child">
                           <object class="GtkImage">
                             <property name="paintable">
@@ -77,7 +77,7 @@
                         </style>
                         <property name="focus-on-click">0</property>
                         <property name="has-frame">0</property>
-                        <property name="tooltip-text" translatable="yes">Delete shape</property>
+                        <property name="tooltip-text" translatable="yes">Delete Element</property>
                         <property name="child">
                           <object class="GtkImage">
                             <property name="paintable">
@@ -112,7 +112,7 @@
               <object class="GtkLabel" id="shape_label">
                 <property name="hexpand">1</property>
                 <property name="xalign">1</property>
-                <property name="label" translatable="yes">_Shape</property>
+                <property name="label" translatable="yes">_Type</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">shape_dropdown</property>
               </object>
@@ -178,7 +178,7 @@
                   </closure>
                 </binding>
                 <property name="icon-name">list-add-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Add Shape</property>
+                <property name="tooltip-text" translatable="yes">Add Element</property>
                 <signal name="clicked" handler="add_shape" swapped="yes"/>
               </object>
             </child>
@@ -2213,8 +2213,54 @@
         </child>
 
         <child>
+          <object class="GtkLabel" id="href_label">
+            <binding name="visible">
+              <closure type="gboolean" function="bb_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>23</constant> <!-- a -->
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
+            <property name="label" translatable="yes">_URL</property>
+            <property name="use-underline">1</property>
+            <property name="mnemonic-widget">href_entry</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="row">49</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="href_entry">
+            <binding name="visible">
+              <closure type="gboolean" function="bb_and_uint_equal">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="expanded">expander</lookup>
+                <lookup name="selected">shape_dropdown</lookup>
+                <constant type='guint'>23</constant> <!-- a -->
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
+            <property name="hexpand">1</property>
+            <signal name="activate" handler="href_changed" swapped="yes"/>
+            <layout>
+              <property name="row">49</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkLabel" id="class_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="label" translatable="yes">_Classes</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">class_entry</property>
@@ -2227,7 +2273,12 @@
         </child>
         <child>
           <object class="GtkEntry" id="class_entry">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <signal name="activate" handler="class_changed" swapped="yes"/>
             <layout>
@@ -2239,7 +2290,12 @@
 
         <child>
           <object class="GtkLabel" id="style_label">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="label" translatable="yes">_Style</property>
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">style_entry</property>
@@ -2252,7 +2308,12 @@
         </child>
         <child>
           <object class="GtkEntry" id="style_entry">
-            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <binding name="visible">
+              <closure type="gboolean" function="bool_and_edit">
+                <lookup name="expanded">expander</lookup>
+                <lookup name="update-counter">ShapeEditor</lookup>
+              </closure>
+            </binding>
             <property name="hexpand">1</property>
             <signal name="activate" handler="style_changed" swapped="yes"/>
             <layout>

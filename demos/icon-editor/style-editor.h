@@ -1,5 +1,5 @@
 /*
- * Copyright © 2025 Red Hat, Inc
+ * Copyright © 2026 Red Hat, Inc
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,19 +22,15 @@
 #pragma once
 
 #include <gtk/gtk.h>
-
 #include "path-paintable.h"
 
 
-#define PAINTABLE_EDITOR_TYPE (paintable_editor_get_type ())
-G_DECLARE_FINAL_TYPE (PaintableEditor, paintable_editor, PAINTABLE, EDITOR, GtkWidget)
+#define STYLE_EDITOR_TYPE (style_editor_get_type ())
+G_DECLARE_FINAL_TYPE (StyleEditor, style_editor, STYLE, EDITOR, GtkWidget)
 
 
-PaintableEditor * paintable_editor_new           (void);
+StyleEditor *   style_editor_new (void);
 
-void              paintable_editor_set_paintable (PaintableEditor *self,
-                                                  PathPaintable   *paintable);
-PathPaintable *   paintable_editor_get_paintable (PaintableEditor *self);
-void              paintable_editor_add_element   (PaintableEditor *self);
-void              paintable_editor_set_show_xml  (PaintableEditor *self,
-                                                  gboolean         xml);
+void            style_editor_set_style     (StyleEditor   *self,
+                                            const char    *style);
+const char *    style_editor_get_style     (StyleEditor   *self);

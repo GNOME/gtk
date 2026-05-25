@@ -199,15 +199,15 @@ svg_color_stop_get_id (SvgColorStop *stop)
 }
 
 void
-svg_color_stop_set_style (SvgColorStop *stop,
-                          const char   *style)
+svg_color_stop_set_inline_style (SvgColorStop *stop,
+                                 const char   *style)
 {
   g_free (stop->style);
   stop->style = g_strdup (style);
 }
 
 const char *
-svg_color_stop_get_style (SvgColorStop *stop)
+svg_color_stop_get_inline_style (SvgColorStop *stop)
 {
   return stop->style;
 }

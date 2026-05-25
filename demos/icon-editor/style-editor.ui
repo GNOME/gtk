@@ -1,0 +1,56 @@
+<interface>
+  <template class="StyleEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <child>
+          <object class="GtkExpander" id="expander">
+            <property name="hexpand">1</property>
+            <property name="valign">center</property>
+            <property name="label-widget">
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel" id="title">
+                    <property name="hexpand">1</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Stylesheet</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible" bind-source="expander" bind-property="expanded" bind-flags="sync-create"/>
+            <property name="has-frame">1</property>
+            <property name="min-content-height">200</property>
+            <child>
+              <object class="GtkTextView">
+                <property name="left-margin">6</property>
+                <property name="right-margin">6</property>
+                <property name="top-margin">6</property>
+                <property name="bottom-margin">6</property>
+                <property name="buffer">
+                  <object class="GtkTextBuffer" id="content">
+                    <signal name="changed" handler="text_changed" swapped="yes"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
