@@ -71,7 +71,7 @@
  * (see gtk_notebook_popup_enable(), gtk_notebook_popup_disable())
  *
  * # GtkNotebook as GtkBuildable
- * 
+ *
  * The GtkNotebook implementation of the #GtkBuildable interface
  * supports placing children into tabs by specifying “tab” as the
  * “type” attribute of a `<child>` element. Note that the content
@@ -1680,7 +1680,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
     page_num = reorder_tab (notebook, child->next, priv->focus_tab);
   else
     page_num = reorder_tab (notebook, child, priv->focus_tab);
-  
+
   gtk_notebook_child_reordered (notebook, priv->focus_tab->data);
   for (element = priv->children, i = 0; element; element = element->next, i++)
     {
@@ -2397,7 +2397,7 @@ gtk_notebook_measure_stack (GtkCssGadget   *gadget,
         {
           _gtk_widget_get_preferred_size_for_size (page->child,
                                                    orientation,
-                                                   size, 
+                                                   size,
                                                    &child_minimum,
                                                    &child_natural,
                                                    NULL,
@@ -3525,7 +3525,7 @@ update_arrow_nodes (GtkNotebook *notebook)
   const char *style_property_name;
   GtkCssNode *tabs_node;
   gint i;
- 
+
   tabs_node = gtk_css_gadget_get_node (priv->tabs_gadget);
 
   if (priv->tab_pos == GTK_POS_LEFT ||
@@ -3611,7 +3611,7 @@ update_arrow_nodes (GtkNotebook *notebook)
             gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (priv->arrow_gadget[i]), down_image_type);
           else
             gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (priv->arrow_gadget[i]), up_image_type);
-          
+
           gtk_builtin_icon_set_default_size_property (GTK_BUILTIN_ICON (priv->arrow_gadget[i]), style_property_name);
         }
       else
@@ -3740,9 +3740,12 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   else if (priv->detached_tab)
     gtk_notebook_switch_page (notebook, priv->detached_tab);
 
-  _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
-  gtk_widget_destroy (priv->dnd_window);
-  priv->dnd_window = NULL;
+  if (priv->dnd_window)
+    {
+      _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
+      gtk_widget_destroy (priv->dnd_window);
+      priv->dnd_window = NULL;
+    }
 
   priv->operation = DRAG_OPERATION_NONE;
 }
@@ -4670,7 +4673,7 @@ page_visible_cb (GtkWidget  *child,
         }
       gtk_css_gadget_set_visible (priv->header_gadget, priv->show_tabs && gtk_notebook_has_current_page (notebook));
     }
-  
+
   if (!gtk_notebook_has_current_page (notebook) && gtk_widget_get_visible (child))
     {
       gtk_notebook_switch_page (notebook, page);
@@ -5349,7 +5352,7 @@ gtk_notebook_draw_tabs (GtkCssGadget *gadget,
         {
           if (priv->arrow_gadget[i] == NULL)
             continue;
-          
+
           gtk_css_gadget_draw (priv->arrow_gadget[i], cr);
         }
     }
@@ -5973,7 +5976,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
           GtkAllocation fixed_allocation = { 0, 0, child_allocation.width, child_allocation.height };
           gtk_css_gadget_allocate (page->gadget, &fixed_allocation, -1, &page_clip);
         }
-      else 
+      else
         {
           gtk_css_gadget_allocate (page->gadget, &child_allocation, -1, &page_clip);
         }
