@@ -3740,9 +3740,12 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   else if (priv->detached_tab)
     gtk_notebook_switch_page (notebook, priv->detached_tab);
 
-  _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
-  gtk_widget_destroy (priv->dnd_window);
-  priv->dnd_window = NULL;
+  if (priv->dnd_window)
+    {
+      _gtk_bin_set_child (GTK_BIN (priv->dnd_window), NULL);
+      gtk_widget_destroy (priv->dnd_window);
+      priv->dnd_window = NULL;
+    }
 
   priv->operation = DRAG_OPERATION_NONE;
 }
