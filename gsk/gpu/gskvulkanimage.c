@@ -39,7 +39,7 @@ struct _GskVulkanImage
   struct {
     VkDescriptorSet vk_descriptor_set;
     gsize pool_id;
-  } descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS];
+  } descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS][2];
 
   VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
@@ -1151,12 +1151,16 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  vk_features = gsk_vulkan_device_get_format_features (device,
-                                                       vk_format,
-                                                       dmabuf->modifier,
-                                                       dmabuf->n_planes,
-                                                       VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
-                                                       VK_IMAGE_USAGE_SAMPLED_BIT);
+  vk_features = gsk_vulkan_device_supports_format (device,
+                                                   vk_format,
+                                                   dmabuf->modifier,
+                                                   dmabuf->n_planes,
+                                                   needs_conversion,
+                                                   VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                                   VK_IMAGE_USAGE_SAMPLED_BIT,
+                                                   width,
+                                                   height,
+                                                   &flags);
   if (!(vk_features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
     {
       GDK_DEBUG (DMABUF, "Vulkan driver does not support format %.4s::%016llx with %u planes",
@@ -1173,7 +1177,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
         }
       conv = GSK_GPU_CONVERSION_NONE;
     }
-  flags = gsk_vulkan_image_flags_for_features (vk_features) & ~(GSK_GPU_IMAGE_RENDERABLE);
+  flags &= ~(GSK_GPU_IMAGE_RENDERABLE);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
@@ -1799,10 +1803,14 @@ gsk_vulkan_image_finalize (GObject *object)
 
   for (i = 0; i < GSK_GPU_SAMPLER_N_SAMPLERS; i++)
     {
-      if (self->descriptor_sets[i].vk_descriptor_set)
+      if (self->descriptor_sets[i][0].vk_descriptor_set)
         gsk_vulkan_device_free_descriptor (self->device,
-                                           self->descriptor_sets[i].pool_id,
-                                           self->descriptor_sets[i].vk_descriptor_set);
+                                           self->descriptor_sets[i][0].pool_id,
+                                           self->descriptor_sets[i][0].vk_descriptor_set);
+      if (self->descriptor_sets[i][1].vk_descriptor_set)
+        gsk_vulkan_device_free_descriptor (self->device,
+                                           self->descriptor_sets[i][1].pool_id,
+                                           self->descriptor_sets[i][1].vk_descriptor_set);
     }
 
   if (self->vk_framebuffer != VK_NULL_HANDLE)
@@ -1906,7 +1914,9 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                         GskGpuSampler   sampler,
                                         gboolean        as_mask)
 {
-  if (!self->descriptor_sets[sampler].vk_descriptor_set)
+  guint id = as_mask ? 1 : 0;
+
+  if (!self->descriptor_sets[sampler][id].vk_descriptor_set)
     {
       VkDescriptorSetLayout desc_layout;
       uint32_t n_descriptors;
@@ -1928,16 +1938,16 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
           n_descriptors = 3;
         }
 
-      self->descriptor_sets[sampler].vk_descriptor_set =
+      self->descriptor_sets[sampler][id].vk_descriptor_set =
         gsk_vulkan_device_allocate_descriptor (self->device,
                                                desc_layout,
-                                               &self->descriptor_sets[sampler].pool_id);
+                                               &self->descriptor_sets[sampler][id].pool_id);
 
       vkUpdateDescriptorSets (gsk_vulkan_device_get_vk_device (self->device),
                               1,
                               &(VkWriteDescriptorSet) {
                                   .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                  .dstSet = self->descriptor_sets[sampler].vk_descriptor_set,
+                                  .dstSet = self->descriptor_sets[sampler][id].vk_descriptor_set,
                                   .dstBinding = 0,
                                   .dstArrayElement = 0,
                                   .descriptorCount = n_descriptors,
@@ -1967,7 +1977,7 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                               NULL);
     }
 
-  return self->descriptor_sets[sampler].vk_descriptor_set;
+  return self->descriptor_sets[sampler][id].vk_descriptor_set;
 }
 
 GskVulkanYcbcr *

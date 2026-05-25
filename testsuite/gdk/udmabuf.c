@@ -86,7 +86,7 @@ udmabuf_allocate (size_t   size,
 
   size = align (size, alignment);
 
-  mem_fd = memfd_create ("gtk", MFD_ALLOW_SEALING);
+  mem_fd = memfd_create ("gtk-testsuite", MFD_ALLOW_SEALING);
   if (mem_fd == -1)
     {
       g_set_error (error,

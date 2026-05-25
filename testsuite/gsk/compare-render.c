@@ -135,10 +135,12 @@ save_node (GskRenderNode *node,
            const char    *extension)
 {
   char *filename = get_output_file (test_name, variant_name, ".node", extension);
+  GError *error = NULL;
   gboolean result;
 
   g_print ("Storing modified nodes at %s\n", filename);
-  result = gsk_render_node_write_to_file (node, filename, NULL);
+  result = gsk_render_node_write_to_file (node, filename, &error);
+  g_assert_no_error (error);
   g_assert_true (result);
   g_free (filename);
 }

@@ -29,11 +29,11 @@ G_BEGIN_DECLS
 typedef enum
 {
   /* path has only lines */
-  GSK_PATH_FLAT,
+  GSK_PATH_FLAT          = 1 << 0,
   /* all points of the path are identical */
-  GSK_PATH_ZERO_LENGTH,
+  GSK_PATH_ZERO_LENGTH   = 1 << 1,
   /* all contours are closed */
-  GSK_PATH_CLOSED
+  GSK_PATH_CLOSED        = 1 << 2,
 } GskPathFlags;
 
 typedef struct _GskContour GskContour;
