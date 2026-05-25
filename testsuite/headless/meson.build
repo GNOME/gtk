@@ -20,10 +20,12 @@ if get_option('b_sanitize') != 'address'
     env: env,
   )
 
-  test('waylandsocket',
-    find_program('run-headless-wayland-tests.sh', dirs: meson.current_source_dir()),
-    args: [test_executables['waylandsocket'].full_path()],
-    suite: ['headless'],
-    env: env,
-  )
+  if os_linux
+    test('waylandsocket',
+      find_program('run-headless-wayland-tests.sh', dirs: meson.current_source_dir()),
+      args: [test_executables['waylandsocket'].full_path()],
+      suite: ['headless'],
+      env: env,
+    )
+  endif
 endif
