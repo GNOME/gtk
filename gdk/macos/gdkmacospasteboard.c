@@ -199,9 +199,9 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
 
           for (gsize i = 0; i < n_files; ++i)
             {
-              NSString* uriString = [files objectAtIndex:i];
-              uriString = [@"file://" stringByAppendingString:uriString];
-              uriString = [uriString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
+              NSString *path = [files objectAtIndex:i];
+              NSURL *url = [NSURL fileURLWithPath:path];
+              NSString *uriString = [url absoluteString];
 
               g_string_append_printf (str,
                                       "%s\r\n",
