@@ -78,6 +78,7 @@ style_elt_free (gpointer p)
   StyleElt *e = (StyleElt *) p;
 
   g_bytes_unref (e->content);
+  g_free (e->media);
   g_free (e);
 }
 

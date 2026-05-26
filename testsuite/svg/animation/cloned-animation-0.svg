@@ -19,7 +19,7 @@
     The expected behavior is everything gets cloned in the use
     shadow tree and the original and cloned animations can be
     triggered independently.
-    Browsers don't get this right.
+    Browsers don&apos;t get this right.
   </desc>
   <style type='text/css'> rect:hover { fill: green }</style>
   <g

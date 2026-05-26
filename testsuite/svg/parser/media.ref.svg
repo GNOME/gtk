@@ -11,6 +11,12 @@
       rect { fill: lightgreen; }
     }
   </style>
+  <style type='text/css'>
+    rect { stroke: blue; }
+  </style>
+  <style type='text/css' media='(not (prefers-contrast: no-preference))'>
+    rect { stroke-width: 2mm; }
+  </style>
   <rect
           x='0'
           y='0'

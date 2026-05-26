@@ -156,17 +156,17 @@ serialize_shape_attrs (GString              *s,
 
   for (SvgProperty attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
     {
+      if (svg->gpa_version == 0 &&
+          (attr == SVG_PROPERTY_STROKE_MINWIDTH ||
+          attr == SVG_PROPERTY_STROKE_MAXWIDTH))
+        continue;
+
       if ((flags & GTK_SVG_SERIALIZE_NO_COMPAT) == 0 &&
           svg->gpa_version > 0 &&
           svg_element_type_is_path (svg_element_get_type (shape)) &&
           attr == SVG_PROPERTY_VISIBILITY)
         {
           unsigned int state;
-
-          if (svg->gpa_version == 0 &&
-              (attr == SVG_PROPERTY_STROKE_MINWIDTH ||
-               attr == SVG_PROPERTY_STROKE_MAXWIDTH))
-            continue;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
             state = svg->state;
@@ -845,7 +845,7 @@ serialize_shape (GString              *s,
                   if (!started)
                     {
                       string_indent (s, indent + ATTR_INDENT);
-                      g_string_append_printf (s, "gpa:css-state='");
+                      g_string_append (s, "gpa:css-state='");
                     }
                   else
                     g_string_append_c (s, ',');
@@ -864,7 +864,7 @@ serialize_shape (GString              *s,
     {
       string_indent (s, indent + BASE_INDENT);
       g_string_append (s, "<title>");
-      g_string_append (s, svg_element_get_title (shape));
+      string_append_escaped (s, svg_element_get_title (shape));
       g_string_append (s, "</title>");
     }
 
@@ -872,7 +872,7 @@ serialize_shape (GString              *s,
     {
       string_indent (s, indent + BASE_INDENT);
       g_string_append (s, "<desc>");
-      g_string_append (s, svg_element_get_description (shape));
+      string_append_escaped (s, svg_element_get_description (shape));
       g_string_append (s, "</desc>");
     }
 
@@ -880,8 +880,15 @@ serialize_shape (GString              *s,
     {
       StyleElt *elt = g_ptr_array_index (shape->styles, i);
       string_indent (s, indent + BASE_INDENT);
-      g_string_append (s, "<style type='text/css'>");
-      g_string_append (s, g_bytes_get_data (elt->content, NULL));
+      g_string_append (s, "<style type='text/css'");
+      if (elt->media)
+        {
+          g_string_append (s, " media='");
+          string_append_escaped (s, elt->media);
+          g_string_append (s, "'");
+        }
+      g_string_append (s, ">");
+      string_append_escaped (s, g_bytes_get_data (elt->content, NULL));
       g_string_append (s, "</style>");
     }
 
