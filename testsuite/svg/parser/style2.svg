@@ -6,6 +6,10 @@
   <style type="not css">
     paint it red
   </style>
+  <style>
+    @import "foo"
+    @import url(foo)
+  </style>
   <circle id='c' cx='50' cy='50' r='20'/>
   <path style='d:path("m0,0h100l40,20z");fill:magenta'/>
 </svg>

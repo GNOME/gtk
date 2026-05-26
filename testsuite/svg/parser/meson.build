@@ -45,6 +45,7 @@ test_data = [
   'filters.svg',
   'focus.svg',
   'fonts.svg',
+  'fonts2.svg',
   'gpa-attributes.svg',
   'gpa-condition.svg',
   'gradient-animation.svg',

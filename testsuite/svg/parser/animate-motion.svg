@@ -17,7 +17,7 @@
   <!-- animateMotion with keyPoints and mpath -->
   <circle r="6" fill="green">
     <animateMotion dur="6s" keyPoints="0;0.5;1" keyTimes="0;0.8;1" repeatCount="indefinite" calcMode='linear'>
-      <mpath href="#motionPath2"/>
+      <mpath xlink:href="#motionPath2"/>
     </animateMotion>
   </circle>
 

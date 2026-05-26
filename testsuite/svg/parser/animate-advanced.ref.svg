@@ -95,4 +95,31 @@
             to='0'
             keyTimes='0; 1'/>
   </line>
+  <circle
+          fill='rgb(0,128,0)'
+          cx='30'
+          cy='100'
+          r='8'>
+    <animate
+            attributeName='cx'
+            dur='2000ms'
+            repeatCount='3'
+            from='30'
+            to='40'
+            keyTimes='0; 1'/>
+  </circle>
+  <circle
+          fill='rgb(0,128,0)'
+          cx='30'
+          cy='100'
+          r='8'>
+    <animate
+            attributeName='cx'
+            dur='2000ms'
+            repeatCount='3'
+            from='0'
+            to='10'
+            keyTimes='0; 1'
+            additive='sum'/>
+  </circle>
 </svg>

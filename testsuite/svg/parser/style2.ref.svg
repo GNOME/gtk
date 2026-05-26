@@ -8,6 +8,10 @@
     circle { fli: red; }
     rect { fill: not-a-color; }
   </style>
+  <style type='text/css'>
+    @import &quot;foo&quot;
+    @import url(foo)
+  </style>
   <circle
           id='c'
           cx='50'

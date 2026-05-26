@@ -9,6 +9,8 @@
         height='20'
         flood-color='red'/>
       <feGaussianBlur
+        id='gauss'
+        class='gauss'
         in='SourceGraphic'
         x='0%'
         y='0%'
