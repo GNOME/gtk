@@ -845,7 +845,7 @@ serialize_shape (GString              *s,
                   if (!started)
                     {
                       string_indent (s, indent + ATTR_INDENT);
-                      g_string_append_printf (s, "gpa:css-state='");
+                      g_string_append (s, "gpa:css-state='");
                     }
                   else
                     g_string_append_c (s, ',');
@@ -864,7 +864,7 @@ serialize_shape (GString              *s,
     {
       string_indent (s, indent + BASE_INDENT);
       g_string_append (s, "<title>");
-      g_string_append (s, svg_element_get_title (shape));
+      string_append_escaped (s, svg_element_get_title (shape));
       g_string_append (s, "</title>");
     }
 
@@ -872,7 +872,7 @@ serialize_shape (GString              *s,
     {
       string_indent (s, indent + BASE_INDENT);
       g_string_append (s, "<desc>");
-      g_string_append (s, svg_element_get_description (shape));
+      string_append_escaped (s, svg_element_get_description (shape));
       g_string_append (s, "</desc>");
     }
 
