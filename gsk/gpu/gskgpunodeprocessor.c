@@ -2923,6 +2923,8 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
       gsk_repeat_node_compute_rect_for_pad (&bounds,
                                             &child_bounds,
                                             &clipped_child_bounds);
+      if (!gsk_gpu_render_pass_snap_rect (self, &clipped_child_bounds, GSK_RECT_SNAP_GROW, &clipped_child_bounds))
+        return;
       image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         GSK_GPU_AS_IMAGE_EXACT_SIZE,
                                                         &clipped_child_bounds,

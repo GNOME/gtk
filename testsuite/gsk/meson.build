@@ -217,6 +217,7 @@ compare_render_tests = [
   'repeat-node-tiling-vertical',
   'repeat-none-child-bounds',
   'repeat-noninteger-nocairo',
+  'repeat-pad-noninteger-child-bounds',
   'repeat-repeat',
   'repeat-repeats',
   'repeat-repeats-nested',

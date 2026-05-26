@@ -172,6 +172,8 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
     return;
 
   gsk_repeat_node_compute_rect_for_pad (&clip_bounds, &child_bounds, &draw_bounds);
+  if (!gsk_cairo_rect_snap (cr, &draw_bounds, GSK_RECT_SNAP_GROW, &draw_bounds))
+    return;
 
   gsk_repeat_node_draw_tiled (cr,
                               data,

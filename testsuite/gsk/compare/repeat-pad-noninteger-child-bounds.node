@@ -1,0 +1,972 @@
+clip {
+  clip: 0 0 30 30;
+  child: repeat {
+    bounds: -50 -50 30 30;
+    child-bounds: -44.5 -44.5 19 19;
+    child: color {
+      bounds: -44 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 0 30 30;
+  child: repeat {
+    bounds: 0 -50 30 30;
+    child-bounds: 5.5 -44.5 19 19;
+    child: color {
+      bounds: 6 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 0 30 30;
+  child: repeat {
+    bounds: 50 -50 30 30;
+    child-bounds: 55.5 -44.5 19 19;
+    child: color {
+      bounds: 56 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 0 30 30;
+  child: repeat {
+    bounds: 100 -50 30 30;
+    child-bounds: 105.5 -44.5 19 19;
+    child: color {
+      bounds: 106 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 0 30 30;
+  child: repeat {
+    bounds: 150 -50 30 30;
+    child-bounds: 155.5 -44.5 19 19;
+    child: color {
+      bounds: 156 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 0 30 30;
+  child: repeat {
+    bounds: 200 -50 30 30;
+    child-bounds: 205.5 -44.5 19 19;
+    child: color {
+      bounds: 206 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 0 30 30;
+  child: repeat {
+    bounds: 250 -50 30 30;
+    child-bounds: 255.5 -44.5 19 19;
+    child: color {
+      bounds: 256 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 0 30 30;
+  child: repeat {
+    bounds: 300 -50 30 30;
+    child-bounds: 305.5 -44.5 19 19;
+    child: color {
+      bounds: 306 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 0 30 30;
+  child: repeat {
+    bounds: 350 -50 30 30;
+    child-bounds: 355.5 -44.5 19 19;
+    child: color {
+      bounds: 356 -44 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 40 30 30;
+  child: repeat {
+    bounds: -50 0 30 30;
+    child-bounds: -44.5 5.5 19 19;
+    child: color {
+      bounds: -44 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 40 30 30;
+  child: repeat {
+    bounds: 0 0 30 30;
+    child-bounds: 5.5 5.5 19 19;
+    child: color {
+      bounds: 6 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 40 30 30;
+  child: repeat {
+    bounds: 50 0 30 30;
+    child-bounds: 55.5 5.5 19 19;
+    child: color {
+      bounds: 56 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 40 30 30;
+  child: repeat {
+    bounds: 100 0 30 30;
+    child-bounds: 105.5 5.5 19 19;
+    child: color {
+      bounds: 106 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 40 30 30;
+  child: repeat {
+    bounds: 150 0 30 30;
+    child-bounds: 155.5 5.5 19 19;
+    child: color {
+      bounds: 156 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 40 30 30;
+  child: repeat {
+    bounds: 200 0 30 30;
+    child-bounds: 205.5 5.5 19 19;
+    child: color {
+      bounds: 206 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 40 30 30;
+  child: repeat {
+    bounds: 250 0 30 30;
+    child-bounds: 255.5 5.5 19 19;
+    child: color {
+      bounds: 256 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 40 30 30;
+  child: repeat {
+    bounds: 300 0 30 30;
+    child-bounds: 305.5 5.5 19 19;
+    child: color {
+      bounds: 306 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 40 30 30;
+  child: repeat {
+    bounds: 350 0 30 30;
+    child-bounds: 355.5 5.5 19 19;
+    child: color {
+      bounds: 356 6 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 80 30 30;
+  child: repeat {
+    bounds: -50 50 30 30;
+    child-bounds: -44.5 55.5 19 19;
+    child: color {
+      bounds: -44 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 80 30 30;
+  child: repeat {
+    bounds: 0 50 30 30;
+    child-bounds: 5.5 55.5 19 19;
+    child: color {
+      bounds: 6 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 80 30 30;
+  child: repeat {
+    bounds: 50 50 30 30;
+    child-bounds: 55.5 55.5 19 19;
+    child: color {
+      bounds: 56 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 80 30 30;
+  child: repeat {
+    bounds: 100 50 30 30;
+    child-bounds: 105.5 55.5 19 19;
+    child: color {
+      bounds: 106 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 80 30 30;
+  child: repeat {
+    bounds: 150 50 30 30;
+    child-bounds: 155.5 55.5 19 19;
+    child: color {
+      bounds: 156 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 80 30 30;
+  child: repeat {
+    bounds: 200 50 30 30;
+    child-bounds: 205.5 55.5 19 19;
+    child: color {
+      bounds: 206 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 80 30 30;
+  child: repeat {
+    bounds: 250 50 30 30;
+    child-bounds: 255.5 55.5 19 19;
+    child: color {
+      bounds: 256 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 80 30 30;
+  child: repeat {
+    bounds: 300 50 30 30;
+    child-bounds: 305.5 55.5 19 19;
+    child: color {
+      bounds: 306 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 80 30 30;
+  child: repeat {
+    bounds: 350 50 30 30;
+    child-bounds: 355.5 55.5 19 19;
+    child: color {
+      bounds: 356 56 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 120 30 30;
+  child: repeat {
+    bounds: -50 100 30 30;
+    child-bounds: -44.5 105.5 19 19;
+    child: color {
+      bounds: -44 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 120 30 30;
+  child: repeat {
+    bounds: 0 100 30 30;
+    child-bounds: 5.5 105.5 19 19;
+    child: color {
+      bounds: 6 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 120 30 30;
+  child: repeat {
+    bounds: 50 100 30 30;
+    child-bounds: 55.5 105.5 19 19;
+    child: color {
+      bounds: 56 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 120 30 30;
+  child: repeat {
+    bounds: 100 100 30 30;
+    child-bounds: 105.5 105.5 19 19;
+    child: color {
+      bounds: 106 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 120 30 30;
+  child: repeat {
+    bounds: 150 100 30 30;
+    child-bounds: 155.5 105.5 19 19;
+    child: color {
+      bounds: 156 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 120 30 30;
+  child: repeat {
+    bounds: 200 100 30 30;
+    child-bounds: 205.5 105.5 19 19;
+    child: color {
+      bounds: 206 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 120 30 30;
+  child: repeat {
+    bounds: 250 100 30 30;
+    child-bounds: 255.5 105.5 19 19;
+    child: color {
+      bounds: 256 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 120 30 30;
+  child: repeat {
+    bounds: 300 100 30 30;
+    child-bounds: 305.5 105.5 19 19;
+    child: color {
+      bounds: 306 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 120 30 30;
+  child: repeat {
+    bounds: 350 100 30 30;
+    child-bounds: 355.5 105.5 19 19;
+    child: color {
+      bounds: 356 106 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 160 30 30;
+  child: repeat {
+    bounds: -50 150 30 30;
+    child-bounds: -44.5 155.5 19 19;
+    child: color {
+      bounds: -44 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 160 30 30;
+  child: repeat {
+    bounds: 0 150 30 30;
+    child-bounds: 5.5 155.5 19 19;
+    child: color {
+      bounds: 6 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 160 30 30;
+  child: repeat {
+    bounds: 50 150 30 30;
+    child-bounds: 55.5 155.5 19 19;
+    child: color {
+      bounds: 56 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 160 30 30;
+  child: repeat {
+    bounds: 100 150 30 30;
+    child-bounds: 105.5 155.5 19 19;
+    child: color {
+      bounds: 106 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 160 30 30;
+  child: repeat {
+    bounds: 150 150 30 30;
+    child-bounds: 155.5 155.5 19 19;
+    child: color {
+      bounds: 156 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 160 30 30;
+  child: repeat {
+    bounds: 200 150 30 30;
+    child-bounds: 205.5 155.5 19 19;
+    child: color {
+      bounds: 206 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 160 30 30;
+  child: repeat {
+    bounds: 250 150 30 30;
+    child-bounds: 255.5 155.5 19 19;
+    child: color {
+      bounds: 256 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 160 30 30;
+  child: repeat {
+    bounds: 300 150 30 30;
+    child-bounds: 305.5 155.5 19 19;
+    child: color {
+      bounds: 306 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 160 30 30;
+  child: repeat {
+    bounds: 350 150 30 30;
+    child-bounds: 355.5 155.5 19 19;
+    child: color {
+      bounds: 356 156 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 200 30 30;
+  child: repeat {
+    bounds: -50 200 30 30;
+    child-bounds: -44.5 205.5 19 19;
+    child: color {
+      bounds: -44 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 200 30 30;
+  child: repeat {
+    bounds: 0 200 30 30;
+    child-bounds: 5.5 205.5 19 19;
+    child: color {
+      bounds: 6 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 200 30 30;
+  child: repeat {
+    bounds: 50 200 30 30;
+    child-bounds: 55.5 205.5 19 19;
+    child: color {
+      bounds: 56 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 200 30 30;
+  child: repeat {
+    bounds: 100 200 30 30;
+    child-bounds: 105.5 205.5 19 19;
+    child: color {
+      bounds: 106 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 200 30 30;
+  child: repeat {
+    bounds: 150 200 30 30;
+    child-bounds: 155.5 205.5 19 19;
+    child: color {
+      bounds: 156 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 200 30 30;
+  child: repeat {
+    bounds: 200 200 30 30;
+    child-bounds: 205.5 205.5 19 19;
+    child: color {
+      bounds: 206 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 200 30 30;
+  child: repeat {
+    bounds: 250 200 30 30;
+    child-bounds: 255.5 205.5 19 19;
+    child: color {
+      bounds: 256 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 200 30 30;
+  child: repeat {
+    bounds: 300 200 30 30;
+    child-bounds: 305.5 205.5 19 19;
+    child: color {
+      bounds: 306 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 200 30 30;
+  child: repeat {
+    bounds: 350 200 30 30;
+    child-bounds: 355.5 205.5 19 19;
+    child: color {
+      bounds: 356 206 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 240 30 30;
+  child: repeat {
+    bounds: -50 250 30 30;
+    child-bounds: -44.5 255.5 19 19;
+    child: color {
+      bounds: -44 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 240 30 30;
+  child: repeat {
+    bounds: 0 250 30 30;
+    child-bounds: 5.5 255.5 19 19;
+    child: color {
+      bounds: 6 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 240 30 30;
+  child: repeat {
+    bounds: 50 250 30 30;
+    child-bounds: 55.5 255.5 19 19;
+    child: color {
+      bounds: 56 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 240 30 30;
+  child: repeat {
+    bounds: 100 250 30 30;
+    child-bounds: 105.5 255.5 19 19;
+    child: color {
+      bounds: 106 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 240 30 30;
+  child: repeat {
+    bounds: 150 250 30 30;
+    child-bounds: 155.5 255.5 19 19;
+    child: color {
+      bounds: 156 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 240 30 30;
+  child: repeat {
+    bounds: 200 250 30 30;
+    child-bounds: 205.5 255.5 19 19;
+    child: color {
+      bounds: 206 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 240 30 30;
+  child: repeat {
+    bounds: 250 250 30 30;
+    child-bounds: 255.5 255.5 19 19;
+    child: color {
+      bounds: 256 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 240 30 30;
+  child: repeat {
+    bounds: 300 250 30 30;
+    child-bounds: 305.5 255.5 19 19;
+    child: color {
+      bounds: 306 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 240 30 30;
+  child: repeat {
+    bounds: 350 250 30 30;
+    child-bounds: 355.5 255.5 19 19;
+    child: color {
+      bounds: 356 256 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 280 30 30;
+  child: repeat {
+    bounds: -50 300 30 30;
+    child-bounds: -44.5 305.5 19 19;
+    child: color {
+      bounds: -44 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 280 30 30;
+  child: repeat {
+    bounds: 0 300 30 30;
+    child-bounds: 5.5 305.5 19 19;
+    child: color {
+      bounds: 6 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 280 30 30;
+  child: repeat {
+    bounds: 50 300 30 30;
+    child-bounds: 55.5 305.5 19 19;
+    child: color {
+      bounds: 56 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 280 30 30;
+  child: repeat {
+    bounds: 100 300 30 30;
+    child-bounds: 105.5 305.5 19 19;
+    child: color {
+      bounds: 106 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 280 30 30;
+  child: repeat {
+    bounds: 150 300 30 30;
+    child-bounds: 155.5 305.5 19 19;
+    child: color {
+      bounds: 156 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 280 30 30;
+  child: repeat {
+    bounds: 200 300 30 30;
+    child-bounds: 205.5 305.5 19 19;
+    child: color {
+      bounds: 206 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 280 30 30;
+  child: repeat {
+    bounds: 250 300 30 30;
+    child-bounds: 255.5 305.5 19 19;
+    child: color {
+      bounds: 256 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 280 30 30;
+  child: repeat {
+    bounds: 300 300 30 30;
+    child-bounds: 305.5 305.5 19 19;
+    child: color {
+      bounds: 306 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 280 30 30;
+  child: repeat {
+    bounds: 350 300 30 30;
+    child-bounds: 355.5 305.5 19 19;
+    child: color {
+      bounds: 356 306 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 0 320 30 30;
+  child: repeat {
+    bounds: -50 350 30 30;
+    child-bounds: -44.5 355.5 19 19;
+    child: color {
+      bounds: -44 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 40 320 30 30;
+  child: repeat {
+    bounds: 0 350 30 30;
+    child-bounds: 5.5 355.5 19 19;
+    child: color {
+      bounds: 6 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 80 320 30 30;
+  child: repeat {
+    bounds: 50 350 30 30;
+    child-bounds: 55.5 355.5 19 19;
+    child: color {
+      bounds: 56 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 120 320 30 30;
+  child: repeat {
+    bounds: 100 350 30 30;
+    child-bounds: 105.5 355.5 19 19;
+    child: color {
+      bounds: 106 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 160 320 30 30;
+  child: repeat {
+    bounds: 150 350 30 30;
+    child-bounds: 155.5 355.5 19 19;
+    child: color {
+      bounds: 156 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 200 320 30 30;
+  child: repeat {
+    bounds: 200 350 30 30;
+    child-bounds: 205.5 355.5 19 19;
+    child: color {
+      bounds: 206 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 240 320 30 30;
+  child: repeat {
+    bounds: 250 350 30 30;
+    child-bounds: 255.5 355.5 19 19;
+    child: color {
+      bounds: 256 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 280 320 30 30;
+  child: repeat {
+    bounds: 300 350 30 30;
+    child-bounds: 305.5 355.5 19 19;
+    child: color {
+      bounds: 306 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
+clip {
+  clip: 320 320 30 30;
+  child: repeat {
+    bounds: 350 350 30 30;
+    child-bounds: 355.5 355.5 19 19;
+    child: color {
+      bounds: 356 356 18 18;
+      color: #0000F0;
+    }
+    repeat: pad;
+  }
+}
