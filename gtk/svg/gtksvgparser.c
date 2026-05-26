@@ -3660,6 +3660,9 @@ parse_media_block (SvgCssScanner *scanner)
   media->condition = condition;
   media->next = scanner->media;
 
+  /* GtkSvg takes ownership of the media blocks. They are evaluated when
+   * we apply styles.
+   */
   scanner->data->svg->media = g_list_append (scanner->data->svg->media, media);
 
   scanner->media = media;
