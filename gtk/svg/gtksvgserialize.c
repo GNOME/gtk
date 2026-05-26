@@ -880,8 +880,15 @@ serialize_shape (GString              *s,
     {
       StyleElt *elt = g_ptr_array_index (shape->styles, i);
       string_indent (s, indent + BASE_INDENT);
-      g_string_append (s, "<style type='text/css'>");
-      g_string_append (s, g_bytes_get_data (elt->content, NULL));
+      g_string_append (s, "<style type='text/css'");
+      if (elt->media)
+        {
+          g_string_append (s, " media='");
+          string_append_escaped (s, elt->media);
+          g_string_append (s, "'");
+        }
+      g_string_append (s, ">");
+      string_append_escaped (s, g_bytes_get_data (elt->content, NULL));
       g_string_append (s, "</style>");
     }
 

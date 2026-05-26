@@ -119,6 +119,7 @@ typedef struct
   uint64_t num_loaded_elements;
   gboolean load_user_style;
   PangoLanguage *lang;
+  char *media;
 } ParserData;
 
 /* {{{ Errors */
@@ -2287,6 +2288,7 @@ start_element_cb (GMarkupParseContext  *context,
   if (strcmp (element_name, "style") == 0)
     {
       gboolean is_css = TRUE;
+      const char *media = NULL;
 
       for (unsigned int i = 0; attr_names[i]; i++)
         {
@@ -2294,13 +2296,18 @@ start_element_cb (GMarkupParseContext  *context,
             {
               if (strcmp (attr_values[i], "text/css") != 0)
                 is_css = FALSE;
-              break;
+            }
+          else if (strcmp (attr_names[i], "media") == 0)
+            {
+              media = attr_values[i];
             }
         }
 
       g_string_set_size (data->text.text, 0);
       if (is_css)
         start_collect_text (data, context);
+
+      g_set_str (&data->media, media);
 
       return;
     }
@@ -2611,6 +2618,7 @@ do_target:
           elt = g_new0 (StyleElt, 1);
           elt->content = g_bytes_new_take (string, strlen (string));
           elt->location = data->text.start;
+          elt->media = g_steal_pointer (&data->media);
           g_ptr_array_add (data->current_shape->styles, elt);
         }
     }
@@ -3507,7 +3515,8 @@ svg_css_compare_rule (gconstpointer a_,
 static void load_internal (ParserData    *data,
                            SvgCssScanner *scanner,
                            GFile         *file,
-                           GBytes        *bytes);
+                           GBytes        *bytes,
+                           const char    *media);
 
 static gboolean
 svg_css_scanner_would_recurse (SvgCssScanner *scanner,
@@ -3612,7 +3621,7 @@ parse_import (SvgCssScanner *scanner)
         }
       else
         {
-          load_internal (scanner->data, scanner, file, bytes);
+          load_internal (scanner->data, scanner, file, bytes, NULL);
           g_bytes_unref (bytes);
         }
     }
@@ -3941,12 +3950,52 @@ static void
 load_internal (ParserData    *data,
                SvgCssScanner *parent,
                GFile         *file,
-               GBytes        *bytes)
+               GBytes        *bytes,
+               const char    *media_attr)
 {
   SvgCssScanner *scanner;
+  SvgCssMediaCondition *condition = NULL;
 
   scanner = svg_css_scanner_new (data, parent, file, bytes);
+
+  if (media_attr)
+    {
+      GtkCssParser *parser;
+
+      parser = parser_new_for_string (media_attr);
+      condition = parse_media_condition (parser);
+
+      if (!condition)
+        {
+          gtk_css_parser_error_syntax (parser, "Failed to parse media attribute");
+        }
+      else
+        {
+          gtk_css_parser_skip_whitespace (parser);
+          if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+            {
+              gtk_css_parser_error_syntax (parser, "Junk at end of media attribute");
+              g_clear_pointer (&condition, svg_css_media_condition_free);
+            }
+        }
+
+      gtk_css_parser_unref (parser);
+    }
+
+  if (condition)
+    {
+      SvgCssMediaBlock *media;
+
+      media = g_new0 (SvgCssMediaBlock, 1);
+      media->condition = condition;
+      media->next = scanner->media;
+
+      scanner->data->svg->media = g_list_append (scanner->data->svg->media, media);
+      scanner->media = media;
+    }
+
   parse_stylesheet (scanner);
+
   svg_css_scanner_destroy (scanner);
 }
 
@@ -3958,7 +4007,7 @@ load_styles_for_shape (SvgElement *shape,
     {
       StyleElt *elt = g_ptr_array_index (shape->styles, i);
       data->text.start = elt->location;
-      load_internal (data, NULL, NULL, elt->content);
+      load_internal (data, NULL, NULL, elt->content, elt->media);
     }
 
   if (svg_element_type_is_container (svg_element_get_type (shape)))
@@ -3990,7 +4039,7 @@ load_user_styles (ParserData *data)
 
   data->current_shape = NULL;
   data->load_user_style = TRUE;
-  load_internal (data, NULL, NULL, data->svg->stylesheet);
+  load_internal (data, NULL, NULL, data->svg->stylesheet, NULL);
 
   g_array_sort (data->svg->user_styles, svg_css_compare_rule);
   resolve_refs_in_rulesets (data->svg->user_styles, NULL, data);
@@ -4668,6 +4717,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   data.num_loaded_elements = 0;
   data.load_user_style = FALSE;
   data.lang = NULL;
+  data.media = NULL;
 
   context = g_markup_parse_context_new (&parser,
                                         G_MARKUP_PREFIX_ERROR_POSITION |
@@ -4747,6 +4797,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
   g_hash_table_unref (data.animations);
   g_ptr_array_unref (data.pending_animations);
   g_string_free (data.text.text, TRUE);
+  g_free (data.media);
 
   if (self->gpa_version > 0 && (self->features & GTK_SVG_ANIMATIONS) == 0)
     apply_state (self, self->state);

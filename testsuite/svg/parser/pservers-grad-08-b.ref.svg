@@ -13,7 +13,7 @@
     <style type='text/css'>
     @font-face {
       font-family: Blocky;
-      src: url(woffs/Blocky.woff) format("woff");
+      src: url(woffs/Blocky.woff) format(&quot;woff&quot;);
   </style>
     <g
             transform='scale(1, 1.5)'>

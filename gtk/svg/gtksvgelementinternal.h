@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 typedef struct {
   GBytes *content;
   GtkSvgLocation location;
+  char *media;
 } StyleElt;
 
 typedef enum
