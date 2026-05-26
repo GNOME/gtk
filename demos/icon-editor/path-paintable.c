@@ -917,5 +917,11 @@ ref_value (SvgElement  *shape,
   return value;
 }
 
+gboolean
+svg_element_type_is_graphical (SvgElementType type)
+{
+  return svg_element_type_is_path (type) || svg_element_type_is_text (type);
+}
+
 /* }}} */
 /* vim:set foldmethod=marker: */
