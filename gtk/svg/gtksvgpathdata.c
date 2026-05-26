@@ -185,14 +185,6 @@ svg_path_data_parse_full (const char   *string,
 }
 
 SvgPathData *
-svg_path_data_parse (const char *string)
-{
-  SvgPathData *data = NULL;
-  svg_path_data_parse_full (string, &data);
-  return data;
-}
-
-SvgPathData *
 svg_path_data_from_gsk (GskPath *path)
 {
   SvgPathOps ops;

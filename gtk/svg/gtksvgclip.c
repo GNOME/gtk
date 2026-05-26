@@ -175,7 +175,12 @@ SvgValue *
 svg_clip_new_path (const char   *string,
                    unsigned int  fill_rule)
 {
-  return svg_clip_new_from_data (svg_path_data_parse (string), fill_rule);
+  SvgPathData *data = NULL;
+
+  if (!svg_path_data_parse_full (string, &data))
+    return NULL;
+
+  return svg_clip_new_from_data (data, fill_rule);
 }
 
 SvgValue *
