@@ -3408,7 +3408,6 @@ struct _SvgCssScanner
   ParserData *data;
   GtkCssParser *parser;
   SvgCssScanner *parent;
-  GArray *media_features;
   SvgCssMediaBlock *media;
 };
 
@@ -3478,90 +3477,10 @@ svg_css_scanner_new (ParserData    *data,
                      GBytes        *bytes)
 {
   SvgCssScanner *scanner = g_new0 (SvgCssScanner, 1);
-  GtkCssDiscreteMediaFeature feature;
 
   scanner->data = data;
   scanner->parent = parent;
   scanner->parser = gtk_css_parser_new_for_bytes (bytes, file, svg_css_scanner_parser_error, data, NULL);
-
-  if (parent == NULL)
-    {
-      GtkInterfaceColorScheme prefers_color_scheme = GTK_INTERFACE_COLOR_SCHEME_DEFAULT;
-      GtkInterfaceContrast prefers_contrast = GTK_INTERFACE_CONTRAST_NO_PREFERENCE;
-      GtkReducedMotion prefers_reduced_motion = GTK_REDUCED_MOTION_NO_PREFERENCE;
-
-      if (data->svg->settings)
-        g_object_get (data->svg->settings,
-                      "gtk-interface-color-scheme", &prefers_color_scheme,
-                      "gtk-interface-contrast", &prefers_contrast,
-                      "gtk-interface-reduced-motion", &prefers_reduced_motion,
-                      NULL);
-
-      scanner->media_features = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssDiscreteMediaFeature), 3);
-
-      feature.name = "prefers-color-scheme";
-
-      switch (prefers_color_scheme)
-        {
-        case GTK_INTERFACE_COLOR_SCHEME_DEFAULT:
-        case GTK_INTERFACE_COLOR_SCHEME_LIGHT:
-        case GTK_INTERFACE_COLOR_SCHEME_UNSUPPORTED:
-          feature.value = "light";
-          break;
-
-        case GTK_INTERFACE_COLOR_SCHEME_DARK:
-          feature.value = "dark";
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-
-      g_array_append_vals (scanner->media_features, &feature, 1);
-
-      feature.name = "prefers-contrast";
-
-      switch (prefers_contrast)
-        {
-        case GTK_INTERFACE_CONTRAST_NO_PREFERENCE:
-        case GTK_INTERFACE_CONTRAST_UNSUPPORTED:
-          feature.value = "no-preference";
-          break;
-
-        case GTK_INTERFACE_CONTRAST_MORE:
-          feature.value = "more";
-          break;
-
-        case GTK_INTERFACE_CONTRAST_LESS:
-          feature.value = "less";
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-
-      g_array_append_vals (scanner->media_features, &feature, 1);
-
-      feature.name = "prefers-reduced-motion";
-
-      switch (prefers_reduced_motion)
-        {
-        case GTK_REDUCED_MOTION_NO_PREFERENCE:
-          feature.value = "no-preference";
-          break;
-
-        case GTK_REDUCED_MOTION_REDUCE:
-          feature.value = "reduce";
-          break;
-
-        default:
-          g_assert_not_reached ();
-        }
-
-      g_array_append_vals (scanner->media_features, &feature, 1);
-    }
-  else
-    scanner->media_features = g_array_ref (parent->media_features);
 
   return scanner;
 }
@@ -3570,7 +3489,6 @@ static void
 svg_css_scanner_destroy (SvgCssScanner *scanner)
 {
   gtk_css_parser_unref (scanner->parser);
-  g_array_unref (scanner->media_features);
 
   g_free (scanner);
 }
