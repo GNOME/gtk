@@ -2969,7 +2969,6 @@ gtk_svg_load_from_bytes (GtkSvg *self,
 {
   g_return_if_fail (GTK_IS_SVG (self));
 
-  gtk_svg_set_playing (self, FALSE);
   gtk_svg_clear_content (self);
 
   gtk_svg_init_from_bytes (self, bytes);
@@ -3000,7 +2999,6 @@ gtk_svg_load_from_resource (GtkSvg     *self,
 
   g_set_str (&self->resource, path);
 
-  gtk_svg_set_playing (self, FALSE);
   gtk_svg_clear_content (self);
 
   if (path)
