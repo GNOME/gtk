@@ -1686,14 +1686,20 @@ compute_current_values_for_shape (SvgElement        *shape,
                   if (a->type == ANIMATION_TYPE_MOTION)
                     {
                       end_val = svg_value_accumulate (val, motion, context, 1);
-                      svg_value_unref (motion);
-                      motion = end_val;
+                      if (end_val)
+                        {
+                          svg_value_unref (motion);
+                          motion = end_val;
+                        }
                     }
                   else
                     {
                       end_val = svg_value_accumulate (val, shape_get_current_value (shape, a->attr, a->idx), context, 1);
-                      shape_set_current_value (shape, a->attr, a->idx, end_val);
-                      svg_value_unref (end_val);
+                      if (end_val)
+                        {
+                          shape_set_current_value (shape, a->attr, a->idx, end_val);
+                          svg_value_unref (end_val);
+                        }
                     }
                 }
               else
@@ -1720,8 +1726,11 @@ compute_current_values_for_shape (SvgElement        *shape,
               SvgValue *combined;
 
               combined = svg_value_accumulate (shape_get_current_value (shape, SVG_PROPERTY_TRANSFORM, 0), motion, context, 1);
-              svg_element_set_current_value (shape, SVG_PROPERTY_TRANSFORM, combined);
-              svg_value_unref (combined);
+              if (combined)
+                {
+                  svg_element_set_current_value (shape, SVG_PROPERTY_TRANSFORM, combined);
+                  svg_value_unref (combined);
+                }
             }
         }
 
