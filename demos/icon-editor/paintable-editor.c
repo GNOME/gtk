@@ -132,7 +132,15 @@ append_styles (SvgElement *element,
     {
       if (s->len > 0)
         g_string_append (s, "\n");
-      g_string_append (s, svg_element_get_style (element, i));
+
+      if (svg_element_get_style_media (element, i))
+        {
+          g_string_append_printf  (s, "@media (%s) {\n", svg_element_get_style_media (element, i));
+          g_string_append (s, svg_element_get_style (element, i));
+          g_string_append (s, "\n}\n");
+        }
+      else
+        g_string_append (s, svg_element_get_style (element, i));
     }
 
   svg_element_clear_style (element);
