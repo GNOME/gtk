@@ -1829,6 +1829,8 @@ push_group (SvgElement   *shape,
       if (svg_clip_get_kind (clip) == CLIP_PATH)
         {
           GskFillRule rule;
+          graphene_rect_t bounds;
+          GskPath *clip_path;
 
           switch (svg_clip_get_fill_rule (clip))
             {
@@ -1841,9 +1843,21 @@ push_group (SvgElement   *shape,
               break;
             }
 
+          /* path() coordinates are relative to the element's reference box */
+          if (svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds))
+            {
+              GskTransform *t = gsk_transform_translate (NULL, &bounds.origin);
+              clip_path = svg_transform_path (t, svg_clip_get_path (clip));
+              gsk_transform_unref (t);
+            }
+          else
+            {
+              clip_path = gsk_path_ref (svg_clip_get_path (clip));
+            }
+
           if (context->picking.picking)
             {
-              if (!gsk_path_in_fill (svg_clip_get_path (clip), &context->picking.p, rule))
+              if (!gsk_path_in_fill (clip_path, &context->picking.p, rule))
                 {
                   if (!context->picking.done)
                     context->picking.clipped = shape;
@@ -1854,7 +1868,8 @@ push_group (SvgElement   *shape,
           if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
             gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
 #endif
-          svg_snapshot_push_fill (context->snapshot, svg_clip_get_path (clip), rule);
+          svg_snapshot_push_fill (context->snapshot, clip_path, rule);
+          gsk_path_unref (clip_path);
         }
       else
         {
