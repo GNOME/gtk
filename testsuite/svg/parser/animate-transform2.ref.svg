@@ -1,0 +1,97 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='120'
+        height='120'
+        viewBox='0 0 120 120'>
+  <rect
+          fill='rgb(255,0,0)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0'
+            to='30'
+            keyTimes='0; 1'
+            type='skewX'/>
+  </rect>
+  <rect
+          fill='rgb(0,0,255)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0'
+            to='30'
+            keyTimes='0; 1'
+            type='skewY'/>
+  </rect>
+  <rect
+          fill='rgb(0,128,0)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0 0'
+            to='50 0'
+            keyTimes='0; 1'
+            type='translate'/>
+  </rect>
+  <rect
+          fill='rgb(255,165,0)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='1 1'
+            to='3 3'
+            keyTimes='0; 1'
+            type='scale'/>
+  </rect>
+  <rect
+          fill='rgb(128,0,128)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0 0 0'
+            to='180 0 0'
+            keyTimes='0; 1'
+            type='rotate'/>
+  </rect>
+  <rect
+          fill='rgb(0,255,255)'
+          x='40'
+          y='40'
+          width='20'
+          height='20'>
+    <animateTransform
+            attributeName='transform'
+            dur='2000ms'
+            fill='freeze'
+            from='0 50 0'
+            to='180 50 0'
+            keyTimes='0; 1'
+            type='rotate'/>
+  </rect>
+</svg>

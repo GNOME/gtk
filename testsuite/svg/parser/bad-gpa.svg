@@ -1,0 +1,20 @@
+<svg width='100' height='100'
+     gpa:version='2'
+     gpa:state-names='one two'
+     gpa:state='invalid'>
+  <path d='M0 0 L10 10' id='p1'
+     gpa:stroke='invalidcolor'
+     gpa:fill='invalidcolor'
+     gpa:stroke-width='invalid'
+     gpa:states='invalid'
+     gpa:origin='invalid'
+     gpa:transition-type='invalid'
+     gpa:transition-duration='invalid'
+     gpa:transition-delay='invalid'
+     gpa:transition-easing='invalid'
+     gpa:animation-direction='invalid'
+     gpa:animation-duration='invalid'
+     gpa:animation-repeat='invalid'
+     gpa:animation-segment='invalid'
+     gpa:animation-easing='invalid'/>
+</svg>

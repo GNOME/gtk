@@ -1,0 +1,22 @@
+<svg width='100' height='100'>
+  <!-- attributeName on animateMotion (not allowed) -->
+  <circle cx='10' cy='10' r='5'>
+    <animateMotion attributeName='transform' path='M0,0 L10,10' dur='1s'/>
+  </circle>
+  <!-- invalid rotate -->
+  <circle cx='10' cy='10' r='5'>
+    <animateMotion rotate='invalid' path='M0,0 L10,10' dur='1s'/>
+  </circle>
+  <!-- invalid path data -->
+  <circle cx='10' cy='10' r='5'>
+    <animateMotion path='invalid' dur='1s'/>
+  </circle>
+  <!-- invalid by value -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' from='0' by='invalid' dur='1s'/>
+  </rect>
+  <!-- invalid color-interpolation -->
+  <rect x='0' y='0' width='10' height='10' fill='red'>
+    <animate attributeName='fill' values='red;blue' color-interpolation='invalid' dur='1s'/>
+  </rect>
+</svg>

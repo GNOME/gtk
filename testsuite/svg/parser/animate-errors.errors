@@ -1,0 +1,8 @@
+4.75: (animateMotion / attributeName): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+8.66: (animateMotion / rotate): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+8.66: (animateMotion / rotate): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+12.45: (animateMotion / path): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+12.45 - 13.1: (circle): GTK_SVG_ERROR_INVALID_ELEMENT
+16.64: (animate / by): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+16.64 - 17.1: (rect): GTK_SVG_ERROR_INVALID_ELEMENT
+20.93: (animate / color-interpolation): GTK_SVG_ERROR_INVALID_ATTRIBUTE

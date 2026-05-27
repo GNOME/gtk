@@ -1,0 +1,78 @@
+<svg width='100' height='100'>
+  <!-- invalid dur -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='invalid'/>
+  </rect>
+  <!-- invalid repeatCount -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' repeatCount='invalid'/>
+  </rect>
+  <!-- invalid repeatDur -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' repeatDur='invalid'/>
+  </rect>
+  <!-- invalid fill (animation fill) -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' fill='invalid'/>
+  </rect>
+  <!-- invalid restart -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' restart='invalid'/>
+  </rect>
+  <!-- invalid calcMode -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' calcMode='invalid'/>
+  </rect>
+  <!-- invalid additive -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' from='0' to='10' dur='1s' additive='invalid'/>
+  </rect>
+  <!-- invalid accumulate -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' dur='1s' accumulate='invalid'/>
+  </rect>
+  <!-- missing attributeName -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate values='0;10' dur='1s'/>
+  </rect>
+  <!-- invalid attributeName -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='nonexistent' values='0;10' dur='1s'/>
+  </rect>
+  <!-- missing type on animateTransform -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animateTransform values='0;45' dur='1s'/>
+  </rect>
+  <!-- invalid type on animateTransform -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animateTransform attributeName='transform' type='invalid' values='0;45' dur='1s'/>
+  </rect>
+  <!-- type attribute on animate (not allowed) -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' type='translate' values='0;10' dur='1s'/>
+  </rect>
+  <!-- invalid values -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='invalid' dur='1s'/>
+  </rect>
+  <!-- only 1 value in values -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='10' dur='1s'/>
+  </rect>
+  <!-- invalid from -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' from='invalid' to='10' dur='1s'/>
+  </rect>
+  <!-- invalid to -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' from='0' to='invalid' dur='1s'/>
+  </rect>
+  <!-- no values/from/to/by at all -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' dur='1s'/>
+  </rect>
+  <!-- wrong attributeName on animateTransform -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animateTransform attributeName='x' type='rotate' values='0;45' dur='1s'/>
+  </rect>
+</svg>
