@@ -15,9 +15,6 @@ gboolean     svg_property_has_css           (SvgProperty     attr);
 gboolean     svg_property_has_presentation  (SvgProperty     attr);
 gboolean     svg_property_applies_to        (SvgProperty     attr,
                                              SvgElementType  type);
-gboolean     svg_property_for_element       (SvgProperty     attr);
-gboolean     svg_property_for_color_stop    (SvgProperty     attr);
-gboolean     svg_property_for_filter        (SvgProperty     attr);
 
 const char * svg_property_get_name          (SvgProperty     attr);
 const char * svg_property_get_presentation  (SvgProperty     attr,
