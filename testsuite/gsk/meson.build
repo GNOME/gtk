@@ -218,6 +218,7 @@ compare_render_tests = [
   'repeat-none-child-bounds',
   'repeat-noninteger-nocairo',
   'repeat-pad-noninteger-child-bounds',
+  'repeat-reflect-pixel-alignment',
   'repeat-repeat',
   'repeat-repeats',
   'repeat-repeats-nested',

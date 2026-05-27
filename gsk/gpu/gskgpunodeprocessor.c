@@ -2942,7 +2942,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
     }
   else if (repeat == GSK_REPEAT_REFLECT)
     {
-      graphene_rect_t clipped_child_bounds;
+      graphene_rect_t clipped_child_bounds, snapped_child_bounds;
       graphene_point_t pos;
       GskGpuImage *image;
 
@@ -2950,6 +2950,19 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
                                                 &child_bounds,
                                                 &clipped_child_bounds,
                                                 &pos);
+      if (!gsk_gpu_render_pass_snap_rect (self,
+                                          &clipped_child_bounds,
+                                          GSK_RECT_SNAP_GROW,
+                                          &snapped_child_bounds))
+        return;
+
+      if (gsk_rect_contains_rect (&child_bounds, &snapped_child_bounds))
+        {
+          pos.x += snapped_child_bounds.origin.x - clipped_child_bounds.origin.x;
+          pos.y += snapped_child_bounds.origin.y - clipped_child_bounds.origin.y;
+          clipped_child_bounds = snapped_child_bounds;
+        }
+
       image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         GSK_GPU_AS_IMAGE_EXACT_SIZE,
                                                         &clipped_child_bounds,

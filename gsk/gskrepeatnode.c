@@ -436,7 +436,7 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
                               GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
-  graphene_rect_t clip_bounds, draw_bounds;
+  graphene_rect_t clip_bounds, draw_bounds, snapped;
   graphene_point_t draw_pos;
   graphene_rect_t bounds, child_bounds;
 
@@ -452,6 +452,16 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
                                             &child_bounds,
                                             &draw_bounds,
                                             &draw_pos);
+
+  if (!gsk_cairo_rect_snap (cr, &draw_bounds, GSK_RECT_SNAP_GROW, &snapped))
+    return;
+
+  if (gsk_rect_contains_rect (&child_bounds, &snapped))
+    {
+      draw_pos.x += snapped.origin.x - draw_bounds.origin.x;
+      draw_pos.y += snapped.origin.y - draw_bounds.origin.y;
+      draw_bounds = snapped;
+    }
 
   gsk_repeat_node_draw_tiled (cr,
                               data,
