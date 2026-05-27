@@ -102,6 +102,8 @@ const char * svg_element_get_inline_style    (SvgElement            *element,
 unsigned int svg_element_get_n_styles        (SvgElement            *element);
 const char * svg_element_get_style           (SvgElement            *element,
                                               unsigned int           pos);
+const char * svg_element_get_style_media     (SvgElement            *element,
+                                              unsigned int           pos);
 void         svg_element_set_style           (SvgElement            *element,
                                               unsigned int           pos,
                                               const char            *style);

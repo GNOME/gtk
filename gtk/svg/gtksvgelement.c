@@ -1214,6 +1214,19 @@ svg_element_get_style (SvgElement   *element,
   return g_bytes_get_data (elt->content, NULL);
 }
 
+const char *
+svg_element_get_style_media (SvgElement   *element,
+                             unsigned int  pos)
+{
+  StyleElt *elt;
+
+  g_return_val_if_fail (pos < element->styles->len, NULL);
+
+  elt = g_ptr_array_index (element->styles, pos);
+
+  return elt->media;
+}
+
 void
 svg_element_set_style (SvgElement   *element,
                        unsigned int  pos,
