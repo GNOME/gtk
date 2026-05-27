@@ -379,7 +379,7 @@ gdk_win32_surface_constructed (GObject *object)
 
   if (gdk_win32_display_get_dcomp_device (display_win32))
     dwExStyle |= WS_EX_NOREDIRECTIONBITMAP;
-  
+
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
@@ -779,8 +779,19 @@ gdk_win32_surface_show (GdkSurface *surface,
 static void
 gdk_win32_surface_hide (GdkSurface *surface)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
   if (surface->destroyed)
     return;
+
+  if (surface->autohide && impl->popup_grab)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat, surface);
+      impl->popup_grab = FALSE;
+    }
 
   GDK_NOTE (MISC, g_print ("gdk_win32_surface_hide: %p: %s\n",
 			   GDK_SURFACE_HWND (surface),
@@ -1062,37 +1073,25 @@ show_popup (GdkSurface *surface)
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static void
-show_grabbing_popup (GdkSeat    *seat,
-                     GdkSurface *surface,
-                     gpointer    user_data)
-{
-  show_popup (surface);
-}
-
 static gboolean
 gdk_win32_surface_present_popup (GdkSurface     *surface,
                                  int             width,
                                  int             height,
                                  GdkPopupLayout *layout)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
   gdk_win32_surface_layout_popup (surface, width, height, layout);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
     return TRUE;
 
+  show_popup (surface);
+
   if (surface->autohide)
     {
-      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                     surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     show_grabbing_popup, NULL);
-    }
-  else
-    {
-      show_popup (surface);
+      gdk_seat_grab (gdk_display_get_default_seat (surface->display), surface);
+      impl->popup_grab = TRUE;
     }
 
   return GDK_SURFACE_IS_MAPPED (surface);
@@ -1110,7 +1109,7 @@ gdk_win32_surface_raise (GdkSurface *surface)
         API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface), HWND_TOPMOST,
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER));
-         
+
       else if (GDK_IS_POPUP (surface))
         ShowWindow (GDK_SURFACE_HWND (surface), SW_SHOWNOACTIVATE);
       else
@@ -1750,6 +1749,26 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
 }
 
 static void
+update_cursor_for_drag_move_resize (GdkSurface *surface,
+                                    GdkCursor  *cursor)
+{
+  GdkWin32HCursor *win32_hcursor = NULL;
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+
+  if (cursor != NULL)
+    win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
+                                                                    cursor,
+                                                                    gdk_surface_get_scale (surface));
+
+  g_set_object (&display->grab_cursor, win32_hcursor);
+
+  if (display->grab_cursor != NULL)
+    SetCursor (gdk_win32_hcursor_get_handle (display->grab_cursor));
+  else
+    SetCursor (LoadCursor (NULL, IDC_ARROW));
+}
+
+static void
 setup_drag_move_resize_context (GdkSurface                  *surface,
                                 GdkW32DragMoveResizeContext *context,
                                 GdkW32WindowDragOp           op,
@@ -1921,11 +1940,7 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
    * our op before it even begins, but only if context->op is not NONE.
    * This is why we first do the grab, *then* set the op.
    */
-  gdk_device_grab (device, pointer_surface,
-                   FALSE,
-                   GDK_ALL_EVENTS_MASK,
-                   context->cursor,
-                   timestamp);
+  SetCapture (GDK_SURFACE_HWND (surface));
 
   context->surface = g_object_ref (surface);
   context->op = op;
@@ -1938,6 +1953,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
   context->current_root_y = root_y;
   context->timestamp = timestamp;
   context->start_rect = rect;
+
+  update_cursor_for_drag_move_resize (surface, context->cursor);
 
   GDK_NOTE (EVENTS,
             g_print ("begin drag moveresize: surface %p, toplevel %p, "
@@ -1957,7 +1974,8 @@ gdk_win32_surface_end_move_resize_drag (GdkSurface *surface)
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
-  gdk_device_ungrab (context->device, GDK_CURRENT_TIME);
+  update_cursor_for_drag_move_resize (surface, NULL);
+  ReleaseCapture ();
 
   g_clear_object (&context->cursor);
 
@@ -3378,7 +3396,6 @@ gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkSeat *gdk_seat;
-  GdkGrabStatus status;
 
   if (surface->shortcuts_inhibited)
     return; /* Already inhibited */
@@ -3389,12 +3406,6 @@ gdk_win32_toplevel_inhibit_system_shortcuts (GdkToplevel *toplevel,
   gdk_seat = gdk_surface_get_seat_from_event (surface, gdk_event);
 
   if (!(gdk_seat_get_capabilities (gdk_seat) & GDK_SEAT_CAPABILITY_KEYBOARD))
-    return;
-
-  status = gdk_seat_grab (gdk_seat, surface, GDK_SEAT_CAPABILITY_KEYBOARD,
-                          TRUE, NULL, gdk_event, NULL, NULL);
-
-  if (status != GDK_GRAB_SUCCESS)
     return;
 
   // TODO: install a WH_KEYBOARD_LL hook to take alt-tab/win etc.
@@ -3409,13 +3420,10 @@ static void
 gdk_win32_toplevel_restore_system_shortcuts (GdkToplevel *toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkSeat *gdk_seat;
 
   if (!surface->shortcuts_inhibited)
     return; /* Not inhibited */
 
-  gdk_seat = surface->current_shortcuts_inhibited_seat;
-  gdk_seat_ungrab (gdk_seat);
   surface->current_shortcuts_inhibited_seat = NULL;
 
   surface->shortcuts_inhibited = FALSE;
@@ -3479,7 +3487,7 @@ gdk_win32_drag_surface_present (GdkDragSurface *drag_surface,
 {
   GdkSurface *surface = GDK_SURFACE (drag_surface);
 
-  gdk_win32_surface_resize (surface, width, height);  
+  gdk_win32_surface_resize (surface, width, height);
   gdk_win32_surface_show (surface, FALSE);
   maybe_notify_mapped (surface);
 
@@ -3496,19 +3504,19 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
  * gdk_win32_surface_set_dcomp_content:
  * @self: The surface to set the content on
  * @dcomp_content: (nullable): The content to set.
- * 
+ *
  * Sets the content to be displayed in the surface.
- * 
+ *
  * This function should be called by draw contexts when they are created
  * or destroyed.
  * They set up their preferred method of rendering and then set it using
  * this function. The dcomp_content must be valid content for the
  * [IDCompositionVisual::SetContent()](https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-idcompositionvisual-setcontent)
  * function.
- * 
+ *
  * The content should be set to NULL again when the draw context gets
  * destroyed.
- * 
+ *
  * This function may not be called when Direct Composition is not in use.
  * See gdk_win32_display_get_dcomp_device() for details.
  */

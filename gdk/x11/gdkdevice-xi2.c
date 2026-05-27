@@ -37,6 +37,17 @@
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+#define GRAB_EVENT_MASK                                  \
+  (GDK_POINTER_MOTION_MASK |                             \
+   GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |     \
+   GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |       \
+   GDK_SCROLL_MASK |                                     \
+   (GDK_ALL_EVENTS_MASK &                                \
+    ~(GDK_BUTTON_MOTION_MASK |                           \
+      GDK_BUTTON1_MOTION_MASK |                          \
+      GDK_BUTTON2_MOTION_MASK |                          \
+      GDK_BUTTON3_MOTION_MASK)))
+
 typedef struct _ScrollValuator ScrollValuator;
 
 struct _ScrollValuator
@@ -80,16 +91,6 @@ static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
                                                   GdkSurface *surface,
                                                   GdkCursor *cursor);
 
-static GdkGrabStatus gdk_x11_device_xi2_grab   (GdkDevice     *device,
-                                                GdkSurface     *surface,
-                                                gboolean       owner_events,
-                                                GdkEventMask   event_mask,
-                                                GdkSurface     *confine_to,
-                                                GdkCursor     *cursor,
-                                                guint32        time_);
-static void          gdk_x11_device_xi2_ungrab (GdkDevice     *device,
-                                                guint32        time_);
-
 static GdkSurface * gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
                                                             double          *win_x,
                                                             double          *win_y,
@@ -115,8 +116,6 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   object_class->set_property = gdk_x11_device_xi2_set_property;
 
   device_class->set_surface_cursor = gdk_x11_device_xi2_set_surface_cursor;
-  device_class->grab = gdk_x11_device_xi2_grab;
-  device_class->ungrab = gdk_x11_device_xi2_ungrab;
   device_class->surface_at_position = gdk_x11_device_xi2_surface_at_position;
 
   props[PROP_DEVICE_ID] = g_param_spec_int ("device-id", NULL, NULL,
@@ -304,12 +303,10 @@ gdk_x11_convert_grab_status (int status)
     }
 }
 
-static GdkGrabStatus
+GdkGrabStatus
 gdk_x11_device_xi2_grab (GdkDevice    *device,
-                         GdkSurface    *surface,
+                         GdkSurface   *surface,
                          gboolean      owner_events,
-                         GdkEventMask  event_mask,
-                         GdkSurface    *confine_to,
                          GdkCursor    *cursor,
                          guint32       time_)
 {
@@ -324,8 +321,6 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   display = gdk_device_get_display (device);
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (GDK_X11_DISPLAY (display)->device_manager);
 
-  /* FIXME: confine_to is actually unused */
-
   xwindow = GDK_SURFACE_XID (surface);
 
   if (!cursor)
@@ -337,7 +332,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
 
   mask.deviceid = device_xi2->device_id;
   mask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
-                                                        event_mask,
+                                                        GRAB_EVENT_MASK,
                                                         &mask.mask_len);
 
   status = XIGrabDevice (GDK_DISPLAY_XDISPLAY (display),
@@ -351,25 +346,18 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
 
   g_free (mask.mask);
 
-  _gdk_x11_display_update_grab_info (display, device, status);
-
   return gdk_x11_convert_grab_status (status);
 }
 
-static void
+void
 gdk_x11_device_xi2_ungrab (GdkDevice *device,
                            guint32    time_)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
-  gulong serial;
 
   display = gdk_device_get_display (device);
-  serial = NextRequest (GDK_DISPLAY_XDISPLAY (display));
-
   XIUngrabDevice (GDK_DISPLAY_XDISPLAY (display), device_xi2->device_id, time_);
-
-  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
 }
 
 static GdkSurface *

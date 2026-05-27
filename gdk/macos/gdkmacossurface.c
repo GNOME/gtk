@@ -197,8 +197,12 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
   was_key = [self->window isKeyWindow];
 
-  seat = gdk_display_get_default_seat (surface->display);
-  gdk_seat_ungrab (seat);
+  if (self->popup_grab)
+    {
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat, surface);
+      self->popup_grab = FALSE;
+    }
 
   [self->window hide];
 
@@ -409,6 +413,8 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
       return NULL;
     }
 
+  gdk_macos_device_set_implicit_grab (device, NULL);
+
   /* Hold a reference until drop_done is called */
   g_object_ref (drag);
 
@@ -424,6 +430,16 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosWindow *window = g_steal_pointer (&self->window);
   GdkFrameClock *frame_clock;
+  GdkSeat *seat;
+
+  seat = gdk_display_get_default_seat (surface->display);
+  if (seat)
+    {
+      GdkDevice *pointer = gdk_seat_get_pointer (seat);
+
+      if (gdk_macos_device_get_implicit_grab (pointer) == surface)
+        gdk_macos_device_set_implicit_grab (pointer, NULL);
+    }
 
   _gdk_macos_surface_cancel_frame (self);
   g_clear_object (&self->best_monitor);

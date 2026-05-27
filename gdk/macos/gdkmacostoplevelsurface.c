@@ -27,6 +27,7 @@
 #include "gdkseatprivate.h"
 #include "gdktoplevelprivate.h"
 
+#include "gdkmacosdevice-private.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacosutils-private.h"
@@ -364,7 +365,7 @@ _gdk_macos_toplevel_surface_begin_resize (GdkToplevel    *toplevel,
 
   /* Release passive grab */
   if (button != 0)
-    gdk_seat_ungrab (gdk_device_get_seat (device));
+    gdk_macos_device_set_implicit_grab (device, NULL);
 
   if ((nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (toplevel))))
     [(GdkMacosWindow *)nswindow beginManualResize:edge];
@@ -387,7 +388,7 @@ _gdk_macos_toplevel_surface_begin_move (GdkToplevel *toplevel,
 
   /* Release passive grab */
   if (button != 0)
-    gdk_seat_ungrab (gdk_device_get_seat (device));
+    gdk_macos_device_set_implicit_grab (device, NULL);
 
   if ((nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (toplevel))))
     [(GdkMacosWindow *)nswindow beginManualMove];

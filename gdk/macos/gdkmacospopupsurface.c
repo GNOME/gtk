@@ -118,14 +118,6 @@ show_popup (GdkMacosPopupSurface *self)
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
 }
 
-static void
-show_grabbing_popup (GdkSeat    *seat,
-                     GdkSurface *surface,
-                     gpointer    user_data)
-{
-  show_popup (GDK_MACOS_POPUP_SURFACE (surface));
-}
-
 static gboolean
 gdk_macos_popup_surface_present (GdkPopup       *popup,
                                  int             width,
@@ -144,22 +136,15 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
   if (!self->attached && GDK_SURFACE (self)->parent != NULL)
     _gdk_macos_popup_surface_attach_to_parent (self);
 
+  show_popup (GDK_MACOS_POPUP_SURFACE (self));
+
   if (GDK_SURFACE (self)->autohide)
     {
       GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (popup));
       GdkSeat *seat = gdk_display_get_default_seat (display);
 
-      gdk_seat_grab (seat,
-                     GDK_SURFACE (self),
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     show_grabbing_popup,
-                     NULL);
-    }
-  else
-    {
-      show_popup (GDK_MACOS_POPUP_SURFACE (self));
+      gdk_seat_grab (seat, GDK_SURFACE (self));
+      GDK_MACOS_SURFACE (self)->popup_grab = TRUE;
     }
 
   GDK_MACOS_SURFACE (self)->did_initial_present = TRUE;

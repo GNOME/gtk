@@ -174,6 +174,8 @@ struct _GdkWin32Surface
    */
   guint maximizing : 1;
 
+  guint popup_grab : 1;
+
   GdkW32DragMoveResizeContext drag_move_resize_context;
 
   /* Enable all decorations? */

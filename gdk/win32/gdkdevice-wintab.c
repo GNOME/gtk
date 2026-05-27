@@ -120,24 +120,6 @@ gdk_device_wintab_query_state (GdkDevice        *device,
     }
 }
 
-static GdkGrabStatus
-gdk_device_wintab_grab (GdkDevice    *device,
-                        GdkSurface   *surface,
-                        gboolean      owner_events,
-                        GdkEventMask  event_mask,
-                        GdkSurface   *confine_to,
-                        GdkCursor    *cursor,
-                        guint32       time_)
-{
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_device_wintab_ungrab (GdkDevice *device,
-                          guint32    time_)
-{
-}
-
 static GdkSurface *
 gdk_device_wintab_surface_at_position (GdkDevice       *device,
                                        double          *win_x,
@@ -220,8 +202,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_device_wintab_set_surface_cursor;
-  device_class->grab = gdk_device_wintab_grab;
-  device_class->ungrab = gdk_device_wintab_ungrab;
   device_class->surface_at_position = gdk_device_wintab_surface_at_position;
 }
 

@@ -22,19 +22,11 @@
 
 #include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
+#include "gdkseatprivate.h"
 
 static void gdk_broadway_device_set_surface_cursor (GdkDevice *device,
                                                     GdkSurface *surface,
                                                     GdkCursor *cursor);
-static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
-                                                 GdkSurface     *surface,
-                                                 gboolean       owner_events,
-                                                 GdkEventMask   event_mask,
-                                                 GdkSurface     *confine_to,
-                                                 GdkCursor     *cursor,
-                                                 guint32        time_);
-static void          gdk_broadway_device_ungrab (GdkDevice     *device,
-                                                 guint32        time_);
 static GdkSurface * gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                                              double          *win_x,
                                                              double          *win_y,
@@ -49,8 +41,6 @@ gdk_broadway_device_class_init (GdkBroadwayDeviceClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_broadway_device_set_surface_cursor;
-  device_class->grab = gdk_broadway_device_grab;
-  device_class->ungrab = gdk_broadway_device_ungrab;
   device_class->surface_at_position = gdk_broadway_device_surface_at_position;
 }
 
@@ -114,19 +104,9 @@ _gdk_broadway_surface_grab_check_unmap (GdkSurface *surface,
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  /* End all grabs on the newly hidden surface */
-  for (d = devices; d; d = d->next)
-    _gdk_display_end_device_grab (display, d->data, serial, surface, TRUE);
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
 
@@ -135,100 +115,11 @@ _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkSeat *seat;
-  GdkDeviceGrabInfo *grab;
-  GList *devices, *d;
 
   seat = gdk_display_get_default_seat (display);
-
-  devices = NULL;
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-  devices = g_list_prepend (devices, gdk_seat_get_pointer (seat));
-
-  for (d = devices; d; d = d->next)
-    {
-      /* Make sure there is no lasting grab in this native surface */
-      grab = _gdk_display_get_last_device_grab (display, d->data);
-
-      if (grab && grab->surface == surface)
-        {
-          grab->serial_end = grab->serial_start;
-          grab->implicit_ungrab = TRUE;
-        }
-
-    }
-
-  g_list_free (devices);
+  gdk_seat_break_grab (seat, surface);
 }
 
-
-static GdkGrabStatus
-gdk_broadway_device_grab (GdkDevice    *device,
-                          GdkSurface    *surface,
-                          gboolean      owner_events,
-                          GdkEventMask  event_mask,
-                          GdkSurface    *confine_to,
-                          GdkCursor    *cursor,
-                          guint32       time_)
-{
-  GdkDisplay *display;
-  GdkBroadwayDisplay *broadway_display;
-
-  display = gdk_device_get_display (device);
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-      return GDK_GRAB_SUCCESS;
-    }
-  else
-    {
-      /* Device is a pointer */
-      return _gdk_broadway_server_grab_pointer (broadway_display->server,
-                                                GDK_BROADWAY_SURFACE (surface)->id,
-                                                owner_events,
-                                                event_mask,
-                                                time_);
-    }
-}
-
-#define TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
-static void
-gdk_broadway_device_ungrab (GdkDevice *device,
-                            guint32    time_)
-{
-  GdkDisplay *display;
-  GdkBroadwayDisplay *broadway_display;
-  GdkDeviceGrabInfo *grab;
-  guint32 serial;
-
-  display = gdk_device_get_display (device);
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-    }
-  else
-    {
-      /* Device is a pointer */
-      serial = _gdk_broadway_server_ungrab_pointer (broadway_display->server, time_);
-
-      if (serial != 0)
-        {
-          grab = _gdk_display_get_last_device_grab (display, device);
-          if (grab &&
-              (time_ == GDK_CURRENT_TIME ||
-               grab->time == GDK_CURRENT_TIME ||
-               !TIME_IS_LATER (grab->time, time_)))
-            grab->serial_end = serial;
-        }
-    }
-}
 
 static GdkSurface *
 gdk_broadway_device_surface_at_position (GdkDevice       *device,
@@ -264,4 +155,3 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
   return g_hash_table_lookup (broadway_display->id_ht,
                               GUINT_TO_POINTER (mouse_toplevel_id));
 }
-

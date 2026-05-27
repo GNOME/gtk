@@ -93,113 +93,29 @@ gdk_android_seat_get_capabilities (GdkSeat *seat)
   return GDK_SEAT_CAPABILITY_ALL;
 }
 
-#define KEYBOARD_EVENTS (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | \
-                         GDK_FOCUS_CHANGE_MASK)
-#define POINTER_EVENTS  (GDK_POINTER_MOTION_MASK |                  \
-                         GDK_BUTTON_PRESS_MASK |                    \
-                         GDK_BUTTON_RELEASE_MASK |                  \
-                         GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK | \
-                         GDK_ENTER_NOTIFY_MASK |                    \
-                         GDK_LEAVE_NOTIFY_MASK |                    \
-                         GDK_PROXIMITY_IN_MASK |                    \
-                         GDK_PROXIMITY_OUT_MASK |                   \
-                         GDK_TOUCHPAD_GESTURE_MASK)
-#define TOUCH_EVENTS    (GDK_TOUCH_MASK)
-
 static GdkGrabStatus
-gdk_android_seat_grab (GdkSeat               *seat,
-                       GdkSurface            *surface,
-                       GdkSeatCapabilities    capabilities,
-                       gboolean               owner_events,
-                       GdkCursor             *cursor,
-                       GdkEvent              *event,
-                       GdkSeatGrabPrepareFunc prepare_func,
-                       gpointer               prepare_func_data)
+gdk_android_seat_grab (GdkSeat    *seat,
+                       GdkSurface *surface)
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
   GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
-  guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
-
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-  gboolean grabbed_pointer = FALSE;
-  gboolean grabbed_touchscreen = FALSE;
-  gboolean grabbed_keyboard = FALSE;
-
-  gboolean was_visible = gdk_surface_get_mapped (surface);
-
-  if (prepare_func)
-    (prepare_func) (seat, surface, prepare_func_data);
-
   JNIEnv *env = gdk_android_get_env();
 
-  if (!gdk_surface_get_mapped (surface))
-    {
-      g_critical ("Surface %p has not been mapped in GdkSeatGrabPrepareFunc",
-                  surface);
-      return GDK_GRAB_NOT_VIEWABLE;
-    }
+  (*env)->PushLocalFrame (env, 1);
+  GdkAndroidToplevel *toplevel = gdk_android_surface_get_toplevel (surface_impl);
+  jobject view = (*env)->GetObjectField (env, toplevel->activity, gdk_android_get_java_cache ()->toplevel.toplevel_view);
+  if (self->active_grab_view)
+    (*env)->DeleteGlobalRef (env, self->active_grab_view);
+  self->active_grab_view = (*env)->NewGlobalRef (env, view);
+  (*env)->CallVoidMethod (env, view, gdk_android_get_java_cache ()->toplevel_view.set_grabbed_surface, surface_impl->surface);
+  (*env)->PopLocalFrame (env, NULL);
 
-  if (capabilities & (GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TABLET_STYLUS))
-    {
-      status = gdk_device_grab (self->logical_pointer, surface,
-                                owner_events,
-                                POINTER_EVENTS, cursor,
-                                evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
-
-      (*env)->PushLocalFrame (env, 1);
-      GdkAndroidToplevel *toplevel = gdk_android_surface_get_toplevel (surface_impl);
-      jobject view = (*env)->GetObjectField (env, toplevel->activity, gdk_android_get_java_cache ()->toplevel.toplevel_view);
-      if (self->active_grab_view)
-        (*env)->DeleteGlobalRef (env, self->active_grab_view);
-      self->active_grab_view = (*env)->NewGlobalRef (env, view);
-      (*env)->CallVoidMethod (env, view, gdk_android_get_java_cache ()->toplevel_view.set_grabbed_surface, surface_impl->surface);
-      (*env)->PopLocalFrame (env, NULL);
-
-      grabbed_pointer = TRUE;
-    }
-
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_TOUCH)
-    {
-      status = gdk_device_grab (self->logical_touchscreen, surface,
-                                owner_events,
-                                TOUCH_EVENTS, cursor,
-                                evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
-      grabbed_touchscreen = TRUE;
-    }
-
-  if (status == GDK_GRAB_SUCCESS &&
-      capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
-    {
-      status = gdk_device_grab (self->logical_keyboard, surface,
-                                owner_events,
-                                KEYBOARD_EVENTS, cursor,
-                                evtime);
-      if (status != GDK_GRAB_SUCCESS)
-        goto failure;
-      grabbed_keyboard = TRUE;
-    }
-
-  return status;
-failure:
-  if (grabbed_pointer)
-    gdk_device_ungrab (self->logical_pointer, evtime);
-  if (grabbed_touchscreen)
-    gdk_device_ungrab (self->logical_touchscreen, evtime);
-  if (grabbed_keyboard)
-    gdk_device_ungrab (self->logical_keyboard, evtime);
-
-  if (!was_visible)
-    gdk_surface_hide (surface);
-  return status;
+  return GDK_GRAB_SUCCESS;
 }
 
 static void
-gdk_android_seat_ungrab (GdkSeat *seat)
+gdk_android_seat_ungrab (GdkSeat    *seat,
+                         GdkSurface *surface)
 {
   GdkAndroidSeat *self = (GdkAndroidSeat *) seat;
 
@@ -210,10 +126,6 @@ gdk_android_seat_ungrab (GdkSeat *seat)
       (*env)->DeleteGlobalRef (env, self->active_grab_view);
       self->active_grab_view = NULL;
     }
-
-  gdk_device_ungrab (self->logical_pointer, GDK_CURRENT_TIME);
-  gdk_device_ungrab (self->logical_touchscreen, GDK_CURRENT_TIME);
-  gdk_device_ungrab (self->logical_keyboard, GDK_CURRENT_TIME);
 }
 
 static GdkDevice *

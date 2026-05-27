@@ -129,25 +129,6 @@ _gdk_device_win32_query_state (GdkDevice        *device,
     gdk_device_win32_query_state (device, surface, child_surface, win_x, win_y, mask);
 }
 
-static GdkGrabStatus
-gdk_device_win32_grab (GdkDevice    *device,
-                       GdkSurface   *surface,
-                       gboolean      owner_events,
-                       GdkEventMask  event_mask,
-                       GdkSurface   *confine_to,
-                       GdkCursor    *cursor,
-                       guint32       time_)
-{
-  /* No support for grabbing physical devices atm */
-  return GDK_GRAB_NOT_VIEWABLE;
-}
-
-static void
-gdk_device_win32_ungrab (GdkDevice *device,
-                         guint32    time_)
-{
-}
-
 static void
 screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
 {
@@ -204,8 +185,6 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_device_win32_set_surface_cursor;
-  device_class->grab = gdk_device_win32_grab;
-  device_class->ungrab = gdk_device_win32_ungrab;
   device_class->surface_at_position = _gdk_device_win32_surface_at_position;
 }
 

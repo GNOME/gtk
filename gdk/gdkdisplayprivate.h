@@ -66,21 +66,6 @@ typedef enum {
 extern const GdkDebugKey gdk_vulkan_feature_keys[];
 #endif
 
-/* Tracks information about the device grab on this display */
-typedef struct
-{
-  GdkSurface *surface;
-  gulong serial_start;
-  gulong serial_end; /* exclusive, i.e. not active on serial_end */
-  guint event_mask;
-  guint32 time;
-
-  guint activated : 1;
-  guint implicit_ungrab : 1;
-  guint owner_events : 1;
-  guint implicit : 1;
-} GdkDeviceGrabInfo;
-
 /* Tracks information about which surface and position the pointer last was in.
  * This is useful when we need to synthesize events later.
  * Note that we track toplevel_under_pointer using enter/leave events,
@@ -106,8 +91,6 @@ struct _GdkDisplay
   guint event_pause_count;       /* How many times events are blocked */
 
   guint closed             : 1;  /* Whether this display has been closed */
-
-  GHashTable *device_grabs;
 
   GdkClipboard *clipboard;
   GdkClipboard *primary_clipboard;
@@ -217,27 +200,6 @@ typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
 
 void                _gdk_display_update_last_event    (GdkDisplay     *display,
                                                        GdkEvent       *event);
-void                _gdk_display_device_grab_update   (GdkDisplay *display,
-                                                       GdkDevice  *device,
-                                                       gulong      current_serial);
-GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
-                                                       GdkDevice  *device);
-GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       GdkSurface        *surface,
-                                                       gboolean          owner_events,
-                                                       GdkEventMask      event_mask,
-                                                       gulong            serial_start,
-                                                       guint32           time,
-                                                       gboolean          implicit);
-GdkDeviceGrabInfo * _gdk_display_has_device_grab      (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       gulong            serial);
-gboolean            _gdk_display_end_device_grab      (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       gulong            serial,
-                                                       GdkSurface        *if_child,
-                                                       gboolean          implicit);
 GdkPointerSurfaceInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display,
                                                        GdkDevice        *device);
 void                _gdk_display_pointer_info_foreach (GdkDisplay       *display,
@@ -312,4 +274,3 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
 int gdk_display_guess_scale_factor         (GdkDisplay   *display);
 
 G_END_DECLS
-

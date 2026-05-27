@@ -35,6 +35,7 @@
 struct _GdkMacosDevice
 {
   GdkDevice parent_instance;
+  GdkSurface *implicit_grab;
 };
 
 struct _GdkMacosDeviceClass
@@ -95,38 +96,6 @@ gdk_macos_device_surface_at_position (GdkDevice       *device,
   return GDK_SURFACE (surface);
 }
 
-static GdkGrabStatus
-gdk_macos_device_grab (GdkDevice    *device,
-                       GdkSurface   *window,
-                       gboolean      owner_events,
-                       GdkEventMask  event_mask,
-                       GdkSurface   *confine_to,
-                       GdkCursor    *cursor,
-                       guint32       time_)
-{
-  /* Should remain empty */
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_macos_device_ungrab (GdkDevice *device,
-                         guint32    time_)
-{
-  GdkMacosDevice *self = (GdkMacosDevice *)device;
-  GdkDeviceGrabInfo *grab;
-  GdkDisplay *display;
-
-  g_assert (GDK_IS_MACOS_DEVICE (self));
-
-  display = gdk_device_get_display (device);
-  grab = _gdk_display_get_last_device_grab (display, device);
-
-  if (grab != NULL)
-    grab->serial_end = grab->serial_start;
-
-  _gdk_display_device_grab_update (display, device, 0);
-}
-
 void
 gdk_macos_device_query_state (GdkDevice        *device,
                               GdkSurface       *surface,
@@ -173,10 +142,8 @@ gdk_macos_device_class_init (GdkMacosDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->grab = gdk_macos_device_grab;
   device_class->set_surface_cursor = gdk_macos_device_set_surface_cursor;
   device_class->surface_at_position = gdk_macos_device_surface_at_position;
-  device_class->ungrab = gdk_macos_device_ungrab;
 }
 
 static void
@@ -184,4 +151,26 @@ gdk_macos_device_init (GdkMacosDevice *self)
 {
   _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_X, 0, 0, 1);
   _gdk_device_add_axis (GDK_DEVICE (self), GDK_AXIS_Y, 0, 0, 1);
+}
+
+void
+gdk_macos_device_set_implicit_grab (GdkDevice  *device,
+                                    GdkSurface *surface)
+{
+  GdkMacosDevice *self = (GdkMacosDevice *)device;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+  g_assert (!surface || GDK_IS_MACOS_SURFACE (surface));
+
+  g_set_object (&self->implicit_grab, surface);
+}
+
+GdkSurface *
+gdk_macos_device_get_implicit_grab (GdkDevice *device)
+{
+  GdkMacosDevice *self = (GdkMacosDevice *)device;
+
+  g_assert (GDK_IS_MACOS_DEVICE (device));
+
+  return self->implicit_grab;
 }

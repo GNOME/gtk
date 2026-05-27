@@ -86,9 +86,9 @@ rect_anchor_to_anchor (GdkGravity rect_anchor)
       return XDG_POSITIONER_ANCHOR_BOTTOM;
     case GDK_GRAVITY_SOUTH_EAST:
       return XDG_POSITIONER_ANCHOR_BOTTOM_RIGHT;
-    default: 
+    default:
       g_assert_not_reached ();
-    } 
+    }
 }
 
 static enum xdg_positioner_gravity
@@ -285,6 +285,12 @@ gdk_wayland_popup_hide_surface (GdkWaylandSurface *wayland_surface)
   GdkSurface *surface = GDK_SURFACE (popup);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (popup->display_server.xdg_popup && surface->autohide)
+    {
+      GdkSeat *seat = gdk_display_get_default_seat (display);
+      gdk_seat_ungrab (seat, surface);
+    }
 
   g_clear_pointer (&popup->display_server.xdg_popup, xdg_popup_destroy);
   g_clear_pointer (&popup->display_server.zxdg_popup_v6, zxdg_popup_v6_destroy);
@@ -1307,26 +1313,6 @@ show_popup (GdkWaylandPopup *wayland_popup,
   gdk_wayland_surface_map_popup (wayland_popup, width, height, layout);
 }
 
-typedef struct
-{
-  int width;
-  int height;
-  GdkPopupLayout *layout;
-} GrabPrepareData;
-
-static void
-show_grabbing_popup (GdkSeat    *seat,
-                     GdkSurface *surface,
-                     gpointer    user_data)
-{
-  GrabPrepareData *data = user_data;
-
-  g_return_if_fail (GDK_IS_WAYLAND_POPUP (surface));
-  GdkWaylandPopup *wayland_popup = GDK_WAYLAND_POPUP (surface);
-
-  show_popup (wayland_popup, data->width, data->height, data->layout);
-}
-
 static void
 reposition_popup (GdkWaylandPopup *wayland_popup,
                   int              width,
@@ -1366,21 +1352,9 @@ gdk_wayland_surface_present_popup (GdkWaylandPopup *wayland_popup,
           seat = gdk_display_get_default_seat (surface->display);
           if (seat)
             {
-              GrabPrepareData data;
               GdkGrabStatus result;
 
-              data = (GrabPrepareData) {
-                .width = width,
-                .height = height,
-                .layout = layout,
-              };
-
-              result = gdk_seat_grab (seat,
-                                      surface,
-                                      GDK_SEAT_CAPABILITY_ALL,
-                                      TRUE,
-                                      NULL, NULL,
-                                      show_grabbing_popup, &data);
+              result = gdk_seat_grab (seat, surface);
               if (result != GDK_GRAB_SUCCESS)
                 {
                   const char *grab_status[] = {
@@ -1391,10 +1365,8 @@ gdk_wayland_surface_present_popup (GdkWaylandPopup *wayland_popup,
                 }
             }
         }
-      else
-        {
-          show_popup (wayland_popup, width, height, layout);
-        }
+
+      show_popup (wayland_popup, width, height, layout);
     }
   else
     {

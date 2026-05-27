@@ -100,16 +100,6 @@ struct _GdkDeviceClass
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
-  GdkGrabStatus (* grab)     (GdkDevice        *device,
-                              GdkSurface        *surface,
-                              gboolean          owner_events,
-                              GdkEventMask      event_mask,
-                              GdkSurface        *confine_to,
-                              GdkCursor        *cursor,
-                              guint32           time_);
-  void          (*ungrab)    (GdkDevice        *device,
-                              guint32           time_);
-
   GdkSurface * (* surface_at_position) (GdkDevice       *device,
                                         double          *win_x,
                                         double          *win_y,
@@ -171,14 +161,6 @@ void  gdk_device_set_seat  (GdkDevice *device,
 void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
 
-GdkGrabStatus gdk_device_grab (GdkDevice        *device,
-                               GdkSurface        *surface,
-                               gboolean          owner_events,
-                               GdkEventMask      event_mask,
-                               GdkCursor        *cursor,
-                               guint32           time_);
-void gdk_device_ungrab        (GdkDevice        *device,
-                               guint32           time_);
 int gdk_device_get_n_axes     (GdkDevice       *device);
 gboolean gdk_device_get_axis  (GdkDevice         *device,
                                double            *axes,
@@ -190,10 +172,4 @@ GdkAxisUse gdk_device_get_axis_use  (GdkDevice         *device,
 void gdk_device_set_timestamp (GdkDevice *device,
                                guint32    timestamp);
 
-gboolean gdk_device_grab_info (GdkDisplay  *display,
-                               GdkDevice   *device,
-                               GdkSurface  **grab_surface,
-                               gboolean    *owner_events);
-
 G_END_DECLS
-

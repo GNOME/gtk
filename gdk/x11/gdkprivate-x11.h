@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /*
@@ -108,13 +108,6 @@ void _gdk_x11_surface_set_frame_still_painting (GdkSurface *surface,
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
                                           Window      xroot_window);
 
-void _gdk_x11_display_update_grab_info        (GdkDisplay *display,
-                                               GdkDevice  *device,
-                                               int         status);
-void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
-                                               GdkDevice  *device,
-                                               guint32     time,
-                                               gulong      serial);
 void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 
@@ -255,4 +248,3 @@ extern const int         _gdk_x11_event_mask_table_size;
 #define GDK_SURFACE_XDISPLAY(win)      (GDK_X11_SCREEN (GDK_SURFACE_SCREEN (win))->xdisplay)
 #define GDK_SURFACE_XID(win)           (GDK_X11_SURFACE (win)->xid)
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_X11_SCREEN (screen)->xdisplay)
-

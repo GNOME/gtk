@@ -20,7 +20,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -445,6 +445,15 @@ gdk_broadway_surface_hide (GdkSurface *surface)
 
   /* FIXME: update state ? */
 
+  if (surface->autohide && impl->popup_grab)
+    {
+      GdkSeat *seat;
+
+      seat = gdk_display_get_default_seat (surface->display);
+      gdk_seat_ungrab (seat, surface);
+      impl->popup_grab = FALSE;
+    }
+
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
 
   _gdk_broadway_surface_grab_check_unmap (surface,
@@ -650,37 +659,25 @@ show_popup (GdkSurface *surface)
   gdk_surface_invalidate_rect (surface, NULL);
 }
 
-static void
-show_grabbing_popup (GdkSeat    *seat,
-                     GdkSurface *surface,
-                     gpointer    user_data)
-{
-  show_popup (surface);
-}
-
 static gboolean
 gdk_broadway_surface_present_popup (GdkSurface     *surface,
                                     int             width,
                                     int             height,
                                     GdkPopupLayout *layout)
 {
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
+
   gdk_broadway_surface_layout_popup (surface, width, height, layout);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
     return TRUE;
 
+  show_popup (surface);
+
   if (surface->autohide)
     {
-      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
-                     surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL,
-                     show_grabbing_popup, NULL);
-    }
-  else
-    {
-      show_popup (surface);
+      gdk_seat_grab (gdk_display_get_default_seat (surface->display), surface);
+      impl->popup_grab = TRUE;
     }
 
   return GDK_SURFACE_IS_MAPPED (surface);
@@ -1171,9 +1168,9 @@ static void
 create_moveresize_surface (MoveResizeData *mv_resize,
                            guint32         timestamp)
 {
+  GdkBroadwayDisplay *broadway_display;
   GdkGrabStatus status;
-  GdkSeat *seat;
-  GdkDevice *pointer;
+  GdkSurface *surface;
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
@@ -1183,18 +1180,11 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   gdk_broadway_surface_move_resize_internal (mv_resize->moveresize_emulation_surface, TRUE, -100, -100, 1, 1);
   gdk_broadway_surface_show (mv_resize->moveresize_emulation_surface, FALSE);
 
-  seat = gdk_display_get_default_seat (mv_resize->display);
-  pointer = gdk_seat_get_pointer (seat);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  status = gdk_device_grab (pointer,
-                            mv_resize->moveresize_emulation_surface,
-                            FALSE,
-                            GDK_BUTTON_RELEASE_MASK |
-                            GDK_POINTER_MOTION_MASK,
-                            NULL,
-                            timestamp);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  broadway_display = GDK_BROADWAY_DISPLAY (mv_resize->display);
+  surface = mv_resize->moveresize_emulation_surface;
+  status = _gdk_broadway_server_grab_pointer (broadway_display->server,
+                                              GDK_BROADWAY_SURFACE (surface)->id,
+                                              FALSE, timestamp);
 
   if (status != GDK_GRAB_SUCCESS)
     {

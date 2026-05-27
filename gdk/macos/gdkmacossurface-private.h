@@ -72,6 +72,7 @@ struct _GdkMacosSurface
   guint in_change_monitor : 1;
   guint in_frame : 1;
   guint awaiting_frame : 1;
+  guint popup_grab : 1;
 };
 
 struct _GdkMacosSurfaceClass

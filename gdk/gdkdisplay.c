@@ -40,6 +40,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
+#include "gdkseatprivate.h"
 #include "gdkvulkancontextprivate.h"
 
 #ifdef HAVE_EGL
@@ -372,33 +373,12 @@ free_pointer_info (GdkPointerSurfaceInfo *info)
 }
 
 static void
-free_device_grab (GdkDeviceGrabInfo *info)
-{
-  g_object_unref (info->surface);
-  g_free (info);
-}
-
-static gboolean
-free_device_grabs_foreach (gpointer key,
-                           gpointer value,
-                           gpointer user_data)
-{
-  GList *list = value;
-
-  g_list_free_full (list, (GDestroyNotify) free_device_grab);
-
-  return TRUE;
-}
-
-static void
 gdk_display_init (GdkDisplay *display)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
 
   display->double_click_time = 250;
   display->double_click_distance = 5;
-
-  display->device_grabs = g_hash_table_new (NULL, NULL);
 
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) free_pointer_info);
@@ -461,11 +441,6 @@ static void
 gdk_display_finalize (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
-
-  g_hash_table_foreach_remove (display->device_grabs,
-                               free_device_grabs_foreach,
-                               NULL);
-  g_hash_table_destroy (display->device_grabs);
 
   g_hash_table_destroy (display->pointers_info);
 
@@ -557,332 +532,12 @@ gdk_display_put_event (GdkDisplay *display,
   _gdk_event_queue_append (display, gdk_event_ref ((GdkEvent *)event));
 }
 
-static void
-generate_grab_broken_event (GdkDisplay *display,
-                            GdkSurface  *surface,
-                            GdkDevice  *device,
-			    gboolean    implicit,
-			    GdkSurface  *grab_surface)
-{
-  g_return_if_fail (surface != NULL);
-
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      GdkEvent *event;
-
-      event = gdk_grab_broken_event_new (surface,
-                                         device,
-                                         grab_surface,
-                                         implicit);
-
-      _gdk_event_queue_append (display, event);
-    }
-}
-
-GdkDeviceGrabInfo *
-_gdk_display_get_last_device_grab (GdkDisplay *display,
-                                   GdkDevice  *device)
-{
-  GList *l;
-
-  l = g_hash_table_lookup (display->device_grabs, device);
-
-  if (l)
-    {
-      l = g_list_last (l);
-      return l->data;
-    }
-
-  return NULL;
-}
-
-GdkDeviceGrabInfo *
-_gdk_display_add_device_grab (GdkDisplay       *display,
-                              GdkDevice        *device,
-                              GdkSurface        *surface,
-                              gboolean          owner_events,
-                              GdkEventMask      event_mask,
-                              unsigned long     serial_start,
-                              guint32           time,
-                              gboolean          implicit)
-{
-  GdkDeviceGrabInfo *info, *other_info;
-  GList *grabs, *l;
-
-  info = g_new0 (GdkDeviceGrabInfo, 1);
-
-  info->surface = g_object_ref (surface);
-  info->serial_start = serial_start;
-  info->serial_end = G_MAXULONG;
-  info->owner_events = owner_events;
-  info->event_mask = event_mask;
-  info->time = time;
-  info->implicit = implicit;
-
-  grabs = g_hash_table_lookup (display->device_grabs, device);
-
-  /* Find the first grab that has a larger start time (if any) and insert
-   * before that. I.E we insert after already existing grabs with same
-   * start time */
-  for (l = grabs; l != NULL; l = l->next)
-    {
-      other_info = l->data;
-
-      if (info->serial_start < other_info->serial_start)
-	break;
-    }
-
-  grabs = g_list_insert_before (grabs, l, info);
-
-  /* Make sure the new grab end before next grab */
-  if (l)
-    {
-      other_info = l->data;
-      info->serial_end = other_info->serial_start;
-    }
-
-  /* Find any previous grab and update its end time */
-  l = g_list_find (grabs, info);
-  l = l->prev;
-  if (l)
-    {
-      other_info = l->data;
-      other_info->serial_end = serial_start;
-    }
-
-  g_hash_table_insert (display->device_grabs, device, grabs);
-
-  return info;
-}
-
-static GdkSurface *
-get_current_toplevel (GdkDisplay      *display,
-                      GdkDevice       *device,
-                      int             *x_out,
-                      int             *y_out,
-		      GdkModifierType *state_out)
-{
-  GdkSurface *pointer_surface;
-  double x, y;
-  GdkModifierType state;
-
-  pointer_surface = _gdk_device_surface_at_position (device, &x, &y, &state);
-
-  if (pointer_surface != NULL &&
-      GDK_SURFACE_DESTROYED (pointer_surface))
-    pointer_surface = NULL;
-
-  *x_out = round (x);
-  *y_out = round (y);
-  *state_out = state;
-
-  return pointer_surface;
-}
-
-static void
-switch_to_pointer_grab (GdkDisplay        *display,
-                        GdkDevice         *device,
-			GdkDeviceGrabInfo *grab,
-			GdkDeviceGrabInfo *last_grab,
-			guint32            time,
-			gulong             serial)
-{
-  GdkSurface *new_toplevel;
-  GdkPointerSurfaceInfo *info;
-  GList *old_grabs;
-  GdkModifierType state;
-  int x = 0, y = 0;
-
-  /* Temporarily unset pointer to make sure we send the crossing events below */
-  old_grabs = g_hash_table_lookup (display->device_grabs, device);
-  g_hash_table_steal (display->device_grabs, device);
-  info = _gdk_display_get_pointer_info (display, device);
-
-  if (grab)
-    {
-      /* New grab is in effect */
-      if (!grab->implicit)
-	{
-	  /* !owner_event Grabbing a surface that we're not inside, current status is
-	     now NULL (i.e. outside grabbed surface) */
-	  if (!grab->owner_events && info->surface_under_pointer != grab->surface)
-	    _gdk_display_set_surface_under_pointer (display, device, NULL);
-	}
-
-      grab->activated = TRUE;
-    }
-
-  if (last_grab)
-    {
-      new_toplevel = NULL;
-
-      if (grab == NULL /* ungrab */ ||
-	  (!last_grab->owner_events && grab->owner_events) /* switched to owner_events */ )
-	{
-          new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
-
-	  if (new_toplevel)
-	    {
-	      /* w is now toplevel and x,y in toplevel coords */
-              _gdk_display_set_surface_under_pointer (display, device, new_toplevel);
-	      info->toplevel_x = x;
-	      info->toplevel_y = y;
-	      info->state = state;
-	    }
-	}
-
-      if (grab == NULL) /* Ungrabbed, send events */
-	{
-	  /* We're now ungrabbed, update the surface_under_pointer */
-	  _gdk_display_set_surface_under_pointer (display, device, new_toplevel);
-	}
-    }
-
-  g_hash_table_insert (display->device_grabs, device, old_grabs);
-}
-
 void
 _gdk_display_update_last_event (GdkDisplay     *display,
                                 GdkEvent       *event)
 {
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
-}
-
-void
-_gdk_display_device_grab_update (GdkDisplay *display,
-                                 GdkDevice  *device,
-                                 gulong      current_serial)
-{
-  GdkDeviceGrabInfo *current_grab, *next_grab;
-  GList *grabs;
-  guint32 time;
-
-  time = display->last_event_time;
-  grabs = g_hash_table_lookup (display->device_grabs, device);
-
-  while (grabs != NULL)
-    {
-      current_grab = grabs->data;
-
-      if (current_grab->serial_start > current_serial)
-	return; /* Hasn't started yet */
-
-      if (current_grab->serial_end > current_serial)
-	{
-	  /* This one hasn't ended yet.
-	     its the currently active one or scheduled to be active */
-
-	  if (!current_grab->activated)
-            {
-              if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-                switch_to_pointer_grab (display, device, current_grab, NULL, time, current_serial);
-            }
-
-	  break;
-	}
-
-      next_grab = NULL;
-      if (grabs->next)
-	{
-	  /* This is the next active grab */
-	  next_grab = grabs->next->data;
-
-	  if (next_grab->serial_start > current_serial)
-	    next_grab = NULL; /* Actually its not yet active */
-	}
-
-      if ((next_grab == NULL && current_grab->implicit_ungrab) ||
-          (next_grab != NULL && current_grab->surface != next_grab->surface))
-        generate_grab_broken_event (display, GDK_SURFACE (current_grab->surface),
-                                    device,
-                                    current_grab->implicit,
-                                    next_grab? next_grab->surface : NULL);
-
-      /* Remove old grab */
-      grabs = g_list_delete_link (grabs, grabs);
-      g_hash_table_insert (display->device_grabs, device, grabs);
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-        switch_to_pointer_grab (display, device,
-                                next_grab, current_grab,
-                                time, current_serial);
-
-      free_device_grab (current_grab);
-    }
-}
-
-static GList *
-grab_list_find (GList  *grabs,
-                gulong  serial)
-{
-  GdkDeviceGrabInfo *grab;
-
-  while (grabs)
-    {
-      grab = grabs->data;
-
-      if (serial >= grab->serial_start && serial < grab->serial_end)
-	return grabs;
-
-      grabs = grabs->next;
-    }
-
-  return NULL;
-}
-
-static GList *
-find_device_grab (GdkDisplay *display,
-                   GdkDevice  *device,
-                   gulong      serial)
-{
-  GList *l;
-
-  l = g_hash_table_lookup (display->device_grabs, device);
-  return grab_list_find (l, serial);
-}
-
-GdkDeviceGrabInfo *
-_gdk_display_has_device_grab (GdkDisplay *display,
-                              GdkDevice  *device,
-                              gulong      serial)
-{
-  GList *l;
-
-  l = find_device_grab (display, device, serial);
-  if (l)
-    return l->data;
-
-  return NULL;
-}
-
-/* Returns true if last grab was ended
- * If if_child is non-NULL, end the grab only if the grabbed
- * surface is the same as if_child or a descendant of it */
-gboolean
-_gdk_display_end_device_grab (GdkDisplay *display,
-                              GdkDevice  *device,
-                              gulong      serial,
-                              GdkSurface  *if_child,
-                              gboolean    implicit)
-{
-  GdkDeviceGrabInfo *grab;
-  GList *l;
-
-  l = find_device_grab (display, device, serial);
-
-  if (l == NULL)
-    return FALSE;
-
-  grab = l->data;
-  if (grab && (if_child == NULL || if_child == grab->surface))
-    {
-      grab->serial_end = serial;
-      grab->implicit_ungrab = implicit;
-      return l->next == NULL;
-    }
-
-  return FALSE;
 }
 
 GdkPointerSurfaceInfo *
@@ -933,46 +588,6 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
     }
 }
 
-/*< private >
- * gdk_device_grab_info:
- * @display: the display for which to get the grab information
- * @device: device to get the grab information from
- * @grab_surface: (out) (transfer none): location to store current grab surface
- * @owner_events: (out): location to store boolean indicating whether
- *   the @owner_events flag to gdk_device_grab() was %TRUE.
- *
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- *
- * Returns: %TRUE if this application currently has the
- *  keyboard grabbed.
- */
-gboolean
-gdk_device_grab_info (GdkDisplay  *display,
-                      GdkDevice   *device,
-                      GdkSurface  **grab_surface,
-                      gboolean    *owner_events)
-{
-  GdkDeviceGrabInfo *info;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  info = _gdk_display_get_last_device_grab (display, device);
-
-  if (info)
-    {
-      if (grab_surface)
-        *grab_surface = info->surface;
-      if (owner_events)
-        *owner_events = info->owner_events;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
 /**
  * gdk_display_device_is_grabbed:
  * @display: a `GdkDisplay`
@@ -986,17 +601,14 @@ gboolean
 gdk_display_device_is_grabbed (GdkDisplay *display,
                                GdkDevice  *device)
 {
-  GdkDeviceGrabInfo *info;
+  GdkSeat *seat;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
   g_return_val_if_fail (GDK_IS_DEVICE (device), TRUE);
 
-  /* What we're interested in is the steady state (ie last grab),
-     because we're interested e.g. if we grabbed so that we
-     can ungrab, even if our grab is not active just yet. */
-  info = _gdk_display_get_last_device_grab (display, device);
+  seat = gdk_device_get_seat (device);
 
-  return (info && !info->implicit);
+  return gdk_seat_get_topmost_grab_surface (seat) != NULL;
 }
 
 /**
@@ -2047,7 +1659,7 @@ gdk_display_init_dmabuf_invoke_callback (gpointer data)
   GDK_DISPLAY_DEBUG (self, DMABUF,
                      "Initialization finished. Advertising %zu dmabuf formats",
                      gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
-  
+
   return G_SOURCE_REMOVE;
 }
 
@@ -2249,10 +1861,7 @@ device_removed_cb (GdkSeat    *seat,
                    GdkDevice  *device,
                    GdkDisplay *display)
 {
-  g_hash_table_remove (display->device_grabs, device);
   g_hash_table_remove (display->pointers_info, device);
-
-  /* FIXME: change core pointer and remove from device list */
 }
 
 void

@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * gdkdisplay-x11.c
- * 
+ *
  * Copyright 2001 Sun Microsystems Inc.
  * Copyright (C) 2004 Nokia Corporation
  *
@@ -915,7 +915,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
 #endif
 
-    if (surface && 
+    if (surface &&
 	xevent->xconfigure.event == xevent->xconfigure.window)
         {
           int x, y;
@@ -1520,8 +1520,8 @@ gdk_x11_display_open (const char *display_name)
     }
 
 #ifdef HAVE_XFIXES
-  if (XFixesQueryExtension (display_x11->xdisplay, 
-			    &display_x11->xfixes_event_base, 
+  if (XFixesQueryExtension (display_x11->xdisplay,
+			    &display_x11->xfixes_event_base,
 			    &ignore))
     {
       display_x11->have_xfixes = TRUE;
@@ -1595,7 +1595,7 @@ gdk_x11_display_open (const char *display_name)
 
   /* We don't yet know a valid time. */
   display_x11->user_time = 0;
-  
+
 #ifdef HAVE_XKB
   {
     int xkb_major = XkbMajorVersion;
@@ -1604,13 +1604,13 @@ gdk_x11_display_open (const char *display_name)
       {
         xkb_major = XkbMajorVersion;
         xkb_minor = XkbMinorVersion;
-	    
-        if (XkbQueryExtension (display_x11->xdisplay, 
+
+        if (XkbQueryExtension (display_x11->xdisplay,
 			       NULL, &display_x11->xkb_event_type, NULL,
                                &xkb_major, &xkb_minor))
           {
 	    Bool detectable_autorepeat_supported;
-	    
+
 	    display_x11->use_xkb = TRUE;
 
             XkbSelectEvents (display_x11->xdisplay,
@@ -1644,7 +1644,7 @@ gdk_x11_display_open (const char *display_name)
   {
     int major, minor;
     int error_base, event_base;
-    
+
     if (XSyncQueryExtension (display_x11->xdisplay,
 			     &event_base, &error_base) &&
         XSyncInitialize (display_x11->xdisplay,
@@ -1769,16 +1769,16 @@ gdk_add_connection_handler (Display *display,
 
   connection->fd = fd;
   connection->display = display;
-  
+
   io_channel = g_io_channel_unix_new (fd);
-  
+
   connection->source = g_io_create_watch (io_channel, G_IO_IN);
   g_source_set_callback (connection->source,
 			 (GSourceFunc)process_internal_connection, connection, NULL);
   g_source_attach (connection->source, NULL);
-  
+
   g_io_channel_unref (io_channel);
-  
+
   return connection;
 }
 
@@ -1817,51 +1817,6 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   display_x11 = GDK_X11_DISPLAY (display);
 
   return GDK_SCREEN_XROOTWIN (display_x11->screen) == xroot_window;
-}
-
-static void
-device_grab_update_callback (GdkDisplay *display,
-                             gpointer    data,
-                             gulong      serial)
-{
-  GdkDevice *device = data;
-
-  _gdk_display_device_grab_update (display, device, serial);
-}
-
-#define XSERVER_TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
-void
-_gdk_x11_display_update_grab_info (GdkDisplay *display,
-                                   GdkDevice  *device,
-                                   int         status)
-{
-  if (status == GrabSuccess)
-    _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
-}
-
-void
-_gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
-                                          GdkDevice  *device,
-                                          guint32     time,
-                                          gulong      serial)
-{
-  GdkDeviceGrabInfo *grab;
-
-  XFlush (GDK_DISPLAY_XDISPLAY (display));
-
-  grab = _gdk_display_get_last_device_grab (display, device);
-  if (grab &&
-      (time == GDK_CURRENT_TIME ||
-       grab->time == GDK_CURRENT_TIME ||
-       !XSERVER_TIME_IS_LATER (grab->time, time)))
-    {
-      grab->serial_end = serial;
-      _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
-    }
 }
 
 static void
@@ -1926,11 +1881,11 @@ void
 gdk_x11_display_grab (GdkDisplay *display)
 {
   GdkX11Display *display_x11;
-  
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_X11_DISPLAY (display);
-  
+
   if (display_x11->grab_count == 0)
     XGrabServer (display_x11->xdisplay);
   display_x11->grab_count++;
@@ -1949,12 +1904,12 @@ void
 gdk_x11_display_ungrab (GdkDisplay *display)
 {
   GdkX11Display *display_x11;
-  
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_X11_DISPLAY (display);;
   g_return_if_fail (display_x11->grab_count > 0);
-  
+
   display_x11->grab_count--;
   if (display_x11->grab_count == 0)
     {
@@ -2146,7 +2101,7 @@ broadcast_xmessage (GdkDisplay *display,
 {
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
   Window xroot_window = GDK_DISPLAY_XROOTWIN (display);
-  
+
   Atom type_atom;
   Atom type_atom_begin;
   Window xwindow;
@@ -2174,14 +2129,14 @@ broadcast_xmessage (GdkDisplay *display,
 
   type_atom = gdk_x11_get_xatom_by_name_for_display (display, message_type);
   type_atom_begin = gdk_x11_get_xatom_by_name_for_display (display, message_type_begin);
-  
+
   {
     XClientMessageEvent xclient;
     const char *src;
     const char *src_end;
     char *dest;
     char *dest_end;
-    
+
     memset(&xclient, 0, sizeof (xclient));
     xclient.type = ClientMessage;
     xclient.message_type = type_atom_begin;
@@ -2191,12 +2146,12 @@ broadcast_xmessage (GdkDisplay *display,
 
     src = message;
     src_end = message + strlen (message) + 1; /* +1 to include nul byte */
-    
+
     while (src != src_end)
       {
         dest = &xclient.data.b[0];
         dest_end = dest + 20;
-        
+
         while (dest != dest_end &&
                src != src_end)
           {
@@ -2210,7 +2165,7 @@ broadcast_xmessage (GdkDisplay *display,
 	    *dest = 0;
 	    ++dest;
 	  }
-        
+
         XSendEvent (xdisplay,
                     xroot_window,
                     False,
@@ -2235,7 +2190,7 @@ broadcast_xmessage (GdkDisplay *display,
  * skipped in the output.)
  *
  * Sends a startup notification message of type @message_type to
- * @display. 
+ * @display.
  *
  * This is a convenience function for use by code that implements the
  * freedesktop startup notification specification. Applications should
@@ -2328,7 +2283,7 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
   if (display_x11->have_xfixes)
     {
       atom = gdk_x11_get_xatom_by_name_for_display (display, selection);
-      XFixesSelectSelectionInput (display_x11->xdisplay, 
+      XFixesSelectSelectionInput (display_x11->xdisplay,
 				  display_x11->leader_window,
 				  atom,
 				  XFixesSetSelectionOwnerNotifyMask |
@@ -2365,7 +2320,7 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
  * @display: (type GdkX11Display): a `GdkDisplay`
  *
  * Gets the startup notification ID for a display.
- * 
+ *
  * Returns: the startup notification ID for @display
  *
  * Deprecated: 4.10
@@ -2796,7 +2751,7 @@ gdk_x11_set_sm_client_id (const char *sm_client_id)
 
   g_slist_free (displays);
 }
- 
+
 gsize
 gdk_x11_display_get_max_request_size (GdkDisplay *display)
 {
@@ -2806,7 +2761,7 @@ gdk_x11_display_get_max_request_size (GdkDisplay *display)
   size = XExtendedMaxRequestSize (xdisplay);
   if (size <= 0)
     size = XMaxRequestSize (xdisplay);
-  
+
   size = MIN (262144, size - 100);
   return size;
 }
@@ -2984,7 +2939,7 @@ gdk_x11_display_get_visual_info_for_visual (GdkX11Display  *self,
                             &template,
                             &nvisuals);
   g_warn_if_fail (nvisuals == 1);
-  
+
   return visinfo;
 }
 
@@ -3038,7 +2993,7 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
   int visualid;
 
   /* No env vars set, do the regular GL initialization.
-   * 
+   *
    * We try EGL first, but are very picky about what we accept.
    * If that fails, we try to go with GLX instead.
    * And if that also fails, we try EGL again, but this time accept anything.
@@ -3054,7 +3009,7 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
 
       if (gdk_x11_display_init_glx (self, out_visual, out_depth, error))
         return TRUE;
-      
+
       g_clear_error (error);
       if (!gdk_display_init_egl (display, EGL_PLATFORM_X11_KHR, dpy, TRUE, error))
         return FALSE;

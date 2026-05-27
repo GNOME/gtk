@@ -28,7 +28,7 @@
 #include "gdkdisplay.h"
 #include "gdkeventsourceprivate.h"
 #include "gdkmonitor-broadway.h"
-#include "gdkseatdefaultprivate.h"
+#include "gdkseat-broadway.h"
 #include "gdkdevice-broadway.h"
 #include "gdkdeviceprivate.h"
 #include <gdk/gdktextureprivate.h>
@@ -196,13 +196,13 @@ _gdk_broadway_display_open (const char *display_name)
   _gdk_device_set_associated_device (broadway_display->touchscreen, broadway_display->core_pointer);
   _gdk_device_add_physical_device (broadway_display->core_pointer, broadway_display->touchscreen);
 
-  seat = gdk_seat_default_new_for_logical_pair (broadway_display->core_pointer,
-                                                broadway_display->core_keyboard);
+  seat = gdk_broadway_seat_new_for_logical_pair (broadway_display->core_pointer,
+                                                 broadway_display->core_keyboard);
 
   gdk_display_add_seat (display, seat);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), broadway_display->pointer);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), broadway_display->keyboard);
-  gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), broadway_display->touchscreen);
+  gdk_broadway_seat_add_physical_device (GDK_BROADWAY_SEAT (seat), broadway_display->pointer);
+  gdk_broadway_seat_add_physical_device (GDK_BROADWAY_SEAT (seat), broadway_display->keyboard);
+  gdk_broadway_seat_add_physical_device (GDK_BROADWAY_SEAT (seat), broadway_display->touchscreen);
   g_object_unref (seat);
 
   gdk_event_init (display);

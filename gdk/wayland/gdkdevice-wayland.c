@@ -83,94 +83,6 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
     }
 }
 
-static GdkGrabStatus
-gdk_wayland_device_grab (GdkDevice    *device,
-                         GdkSurface   *surface,
-                         gboolean      owner_events,
-                         GdkEventMask  event_mask,
-                         GdkSurface   *confine_to,
-                         GdkCursor    *cursor,
-                         uint32_t      time_)
-{
-  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
-  GdkWaylandPointerData *pointer =
-    gdk_wayland_device_get_pointer (wayland_device);
-
-  if (GDK_IS_DRAG_SURFACE (surface) &&
-      gdk_surface_get_mapped (surface))
-    {
-      g_warning ("Surface %p is already mapped at the time of grabbing. "
-                 "gdk_seat_grab() should be used to simultaneously grab input "
-                 "and show this popup. You may find oddities ahead.",
-                 surface);
-    }
-
-  gdk_wayland_device_maybe_emit_grab_crossing (device, surface, time_);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-      gdk_wayland_surface_inhibit_shortcuts (surface,
-                                             gdk_device_get_seat (device));
-      return GDK_GRAB_SUCCESS;
-    }
-  else
-    {
-      /* Device is a pointer */
-      if (pointer->grab_surface != NULL &&
-          time_ != 0 && pointer->grab_time > time_)
-        {
-          return GDK_GRAB_ALREADY_GRABBED;
-        }
-
-      if (time_ == 0)
-        time_ = pointer->time;
-
-      pointer->grab_surface = surface;
-      pointer->grab_time = time_;
-      _gdk_wayland_surface_set_grab_seat (surface, GDK_SEAT (wayland_seat));
-
-      g_clear_object (&wayland_seat->cursor);
-
-      if (cursor)
-        wayland_seat->cursor = g_object_ref (cursor);
-
-      gdk_wayland_device_update_surface_cursor (device);
-    }
-
-  return GDK_GRAB_SUCCESS;
-}
-
-static void
-gdk_wayland_device_ungrab (GdkDevice *device,
-                           uint32_t   time_)
-{
-  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
-  GdkWaylandPointerData *pointer =
-    gdk_wayland_device_get_pointer (wayland_device);
-  GdkSurface *prev_focus;
-
-  prev_focus = gdk_wayland_device_maybe_emit_ungrab_crossing (device, time_);
-
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      /* Device is a keyboard */
-      if (prev_focus)
-        gdk_wayland_surface_restore_shortcuts (prev_focus,
-                                              gdk_device_get_seat (device));
-    }
-  else
-    {
-      /* Device is a pointer */
-      gdk_wayland_device_update_surface_cursor (device);
-
-      if (pointer->grab_surface)
-        _gdk_wayland_surface_set_grab_seat (pointer->grab_surface,
-                                           NULL);
-    }
-}
-
 static GdkSurface *
 gdk_wayland_device_surface_at_position (GdkDevice       *device,
                                         double          *win_x,
@@ -201,8 +113,6 @@ gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->set_surface_cursor = gdk_wayland_device_set_surface_cursor;
-  device_class->grab = gdk_wayland_device_grab;
-  device_class->ungrab = gdk_wayland_device_ungrab;
   device_class->surface_at_position = gdk_wayland_device_surface_at_position;
 }
 
@@ -816,21 +726,15 @@ GdkSurface *
 gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
                                                uint32_t   time_)
 {
-  GdkDeviceGrabInfo *grab;
+  GdkSeat *seat;
   GdkSurface *focus = NULL;
-  GdkSurface *surface = NULL;
   GdkSurface *prev_focus = NULL;
 
+  seat = gdk_device_get_seat (device);
   focus = gdk_wayland_device_get_focus (device);
-  grab = _gdk_display_get_last_device_grab (gdk_device_get_display (device), device);
+  prev_focus = gdk_seat_get_topmost_grab_surface (seat);
 
-  if (grab)
-    {
-      prev_focus = grab->surface;
-      surface = grab->surface;
-    }
-
-  if (focus != surface)
+  if (focus != prev_focus)
     device_emit_grab_crossing (device, prev_focus, focus, GDK_CROSSING_UNGRAB, time_);
 
   return prev_focus;

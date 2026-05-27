@@ -62,6 +62,7 @@ struct _GdkX11Surface
   guint frame_clock_connected : 1;
   guint frame_sync_enabled : 1;
   guint tracking_damage: 1;
+  guint popup_grab : 1;
 
   int surface_scale;
 

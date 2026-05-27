@@ -66,6 +66,8 @@ struct _GdkAndroidSurface
   // this allows us to delay the surface mapping to the _surface_on_layout call
   gboolean delayed_map;
 
+  gboolean popup_grab;
+
   GdkAndroidSurfaceConfiguration cfg;
 
   GList *visible_node;

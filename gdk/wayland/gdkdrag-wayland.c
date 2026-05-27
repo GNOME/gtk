@@ -424,7 +424,5 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
 
   gdk_drag_update_cursor (drag);
 
-  gdk_seat_ungrab (seat);
-
   return drag;
 }

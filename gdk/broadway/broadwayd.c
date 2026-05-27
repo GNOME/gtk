@@ -352,7 +352,6 @@ client_handle_request (BroadwayClient *client,
                                       client->id,
                                       request->grab_pointer.id,
                                       request->grab_pointer.owner_events,
-                                      request->grab_pointer.event_mask,
                                       request->grab_pointer.time_);
       send_reply (client, request, &reply, sizeof (reply.grab_pointer),
                   BROADWAY_REPLY_GRAB_POINTER);
