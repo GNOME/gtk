@@ -1,0 +1,39 @@
+color {
+  bounds: 80 10 60 60;
+  color: rgb(0,128,0);
+}
+color {
+  bounds: 220 10 60 60;
+  color: rgb(128,0,128);
+}
+clip {
+  clip: 10 80 60 60;
+  child: color {
+    bounds: 0 70 80 80;
+    color: rgb(255,165,0);
+  }
+}
+color {
+  bounds: 80 80 60 60;
+  color: rgb(0,128,128);
+}
+color {
+  bounds: 150 80 60 60;
+  color: rgba(0,0,0,0);
+}
+linear-gradient {
+  bounds: 220 80 60 60;
+  start: 220 80;
+  end: 280 80;
+  stops: 0 rgb(255,0,0), 1 rgb(0,0,255);
+  interpolation: srgb-linear;
+  premultiplied: false;
+}
+color {
+  bounds: 10 150 60 60;
+  color: rgb(165,42,42);
+}
+color {
+  bounds: 80 150 60 60;
+  color: rgb(0,0,128);
+}

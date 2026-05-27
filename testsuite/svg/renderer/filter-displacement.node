@@ -1,0 +1,15 @@
+displacement {
+  bounds: 40 40 120 120;
+  child: color {
+    bounds: 50 50 100 100;
+    color: rgb(0,0,255);
+  }
+  displacement: color {
+    bounds: 40 40 120 120;
+    color: rgba(255,0,0,0.5);
+  }
+  max: 10;
+  scale: 20;
+  offset: 0.5;
+  channels: red green;
+}

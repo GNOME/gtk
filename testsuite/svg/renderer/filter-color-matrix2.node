@@ -1,0 +1,65 @@
+color-matrix {
+  matrix: matrix3d(0.6063, 0.1063, 0.1063, 0, 0.3576, 0.8576, 0.3576, 0, 0.0361, 0.0361, 0.5361, 0, 0, 0, 0, 1);
+  child: container {
+    color {
+      bounds: 0 2 120 96;
+      color: rgba(0,0,0,0);
+    }
+    color {
+      bounds: 10 10 100 80;
+      color: rgb(255,0,0);
+    }
+  }
+  bounds: 0 2 120 96;
+  color-state: srgb-linear;
+}
+color-matrix {
+  matrix: matrix3d(5.55112e-17, 0.356, -0.574, 0, 0, 0.855, 1.43, 0, 1, -0.211, 0.144, 0, 0, 0, 0, 1);
+  child: container {
+    color {
+      bounds: 120 2 120 96;
+      color: rgba(0,0,0,0);
+    }
+    color {
+      bounds: 130 10 100 80;
+      color: rgb(0,128,0);
+    }
+  }
+  bounds: 120 2 120 96;
+  color-state: srgb-linear;
+}
+color-matrix {
+  matrix: matrix3d(0, 0, 0, 0.2126, 0, 0, 0, 0.7152, 0, 0, 0, 0.0722, 0, 0, 0, 0);
+  child: container {
+    color {
+      bounds: 240 2 120 96;
+      color: rgba(0,0,0,0);
+    }
+    color {
+      bounds: 250 10 100 80;
+      color: rgb(0,0,255);
+    }
+  }
+  bounds: 240 2 120 96;
+  color-state: srgb-linear;
+}
+color-matrix {
+  matrix: matrix3d(0.618879, 0.163503, -0.494107, 0, -0.296163, 1.01552, 0.715, 0, 0.677283, -0.179023, 0.779107, 0, 0, 0, 0, 1);
+  child: color-matrix {
+    matrix: matrix3d(1.7874, -0.2126, -0.2126, 0, -0.7152, 1.2848, -0.7152, 0, -0.0722, -0.0722, 1.9278, 0, 0, 0, 0, 1);
+    child: container {
+      color {
+        bounds: 0 102 120 96;
+        color: rgba(0,0,0,0);
+      }
+      color {
+        bounds: 10 110 100 80;
+        color: rgb(128,0,128);
+      }
+    }
+    bounds: 0 102 120 96;
+    color-state: srgb-linear;
+  }
+  bounds: 0 102 120 96;
+  color-state: srgb-linear;
+}

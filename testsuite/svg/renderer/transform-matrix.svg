@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- matrix transform -->
+  <rect x="20" y="20" width="40" height="40" fill="red"
+        transform="matrix(1 0 0.5 1 0 0)"/>
+
+  <!-- combined transforms: translate + scale + rotate -->
+  <rect x="0" y="0" width="40" height="40" fill="green"
+        transform="translate(150 50) scale(1.5) rotate(30)"/>
+
+  <!-- skewX and skewY -->
+  <rect x="20" y="120" width="40" height="40" fill="blue"
+        transform="skewX(20)"/>
+  <rect x="120" y="120" width="40" height="40" fill="purple"
+        transform="skewY(15)"/>
+
+  <!-- scale with single value -->
+  <rect x="220" y="120" width="40" height="40" fill="orange"
+        transform="scale(2)"/>
+
+  <!-- translate with single value -->
+  <rect x="20" y="220" width="40" height="40" fill="teal"
+        transform="translate(30)"/>
+
+  <!-- identity matrix -->
+  <rect x="120" y="220" width="40" height="40" fill="brown"
+        transform="matrix(1 0 0 1 0 0)"/>
+</svg>

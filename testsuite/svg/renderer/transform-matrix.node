@@ -1,0 +1,45 @@
+clip {
+  clip: 0 0 300 300;
+  child: container {
+    transform {
+      transform: matrix(1, 0, 0.5, 1, 0, 0);
+      child: color {
+        bounds: 20 20 40 40;
+        color: rgb(255,0,0);
+      }
+    }
+    transform {
+      transform: translate(150, 50) scale(1.5) rotate(30);
+      child: color {
+        bounds: 0 0 40 40;
+        color: rgb(0,128,0);
+      }
+    }
+    transform {
+      transform: skewX(20);
+      child: color {
+        bounds: 20 120 40 40;
+        color: rgb(0,0,255);
+      }
+    }
+    transform {
+      transform: skewY(15);
+      child: color {
+        bounds: 120 120 40 40;
+        color: rgb(128,0,128);
+      }
+    }
+    color {
+      bounds: 440 240 80 80;
+      color: rgb(255,165,0);
+    }
+    color {
+      bounds: 50 220 40 40;
+      color: rgb(0,128,128);
+    }
+    color {
+      bounds: 120 220 40 40;
+      color: rgb(165,42,42);
+    }
+  }
+}

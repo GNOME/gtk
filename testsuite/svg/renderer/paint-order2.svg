@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- stroke first -->
+  <rect x="10" y="10" width="80" height="80" fill="red" stroke="blue" stroke-width="10"
+        paint-order="stroke fill markers"/>
+
+  <!-- markers first -->
+  <line x1="120" y1="50" x2="220" y2="50" stroke="black" stroke-width="2"
+        paint-order="markers stroke fill"
+        marker-start="url(#dot)" marker-end="url(#dot)"/>
+
+  <defs>
+    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="5" markerHeight="5">
+      <circle cx="5" cy="5" r="5" fill="red"/>
+    </marker>
+  </defs>
+
+  <!-- stroke markers fill -->
+  <rect x="10" y="110" width="80" height="80" fill="green" stroke="orange" stroke-width="8"
+        paint-order="stroke markers fill"/>
+
+  <!-- markers fill stroke -->
+  <rect x="120" y="110" width="80" height="80" fill="purple" stroke="yellow" stroke-width="8"
+        paint-order="markers fill stroke"/>
+</svg>

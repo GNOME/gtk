@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <symbol id="s1" viewBox="0 0 50 50">
+      <rect x="0" y="0" width="50" height="50" fill="red"/>
+      <circle cx="25" cy="25" r="20" fill="white"/>
+    </symbol>
+  </defs>
+
+  <!-- xMinYMin meet -->
+  <svg x="10" y="10" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="xMinYMin meet">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMaxYMax meet -->
+  <svg x="110" y="10" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="xMaxYMax meet">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMidYMin slice -->
+  <svg x="210" y="10" width="40" height="80" viewBox="0 0 50 50"
+       preserveAspectRatio="xMidYMin slice">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMinYMax meet -->
+  <svg x="10" y="110" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="xMinYMax meet">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMaxYMin slice -->
+  <svg x="110" y="110" width="40" height="80" viewBox="0 0 50 50"
+       preserveAspectRatio="xMaxYMin slice">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- none -->
+  <svg x="210" y="110" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="none">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMaxYMax slice -->
+  <svg x="10" y="210" width="40" height="80" viewBox="0 0 50 50"
+       preserveAspectRatio="xMaxYMax slice">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMidYMid meet (default) -->
+  <svg x="110" y="210" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="xMidYMid meet">
+    <use href="#s1"/>
+  </svg>
+
+  <!-- xMinYMid meet -->
+  <svg x="210" y="210" width="80" height="40" viewBox="0 0 50 50"
+       preserveAspectRatio="xMinYMid meet">
+    <use href="#s1"/>
+  </svg>
+</svg>

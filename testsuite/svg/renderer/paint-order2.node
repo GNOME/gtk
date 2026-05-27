@@ -1,0 +1,71 @@
+stroke {
+  child: color {
+    bounds: 5 5 90 90;
+    color: rgb(0,0,255);
+  }
+  path: "\
+M 10 10 h 80 v 80 h -80 z";
+  line-width: 10;
+  line-cap: butt;
+  line-join: miter;
+}
+color {
+  bounds: 10 10 80 80;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 115 45 10 10 / 5;
+  child: color {
+    bounds: 115 45 10 10;
+    color: rgb(255,0,0);
+  }
+}
+rounded-clip {
+  clip: 215 45 10 10 / 5;
+  child: color {
+    bounds: 215 45 10 10;
+    color: rgb(255,0,0);
+  }
+}
+stroke {
+  child: color {
+    bounds: 112 42 116 16;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 120 50\
+L 220 50";
+  line-width: 2;
+  line-cap: butt;
+  line-join: miter;
+}
+stroke {
+  child: color {
+    bounds: 6 106 88 88;
+    color: rgb(255,165,0);
+  }
+  path: "\
+M 10 110 h 80 v 80 h -80 z";
+  line-width: 8;
+  line-cap: butt;
+  line-join: miter;
+}
+color {
+  bounds: 10 110 80 80;
+  color: rgb(0,128,0);
+}
+color {
+  bounds: 120 110 80 80;
+  color: rgb(128,0,128);
+}
+stroke {
+  child: color {
+    bounds: 116 106 88 88;
+    color: rgb(255,255,0);
+  }
+  path: "\
+M 120 110 h 80 v 80 h -80 z";
+  line-width: 8;
+  line-cap: butt;
+  line-join: miter;
+}

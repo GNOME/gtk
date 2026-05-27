@@ -1,0 +1,39 @@
+color {
+  bounds: 10 10 80 80;
+  color: rgb(255,0,0);
+}
+stroke {
+  child: color {
+    bounds: 8 8 84 84;
+    color: rgb(255,0,0);
+  }
+  path: "\
+M 10 10 h 80 v 80 h -80 z";
+  line-width: 4;
+  line-cap: butt;
+  line-join: miter;
+}
+color {
+  bounds: 110 10 80 80;
+  color: rgb(0,128,0);
+}
+linear-gradient {
+  bounds: 10 110 80 80;
+  start: 10 110;
+  end: 90 110;
+  stops: 0 rgb(0,0,0), 1 rgb(255,255,255);
+  premultiplied: false;
+}
+stroke {
+  child: color {
+    bounds: 94 104 192 32;
+    color: rgb(255,165,0);
+  }
+  path: "\
+M 110 120\
+L 270 120";
+  line-width: 4;
+  line-cap: butt;
+  line-join: miter;
+  dash: 10 5;
+}

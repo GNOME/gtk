@@ -1,0 +1,54 @@
+mask {
+  mode: luminance;
+  source: color {
+    bounds: 10 10 80 80;
+    color: rgb(255,0,0);
+  }
+  mask: container {
+    color {
+      bounds: 10 10 80 80;
+      color: rgb(255,255,255);
+    }
+    rounded-clip {
+      clip: 18 18 64 64 / 32;
+      child: color {
+        bounds: 18 18 64 64;
+        color: rgb(0,0,0);
+      }
+    }
+  }
+}
+mask {
+  mode: luminance;
+  source: color {
+    bounds: 150 10 80 80;
+    color: rgb(0,0,255);
+  }
+  mask: clip {
+    clip: 158 18 64 64;
+    child: container {
+      color {
+        bounds: 150 10 80 80;
+        color: rgb(255,255,255);
+      }
+      rounded-clip {
+        clip: 170 30 40 40 / 20;
+        child: color {
+          bounds: 170 30 40 40;
+          color: rgb(0,0,0);
+        }
+      }
+    }
+  }
+}
+mask {
+  mode: luminance;
+  source: color {
+    bounds: 10 110 80 80;
+    color: rgb(0,128,0);
+  }
+  mask: color {
+    bounds: 10 110 80 80;
+    color: rgba(255,255,255,0.5);
+  }
+}
