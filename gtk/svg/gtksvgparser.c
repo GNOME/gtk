@@ -2926,7 +2926,7 @@ resolve_paint_ref (SvgValue   *value,
 {
   SvgValue *paint = value;
 
-  if (svg_value_is_unset (value))
+  if (svg_value_is_unset (value) || svg_value_is_inherit (value) || svg_value_is_initial (value))
     return;
 
   if (paint_is_server (svg_paint_get_kind (paint)) &&
@@ -4544,7 +4544,7 @@ apply_styles_to_shape (SvgElement *shape,
     }
 
   paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
-  if (!svg_value_is_unset (paint))
+  if (svg_value_is_paint (paint))
     {
       GtkSymbolicColor symbolic;
 
@@ -4562,7 +4562,7 @@ apply_styles_to_shape (SvgElement *shape,
     }
 
   paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
-  if (!svg_value_is_unset (paint))
+  if (svg_value_is_paint (paint))
     {
       GtkSymbolicColor symbolic;
 
