@@ -173,7 +173,6 @@ update_xml (GtkInspectorSvg *self)
   gtk_text_buffer_set_text (self->xml_buffer,
                             g_bytes_get_data (xml, NULL),
                             g_bytes_get_size (xml));
-  update_timeout (self);
   g_signal_handlers_unblock_by_func (self->xml_buffer, xml_changed, self);
   g_bytes_unref (xml);
 }
