@@ -276,13 +276,7 @@ markup_filter_attributes (const char *element_name,
         *ptr = NULL;
       for (unsigned int i = 0; attr_names[i]; i++)
         {
-          if (g_str_has_suffix (name, "*") &&
-              strncmp (attr_names[i], name, strlen (name) - 1) == 0)
-            {
-              g_assert (ptr == NULL);
-              *handled |= G_GUINT64_CONSTANT(1) << i;
-            }
-          else if (strcmp (attr_names[i], name) == 0)
+          if (strcmp (attr_names[i], name) == 0)
             {
               if (ptr)
                 *ptr = attr_values[i];
