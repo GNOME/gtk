@@ -1,0 +1,13 @@
+<svg width='100' height='100'>
+  <rect x='0' y='0' width='10' height='10' transform='rotate()'/>
+  <rect x='0' y='0' width='10' height='10' transform='translate(abc)'/>
+  <rect x='0' y='0' width='10' height='10' transform='scale()'/>
+  <circle cx='0' cy='0' r='10' fill='notacolor'/>
+  <path d='M 0 0 L 10 10' stroke-dasharray='abc'/>
+  <path d='M 0 0 L 10 10' stroke-linecap='invalid'/>
+  <path d='M 0 0 L 10 10' stroke-linejoin='invalid'/>
+  <path d='M 0 0 L 10 10' fill-rule='invalid'/>
+  <path d='M 0 0 L 10 10' clip-rule='invalid'/>
+  <path d='M 0 0 L 10 10' display='invalid'/>
+  <path d='M 0 0 L 10 10' visibility='invalid'/>
+</svg>

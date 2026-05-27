@@ -1,0 +1,30 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100'
+        height='100'>
+  <text
+          x='10'
+          y='20'
+          text-decoration='underline'>underline</text>
+  <text
+          x='10'
+          y='40'
+          text-decoration='overline'>overline</text>
+  <text
+          x='10'
+          y='60'
+          text-decoration='line-through'>line-through</text>
+  <text
+          x='10'
+          y='80'
+          text-decoration='underline overline'>both</text>
+  <text
+          x='10'
+          y='100'
+          text-decoration='underline line-through'>underline and line-through</text>
+  <text
+          x='10'
+          y='120'
+          text-decoration='underline overline line-through'>all three</text>
+</svg>

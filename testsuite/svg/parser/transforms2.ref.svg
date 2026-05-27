@@ -1,0 +1,111 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100'
+        height='100'>
+  <rect
+          transform='translate(10, 0)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='translate(10, 20)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='scale(2, 2)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='scale(2, 3)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='rotate(45, 0, 0)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='rotate(45, 50, 50)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='skewX(30)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='skewY(30)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='matrix(1, 0, 0, 1, 10, 20)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='translate(10, 20) rotate(45, 0, 0) scale(2, 2)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='none'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='matrix(0.5, 0.866, -0.866, 0.5, 0, 0)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='translate(0, 0)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='scale(1, 1)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='skewX(0) skewY(0)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+</svg>

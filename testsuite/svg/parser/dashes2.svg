@@ -1,0 +1,11 @@
+<svg width='100' height='100'>
+  <path d='M 0 0 L 100 0' stroke='black' stroke-dasharray='none'/>
+  <path d='M 0 10 L 100 10' stroke='black' stroke-dasharray='5'/>
+  <path d='M 0 20 L 100 20' stroke='black' stroke-dasharray='5px 10px'/>
+  <path d='M 0 30 L 100 30' stroke='black' stroke-dasharray='1em 2em 3em'/>
+  <path d='M 0 40 L 100 40' stroke='black' stroke-dasharray='10% 20%'/>
+  <path d='M 0 50 L 100 50' stroke='black' stroke-dasharray='5 10 15 20'/>
+  <path d='M 0 60 L 100 60' stroke='black' stroke-dasharray='0'/>
+  <path d='M 0 70 L 100 70' stroke='black' stroke-dasharray='1,2,3,4,5'/>
+  <path d='M 0 80 L 100 80' stroke='black' stroke-dasharray='10pt 5pt'/>
+</svg>

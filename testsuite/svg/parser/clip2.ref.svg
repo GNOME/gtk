@@ -1,0 +1,55 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='200'
+        height='200'>
+  <defs>
+    <clipPath
+            id='clipCircle'>
+      <circle
+              cx='100'
+              cy='100'
+              r='50'>
+      </circle>
+    </clipPath>
+    <clipPath
+            id='clipRect'>
+      <rect
+              x='25'
+              y='25'
+              width='150'
+              height='150'>
+      </rect>
+    </clipPath>
+  </defs>
+  <rect
+          clip-path='url(#clipCircle)'
+          fill='rgb(255,0,0)'
+          x='0'
+          y='0'
+          width='200'
+          height='200'>
+  </rect>
+  <circle
+          clip-path='url(#clipRect)'
+          fill='rgb(0,0,255)'
+          cx='100'
+          cy='100'
+          r='80'>
+  </circle>
+  <path
+          clip-path='path("M 0 0 L 100 0 L 100 100 L 0 100 Z")'
+          d='M 0 0 L 200 200'>
+  </path>
+  <path
+          clip-path='path(evenodd, "M 0 0 L 200 0 L 200 200 L 0 200 Z M 50 50 L 150 50 L 150 150 L 50 150 Z")'
+          d='M 0 0 L 200 200'>
+  </path>
+  <ellipse
+          clip-path='none'
+          cx='100'
+          cy='100'
+          rx='80'
+          ry='40'>
+  </ellipse>
+</svg>
