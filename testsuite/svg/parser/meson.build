@@ -49,6 +49,7 @@ test_data = [
   'ellipse.svg',
   'filter-functions.svg',
   'filter-functions2.svg',
+  'filter-functions3.svg',
   'filters.svg',
   'focus.svg',
   'fonts.svg',
