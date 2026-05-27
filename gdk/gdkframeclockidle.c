@@ -116,6 +116,63 @@ static GSourceFuncs sleep_source_funcs = {
   NULL /* finalize */
 };
 
+typedef struct
+{
+  GSource source;
+} GdkTimeoutDeadlineSource;
+
+static gboolean
+gdk_timeout_deadline_source_dispatch (GSource     *source,
+                                      GSourceFunc  callback,
+                                      gpointer     user_data)
+{
+  if (callback == NULL)
+    return G_SOURCE_REMOVE;
+
+  return callback (user_data);
+}
+
+static GSourceFuncs gdk_timeout_deadline_source_funcs = {
+  NULL,
+  NULL,
+  gdk_timeout_deadline_source_dispatch,
+  NULL /* finalize */
+};
+
+static GSource *
+gdk_timeout_new_deadline (gint64 deadline)
+{
+  GSource *source;
+
+  source = g_source_new (&gdk_timeout_deadline_source_funcs,
+                         sizeof (GdkTimeoutDeadlineSource));
+  g_source_set_ready_time (source, deadline);
+
+  return source;
+}
+
+static guint
+frame_clock_source_add (int             priority,
+                        gint64          deadline,
+                        GSourceFunc     function,
+                        gpointer        data,
+                        GDestroyNotify  notify,
+                        const char     *name)
+{
+  GSource *source;
+  guint id;
+
+  source = gdk_timeout_new_deadline (deadline);
+  g_source_set_priority (source, priority);
+  g_source_set_callback (source, function, data, notify);
+  g_source_set_static_name (source, name);
+
+  id = g_source_attach (source, NULL);
+  g_source_unref (source);
+
+  return id;
+}
+
 static gint64
 get_sleep_serial (void)
 {
@@ -310,40 +367,35 @@ maybe_start_idle (GdkFrameClockIdle *self,
 
   if (should_run_flush_idle (self) || should_run_paint_idle (self))
     {
-      guint min_interval = 0;
+      gint64 ready_time = 0;
 
       if (!caused_by_thaw &&
           priv->min_next_frame_time != 0 &&
           !GDK_DEBUG_CHECK (NO_VSYNC))
-        {
-          gint64 now = g_get_monotonic_time ();
-          gint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
-          min_interval = (min_interval_us + 500) / 1000;
-        }
+        ready_time = priv->min_next_frame_time;
 
       if (priv->flush_idle_id == 0 && should_run_flush_idle (self))
         {
-          GSource *source;
-
-          priv->flush_idle_id = g_timeout_add_full (GDK_PRIORITY_EVENTS + 1,
-                                                    min_interval,
-                                                    gdk_frame_clock_flush_idle,
-                                                    g_object_ref (self),
-                                                    (GDestroyNotify) g_object_unref);
-          source = g_main_context_find_source_by_id (NULL, priv->flush_idle_id);
-          g_source_set_static_name (source, "[gtk] gdk_frame_clock_flush_idle");
+          priv->flush_idle_id =
+            frame_clock_source_add (GDK_PRIORITY_EVENTS + 1,
+                                    ready_time,
+                                    gdk_frame_clock_flush_idle,
+                                    g_object_ref (self),
+                                    (GDestroyNotify) g_object_unref,
+                                    "[gtk] gdk_frame_clock_flush_idle");
         }
 
       if (!priv->in_paint_idle &&
 	  priv->paint_idle_id == 0 && should_run_paint_idle (self))
         {
           priv->paint_is_thaw = caused_by_thaw;
-          priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
-                                                    min_interval,
-                                                    gdk_frame_clock_paint_idle,
-                                                    g_object_ref (self),
-                                                    (GDestroyNotify) g_object_unref);
-          gdk_source_set_static_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
+          priv->paint_idle_id =
+            frame_clock_source_add (GDK_PRIORITY_REDRAW,
+                                    ready_time,
+                                    gdk_frame_clock_paint_idle,
+                                    g_object_ref (self),
+                                    (GDestroyNotify) g_object_unref,
+                                    "[gtk] gdk_frame_clock_paint_idle");
         }
     }
 }
