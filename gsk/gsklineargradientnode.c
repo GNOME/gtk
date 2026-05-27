@@ -57,6 +57,7 @@ struct _GskLinearGradientNode
 {
   GskRenderNode render_node;
   GskGradient gradient;
+  GskRectSnap snap;
 
   graphene_point_t start;
   graphene_point_t end;
@@ -104,9 +105,13 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
   GskGradient *gradient = &self->gradient;
+  graphene_rect_t bounds;
   cairo_pattern_t *pattern;
   gsize n_stops;
   gsize i;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
 
   if (gsk_linear_gradient_node_is_zero_length (node))
     {
@@ -133,7 +138,7 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
                                          0.5 * (start.values[2] + end.values[2]),
                                          0.5 * (start.values[3] + end.values[3]) });
             gdk_cairo_set_source_color (cr, data->ccs, &color);
-            gdk_cairo_rect (cr, &node->bounds);
+            gdk_cairo_rect (cr, &bounds);
             cairo_fill (cr);
           }
           break;
@@ -144,7 +149,7 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
             GdkColor color;
             gsk_gradient_get_average_color (gradient, &color);
             gdk_cairo_set_source_color (cr, data->ccs, &color);
-            gdk_cairo_rect (cr, &node->bounds);
+            gdk_cairo_rect (cr, &bounds);
             cairo_fill (cr);
             gdk_color_finish (&color);
             return;
@@ -215,7 +220,7 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
 
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_fill (cr);
 }
 
@@ -228,6 +233,7 @@ gsk_linear_gradient_node_diff (GskRenderNode *node1,
   GskLinearGradientNode *self2 = (GskLinearGradientNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->snap == self2->snap &&
       graphene_point_equal (&self1->start, &self2->start) &&
       graphene_point_equal (&self1->end, &self2->end) &&
       gsk_gradient_equal (&self1->gradient, &self2->gradient))
@@ -303,7 +309,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   gradient = gsk_gradient_new ();
   gsk_gradient_add_color_stops (gradient, color_stops, n_color_stops);
 
-  node = gsk_linear_gradient_node_new2 (bounds, start, end, gradient);
+  node = gsk_linear_gradient_node_new2 (bounds, GSK_RECT_SNAP_NONE, start, end, gradient);
 
   gsk_gradient_free (gradient);
 
@@ -313,18 +319,21 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
 /*< private >
  * gsk_linear_gradient_node_new2:
  * @bounds: the rectangle to render the linear gradient into
+ * @snap: how to snap the gradient to the pixel grid
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
  * @gradient: the gradient specification
  *
  * Creates a `GskRenderNode` that will create a linear gradient
  * from the given points and gradient specification, and render
- * that into the area given by @bounds.
+ * that into the area given by @bounds using the given @snap
+ * value.
  *
  * Returns: (transfer full) (type GskLinearGradientNode): A new `GskRenderNode`
  */
 GskRenderNode *
 gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
+                               GskRectSnap              snap,
                                const graphene_point_t  *start,
                                const graphene_point_t  *end,
                                const GskGradient       *gradient)
@@ -345,12 +354,13 @@ gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
+  self->snap = snap;
   graphene_point_init_from_point (&self->start, start);
   graphene_point_init_from_point (&self->end, end);
 
   gsk_gradient_init_copy (&self->gradient, gradient);
 
-  node->fully_opaque = gsk_gradient_is_opaque (gradient);
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) && gsk_gradient_is_opaque (gradient);
   node->preferred_depth = gdk_color_state_get_depth (gsk_gradient_get_interpolation (gradient));
   node->is_hdr = gdk_color_state_is_hdr (gsk_gradient_get_interpolation (gradient));
 
@@ -394,7 +404,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   gsk_gradient_add_color_stops (gradient, color_stops, n_color_stops);
   gsk_gradient_set_repeat (gradient, GSK_REPEAT_REPEAT);
 
-  node = gsk_linear_gradient_node_new2 (bounds, start, end, gradient);
+  node = gsk_linear_gradient_node_new2 (bounds, GSK_RECT_SNAP_NONE, start, end, gradient);
 
   gsk_gradient_free (gradient);
 
@@ -472,6 +482,24 @@ gsk_linear_gradient_node_get_color_stops (const GskRenderNode *node,
   G_UNLOCK (rgba);
 
   return stops;
+}
+
+/**
+ * gsk_linear_gradient_node_get_snap:
+ * @node: (type GskLinearGradientNode): a `GskRenderNode` for a linear gradient
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_linear_gradient_node_get_snap (const GskRenderNode *node)
+{
+  GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+
+  return self->snap;
 }
 
 /*< private >

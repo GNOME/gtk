@@ -43,6 +43,7 @@ struct _GskRadialGradientNode
 {
   GskRenderNode render_node;
   GskGradient gradient;
+  GskRectSnap snap;
 
   graphene_point_t start_center;
   graphene_point_t end_center;
@@ -94,11 +95,15 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
                                GskCairoData  *data)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+  graphene_rect_t bounds;
   cairo_pattern_t *pattern;
   gsize i;
   GskGradient *gradient = &self->gradient;
   gsize n_stops;
   float end_radius;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
 
   if (gsk_radial_gradient_node_is_zero_length (node))
     {
@@ -118,7 +123,7 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
             GdkColor color;
             gsk_gradient_get_average_color (gradient, &color);
             gdk_cairo_set_source_color (cr, data->ccs, &color);
-            gdk_cairo_rect (cr, &node->bounds);
+            gdk_cairo_rect (cr, &bounds);
             cairo_fill (cr);
             gdk_color_finish (&color);
             return;
@@ -197,7 +202,7 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
                                               gsk_gradient_get_stop_color (gradient, n_stops - 1));
     }
 
-  gdk_cairo_rect (cr, &node->bounds);
+  gdk_cairo_rect (cr, &bounds);
   cairo_translate (cr, self->start_center.x, self->start_center.y);
   cairo_set_source (cr, pattern);
   cairo_fill (cr);
@@ -214,6 +219,7 @@ gsk_radial_gradient_node_diff (GskRenderNode *node1,
   GskRadialGradientNode *self2 = (GskRadialGradientNode *) node2;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       !graphene_point_equal (&self1->start_center, &self2->start_center) ||
       self1->start_radius != self2->start_radius ||
       !graphene_point_equal (&self1->end_center, &self2->end_center) ||
@@ -314,6 +320,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   gsk_gradient_add_color_stops (gradient, color_stops, n_color_stops);
 
   node = gsk_radial_gradient_node_new2 (bounds,
+                                        GSK_RECT_SNAP_NONE,
                                         center, hradius * start,
                                         center, hradius * end,
                                         hradius / vradius,
@@ -351,6 +358,7 @@ gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
 /*< private >
  * gsk_radial_gradient_node_new2:
  * @bounds: the bounds of the node
+ * @snap: how to snap the gradient to the pixel grid
  * @start_center: the center of the start circle
  * @start_radius: the radius of the start circle
  * @end_center: the center of the end circle
@@ -372,6 +380,7 @@ gsk_radial_gradient_fills_plane (const graphene_point_t *c1,
  */
 GskRenderNode *
 gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
+                               GskRectSnap              snap,
                                const graphene_point_t  *start_center,
                                float                    start_radius,
                                const graphene_point_t  *end_center,
@@ -397,6 +406,7 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
+  self->snap = snap;
 
   graphene_point_init_from_point (&self->start_center, start_center);
   self->start_radius = start_radius;
@@ -407,7 +417,8 @@ gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
 
   gsk_gradient_init_copy (&self->gradient, gradient);
 
-  node->fully_opaque = gsk_gradient_is_opaque (gradient) &&
+  node->fully_opaque = !gsk_rect_snap_can_shrink (snap) && 
+                       gsk_gradient_is_opaque (gradient) &&
                        gsk_radial_gradient_fills_plane (start_center, start_radius,
                                                         end_center, end_radius);
 
@@ -468,6 +479,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   gsk_gradient_set_repeat (gradient, GSK_REPEAT_REPEAT);
 
   node = gsk_radial_gradient_node_new2 (bounds,
+                                        GSK_RECT_SNAP_NONE,
                                         center, hradius * start,
                                         center, hradius * end,
                                         hradius / vradius,
@@ -640,3 +652,22 @@ gsk_radial_gradient_node_get_aspect_ratio (const GskRenderNode *node)
 
   return self->aspect_ratio;
 }
+
+/**
+ * gsk_radial_gradient_node_get_snap:
+ * @node: (type GskRadialGradientNode): a `GskRenderNode` for a radial gradient
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_radial_gradient_node_get_snap (const GskRenderNode *node)
+{
+  const GskRadialGradientNode *self = (const GskRadialGradientNode *) node;
+
+  return self->snap;
+}
+

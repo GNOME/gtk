@@ -39,6 +39,8 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_clip_node_get_child                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_rect_t * gsk_clip_node_get_clip                  (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_clip_node_get_snap                  (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS
 

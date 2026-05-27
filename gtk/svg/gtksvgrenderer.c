@@ -978,10 +978,10 @@ apply_filter_tree (SvgElement    *shape,
             switch (edge_mode)
               {
              case EDGE_MODE_DUPLICATE:
-               child = gsk_repeat_node_new2 (&filter_region, in->node, &in->bounds, GSK_REPEAT_PAD);
+               child = gsk_repeat_node_new2 (&filter_region, GSK_RECT_SNAP_NONE, in->node, &in->bounds, GSK_RECT_SNAP_NONE, GSK_REPEAT_PAD);
                break;
              case EDGE_MODE_WRAP:
-               child = gsk_repeat_node_new2 (&filter_region, in->node, &in->bounds, GSK_REPEAT_REPEAT);
+               child = gsk_repeat_node_new2 (&filter_region, GSK_RECT_SNAP_NONE, in->node, &in->bounds, GSK_RECT_SNAP_NONE, GSK_REPEAT_REPEAT);
                break;
              case EDGE_MODE_NONE:
                child = gsk_render_node_ref (in->node);
@@ -1011,7 +1011,7 @@ apply_filter_tree (SvgElement    *shape,
 
             gdk_color_init_copy (&c, svg_color_get_color (color));
             c.alpha *= svg_number_get (alpha, 1);
-            result = gsk_color_node_new2 (&c, &subregion);
+            result = gsk_color_node_new2 (&c, &subregion, GSK_RECT_SNAP_NONE);
             gdk_color_finish (&c);
           }
           break;
@@ -1116,7 +1116,7 @@ apply_filter_tree (SvgElement    *shape,
                 k[2] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K3), 1);
                 k[3] = svg_number_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COMPOSITE_K4), 1);
 
-                result = gsk_arithmetic_node_new (&subregion, in->node, in2->node, color_state, k);
+                result = gsk_arithmetic_node_new (&subregion, GSK_RECT_SNAP_NONE, in->node, in2->node, color_state, k);
               }
             else if (svg_op == COMPOSITE_OPERATOR_OVER)
               {
@@ -1250,11 +1250,11 @@ apply_filter_tree (SvgElement    *shape,
                 GdkColor new_color;
 
                 color_apply_color_matrix (color, color_state, &matrix, &offset,  &new_color);
-                result = gsk_color_node_new2 (&new_color, &node->bounds);
+                result = gsk_color_node_new2 (&new_color, &node->bounds, GSK_RECT_SNAP_NONE);
                 gdk_color_finish (&new_color);
               }
             else
-              result = gsk_color_matrix_node_new2 (&in->node->bounds, in->node, color_state, &matrix, &offset);
+              result = gsk_color_matrix_node_new2 (&in->node->bounds, GSK_RECT_SNAP_NONE, in->node, color_state, &matrix, &offset);
 
             filter_result_unref (in);
           }
@@ -1388,6 +1388,7 @@ apply_filter_tree (SvgElement    *shape,
             offset.x = offset.y = 0.5;
 
             result = gsk_displacement_node_new (&subregion,
+                                                GSK_RECT_SNAP_NONE,
                                                 in->node, in2->node,
                                                 channels,
                                                 &max, &scale, &offset);
@@ -3041,7 +3042,7 @@ stroke_shape (SvgElement   *shape,
         gdk_color_init_copy (&color, svg_paint_get_color (paint));
         color.alpha *= opacity;
         opacity = 1;
-        child = gsk_color_node_new2 (&color, &paint_bounds);
+        child = gsk_color_node_new2 (&color, &paint_bounds, GSK_RECT_SNAP_NONE);
         gdk_color_finish (&color);
       }
       break;

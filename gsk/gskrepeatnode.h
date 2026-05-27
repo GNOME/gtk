@@ -36,10 +36,14 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeat_node_new                     (const graphene_rect_t    *bounds,
                                                                  GskRenderNode            *child,
                                                                  const graphene_rect_t    *child_bounds);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_repeat_node_get_snap                (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_repeat_node_get_child               (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_rect_t * gsk_repeat_node_get_child_bounds        (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_repeat_node_get_child_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS
 

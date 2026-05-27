@@ -9,6 +9,7 @@
 G_BEGIN_DECLS
 
 GskRenderNode * gsk_radial_gradient_node_new2           (const graphene_rect_t   *bounds,
+                                                         GskRectSnap              snap,
                                                          const graphene_point_t  *start_center,
                                                          float                    start_radius,
                                                          const graphene_point_t  *end_center,

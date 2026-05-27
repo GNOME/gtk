@@ -78,6 +78,21 @@ gsk_gpu_render_pass_user_to_device (GskGpuRenderPass      *self,
   return TRUE;
 }
 
+static gboolean
+gsk_gpu_render_pass_user_to_device_grow (GskGpuRenderPass      *self,
+                                         const graphene_rect_t *user,
+                                         cairo_rectangle_int_t *device)
+{
+  graphene_rect_t tmp;
+
+  if (!gsk_gpu_render_pass_user_to_device (self, user, &tmp))
+    return FALSE;
+
+  gsk_rect_to_cairo_grow (&tmp, device);
+
+  return TRUE;
+}
+
 gboolean
 gsk_gpu_render_pass_user_to_device_shrink (GskGpuRenderPass      *self,
                                            const graphene_rect_t *user,
@@ -108,6 +123,46 @@ gsk_gpu_render_pass_user_to_device_exact (GskGpuRenderPass      *self,
     return FALSE;
 
   return TRUE;
+}
+
+/*<private>
+ * gsk_gpu_render_pass_snap_rect:
+ * @self: the renderpass
+ * @rect: the rectangle to snap
+ * @snap: how to snap the rectangle
+ * @result: (out caller-allocates)
+ *
+ * Snaps the given rectangle to the device pixel grid
+ * of the renderpass.
+ * 
+ * If the renderpass is transformed in a way that isn't axis-aligned,
+ * then the result will be set to the input and no snapping will be
+ * applied.
+ *
+ * When shrinking the rectangle or when using very small
+ * rectangles it can happen that the resulting rectangle
+ * is empty. In that case this function will return false.
+ *
+ * Returns: true if the result was not empty
+ **/
+gboolean
+gsk_gpu_render_pass_snap_rect (GskGpuRenderPass      *self,
+                               const graphene_rect_t *rect,
+                               GskRectSnap            snap,
+                               graphene_rect_t       *result)
+{
+  if (gsk_transform_get_fine_category (self->modelview) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
+    {
+      if (rect != result)
+        *result = *rect;
+      return TRUE;
+    }
+
+  return gsk_rect_snap_to_grid (rect,
+                                snap,
+                                &self->scale,
+                                &self->offset,
+                                result);
 }
 
 static void
@@ -699,6 +754,39 @@ gsk_gpu_render_pass_get_clip_bounds (GskGpuRenderPass *self,
                             &self->clip.rect.bounds,
                             &GRAPHENE_POINT_INIT (-self->offset.x, -self->offset.y));
       return TRUE;
+    }
+}
+
+/*<private>
+ * gsk_gpu_render_pass_in_clip_fast:
+ * @self: the renderpass
+ * @rect: a rectangle to check
+ *
+ * Does a quick check to see if the rectangle may be inside the clip.
+ *
+ * This function is written for performance and quick rejection, so it
+ * may return true even though the rectangle is clipped entirely.
+ * However, it will never return false if the rect is still visible.
+ *
+ * This function takes into account that the rectangle may be snapped,
+ * so it will check with pixel boundary accuracy.
+ *
+ * Returns: false if it can guarantee the rectangle will be clipped away
+ **/
+gboolean
+gsk_gpu_render_pass_in_clip_fast (GskGpuRenderPass      *self,
+                                  const graphene_rect_t *rect)
+{
+  cairo_rectangle_int_t device;
+
+  if (gsk_gpu_render_pass_user_to_device_grow (self, rect, &device))
+    {
+      /* conversion worked, so check against scissor rect */
+      return gdk_rectangle_intersect (&self->scissor, &device, NULL);
+    }
+  else
+    {
+      return gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, rect);
     }
 }
 

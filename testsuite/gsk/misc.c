@@ -283,6 +283,7 @@ test_radial_gradient_opaque (void)
   gsk_gradient_add_color_stops (gradient, stops, G_N_ELEMENTS (stops));
 
   node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        GSK_RECT_SNAP_NONE,
                                         &GRAPHENE_POINT_INIT (25, 25),
                                         10,
                                         &GRAPHENE_POINT_INIT (25, 25),
@@ -294,6 +295,7 @@ test_radial_gradient_opaque (void)
   gsk_render_node_unref (node);
 
   node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        GSK_RECT_SNAP_NONE,
                                         &GRAPHENE_POINT_INIT (25, 25),
                                         10,
                                         &GRAPHENE_POINT_INIT (35, 25),
@@ -307,6 +309,7 @@ test_radial_gradient_opaque (void)
   gsk_gradient_set_repeat (gradient, GSK_REPEAT_NONE);
 
   node = gsk_radial_gradient_node_new2 (&GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                        GSK_RECT_SNAP_NONE,
                                         &GRAPHENE_POINT_INIT (25, 25),
                                         10,
                                         &GRAPHENE_POINT_INIT (25, 25),

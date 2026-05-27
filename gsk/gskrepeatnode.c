@@ -37,6 +37,8 @@ struct _GskRepeatNode
 
   GskRenderNode *child;
   graphene_rect_t child_bounds;
+  GskRectSnap snap;
+  GskRectSnap child_snap;
   GskRepeat repeat;
 };
 
@@ -115,14 +117,17 @@ gsk_repeat_node_draw_none (GskRenderNode *node,
                            GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
+  graphene_rect_t bounds, child_bounds;
 
-  gdk_cairo_rect (cr, &node->bounds);
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds) ||
+      !gsk_cairo_rect_snap (cr, &self->child_bounds, self->child_snap, &child_bounds))
+    return;
+
+  if (!gsk_rect_intersection (&bounds, &child_bounds, &bounds))
+    return;
+
+  gdk_cairo_rect (cr, &bounds);
   cairo_clip (cr);
-  if (!gsk_rect_contains_rect (&self->child_bounds, &self->child->bounds))
-    {
-      gdk_cairo_rect (cr, &self->child_bounds);
-      cairo_clip (cr);
-    }
   gsk_render_node_draw_full (self->child, cr, data);
   return;
 }
@@ -156,12 +161,19 @@ gsk_repeat_node_draw_pad (GskRenderNode *node,
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds, draw_bounds;
+  graphene_rect_t bounds, child_bounds;
 
-  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
-  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds) ||
+      !gsk_cairo_rect_snap (cr, &self->child_bounds, self->child_snap, &child_bounds))
     return;
 
-  gsk_repeat_node_compute_rect_for_pad (&clip_bounds, &self->child_bounds, &draw_bounds);
+  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+  if (!gsk_rect_intersection (&clip_bounds, &bounds, &clip_bounds))
+    return;
+
+  gsk_repeat_node_compute_rect_for_pad (&clip_bounds, &child_bounds, &draw_bounds);
+  if (!gsk_cairo_rect_snap (cr, &draw_bounds, GSK_RECT_SNAP_GROW, &draw_bounds))
+    return;
 
   gsk_repeat_node_draw_tiled (cr,
                               data,
@@ -180,23 +192,28 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
   GskRepeatNode *self = (GskRepeatNode *) node;
   graphene_rect_t clip_bounds;
   float tile_left, tile_right, tile_top, tile_bottom;
+  graphene_rect_t bounds, child_bounds;
 
-  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
-  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds) ||
+      !gsk_cairo_rect_snap (cr, &self->child_bounds, self->child_snap, &child_bounds))
     return;
 
-  tile_left = (clip_bounds.origin.x - self->child_bounds.origin.x) / self->child_bounds.size.width;
-  tile_right = (clip_bounds.origin.x + clip_bounds.size.width - self->child_bounds.origin.x) / self->child_bounds.size.width;
-  tile_top = (clip_bounds.origin.y - self->child_bounds.origin.y) / self->child_bounds.size.height;
-  tile_bottom = (clip_bounds.origin.y + clip_bounds.size.height - self->child_bounds.origin.y) / self->child_bounds.size.height;
+  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+  if (!gsk_rect_intersection (&clip_bounds, &bounds, &clip_bounds))
+    return;
+
+  tile_left = (clip_bounds.origin.x - child_bounds.origin.x) / child_bounds.size.width;
+  tile_right = (clip_bounds.origin.x + clip_bounds.size.width - child_bounds.origin.x) / child_bounds.size.width;
+  tile_top = (clip_bounds.origin.y - child_bounds.origin.y) / child_bounds.size.height;
+  tile_bottom = (clip_bounds.origin.y + clip_bounds.size.height - child_bounds.origin.y) / child_bounds.size.height;
 
   /* the 1st check tests that a tile fully fits into the bounds,
    * the 2nd check is to catch the case where it fits exactly */
   if (ceilf (tile_left) < floorf (tile_right) &&
-      clip_bounds.size.width > self->child_bounds.size.width)
+      clip_bounds.size.width > child_bounds.size.width)
     {
       if (ceilf (tile_top) < floorf (tile_bottom) &&
-          clip_bounds.size.height > self->child_bounds.size.height)
+          clip_bounds.size.height > child_bounds.size.height)
         {
           /* tile in both directions */
           gsk_repeat_node_draw_tiled (cr,
@@ -204,8 +221,8 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                       &clip_bounds,
                                       self->repeat,
                                       self->child,
-                                      &self->child_bounds,
-                                      &self->child_bounds.origin);
+                                      &child_bounds,
+                                      &child_bounds.origin);
         }
       else
         {
@@ -213,10 +230,22 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
           float y;
           for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
             {
+              graphene_rect_t strip, snapped;
               float start_y = MAX (clip_bounds.origin.y,
-                                   self->child_bounds.origin.y + y * self->child_bounds.size.height);
+                                   child_bounds.origin.y + y * child_bounds.size.height);
               float end_y = MAX (clip_bounds.origin.y + clip_bounds.size.height,
-                                 self->child_bounds.origin.y + (y + 1) * self->child_bounds.size.height);
+                                 child_bounds.origin.y + (y + 1) * child_bounds.size.height);
+
+              strip = GRAPHENE_RECT_INIT (child_bounds.origin.x,
+                                          start_y - y * child_bounds.size.height,
+                                          child_bounds.size.width,
+                                          end_y - start_y);
+              if (gsk_cairo_rect_snap (cr, &strip, GSK_RECT_SNAP_GROW, &snapped))
+                {
+                  strip.origin.y = snapped.origin.y;
+                  strip.size.height = snapped.size.height;
+                }
+
               gsk_repeat_node_draw_tiled (cr,
                                           data,
                                           &GRAPHENE_RECT_INIT (
@@ -227,30 +256,37 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                           ),
                                           self->repeat,
                                           self->child,
-                                          &GRAPHENE_RECT_INIT (
-                                              self->child_bounds.origin.x,
-                                              start_y - y * self->child_bounds.size.height,
-                                              self->child_bounds.size.width,
-                                              end_y - start_y
-                                          ),
+                                          &strip,
                                           &GRAPHENE_POINT_INIT (
-                                            self->child_bounds.origin.x,
-                                            start_y
+                                            child_bounds.origin.x,
+                                            strip.origin.y + y * child_bounds.size.height
                                           ));
             }
         }
     }
   else if (ceilf (tile_top) < floorf (tile_bottom) &&
-           clip_bounds.size.height > self->child_bounds.size.height)
+           clip_bounds.size.height > child_bounds.size.height)
     {
       /* repeat horizontally, tile vertically */
       float x;
       for (x = floorf (tile_left); x < ceilf (tile_right); x++)
         {
+          graphene_rect_t strip, snapped;
           float start_x = MAX (clip_bounds.origin.x,
-                               self->child_bounds.origin.x + x * self->child_bounds.size.width);
+                               child_bounds.origin.x + x * child_bounds.size.width);
           float end_x = MIN (clip_bounds.origin.x + clip_bounds.size.width,
-                             self->child_bounds.origin.x + (x + 1) * self->child_bounds.size.width);
+                             child_bounds.origin.x + (x + 1) * child_bounds.size.width);
+
+          strip = GRAPHENE_RECT_INIT (start_x - x * child_bounds.size.width,
+                                      child_bounds.origin.y,
+                                      end_x - start_x,
+                                      child_bounds.size.height);
+          if (gsk_cairo_rect_snap (cr, &strip, GSK_RECT_SNAP_GROW, &snapped))
+            {
+              strip.origin.x = snapped.origin.x;
+              strip.size.width = snapped.size.width;
+            }
+
           gsk_repeat_node_draw_tiled (cr,
                                       data,
                                       &GRAPHENE_RECT_INIT (
@@ -261,15 +297,10 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
                                       ),
                                       self->repeat,
                                       self->child,
-                                      &GRAPHENE_RECT_INIT (
-                                          start_x - x * self->child_bounds.size.width,
-                                          self->child_bounds.origin.y,
-                                          end_x - start_x,
-                                          self->child_bounds.size.height
-                                      ),
+                                      &strip,
                                       &GRAPHENE_POINT_INIT (
-                                        start_x,
-                                        self->child_bounds.origin.y
+                                        strip.origin.x + x * child_bounds.size.width,
+                                        child_bounds.origin.y
                                       ));
         }
     }
@@ -287,9 +318,9 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
             {
               cairo_save (cr);
               cairo_translate (cr,
-                               x * self->child_bounds.size.width,
-                               y * self->child_bounds.size.height);
-              gdk_cairo_rect (cr, &self->child_bounds);
+                               x * child_bounds.size.width,
+                               y * child_bounds.size.height);
+              gdk_cairo_rect (cr, &child_bounds);
               cairo_clip (cr);
               gsk_render_node_draw_full (self->child, cr, data);
               cairo_restore (cr);
@@ -405,17 +436,32 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
                               GskCairoData  *data)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
-  graphene_rect_t clip_bounds, draw_bounds;
+  graphene_rect_t clip_bounds, draw_bounds, snapped;
   graphene_point_t draw_pos;
+  graphene_rect_t bounds, child_bounds;
+
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds) ||
+      !gsk_cairo_rect_snap (cr, &self->child_bounds, self->child_snap, &child_bounds))
+    return;
 
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
-  if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+  if (!gsk_rect_intersection (&clip_bounds, &bounds, &clip_bounds))
     return;
 
   gsk_repeat_node_compute_rect_for_reflect (&clip_bounds,
-                                            &self->child_bounds,
+                                            &child_bounds,
                                             &draw_bounds,
                                             &draw_pos);
+
+  if (!gsk_cairo_rect_snap (cr, &draw_bounds, GSK_RECT_SNAP_GROW, &snapped))
+    return;
+
+  if (gsk_rect_contains_rect (&child_bounds, &snapped))
+    {
+      draw_pos.x += snapped.origin.x - draw_bounds.origin.x;
+      draw_pos.y += snapped.origin.y - draw_bounds.origin.y;
+      draw_bounds = snapped;
+    }
 
   gsk_repeat_node_draw_tiled (cr,
                               data,
@@ -466,6 +512,8 @@ gsk_repeat_node_diff (GskRenderNode *node1,
   GskRepeatNode *self2 = (GskRepeatNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      self1->snap == self2->snap &&
+      self1->child_snap == self2->child_snap &&
       gsk_rect_equal (&self1->child_bounds, &self2->child_bounds) &&
       self1->repeat == self2->repeat)
     {
@@ -513,7 +561,7 @@ gsk_repeat_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_repeat_node_new2 (&node->bounds, child, &self->child_bounds, self->repeat);
+    result = gsk_repeat_node_new2 (&node->bounds, self->snap, child, &self->child_bounds, self->child_snap, self->repeat);
 
   gsk_render_node_unref (child);
 
@@ -539,8 +587,10 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskRepeatNode, gsk_repeat_node)
 
 GskRenderNode *
 gsk_repeat_node_new2 (const graphene_rect_t  *bounds,
+                      GskRectSnap             snap,
                       GskRenderNode          *child,
                       const graphene_rect_t  *child_bounds,
+                      GskRectSnap             child_snap,
                       GskRepeat               repeat)
 {
   GskRepeatNode *self;
@@ -557,6 +607,8 @@ gsk_repeat_node_new2 (const graphene_rect_t  *bounds,
 
   self->child = gsk_render_node_ref (child);
   self->repeat = repeat;
+  self->snap = snap;
+  self->child_snap = child_snap;
 
   if (child_bounds)
     {
@@ -571,6 +623,9 @@ gsk_repeat_node_new2 (const graphene_rect_t  *bounds,
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
   node->fully_opaque = child->fully_opaque &&
+                       !gsk_rect_snap_can_shrink (snap) &&
+                       !gsk_rect_snap_can_shrink (child_snap) &&
+                       !gsk_rect_snap_can_grow (child_snap) &&
                        gsk_rect_contains_rect (&child->bounds, &self->child_bounds) &&
                        repeat != GSK_REPEAT_NONE &&
                        !gsk_rect_is_empty (&self->child_bounds);
@@ -602,7 +657,12 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
 
-  return gsk_repeat_node_new2 (bounds, child, child_bounds, GSK_REPEAT_REPEAT);
+  return gsk_repeat_node_new2 (bounds,
+                               GSK_RECT_SNAP_NONE,
+                               child,
+                               child_bounds,
+                               GSK_RECT_SNAP_NONE,
+                               GSK_REPEAT_REPEAT);
 }
 
 /**
@@ -643,4 +703,41 @@ gsk_repeat_node_get_repeat (GskRenderNode *node)
   const GskRepeatNode *self = (const GskRepeatNode *) node;
 
   return self->repeat;
+}
+
+/**
+ * gsk_repeat_node_get_snap:
+ * @node: (type GskRepeatNode): a repeat `GskRenderNode`
+ *
+ * Retrieves the snap value for this node
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_repeat_node_get_snap (const GskRenderNode *node)
+{
+  const GskRepeatNode *self = (const GskRepeatNode *) node;
+
+  return self->snap;
+}
+
+/**
+ * gsk_repeat_node_get_child_snap:
+ * @node: (type GskRepeatNode): a repeat `GskRenderNode`
+ *
+ * Retrieves the snap value for the child's bounding
+ * rectangle.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.24
+ **/
+GskRectSnap
+gsk_repeat_node_get_child_snap (const GskRenderNode *node)
+{
+  const GskRepeatNode *self = (const GskRepeatNode *) node;
+
+  return self->child_snap;
 }

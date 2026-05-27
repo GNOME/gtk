@@ -41,6 +41,8 @@ GskRenderNode *         gsk_inset_shadow_node_new               (const GskRounde
                                                                  float                     blur_radius);
 GDK_AVAILABLE_IN_ALL
 const GskRoundedRect *  gsk_inset_shadow_node_get_outline       (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_24
+GskRectSnap             gsk_inset_shadow_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_inset_shadow_node_get_color         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

@@ -39,6 +39,8 @@ GskRenderNode *         gsk_conic_gradient_node_new                 (const graph
                                                                      float                     rotation,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_24
+GskRectSnap              gsk_conic_gradient_node_get_snap           (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t * gsk_conic_gradient_node_get_center         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

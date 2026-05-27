@@ -320,6 +320,26 @@ typedef enum {
 } GskCorner;
 
 /**
+ * GskSide:
+ * @GSK_SIDE_TOP: The top side
+ * @GSK_SIDE_RIGHT: The right side
+ * @GSK_SIDE_BOTTOM: The bottom side
+ * @GSK_SIDE_LEFT: The left side
+ *
+ * The sides of a rectangle as used by `GskRectSnap` or `GskBorderNode`.
+ * 
+ * This is the order used by CSS shorthand arguments.
+ *
+ * Since: 4.24
+ */
+typedef enum {
+  GSK_SIDE_TOP GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 0,
+  GSK_SIDE_RIGHT GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 1,
+  GSK_SIDE_BOTTOM GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 2,
+  GSK_SIDE_LEFT GDK_AVAILABLE_ENUMERATOR_IN_4_24 = 3
+} GskSide;
+
+/**
  * GskFillRule:
  * @GSK_FILL_RULE_WINDING: If the path crosses the ray from
  *   left-to-right, counts +1. If the path crosses the ray
@@ -607,5 +627,27 @@ typedef enum
   GSK_MASK_MODE_LUMINANCE,
   GSK_MASK_MODE_INVERTED_LUMINANCE
 } GskMaskMode;
+
+/**
+ * GskSnapDirection:
+ * @GSK_SNAP_NONE: Don't snap the value
+ * @GSK_SNAP_FLOOR: Use floor() to snap
+ * @GSK_SNAP_CEIL: Use ceil() to snap
+ * @GSK_SNAP_ROUND: Use round() to snap
+ *
+ * Specifies how a coordinate should be snapped to the pixel grid.
+ *
+ * Note that the top and left sides of rectangles need to be snapped
+ * in the opposite direction from the bottom and right sides to make
+ * the rectangle grow or shrink.
+ *
+ * Since: 4.24
+ */
+typedef enum {
+  GSK_SNAP_NONE,
+  GSK_SNAP_FLOOR,
+  GSK_SNAP_CEIL,
+  GSK_SNAP_ROUND
+} GskSnapDirection;
 
 G_END_DECLS

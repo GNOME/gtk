@@ -1,0 +1,19 @@
+color {
+  bounds: 0 0 4 4;
+  color: rgb(0,0,0);
+}
+repeat {
+  bounds: 0.5 0.5 3 3;
+  child-bounds: 0 0 2 2;
+  child: texture {
+    bounds: 0 0 2 2;
+    texture: memory {
+      width: 2;
+      height: 2;
+      format: r8g8b8;
+      stride: 6;
+      data: "0000F0 F00000 F00000 0000F0";
+    }
+  }
+  repeat: reflect;
+}
