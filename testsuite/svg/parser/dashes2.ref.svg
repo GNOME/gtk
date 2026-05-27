@@ -1,0 +1,51 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100'
+        height='100'>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='none'
+          d='M 0 0 L 100 0'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='5'
+          d='M 0 10 L 100 10'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='5px 10px'
+          d='M 0 20 L 100 20'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='1em 2em 3em'
+          d='M 0 30 L 100 30'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='10% 20%'
+          d='M 0 40 L 100 40'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='5 10 15 20'
+          d='M 0 50 L 100 50'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='0'
+          d='M 0 60 L 100 60'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='1 2 3 4 5'
+          d='M 0 70 L 100 70'>
+  </path>
+  <path
+          stroke='rgb(0,0,0)'
+          stroke-dasharray='10pt 5pt'
+          d='M 0 80 L 100 80'>
+  </path>
+</svg>

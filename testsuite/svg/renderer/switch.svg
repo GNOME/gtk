@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- switch with systemLanguage: first match wins -->
+  <switch>
+    <rect x="10" y="10" width="80" height="80" fill="red" systemLanguage="xx"/>
+    <rect x="10" y="10" width="80" height="80" fill="green" systemLanguage="en"/>
+    <rect x="10" y="10" width="80" height="80" fill="blue"/>
+  </switch>
+
+  <!-- switch with requiredExtensions (should fall through) -->
+  <switch>
+    <circle cx="150" cy="50" r="40" fill="red" requiredExtensions="http://example.com/nonexistent"/>
+    <circle cx="150" cy="50" r="40" fill="purple"/>
+  </switch>
+
+  <!-- nested switch -->
+  <switch>
+    <g systemLanguage="en">
+      <rect x="10" y="110" width="80" height="80" fill="orange"/>
+    </g>
+    <rect x="10" y="110" width="80" height="80" fill="gray"/>
+  </switch>
+</svg>

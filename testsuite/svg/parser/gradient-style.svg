@@ -10,8 +10,8 @@
        gradientUnits="userSpaceOnUse"
 
        cx="500" cy="500" r="200">
-      <stop style="stop-color:#aa88ff" offset="0%"/>
-      <stop style="stop-color:#ffddcc" offset="50%"/>
+      <stop class='zero' style="stop-color:#aa88ff" offset="0%"/>
+      <stop id='one' style="stop-color:#ffddcc" offset="50%"/>
       <stop style="stop-color:#bbffee" offset="100%"/>
     </radialGradient>
 

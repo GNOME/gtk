@@ -5,6 +5,7 @@
         height='16'>
   <path
           transform='rotate(45, 0, 0) translate(-3, 5) scale(6, 6)'
+          transform-origin='0% 50%'
           d='M 0 0 L 100 100'>
   </path>
 </svg>

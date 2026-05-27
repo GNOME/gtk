@@ -1148,24 +1148,6 @@ svg_property_applies_to (SvgProperty      attr,
          (shape_attrs[attr].applies_to & BIT (type)) != 0;
 }
 
-gboolean
-svg_property_for_element (SvgProperty attr)
-{
-  return attr <= SVG_PROPERTY_STROKE_MAXWIDTH;
-}
-
-gboolean
-svg_property_for_color_stop (SvgProperty attr)
-{
-  return SVG_PROPERTY_STOP_OFFSET <= attr && attr <= SVG_PROPERTY_STOP_OPACITY;
-}
-
-gboolean
-svg_property_for_filter (SvgProperty attr)
-{
-  return SVG_PROPERTY_FE_X <= attr;
-}
-
 static void
 shape_attrs_init_default_values (void)
 {

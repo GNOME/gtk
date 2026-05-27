@@ -1,0 +1,46 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100'
+        height='100'>
+  <defs>
+    <mask
+            id='mask1'>
+      <rect
+              fill='rgb(255,255,255)'
+              x='0'
+              y='0'
+              width='50'
+              height='50'>
+      </rect>
+    </mask>
+    <mask
+            id='mask2'>
+      <circle
+              fill='rgb(255,255,255)'
+              cx='50'
+              cy='50'
+              r='25'>
+      </circle>
+    </mask>
+  </defs>
+  <rect
+          mask='url(#mask1)'
+          fill='rgb(255,0,0)'
+          x='0'
+          y='0'
+          width='100'
+          height='100'>
+  </rect>
+  <circle
+          mask='url(#mask2)'
+          fill='rgb(0,0,255)'
+          cx='50'
+          cy='50'
+          r='40'>
+  </circle>
+  <path
+          mask='none'
+          d='M 0 0 L 100 100'>
+  </path>
+</svg>

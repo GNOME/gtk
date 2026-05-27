@@ -2,6 +2,7 @@
   <path id='path0' d='M 0 0 L 100 100'
     fill='rgb(255,124,37)'
     stroke='rgba(1,10,200,0.5)'
+    color='currentColor'
   />
   <path id='path1' d='M 0 0 L 100 100'
     fill='url(#gpa:foreground)'
@@ -23,5 +24,17 @@
   />
   <path id='path6' d='M 0 0 L 100 100'
     fill='none'
+  />
+  <path id='path7' d='M 0 0 L 100 100'
+    fill='url(#gpa:success) currentColor'
+  />
+  <path id='path8' d='M 0 0 L 100 100'
+    fill='currentColor'
+  />
+  <path id='path9' d='M 0 0 L 100 100'
+    fill='context-fill'
+  />
+  <path id='path9' d='M 0 0 L 100 100'
+    fill='context-stroke'
   />
 </svg>

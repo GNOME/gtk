@@ -1,0 +1,13 @@
+<svg width='200' height='200'>
+  <circle cx='10' cy='10' r='5' filter='hue-rotate(90deg)'/>
+  <circle cx='20' cy='10' r='5' filter='hue-rotate(1.5708rad)'/>
+  <circle cx='30' cy='10' r='5' filter='hue-rotate(100grad)'/>
+  <circle cx='40' cy='10' r='5' filter='hue-rotate(0.25turn)'/>
+  <circle cx='50' cy='10' r='5' filter='brightness(50%)'/>
+  <circle cx='60' cy='10' r='5' filter='contrast(150%)'/>
+  <circle cx='70' cy='10' r='5' filter='opacity(75%)'/>
+  <circle cx='80' cy='10' r='5' filter='saturate(200%)'/>
+  <circle cx='90' cy='10' r='5' filter='grayscale(100%)'/>
+  <circle cx='100' cy='10' r='5' filter='invert(50%)'/>
+  <circle cx='110' cy='10' r='5' filter='sepia(80%)'/>
+</svg>

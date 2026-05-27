@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- currentColor inherited from parent -->
+  <g color="red">
+    <rect x="10" y="10" width="80" height="80" fill="currentColor"/>
+    <rect x="10" y="10" width="80" height="80" fill="none" stroke="currentColor" stroke-width="4"/>
+  </g>
+
+  <!-- currentColor overridden -->
+  <g color="blue">
+    <rect x="110" y="10" width="80" height="80" fill="currentColor" color="green"/>
+  </g>
+
+  <!-- currentColor in gradient stop -->
+  <defs>
+    <linearGradient id="grad1">
+      <stop offset="0" stop-color="currentColor"/>
+      <stop offset="1" stop-color="white"/>
+    </linearGradient>
+  </defs>
+  <g color="purple">
+    <rect x="10" y="110" width="80" height="80" fill="url(#grad1)"/>
+  </g>
+
+  <!-- currentColor in stroke-dasharray context -->
+  <g color="orange">
+    <line x1="110" y1="120" x2="270" y2="120" stroke="currentColor" stroke-width="4"
+          stroke-dasharray="10 5"/>
+  </g>
+</svg>

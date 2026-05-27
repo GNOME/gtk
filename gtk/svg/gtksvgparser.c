@@ -276,13 +276,7 @@ markup_filter_attributes (const char *element_name,
         *ptr = NULL;
       for (unsigned int i = 0; attr_names[i]; i++)
         {
-          if (g_str_has_suffix (name, "*") &&
-              strncmp (attr_names[i], name, strlen (name) - 1) == 0)
-            {
-              g_assert (ptr == NULL);
-              *handled |= G_GUINT64_CONSTANT(1) << i;
-            }
-          else if (strcmp (attr_names[i], name) == 0)
+          if (strcmp (attr_names[i], name) == 0)
             {
               if (ptr)
                 *ptr = attr_values[i];
@@ -2932,7 +2926,7 @@ resolve_paint_ref (SvgValue   *value,
 {
   SvgValue *paint = value;
 
-  if (svg_value_is_unset (value))
+  if (svg_value_is_unset (value) || svg_value_is_inherit (value) || svg_value_is_initial (value))
     return;
 
   if (paint_is_server (svg_paint_get_kind (paint)) &&
@@ -4550,7 +4544,7 @@ apply_styles_to_shape (SvgElement *shape,
     }
 
   paint = svg_element_get_base_value (shape, SVG_PROPERTY_FILL);
-  if (!svg_value_is_unset (paint))
+  if (svg_value_is_paint (paint))
     {
       GtkSymbolicColor symbolic;
 
@@ -4568,7 +4562,7 @@ apply_styles_to_shape (SvgElement *shape,
     }
 
   paint = svg_element_get_base_value (shape, SVG_PROPERTY_STROKE);
-  if (!svg_value_is_unset (paint))
+  if (svg_value_is_paint (paint))
     {
       GtkSymbolicColor symbolic;
 

@@ -1,0 +1,10 @@
+<svg width='100' height='100'>
+  <g fill='red' stroke='blue' opacity='0.5'>
+    <rect x='0' y='0' width='10' height='10' fill='inherit'/>
+    <rect x='0' y='0' width='10' height='10' stroke='inherit'/>
+    <rect x='0' y='0' width='10' height='10' opacity='inherit'/>
+    <rect x='0' y='0' width='10' height='10' fill='initial'/>
+    <rect x='0' y='0' width='10' height='10' stroke='initial'/>
+  </g>
+  <rect x='0' y='0' width='auto' height='auto' rx='auto' ry='auto'/>
+</svg>

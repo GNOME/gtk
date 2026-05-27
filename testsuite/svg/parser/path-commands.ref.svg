@@ -1,0 +1,63 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='200'
+        height='200'>
+  <path
+          d='M 10 10 L 90 10 L 90 90 L 10 90 Z'>
+  </path>
+  <path
+          d='M 10 10 L 90 10 L 90 90 L 10 90 Z'>
+  </path>
+  <path
+          d='M 10 10 L 90 10 L 90 90 L 10 90 Z'>
+  </path>
+  <path
+          d='M 10 10 L 90 10 L 90 90 L 10 90 Z'>
+  </path>
+  <path
+          d='M 10 80 C 40 10, 65 10, 95 80'>
+  </path>
+  <path
+          d='M 10 80 C 10 80, 95 10, 180 80'>
+  </path>
+  <path
+          d='M 10 80 Q 95 10, 180 80'>
+  </path>
+  <path
+          d='M 10 80 Q 52 10, 95 80 Q 138 150, 180 80'>
+  </path>
+  <path
+          d='M 80 80 A 45 45 0 0 0 125 125'>
+  </path>
+  <path
+          d='M 80 80 A 45 45 0 1 0 125 125'>
+  </path>
+  <path
+          d='M 80 80 A 45 45 0 0 1 125 125'>
+  </path>
+  <path
+          d='M 80 80 A 45 45 0 1 1 125 125'>
+  </path>
+  <path
+          d='M 10 10 L 30 30 M 50 50 L 70 70'>
+  </path>
+  <path
+          d='M 0 0 L 10 10 L 20 20 L 50 20 L 60 20 L 60 50 L 60 60 Z'>
+  </path>
+  <path
+          d='M 10 80 C 40 10, 65 10, 95 80'>
+  </path>
+  <path
+          d='M 10 80 C 10 80, 95 10, 180 80'>
+  </path>
+  <path
+          d='M 10 80 Q 95 10, 180 80'>
+  </path>
+  <path
+          d='M 10 80 Q 52.5 10, 95 80 Q 137.5 150, 180 80'>
+  </path>
+  <path
+          d='M 80 80 A 45 45 0 0 0 125 125'>
+  </path>
+</svg>

@@ -1,0 +1,26 @@
+<svg width='100' height='100'>
+  <!-- keyTimes wrong count vs values -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10;20' keyTimes='0;1' dur='1s'/>
+  </rect>
+  <!-- keyTimes first value not 0 -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10;20' keyTimes='0.1;0.5;1' dur='1s'/>
+  </rect>
+  <!-- keyTimes last value not 1 -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10;20' keyTimes='0;0.5;0.9' calcMode='linear' dur='1s'/>
+  </rect>
+  <!-- keyTimes not monotonically increasing -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10;20;30' keyTimes='0;0.7;0.3;1' dur='1s'/>
+  </rect>
+  <!-- keySplines wrong count vs intervals -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10;20;30' keyTimes='0;0.3;0.7;1' calcMode='spline' keySplines='0 0 1 1' dur='1s'/>
+  </rect>
+  <!-- invalid keySplines format -->
+  <rect x='0' y='0' width='10' height='10'>
+    <animate attributeName='x' values='0;10' calcMode='spline' keySplines='invalid' dur='1s'/>
+  </rect>
+</svg>

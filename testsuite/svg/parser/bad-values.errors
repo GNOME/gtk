@@ -1,0 +1,9 @@
+2.66: (rect / transform): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+3.72: (rect / transform): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+4.65: (rect / transform): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+5.50: (circle / fill): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+6.51: (path / stroke-dasharray): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+7.53: (path / stroke-linecap): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+8.54: (path / stroke-linejoin): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+9.48: (path / fill-rule): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+10.48: (path / clip-rule): GTK_SVG_ERROR_INVALID_ATTRIBUTE

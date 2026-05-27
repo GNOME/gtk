@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <defs>
+    <!-- marker with orient in radians -->
+    <marker id="m-rad" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6" orient="1.5707963rad">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="red"/>
+    </marker>
+
+    <!-- marker with orient in gradians -->
+    <marker id="m-grad" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6" orient="100grad">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="green"/>
+    </marker>
+
+    <!-- marker with orient in turns -->
+    <marker id="m-turn" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6" orient="0.25turn">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="blue"/>
+    </marker>
+
+    <!-- marker with orient auto-start-reverse -->
+    <marker id="m-asr" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="purple"/>
+    </marker>
+  </defs>
+
+  <line x1="30" y1="50" x2="170" y2="50" stroke="black" stroke-width="2"
+        marker-start="url(#m-rad)" marker-end="url(#m-rad)"/>
+  <line x1="30" y1="100" x2="170" y2="100" stroke="black" stroke-width="2"
+        marker-start="url(#m-grad)" marker-end="url(#m-grad)"/>
+  <line x1="30" y1="150" x2="170" y2="150" stroke="black" stroke-width="2"
+        marker-start="url(#m-turn)" marker-end="url(#m-turn)"/>
+  <line x1="230" y1="100" x2="370" y2="100" stroke="black" stroke-width="2"
+        marker-start="url(#m-asr)" marker-end="url(#m-asr)"/>
+</svg>

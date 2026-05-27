@@ -1,0 +1,84 @@
+color-matrix {
+  matrix: matrix3d(1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1);
+  child: color {
+    bounds: 10 10 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 10 10 60 40;
+}
+color-matrix {
+  matrix: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1);
+  offset: 0.25 0.25 0.25 0;
+  child: color {
+    bounds: 80 10 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 80 10 60 40;
+}
+color-matrix {
+  matrix: matrix3d(0.2126, 0.2126, 0.2126, 0, 0.7152, 0.7152, 0.7152, 0, 0.0722, 0.0722, 0.0722, 0, 0, 0, 0, 1);
+  child: color {
+    bounds: 150 10 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 150 10 60 40;
+}
+color-matrix {
+  matrix: matrix3d(5.55112e-17, 0.356, -0.574, 0, 0, 0.855, 1.43, 0, 1, -0.211, 0.144, 0, 0, 0, 0, 1);
+  child: color {
+    bounds: 220 10 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 220 10 60 40;
+}
+color-matrix {
+  matrix: matrix3d(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1);
+  offset: 1 1 1 0;
+  child: color {
+    bounds: 290 10 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 290 10 60 40;
+}
+color-matrix {
+  matrix: matrix3d(1.7874, -0.2126, -0.2126, 0, -0.7152, 1.2848, -0.7152, 0, -0.0722, -0.0722, 1.9278, 0, 0, 0, 0, 1);
+  child: color {
+    bounds: 10 70 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 10 70 60 40;
+}
+color-matrix {
+  matrix: matrix3d(0.393, 0.349, 0.272, 0, 0.769, 0.686, 0.534, 0, 0.189, 0.168, 0.131, 0, 0, 0, 0, 1);
+  child: color {
+    bounds: 80 70 60 40;
+    color: rgb(0,0,255);
+  }
+  bounds: 80 70 60 40;
+}
+opacity {
+  child: color {
+    bounds: 150 70 60 40;
+    color: rgb(0,0,255);
+  }
+}
+shadow {
+  shadows: rgb(255,0,0) 3 3 4;
+  child: color {
+    bounds: 220 70 60 40;
+    color: rgb(0,0,255);
+  }
+}
+color-matrix {
+  matrix: matrix3d(1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 1);
+  offset: -0.25 -0.25 -0.25 0;
+  child: color-matrix {
+    matrix: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1);
+    child: color {
+      bounds: 290 70 60 40;
+      color: rgb(0,128,0);
+    }
+    bounds: 290 70 60 40;
+  }
+  bounds: 290 70 60 40;
+}

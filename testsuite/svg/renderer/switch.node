@@ -1,0 +1,15 @@
+color {
+  bounds: 10 10 80 80;
+  color: rgb(0,128,0);
+}
+rounded-clip {
+  clip: 110 10 80 80 / 40;
+  child: color {
+    bounds: 110 10 80 80;
+    color: rgb(128,0,128);
+  }
+}
+color {
+  bounds: 10 110 80 80;
+  color: rgb(255,165,0);
+}

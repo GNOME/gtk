@@ -81,6 +81,7 @@ void            shape_set_default_attrs            (SvgElement *shape);
 GdkPaintable *  shape_get_path_image               (SvgElement  *shape,
                                                     GtkSvg *svg);
 
+
 GtkIconPaintable *
                 path_paintable_get_icon_paintable  (PathPaintable *self);
 
@@ -98,3 +99,6 @@ char *          path_paintable_find_unused_id      (PathPaintable *self,
 
 SvgValue *      ref_value (SvgElement *shape,
                            SvgProperty attr);
+
+gboolean     svg_element_type_is_graphical         (SvgElementType  type);
+

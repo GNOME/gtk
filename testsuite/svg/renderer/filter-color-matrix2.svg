@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <defs>
+    <filter id="saturate">
+      <feColorMatrix type="saturate" values="0.5"/>
+    </filter>
+    <filter id="hueRotate">
+      <feColorMatrix type="hueRotate" values="90"/>
+    </filter>
+    <filter id="luminanceToAlpha">
+      <feColorMatrix type="luminanceToAlpha"/>
+    </filter>
+  </defs>
+
+  <rect x="10" y="10" width="100" height="80" fill="red" filter="url(#saturate)"/>
+  <rect x="130" y="10" width="100" height="80" fill="green" filter="url(#hueRotate)"/>
+  <rect x="250" y="10" width="100" height="80" fill="blue" filter="url(#luminanceToAlpha)"/>
+
+  <!-- combined: saturate + hueRotate in sequence -->
+  <defs>
+    <filter id="combined">
+      <feColorMatrix type="saturate" values="2" result="sat"/>
+      <feColorMatrix type="hueRotate" values="45" in="sat"/>
+    </filter>
+  </defs>
+  <rect x="10" y="110" width="100" height="80" fill="purple" filter="url(#combined)"/>
+</svg>

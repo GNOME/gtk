@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect x="10" y="10" width="60" height="40" fill="blue" style="filter: brightness(1.5)"/>
+  <rect x="80" y="10" width="60" height="40" fill="blue" style="filter: contrast(0.5)"/>
+  <rect x="150" y="10" width="60" height="40" fill="blue" style="filter: grayscale(100%)"/>
+  <rect x="220" y="10" width="60" height="40" fill="blue" style="filter: hue-rotate(90deg)"/>
+  <rect x="290" y="10" width="60" height="40" fill="blue" style="filter: invert(100%)"/>
+  <rect x="10" y="70" width="60" height="40" fill="blue" style="filter: saturate(200%)"/>
+  <rect x="80" y="70" width="60" height="40" fill="blue" style="filter: sepia(100%)"/>
+  <rect x="150" y="70" width="60" height="40" fill="blue" style="filter: opacity(0.5)"/>
+  <rect x="220" y="70" width="60" height="40" fill="blue" style="filter: drop-shadow(3px 3px 2px red)"/>
+  <rect x="290" y="70" width="60" height="40" fill="green" style="filter: brightness(0.5) contrast(1.5)"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg width='200' height='200'>
+  <defs>
+    <filter id='myfilter'>
+      <feGaussianBlur stdDeviation='5'/>
+    </filter>
+  </defs>
+  <circle cx='10' cy='10' r='5' filter='blur(0)'/>
+  <circle cx='20' cy='10' r='5' filter='blur(10px)'/>
+  <circle cx='30' cy='10' r='5' filter='brightness(0.5)'/>
+  <circle cx='40' cy='10' r='5' filter='brightness(2)'/>
+  <circle cx='50' cy='10' r='5' filter='contrast(0)'/>
+  <circle cx='60' cy='10' r='5' filter='contrast(2)'/>
+  <circle cx='70' cy='10' r='5' filter='grayscale(0.5)'/>
+  <circle cx='80' cy='10' r='5' filter='invert(1)'/>
+  <circle cx='90' cy='10' r='5' filter='sepia(0.5)'/>
+  <circle cx='100' cy='10' r='5' filter='saturate(2)'/>
+  <circle cx='110' cy='10' r='5' filter='hue-rotate(90)'/>
+  <circle cx='120' cy='10' r='5' filter='hue-rotate(180)'/>
+  <circle cx='130' cy='10' r='5' filter='opacity(0.5)'/>
+  <circle cx='10' cy='30' r='5' filter='drop-shadow(2px 4px)'/>
+  <circle cx='20' cy='30' r='5' filter='drop-shadow(2px 4px 6px)'/>
+  <circle cx='30' cy='30' r='5' filter='drop-shadow(2px 4px 6px blue)'/>
+  <circle cx='40' cy='30' r='5' filter='drop-shadow(red 2px 4px)'/>
+  <circle cx='50' cy='30' r='5' filter='url(#myfilter)'/>
+  <rect x='0' y='50' width='20' height='20' filter='blur(2) grayscale(0.5) brightness(1.5)'/>
+  <rect x='30' y='50' width='20' height='20' filter='contrast(1.5) saturate(0.5) hue-rotate(45)'/>
+</svg>

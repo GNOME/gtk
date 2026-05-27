@@ -1,0 +1,26 @@
+<svg width='100' height='100'>
+  <marker id='m1' orient='auto' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m2' orient='auto-start-reverse' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m3' orient='0' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m4' orient='45' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m5' orient='45deg' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m6' orient='1.5rad' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m7' orient='200grad' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+  <marker id='m8' orient='0.5turn' markerWidth='5' markerHeight='5'>
+    <circle r='2'/>
+  </marker>
+</svg>

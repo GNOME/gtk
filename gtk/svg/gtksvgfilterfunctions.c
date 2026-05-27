@@ -304,17 +304,25 @@ parse_drop_shadow_arg (GtkCssParser *parser,
 
   if (vals[0] == NULL)
     {
-      GdkRGBA color;
+      const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
       if (gtk_css_parser_try_ident (parser, "currentColor"))
         {
           vals[0] = svg_color_new_current ();
           return 1;
         }
-      else if (gdk_rgba_parser_parse (parser, &color))
+      else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT) ||
+               gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED) ||
+               gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
+               gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION))
         {
-          vals[0] = svg_color_new_rgba (&color);
-          return 1;
+          GdkRGBA color;
+
+          if (gdk_rgba_parser_parse (parser, &color))
+            {
+              vals[0] = svg_color_new_rgba (&color);
+              return 1;
+            }
         }
     }
 

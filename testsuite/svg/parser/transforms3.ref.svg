@@ -1,0 +1,79 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='100'
+        height='100'>
+  <rect
+          transform='translate3d(10, 20, 30)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='scale3d(2, 3, 4)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='rotate3d(1, 0, 0, 45)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='skew(30, 45)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='perspective(500)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='matrix(1, 0, 0, 0,
+       0, 1, 0, 0,
+       0, 0, 1, 0,
+       10, 20, 30, 1)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='translate3d(5, 10, 15) rotate3d(0, 1, 0, 90)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='scale3d(1, 1, 1)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='perspective(100) translate3d(0, 0, 50)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+  <rect
+          transform='rotate(45, 0, 0) translate(10, 20) scale(2, 2)'
+          x='0'
+          y='0'
+          width='10'
+          height='10'>
+  </rect>
+</svg>

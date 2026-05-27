@@ -1,0 +1,62 @@
+mask {
+  source: color {
+    bounds: 10 10 80 80;
+    color: rgb(255,0,0);
+  }
+  mask: transform {
+    transform: translate(10, 10) scale(80);
+    child: fill {
+      child: color {
+        bounds: 0 0 1 1;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 1 0.5 o 0 0.5, -0.5 0.5, 0.707106769 o -0.5 0, -0.5 -0.5, 0.707106769 o 0 -0.5, 0.5 -0.5, 0.707106769 o 0.5 0, 0.5 0.5, 0.707106769 z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 120 10 100 80;
+    color: rgb(0,128,0);
+  }
+  mask: container {
+    fill {
+      child: color {
+        bounds: 120 10 40 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 120 10 h 40 v 80 h -40 z";
+      fill-rule: winding;
+    }
+    fill {
+      child: color {
+        bounds: 170 10 40 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 170 10 h 40 v 80 h -40 z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 10 110 80 80;
+    color: rgb(0,0,255);
+  }
+  mask: transform {
+    transform: rotate(15);
+    child: fill {
+      child: color {
+        bounds: 10 110 80 80;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 10 110 h 80 v 80 h -80 z";
+      fill-rule: winding;
+    }
+  }
+}

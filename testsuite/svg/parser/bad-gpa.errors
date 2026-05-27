@@ -1,0 +1,16 @@
+5.1: (svg / gpa:state): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+5.1: (svg / gpa:version): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:stroke): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:fill): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:stroke-width): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:states): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:origin): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:transition-type): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:transition-duration): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:transition-delay): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:transition-easing): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:animation-direction): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:animation-duration): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:animation-repeat): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:animation-segment): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+19.38: (path / gpa:animation-easing): GTK_SVG_ERROR_INVALID_ATTRIBUTE

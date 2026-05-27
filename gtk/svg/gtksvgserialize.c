@@ -555,7 +555,7 @@ serialize_animation_transform (GString              *s,
                                SvgAnimation         *a,
                                GtkSvgSerializeFlags  flags)
 {
-  const char *types[] = { "none", "translate", "scale", "rotate", "any" };
+  const char *types[] = { "none", "translate", "scale", "rotate", "skewX", "skewY", "matrix" };
 
   string_indent (s, indent);
   g_string_append (s, "<animateTransform");

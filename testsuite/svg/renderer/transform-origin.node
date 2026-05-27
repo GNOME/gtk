@@ -1,0 +1,45 @@
+transform {
+  transform: translate(50, 50) rotate(45) translate(-50, -50);
+  child: color {
+    bounds: 20 20 60 60;
+    color: rgb(255,0,0);
+  }
+}
+transform {
+  transform: translate(150, 50) rotate(30) translate(-150, -50);
+  child: container {
+    color {
+      bounds: 120 20 60 60;
+      color: rgb(0,128,0);
+    }
+    stroke {
+      child: color {
+        bounds: 118 18 64 64;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 120 20 h 60 v 60 h -60 z";
+      line-width: 4;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+color {
+  bounds: 185 85 30 30;
+  color: rgb(0,0,255);
+}
+transform {
+  transform: translate(50, 150) rotate(60) translate(-50, -150);
+  child: rounded-clip {
+    clip: 20 120 60 60 / 30;
+    child: color {
+      bounds: 20 120 60 60;
+      color: rgb(128,0,128);
+    }
+  }
+}
+color {
+  bounds: 120 120 90 90;
+  color: rgb(255,165,0);
+}

@@ -1,0 +1,65 @@
+fill {
+  child: color {
+    bounds: 10 10 80 80;
+    color: rgb(255,0,0);
+  }
+  path: "\
+M 10 10\
+L 90 10\
+L 90 90\
+L 10 90\
+Z\
+M 30 30\
+L 30 70\
+L 70 70\
+L 70 30\
+Z";
+  fill-rule: winding;
+}
+fill {
+  child: color {
+    bounds: 110 10 80 80;
+    color: rgb(0,128,0);
+  }
+  path: "\
+M 110 10\
+L 190 10\
+L 190 90\
+L 110 90\
+Z\
+M 130 30\
+L 130 70\
+L 170 70\
+L 170 30\
+Z";
+  fill-rule: even-odd;
+}
+clip {
+  clip: 220 20 60 60;
+  child: color {
+    bounds: 210 10 80 80;
+    color: rgb(0,0,255);
+  }
+}
+color {
+  bounds: 10 110 80 80;
+  color: rgb(255,165,0);
+}
+fill {
+  child: color {
+    bounds: 110 110 80 80;
+    color: rgb(128,0,128);
+  }
+  path: "\
+M 120 120\
+L 180 120\
+L 180 180\
+L 120 180\
+Z\
+M 140 140\
+L 140 160\
+L 160 160\
+L 160 140\
+Z";
+  fill-rule: winding;
+}

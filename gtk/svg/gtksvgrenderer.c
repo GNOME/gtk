@@ -1735,39 +1735,42 @@ push_group (SvgElement   *shape,
     {
       GskTransform *transform = svg_transform_get_gsk (tf);
 
-      if (svg_element_is_specified (shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
-        {
+      {
           SvgValue *tfo = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM_ORIGIN);
-          SvgValue *tfb = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM_BOX);
-          graphene_rect_t bounds;
-          double x, y;
 
-          switch (svg_enum_get (tfb))
+          if (tfo && svg_numbers_get_length (tfo) >= 2)
             {
-            case TRANSFORM_BOX_CONTENT_BOX:
-            case TRANSFORM_BOX_FILL_BOX:
-              svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds);
-              break;
-            case TRANSFORM_BOX_BORDER_BOX:
-            case TRANSFORM_BOX_STROKE_BOX:
-              svg_element_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
-              break;
-            case TRANSFORM_BOX_VIEW_BOX:
-              graphene_rect_init_from_rect (&bounds, context->viewport);
-              break;
-            default:
-              g_assert_not_reached ();
+              SvgValue *tfb = svg_element_get_current_value (shape, SVG_PROPERTY_TRANSFORM_BOX);
+              graphene_rect_t bounds;
+              double x, y;
+
+              switch (svg_enum_get (tfb))
+                {
+                case TRANSFORM_BOX_CONTENT_BOX:
+                case TRANSFORM_BOX_FILL_BOX:
+                  svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds);
+                  break;
+                case TRANSFORM_BOX_BORDER_BOX:
+                case TRANSFORM_BOX_STROKE_BOX:
+                  svg_element_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
+                  break;
+                case TRANSFORM_BOX_VIEW_BOX:
+                  graphene_rect_init_from_rect (&bounds, context->viewport);
+                  break;
+                default:
+                  g_assert_not_reached ();
+                }
+
+              x = bounds.origin.x + svg_numbers_get (tfo, 0, bounds.size.width);
+              y = bounds.origin.y + svg_numbers_get (tfo, 1, bounds.size.height);
+
+              transform = gsk_transform_translate (
+                              gsk_transform_transform (
+                                  gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                                  transform),
+                              &GRAPHENE_POINT_INIT (-x, -y));
             }
-
-          x = svg_numbers_get (tfo, 0, bounds.size.width);
-          y = svg_numbers_get (tfo, 1, bounds.size.height);
-
-          transform = gsk_transform_translate (
-                          gsk_transform_transform (
-                              gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
-                              transform),
-                          &GRAPHENE_POINT_INIT (-x, -y));
-        }
+      }
 
       push_transform (context, transform);
       gtk_snapshot_save (context->snapshot);
@@ -1829,6 +1832,8 @@ push_group (SvgElement   *shape,
       if (svg_clip_get_kind (clip) == CLIP_PATH)
         {
           GskFillRule rule;
+          graphene_rect_t bounds;
+          GskPath *clip_path;
 
           switch (svg_clip_get_fill_rule (clip))
             {
@@ -1841,9 +1846,21 @@ push_group (SvgElement   *shape,
               break;
             }
 
+          /* path() coordinates are relative to the element's reference box */
+          if (svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds))
+            {
+              GskTransform *t = gsk_transform_translate (NULL, &bounds.origin);
+              clip_path = svg_transform_path (t, svg_clip_get_path (clip));
+              gsk_transform_unref (t);
+            }
+          else
+            {
+              clip_path = gsk_path_ref (svg_clip_get_path (clip));
+            }
+
           if (context->picking.picking)
             {
-              if (!gsk_path_in_fill (svg_clip_get_path (clip), &context->picking.p, rule))
+              if (!gsk_path_in_fill (clip_path, &context->picking.p, rule))
                 {
                   if (!context->picking.done)
                     context->picking.clipped = shape;
@@ -1854,7 +1871,8 @@ push_group (SvgElement   *shape,
           if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
             gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
 #endif
-          svg_snapshot_push_fill (context->snapshot, svg_clip_get_path (clip), rule);
+          svg_snapshot_push_fill (context->snapshot, clip_path, rule);
+          gsk_path_unref (clip_path);
         }
       else
         {
@@ -1912,38 +1930,41 @@ push_group (SvgElement   *shape,
                 {
                   GskTransform *transform = svg_transform_get_gsk (ctf);
 
-                  if (svg_element_is_specified (clip_shape, SVG_PROPERTY_TRANSFORM_ORIGIN))
-                    {
+                  {
                       SvgValue *tfo = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM_ORIGIN);
-                      SvgValue *tfb = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM_BOX);
-                      graphene_rect_t bounds;
-                      double x, y;
 
-                      switch (svg_enum_get (tfb))
+                      if (tfo && svg_numbers_get_length (tfo) >= 2)
                         {
-                        case TRANSFORM_BOX_CONTENT_BOX:
-                        case TRANSFORM_BOX_FILL_BOX:
-                          svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds);
-                          break;
-                        case TRANSFORM_BOX_BORDER_BOX:
-                        case TRANSFORM_BOX_STROKE_BOX:
-                          svg_element_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
-                          break;
-                        case TRANSFORM_BOX_VIEW_BOX:
-                          graphene_rect_init_from_rect (&bounds, context->viewport);
-                          break;
-                        default:
-                          g_assert_not_reached ();
+                          SvgValue *tfb = svg_element_get_current_value (clip_shape, SVG_PROPERTY_TRANSFORM_BOX);
+                          graphene_rect_t bounds;
+                          double x, y;
+
+                          switch (svg_enum_get (tfb))
+                            {
+                            case TRANSFORM_BOX_CONTENT_BOX:
+                            case TRANSFORM_BOX_FILL_BOX:
+                              svg_element_get_current_bounds (shape, context->viewport, context->svg, &bounds);
+                              break;
+                            case TRANSFORM_BOX_BORDER_BOX:
+                            case TRANSFORM_BOX_STROKE_BOX:
+                              svg_element_get_current_stroke_bounds (shape, context->viewport, context->svg, &bounds);
+                              break;
+                            case TRANSFORM_BOX_VIEW_BOX:
+                              graphene_rect_init_from_rect (&bounds, context->viewport);
+                              break;
+                            default:
+                              g_assert_not_reached ();
+                            }
+
+                          x = bounds.origin.x + svg_numbers_get (tfo, 0, bounds.size.width);
+                          y = bounds.origin.y + svg_numbers_get (tfo, 1, bounds.size.height);
+
+                          transform = gsk_transform_translate (
+                                          gsk_transform_transform (
+                                              gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                                              transform),
+                                          &GRAPHENE_POINT_INIT (-x, -y));
                         }
-
-                      x = svg_numbers_get (tfo, 0, bounds.size.width);
-                      y = svg_numbers_get (tfo, 1, bounds.size.width);
-
-                      transform = gsk_transform_translate (
-                                      gsk_transform_transform (
-                                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
-                                          transform),
-                                      &GRAPHENE_POINT_INIT (-x, -y));
                     }
 
                   push_transform (context, transform);
@@ -2551,27 +2572,30 @@ paint_radial_gradient (SvgElement            *gradient,
 
   gradient_transform = svg_transform_get_gsk (tf);
 
-  if (svg_element_is_specified (gradient, SVG_PROPERTY_TRANSFORM_ORIGIN))
-    {
+  {
       SvgValue *tfo = gradient->current[SVG_PROPERTY_TRANSFORM_ORIGIN];
-      double x, y;
 
-      if (svg_numbers_get_unit (tfo, 0) == SVG_UNIT_PERCENTAGE)
-        x = bounds->origin.x + svg_numbers_get (tfo, 0, bounds->size.width);
-      else
-        x = svg_numbers_get (tfo, 0, 1);
+      if (tfo && svg_numbers_get_length (tfo) >= 2)
+        {
+          double x, y;
 
-      if (svg_numbers_get_unit (tfo, 1) == SVG_UNIT_PERCENTAGE)
-        y = bounds->origin.y + svg_numbers_get (tfo, 1, bounds->size.width);
-      else
-        y = svg_numbers_get (tfo, 1, 1);
+          if (svg_numbers_get_unit (tfo, 0) == SVG_UNIT_PERCENTAGE)
+            x = bounds->origin.x + svg_numbers_get (tfo, 0, bounds->size.width);
+          else
+            x = svg_numbers_get (tfo, 0, 1);
 
-      gradient_transform = gsk_transform_translate (
-                      gsk_transform_transform (
-                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
-                          gradient_transform),
-                      &GRAPHENE_POINT_INIT (-x, -y));
-    }
+          if (svg_numbers_get_unit (tfo, 1) == SVG_UNIT_PERCENTAGE)
+            y = bounds->origin.y + svg_numbers_get (tfo, 1, bounds->size.height);
+          else
+            y = svg_numbers_get (tfo, 1, 1);
+
+          gradient_transform = gsk_transform_translate (
+                          gsk_transform_transform (
+                              gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                              gradient_transform),
+                          &GRAPHENE_POINT_INIT (-x, -y));
+        }
+  }
 
   gtk_snapshot_transform (context->snapshot, gradient_transform);
   push_transform (context, gradient_transform);
@@ -2694,20 +2718,23 @@ paint_pattern (SvgElement            *pattern,
 
   transform = svg_transform_get_gsk (tf);
 
-  if (svg_element_is_specified (pattern, SVG_PROPERTY_TRANSFORM_ORIGIN))
-    {
+  {
       SvgValue *tfo = pattern->current[SVG_PROPERTY_TRANSFORM_ORIGIN];
-      double xx, yy;
 
-      xx = svg_numbers_get (tfo, 0, child_bounds.size.width);
-      yy = svg_numbers_get (tfo, 1, child_bounds.size.width);
+      if (tfo && svg_numbers_get_length (tfo) >= 2)
+        {
+          double xx, yy;
 
-      transform = gsk_transform_translate (
-                      gsk_transform_transform (
-                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (xx, yy)),
-                          transform),
-                      &GRAPHENE_POINT_INIT (-xx, -yy));
-     }
+          xx = child_bounds.origin.x + svg_numbers_get (tfo, 0, child_bounds.size.width);
+          yy = child_bounds.origin.y + svg_numbers_get (tfo, 1, child_bounds.size.height);
+
+          transform = gsk_transform_translate (
+                          gsk_transform_transform (
+                              gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (xx, yy)),
+                              transform),
+                          &GRAPHENE_POINT_INIT (-xx, -yy));
+        }
+  }
 
   gtk_snapshot_transform (context->snapshot, transform);
   push_transform (context, transform);

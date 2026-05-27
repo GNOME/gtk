@@ -474,7 +474,8 @@ static gboolean
 parse_transform_function (GtkCssParser *self,
                           unsigned int  min_args,
                           unsigned int  max_args,
-                          double       *values)
+                          double       *values,
+                          unsigned int (*parse_one) (GtkCssParser *, unsigned int, gpointer))
 {
   const GtkCssToken *token;
   gboolean result = FALSE;
@@ -501,10 +502,17 @@ parse_transform_function (GtkCssParser *self,
           break;
         }
 
-      parse_args = css_parser_parse_number (self, arg, num);
+      parse_args = parse_one (self, arg, num);
       if (parse_args == 0)
         break;
-      values[arg] = num[arg].value;
+
+      if (num[arg].unit == SVG_UNIT_DEG ||
+          num[arg].unit == SVG_UNIT_RAD ||
+          num[arg].unit == SVG_UNIT_GRAD ||
+          num[arg].unit == SVG_UNIT_TURN)
+        values[arg] = angle_to_deg (num[arg].value, num[arg].unit);
+      else
+        values[arg] = num[arg].value;
       arg += parse_args;
       token = gtk_css_parser_get_token (self);
       if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
@@ -564,7 +572,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
            double values[3] = { 0, 0, 0 };
 
-          if (!parse_transform_function (parser, 1, 3, values))
+          if (!parse_transform_function (parser, 1, 3, values, css_parser_parse_number_angle))
             goto fail;
 
           transform.type = TRANSFORM_ROTATE;
@@ -576,7 +584,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!parse_transform_function (parser, 1, 2, values))
+          if (!parse_transform_function (parser, 1, 2, values, css_parser_parse_number))
             goto fail;
 
           transform.type = TRANSFORM_SCALE;
@@ -590,7 +598,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[2] = { 0, 0 };
 
-          if (!parse_transform_function (parser, 1, 2, values))
+          if (!parse_transform_function (parser, 1, 2, values, css_parser_parse_number_length))
             goto fail;
 
           transform.type = TRANSFORM_TRANSLATE;
@@ -604,7 +612,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!parse_transform_function (parser, 1, 1, values))
+          if (!parse_transform_function (parser, 1, 1, values, css_parser_parse_number_angle))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_X;
@@ -614,7 +622,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!parse_transform_function (parser, 1, 1, values))
+          if (!parse_transform_function (parser, 1, 1, values, css_parser_parse_number_angle))
             goto fail;
 
           transform.type = TRANSFORM_SKEW_Y;
@@ -624,7 +632,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[6];
 
-          if (!parse_transform_function (parser, 6, 6, values))
+          if (!parse_transform_function (parser, 6, 6, values, css_parser_parse_number))
             goto fail;
 
           transform.type = TRANSFORM_MATRIX;
@@ -634,7 +642,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[3];
 
-          if (!parse_transform_function (parser, 3, 3, values))
+          if (!parse_transform_function (parser, 3, 3, values, css_parser_parse_number_length))
             goto fail;
 
           transform.type = TRANSFORM_TRANSLATE_3D;
@@ -646,7 +654,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[3];
 
-          if (!parse_transform_function (parser, 3, 3, values))
+          if (!parse_transform_function (parser, 3, 3, values, css_parser_parse_number))
             goto fail;
 
           transform.type = TRANSFORM_SCALE_3D;
@@ -658,7 +666,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[4];
 
-          if (!parse_transform_function (parser, 4, 4, values))
+          if (!parse_transform_function (parser, 4, 4, values, css_parser_parse_number_angle))
             goto fail;
 
           transform.type = TRANSFORM_ROTATE_3D;
@@ -671,7 +679,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[2];
 
-          if (!parse_transform_function (parser, 2, 2, values))
+          if (!parse_transform_function (parser, 2, 2, values, css_parser_parse_number_angle))
             goto fail;
 
           transform.type = TRANSFORM_SKEW;
@@ -682,7 +690,7 @@ svg_transform_parse_css (GtkCssParser *parser)
         {
           double values[1];
 
-          if (!parse_transform_function (parser, 1, 1, values))
+          if (!parse_transform_function (parser, 1, 1, values, css_parser_parse_number_length))
             goto fail;
 
           transform.type = TRANSFORM_PERSPECTIVE;
@@ -693,7 +701,7 @@ svg_transform_parse_css (GtkCssParser *parser)
           double values[16];
           float floats[16];
 
-          if (!parse_transform_function (parser, 16, 16, values))
+          if (!parse_transform_function (parser, 16, 16, values, css_parser_parse_number))
             goto fail;
 
           transform.type = TRANSFORM_MATRIX_3D;

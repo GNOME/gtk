@@ -12,6 +12,7 @@
           r='5.5'>
   </circle>
   <rect
+          id='rect'
           x='1'
           y='-3'
           width='100.1'
@@ -44,6 +45,13 @@
           width='20'
           height='30'>
   </image>
+  <image
+          href='smiley.png'
+          x='10'
+          y='10'
+          width='20'
+          height='30'>
+  </image>
   <switch>
     <g
             systemLanguage='en'>
@@ -54,6 +62,13 @@
   </switch>
   <a
           href='test'>
+    <circle
+            r='10'>
+    </circle>
+    <text>click this circle</text>
+  </a>
+  <a
+          href='#anim'>
     <circle
             r='10'>
     </circle>

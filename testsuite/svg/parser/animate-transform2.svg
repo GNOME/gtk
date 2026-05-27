@@ -1,0 +1,20 @@
+<svg width='120' height='120' viewBox='0 0 120 120'>
+  <rect x='40' y='40' width='20' height='20' fill='red'>
+    <animateTransform attributeName='transform' type='skewX' from='0' to='30' dur='2s' fill='freeze'/>
+  </rect>
+  <rect x='40' y='40' width='20' height='20' fill='blue'>
+    <animateTransform attributeName='transform' type='skewY' from='0' to='30' dur='2s' fill='freeze'/>
+  </rect>
+  <rect x='40' y='40' width='20' height='20' fill='green'>
+    <animateTransform attributeName='transform' type='translate' from='0' to='50' dur='2s' fill='freeze'/>
+  </rect>
+  <rect x='40' y='40' width='20' height='20' fill='orange'>
+    <animateTransform attributeName='transform' type='scale' from='1' to='3' dur='2s' fill='freeze'/>
+  </rect>
+  <rect x='40' y='40' width='20' height='20' fill='purple'>
+    <animateTransform attributeName='transform' type='rotate' from='0' to='180' dur='2s' fill='freeze'/>
+  </rect>
+  <rect x='40' y='40' width='20' height='20' fill='cyan'>
+    <animateTransform attributeName='transform' type='rotate' from='0 50' to='180 50' dur='2s' fill='freeze'/>
+  </rect>
+</svg>

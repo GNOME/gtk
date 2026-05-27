@@ -1,0 +1,114 @@
+color {
+  bounds: 10 10 40 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 14 14 32 32 / 16;
+  child: color {
+    bounds: 14 14 32 32;
+    color: rgb(255,255,255);
+  }
+}
+color {
+  bounds: 150 10 40 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 154 14 32 32 / 16;
+  child: color {
+    bounds: 154 14 32 32;
+    color: rgb(255,255,255);
+  }
+}
+clip {
+  clip: 210 10 40 80;
+  child: container {
+    color {
+      bounds: 190 10 80 80;
+      color: rgb(255,0,0);
+    }
+    rounded-clip {
+      clip: 198 18 64 64 / 32;
+      child: color {
+        bounds: 198 18 64 64;
+        color: rgb(255,255,255);
+      }
+    }
+  }
+}
+color {
+  bounds: 10 110 40 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 14 114 32 32 / 16;
+  child: color {
+    bounds: 14 114 32 32;
+    color: rgb(255,255,255);
+  }
+}
+clip {
+  clip: 110 110 40 80;
+  child: container {
+    color {
+      bounds: 70 110 80 80;
+      color: rgb(255,0,0);
+    }
+    rounded-clip {
+      clip: 78 118 64 64 / 32;
+      child: color {
+        bounds: 78 118 64 64;
+        color: rgb(255,255,255);
+      }
+    }
+  }
+}
+color {
+  bounds: 210 110 80 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 218 114 64 32 / 32;
+  child: color {
+    bounds: 218 114 64 32;
+    color: rgb(255,255,255);
+  }
+}
+clip {
+  clip: 10 210 40 80;
+  child: container {
+    color {
+      bounds: -30 210 80 80;
+      color: rgb(255,0,0);
+    }
+    rounded-clip {
+      clip: -22 218 64 64 / 32;
+      child: color {
+        bounds: -22 218 64 64;
+        color: rgb(255,255,255);
+      }
+    }
+  }
+}
+color {
+  bounds: 130 210 40 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 134 214 32 32 / 16;
+  child: color {
+    bounds: 134 214 32 32;
+    color: rgb(255,255,255);
+  }
+}
+color {
+  bounds: 210 210 40 40;
+  color: rgb(255,0,0);
+}
+rounded-clip {
+  clip: 214 214 32 32 / 16;
+  child: color {
+    bounds: 214 214 32 32;
+    color: rgb(255,255,255);
+  }
+}

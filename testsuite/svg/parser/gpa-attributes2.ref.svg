@@ -1,0 +1,63 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state-names='active hover pressed'
+        gpa:state='0'
+        width='100'
+        height='100'>
+  <path
+          id='path1'
+          stroke-width='2'
+          d='M 0 0 L 50 50'
+          gpa:stroke-minwidth='1'
+          gpa:stroke-maxwidth='4'
+          gpa:stroke='accent'
+          gpa:fill='foreground'
+          gpa:states='active'
+          gpa:transition-type='fade'
+          gpa:transition-easing='ease-in-out'
+          gpa:transition-duration='200ms'
+          gpa:transition-delay='50ms'
+          gpa:origin='0.5'>
+  </path>
+  <path
+          id='path2'
+          visibility='hidden'
+          d='M 10 0 L 60 50'
+          gpa:states='none'
+          gpa:transition-type='animate'
+          gpa:transition-duration='300ms'
+          gpa:animation-type='automatic'
+          gpa:animation-direction='normal'
+          gpa:animation-easing='ease-in'
+          gpa:animation-duration='1000ms'
+          gpa:animation-repeat='3'
+          gpa:animation-segment='0.5'>
+  </path>
+  <path
+          id='path3'
+          visibility='hidden'
+          d='M 20 0 L 70 50'
+          gpa:states='hover pressed'
+          gpa:animation-type='automatic'
+          gpa:animation-direction='alternate'
+          gpa:animation-duration='2000ms'>
+  </path>
+  <path
+          id='path4'
+          d='M 30 0 L 80 50'
+          gpa:animation-type='automatic'
+          gpa:animation-direction='reverse'
+          gpa:animation-duration='500ms'>
+  </path>
+  <circle
+          id='dot1'
+          cx='50'
+          cy='50'
+          r='10'
+          gpa:attach-to='path1'
+          gpa:attach-pos='0.5'>
+  </circle>
+</svg>

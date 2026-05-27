@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- visibility hidden -->
+  <rect x="10" y="10" width="60" height="60" fill="red" visibility="hidden"/>
+
+  <!-- visibility visible (default) -->
+  <rect x="80" y="10" width="60" height="60" fill="green" visibility="visible"/>
+
+  <!-- display none -->
+  <rect x="150" y="10" width="60" height="60" fill="blue" display="none"/>
+
+  <!-- display inline (default) -->
+  <rect x="220" y="10" width="60" height="60" fill="purple" display="inline"/>
+
+  <!-- overflow hidden on nested svg -->
+  <svg x="10" y="80" width="60" height="60" overflow="hidden">
+    <rect x="-10" y="-10" width="80" height="80" fill="orange"/>
+  </svg>
+
+  <!-- overflow visible on nested svg -->
+  <svg x="80" y="80" width="60" height="60" overflow="visible">
+    <rect x="0" y="0" width="60" height="60" fill="teal"/>
+  </svg>
+
+  <!-- opacity 0 -->
+  <rect x="150" y="80" width="60" height="60" fill="red" opacity="0"/>
+
+  <!-- color-interpolation -->
+  <defs>
+    <linearGradient id="g1" color-interpolation="linearRGB">
+      <stop offset="0" stop-color="red"/>
+      <stop offset="1" stop-color="blue"/>
+    </linearGradient>
+  </defs>
+  <rect x="220" y="80" width="60" height="60" fill="url(#g1)"/>
+
+  <!-- shape-rendering -->
+  <rect x="10" y="150" width="60" height="60" fill="brown" shape-rendering="crispEdges"/>
+
+  <!-- image-rendering -->
+  <rect x="80" y="150" width="60" height="60" fill="navy" image-rendering="optimizeSpeed"/>
+</svg>

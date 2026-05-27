@@ -14,6 +14,8 @@
               flood-color='rgb(255,0,0)'>
       </feFlood>
       <feGaussianBlur
+              id='gauss'
+              class='gauss'
               width='50%'
               height='50%'
               result='blurred_source'
