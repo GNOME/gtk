@@ -167,6 +167,14 @@ gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
   source_dir: meson.current_source_dir()
 )
 
+test('gtk-demo-manifest-check',
+  manifest_check,
+  args: [
+    meson.current_source_dir() / 'demo.gresource.xml',
+    demos,
+  ],
+)
+
 # Use a subset of compiler flags
 demo_cflags = []
 foreach flag: common_cflags

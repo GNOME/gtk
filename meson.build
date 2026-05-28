@@ -885,6 +885,8 @@ gen_visibility_macros = find_program('build-aux/meson/gen-visibility-macros.py')
 
 gen_profile_conf = find_program('build-aux/meson/gen-profile-conf.py')
 
+manifest_check = find_program('build-aux/meson/manifest-check.py')
+
 profile = get_option('profile')
 if profile == 'auto'
   if gtk_minor_version.is_even()
