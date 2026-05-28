@@ -20,8 +20,9 @@
 
 #include "visual.h"
 
-#include "fpsoverlay.h"
 #include "a11yoverlay.h"
+#include "fpsoverlay.h"
+#include "frametimeoverlay.h"
 #include "updatesoverlay.h"
 #include "layoutoverlay.h"
 #include "focusoverlay.h"
@@ -96,6 +97,7 @@ struct _GtkInspectorVisual
 
   GtkWidget *debug_box;
   GtkWidget *fps_switch;
+  GtkWidget *frametime_switch;
   GtkWidget *updates_switch;
   GtkWidget *cairo_switch;
   GtkWidget *baselines_switch;
@@ -108,6 +110,7 @@ struct _GtkInspectorVisual
   GtkWidget *touchscreen_switch;
 
   GtkInspectorOverlay *fps_overlay;
+  GtkInspectorOverlay *frametime_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
   GtkInspectorOverlay *focus_overlay;
@@ -303,6 +306,40 @@ fps_activate (GtkSwitch          *sw,
         {
           gtk_inspector_window_remove_overlay (iw, vis->fps_overlay);
           vis->fps_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
+}
+
+static void
+frametime_activate (GtkSwitch          *sw,
+                    GParamSpec         *pspec,
+                    GtkInspectorVisual *vis)
+{
+  GtkInspectorWindow *iw;
+  gboolean active;
+
+  active = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (active)
+    {
+      if (vis->frametime_overlay == NULL)
+        {
+          vis->frametime_overlay = gtk_frame_time_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, vis->frametime_overlay);
+          g_object_unref (vis->frametime_overlay);
+        }
+    }
+  else
+    {
+      if (vis->frametime_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, vis->frametime_overlay);
+          vis->frametime_overlay = NULL;
         }
     }
 
@@ -1128,6 +1165,11 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->fps_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
+  else if (gtk_widget_is_ancestor (vis->frametime_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->frametime_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
   else if (gtk_widget_is_ancestor (vis->updates_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->updates_switch);
@@ -1286,6 +1328,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fps_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, frametime_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cairo_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, baselines_switch);
@@ -1295,6 +1338,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, subsurface_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
+  gtk_widget_class_bind_template_callback (widget_class, frametime_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, cairo_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);

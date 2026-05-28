@@ -12,6 +12,7 @@ inspector_sources = files(
   'eventrecording.c',
   'focusoverlay.c',
   'fpsoverlay.c',
+  'frametimeoverlay.c',
   'general.c',
   'graphdata.c',
   'graphrenderer.c',
