@@ -647,7 +647,7 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
 
       frame = frames_get (&priv->frames, priv->current);
 
-      if (gdk_frame_timings_get_frame_time (frame->timings) + G_USEC_PER_SEC > frame_time / 1000)
+      if (gdk_frame_timings_get_frame_time (frame->timings) + 10 * G_USEC_PER_SEC > frame_time / 1000)
         {
           /* Keep the frame, not a second old yet */
           GdkFrameClockFrame new_frame = {
