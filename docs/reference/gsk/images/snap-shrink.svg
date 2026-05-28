@@ -2,8 +2,8 @@
         xmlns='http://www.w3.org/2000/svg'
         xmlns:svg='http://www.w3.org/2000/svg'
         width='300mm'
-        height='297mm'
-        viewBox='0 0 300 297'>
+        height='100mm'
+        viewBox='0 0 300 100'>
   <defs>
     <style>
       .foreground-stroke {
