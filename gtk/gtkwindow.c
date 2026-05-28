@@ -416,9 +416,6 @@ static void     surface_state_changed     (GtkWidget          *widget);
 static void     surface_size_changed      (GtkWidget          *widget,
                                            int                 width,
                                            int                 height);
-static gboolean surface_render            (GdkSurface         *surface,
-                                           cairo_region_t     *region,
-                                           GtkWidget          *widget);
 static gboolean surface_event             (GdkSurface         *surface,
                                            GdkEvent           *event,
                                            GtkWidget          *widget);
@@ -4559,7 +4556,6 @@ gtk_window_realize (GtkWidget *widget)
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "notify::mapped", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "notify::capabilities", G_CALLBACK (update_window_actions), widget);
-  g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
 
@@ -4669,7 +4665,6 @@ gtk_window_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, update_window_actions, widget);
-  g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (surface, toplevel_compute_size, widget);
 
@@ -4973,16 +4968,6 @@ maybe_unset_focus_and_default (GtkWindow *window)
 
   if (priv->unset_default)
     gtk_window_set_default_widget (window, NULL);
-}
-
-static gboolean
-surface_render (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
-
-  return TRUE;
 }
 
 static void

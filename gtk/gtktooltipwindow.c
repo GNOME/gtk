@@ -187,15 +187,6 @@ mapped_changed (GdkSurface *surface,
 }
 
 static gboolean
-surface_render (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
-  return TRUE;
-}
-
-static gboolean
 surface_event (GdkSurface *surface,
                GdkEvent   *event,
                GtkWidget  *widget)
@@ -215,7 +206,6 @@ gtk_tooltip_window_realize (GtkWidget *widget)
   gdk_surface_set_widget (window->surface, widget);
 
   g_signal_connect (window->surface, "notify::mapped", G_CALLBACK (mapped_changed), widget);
-  g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->realize (widget);
@@ -238,7 +228,6 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   g_clear_object (&window->renderer);
 
   g_signal_handlers_disconnect_by_func (window->surface, mapped_changed, widget);
-  g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
   gdk_surface_set_widget (window->surface, NULL);
   g_clear_pointer (&window->surface, gdk_surface_destroy);

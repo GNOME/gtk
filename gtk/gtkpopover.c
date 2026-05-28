@@ -969,15 +969,6 @@ surface_mapped_changed (GtkWidget *widget)
 }
 
 static gboolean
-surface_render (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
-  return TRUE;
-}
-
-static gboolean
 surface_event (GdkSurface *surface,
                GdkEvent   *event,
                GtkWidget  *widget)
@@ -1101,7 +1092,6 @@ gtk_popover_realize (GtkWidget *widget)
   gdk_surface_set_widget (priv->surface, widget);
 
   g_signal_connect_swapped (priv->surface, "notify::mapped", G_CALLBACK (surface_mapped_changed), widget);
-  g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
@@ -1125,7 +1115,6 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_clear_object (&priv->renderer);
 
   g_signal_handlers_disconnect_by_func (priv->surface, surface_mapped_changed, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   gdk_surface_set_widget (priv->surface, NULL);
   g_clear_pointer (&priv->surface, gdk_surface_destroy);

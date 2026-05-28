@@ -286,15 +286,6 @@ gtk_text_handle_native_interface_init (GtkNativeInterface *iface)
   iface->layout = gtk_text_handle_native_layout;
 }
 
-static gboolean
-surface_render (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkTextHandle  *handle)
-{
-  gtk_widget_render (GTK_WIDGET (handle), surface, region);
-  return TRUE;
-}
-
 static void
 surface_mapped_changed (GtkWidget *widget)
 {
@@ -375,7 +366,6 @@ gtk_text_handle_realize (GtkWidget *widget)
 
   g_signal_connect_swapped (handle->surface, "notify::mapped",
                             G_CALLBACK (surface_mapped_changed), widget);
-  g_signal_connect (handle->surface, "render", G_CALLBACK (surface_render), widget);
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->realize (widget);
 
@@ -396,7 +386,6 @@ gtk_text_handle_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (handle->renderer);
   g_clear_object (&handle->renderer);
 
-  g_signal_handlers_disconnect_by_func (handle->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (handle->surface, surface_mapped_changed, widget);
 
   gdk_surface_set_widget (handle->surface, NULL);
