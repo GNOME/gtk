@@ -30,12 +30,19 @@
 #include "gtknativeprivate.h"
 #include "gtkwidgetprivate.h"
 
+#include "inspector/window.h"
+#ifdef HAVE_ACCESSKIT
+#include "a11y/gtkaccesskitcontextprivate.h"
+#endif
+
+#include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 
 typedef struct _GtkNativePrivate
 {
   gulong update_handler_id;
   gulong layout_handler_id;
+  gulong render_handler_id;
   gulong scale_changed_handler_id;
   gulong enter_monitor_handler_id;
   gulong leave_monitor_handler_id;
@@ -124,6 +131,66 @@ surface_layout_cb (GdkSurface *surface,
     gtk_native_queue_relayout (native);
 }
 
+static gboolean
+surface_render_cb (GdkSurface     *surface,
+                   cairo_region_t *region,
+                   GtkWidget      *widget)
+{
+#ifdef HAVE_ACCESSKIT
+  GtkATContext *at_ctx;
+#endif
+  GtkSnapshot *snapshot;
+  GskRenderer *renderer;
+  GskRenderNode *root;
+  double x, y;
+  gint64 before_snapshot G_GNUC_UNUSED;
+  gint64 before_render G_GNUC_UNUSED;
+
+  before_snapshot = GDK_PROFILER_CURRENT_TIME;
+  before_render = 0;
+
+#ifdef HAVE_ACCESSKIT
+  at_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (GTK_IS_ACCESSKIT_CONTEXT (at_ctx))
+    gtk_accesskit_context_update_tree (GTK_ACCESSKIT_CONTEXT (at_ctx));
+  g_object_unref (at_ctx);
+#endif
+
+  renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
+  if (renderer == NULL)
+    return TRUE;
+
+  snapshot = gtk_snapshot_new ();
+  gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+  gtk_widget_snapshot (widget, snapshot);
+  root = gtk_snapshot_free_to_node (snapshot);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      before_render = GDK_PROFILER_CURRENT_TIME;
+      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
+    }
+
+  if (root != NULL)
+    {
+      root = gtk_inspector_prepare_render (widget,
+                                           renderer,
+                                           surface,
+                                           region,
+                                           root,
+                                           widget->priv->render_node);
+
+      gsk_renderer_render (renderer, root, region);
+
+      gsk_render_node_unref (root);
+
+      gdk_profiler_end_mark (before_render, "Widget render", "");
+    }
+
+  return TRUE;
+}
+
 static void
 scale_changed_cb (GdkSurface *surface,
                   GParamSpec *pspec,
@@ -183,6 +250,9 @@ gtk_native_realize (GtkNative *self)
   priv->layout_handler_id = g_signal_connect (surface, "layout",
                                               G_CALLBACK (surface_layout_cb),
                                               self);
+  priv->render_handler_id = g_signal_connect (surface, "render", 
+                                              G_CALLBACK (surface_render_cb),
+                                              self);
 
   priv->scale_changed_handler_id = g_signal_connect (surface, "notify::scale-factor",
                                                      G_CALLBACK (scale_changed_cb),
@@ -225,6 +295,7 @@ gtk_native_unrealize (GtkNative *self)
 
   g_clear_signal_handler (&priv->update_handler_id, clock);
   g_clear_signal_handler (&priv->layout_handler_id, surface);
+  g_clear_signal_handler (&priv->render_handler_id, surface);
   g_clear_signal_handler (&priv->scale_changed_handler_id, surface);
   g_clear_signal_handler (&priv->enter_monitor_handler_id, surface);
   g_clear_signal_handler (&priv->leave_monitor_handler_id, surface);

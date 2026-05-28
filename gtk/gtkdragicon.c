@@ -176,15 +176,6 @@ gtk_drag_icon_native_init (GtkNativeInterface *iface)
   iface->layout = gtk_drag_icon_native_layout;
 }
 
-static gboolean
-surface_render (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
-  return TRUE;
-}
-
 static void
 surface_compute_size (GdkDragSurface     *surface,
                       GdkDragSurfaceSize *size,
@@ -204,7 +195,6 @@ gtk_drag_icon_realize (GtkWidget *widget)
 
   gdk_surface_set_widget (icon->surface, widget);
 
-  g_signal_connect (icon->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (icon->surface, "compute-size", G_CALLBACK (surface_compute_size), widget);
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->realize (widget);
@@ -228,7 +218,6 @@ gtk_drag_icon_unrealize (GtkWidget *widget)
 
   if (icon->surface)
     {
-      g_signal_handlers_disconnect_by_func (icon->surface, surface_render, widget);
       g_signal_handlers_disconnect_by_func (icon->surface, surface_compute_size, widget);
       gdk_surface_set_widget (icon->surface, NULL);
     }
