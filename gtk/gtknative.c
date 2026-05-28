@@ -131,10 +131,10 @@ surface_layout_cb (GdkSurface *surface,
     gtk_native_queue_relayout (native);
 }
 
-static void
-gtk_widget_render (GtkWidget            *widget,
-                   GdkSurface           *surface,
-                   const cairo_region_t *region)
+static gboolean
+surface_render_cb (GdkSurface     *surface,
+                   cairo_region_t *region,
+                   GtkWidget      *widget)
 {
 #ifdef HAVE_ACCESSKIT
   GtkATContext *at_ctx;
@@ -149,9 +149,6 @@ gtk_widget_render (GtkWidget            *widget,
   before_snapshot = GDK_PROFILER_CURRENT_TIME;
   before_render = 0;
 
-  if (!GTK_IS_NATIVE (widget))
-    return;
-
 #ifdef HAVE_ACCESSKIT
   at_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
   if (GTK_IS_ACCESSKIT_CONTEXT (at_ctx))
@@ -161,7 +158,7 @@ gtk_widget_render (GtkWidget            *widget,
 
   renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   if (renderer == NULL)
-    return;
+    return TRUE;
 
   snapshot = gtk_snapshot_new ();
   gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
@@ -190,14 +187,6 @@ gtk_widget_render (GtkWidget            *widget,
 
       gdk_profiler_end_mark (before_render, "Widget render", "");
     }
-}
-
-static gboolean
-surface_render_cb (GdkSurface     *surface,
-                   cairo_region_t *region,
-                   GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
 
   return TRUE;
 }
