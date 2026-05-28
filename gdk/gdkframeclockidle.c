@@ -312,7 +312,8 @@ maybe_start_idle (GdkFrameClockIdle *self,
     {
       guint min_interval = 0;
 
-      if (priv->min_next_frame_time != 0 &&
+      if (!caused_by_thaw &&
+          priv->min_next_frame_time != 0 &&
           !GDK_DEBUG_CHECK (NO_VSYNC))
         {
           gint64 now = g_get_monotonic_time ();
