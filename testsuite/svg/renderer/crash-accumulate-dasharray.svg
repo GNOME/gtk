@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <line x1="0" y1="50" x2="200" y2="50" stroke="black" stroke-width="4" stroke-dasharray="5,5">
+    <animate attributeName="stroke-dasharray" from="5,5" to="20,20" dur="1s" accumulate="sum" additive="sum" repeatCount="5"/>
+  </line>
+</svg>

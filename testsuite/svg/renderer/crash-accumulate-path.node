@@ -1,0 +1,27 @@
+clip {
+  clip: 0 0 200 200;
+  child: container {
+    fill {
+      child: color {
+        bounds: 0 0 10 10;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 0\
+L 10 10";
+      fill-rule: winding;
+    }
+    stroke {
+      child: color {
+        bounds: -4 -4 18 18;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 0\
+L 10 10";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}

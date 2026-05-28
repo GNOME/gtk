@@ -2753,7 +2753,7 @@ resolve_clip_ref (SvgValue   *value,
                   SvgElement *shape,
                   ParserData *data)
 {
-  if (svg_value_is_unset (value))
+  if (svg_value_is_unset (value) || svg_value_is_inherit (value) || svg_value_is_initial (value))
     return;
 
   if (svg_clip_get_kind (value) == CLIP_URL &&
@@ -2783,7 +2783,7 @@ resolve_mask_ref (SvgValue   *value,
                   SvgElement *shape,
                   ParserData *data)
 {
-  if (svg_value_is_unset (value))
+  if (svg_value_is_unset (value) || svg_value_is_inherit (value) || svg_value_is_initial (value))
     return;
 
   if (svg_mask_get_kind (value) == MASK_URL && svg_mask_get_shape (value) == NULL)
@@ -2982,7 +2982,7 @@ resolve_filter_ref (SvgValue   *value,
                     SvgElement *shape,
                     ParserData *data)
 {
-  if (svg_value_is_unset (value))
+  if (svg_value_is_unset (value) || svg_value_is_inherit (value) || svg_value_is_initial (value))
     return;
 
   for (unsigned int i = 0; i < svg_filter_functions_get_length (value); i++)
@@ -4528,7 +4528,8 @@ apply_styles_to_shape (SvgElement *shape,
     }
 
   color = svg_element_get_base_value (shape, SVG_PROPERTY_COLOR);
-  if (!svg_value_is_unset (color))
+  if (!svg_value_is_unset (color) &&
+      !svg_value_is_inherit (color))
     {
       if ((svg->features & GTK_SVG_EXTENSIONS) == 0 &&
           svg_color_get_kind (color) == COLOR_SYMBOLIC)

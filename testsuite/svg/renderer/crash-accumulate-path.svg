@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,0 L10,10" stroke="black">
+    <animate attributeName="d" from="M0,0 L10,10" to="M100,100 L200,200" dur="1s" accumulate="sum" additive="sum" repeatCount="2"/>
+  </path>
+</svg>

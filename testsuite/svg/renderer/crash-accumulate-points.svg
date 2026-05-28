@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <polygon points="0,0 10,0 10,10 0,10">
+    <animate attributeName="points" from="0,0 10,0 10,10 0,10" to="50,50 60,50 60,60 50,60" dur="1s" accumulate="sum" additive="sum" repeatCount="3"/>
+  </polygon>
+</svg>
