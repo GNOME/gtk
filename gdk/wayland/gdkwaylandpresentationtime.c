@@ -49,6 +49,14 @@ gdk_wayland_presentation_time_free (GdkWaylandPresentationTime *self)
   g_free (self);
 }
 
+gboolean
+gdk_wayland_presentation_time_supported (GdkWaylandPresentationTime *self)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  return self->display->presentation != NULL;
+}
+
 static gint64
 time_from_wayland (uint32_t tv_sec_hi,
                    uint32_t tv_sec_lo,
