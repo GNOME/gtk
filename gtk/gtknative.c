@@ -30,6 +30,12 @@
 #include "gtknativeprivate.h"
 #include "gtkwidgetprivate.h"
 
+#include "inspector/window.h"
+#ifdef HAVE_ACCESSKIT
+#include "a11y/gtkaccesskitcontextprivate.h"
+#endif
+
+#include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 
 typedef struct _GtkNativePrivate
@@ -123,6 +129,67 @@ surface_layout_cb (GdkSurface *surface,
 
   if (gtk_widget_needs_allocate (GTK_WIDGET (native)))
     gtk_native_queue_relayout (native);
+}
+
+static void
+gtk_widget_render (GtkWidget            *widget,
+                   GdkSurface           *surface,
+                   const cairo_region_t *region)
+{
+#ifdef HAVE_ACCESSKIT
+  GtkATContext *at_ctx;
+#endif
+  GtkSnapshot *snapshot;
+  GskRenderer *renderer;
+  GskRenderNode *root;
+  double x, y;
+  gint64 before_snapshot G_GNUC_UNUSED;
+  gint64 before_render G_GNUC_UNUSED;
+
+  before_snapshot = GDK_PROFILER_CURRENT_TIME;
+  before_render = 0;
+
+  if (!GTK_IS_NATIVE (widget))
+    return;
+
+#ifdef HAVE_ACCESSKIT
+  at_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (GTK_IS_ACCESSKIT_CONTEXT (at_ctx))
+    gtk_accesskit_context_update_tree (GTK_ACCESSKIT_CONTEXT (at_ctx));
+  g_object_unref (at_ctx);
+#endif
+
+  renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
+  if (renderer == NULL)
+    return;
+
+  snapshot = gtk_snapshot_new ();
+  gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+  gtk_widget_snapshot (widget, snapshot);
+  root = gtk_snapshot_free_to_node (snapshot);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      before_render = GDK_PROFILER_CURRENT_TIME;
+      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
+    }
+
+  if (root != NULL)
+    {
+      root = gtk_inspector_prepare_render (widget,
+                                           renderer,
+                                           surface,
+                                           region,
+                                           root,
+                                           widget->priv->render_node);
+
+      gsk_renderer_render (renderer, root, region);
+
+      gsk_render_node_unref (root);
+
+      gdk_profiler_end_mark (before_render, "Widget render", "");
+    }
 }
 
 static gboolean

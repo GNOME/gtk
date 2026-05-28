@@ -233,10 +233,6 @@ void         gtk_widget_monitor_changed     (GtkWidget *widget);
 
 GdkSurface * gtk_widget_get_surface         (GtkWidget *widget);
 
-void         gtk_widget_render              (GtkWidget            *widget,
-                                             GdkSurface           *surface,
-                                             const cairo_region_t *region);
-
 void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 						gpointer      group);
 void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
