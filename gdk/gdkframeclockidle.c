@@ -240,6 +240,8 @@ compute_smooth_frame_time (GdkFrameClock *clock,
   /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
    *        and new_frame_time >= old_frame_time. */
   frames_passed = (new_frame_time - smoothed_frame_time_base + frame_interval / 2) / frame_interval;
+  if (new_frame_time_is_vsync_related)
+    frames_passed = MAX (frames_passed, 1);
 
   /* We use an approximately whole number of frames in the future from
    * last smoothed frame time. This way we avoid minor jitter in the
