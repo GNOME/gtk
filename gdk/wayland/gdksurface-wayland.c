@@ -1075,21 +1075,23 @@ static void
 unmap_popups_for_surface (GdkSurface *surface)
 {
   GdkWaylandDisplay *display_wayland;
-  GList *l;
+  GList *l, *popups;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  for (l = display_wayland->current_popups; l; l = l->next)
+  popups = g_list_copy (display_wayland->current_popups);
+  for (l = popups; l; l = l->next)
     {
        GdkSurface *popup = l->data;
 
        if (popup->parent == surface)
          {
-           g_warning ("Tried to unmap the parent of a popup");
+           if (popup->autohide)
+             g_warning ("Tried to unmap the parent of a popup");
            gdk_surface_hide (popup);
-
-           return;
          }
     }
+
+  g_list_free (popups);
 }
 
 void
