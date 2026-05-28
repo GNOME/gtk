@@ -233,8 +233,6 @@ compute_smooth_frame_time (GdkFrameClock *clock,
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
   gint64 frames_passed;
   gint64 new_smoothed_time;
-  gint64 current_error;
-  gint64 correction_magnitude;
 
   /* Consecutive frame, assume it is an integer number of frames later, so round to nearest such */
   /* NOTE:  This is >= 0, because smoothed_frame_time_base is < frame_interval/2 from old_frame_time
@@ -248,43 +246,6 @@ compute_smooth_frame_time (GdkFrameClock *clock,
    * frame times making the animation speed uneven, but still animate
    * evenly in case of whole frame skips. */
   new_smoothed_time = smoothed_frame_time_base + frames_passed * frame_interval;
-
-  /* However, sometimes the smoothed time is too much off from the
-   * real time. For example, if the first frame clock cycle happened
-   * not due to a frame rendering but an input event, then
-   * new_frame_time could happen to be near the middle between two
-   * frames. If that happens and we then start regularly animating at
-   * the refresh_rate, then the jitter in the real time may cause us
-   * to randomly sometimes round up, and sometimes down.
-   *
-   * To combat this we converge the smooth time towards the real time
-   * in a way that is slow when they are near and fast when they are
-   * far from each other.
-   *
-   * This is done by using the square of the error as the correction
-   * magnitude. I.e. if the error is 0.5 frame, we correct by
-   * 0.5*0.5=0.25 frame, if the error is 0.25 we correct by 0.125, if
-   * the error is 0.1, frame we correct by 0.01 frame, etc.
-   *
-   * The actual computation is:
-   *   (current_error/frame_interval)*(current_error/frame_interval)*frame_interval
-   * But this can be simplified as below.
-   *
-   * Note: We only do this correction if the new frame is caused by a
-   * thaw of the frame clock, so that we know the time is actually
-   * related to the physical vblank. For frameclock cycles triggered
-   * by other events we always step up in whole frames from the last
-   * reported time.
-   */
-  if (new_frame_time_is_vsync_related)
-    {
-      current_error = new_smoothed_time - new_frame_time;
-      correction_magnitude = current_error * current_error / frame_interval; /* Note, this is always > 0 due to the square */
-      if (current_error > 0)
-        new_smoothed_time -= correction_magnitude;
-      else
-        new_smoothed_time += correction_magnitude;
-    }
 
   /* Ensure we're always monotonic  */
   if (new_smoothed_time <= priv->smoothed_frame_time_reported)
