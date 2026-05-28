@@ -231,7 +231,7 @@ compute_smooth_frame_time (GdkFrameClock *clock,
                            gint64 frame_interval)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-  int frames_passed;
+  gint64 frames_passed;
   gint64 new_smoothed_time;
   gint64 current_error;
   gint64 correction_magnitude;
@@ -582,7 +582,7 @@ gdk_frame_clock_paint_idle (void *data)
                       compute_smooth_frame_time (clock, priv->frame_time + priv->smoothed_frame_time_phase,
                                                  priv->paint_is_thaw,
                                                  priv->smoothed_frame_time_base,
-                                                 priv->smoothed_frame_time_period);
+                                                 frame_interval);
                 }
 
               priv->smoothed_frame_time_period = frame_interval;
