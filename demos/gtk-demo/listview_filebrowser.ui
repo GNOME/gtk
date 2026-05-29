@@ -184,6 +184,9 @@
             <signal name="clicked" handler="filebrowser_up_clicked_cb" object="dirlist" swapped="no"/>
           </object>
         </child>
+        <child type="start">
+          <object class="GtkSpinner" id="loading-spinner"/>
+        </child>
         <child type="end">
           <object class="GtkListView">
             <property name="valign">center</property>

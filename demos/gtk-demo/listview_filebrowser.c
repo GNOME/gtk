@@ -239,6 +239,7 @@ do_listview_filebrowser (GtkWidget *do_widget)
       GtkWidget *view;
       GtkBuilder *builder;
       GtkDirectoryList *dirlist;
+      GObject *spinner;
       GFile *file;
       char *cwd;
       GtkCssProvider *provider;
@@ -263,6 +264,10 @@ do_listview_filebrowser (GtkWidget *do_widget)
       dirlist = GTK_DIRECTORY_LIST (gtk_builder_get_object (builder, "dirlist"));
       gtk_directory_list_set_file (dirlist, file);
       g_object_unref (file);
+
+      /* Bind the loading spinner */
+      spinner = gtk_builder_get_object (builder, "loading-spinner");
+      g_object_bind_property (dirlist, "loading", spinner, "spinning", G_BINDING_DEFAULT);
 
       /* grab focus in the view */
       view = GTK_WIDGET (gtk_builder_get_object (builder, "view"));
