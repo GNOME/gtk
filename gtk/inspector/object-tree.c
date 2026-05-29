@@ -62,6 +62,7 @@
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtksvgwidgetprivate.h"
+#include "gtkspinnerprivate.h"
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -143,6 +144,18 @@ object_tree_svg_widget_get_children (GObject *object)
 
   store = g_list_store_new (G_TYPE_OBJECT);
   g_list_store_append (store, gtk_svg_widget_get_svg (svg));
+
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
+object_tree_spinner_get_children (GObject *object)
+{
+  GtkSpinner *spinner = GTK_SPINNER (object);
+  GListStore *store;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  g_list_store_append (store, gtk_spinner_get_svg (spinner));
 
   return G_LIST_MODEL (store);
 }
@@ -529,6 +542,11 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_svg_widget_get_type,
     object_tree_widget_get_parent,
     object_tree_svg_widget_get_children
+  },
+  {
+    gtk_spinner_get_type,
+    object_tree_widget_get_parent,
+    object_tree_spinner_get_children
   },
   {
     gtk_text_buffer_get_type,
