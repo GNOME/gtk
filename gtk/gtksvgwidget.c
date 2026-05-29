@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "gtksvgwidget.h"
+#include "gtksvgwidgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtktooltip.h"
 #include "gtkcssnodeprivate.h"
@@ -518,6 +518,15 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
                               _gtk_marshal_VOID__STRING_STRINGv);
 
   gtk_widget_class_set_css_name (widget_class, "svg");
+}
+
+/* }}} */
+/* {{{ Private API */
+
+GtkSvg *
+gtk_svg_widget_get_svg (GtkSvgWidget *self)
+{
+  return self->svg;
 }
 
 /* }}} */
