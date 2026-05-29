@@ -56,9 +56,9 @@
  * classes such as `:focus`, `:active`, `:hover` or `:visited`.
  *
  * If [property@Gtk.Widget:has-tooltip] is set, then the content
- * of \<title\> elements will be shown as tooltips.
+ * of `<title>` elements will be shown as tooltips.
  *
- * SVG animations and different \<view\>s can be triggered by input
+ * SVG animations and different `<view>`s can be triggered by input
  * events as well. The following events are supported: focus, blur,
  * mouseenter, mouseleave, click.
  * See the [SVG animation](https://svgwg.org/specs/animations/)
