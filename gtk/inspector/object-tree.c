@@ -61,6 +61,8 @@
 #include "gtksearchbar.h"
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtksvgwidgetprivate.h"
+
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
@@ -131,6 +133,18 @@ object_tree_widget_get_children (GObject *object)
   g_object_unref (sublist);
 
   return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
+}
+
+static GListModel *
+object_tree_svg_widget_get_children (GObject *object)
+{
+  GtkSvgWidget *svg = GTK_SVG_WIDGET (object);
+  GListStore *store;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  g_list_store_append (store, gtk_svg_widget_get_svg (svg));
+
+  return G_LIST_MODEL (store);
 }
 
 static GObject *
@@ -510,6 +524,11 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_text_tag_table_get_type,
     object_tree_get_parent_default,
     object_tree_text_tag_table_get_children
+  },
+  {
+    gtk_svg_widget_get_type,
+    object_tree_widget_get_parent,
+    object_tree_svg_widget_get_children
   },
   {
     gtk_text_buffer_get_type,

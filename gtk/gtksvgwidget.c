@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "gtksvgwidget.h"
+#include "gtksvgwidgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtktooltip.h"
 #include "gtkcssnodeprivate.h"
@@ -56,9 +56,9 @@
  * classes such as `:focus`, `:active`, `:hover` or `:visited`.
  *
  * If [property@Gtk.Widget:has-tooltip] is set, then the content
- * of \<title\> elements will be shown as tooltips.
+ * of `<title>` elements will be shown as tooltips.
  *
- * SVG animations and different \<view\>s can be triggered by input
+ * SVG animations and different `<view>`s can be triggered by input
  * events as well. The following events are supported: focus, blur,
  * mouseenter, mouseleave, click.
  * See the [SVG animation](https://svgwg.org/specs/animations/)
@@ -518,6 +518,15 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
                               _gtk_marshal_VOID__STRING_STRINGv);
 
   gtk_widget_class_set_css_name (widget_class, "svg");
+}
+
+/* }}} */
+/* {{{ Private API */
+
+GtkSvg *
+gtk_svg_widget_get_svg (GtkSvgWidget *self)
+{
+  return self->svg;
 }
 
 /* }}} */
