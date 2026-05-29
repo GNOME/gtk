@@ -168,7 +168,7 @@
   <object class="GtkSingleSelection" id="selection_model">
     <property name="model">
       <object class="GtkDirectoryList" id="dirlist">
-        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type,standard::type</property>
       </object>
     </property>
   </object>
