@@ -37,7 +37,7 @@
           gpa:states='0'
           gpa:stroke='foreground'
           gpa:transition-type='fade'
-          gpa:transition-duration='1000ms'>
+          gpa:transition-duration='500ms'>
   </circle>
   <circle
           id='path1'
@@ -53,7 +53,7 @@
           gpa:states='0'
           gpa:stroke='foreground'
           gpa:transition-type='fade'
-          gpa:transition-duration='1000ms'
+          gpa:transition-duration='500ms'
           gpa:animation-type='automatic'
           gpa:animation-direction='segment'
           gpa:animation-duration='2000ms'>
