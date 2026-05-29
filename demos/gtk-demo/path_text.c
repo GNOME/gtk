@@ -498,6 +498,18 @@ drag_update (GtkGestureDrag *drag,
 }
 
 static void
+drag_end (GtkGestureDrag *drag,
+          double          offset_x,
+          double          offset_y,
+          GtkPathWidget  *self)
+{
+  if (!gtk_gesture_is_active (GTK_GESTURE (drag)))
+    return;
+
+  drag_update (drag, offset_x, offset_y, self);
+}
+
+static void
 pointer_motion (GtkEventControllerMotion *controller,
                 double                    x,
                 double                    y,
@@ -530,7 +542,7 @@ gtk_path_widget_init (GtkPathWidget *self)
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
   g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);
   g_signal_connect (controller, "drag-update", G_CALLBACK (drag_update), self);
-  g_signal_connect (controller, "drag-end", G_CALLBACK (drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (drag_end), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = GTK_EVENT_CONTROLLER (gtk_event_controller_motion_new ());
