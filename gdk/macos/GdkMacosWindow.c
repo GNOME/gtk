@@ -93,10 +93,15 @@ static Class _contentViewClass = nil;
                                 0,
                                 GDK_TOPLEVEL_STATE_MINIMIZED |
                                 GDK_TOPLEVEL_STATE_SUSPENDED);
+  gdk_surface_set_is_mapped (GDK_SURFACE (gdk_surface), FALSE);
+  gdk_surface_freeze_updates (GDK_SURFACE (gdk_surface));
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
 {
+  gdk_surface_set_is_mapped (GDK_SURFACE (gdk_surface), TRUE);
+  gdk_surface_thaw_updates (GDK_SURFACE (gdk_surface));
+
   if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface))
     _gdk_macos_toplevel_surface_attach_to_parent (GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface));
   else if (GDK_IS_MACOS_POPUP_SURFACE (gdk_surface))
