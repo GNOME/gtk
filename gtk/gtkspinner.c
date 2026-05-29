@@ -29,7 +29,7 @@
 
 #include "config.h"
 
-#include "gtkspinner.h"
+#include "gtkspinnerprivate.h"
 
 #include "gtkimage.h"
 #include "gtkprivate.h"
@@ -368,4 +368,10 @@ gtk_spinner_stop (GtkSpinner *spinner)
   gtk_accessible_update_state (GTK_ACCESSIBLE (spinner),
                                GTK_ACCESSIBLE_STATE_BUSY, FALSE,
                                -1);
+}
+
+GtkSvg *
+gtk_spinner_get_svg (GtkSpinner *spinner)
+{
+  return spinner->paintable;
 }
