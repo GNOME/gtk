@@ -837,19 +837,20 @@ is_mouse_button_press_event (NSEventType type)
 }
 
 static void
-get_surface_point_from_screen_point (GdkSurface *surface,
-                                     NSPoint     screen_point,
-                                     int        *x,
-                                     int        *y)
+get_surface_point_from_screen_point (GdkMacosDisplay *self,
+                                     GdkMacosSurface *surface,
+                                     NSPoint          screen_point,
+                                     int             *x,
+                                     int             *y)
 {
-  NSWindow *nswindow;
-  NSPoint point;
+  int x_tmp, y_tmp;
 
-  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
-  point = convert_nspoint_from_screen (nswindow, screen_point);
-
-  *x = point.x;
-  *y = surface->height - point.y;
+  _gdk_macos_display_from_display_coords (self,
+                                          screen_point.x,
+                                          screen_point.y,
+                                          &x_tmp, &y_tmp);
+  *x = x_tmp - surface->root_x;
+  *y = y_tmp - surface->root_y;
 }
 
 static GdkSurface *
@@ -1017,7 +1018,7 @@ find_surface_for_mouse_event (GdkMacosDisplay *self,
   NSPoint point;
   NSEventType event_type;
   GdkSurface *surface;
-  GdkSurface *implicit_grab_surface;
+  GdkMacosSurface *implicit_grab_surface;
   GdkSurface *grab_surface;
   GdkDevice *pointer;
   GdkSeat *seat;
@@ -1034,13 +1035,13 @@ find_surface_for_mouse_event (GdkMacosDisplay *self,
 
   event_type = [nsevent type];
 
-  implicit_grab_surface = gdk_macos_device_get_implicit_grab (pointer);
+  implicit_grab_surface = GDK_MACOS_SURFACE (gdk_macos_device_get_implicit_grab (pointer));
   grab_surface = gdk_seat_get_topmost_grab_surface (seat);
 
   if (implicit_grab_surface)
     {
-      get_surface_point_from_screen_point (implicit_grab_surface, point, x, y);
-      return GDK_MACOS_SURFACE (implicit_grab_surface);
+      get_surface_point_from_screen_point (self, implicit_grab_surface, point, x, y);
+      return implicit_grab_surface;
     }
   else if (grab_surface)
     {

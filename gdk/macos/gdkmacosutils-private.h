@@ -40,16 +40,8 @@ struct _GdkPoint
 typedef struct _GdkPoint GdkPoint;
 
 static inline NSPoint
-convert_nspoint_from_screen (NSWindow *window,
-                             NSPoint   point)
-{
-  return [window convertPointFromScreen:point];
-}
-
-static inline NSPoint
 convert_nspoint_to_screen (NSWindow *window,
                            NSPoint   point)
 {
   return [window convertPointToScreen:point];
 }
-
