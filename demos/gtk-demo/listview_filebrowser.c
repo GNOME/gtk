@@ -224,7 +224,8 @@ filebrowser_view_activated_cb (GtkGridView      *view,
   GFileInfo *info;
 
   info = g_list_model_get_item (G_LIST_MODEL (gtk_grid_view_get_model (view)), pos);
-  if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+  if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
+      g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
     gtk_directory_list_set_file (list, G_FILE (g_file_info_get_attribute_object (info, "standard::file")));
 
   g_object_unref (info);
@@ -238,6 +239,7 @@ do_listview_filebrowser (GtkWidget *do_widget)
       GtkWidget *view;
       GtkBuilder *builder;
       GtkDirectoryList *dirlist;
+      GObject *spinner;
       GFile *file;
       char *cwd;
       GtkCssProvider *provider;
@@ -262,6 +264,10 @@ do_listview_filebrowser (GtkWidget *do_widget)
       dirlist = GTK_DIRECTORY_LIST (gtk_builder_get_object (builder, "dirlist"));
       gtk_directory_list_set_file (dirlist, file);
       g_object_unref (file);
+
+      /* Bind the loading spinner */
+      spinner = gtk_builder_get_object (builder, "loading-spinner");
+      g_object_bind_property (dirlist, "loading", spinner, "spinning", G_BINDING_DEFAULT);
 
       /* grab focus in the view */
       view = GTK_WIDGET (gtk_builder_get_object (builder, "view"));

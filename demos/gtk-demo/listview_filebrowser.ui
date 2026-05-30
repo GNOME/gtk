@@ -168,7 +168,7 @@
   <object class="GtkSingleSelection" id="selection_model">
     <property name="model">
       <object class="GtkDirectoryList" id="dirlist">
-        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type,standard::type</property>
       </object>
     </property>
   </object>
@@ -183,6 +183,9 @@
             <property name="icon-name">go-up-symbolic</property>
             <signal name="clicked" handler="filebrowser_up_clicked_cb" object="dirlist" swapped="no"/>
           </object>
+        </child>
+        <child type="start">
+          <object class="GtkSpinner" id="loading-spinner"/>
         </child>
         <child type="end">
           <object class="GtkListView">
