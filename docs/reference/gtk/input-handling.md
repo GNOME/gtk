@@ -72,7 +72,7 @@ the widget at the events coordinates (see gtk_widget_pick()).
 In the first phase (the “capture” phase) the event is delivered to
 each widget from the top-most (the top-level `GtkWindow` or grab widget)
 down to the target widget.
-[Event controllers](event-controllers-and-gestures) that are attached
+[Event controllers](#event-controllers-and-gestures) that are attached
 with `GTK_PHASE_CAPTURE` get a chance to react to the event.
 
 After the “capture” phase, the widget that was intended to be the
