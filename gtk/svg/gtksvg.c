@@ -2274,6 +2274,9 @@ gtk_svg_set_hover_callback (GtkSvg             *svg,
 
 /* {{{ Animation */
 
+static void update_for_state (GtkSvg       *self,
+                              unsigned int  previous_state);
+
 /*< private>
  * gtk_svg_set_load_time:
  * @self: an SVG paintable
@@ -2312,6 +2315,7 @@ gtk_svg_set_load_time (GtkSvg  *self,
 
   timeline_set_load_time (self->timeline, load_time);
 
+  update_for_state (self, self->initial_state);
   update_animation_state (self);
 }
 
@@ -3083,6 +3087,32 @@ gtk_svg_get_weight (GtkSvg *self)
   return self->weight;
 }
 
+static void
+update_for_state (GtkSvg       *self,
+                  unsigned int  previous_state)
+{
+  int64_t current_time;
+
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing)
+    {
+      if (self->gpa_version > 0)
+        {
+          apply_state (self, self->state);
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+        }
+    }
+
+  current_time = get_current_time (self);
+  timeline_update_for_state (self->timeline,
+                             previous_state, self->state,
+                             current_time + self->state_change_delay);
+   gtk_svg_advance (self, current_time);
+
+#ifdef DEBUG
+   animation_state_dump (self);
+#endif
+}
+
 /**
  * gtk_svg_set_state:
  * @self: an SVG paintable
@@ -3112,38 +3142,16 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
-      return;
-    }
+  dbg_print ("state", "renderer state %u -> %u", previous_state, state);
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing)
-    {
-      if (self->gpa_version > 0)
-        {
-          apply_state (self, state);
-          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
-        }
-    }
+  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
+    goto done;
 
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
-    {
-      int64_t current_time = get_current_time (self);
-      dbg_print ("state", "renderer state %u -> %u", previous_state, state);
+    update_for_state (self, previous_state);
 
-      timeline_update_for_state (self->timeline,
-                                 previous_state, self->state,
-                                 current_time + self->state_change_delay);
-
-      gtk_svg_advance (self, current_time);
-
-#ifdef DEBUG
-      animation_state_dump (self);
-#endif
-    }
-
+done:
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 

@@ -1499,17 +1499,13 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
       unsigned int state;
 
       if (parse_number (state_attr, 0, 63, &v))
-        {
-          svg->initial_state = (unsigned int) v;
-          gtk_svg_set_state (svg, (unsigned int) v);
-        }
+        svg->initial_state = (unsigned int) v;
       else if (find_named_state (svg, state_attr, &state))
-        {
-          svg->initial_state = state;
-          gtk_svg_set_state (svg, state);
-        }
+        svg->initial_state = state;
       else
         gtk_svg_invalid_attribute (svg, context, attr_names, "gpa:state", NULL);
+
+      svg->state = svg->initial_state;
     }
 
   if (version_attr)
