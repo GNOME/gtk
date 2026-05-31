@@ -1661,6 +1661,21 @@ compute_current_values_for_shape (SvgElement        *shape,
       context->viewport = &viewport;
     }
 
+  if ((context->svg->features & GTK_SVG_ANIMATIONS) == 0 &&
+      !svg_element_is_important (shape, SVG_PROPERTY_VISIBILITY))
+    {
+      Visibility visibility;
+
+      if (svg_element_get_states (shape) & context->svg->state)
+        visibility = VISIBILITY_VISIBLE;
+      else
+        visibility = VISIBILITY_HIDDEN;
+
+      SvgValue *value = svg_visibility_new (visibility);
+      shape_set_current_value (shape, SVG_PROPERTY_VISIBILITY, 0, value);
+      svg_value_unref (value);
+    }
+
   if (shape->animations)
     {
       SvgValue *identity, *motion;
@@ -3103,8 +3118,7 @@ gtk_svg_set_state (GtkSvg       *self,
       return;
     }
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0 ||
-      !self->playing)
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing)
     {
       if (self->gpa_version > 0)
         {
