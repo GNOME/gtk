@@ -225,81 +225,81 @@ shape_apply_state (GtkSvg       *self,
                    SvgElement   *shape,
                    unsigned int  state)
 {
-  if (svg_element_type_is_path (svg_element_get_type (shape)))
+  Visibility visibility;
+
+  if (svg_element_get_states (shape) & BIT (state))
+    visibility = VISIBILITY_VISIBLE;
+  else
+    visibility = VISIBILITY_HIDDEN;
+
+  if (svg_element_type_is_renderable (svg_element_get_type (shape)))
     {
-      Visibility visibility;
-
-      if (svg_element_get_states (shape) & BIT (state))
-        visibility = VISIBILITY_VISIBLE;
-      else
-        visibility = VISIBILITY_HIDDEN;
-
       if ((self->features & GTK_SVG_ANIMATIONS) == 0)
         {
           SvgValue *value = svg_visibility_new (visibility);
           svg_element_set_base_value (shape, SVG_PROPERTY_VISIBILITY, value, FALSE);
           svg_value_unref (value);
         }
+     }
 
-      if (!self->playing && shape->animations)
+  if (!self->playing && shape->animations)
+    {
+      for (unsigned int i = shape->animations->len; i > 0; i--)
         {
-          for (unsigned int i = shape->animations->len; i > 0; i--)
-            {
-              SvgAnimation *a = g_ptr_array_index (shape->animations, i - 1);
+          SvgAnimation *a = g_ptr_array_index (shape->animations, i - 1);
 
-              if ((visibility == VISIBILITY_VISIBLE &&
-                   g_str_has_prefix (a->id, "gpa:transition:fade-in")) ||
-                  (visibility == VISIBILITY_HIDDEN &&
-                   g_str_has_prefix (a->id, "gpa:transition:fade-out")))
+          if ((visibility == VISIBILITY_VISIBLE &&
+               g_str_has_prefix (a->id, "gpa:transition:fade-in")) ||
+              (visibility == VISIBILITY_HIDDEN &&
+               g_str_has_prefix (a->id, "gpa:transition:fade-out")))
+            {
+              a->status = ANIMATION_STATUS_DONE;
+              a->previous.begin = self->current_time;
+              a->current.begin = INDEFINITE;
+              a->current.end = INDEFINITE;
+              a->state_changed = TRUE;
+              g_ptr_array_steal_index (shape->animations, i - 1);
+              g_ptr_array_add (shape->animations, a);
+            }
+          if (g_str_has_prefix (a->id, "gpa:out-of-state"))
+            {
+              if (visibility == VISIBILITY_HIDDEN)
+                {
+                  a->status = ANIMATION_STATUS_RUNNING;
+                  a->previous.begin = self->current_time;
+                  a->current.begin = self->current_time;
+                  a->current.end = INDEFINITE;
+                }
+              else
                 {
                   a->status = ANIMATION_STATUS_DONE;
                   a->previous.begin = self->current_time;
                   a->current.begin = INDEFINITE;
                   a->current.end = INDEFINITE;
-                  a->state_changed = TRUE;
-                  g_ptr_array_steal_index (shape->animations, i - 1);
-                  g_ptr_array_add (shape->animations, a);
                 }
-              if (g_str_has_prefix (a->id, "gpa:out-of-state"))
+              a->state_changed = TRUE;
+              g_ptr_array_steal_index (shape->animations, i - 1);
+              g_ptr_array_add (shape->animations, a);
+            }
+          if (g_str_has_prefix (a->id, "gpa:in-state"))
+            {
+              if (visibility == VISIBILITY_VISIBLE)
                 {
-                  if (visibility == VISIBILITY_HIDDEN)
-                    {
-                      a->status = ANIMATION_STATUS_RUNNING;
-                      a->previous.begin = self->current_time;
-                      a->current.begin = self->current_time;
-                      a->current.end = INDEFINITE;
-                    }
-                  else
-                    {
-                      a->status = ANIMATION_STATUS_DONE;
-                      a->previous.begin = self->current_time;
-                      a->current.begin = INDEFINITE;
-                      a->current.end = INDEFINITE;
-                    }
-                  a->state_changed = TRUE;
-                  g_ptr_array_steal_index (shape->animations, i - 1);
-                  g_ptr_array_add (shape->animations, a);
+                  a->status = ANIMATION_STATUS_RUNNING;
+                  a->previous.begin = self->current_time;
+                  a->current.begin = self->current_time;
+                  a->current.end = INDEFINITE;
                 }
-              if (g_str_has_prefix (a->id, "gpa:in-state"))
+              else
                 {
-                  if (visibility == VISIBILITY_VISIBLE)
-                    {
-                      a->status = ANIMATION_STATUS_RUNNING;
-                      a->previous.begin = self->current_time;
-                      a->current.begin = self->current_time;
-                      a->current.end = INDEFINITE;
-                    }
-                  else
-                    {
-                      a->status = ANIMATION_STATUS_DONE;
-                      a->previous.begin = self->current_time;
-                      a->current.begin = INDEFINITE;
-                      a->current.end = INDEFINITE;
-                    }
-                  a->state_changed = TRUE;
-                  g_ptr_array_steal_index (shape->animations, i - 1);
-                  g_ptr_array_add (shape->animations, a);
+                  a->status = ANIMATION_STATUS_DONE;
+                  a->previous.begin = self->current_time;
+                  a->current.begin = INDEFINITE;
+                  a->current.end = INDEFINITE;
                 }
+              a->state_changed = TRUE;
+              g_ptr_array_steal_index (shape->animations, i - 1);
+              g_ptr_array_add (shape->animations, a);
             }
         }
     }
