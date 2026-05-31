@@ -114,6 +114,7 @@ default:
       python3-pygments
       python3-typogrify
       sassc
+      tinysparql-devel
       vulkan-validation-layers
       weston
       xorg-x11-server-Xvfb
@@ -289,7 +290,7 @@ release-build:
   stage: build
   needs: ['container:fedora']
   variables:
-    EXTRA_MESON_FLAGS: "--buildtype=release"
+    EXTRA_MESON_FLAGS: "--buildtype=release -Dtracker=enabled"
   script:
     - .gitlab-ci/show-info-linux.sh
     - mkdir _install

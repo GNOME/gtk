@@ -23,19 +23,15 @@
 
 #include "gtkqueryprivate.h"
 #include "gtkfilesystemmodelprivate.h"
+#include "gdktypes.h"
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SEARCH_ENGINE		(_gtk_search_engine_get_type ())
-#define GTK_SEARCH_ENGINE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEARCH_ENGINE, GtkSearchEngine))
-#define GTK_SEARCH_ENGINE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEARCH_ENGINE, GtkSearchEngineClass))
-#define GTK_IS_SEARCH_ENGINE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SEARCH_ENGINE))
-#define GTK_IS_SEARCH_ENGINE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SEARCH_ENGINE))
-#define GTK_SEARCH_ENGINE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SEARCH_ENGINE, GtkSearchEngineClass))
+#define GTK_TYPE_SEARCH_ENGINE (gtk_search_engine_get_type ())
 
-typedef struct _GtkSearchEngine GtkSearchEngine;
-typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
+GDK_DECLARE_INTERNAL_TYPE (GtkSearchEngine, gtk_search_engine, GTK, SEARCH_ENGINE, GObject)
+
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
 typedef struct _GtkSearchHit GtkSearchHit;
 
@@ -52,10 +48,10 @@ struct _GtkSearchEngine
   GtkSearchEnginePrivate *priv;
 };
 
-struct _GtkSearchEngineClass 
+struct _GtkSearchEngineClass
 {
   GObjectClass parent_class;
-  
+
   /* VTable */
   void     (*set_query)       (GtkSearchEngine *engine, 
 			       GtkQuery        *query);
@@ -69,8 +65,6 @@ struct _GtkSearchEngineClass
   void     (*error)           (GtkSearchEngine *engine, 
 			       const char      *error_message);
 };
-
-GType            _gtk_search_engine_get_type        (void);
 
 GtkSearchEngine* _gtk_search_engine_new             (void);
 
@@ -93,4 +87,3 @@ void             _gtk_search_engine_set_model       (GtkSearchEngine    *engine,
                                                      GtkFileSystemModel *model);
 
 G_END_DECLS
-

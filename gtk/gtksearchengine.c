@@ -59,7 +59,7 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngine, gtk_search_engine, G_TYPE_OBJECT);
 
 static void
 set_query (GtkSearchEngine *engine,
@@ -131,11 +131,11 @@ finalize (GObject *object)
 
   g_clear_object (&engine->priv->query);
 
-  G_OBJECT_CLASS (_gtk_search_engine_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_search_engine_parent_class)->finalize (object);
 }
 
 static void
-_gtk_search_engine_class_init (GtkSearchEngineClass *class)
+gtk_search_engine_class_init (GtkSearchEngineClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
@@ -176,9 +176,9 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
 }
 
 static void
-_gtk_search_engine_init (GtkSearchEngine *engine)
+gtk_search_engine_init (GtkSearchEngine *engine)
 {
-  engine->priv = _gtk_search_engine_get_instance_private (engine);
+  engine->priv = gtk_search_engine_get_instance_private (engine);
 }
 
 static void
