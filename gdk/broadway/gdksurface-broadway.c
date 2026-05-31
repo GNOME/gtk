@@ -35,6 +35,7 @@
 #include "gdkdragsurfaceprivate.h"
 #include "gdkeventsourceprivate.h"
 #include "gdkframeclockidleprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkpopupprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdkprivate-broadway.h"

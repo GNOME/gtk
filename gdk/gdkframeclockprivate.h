@@ -80,28 +80,6 @@ struct _GdkFrameClockClass
   /* void (* resume_events)      (GdkFrameClock *clock); */
 };
 
-struct _GdkFrameTimings
-{
-  /*< private >*/
-  guint ref_count;
-
-  gint64 frame_counter;
-  guint64 cookie;
-  gint64 frame_time;
-  gint64 smoothed_frame_time;
-  gint64 drawn_time;
-  gint64 presentation_time;
-  gint64 refresh_interval;
-  gint64 predicted_presentation_time;
-
-  gint64 layout_start_time;
-  gint64 paint_start_time;
-  gint64 frame_end_time;
-
-  guint complete : 1;
-  guint slept_before : 1;
-};
-
 void _gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock);
 void _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock);
 gboolean gdk_frame_clock_is_frozen (GdkFrameClock *clock);
@@ -112,10 +90,6 @@ void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                            GdkFrameTimings *timings);
 void _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock *frame_clock,
                                                GdkFrameTimings *timings);
-
-GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
-gboolean         _gdk_frame_timings_steal (GdkFrameTimings *timings,
-                                           gint64           frame_counter);
 
 void _gdk_frame_clock_emit_flush_events  (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_before_paint  (GdkFrameClock *frame_clock);

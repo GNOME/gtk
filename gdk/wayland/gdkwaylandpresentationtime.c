@@ -1,6 +1,7 @@
 #include "config.h"
 
-#include <gdk/gdkframeclockprivate.h>
+#include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 
 #include "gdkwaylandpresentationtime-private.h"
 

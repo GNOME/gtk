@@ -25,6 +25,7 @@
 #include "gdkdragsurfaceprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"

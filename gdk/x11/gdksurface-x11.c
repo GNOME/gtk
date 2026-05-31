@@ -35,6 +35,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-xi2-private.h"
 #include "gdkframeclockidleprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkasync.h"
 #include "gdkeventsourceprivate.h"
 #include "gdkdisplay-x11.h"

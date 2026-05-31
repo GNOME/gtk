@@ -23,6 +23,7 @@
 
 #include "gdkframeclockidleprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkglcontextprivate.h"
 
 #include "gdkandroidchoreographersource-private.h"
