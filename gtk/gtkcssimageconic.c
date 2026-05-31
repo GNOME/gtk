@@ -153,10 +153,7 @@ gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
 
   color = gtk_css_color_value_parse (parser);
   if (color == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Expected color stop to contain a color");
-      goto fail;
-    }
+    goto fail;
 
   if (gtk_css_number_value_can_parse (parser))
     {
