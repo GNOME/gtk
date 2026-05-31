@@ -1,0 +1,11 @@
+a {
+  background-image: conic-gradient(90s, red, blue);
+}
+
+b {
+  background-image: conic-gradient(90deg red, blue);
+}
+
+c {
+  background-image: conic-gradient(90deg, red, blue);
+}
