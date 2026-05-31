@@ -133,6 +133,7 @@ gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
   GtkCssValue *hint = NULL;
   GtkCssValue *color = NULL;
   GtkCssValue *angles[2] = { NULL, NULL };
+  guint retval = 1;
 
   if (gtk_css_number_value_can_parse (parser))
     {
@@ -140,15 +141,15 @@ gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
                                          GTK_CSS_PARSE_PERCENT
                                          | GTK_CSS_PARSE_ANGLE);
       if (hint == NULL)
+        goto fail;
+
+      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
         {
-          gtk_css_parser_error_syntax (parser, "Failed to parse transition hint");
+          gtk_css_parser_error_syntax (parser, "Expected a comma after transition hint");
           goto fail;
         }
 
-      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        goto fail;
-
-      gtk_css_parser_consume_token (parser);
+      retval++;
     }
 
   color = gtk_css_color_value_parse (parser);
@@ -179,7 +180,7 @@ gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
                          },
                          1);
 
-  return 1;
+  return retval;
 
 fail:
   g_clear_pointer (&hint, gtk_css_value_unref);
