@@ -6,6 +6,8 @@
         gpa:state='63'
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='6000ms'
+        gpa:next-update='6000ms'
+        gpa:run-mode='discrete'
         font-size='13.333'
         font-weight='400'
         width='64'
@@ -30,7 +32,9 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <animate
             id='gpa:transition:fade-in:0:opacity:red'
             attributeName='opacity'
@@ -43,7 +47,9 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='2000ms'/>
     <animate
             id='gpa:transition:fade-out:0:opacity:red'
             attributeName='opacity'
@@ -56,6 +62,8 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='4000ms'/>
   </circle>
 </svg>

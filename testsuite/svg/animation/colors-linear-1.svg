@@ -6,6 +6,7 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='200'
@@ -32,7 +33,9 @@
               keyTimes='0; 0.5; 1'
               color-interpolation='linearRGB'
               gpa:status='running'
-              gpa:current-start-time='0ms'/>
+              gpa:current-start-time='0ms'
+              gpa:run-mode='continuous'
+              gpa:last-start-time='0ms'/>
     </circle>
     <circle
             id='q'
@@ -51,7 +54,9 @@
               values='rgb(0,0,0); rgb(255,255,255); rgb(0,0,0)'
               keyTimes='0; 0.5; 1'
               gpa:status='running'
-              gpa:current-start-time='0ms'/>
+              gpa:current-start-time='0ms'
+              gpa:run-mode='continuous'
+              gpa:last-start-time='0ms'/>
     </circle>
   </g>
 </svg>

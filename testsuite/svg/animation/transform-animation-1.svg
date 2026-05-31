@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
+        gpa:next-update='3000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='100'
@@ -39,7 +41,9 @@
               additive='sum'
               gpa:status='running'
               gpa:current-start-time='0ms'
-              gpa:current-end-time='3000ms'/>
+              gpa:current-end-time='3000ms'
+              gpa:run-mode='continuous'
+              gpa:last-start-time='0ms'/>
     </rect>
   </g>
 </svg>

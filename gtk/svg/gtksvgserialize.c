@@ -494,6 +494,9 @@ serialize_animation_status (GString              *s,
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
     {
       const char *status[] = { "inactive", "running", "done" };
+      const char *run_modes[] = { "stopped", "discrete", "continuous" };
+      int64_t last_start;
+
       append_string_attr (s, indent, "gpa:status", status[a->status]);
 
       /* Not writing out start/end time, since that will be hard to compare */
@@ -512,6 +515,16 @@ serialize_animation_status (GString              *s,
 
       if (a->current.end != INDEFINITE)
         append_time_attr (s, indent, "gpa:current-end-time", a->current.end - svg->load_time);
+
+      append_string_attr (s, indent, "gpa:run-mode", run_modes[a->run_mode]);
+
+      if (a->status == ANIMATION_STATUS_DONE)
+        last_start = a->previous.begin;
+      else
+        last_start = a->current.begin;
+
+      if (last_start != INDEFINITE)
+        append_time_attr (s, indent, "gpa:last-start-time", last_start - svg->load_time);
     }
 }
 
@@ -1127,6 +1140,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
 
   if (flags & GTK_SVG_SERIALIZE_INCLUDE_STATE)
     {
+      const char *run_modes[] = { "stopped", "discrete", "continuous" };
       string_indent (s, ATTR_INDENT);
       string_append_double (s,
                             "gpa:state-change-delay='",
@@ -1140,6 +1154,17 @@ gtk_svg_serialize_full (GtkSvg               *self,
                                 (self->current_time - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
           g_string_append (s, "ms'");
         }
+
+      if (self->next_update != INDEFINITE)
+        {
+          string_indent (s, ATTR_INDENT);
+          string_append_double (s,
+                                "gpa:next-update='",
+                                (self->next_update - self->load_time) / (double) G_TIME_SPAN_MILLISECOND);
+          g_string_append (s, "ms'");
+        }
+
+      append_string_attr (s, 0, "gpa:run-mode", run_modes[self->run_mode]);
     }
 
   serialize_shape_attrs (s, self, 0, self->content, flags);

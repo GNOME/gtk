@@ -6,6 +6,8 @@
         gpa:state='63'
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='5000ms'
+        gpa:next-update='6000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='64'
@@ -37,7 +39,9 @@
                 keySplines='0 0 1 1'
                 keyTimes='0; 1'
                 calcMode='spline'
-                gpa:status='done'/>
+                gpa:status='done'
+                gpa:run-mode='stopped'
+                gpa:last-start-time='2000ms'/>
         <animate
                 id='gpa:transition:fade-out:1:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
@@ -52,7 +56,9 @@
                 calcMode='spline'
                 gpa:status='running'
                 gpa:current-start-time='4000ms'
-                gpa:current-end-time='6000ms'/>
+                gpa:current-end-time='6000ms'
+                gpa:run-mode='continuous'
+                gpa:last-start-time='4000ms'/>
       </feGaussianBlur>
       <feComponentTransfer
               in='SourceGraphic'>
@@ -75,7 +81,9 @@
                 keySplines='0 0 1 1'
                 keyTimes='0; 1'
                 calcMode='spline'
-                gpa:status='done'/>
+                gpa:status='done'
+                gpa:run-mode='stopped'
+                gpa:last-start-time='2000ms'/>
         <animate
                 id='gpa:transition:fade-out:4:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
@@ -90,7 +98,9 @@
                 calcMode='spline'
                 gpa:status='running'
                 gpa:current-start-time='4000ms'
-                gpa:current-end-time='6000ms'/>
+                gpa:current-end-time='6000ms'
+                gpa:run-mode='continuous'
+                gpa:last-start-time='4000ms'/>
       </feGaussianBlur>
       <feComponentTransfer>
         <feFuncR
@@ -124,7 +134,9 @@
                   keySplines='0 0 1 1'
                   keyTimes='0; 1'
                   calcMode='spline'
-                  gpa:status='done'/>
+                  gpa:status='done'
+                  gpa:run-mode='stopped'
+                  gpa:last-start-time='2000ms'/>
           <animate
                   id='gpa:transition:fade-out:9:slope:gpa:morph-filter:red'
                   attributeName='slope'
@@ -139,7 +151,9 @@
                   calcMode='spline'
                   gpa:status='running'
                   gpa:current-start-time='4000ms'
-                  gpa:current-end-time='6000ms'/>
+                  gpa:current-end-time='6000ms'
+                  gpa:run-mode='continuous'
+                  gpa:last-start-time='4000ms'/>
           <animate
                   id='gpa:transition:fade-in:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
@@ -152,7 +166,9 @@
                   keySplines='0 0 1 1'
                   keyTimes='0; 1'
                   calcMode='spline'
-                  gpa:status='done'/>
+                  gpa:status='done'
+                  gpa:run-mode='stopped'
+                  gpa:last-start-time='2000ms'/>
           <animate
                   id='gpa:transition:fade-out:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
@@ -167,7 +183,9 @@
                   calcMode='spline'
                   gpa:status='running'
                   gpa:current-start-time='4000ms'
-                  gpa:current-end-time='6000ms'/>
+                  gpa:current-end-time='6000ms'
+                  gpa:run-mode='continuous'
+                  gpa:last-start-time='4000ms'/>
         </feFuncA>
       </feComponentTransfer>
       <feComposite
@@ -197,7 +215,9 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <set
             id='gpa:set:morph:red'
             attributeName='filter'
@@ -206,6 +226,8 @@
             to='url(#gpa:morph-filter:red)'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

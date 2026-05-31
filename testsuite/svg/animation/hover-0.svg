@@ -6,6 +6,7 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
+        gpa:run-mode='stopped'
         font-size='13.333'
         font-weight='400'
         width='0px'

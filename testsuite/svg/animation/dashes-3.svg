@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='11000ms'
+        gpa:next-update='11000ms'
+        gpa:run-mode='stopped'
         font-size='13.333'
         font-weight='400'
         width='300'
@@ -26,7 +28,9 @@
             from='1 1'
             to='10 10'
             keyTimes='0; 1'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='0ms'/>
     <animate
             id='dashes'
             attributeName='stroke-dasharray'
@@ -35,7 +39,9 @@
             from='10 10'
             to='none'
             keyTimes='0; 1'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='10000ms'/>
   </path>
   <circle
           font-size='13.333'

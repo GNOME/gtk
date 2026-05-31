@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='10000ms'
+        gpa:next-update='10000ms'
+        gpa:run-mode='stopped'
         font-size='13.333'
         font-weight='400'
         width='300'
@@ -31,7 +33,9 @@
               fill='freeze'
               values='rgb(255,0,0); rgb(0,255,0); url(#gpa:foreground) rgb(0,0,0); rgb(0,0,255); none; rgb(255,0,0)'
               keyTimes='0; 0.2; 0.4; 0.6; 0.8; 1'
-              gpa:status='done'/>
+              gpa:status='done'
+              gpa:run-mode='stopped'
+              gpa:last-start-time='0ms'/>
     </circle>
   </g>
 </svg>

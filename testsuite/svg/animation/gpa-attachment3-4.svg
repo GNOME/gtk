@@ -6,6 +6,8 @@
         gpa:state='63'
         gpa:state-change-delay='1000ms'
         gpa:time-since-load='5000ms'
+        gpa:next-update='5000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='100'
@@ -29,7 +31,9 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -42,7 +46,9 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'/>
     <animate
             id='gpa:transition:fade-out:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -57,7 +63,9 @@
             calcMode='spline'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'/>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dashoffset:line'
             attributeName='stroke-dashoffset'
@@ -70,7 +78,9 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'/>
     <animate
             id='gpa:transition:fade-out:0:stroke-dashoffset:line'
             attributeName='stroke-dashoffset'
@@ -85,7 +95,9 @@
             calcMode='spline'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'/>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'/>
     <set
             id='gpa:path-length:line'
             attributeName='pathLength'
@@ -94,7 +106,9 @@
             to='1'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </path>
   <circle
           id='red'
@@ -116,7 +130,9 @@
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <animateMotion
             id='gpa:attachment:red'
             begin='0ms'
@@ -127,7 +143,9 @@
             calcMode='linear'
             keyPoints='0.5; 0.5'
             rotate='auto'
-            gpa:status='done'>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='0ms'>
       <mpath href='#line'/>
     </animateMotion>
     <animateMotion
@@ -141,7 +159,9 @@
             calcMode='spline'
             keyPoints='1; 0.5'
             rotate='auto'
-            gpa:status='done'>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'>
       <mpath href='#line'/>
     </animateMotion>
     <animateMotion
@@ -157,7 +177,9 @@
             rotate='auto'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'>
       <mpath href='#line'/>
     </animateMotion>
     <set
@@ -168,6 +190,8 @@
             to='1'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

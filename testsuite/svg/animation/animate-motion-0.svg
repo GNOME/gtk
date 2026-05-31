@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
+        gpa:next-update='10000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='300'
@@ -32,6 +34,8 @@
             gpa:status='running'
             gpa:current-start-time='0ms'
             gpa:current-end-time='10000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='0ms'
             path='M 30 160 L 270 40'/>
   </circle>
 </svg>

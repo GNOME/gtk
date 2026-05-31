@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='3000ms'
+        gpa:next-update='4000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         fill='rgb(255,0,0)'
@@ -52,7 +54,9 @@
                 type='translate'
                 gpa:status='running'
                 gpa:current-start-time='2000ms'
-                gpa:current-end-time='4000ms'/>
+                gpa:current-end-time='4000ms'
+                gpa:run-mode='continuous'
+                gpa:last-start-time='2000ms'/>
       </rect>
     </a>
   </g>
