@@ -229,11 +229,11 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
         }
       else
         {
-          if (gtk_css_image_conic_parse_color_stop (self, parser, stop_array))
-            {
-              retval = 2;
-              break;
-            }
+          if (!gtk_css_image_conic_parse_color_stop (self, parser, stop_array))
+            return 0;
+
+          retval = 2;
+          break;
         }
     }
   while (!(has_colorspace && has_rotation && has_center));
