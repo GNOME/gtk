@@ -352,8 +352,22 @@ parse_transform_origin (GtkCssParser *parser)
         }
     }
 
-  if (set[0] == set[1] && set[0] != NEUTRAL)
-    return NULL;
+  if (set[0] == set[1])
+    {
+      if (set[0] != NEUTRAL)
+        return NULL;
+
+      set[0] = HORIZONTAL;
+      set[1] = VERTICAL;
+    }
+
+  if (set[0] == NEUTRAL)
+    set[0] = 1 - set[1];
+
+  if (set[1] == NEUTRAL)
+    set[1] = 1 - set[0];
+
+  /* by now, set[0] and set[1] are h,v or v,h */
 
   if (set[0] == HORIZONTAL)
     return svg_numbers_new2 (d[0], u[0], d[1], u[1]);
