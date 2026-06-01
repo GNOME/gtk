@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-05-20 05:07+0000\n"
-"PO-Revision-Date: 2026-05-21 10:29+0200\n"
+"POT-Creation-Date: 2026-06-01 01:10+0000\n"
+"PO-Revision-Date: 2026-06-01 16:55+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
 "Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -32,8 +32,8 @@ msgstr "Niciun format compatibil pentru a transfera conținutul furnizorului."
 
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:245 gdk/wayland/gdkdrop-wayland.c:205
-#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1010
-#: gdk/win32/gdkdrop-win32.c:1059 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1017
+#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:801
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Niciun format de transfer compatibil nu a fost găsit"
@@ -86,35 +86,35 @@ msgstr "Nu s-a putut oferi conținutul ca „%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Nu s-a putut oferi conținutul ca %s"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
+#: gdk/gdkdisplay.c:177 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "Backend-ul actual nu este compatibil cu OpenGL"
 
-#: gdk/gdkdisplay.c:1365 gdk/gdkvulkancontext.c:1941
+#: gdk/gdkdisplay.c:977 gdk/gdkvulkancontext.c:1941
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Vulkan este dezactivat prin GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1415
+#: gdk/gdkdisplay.c:1027
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "OpenGL este dezactivat prin GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1339
 msgid "No EGL configuration available"
 msgstr "Nicio configurație EGL disponibilă"
 
-#: gdk/gdkdisplay.c:1735
+#: gdk/gdkdisplay.c:1347
 msgid "Failed to get EGL configurations"
 msgstr "Eșec la obținerea configurațiilor EGL"
 
-#: gdk/gdkdisplay.c:1765
+#: gdk/gdkdisplay.c:1377
 msgid "No EGL configuration with required features found"
 msgstr "Nu s-a găsit nicio configurație EGL cu caracteristicile necesare"
 
-#: gdk/gdkdisplay.c:1772
+#: gdk/gdkdisplay.c:1384
 msgid "No perfect EGL configuration found"
 msgstr "Nu s-a găsit nicio configurație EGL perfectă"
 
-#: gdk/gdkdisplay.c:1814
+#: gdk/gdkdisplay.c:1426
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -122,23 +122,23 @@ msgstr[0] "Implementării EGL îi lipsește extensia %s"
 msgstr[1] "Implementării EGL îi lipsesc %2$d extensii: %1$s"
 msgstr[2] "Implementării EGL îi lipsesc %2$d de extensii: %1$s"
 
-#: gdk/gdkdisplay.c:1863
+#: gdk/gdkdisplay.c:1475
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL nu este disponibil în această izolare"
 
-#: gdk/gdkdisplay.c:1864
+#: gdk/gdkdisplay.c:1476
 msgid "libEGL not available"
 msgstr "libEGL nu este disponibil"
 
-#: gdk/gdkdisplay.c:1874
+#: gdk/gdkdisplay.c:1486
 msgid "Failed to create EGL display"
 msgstr "Eșec la crearea unui afișaj EGL"
 
-#: gdk/gdkdisplay.c:1883
+#: gdk/gdkdisplay.c:1495
 msgid "Could not initialize EGL display"
 msgstr "Nu s-a putut inițializa afișajul EGL"
 
-#: gdk/gdkdisplay.c:1893
+#: gdk/gdkdisplay.c:1505
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Versiunea EGL %d.%d este prea veche. GTK necesită %d.%d"
@@ -720,38 +720,38 @@ msgstr ""
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Nu se pot prelua datele copiate. GetClipboardData() a eșuat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:941
+#: gdk/win32/gdkdrop-win32.c:948
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Nu se pot lua date DnD. GlobalLock(0x%p) a eșuat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:950
+#: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Nu se pot lua date DnD. GlobalSize(0x%p) a eșuat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:961
+#: gdk/win32/gdkdrop-win32.c:968
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nu se pot lua date DnD. Nu s-au putut aloca %s octeți pentru a stoca datele."
 
-#: gdk/win32/gdkdrop-win32.c:1031
+#: gdk/win32/gdkdrop-win32.c:1038
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Suprafața GDK 0x%p nu este înregistrată ca destinație pentru așezat"
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:1046
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Înregistrarea contextului destinației 0x%p nu are un obiect cu date"
 
-#: gdk/win32/gdkdrop-win32.c:1079
+#: gdk/win32/gdkdrop-win32.c:1086
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) a eșuat, se restituie 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:1125
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Nu s-au putut transforma datele DnD din formatul W32 0x%x în %p (%s)"
@@ -2340,7 +2340,7 @@ msgstr "Un fișier cu acel nume există deja"
 #: gtk/gtkmessagedialog.c:184 gtk/gtkmountoperation.c:607
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:656
 #: gtk/print/gtkprintunixdialog.c:671 gtk/print/gtkprintunixdialog.c:828
-#: gtk/gtkwindow.c:6505 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6490 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2877,7 +2877,7 @@ msgid "Play"
 msgstr "Redare"
 
 #: gtk/gtkmessagedialog.c:167 gtk/gtkmessagedialog.c:185
-#: gtk/print/gtkprintbackend.c:657 gtk/gtkwindow.c:6506
+#: gtk/print/gtkprintbackend.c:657 gtk/gtkwindow.c:6491
 msgid "_OK"
 msgstr "_Bine"
 
@@ -3995,7 +3995,7 @@ msgstr "PDF"
 msgid "PostScript"
 msgstr "PostScript"
 
-#: gtk/print/backends/gtkprintbackendfile.c:643 gtk/inspector/window.ui:604
+#: gtk/print/backends/gtkprintbackendfile.c:643 gtk/inspector/window.ui:623
 msgid "SVG"
 msgstr "SVG"
 
@@ -4318,7 +4318,7 @@ msgid "Search Shortcuts"
 msgstr "Caută scurtături"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:584
+#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:603
 msgid "Shortcuts"
 msgstr "Scurtături"
 
@@ -4514,12 +4514,12 @@ msgstr "An_ulează"
 msgid "_Redo"
 msgstr "_Refă"
 
-#: gtk/gtkwindow.c:6494
+#: gtk/gtkwindow.c:6479
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Se folosește Inspectorul GTK?"
 
-#: gtk/gtkwindow.c:6496
+#: gtk/gtkwindow.c:6481
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4530,7 +4530,7 @@ msgstr ""
 "modificarea componentelor interne ale oricărei aplicație GTK. Folosirea lui "
 "poate cauza închiderea neașteptată a aplicației."
 
-#: gtk/gtkwindow.c:6501
+#: gtk/gtkwindow.c:6486
 msgid "Don’t show this message again"
 msgstr "Nu arăta din nou acest mesaj"
 
@@ -4637,7 +4637,7 @@ msgstr "la distanță"
 msgid "Drag and hold here"
 msgstr "Trage și menține apăsat aici"
 
-#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:670
+#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:690
 msgid "Clipboard"
 msgstr "Copiate"
 
@@ -4970,7 +4970,7 @@ msgstr "Suprafață"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
 #: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1727
-#: gtk/inspector/window.ui:482
+#: gtk/inspector/window.ui:501
 msgid "Properties"
 msgstr "Proprietăți"
 
@@ -5142,16 +5142,16 @@ msgstr "(doar de citit)"
 msgid "Defined At"
 msgstr "Definit la"
 
-#: gtk/inspector/recorder.c:2181
+#: gtk/inspector/recorder.c:2216
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Salvarea RenderNode a eșuat"
 
-#: gtk/inspector/recorder.c:2371
+#: gtk/inspector/recorder.c:2406
 msgid "Frame"
 msgstr "Fotogramă"
 
-#: gtk/inspector/recorder.c:2394
+#: gtk/inspector/recorder.c:2429
 msgid "<b>Start of Recording</b>"
 msgstr "<b>Începutul înregistrării</b>"
 
@@ -5495,95 +5495,99 @@ msgstr "Arată/Ascunde Panoul lateral"
 msgid "Refresh action state"
 msgstr "Actualizează starea acțiunii"
 
-#: gtk/inspector/window.ui:391
+#: gtk/inspector/window.ui:347
+msgid "Include debug information"
+msgstr "Include informații de depanare"
+
+#: gtk/inspector/window.ui:410
 msgid "Previous object"
 msgstr "Obiectul precedent"
 
-#: gtk/inspector/window.ui:406
+#: gtk/inspector/window.ui:425
 msgid "Child object"
 msgstr "Obiectul copil"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:440
 msgid "Previous sibling"
 msgstr "Fratele precedent"
 
-#: gtk/inspector/window.ui:427
+#: gtk/inspector/window.ui:446
 msgid "List Position"
 msgstr "Poziția în listă"
 
-#: gtk/inspector/window.ui:442
+#: gtk/inspector/window.ui:461
 msgid "Next sibling"
 msgstr "Fratele următor"
 
-#: gtk/inspector/window.ui:472
+#: gtk/inspector/window.ui:491
 msgid "Miscellaneous"
 msgstr "Altele"
 
-#: gtk/inspector/window.ui:493 gtk/print/ui/gtkprintunixdialog.ui:451
+#: gtk/inspector/window.ui:512 gtk/print/ui/gtkprintunixdialog.ui:451
 msgid "Layout"
 msgstr "Aspect"
 
-#: gtk/inspector/window.ui:504
+#: gtk/inspector/window.ui:523
 msgid "CSS Nodes"
 msgstr "Noduri CSS"
 
-#: gtk/inspector/window.ui:515
+#: gtk/inspector/window.ui:534
 msgid "Size Groups"
 msgstr "Grupuri de mărimi"
 
-#: gtk/inspector/window.ui:524 gtk/inspector/window.ui:533
+#: gtk/inspector/window.ui:543 gtk/inspector/window.ui:552
 msgid "Data"
 msgstr "Date"
 
-#: gtk/inspector/window.ui:543
+#: gtk/inspector/window.ui:562
 msgid "Actions"
 msgstr "Acțiuni"
 
-#: gtk/inspector/window.ui:554
+#: gtk/inspector/window.ui:573
 msgid "Menu"
 msgstr "Opțiuni"
 
-#: gtk/inspector/window.ui:563
+#: gtk/inspector/window.ui:582
 msgid "Controllers"
 msgstr "Controlere"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:592
 msgid "Magnifier"
 msgstr "Lupă"
 
-#: gtk/inspector/window.ui:594
+#: gtk/inspector/window.ui:613
 msgid "Accessibility"
 msgstr "Accesibilitate"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:648
 msgid "Global"
 msgstr "Globale"
 
-#: gtk/inspector/window.ui:641
+#: gtk/inspector/window.ui:661
 msgid "Information"
 msgstr "Informații"
 
-#: gtk/inspector/window.ui:650
+#: gtk/inspector/window.ui:670
 msgid "Settings"
 msgstr "Preferințe"
 
-#: gtk/inspector/window.ui:659
+#: gtk/inspector/window.ui:679
 msgid "Resources"
 msgstr "Resurse"
 
-#: gtk/inspector/window.ui:680
+#: gtk/inspector/window.ui:700
 msgid "Statistics"
 msgstr "Statistici"
 
-#: gtk/inspector/window.ui:691
+#: gtk/inspector/window.ui:711
 msgid "Logging"
 msgstr "Jurnalizare"
 
-#: gtk/inspector/window.ui:706
+#: gtk/inspector/window.ui:726
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:715
+#: gtk/inspector/window.ui:735
 msgid "Recorder"
 msgstr "Înregistrator"
 
@@ -5600,7 +5604,7 @@ msgstr "Forme deasupra bazei"
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr "Poziționare de marcare deasupra bazei"
+msgstr "Poziționarea diacriticelor deasupra bazei"
 
 #: gtk/open-type-layout.h:17
 msgctxt "OpenType layout"
@@ -5625,7 +5629,7 @@ msgstr "Forme sub bază"
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr "Poziție de marcarea sub bază"
+msgstr "Poziționarea diacriticelor sub bază"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
@@ -5880,7 +5884,7 @@ msgstr "Forme oglindite _Stânga-Dreapta"
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr "Marchează poziționarea"
+msgstr "Poziționarea semnelor"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
@@ -5900,12 +5904,12 @@ msgstr "Greacă matematică"
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr "Marchează pentru a marca poziționarea"
+msgstr "Poziționarea semnului relativ la alt semn"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr "Marchează poziționarea via substituție"
+msgstr "Poziționarea semnelor prin înlocuire"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
