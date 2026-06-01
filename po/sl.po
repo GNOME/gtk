@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-05-27 20:21+0000\n"
-"PO-Revision-Date: 2026-05-28 09:29+0200\n"
+"POT-Creation-Date: 2026-06-01 01:10+0000\n"
+"PO-Revision-Date: 2026-06-01 21:40+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2355,7 +2355,7 @@ msgstr "Datoteka s tem imenom že obstaja."
 #: gtk/gtkmessagedialog.c:184 gtk/gtkmountoperation.c:607
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:656
 #: gtk/print/gtkprintunixdialog.c:671 gtk/print/gtkprintunixdialog.c:828
-#: gtk/gtkwindow.c:6505 gtk/ui/gtkappchooserdialog.ui:51
+#: gtk/gtkwindow.c:6490 gtk/ui/gtkappchooserdialog.ui:51
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:44
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2892,7 +2892,7 @@ msgid "Play"
 msgstr "Predvajaj"
 
 #: gtk/gtkmessagedialog.c:167 gtk/gtkmessagedialog.c:185
-#: gtk/print/gtkprintbackend.c:657 gtk/gtkwindow.c:6506
+#: gtk/print/gtkprintbackend.c:657 gtk/gtkwindow.c:6491
 msgid "_OK"
 msgstr "_V redu"
 
@@ -4002,7 +4002,7 @@ msgstr "PDF"
 msgid "PostScript"
 msgstr "PostScript"
 
-#: gtk/print/backends/gtkprintbackendfile.c:643 gtk/inspector/window.ui:604
+#: gtk/print/backends/gtkprintbackendfile.c:643 gtk/inspector/window.ui:623
 msgid "SVG"
 msgstr "SVG"
 
@@ -4325,7 +4325,7 @@ msgid "Search Shortcuts"
 msgstr "Iskalne bližnjice"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:584
+#: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:603
 msgid "Shortcuts"
 msgstr "Tipkovne bližnjice"
 
@@ -4521,12 +4521,12 @@ msgstr "_Razveljavi"
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
-#: gtk/gtkwindow.c:6494
+#: gtk/gtkwindow.c:6479
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:6496
+#: gtk/gtkwindow.c:6481
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -4537,7 +4537,7 @@ msgstr ""
 "nastavitev kateregakoli programa GTK. Neustrezna raba lahko povzroči napačno "
 "delovanje oziroma sesutje okolja."
 
-#: gtk/gtkwindow.c:6501
+#: gtk/gtkwindow.c:6486
 msgid "Don’t show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -4644,7 +4644,7 @@ msgstr "oddaljeno"
 msgid "Drag and hold here"
 msgstr "Povleci in zadrži na tem mestu"
 
-#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:670
+#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:690
 msgid "Clipboard"
 msgstr "Odložišče"
 
@@ -4975,7 +4975,7 @@ msgstr "Površina"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
 #: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1727
-#: gtk/inspector/window.ui:482
+#: gtk/inspector/window.ui:501
 msgid "Properties"
 msgstr "Lastnosti"
 
@@ -5500,95 +5500,99 @@ msgstr "Preklopi stransko okno"
 msgid "Refresh action state"
 msgstr "Osveži stanje dejanja"
 
-#: gtk/inspector/window.ui:391
+#: gtk/inspector/window.ui:347
+msgid "Include debug information"
+msgstr "Vključi podatke za odpravljanje napak"
+
+#: gtk/inspector/window.ui:410
 msgid "Previous object"
 msgstr "Predhodni predmet"
 
-#: gtk/inspector/window.ui:406
+#: gtk/inspector/window.ui:425
 msgid "Child object"
 msgstr "Podrejeni predmet"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:440
 msgid "Previous sibling"
 msgstr "Predhodni podrejeni predmet"
 
-#: gtk/inspector/window.ui:427
+#: gtk/inspector/window.ui:446
 msgid "List Position"
 msgstr "Položaj seznama"
 
-#: gtk/inspector/window.ui:442
+#: gtk/inspector/window.ui:461
 msgid "Next sibling"
 msgstr "Naslednji podrejeni predmet"
 
-#: gtk/inspector/window.ui:472
+#: gtk/inspector/window.ui:491
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: gtk/inspector/window.ui:493 gtk/print/ui/gtkprintunixdialog.ui:451
+#: gtk/inspector/window.ui:512 gtk/print/ui/gtkprintunixdialog.ui:451
 msgid "Layout"
 msgstr "Razporeditev"
 
-#: gtk/inspector/window.ui:504
+#: gtk/inspector/window.ui:523
 msgid "CSS Nodes"
 msgstr "Vozlišča CSS"
 
-#: gtk/inspector/window.ui:515
+#: gtk/inspector/window.ui:534
 msgid "Size Groups"
 msgstr "Velikostne skupine"
 
-#: gtk/inspector/window.ui:524 gtk/inspector/window.ui:533
+#: gtk/inspector/window.ui:543 gtk/inspector/window.ui:552
 msgid "Data"
 msgstr "Podatki"
 
-#: gtk/inspector/window.ui:543
+#: gtk/inspector/window.ui:562
 msgid "Actions"
 msgstr "Dejanja"
 
-#: gtk/inspector/window.ui:554
+#: gtk/inspector/window.ui:573
 msgid "Menu"
 msgstr "Meni"
 
-#: gtk/inspector/window.ui:563
+#: gtk/inspector/window.ui:582
 msgid "Controllers"
 msgstr "Nadzorniki"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:592
 msgid "Magnifier"
 msgstr "Povečevalo"
 
-#: gtk/inspector/window.ui:594
+#: gtk/inspector/window.ui:613
 msgid "Accessibility"
 msgstr "Dostopnost"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:648
 msgid "Global"
 msgstr "Splošno"
 
-#: gtk/inspector/window.ui:641
+#: gtk/inspector/window.ui:661
 msgid "Information"
 msgstr "Podrobnosti"
 
-#: gtk/inspector/window.ui:650
+#: gtk/inspector/window.ui:670
 msgid "Settings"
 msgstr "Nastavitve"
 
-#: gtk/inspector/window.ui:659
+#: gtk/inspector/window.ui:679
 msgid "Resources"
 msgstr "Viri"
 
-#: gtk/inspector/window.ui:680
+#: gtk/inspector/window.ui:700
 msgid "Statistics"
 msgstr "Statistika"
 
-#: gtk/inspector/window.ui:691
+#: gtk/inspector/window.ui:711
 msgid "Logging"
 msgstr "Beleženje"
 
-#: gtk/inspector/window.ui:706
+#: gtk/inspector/window.ui:726
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:715
+#: gtk/inspector/window.ui:735
 msgid "Recorder"
 msgstr "Snemalnik"
 
