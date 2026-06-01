@@ -216,6 +216,10 @@ extern int64_t time_base;
  * will start a fade-out of path1 300ms before a transition from state
  * 0 to 1, 2 or 3.
  *
+ * States can be specified numerically, or by name. It is also possible
+ * to say `not STATE` instead of explictly listing all states that are
+ * different from `STATE`.
+ *
  * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
  * colors can also be specified as a custom paint server reference,
  * like this: `url(#gpa:warning)`. This works in `fill` and `stroke`

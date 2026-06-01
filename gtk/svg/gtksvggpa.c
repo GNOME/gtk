@@ -36,6 +36,7 @@
 #include "gtksvgfilterfunctionsprivate.h"
 #include "gtksvgstringprivate.h"
 #include "gtksvgtimespecprivate.h"
+#include "gtkpopcountprivate.h"
 
 
 gboolean
@@ -114,6 +115,13 @@ parse_states_css (GtkCssParser *parser,
   *states = NO_STATES;
   while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
+      gboolean negated = FALSE;
+
+      gtk_css_parser_skip_whitespace (parser);
+
+      if (gtk_css_parser_try_ident (parser, "not"))
+        negated = TRUE;
+
       gtk_css_parser_skip_whitespace (parser);
       if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
@@ -129,7 +137,10 @@ parse_states_css (GtkCssParser *parser,
 
           g_free (id);
 
-          *states |= BIT (u);
+          if (negated)
+            *states |= ALL_STATES ^ BIT (u);
+          else
+            *states |= BIT (u);
         }
       else if (gtk_css_parser_has_integer (parser))
         {
@@ -142,7 +153,10 @@ parse_states_css (GtkCssParser *parser,
               return FALSE;
             }
 
-          *states |= BIT ((unsigned int) i);
+          if (negated)
+            *states |= ALL_STATES ^ BIT ((unsigned int) i);
+          else
+            *states |= BIT ((unsigned int) i);
         }
       else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
         return TRUE;
@@ -189,11 +203,26 @@ print_states (GString  *s,
       gboolean first = TRUE;
       unsigned int n_state_names = 0;
       const char **state_names = NULL;
+
       if (svg)
         {
           n_state_names = svg->n_state_names;
           state_names = (const char **) svg->state_names;
         }
+
+      if (gtk_popcount64 (~states) == 1)
+        {
+          int omitted = gtk_ctz64 (~states);
+
+          g_string_append (s, "not ");
+          if (omitted < n_state_names)
+            g_string_append (s, state_names[omitted]);
+          else
+            g_string_append_printf (s, "%u", omitted);
+
+          return;
+        }
+
       for (unsigned int u = 0; u < 64; u++)
         {
           if ((states & BIT (u)) != 0)
