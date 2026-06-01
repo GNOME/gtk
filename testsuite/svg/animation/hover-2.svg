@@ -8,7 +8,6 @@
         gpa:time-since-load='3000ms'
         gpa:run-mode='stopped'
         font-size='13.333'
-        font-weight='400'
         width='0px'
         height='0px'
         viewBox='0 0 100 100'>
@@ -18,14 +17,12 @@
   <circle
           id='circ'
           font-size='13.333'
-          font-weight='400'
           cx='0'
           cy='50'
           r='50'>
   </circle>
   <use
           font-size='13.333'
-          font-weight='400'
           href='#circ'
           x='100'
           width='0'

@@ -421,16 +421,60 @@ DEFINE_ENUM (FONT_VARIANT, font_variant, PangoVariant,
   DEFINE_ENUM_VALUE (FONT_VARIANT, PANGO_VARIANT_TITLE_CAPS, "titling-caps")
 )
 
-DEFINE_ENUM (FONT_STRETCH, font_stretch, PangoStretch,
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_CONDENSED, "condensed"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_NORMAL, "normal"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_EXPANDED, "expanded"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded"),
-  DEFINE_ENUM_VALUE (FONT_STRETCH, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded")
+static SvgValue *
+svg_font_stretch_resolve (const SvgValue    *value,
+                          SvgProperty        attr,
+                          unsigned int       idx,
+                          SvgElement        *shape,
+                          SvgComputeContext *context)
+{
+  const SvgEnum *font_stretch = (const SvgEnum *) value;
+
+  g_assert (attr == SVG_PROPERTY_FONT_STRETCH);
+
+  if (font_stretch->value < FONT_STRETCH_NARROWER)
+    return svg_number_new (font_stretch->value);
+  else
+    {
+      unsigned int parent_stretch;
+
+      if (context->parent)
+        parent_stretch = (unsigned int) svg_number_get (context->parent->current[SVG_PROPERTY_FONT_STRETCH], 100);
+      else
+        parent_stretch = PANGO_STRETCH_NORMAL;
+
+      if (font_stretch->value == FONT_STRETCH_WIDER)
+        {
+
+          if (parent_stretch < PANGO_STRETCH_ULTRA_EXPANDED)
+            return svg_number_new (parent_stretch + 1);
+          else
+            return svg_number_new (parent_stretch);
+        }
+      else if (font_stretch->value == FONT_STRETCH_NARROWER)
+        {
+          if (parent_stretch > 0)
+            return svg_number_new (parent_stretch - 1);
+          else
+            return svg_number_new (parent_stretch);
+        }
+      else
+        g_assert_not_reached ();
+    }
+}
+
+DEFINE_ENUM_CUSTOM_RESOLVE (FONT_STRETCH, font_stretch, FontStretch, svg_font_stretch_resolve,
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_ULTRA_CONDENSED, "ultra-condensed"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_EXTRA_CONDENSED, "extra-condensed"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_CONDENSED, "condensed"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_SEMI_CONDENSED, "semi-condensed"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_NORMAL, "normal"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_SEMI_EXPANDED, "semi-expanded"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_EXPANDED, "expanded"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_EXTRA_EXPANDED, "extra-expanded"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_ULTRA_EXPANDED, "ultra-expanded"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_NARROWER, "narrower"),
+  DEFINE_ENUM_VALUE (FONT_STRETCH, FONT_STRETCH_WIDER, "wider")
 )
 
 DEFINE_ENUM (EDGE_MODE, edge_mode, EdgeMode,

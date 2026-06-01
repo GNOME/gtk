@@ -352,8 +352,22 @@ parse_transform_origin (GtkCssParser *parser)
         }
     }
 
-  if (set[0] == set[1] && set[0] != NEUTRAL)
-    return NULL;
+  if (set[0] == set[1])
+    {
+      if (set[0] != NEUTRAL)
+        return NULL;
+
+      set[0] = HORIZONTAL;
+      set[1] = VERTICAL;
+    }
+
+  if (set[0] == NEUTRAL)
+    set[0] = 1 - set[1];
+
+  if (set[1] == NEUTRAL)
+    set[1] = 1 - set[0];
+
+  /* by now, set[0] and set[1] are h,v or v,h */
 
   if (set[0] == HORIZONTAL)
     return svg_numbers_new2 (d[0], u[0], d[1], u[1]);
@@ -1172,7 +1186,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
-  shape_attrs[SVG_PROPERTY_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
+  shape_attrs[SVG_PROPERTY_FONT_STRETCH].initial_value = svg_font_stretch_new (FONT_STRETCH_NORMAL);
   shape_attrs[SVG_PROPERTY_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SVG_PROPERTY_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);

@@ -10,7 +10,6 @@
         id='toplevel'
         tabindex='-1'
         font-size='13.333'
-        font-weight='400'
         width='64'
         height='64'>
   <style type='text/css'>
@@ -21,7 +20,6 @@
           id='rect1'
           tabindex='0'
           font-size='13.333'
-          font-weight='400'
           fill='rgb(255,255,0)'
           x='0'
           y='0'
@@ -50,18 +48,15 @@
   </rect>
   <g
           id='group'
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <a
             id='link'
             font-size='13.333'
-            font-weight='400'
             href='http://www.gtk.org'
             gpa:css-state='link'>
       <rect
               id='rect2'
               font-size='13.333'
-              font-weight='400'
               fill='rgb(255,255,0)'
               x='32px'
               y='0'
@@ -93,7 +88,6 @@
             id='rect3'
             tabindex='0'
             font-size='13.333'
-            font-weight='400'
             fill='rgb(255,255,0)'
             stroke='rgb(0,0,0)'
             x='0'
@@ -107,7 +101,6 @@
           id='rect4'
           tabindex='0'
           font-size='13.333'
-          font-weight='400'
           fill='rgb(255,255,0)'
           x='32px'
           y='32px'

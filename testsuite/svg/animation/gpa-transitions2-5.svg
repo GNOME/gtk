@@ -9,7 +9,6 @@
         gpa:next-update='6000ms'
         gpa:run-mode='discrete'
         font-size='13.333'
-        font-weight='400'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
@@ -17,7 +16,6 @@
           id='red'
           font-size='13.333'
           visibility='hidden'
-          font-weight='400'
           fill='none'
           stroke='rgb(255,0,0)'
           stroke-dasharray='0 2'

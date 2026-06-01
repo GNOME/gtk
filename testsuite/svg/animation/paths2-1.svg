@@ -9,13 +9,11 @@
         gpa:next-update='10000ms'
         gpa:run-mode='continuous'
         font-size='13.333'
-        font-weight='400'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <path
           font-size='13.333'
-          font-weight='400'
           stroke='rgb(0,0,0)'
           d='M 20 10 L 170 10 C 90 50, 85 70, 85 75 A 25 25 72.5 1 1 20 10 Z'>
     <animate

@@ -26,11 +26,11 @@
               x='360'
               y='120'>300</text>
       <text
-              font-weight='400'
+              font-weight='normal'
               x='360'
               y='155'>400</text>
       <text
-              font-weight='500'
+              font-weight='bold'
               x='360'
               y='190'>500</text>
       <text

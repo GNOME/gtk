@@ -6,7 +6,8 @@
           font-weight='normal'>
     <g
             font-size='larger'
-            font-weight='bolder'>
+            font-weight='bolder'
+            font-stretch='wider'>
       <g
               font-size='88%'
               font-weight='666'>
@@ -14,7 +15,8 @@
     </g>
     <g
             font-size='large'
-            font-weight='bold'>
+            font-weight='bold'
+            font-stretch='semi-expanded'>
     </g>
   </g>
 </svg>
