@@ -54,6 +54,17 @@ struct _GtkColumnViewTitleClass
 
 G_DEFINE_TYPE (GtkColumnViewTitle, gtk_column_view_title, GTK_TYPE_WIDGET)
 
+static GtkSizeRequestMode
+gtk_column_view_title_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (child)
+    return gtk_widget_get_request_mode (child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static int
 unadjust_width (GtkWidget *widget,
                 int        width)
@@ -156,6 +167,7 @@ gtk_column_view_title_class_init (GtkColumnViewTitleClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  widget_class->get_request_mode = gtk_column_view_title_get_request_mode;
   widget_class->measure = gtk_column_view_title_measure;
   widget_class->size_allocate = gtk_column_view_title_size_allocate;
 

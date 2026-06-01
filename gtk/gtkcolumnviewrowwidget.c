@@ -381,6 +381,24 @@ gtk_column_view_row_widget_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_column_view_row_widget_parent_class)->dispose (object);
 }
 
+static GtkSizeRequestMode
+gtk_column_view_row_widget_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *child;
+  GtkSizeRequestMode child_mode;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      child_mode = gtk_widget_get_request_mode (child);
+      if (child_mode != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+    }
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static void
 gtk_column_view_row_widget_measure_along (GtkColumnViewRowWidget *self,
                                           int                     for_size,
@@ -533,6 +551,7 @@ gtk_column_view_row_widget_class_init (GtkColumnViewRowWidgetClass *klass)
   widget_class->focus = gtk_column_view_row_widget_focus;
   widget_class->grab_focus = gtk_column_view_row_widget_grab_focus;
   widget_class->set_focus_child = gtk_column_view_row_widget_set_focus_child;
+  widget_class->get_request_mode = gtk_column_view_row_widget_get_request_mode;
   widget_class->measure = gtk_column_view_row_widget_measure;
   widget_class->size_allocate = gtk_column_view_row_widget_allocate;
 
