@@ -74,6 +74,7 @@ struct _GtkSpinner
   GtkWidget parent;
   GtkSvg *paintable;
 
+  GtkReducedMotion motion;
   guint spinning : 1;
 };
 
@@ -139,11 +140,25 @@ static void
 ensure_paintable (GtkSpinner *spinner)
 {
   GdkFrameClock *clock;
+  GtkReducedMotion motion;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (spinner)),
+                "gtk-interface-reduced-motion", &motion,
+                NULL);
+
+  if (spinner->motion != motion)
+    {
+      spinner->motion = motion;
+      g_clear_object (&spinner->paintable);
+    }
 
   if (spinner->paintable)
     return;
 
-  spinner->paintable = gtk_svg_new_from_resource ("/org/gtk/libgtk/icons/process-working.gpa");
+  if (spinner->motion == GTK_REDUCED_MOTION_NO_PREFERENCE)
+    spinner->paintable = gtk_svg_new_from_resource ("/org/gtk/libgtk/icons/process-working.gpa");
+  else
+    spinner->paintable = gtk_svg_new_from_resource ("/org/gtk/libgtk/icons/sand-watch.svg");
 
   g_signal_connect_swapped (spinner->paintable, "invalidate-contents",
                             G_CALLBACK (gtk_widget_queue_draw), spinner);
@@ -152,6 +167,15 @@ ensure_paintable (GtkSpinner *spinner)
 
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (spinner));
   gtk_svg_set_frame_clock (spinner->paintable, clock);
+
+  gtk_svg_play (spinner->paintable);
+  gtk_widget_queue_draw (GTK_WIDGET (spinner));
+}
+
+static void
+motion_changed (GtkSpinner *spinner)
+{
+  ensure_paintable (spinner);
 }
 
 static void
@@ -163,7 +187,9 @@ gtk_spinner_map (GtkWidget *widget)
 
   ensure_paintable (spinner);
 
-  gtk_svg_play (spinner->paintable);
+  g_signal_connect_swapped (gtk_widget_get_settings (widget),
+                            "notify::gtk-interface-reduced-motion",
+                            G_CALLBACK (motion_changed), widget);
 }
 
 static void
@@ -172,6 +198,9 @@ gtk_spinner_unmap (GtkWidget *widget)
   GtkSpinner *spinner = GTK_SPINNER (widget);
 
   gtk_svg_pause (spinner->paintable);
+
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_settings (widget),
+                                        motion_changed, widget);
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
 }
@@ -319,6 +348,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
+  spinner->motion = GTK_REDUCED_MOTION_NO_PREFERENCE;
 }
 
 /**

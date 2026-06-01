@@ -6,8 +6,8 @@
         xmlns:dc='http://purl.org/dc/elements/1.1/'
         xmlns:gpa='https://www.gtk.org/grappa'
         gpa:version='1'
-        gpa:state='0'
         gpa:state-names='play pause'
+        gpa:state='pause'
         viewBox='0 0 16 16'
         width='16'
         height='16'>
