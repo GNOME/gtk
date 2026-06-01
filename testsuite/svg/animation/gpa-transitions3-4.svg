@@ -6,6 +6,8 @@
         gpa:state='63'
         gpa:state-change-delay='2000ms'
         gpa:time-since-load='5000ms'
+        gpa:next-update='6000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='64'
@@ -28,7 +30,7 @@
         <animate
                 id='gpa:transition:fade-in:1:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+                begin='StateChange(not 0, 0)'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -37,11 +39,13 @@
                 keySplines='0 0 1 1'
                 keyTimes='0; 1'
                 calcMode='spline'
-                gpa:status='done'/>
+                gpa:status='done'
+                gpa:run-mode='stopped'
+                gpa:last-start-time='2000ms'/>
         <animate
                 id='gpa:transition:fade-out:1:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
+                begin='StateChange(0, not 0) -2000ms'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -52,7 +56,9 @@
                 calcMode='spline'
                 gpa:status='running'
                 gpa:current-start-time='4000ms'
-                gpa:current-end-time='6000ms'/>
+                gpa:current-end-time='6000ms'
+                gpa:run-mode='continuous'
+                gpa:last-start-time='4000ms'/>
       </feGaussianBlur>
       <feComponentTransfer
               in='SourceGraphic'>
@@ -66,7 +72,7 @@
         <animate
                 id='gpa:transition:fade-in:4:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+                begin='StateChange(not 0, 0)'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -75,11 +81,13 @@
                 keySplines='0 0 1 1'
                 keyTimes='0; 1'
                 calcMode='spline'
-                gpa:status='done'/>
+                gpa:status='done'
+                gpa:run-mode='stopped'
+                gpa:last-start-time='2000ms'/>
         <animate
                 id='gpa:transition:fade-out:4:stdDeviation:gpa:morph-filter:red'
                 attributeName='stdDeviation'
-                begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
+                begin='StateChange(0, not 0) -2000ms'
                 dur='2000ms'
                 repeatDur='2000ms'
                 fill='freeze'
@@ -90,7 +98,9 @@
                 calcMode='spline'
                 gpa:status='running'
                 gpa:current-start-time='4000ms'
-                gpa:current-end-time='6000ms'/>
+                gpa:current-end-time='6000ms'
+                gpa:run-mode='continuous'
+                gpa:last-start-time='4000ms'/>
       </feGaussianBlur>
       <feComponentTransfer>
         <feFuncR
@@ -115,7 +125,7 @@
           <animate
                   id='gpa:transition:fade-in:9:slope:gpa:morph-filter:red'
                   attributeName='slope'
-                  begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+                  begin='StateChange(not 0, 0)'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -124,11 +134,13 @@
                   keySplines='0 0 1 1'
                   keyTimes='0; 1'
                   calcMode='spline'
-                  gpa:status='done'/>
+                  gpa:status='done'
+                  gpa:run-mode='stopped'
+                  gpa:last-start-time='2000ms'/>
           <animate
                   id='gpa:transition:fade-out:9:slope:gpa:morph-filter:red'
                   attributeName='slope'
-                  begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
+                  begin='StateChange(0, not 0) -2000ms'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -139,11 +151,13 @@
                   calcMode='spline'
                   gpa:status='running'
                   gpa:current-start-time='4000ms'
-                  gpa:current-end-time='6000ms'/>
+                  gpa:current-end-time='6000ms'
+                  gpa:run-mode='continuous'
+                  gpa:last-start-time='4000ms'/>
           <animate
                   id='gpa:transition:fade-in:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
-                  begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+                  begin='StateChange(not 0, 0)'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -152,11 +166,13 @@
                   keySplines='0 0 1 1'
                   keyTimes='0; 1'
                   calcMode='spline'
-                  gpa:status='done'/>
+                  gpa:status='done'
+                  gpa:run-mode='stopped'
+                  gpa:last-start-time='2000ms'/>
           <animate
                   id='gpa:transition:fade-out:9:intercept:gpa:morph-filter:red'
                   attributeName='intercept'
-                  begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -2000ms'
+                  begin='StateChange(0, not 0) -2000ms'
                   dur='2000ms'
                   repeatDur='2000ms'
                   fill='freeze'
@@ -167,7 +183,9 @@
                   calcMode='spline'
                   gpa:status='running'
                   gpa:current-start-time='4000ms'
-                  gpa:current-end-time='6000ms'/>
+                  gpa:current-end-time='6000ms'
+                  gpa:run-mode='continuous'
+                  gpa:last-start-time='4000ms'/>
         </feFuncA>
       </feComponentTransfer>
       <feComposite
@@ -192,12 +210,14 @@
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
-            begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
-            end='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            begin='StateChange(0, not 0); 0ms'
+            end='StateChange(not 0, 0)'
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <set
             id='gpa:set:morph:red'
             attributeName='filter'
@@ -206,6 +226,8 @@
             to='url(#gpa:morph-filter:red)'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

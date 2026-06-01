@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
+        gpa:next-update='1000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='100'
@@ -30,7 +32,9 @@
             keyTimes='0; 1'
             gpa:status='running'
             gpa:current-start-time='0ms'
-            gpa:current-end-time='1000ms'/>
+            gpa:current-end-time='1000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='0ms'/>
     <animate
             id='fade-out'
             attributeName='opacity'
@@ -42,6 +46,8 @@
             keyTimes='0; 1'
             gpa:status='inactive'
             gpa:current-start-time='10000ms'
-            gpa:current-end-time='11000ms'/>
+            gpa:current-end-time='11000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='10000ms'/>
   </circle>
 </svg>

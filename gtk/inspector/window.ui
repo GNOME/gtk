@@ -330,6 +330,25 @@
                                             </property>
                                           </object>
                                         </child>
+                                        <child>
+                                          <object class="GtkStackPage">
+                                            <property name="name">svg</property>
+                                            <property name="child">
+                                              <object class="GtkToggleButton" id="svg_debug_button">
+                                                <property name="child">
+                                                  <object class="GtkImage">
+                                                    <property name="paintable">
+                                                      <object class="GtkSvg">
+                                                        <property name="resource">/org/gtk/libgtk/icons/insert-object-symbolic.svg</property>
+                                                      </object>
+                                                    </property>
+                                                  </object>
+                                                </property>
+                                                <property name="tooltip-text" translatable="yes">Include debug information</property>
+                                              </object>
+                                            </property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -604,6 +623,7 @@
                                         <property name="title" translatable="yes">SVG</property>
                                         <property name="child">
                                           <object class="GtkInspectorSvg" id="svg">
+                                            <property name="button">svg_debug_button</property>
                                           </object>
                                         </property>
                                       </object>

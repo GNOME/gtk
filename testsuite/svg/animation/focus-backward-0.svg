@@ -6,6 +6,7 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='0ms'
+        gpa:run-mode='discrete'
         id='toplevel'
         tabindex='-1'
         font-size='13.333'
@@ -34,7 +35,8 @@
             from='rgb(255,255,0)'
             to='rgb(255,0,0)'
             keyTimes='0; 1'
-            gpa:status='inactive'/>
+            gpa:status='inactive'
+            gpa:run-mode='discrete'/>
     <animate
             attributeName='fill'
             begin='rect1.blur'
@@ -43,7 +45,8 @@
             from='rgb(255,0,0)'
             to='rgb(255,255,0)'
             keyTimes='0; 1'
-            gpa:status='inactive'/>
+            gpa:status='inactive'
+            gpa:run-mode='discrete'/>
   </rect>
   <g
           id='group'
@@ -72,7 +75,8 @@
                 from='rgb(255,255,0)'
                 to='rgb(144,238,144)'
                 keyTimes='0; 1'
-                gpa:status='inactive'/>
+                gpa:status='inactive'
+                gpa:run-mode='discrete'/>
         <animate
                 attributeName='fill'
                 begin='link.blur'
@@ -81,7 +85,8 @@
                 from='rgb(144,238,144)'
                 to='rgb(255,255,0)'
                 keyTimes='0; 1'
-                gpa:status='inactive'/>
+                gpa:status='inactive'
+                gpa:run-mode='discrete'/>
       </rect>
     </a>
     <rect

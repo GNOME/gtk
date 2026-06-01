@@ -6,6 +6,8 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='4000ms'
+        gpa:next-update='4000ms'
+        gpa:run-mode='discrete'
         font-size='13.333'
         font-weight='400'
         width='100'
@@ -28,13 +30,17 @@
             to='0.5'
             gpa:status='running'
             gpa:current-start-time='500ms'
-            gpa:current-end-time='5500ms'/>
+            gpa:current-end-time='5500ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='500ms'/>
     <set
             id='two'
             attributeName='opacity'
             begin='1500ms'
             dur='2000ms'
             to='1'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='1500ms'/>
   </circle>
 </svg>

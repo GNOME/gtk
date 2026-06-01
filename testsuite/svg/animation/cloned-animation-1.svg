@@ -6,6 +6,7 @@
         gpa:state='0'
         gpa:state-change-delay='0ms'
         gpa:time-since-load='1000ms'
+        gpa:run-mode='discrete'
         font-size='13.333'
         font-weight='400'
         fill='rgb(255,0,0)'
@@ -51,7 +52,8 @@
                 values='0 0; 50 0; 0 0'
                 keyTimes='0; 0.5; 1'
                 type='translate'
-                gpa:status='inactive'/>
+                gpa:status='inactive'
+                gpa:run-mode='discrete'/>
       </rect>
     </a>
   </g>

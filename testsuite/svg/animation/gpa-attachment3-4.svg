@@ -6,6 +6,8 @@
         gpa:state='63'
         gpa:state-change-delay='1000ms'
         gpa:time-since-load='5000ms'
+        gpa:next-update='5000ms'
+        gpa:run-mode='continuous'
         font-size='13.333'
         font-weight='400'
         width='100'
@@ -24,16 +26,18 @@
     <set
             id='gpa:out-of-state:line'
             attributeName='visibility'
-            begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
-            end='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            begin='StateChange(0, not 0); 0ms'
+            end='StateChange(not 0, 0)'
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
-            begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            begin='StateChange(not 0, 0)'
             dur='1000ms'
             repeatDur='1000ms'
             fill='freeze'
@@ -42,11 +46,13 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'/>
     <animate
             id='gpa:transition:fade-out:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
-            begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -1000ms'
+            begin='StateChange(0, not 0) -1000ms'
             dur='1000ms'
             repeatDur='1000ms'
             fill='freeze'
@@ -57,11 +63,13 @@
             calcMode='spline'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'/>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dashoffset:line'
             attributeName='stroke-dashoffset'
-            begin='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            begin='StateChange(not 0, 0)'
             dur='1000ms'
             repeatDur='1000ms'
             fill='freeze'
@@ -70,11 +78,13 @@
             keySplines='0 0 1 1'
             keyTimes='0; 1'
             calcMode='spline'
-            gpa:status='done'/>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'/>
     <animate
             id='gpa:transition:fade-out:0:stroke-dashoffset:line'
             attributeName='stroke-dashoffset'
-            begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63) -1000ms'
+            begin='StateChange(0, not 0) -1000ms'
             dur='1000ms'
             repeatDur='1000ms'
             fill='freeze'
@@ -85,7 +95,9 @@
             calcMode='spline'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'/>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'/>
     <set
             id='gpa:path-length:line'
             attributeName='pathLength'
@@ -94,7 +106,9 @@
             to='1'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </path>
   <circle
           id='red'
@@ -111,12 +125,14 @@
     <set
             id='gpa:out-of-state:red'
             attributeName='visibility'
-            begin='StateChange(0, 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63); 0ms'
-            end='StateChange(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63, 0)'
+            begin='StateChange(0, not 0); 0ms'
+            end='StateChange(not 0, 0)'
             to='hidden'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='6000ms'/>
+            gpa:current-start-time='6000ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='6000ms'/>
     <animateMotion
             id='gpa:attachment:red'
             begin='0ms'
@@ -127,7 +143,9 @@
             calcMode='linear'
             keyPoints='0.5; 0.5'
             rotate='auto'
-            gpa:status='done'>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='0ms'>
       <mpath href='#line'/>
     </animateMotion>
     <animateMotion
@@ -141,7 +159,9 @@
             calcMode='spline'
             keyPoints='1; 0.5'
             rotate='auto'
-            gpa:status='done'>
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='3000ms'>
       <mpath href='#line'/>
     </animateMotion>
     <animateMotion
@@ -157,7 +177,9 @@
             rotate='auto'
             gpa:status='running'
             gpa:current-start-time='5000ms'
-            gpa:current-end-time='6000ms'>
+            gpa:current-end-time='6000ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='5000ms'>
       <mpath href='#line'/>
     </animateMotion>
     <set
@@ -168,6 +190,8 @@
             to='1'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'/>
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

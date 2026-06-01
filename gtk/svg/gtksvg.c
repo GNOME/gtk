@@ -216,6 +216,10 @@ extern int64_t time_base;
  * will start a fade-out of path1 300ms before a transition from state
  * 0 to 1, 2 or 3.
  *
+ * States can be specified numerically, or by name. It is also possible
+ * to say `not STATE` instead of explictly listing all states that are
+ * different from `STATE`.
+ *
  * In addition to the `gpa:fill` and `gpa:stroke` attributes, symbolic
  * colors can also be specified as a custom paint server reference,
  * like this: `url(#gpa:warning)`. This works in `fill` and `stroke`
@@ -1661,6 +1665,21 @@ compute_current_values_for_shape (SvgElement        *shape,
       context->viewport = &viewport;
     }
 
+  if ((context->svg->features & GTK_SVG_ANIMATIONS) == 0 &&
+      !svg_element_is_important (shape, SVG_PROPERTY_VISIBILITY))
+    {
+      Visibility visibility;
+
+      if (svg_element_get_states (shape) & context->svg->state)
+        visibility = VISIBILITY_VISIBLE;
+      else
+        visibility = VISIBILITY_HIDDEN;
+
+      SvgValue *value = svg_visibility_new (visibility);
+      shape_set_current_value (shape, SVG_PROPERTY_VISIBILITY, 0, value);
+      svg_value_unref (value);
+    }
+
   if (shape->animations)
     {
       SvgValue *identity, *motion;
@@ -2259,6 +2278,9 @@ gtk_svg_set_hover_callback (GtkSvg             *svg,
 
 /* {{{ Animation */
 
+static void update_for_state (GtkSvg       *self,
+                              unsigned int  previous_state);
+
 /*< private>
  * gtk_svg_set_load_time:
  * @self: an SVG paintable
@@ -2297,6 +2319,7 @@ gtk_svg_set_load_time (GtkSvg  *self,
 
   timeline_set_load_time (self->timeline, load_time);
 
+  update_for_state (self, self->initial_state);
   update_animation_state (self);
 }
 
@@ -3068,6 +3091,32 @@ gtk_svg_get_weight (GtkSvg *self)
   return self->weight;
 }
 
+static void
+update_for_state (GtkSvg       *self,
+                  unsigned int  previous_state)
+{
+  int64_t current_time;
+
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing)
+    {
+      if (self->gpa_version > 0)
+        {
+          apply_state (self, self->state);
+          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+        }
+    }
+
+  current_time = get_current_time (self);
+  timeline_update_for_state (self->timeline,
+                             previous_state, self->state,
+                             current_time + self->state_change_delay);
+   gtk_svg_advance (self, current_time);
+
+#ifdef DEBUG
+   animation_state_dump (self);
+#endif
+}
+
 /**
  * gtk_svg_set_state:
  * @self: an SVG paintable
@@ -3097,39 +3146,16 @@ gtk_svg_set_state (GtkSvg       *self,
   previous_state = self->state;
   self->state = state;
 
-  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
-    {
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
-      return;
-    }
+  dbg_print ("state", "renderer state %u -> %u", previous_state, state);
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0 ||
-      !self->playing)
-    {
-      if (self->gpa_version > 0)
-        {
-          apply_state (self, state);
-          gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
-        }
-    }
+  if ((self->features & GTK_SVG_EXTENSIONS) == 0)
+    goto done;
 
   /* Don't jiggle things while we're still loading */
   if (self->load_time != INDEFINITE)
-    {
-      int64_t current_time = get_current_time (self);
-      dbg_print ("state", "renderer state %u -> %u", previous_state, state);
+    update_for_state (self, previous_state);
 
-      timeline_update_for_state (self->timeline,
-                                 previous_state, self->state,
-                                 current_time + self->state_change_delay);
-
-      gtk_svg_advance (self, current_time);
-
-#ifdef DEBUG
-      animation_state_dump (self);
-#endif
-    }
-
+done:
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STATE]);
 }
 

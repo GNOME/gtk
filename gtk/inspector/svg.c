@@ -26,12 +26,13 @@
 #include "gtkdialogerror.h"
 #include "gtkfiledialog.h"
 #include "gtkstack.h"
-#include "svg/gtksvgprivate.h"
+#include "svg/gtksvgserializeprivate.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtktextview.h"
 #include "gtktextbuffer.h"
 #include "gtkoverlay.h"
+#include "gtktogglebutton.h"
 
 struct _GtkInspectorSvg
 {
@@ -41,15 +42,26 @@ struct _GtkInspectorSvg
   GtkOverlay *overlay;
   GtkTextView *xml_view;
   GtkTextBuffer *xml_buffer;
+  GtkToggleButton *button;
 
   guint timeout;
   GList *errors;
+
+  GtkSvgSerializeFlags flags;
 };
 
 typedef struct _GtkInspectorSvgClass
 {
   GtkWidgetClass parent_class;
 } GtkInspectorSvgClass;
+
+enum {
+  PROP_0,
+  PROP_BUTTON,
+  N_PROPS
+};
+
+static GParamSpec *props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (GtkInspectorSvg, gtk_inspector_svg, GTK_TYPE_WIDGET)
 
@@ -167,7 +179,9 @@ static void
 update_xml (GtkInspectorSvg *self)
 {
   GtkSvg *svg = GTK_SVG (self->object);
-  GBytes *xml = gtk_svg_serialize (svg);
+  GBytes *xml;
+
+  xml = gtk_svg_serialize_full (svg, NULL, 0, self->flags);
 
   g_signal_handlers_block_by_func (self->xml_buffer, xml_changed, self);
   gtk_text_buffer_set_text (self->xml_buffer,
@@ -271,6 +285,22 @@ copy_clipboard (GtkWidget  *widget,
   g_free (text);
 }
 
+static void
+button_clicked (GtkButton       *button,
+                GtkInspectorSvg *self)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    self->flags = GTK_SVG_SERIALIZE_AT_CURRENT_TIME |
+                  GTK_SVG_SERIALIZE_INCLUDE_STATE |
+                  GTK_SVG_SERIALIZE_EXPAND_GPA_ATTRS |
+                  GTK_SVG_SERIALIZE_NO_COMPAT;
+  else
+    self->flags = GTK_SVG_SERIALIZE_DEFAULT;
+
+  if (self->object)
+    update_xml (self);
+}
+
 static gboolean
 query_tooltip_cb (GtkWidget       *widget,
                   int              x,
@@ -342,6 +372,58 @@ static void
 gtk_inspector_svg_init (GtkInspectorSvg *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->flags = GTK_SVG_SERIALIZE_DEFAULT;
+}
+
+static void
+constructed (GObject *object)
+{
+  GtkInspectorSvg *sl = GTK_INSPECTOR_SVG (object);
+
+  G_OBJECT_CLASS (gtk_inspector_svg_parent_class)->constructed (object);
+
+  g_signal_connect (sl->button, "clicked", G_CALLBACK (button_clicked), sl);
+}
+
+static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorSvg *sl = GTK_INSPECTOR_SVG (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      g_value_set_object (value, sl->button);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorSvg *sl = GTK_INSPECTOR_SVG (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      sl->button = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -368,6 +450,14 @@ gtk_inspector_svg_class_init (GtkInspectorSvgClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = dispose;
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+  object_class->constructed = constructed;
+
+  props[PROP_BUTTON] = g_param_spec_object ("button", NULL, NULL,
+                                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME);
+
+  g_object_class_install_properties (object_class, N_PROPS, props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/svg.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorSvg, overlay);
