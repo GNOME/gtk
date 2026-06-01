@@ -57,7 +57,6 @@ struct _GdkFrameClockIdlePrivate
                                           the initial value of smooth_phase_state is SMOOTH_PHASE_STATE_VALID. See the comment in gdk_frame_clock_paint_idle()
                                           for details. */
 
-  gint64 sleep_serial;
   gint64 freeze_time; /* in microseconds */
 
   guint flush_idle_id;
@@ -79,59 +78,6 @@ static gboolean gdk_frame_clock_flush_idle (void *data);
 static gboolean gdk_frame_clock_paint_idle (void *data);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
-
-static gint64 sleep_serial;
-static gint64 sleep_source_prepare_time;
-static GSource *sleep_source;
-
-static gboolean
-sleep_source_prepare (GSource *source,
-                      int     *timeout)
-{
-  sleep_source_prepare_time = g_source_get_time (source);
-  *timeout = -1;
-  return FALSE;
-}
-
-static gboolean
-sleep_source_check (GSource *source)
-{
-  if (g_source_get_time (source) != sleep_source_prepare_time)
-    sleep_serial++;
-
-  return FALSE;
-}
-
-static gboolean
-sleep_source_dispatch (GSource     *source,
-                       GSourceFunc  callback,
-                       gpointer     user_data)
-{
-  return TRUE;
-}
-
-static GSourceFuncs sleep_source_funcs = {
-  sleep_source_prepare,
-  sleep_source_check,
-  sleep_source_dispatch,
-  NULL /* finalize */
-};
-
-static gint64
-get_sleep_serial (void)
-{
-  if (sleep_source == NULL)
-    {
-      sleep_source = g_source_new (&sleep_source_funcs, sizeof (GSource));
-
-      g_source_set_static_name (sleep_source, "[gtk] sleep serial");
-      g_source_set_priority (sleep_source, G_PRIORITY_HIGH);
-      g_source_attach (sleep_source, NULL);
-      g_source_unref (sleep_source);
-    }
-
-  return sleep_serial;
-}
 
 static void
 gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
@@ -541,7 +487,6 @@ gdk_frame_clock_paint_idle (void *data)
 
               timings->frame_time = priv->frame_time;
               timings->smoothed_frame_time = priv->smoothed_frame_time_base;
-              timings->slept_before = priv->sleep_serial != get_sleep_serial ();
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 
@@ -678,9 +623,6 @@ gdk_frame_clock_paint_idle (void *data)
       maybe_start_idle (clock_idle, FALSE);
     }
 
-  if (!gdk_frame_clock_idle_is_frozen (clock_idle))
-    priv->sleep_serial = get_sleep_serial ();
-
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
 
   return G_SOURCE_REMOVE;
@@ -780,8 +722,6 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
        */
       if (priv->paint_idle_id == 0)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-
-      priv->sleep_serial = get_sleep_serial ();
 
       if (GDK_PROFILER_IS_RUNNING)
         {

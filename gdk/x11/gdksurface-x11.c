@@ -566,22 +566,11 @@ gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
 
   if (presentation_time != 0)
     {
-      if (timings->slept_before)
-        {
-          presentation_time += refresh_interval;
-        }
-      else
-        {
-          if (presentation_time < timings->frame_time + refresh_interval / 2)
-            presentation_time += refresh_interval;
-        }
+      presentation_time += refresh_interval;
     }
   else
     {
-      if (timings->slept_before)
-        presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
-      else
-        presentation_time = timings->frame_time + refresh_interval;
+      presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
     }
 
   if (presentation_time < impl->toplevel->throttled_presentation_time)
@@ -742,10 +731,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
        * but rather at a particular time. This can trigger different handling from
        * the compositor.
        */
-      if (timings->slept_before)
-        impl->toplevel->current_counter_value += 3;
-      else
-        impl->toplevel->current_counter_value += 1;
+      impl->toplevel->current_counter_value += 3;
 
       maybe_sync_counter_for_end_frame (surface);
 
