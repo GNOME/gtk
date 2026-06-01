@@ -1,0 +1,49 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state-names='play pause'
+        gpa:state='play'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license
+                rdf:resource='https://creativecommons.org/publicdomain/zero/1.0/'/>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>adw clock sand watch clock-timer hourglass</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='sand watch'
+          fill='none'
+          stroke='url(#gpa:foreground) rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          stroke-miterlimit='4'
+          stroke-dasharray='none'
+          stroke-dashoffset='22.5589'
+          d='M 11 1 L 11 4 C 11 4.62474, 10.6878 5.20815, 10.1679 5.5547 L 8 7 L 8 8 L 10.1679 9.4453 C 10.6878 9.79185, 11 10.3753, 11 11 L 11 14 M 4 1 L 4 4 C 4 4.62474, 4.31223 5.20815, 4.83205 5.5547 L 7 7 L 7 8 L 4.83205 9.4453 C 4.31223 9.79185, 4 10.3753, 4 11 L 4 14 M 2 14 L 13 14 M 2 1 L 13 1'
+          gpa:stroke-minwidth='0.5'
+          gpa:stroke-maxwidth='3'
+          class='transparent-fill foreground-stroke'
+          gpa:stroke='foreground'
+          gpa:states='play'>
+  </path>
+</svg>
