@@ -1921,6 +1921,8 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->content, svg_element_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
+  g_clear_pointer (&self->user_styles, g_array_unref);
+  g_clear_pointer (&self->author_styles, g_array_unref);
 
   frame_clock_disconnect (self);
   g_clear_handle_id (&self->pending_advance, g_source_remove);
