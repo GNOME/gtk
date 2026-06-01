@@ -190,6 +190,38 @@ serialize_shape_attrs (GString              *s,
           else
             value = svg_element_get_specified_value (shape, attr);
 
+          if (value)
+            svg_value_ref (value);
+
+          if (value &&
+              attr == SVG_PROPERTY_FONT_WEIGHT &&
+              strcmp (value->class->name, "SvgNumber") == 0)
+            {
+              SvgValue *tmp;
+              double weight = svg_number_get (value, 1000);
+
+              if (weight == 400)
+                tmp = svg_font_weight_new (FONT_WEIGHT_NORMAL);
+              else if (weight == 500)
+                tmp = svg_font_weight_new (FONT_WEIGHT_BOLD);
+              else
+                tmp = NULL;
+              if (tmp)
+                {
+                  svg_value_unref (value);
+                  value = tmp;
+                }
+            }
+
+          if (value &&
+              attr == SVG_PROPERTY_FONT_STRETCH &&
+              strcmp (value->class->name, "SvgNumber") == 0)
+            {
+              SvgValue *tmp = svg_font_stretch_new ((FontStretch) svg_number_get (value, 100));
+              svg_value_unref (value);
+              value = tmp;
+            }
+
           initial = svg_property_ref_initial_value (attr, svg_element_get_type (shape), svg_element_get_parent (shape) != NULL);
 
           if (value && (svg_element_is_specified (shape, attr) || !svg_value_equal (value, initial)))
@@ -204,6 +236,7 @@ serialize_shape_attrs (GString              *s,
             }
 
           svg_value_unref (initial);
+          svg_value_unref (value);
         }
     }
 }

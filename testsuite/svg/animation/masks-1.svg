@@ -9,17 +9,14 @@
         gpa:next-update='1000ms'
         gpa:run-mode='stopped'
         font-size='13.333'
-        font-weight='400'
         width='30'
         height='20'
         viewBox='0 0 30 20'>
   <mask
           id='mask1'
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <circle
             font-size='13.333'
-            font-weight='400'
             fill='rgb(255,255,255)'
             fill-opacity='0.5'
             cx='10'
@@ -29,11 +26,9 @@
   </mask>
   <mask
           id='mask2'
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <circle
             font-size='13.333'
-            font-weight='400'
             fill='rgb(255,255,255)'
             fill-opacity='1'
             cx='20'
@@ -45,7 +40,6 @@
           id='rect'
           font-size='13.333'
           mask='url(#mask2)'
-          font-weight='400'
           fill='rgb(255,0,0)'
           x='10'
           y='0'

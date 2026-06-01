@@ -9,14 +9,12 @@
         gpa:next-update='10000ms'
         gpa:run-mode='continuous'
         font-size='13.333'
-        font-weight='400'
         width='300'
         height='200'
         viewBox='0 0 300 200'>
   <path
           id='p'
           font-size='13.333'
-          font-weight='400'
           stroke='rgb(0,0,0)'
           stroke-width='1'
           stroke-dasharray='10 10'
@@ -48,7 +46,6 @@
   </path>
   <circle
           font-size='13.333'
-          font-weight='400'
           fill='rgb(255,0,0)'
           r='5'>
   </circle>

@@ -9,13 +9,11 @@
         gpa:next-update='2000ms'
         gpa:run-mode='discrete'
         font-size='13.333'
-        font-weight='400'
         width='100'
         height='100'>
   <linearGradient
           id='rg'
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <stop
             offset='0'
             stop-color='rgb(255,0,0)'
@@ -29,8 +27,7 @@
   </linearGradient>
   <linearGradient
           id='yb'
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <stop
             offset='0'
             stop-color='rgb(255,255,0)'
@@ -45,7 +42,6 @@
   <linearGradient
           id='gradient'
           font-size='13.333'
-          font-weight='400'
           href='#rg'>
     <animate
             id='swapgradient'
@@ -63,7 +59,6 @@
   </linearGradient>
   <rect
           font-size='13.333'
-          font-weight='400'
           fill='url(#gradient)'
           x='0px'
           y='0px'

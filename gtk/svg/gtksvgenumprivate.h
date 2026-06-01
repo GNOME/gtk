@@ -50,7 +50,7 @@ SvgValue *   svg_direction_new               (PangoDirection        value);
 SvgValue *   svg_writing_mode_new            (WritingMode           value);
 SvgValue *   svg_font_style_new              (PangoStyle            value);
 SvgValue *   svg_font_variant_new            (PangoVariant          value);
-SvgValue *   svg_font_stretch_new            (PangoStretch          value);
+SvgValue *   svg_font_stretch_new            (FontStretch           value);
 SvgValue *   svg_font_size_new               (FontSize              value);
 SvgValue *   svg_font_weight_new             (FontWeight            value);
 SvgValue *   svg_edge_mode_new               (EdgeMode              value);

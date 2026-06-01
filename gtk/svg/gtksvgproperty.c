@@ -1186,7 +1186,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
-  shape_attrs[SVG_PROPERTY_FONT_STRETCH].initial_value = svg_font_stretch_new (PANGO_STRETCH_NORMAL);
+  shape_attrs[SVG_PROPERTY_FONT_STRETCH].initial_value = svg_font_stretch_new (FONT_STRETCH_NORMAL);
   shape_attrs[SVG_PROPERTY_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SVG_PROPERTY_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);

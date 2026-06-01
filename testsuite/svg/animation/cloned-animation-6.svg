@@ -9,7 +9,6 @@
         gpa:next-update='6000ms'
         gpa:run-mode='stopped'
         font-size='13.333'
-        font-weight='400'
         fill='rgb(255,0,0)'
         width='0px'
         height='0px'
@@ -27,17 +26,14 @@
   <g
           id='group'
           font-size='13.333'
-          font-weight='400'
           fill='rgb(255,0,0)'>
     <a
             id='shift'
             font-size='13.333'
-            font-weight='400'
             fill='rgb(255,0,0)'
             gpa:css-state='link,visited'>
       <rect
               font-size='13.333'
-              font-weight='400'
               fill='rgb(255,0,0)'
               x='0'
               y='0'
@@ -59,7 +55,6 @@
   </g>
   <use
           font-size='13.333'
-          font-weight='400'
           fill='rgb(0,0,255)'
           href='#group'
           y='50'

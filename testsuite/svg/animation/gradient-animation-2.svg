@@ -8,16 +8,13 @@
         gpa:time-since-load='1000ms'
         gpa:run-mode='continuous'
         font-size='13.333'
-        font-weight='400'
         width='100'
         height='100'>
   <defs
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <linearGradient
             id='gradient'
             font-size='13.333'
-            font-weight='400'
             gradientUnits='objectBoundingBox'
             x1='0'
             y1='0'
@@ -52,7 +49,6 @@
   </defs>
   <rect
           font-size='13.333'
-          font-weight='400'
           fill='url(#gradient)'
           x='0'
           y='0'

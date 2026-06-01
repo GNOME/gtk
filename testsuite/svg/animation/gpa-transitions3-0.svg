@@ -8,17 +8,14 @@
         gpa:time-since-load='0ms'
         gpa:run-mode='discrete'
         font-size='13.333'
-        font-weight='400'
         width='64'
         height='64'
         viewBox='0 0 32 32'>
   <defs
-          font-size='13.333'
-          font-weight='400'>
+          font-size='13.333'>
     <filter
             id='gpa:morph-filter:red'
             font-size='13.333'
-            font-weight='400'
             x='-50%'
             y='-50%'
             width='200%'
@@ -186,7 +183,6 @@
           id='red'
           font-size='13.333'
           visibility='hidden'
-          font-weight='400'
           filter='url(#gpa:morph-filter:red)'
           fill='none'
           stroke='rgb(255,0,0)'

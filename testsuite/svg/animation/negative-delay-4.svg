@@ -9,13 +9,11 @@
         gpa:next-update='1250ms'
         gpa:run-mode='discrete'
         font-size='13.333'
-        font-weight='400'
         width='100'
         height='100'>
   <path
           id='line1'
           font-size='13.333'
-          font-weight='400'
           fill='none'
           stroke='rgb(0,0,0)'
           stroke-width='2'
@@ -105,7 +103,6 @@
           id='line2'
           font-size='13.333'
           visibility='hidden'
-          font-weight='400'
           fill='none'
           stroke='rgb(0,0,0)'
           stroke-width='2'
