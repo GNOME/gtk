@@ -554,6 +554,7 @@ svg_animation_update_for_spec (SvgAnimation *animation,
             {
               dbg_print ("status", "Restarting %s at %s", animation->id, format_time (spec->time));
               animation->current.begin = spec->time;
+              animation_set_current_end (animation, INDEFINITE);
               changed = TRUE;
             }
         }
