@@ -64,8 +64,8 @@ struct _GdkFrameClockClass
   void     (* begin_updating) (GdkFrameClock      *clock);
   void     (* end_updating)   (GdkFrameClock      *clock);
 
-  void     (* freeze)         (GdkFrameClock *clock);
-  void     (* thaw)           (GdkFrameClock *clock);
+  void     (* start)             (GdkFrameClock *clock);
+  void     (* stop)              (GdkFrameClock *clock);
 
   /* signals */
   /* void (* flush_events)       (GdkFrameClock *clock); */

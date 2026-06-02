@@ -676,7 +676,7 @@ gdk_frame_clock_idle_end_updating (GdkFrameClock *clock)
 }
 
 static void
-gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
+gdk_frame_clock_idle_stop (GdkFrameClock *clock)
 {
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
@@ -688,7 +688,7 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
 }
 
 static void
-gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
+gdk_frame_clock_idle_start (GdkFrameClock *clock)
 {
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
@@ -723,8 +723,8 @@ gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
   frame_clock_class->request_phase = gdk_frame_clock_idle_request_phase;
   frame_clock_class->begin_updating = gdk_frame_clock_idle_begin_updating;
   frame_clock_class->end_updating = gdk_frame_clock_idle_end_updating;
-  frame_clock_class->freeze = gdk_frame_clock_idle_freeze;
-  frame_clock_class->thaw = gdk_frame_clock_idle_thaw;
+  frame_clock_class->start = gdk_frame_clock_idle_start;
+  frame_clock_class->stop = gdk_frame_clock_idle_stop;
 }
 
 GdkFrameClock *
