@@ -45,9 +45,6 @@ typedef struct _GdkFrameClockIdleClass         GdkFrameClockIdleClass;
 struct _GdkFrameClockIdle
 {
   GdkFrameClock parent_instance;
-
-  /*< private >*/
-  GdkFrameClockIdlePrivate *priv;
 };
 
 struct _GdkFrameClockIdleClass
