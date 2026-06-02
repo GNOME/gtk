@@ -77,9 +77,9 @@ struct _GdkFrameClockClass
   /* void (* resume_events)      (GdkFrameClock *clock); */
 };
 
-void _gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock);
-void _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock);
-gboolean gdk_frame_clock_is_frozen (GdkFrameClock *clock);
+void gdk_frame_clock_start               (GdkFrameClock *clock);
+void gdk_frame_clock_stop                (GdkFrameClock *clock);
+gboolean gdk_frame_clock_is_stopped      (GdkFrameClock *clock);
 
 void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock,
                                            gint64           monotonic_time);
