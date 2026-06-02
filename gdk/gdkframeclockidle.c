@@ -681,11 +681,8 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (!gdk_frame_clock_is_stopped (clock))
-    {
-      if (GDK_PROFILER_IS_RUNNING)
-        priv->freeze_time = g_get_monotonic_time ();
-    }
+  if (GDK_PROFILER_IS_RUNNING)
+    priv->freeze_time = g_get_monotonic_time ();
 
   maybe_stop_idle (clock_idle);
 }
@@ -696,23 +693,20 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (!gdk_frame_clock_is_stopped (clock))
-    {
-      maybe_start_idle (clock_idle, TRUE);
-      /* If nothing is requested so we didn't start an idle, we need
-       * to skip to the end of the state chain, since the idle won't
-       * run and do it for us.
-       */
-      if (priv->paint_idle_id == 0)
-        priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+  maybe_start_idle (clock_idle, TRUE);
+  /* If nothing is requested so we didn't start an idle, we need
+   * to skip to the end of the state chain, since the idle won't
+   * run and do it for us.
+   */
+  if (priv->paint_idle_id == 0)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
-      if (GDK_PROFILER_IS_RUNNING)
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      if (priv->freeze_time != 0)
         {
-          if (priv->freeze_time != 0)
-            {
-              gdk_profiler_end_mark (priv->freeze_time * 1000, "frameclock frozen", NULL);
-              priv->freeze_time = 0;
-            }
+          gdk_profiler_end_mark (priv->freeze_time * 1000, "frameclock frozen", NULL);
+          priv->freeze_time = 0;
         }
     }
 }
