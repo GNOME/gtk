@@ -4648,8 +4648,6 @@ gtk_window_unrealize (GtkWidget *widget)
       info->last.flags = 0;
     }
 
-  gsk_renderer_unrealize (priv->renderer);
-
   /* Icons */
   gtk_window_unrealize_icon (window);
 
@@ -4659,6 +4657,7 @@ gtk_window_unrealize (GtkWidget *widget)
   if (priv->child)
     gtk_widget_unrealize (priv->child);
 
+  gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
   surface = priv->surface;

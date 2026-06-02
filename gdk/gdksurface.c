@@ -1270,12 +1270,6 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
   return FALSE;
 }
 
-static gboolean
-gdk_surface_is_toplevel_frozen (GdkSurface *surface)
-{
-  return surface->update_and_descendants_freeze_count > 0;
-}
-
 static void
 gdk_surface_schedule_update (GdkSurface *surface)
 {
@@ -1285,8 +1279,7 @@ gdk_surface_schedule_update (GdkSurface *surface)
 
   surface->pending_phases |= GDK_FRAME_CLOCK_PHASE_PAINT;
 
-  if (surface->update_freeze_count ||
-      gdk_surface_is_toplevel_frozen (surface))
+  if (surface->update_freeze_count)
     return;
 
   /* If there's no frame clock (a foreign surface), then the invalid
@@ -1362,8 +1355,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
 
   if (GDK_SURFACE_DESTROYED (surface) ||
       !surface->update_area ||
-      surface->update_freeze_count ||
-      gdk_surface_is_toplevel_frozen (surface))
+      surface->update_freeze_count)
     return;
 
   surface->pending_phases &= ~GDK_FRAME_CLOCK_PHASE_PAINT;

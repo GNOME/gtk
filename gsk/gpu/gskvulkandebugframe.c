@@ -410,7 +410,9 @@ gsk_vulkan_debug_frame_start_node (GskGpuFrame   *frame,
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-  entry->profile.total.cpu_record_ns -= g_get_monotonic_time () * 1000;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  entry->profile.total.cpu_record_ns -= g_get_monotonic_time_ns ();
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -421,7 +423,9 @@ gsk_vulkan_debug_frame_end_node (GskGpuFrame *frame)
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-  entry->profile.total.cpu_record_ns += g_get_monotonic_time () * 1000;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  entry->profile.total.cpu_record_ns += g_get_monotonic_time_ns ();
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   self->debug_current = entry->parent;
 
