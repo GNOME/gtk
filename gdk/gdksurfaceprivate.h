@@ -79,8 +79,6 @@ struct _GdkSurface
     GdkGravity rect_anchor;
   } popup;
 
-  guint update_and_descendants_freeze_count;
-
   int width, height;
 
   GdkCursor *cursor;
