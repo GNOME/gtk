@@ -61,7 +61,6 @@ struct _GdkFrameClockIdlePrivate
 
   guint flush_idle_id;
   guint paint_idle_id;
-  guint freeze_count;
   guint updating_count;
 
   GdkFrameClockPhase requested;
@@ -87,7 +86,6 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
   frame_clock_idle->priv = priv =
     gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
-  priv->freeze_count = 0;
   priv->smoothed_frame_time_period = FRAME_INTERVAL;
 }
 
@@ -689,7 +687,6 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
         priv->freeze_time = g_get_monotonic_time ();
     }
 
-  priv->freeze_count++;
   maybe_stop_idle (clock_idle);
 }
 
@@ -699,9 +696,6 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  g_return_if_fail (priv->freeze_count > 0);
-
-  priv->freeze_count--;
   if (!gdk_frame_clock_is_stopped (clock))
     {
       maybe_start_idle (clock_idle, TRUE);
