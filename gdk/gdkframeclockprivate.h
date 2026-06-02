@@ -37,9 +37,6 @@ G_BEGIN_DECLS
 struct _GdkFrameClock
 {
   GObject parent_instance;
-
-  /*< private >*/
-  GdkFrameClockPrivate *priv;
 };
 
 /**

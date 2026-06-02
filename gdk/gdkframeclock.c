@@ -109,7 +109,8 @@ _gdk_frame_clock_freeze (GdkFrameClock *clock);
 static void
 gdk_frame_clock_finalize (GObject *object)
 {
-  GdkFrameClockPrivate *priv = GDK_FRAME_CLOCK (object)->priv;
+  GdkFrameClock *self = GDK_FRAME_CLOCK (object);
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
 
   timings_clear (&priv->timings);
 
@@ -260,9 +261,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 static void
 gdk_frame_clock_init (GdkFrameClock *clock)
 {
-  GdkFrameClockPrivate *priv;
-
-  clock->priv = priv = gdk_frame_clock_get_instance_private (clock);
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
 
   priv->frame_counter = -1;
   priv->current = 0;
@@ -372,11 +371,9 @@ _gdk_frame_clock_thaw (GdkFrameClock *clock)
 void
 _gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock)
 {
-  GdkFrameClockPrivate *priv;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
 
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
-  priv = clock->priv;
 
   priv->n_freeze_inhibitors++;
   if (priv->n_freeze_inhibitors == 1)
@@ -386,11 +383,9 @@ _gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock)
 void
 _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
 {
-  GdkFrameClockPrivate *priv;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
 
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
-  priv = clock->priv;
 
   priv->n_freeze_inhibitors--;
   if (priv->n_freeze_inhibitors == 0)
@@ -400,13 +395,17 @@ _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
 gboolean
 gdk_frame_clock_is_frozen (GdkFrameClock *clock)
 {
-  return clock->priv->n_freeze_inhibitors == 0;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
+
+  return priv->n_freeze_inhibitors == 0;
 }
 
 static inline gint64
 _gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 {
-  return frame_clock->priv->frame_counter;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
+
+  return priv->frame_counter;
 }
 
 /**
@@ -431,7 +430,9 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 static inline gint64
 _gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 {
-  return frame_clock->priv->frame_counter + 1 - timings_get_size (&frame_clock->priv->timings);
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
+
+  return priv->frame_counter + 1 - timings_get_size (&priv->timings);
 }
 
 /**
@@ -463,10 +464,9 @@ void
 _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock,
                               gint64         monotonic_time)
 {
-  GdkFrameClockPrivate *priv;
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
 
-  priv = frame_clock->priv;
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
   priv->frame_counter++;
 
@@ -504,7 +504,7 @@ static inline GdkFrameTimings *
 _gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
                               gint64         frame_counter)
 {
-  GdkFrameClockPrivate *priv = frame_clock->priv;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
   gsize size, pos;
 
   if (frame_counter > priv->frame_counter)
@@ -561,11 +561,9 @@ gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
 GdkFrameTimings *
 gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
 {
-  GdkFrameClockPrivate *priv;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
 
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
-
-  priv = frame_clock->priv;
 
   return _gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
 }
