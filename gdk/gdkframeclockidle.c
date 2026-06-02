@@ -57,7 +57,7 @@ struct _GdkFrameClockIdlePrivate
                                           the initial value of smooth_phase_state is SMOOTH_PHASE_STATE_VALID. See the comment in gdk_frame_clock_paint_idle()
                                           for details. */
 
-  gint64 freeze_time; /* in microseconds */
+  gint64 freeze_time; /* in nanoseconds */
 
   guint flush_idle_id;
   guint paint_idle_id;
@@ -682,7 +682,7 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
   if (GDK_PROFILER_IS_RUNNING)
-    priv->freeze_time = g_get_monotonic_time ();
+    priv->freeze_time = GDK_PROFILER_CURRENT_TIME;
 
   maybe_stop_idle (clock_idle);
 }
@@ -705,7 +705,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
     {
       if (priv->freeze_time != 0)
         {
-          gdk_profiler_end_mark (priv->freeze_time * 1000, "frameclock frozen", NULL);
+          gdk_profiler_end_mark (priv->freeze_time, "frameclock frozen", NULL);
           priv->freeze_time = 0;
         }
     }
