@@ -708,7 +708,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
 
       if (GDK_PROFILER_IS_RUNNING)
         {
-          if (gdk_frame_clock_is_stopped (clock))
+          if (priv->freeze_time != 0)
             {
               gdk_profiler_end_mark (priv->freeze_time * 1000, "frameclock frozen", NULL);
               priv->freeze_time = 0;
