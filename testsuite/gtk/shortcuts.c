@@ -184,6 +184,7 @@ test_trigger_parse_alternative (void)
 {
   enum
   {
+    NO_TRIGGER,
     TRIGGER_NEVER,
     TRIGGER_KEYVAL,
     TRIGGER_MNEMONIC,
@@ -193,70 +194,58 @@ test_trigger_parse_alternative (void)
   const struct
   {
     const char *str;
-    int first;
-    int second;
+    int kinds[3];
   } tests[] = {
-    { "U|<Primary>U", TRIGGER_KEYVAL, TRIGGER_KEYVAL },
-    { "_U|<Shift>u", TRIGGER_MNEMONIC, TRIGGER_KEYVAL },
-    { "x|_x|<Primary>x", TRIGGER_KEYVAL, TRIGGER_ALTERNATIVE },
+    { "U|<Primary>U", { TRIGGER_KEYVAL, TRIGGER_KEYVAL, NO_TRIGGER } },
+    { "_U|<Shift>u", { TRIGGER_MNEMONIC, TRIGGER_KEYVAL, NO_TRIGGER } },
+    { "x|_x|<Primary>x", { TRIGGER_KEYVAL, TRIGGER_MNEMONIC, TRIGGER_KEYVAL } },
   };
 
   for (int i = 0; i < G_N_ELEMENTS (tests); i++)
     {
+      unsigned int n;
+
       g_test_message ("Checking: '%s'", tests[i].str);
 
       GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (tests[i].str);
 
       g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (trigger));
 
-      GtkShortcutTrigger *t1 = gtk_alternative_trigger_get_first (GTK_ALTERNATIVE_TRIGGER (trigger));
+      n = g_list_model_get_n_items (G_LIST_MODEL (trigger));
+      g_assert (n <= 3);
 
-      switch (tests[i].first)
+      for (unsigned int pos = 0; pos < n; pos++)
         {
-        case TRIGGER_NEVER:
-          g_assert_true (GTK_IS_NEVER_TRIGGER (t1));
-          break;
+          GtkShortcutTrigger *t1 = g_list_model_get_item (G_LIST_MODEL (trigger), pos);
 
-        case TRIGGER_KEYVAL:
-          g_assert_true (GTK_IS_KEYVAL_TRIGGER (t1));
-          break;
+          switch (tests[i].kinds[pos])
+            {
+            case NO_TRIGGER:
+              g_assert_null (t1);
+              break;
 
-        case TRIGGER_MNEMONIC:
-          g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t1));
-          break;
+            case TRIGGER_NEVER:
+              g_assert_true (GTK_IS_NEVER_TRIGGER (t1));
+              break;
 
-        case TRIGGER_ALTERNATIVE:
-          g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t1));
-          break;
+            case TRIGGER_KEYVAL:
+              g_assert_true (GTK_IS_KEYVAL_TRIGGER (t1));
+              break;
 
-        default:
-          g_assert_not_reached ();
-          break;
-        }
+            case TRIGGER_MNEMONIC:
+              g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t1));
+              break;
 
-      GtkShortcutTrigger *t2 = gtk_alternative_trigger_get_second (GTK_ALTERNATIVE_TRIGGER (trigger));
+            case TRIGGER_ALTERNATIVE:
+              g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t1));
+              break;
 
-      switch (tests[i].second)
-        {
-        case TRIGGER_NEVER:
-          g_assert_true (GTK_IS_NEVER_TRIGGER (t2));
-          break;
+            default:
+              g_assert_not_reached ();
+              break;
+            }
 
-        case TRIGGER_KEYVAL:
-          g_assert_true (GTK_IS_KEYVAL_TRIGGER (t2));
-          break;
-
-        case TRIGGER_MNEMONIC:
-          g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t2));
-          break;
-
-        case TRIGGER_ALTERNATIVE:
-          g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t2));
-          break;
-
-        default:
-          g_assert_not_reached ();
-          break;
+           g_clear_object (&t1);
         }
 
       g_object_unref (trigger);
