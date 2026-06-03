@@ -913,3 +913,114 @@ gdk_keyval_convert_case (guint symbol,
   if (upper)
     *upper = xupper;
 }
+
+/* Note that this array must have a 0 at the beginning,
+ * at the end, and between any two sets of aliases
+ */
+static const guint aliases[] = {
+  0,
+  GDK_KEY_space, GDK_KEY_KP_Space,
+  0,
+  GDK_KEY_Tab, GDK_KEY_ISO_Left_Tab, GDK_KEY_KP_Tab,
+  0,
+  GDK_KEY_Return, GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter,
+  0,
+  GDK_KEY_Home, GDK_KEY_KP_Home,
+  0,
+  GDK_KEY_End, GDK_KEY_KP_End,
+  0,
+  GDK_KEY_Left, GDK_KEY_KP_Left,
+  0,
+  GDK_KEY_Up, GDK_KEY_KP_Up,
+  0,
+  GDK_KEY_Right, GDK_KEY_KP_Right,
+  0,
+  GDK_KEY_Down, GDK_KEY_KP_Down,
+  0,
+  GDK_KEY_Page_Up, GDK_KEY_KP_Page_Up,
+  0,
+  GDK_KEY_Page_Down, GDK_KEY_KP_Page_Down,
+  0,
+  GDK_KEY_Prior, GDK_KEY_KP_Prior,
+  0,
+  GDK_KEY_Next, GDK_KEY_KP_Next,
+  0,
+  GDK_KEY_Insert, GDK_KEY_KP_Insert,
+  0,
+  GDK_KEY_Delete, GDK_KEY_KP_Delete,
+  0,
+  GDK_KEY_equal, GDK_KEY_KP_Equal,
+  0,
+  GDK_KEY_plus, GDK_KEY_KP_Add,
+  0,
+  GDK_KEY_minus, GDK_KEY_KP_Subtract,
+  0,
+  GDK_KEY_asterisk, GDK_KEY_KP_Multiply,
+  0,
+  GDK_KEY_slash, GDK_KEY_KP_Divide,
+  0,
+  GDK_KEY_Menu, GDK_KEY_ContextMenu,
+  0,
+  GDK_KEY_0, GDK_KEY_KP_0,
+  0,
+  GDK_KEY_1, GDK_KEY_KP_1,
+  0,
+  GDK_KEY_2, GDK_KEY_KP_2,
+  0,
+  GDK_KEY_3, GDK_KEY_KP_3,
+  0,
+  GDK_KEY_4, GDK_KEY_KP_4,
+  0,
+  GDK_KEY_5, GDK_KEY_KP_5,
+  0,
+  GDK_KEY_6, GDK_KEY_KP_6,
+  0,
+  GDK_KEY_7, GDK_KEY_KP_7,
+  0,
+  GDK_KEY_8, GDK_KEY_KP_8,
+  0,
+  GDK_KEY_9, GDK_KEY_KP_9,
+  0,
+};
+
+/**
+ * gdk_keyval_get_aliases:
+ * @keyval: the keyval to get aliases for
+ * @n_aliases: (out): return location for the number of aliases
+ *
+ * Gets keyvals that are 'aliases' for @keyval.
+ *
+ * Aliases are meant to be functionally equivalent and
+ * should be treated the same with respect to keyboard
+ * shortcuts, etc. An example are keypad keys that are
+ * aliases for their normal counterpart, such as
+ * `GDK_KEY_KP_Left` and `GDK_KEY_Left`.
+ *
+ * Returns: (transfer none) (nullable) (array length=n_aliases):
+ *     an array of keyvals
+ *
+ * Since: 4.24
+ */
+const guint *
+gdk_keyval_get_aliases (guint  keyval,
+                        guint *n_aliases)
+{
+  guint start = 1, end = 1;
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (aliases); i++)
+    {
+      if (aliases[i] == 0)
+        start = i + 1;
+
+      if (aliases[i] == keyval)
+        {
+          for (end = i + 1; aliases[end] != 0; end++) ;
+
+          *n_aliases = end - start;
+          return &aliases[start];
+        }
+    }
+
+  *n_aliases = 0;
+  return NULL;
+}
