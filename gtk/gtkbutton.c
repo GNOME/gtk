@@ -198,11 +198,10 @@ gtk_button_get_request_mode (GtkWidget *widget)
 static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
-  const guint activate_keyvals[] = { GDK_KEY_space, GDK_KEY_KP_Space, GDK_KEY_Return,
-                                     GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter };
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  GtkShortcutAction *activate_action;
+  GtkShortcutTrigger *trigger;
+  GtkShortcut *activate_shortcut;
 
   gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
@@ -333,16 +332,11 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   gtk_widget_class_set_activate_signal (widget_class, button_signals[ACTIVATE]);
 
-  activate_action = gtk_signal_action_new ("activate");
-  for (guint i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
-    {
-      GtkShortcut *activate_shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),
-                                                         g_object_ref (activate_action));
-
-      gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
-      g_object_unref (activate_shortcut);
-    }
-  g_object_unref (activate_action);
+  trigger = gtk_alternative_trigger_new (gtk_shortcut_trigger_create_with_aliases (GDK_KEY_Return, 0),
+                                         gtk_shortcut_trigger_create_with_aliases (GDK_KEY_space, 0));
+  activate_shortcut = gtk_shortcut_new (trigger, gtk_signal_action_new ("activate"));
+  gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
+  g_object_unref (activate_shortcut);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
