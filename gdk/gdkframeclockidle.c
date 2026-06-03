@@ -461,6 +461,28 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
 }
 
+static void
+gdk_frame_clock_idle_run_update (GdkFrameClockIdle *self)
+{
+  GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
+  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+
+  if (gdk_frame_clock_is_stopped (clock))
+    return;
+
+  if ((priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE) != 0 ||
+      priv->updating_count > 0)
+    {
+      priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
+      _gdk_frame_clock_emit_update (clock);
+    }
+  
+  if (gdk_frame_clock_is_stopped (clock))
+    return;
+
+  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+}
+
 static gboolean
 gdk_frame_clock_paint_idle (void *data)
 {
@@ -499,15 +521,7 @@ gdk_frame_clock_paint_idle (void *data)
           G_GNUC_FALLTHROUGH;
 
         case GDK_FRAME_CLOCK_PHASE_UPDATE:
-          if (!gdk_frame_clock_is_stopped (clock))
-            {
-              if ((priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE) != 0 ||
-                  priv->updating_count > 0)
-                {
-                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
-                  _gdk_frame_clock_emit_update (clock);
-                }
-            }
+          gdk_frame_clock_idle_run_update (self);
           G_GNUC_FALLTHROUGH;
 
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
@@ -524,7 +538,6 @@ gdk_frame_clock_paint_idle (void *data)
                     }
                 }
 
-              priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
 	      /* We loop in the layout phase, because we don't want to progress
 	       * into the paint phase with invalid size allocations. This may
 	       * happen in some situation like races between user window
