@@ -1373,5 +1373,40 @@ gtk_alternative_trigger_newv (GtkShortcutTrigger **triggers,
 }
 
 /* }}} */
+/* {{{ Convenience API */
+
+/**
+ * gtk_shortcut_trigger_create_with_aliases:
+ * @keyval: The keyval to trigger for
+ * @modifiers: the modifiers that need to be present
+ *
+ * Creates a shortcut trigger that will trigger for
+ * any alias of the given key.
+ *
+ * Returns: (transfer full): a new `GtkShortcutTrigger`
+ *
+ * Since: 4.24
+ */
+GtkShortcutTrigger *
+gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
+                                          GdkModifierType modifiers)
+{
+  const unsigned int *keys;
+  unsigned int n_keys;
+  GtkShortcutTrigger **triggers;
+
+  keys = gdk_keyval_get_aliases (keyval, &n_keys);
+
+  if (n_keys < 2)
+    return gtk_keyval_trigger_new (keyval, modifiers);
+
+  triggers = g_newa (GtkShortcutTrigger *, n_keys);
+  for (unsigned int i = 0; i < n_keys; i++)
+    triggers[i] = gtk_keyval_trigger_new (keys[i], modifiers);
+
+  return gtk_alternative_trigger_newv (triggers, n_keys);
+}
+
+/* }}} */
 
 /* vm:set foldmethod=marker: */

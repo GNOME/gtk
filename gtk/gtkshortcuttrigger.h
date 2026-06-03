@@ -140,5 +140,9 @@ GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkAlternativeT
 GDK_AVAILABLE_IN_ALL
 GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkAlternativeTrigger  *self);
 
+GDK_AVAILABLE_IN_4_24
+GtkShortcutTrigger *    gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
+                                                                  GdkModifierType modifiers);
+
 G_END_DECLS
 
