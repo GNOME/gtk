@@ -480,7 +480,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   *n_keys = array->len;
   *keys = (GdkKeymapKey *)g_array_free (array, FALSE);
 
-  return TRUE;
+  return *n_keys > 0;
 }
 
 void
