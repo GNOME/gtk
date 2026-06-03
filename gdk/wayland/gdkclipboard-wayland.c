@@ -193,21 +193,29 @@ gdk_wayland_clipboard_claim (GdkClipboard       *clipboard,
       GdkDevice *device;
       const char * const *mime_types;
       gsize i, n_mime_types;
+      struct wl_data_source *source;
 
-      gdk_wayland_clipboard_discard_offer (cb);
-      gdk_wayland_clipboard_discard_source (cb);
-
-      cb->source = wl_data_device_manager_create_data_source (wayland_display->data_device_manager);
-      wl_data_source_add_listener (cb->source, &data_source_listener, cb);
+      source = wl_data_device_manager_create_data_source (wayland_display->data_device_manager);
+      wl_data_source_add_listener (source, &data_source_listener, cb);
 
       mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
       for (i = 0; i < n_mime_types; i++)
         {
-          wl_data_source_offer (cb->source, mime_types[i]);
+          wl_data_source_offer (source, mime_types[i]);
         }
 
       device = gdk_seat_get_pointer (gdk_display_get_default_seat (GDK_DISPLAY (wayland_display)));
-      gdk_wayland_device_set_selection (device, cb->source);
+
+      /* The new selection should be set before the old one is destroyed.
+       * Otherwise it is possible that the clipboard manager may see that
+       * the current selection is gone and attempt to set its saved data.
+       */
+      gdk_wayland_device_set_selection (device, source);
+
+      gdk_wayland_clipboard_discard_offer (cb);
+      gdk_wayland_clipboard_discard_source (cb);
+
+      cb->source = source;
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_wayland_clipboard_parent_class)->claim (clipboard, formats, local, content);

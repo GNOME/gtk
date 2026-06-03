@@ -287,25 +287,34 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
       gsize i, n_mime_types;
       GdkSeat *seat;
       uint32_t serial;
+      struct zwp_primary_selection_source_v1 *source;
 
-      gdk_wayland_primary_discard_offer (cb);
-      gdk_wayland_primary_discard_source (cb);
-
-      cb->source = zwp_primary_selection_device_manager_v1_create_source (wdisplay->primary_selection_manager);
-      zwp_primary_selection_source_v1_add_listener (cb->source, &primary_source_listener, cb);
+      source = zwp_primary_selection_device_manager_v1_create_source (wdisplay->primary_selection_manager);
+      zwp_primary_selection_source_v1_add_listener (source, &primary_source_listener, cb);
 
       mime_types = gdk_content_formats_get_mime_types (formats, &n_mime_types);
       for (i = 0; i < n_mime_types; i++)
         {
-          zwp_primary_selection_source_v1_offer (cb->source, mime_types[i]);
+          zwp_primary_selection_source_v1_offer (source, mime_types[i]);
         }
 
       seat = gdk_display_get_default_seat (GDK_DISPLAY (wdisplay));
       serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat),
                                                                 NULL);
+
+      /* The new primary selection should be set before the old one is
+       * destroyed. Otherwise it is possible that the clipboard manager may
+       * see that the current primary selection is gone and attempt to set
+       * its saved data.
+       */
       zwp_primary_selection_device_v1_set_selection (cb->primary_data_device,
-                                                     cb->source,
+                                                     source,
                                                      serial);
+
+      gdk_wayland_primary_discard_offer (cb);
+      gdk_wayland_primary_discard_source (cb);
+
+      cb->source = source;
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_wayland_primary_parent_class)->claim (clipboard, formats, local, content);
