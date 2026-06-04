@@ -575,29 +575,20 @@ gtk_window_accessible_interface_init (GtkAccessibleInterface *iface)
 
 static void
 add_tab_bindings (GtkWidgetClass   *widget_class,
-		  GdkModifierType   modifiers,
-		  GtkDirectionType  direction)
+                  GdkModifierType   modifiers,
+                  GtkDirectionType  direction)
 {
-  GtkShortcut *shortcut;
-
-  shortcut = gtk_shortcut_new_with_arguments (
-                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
-                                              gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
-                 gtk_signal_action_new ("move-focus"),
-                 "(i)", direction);
-
-  gtk_widget_class_add_shortcut (widget_class, shortcut);
-
-  g_object_unref (shortcut);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Tab, modifiers,
+                                       "move-focus",
+                                       "(i)", direction);
 }
 
 static void
 add_arrow_bindings (GtkWidgetClass   *widget_class,
-		    guint             keysym,
-		    GtkDirectionType  direction)
+                    guint             keysym,
+                    GtkDirectionType  direction)
 {
-  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
-
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_NO_MODIFIER_MASK,
                                        "move-focus",
@@ -605,16 +596,6 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
                                        direction);
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, GDK_NO_MODIFIER_MASK,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)",
                                        direction);
@@ -1356,14 +1337,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "activate-focus", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
-                                       "activate-focus", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
-                                       "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
-                                       "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-default", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
