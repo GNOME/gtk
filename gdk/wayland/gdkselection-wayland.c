@@ -105,7 +105,6 @@ struct _GdkWaylandSelection
   GPtrArray *stored_selections; /* Array of StoredSelection */
   StoredSelection *current_request_selection;
   GArray *source_targets;
-  GdkAtom requested_target;
 
   gpointer primary_source;
   GdkWindow *primary_owner;
@@ -1851,7 +1850,6 @@ gdk_wayland_selection_clear_targets (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
 
-  wayland_selection->requested_target = GDK_NONE;
   g_array_set_size (wayland_selection->source_targets, 0);
   gdk_wayland_selection_unset_data_source (display, selection);
 }
