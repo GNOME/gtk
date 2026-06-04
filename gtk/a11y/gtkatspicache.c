@@ -37,7 +37,6 @@
  *  (so): object ref
  *  (so): application ref
  *  (so): parent ref
- *    - parent.role == application ? desktop ref : null ref
  *  i: index in parent, or -1 for transient widgets/menu items
  *  i: child count, or -1 for defunct/menus
  *  as: interfaces
@@ -156,7 +155,7 @@ collect_root (GtkAtSpiCache   *self,
   g_variant_builder_add (builder, "@(so)", gtk_at_spi_root_to_ref (self->root));
   g_variant_builder_add (builder, "@(so)", gtk_at_spi_root_to_ref (self->root));
 
-  g_variant_builder_add (builder, "@(so)", gtk_at_spi_null_ref ());
+  g_variant_builder_add (builder, "@(so)", gtk_at_spi_root_get_parent_ref (self->root));
 
   g_variant_builder_add (builder, "i", -1);
   g_variant_builder_add (builder, "i", 0);
