@@ -143,6 +143,8 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_add_table (GtkTargetList        *list,
                                           const GtkTargetEntry *targets,
                                           guint                 ntargets);
+GDK_AVAILABLE_IN_3_24
+void           gtk_target_list_clear     (GtkTargetList  *list);
 GDK_AVAILABLE_IN_ALL
 void           gtk_target_list_remove    (GtkTargetList  *list,
                                           GdkAtom         target);
@@ -181,6 +183,13 @@ void     gtk_selection_add_targets   (GtkWidget            *widget,
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_clear_targets (GtkWidget            *widget,
                                       GdkAtom               selection);
+
+GDK_AVAILABLE_IN_3_24
+void     gtk_selection_set_targets   (GtkWidget            *widget,
+                                      GdkAtom               selection,
+                                      const GtkTargetEntry *targets,
+                                      guint                 ntargets);
+
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_convert       (GtkWidget            *widget,
                                       GdkAtom               selection,

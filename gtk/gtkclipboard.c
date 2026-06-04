@@ -630,8 +630,7 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
       clipboard->get_func = get_func;
       clipboard->clear_func = clear_func;
 
-      gtk_selection_clear_targets (clipboard_widget, clipboard->selection);
-      gtk_selection_add_targets (clipboard_widget, clipboard->selection,
+      gtk_selection_set_targets (clipboard_widget, clipboard->selection,
 				 targets, n_targets);
 
       return TRUE;

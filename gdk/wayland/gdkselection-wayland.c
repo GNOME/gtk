@@ -1761,6 +1761,27 @@ gdk_wayland_selection_clear_targets (GdkDisplay *display,
 }
 
 void
+gdk_wayland_selection_set_targets (GdkWindow *window,
+                                   GdkAtom    selection,
+                                   guint      ntargets,
+                                   GdkAtom   *targets)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  GArray *source_targets;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  source_targets = gdk_wayland_selection_targets_by_atom (display, selection);
+  if (!source_targets)
+    return;
+
+  g_array_set_size (source_targets, 0);
+  g_array_append_vals (source_targets, targets, ntargets);
+
+  gdk_wayland_selection_announce_targets (display, selection, source_targets);
+}
+
+void
 gdk_wayland_selection_announce_targets (GdkDisplay *display,
                                         GdkAtom     selection,
                                         GArray     *targets)

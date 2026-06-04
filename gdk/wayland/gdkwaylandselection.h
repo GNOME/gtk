@@ -47,6 +47,14 @@ GDK_AVAILABLE_IN_ALL
 void
 gdk_wayland_selection_clear_targets (GdkDisplay *display, GdkAtom selection);
 
+#define gdk_wayland_selection_set_targets gdk_wayland_selection_set_targets_libgtk_only
+GDK_AVAILABLE_IN_3_24
+void
+gdk_wayland_selection_set_targets (GdkWindow *window,
+                                   GdkAtom    selection,
+                                   guint      ntargets,
+                                   GdkAtom   *targets);
+
 #endif
 
 G_END_DECLS

@@ -561,6 +561,26 @@ gtk_target_list_add_table (GtkTargetList        *list,
     }
 }
 
+static void
+free_target_pair(gpointer data)
+{
+  g_slice_free (GtkTargetPair, data);
+}
+
+/**
+ * gtk_target_list_clear:
+ * @list: a #GtkTargetList
+ *
+ * Removes all targets in the list.
+ **/
+void
+gtk_target_list_clear (GtkTargetList *list)
+{
+  g_return_if_fail (list != NULL);
+
+  g_clear_list (&list->list, free_target_pair);
+}
+
 /**
  * gtk_target_list_remove:
  * @list: a #GtkTargetList
@@ -1031,6 +1051,53 @@ gtk_selection_add_targets (GtkWidget            *widget,
 #endif
 }
 
+/**
+ * gtk_selection_set_targets:
+ * @widget: a #GtkWidget
+ * @selection: the selection
+ * @targets: (array length=ntargets): a table of targets to set
+ * @ntargets:  number of entries in @targets
+ *
+ * Set a list of supported targets for a given widget and selection.
+ *
+ * The main difference between gtk_selection_add_targets() and
+ * gtk_selection_set_targets() is that the former only appends
+ * targets while the latter clears the old targets and adds new
+ * targets in a single step.
+ **/
+void
+gtk_selection_set_targets (GtkWidget            *widget,
+                           GdkAtom               selection,
+                           const GtkTargetEntry *targets,
+                           guint                 ntargets)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (selection != GDK_NONE);
+  g_return_if_fail (targets != NULL);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      GtkTargetList *list;
+      GdkAtom *atoms = g_new (GdkAtom, ntargets);
+      guint i;
+
+      list = gtk_selection_target_list_get (widget, selection);
+      gtk_target_list_clear (list);
+      gtk_target_list_add_table (list, targets, ntargets);
+
+      for (i = 0; i < ntargets; i++)
+        atoms[i] = gdk_atom_intern (targets[i].target, FALSE);
+
+      gdk_wayland_selection_set_targets (gtk_widget_get_window (widget), selection, ntargets, atoms);
+      g_free (atoms);
+      return;
+    }
+#endif
+
+  gtk_selection_clear_targets (widget, selection);
+  gtk_selection_add_targets (widget, selection, targets, ntargets);
+}
 
 /**
  * gtk_selection_remove_all:
