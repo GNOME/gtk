@@ -2088,6 +2088,9 @@ gtk_clipboard_real_set_can_store (GtkClipboard         *clipboard,
   if (clipboard->selection != GDK_SELECTION_CLIPBOARD)
     return;
   
+  if (!gdk_display_supports_clipboard_persistence (gtk_clipboard_get_display (clipboard)))
+    return;
+
   g_free (clipboard->storable_targets);
   
   clipboard_widget = get_clipboard_widget (clipboard->display);
