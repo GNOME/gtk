@@ -144,5 +144,8 @@ GDK_AVAILABLE_IN_4_24
 GtkShortcutTrigger *    gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
                                                                   GdkModifierType modifiers);
 
+GDK_AVAILABLE_IN_4_24
+GtkShortcutTrigger *    gtk_shortcut_trigger_create_for_menu     (void);
+
 G_END_DECLS
 

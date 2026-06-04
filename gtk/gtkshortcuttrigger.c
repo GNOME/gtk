@@ -1421,6 +1421,43 @@ gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
   return gtk_alternative_trigger_newv (triggers, n_keys);
 }
 
+/**
+ * gtk_shortcut_trigger_create_for_menu:
+ *
+ * Creates a shortcut trigger that will trigger for
+ * the usual key combinations that trigger a context
+ * menu, such as <kbd>Menu</kbd> or
+ * <kbd>Shift</kbd>+<kbd>F10</kbd>.
+ *
+ * Returns: (transfer full): a new `GtkShortcutTrigger`
+ *
+ * Since: 4.24
+ */
+GtkShortcutTrigger *
+gtk_shortcut_trigger_create_for_menu (void)
+{
+  static GtkShortcutTrigger *menu_trigger = NULL;
+
+  if (menu_trigger == NULL)
+    {
+      const unsigned int *keys;
+      unsigned int n_keys;
+      GtkShortcutTrigger **triggers;
+
+      keys = gdk_keyval_get_aliases (GDK_KEY_Menu, &n_keys);
+
+      triggers = g_newa (GtkShortcutTrigger *, n_keys + 1);
+      for (unsigned int i = 0; i < n_keys; i++)
+        triggers[i] = gtk_keyval_trigger_new (keys[i], 0);
+
+      triggers[n_keys] = gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK);
+
+      menu_trigger = gtk_alternative_trigger_newv (triggers, n_keys + 1);
+    }
+
+  return g_object_ref (menu_trigger);
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker: */
