@@ -48,6 +48,9 @@
 #define GTK_SHORTCUT_TRIGGER_HASH_MNEMONIC      2u
 #define GTK_SHORTCUT_TRIGGER_HASH_ALTERNATIVE   3u
 
+
+/* {{{ GObject boilerplate */
+
 struct _GtkShortcutTrigger
 {
   GObject parent_instance;
@@ -81,6 +84,9 @@ static void
 gtk_shortcut_trigger_init (GtkShortcutTrigger *self)
 {
 }
+
+/* }}} */
+/* {{{ Public API */
 
 /**
  * gtk_shortcut_trigger_trigger:
@@ -411,6 +417,9 @@ gtk_shortcut_trigger_compare (gconstpointer trigger1,
     }
 }
 
+/* }}} */
+/* {{{ Never trigger */
+
 struct _GtkNeverTrigger
 {
   GtkShortcutTrigger parent_instance;
@@ -530,6 +539,9 @@ gtk_never_trigger_get (void)
 
   return never_singleton;
 }
+
+/* }}} */
+/* {{{ Keyval trigger */
 
 struct _GtkKeyvalTrigger
 {
@@ -773,7 +785,8 @@ gtk_keyval_trigger_get_keyval (GtkKeyvalTrigger *self)
   return self->keyval;
 }
 
-/*** GTK_MNEMONIC_TRIGGER ***/
+/* }}} */
+/* {{{ Mnemonic trigger */
 
 struct _GtkMnemonicTrigger
 {
@@ -994,7 +1007,8 @@ gtk_mnemonic_trigger_get_keyval (GtkMnemonicTrigger *self)
   return self->keyval;
 }
 
-/*** GTK_ALTERNATIVE_TRIGGER ***/
+/* }}} */
+/* {{{ Alternative trigger */
 
 struct _GtkAlternativeTrigger
 {
@@ -1409,4 +1423,4 @@ gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
 
 /* }}} */
 
-/* vm:set foldmethod=marker: */
+/* vim:set foldmethod=marker: */
