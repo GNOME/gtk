@@ -3940,46 +3940,25 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
 
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
-                                 GTK_MOVEMENT_BUFFER_ENDS, -1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_End, 0,
-                                 GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
-                                 GTK_MOVEMENT_DISPLAY_LINES, -1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Down, 0,
-                                 GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
-                                 GTK_MOVEMENT_PAGES, -1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
-                                 GTK_MOVEMENT_PAGES, 1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
 
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Right, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Right, 0,
-                                 GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   gtk_flow_box_add_move_binding (widget_class, GDK_KEY_Left, 0,
-                                 GTK_MOVEMENT_VISUAL_POSITIONS, -1);
-  gtk_flow_box_add_move_binding (widget_class, GDK_KEY_KP_Left, 0,
                                  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_space, GDK_CONTROL_MASK,
-                                       "toggle-cursor-child",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-                                       "toggle-cursor-child",
-                                       NULL);
+                                       "toggle-cursor-child", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_a, GDK_CONTROL_MASK,
