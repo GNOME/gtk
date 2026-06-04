@@ -403,7 +403,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
       res = g_variant_new_string (id ? id : "");
     }
   else if (g_strcmp0 (property_name, "Parent") == 0)
-    res = gtk_at_spi_null_ref ();
+    res = gtk_at_spi_root_get_parent_ref (self);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     {
       guint n_toplevels = g_list_model_get_n_items (self->toplevels);
@@ -1095,6 +1095,26 @@ gtk_at_spi_root_to_ref (GtkAtSpiRoot *self)
   return g_variant_new ("(so)",
                         g_dbus_connection_get_unique_name (self->connection),
                         self->root_path);
+}
+
+/*< private >
+ * gtk_at_spi_root_get_parent_ref:
+ * @self: a `GtkAtSpiRoot`
+ *
+ * Returns an AT-SPI object reference for the parent of the root,
+ * which is the desktop accessible.
+ *
+ * Returns: a `GVariant` with the parent reference
+ */
+GVariant *
+gtk_at_spi_root_get_parent_ref (GtkAtSpiRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), gtk_at_spi_null_ref ());
+
+  if (self->desktop_name != NULL && self->desktop_path != NULL)
+    return g_variant_new ("(so)", self->desktop_name, self->desktop_path);
+
+  return gtk_at_spi_null_ref ();
 }
 
 const char *
