@@ -271,11 +271,15 @@ void     gdk_wayland_selection_store   (GdkWindow    *window,
                                         GdkPropMode   mode,
                                         const guchar *data,
                                         gint          len);
-struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
-                                                               GdkAtom    selection);
+struct wl_data_source * gdk_wayland_selection_get_dnd_data_source (GdkWindow *owner);
 void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);
 gboolean gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
                                                           uint32_t    actions);
+
+void
+gdk_wayland_selection_announce_targets (GdkDisplay *display,
+                                        GdkAtom     selection,
+                                        GArray     *targets);
 
 EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);

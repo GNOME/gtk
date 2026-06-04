@@ -540,9 +540,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
 
   context_wayland->dnd_window = create_dnd_window (gdk_window_get_screen (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
-  context_wayland->data_source =
-    gdk_wayland_selection_get_data_source (window,
-                                           gdk_wayland_drag_context_get_selection (context));
+  context_wayland->data_source = gdk_wayland_selection_get_dnd_data_source (window);
 
   for (l = context->targets; l; l = l->next)
     {
