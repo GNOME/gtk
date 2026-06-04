@@ -1364,30 +1364,18 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
   gdk_wayland_selection_reset_selection (wayland_selection, selection);
 
   if (selection == atoms[ATOM_CLIPBOARD])
-    {
       wayland_selection->clipboard_owner = owner;
-      if (send_event && !owner)
-        {
-          gdk_wayland_selection_clear_targets (display, selection);
-        }
-      return TRUE;
-    }
   else if (selection == atoms[ATOM_PRIMARY])
-    {
       wayland_selection->primary_owner = owner;
-      if (send_event && !owner)
-        {
-          gdk_wayland_selection_clear_targets (display, selection);
-        }
-      return TRUE;
-    }
   else if (selection == atoms[ATOM_DND])
-    {
       wayland_selection->dnd_owner = owner;
-      return TRUE;
-    }
+  else
+      return FALSE;
 
-  return FALSE;
+  if (send_event && !owner)
+      gdk_wayland_selection_clear_targets (display, selection);
+
+  return TRUE;
 }
 
 void
