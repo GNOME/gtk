@@ -739,37 +739,20 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_Home, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, -1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
-                                 GTK_MOVEMENT_BUFFER_ENDS, -1);
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_End, 0,
-                                 GTK_MOVEMENT_BUFFER_ENDS, 1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                                  GTK_MOVEMENT_BUFFER_ENDS, 1);
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_Up, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, -1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Up, 0,
-                                 GTK_MOVEMENT_DISPLAY_LINES, -1);
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_Down, 0,
-                                 GTK_MOVEMENT_DISPLAY_LINES, 1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Down, 0,
                                  GTK_MOVEMENT_DISPLAY_LINES, 1);
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_Page_Up, 0,
                                  GTK_MOVEMENT_PAGES, -1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Up, 0,
-                                 GTK_MOVEMENT_PAGES, -1);
   gtk_list_box_add_move_binding (widget_class, GDK_KEY_Page_Down, 0,
-                                 GTK_MOVEMENT_PAGES, 1);
-  gtk_list_box_add_move_binding (widget_class, GDK_KEY_KP_Page_Down, 0,
                                  GTK_MOVEMENT_PAGES, 1);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_space, GDK_CONTROL_MASK,
-                                       "toggle-cursor-row",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-                                       "toggle-cursor-row",
-                                       NULL);
+                                       "toggle-cursor-row", NULL);
 
 #ifdef __APPLE__
   gtk_widget_class_add_binding_signal (widget_class,
