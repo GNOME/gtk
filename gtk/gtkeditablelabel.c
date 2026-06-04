@@ -494,8 +494,6 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkShortcut *shortcut;
-  GtkShortcutTrigger *trigger;
-  GtkShortcutAction *action;
 
   object_class->set_property = gtk_editable_label_set_property;
   object_class->get_property = gtk_editable_label_get_property;
@@ -547,13 +545,8 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    */
   gtk_widget_class_install_action (widget_class, "editing.stop", "b", stop_editing);
 
-  trigger = gtk_alternative_trigger_new (
-                gtk_alternative_trigger_new (
-                    gtk_keyval_trigger_new (GDK_KEY_Return, 0),
-                    gtk_keyval_trigger_new (GDK_KEY_ISO_Enter, 0)),
-                    gtk_keyval_trigger_new (GDK_KEY_KP_Enter, 0));
-  action = gtk_named_action_new ("editing.start");
-  shortcut = gtk_shortcut_new (trigger, action);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_with_aliases (GDK_KEY_Return, 0),
+                               gtk_named_action_new ("editing.start"));
   gtk_widget_class_add_shortcut (widget_class, shortcut);
   g_object_unref (shortcut);
 
