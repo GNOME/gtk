@@ -32,6 +32,7 @@
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
@@ -499,6 +500,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 {
   GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
   GObjectClass *object_class = (GObjectClass *)class;
+  GtkShortcut *shortcut;
 
   object_class->get_property = swatch_get_property;
   object_class->set_property = swatch_set_property;
@@ -530,14 +532,10 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
    */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, swatch_popup_menu);
 
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
-                                       "menu.popup",
-                                       NULL);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_for_menu (),
+                               gtk_named_action_new ("menu.popup"));
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  g_object_unref (shortcut);
 
   gtk_widget_class_set_css_name (widget_class, I_("colorswatch"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_RADIO);

@@ -2320,6 +2320,7 @@ gtk_label_class_init (GtkLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkShortcut *shortcut;
 
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
@@ -2756,14 +2757,10 @@ gtk_label_class_init (GtkLabelClass *class)
    * Key bindings
    */
 
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
-                                       "menu.popup",
-                                       NULL);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_for_menu (),
+                               gtk_named_action_new ("menu.popup"));
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  g_object_unref (shortcut);
 
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
@@ -2771,12 +2768,6 @@ gtk_label_class_init (GtkLabelClass *class)
 
   add_move_binding (widget_class, GDK_KEY_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Right, 0,
-                    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Left, 0,
-                      GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   add_move_binding (widget_class, GDK_KEY_f, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
@@ -2788,12 +2779,6 @@ gtk_label_class_init (GtkLabelClass *class)
                       GTK_MOVEMENT_WORDS, 1);
 
   add_move_binding (widget_class, GDK_KEY_Left, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_WORDS, -1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, -1);
 
   /* select all */
@@ -2843,22 +2828,10 @@ gtk_label_class_init (GtkLabelClass *class)
   add_move_binding (widget_class, GDK_KEY_End, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (widget_class, GDK_KEY_KP_Home, 0,
-                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_End, 0,
-                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
-
   add_move_binding (widget_class, GDK_KEY_Home, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
 
   add_move_binding (widget_class, GDK_KEY_End, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_BUFFER_ENDS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Home, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_BUFFER_ENDS, -1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_End, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
 
 #ifdef __APPLE__
@@ -2868,34 +2841,16 @@ gtk_label_class_init (GtkLabelClass *class)
   add_move_binding (widget_class, GDK_KEY_Left, GDK_ALT_MASK,
                     GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_ALT_MASK,
-                    GTK_MOVEMENT_WORDS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_ALT_MASK,
-                    GTK_MOVEMENT_WORDS, -1);
-
   add_move_binding (widget_class, GDK_KEY_Right, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
   add_move_binding (widget_class, GDK_KEY_Left, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_META_MASK,
-                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_META_MASK,
-                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
-
   add_move_binding (widget_class, GDK_KEY_Up, GDK_META_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
 
   add_move_binding (widget_class, GDK_KEY_Down, GDK_META_MASK,
-                    GTK_MOVEMENT_BUFFER_ENDS, 1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Up, GDK_META_MASK,
-                    GTK_MOVEMENT_BUFFER_ENDS, -1);
-
-  add_move_binding (widget_class, GDK_KEY_KP_Down, GDK_META_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
 #endif
 
@@ -2914,14 +2869,6 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Return, GDK_NO_MODIFIER_MASK,
-                                       "activate-current-link",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, GDK_NO_MODIFIER_MASK,
-                                       "activate-current-link",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, GDK_NO_MODIFIER_MASK,
                                        "activate-current-link",
                                        NULL);
 

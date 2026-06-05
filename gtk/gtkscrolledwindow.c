@@ -453,14 +453,8 @@ add_scroll_binding (GtkWidgetClass *widget_class,
                     GtkScrollType   scroll,
                     gboolean        horizontal)
 {
-  guint keypad_keyval = keyval - GDK_KEY_Left + GDK_KEY_KP_Left;
-
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, mask,
-                                       "scroll-child",
-                                       "(ib)", scroll, horizontal);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keyval, mask,
                                        "scroll-child",
                                        "(ib)", scroll, horizontal);
 }

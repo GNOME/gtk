@@ -132,6 +132,40 @@ test_key_unicode (void)
     }
 }
 
+static gboolean
+keys_contains (const unsigned int *keys,
+               unsigned int        n_keys,
+               unsigned int        key)
+{
+  for (unsigned int i = 0; i < n_keys; i++)
+    {
+      if (keys[i] == key)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+test_key_aliases (void)
+{
+  const unsigned int *keys;
+  unsigned int n;
+
+  keys = gdk_keyval_get_aliases (GDK_KEY_Return, &n);
+  g_assert_true (keys_contains (keys, n, GDK_KEY_Return));
+  g_assert_true (keys_contains (keys, n, GDK_KEY_ISO_Enter));
+  g_assert_true (keys_contains (keys, n, GDK_KEY_KP_Enter));
+
+  keys = gdk_keyval_get_aliases (GDK_KEY_Page_Down, &n);
+  g_assert_true (keys_contains (keys, n, GDK_KEY_Page_Down));
+  g_assert_true (keys_contains (keys, n, GDK_KEY_KP_Page_Down));
+
+  keys = gdk_keyval_get_aliases (GDK_KEY_a, &n);
+  g_assert_true (n == 0);
+  g_assert_true (keys == NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -145,6 +179,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/keysyms/xf86", test_keysyms_xf86);
   g_test_add_func ("/keys/case", test_key_case);
   g_test_add_func ("/keys/unicode", test_key_unicode);
+  g_test_add_func ("/keys/aliases", test_key_aliases);
 
   return g_test_run ();
 }

@@ -47,6 +47,7 @@
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkselectionmodel.h"
+#include "gtkshortcuttrigger.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -990,10 +991,6 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
                                        GDK_KEY_Tab, modifiers,
                                        "move-focus-out",
                                        "(i)", direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Tab, modifiers,
-                                       "move-focus-out",
-                                       "(i)", direction);
 }
 
 static void
@@ -1001,14 +998,8 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
                     guint             keysym,
                     GtkDirectionType  direction)
 {
-  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
-
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_CONTROL_MASK,
-                                       "move-focus-out",
-                                       "(i)", direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, GDK_CONTROL_MASK,
                                        "move-focus-out",
                                        "(i)", direction);
 }
@@ -1019,14 +1010,8 @@ add_reorder_bindings (GtkWidgetClass   *widget_class,
                       GtkDirectionType  direction,
                       gboolean          move_to_last)
 {
-  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
-
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_ALT_MASK,
-                                       "reorder-tab",
-                                       "(ib)", direction, move_to_last);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, GDK_ALT_MASK,
                                        "reorder-tab",
                                        "(ib)", direction, move_to_last);
 }
@@ -1084,6 +1069,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 {
   GObjectClass   *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkShortcut *shortcut;
 
   gobject_class->set_property = gtk_notebook_set_property;
   gobject_class->get_property = gtk_notebook_get_property;
@@ -1447,36 +1433,21 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                        GDK_KEY_space, GDK_NO_MODIFIER_MASK,
                                        "select-page",
                                        "(b)", FALSE);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Space, GDK_NO_MODIFIER_MASK,
-                                       "select-page",
-                                       "(b)", FALSE);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Home, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_FIRST);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Home, GDK_NO_MODIFIER_MASK,
-                                       "focus-tab",
-                                       "(i)", GTK_NOTEBOOK_TAB_FIRST);
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_End, GDK_NO_MODIFIER_MASK,
                                        "focus-tab",
                                        "(i)", GTK_NOTEBOOK_TAB_LAST);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_End, GDK_NO_MODIFIER_MASK,
-                                       "focus-tab",
-                                       "(i)", GTK_NOTEBOOK_TAB_LAST);
 
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
-                                       "menu.popup",
-                                       NULL);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_for_menu (),
+                               gtk_named_action_new ("menu.popup"));
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  g_object_unref (shortcut);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Page_Up, GDK_CONTROL_MASK,

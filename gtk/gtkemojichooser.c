@@ -30,6 +30,7 @@
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
 #include "gtksearchentryprivate.h"
+#include "gtkshortcuttrigger.h"
 #include "gtktext.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
@@ -178,6 +179,7 @@ gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkShortcut *shortcut;
 
   object_class->dispose = gtk_emoji_chooser_child_dispose;
   widget_class->size_allocate = gtk_emoji_chooser_child_size_allocate;
@@ -186,14 +188,10 @@ gtk_emoji_chooser_child_class_init (GtkEmojiChooserChildClass *class)
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_emoji_chooser_child_popup_menu);
 
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
-                                       "menu.popup",
-                                       NULL);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_for_menu (),
+                               gtk_named_action_new ("menu.popup"));
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  g_object_unref (shortcut);
 
   gtk_widget_class_set_css_name (widget_class, "emoji");
 }

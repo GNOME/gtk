@@ -642,11 +642,17 @@ gtk_scale_size_allocate (GtkWidget *widget,
     }
 }
 
-#define add_slider_binding(binding_set, keyval, mask, scroll)        \
-  gtk_widget_class_add_binding_signal (widget_class,                 \
-                                       keyval, mask,                 \
-                                       I_("move-slider"),            \
-                                       "(i)", scroll)
+static void
+add_slider_binding (GtkWidgetClass  *widget_class,
+                    unsigned int     keyval,
+                    GdkModifierType  mask,
+                    GtkScrollType    scroll)
+{
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       keyval, mask,
+                                       I_("move-slider"),
+                                       "(i)", scroll);
+}
 
 static void
 gtk_scale_value_changed (GtkRange *range)
@@ -738,115 +744,73 @@ gtk_scale_class_init (GtkScaleClass *class)
    * blind users etc. don't care about scale orientation.
    */
 
-  add_slider_binding (binding_set, GDK_KEY_Left, 0,
+  add_slider_binding (widget_class, GDK_KEY_Left, 0,
                       GTK_SCROLL_STEP_LEFT);
 
-  add_slider_binding (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Left, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_LEFT);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Left, 0,
-                      GTK_SCROLL_STEP_LEFT);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_LEFT);
-
-  add_slider_binding (binding_set, GDK_KEY_Right, 0,
+  add_slider_binding (widget_class, GDK_KEY_Right, 0,
                       GTK_SCROLL_STEP_RIGHT);
 
-  add_slider_binding (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Right, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_RIGHT);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Right, 0,
-                      GTK_SCROLL_STEP_RIGHT);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_RIGHT);
-
-  add_slider_binding (binding_set, GDK_KEY_Up, 0,
+  add_slider_binding (widget_class, GDK_KEY_Up, 0,
                       GTK_SCROLL_STEP_UP);
 
-  add_slider_binding (binding_set, GDK_KEY_Up, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Up, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_UP);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Up, 0,
-                      GTK_SCROLL_STEP_UP);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_Up, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_UP);
-
-  add_slider_binding (binding_set, GDK_KEY_Down, 0,
+  add_slider_binding (widget_class, GDK_KEY_Down, 0,
                       GTK_SCROLL_STEP_DOWN);
 
-  add_slider_binding (binding_set, GDK_KEY_Down, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Down, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_DOWN);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Down, 0,
-                      GTK_SCROLL_STEP_DOWN);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_Down, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_DOWN);
-
-  add_slider_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Page_Up, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_LEFT);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Page_Up, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_LEFT);
-
-  add_slider_binding (binding_set, GDK_KEY_Page_Up, 0,
+  add_slider_binding (widget_class, GDK_KEY_Page_Up, 0,
                       GTK_SCROLL_PAGE_UP);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Page_Up, 0,
-                      GTK_SCROLL_PAGE_UP);
-
-  add_slider_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_RIGHT);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK,
-                      GTK_SCROLL_PAGE_RIGHT);
-
-  add_slider_binding (binding_set, GDK_KEY_Page_Down, 0,
-                      GTK_SCROLL_PAGE_DOWN);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_Page_Down, 0,
+  add_slider_binding (widget_class, GDK_KEY_Page_Down, 0,
                       GTK_SCROLL_PAGE_DOWN);
 
   /* Logical bindings (vs. visual bindings above) */
 
-  add_slider_binding (binding_set, GDK_KEY_plus, 0,
+  add_slider_binding (widget_class, GDK_KEY_plus, 0,
                       GTK_SCROLL_STEP_FORWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_minus, 0,
+  add_slider_binding (widget_class, GDK_KEY_minus, 0,
                       GTK_SCROLL_STEP_BACKWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_plus, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_plus, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_FORWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_minus, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_BACKWARD);
 
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Add, 0,
+  add_slider_binding (widget_class, GDK_KEY_KP_Add, 0,
                       GTK_SCROLL_STEP_FORWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Subtract, 0,
+  add_slider_binding (widget_class, GDK_KEY_KP_Subtract, 0,
                       GTK_SCROLL_STEP_BACKWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Add, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_KP_Add, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_FORWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK,
+  add_slider_binding (widget_class, GDK_KEY_KP_Subtract, GDK_CONTROL_MASK,
                       GTK_SCROLL_PAGE_BACKWARD);
 
-  add_slider_binding (binding_set, GDK_KEY_Home, 0,
+  add_slider_binding (widget_class, GDK_KEY_Home, 0,
                       GTK_SCROLL_START);
 
-  add_slider_binding (binding_set, GDK_KEY_KP_Home, 0,
-                      GTK_SCROLL_START);
-
-  add_slider_binding (binding_set, GDK_KEY_End, 0,
-                      GTK_SCROLL_END);
-
-  add_slider_binding (binding_set, GDK_KEY_KP_End, 0,
+  add_slider_binding (widget_class, GDK_KEY_End, 0,
                       GTK_SCROLL_END);
 
   gtk_widget_class_set_css_name (widget_class, I_("scale"));

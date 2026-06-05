@@ -275,15 +275,13 @@ puzzle_button_pressed (GtkGestureClick *gesture,
 static void
 add_move_binding (GtkShortcutController *controller,
                   guint                  keyval,
-                  guint                  kp_keyval,
                   int                    dx,
                   int                    dy)
 {
   GtkShortcut *shortcut;
 
   shortcut = gtk_shortcut_new_with_arguments (
-                 gtk_alternative_trigger_new (gtk_keyval_trigger_new (keyval, 0),
-                                              gtk_keyval_trigger_new (kp_keyval, 0)),
+                 gtk_shortcut_trigger_create_with_aliases (keyval, 0),
                  gtk_callback_action_new (puzzle_key_pressed, NULL, NULL),
                  "(ii)", dx, dy);
   gtk_shortcut_controller_add_shortcut (controller, shortcut);
@@ -313,18 +311,10 @@ start_puzzle (GdkPaintable *paintable)
   controller = gtk_shortcut_controller_new ();
   gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
                                      GTK_SHORTCUT_SCOPE_LOCAL);
-  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
-                    GDK_KEY_Left, GDK_KEY_KP_Left,
-                    -1, 0);
-  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
-                    GDK_KEY_Right, GDK_KEY_KP_Right,
-                    1, 0);
-  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
-                    GDK_KEY_Up, GDK_KEY_KP_Up,
-                    0, -1);
-  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller),
-                    GDK_KEY_Down, GDK_KEY_KP_Down,
-                    0, 1);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller), GDK_KEY_Left, -1, 0);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller), GDK_KEY_Right, 1, 0);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller), GDK_KEY_Up, 0, -1);
+  add_move_binding (GTK_SHORTCUT_CONTROLLER (controller), GDK_KEY_Down, 0, 1);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());

@@ -4558,6 +4558,11 @@ gtk_widget_compute_point (GtkWidget              *widget,
  * initialization. It does not provide for user data, if you need that,
  * you will have to use [method@Gtk.WidgetClass.add_shortcut] with a custom
  * shortcut.
+ *
+ * Note: Since 4.24, this function takes key aliases into account.
+ * See [func@Gdk.keyval_get_aliases] for more information on key aliases.
+ * To make a shortcut for an individual key, use
+ * [method@Gtk.WidgetClass.add_shortcut].
  */
 void
 gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
@@ -4568,23 +4573,35 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
                               ...)
 {
   GtkShortcut *shortcut;
+  const guint *keys;
+  guint n_keys;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
 
-  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
-                               gtk_callback_action_new (callback, NULL, NULL));
-  if (format_string)
+  keys = gdk_keyval_get_aliases (keyval, &n_keys);
+  if (keys == NULL)
     {
-      va_list args;
-      va_start (args, format_string);
-      gtk_shortcut_set_arguments (shortcut,
-                                  g_variant_new_va (format_string, NULL, &args));
-      va_end (args);
+      keys = &keyval;
+      n_keys = 1;
     }
 
-  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  for (unsigned int i = 0; i < n_keys; i++)
+    {
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+                                   gtk_callback_action_new (callback, NULL, NULL));
+      if (format_string)
+        {
+          va_list args;
+          va_start (args, format_string);
+          gtk_shortcut_set_arguments (shortcut,
+                                      g_variant_new_va (format_string, NULL, &args));
+          va_end (args);
+        }
 
-  g_object_unref (shortcut);
+      gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+      g_object_unref (shortcut);
+    }
 }
 
 /**
@@ -4605,6 +4622,11 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
  * initialization.
+ *
+ * Note: Since 4.24, this function takes key aliases into account.
+ * See [func@Gdk.keyval_get_aliases] for more information on key aliases.
+ * To make a shortcut for an individual key, use
+ * [method@Gtk.WidgetClass.add_shortcut].
  */
 void
 gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
@@ -4615,25 +4637,39 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
                                      ...)
 {
   GtkShortcut *shortcut;
+  const guint *keys;
+  guint n_keys;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (g_signal_lookup (signal, G_TYPE_FROM_CLASS (widget_class)));
   /* XXX: validate variant format for signal */
 
-  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
-                               gtk_signal_action_new (signal));
-  if (format_string)
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  keys = gdk_keyval_get_aliases (keyval, &n_keys);
+  if (keys == NULL)
     {
-      va_list args;
-      va_start (args, format_string);
-      gtk_shortcut_set_arguments (shortcut,
-                                  g_variant_new_va (format_string, NULL, &args));
-      va_end (args);
+      keys = &keyval;
+      n_keys = 1;
     }
 
-  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  for (unsigned int i = 0; i < n_keys; i++)
+    {
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+                                   gtk_signal_action_new (signal));
+      if (format_string)
+        {
+          va_list args;
+          va_start (args, format_string);
+          gtk_shortcut_set_arguments (shortcut,
+                                      g_variant_new_va (format_string, NULL, &args));
+          va_end (args);
+        }
 
-  g_object_unref (shortcut);
+      gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+      g_object_unref (shortcut);
+    }
 }
 
 /**
@@ -4654,6 +4690,11 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
  * This function is a convenience wrapper around
  * [method@Gtk.WidgetClass.add_shortcut] and must be called during class
  * initialization.
+ *
+ * Note: Since 4.24, this function takes key aliases into account.
+ * See [func@Gdk.keyval_get_aliases] for more information on key aliases.
+ * To make a shortcut for an individual key, use
+ * [method@Gtk.WidgetClass.add_shortcut].
  */
 void
 gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
@@ -4664,24 +4705,36 @@ gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
                                      ...)
 {
   GtkShortcut *shortcut;
+  const guint *keys;
+  guint n_keys;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
-  /* XXX: validate variant format for action */
+  /* XXX: validate variant format for signal */
 
-  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
-                               gtk_named_action_new (action_name));
-  if (format_string)
+  keys = gdk_keyval_get_aliases (keyval, &n_keys);
+  if (keys == NULL)
     {
-      va_list args;
-      va_start (args, format_string);
-      gtk_shortcut_set_arguments (shortcut,
-                                  g_variant_new_va (format_string, NULL, &args));
-      va_end (args);
+      keys = &keyval;
+      n_keys = 1;
     }
 
-  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  for (unsigned int i = 0; i < n_keys; i++)
+    {
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+                                   gtk_named_action_new (action_name));
+      if (format_string)
+        {
+          va_list args;
+          va_start (args, format_string);
+          gtk_shortcut_set_arguments (shortcut,
+                                      g_variant_new_va (format_string, NULL, &args));
+          va_end (args);
+        }
 
-  g_object_unref (shortcut);
+      gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+      g_object_unref (shortcut);
+    }
 }
 
 /**

@@ -184,6 +184,7 @@ test_trigger_parse_alternative (void)
 {
   enum
   {
+    NO_TRIGGER,
     TRIGGER_NEVER,
     TRIGGER_KEYVAL,
     TRIGGER_MNEMONIC,
@@ -193,70 +194,58 @@ test_trigger_parse_alternative (void)
   const struct
   {
     const char *str;
-    int first;
-    int second;
+    int kinds[3];
   } tests[] = {
-    { "U|<Primary>U", TRIGGER_KEYVAL, TRIGGER_KEYVAL },
-    { "_U|<Shift>u", TRIGGER_MNEMONIC, TRIGGER_KEYVAL },
-    { "x|_x|<Primary>x", TRIGGER_KEYVAL, TRIGGER_ALTERNATIVE },
+    { "U|<Primary>U", { TRIGGER_KEYVAL, TRIGGER_KEYVAL, NO_TRIGGER } },
+    { "_U|<Shift>u", { TRIGGER_MNEMONIC, TRIGGER_KEYVAL, NO_TRIGGER } },
+    { "x|_x|<Primary>x", { TRIGGER_KEYVAL, TRIGGER_MNEMONIC, TRIGGER_KEYVAL } },
   };
 
   for (int i = 0; i < G_N_ELEMENTS (tests); i++)
     {
+      unsigned int n;
+
       g_test_message ("Checking: '%s'", tests[i].str);
 
       GtkShortcutTrigger *trigger = gtk_shortcut_trigger_parse_string (tests[i].str);
 
       g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (trigger));
 
-      GtkShortcutTrigger *t1 = gtk_alternative_trigger_get_first (GTK_ALTERNATIVE_TRIGGER (trigger));
+      n = g_list_model_get_n_items (G_LIST_MODEL (trigger));
+      g_assert (n <= 3);
 
-      switch (tests[i].first)
+      for (unsigned int pos = 0; pos < n; pos++)
         {
-        case TRIGGER_NEVER:
-          g_assert_true (GTK_IS_NEVER_TRIGGER (t1));
-          break;
+          GtkShortcutTrigger *t1 = g_list_model_get_item (G_LIST_MODEL (trigger), pos);
 
-        case TRIGGER_KEYVAL:
-          g_assert_true (GTK_IS_KEYVAL_TRIGGER (t1));
-          break;
+          switch (tests[i].kinds[pos])
+            {
+            case NO_TRIGGER:
+              g_assert_null (t1);
+              break;
 
-        case TRIGGER_MNEMONIC:
-          g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t1));
-          break;
+            case TRIGGER_NEVER:
+              g_assert_true (GTK_IS_NEVER_TRIGGER (t1));
+              break;
 
-        case TRIGGER_ALTERNATIVE:
-          g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t1));
-          break;
+            case TRIGGER_KEYVAL:
+              g_assert_true (GTK_IS_KEYVAL_TRIGGER (t1));
+              break;
 
-        default:
-          g_assert_not_reached ();
-          break;
-        }
+            case TRIGGER_MNEMONIC:
+              g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t1));
+              break;
 
-      GtkShortcutTrigger *t2 = gtk_alternative_trigger_get_second (GTK_ALTERNATIVE_TRIGGER (trigger));
+            case TRIGGER_ALTERNATIVE:
+              g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t1));
+              break;
 
-      switch (tests[i].second)
-        {
-        case TRIGGER_NEVER:
-          g_assert_true (GTK_IS_NEVER_TRIGGER (t2));
-          break;
+            default:
+              g_assert_not_reached ();
+              break;
+            }
 
-        case TRIGGER_KEYVAL:
-          g_assert_true (GTK_IS_KEYVAL_TRIGGER (t2));
-          break;
-
-        case TRIGGER_MNEMONIC:
-          g_assert_true (GTK_IS_MNEMONIC_TRIGGER (t2));
-          break;
-
-        case TRIGGER_ALTERNATIVE:
-          g_assert_true (GTK_IS_ALTERNATIVE_TRIGGER (t2));
-          break;
-
-        default:
-          g_assert_not_reached ();
-          break;
+           g_clear_object (&t1);
         }
 
       g_object_unref (trigger);
@@ -288,7 +277,7 @@ test_trigger_parse_invalid (void)
 static void
 test_trigger_trigger (void)
 {
-  GtkShortcutTrigger *trigger[4];
+  GtkShortcutTrigger *trigger[5];
   GdkDisplay *display;
   GdkSeat *seat;
   GdkSurface *surface;
@@ -298,14 +287,16 @@ test_trigger_trigger (void)
     guint keyval;
     GdkModifierType state;
     gboolean mnemonic;
-    GdkKeyMatch result[4];
+    GdkKeyMatch result[5];
   } tests[] = {
-    { GDK_KEY_a, GDK_CONTROL_MASK, FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT } }, 
-    { GDK_KEY_a, GDK_CONTROL_MASK, TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT } }, 
-    { GDK_KEY_a, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
-    { GDK_KEY_a, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
-    { GDK_KEY_u, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE } }, 
-    { GDK_KEY_u, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_EXACT } }, 
+    { GDK_KEY_a, GDK_CONTROL_MASK, FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_a, GDK_CONTROL_MASK, TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_a, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_a, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_u, GDK_SHIFT_MASK,   FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_u, GDK_SHIFT_MASK,   TRUE,  { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_EXACT, GDK_KEY_MATCH_NONE } },
+    { GDK_KEY_space, 0,            FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_EXACT } },
+    { GDK_KEY_KP_Space, 0,         FALSE, { GDK_KEY_MATCH_NONE, GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_NONE,  GDK_KEY_MATCH_EXACT } },
   };
   int i, j;
 
@@ -322,6 +313,7 @@ test_trigger_trigger (void)
   trigger[2] = gtk_mnemonic_trigger_new (GDK_KEY_u);
   trigger[3] = gtk_alternative_trigger_new (g_object_ref (trigger[1]),
                                             g_object_ref (trigger[2]));
+  trigger[4] = gtk_shortcut_trigger_create_with_aliases (GDK_KEY_space, 0);
 
   device = gdk_seat_get_keyboard (seat);
   surface = gdk_surface_new_toplevel (display);
@@ -365,6 +357,7 @@ test_trigger_trigger (void)
   g_object_unref (trigger[1]);
   g_object_unref (trigger[2]);
   g_object_unref (trigger[3]);
+  g_object_unref (trigger[4]);
 }
 
 static gboolean

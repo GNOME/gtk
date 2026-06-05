@@ -129,12 +129,23 @@ GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkAlternativeTrigger, gtk_alternative_trigger, GTK, ALTERNATIVE_TRIGGER, GtkShortcutTrigger)
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger    *first,
-                                                                 GtkShortcutTrigger    *second);
+GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger     *first,
+                                                                 GtkShortcutTrigger     *second);
+GDK_AVAILABLE_IN_4_24
+GtkShortcutTrigger *    gtk_alternative_trigger_newv            (GtkShortcutTrigger    **triggers,
+                                                                 size_t                  n_triggers);
+
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkAlternativeTrigger *self);
+GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkAlternativeTrigger  *self);
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkAlternativeTrigger *self);
+GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkAlternativeTrigger  *self);
+
+GDK_AVAILABLE_IN_4_24
+GtkShortcutTrigger *    gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
+                                                                  GdkModifierType modifiers);
+
+GDK_AVAILABLE_IN_4_24
+GtkShortcutTrigger *    gtk_shortcut_trigger_create_for_menu     (void);
 
 G_END_DECLS
 

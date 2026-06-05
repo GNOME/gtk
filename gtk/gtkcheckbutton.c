@@ -630,16 +630,10 @@ gtk_check_button_real_activate (GtkCheckButton *self)
 static void
 gtk_check_button_class_init (GtkCheckButtonClass *class)
 {
-  const guint activate_keyvals[] = {
-    GDK_KEY_space,
-    GDK_KEY_KP_Space,
-    GDK_KEY_Return,
-    GDK_KEY_ISO_Enter,
-    GDK_KEY_KP_Enter
-  };
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkShortcutAction *activate_action;
+  GtkShortcutTrigger *trigger;
+  GtkShortcut *activate_shortcut;
 
   object_class->dispose = gtk_check_button_dispose;
   object_class->set_property = gtk_check_button_set_property;
@@ -769,16 +763,11 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
-  activate_action = gtk_signal_action_new ("activate");
-  for (guint i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
-    {
-      GtkShortcut *activate_shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (activate_keyvals[i], 0),
-                                                         g_object_ref (activate_action));
-
-      gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
-      g_object_unref (activate_shortcut);
-    }
-  g_object_unref (activate_action);
+  trigger = gtk_alternative_trigger_new (gtk_shortcut_trigger_create_with_aliases (GDK_KEY_Return, 0),
+                                         gtk_shortcut_trigger_create_with_aliases (GDK_KEY_space, 0));
+  activate_shortcut = gtk_shortcut_new (trigger, gtk_signal_action_new ("activate"));
+  gtk_widget_class_add_shortcut (widget_class, activate_shortcut);
+  g_object_unref (activate_shortcut);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("checkbutton"));

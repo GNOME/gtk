@@ -663,8 +663,7 @@ insert_row (GtkPlacesView *view,
   g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
   controller = gtk_shortcut_controller_new ();
-  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
-                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  trigger = gtk_shortcut_trigger_create_for_menu ();
   action = gtk_callback_action_new (on_row_popup_menu, row, NULL);
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
