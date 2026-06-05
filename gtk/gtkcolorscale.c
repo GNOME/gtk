@@ -189,8 +189,7 @@ scale_constructed (GObject *object)
   GtkShortcut *shortcut;
 
   controller = gtk_shortcut_controller_new ();
-  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
-                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  trigger = gtk_shortcut_trigger_create_for_menu ();
   action = gtk_named_action_new ("color.edit");
   shortcut = gtk_shortcut_new_with_arguments (trigger,
                                               action,
