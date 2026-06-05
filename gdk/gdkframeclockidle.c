@@ -316,14 +316,12 @@ gdk_frame_clock_flush_idle (void *data)
 
   priv->flush_idle_id = 0;
 
-  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE)
-    return G_SOURCE_REMOVE;
-
-  priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
-
-  gdk_frame_clock_idle_run_flush_events (self);
+  if (priv->phase == GDK_FRAME_CLOCK_PHASE_NONE)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
 
   g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
+
+  gdk_frame_clock_idle_run_flush_events (self);
   gdk_frame_clock_paint_idle (data);
 
   return G_SOURCE_REMOVE;
