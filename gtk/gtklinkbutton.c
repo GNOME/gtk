@@ -81,6 +81,7 @@
 #include "gtkmarshalers.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
+#include "gtkshortcuttrigger.h"
 #include "gtksizerequest.h"
 #include "gtktooltip.h"
 #include "gtkurilauncher.h"
@@ -179,6 +180,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
+  GtkShortcut *shortcut;
 
   gobject_class->set_property = gtk_link_button_set_property;
   gobject_class->get_property = gtk_link_button_get_property;
@@ -256,14 +258,10 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_link_button_popup_menu);
 
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "menu.popup",
-                                       NULL);
-  gtk_widget_class_add_binding_action (widget_class,
-                                       GDK_KEY_Menu, GDK_NO_MODIFIER_MASK,
-                                       "menu.popup",
-                                       NULL);
+  shortcut = gtk_shortcut_new (gtk_shortcut_trigger_create_for_menu (),
+                               gtk_named_action_new ("menu.popup"));
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+  g_object_unref (shortcut);
 }
 
 static GMenuModel *
