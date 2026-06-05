@@ -650,9 +650,7 @@ gtk_popover_bin_set_handle_input (GtkPopoverBin *self,
       gtk_widget_add_controller (GTK_WIDGET (self), self->long_press_gesture);
 
       self->shortcut_controller = GTK_EVENT_CONTROLLER (gtk_shortcut_controller_new ());
-      trigger = gtk_alternative_trigger_new (
-                  gtk_keyval_trigger_new (GDK_KEY_Menu, GDK_NO_MODIFIER_MASK),
-                  gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK));
+      trigger = gtk_shortcut_trigger_create_for_menu ();
       action = gtk_named_action_new ("menu.popup");
       gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (self->shortcut_controller),
                                             gtk_shortcut_new (trigger, action));
