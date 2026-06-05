@@ -305,11 +305,7 @@ gdk_frame_clock_idle_run_flush_events (GdkFrameClockIdle *self)
       _gdk_frame_clock_emit_flush_events (clock);
     }
 
-  if ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||
-      priv->updating_count > 0)
-    priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-  else
-    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 }
 
 static gboolean
