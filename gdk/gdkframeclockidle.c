@@ -292,12 +292,31 @@ maybe_stop_idle (GdkFrameClockIdle *self)
     g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
 }
 
+static void
+gdk_frame_clock_idle_run_flush_events (GdkFrameClockIdle *self)
+{
+  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+  GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
+
+  if (priv->requested & GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
+    {
+      priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
+
+      _gdk_frame_clock_emit_flush_events (clock);
+    }
+
+  if ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||
+      priv->updating_count > 0)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+  else
+    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+}
+
 static gboolean
 gdk_frame_clock_flush_idle (void *data)
 {
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-  GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
 
   priv->flush_idle_id = 0;
 
@@ -305,15 +324,8 @@ gdk_frame_clock_flush_idle (void *data)
     return G_SOURCE_REMOVE;
 
   priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
-  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
 
-  _gdk_frame_clock_emit_flush_events (clock);
-
-  if ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||
-      priv->updating_count > 0)
-    priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-  else
-    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+  gdk_frame_clock_idle_run_flush_events (self);
 
   g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
   gdk_frame_clock_paint_idle (data);
