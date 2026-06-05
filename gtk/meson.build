@@ -749,15 +749,7 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
 theme_deps = []
 # For git checkouts, but not for tarballs...
 if not fs.exists('theme/Default/Default-light.css')
-  # ... build the theme files
-  sassc = find_program('sassc', native: true)
-  sassc_opts = [ '-a', '-M', '-t', 'compact' ]
-
   subdir('theme/Default')
-
-  theme_deps += [
-    default_theme_deps,
-  ]
 endif
 
 gtkresources = gnome.compile_resources('gtkresources',

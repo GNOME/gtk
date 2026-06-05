@@ -1,8 +1,0 @@
-[wrap-git]
-directory = sassc
-url = https://github.com/lazka/sassc.git
-revision = meson
-depth = 1
-
-[provide]
-program_names = sassc
