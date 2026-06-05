@@ -6922,16 +6922,14 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_widget_set_parent (impl->rename_file_popover, GTK_WIDGET (impl));
 
   controller = gtk_shortcut_controller_new ();
-  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
-                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  trigger = gtk_shortcut_trigger_create_for_menu ();
   action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
   gtk_widget_add_controller (GTK_WIDGET (impl->browse_files_column_view), controller);
 
   controller = gtk_shortcut_controller_new ();
-  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
-                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  trigger = gtk_shortcut_trigger_create_for_menu ();
   action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
