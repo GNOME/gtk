@@ -308,25 +308,6 @@ gdk_frame_clock_idle_run_flush_events (GdkFrameClockIdle *self)
   priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 }
 
-static gboolean
-gdk_frame_clock_flush_idle (void *data)
-{
-  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
-  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-
-  priv->flush_idle_id = 0;
-
-  if (priv->phase == GDK_FRAME_CLOCK_PHASE_NONE)
-    priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
-
-  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
-
-  gdk_frame_clock_idle_run_flush_events (self);
-  gdk_frame_clock_paint_idle (data);
-
-  return G_SOURCE_REMOVE;
-}
-
 /*
  * Returns the positive remainder.
  *
@@ -470,10 +451,9 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   timings->frame_time = priv->frame_time;
   timings->smoothed_frame_time = priv->smoothed_frame_time_base;
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-
   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
   _gdk_frame_clock_emit_before_paint (clock);
+
   priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
 }
 
@@ -617,25 +597,27 @@ gdk_frame_clock_idle_run_resume_events (GdkFrameClockIdle *self)
     priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
-static gboolean
-gdk_frame_clock_paint_idle (void *data)
+static void
+gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
 {
-  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   gint64 before G_GNUC_UNUSED;
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  priv->paint_idle_id = 0;
   priv->in_paint_idle = TRUE;
   priv->min_next_frame_time = 0;
+
+  if (priv->phase == GDK_FRAME_CLOCK_PHASE_NONE)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
 
   switch (priv->phase)
     {
     case GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS:
-      break;
-    case GDK_FRAME_CLOCK_PHASE_NONE:
+      gdk_frame_clock_idle_run_flush_events (self);
+      G_GNUC_FALLTHROUGH;
+
     case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
       gdk_frame_clock_idle_run_before_paint (self);
       G_GNUC_FALLTHROUGH;
@@ -657,13 +639,13 @@ gdk_frame_clock_paint_idle (void *data)
       G_GNUC_FALLTHROUGH;
 
     case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
+      gdk_frame_clock_idle_run_resume_events (self);
+      break;
+
+    case GDK_FRAME_CLOCK_PHASE_NONE:
     default:
-      ;
+      g_assert_not_reached ();
     }
-
-  gdk_frame_clock_idle_run_resume_events (self);
-
-  priv->in_paint_idle = FALSE;
 
   /* If there is throttling in the backend layer, then we'll do another
    * update as soon as the backend unthrottles (if there is work to do),
@@ -688,6 +670,34 @@ gdk_frame_clock_paint_idle (void *data)
     }
 
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
+
+  priv->in_paint_idle = FALSE;
+}
+
+static gboolean
+gdk_frame_clock_flush_idle (void *data)
+{
+  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
+  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+
+  priv->flush_idle_id = 0;
+
+  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
+
+  gdk_frame_clock_idle_frame (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+gdk_frame_clock_paint_idle (void *data)
+{
+  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
+  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+
+  priv->paint_idle_id = 0;
+
+  gdk_frame_clock_idle_frame (self);
 
   return G_SOURCE_REMOVE;
 }
