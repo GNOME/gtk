@@ -75,7 +75,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-08-09.0'
+    BASE_TAG: '2026-11-11.0'
     FDO_DISTRIBUTION_VERSION: 45
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -91,6 +91,7 @@ default:
       git
       glibc-langpack-en
       graphviz
+      grass-compiler
       libasan
       libcloudproviders-devel
       libubsan
@@ -114,7 +115,6 @@ default:
       python3-pip
       python3-pygments
       python3-typogrify
-      sassc
       tinysparql-devel
       vulkan-validation-layers
       weston
