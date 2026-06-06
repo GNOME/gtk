@@ -28,6 +28,7 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdkrectangleprivate.h"
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"

@@ -36,6 +36,7 @@
 #include "gdkeventsourceprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkpopupprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdkprivate-broadway.h"
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"

@@ -41,6 +41,7 @@
 #include <glib/gi18n-lib.h>
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdkrectangleprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"

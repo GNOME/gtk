@@ -40,6 +40,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
+#include "gdkprofilerprivate.h"
 #include "gdktextureprivate.h"
 #include "gdkdragsurfacesizeprivate.h"
 

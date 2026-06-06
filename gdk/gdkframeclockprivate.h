@@ -27,7 +27,6 @@
 #pragma once
 
 #include <gdk/gdkframeclock.h>
-#include <gdk/gdkprofilerprivate.h>
 
 G_BEGIN_DECLS
 

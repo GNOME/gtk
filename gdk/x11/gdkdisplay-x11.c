@@ -34,6 +34,7 @@
 #include "gdkeventtranslatorprivate.h"
 #include "gdkframeclockprivate.h"
 #include "gdkdeviceprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
