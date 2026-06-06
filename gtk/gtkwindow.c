@@ -6027,9 +6027,11 @@ gtk_window_finalize (GObject *object)
       g_signal_handlers_disconnect_by_func (priv->screen,
                                             gtk_window_on_composited_changed, window);
 #ifdef GDK_WINDOWING_X11
-      g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (priv->screen),
-                                            gtk_window_on_theme_variant_changed,
-                                            window);
+      GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
+      if (settings)
+        g_signal_handlers_disconnect_by_func (settings,
+                                              gtk_window_on_theme_variant_changed,
+                                              window);
 #endif
     }
 
