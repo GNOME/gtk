@@ -59,22 +59,18 @@ struct _GdkFrameClockIdlePrivate
 
   gint64 freeze_time; /* in nanoseconds */
 
-  guint flush_idle_id;
-  guint paint_idle_id;
+  GSource *source;
   guint updating_count;
 
   GdkFrameClockPhase requested;
   GdkFrameClockPhase phase;
 
-  guint in_paint_idle : 1;
+  guint in_frame : 1;
   guint paint_is_thaw : 1;
 #ifdef G_OS_WIN32
   guint begin_period : 1;
 #endif
 };
-
-static gboolean gdk_frame_clock_flush_idle (void *data);
-static gboolean gdk_frame_clock_paint_idle (void *data);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
@@ -92,8 +88,7 @@ gdk_frame_clock_idle_dispose (GObject *object)
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (object);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
-  g_clear_handle_id (&priv->flush_idle_id, g_source_remove);
-  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
+  g_clear_pointer (&priv->source, g_source_destroy);
 
 #ifdef G_OS_WIN32
   if (priv->begin_period) 
@@ -188,7 +183,7 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   /* can't change frame time during a paint */
   if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
       priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS &&
-      (priv->phase != GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT || priv->in_paint_idle))
+      (priv->phase != GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT || priv->in_frame))
     return priv->smoothed_frame_time_base;
 
   /* Outside a paint, pick something smoothed close to now */
@@ -211,29 +206,33 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   return new_smoothed_time;
 }
 
-static inline gboolean
-should_run_flush_idle (GdkFrameClockIdle *self)
-{
-  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-
-  return !gdk_frame_clock_is_stopped (GDK_FRAME_CLOCK (self)) &&
-         (priv->requested & GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0;
-}
-
 /* The reason why we track updating_count separately here and don't
  * just add GDK_FRAME_CLOCK_PHASE_UPDATE into ->request on every frame
  * is so that we can avoid doing one more frame when an animation
  * is cancelled.
  */
 static inline gboolean
-should_run_paint_idle (GdkFrameClockIdle *self)
+should_run_source (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
   return !gdk_frame_clock_is_stopped (GDK_FRAME_CLOCK (self)) &&
-         ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0 ||
-          priv->updating_count > 0);
+         !priv->in_frame &&
+         (priv->requested != 0 || priv->updating_count > 0);
 }
+
+static inline gint
+get_source_priority (GdkFrameClockIdle *self)
+{
+  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+
+  if (priv->requested & GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
+    return GDK_PRIORITY_EVENTS + 1;
+  else
+    return GDK_PRIORITY_REDRAW;
+}
+
+static gboolean gdk_frame_clock_source_cb (void *data);
 
 static void
 maybe_start_idle (GdkFrameClockIdle *self,
@@ -241,7 +240,7 @@ maybe_start_idle (GdkFrameClockIdle *self,
 {
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
-  if (should_run_flush_idle (self) || should_run_paint_idle (self))
+  if (should_run_source (self) && priv->source == NULL)
     {
       guint min_interval = 0;
 
@@ -253,30 +252,17 @@ maybe_start_idle (GdkFrameClockIdle *self,
           min_interval = (min_interval_us + 500) / 1000;
         }
 
-      if (priv->flush_idle_id == 0 && should_run_flush_idle (self))
-        {
-          GSource *source;
+      priv->source = g_timeout_source_new (min_interval);
+      g_source_set_static_name (priv->source, "[gtk] gdk_frame_clock_frame");
+      g_source_set_callback (priv->source,
+                             gdk_frame_clock_source_cb, 
+                             g_object_ref (self),
+                             (GDestroyNotify) g_object_unref);
+      g_source_set_priority (priv->source, get_source_priority (self));
+      g_source_attach (priv->source, NULL);
+      g_source_unref (priv->source);
 
-          priv->flush_idle_id = g_timeout_add_full (GDK_PRIORITY_EVENTS + 1,
-                                                    min_interval,
-                                                    gdk_frame_clock_flush_idle,
-                                                    g_object_ref (self),
-                                                    (GDestroyNotify) g_object_unref);
-          source = g_main_context_find_source_by_id (NULL, priv->flush_idle_id);
-          g_source_set_static_name (source, "[gtk] gdk_frame_clock_flush_idle");
-        }
-
-      if (!priv->in_paint_idle &&
-	  priv->paint_idle_id == 0 && should_run_paint_idle (self))
-        {
-          priv->paint_is_thaw = caused_by_thaw;
-          priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
-                                                    min_interval,
-                                                    gdk_frame_clock_paint_idle,
-                                                    g_object_ref (self),
-                                                    (GDestroyNotify) g_object_unref);
-          gdk_source_set_static_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
-        }
+      priv->paint_is_thaw = caused_by_thaw;
     }
 }
 
@@ -285,11 +271,8 @@ maybe_stop_idle (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
-  if (priv->flush_idle_id != 0 && !should_run_flush_idle (self))
-    g_clear_handle_id (&priv->flush_idle_id, g_source_remove);
-
-  if (priv->paint_idle_id != 0 && !should_run_paint_idle (self))
-    g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
+  if (!should_run_source (self))
+    g_clear_pointer (&priv->source, g_source_destroy);
 }
 
 static void
@@ -606,7 +589,7 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  priv->in_paint_idle = TRUE;
+  priv->in_frame = TRUE;
   priv->min_next_frame_time = 0;
 
   if (priv->phase == GDK_FRAME_CLOCK_PHASE_NONE)
@@ -647,6 +630,8 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
       g_assert_not_reached ();
     }
 
+  priv->in_frame = FALSE;
+
   /* If there is throttling in the backend layer, then we'll do another
    * update as soon as the backend unthrottles (if there is work to do),
    * otherwise we need to figure when the next frame should be.
@@ -670,32 +655,15 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
     }
 
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
-
-  priv->in_paint_idle = FALSE;
 }
 
 static gboolean
-gdk_frame_clock_flush_idle (void *data)
+gdk_frame_clock_source_cb (void *data)
 {
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
-  priv->flush_idle_id = 0;
-
-  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
-
-  gdk_frame_clock_idle_frame (self);
-
-  return G_SOURCE_REMOVE;
-}
-
-static gboolean
-gdk_frame_clock_paint_idle (void *data)
-{
-  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
-  GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-
-  priv->paint_idle_id = 0;
+  priv->source = NULL;
 
   gdk_frame_clock_idle_frame (self);
 
@@ -710,7 +678,18 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
   priv->requested |= phase;
-  maybe_start_idle (self, FALSE);
+
+  if (priv->source)
+    {
+      int priority = get_source_priority (self);
+
+      if (priority != g_source_get_priority (priv->source))
+        g_source_set_priority (priv->source, priority);
+    }
+  else
+    {
+      maybe_start_idle (self, FALSE);
+    }
 }
 
 static void
@@ -781,11 +760,12 @@ gdk_frame_clock_idle_start (GdkFrameClock *clock)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
   maybe_start_idle (self, TRUE);
+
   /* If nothing is requested so we didn't start an idle, we need
    * to skip to the end of the state chain, since the idle won't
    * run and do it for us.
    */
-  if (priv->paint_idle_id == 0)
+  if (priv->source == NULL)
     priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
   if (GDK_PROFILER_IS_RUNNING)
