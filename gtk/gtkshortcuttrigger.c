@@ -1397,6 +1397,9 @@ gtk_alternative_trigger_newv (GtkShortcutTrigger **triggers,
  * Creates a shortcut trigger that will trigger for
  * any alias of the given key.
  *
+ * See [func@Gdk.keyval_get_aliases] for more information
+ * on aliases.
+ *
  * Returns: (transfer full): a new `GtkShortcutTrigger`
  *
  * Since: 4.24
