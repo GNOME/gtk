@@ -63,7 +63,7 @@ struct _GdkFrameClockIdlePrivate
   guint updating_count;
 
   GdkFrameClockPhase requested;
-  GdkFrameClockPhase phase;
+  GdkFrameStage stage;
 
   guint in_frame : 1;
   guint paint_is_thaw : 1;
@@ -181,9 +181,9 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   gint64 new_smoothed_time;
 
   /* can't change frame time during a paint */
-  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
-      priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS &&
-      (priv->phase != GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT || priv->in_frame))
+  if (priv->stage != GDK_FRAME_STAGE_NONE &&
+      priv->stage != GDK_FRAME_STAGE_FLUSH_EVENTS &&
+      (priv->stage != GDK_FRAME_STAGE_BEFORE_PAINT || priv->in_frame))
     return priv->smoothed_frame_time_base;
 
   /* Outside a paint, pick something smoothed close to now */
@@ -288,7 +288,7 @@ gdk_frame_clock_idle_run_flush_events (GdkFrameClockIdle *self)
       _gdk_frame_clock_emit_flush_events (clock);
     }
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+  priv->stage = GDK_FRAME_STAGE_BEFORE_PAINT;
 }
 
 /*
@@ -437,7 +437,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
   _gdk_frame_clock_emit_before_paint (clock);
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
+  priv->stage = GDK_FRAME_STAGE_UPDATE;
 }
 
 static void
@@ -459,7 +459,7 @@ gdk_frame_clock_idle_run_update (GdkFrameClockIdle *self)
   if (gdk_frame_clock_is_stopped (clock))
     return;
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+  priv->stage = GDK_FRAME_STAGE_LAYOUT;
 }
 
 static void
@@ -477,7 +477,7 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
 
   if (GDK_DEBUG_CHECK (FRAMES))
     {
-      if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
+      if (priv->stage != GDK_FRAME_STAGE_LAYOUT &&
           (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
         {
           if (timings)
@@ -504,7 +504,7 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
   if (gdk_frame_clock_is_stopped (clock))
     return;
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
+  priv->stage = GDK_FRAME_STAGE_PAINT;
 }
 
 static void
@@ -521,7 +521,7 @@ gdk_frame_clock_idle_run_paint (GdkFrameClockIdle *self)
 
   if (GDK_DEBUG_CHECK (FRAMES))
     {
-      if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
+      if (priv->stage != GDK_FRAME_STAGE_PAINT &&
           (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
         {
           if (timings)
@@ -535,7 +535,7 @@ gdk_frame_clock_idle_run_paint (GdkFrameClockIdle *self)
       _gdk_frame_clock_emit_paint (clock);
     }
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+  priv->stage = GDK_FRAME_STAGE_AFTER_PAINT;
 }
 
 static void
@@ -561,7 +561,7 @@ gdk_frame_clock_idle_run_after_paint (GdkFrameClockIdle *self)
 
   /* the ::after-paint phase doesn't get repeated on freeze/thaw,
    */
-  priv->phase = GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
+  priv->stage = GDK_FRAME_STAGE_RESUME_EVENTS;
 }
 
 static void
@@ -577,7 +577,7 @@ gdk_frame_clock_idle_run_resume_events (GdkFrameClockIdle *self)
     }
 
   if (!gdk_frame_clock_is_stopped (clock))
-    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+    priv->stage = GDK_FRAME_STAGE_NONE;
 }
 
 static void
@@ -592,40 +592,40 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
   priv->in_frame = TRUE;
   priv->min_next_frame_time = 0;
 
-  if (priv->phase == GDK_FRAME_CLOCK_PHASE_NONE)
-    priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
+  if (priv->stage == GDK_FRAME_STAGE_NONE)
+    priv->stage = GDK_FRAME_STAGE_FLUSH_EVENTS;
 
-  switch (priv->phase)
+  switch (priv->stage)
     {
-    case GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS:
+    case GDK_FRAME_STAGE_FLUSH_EVENTS:
       gdk_frame_clock_idle_run_flush_events (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
+    case GDK_FRAME_STAGE_BEFORE_PAINT:
       gdk_frame_clock_idle_run_before_paint (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_UPDATE:
+    case GDK_FRAME_STAGE_UPDATE:
       gdk_frame_clock_idle_run_update (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_LAYOUT:
+    case GDK_FRAME_STAGE_LAYOUT:
       gdk_frame_clock_idle_run_layout (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_PAINT:
+    case GDK_FRAME_STAGE_PAINT:
       gdk_frame_clock_idle_run_paint (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
+    case GDK_FRAME_STAGE_AFTER_PAINT:
       gdk_frame_clock_idle_run_after_paint (self);
       G_GNUC_FALLTHROUGH;
 
-    case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
+    case GDK_FRAME_STAGE_RESUME_EVENTS:
       gdk_frame_clock_idle_run_resume_events (self);
       break;
 
-    case GDK_FRAME_CLOCK_PHASE_NONE:
+    case GDK_FRAME_STAGE_NONE:
     default:
       g_assert_not_reached ();
     }
@@ -766,7 +766,7 @@ gdk_frame_clock_idle_start (GdkFrameClock *clock)
    * run and do it for us.
    */
   if (priv->source == NULL)
-    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+    priv->stage = GDK_FRAME_STAGE_NONE;
 
   if (GDK_PROFILER_IS_RUNNING)
     {
