@@ -46,7 +46,6 @@
 #include "gsk/gskrectprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gtk/gtkcssselectorprivate.h"
-#include <glib/gstdio.h>
 #include "gtksvgenumtypes.h"
 #include "gtksvgutilsprivate.h"
 #include "gtksvgstringutilsprivate.h"
@@ -88,6 +87,8 @@
 #include "gtksvgtimespecprivate.h"
 #include "gtksvggpaprivate.h"
 #include "gtksvgmediaqueryprivate.h"
+
+#include <glib/gstdio.h>
 
 #include <stdint.h>
 
@@ -454,6 +455,12 @@ load_texture (const char  *string,
   else if (g_str_has_prefix (string, "resource:"))
     {
       texture = gdk_texture_new_from_resource (string + strlen ("resource:"));
+    }
+  else if (allow_external && g_str_has_prefix (string, "file:"))
+    {
+      GFile *file = g_file_new_for_uri (string);
+      texture = gdk_texture_new_from_file (file, error);
+      g_object_unref (file);
     }
   else if (allow_external)
     {
