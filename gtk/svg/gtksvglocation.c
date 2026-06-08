@@ -47,7 +47,7 @@ gtk_svg_location_init (GtkSvgLocation      *location,
 
   g_markup_parse_context_get_position (context, &lines, &chars);
 
-  location->lines = lines;
+  location->lines = MAX (lines - 1, 0);
   location->line_chars = chars;
 
 #if GLIB_CHECK_VERSION (2, 88, 0)
@@ -69,6 +69,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                         &location->lines,
                                         &location->line_chars,
                                         &location->bytes);
+  if (location->lines > 0)
+    location->lines -= 1;
 G_GNUC_END_IGNORE_DEPRECATIONS
 #else
   gtk_svg_location_init (location, context);
@@ -104,6 +106,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_markup_parse_context_get_attribute_position (context, attr,
                                                  &start->lines, &start->line_chars, &start->bytes,
                                                  &end->lines, &end->line_chars, &end->bytes);
+  if (start->lines > 0)
+    start->lines -= 1;
+  if (end->lines > 0)
+    end->lines -= 1;
 G_GNUC_END_IGNORE_DEPRECATIONS
 #else
   gtk_svg_location_init_tag_range (start, end, context);

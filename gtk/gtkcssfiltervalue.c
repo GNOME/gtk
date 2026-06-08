@@ -864,11 +864,13 @@ typedef struct
 
 static void
 css_location_update (GtkCssLocation *l,
+                     int             lines,
                      int             bytes,
                      int             chars)
 {
   l->bytes += bytes;
   l->chars += chars;
+  l->lines += lines;
   l->line_bytes += bytes;
   l->line_chars += chars;
 }
@@ -881,18 +883,15 @@ svg_error_cb (GtkSvg          *svg,
   GtkCssLocation start = d->start;
   GtkCssLocation end = d->end;
 
-#if 0
-  /* GMarkup error locations are not good enough for this :( */
   if (d->is_data && svg_error->domain == GTK_SVG_ERROR)
     {
       const GtkSvgLocation *s = gtk_svg_error_get_start (svg_error);
       const GtkSvgLocation *e = gtk_svg_error_get_end (svg_error);
 
       start = end = d->start;
-      css_location_update (&start, s->line_chars, e->line_chars);
-      css_location_update (&end, e->line_chars, e->line_chars);
+      css_location_update (&start, s->lines, s->line_chars, s->line_chars);
+      css_location_update (&end, e->lines, e->line_chars, e->line_chars);
     }
-#endif
 
   gtk_css_parser_error (d->parser,
                         GTK_CSS_PARSER_ERROR_SYNTAX,
@@ -1019,9 +1018,9 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
           end = *gtk_css_parser_get_end_location (parser);
 
           len = strlen ("url(\"");
-          css_location_update (&start, len, len);
+          css_location_update (&start, 0, len, len);
           len = strlen ("\")");
-          css_location_update (&end, - len, - len);
+          css_location_update (&end, 0, - len, - len);
 
           g_uri_split (url, 0, &scheme, NULL, NULL, NULL, &path, NULL, &fragment, NULL);
           if (!fragment)
@@ -1063,9 +1062,9 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
               if (bytes)
                 {
                   len = strchr (url, ',') - url;
-                  css_location_update (&start, len, len);
+                  css_location_update (&start, 0, len, len);
                   len = strlen (fragment) - 1;
-                  css_location_update (&end, - len, - len);
+                  css_location_update (&end, 0, - len, - len);
                 }
             }
           else
