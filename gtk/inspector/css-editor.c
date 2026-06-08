@@ -386,12 +386,12 @@ show_parsing_error (GtkCssProvider        *provider,
   start = gtk_css_section_get_start_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->start,
-                                          CLAMP (start->lines, 0, INT_MAX),
+                                          CLAMP (start->lines - 1, 0, INT_MAX),
                                           CLAMP (start->line_bytes, 0, INT_MAX));
   end = gtk_css_section_get_end_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->end,
-                                          CLAMP (end->lines, 0, INT_MAX),
+                                          CLAMP (end->lines - 1, 0, INT_MAX),
                                           CLAMP (end->line_bytes, 0, INT_MAX));
 
   if (error->domain == GTK_CSS_PARSER_WARNING)
