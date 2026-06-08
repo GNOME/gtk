@@ -155,6 +155,12 @@ svg_unset_new (void)
 }
 
 gboolean
+svg_value_is_keyword (const SvgValue *value)
+{
+  return value->class == &SVG_KEYWORD_CLASS;
+}
+
+gboolean
 svg_value_is_inherit (const SvgValue *value)
 {
   return value->class == &SVG_KEYWORD_CLASS &&
