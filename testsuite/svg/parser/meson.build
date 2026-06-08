@@ -45,6 +45,7 @@ test_data = [
   'crash5.svg',
   'crash-inherit-color.svg',
   'crash-inherit-color-on-svg.svg',
+  'crash-inherit-marker.svg',
   'dashes.svg',
   'dashes2.svg',
   'dep-cycle.svg',

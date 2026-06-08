@@ -2806,7 +2806,7 @@ resolve_href_ref (SvgValue   *value,
 {
   const char *ref;
 
-  if (svg_value_is_unset (value))
+  if (svg_value_is_keyword (value))
     return;
 
   if (svg_href_get_kind (value) == HREF_NONE)
@@ -2889,7 +2889,7 @@ resolve_marker_ref (SvgValue   *value,
                     SvgElement *shape,
                     ParserData *data)
 {
-  if (svg_value_is_unset (value))
+  if (svg_value_is_keyword (value))
     return;
 
   if (svg_href_get_kind (value) != HREF_NONE && svg_href_get_shape (value) == NULL)
