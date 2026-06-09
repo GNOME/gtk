@@ -1,0 +1,53 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='2000ms'
+        gpa:run-mode='continuous'
+        font-size='13.333'
+        width='200'
+        height='100'
+        viewBox='0 0 200 100'>
+  <style type='text/css'>
+    #dashed { stroke-dasharray: 5 3; fill: none; }
+    .vessel { stroke: black; stroke-width: 2; }
+  </style>
+  <defs
+          font-size='13.333'>
+    <path
+            id='dashed'
+            font-size='13.333'
+            fill='none'
+            stroke-dasharray='5 3'
+            d='M 10 50 L 190 50'>
+    </path>
+  </defs>
+  <g
+          font-size='13.333'
+          stroke-dashoffset='8'>
+    <animate
+            attributeName='stroke-dashoffset'
+            dur='4000ms'
+            repeatCount='indefinite'
+            from='0'
+            to='16'
+            keyTimes='0; 1'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='0ms'/>
+    <use
+            class='vessel'
+            font-size='13.333'
+            stroke='rgb(0,0,0)'
+            stroke-width='2'
+            stroke-dashoffset='8'
+            href='#dashed'
+            width='0'
+            height='0'>
+    </use>
+  </g>
+</svg>

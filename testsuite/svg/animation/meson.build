@@ -38,6 +38,7 @@ test_data = [
   'symbolics.test',
   'transform-animation.test',
   'use.test',
+  'use-dashes.test',
 ]
 
 foreach testname : test_data

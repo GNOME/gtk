@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg'
+     xmlns:xlink='http://www.w3.org/1999/xlink'
+     width='200' height='100' viewBox='0 0 200 100'>
+  <style>
+    #dashed { stroke-dasharray: 5 3; fill: none; }
+    .vessel { stroke: black; stroke-width: 2; }
+  </style>
+  <defs>
+    <path id='dashed' d='M 10 50 L 190 50'/>
+  </defs>
+  <g>
+    <use href='#dashed' class='vessel'/>
+    <animate attributeName='stroke-dashoffset' values='0;16' dur='4s' repeatCount='indefinite'/>
+  </g>
+</svg>
