@@ -2304,8 +2304,7 @@ gtk_tree_row_ref_deleted (RowRefList  *refs,
                 gtk_tree_row_reference_unref_path (reference->path, reference->model, path->depth - 1);
               else
                 gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth - 1);
-              gtk_tree_path_free (reference->path);
-              reference->path = NULL;
+              g_clear_pointer (&reference->path, gtk_tree_path_free);
             }
           else if (path->indices[i] < reference->path->indices[i])
             {

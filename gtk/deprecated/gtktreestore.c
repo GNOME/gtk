@@ -2202,8 +2202,7 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest *drag_dest,
                                        parent);
               dest_parent_p = &dest_parent;
             }
-          gtk_tree_path_free (parent);
-          parent = NULL;
+          g_clear_pointer (&parent, gtk_tree_path_free);
 
           gtk_tree_store_prepend (tree_store,
                                   &dest_iter,

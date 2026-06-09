@@ -264,10 +264,7 @@ gtk_print_job_finalize (GObject *object)
     g_object_unref (job->backend);
 
   if (job->spool_io != NULL)
-    {
-      g_io_channel_unref (job->spool_io);
-      job->spool_io = NULL;
-    }
+    g_clear_pointer (&job->spool_io, g_io_channel_unref);
 
   if (job->printer)
     g_object_unref (job->printer);
@@ -527,8 +524,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 
   if (tmp_error != NULL)
     {
-      g_io_channel_unref (job->spool_io);
-      job->spool_io = NULL;
+      g_clear_pointer (&job->spool_io, g_io_channel_unref);
       g_propagate_error (error, tmp_error);
       return NULL;
     }

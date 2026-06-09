@@ -6126,8 +6126,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 	    }
 	  else
 	    {
-	      gtk_tree_path_free (path);
-	      path = NULL;
+              g_clear_pointer (&path, gtk_tree_path_free);
 	    }
 	}
 
