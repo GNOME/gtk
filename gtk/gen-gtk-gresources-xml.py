@@ -2,7 +2,9 @@
 #
 # Generate gtk.gresources.xml
 #
-# Usage: gen-gtk-gresources-xml SRCDIR_GTK [OUTPUT-FILE]
+# Usage: gen-gtk-gresources-xml SRCDIR_GTK ENDIAN
+#
+# Endian can be 'big' or 'little'
 
 import os, sys
 import filecmp
@@ -37,8 +39,8 @@ xml += '''
     <file>theme/Default/gtk.css</file>
 '''
 for f in {'light', 'dark', 'hc', 'hc-dark'}:
-  xml += '    <file alias=\'theme/Default/gtk-{0}.css\'>theme/Default/gtk.css</file>'.format(f)
-  xml += '    <file>theme/Default/Default-{0}.css</file>'.format(f)
+  xml += '    <file alias=\'theme/Default/gtk-{0}.css\'>theme/Default/gtk.css</file>\n'.format(f)
+  xml += '    <file>theme/Default/Default-{0}.css</file>\n'.format(f)
 
 for f in get_files('theme/Default/assets', '.png'):
   xml += '    <file>theme/Default/assets/{0}</file>\n'.format(f)
