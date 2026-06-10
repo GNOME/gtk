@@ -420,6 +420,7 @@ set_random_icons (IconEditorWindow *self)
     "switch-on-symbolic",
   };
   g_autoptr (GtkBitset) used = gtk_bitset_new_empty ();
+  GtkImage *image;
 
   for (unsigned int i = 0; i < 24; i++)
     {
@@ -443,10 +444,18 @@ set_random_icons (IconEditorWindow *self)
       gtk_bitset_add (used, r);
     }
 
-  gtk_image_set_from_paintable (self->images[g_random_int_range (0, 3)], GDK_PAINTABLE (self->paintable));
-  gtk_image_set_from_paintable (self->images[g_random_int_range (4, 7)], GDK_PAINTABLE (self->paintable));
-  gtk_image_set_from_paintable (self->images[g_random_int_range (8, 15)], GDK_PAINTABLE (self->paintable));
-  gtk_image_set_from_paintable (self->images[g_random_int_range (16, 23)], GDK_PAINTABLE (self->paintable));
+  image = self->images[g_random_int_range (0, 3)];
+  gtk_image_set_from_paintable (image, GDK_PAINTABLE (self->paintable));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), NULL);
+  image = self->images[g_random_int_range (4, 7)];
+  gtk_image_set_from_paintable (image, GDK_PAINTABLE (self->paintable));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), NULL);
+  image = self->images[g_random_int_range (8, 15)];
+  gtk_image_set_from_paintable (image, GDK_PAINTABLE (self->paintable));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), NULL);
+  image = self->images[g_random_int_range (16, 23)];
+  gtk_image_set_from_paintable (image, GDK_PAINTABLE (self->paintable));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), NULL);
 }
 
 static void
