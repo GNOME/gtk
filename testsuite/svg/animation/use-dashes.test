@@ -1,0 +1,8 @@
+# checks that stroke-dasharray on a use target survives style re-application
+input: use-dashes.svg
+time: 1000
+output: use-dashes-0.svg
+pointer: enter 100 50
+pointer: leave
+time: 2000
+output: use-dashes-1.svg

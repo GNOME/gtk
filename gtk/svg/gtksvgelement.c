@@ -2344,6 +2344,8 @@ svg_element_clone (SvgElement *element,
   clone->css_node = gtk_css_node_new ();
   gtk_css_node_set_parent (clone->css_node, parent->css_node);
   gtk_css_node_set_name (clone->css_node, g_quark_from_static_string (svg_element_type_get_name (clone->type)));
+  if (element->id)
+    gtk_css_node_set_id (clone->css_node, g_quark_from_string (element->id));
   gtk_css_node_set_classes (clone->css_node, (const char **) clone->classes);
   if (clone->type == SVG_ELEMENT_LINK)
     gtk_css_node_set_state (clone->css_node, GTK_STATE_FLAG_LINK);
