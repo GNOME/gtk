@@ -103,12 +103,12 @@ The `width` and `height` attributes on the `<svg>` element determine the size of
 
 The following attributes are allowed on elements that specify a path:
 
-- `fill`: ignored. The fill paint is determined based on the `gtk:fill` attribute
+- `fill`: ignored. The fill paint is determined based on the `gpa:fill` attribute
 - `fill-opacity`: opacity for filled paths, in addition to the alpha value of the fill paint
 - `fill-rule`: the fill rule used when filling
-- `stroke`: ignored. The stroke paint is determined based on the `gtk:stroke` attribute
+- `stroke`: ignored. The stroke paint is determined based on the `gpa:stroke` attribute
 - `stroke-opacity`: opacity for stroked paths, in addition to the alpha value of the stroke paint
-- `stroke-width`: line width used when stroking, ignored when `gtk:stroke-width` is set
+- `stroke-width`: line width used when stroking, ignored when `gpa:stroke-width` is set
 - `stroke-linecap`: the line cap value used when stroking
 - `stroke-linejoin`: the line join value used when stroking
 - `id`: used when attaching paths
