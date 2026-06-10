@@ -827,13 +827,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       GList *next = pending_motions->next;
 
       if (last_motion != NULL)
-        {
-          if ((gdk_event_get_modifier_state (last_motion) &
-               (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
-                GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)) ||
-               gdk_event_get_device_tool (last_motion) != NULL)
-            gdk_motion_event_push_history (last_motion, pending_motions->data);
-        }
+        gdk_motion_event_push_history (last_motion, pending_motions->data);
 
       gdk_event_unref (pending_motions->data);
       g_queue_delete_link (&display->queued_events, pending_motions);
