@@ -709,6 +709,9 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
+  if ((priv->requested & phase) == phase)
+    return;
+
   priv->requested |= phase;
 
   if (priv->source)
