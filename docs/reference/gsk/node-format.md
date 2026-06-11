@@ -165,6 +165,20 @@ side they are used for.
 
 # Nodes
 
+### arithmetic
+
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| bounds      | `<number>`       | 1                      | non-default |
+| snap        | `<snap>`         | none                   | non-default |
+| first       | `<node>`         | color { }              | always      |
+| second      | `<node>`         | color { }              | always      |
+| k           | `<number>{4}`    | 0 0 0 0                | always      |
+| color-state | `<color-state>`  | srgb                   | non-default |
+
+Creates a new arithmetic node, with an effect as described in the CSS
+[filter effects spec](https://www.w3.org/TR/filter-effects-1/#elementdef-fecomposite).
+
 ### container
 
 The **container** node is a special node that allows specifying a list of child nodes. Its contents follow the same rules as an empty document.
@@ -365,6 +379,26 @@ Creates a node like `gsk_cross_fade_node_new()` with the given properties.
 | message  | `<string>`       | ""                     | non-default |
 
 Creates a node like `gsk_debug_node_new()` with the given properties.
+
+### displacement
+
+| property     | syntax           | default                | printed     |
+| ------------ | ---------------- | ---------------------- | ----------- |
+| bounds       | `<rect>`         | 50                     | always      |
+| snap         | `<snap>`         | none                   | non-default |
+| child        | `<node>`         | color { }              | always      |
+| displacement | `<node>`         | color { }              | always      |
+| max          | `<number>{1,2}`  | 5 5                    | non-default |
+| scale        | `<number>{1,2}`  | 10 10                  | non-default |
+| offset       | `<number>{1,2}`  | 0.5 0.5                | non-default |
+| channels     | `<channel>{2}`   | red green              | non-default |
+
+Creates a new displacement node, with an effect as described in the CSS
+[filter effects spec](https://www.w3.org/TR/filter-effects-1/#feDisplacementMapElement)
+
+Possible values for the channels property are:
+
+    channel: red | green | blue | alpha
 
 ### fill
 
