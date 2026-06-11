@@ -2,6 +2,7 @@
 
 #include "gskgputypesprivate.h"
 
+#include <gsk/gsktypes.h>
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -45,6 +46,22 @@ void                    gsk_gpu_cache_cache_texture_image               (GskGpuC
                                                                          GdkTexture             *texture,
                                                                          GskGpuImage            *image,
                                                                          GdkColorState          *color_state);
+GskGpuImage        *gsk_gpu_cache_lookup_node_image       (GskGpuCache           *self,
+                                                           GskRenderNode         *node,
+                                                           GdkColorState         *color_state,
+                                                           GskGpuAsImageFlags     flags,
+                                                           GdkMemoryFormat        format,
+                                                           const graphene_rect_t *bounds,
+                                                           const graphene_size_t *scale,
+                                                           graphene_rect_t       *out_bounds);
+void                gsk_gpu_cache_cache_node_image        (GskGpuCache           *self,
+                                                           GskRenderNode         *node,
+                                                           GdkColorState         *color_state,
+                                                           GskGpuAsImageFlags     flags,
+                                                           GdkMemoryFormat        format,
+                                                           const graphene_rect_t *bounds,
+                                                           const graphene_size_t *scale,
+                                                           GskGpuImage           *image);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuCache, g_object_unref)

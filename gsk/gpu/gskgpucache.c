@@ -23,6 +23,9 @@
 #include "gdk/gdktextureprivate.h"
 
 #include "gsk/gskdebugprivate.h"
+#include "gsk/gskrendernodeprivate.h"
+
+#include <string.h>
 
 #define ATLAS_SIZE 1024
 
@@ -31,6 +34,7 @@
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
 
 typedef struct _GskGpuCachedGlyph GskGpuCachedGlyph;
+typedef struct _GskGpuCachedNodeImage GskGpuCachedNodeImage;
 typedef struct _GskGpuCachedTexture GskGpuCachedTexture;
 typedef struct _GskGpuCachedTile GskGpuCachedTile;
 
@@ -270,6 +274,180 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
   gsk_gpu_cached_texture_should_collect
 };
 
+/* }}} */
+/* {{{ CachedNodeImage */
+
+struct _GskGpuCachedNodeImage
+{
+  GskGpuCached parent;
+
+  GskRenderNode *node;
+  GskGpuImage *image;
+  GdkColorState *color_state; /* no ref because global */
+  graphene_rect_t bounds;
+  graphene_size_t scale;
+  GskGpuAsImageFlags flags;
+  GdkMemoryFormat format;
+};
+
+static guint
+gsk_gpu_float_hash (float value)
+{
+  guint bits;
+
+  memcpy (&bits, &value, sizeof (bits));
+
+  return bits;
+}
+
+static guint
+gsk_gpu_cached_node_image_hash (gconstpointer data)
+{
+  const GskGpuCachedNodeImage *self = data;
+  guint hash;
+
+  hash = GPOINTER_TO_UINT (self->node);
+  hash ^= GPOINTER_TO_UINT (self->color_state);
+  hash ^= self->flags << 3;
+  hash ^= self->format << 8;
+  hash ^= gsk_gpu_float_hash (self->bounds.origin.x);
+  hash ^= gsk_gpu_float_hash (self->bounds.origin.y) << 1;
+  hash ^= gsk_gpu_float_hash (self->bounds.size.width) << 2;
+  hash ^= gsk_gpu_float_hash (self->bounds.size.height) << 3;
+  hash ^= gsk_gpu_float_hash (self->scale.width) << 4;
+  hash ^= gsk_gpu_float_hash (self->scale.height) << 5;
+
+  return hash;
+}
+
+static gboolean
+gsk_gpu_cached_node_image_equal (gconstpointer a,
+                                 gconstpointer b)
+{
+  const GskGpuCachedNodeImage *node_a = a;
+  const GskGpuCachedNodeImage *node_b = b;
+
+  return node_a->node == node_b->node &&
+         node_a->color_state == node_b->color_state &&
+         node_a->flags == node_b->flags &&
+         node_a->format == node_b->format &&
+         graphene_rect_equal (&node_a->bounds, &node_b->bounds) &&
+         graphene_size_equal (&node_a->scale, &node_b->scale);
+}
+
+static void
+gsk_gpu_cached_node_image_print_stats (GskGpuCache *cache,
+                                       GString     *string)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  g_string_append_printf (string, "in hash: %u", g_hash_table_size (priv->node_cache));
+}
+
+static void
+gsk_gpu_cached_node_image_finalize (GskGpuCached *cached)
+{
+  GskGpuCachedNodeImage *self = (GskGpuCachedNodeImage *) cached;
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
+  gpointer key, value;
+
+  g_clear_object (&self->image);
+
+  if (g_hash_table_steal_extended (priv->node_cache, self, &key, &value))
+    {
+      if ((GskGpuCached *) value != cached)
+        g_hash_table_insert (priv->node_cache, key, value);
+    }
+
+  gsk_render_node_unref (self->node);
+}
+
+static gboolean
+gsk_gpu_cached_node_image_should_collect (GskGpuCached *cached,
+                                          gint64        cache_timeout,
+                                          gint64        timestamp)
+{
+  return gsk_gpu_cached_is_old (cached, cache_timeout, timestamp);
+}
+
+static const GskGpuCachedClass GSK_GPU_CACHED_NODE_IMAGE_CLASS =
+{
+  sizeof (GskGpuCachedNodeImage),
+  "NodeImage",
+  FALSE,
+  gsk_gpu_cached_node_image_print_stats,
+  gsk_gpu_cached_node_image_finalize,
+  gsk_gpu_cached_node_image_should_collect
+};
+
+static void
+gsk_gpu_cached_node_image_init_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  priv->node_cache = g_hash_table_new (gsk_gpu_cached_node_image_hash,
+                                       gsk_gpu_cached_node_image_equal);
+}
+
+static void
+gsk_gpu_cached_node_image_finish_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  g_clear_pointer (&priv->node_cache, g_hash_table_unref);
+}
+
+static gboolean
+gsk_gpu_cached_node_image_can_cache_color_state (GdkColorState *color_state)
+{
+  return color_state == NULL ||
+         GDK_IS_DEFAULT_COLOR_STATE (color_state) ||
+         GDK_IS_BUILTIN_COLOR_STATE (color_state);
+}
+
+static GskGpuCachedNodeImage *
+gsk_gpu_cached_node_image_new (GskGpuCache           *cache,
+                               GskRenderNode         *node,
+                               GdkColorState         *color_state,
+                               GskGpuAsImageFlags     flags,
+                               GdkMemoryFormat        format,
+                               const graphene_rect_t *bounds,
+                               const graphene_size_t *scale,
+                               GskGpuImage           *image)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+  GskGpuCachedNodeImage lookup;
+  GskGpuCachedNodeImage *self;
+
+  if (!gsk_gpu_cached_node_image_can_cache_color_state (color_state))
+    return NULL;
+
+  lookup.node = node;
+  lookup.color_state = color_state;
+  lookup.flags = flags;
+  lookup.format = format;
+  lookup.bounds = *bounds;
+  lookup.scale = *scale;
+
+  self = g_hash_table_lookup (priv->node_cache, &lookup);
+  if (self != NULL)
+    gsk_gpu_cached_free ((GskGpuCached *) self);
+
+  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_NODE_IMAGE_CLASS);
+  self->node = gsk_render_node_ref (node);
+  self->image = g_object_ref (image);
+  self->color_state = color_state;
+  self->bounds = *bounds;
+  self->scale = *scale;
+  self->flags = flags;
+  self->format = format;
+  ((GskGpuCached *) self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
+
+  g_hash_table_insert (priv->node_cache, self, self);
+
+  return self;
+}
+
 /* Note: this function can run in an arbitrary thread, so it can
  * only access things atomically
  */
@@ -504,6 +682,7 @@ gsk_gpu_cache_dispose (GObject *object)
 
   gsk_gpu_cached_stroke_finish_cache (self);
   gsk_gpu_cached_fill_finish_cache (self);
+  gsk_gpu_cached_node_image_finish_cache (self);
 
 #ifdef GDK_RENDERING_VULKAN
   if (GSK_IS_VULKAN_DEVICE (self->device))
@@ -593,6 +772,60 @@ gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
   gsk_gpu_cached_use ((GskGpuCached *) cache);
 }
 
+GskGpuImage *
+gsk_gpu_cache_lookup_node_image (GskGpuCache           *self,
+                                 GskRenderNode         *node,
+                                 GdkColorState         *color_state,
+                                 GskGpuAsImageFlags     flags,
+                                 GdkMemoryFormat        format,
+                                 const graphene_rect_t *bounds,
+                                 const graphene_size_t *scale,
+                                 graphene_rect_t       *out_bounds)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
+  GskGpuCachedNodeImage lookup;
+  GskGpuCachedNodeImage *cache;
+
+  if (!gsk_gpu_cached_node_image_can_cache_color_state (color_state))
+    return NULL;
+
+  lookup.node = node;
+  lookup.color_state = color_state;
+  lookup.flags = flags;
+  lookup.format = format;
+  lookup.bounds = *bounds;
+  lookup.scale = *scale;
+
+  cache = g_hash_table_lookup (priv->node_cache, &lookup);
+  if (cache == NULL || cache->image == NULL)
+    return NULL;
+
+  gsk_gpu_cached_use ((GskGpuCached *) cache);
+
+  *out_bounds = cache->bounds;
+
+  return g_object_ref (cache->image);
+}
+
+void
+gsk_gpu_cache_cache_node_image (GskGpuCache           *self,
+                                GskRenderNode         *node,
+                                GdkColorState         *color_state,
+                                GskGpuAsImageFlags     flags,
+                                GdkMemoryFormat        format,
+                                const graphene_rect_t *bounds,
+                                const graphene_size_t *scale,
+                                GskGpuImage           *image)
+{
+  GskGpuCachedNodeImage *cache;
+
+  cache = gsk_gpu_cached_node_image_new (self, node, color_state, flags, format, bounds, scale, image);
+  if (cache == NULL)
+    return;
+
+  gsk_gpu_cached_use ((GskGpuCached *) cache);
+}
+
 static void
 gsk_gpu_cache_init_caches (GskGpuCache *self)
 {
@@ -601,6 +834,7 @@ gsk_gpu_cache_init_caches (GskGpuCache *self)
   
   gsk_gpu_cached_atlas_init_cache (self);
   gsk_gpu_cached_glyph_init_cache (self);
+  gsk_gpu_cached_node_image_init_cache (self);
   gsk_gpu_cached_tile_init_cache (self);
 #ifdef GDK_RENDERING_VULKAN
   if (GSK_IS_VULKAN_DEVICE (self->device))

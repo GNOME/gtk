@@ -38,6 +38,20 @@ typedef enum {
 } GskGpuImageFlags;
 
 typedef enum {
+  /* The returned image will be sampled outside the bounds, so it is
+   * important that it returns the right values.
+   * In particular, opaque textures must ensure they return transparency
+   * and images must not be contained in an atlas.
+   */
+  GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
+  /* The returned image needs to be the exact size of the given clip
+   * rect, for example because it will be repeated.
+   * In detail: out_bounds must equal clip_bounds
+   */
+  GSK_GPU_AS_IMAGE_EXACT_SIZE            = (1 << 1),
+} GskGpuAsImageFlags;
+
+typedef enum {
   GSK_GPU_CONVERSION_NONE,
   GSK_GPU_CONVERSION_SRGB,
   GSK_GPU_CONVERSION_BT601,

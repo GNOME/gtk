@@ -151,20 +151,6 @@
  */
 
 
-typedef enum {
-  /* The returned image will be sampled outside the bounds, so it is
-   * important that it returns the right values.
-   * In particular, opaque textures must ensure they return transparency
-   * and images must not be contained in an atlas.
-   */
-  GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
-  /* The returned image needs to be the exact size of the given clip
-   * rect, for example because it will be repeated.
-   * In detail: out_bounds must equal clip_bounds
-   */
-  GSK_GPU_AS_IMAGE_EXACT_SIZE = (1 << 1),
-} GskGpuAsImageFlags;
-
 static void             gsk_gpu_node_processor_add_node_untracked       (GskGpuRenderPass            *self,
                                                                          GskRenderNode                  *node);
 static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
@@ -2107,13 +2093,82 @@ gsk_gpu_node_processor_add_conic_gradient_node (GskGpuRenderPass *self,
                                             gsk_gpu_node_processor_conic_gradient_op);
 }
 
+static GskGpuImage *
+gsk_gpu_node_processor_create_blur_image (GskGpuRenderPass      *self,
+                                          GskRenderNode         *node,
+                                          const graphene_rect_t *bounds,
+                                          GdkMemoryFormat        format,
+                                          graphene_rect_t       *out_bounds)
+{
+  GskGpuRenderPass *other;
+  GskGpuImage *result;
+  GskRenderNode *child;
+  GskGpuImage *source_image;
+  GskGpuRenderPassBlendStorage blend_storage;
+  graphene_rect_t source_bounds;
+  graphene_rect_t source_rect;
+  float blur_radius;
+  float clip_radius;
+
+  child = gsk_blur_node_get_child (node);
+  blur_radius = gsk_blur_node_get_radius (node);
+  clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
+
+  source_bounds = *bounds;
+  graphene_rect_inset (&source_bounds, -clip_radius, -clip_radius);
+
+  source_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                           GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                                           &source_bounds,
+                                                           child,
+                                                           0,
+                                                           &source_rect);
+  if (source_image == NULL)
+    return NULL;
+
+  other = gsk_gpu_node_processor_new_draw (self->frame,
+                                           self->ccs,
+                                           gdk_memory_format_get_depth (format),
+                                           &self->scale,
+                                           bounds,
+                                           &result);
+  if (other == NULL)
+    {
+      g_object_unref (source_image);
+      return NULL;
+    }
+
+  gsk_gpu_render_pass_push_blend (other, GSK_GPU_BLEND_NONE, &blend_storage);
+
+  gsk_gpu_node_processor_blur_op (other,
+                                  &node->bounds,
+                                  graphene_point_zero (),
+                                  blur_radius,
+                                  NULL,
+                                  source_image,
+                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (source_image)),
+                                  &source_rect);
+
+  gsk_gpu_render_pass_pop_blend (other, &blend_storage);
+  gsk_gpu_render_pass_free (other);
+
+  g_object_unref (source_image);
+
+  *out_bounds = *bounds;
+
+  return result;
+}
+
 static void
 gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
                                       GskRenderNode       *node)
 {
+  GskGpuCache *cache;
   GskRenderNode *child;
   GskGpuImage *image;
-  graphene_rect_t tex_rect, clip_rect;
+  GdkMemoryDepth depth;
+  GdkMemoryFormat format;
+  graphene_rect_t cache_bounds, tex_rect, clip_rect;
   float blur_radius, clip_radius;
 
   child = gsk_blur_node_get_child (node);
@@ -2124,9 +2179,66 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
       return;
     }
 
-  clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
     return;
+
+  if (gsk_rect_intersection (&clip_rect, &node->bounds, &cache_bounds) &&
+      gsk_rect_snap_to_grid_grow (&node->bounds, &self->scale, &self->offset, &cache_bounds))
+    {
+      cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
+      depth = gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
+                                      gsk_render_node_get_preferred_depth (child));
+      format = gdk_memory_depth_get_format (depth);
+
+      image = gsk_gpu_cache_lookup_node_image (cache,
+                                               node,
+                                               self->ccs,
+                                               GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                               format,
+                                               &cache_bounds,
+                                               &self->scale,
+                                               &tex_rect);
+      if (image != NULL)
+        {
+          GSK_DEBUG (CACHE, "NodeImage blur cache hit");
+          gsk_gpu_node_processor_image_op (self,
+                                           image,
+                                           self->ccs,
+                                           GSK_GPU_SAMPLER_TRANSPARENT,
+                                           &node->bounds,
+                                           &tex_rect);
+          g_object_unref (image);
+          return;
+        }
+
+      image = gsk_gpu_node_processor_create_blur_image (self,
+                                                        node,
+                                                        &cache_bounds,
+                                                        format,
+                                                        &tex_rect);
+      if (image != NULL)
+        {
+          GSK_DEBUG (CACHE, "NodeImage blur cache miss");
+          gsk_gpu_cache_cache_node_image (cache,
+                                          node,
+                                          self->ccs,
+                                          GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                          format,
+                                          &tex_rect,
+                                          &self->scale,
+                                          image);
+          gsk_gpu_node_processor_image_op (self,
+                                           image,
+                                           self->ccs,
+                                           GSK_GPU_SAMPLER_TRANSPARENT,
+                                           &node->bounds,
+                                           &tex_rect);
+          g_object_unref (image);
+          return;
+        }
+    }
+
+  clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
   graphene_rect_inset (&clip_rect, -clip_radius, -clip_radius);
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
