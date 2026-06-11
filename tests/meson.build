@@ -131,6 +131,13 @@ gtk_tests = [
   ['testfiledialog'],
 ]
 
+ei_dep = dependency('libei-1.0', required: false)
+if ei_dep.found()
+  gtk_tests += [
+    ['testinputlatency', [], [ libgtk_dep, ei_dep ]],
+  ]
+endif
+
 if os_unix
   gtk_tests += [
     ['testfontchooserdialog'],
