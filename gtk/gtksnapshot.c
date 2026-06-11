@@ -50,6 +50,7 @@
 #include "gsk/gsktextnodeprivate.h"
 #include "gsk/gsktexturenodeprivate.h"
 #include "gsk/gsktexturescalenodeprivate.h"
+#include "gsk/gskturbulencenodeprivate.h"
 #include "gsk/gskrectprivate.h"
 
 #include "gtk/gskpangoprivate.h"
@@ -3770,4 +3771,50 @@ gtk_snapshot_push_subsurface (GtkSnapshot   *snapshot,
                                    gtk_snapshot_clear_subsurface);
 
   state->data.subsurface.subsurface = g_object_ref (subsurface);
+}
+
+/*< private >
+ * gtk_snapshot_add_turbulence:
+ * @snapshot: a `GtkSnapshot`
+ * @bounds: the bounds for the new node
+ * @color_state: the color state to add noise in
+ * @base_freq: the base frequencies
+ * @num_octaves: The number of octaves of noise
+ * @seed: The random seed
+ * @noise_type: The type of noise pattern
+ * @stitch_tiles: Whether to enable tile stitching
+ *
+ * Creates a new render node drawing the @color into the
+ * given @bounds and appends it to the current render node
+ * of @snapshot.
+ */
+void
+gtk_snapshot_add_turbulence (GtkSnapshot           *snapshot,
+                             const graphene_rect_t *bounds,
+                             GdkColorState         *color_state,
+                             const graphene_size_t *base_freq,
+                             unsigned int           num_octaves,
+                             int                    seed,
+                             GskNoiseType           noise_type,
+                             gboolean               stitch_tiles)
+{
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
+  GskRenderNode *node;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (bounds != NULL);
+  g_return_if_fail (color_state != NULL);
+
+  gtk_snapshot_ensure_identity (snapshot);
+
+  node = gsk_turbulence_node_new (bounds,
+                                  state->props.snap,
+                                  color_state,
+                                  base_freq,
+                                  num_octaves,
+                                  seed,
+                                  noise_type,
+                                  stitch_tiles);
+
+  gtk_snapshot_append_node_internal (snapshot, node);
 }
