@@ -1718,7 +1718,9 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_new0 (EntryIconInfo, 1);
   priv->icons[icon_pos] = icon_info;
 
-  icon_info->widget = gtk_image_new ();
+  icon_info->widget = g_object_new (GTK_TYPE_IMAGE,
+                                    "visible", FALSE,
+                                    NULL);
   gtk_widget_set_cursor_from_name (icon_info->widget, "default");
   if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
     gtk_widget_insert_before (icon_info->widget, widget, priv->text);
@@ -2089,6 +2091,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
     }
 
   gtk_image_clear (GTK_IMAGE (icon_info->widget));
+  gtk_widget_set_visible (icon_info->widget, FALSE);
 
   g_object_notify_by_pspec (G_OBJECT (entry),
                             entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -2553,6 +2556,7 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
       g_object_ref (paintable);
 
       gtk_image_set_from_paintable (GTK_IMAGE (icon_info->widget), paintable);
+      gtk_widget_set_visible (icon_info->widget, TRUE);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -2611,6 +2615,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
   if (icon_name != NULL)
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (icon_info->widget), icon_name);
+      gtk_widget_set_visible (icon_info->widget, TRUE);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -2666,6 +2671,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
   if (icon)
     {
       gtk_image_set_from_gicon (GTK_IMAGE (icon_info->widget), icon);
+      gtk_widget_set_visible (icon_info->widget, TRUE);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
