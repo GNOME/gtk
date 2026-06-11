@@ -1675,7 +1675,22 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_DISPLACEMENT_NODE:
       {
+        const graphene_size_t *s;
+        const graphene_point_t *p;
+        const GdkColorChannel *channels;
+
         add_snap_row (store, "Snap", gsk_displacement_node_get_snap (node));
+
+        s = gsk_displacement_node_get_max (node);
+        add_text_row (store, "Max", "%f %f", s->width, s->height);
+        s = gsk_displacement_node_get_scale (node);
+        add_text_row (store, "Scale", "%f %f", s->width, s->height);
+        p = gsk_displacement_node_get_offset (node);
+        add_text_row (store, "Offset", "%f %f", p->x, p->y);
+        channels = gsk_displacement_node_get_channels (node);
+        add_text_row (store, "Channels", "%s %s",
+                      enum_to_nick (GDK_TYPE_COLOR_CHANNEL, channels[0]),
+                      enum_to_nick (GDK_TYPE_COLOR_CHANNEL, channels[1]));
       }
       break;
 
