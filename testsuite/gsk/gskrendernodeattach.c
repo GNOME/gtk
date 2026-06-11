@@ -50,6 +50,7 @@ node_attach (const GskRenderNode *node,
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_TEXT_NODE:
     case GSK_PASTE_NODE:
+    case GSK_TURBULENCE_NODE:
       return gsk_render_node_ref ((GskRenderNode *)node);
 
     case GSK_TRANSFORM_NODE:
