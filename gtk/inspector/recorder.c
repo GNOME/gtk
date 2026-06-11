@@ -60,6 +60,7 @@
 #include <gsk/gskshadownodeprivate.h>
 #include <gsk/gsktextnodeprivate.h>
 #include <gsk/gsktransformprivate.h>
+#include <gsk/gskturbulencenodeprivate.h>
 #include <gsk/gskcomponenttransferprivate.h>
 #include <gsk/gskdisplacementnodeprivate.h>
 
@@ -363,6 +364,8 @@ node_type_name (GskRenderNodeType type)
       return "Displacement";
     case GSK_ARITHMETIC_NODE:
       return "Arithmetic";
+    case GSK_TURBULENCE_NODE:
+      return "Turbulence";
     }
 }
 
@@ -407,6 +410,7 @@ node_name (GskRenderNode *node)
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1705,6 +1709,21 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         add_text_row (store, "Factors", "%s", tmp);
         add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gsk_arithmetic_node_get_color_state (node)));
         g_free (tmp);
+      }
+      break;
+
+    case GSK_TURBULENCE_NODE:
+      {
+        const graphene_size_t *s;
+        const char *noise_types[] = { "Fractal Noise", "Turbulence" };
+
+        s = gsk_turbulence_node_get_base_frequency (node);
+        add_text_row (store, "Base Frequency", "%f %f", s->width, s->height);
+        add_int_row (store, "Octaves", gsk_turbulence_node_get_num_octaves (node));
+        add_int_row (store, "Seed", gsk_turbulence_node_get_seed (node));
+
+        add_text_row (store, "Noise Type", "%s", noise_types[gsk_turbulence_node_get_noise_type (node)]);
+        add_boolean_row (store, "Stitch Tiles", gsk_turbulence_node_get_stitch_tiles (node));
       }
       break;
 
