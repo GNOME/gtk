@@ -1914,7 +1914,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 #endif
 
   /* Overwrite */
-  gtk_widget_class_add_binding_action (widget_class,
+  gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Insert, GDK_NO_MODIFIER_MASK,
                                        "toggle-overwrite", NULL);
 
