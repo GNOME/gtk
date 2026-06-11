@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 
 /**
  * GdkFrameTimings:

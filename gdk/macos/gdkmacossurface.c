@@ -32,6 +32,7 @@
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 
