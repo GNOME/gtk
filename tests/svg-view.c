@@ -84,15 +84,19 @@ main (int argc, char *argv[])
     g_error ("%s", error->message);
 
   window = gtk_window_new ();
+  gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
   svg = gtk_svg_widget_new ();
   g_signal_connect (svg, "error", G_CALLBACK (error_cb), NULL);
   g_signal_connect (svg, "activate", G_CALLBACK (activate_cb), window);
   gtk_svg_widget_load_from_bytes (svg, bytes);
+  gtk_widget_set_halign (GTK_WIDGET (svg), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (svg), GTK_ALIGN_START);
 
   gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (svg));
 
   gtk_window_present (GTK_WINDOW (window));
+  gtk_window_fullscreen (GTK_WINDOW (window));
 
   while (g_list_model_get_n_items (gtk_window_get_toplevels ()))
     g_main_context_iteration (NULL, TRUE);
