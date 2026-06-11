@@ -33,6 +33,7 @@ gsk_private_gpu_shaders = files([
   'gskgpuradialgradient.glsl',
   'gskgpuroundedcolor.glsl',
   'gskgputexture.glsl',
+  'gskgputurbulence.glsl',
 ])
 
 gsk_private_gpu_shader_headers = []
