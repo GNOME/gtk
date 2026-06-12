@@ -50,6 +50,8 @@ test_data = [
   'dashes2.svg',
   'dep-cycle.svg',
   'ellipse.svg',
+  'feTurbulence-basic.svg',
+  'feTurbulence-all-attrs.svg',
   'filter-functions.svg',
   'filter-functions2.svg',
   'filter-functions3.svg',

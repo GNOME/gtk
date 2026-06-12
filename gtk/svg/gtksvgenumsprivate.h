@@ -188,6 +188,13 @@ typedef enum
 
 typedef enum
 {
+  STITCH_NO_STITCH,
+  STITCH_STITCH,
+} StitchTiles;
+
+
+typedef enum
+{
   BLEND_COMPOSITE,
   BLEND_NO_COMPOSITE,
 } BlendComposite;
@@ -219,6 +226,12 @@ typedef enum
   COMPONENT_TRANSFER_LINEAR,
   COMPONENT_TRANSFER_GAMMA,
 } ComponentTransferType;
+
+typedef enum
+{
+  TURBULENCE_TYPE_FRACTAL_NOISE,
+  TURBULENCE_TYPE_TURBULENCE,
+} TurbulenceType;
 
 typedef enum
 {

@@ -1,0 +1,22 @@
+<svg width='100' height='100'>
+
+  <defs>
+    <filter id='filter'>
+      <feTurbulence
+        x='5'
+        y='5'
+        width='90'
+        height='90'
+        baseFrequency='0.1 0.2'
+        numOctaves='3'
+        seed='42'
+        type='fractalNoise'
+        result='noise'/>
+    </filter>
+  </defs>
+
+  <rect
+        x='10' y='10' width='80' height='80'
+        filter='url(#filter)'>
+  </rect>
+</svg>
