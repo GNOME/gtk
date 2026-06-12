@@ -319,6 +319,7 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
 
     default:
 
@@ -924,6 +925,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
     default:
       break; /* Fallback */
     }
