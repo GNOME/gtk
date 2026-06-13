@@ -209,15 +209,17 @@ update_states (StateEditor *self)
   for (unsigned int i = 0; i < n; i++)
     {
       GtkWidget *child = gtk_grid_get_child_at (self->grid, -2, i);
-      const char *id;
+      SvgElement *shape;
 
       if (!GTK_IS_LABEL (child))
         break;
 
-      id = gtk_label_get_label (GTK_LABEL (child));
-      path_paintable_set_path_states_by_id (self->paintable, id, states[i]);
+      shape = (SvgElement *) g_object_get_data (G_OBJECT (child), "shape");
+      if (shape)
+        svg_element_set_states (shape, states[i]);
     }
 
+  path_paintable_changed (self->paintable);
   self->updating = FALSE;
 
   repopulate (self);
@@ -232,7 +234,7 @@ update_one (GtkWidget   *check,
   GtkLayoutChild *layout_child;
   int row;
   GtkWidget *label;
-  const char *id;
+  SvgElement *shape;
   uint64_t states;
 
   mgr = gtk_widget_get_layout_manager (GTK_WIDGET (self->grid));
@@ -240,7 +242,7 @@ update_one (GtkWidget   *check,
   row = gtk_grid_layout_child_get_row (GTK_GRID_LAYOUT_CHILD (layout_child));
 
   label = gtk_grid_get_child_at (self->grid, -2, row);
-  id = gtk_label_get_label (GTK_LABEL (label));
+  shape = (SvgElement *) g_object_get_data (G_OBJECT (label), "shape");
 
   states = 0;
   for (unsigned int i = 0; i < self->max_state; i++)
@@ -253,7 +255,8 @@ update_one (GtkWidget   *check,
     }
 
   self->updating = TRUE;
-  path_paintable_set_path_states_by_id (self->paintable, id, states);
+  svg_element_set_states (shape, states);
+  path_paintable_changed (self->paintable);
   self->updating = FALSE;
 
   if (!gtk_check_button_get_active (GTK_CHECK_BUTTON (check)))
@@ -352,6 +355,7 @@ create_paths_for_shape (StateEditor  *self,
           gtk_grid_attach (self->grid, child, -3, *row, 1, 1);
 
           child = gtk_label_new (id);
+          g_object_set_data (G_OBJECT (child), "shape", sh);
           gtk_grid_attach (self->grid, child, -2, *row, 1, 1);
 
           child = gtk_toggle_button_new_with_label ("All");
