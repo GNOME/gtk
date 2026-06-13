@@ -4668,9 +4668,7 @@ can_reuse_node (GtkSvg        *self,
       return FALSE;
     }
 
-  if ((self->used & GTK_SVG_USES_STROKES) != 0 &&
-      self->weight < 1 &&
-      weight != self->node_for.weight)
+  if ((self->used & GTK_SVG_USES_STROKES) != 0 && weight != self->node_for.weight)
     {
       dbg_print ("cache", "Can't reuse rendernode: %s", "stroke weight change");
       return FALSE;
@@ -4786,6 +4784,9 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       gtk_svg_set_load_time (self, current_time);
     }
 
+  if (self->weight >= 1)
+    weight = self->weight;
+
   if (!can_reuse_node (self, width, height, colors, n_colors, weight))
     {
       SvgComputeContext compute_context;
@@ -4857,7 +4858,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       paint_context.snapshot = snapshot;
       paint_context.colors = used_colors;
       paint_context.n_colors = n_used_colors;
-      paint_context.weight = self->weight >= 1 ? self->weight : weight;
+      paint_context.weight = weight;
       paint_context.op = RENDERING;
       paint_context.op_stack = NULL;
       paint_context.ctx_shape_stack = NULL;
