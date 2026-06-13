@@ -1,0 +1,7 @@
+turbulence {
+  bounds: 0 0 100 100;
+  base-frequency: 0.04;
+  num-octaves: 4;
+  seed: 0;
+  noise-type: fractal-noise;
+}
