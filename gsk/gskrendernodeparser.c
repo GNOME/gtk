@@ -65,6 +65,7 @@
 #include "gskstrokenode.h"
 #include "gsksubsurfacenode.h"
 #include "gsktextnodeprivate.h"
+#include "gskturbulencenodeprivate.h"
 #include "gsktexturenodeprivate.h"
 #include "gsktexturescalenodeprivate.h"
 #include "gsktransformnode.h"
@@ -1743,6 +1744,48 @@ parse_scaling_filter (GtkCssParser *parser,
     }
 
   gtk_css_parser_error_syntax (parser, "Not a valid scaling filter.");
+
+  return FALSE;
+}
+
+static const struct
+{
+  GskNoiseType type;
+  const char *name;
+} noise_types[] = {
+  { GSK_NOISE_FRACTAL_NOISE, "fractal-noise" },
+  { GSK_NOISE_TURBULENCE, "turbulence" },
+};
+
+static const char *
+get_noise_type_name (GskNoiseType type)
+{
+  for (unsigned int i = 0; i < G_N_ELEMENTS (noise_types); i++)
+    {
+      if (noise_types[i].type == type)
+        return noise_types[i].name;
+    }
+
+  return NULL;
+}
+
+static gboolean
+parse_noise_type (GtkCssParser *parser,
+                  Context      *context,
+                  gpointer      out_type)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (noise_types); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, noise_types[i].name))
+        {
+          *(GskNoiseType *) out_type = noise_types[i].type;
+          return TRUE;
+        }
+    }
+
+  gtk_css_parser_error_syntax (parser, "Not a valid noise type.");
 
   return FALSE;
 }
@@ -4454,6 +4497,41 @@ parse_arithmetic_node (GtkCssParser *parser,
   return result;
 }
 
+static GskRenderNode *
+parse_turbulence_node (GtkCssParser *parser,
+                       Context      *context)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
+  graphene_size_t base_frequency = { 0, 0 };
+  size_t num_octaves = 1;
+  unsigned int seed = 0;
+  GskNoiseType noise_type = GSK_NOISE_TURBULENCE;
+  gboolean stitch_tiles = FALSE;
+  GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
+    { "base-frequency", parse_scale, NULL, &base_frequency },
+    { "num-octaves", parse_size, NULL, &num_octaves },
+    { "seed", parse_unsigned, NULL, &seed },
+    { "noise-type", parse_noise_type, NULL, &noise_type },
+    { "stitch-tiles", parse_boolean, NULL, &stitch_tiles },
+    { "color-state", parse_default_color_state, clear_color_state, &color_state }
+  };
+  GskRenderNode *node;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  node = gsk_turbulence_node_new (&bounds, snap, color_state,
+                                  &base_frequency,
+                                  num_octaves, seed, noise_type, stitch_tiles);
+
+  gdk_color_state_unref (color_state);
+
+  return node;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -4500,6 +4578,7 @@ parse_node (GtkCssParser *parser,
     { "isolation", parse_isolation_node },
     { "displacement", parse_displacement_node },
     { "arithmetic", parse_arithmetic_node },
+    { "turbulence", parse_turbulence_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -4858,6 +4937,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;
@@ -5252,6 +5332,18 @@ append_enum_param (Printer    *p,
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
   g_string_append (p->str, enum_to_nick (type, value));
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
+append_noise_param (Printer      *p,
+                    const char   *param_name,
+                    GskNoiseType  noise_type)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  g_string_append (p->str, get_noise_type_name (noise_type));
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
@@ -7031,6 +7123,29 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         append_node_param (p, "first", gsk_arithmetic_node_get_first_child (node));
         append_node_param (p, "second", gsk_arithmetic_node_get_second_child (node));
         append_color_state_param (p, "color-state", gsk_arithmetic_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_TURBULENCE_NODE:
+      {
+        const graphene_size_t *freq = gsk_turbulence_node_get_base_frequency (node);
+
+        start_node (p, "turbulence", node_name);
+
+        append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_turbulence_node_get_snap (node));
+        append_color_state_param (p, "color-state", gsk_turbulence_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
+        append_two_float_param (p, "base-frequency", freq->width, freq->height);
+        if (gsk_turbulence_node_get_num_octaves (node) != 1)
+          append_size_param (p, "num-octaves", gsk_turbulence_node_get_num_octaves (node));
+        if (gsk_turbulence_node_get_seed (node) != 0)
+          append_unsigned_param (p, "seed", gsk_turbulence_node_get_seed (node));
+        if (gsk_turbulence_node_get_noise_type (node) != GSK_NOISE_TURBULENCE)
+          append_noise_param (p, "noise-type", gsk_turbulence_node_get_noise_type (node));
+        if (gsk_turbulence_node_get_stitch_tiles (node))
+          append_boolean_param (p, "stitch-tiles", TRUE);
 
         end_node (p);
       }

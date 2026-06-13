@@ -547,6 +547,7 @@ node_parser_tests = [
   'empty-texture-scale.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
+  'empty-turbulence.node',
   'fill.node',
   'fill.ref.node',
   'fill2.node',
@@ -617,6 +618,8 @@ node_parser_tests = [
   'transform-fail.node',
   'transform-fail.ref.node',
   'transform-fail.errors',
+  'turbulence.node',
+  'turbulence.ref.node',
   # this fails in f40 since libpng changes the pngs while reencoding
   #'widgetfactory.node',
 ]

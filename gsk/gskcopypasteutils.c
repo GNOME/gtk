@@ -134,6 +134,7 @@ replay_partial_node (const PartialNode *replay)
         case GSK_ISOLATION_NODE:
         case GSK_DISPLACEMENT_NODE:
         case GSK_ARITHMETIC_NODE:
+        case GSK_TURBULENCE_NODE:
           /* These all don't record anything, so we never
            * encounter them */
         case GSK_NOT_A_RENDER_NODE:
@@ -202,6 +203,7 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
     case GSK_DEBUG_NODE:
     case GSK_TEXTURE_SCALE_NODE:
     case GSK_SUBSURFACE_NODE:
+    case GSK_TURBULENCE_NODE:
       /* keep recording */
       result = gsk_render_replay_default (replay, node);
       break;

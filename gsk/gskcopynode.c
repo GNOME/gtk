@@ -213,6 +213,7 @@ gsk_copy_node_analyze_child (GskCopyNode   *self,
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
       for (i = 0; i < n_children; i++)
         {
           gsk_copy_node_analyze_child (self, children[i], depth);

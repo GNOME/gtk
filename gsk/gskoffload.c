@@ -611,6 +611,7 @@ visit_node (GskOffload    *self,
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_PASTE_NODE:
+    case GSK_TURBULENCE_NODE:
       /* no children */
       break;
 

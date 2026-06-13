@@ -749,3 +749,23 @@ Possible values for the filter property are:
 | transform| `<transform>`    | none                   | non-default |
 
 Creates a node like `gsk_transform_node_new()` with the given properties.
+
+### turbulence
+
+| property          | syntax               | default         | printed     |
+| ----------------- | -------------------- | --------------- | ----------- |
+| bounds            | `<rect>`             | 50              | always      |
+| snap              | `<snap>`             | none            | non-default |
+| color-state       | `<color-state>`      | srgb            | non-default |
+| base-frequency    | `<number>{1,2}`      | 0 0             | always      |
+| num-octaves       | `<integer>`          | 1               | non-default |
+| seed              | `<integer>`          | 0               | non-default |
+| noise-type        | `<noise-type>`       | turbulence      | non-default |
+| stitch-tiles      | `<boolean>`          | false           | non-default |
+
+Creates a new turbulence node, with an effect as described in the CSS
+[filter effects spec](https://www.w3.org/TR/filter-effects-1/#feTurbulenceElement).
+
+Possible values for the noise-type property are:
+
+    noise-type: fractal-noise | turbulence

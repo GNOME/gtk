@@ -56,6 +56,7 @@ gsk_public_sources = files([
   'gsktexturescalenode.c',
   'gsktransform.c',
   'gsktransformnode.c',
+  'gskturbulencenode.c',
   'gpu/gskglrenderer.c',
   'gpu/gskvulkanrenderer.c',
 ])

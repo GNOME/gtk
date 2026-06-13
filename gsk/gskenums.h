@@ -155,6 +155,14 @@ G_BEGIN_DECLS
  * Since: 4.22
  */
 
+/**
+ * GSK_TURBULENCE_NODE:
+ *
+ * A node that generates a Perlin noise or fractal Brownian motion pattern.
+ *
+ * Since: 4.24
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -194,6 +202,7 @@ typedef enum {
   GSK_ISOLATION_NODE,
   GSK_DISPLACEMENT_NODE,
   GSK_ARITHMETIC_NODE,
+  GSK_TURBULENCE_NODE,
 } GskRenderNodeType;
 
 /**
