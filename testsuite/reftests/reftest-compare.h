@@ -24,5 +24,9 @@ G_BEGIN_DECLS
 G_MODULE_EXPORT
 GdkTexture *            reftest_compare_textures        (GdkTexture             *texture1,
                                                          GdkTexture             *texture2);
+GdkTexture *            reftest_compare_textures_with_tolerance
+                                                        (GdkTexture             *texture1,
+                                                         GdkTexture             *texture2,
+                                                         int                     tolerance);
 
 G_END_DECLS
