@@ -306,9 +306,12 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
         timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
     }
 
-  fill_presentation_time_from_frame_time (timings, time);
-
-  timings->complete = TRUE;
+  if (impl->presentation_time == NULL ||
+      !gdk_wayland_presentation_time_supported (impl->presentation_time))
+    {
+      fill_presentation_time_from_frame_time (timings, time);
+      timings->complete = TRUE;
+    }
 
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     _gdk_frame_clock_debug_print_timings (clock, timings);

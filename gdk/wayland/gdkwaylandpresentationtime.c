@@ -2,6 +2,7 @@
 
 #include "gdkframeclockprivate.h"
 #include "gdkframetimingsprivate.h"
+#include "gdkprofilerprivate.h"
 
 #include "gdkwaylandpresentationtime-private.h"
 
@@ -50,6 +51,14 @@ gdk_wayland_presentation_time_free (GdkWaylandPresentationTime *self)
   g_free (self);
 }
 
+gboolean
+gdk_wayland_presentation_time_supported (GdkWaylandPresentationTime *self)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  return self->display->presentation != NULL;
+}
+
 static gint64
 time_from_wayland (uint32_t tv_sec_hi,
                    uint32_t tv_sec_lo,
@@ -94,7 +103,15 @@ gdk_wayland_presentation_feedback_presented (void                            *da
   if ((timings = gdk_frame_clock_get_timings (frame->frame_clock, frame->frame_number)))
     {
       timings->presentation_time = time_from_wayland (tv_sec_hi, tv_sec_lo, tv_nsec);
+      if (refresh != 0)
+        timings->refresh_interval = refresh / 1000L;
       timings->complete = TRUE;
+
+      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+        _gdk_frame_clock_debug_print_timings (frame->frame_clock, timings);
+
+      if (GDK_PROFILER_IS_RUNNING)
+        _gdk_frame_clock_add_timings_to_profiler (frame->frame_clock, timings);
     }
 
   if (g_ptr_array_find (self->frames, frame, &pos))
@@ -106,10 +123,22 @@ gdk_wayland_presentation_feedback_discarded (void                            *da
                                              struct wp_presentation_feedback *feedback)
 {
   GdkWaylandPresentationFrame *frame = data;
+  GdkFrameTimings *timings;
   uint32_t pos;
 
   g_assert (frame != NULL);
   g_assert (frame->self != NULL);
+
+  if ((timings = gdk_frame_clock_get_timings (frame->frame_clock, frame->frame_number)))
+    {
+      timings->complete = TRUE;
+
+      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+        _gdk_frame_clock_debug_print_timings (frame->frame_clock, timings);
+
+      if (GDK_PROFILER_IS_RUNNING)
+        _gdk_frame_clock_add_timings_to_profiler (frame->frame_clock, timings);
+    }
 
   if (g_ptr_array_find (frame->self->frames, frame, &pos))
     g_ptr_array_remove_index_fast (frame->self->frames, pos);
