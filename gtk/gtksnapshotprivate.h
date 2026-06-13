@@ -24,6 +24,7 @@
 /* for GskRepeat */
 #include "gsk/gskgradientprivate.h"
 #include "gsk/gskshadownodeprivate.h"
+#include "gsk/gskturbulencenodeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -116,5 +117,13 @@ void                    gtk_snapshot_append_node_scaled         (GtkSnapshot    
                                                                  graphene_rect_t         *from,
                                                                  graphene_rect_t         *to);
 
+void                    gtk_snapshot_add_turbulence             (GtkSnapshot            *snapshot,
+                                                                 const graphene_rect_t  *bounds,
+                                                                 GdkColorState          *color_state,
+                                                                 const graphene_size_t  *base_freq,
+                                                                 unsigned int            num_octaves,
+                                                                 int                     seed,
+                                                                 GskNoiseType            noise_type,
+                                                                 gboolean                stitch_tiles);
 
 G_END_DECLS

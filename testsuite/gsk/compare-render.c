@@ -7,6 +7,7 @@
 
 
 static char *arg_output_dir = NULL;
+static int arg_tolerance = 0;
 
 extern void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -837,7 +838,7 @@ run_single_test (const TestSetup *setup,
   if (setup->free)
     setup->free (test_data);
 
-  diff = reftest_compare_textures (reference, rendered);
+  diff = reftest_compare_textures_with_tolerance (reference, rendered, arg_tolerance);
   if (diff)
     {
       g_test_fail ();
@@ -933,6 +934,7 @@ int
 main (int argc, char **argv)
 {
   GOptionEntry options[] = {
+    { "tolerance", 't', 0, G_OPTION_ARG_INT, &arg_tolerance, "Tolerance to allow in comparisons", "NUM" },
     { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
     { test_setups[0].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[0], test_setups[0].description, NULL },
     { test_setups[1].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[1], test_setups[1].description, NULL },

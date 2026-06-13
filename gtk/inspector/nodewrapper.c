@@ -272,6 +272,7 @@ get_roles (GskRenderNodeType node_type)
     case GSK_TEXTURE_NODE:
     case GSK_TEXTURE_SCALE_NODE:
     case GSK_ISOLATION_NODE:
+    case GSK_TURBULENCE_NODE:
     case GSK_NOT_A_RENDER_NODE:
     default:
       return NULL;
@@ -499,6 +500,7 @@ render_heatmap_node (cairo_t               *cr,
     case GSK_ISOLATION_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
       {
         GskRenderNode **children;
         gsize i, n_children;

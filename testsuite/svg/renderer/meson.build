@@ -59,6 +59,7 @@ test_data = [
   'filter-primitive-units-object-bounding-box.svg',
   'filter-primitive-units-user-space-on-use.svg',
   'filter-tile.svg',
+  'filter-turbulence.svg',
   'filter-units-combined.svg',
   'filter-units-object-bounding-box.svg',
   'filter-units-user-space-on-use.svg',

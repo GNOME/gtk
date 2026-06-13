@@ -1,0 +1,19 @@
+turbulence {
+  bounds: 0 0 100 100;
+  base-frequency: 0.1 0.2;
+}
+
+turbulence {
+  bounds: 10 10 200 200;
+  base-frequency: 0.5;
+  num-octaves: 3;
+  snap: round;
+}
+
+turbulence {
+  bounds: 0 0 100 100;
+  base-frequency: 0.3;
+  seed: 42;
+  noise-type: fractal-noise;
+  color-state: srgb-linear;
+}

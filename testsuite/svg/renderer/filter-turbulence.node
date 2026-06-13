@@ -1,0 +1,10 @@
+clip {
+  clip: 0 0 100 100;
+  child: turbulence {
+    bounds: -10 -10 120 120;
+    color-state: srgb-linear;
+    base-frequency: 0.1;
+    num-octaves: 2;
+    noise-type: fractal-noise;
+  }
+}

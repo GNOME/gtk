@@ -291,6 +291,17 @@ compare_render_tests = [
   'zero-length-path-stroke',
 ]
 
+tests_with_rounding_issues = [
+  'turbulence-basic',
+  'turbulence-clouds',
+  'turbulence-coarse',
+  'turbulence-fine',
+  'turbulence-fractal',
+  'turbulence-seed1',
+  'turbulence-turbulence',
+  'turbulence-transformed',
+]
+
 # These tests use dmabufs and fail in testrunners that have
 # dmabuf support but no access to /dev/udmabuf.
 # For that purpose we add them to the 'needs-udmabuf' suite
@@ -382,58 +393,81 @@ compare_xfails = {
     'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
     'yuv-matrix-dmabuf-nv12': ['serialize'],
     'yuv-matrix-dmabuf-yuyv': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-basic': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-clouds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-coarse': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-fine': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-fractal': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-seed1': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-transformed': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
+    'turbulence-turbulence': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
   }
 }
 
-foreach renderer : renderers
-  renderer_name = renderer.get('name')
-  renderer_xfails = compare_xfails.get(renderer_name, { })
+testlists = [
+  {
+    'tests': compare_render_tests,
+    'extra_args': [],
+  },
+  {
+    'tests': tests_with_rounding_issues,
+    'extra_args': ['--tolerance=2'],
+  }
+]
 
-  foreach testname : compare_render_tests
-    test_xfails = renderer_xfails.get(testname, [])
-    exclude_term = '-no' + renderer_name
+foreach testlist : testlists
+  foreach renderer : renderers
+    renderer_name = renderer.get('name')
+    renderer_xfails = compare_xfails.get(renderer_name, { })
 
-    suites = [
-      'gsk',
-      'gsk-compare',
-      'gsk-' + renderer_name,
-      'gsk-compare-' + renderer_name,
-    ]
+    foreach testname : testlist.get('tests')
+      test_xfails = renderer_xfails.get(testname, [])
+      exclude_term = '-no' + renderer_name
 
-    test_env = [
-      'GSK_RENDERER=' + renderer_name,
-      'GTK_A11Y=test',
-      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-      'TEST_FONT_DIR=@0@/fonts'.format(meson.current_source_dir())
-    ]
+      suites = [
+        'gsk',
+        'gsk-compare',
+        'gsk-' + renderer_name,
+        'gsk-compare-' + renderer_name,
+      ]
 
-    if ((not testname.contains(exclude_term)))
+      test_env = [
+        'GSK_RENDERER=' + renderer_name,
+        'GTK_A11Y=test',
+        'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+        'TEST_FONT_DIR=@0@/fonts'.format(meson.current_source_dir())
+      ]
 
-      foreach variant : variants.keys()
-        extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
-        if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clip')
-          extra_suites += ['failing']
-        endif
-        if needs_udmabuf.contains(testname)
-          extra_suites += ['needs-udmabuf']
-        endif
-        test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
-          protocol: 'tap',
-          args: [
-            '--tap',
-            '-k',
-            variants.get(variant),
-            '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-            join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-            join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-          ],
-          env: test_env,
-          suite: suites + extra_suites,
-          is_parallel: not demanding_tests.contains (testname),
-        )
-      endforeach
-    endif
+      if ((not testname.contains(exclude_term)))
+
+        foreach variant : variants.keys()
+          extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
+          if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clip')
+            extra_suites += ['failing']
+          endif
+          if needs_udmabuf.contains(testname)
+            extra_suites += ['needs-udmabuf']
+          endif
+          test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
+            protocol: 'tap',
+            args: [
+              '--tap',
+              '-k',
+            ] + testlist.get('extra_args') +
+            [
+              variants.get(variant),
+              '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+              join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+              join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
+            ],
+            env: test_env,
+            suite: suites + extra_suites,
+            is_parallel: not demanding_tests.contains (testname),
+          )
+        endforeach
+      endif
+    endforeach
   endforeach
 endforeach
 
@@ -547,6 +581,7 @@ node_parser_tests = [
   'empty-texture-scale.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
+  'empty-turbulence.node',
   'fill.node',
   'fill.ref.node',
   'fill2.node',
@@ -617,6 +652,8 @@ node_parser_tests = [
   'transform-fail.node',
   'transform-fail.ref.node',
   'transform-fail.errors',
+  'turbulence.node',
+  'turbulence.ref.node',
   # this fails in f40 since libpng changes the pngs while reencoding
   #'widgetfactory.node',
 ]

@@ -151,8 +151,7 @@ extern int64_t time_base;
  * not supported.
  *
  * In the `<filter>` element, the following primitives are not supported:
- * feConvolveMatrix, feDiffuseLighting, feMorphology, feSpecularLighting
- * and feTurbulence.
+ * feConvolveMatrix, feDiffuseLighting, feMorphology, feSpecularLighting.
  *
  * Support for the `mask` attribute is limited to just a url referring to
  * the `<mask>` element by ID.

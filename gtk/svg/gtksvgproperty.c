@@ -205,6 +205,17 @@ parse_any_number (GtkCssParser *parser)
 }
 
 static SvgValue *
+parse_integer (GtkCssParser *parser)
+{
+  int num;
+
+  if (!gtk_css_parser_consume_integer (parser, &num))
+    return NULL;
+
+  return svg_number_new ((double) num);
+}
+
+static SvgValue *
 parse_font_weight (GtkCssParser *parser)
 {
   SvgValue *v;
@@ -1128,6 +1139,31 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = BIT (SVG_ELEMENT_FILTER),
     .parse_value = parse_any_number,
   },
+  [SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ] = {
+    .flags = SVG_PROPERTY_NO_CSS,
+    .applies_to = BIT (SVG_ELEMENT_FILTER),
+    .parse_value = parse_number_optional_number,
+  },
+  [SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES] = {
+    .flags = SVG_PROPERTY_NO_CSS,
+    .applies_to = BIT (SVG_ELEMENT_FILTER),
+    .parse_value = parse_integer,
+  },
+  [SVG_PROPERTY_FE_TURBULENCE_SEED] = {
+    .flags = SVG_PROPERTY_NO_CSS,
+    .applies_to = BIT (SVG_ELEMENT_FILTER),
+    .parse_value = parse_any_number,
+  },
+  [SVG_PROPERTY_FE_TURBULENCE_TYPE] = {
+    .flags = SVG_PROPERTY_NO_CSS | SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = BIT (SVG_ELEMENT_FILTER),
+    .parse_value = svg_turbulence_type_parse,
+  },
+  [SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES] = {
+    .flags = SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
+    .applies_to = BIT (SVG_ELEMENT_FILTER),
+    .parse_value = svg_stitch_tiles_parse,
+  },
 };
 
 gboolean
@@ -1288,6 +1324,11 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FE_FUNC_AMPLITUDE].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FE_FUNC_EXPONENT].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FE_FUNC_OFFSET].initial_value = svg_number_new (0);
+  shape_attrs[SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ].initial_value = svg_numbers_new1 (0);
+  shape_attrs[SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES].initial_value = svg_number_new (1);
+  shape_attrs[SVG_PROPERTY_FE_TURBULENCE_SEED].initial_value = svg_number_new (0);
+  shape_attrs[SVG_PROPERTY_FE_TURBULENCE_TYPE].initial_value = svg_turbulence_type_new (TURBULENCE_TYPE_TURBULENCE);
+  shape_attrs[SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES].initial_value = svg_stitch_tiles_new (STITCH_NO_STITCH);
 
   /* We require initial values to immortal for thread-safety
    * reasons. since they are the only objects in the SVG code
@@ -1378,7 +1419,8 @@ typedef struct {
   (BIT (SVG_FILTER_FLOOD) | BIT (SVG_FILTER_BLUR) | BIT (SVG_FILTER_BLEND) | \
    BIT (SVG_FILTER_COLOR_MATRIX) | BIT (SVG_FILTER_COMPOSITE) | BIT (SVG_FILTER_OFFSET) | \
    BIT (SVG_FILTER_DISPLACEMENT) | BIT (SVG_FILTER_TILE) | BIT (SVG_FILTER_IMAGE) | \
-   BIT (SVG_FILTER_MERGE) | BIT (SVG_FILTER_COMPONENT_TRANSFER) | BIT (SVG_FILTER_DROPSHADOW))
+   BIT (SVG_FILTER_MERGE) | BIT (SVG_FILTER_COMPONENT_TRANSFER) | BIT (SVG_FILTER_DROPSHADOW) | \
+   BIT (SVG_FILTER_TURBULENCE))
 
 #define FILTER_FUNCS \
   (BIT (SVG_FILTER_FUNC_R) | BIT (SVG_FILTER_FUNC_G) | BIT (SVG_FILTER_FUNC_B) | BIT (SVG_FILTER_FUNC_A))
@@ -1530,6 +1572,11 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "amplitude", BIT (SVG_ELEMENT_FILTER), FILTER_FUNCS, SVG_PROPERTY_FE_FUNC_AMPLITUDE },
   { "exponent", BIT (SVG_ELEMENT_FILTER), FILTER_FUNCS, SVG_PROPERTY_FE_FUNC_EXPONENT },
   { "offset", BIT (SVG_ELEMENT_FILTER), FILTER_FUNCS, SVG_PROPERTY_FE_FUNC_OFFSET },
+  { "baseFrequency", BIT (SVG_ELEMENT_FILTER), BIT (SVG_FILTER_TURBULENCE), SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ },
+  { "numOctaves", BIT (SVG_ELEMENT_FILTER), BIT (SVG_FILTER_TURBULENCE), SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES },
+  { "seed", BIT (SVG_ELEMENT_FILTER), BIT (SVG_FILTER_TURBULENCE), SVG_PROPERTY_FE_TURBULENCE_SEED },
+  { "type", BIT (SVG_ELEMENT_FILTER), BIT (SVG_FILTER_TURBULENCE), SVG_PROPERTY_FE_TURBULENCE_TYPE },
+  { "stitchTiles", BIT (SVG_ELEMENT_FILTER), BIT (SVG_FILTER_TURBULENCE), SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES },
 };
 
 gboolean

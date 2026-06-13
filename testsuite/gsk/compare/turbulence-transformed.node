@@ -1,0 +1,22 @@
+turbulence "turb" {
+  bounds: 0 0 100 100;
+  base-frequency: 0.05;
+  num-octaves: 2;
+  seed: 0;
+  noise-type: turbulence;
+}
+
+transform {
+  transform: translate(110, 0);
+  child: "turb";
+}
+
+transform {
+  transform: translate(0, 110);
+  child: "turb";
+}
+
+transform {
+  transform: translate(160, 160) rotate(180) translate(-50, -50);
+  child: "turb";
+}

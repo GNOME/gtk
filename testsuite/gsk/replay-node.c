@@ -11,6 +11,7 @@
 #include <gsk/gskoutsetshadownodeprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskrepeatnodeprivate.h>
+#include <gsk/gskturbulencenodeprivate.h>
 #include <gtk/gtksnapshotprivate.h>
 
 void
@@ -554,6 +555,28 @@ replay_arithmetic_node (GskRenderNode *node,
   gtk_snapshot_restore (snapshot);
 }
 
+static void
+replay_turbulence_node (GskRenderNode *node,
+                        GtkSnapshot   *snapshot)
+{
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_turbulence_node_get_snap (node));
+
+  gtk_snapshot_add_turbulence (snapshot,
+                               &bounds,
+                               gsk_turbulence_node_get_color_state (node),
+                               gsk_turbulence_node_get_base_frequency (node),
+                               gsk_turbulence_node_get_num_octaves (node),
+                               gsk_turbulence_node_get_seed (node),
+                               gsk_turbulence_node_get_noise_type (node),
+                               gsk_turbulence_node_get_stitch_tiles (node));
+
+  gtk_snapshot_restore (snapshot);
+}
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -695,6 +718,10 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_ARITHMETIC_NODE:
       replay_arithmetic_node (node, snapshot);
+      break;
+
+    case GSK_TURBULENCE_NODE:
+      replay_turbulence_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:

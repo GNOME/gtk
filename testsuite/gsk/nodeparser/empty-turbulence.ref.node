@@ -1,0 +1,4 @@
+turbulence {
+  bounds: 0 0 50 50;
+  base-frequency: 0;
+}

@@ -36,6 +36,7 @@
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskisolationnodeprivate.h"
 #include "gsk/gskrepeatnodeprivate.h"
+#include "gsk/gskturbulencenodeprivate.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskcontourprivate.h"
 #include "gsk/gskrectprivate.h"
@@ -783,6 +784,7 @@ determine_filter_subregion (SvgFilter             *f,
         {
         case SVG_FILTER_FLOOD:
         case SVG_FILTER_IMAGE:
+        case SVG_FILTER_TURBULENCE:
           /* zero inputs */
           graphene_rect_init_from_rect (subregion, filter_region);
           break;
@@ -1395,6 +1397,52 @@ apply_filter_tree (SvgElement    *shape,
 
             filter_result_unref (in);
             filter_result_unref (in2);
+          }
+          break;
+
+        case SVG_FILTER_TURBULENCE:
+          {
+            SvgValue *base_freq = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ);
+            SvgValue *oct = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES);
+            SvgValue *seed_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_SEED);
+            SvgValue *type_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_TYPE);
+            SvgValue *stitch_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES);
+            graphene_size_t freq;
+            unsigned int num_octaves;
+            int seed;
+            GskNoiseType noise_type;
+            gboolean stitch_tiles;
+
+            for (unsigned int idx = 0; idx < svg_numbers_get_length (base_freq); idx++)
+              {
+                double val = svg_numbers_get (base_freq, idx, 1);
+                if (val < 0)
+                  {
+                    gtk_svg_rendering_error (context->svg, "Unsupported base-frequency value: %f", val);
+                    break;
+                  }
+              }
+
+            /* Limits here are copied from librsvg */
+            freq.width = CLAMP (svg_numbers_get (base_freq, 0, 1), 0, 32768.0);
+            freq.height = freq.width;
+            if (svg_numbers_get_length (base_freq) == 2)
+              freq.height = CLAMP (svg_numbers_get (base_freq, 1, freq.width), 0, 32768.0);
+            num_octaves = (unsigned int) CLAMP (svg_number_get (oct, 1), 0, 9);
+            seed = (int) trunc (svg_number_get (seed_val, 0));
+            noise_type = (svg_enum_get (type_val) == TURBULENCE_TYPE_TURBULENCE)
+                          ? GSK_NOISE_TURBULENCE
+                          : GSK_NOISE_FRACTAL_NOISE;
+            stitch_tiles = (svg_enum_get (stitch_val) == STITCH_STITCH);
+
+            result = gsk_turbulence_node_new (&subregion,
+                                              GSK_RECT_SNAP_NONE,
+                                              color_state,
+                                              &freq,
+                                              num_octaves,
+                                              seed,
+                                              noise_type,
+                                              stitch_tiles);
           }
           break;
 

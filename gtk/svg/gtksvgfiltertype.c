@@ -101,6 +101,12 @@ static SvgProperty dropshadow_attrs[] = {
   SVG_PROPERTY_FE_COLOR, SVG_PROPERTY_FE_OPACITY,
 };
 
+static SvgProperty turbulence_attrs[] = {
+  SVG_PROPERTY_FE_X, SVG_PROPERTY_FE_Y, SVG_PROPERTY_FE_WIDTH, SVG_PROPERTY_FE_HEIGHT, SVG_PROPERTY_FE_RESULT,
+  SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ, SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES,
+  SVG_PROPERTY_FE_TURBULENCE_SEED, SVG_PROPERTY_FE_TURBULENCE_TYPE, SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES,
+};
+
 typedef struct
 {
   const char *name;
@@ -193,6 +199,11 @@ static FilterTypeInfo filter_types[] = {
     .name = "feDropShadow",
     .n_attrs = G_N_ELEMENTS (dropshadow_attrs),
     .attrs = dropshadow_attrs,
+  },
+  [SVG_FILTER_TURBULENCE] = {
+    .name = "feTurbulence",
+    .n_attrs = G_N_ELEMENTS (turbulence_attrs),
+    .attrs = turbulence_attrs,
   },
 };
 

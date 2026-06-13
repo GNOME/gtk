@@ -2306,8 +2306,7 @@ start_element_cb (GMarkupParseContext  *context,
       strcmp (element_name, "feConvolveMatrix") == 0 ||
       strcmp (element_name, "feDiffuseLighting") == 0 ||
       strcmp (element_name, "feMorphology") == 0 ||
-      strcmp (element_name, "feSpecularLighting") == 0 ||
-      strcmp (element_name, "feTurbulence") == 0)
+      strcmp (element_name, "feSpecularLighting") == 0)
     {
       skip_element (data, context, GTK_SVG_ERROR_NOT_IMPLEMENTED, "<%s> is not supported", element_name);
       return;
