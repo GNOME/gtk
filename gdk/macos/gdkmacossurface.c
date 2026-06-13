@@ -251,7 +251,6 @@ gdk_macos_surface_begin_frame (GdkMacosSurface *self)
 static void
 gdk_macos_surface_end_frame (GdkMacosSurface *self)
 {
-  GdkFrameTimings *timings;
   GdkFrameClock *frame_clock;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
@@ -261,8 +260,7 @@ gdk_macos_surface_end_frame (GdkMacosSurface *self)
 
   frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
 
-  if ((timings = gdk_frame_clock_get_current_timings (frame_clock)))
-    self->pending_frame_counter = timings->frame_counter;
+  self->pending_frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
 
   self->in_frame = FALSE;
 
