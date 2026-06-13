@@ -2497,6 +2497,7 @@ gtk_svg_set_playing (GtkSvg   *self,
 void
 gtk_svg_clear_content (GtkSvg *self)
 {
+  g_clear_pointer (&self->resource, g_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->content, svg_element_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
@@ -3008,6 +3009,7 @@ gtk_svg_load_from_bytes (GtkSvg *self,
                          GBytes *bytes)
 {
   g_return_if_fail (GTK_IS_SVG (self));
+  g_return_if_fail (bytes != NULL);
 
   gtk_svg_clear_content (self);
 
@@ -3036,13 +3038,11 @@ gtk_svg_load_from_resource (GtkSvg     *self,
                             const char *path)
 {
   g_return_if_fail (GTK_IS_SVG (self));
-
-  g_set_str (&self->resource, path);
+  g_return_if_fail (path != NULL);
 
   gtk_svg_clear_content (self);
-
-  if (path)
-    gtk_svg_init_from_resource (self, path);
+  self->resource = g_strdup (path);
+  gtk_svg_init_from_resource (self, path);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE]);
 }
