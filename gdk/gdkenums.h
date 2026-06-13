@@ -350,6 +350,102 @@ typedef enum
 #define GDK_ACTION_ALL (GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK)
 
 /**
+ * GdkFrameResult:
+ *
+ * An enumeration describing the process of rendering a frame.
+ * Rendering a frame starts with the frame clock cycle and then follows
+ * the rendered frame (if there was one) through the display server
+ * until it appears on screen.
+ *
+ * It is relevant in particular for [struct@Gdk.FrameTimings] which
+ * may still be waiting for values to be filled in.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_PREPARING:
+ *
+ * The frame is currently being prepared and rendered by GTK.
+ * This is the initial state.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_SKIPPED:
+ *
+ * GTK has determined that nothing needs to be rendered because
+ * there are no visual changes. No rendering will be submitted to
+ * the display server and because of that no information will
+ * be forthcoming from the display server.
+ *
+ * The frame is complete.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_EMPTY:
+ *
+ * GTK has determined that nothing needs to be rendered because
+ * there are no visual changes. This information has been submitted 
+ * to the display server. The presentation time has been updated to
+ * reflect when this frame would have been displayed.
+ *
+ * The frame is complete.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_SUBMITTED:
+ *
+ * A frame has been drawn and submitted to the display server, but
+ * the display server will not provide any further feedback about when
+ * or how the frame is going to be displayed.
+ *
+ * The frame is complete.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_OUTSTANDING:
+ *
+ * The frame has been drawn and submitted to the display server, but the
+ * display server has not yet replied what is going to happen with the
+ * rendered image.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_DISCARDED:
+ *
+ * The frame has been drawn and submitted to the display server, but the
+ * display server has not displayed it. No presentation time will be available.
+ *
+ * The frame is complete.
+ *
+ * Since: 4.24
+ */
+/**
+ * GDK_FRAME_PRESENTED:
+ *
+ * The frame has been drawn and submitted to the display server, and the
+ * display server has rendered it and displayed the result. The presentation
+ * time is accurately reflecting when that happened.
+ *
+ * The frame is complete.
+ *
+ * Since: 4.24
+ */
+typedef enum {
+  GDK_FRAME_PREPARING,
+  GDK_FRAME_SKIPPED,
+  GDK_FRAME_EMPTY,
+  GDK_FRAME_SUBMITTED,
+  GDK_FRAME_OUTSTANDING,
+  GDK_FRAME_DISCARDED,
+  GDK_FRAME_PRESENTED,
+} GdkFrameResult;
+
+/**
  * GdkMemoryFormat:
  * @GDK_MEMORY_B8G8R8A8_PREMULTIPLIED: 4 bytes; for blue, green, red, alpha.
  *   The color values are premultiplied with the alpha value.
