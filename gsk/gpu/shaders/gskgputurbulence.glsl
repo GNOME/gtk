@@ -167,9 +167,9 @@ turbulence (vec2 point, vec2 base_freq, uint n_octaves)
             base_freq.y = freq_high;
         }
       stitch_width = int (_tile_width * base_freq.x + 0.5);
-      strich_wrap_x = int (_tile_x * base_freq.x) + PerlinN + stitch_width;
+      strich_wrap_x = PerlinN + stitch_width;
       stitch_height = int (_tile_height * base_freq.y + 0.5);
-      stitch_wrap_y = int (_tile_y * base_freq.y) + PerlinN + stitch_height;
+      stitch_wrap_y = PerlinN + stitch_height;
     }
 
   vec4 sum = vec4(0.0, 0.0, 0.0, 0.0);
