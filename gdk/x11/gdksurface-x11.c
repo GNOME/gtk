@@ -735,7 +735,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 
       maybe_sync_counter_for_end_frame (surface);
 
-      if (_gdk_x11_surface_syncs_frames (surface))
+      if (_gdk_x11_surface_syncs_frames (surface) && !gdk_frame_timings_get_complete (timings))
         {
           impl->toplevel->frame_pending = TRUE;
           gdk_surface_freeze_updates (surface);
@@ -755,7 +755,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       impl->toplevel->configure_counter_value = 0;
     }
 
-  if (!impl->toplevel->frame_pending)
+  if (!impl->toplevel->frame_pending && !gdk_frame_timings_get_complete (timings))
     {
       gdk_frame_clock_submitted (clock,
                                  gdk_frame_clock_get_frame_counter (clock),
