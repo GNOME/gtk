@@ -12,4 +12,6 @@
   <circle gpa:states='no-such-state'/>
   <circle gpa:states='empty -1'/>
   <circle gpa:states='zero 65'/>
+  <circle gpa:states='not 1'/>
+  <circle gpa:states='not 1 2 3'/>
 </svg>

@@ -62,7 +62,8 @@ gboolean
 valid_state_name (const char *name)
 {
   if (strcmp (name, "all") == 0 ||
-      strcmp (name, "none") == 0)
+      strcmp (name, "none") == 0 ||
+      strcmp (name, "not") == 0)
     return FALSE;
 
   if (!is_state_name_start (name[0]))
@@ -99,6 +100,8 @@ parse_states_css (GtkCssParser *parser,
                   GtkSvg       *svg,
                   uint64_t     *states)
 {
+  gboolean negated = FALSE;
+
   gtk_css_parser_skip_whitespace (parser);
 
   if (gtk_css_parser_try_ident (parser, "all"))
@@ -112,16 +115,13 @@ parse_states_css (GtkCssParser *parser,
       return TRUE;
     }
 
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_try_ident (parser, "not"))
+    negated = TRUE;
+
   *states = NO_STATES;
   while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      gboolean negated = FALSE;
-
-      gtk_css_parser_skip_whitespace (parser);
-
-      if (gtk_css_parser_try_ident (parser, "not"))
-        negated = TRUE;
-
       gtk_css_parser_skip_whitespace (parser);
       if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
@@ -137,10 +137,7 @@ parse_states_css (GtkCssParser *parser,
 
           g_free (id);
 
-          if (negated)
-            *states |= ALL_STATES ^ BIT (u);
-          else
-            *states |= BIT (u);
+          *states |= BIT (u);
         }
       else if (gtk_css_parser_has_integer (parser))
         {
@@ -153,16 +150,16 @@ parse_states_css (GtkCssParser *parser,
               return FALSE;
             }
 
-          if (negated)
-            *states |= ALL_STATES ^ BIT ((unsigned int) i);
-          else
-            *states |= BIT ((unsigned int) i);
+          *states |= BIT ((unsigned int) i);
         }
       else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        return TRUE;
+        break;
       else
         return FALSE;
     }
+
+  if (negated)
+    *states = ALL_STATES ^ *states;
 
   return TRUE;
 }
@@ -210,17 +207,10 @@ print_states (GString  *s,
           state_names = (const char **) svg->state_names;
         }
 
-      if (gtk_popcount64 (~states) == 1)
+      if (gtk_popcount64 (states) > 31)
         {
-          int omitted = gtk_ctz64 (~states);
-
           g_string_append (s, "not ");
-          if (omitted < n_state_names)
-            g_string_append (s, state_names[omitted]);
-          else
-            g_string_append_printf (s, "%u", omitted);
-
-          return;
+          states = ~states;
         }
 
       for (unsigned int u = 0; u < 64; u++)
@@ -365,6 +355,8 @@ create_visibility_setter (SvgElement   *shape,
   Visibility opposite_visibility;
   SvgValue *value;
 
+  a->line = 0;
+
   if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
     {
       value = svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY);
@@ -436,6 +428,15 @@ create_states (SvgElement   *shape,
 /* }}} */
 /* {{{ Transitions */
 
+/* Animations and transitions are triggered by state changes, so they
+ * will commonly have the same start time. To make sure things work out
+ * correctly, we use the line field to disambiguate, as follows:
+ * - 0: visibility setters, connections, path-length
+ * - 1: fade-in transitions
+ * - 2: animations
+ * - 3: fade-out transitions
+ */
+
 void
 create_path_length (SvgElement *shape,
                     Timeline   *timeline)
@@ -443,6 +444,7 @@ create_path_length (SvgElement *shape,
   SvgAnimation *a = svg_animation_new (ANIMATION_TYPE_SET);
   TimeSpec *begin, *end;
 
+  a->line = 0;
   a->attr = SVG_PROPERTY_PATH_LENGTH;
 
   a->id = g_strdup_printf ("gpa:path-length:%s", svg_element_get_id (shape));
@@ -485,6 +487,8 @@ create_transition (SvgElement    *shape,
   TimeSpec *begin;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 1;
   a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
@@ -520,6 +524,8 @@ create_transition (SvgElement    *shape,
   a->gpa.origin = origin;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 3;
   a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
@@ -557,6 +563,8 @@ create_transition (SvgElement    *shape,
   if (delay > 0)
     {
       a = svg_animation_new (ANIMATION_TYPE_SET);
+
+      a->line = 1;
       a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
@@ -584,6 +592,8 @@ create_transition (SvgElement    *shape,
       svg_element_add_animation (shape, a);
 
       a = svg_animation_new (ANIMATION_TYPE_SET);
+
+      a->line = 3;
       a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
@@ -624,6 +634,8 @@ create_transition_delay (SvgElement  *shape,
   TimeSpec *begin;
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 1;
   a->simple_duration = delay;
   a->repeat_duration = delay;
   a->repeat_count = 1;
@@ -651,6 +663,8 @@ create_transition_delay (SvgElement  *shape,
   time_spec_add_animation (begin, a);
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 3;
   a->simple_duration = delay;
   a->repeat_duration = delay;
   a->repeat_count = 1;
@@ -815,6 +829,8 @@ create_morph_filter (SvgElement *shape,
   g_free (str);
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 1;
   a->id = g_strdup_printf ("gpa:set:morph:%s", svg_element_get_id (shape));
   a->attr = SVG_PROPERTY_FILTER;
 
@@ -907,6 +923,8 @@ create_animation (SvgElement   *shape,
   TimeSpec *begin, *end;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 2;
   a->repeat_count = repeat;
   a->simple_duration = duration;
   if (repeat == REPEAT_FOREVER)
@@ -1245,6 +1263,7 @@ create_attachment (SvgElement *shape,
 
   a = svg_animation_new (ANIMATION_TYPE_MOTION);
 
+  a->line = 0;
   a->has_begin = 1;
   a->has_end = 1;
   a->has_simple_duration = 1;
@@ -1291,6 +1310,8 @@ create_attachment_connection_to (SvgAnimation *a,
   TimeSpec *begin, *end;
 
   a2 = svg_animation_new (ANIMATION_TYPE_MOTION);
+
+  a2->line = 0;
   a2->simple_duration = da->simple_duration;
   a2->repeat_count = da->repeat_count;
   if (g_str_has_prefix (da->id, "gpa:animation:"))

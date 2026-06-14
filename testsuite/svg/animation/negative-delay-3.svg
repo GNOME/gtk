@@ -107,7 +107,7 @@
           stroke-width='2'
           stroke-linecap='round'
           stroke-linejoin='round'
-          stroke-dasharray='1 0'
+          stroke-dasharray='0 2'
           pathLength='1'
           d='M 100 0 L 0 100'
           gpa:states='1'>
@@ -119,21 +119,6 @@
             to='hidden'
             gpa:status='done'
             gpa:computed-simple-duration='indefinite'
-            gpa:run-mode='stopped'
-            gpa:last-start-time='0ms'/>
-    <animate
-            id='gpa:transition:fade-out:0:stroke-dasharray:line2'
-            attributeName='stroke-dasharray'
-            begin='StateChange(1, not 1) -250ms'
-            dur='500ms'
-            repeatDur='500ms'
-            fill='freeze'
-            from='1 0'
-            to='0 2'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
     <animate
@@ -151,13 +136,18 @@
             gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
-    <set
-            id='gpa:transition:fade-out-delay:stroke-dashoffset:line2'
-            attributeName='stroke-dashoffset'
-            begin='StateChange(1, not 1) 250ms'
-            dur='-250ms'
-            repeatDur='-250ms'
-            to='0.5'
+    <animate
+            id='gpa:transition:fade-out:0:stroke-dasharray:line2'
+            attributeName='stroke-dasharray'
+            begin='StateChange(1, not 1) -250ms'
+            dur='500ms'
+            repeatDur='500ms'
+            fill='freeze'
+            from='1 0'
+            to='0 2'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
             gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
@@ -171,6 +161,16 @@
             gpa:status='done'
             gpa:current-start-time='250ms'
             gpa:current-end-time='0ms'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='0ms'/>
+    <set
+            id='gpa:transition:fade-out-delay:stroke-dashoffset:line2'
+            attributeName='stroke-dashoffset'
+            begin='StateChange(1, not 1) 250ms'
+            dur='-250ms'
+            repeatDur='-250ms'
+            to='0.5'
+            gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
     <set
