@@ -764,25 +764,26 @@ immodules = [
 
 install_data(join_paths(immodule_srcdir, 'im-multipress.conf'), install_dir: join_paths(gtk_sysconfdir, 'gtk-3.0'))
 
-# Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
-# doing the same check as glib. We can't check that by linking to glib because
-# it might be a subproject and hence not built yet.
-if cc.has_function('ngettext')
-  libintl_dep = []
-  cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
-else
-  libintl_dep = cc.find_library('intl', required : false)
-  if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
-    cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
-  else
-    # Don't use subproject('proxy-libintl').get_variable('intl_dep') because that
-    # makes the dependency unconditional. This way, people have the option of
-    # either not providing the subproject or disabling it entirely with
-    # --wrap-mode=nodownload or nofallback.
-    libintl_dep = dependency('', required : false,
-                             fallback: ['proxy-libintl', 'intl_dep'])
-    if libintl_dep.found()
-      cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+# Check for bind_textdomain_codeset and build the proxy-libintl subproject if
+# necessary to provide it (and --wrap-mode permits that).  Also set the CPP variable
+# HAVE_BIND_TEXTDOMAIN_CODESET for source files to use.  Note that cc.has_function()
+# works in the general case without a prefix but we must provide one for
+# proxy-libintl because it uses CPP macros for redirection to its thunks (ie.
+# bind_textdomain_codeset is redirected to g_libintl_bind_textdomain_codeset).
+
+libintl_dep = []
+if cc.has_function('bind_textdomain_codeset')
+  cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)  # found without -lintl (ie. Linux/glibc)
+  libintl = dependency('intl', required: false, fallback: ['proxy-libintl', 'intl_dep'])
+  if libintl.found()
+    libintl_dep += [libintl]
+    if libintl.type_name() != 'internal'
+      if cc.has_function('bind_textdomain_codeset',
+                         dependencies: libintl, prefix: '#include <libintl.h>')
+        cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)  # found with -lintl
+      endif
+    else
+      cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)  # proxy-libintl is known to provide it
     endif
   endif
 endif
