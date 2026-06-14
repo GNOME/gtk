@@ -451,7 +451,13 @@ initial_state_changed (StateEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   svg->initial_state = (unsigned int) gtk_spin_button_get_value_as_int (self->initial_state);
-  path_paintable_changed (self->paintable);
+
+  /* Not the best way to go about things, but we don't want to trigger
+   * recreating the render_paintable
+   */
+  g_object_set (gtk_window_get_transient_for (GTK_WINDOW (self)),
+                "changed", TRUE,
+                NULL);
 }
 
 /* }}} */

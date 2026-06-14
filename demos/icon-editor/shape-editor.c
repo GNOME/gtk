@@ -1445,12 +1445,12 @@ shape_editor_update (ShapeEditor *self)
       GtkSvgLocation loc;
       SvgValue *href;
 
+      self->updating = TRUE;
+
       id = svg_element_get_id (self->shape);
       type = svg_element_get_type (self->shape);
 
       gtk_editable_set_text (GTK_EDITABLE (self->id_label), id ? id : "");
-
-      self->updating = TRUE;
 
       if (!can_edit_shape (self->shape))
         {
@@ -1841,6 +1841,7 @@ shape_editor_update (ShapeEditor *self)
 
       if (svg_property_applies_to (SVG_PROPERTY_MASK, type))
         {
+          /* todo */
         }
 
       if (svg_property_applies_to (SVG_PROPERTY_MASK_TYPE, type))

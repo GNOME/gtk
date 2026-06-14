@@ -1194,6 +1194,10 @@ icon_editor_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CHANGED:
+      icon_editor_window_set_changed (self, g_value_get_boolean (value));
+      break;
+
     case PROP_PAINTABLE:
       icon_editor_window_set_paintable (self, g_value_get_object (value));
       break;
@@ -1378,7 +1382,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   properties[PROP_CHANGED] =
     g_param_spec_boolean ("changed", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_SIDEBAR] =
     g_param_spec_boolean ("show-sidebar", NULL, NULL,
