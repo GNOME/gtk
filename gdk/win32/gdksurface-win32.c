@@ -159,31 +159,27 @@ gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
 {
   DWM_TIMING_INFO timing_info;
   LARGE_INTEGER tick_frequency;
-  GdkFrameTimings *timings;
 
-  timings = gdk_frame_clock_get_timings (clock, gdk_frame_clock_get_frame_counter (clock));
-
-  if (timings)
+  if (QueryPerformanceFrequency (&tick_frequency))
     {
-      timings->refresh_interval = 16667; /* default to 1/60th of a second */
-      timings->presentation_time = 0;
+      HRESULT hr;
 
-      if (QueryPerformanceFrequency (&tick_frequency))
+      timing_info.cbSize = sizeof (timing_info);
+      hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
+
+      if (SUCCEEDED (hr))
         {
-          HRESULT hr;
-
-          timing_info.cbSize = sizeof (timing_info);
-          hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
-
-          if (SUCCEEDED (hr))
-            {
-              timings->refresh_interval = timing_info.qpcRefreshPeriod * (double)G_USEC_PER_SEC / tick_frequency.QuadPart;
-              timings->presentation_time = timing_info.qpcCompose * (double)G_USEC_PER_SEC / tick_frequency.QuadPart;
-            }
+          gdk_frame_clock_presented (clock,
+                                     gdk_frame_clock_get_frame_counter (clock),
+                                     timing_info.qpcCompose * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart,
+                                     timing_info.qpcRefreshPeriod * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart);
+          return;
         }
-
-      timings->complete = TRUE;
     }
+
+  gdk_frame_clock_submitted (clock,
+                             gdk_frame_clock_get_frame_counter (clock),
+                             0);
 }
 
 void
