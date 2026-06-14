@@ -325,10 +325,6 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
 {
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
-  impl->pending_frame_counter = 0;
 
   /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
@@ -336,20 +332,11 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
   else
     gdk_surface_thaw_updates (surface);
 
-  if (timings)
-    {
-      timings->refresh_interval = 33333; /* default to 1/30th of a second */
-      // This isn't quite right, since we've done a roundtrip back too, can we do better?
-      timings->presentation_time = g_get_monotonic_time ();
-      timings->complete = TRUE;
+  gdk_frame_clock_submitted (clock,
+                             impl->pending_frame_counter,
+                             G_NSEC_PER_SEC / 30); /* default to 1/30th of a second */
 
-
-      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-        _gdk_frame_clock_debug_print_timings (clock, timings);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    _gdk_frame_clock_add_timings_to_profiler (clock, timings);
-    }
+  impl->pending_frame_counter = 0;
 }
 
 static void
