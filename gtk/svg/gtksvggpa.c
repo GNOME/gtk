@@ -355,6 +355,8 @@ create_visibility_setter (SvgElement   *shape,
   Visibility opposite_visibility;
   SvgValue *value;
 
+  a->line = 0;
+
   if (svg_element_is_specified (shape, SVG_PROPERTY_VISIBILITY))
     {
       value = svg_element_get_specified_value (shape, SVG_PROPERTY_VISIBILITY);
@@ -426,6 +428,15 @@ create_states (SvgElement   *shape,
 /* }}} */
 /* {{{ Transitions */
 
+/* Animations and transitions are triggered by state changes, so they
+ * will commonly have the same start time. To make sure things work out
+ * correctly, we use the line field to disambiguate, as follows:
+ * - 0: visibility setters, connections, path-length
+ * - 1: fade-in transitions
+ * - 2: animations
+ * - 3: fade-out transitions
+ */
+
 void
 create_path_length (SvgElement *shape,
                     Timeline   *timeline)
@@ -433,6 +444,7 @@ create_path_length (SvgElement *shape,
   SvgAnimation *a = svg_animation_new (ANIMATION_TYPE_SET);
   TimeSpec *begin, *end;
 
+  a->line = 0;
   a->attr = SVG_PROPERTY_PATH_LENGTH;
 
   a->id = g_strdup_printf ("gpa:path-length:%s", svg_element_get_id (shape));
@@ -475,6 +487,8 @@ create_transition (SvgElement    *shape,
   TimeSpec *begin;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 1;
   a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
@@ -510,6 +524,8 @@ create_transition (SvgElement    *shape,
   a->gpa.origin = origin;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 3;
   a->idx = idx;
   a->simple_duration = duration;
   a->repeat_duration = duration;
@@ -547,6 +563,8 @@ create_transition (SvgElement    *shape,
   if (delay > 0)
     {
       a = svg_animation_new (ANIMATION_TYPE_SET);
+
+      a->line = 1;
       a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
@@ -574,6 +592,8 @@ create_transition (SvgElement    *shape,
       svg_element_add_animation (shape, a);
 
       a = svg_animation_new (ANIMATION_TYPE_SET);
+
+      a->line = 3;
       a->idx = idx;
       a->attr = attr;
       a->simple_duration = duration;
@@ -614,6 +634,8 @@ create_transition_delay (SvgElement  *shape,
   TimeSpec *begin;
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 1;
   a->simple_duration = delay;
   a->repeat_duration = delay;
   a->repeat_count = 1;
@@ -641,6 +663,8 @@ create_transition_delay (SvgElement  *shape,
   time_spec_add_animation (begin, a);
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 3;
   a->simple_duration = delay;
   a->repeat_duration = delay;
   a->repeat_count = 1;
@@ -805,6 +829,8 @@ create_morph_filter (SvgElement *shape,
   g_free (str);
 
   a = svg_animation_new (ANIMATION_TYPE_SET);
+
+  a->line = 1;
   a->id = g_strdup_printf ("gpa:set:morph:%s", svg_element_get_id (shape));
   a->attr = SVG_PROPERTY_FILTER;
 
@@ -897,6 +923,8 @@ create_animation (SvgElement   *shape,
   TimeSpec *begin, *end;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
+
+  a->line = 2;
   a->repeat_count = repeat;
   a->simple_duration = duration;
   if (repeat == REPEAT_FOREVER)
@@ -1235,6 +1263,7 @@ create_attachment (SvgElement *shape,
 
   a = svg_animation_new (ANIMATION_TYPE_MOTION);
 
+  a->line = 0;
   a->has_begin = 1;
   a->has_end = 1;
   a->has_simple_duration = 1;
@@ -1281,6 +1310,8 @@ create_attachment_connection_to (SvgAnimation *a,
   TimeSpec *begin, *end;
 
   a2 = svg_animation_new (ANIMATION_TYPE_MOTION);
+
+  a2->line = 0;
   a2->simple_duration = da->simple_duration;
   a2->repeat_count = da->repeat_count;
   if (g_str_has_prefix (da->id, "gpa:animation:"))
