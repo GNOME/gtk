@@ -109,7 +109,7 @@ void _gdk_frame_clock_emit_before_paint  (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_update        (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_layout        (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_paint         (GdkFrameClock *frame_clock);
-void _gdk_frame_clock_emit_after_paint   (GdkFrameClock *frame_clock);
+void _gdk_frame_clock_emit_after_paint   (GdkFrameClock *self);
 void _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock);
 
 void            gdk_frame_clock_outstanding                     (GdkFrameClock          *self);

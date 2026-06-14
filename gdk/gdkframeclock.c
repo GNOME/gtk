@@ -726,9 +726,27 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 }
 
 void
-_gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
+_gdk_frame_clock_emit_after_paint (GdkFrameClock *self)
 {
-  g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
+  GdkFrameTimings *timings;
+
+  g_signal_emit (self, signals[AFTER_PAINT], 0);
+
+  timings = gdk_frame_clock_get_current_timings (self);
+  if (timings->result == GDK_FRAME_PREPARING)
+    {
+      /* Painting was done and if no surfaces transitioned the frame,
+       * either to OUTSTANDING when painting or a backend in
+       * after_paint(), then we mark this frame as SKIPPED.
+       */
+      timings->result = GDK_FRAME_SKIPPED;
+      timings->complete = TRUE;
+
+      if (GDK_DEBUG_CHECK (FRAMES))
+        _gdk_frame_clock_debug_print_timings (self, timings);
+      if (GDK_PROFILER_IS_RUNNING)
+        _gdk_frame_clock_add_timings_to_profiler (self, timings);
+    }
 }
 
 void
