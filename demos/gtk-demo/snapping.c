@@ -1,4 +1,5 @@
 /* Snapping
+ * #Keywords: qr code
  *
  * Demonstrates how to snap content.
  *
