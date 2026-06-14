@@ -30,6 +30,22 @@
 
 G_BEGIN_DECLS
 
+/* little hacks to avoid requiring 2.88 */
+#if GLIB_CHECK_VERSION(2, 87, 3)
+#undef G_NSEC_PER_SEC
+static inline uint64_t
+avoid_deprecation_monotonic_time_ns (void)
+{
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  return g_get_monotonic_time_ns ();
+G_GNUC_END_IGNORE_DEPRECATIONS
+}
+#define g_get_monotonic_time_ns() avoid_deprecation_monotonic_time_ns()
+#else
+#define g_get_monotonic_time_ns() ((uint64_t) 1000 * g_get_monotonic_time ())
+#endif
+#define G_NSEC_PER_SEC G_GUINT64_CONSTANT(1000000000)
+
 /**
  * GdkFrameClock:
  * @parent_instance: The parent instance.
