@@ -5,9 +5,6 @@
      gpa:state='1'>
   <path d='M 6 3 L 6 13 L 3 10 L 1 10 L 1 6 L 3 6 Z'
         id='path0'
-        gpa:transition-type='morph'
-        gpa:transition-duration='200ms'
-        gpa:transition-easing='ease-in'
         stroke-width='2'
         stroke-linecap='round'
         stroke-linejoin='round'
