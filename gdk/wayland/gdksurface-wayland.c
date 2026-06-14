@@ -270,8 +270,6 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-  GdkFrameTimings *timings;
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland frame event", NULL);
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
@@ -286,38 +284,41 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
       gdk_surface_thaw_updates (surface);
     }
 
-  timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
-  impl->pending_frame_counter = 0;
-
-  if (timings == NULL)
-    return;
-
-  timings->refresh_interval = 16667; /* default to 1/60th of a second */
-  if (impl->display_server.outputs)
-    {
-      /* We pick a random output out of the outputs that the surface touches
-       * The rate here is in milli-hertz
-       */
-      GdkMonitor *monitor =
-         gdk_wayland_display_get_monitor (display_wayland,
-                                          impl->display_server.outputs->data);
-      int refresh_rate = monitor ? gdk_monitor_get_refresh_rate (monitor) : 0;
-      if (refresh_rate != 0)
-        timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
-    }
-
   if (impl->presentation_time == NULL ||
       !gdk_wayland_presentation_time_supported (impl->presentation_time))
     {
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+      GdkFrameTimings *timings;
+
+      timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
+      impl->pending_frame_counter = 0;
+
+      if (timings == NULL)
+        return;
+
+      timings->refresh_interval = 16667; /* default to 1/60th of a second */
+      if (impl->display_server.outputs)
+        {
+          /* We pick a random output out of the outputs that the surface touches
+           * The rate here is in milli-hertz
+           */
+          GdkMonitor *monitor =
+             gdk_wayland_display_get_monitor (display_wayland,
+                                              impl->display_server.outputs->data);
+          int refresh_rate = monitor ? gdk_monitor_get_refresh_rate (monitor) : 0;
+          if (refresh_rate != 0)
+            timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
+        }
+
       fill_presentation_time_from_frame_time (timings, time);
       timings->complete = TRUE;
+
+      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+        _gdk_frame_clock_debug_print_timings (clock, timings);
+
+      if (GDK_PROFILER_IS_RUNNING)
+        _gdk_frame_clock_add_timings_to_profiler (clock, timings);
     }
-
-  if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-    _gdk_frame_clock_debug_print_timings (clock, timings);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 }
 
 static void
