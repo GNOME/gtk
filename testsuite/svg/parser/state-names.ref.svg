@@ -27,4 +27,10 @@
   </circle>
   <circle>
   </circle>
+  <circle
+          gpa:states='not 1'>
+  </circle>
+  <circle
+          gpa:states='not 1 2 3'>
+  </circle>
 </svg>

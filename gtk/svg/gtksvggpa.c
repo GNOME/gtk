@@ -62,7 +62,8 @@ gboolean
 valid_state_name (const char *name)
 {
   if (strcmp (name, "all") == 0 ||
-      strcmp (name, "none") == 0)
+      strcmp (name, "none") == 0 ||
+      strcmp (name, "not") == 0)
     return FALSE;
 
   if (!is_state_name_start (name[0]))
@@ -99,6 +100,8 @@ parse_states_css (GtkCssParser *parser,
                   GtkSvg       *svg,
                   uint64_t     *states)
 {
+  gboolean negated = FALSE;
+
   gtk_css_parser_skip_whitespace (parser);
 
   if (gtk_css_parser_try_ident (parser, "all"))
@@ -112,16 +115,13 @@ parse_states_css (GtkCssParser *parser,
       return TRUE;
     }
 
+  gtk_css_parser_skip_whitespace (parser);
+  if (gtk_css_parser_try_ident (parser, "not"))
+    negated = TRUE;
+
   *states = NO_STATES;
   while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      gboolean negated = FALSE;
-
-      gtk_css_parser_skip_whitespace (parser);
-
-      if (gtk_css_parser_try_ident (parser, "not"))
-        negated = TRUE;
-
       gtk_css_parser_skip_whitespace (parser);
       if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
@@ -137,10 +137,7 @@ parse_states_css (GtkCssParser *parser,
 
           g_free (id);
 
-          if (negated)
-            *states |= ALL_STATES ^ BIT (u);
-          else
-            *states |= BIT (u);
+          *states |= BIT (u);
         }
       else if (gtk_css_parser_has_integer (parser))
         {
@@ -153,16 +150,16 @@ parse_states_css (GtkCssParser *parser,
               return FALSE;
             }
 
-          if (negated)
-            *states |= ALL_STATES ^ BIT ((unsigned int) i);
-          else
-            *states |= BIT ((unsigned int) i);
+          *states |= BIT ((unsigned int) i);
         }
       else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        return TRUE;
+        break;
       else
         return FALSE;
     }
+
+  if (negated)
+    *states = ALL_STATES ^ *states;
 
   return TRUE;
 }
@@ -210,17 +207,10 @@ print_states (GString  *s,
           state_names = (const char **) svg->state_names;
         }
 
-      if (gtk_popcount64 (~states) == 1)
+      if (gtk_popcount64 (states) > 31)
         {
-          int omitted = gtk_ctz64 (~states);
-
           g_string_append (s, "not ");
-          if (omitted < n_state_names)
-            g_string_append (s, state_names[omitted]);
-          else
-            g_string_append_printf (s, "%u", omitted);
-
-          return;
+          states = ~states;
         }
 
       for (unsigned int u = 0; u < 64; u++)
