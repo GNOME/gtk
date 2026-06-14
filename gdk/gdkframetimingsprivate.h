@@ -57,6 +57,7 @@ struct _GdkFrameTimings
   gint64 paint_start_time;
   gint64 frame_end_time;
 
+  GdkFrameResult result;
   guint complete : 1;
 };
 
