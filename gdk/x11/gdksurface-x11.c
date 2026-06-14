@@ -756,7 +756,11 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
     }
 
   if (!impl->toplevel->frame_pending)
-    timings->complete = TRUE;
+    {
+      gdk_frame_clock_submitted (clock,
+                                 gdk_frame_clock_get_frame_counter (clock),
+                                 0);
+    }
 }
 
 /*****************************************************

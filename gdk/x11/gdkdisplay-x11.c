@@ -1249,17 +1249,18 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
               gint32 refresh_interval = d3;
 
               if (timings->drawn_time && presentation_time_offset)
-                timings->presentation_time = timings->drawn_time + presentation_time_offset;
-
-              if (refresh_interval)
-                timings->refresh_interval = refresh_interval;
-
-              timings->complete = TRUE;
-              if (GDK_DISPLAY_DEBUG_CHECK (display, FRAMES))
-                _gdk_frame_clock_debug_print_timings (clock, timings);
-
-              if (GDK_PROFILER_IS_RUNNING)
-                _gdk_frame_clock_add_timings_to_profiler (clock, timings);
+                {
+                  gdk_frame_clock_presented (clock,
+                                             timings->frame_counter,
+                                             (uint64_t) (timings->drawn_time + presentation_time_offset) * 1000,
+                                             refresh_interval * 1000);
+                }
+              else
+                {
+                  gdk_frame_clock_submitted (clock,
+                                             timings->frame_counter,
+                                             refresh_interval * 1000);
+                }
             }
         }
     }
