@@ -907,7 +907,7 @@ static SvgPropertyInfo shape_attrs[] = {
     .parse_value = parse_length_percentage,
   },
   [SVG_PROPERTY_UNICODE_BIDI] = {
-    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
+    .flags = SVG_PROPERTY_IS_DISCRETE,
     .applies_to = ELEMENT_TEXTS,
     .parse_value = svg_unicode_bidi_parse,
   },

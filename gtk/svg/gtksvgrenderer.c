@@ -3346,6 +3346,17 @@ paint_markers (SvgElement   *shape,
 /* {{{ Text */
 
 #define SVG_DEFAULT_DPI 96.0
+
+#define LRE 0x202a
+#define RLE 0x202b
+#define PDF 0x202c
+#define LRO 0x202d
+#define RLO 0x202e
+#define LRI 0x2066
+#define RLI 0x2067
+#define FSI 0x2068
+#define PDI 0x2069
+
 static PangoLayout *
 text_create_layout (SvgElement       *self,
                     PangoFontMap     *fontmap,
@@ -3357,7 +3368,7 @@ text_create_layout (SvgElement       *self,
 {
   PangoContext *context;
   UnicodeBidi uni;
-  PangoDirection direction;
+  PangoDirection direction, dir;
   WritingMode wmode;
   PangoGravity gravity;
   PangoFontDescription *font_desc;
@@ -3372,12 +3383,13 @@ text_create_layout (SvgElement       *self,
   double offset;
   SvgValue *font_family;
   DominantBaseline baseline;
+  char *text_with_bidi = NULL;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SVG_PROPERTY_LANG], 0));
 
   uni = svg_enum_get (self->current[SVG_PROPERTY_UNICODE_BIDI]);
-  direction = svg_enum_get (self->current[SVG_PROPERTY_DIRECTION]);
+  dir = direction = svg_enum_get (self->current[SVG_PROPERTY_DIRECTION]);
   wmode = svg_enum_get (self->current[SVG_PROPERTY_WRITING_MODE]);
   switch (wmode)
     {
@@ -3411,6 +3423,53 @@ text_create_layout (SvgElement       *self,
 
   if (uni == UNICODE_BIDI_OVERRIDE || uni == UNICODE_BIDI_EMBED)
     pango_context_set_base_dir (context, direction);
+  else if (dir != PANGO_DIRECTION_LTR)
+    pango_context_set_base_dir (context, dir);
+  else
+    pango_context_set_base_dir (context, direction);
+
+  if (uni != UNICODE_BIDI_NORMAL)
+    {
+      GString *s = g_string_new ("");
+      switch (uni)
+        {
+        case UNICODE_BIDI_EMBED:
+          g_string_append_unichar (s, dir == PANGO_DIRECTION_LTR ? LRE : RLE);
+          g_string_append (s, text);
+          g_string_append_unichar (s, PDF);
+          text_with_bidi = g_string_free_and_steal (s);
+          break;
+        case UNICODE_BIDI_ISOLATE:
+          g_string_append_unichar (s, dir == PANGO_DIRECTION_LTR ? LRI : RLI);
+          g_string_append (s, text);
+          g_string_append_unichar (s, PDI);
+          text_with_bidi = g_string_free_and_steal (s);
+          break;
+        case UNICODE_BIDI_OVERRIDE:
+          g_string_append_unichar (s, dir == PANGO_DIRECTION_LTR ? LRO : RLO);
+          g_string_append (s, text);
+          g_string_append_unichar (s, PDF);
+          text_with_bidi = g_string_free_and_steal (s);
+          break;
+        case UNICODE_BIDI_ISOLATE_OVERRIDE:
+          g_string_append_unichar (s, FSI);
+          g_string_append_unichar (s, dir == PANGO_DIRECTION_LTR ? LRO : RLO);
+          g_string_append (s, text);
+          g_string_append_unichar (s, PDF);
+          g_string_append_unichar (s, PDI);
+          text_with_bidi = g_string_free_and_steal (s);
+          break;
+        case UNICODE_BIDI_PLAINTEXT:
+          g_string_append_unichar (s, FSI);
+          g_string_append (s, text);
+          g_string_append_unichar (s, PDI);
+          text_with_bidi = g_string_free_and_steal (s);
+          break;
+        case UNICODE_BIDI_NORMAL:
+        default:
+          g_assert_not_reached ();
+        }
+    }
 
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
@@ -3483,7 +3542,7 @@ text_create_layout (SvgElement       *self,
   pango_layout_set_attributes (layout, attr_list);
   pango_attr_list_unref (attr_list);
 
-  pango_layout_set_text (layout, text, -1);
+  pango_layout_set_text (layout, text_with_bidi ? text_with_bidi : text, -1);
 
   pango_layout_set_alignment (layout, (direction == PANGO_DIRECTION_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT);
 
@@ -3566,6 +3625,8 @@ text_create_layout (SvgElement       *self,
     }
 
   g_object_unref (context);
+  g_free (text_with_bidi);
+
   return layout;
 }
 

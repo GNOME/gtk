@@ -320,7 +320,6 @@
                     </child>
                     <child>
                       <object class="StyleEditor" id="stylesheet">
-                        <signal name="notify::style" handler="style_changed" swapped="yes"/>
                       </object>
                     </child>
                   </object>

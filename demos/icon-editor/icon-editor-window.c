@@ -313,6 +313,22 @@ show_error (IconEditorWindow *self,
   gtk_alert_dialog_show (alert, GTK_WINDOW (self));
 }
 
+static gboolean
+is_regular_file (GFile *file)
+{
+  const char *uri;
+
+  if (file == NULL)
+    return FALSE;
+
+  uri = g_file_get_uri (file);
+
+  if (uri != NULL && g_str_has_prefix (uri, "resource://"))
+    return FALSE;
+
+  return TRUE;
+}
+
 /* }}} */
 /* {{{ Opening/Importing */
 
@@ -614,7 +630,7 @@ show_open_filechooser (IconEditorWindow *self)
 
   gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
 
-  if (self->file)
+  if (is_regular_file (self->file))
     {
       gtk_file_dialog_set_initial_file (dialog, self->file);
     }
@@ -627,6 +643,23 @@ show_open_filechooser (IconEditorWindow *self)
 
   gtk_file_dialog_open (dialog, GTK_WINDOW (self),
                         NULL, open_response_cb, self);
+}
+
+static gboolean
+icon_editor_window_load_file (IconEditorWindow *self,
+                              GFile            *file)
+{
+  g_autofree char *basename = NULL;
+
+  if (!load_file_contents (self, file))
+    return FALSE;
+
+  g_set_object (&self->file, file);
+
+  basename = g_file_get_basename (file);
+  gtk_window_set_title (GTK_WINDOW (self), basename);
+
+  return TRUE;
 }
 
 /* }}} */
@@ -758,6 +791,27 @@ save_to_file (IconEditorWindow *self,
   icon_editor_window_set_changed (self, FALSE);
 }
 
+typedef void (* FollowupCallback) (IconEditorWindow *self,
+                                   gpointer          data);
+
+typedef struct
+{
+  FollowupCallback callback;
+  gpointer data;
+  GDestroyNotify destroy;
+} FollowupData;
+
+static void
+followup_data_free (gpointer data)
+{
+  FollowupData *fd = data;
+
+  if (fd->destroy)
+    fd->destroy (fd->data);
+
+  g_free (data);
+}
+
 static void
 save_response_cb (GObject      *source,
                   GAsyncResult *result,
@@ -767,6 +821,7 @@ save_response_cb (GObject      *source,
   IconEditorWindow *self = user_data;
   g_autoptr (GFile) file = NULL;
   g_autoptr (GError) error = NULL;
+  FollowupData *data = g_object_get_data (G_OBJECT (dialog), "followup");
 
   file = gtk_file_dialog_save_finish (dialog, result, &error);
   if (!file)
@@ -777,16 +832,20 @@ save_response_cb (GObject      *source,
     }
 
   save_to_file (self, file);
+
+  if (data)
+    data->callback (self, data->data);
 }
 
 static void
-show_save_filechooser (IconEditorWindow *self)
+show_save_filechooser_with_followup (IconEditorWindow *self,
+                                     FollowupData     *data)
 {
   g_autoptr (GtkFileDialog) dialog = NULL;
 
   dialog = gtk_file_dialog_new ();
   gtk_file_dialog_set_title (dialog, "Save icon");
-  if (self->file)
+  if (is_regular_file (self->file))
     {
       gtk_file_dialog_set_initial_file (dialog, self->file);
     }
@@ -797,10 +856,19 @@ show_save_filechooser (IconEditorWindow *self)
       gtk_file_dialog_set_initial_name (dialog, "demo.gpa");
     }
 
+  if (data)
+    g_object_set_data_full (G_OBJECT (dialog), "followup", data, followup_data_free);
+
   gtk_file_dialog_save (dialog,
                         GTK_WINDOW (self),
                         NULL,
                         save_response_cb, self);
+}
+
+static void
+show_save_filechooser (IconEditorWindow *self)
+{
+  show_save_filechooser_with_followup (self, NULL);
 }
 
 static void
@@ -888,7 +956,8 @@ quit_alert_done (GObject      *source,
 
   if (res == 0)
     {
-      if (self->file)
+      /* Don't try to save resource files */
+      if (is_regular_file (self->file))
         save_to_file (self, self->file);
       else
         show_save_filechooser (self);
@@ -944,7 +1013,7 @@ file_save (GSimpleAction *action,
 {
   IconEditorWindow *self = user_data;
 
-  if (self->file)
+  if (is_regular_file (self->file))
     save_to_file (self, self->file);
   else
     show_save_filechooser (self);
@@ -1000,7 +1069,7 @@ close_alert_done (GObject      *source,
 
   if (res == 0)
     {
-      if (self->file)
+      if (is_regular_file (self->file))
         save_to_file (self, self->file);
       else
         show_save_filechooser (self);
@@ -1092,16 +1161,14 @@ open_example (GSimpleAction *action,
               gpointer       user_data)
 {
   IconEditorWindow *self = user_data;
-  g_autofree char *path = NULL;
-  g_autoptr (PathPaintable) paintable = NULL;
+  g_autofree char *uri = NULL;
+  g_autoptr (GFile) file = NULL;
 
-  path = g_strconcat ("/org/gtk/Shaper/",
+  uri = g_strconcat ("resource:///org/gtk/Shaper/",
                       g_variant_get_string (parameter, NULL),
                       NULL);
-
-  paintable = path_paintable_new_from_resource (path);
-
-  icon_editor_window_set_paintable (self, paintable);
+  file = g_file_new_for_uri (uri);
+  icon_editor_window_load (self, file);
 }
 
 static void
@@ -1194,6 +1261,10 @@ icon_editor_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CHANGED:
+      icon_editor_window_set_changed (self, g_value_get_boolean (value));
+      break;
+
     case PROP_PAINTABLE:
       icon_editor_window_set_paintable (self, g_value_get_object (value));
       break;
@@ -1378,7 +1449,7 @@ icon_editor_window_class_init (IconEditorWindowClass *class)
   properties[PROP_CHANGED] =
     g_param_spec_boolean ("changed", NULL, NULL,
                           FALSE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME);
 
   properties[PROP_SHOW_SIDEBAR] =
     g_param_spec_boolean ("show-sidebar", NULL, NULL,
@@ -1480,23 +1551,68 @@ icon_editor_window_new (IconEditorApplication *application)
                        NULL);
 }
 
+static void
+open_alert_done (GObject      *source,
+                 GAsyncResult *result,
+                 gpointer      data)
+{
+  GtkAlertDialog *alert = GTK_ALERT_DIALOG (source);
+  IconEditorWindow *self = ICON_EDITOR_WINDOW (data);
+  g_autoptr (GError) error = NULL;
+  int res;
+  GFile *file = G_FILE (g_object_get_data (G_OBJECT (alert), "file"));
+
+  res = gtk_alert_dialog_choose_finish (alert, result, &error);
+  if (res == -1)
+    return;
+
+  if (res == 0)
+    {
+      /* Don't try to save resource files */
+      if (is_regular_file (self->file))
+        {
+          save_to_file (self, self->file);
+          icon_editor_window_load_file (self, file);
+        }
+      else
+        {
+          FollowupData *fd = g_new (FollowupData, 1);
+          fd->callback = (FollowupCallback) icon_editor_window_load_file;
+          fd->data = g_object_ref (file);
+          fd->destroy = g_object_unref;
+          show_save_filechooser_with_followup (self, fd);
+        }
+    }
+  else if (res == 1)
+    {
+      icon_editor_window_load_file (self, file);
+    }
+}
+
 gboolean
 icon_editor_window_load (IconEditorWindow *self,
                          GFile            *file)
 {
-  g_autofree char *basename = NULL;
+  if (self->changed)
+    {
+      g_autoptr (GtkAlertDialog) alert = NULL;
+      const char *buttons[] = { "Save", "Quit", NULL };
 
-  if (!load_file_contents (self, file))
-    return FALSE;
+      alert = gtk_alert_dialog_new ("Unsaved changes");
+      g_object_set_data_full (G_OBJECT (alert), "file", g_object_ref (file), g_object_unref);
+      gtk_alert_dialog_set_detail (alert, "The icon contains unsaved changes.");
+      gtk_alert_dialog_set_modal (alert, TRUE);
+      gtk_alert_dialog_set_buttons (alert, buttons);
+      gtk_alert_dialog_set_default_button (alert, 0);
+      gtk_alert_dialog_choose (alert, GTK_WINDOW (self), NULL, open_alert_done, self);
 
-  g_set_object (&self->file, file);
+      return TRUE;
+    }
 
-  basename = g_file_get_basename (file);
-  gtk_window_set_title (GTK_WINDOW (self), basename);
-
-  return TRUE;
+  return icon_editor_window_load_file (self, file);
 }
 
 /* }}} */
 
 /* vim:set foldmethod=marker: */
+

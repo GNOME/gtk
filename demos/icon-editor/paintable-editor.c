@@ -65,6 +65,7 @@ struct _PaintableEditor
 
   GtkBox *elements;
   StyleEditor *stylesheet;
+  gulong style_handler;
 };
 
 struct _PaintableEditorClass
@@ -152,8 +153,10 @@ populate_style_editor (PaintableEditor *self)
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   g_autoptr (GString) s = g_string_new ("");
 
+  g_signal_handler_block (self->stylesheet, self->style_handler);
   svg_element_foreach (svg->content, append_styles, s);
   style_editor_set_style (self->stylesheet, s->str);
+  g_signal_handler_unblock (self->stylesheet, self->style_handler);
 }
 
 static void
@@ -632,6 +635,9 @@ paintable_editor_init (PaintableEditor *self)
 {
   self->compat_classes = TRUE;
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->style_handler = g_signal_connect_swapped (self->stylesheet, "notify::style",
+                                                  G_CALLBACK (style_changed), self);
 }
 
 static void
@@ -687,13 +693,19 @@ paintable_editor_dispose (GObject *object)
 {
   PaintableEditor *self = PAINTABLE_EDITOR (object);
 
+  g_clear_signal_handler (&self->style_handler, self->stylesheet);
+
   g_list_free_full (self->errors, svg_error_free);
   self->errors = NULL;
 
   g_clear_handle_id (&self->timeout, g_source_remove);
 
   if (self->paintable)
-    g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
+    {
+      g_signal_handlers_disconnect_by_func (self->paintable, paths_changed, self);
+      g_signal_handlers_disconnect_by_func (self->paintable, changed, self);
+      g_signal_handlers_disconnect_by_func (self->paintable, update_summary, self);
+    }
 
   g_clear_object (&self->paintable);
 
@@ -769,7 +781,6 @@ paintable_editor_class_init (PaintableEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, keywords_changed);
   gtk_widget_class_bind_template_callback (widget_class, xml_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
-  gtk_widget_class_bind_template_callback (widget_class, style_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "PaintableEditor");
@@ -818,6 +829,8 @@ paintable_editor_set_paintable (PaintableEditor *self,
                                 G_CALLBACK (paths_changed), self);
       g_signal_connect_swapped (paintable, "changed",
                                 G_CALLBACK (changed), self);
+      g_signal_connect_swapped (paintable, "notify::state",
+                                G_CALLBACK (update_summary), self);
 
       create_shape_editors (self);
       populate_style_editor (self);
