@@ -26,6 +26,8 @@
 
 #include "gdkframeclockprivate.h"
 
+#include "gdkdebugprivate.h"
+#include "gdkenumtypes.h"
 #include "gdkframetimingsprivate.h"
 #include "gdkprofilerprivate.h"
 
@@ -833,3 +835,193 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 
   gdk_profiler_set_counter (fps_counter, gdk_frame_clock_get_fps (clock));
 }
+
+/**
+ * gdk_frame_clock_submitted:
+ * @self: a frame clock
+ * @frame_counter: the frame to provide info for
+ * @refresh: the refresh interval to the next frame in nanoseconds
+ *   or 0 to keep the predicted interval.
+ *
+ * Marks the given frame as complete by submission to the compositor.
+ *
+ * This function should be called by GDK backends upon frame
+ * submission when no further information about the compositor's use
+ * can be provided for this frame.
+ **/
+void
+gdk_frame_clock_submitted (GdkFrameClock *self,
+                           gint64         frame_counter,
+                           uint64_t       refresh)
+{
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_timings (self, frame_counter);
+  if (timings == NULL)
+    return;
+
+  switch (timings->result)
+    {
+      case GDK_FRAME_PREPARING:
+        timings->result = GDK_FRAME_SKIPPED;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        timings->result = GDK_FRAME_SUBMITTED;
+        break;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_PRESENTED:
+        /* duplicate calls are allowed, but must have the same values */
+        if (timings->refresh_interval / 1000 != refresh)
+          {
+            g_warning_once ("Duplicate call with different values.");
+          }
+        return;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_DISCARDED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  if (refresh != 0)
+    timings->refresh_interval = refresh / 1000;
+  timings->complete = TRUE;
+
+  if (GDK_DEBUG_CHECK (FRAMES))
+    _gdk_frame_clock_debug_print_timings (self, timings);
+  if (GDK_PROFILER_IS_RUNNING)
+    _gdk_frame_clock_add_timings_to_profiler (self, timings);
+}
+
+/**
+ * gdk_frame_clock_discarded:
+ * @self: a frame clock
+ * @frame_counter: the frame to provide info for
+ *
+ * Marks the given frame as complete by the compositor discarding it.
+ *
+ * This function should be called by GDK backends.
+ **/
+void
+gdk_frame_clock_discarded (GdkFrameClock *self,
+                           gint64         frame_counter)
+{
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_timings (self, frame_counter);
+  if (timings == NULL)
+    return;
+
+  switch (timings->result)
+    {
+      case GDK_FRAME_PREPARING:
+        timings->result = GDK_FRAME_SKIPPED;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        timings->result = GDK_FRAME_DISCARDED;
+        break;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_DISCARDED:
+        /* duplicate calls are allowed */
+        return;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_PRESENTED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+        return;
+    }
+
+  timings->complete = TRUE;
+
+  if (GDK_DEBUG_CHECK (FRAMES))
+    _gdk_frame_clock_debug_print_timings (self, timings);
+  if (GDK_PROFILER_IS_RUNNING)
+    _gdk_frame_clock_add_timings_to_profiler (self, timings);
+}
+
+/**
+ * gdk_frame_clock_presented:
+ * @self: a frame clock
+ * @frame_counter: the frame to provide info for
+ * @presentation_time: the presentation time of the image in nanoseconds
+ *   in the monotonic clock's time.
+ * @refresh: the refresh interval to the next frame in nanoseconds
+ *   or 0 to keep the predicted interval.
+ *
+ * Marks the given frame as presented by the compositor.
+ *
+ * This function should be called by GDK backends only when a concrete
+ * presentation time is available. Otherwise call gdk_frame_clock_submitted()
+ * instead.
+ **/
+void
+gdk_frame_clock_presented (GdkFrameClock *self,
+                           gint64         frame_counter,
+                           uint64_t       presentation_time,
+                           uint64_t       refresh)
+{
+  GdkFrameTimings *timings;
+
+  g_return_if_fail (presentation_time != 0);
+
+  timings = gdk_frame_clock_get_timings (self, frame_counter);
+  if (timings == NULL)
+    return;
+
+  switch (timings->result)
+    {
+      case GDK_FRAME_PREPARING:
+        timings->result = GDK_FRAME_EMPTY;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        timings->result = GDK_FRAME_PRESENTED;
+        break;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_PRESENTED:
+        /* duplicate calls are allowed, but must have the same values */
+        if (timings->presentation_time != presentation_time / 1000 ||
+            timings->refresh_interval != refresh / 1000)
+          {
+            g_warning_once ("Duplicate call with different values.");
+          }
+        return;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_DISCARDED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  timings->presentation_time = presentation_time / 1000;
+  if (refresh != 0)
+    timings->refresh_interval = refresh / 1000;
+  timings->complete = TRUE;
+
+  if (GDK_DEBUG_CHECK (FRAMES))
+    _gdk_frame_clock_debug_print_timings (self, timings);
+  if (GDK_PROFILER_IS_RUNNING)
+    _gdk_frame_clock_add_timings_to_profiler (self, timings);
+}
+
