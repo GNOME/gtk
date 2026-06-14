@@ -740,7 +740,6 @@ _gdk_frame_clock_emit_after_paint (GdkFrameClock *self)
        * after_paint(), then we mark this frame as SKIPPED.
        */
       timings->result = GDK_FRAME_SKIPPED;
-      timings->complete = TRUE;
 
       if (GDK_DEBUG_CHECK (FRAMES))
         _gdk_frame_clock_debug_print_timings (self, timings);
@@ -935,7 +934,6 @@ gdk_frame_clock_submitted (GdkFrameClock *self,
 
   if (refresh != 0)
     timings->refresh_interval = refresh / 1000;
-  timings->complete = TRUE;
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);
@@ -988,8 +986,6 @@ gdk_frame_clock_discarded (GdkFrameClock *self,
         g_assert_not_reached ();
         return;
     }
-
-  timings->complete = TRUE;
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);
@@ -1060,7 +1056,6 @@ gdk_frame_clock_presented (GdkFrameClock *self,
   timings->presentation_time = presentation_time / 1000;
   if (refresh != 0)
     timings->refresh_interval = refresh / 1000;
-  timings->complete = TRUE;
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);

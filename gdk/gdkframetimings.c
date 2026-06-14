@@ -144,7 +144,22 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 {
   g_return_val_if_fail (timings != NULL, FALSE);
 
-  return timings->complete;
+  switch (timings->result)
+  {
+    case GDK_FRAME_PREPARING:
+    case GDK_FRAME_OUTSTANDING:
+      return FALSE;
+
+    case GDK_FRAME_SKIPPED:
+    case GDK_FRAME_EMPTY:
+    case GDK_FRAME_SUBMITTED:
+    case GDK_FRAME_DISCARDED:
+    case GDK_FRAME_PRESENTED:
+      return TRUE;
+
+    default:
+      g_return_val_if_reached (TRUE);
+  }
 }
 
 /**
