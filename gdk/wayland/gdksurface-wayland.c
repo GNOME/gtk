@@ -76,9 +76,9 @@ static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 /* {{{ Utilities */
 
-static void
-fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
-                                        uint32_t         frame_time)
+static uint64_t
+get_presentation_time_from_frame_time (uint32_t frame_time,
+                                       uint64_t refresh_interval)
 {
   /* The timestamp in a wayland frame is a msec time value that in some
    * way reflects the time at which the server started drawing the frame.
@@ -101,8 +101,8 @@ fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
    * The complexity here is dealing with the fact that we receive
    * only the low 32 bits of the CLOCK_MONOTONIC value in milliseconds.
    */
-  gint64 now_monotonic = g_get_monotonic_time ();
-  gint64 now_monotonic_msec = now_monotonic / 1000;
+  uint64_t now_monotonic = g_get_monotonic_time_ns ();
+  uint64_t now_monotonic_msec = now_monotonic / 1000 / 1000;
   uint32_t now_monotonic_low = (uint32_t)now_monotonic_msec;
 
   if (frame_time - now_monotonic_low < 1000 ||
@@ -110,14 +110,16 @@ fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
     {
       /* Timestamp we received is within one second of the current time.
        */
-      gint64 last_frame_time = now_monotonic + (gint64)1000 * (gint32)(frame_time - now_monotonic_low);
+      gint64 last_frame_time = now_monotonic + (gint64)1000000 * (gint32)(frame_time - now_monotonic_low);
       if ((gint32)now_monotonic_low < 0 && (gint32)frame_time > 0)
-        last_frame_time += (gint64)1000 * G_GINT64_CONSTANT(0x100000000);
+        last_frame_time += (uint64_t) 1000000 * G_GUINT64_CONSTANT(0x100000000);
       else if ((gint32)now_monotonic_low > 0 && (gint32)frame_time < 0)
-        last_frame_time -= (gint64)1000 * G_GINT64_CONSTANT(0x100000000);
+        last_frame_time -= (uint64_t) 1000000 * G_GUINT64_CONSTANT(0x100000000);
 
-      timings->presentation_time = last_frame_time + timings->refresh_interval;
+      return last_frame_time + refresh_interval;
     }
+
+  return 0;
 }
 
 static gboolean
@@ -287,37 +289,42 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
   if (impl->presentation_time == NULL ||
       !gdk_wayland_presentation_time_supported (impl->presentation_time))
     {
-      GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-      GdkFrameTimings *timings;
+      uint64_t refresh, presentation_time;
 
-      timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
-      impl->pending_frame_counter = 0;
-
-      if (timings == NULL)
-        return;
-
-      timings->refresh_interval = 16667; /* default to 1/60th of a second */
+      refresh = (G_NSEC_PER_SEC + 30) / 60;
       if (impl->display_server.outputs)
         {
           /* We pick a random output out of the outputs that the surface touches
            * The rate here is in milli-hertz
            */
-          GdkMonitor *monitor =
-             gdk_wayland_display_get_monitor (display_wayland,
-                                              impl->display_server.outputs->data);
-          int refresh_rate = monitor ? gdk_monitor_get_refresh_rate (monitor) : 0;
-          if (refresh_rate != 0)
-            timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
+          GdkMonitor *monitor;
+
+          monitor = gdk_wayland_display_get_monitor (display_wayland,
+                                                     impl->display_server.outputs->data);
+          if (monitor)
+            {
+              int monitor_refresh = gdk_monitor_get_refresh_rate (monitor);
+              refresh = (1000 * G_NSEC_PER_SEC + monitor_refresh / 2) / monitor_refresh;
+            }
         }
 
-      fill_presentation_time_from_frame_time (timings, time);
-      timings->complete = TRUE;
+      presentation_time = get_presentation_time_from_frame_time (time, refresh);
 
-      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-        _gdk_frame_clock_debug_print_timings (clock, timings);
+      if (presentation_time != 0)
+        {
+          gdk_frame_clock_presented (gdk_surface_get_frame_clock (surface),
+                                     impl->pending_frame_counter,
+                                     presentation_time,
+                                     refresh);
+        }
+      else
+        {
+          gdk_frame_clock_submitted (gdk_surface_get_frame_clock (surface),
+                                     impl->pending_frame_counter,
+                                     refresh);
+        }
 
-      if (GDK_PROFILER_IS_RUNNING)
-        _gdk_frame_clock_add_timings_to_profiler (clock, timings);
+      impl->pending_frame_counter = 0;
     }
 }
 
