@@ -837,6 +837,31 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 }
 
 /**
+ * gdk_frame_clock_outstanding:
+ * @self: The frame clock
+ *
+ * Called whenever there is a buffer submitted to the compositor, usually
+ * by gdk_draw_context_end_frame() automatically.
+ *
+ * Note that gdk_draw_context_empty_frame() does not call this function.
+ */
+void
+gdk_frame_clock_outstanding (GdkFrameClock *self)
+{
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_current_timings (self);
+
+  /* frames can only be completed in AFTER_PAINT, so we must still be in progress.
+   * We might however be OUTSTANDING already because of a different surface submitting
+   * a buffer.
+   */
+  g_warn_if_fail (timings->result == GDK_FRAME_PREPARING || timings->result == GDK_FRAME_OUTSTANDING);
+
+  timings->result = GDK_FRAME_OUTSTANDING;
+}
+
+/**
  * gdk_frame_clock_submitted:
  * @self: a frame clock
  * @frame_counter: the frame to provide info for
