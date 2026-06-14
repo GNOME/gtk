@@ -163,6 +163,33 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 }
 
 /**
+ * gdk_frame_timings_get_result:
+ * @timings: a `GdkFrameTimings`
+ *
+ * Gets the result of the frame cycle that recorded these timings. 
+ *
+ * The timing information in a `GdkFrameTimings` is filled in
+ * incrementally as the frame as drawn and passed off to the
+ * window system for processing and display to the user. The
+ * accessor functions for `GdkFrameTimings` can return 0 to
+ * indicate an unavailable value for two reasons: either because
+ * the information is not yet available, or because it isn't
+ * available at all. Looking at the result of the timings gives
+ * an explanation for why a value is not available.
+ *
+ * Returns: The result of the frame these timings have been recorded for.
+ *
+ * Since: 4.24
+ **/
+GdkFrameResult
+gdk_frame_timings_get_result (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, GDK_FRAME_EMPTY);
+
+  return timings->result;
+}
+
+/**
  * gdk_frame_timings_get_frame_time:
  * @timings: A `GdkFrameTimings`
  *
