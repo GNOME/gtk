@@ -289,10 +289,10 @@ turbulence (const float           *lookup,
             freq_v = freq_high;
         }
 
-      stitch.width = (unsigned int) (bounds->size.width * freq_h + 0.5);
-      stitch.wrap_x = (unsigned int) (bounds->origin.x * freq_h + PerlinN) + stitch.width;
-      stitch.height = (unsigned int) (bounds->size.height * freq_v + 0.5);
-      stitch.wrap_y = (unsigned int) (bounds->origin.y * freq_v + PerlinN) + stitch.height;
+      stitch.width = (unsigned int) round (bounds->size.width * freq_h);
+      stitch.wrap_x = PerlinN + stitch.width;
+      stitch.height = (unsigned int) round (bounds->size.height * freq_v);
+      stitch.wrap_y = PerlinN + stitch.height;
       stitch_info = &stitch;
     }
 
