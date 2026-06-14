@@ -94,8 +94,8 @@ _gdk_macos_surface_frame_presented (GdkMacosSurface *self,
                                     gint64           presentation_time,
                                     gint64           refresh_interval)
 {
-  GdkFrameTimings *timings;
   GdkFrameClock *frame_clock;
+  gint64 frame_counter;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
@@ -105,26 +105,24 @@ _gdk_macos_surface_frame_presented (GdkMacosSurface *self,
     return;
 
   frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
+  frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+
+  if (self->pending_frame_counter != frame_counter)
+    {
+      gdk_frame_clock_presented (frame_clock,
+                                 frame_counter,
+                                 presentation_time * 1000,
+                                 refresh_interval * 1000);
+    }
 
   if (self->pending_frame_counter)
     {
-      timings = gdk_frame_clock_get_timings (frame_clock, self->pending_frame_counter);
-
-      if (timings != NULL)
-        {
-          timings->presentation_time = presentation_time - refresh_interval;
-          timings->complete = TRUE;
-        }
+      gdk_frame_clock_presented (frame_clock,
+                                 self->pending_frame_counter,
+                                 (presentation_time - refresh_interval) * 1000,
+                                 refresh_interval * 1000);
 
       self->pending_frame_counter = 0;
-    }
-
-  timings = gdk_frame_clock_get_current_timings (frame_clock);
-
-  if (timings != NULL)
-    {
-      timings->refresh_interval = refresh_interval;
-      timings->predicted_presentation_time = presentation_time;
     }
 
   gdk_surface_thaw_updates (GDK_SURFACE (self));
