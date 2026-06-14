@@ -23,7 +23,6 @@
 
 #include "gdkframeclockidleprivate.h"
 #include "gdkframeclockprivate.h"
-#include "gdkframetimingsprivate.h"
 #include "gdkglcontextprivate.h"
 
 #include "gdkandroidchoreographersource-private.h"
@@ -469,29 +468,32 @@ gdk_android_surface_frame_clock_after_paint (GdkFrameClock *clock,
   if (!self->surface)
     return;
 
-  GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock, gdk_frame_clock_get_frame_counter (clock));
-  if (!timings)
-    return;
-
   JNIEnv *env = gdk_android_get_env();
   (*env)->PushLocalFrame (env, 1);
   jobject view = (*env)->CallObjectMethod (env, self->surface,
                                            gdk_android_get_java_cache ()->a_view.get_display);
   if (!view)
     goto exit;
-  gfloat refresh = (*env)->CallFloatMethod (env, view,
-                                            gdk_android_get_java_cache ()->a_display.get_refresh_rate);
-  timings->refresh_interval = 1000000.f / refresh;
+  float refresh = (*env)->CallFloatMethod (env, view,
+                                           gdk_android_get_java_cache ()->a_display.get_refresh_rate);
+  refresh = (float) G_NSEC_PER_SEC / refresh;
 
   GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
   if (display->choreographer_source)
-    timings->presentation_time =
-      gdk_android_choreographer_source_get_presentation_time (
-        (GdkAndroidChoreographerSource *) display->choreographer_source);
+    {
+      gdk_frame_clock_presented (clock,
+                                 gdk_frame_clock_get_frame_counter (clock),
+                                 gdk_android_choreographer_source_get_presentation_time (
+                                   (GdkAndroidChoreographerSource *) display->choreographer_source),
+                                 refresh);
+    }
   else
-    timings->presentation_time = 0;
+    {
+      gdk_frame_clock_submitted (clock,
+                                 gdk_frame_clock_get_frame_counter (clock),
+                                 refresh);
+    }
 
-  timings->complete = TRUE;
 exit:
   (*env)->PopLocalFrame (env, NULL);
 }
