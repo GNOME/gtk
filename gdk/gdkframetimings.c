@@ -45,6 +45,7 @@ _gdk_frame_timings_new (gint64 frame_counter)
   timings = g_new0 (GdkFrameTimings, 1);
   timings->ref_count = 1;
   timings->frame_counter = frame_counter;
+  timings->result = GDK_FRAME_PREPARING;
 
   return timings;
 }
@@ -58,6 +59,7 @@ _gdk_frame_timings_steal (GdkFrameTimings *timings,
       memset (timings, 0, sizeof *timings);
       timings->ref_count = 1;
       timings->frame_counter = frame_counter;
+      timings->result = GDK_FRAME_PREPARING;
       return TRUE;
     }
 
