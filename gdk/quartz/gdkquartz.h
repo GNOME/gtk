@@ -48,6 +48,7 @@ typedef enum
   GDK_OSX_SEQUOIA = 20,
   GDK_OSX_TAHOE = 31,
   GDK_OSX_CURRENT = 31,
+  GDK_OSX_GOLDENGATE = 32,
   GDK_OSX_NEW = 99
 } GdkOSXVersion;
 
