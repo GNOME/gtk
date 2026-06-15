@@ -601,6 +601,7 @@ gsk_gpu_render_pass_push_transform (GskGpuRenderPass                 *self,
                 gsk_gpu_clip_init_empty (&self->clip, graphene_point_zero (), &new_bounds);
               }
           }
+        gsk_transform_unref (clip_transform);
 
         self->modelview = gsk_transform_scale (gsk_transform_ref (storage->modelview),
                                                self->scale.width,
