@@ -37,6 +37,8 @@ typedef enum {
   GDK_FRAME_STAGE_PAINT,
   GDK_FRAME_STAGE_AFTER_PAINT,
   GDK_FRAME_STAGE_RESUME_EVENTS,
+
+  GDK_FRAME_N_STAGES
 } GdkFrameStage;
 
 struct _GdkFrameTimings
