@@ -810,11 +810,11 @@ gdk_frame_clock_idle_start (GdkFrameClock *clock)
   maybe_start_idle (self, TRUE);
 
   /* If nothing is requested so we didn't start an idle, we need
-   * to skip to the end of the state chain, since the idle won't
+   * to skip to ensure we're at the starting stage, since the idle won't
    * run and do it for us.
    */
-  if (priv->source == NULL)
-    priv->stage = GDK_FRAME_STAGE_NONE;
+  if (priv->source == NULL && priv->stage != GDK_FRAME_STAGE_NONE)
+    gdk_frame_clock_idle_frame (self);
 
   if (GDK_PROFILER_IS_RUNNING)
     {
