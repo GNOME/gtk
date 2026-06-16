@@ -116,6 +116,8 @@ struct _GdkDisplayPrivate {
   guint shadow_width: 1;
   guint input_shapes : 1;
 
+  guint prefer_vulkan : 1;
+
   GdkDebugFlags debug_flags;
 };
 
@@ -896,6 +898,51 @@ gdk_display_get_keymap (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
+}
+
+/*<private>
+ * gdk_display_set_prefer_vulkan:
+ * @self: a `GdkDisplay`
+ * @prefer_vulkan: true to prefer Vulkan, false for GLES/GL
+ *
+ * Sets if GTK's internal code should prefer using Vulkan over OpenGL.
+ *
+ * By default, displays will prefer OpenGL.
+ *
+ * Backends should initialize this as early as possible, ideally
+ * during init() or when opening the display, because current code
+ * does not expect this value to change at runtime.
+ *
+ * It would be very confusing to debug for example when one renderer
+ * was a Vulkan renderer and another one used GL.
+ */
+void
+gdk_display_set_prefer_vulkan (GdkDisplay *self,
+                               gboolean    prefer_vulkan)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  if (priv->prefer_vulkan == prefer_vulkan)
+    return;
+
+  priv->prefer_vulkan = prefer_vulkan;
+}
+
+/*<private>
+ * gdk_display_get_prefer_vulkan:
+ * @self: a `GdkDisplay`
+ *
+ * Checks if for this display, GTK's internal code should prefer
+ * using Vulkan over using OpenGL.
+ *
+ * Returns: true if this display prefers Vulkan
+ **/
+gboolean
+gdk_display_get_prefer_vulkan (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  return priv->prefer_vulkan;
 }
 
 /*< private >

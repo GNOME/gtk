@@ -211,6 +211,10 @@ void                _gdk_display_unpause_events       (GdkDisplay       *display
 
 void                gdk_display_init_dmabuf           (GdkDisplay       *self);
 
+void                gdk_display_set_prefer_vulkan     (GdkDisplay       *self,
+                                                       gboolean          prefer_vulkan);
+gboolean            gdk_display_get_prefer_vulkan     (GdkDisplay       *self);
+
 gboolean            gdk_display_prepare_vulkan        (GdkDisplay       *self,
                                                        GError          **error);
 gboolean            gdk_display_has_vulkan_feature    (GdkDisplay       *self,
