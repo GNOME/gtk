@@ -1069,6 +1069,8 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->dmabuf.fourcc != 0, NULL);
+  g_return_val_if_fail (self->dmabuf.planes[0].fd > 0, NULL);
+  g_return_val_if_fail (self->dmabuf.planes[0].stride > 0, NULL);
 
   if (!gdk_has_feature (GDK_FEATURE_DMABUF))
     {
