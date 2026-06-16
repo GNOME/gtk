@@ -1163,13 +1163,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-gdk_wayland_display_init (GdkWaylandDisplay *display)
+gdk_wayland_display_init (GdkWaylandDisplay *self)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  display_wayland->cursor_theme_size = 24;
-  display->xkb_context = xkb_context_new (0);
-  display->monitors = g_list_store_new (GDK_TYPE_MONITOR);
+  self->cursor_theme_size = 24;
+  self->xkb_context = xkb_context_new (0);
+  self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
 }
 
 /* }}} */
