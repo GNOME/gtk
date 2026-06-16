@@ -78,6 +78,11 @@
         <feFuncG type='linear' slope='0.5' intercept='0.2'/>
         <feFuncB type='discrete' offset='1'/>
       </feComponentTransfer>
+      <feTurbulence
+        baseFrequency='0.5'
+        numOctaves='2'
+        seed='10'
+        type='turbulence'/>
     </filter>
   </defs>
 

@@ -1,0 +1,7 @@
+turbulence {
+  bounds: 2 2 96 96;
+  color-state: srgb-linear;
+  base-frequency: 0.5;
+  num-octaves: 2;
+  seed: 1;
+}

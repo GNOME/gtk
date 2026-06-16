@@ -38,6 +38,7 @@ test_data = [
   'dashes.svg',
   'ellipse.svg',
   'ellipse2.svg',
+  'feTurbulence-basic.svg',
   'filter.svg',
   'filter-blend.svg',
   'filter-displacement.svg',

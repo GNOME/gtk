@@ -108,6 +108,11 @@
                 offset='1'>
         </feFuncB>
       </feComponentTransfer>
+      <feTurbulence
+              baseFrequency='0.5'
+              numOctaves='2'
+              seed='10'>
+      </feTurbulence>
     </filter>
   </defs>
   <circle
