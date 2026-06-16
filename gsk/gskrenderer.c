@@ -51,9 +51,6 @@
 #include <gdk/gdk.h>
 #include "gdk/gdkdebugprivate.h"
 
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/wayland/gdkwayland.h>
-#endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
 #endif
@@ -634,17 +631,10 @@ vulkan_supported_platform (GdkSurface *surface,
   GdkDisplay *display = gdk_surface_get_display (surface);
   VkPhysicalDeviceProperties props;
   GError *error = NULL;
-  gboolean platform_is_wayland;
 
-#ifdef GDK_WINDOWING_WAYLAND
-  platform_is_wayland = GDK_IS_WAYLAND_DISPLAY (display);
-#else
-  platform_is_wayland = FALSE;
-#endif
-
-  if (!platform_is_wayland && !as_fallback)
+  if (!gdk_display_get_prefer_vulkan (display) && !as_fallback)
     {
-      GSK_DEBUG (RENDERER, "Not using Vulkan: platform is not Wayland");
+      GSK_DEBUG (RENDERER, "Not using Vulkan: %s prefers OpenGL", G_OBJECT_TYPE_NAME (display));
       return FALSE;
     }
 
