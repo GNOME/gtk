@@ -23,6 +23,17 @@ gdk_wayland_presentation_frame_free (GdkWaylandPresentationFrame *frame)
   g_free (frame);
 }
 
+static gboolean
+gdk_wayland_presentation_frame_same_frame (const void *a_,
+                                           const void *b_)
+{
+  const GdkWaylandPresentationFrame *a = (const GdkWaylandPresentationFrame *) a_;
+  const GdkWaylandPresentationFrame *b = (const GdkWaylandPresentationFrame *) b_;
+
+  return a->frame_clock == b->frame_clock &&
+         a->frame_number == b->frame_number;
+}
+
 struct _GdkWaylandPresentationTime
 {
   GdkWaylandDisplay *display;
@@ -115,8 +126,18 @@ gdk_wayland_presentation_feedback_presented (void                            *da
                                  refresh);
     }
 
-  if (g_ptr_array_find (self->frames, frame, &pos))
-    g_ptr_array_remove_index_fast (self->frames, pos);
+  if (g_ptr_array_find (frame->self->frames, frame, &pos))
+    g_ptr_array_steal_index_fast (frame->self->frames, pos);
+
+  while (g_ptr_array_find_with_equal_func (frame->self->frames,
+                                           frame,
+                                           gdk_wayland_presentation_frame_same_frame,
+                                           &pos))
+    {
+      g_ptr_array_remove_index_fast (self->frames, pos);
+    }
+
+  gdk_wayland_presentation_frame_free (frame);
 }
 
 static void
@@ -129,10 +150,18 @@ gdk_wayland_presentation_feedback_discarded (void                            *da
   g_assert (frame != NULL);
   g_assert (frame->self != NULL);
 
-  gdk_frame_clock_discarded (frame->frame_clock, frame->frame_number);
-
   if (g_ptr_array_find (frame->self->frames, frame, &pos))
-    g_ptr_array_remove_index_fast (frame->self->frames, pos);
+    g_ptr_array_steal_index_fast (frame->self->frames, pos);
+
+  if (!g_ptr_array_find_with_equal_func (frame->self->frames,
+                                         frame,
+                                         gdk_wayland_presentation_frame_same_frame,
+                                         NULL))
+    {
+      gdk_frame_clock_discarded (frame->frame_clock, frame->frame_number);
+    }
+
+  gdk_wayland_presentation_frame_free (frame);
 }
 
 static const struct wp_presentation_feedback_listener gdk_wayland_presentation_feedback_listener = {
