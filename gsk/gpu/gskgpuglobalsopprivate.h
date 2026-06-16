@@ -14,7 +14,6 @@ struct _GskGpuGlobalsInstance
   float color_volume[6];
   float clip_mask_rect[4];
   float clip[12];
-  float padding[24];
 };
 
 /* GPUs often want 32bit alignment */

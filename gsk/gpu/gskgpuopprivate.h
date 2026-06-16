@@ -41,6 +41,7 @@ struct _GskVulkanCommandState
   VkRenderPass vk_render_pass;
   VkFormat vk_format;
   VkCommandBuffer vk_command_buffer;
+  VkDescriptorSet vk_globals_descriptor_set;
   GskGpuBlend blend;
 
   GskVulkanSemaphores *semaphores;

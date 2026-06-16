@@ -4,6 +4,7 @@
 
 #include "gskgpuopprivate.h"
 #include "gskgpuutilsprivate.h"
+#include "gskgpuglobalsopprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
@@ -56,6 +57,10 @@ struct _GskVulkanFramePrivate
   gsize pool_n_sets;
   gsize pool_n_images;
   gsize pool_n_buffers;
+
+  VkDescriptorSet vk_globals_descriptor_set;
+  GskGpuBuffer   *globals_descriptor_for;
+  gsize           globals_pool_id;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskVulkanFrame, gsk_vulkan_frame, GSK_TYPE_GPU_FRAME)
@@ -270,7 +275,7 @@ static GskGpuBuffer *
 gsk_vulkan_frame_create_globals_buffer (GskGpuFrame *frame,
                                         gsize        size)
 {
-  return NULL;
+  return gsk_vulkan_buffer_new_vertex (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)), size);
 }
 
 static GskGpuBuffer *
@@ -351,6 +356,32 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
   state.vk_format = VK_FORMAT_UNDEFINED;
   state.blend = GSK_GPU_BLEND_OVER; /* should we have a BLEND_NONE? */
   state.semaphores = &semaphores;
+
+  if (globals_buffer != NULL)
+    {
+      if (priv->vk_globals_descriptor_set == VK_NULL_HANDLE)
+        priv->vk_globals_descriptor_set = gsk_vulkan_device_allocate_descriptor (device,
+                                           gsk_vulkan_device_get_vk_globals_set_layout (device),
+                                           &priv->globals_pool_id);
+      if (priv->globals_descriptor_for != globals_buffer)
+        {
+          vkUpdateDescriptorSets (gsk_vulkan_device_get_vk_device (device), 1,
+              &(VkWriteDescriptorSet) {
+                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                  .dstSet = priv->vk_globals_descriptor_set,
+                  .dstBinding = 0,
+                  .descriptorCount = 1,
+                  .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+                  .pBufferInfo = &(VkDescriptorBufferInfo) {
+                      .buffer = gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (globals_buffer)),
+                      .offset = 0,
+                      .range = sizeof (GskGpuGlobalsInstance),
+                  },
+              }, 0, NULL);
+          priv->globals_descriptor_for = globals_buffer;
+        }
+      state.vk_globals_descriptor_set = priv->vk_globals_descriptor_set;
+    }
 
   GSK_VULKAN_FRAME_GET_CLASS (self)->submit_ops (self, &state, op);
 
