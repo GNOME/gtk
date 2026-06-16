@@ -2257,11 +2257,21 @@ gtk_svg_equal (GtkSvg *svg1,
     return TRUE;
 
   if (svg1->gpa_version != svg2->gpa_version ||
+      svg1->n_state_names != svg2->n_state_names ||
+      svg1->weight != svg2->weight ||
+      svg1->initial_state != svg2->initial_state ||
+      svg1->features != svg2->features ||
       g_strcmp0 (svg1->author, svg2->author) != 0 ||
       g_strcmp0 (svg1->license, svg2->license) != 0 ||
       g_strcmp0 (svg1->description, svg2->description) != 0 ||
       g_strcmp0 (svg1->keywords, svg2->keywords) != 0)
     return FALSE;
+
+  for (unsigned int i = 0; i < svg1->n_state_names; i++)
+    {
+      if (g_strcmp0 (svg1->state_names[i], svg2->state_names[i]) != 0)
+        return FALSE;
+    }
 
   return svg_element_equal (svg1->content, svg2->content);
 }

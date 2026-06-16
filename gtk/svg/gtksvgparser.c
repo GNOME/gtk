@@ -495,7 +495,7 @@ parse_base_animation_attrs (SvgAnimation         *a,
   if (repeat_count_attr)
     {
       a->has_repeat_count = 1;
-      if (!parse_number_or_named (repeat_count_attr, 0, DBL_MAX, "indefinite", REPEAT_FOREVER, &a->repeat_count))
+      if (!parse_number_or_named (repeat_count_attr, 0, DBL_MAX, "indefinite", REPEAT_FOREVER, &a->repeat_count) || a->repeat_count == 0)
         {
           gtk_svg_invalid_attribute (data->svg, context, attr_names, "repeatCount", NULL);
           a->has_repeat_count = 0;
