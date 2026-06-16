@@ -1168,6 +1168,8 @@ gdk_wayland_display_init (GdkWaylandDisplay *self)
   self->cursor_theme_size = 24;
   self->xkb_context = xkb_context_new (0);
   self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
+
+  gdk_display_set_prefer_vulkan (GDK_DISPLAY (self), TRUE);
 }
 
 /* }}} */
