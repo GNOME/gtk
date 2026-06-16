@@ -154,9 +154,11 @@ gtk_css_filter_init_identity (GtkCssFilter       *filter,
       filter->drop_shadow.value = gtk_css_shadow_value_new_filter (other->drop_shadow.value);
       break;
     case GTK_CSS_FILTER_SVG:
-      filter->svg.ref = NULL;
-      filter->svg.url = NULL;
-      filter->svg.svg = NULL;
+      filter->svg.ref = g_strdup ("filter");
+      filter->svg.url = g_strdup ("<svg><filter id='filter'><feMerge><feMergeNode in='SourceGraphic'/></feMerge></filter></svg>");
+      GBytes *bytes = g_bytes_new_static (filter->svg.url, strlen (filter->svg.url));
+      filter->svg.svg = gtk_svg_new_from_bytes (bytes);
+      g_bytes_unref (bytes);
       break;
     case GTK_CSS_FILTER_NONE:
     default:
