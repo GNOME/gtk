@@ -34,6 +34,10 @@ gdk_quartz_osx_version (void)
   if (vkey == GDK_OSX_UNSUPPORTED)
     {
       gint32 major, minor;
+      /* At developer.apple.com it says NSOperatingSystemVersion is available
+       * on macOS 10.0+ but in fact it was not introduced until 10.10 Yosemite.
+       * Testing confirms it is not available on 10.7.5.
+       */
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
       OSErr err;
 
