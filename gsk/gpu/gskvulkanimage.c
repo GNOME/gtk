@@ -1177,7 +1177,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
         }
       conv = GSK_GPU_CONVERSION_NONE;
     }
-  flags &= ~(GSK_GPU_IMAGE_RENDERABLE);
+  flags &= ~(GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_CAN_MIPMAP);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 

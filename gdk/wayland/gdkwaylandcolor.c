@@ -1253,7 +1253,7 @@ gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
       g_assert (ret);
 
       GDK_DISPLAY_DEBUG (GDK_DISPLAY (self->color->display), MISC,
-                         "Setting color state %s (fourcc %.4s, premul %d)  on surface: coefficients: %u (%s), range: %u (%s), alpha %u (%s)",
+                         "Setting color state %s (fourcc %.4s, premul %d) on surface: coefficients: %u (%s), range: %u (%s), alpha %u (%s)",
                          gdk_color_state_get_name (cs),
                          (char *) &fourcc,
                          premultiplied,
