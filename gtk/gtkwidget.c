@@ -12933,7 +12933,7 @@ gtk_widget_get_size (GtkWidget      *widget,
  * gtk_widget_class_set_layout_manager_type:
  * @widget_class: a widget class
  * @type: the object type that implements the `GtkLayoutManager`
- *   for @widget_class
+ *   for @widget_class or `G_TYPE_INVALID`.
  *
  * Sets the type to be used for creating layout managers for
  * widgets of @widget_class.
@@ -12950,7 +12950,7 @@ gtk_widget_class_set_layout_manager_type (GtkWidgetClass *widget_class,
   GtkWidgetClassPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_LAYOUT_MANAGER));
+  g_return_if_fail (!type || g_type_is_a (type, GTK_TYPE_LAYOUT_MANAGER));
 
   priv = widget_class->priv;
 
