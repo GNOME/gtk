@@ -207,7 +207,7 @@ run (out vec4 color,
    * and window resizing. Subtract the quad origin to get the pixel
    * offset within the node, then add the node's own origin.
    */
-  vec2 pixel_offset = (_pos - rect_bounds (_bounds).xy) / GSK_GLOBAL_SCALE;
+  vec2 pixel_offset = (_pos - rect_bounds (_bounds).xy - 0.5 * fwidth(_pos)) / GSK_GLOBAL_SCALE;
   vec2 point = vec2 (_tile_x, _tile_y) + pixel_offset;
 
   vec4 n = turbulence (point, _base_frequency, _num_octaves);
