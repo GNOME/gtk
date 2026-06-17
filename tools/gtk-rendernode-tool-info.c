@@ -33,11 +33,11 @@
 #define N_NODE_TYPES (GSK_TURBULENCE_NODE + 1)
 
 typedef struct {
-  unsigned int counts[N_NODE_TYPES];
-  unsigned int unique[N_NODE_TYPES];
-  guint depth;
-  guint n_leafs;
-  guint n_unique_leafs;
+  unsigned long long counts[N_NODE_TYPES];
+  unsigned long long unique[N_NODE_TYPES];
+  unsigned long long depth;
+  unsigned long long n_leafs;
+  unsigned long long n_unique_leafs;
 } NodeCount;
 
 static void
@@ -101,8 +101,8 @@ file_info (const char *filename)
   GskRenderNode *node;
   GHashTable *cache;
   NodeCount count = { { 0, } };
-  unsigned int total = 0;
-  unsigned int total_unique = 0;
+  unsigned long long total = 0;
+  unsigned long long total_unique = 0;
   unsigned int namelen = 0;
   unsigned int digits = 0;
   graphene_rect_t bounds, opaque;
@@ -124,23 +124,23 @@ file_info (const char *filename)
   namelen = MAX (namelen, strlen (_("leaf nodes")));
 
   if (total == total_unique)
-    g_print ("%*s %u\n", namelen, _("Number of nodes:"), total);
+    g_print ("%*s %llu\n", namelen, _("Number of nodes:"), total);
   else
-    g_print ("%*s %u (%s %u)\n", namelen, _("Number of nodes:"), total, _("unique:"), total_unique);
+    g_print ("%*s %llu (%s %llu)\n", namelen, _("Number of nodes:"), total, _("unique:"), total_unique);
 
   while (pow (10, digits) < total)
     digits++;
 
-  g_print ("%*s: %*u\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
+  g_print ("%*s: %*llu\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       if (count.counts[i] != count.unique[i])
-        g_print ("%*s: %*u (%s %u)\n", namelen - 1, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
+        g_print ("%*s: %*llu (%s %llu)\n", namelen - 1, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
       else if (count.counts[i] > 0)
-        g_print ("%*s: %*u\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
+        g_print ("%*s: %*llu\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
     }
 
-  g_print ("%s %u\n", _("Depth:"), count.depth);
+  g_print ("%s %llu\n", _("Depth:"), count.depth);
 
   gsk_render_node_get_bounds (node, &bounds);
   g_print ("%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
