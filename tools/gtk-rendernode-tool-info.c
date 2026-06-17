@@ -55,6 +55,7 @@ node_count_add_child (NodeCount       *count,
 
 static void
 count_nodes (GskRenderNode *node,
+             GHashTable    *cache,
              NodeCount     *count)
 {
   GskRenderNode **children;
@@ -69,9 +70,16 @@ count_nodes (GskRenderNode *node,
     count->n_leafs++;
   for (i = 0; i < n_children; i++)
     {
-      NodeCount child = { { 0, } };
-      count_nodes (children[i], &child);
-      node_count_add_child (count, &child);
+      NodeCount *child;
+
+      child = g_hash_table_lookup (cache, children[i]);
+      if (child == NULL)
+        {
+          child = g_new0 (NodeCount, 1);
+          count_nodes (children[i], cache, child);
+          g_hash_table_insert (cache, children[i], child);
+        }
+      node_count_add_child (count, child);
     }
 }
 
@@ -79,6 +87,7 @@ static void
 file_info (const char *filename)
 {
   GskRenderNode *node;
+  GHashTable *cache;
   NodeCount count = { { 0, } };
   unsigned int total = 0;
   unsigned int namelen = 0;
@@ -86,8 +95,9 @@ file_info (const char *filename)
   graphene_rect_t bounds, opaque;
 
   node = load_node_file (filename);
+  cache = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 
-  count_nodes (node, &count);
+  count_nodes (node, cache, &count);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
@@ -127,6 +137,7 @@ file_info (const char *filename)
   else
     g_print ("%s none\n", _("Opaque part:"));
 
+  g_hash_table_unref (cache);
   gsk_render_node_unref (node);
 }
 
