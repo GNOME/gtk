@@ -18,6 +18,7 @@ test_data = [
   'filter-animation.test',
   'focus.test',
   'focus-backwards.test',
+  'fractional-repeat.test',
   'gpa-animations.test',
   'gpa-attachment.test',
   'gpa-attachment2.test',

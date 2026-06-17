@@ -1,0 +1,23 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='32'
+        height='32'
+        viewBox='0 0 32 32'>
+  <path
+          id='path1'
+          fill='none'
+          stroke='black'
+          d='M 16 0 A 16 16 0 0 0 32 16'>
+    <animateTransform
+            attributeName='transform'
+            begin='0ms'
+            dur='3000ms'
+            repeatCount='1.5'
+            fill='freeze'
+            from='0 16 16'
+            to='90 16 16'
+            type='rotate'/>
+  </path>
+</svg>
+

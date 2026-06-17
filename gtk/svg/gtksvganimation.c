@@ -696,9 +696,6 @@ svg_animation_get_simple_duration (SvgAnimation *animation)
  * relative to the animations current start time.
  * Also what frame we are on, and how far into that
  * frame we are.
- *
- * Note: this assumes that the duration is finite
- * and the animation runs forever.
  */
 gboolean
 svg_animation_get_progress (SvgAnimation *a,
@@ -716,8 +713,20 @@ svg_animation_get_progress (SvgAnimation *a,
   int64_t cycle_start, cycle_end;
   int64_t frame_start, frame_end;
   unsigned int i;
+  int64_t begin, end;
 
-  start = a->current.begin;
+  if (a->status == ANIMATION_STATUS_RUNNING)
+    {
+      begin = a->current.begin;
+      end = a->current.end;
+    }
+  else
+    {
+      begin = a->previous.begin;
+      end = a->previous.end;
+    }
+
+  start = begin;
   //g_assert (start < INDEFINITE);
 
   simple_duration = compute_simple_duration (a);
@@ -729,8 +738,8 @@ svg_animation_get_progress (SvgAnimation *a,
       *out_rep = 0;
       *out_frame = 0;
       *out_frame_t = 0;
-      *out_frame_start = a->current.begin;
-      *out_frame_end = a->current.end;
+      *out_frame_start = begin;
+      *out_frame_end = end;
       return FALSE;
     }
 

@@ -1,0 +1,38 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state='0'
+        gpa:state-change-delay='0ms'
+        gpa:time-since-load='1500ms'
+        gpa:next-update='4500ms'
+        gpa:run-mode='continuous'
+        font-size='13.333'
+        width='32'
+        height='32'
+        viewBox='0 0 32 32'>
+  <path
+          id='path1'
+          font-size='13.333'
+          transform='rotate(45, 16, 16)'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          d='M 16 0 A 16 16 0 0 0 32 16'>
+    <animateTransform
+            attributeName='transform'
+            begin='0ms'
+            dur='3000ms'
+            repeatCount='1.5'
+            fill='freeze'
+            from='0 16 16'
+            to='90 16 16'
+            keyTimes='0; 1'
+            type='rotate'
+            gpa:status='running'
+            gpa:current-start-time='0ms'
+            gpa:current-end-time='4500ms'
+            gpa:run-mode='continuous'
+            gpa:last-start-time='0ms'/>
+  </path>
+</svg>

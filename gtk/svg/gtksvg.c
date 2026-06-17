@@ -1411,7 +1411,8 @@ compute_animation_motion_value (SvgAnimation      *a,
 
 static SvgValue *
 compute_value_at_time (SvgAnimation      *a,
-                       SvgComputeContext *context)
+                       SvgComputeContext *context,
+                       int64_t            time)
 {
   int rep;
   unsigned int frame;
@@ -1421,7 +1422,7 @@ compute_value_at_time (SvgAnimation      *a,
   if (a->type == ANIMATION_TYPE_SET)
     return resolve_value (a->shape, context, a->attr, a->idx, a->frames[0].value);
 
-  if (!svg_animation_get_progress (a, context->current_time,
+  if (!svg_animation_get_progress (a, time,
                                    &rep, &frame, &frame_t, &frame_start, &frame_end))
     gtk_svg_update_error (context->svg, "Not enough data to advance animation %s", a->id);
 
@@ -1516,28 +1517,28 @@ compute_value_for_animation (SvgAnimation      *a,
     {
       /* animation is active */
       dbg_print ("values", "%s: updating value", a->id);
-      value = compute_value_at_time (a, context);
+      value = compute_value_at_time (a, context, context->current_time);
     }
   else if (a->fill == ANIMATION_FILL_FREEZE)
     {
       /* keep the last value */
       if (a->repeat_count == 1)
         {
-          if (!(a->attr == SVG_PROPERTY_TRANSFORM && a->type == ANIMATION_TYPE_MOTION))
+          if (a->attr == SVG_PROPERTY_TRANSFORM && a->type == ANIMATION_TYPE_MOTION)
             {
-              dbg_print ("values", "%s: frozen (fast)", a->id);
-              value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
+              dbg_print ("values", "%s: frozen (motion)", a->id);
+              value = compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
             }
           else
            {
-              dbg_print ("values", "%s: frozen (motion)", a->id);
-              value = compute_animation_motion_value (a, 1, a->n_frames - 1, 0, context);
+              dbg_print ("values", "%s: frozen (fast)", a->id);
+              value = resolve_value (a->shape, context, a->attr, a->idx, a->frames[a->n_frames - 1].value);
            }
         }
       else
         {
           dbg_print ("values", "%s: frozen", a->id);
-          value = compute_value_at_time (a, context);
+          value = compute_value_at_time (a, context, a->previous.end);
         }
     }
   else

@@ -1,0 +1,13 @@
+input: fractional-repeat.svg
+time: 0
+output: fractional-repeat-0.svg
+time: 1500
+output: fractional-repeat-1.svg
+time: 2900
+output: fractional-repeat-2.svg
+time: 3000
+output: fractional-repeat-3.svg
+time: 4500
+output: fractional-repeat-4.svg
+time: 6000
+output: fractional-repeat-5.svg
