@@ -1,0 +1,13 @@
+texture {
+  bounds: 0 0 1 1;
+  texture: dmabuf {
+    width: 4;
+    height: 4;
+    stride: 16;
+    fourcc: 'AB24';
+    data: "F00000FF F00000FF F00000FF F00000FF\
+           F00000FF 0000F0FF 0000F0FF F00000FF\
+           F00000FF 0000F0FF 0000F0FF F00000FF\
+           F00000FF F00000FF F00000FF F00000FF";
+  }
+}
