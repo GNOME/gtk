@@ -33,16 +33,27 @@ gdk_quartz_osx_version (void)
 
   if (vkey == GDK_OSX_UNSUPPORTED)
     {
+      gint32 major, minor;
+      /* At developer.apple.com it says NSOperatingSystemVersion is available
+       * on macOS 10.0+ but in fact it was not introduced until 10.10 Yosemite.
+       * Testing confirms it is not available on 10.7.5.
+       */
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
-      OSErr err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&vkey);
+      OSErr err;
 
+      err = Gestalt (gestaltSystemVersionMajor, (SInt32*)&major);
+      g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
+
+      err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&minor);
       g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
 #else
       NSOperatingSystemVersion version;
 
       version = [[NSProcessInfo processInfo] operatingSystemVersion];
-      vkey = version.majorVersion == 10 ? version.minorVersion : version.majorVersion + 5;
+      major = version.majorVersion;
+      minor = version.minorVersion;
 #endif
+      vkey = major == 10 ? minor : major + 5;
     }
 
   if (vkey < GDK_OSX_MIN)
