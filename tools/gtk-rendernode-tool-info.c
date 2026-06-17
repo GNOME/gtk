@@ -30,17 +30,39 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 
-#define N_NODE_TYPES (GSK_DISPLACEMENT_NODE + 1)
+#define N_NODE_TYPES (GSK_TURBULENCE_NODE + 1)
 
 typedef struct {
-  unsigned int counts[N_NODE_TYPES];
-  guint max_depth;
-  guint cur_depth;
-  guint n_leafs;
+  unsigned long long counts[N_NODE_TYPES];
+  unsigned long long unique[N_NODE_TYPES];
+  unsigned long long depth;
+  unsigned long long n_leafs;
+  unsigned long long n_unique_leafs;
 } NodeCount;
 
 static void
+node_count_add_child (NodeCount       *count,
+                      const NodeCount *child,
+                      gboolean         unique)
+{
+  gsize i;
+
+  for (i = 0; i < N_NODE_TYPES; i++)
+    {
+      count->counts[i] += child->counts[i];
+      if (unique)
+        count->unique[i] += child->unique[i];
+    }
+
+  count->depth = MAX (count->depth, child->depth + 1);
+  count->n_leafs += child->n_leafs;
+  if (unique)
+    count->n_unique_leafs += child->n_unique_leafs;
+}
+
+static void
 count_nodes (GskRenderNode *node,
+             GHashTable    *cache,
              NodeCount     *count)
 {
   GskRenderNode **children;
@@ -49,33 +71,51 @@ count_nodes (GskRenderNode *node,
   g_assert (gsk_render_node_get_node_type (node) < N_NODE_TYPES);
 
   count->counts[gsk_render_node_get_node_type (node)] += 1;
-  count->cur_depth++;
-  count->max_depth = MAX (count->cur_depth, count->max_depth);
+  count->unique[gsk_render_node_get_node_type (node)] += 1;
+  count->depth = 1;
   children = gsk_render_node_get_children (node, &n_children);
   if (n_children == 0)
     count->n_leafs++;
   for (i = 0; i < n_children; i++)
-    count_nodes (children[i], count);
-  count->cur_depth--;
+    {
+      NodeCount *child;
+
+      child = g_hash_table_lookup (cache, children[i]);
+      if (child != NULL)
+        {
+          node_count_add_child (count, child, FALSE);
+        }
+      else
+        {
+          child = g_new0 (NodeCount, 1);
+          count_nodes (children[i], cache, child);
+          g_hash_table_insert (cache, children[i], child);
+          node_count_add_child (count, child, TRUE);
+        }
+    }
 }
 
 static void
 file_info (const char *filename)
 {
   GskRenderNode *node;
+  GHashTable *cache;
   NodeCount count = { { 0, } };
-  unsigned int total = 0;
+  unsigned long long total = 0;
+  unsigned long long total_unique = 0;
   unsigned int namelen = 0;
   unsigned int digits = 0;
   graphene_rect_t bounds, opaque;
 
   node = load_node_file (filename);
+  cache = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
 
-  count_nodes (node, &count);
+  count_nodes (node, cache, &count);
 
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       total += count.counts[i];
+      total_unique += count.unique[i];
       if (count.counts[i] > 0)
         namelen = MAX (namelen, strlen (get_node_name (i)));
     }
@@ -83,19 +123,24 @@ file_info (const char *filename)
   namelen = MAX (namelen, strlen (_("Number of nodes:")));
   namelen = MAX (namelen, strlen (_("leaf nodes")));
 
-  g_print ("%*s %u\n", namelen, _("Number of nodes:"), total);
+  if (total == total_unique)
+    g_print ("%*s %llu\n", namelen, _("Number of nodes:"), total);
+  else
+    g_print ("%*s %llu (%s %llu)\n", namelen, _("Number of nodes:"), total, _("unique:"), total_unique);
 
   while (pow (10, digits) < total)
     digits++;
 
-  g_print ("%*s: %*u\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
+  g_print ("%*s: %*llu\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
-      if (count.counts[i] > 0)
-        g_print ("%*s: %*u\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
+      if (count.counts[i] != count.unique[i])
+        g_print ("%*s: %*llu (%s %llu)\n", namelen - 1, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
+      else if (count.counts[i] > 0)
+        g_print ("%*s: %*llu\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
     }
 
-  g_print ("%s %u\n", _("Depth:"), count.max_depth);
+  g_print ("%s %llu\n", _("Depth:"), count.depth);
 
   gsk_render_node_get_bounds (node, &bounds);
   g_print ("%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
@@ -111,6 +156,7 @@ file_info (const char *filename)
   else
     g_print ("%s none\n", _("Opaque part:"));
 
+  g_hash_table_unref (cache);
   gsk_render_node_unref (node);
 }
 
