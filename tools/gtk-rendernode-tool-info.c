@@ -34,10 +34,24 @@
 
 typedef struct {
   unsigned int counts[N_NODE_TYPES];
-  guint max_depth;
-  guint cur_depth;
+  guint depth;
   guint n_leafs;
 } NodeCount;
+
+static void
+node_count_add_child (NodeCount       *count,
+                      const NodeCount *child)
+{
+  gsize i;
+
+  for (i = 0; i < N_NODE_TYPES; i++)
+    {
+      count->counts[i] += child->counts[i];
+    }
+
+  count->depth = MAX (count->depth, child->depth + 1);
+  count->n_leafs += child->n_leafs;
+}
 
 static void
 count_nodes (GskRenderNode *node,
@@ -49,14 +63,16 @@ count_nodes (GskRenderNode *node,
   g_assert (gsk_render_node_get_node_type (node) < N_NODE_TYPES);
 
   count->counts[gsk_render_node_get_node_type (node)] += 1;
-  count->cur_depth++;
-  count->max_depth = MAX (count->cur_depth, count->max_depth);
+  count->depth = 1;
   children = gsk_render_node_get_children (node, &n_children);
   if (n_children == 0)
     count->n_leafs++;
   for (i = 0; i < n_children; i++)
-    count_nodes (children[i], count);
-  count->cur_depth--;
+    {
+      NodeCount child = { { 0, } };
+      count_nodes (children[i], &child);
+      node_count_add_child (count, &child);
+    }
 }
 
 static void
@@ -95,7 +111,7 @@ file_info (const char *filename)
         g_print ("%*s: %*u\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
     }
 
-  g_print ("%s %u\n", _("Depth:"), count.max_depth);
+  g_print ("%s %u\n", _("Depth:"), count.depth);
 
   gsk_render_node_get_bounds (node, &bounds);
   g_print ("%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
