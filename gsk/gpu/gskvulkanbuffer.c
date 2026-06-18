@@ -135,6 +135,13 @@ gsk_vulkan_buffer_new_storage (GskVulkanDevice *device,
 }
 
 GskGpuBuffer *
+gsk_vulkan_buffer_new_globals (GskVulkanDevice *device,
+                               gsize            size)
+{
+  return gsk_vulkan_buffer_new_internal (device, size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
+}
+
+GskGpuBuffer *
 gsk_vulkan_buffer_new_write (GskVulkanDevice *device,
                              gsize            size)
 {

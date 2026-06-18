@@ -275,7 +275,7 @@ static GskGpuBuffer *
 gsk_vulkan_frame_create_globals_buffer (GskGpuFrame *frame,
                                         gsize        size)
 {
-  return gsk_vulkan_buffer_new_vertex (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)), size);
+  return gsk_vulkan_buffer_new_globals (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)), size);
 }
 
 static GskGpuBuffer *
