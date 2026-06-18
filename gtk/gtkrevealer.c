@@ -42,7 +42,7 @@
  * [method@Gtk.Revealer.set_transition_type].
  *
  * These animations respect the [property@Gtk.Settings:gtk-enable-animations]
- * setting.
+ * and [property@GTk.Settings:gtk-interface-reduced-motion] settings.
  *
  * # CSS nodes
  *
@@ -121,6 +121,18 @@ static GtkBuildableIface *parent_buildable_iface;
 static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
+  if (revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_NONE)
+    {
+      GtkReducedMotion reduced_motion;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
+                    "gtk-interface-reduced-motion", &reduced_motion,
+                    NULL);
+
+      if (reduced_motion == GTK_REDUCED_MOTION_REDUCE)
+        return GTK_REVEALER_TRANSITION_TYPE_CROSSFADE;
+    }
+
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
     {
       if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT)
@@ -640,7 +652,7 @@ gtk_revealer_snapshot (GtkWidget   *widget,
   gboolean is_fade;
 
   if (animation_running)
-    is_fade = get_is_fading_type (revealer->transition_type);
+    is_fade = get_is_fading_type (effective_transition (revealer));
   else
     is_fade = FALSE;
 
