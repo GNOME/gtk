@@ -299,7 +299,7 @@ matrix3d() production to specify all 16 values individually.
 
 Creates a node like `gsk_component_transfer_node_new()` with the given properties.
 
-Possible values for the transfer propertes are:
+Possible values for the transfer properties are:
 
     transfer: none | levels(n) | linear(m,b) | gamma(amp,exp,ofs) |
               discrete(v1,…,vn) | table(v1,…,vn)
