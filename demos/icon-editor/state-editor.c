@@ -51,7 +51,14 @@ static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (StateEditor, state_editor, GTK_TYPE_WINDOW)
 
-/* {{{ Utilities, callbacks */ 
+/* {{{ Utilities, callbacks */
+
+static void
+ensure_gpa (StateEditor *self)
+{
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+  svg->gpa_version = 1;
+}
 
 static void repopulate (StateEditor *self);
 
@@ -132,6 +139,7 @@ update_state_names (StateEditor *self)
 
   names[i + 1] = NULL;
 
+  ensure_gpa (self);
   gtk_svg_set_state_names (svg, names);
   path_paintable_changed (self->paintable);
 }
@@ -219,6 +227,7 @@ update_states (StateEditor *self)
         svg_element_set_states (shape, states[i]);
     }
 
+  ensure_gpa (self);
   path_paintable_changed (self->paintable);
   self->updating = FALSE;
 
@@ -256,6 +265,7 @@ update_one (GtkWidget   *check,
 
   self->updating = TRUE;
   svg_element_set_states (shape, states);
+  ensure_gpa (self);
   path_paintable_changed (self->paintable);
   self->updating = FALSE;
 

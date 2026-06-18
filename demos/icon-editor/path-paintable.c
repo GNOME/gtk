@@ -114,7 +114,7 @@ path_paintable_set_svg (PathPaintable *self,
                         GtkSvg        *svg)
 {
   gboolean playing = FALSE;
-  unsigned int state;
+  unsigned int state = 0;
 
   if (self->svg)
     g_object_get (self->svg,
