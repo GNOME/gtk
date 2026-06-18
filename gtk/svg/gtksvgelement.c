@@ -315,6 +315,12 @@ resolve_rx (SvgElement            *element,
     g_assert_not_reached ();
 }
 
+static gboolean
+value_is_set (SvgValue *value)
+{
+  return value && !svg_value_is_unset (value);
+}
+
 GskPath *
 svg_element_get_path (SvgElement            *element,
                       const graphene_rect_t *viewport,
@@ -332,8 +338,10 @@ svg_element_get_path (SvgElement            *element,
     {
     case SVG_ELEMENT_LINE:
       builder = gsk_path_builder_new ();
-      if (values[SVG_PROPERTY_X1] && values[SVG_PROPERTY_Y1] &&
-          values[SVG_PROPERTY_X2] && values[SVG_PROPERTY_Y2])
+      if (value_is_set (values[SVG_PROPERTY_X1]) &&
+          value_is_set (values[SVG_PROPERTY_Y1]) &&
+          value_is_set (values[SVG_PROPERTY_X2]) &&
+          value_is_set (values[SVG_PROPERTY_Y2]))
         {
           double x1 = svg_number_get (values[SVG_PROPERTY_X1], viewport->size.width);
           double y1 = svg_number_get (values[SVG_PROPERTY_Y1], viewport->size.height);
@@ -347,7 +355,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_POLYLINE:
     case SVG_ELEMENT_POLYGON:
       builder = gsk_path_builder_new ();
-      if (values[SVG_PROPERTY_POINTS])
+      if (value_is_set (values[SVG_PROPERTY_POINTS]))
         {
           SvgValue *v = values[SVG_PROPERTY_POINTS];
           if (svg_numbers_get_length (v) > 0)
@@ -376,7 +384,9 @@ svg_element_get_path (SvgElement            *element,
 
     case SVG_ELEMENT_CIRCLE:
       builder = gsk_path_builder_new ();
-      if (values[SVG_PROPERTY_CX] && values[SVG_PROPERTY_CY] && values[SVG_PROPERTY_R])
+      if (value_is_set (values[SVG_PROPERTY_CX]) &&
+          value_is_set (values[SVG_PROPERTY_CY]) &&
+          value_is_set (values[SVG_PROPERTY_R]))
         {
           double cx = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
           double cy = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
@@ -387,8 +397,10 @@ svg_element_get_path (SvgElement            *element,
 
     case SVG_ELEMENT_ELLIPSE:
       builder = gsk_path_builder_new ();
-      if (values[SVG_PROPERTY_CX] && values[SVG_PROPERTY_CY] &&
-          values[SVG_PROPERTY_RX] && values[SVG_PROPERTY_RY])
+      if (value_is_set (values[SVG_PROPERTY_CX]) &&
+          value_is_set (values[SVG_PROPERTY_CY]) &&
+          value_is_set (values[SVG_PROPERTY_RX]) &&
+          value_is_set (values[SVG_PROPERTY_RY]))
         {
           double cx = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
           double cy = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
@@ -400,9 +412,12 @@ svg_element_get_path (SvgElement            *element,
 
     case SVG_ELEMENT_RECT:
       builder = gsk_path_builder_new ();
-      if (values[SVG_PROPERTY_X] && values[SVG_PROPERTY_Y] &&
-          values[SVG_PROPERTY_WIDTH] && values[SVG_PROPERTY_HEIGHT] &&
-          values[SVG_PROPERTY_RX] && values[SVG_PROPERTY_RY])
+      if (value_is_set (values[SVG_PROPERTY_X]) &&
+          value_is_set (values[SVG_PROPERTY_Y]) &&
+          value_is_set (values[SVG_PROPERTY_WIDTH]) &&
+          value_is_set (values[SVG_PROPERTY_HEIGHT]) &&
+          value_is_set (values[SVG_PROPERTY_RX]) &&
+          value_is_set (values[SVG_PROPERTY_RY]))
         {
           double x = svg_number_get (values[SVG_PROPERTY_X], viewport->size.width);
           double y = svg_number_get (values[SVG_PROPERTY_Y], viewport->size.height);
@@ -427,7 +442,7 @@ svg_element_get_path (SvgElement            *element,
       return gsk_path_builder_free_to_path (builder);
 
     case SVG_ELEMENT_PATH:
-      if (values[SVG_PROPERTY_PATH] &&
+      if (value_is_set (values[SVG_PROPERTY_PATH]) &&
           svg_path_get_gsk (values[SVG_PROPERTY_PATH]))
         {
           return gsk_path_ref (svg_path_get_gsk (values[SVG_PROPERTY_PATH]));
