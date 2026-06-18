@@ -1237,6 +1237,18 @@ typedef enum
  * Since: 4.24
  */
 /**
+ * GDK_MEMORY_ABGR2101010_PREMULTIPLIED:
+ *
+ * 4 bytes per pixel
+ *
+ * Bits 31..30 contain the alpha channel, 29..20 blue, 19..10 green
+ * and 9..0 red.
+ *
+ * The color values are premultiplied with the alpha value.
+ *
+ * Since: 4.24
+ */
+/**
  * GDK_MEMORY_XBGR2101010:
  *
  * 4 bytes per pixel
