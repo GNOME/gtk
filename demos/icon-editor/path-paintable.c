@@ -114,13 +114,20 @@ path_paintable_set_svg (PathPaintable *self,
                         GtkSvg        *svg)
 {
   gboolean playing = FALSE;
+  unsigned int state;
 
   if (self->svg)
-    g_object_get (self->svg, "playing", &playing, NULL);
+    g_object_get (self->svg,
+                  "playing", &playing,
+                  "state", &state,
+                  NULL);
 
   g_set_object (&self->svg, svg);
 
-  g_object_set (self->svg, "playing", playing, NULL);
+  g_object_set (self->svg,
+                "playing", playing,
+                "state", state,
+                NULL);
 
   graphene_rect_init (&self->viewport, 0, 0, svg->width, svg->height);
   g_clear_object (&self->render_paintable);
