@@ -53,8 +53,9 @@
  *
  * Transitions between pages can be animated as slides or fades. This
  * can be controlled with [method@Gtk.Stack.set_transition_type].
+ *
  * These animations respect the [property@Gtk.Settings:gtk-enable-animations]
- * setting.
+ * and [property@Gtk.Settings:gtk-interface-reduced-motion] settings.
  *
  * `GtkStack` maintains a [class@Gtk.StackPage] object for each added
  * child, which holds additional per-child properties. You
@@ -1320,6 +1321,18 @@ static GtkStackTransitionType
 effective_transition_type (GtkStack               *stack,
                            GtkStackTransitionType  transition_type)
 {
+  if (transition_type != GTK_STACK_TRANSITION_TYPE_NONE)
+    {
+      GtkReducedMotion reduced_motion;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (stack)),
+                    "gtk-interface-reduced-motion", &reduced_motion,
+                    NULL);
+
+      if (reduced_motion == GTK_REDUCED_MOTION_REDUCE)
+        return GTK_STACK_TRANSITION_TYPE_CROSSFADE;
+    }
+
   if (_gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
     {
       switch (transition_type)
