@@ -66,7 +66,7 @@ static void gdk_win32_surface_set_transient_for (GdkSurface *surface,
 static void gdk_win32_push_modal_surface        (GdkSurface *surface);
 static void gdk_win32_remove_modal_surface      (GdkSurface *surface);
 static void gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
-                                                    GdkSurface    *surface);
+                                                    gpointer       unused);
 
 static void gdk_win32_surface_maximize (GdkSurface *surface);
 static void gdk_win32_surface_unmaximize (GdkSurface *surface);
@@ -155,7 +155,7 @@ gdk_surface_win32_finalize (GObject *object)
 
 static void
 gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
-                                        GdkSurface    *surface)
+                                        gpointer       unused)
 {
   DWM_TIMING_INFO timing_info;
   LARGE_INTEGER tick_frequency;
@@ -354,6 +354,21 @@ RegisterGdkClass (GType wtype)
   return klass;
 }
 
+static GdkFrameClock *
+gdk_win32_surface_create_frame_clock (void)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = _gdk_frame_clock_idle_new ();
+
+  g_signal_connect (frame_clock,
+                    "after-paint",
+                    G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
+                    NULL);
+
+  return frame_clock;
+}
+
 static void
 gdk_win32_surface_constructed (GObject *object)
 {
@@ -384,13 +399,13 @@ gdk_win32_surface_constructed (GObject *object)
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
-      frame_clock = _gdk_frame_clock_idle_new ();
+      frame_clock = gdk_win32_surface_create_frame_clock ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_DRAG_SURFACE)
     {
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       dwStyle |= WS_POPUP;
-      frame_clock = _gdk_frame_clock_idle_new ();
+      frame_clock = gdk_win32_surface_create_frame_clock ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_POPUP)
     {
@@ -473,11 +488,6 @@ gdk_win32_surface_constructed (GObject *object)
   _gdk_win32_surface_register_dnd (surface);
   _gdk_win32_surface_update_style_bits (surface);
 
-  g_signal_connect (frame_clock,
-                    "after-paint",
-                    G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
-                    impl);
-
   impl->inhibit_configure = TRUE;
 
   G_OBJECT_CLASS (gdk_win32_surface_parent_class)->constructed (object);
@@ -497,9 +507,6 @@ gdk_win32_surface_destroy (GdkSurface *surface,
   /* Remove ourself from the modal stack */
   gdk_win32_remove_modal_surface (surface);
 
-  g_signal_handlers_disconnect_by_func (gdk_surface_get_frame_clock (surface),
-                                        gdk_win32_impl_frame_clock_after_paint,
-                                        surface);
 
   /* Remove all our transient children */
   while (impl->transient_children != NULL)
