@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gtksvgvalueprivate.h"
+#include "gtksvgkeywordprivate.h"
 
 SvgValue *
 svg_value_alloc (const SvgValueClass *class,
@@ -176,4 +177,10 @@ svg_value_resolve (const SvgValue    *value,
                    SvgComputeContext *context)
 {
   return value->class->resolve (value, attr, idx, shape, context);
+}
+
+gboolean
+svg_value_is_set (const SvgValue *value)
+{
+  return value && !svg_value_is_unset (value);
 }

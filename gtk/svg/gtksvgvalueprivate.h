@@ -114,4 +114,6 @@ SvgValue * svg_value_default_resolve  (const SvgValue      *value,
                                        SvgElement          *shape,
                                        SvgComputeContext   *context);
 
+gboolean   svg_value_is_set           (const SvgValue *value);
+
 G_END_DECLS
