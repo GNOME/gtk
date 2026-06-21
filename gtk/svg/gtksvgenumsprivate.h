@@ -359,10 +359,10 @@ typedef enum
 
 typedef enum
 {
-  TEXT_DECORATION_NONE        = 0,
-  TEXT_DECORATION_UNDERLINE   = 1 << 0,
-  TEXT_DECORATION_OVERLINE    = 1 << 1,
-  TEXT_DECORATION_LINE_TROUGH = 1 << 2,
+  TEXT_DECORATION_NONE         = 0,
+  TEXT_DECORATION_UNDERLINE    = 1 << 0,
+  TEXT_DECORATION_OVERLINE     = 1 << 1,
+  TEXT_DECORATION_LINE_THROUGH = 1 << 2,
 } TextDecoration;
 
 typedef enum

@@ -31,7 +31,7 @@ static const struct {
 } text_decorations[] = {
   { .name = "underline", .value = TEXT_DECORATION_UNDERLINE },
   { .name = "overline", .value = TEXT_DECORATION_OVERLINE },
-  { .name = "line-through", .value = TEXT_DECORATION_LINE_TROUGH },
+  { .name = "line-through", .value = TEXT_DECORATION_LINE_THROUGH },
 };
 
 typedef struct
