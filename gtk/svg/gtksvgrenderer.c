@@ -3357,6 +3357,21 @@ paint_markers (SvgElement   *shape,
 #define FSI 0x2068
 #define PDI 0x2069
 
+static SvgElement *
+find_text_decoration_origin (SvgElement     *self,
+                             TextDecoration  decoration)
+{
+  SvgValue *value = svg_element_get_specified_value (self, SVG_PROPERTY_TEXT_DECORATION);
+  if (svg_value_is_set (value) &&
+      (svg_text_decoration_get (value) & decoration) != 0)
+    return self;
+
+  if (svg_element_get_type (self) == SVG_ELEMENT_TEXT)
+    return self;
+
+  return find_text_decoration_origin (self->parent, decoration);
+}
+
 static PangoLayout *
 text_create_layout (SvgElement       *self,
                     PangoFontMap     *fontmap,
@@ -3384,6 +3399,7 @@ text_create_layout (SvgElement       *self,
   SvgValue *font_family;
   DominantBaseline baseline;
   char *text_with_bidi = NULL;
+  SvgElement *elt;
 
   context = pango_font_map_create_context (fontmap);
   pango_context_set_language (context, svg_language_get (self->current[SVG_PROPERTY_LANG], 0));
@@ -3522,6 +3538,17 @@ text_create_layout (SvgElement       *self,
           attr->start_index = 0;
           attr->end_index = -1;
           pango_attr_list_insert (attr_list, attr);
+          elt = find_text_decoration_origin (self,TEXT_DECORATION_UNDERLINE);
+          if (svg_paint_get_kind (elt->current[SVG_PROPERTY_FILL]) == PAINT_COLOR)
+            {
+              const GdkColor *color = svg_paint_get_color (elt->current[SVG_PROPERTY_FILL]);
+              attr = pango_attr_underline_color_new (0xffff * color->r,
+                                                     0xffff * color->g,
+                                                     0xffff * color->b);
+              attr->start_index = 0;
+              attr->end_index = -1;
+              pango_attr_list_insert (attr_list, attr);
+            }
         }
       if (decoration & TEXT_DECORATION_OVERLINE)
         {
@@ -3529,6 +3556,17 @@ text_create_layout (SvgElement       *self,
           attr->start_index = 0;
           attr->end_index = -1;
           pango_attr_list_insert (attr_list, attr);
+          elt = find_text_decoration_origin (self,TEXT_DECORATION_OVERLINE);
+          if (svg_paint_get_kind (elt->current[SVG_PROPERTY_FILL]) == PAINT_COLOR)
+            {
+              const GdkColor *color = svg_paint_get_color (elt->current[SVG_PROPERTY_FILL]);
+              attr = pango_attr_overline_color_new (0xffff * color->r,
+                                                    0xffff * color->g,
+                                                    0xffff * color->b);
+              attr->start_index = 0;
+              attr->end_index = -1;
+              pango_attr_list_insert (attr_list, attr);
+            }
         }
       if (decoration & TEXT_DECORATION_LINE_THROUGH)
         {
@@ -3536,6 +3574,17 @@ text_create_layout (SvgElement       *self,
           attr->start_index = 0;
           attr->end_index = -1;
           pango_attr_list_insert (attr_list, attr);
+          elt = find_text_decoration_origin (self,TEXT_DECORATION_LINE_THROUGH);
+          if (svg_paint_get_kind (elt->current[SVG_PROPERTY_FILL]) == PAINT_COLOR)
+            {
+              const GdkColor *color = svg_paint_get_color (elt->current[SVG_PROPERTY_FILL]);
+              attr = pango_attr_strikethrough_color_new (0xffff * color->r,
+                                                         0xffff * color->g,
+                                                         0xffff * color->b);
+              attr->start_index = 0;
+              attr->end_index = -1;
+              pango_attr_list_insert (attr_list, attr);
+            }
         }
     }
 
