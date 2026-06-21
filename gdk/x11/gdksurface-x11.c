@@ -550,7 +550,6 @@ unhook_surface_changed (GdkSurface *surface)
 static void
 gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
 {
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
   GdkFrameClock *clock;
   GdkFrameTimings *timings;
   gint64 presentation_time;
@@ -572,9 +571,6 @@ gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
     {
       presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
     }
-
-  if (presentation_time < impl->toplevel->throttled_presentation_time)
-    presentation_time = impl->toplevel->throttled_presentation_time;
 
   timings->predicted_presentation_time = presentation_time;
 }
