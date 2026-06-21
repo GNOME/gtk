@@ -3530,7 +3530,7 @@ text_create_layout (SvgElement       *self,
           attr->end_index = -1;
           pango_attr_list_insert (attr_list, attr);
         }
-      if (decoration & TEXT_DECORATION_LINE_TROUGH)
+      if (decoration & TEXT_DECORATION_LINE_THROUGH)
         {
           attr = pango_attr_strikethrough_new (TRUE);
           attr->start_index = 0;
