@@ -121,7 +121,8 @@ static GtkBuildableIface *parent_buildable_iface;
 static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
-  if (revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_NONE)
+  if (revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_NONE &&
+      revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
     {
       GtkReducedMotion reduced_motion;
 
@@ -130,7 +131,7 @@ effective_transition (GtkRevealer *revealer)
                     NULL);
 
       if (reduced_motion == GTK_REDUCED_MOTION_REDUCE)
-        return GTK_REVEALER_TRANSITION_TYPE_CROSSFADE;
+        return GTK_REVEALER_TRANSITION_TYPE_NONE;
     }
 
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
