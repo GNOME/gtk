@@ -555,28 +555,20 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                       GdkFrameTimings *timings)
 {
   GString *str;
-
-  gint64 previous_frame_time = 0;
-  gint64 previous_smoothed_frame_time = 0;
+  gint64 previous_frame_time;
   GdkFrameTimings *previous_timings = _gdk_frame_clock_get_timings (clock,
                                                                     timings->frame_counter - 1);
 
   if (previous_timings != NULL)
-    {
-      previous_frame_time = previous_timings->frame_time;
-      previous_smoothed_frame_time = previous_timings->smoothed_frame_time;
-    }
+    previous_frame_time = previous_timings->frame_time;
+  else
+    previous_frame_time = 0;
 
   str = g_string_new ("");
 
   g_string_append_printf (str, "%5" G_GINT64_FORMAT ":", timings->frame_counter);
   if (previous_frame_time != 0)
-    {
-      g_string_append_printf (str, " interval=%-4.1f", (timings->frame_time - previous_frame_time) / 1000.);
-      g_string_append_printf (str, " smoothed=%4.1f / %-4.1f",
-                              (timings->smoothed_frame_time - timings->frame_time) / 1000.,
-                              (timings->smoothed_frame_time - previous_smoothed_frame_time) / 1000.);
-    }
+    g_string_append_printf (str, " interval=%-4.1f", (timings->frame_time - previous_frame_time) / 1000.);
   if (timings->layout_start_time != 0)
     g_string_append_printf (str, " layout_start=%-4.1f", (timings->layout_start_time - timings->frame_time) / 1000.);
   if (timings->paint_start_time != 0)

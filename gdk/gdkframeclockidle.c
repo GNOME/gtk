@@ -488,7 +488,6 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   timings = gdk_frame_clock_get_current_timings (clock);
 
   timings->frame_time = priv->frame_time;
-  timings->smoothed_frame_time = priv->smoothed_frame_time_base;
 
   gdk_frame_clock_get_refresh_info (clock,
                                     timings->frame_time,

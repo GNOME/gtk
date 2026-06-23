@@ -49,7 +49,6 @@ struct _GdkFrameTimings
   gint64 frame_counter;
   guint64 cookie;
   gint64 frame_time;
-  gint64 smoothed_frame_time;
   gint64 drawn_time;
   gint64 presentation_time;
   gint64 refresh_interval;
