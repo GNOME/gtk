@@ -241,14 +241,6 @@ gdk_macos_surface_get_scale (GdkSurface *surface)
 }
 
 static void
-gdk_macos_surface_begin_frame (GdkMacosSurface *self)
-{
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-
-  self->in_frame = TRUE;
-}
-
-static void
 gdk_macos_surface_end_frame (GdkMacosSurface *self)
 {
   GdkFrameClock *frame_clock;
@@ -262,25 +254,7 @@ gdk_macos_surface_end_frame (GdkMacosSurface *self)
 
   self->pending_frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
 
-  self->in_frame = FALSE;
-
   _gdk_macos_surface_request_frame (self);
-}
-
-static void
-gdk_macos_surface_before_paint (GdkMacosSurface *self,
-                                GdkFrameClock   *frame_clock)
-{
-  GdkSurface *surface = (GdkSurface *)self;
-
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-  g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
-
-  if (GDK_SURFACE_DESTROYED (self))
-    return;
-
-  if (surface->update_freeze_count == 0)
-    gdk_macos_surface_begin_frame (self);
 }
 
 static void
@@ -445,9 +419,6 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
       g_signal_handlers_disconnect_by_func (frame_clock,
-                                            G_CALLBACK (gdk_macos_surface_before_paint),
-                                            self);
-      g_signal_handlers_disconnect_by_func (frame_clock,
                                             G_CALLBACK (gdk_macos_surface_after_paint),
                                             self);
     }
@@ -486,11 +457,6 @@ gdk_macos_surface_constructed (GObject *object)
 
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
-      g_signal_connect_object (frame_clock,
-                               "before-paint",
-                               G_CALLBACK (gdk_macos_surface_before_paint),
-                               self,
-                               G_CONNECT_SWAPPED);
       g_signal_connect_object (frame_clock,
                                "after-paint",
                                G_CALLBACK (gdk_macos_surface_after_paint),
