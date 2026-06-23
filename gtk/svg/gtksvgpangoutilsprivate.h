@@ -23,9 +23,11 @@
 
 #include "gsk/gskpath.h"
 #include <pango/pango.h>
+#include <pango/pangocairo.h>
 
 G_BEGIN_DECLS
 
-GskPath * svg_pango_layout_to_path (PangoLayout *layout);
+GskPath * svg_pango_layout_to_path (PangoLayout          *layout,
+                                    PangoRenderComponent  component);
 
 G_END_DECLS
