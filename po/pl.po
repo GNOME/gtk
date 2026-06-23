@@ -1191,7 +1191,7 @@ msgid ""
 "Contact your system administrator"
 msgstr ""
 "Ustawienia systemu uniemożliwiają wprowadzanie zmian.\n"
-"Proszę skontaktować się z osobą administrującą komputerem."
+"Proszę skontaktować się z administratorem komputera."
 
 #: gtk/deprecated/gtkshow.c:291
 msgid "Could not show link"
@@ -2912,19 +2912,19 @@ msgstr "P_ołącz"
 
 #: gtk/gtkmountoperation.c:678
 msgid "Connect As"
-msgstr "Połączenie jako osoba"
+msgstr "Połączenie jako użytkownik"
 
 #: gtk/gtkmountoperation.c:687
 msgid "_Anonymous"
-msgstr "_Anonimowa"
+msgstr "_Anonimowy"
 
 #: gtk/gtkmountoperation.c:694
 msgid "Registered U_ser"
-msgstr "_Zarejestrowana"
+msgstr "_Zarejestrowany"
 
 #: gtk/gtkmountoperation.c:704
 msgid "_Username"
-msgstr "_Nazwa osoby"
+msgstr "_Nazwa użytkownika"
 
 #: gtk/gtkmountoperation.c:709
 msgid "_Domain"
@@ -3481,7 +3481,7 @@ msgstr "Odrzuca zadania"
 #: gtk/print/backends/gtkprintbackendcups.c:1154
 #: gtk/print/backends/gtkprintbackendcups.c:1461
 msgid "Username:"
-msgstr "Nazwa osoby:"
+msgstr "Nazwa użytkownika:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1155
 #: gtk/print/backends/gtkprintbackendcups.c:1470
@@ -4156,7 +4156,7 @@ msgstr "Brak papieru"
 
 #: gtk/print/gtkprintoperation-win32.c:632
 msgid "Need user intervention"
-msgstr "Wymagana jest interwencja osoby"
+msgstr "Wymagana jest interwencja użytkownika"
 
 #: gtk/print/gtkprintoperation-win32.c:739
 msgid "Custom size"
