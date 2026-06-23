@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-06 19:34+0000\n"
+"POT-Creation-Date: 2026-05-08 20:38+0000\n"
 "PO-Revision-Date: 2026-04-01 20:44+0200\n"
 "Last-Translator: Victoria Niedzielska <victorian@gnome.org>\n"
 "Language-Team: Polish <https://l10n.gnome.org/teams/pl/>\n"
@@ -189,7 +189,7 @@ msgstr "Próbowanie użycia %s, ale %s jest już używane"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Próbowanie użycia %s, ale jest wyłączone przez zmienną GDK_DISABLE"
 
-#: gdk/gdktexture.c:646
+#: gdk/gdktexture.c:679
 msgid "Unknown image format."
 msgstr "Nieznany format obrazu."
 
@@ -1243,7 +1243,7 @@ msgstr "Licencja GNU LGPL, wersja 3 lub późniejsza"
 
 #: gtk/gtkaboutdialog.c:133
 msgid "BSD 2-Clause License"
-msgstr "Licencja BSD 2-Clause"
+msgstr "2-klauzulowa licencja BSD"
 
 #: gtk/gtkaboutdialog.c:134
 msgid "The MIT License (MIT)"
@@ -1279,7 +1279,7 @@ msgstr "Licencja GNU AGPL, tylko w wersji 3"
 
 #: gtk/gtkaboutdialog.c:142
 msgid "BSD 3-Clause License"
-msgstr "Licencja BSD 3-Clause"
+msgstr "3-klauzulowa licencja BSD"
 
 #: gtk/gtkaboutdialog.c:143
 msgid "Apache License, Version 2.0"
@@ -1291,7 +1291,7 @@ msgstr "Licencja MPL 2.0"
 
 #: gtk/gtkaboutdialog.c:145
 msgid "BSD Zero-Clause License"
-msgstr "Licencja BSD Zero-Clause"
+msgstr "0-klauzulowa licencja BSD"
 
 #: gtk/gtkaboutdialog.c:1029
 msgid "Website"
@@ -1304,19 +1304,19 @@ msgstr "O programie %s"
 
 #: gtk/gtkaboutdialog.c:2165
 msgid "Created by"
-msgstr "Utworzone przez"
+msgstr "Program"
 
 #: gtk/gtkaboutdialog.c:2168
 msgid "Documented by"
-msgstr "Udokumentowane przez"
+msgstr "Dokumentacja"
 
 #: gtk/gtkaboutdialog.c:2178
 msgid "Translated by"
-msgstr "Przetłumaczone przez"
+msgstr "Tłumaczenie"
 
 #: gtk/gtkaboutdialog.c:2183
 msgid "Design by"
-msgstr "Zaprojektowane przez"
+msgstr "Projekt"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -4135,9 +4135,9 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najprawdopodobniej plik tymczasowy nie mógł zostać utworzony."
 
 #. window
-#: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:617
-#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:287
+#: gtk/print/gtkprintoperation-portal.c:634
+#: gtk/print/gtkprintoperation-portal.c:703 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Wydruk"
 
@@ -4989,15 +4989,18 @@ msgstr "Jest najwyższego poziomu"
 msgid "Child Visible"
 msgstr "Element potomny jest widoczny"
 
-#: gtk/inspector/misc-info.ui:685
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:686
 msgid "Paintable Size"
 msgstr "Rozmiar obszaru malowania"
 
-#: gtk/inspector/misc-info.ui:710
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:712
 msgid "Paintable Aspect Ratio"
 msgstr "Współczynnik proporcji obszaru malowania"
 
-#: gtk/inspector/misc-info.ui:735
+#. Paintable is a colloquial way to refer to the GdkPaintable interface
+#: gtk/inspector/misc-info.ui:738
 msgid "Paintable Flags"
 msgstr "Flagi obszaru malowania"
 
@@ -8735,32 +8738,22 @@ msgstr "Wyświetla węzeł rysowania."
 msgid "Can only preview a single .node file\n"
 msgstr "Można wyświetlić podgląd tylko jednego pliku .node\n"
 
-#. translators: invalid UTF8 in filename
-#: tools/gtk-tool-utils.c:47
-msgid "<invalid>"
-msgstr "<Nieprawidłowe>"
-
-#: tools/gtk-tool-utils.c:60
-#, c-format
-msgid "Warning at %s: %s\n"
-msgstr "Ostrzeżenie w %s: %s\n"
-
-#: tools/gtk-tool-utils.c:62
+#: tools/gtk-tool-utils.c:48
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Błąd w %s: %s\n"
 
-#: tools/gtk-tool-utils.c:80
+#: tools/gtk-tool-utils.c:66
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "Wczytanie pliku węzła się nie powiodło: %s\n"
 
-#: tools/gtk-tool-utils.c:106
+#: tools/gtk-tool-utils.c:87
 #, c-format
 msgid "%s is not a texture node\n"
 msgstr "%s nie jest węzłem tekstury\n"
 
-#: tools/gtk-tool-utils.c:332
+#: tools/gtk-tool-utils.c:313
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "cicp musi być czterema liczbami rozdzielonymi znakiem /\n"
@@ -8872,3 +8865,10 @@ msgstr ""
 "Brak pliku indeksu motywu w „%s”.\n"
 "Jeżeli naprawdę potrzeba utworzyć pamięć podręczną ikon, proszę użyć opcji --"
 "ignore-theme-index.\n"
+
+#~ msgid "<invalid>"
+#~ msgstr "<Nieprawidłowe>"
+
+#, c-format
+#~ msgid "Warning at %s: %s\n"
+#~ msgstr "Ostrzeżenie w %s: %s\n"
