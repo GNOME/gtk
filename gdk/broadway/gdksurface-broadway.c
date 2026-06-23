@@ -213,36 +213,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 static void
-on_frame_clock_before_paint (GdkFrameClock *clock,
-                             GdkSurface    *surface)
-{
-  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  if (surface->update_freeze_count > 0)
-    return;
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-  if (presentation_time != 0)
-    {
-      timings->predicted_presentation_time = presentation_time + refresh_interval;
-    }
-  else
-    {
-      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
-    }
-}
-
-static void
 connect_frame_clock (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
-  g_signal_connect (frame_clock, "before-paint",
-                    G_CALLBACK (on_frame_clock_before_paint), surface);
   g_signal_connect_after (frame_clock, "update",
 			  G_CALLBACK (on_frame_clock_after_update), surface);
   g_signal_connect (frame_clock, "after-paint",
@@ -254,8 +228,6 @@ disconnect_frame_clock (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
-  g_signal_handlers_disconnect_by_func (frame_clock,
-                                        on_frame_clock_before_paint, surface);
   g_signal_handlers_disconnect_by_func (frame_clock,
                                         on_frame_clock_after_update, surface);
   g_signal_handlers_disconnect_by_func (frame_clock,
@@ -325,10 +297,6 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
 {
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
-  impl->pending_frame_counter = 0;
 
   /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
@@ -336,20 +304,11 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
   else
     gdk_surface_thaw_updates (surface);
 
-  if (timings)
-    {
-      timings->refresh_interval = 33333; /* default to 1/30th of a second */
-      // This isn't quite right, since we've done a roundtrip back too, can we do better?
-      timings->presentation_time = g_get_monotonic_time ();
-      timings->complete = TRUE;
+  gdk_frame_clock_submitted (clock,
+                             impl->pending_frame_counter,
+                             G_NSEC_PER_SEC / 30); /* default to 1/30th of a second */
 
-
-      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-        _gdk_frame_clock_debug_print_timings (clock, timings);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    _gdk_frame_clock_add_timings_to_profiler (clock, timings);
-    }
+  impl->pending_frame_counter = 0;
 }
 
 static void

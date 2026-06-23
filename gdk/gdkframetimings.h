@@ -39,6 +39,8 @@ GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_frame_counter     (GdkFrameTimings *timings);
 GDK_AVAILABLE_IN_ALL
 gboolean         gdk_frame_timings_get_complete          (GdkFrameTimings *timings);
+GDK_AVAILABLE_IN_4_24
+GdkFrameResult   gdk_frame_timings_get_result            (GdkFrameTimings *timings);
 GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_frame_time        (GdkFrameTimings *timings);
 GDK_AVAILABLE_IN_ALL

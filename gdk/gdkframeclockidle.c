@@ -348,6 +348,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   gint64 frame_interval = FRAME_INTERVAL;
+  gint64 presentation_time;
   GdkFrameTimings *prev_timings, *timings;
 
   if (gdk_frame_clock_is_stopped (clock))
@@ -465,6 +466,18 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
 
   timings->frame_time = priv->frame_time;
   timings->smoothed_frame_time = priv->smoothed_frame_time_base;
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    timings->frame_time,
+                                    &frame_interval, &presentation_time);
+  if (presentation_time != 0)
+    {
+      timings->predicted_presentation_time = presentation_time + frame_interval;
+    }
+  else
+    {
+      timings->predicted_presentation_time = timings->frame_time + frame_interval / 2 + frame_interval;
+    }
 
   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
   _gdk_frame_clock_emit_before_paint (clock);
@@ -708,6 +721,9 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
 {
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+
+  if ((priv->requested & phase) == phase)
+    return;
 
   priv->requested |= phase;
 

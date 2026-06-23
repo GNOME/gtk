@@ -24,9 +24,11 @@
 
 #include "gdkcairoprivate.h"
 #include "gdkdebugprivate.h"
-#include <glib/gi18n-lib.h>
+#include "gdkframeclockprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
+
+#include <glib/gi18n-lib.h>
 
 /**
  * GdkDrawContext:
@@ -513,6 +515,8 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
   g_clear_pointer (&priv->render_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
   priv->depth = GDK_N_DEPTHS;
+
+  gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
 }
 
 /**

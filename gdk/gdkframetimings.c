@@ -45,6 +45,7 @@ _gdk_frame_timings_new (gint64 frame_counter)
   timings = g_new0 (GdkFrameTimings, 1);
   timings->ref_count = 1;
   timings->frame_counter = frame_counter;
+  timings->result = GDK_FRAME_PREPARING;
 
   return timings;
 }
@@ -58,6 +59,7 @@ _gdk_frame_timings_steal (GdkFrameTimings *timings,
       memset (timings, 0, sizeof *timings);
       timings->ref_count = 1;
       timings->frame_counter = frame_counter;
+      timings->result = GDK_FRAME_PREPARING;
       return TRUE;
     }
 
@@ -142,7 +144,49 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 {
   g_return_val_if_fail (timings != NULL, FALSE);
 
-  return timings->complete;
+  switch (timings->result)
+  {
+    case GDK_FRAME_PREPARING:
+    case GDK_FRAME_OUTSTANDING:
+      return FALSE;
+
+    case GDK_FRAME_SKIPPED:
+    case GDK_FRAME_EMPTY:
+    case GDK_FRAME_SUBMITTED:
+    case GDK_FRAME_DISCARDED:
+    case GDK_FRAME_PRESENTED:
+      return TRUE;
+
+    default:
+      g_return_val_if_reached (TRUE);
+  }
+}
+
+/**
+ * gdk_frame_timings_get_result:
+ * @timings: a `GdkFrameTimings`
+ *
+ * Gets the result of the frame cycle that recorded these timings. 
+ *
+ * The timing information in a `GdkFrameTimings` is filled in
+ * incrementally as the frame as drawn and passed off to the
+ * window system for processing and display to the user. The
+ * accessor functions for `GdkFrameTimings` can return 0 to
+ * indicate an unavailable value for two reasons: either because
+ * the information is not yet available, or because it isn't
+ * available at all. Looking at the result of the timings gives
+ * an explanation for why a value is not available.
+ *
+ * Returns: The result of the frame these timings have been recorded for.
+ *
+ * Since: 4.24
+ **/
+GdkFrameResult
+gdk_frame_timings_get_result (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, GDK_FRAME_EMPTY);
+
+  return timings->result;
 }
 
 /**

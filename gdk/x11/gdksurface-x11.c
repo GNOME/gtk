@@ -548,38 +548,6 @@ unhook_surface_changed (GdkSurface *surface)
 }
 
 static void
-gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
-{
-  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
-  GdkFrameClock *clock;
-  GdkFrameTimings *timings;
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  clock = gdk_surface_get_frame_clock (surface);
-
-  timings = gdk_frame_clock_get_current_timings (clock);
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-
-  if (presentation_time != 0)
-    {
-      presentation_time += refresh_interval;
-    }
-  else
-    {
-      presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
-    }
-
-  if (presentation_time < impl->toplevel->throttled_presentation_time)
-    presentation_time = impl->toplevel->throttled_presentation_time;
-
-  timings->predicted_presentation_time = presentation_time;
-}
-
-static void
 gdk_x11_surface_begin_frame (GdkSurface *surface,
                             gboolean   force_frame)
 {
@@ -735,7 +703,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 
       maybe_sync_counter_for_end_frame (surface);
 
-      if (_gdk_x11_surface_syncs_frames (surface))
+      if (_gdk_x11_surface_syncs_frames (surface) && !gdk_frame_timings_get_complete (timings))
         {
           impl->toplevel->frame_pending = TRUE;
           gdk_surface_freeze_updates (surface);
@@ -755,8 +723,12 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       impl->toplevel->configure_counter_value = 0;
     }
 
-  if (!impl->toplevel->frame_pending)
-    timings->complete = TRUE;
+  if (!impl->toplevel->frame_pending && !gdk_frame_timings_get_complete (timings))
+    {
+      gdk_frame_clock_submitted (clock,
+                                 gdk_frame_clock_get_frame_counter (clock),
+                                 0);
+    }
 }
 
 /*****************************************************
@@ -960,7 +932,6 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
   if (surface->update_freeze_count > 0)
     return;
 
-  gdk_x11_surface_predict_presentation_time (surface);
   gdk_x11_surface_begin_frame (surface, FALSE);
 }
 
