@@ -451,6 +451,7 @@ paths_changed (StateEditor *self)
 {
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   self->max_state = MAX (self->max_state, find_max_state (svg->content));
+  self->max_state = MAX (self->max_state, MAX (svg->n_state_names, 1) - 1);
   self->max_state = CLAMP (self->max_state, 0, 63);
 
   repopulate (self);
