@@ -548,34 +548,6 @@ unhook_surface_changed (GdkSurface *surface)
 }
 
 static void
-gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
-{
-  GdkFrameClock *clock;
-  GdkFrameTimings *timings;
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  clock = gdk_surface_get_frame_clock (surface);
-
-  timings = gdk_frame_clock_get_current_timings (clock);
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-
-  if (presentation_time != 0)
-    {
-      presentation_time += refresh_interval;
-    }
-  else
-    {
-      presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
-    }
-
-  timings->predicted_presentation_time = presentation_time;
-}
-
-static void
 gdk_x11_surface_begin_frame (GdkSurface *surface,
                             gboolean   force_frame)
 {
@@ -960,7 +932,6 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
   if (surface->update_freeze_count > 0)
     return;
 
-  gdk_x11_surface_predict_presentation_time (surface);
   gdk_x11_surface_begin_frame (surface, FALSE);
 }
 

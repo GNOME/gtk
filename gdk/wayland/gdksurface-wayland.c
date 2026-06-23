@@ -349,33 +349,8 @@ static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkSurface     *surface)
 {
-  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
   if (surface->update_freeze_count > 0)
     return;
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-
-  if (presentation_time != 0)
-    {
-      /* Assume the algorithm used by the DRM backend of Weston - it
-       * starts drawing at the next vblank after receiving the commit
-       * for this frame, and presentation occurs at the vblank
-       * after that.
-       */
-      timings->predicted_presentation_time = presentation_time + refresh_interval;
-    }
-  else
-    {
-      /* As above, but we don't actually know the phase of the vblank,
-       * so just assume that we're half way through a refresh cycle.
-       */
-      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
-    }
 
   gdk_surface_apply_state_change (surface);
 }

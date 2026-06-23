@@ -213,36 +213,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 static void
-on_frame_clock_before_paint (GdkFrameClock *clock,
-                             GdkSurface    *surface)
-{
-  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
-  gint64 presentation_time;
-  gint64 refresh_interval;
-
-  if (surface->update_freeze_count > 0)
-    return;
-
-  gdk_frame_clock_get_refresh_info (clock,
-                                    timings->frame_time,
-                                    &refresh_interval, &presentation_time);
-  if (presentation_time != 0)
-    {
-      timings->predicted_presentation_time = presentation_time + refresh_interval;
-    }
-  else
-    {
-      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
-    }
-}
-
-static void
 connect_frame_clock (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
-  g_signal_connect (frame_clock, "before-paint",
-                    G_CALLBACK (on_frame_clock_before_paint), surface);
   g_signal_connect_after (frame_clock, "update",
 			  G_CALLBACK (on_frame_clock_after_update), surface);
   g_signal_connect (frame_clock, "after-paint",
@@ -254,8 +228,6 @@ disconnect_frame_clock (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
-  g_signal_handlers_disconnect_by_func (frame_clock,
-                                        on_frame_clock_before_paint, surface);
   g_signal_handlers_disconnect_by_func (frame_clock,
                                         on_frame_clock_after_update, surface);
   g_signal_handlers_disconnect_by_func (frame_clock,
