@@ -985,6 +985,7 @@ icon_editor_window_close_request (GtkWindow *window)
       gtk_alert_dialog_set_modal (alert, TRUE);
       gtk_alert_dialog_set_buttons (alert, buttons);
       gtk_alert_dialog_set_default_button (alert, 0);
+      gtk_alert_dialog_set_cancel_button (alert, 0);
       gtk_alert_dialog_choose (alert, window, NULL, quit_alert_done, self);
 
       return TRUE;
@@ -1596,7 +1597,7 @@ icon_editor_window_load (IconEditorWindow *self,
   if (self->changed)
     {
       g_autoptr (GtkAlertDialog) alert = NULL;
-      const char *buttons[] = { "Save", "Quit", NULL };
+      const char *buttons[] = { "Save", "Continue", NULL };
 
       alert = gtk_alert_dialog_new ("Unsaved changes");
       g_object_set_data_full (G_OBJECT (alert), "file", g_object_ref (file), g_object_unref);
@@ -1604,6 +1605,7 @@ icon_editor_window_load (IconEditorWindow *self,
       gtk_alert_dialog_set_modal (alert, TRUE);
       gtk_alert_dialog_set_buttons (alert, buttons);
       gtk_alert_dialog_set_default_button (alert, 0);
+      gtk_alert_dialog_set_cancel_button (alert, 0);
       gtk_alert_dialog_choose (alert, GTK_WINDOW (self), NULL, open_alert_done, self);
 
       return TRUE;

@@ -74,6 +74,7 @@ valid_state_name (const char *name)
 {
   if (strcmp (name, "all") == 0 ||
       strcmp (name, "none") == 0 ||
+      strcmp (name, "not") == 0 ||
       g_ascii_isdigit (name[0]))
     return FALSE;
 
@@ -108,6 +109,7 @@ update_state_names (StateEditor *self)
   GtkSvg *svg = path_paintable_get_svg (self->paintable);
   const char *names[65] = { NULL, };
   unsigned int i;
+  gboolean cutoff = FALSE;
 
   for (i = 0; i <= self->max_state; i++)
     {
@@ -116,24 +118,20 @@ update_state_names (StateEditor *self)
 
       e = GTK_EDITABLE (gtk_grid_get_child_at (self->grid, i, -1));
       text = gtk_editable_get_text (e);
-      if (text && valid_state_name (text))
+      if (text && valid_state_name (text) && !cutoff)
         {
           names[i] = text;
         }
       else
         {
           char num[64];
+
           g_snprintf (num, sizeof (num), "%u", i);
-          if (strcmp (num, text) == 0)
-            {
-              names[i] = NULL;
-              break;
-            }
-          else
-            {
-              gtk_editable_set_text (e, num);
-              return;
-            }
+          if (strcmp (num, text) != 0)
+            gtk_editable_set_text (e, num);
+
+          names[i] = NULL;
+          cutoff = TRUE;
         }
     }
 
@@ -318,10 +316,30 @@ drop_state (StateEditor *self)
 }
 
 static void
+add_state_name (GtkSvg *svg)
+{
+  GStrvBuilder *builder;
+  GStrv strv;
+
+  builder = g_strv_builder_new ();
+  for (unsigned int i = 0; i < svg->n_state_names; i++)
+    g_strv_builder_add (builder, svg->state_names[i]);
+  g_strv_builder_take (builder, g_strdup_printf ("state%u", svg->n_state_names));
+  strv = g_strv_builder_unref_to_strv (builder);
+  gtk_svg_set_state_names (svg, (const char **) strv);
+  g_strfreev (strv);
+}
+
+static void
 add_state (StateEditor *self)
 {
+  GtkSvg *svg = path_paintable_get_svg (self->paintable);
+
   if (self->max_state == 63)
     return;
+
+  if (svg->n_state_names == self->max_state + 1)
+    add_state_name (svg);
 
   self->max_state++;
   self->max_state = CLAMP (self->max_state, 0, 63);
@@ -414,6 +432,9 @@ create_paths (StateEditor *self)
   const char **names;
   unsigned int n_names;
   unsigned int row;
+
+  if (svg->n_state_names == 0 && self->max_state == 0)
+    add_state_name (svg);
 
   names = gtk_svg_get_state_names (svg, &n_names);
 
@@ -617,5 +638,3 @@ state_editor_set_paintable (StateEditor *self,
 }
 
 /* }}} */
-
-/* vim:set foldmethod=marker: */
