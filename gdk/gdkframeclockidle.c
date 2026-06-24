@@ -64,6 +64,7 @@ struct _GdkFrameClockIdlePrivate
 
   GdkFrameClockPhase requested;
   GdkFrameStage stage;
+  uint64_t stage_start_time;
 
   guint work_performed : 1;
   guint in_frame : 1;
@@ -315,6 +316,8 @@ gdk_frame_clock_idle_set_stage (GdkFrameClockIdle *self,
 
   g_assert (priv->stage + 1 == stage || (priv->stage + 1 == GDK_FRAME_N_STAGES && stage == GDK_FRAME_STAGE_NONE));
 
+  if (priv->stage == GDK_FRAME_STAGE_NONE || priv->work_performed)
+    priv->stage_start_time = g_get_monotonic_time_ns ();
   priv->stage = stage;
   priv->work_performed = FALSE;
 }
