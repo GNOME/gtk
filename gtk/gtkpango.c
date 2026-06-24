@@ -95,7 +95,12 @@ attribute_from_text (GtkBuilder  *builder,
       break;
     case PANGO_ATTR_WEIGHT:
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_WEIGHT, value, &val, error))
-        attribute = pango_attr_weight_new (g_value_get_int (&val));
+        attribute = pango_attr_weight_new (g_value_get_enum (&val));
+      else if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, NULL))
+        {
+          g_clear_error (error);
+          attribute = pango_attr_weight_new (g_value_get_int (&val));
+        }
       break;
     case PANGO_ATTR_VARIANT:
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_VARIANT, value, &val, error))
@@ -108,7 +113,12 @@ attribute_from_text (GtkBuilder  *builder,
 #if PANGO_VERSION_CHECK (1, 58, 0)
     case PANGO_ATTR_WIDTH:
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_WIDTH, value, &val, error))
-        attribute = pango_attr_width_new (g_value_get_int (&val));
+        attribute = pango_attr_width_new (g_value_get_enum (&val));
+      else if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, NULL))
+        {
+          g_clear_error (error);
+          attribute = pango_attr_width_new (g_value_get_int (&val));
+        }
       break;
 #endif
     case PANGO_ATTR_UNDERLINE:
