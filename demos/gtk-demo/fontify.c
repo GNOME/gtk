@@ -196,6 +196,12 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (stretch);
           break;
 
+#if PANGO_VERSION_CHECK (1, 58, 0)
+        case PANGO_ATTR_WIDTH:
+          INT_ATTR (width);
+          break;
+#endif
+
         case PANGO_ATTR_SIZE:
           INT_ATTR (size);
           break;
