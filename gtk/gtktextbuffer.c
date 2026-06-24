@@ -4765,6 +4765,11 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (stretch);
           break;
 
+#if PANGO_VERSION_CHECK (1, 58, 0)
+        case PANGO_ATTR_WIDTH:
+          break; /* FIXME: add width to GtkTextTag */
+#endif
+
         case PANGO_ATTR_SIZE:
           INT_ATTR (size);
           break;
