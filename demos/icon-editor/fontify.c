@@ -172,7 +172,7 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
     {
       PangoAttribute *attr = l->data;
 
-      switch (attr->klass->type)
+      switch ((int) attr->klass->type)
         {
         case PANGO_ATTR_LANGUAGE:
           LANGUAGE_ATTR (language);

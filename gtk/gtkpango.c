@@ -78,7 +78,7 @@ attribute_from_text (GtkBuilder  *builder,
   type = g_value_get_enum (&val);
   g_value_unset (&val);
 
-  switch (type)
+  switch ((int) type)
     {
       /* PangoAttrLanguage */
     case PANGO_ATTR_LANGUAGE:
