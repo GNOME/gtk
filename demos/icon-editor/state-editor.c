@@ -428,6 +428,7 @@ create_paths (StateEditor *self)
           g_free (s);
         }
       gtk_editable_set_width_chars (GTK_EDITABLE (child), 6);
+      gtk_editable_set_alignment(GTK_EDITABLE (child), 0.5);
       gtk_grid_attach (self->grid, child, i, -1, 1, 1);
       g_signal_connect (child, "notify::editing", G_CALLBACK (state_name_changed), self);
     }
