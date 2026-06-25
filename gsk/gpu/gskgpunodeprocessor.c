@@ -2662,14 +2662,14 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
       graphene_point_t glyph_offset, glyph_origin;
       GskGpuGlyphLookupFlags flags;
 
-      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale,
-                                          offset.y + glyphs[i].geometry.y_offset / pango_scale);
+      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale + self->offset.x,
+                                          offset.y + glyphs[i].geometry.y_offset / pango_scale + self->offset.y);
 
       glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
       glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
       flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
-      glyph_origin.x /= align_scale_x;
-      glyph_origin.y /= align_scale_y;
+      glyph_origin.x = glyph_origin.x / align_scale_x - self->offset.x;
+      glyph_origin.y = glyph_origin.y / align_scale_y - self->offset.y;
 
       image = gsk_gpu_cached_glyph_lookup (cache,
                                            self->frame,
