@@ -56,10 +56,6 @@ struct _GdkFrameTimings
 
   uint64_t stage_end_time[GDK_FRAME_N_STAGES];
 
-  gint64 layout_start_time;
-  gint64 paint_start_time;
-  gint64 frame_end_time;
-
   GdkFrameResult result;
 };
 

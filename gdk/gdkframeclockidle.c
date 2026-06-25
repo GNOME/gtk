@@ -554,23 +554,10 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
 {
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-  GdkFrameTimings *timings;
   int iter;
 
   if (gdk_frame_clock_is_stopped (clock))
     return;
-
-  timings = gdk_frame_clock_get_current_timings (clock);
-
-  if (GDK_DEBUG_CHECK (FRAMES))
-    {
-      if (priv->stage != GDK_FRAME_STAGE_LAYOUT &&
-          (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
-        {
-          if (timings)
-            timings->layout_start_time = g_get_monotonic_time ();
-        }
-    }
 
   /* We loop in the layout phase, because we don't want to progress
    * into the paint phase with invalid size allocations. This may
@@ -600,22 +587,9 @@ gdk_frame_clock_idle_run_paint (GdkFrameClockIdle *self)
 {
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-  GdkFrameTimings *timings;
 
   if (gdk_frame_clock_is_stopped (clock))
     return;
-
-  timings = gdk_frame_clock_get_current_timings (clock);
-
-  if (GDK_DEBUG_CHECK (FRAMES))
-    {
-      if (priv->stage != GDK_FRAME_STAGE_PAINT &&
-          (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
-        {
-          if (timings)
-            timings->paint_start_time = g_get_monotonic_time ();
-        }
-    }
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
     {
@@ -632,12 +606,9 @@ gdk_frame_clock_idle_run_after_paint (GdkFrameClockIdle *self)
 {
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-  GdkFrameTimings *timings;
 
   if (gdk_frame_clock_is_stopped (clock))
     return;
-
-  timings = gdk_frame_clock_get_current_timings (clock);
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_AFTER_PAINT)
     {
@@ -646,12 +617,6 @@ gdk_frame_clock_idle_run_after_paint (GdkFrameClockIdle *self)
       gdk_frame_clock_idle_doing_work (self);
 
       _gdk_frame_clock_emit_after_paint (clock);
-    }
-
-  if (GDK_DEBUG_CHECK (FRAMES))
-    {
-      if (timings)
-        timings->frame_end_time = g_get_monotonic_time ();
     }
 
   /* the ::after-paint phase doesn't get repeated on freeze/thaw,

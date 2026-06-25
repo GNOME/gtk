@@ -569,12 +569,9 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
   g_string_append_printf (str, "%5" G_GINT64_FORMAT ":", timings->frame_counter);
   if (previous_frame_time != 0)
     g_string_append_printf (str, " interval=%-4.1f", (timings->frame_time - previous_frame_time) / 1000.);
-  if (timings->layout_start_time != 0)
-    g_string_append_printf (str, " layout_start=%-4.1f", (timings->layout_start_time - timings->frame_time) / 1000.);
-  if (timings->paint_start_time != 0)
-    g_string_append_printf (str, " paint_start=%-4.1f", (timings->paint_start_time - timings->frame_time) / 1000.);
-  if (timings->frame_end_time != 0)
-    g_string_append_printf (str, " frame_end=%-4.1f", (timings->frame_end_time - timings->frame_time) / 1000.);
+  g_string_append_printf (str, " layout_start=%-4.1f", (timings->stage_end_time[GDK_FRAME_STAGE_UPDATE] / 1000 - timings->frame_time) / 1000.);
+  g_string_append_printf (str, " paint_start=%-4.1f", (timings->stage_end_time[GDK_FRAME_STAGE_LAYOUT] / 1000 - timings->frame_time) / 1000.);
+  g_string_append_printf (str, " frame_end=%-4.1f", (timings->stage_end_time[GDK_FRAME_STAGE_RESUME_EVENTS] / 1000 - timings->frame_time) / 1000.);
   if (timings->drawn_time != 0)
     g_string_append_printf (str, " drawn=%-4.1f", (timings->drawn_time - timings->frame_time) / 1000.);
   if (timings->presentation_time != 0)
