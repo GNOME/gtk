@@ -3764,6 +3764,33 @@ do_generate_layouts (SvgElement       *self,
   return set_bounds;
 }
 
+#if 0
+static void
+print_chunks (SvgElement *self,
+              gboolean    before)
+{
+  g_print ("%s\n", before ? "before" : "after");
+  for (unsigned int i = 0; i < self->text->len; i++)
+    {
+      TextNode *node = &g_array_index (self->text, TextNode, i);
+      switch (node->type)
+        {
+        case TEXT_NODE_SHAPE:
+          g_print ("<tspan>\n");
+          print_chunks (node->shape.shape, before);
+          g_print ("</tspan>\n");
+          break;
+        case TEXT_NODE_CHARACTERS:
+          g_print ("|%s|\n", before ? node->characters.text
+                                    : pango_layout_get_text (node->characters.layout));
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+#endif
+
 static gboolean
 generate_layouts (SvgElement       *self,
                   PangoFontMap     *fontmap,
@@ -3774,6 +3801,10 @@ generate_layouts (SvgElement       *self,
   TextNode *node = &dummy;
   double x = 0;
   double y = 0;
+
+#if 0
+  print_chunks (self, TRUE);
+#endif
 
   retval = do_generate_layouts (self, fontmap, &x, &y, &node, bounds);
 
@@ -3788,6 +3819,10 @@ generate_layouts (SvgElement       *self,
       text = pango_layout_get_text (node->characters.layout);
       pango_layout_set_text (node->characters.layout, text, strlen (text) - 1);
     }
+
+#if 0
+  print_chunks (self, FALSE);
+#endif
 
   return retval;
 }
