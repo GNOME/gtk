@@ -121,19 +121,6 @@ static GtkBuildableIface *parent_buildable_iface;
 static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
-  if (revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_NONE &&
-      revealer->transition_type != GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
-    {
-      GtkReducedMotion reduced_motion;
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
-                    "gtk-interface-reduced-motion", &reduced_motion,
-                    NULL);
-
-      if (reduced_motion == GTK_REDUCED_MOTION_REDUCE)
-        return GTK_REVEALER_TRANSITION_TYPE_NONE;
-    }
-
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
     {
       if (revealer->transition_type == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT)
@@ -290,6 +277,8 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
 {
   GtkWidget *widget = GTK_WIDGET (revealer);
   GtkRevealerTransitionType transition;
+  GtkSettings* settings;
+  GtkReducedMotion reduced_motion;
 
   if (revealer->target_pos == target)
     return;
@@ -297,11 +286,15 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
   revealer->target_pos = target;
   g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_REVEAL_CHILD]);
 
+  settings = gtk_widget_get_settings (widget);
+  g_object_get (settings, "gtk-interface-reduced-motion", &reduced_motion, NULL);
+
   transition = effective_transition (revealer);
   if (gtk_widget_get_mapped (widget) &&
       revealer->transition_duration != 0 &&
       transition != GTK_REVEALER_TRANSITION_TYPE_NONE &&
-      gtk_settings_get_enable_animations (gtk_widget_get_settings (widget)))
+      reduced_motion != GTK_REDUCED_MOTION_REDUCE &&
+      gtk_settings_get_enable_animations (settings))
     {
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN ||
@@ -653,7 +646,7 @@ gtk_revealer_snapshot (GtkWidget   *widget,
   gboolean is_fade;
 
   if (animation_running)
-    is_fade = get_is_fading_type (effective_transition (revealer));
+    is_fade = get_is_fading_type (revealer->transition_type);
   else
     is_fade = FALSE;
 
