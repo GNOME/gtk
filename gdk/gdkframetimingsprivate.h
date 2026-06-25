@@ -63,5 +63,10 @@ GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
 gboolean         _gdk_frame_timings_steal (GdkFrameTimings *timings,
                                            gint64           frame_counter);
 
+uint64_t         gdk_frame_timings_get_start_time               (GdkFrameTimings        *self,
+                                                                 GdkFrameStage           stage);
+uint64_t         gdk_frame_timings_get_end_time                 (GdkFrameTimings        *self,
+                                                                 GdkFrameStage           stage);
+
 G_END_DECLS
 

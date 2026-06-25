@@ -279,3 +279,54 @@ gdk_frame_timings_get_refresh_interval (GdkFrameTimings *timings)
 
   return timings->refresh_interval;
 }
+
+/*<private>
+ * gdk_frame_timings_get_start_time:
+ * @self: the timings
+ * @stage: the stage to query the start time for
+ *
+ * Gets the timestamp of when the given stage started processing.
+ * 
+ * If the stage has not started processing yet - usually because this
+ * is the current frame's timings and the stage has not been reached yet,
+ * then the timestamp of the last stage that has started will be
+ * returned instead.
+ *
+ * Returns: the timestamp in nanoseconds
+ **/
+uint64_t
+gdk_frame_timings_get_start_time (GdkFrameTimings *self,
+                                  GdkFrameStage    stage)
+{
+  if (stage > 0)
+    stage--;
+
+  while (self->stage_end_time[stage] == 0 && stage > 0)
+    stage--;
+
+  return self->stage_end_time[stage];
+}
+
+/*<private>
+ * gdk_frame_timings_get_end_time:
+ * @self: the timings
+ * @stage: the stage to query the end time for
+ *
+ * Gets the timestamp of when the given stage was finished processing.
+ * 
+ * If the stage has not finished processing yet - either because it is
+ * in-process or because it has not yet started processing, then the
+ * timestamp of the last stage that has finished will be returned instead.
+ *
+ * Returns: the timestamp in nanoseconds
+ **/
+uint64_t
+gdk_frame_timings_get_end_time (GdkFrameTimings *self,
+                                GdkFrameStage    stage)
+{
+  while (self->stage_end_time[stage] == 0 && stage > 0)
+    stage--;
+
+  return self->stage_end_time[stage];
+}
+
