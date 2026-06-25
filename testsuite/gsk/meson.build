@@ -395,14 +395,6 @@ compare_xfails = {
     'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
     'yuv-matrix-dmabuf-nv12': ['serialize'],
     'yuv-matrix-dmabuf-yuyv': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-basic': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-clouds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-coarse': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-fine': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-fractal': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-seed1': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-transformed': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
-    'turbulence-turbulence': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip', 'serialize'],
   }
 }
 
