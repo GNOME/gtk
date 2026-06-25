@@ -46,7 +46,6 @@ typedef enum {
 
 struct _GdkFrameClockIdlePrivate
 {
-  gint64 frame_time;                   /* The exact time we last ran the clock cycle, or 0 if never */
   gint64 smoothed_frame_time_base;     /* A grid-aligned version of frame_time (grid size == refresh period), never more than half a grid from frame_time */
   gint64 smoothed_frame_time_period;   /* The grid size that smoothed_frame_time_base is aligned to */
   gint64 smoothed_frame_time_reported; /* Ensures we are always monotonic */
@@ -374,7 +373,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   gint64 frame_interval = FRAME_INTERVAL;
-  gint64 presentation_time;
+  gint64 frame_time, presentation_time;
   GdkFrameTimings *prev_timings, *timings;
 
   if (gdk_frame_clock_is_stopped (clock))
@@ -400,7 +399,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   if (prev_timings && prev_timings->refresh_interval)
     frame_interval = prev_timings->refresh_interval;
 
-  priv->frame_time = g_get_monotonic_time ();
+  frame_time = priv->stage_start_time / 1000;
 
   /*
    * The first clock cycle of an animation might have been triggered by some external event. An external
@@ -463,7 +462,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
       /* First vsync-related animation cycle, we can now compute the phase. We want the phase to satisfy
          0 <= phase < frame_interval */
       priv->smoothed_frame_time_phase =
-          positive_modulo (priv->smoothed_frame_time_base - priv->frame_time,
+          positive_modulo (priv->smoothed_frame_time_base - frame_time,
                            frame_interval);
       priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
     }
@@ -471,13 +470,13 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   if (priv->smoothed_frame_time_base == 0)
     {
       /* First frame ever, or first cycle in a new animation sequence. Ensure monotonicity */
-      priv->smoothed_frame_time_base = MAX (priv->frame_time, priv->smoothed_frame_time_reported);
+      priv->smoothed_frame_time_base = MAX (frame_time, priv->smoothed_frame_time_reported);
     }
   else
     {
       /* compute_smooth_frame_time() ensures monotonicity */
       priv->smoothed_frame_time_base =
-          compute_smooth_frame_time (clock, priv->frame_time + priv->smoothed_frame_time_phase,
+          compute_smooth_frame_time (clock, frame_time + priv->smoothed_frame_time_phase,
                                      priv->paint_is_thaw,
                                      priv->smoothed_frame_time_base,
                                      priv->smoothed_frame_time_period);
@@ -486,14 +485,14 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   priv->smoothed_frame_time_period = frame_interval;
   priv->smoothed_frame_time_reported = priv->smoothed_frame_time_base;
 
-  _gdk_frame_clock_begin_frame (clock, priv->frame_time);
+  _gdk_frame_clock_begin_frame (clock, frame_time);
   /* Note "current" is different now so timings != prev_timings */
   timings = gdk_frame_clock_get_current_timings (clock);
 
   timings->frame_time = priv->smoothed_frame_time_base;
 
   gdk_frame_clock_get_refresh_info (clock,
-                                    priv->frame_time,
+                                    frame_time,
                                     &frame_interval, &presentation_time);
   if (presentation_time != 0)
     {
@@ -501,7 +500,7 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
     }
   else
     {
-      timings->predicted_presentation_time = priv->frame_time + frame_interval / 2 + frame_interval;
+      timings->predicted_presentation_time = frame_time + frame_interval / 2 + frame_interval;
     }
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT)
