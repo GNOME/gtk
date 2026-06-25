@@ -308,7 +308,7 @@ text_chomp (const char *in,
 
   for (size_t i = 0; i < len; i++)
     {
-      if (in[i] == '\n')
+      if (in[i] == '\n' || in[i] == '\r')
         continue;
       if (in[i] == '\t' || in[i] == ' ')
         {
