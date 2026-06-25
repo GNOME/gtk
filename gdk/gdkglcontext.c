@@ -786,7 +786,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
                                        &(cairo_rectangle_int_t) {
                                            0, 0,
                                            buffer_width, buffer_height
-                                       }) == CAIRO_REGION_OVERLAP_IN)
+                                       }) != CAIRO_REGION_OVERLAP_IN)
     {
       EGLint stack_rects[4 * 4]; /* 4 rects */
       EGLint *heap_rects = NULL;
