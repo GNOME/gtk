@@ -55,7 +55,7 @@ struct _GdkAndroidChoreographerSource
 
   gint          needs_dispatch;    /* atomic; set on UI thread, cleared on GTK thread */
   gint          paused;            /* atomic; read on UI thread, written on GTK thread */
-  gint64        presentation_time; /* µs, CLOCK_MONOTONIC; naturally atomic on 64-bit */
+  uint64_t      presentation_time; /* ns, CLOCK_MONOTONIC; naturally atomic on 64-bit */
 
   AChoreographer *choreographer;
   GMainContext *context;
@@ -70,7 +70,7 @@ gdk_android_choreographer_source_on_frame (int64_t frame_time_nanos,
   if (!self || g_atomic_int_get (&self->paused))
     return;
 
-  self->presentation_time = frame_time_nanos / 1000;  /* ns -> us */
+  self->presentation_time = frame_time_nanos;
 
   if (g_atomic_int_compare_and_exchange (&self->needs_dispatch, FALSE, TRUE))
     g_main_context_wakeup (self->context);
