@@ -312,11 +312,20 @@ gdk_frame_clock_idle_set_stage (GdkFrameClockIdle *self,
                                 GdkFrameStage      stage)
 {
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
+  GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
 
   g_assert (priv->stage + 1 == stage || (priv->stage + 1 == GDK_FRAME_N_STAGES && stage == GDK_FRAME_STAGE_NONE));
 
   if (priv->stage == GDK_FRAME_STAGE_NONE || priv->work_performed)
     priv->stage_start_time = g_get_monotonic_time_ns ();
+
+  if (priv->stage >= GDK_FRAME_STAGE_BEFORE_PAINT)
+    {
+      GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
+
+      timings->stage_end_time[priv->stage] = priv->stage_start_time;
+    }
+
   priv->stage = stage;
   priv->work_performed = FALSE;
 }
@@ -368,7 +377,8 @@ positive_modulo (gint64 i,
 }
 
 static void
-gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
+gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self,
+                                       uint64_t           frame_start_time)
 {
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
@@ -488,7 +498,8 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self)
   _gdk_frame_clock_begin_frame (clock, frame_time);
   /* Note "current" is different now so timings != prev_timings */
   timings = gdk_frame_clock_get_current_timings (clock);
-
+  timings->stage_end_time[GDK_FRAME_STAGE_NONE] = frame_start_time;
+  timings->stage_end_time[GDK_FRAME_STAGE_FLUSH_EVENTS] = priv->stage_start_time;
   timings->frame_time = priv->smoothed_frame_time_base;
 
   gdk_frame_clock_get_refresh_info (clock,
@@ -671,6 +682,7 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   gint64 before G_GNUC_UNUSED;
+  uint64_t start_time;
 
   before = GDK_PROFILER_CURRENT_TIME;
 
@@ -679,6 +691,7 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
 
   if (priv->stage == GDK_FRAME_STAGE_NONE)
     gdk_frame_clock_idle_set_stage (self, GDK_FRAME_STAGE_FLUSH_EVENTS);
+  start_time = priv->stage_start_time;
 
   switch (priv->stage)
     {
@@ -687,7 +700,7 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
       G_GNUC_FALLTHROUGH;
 
     case GDK_FRAME_STAGE_BEFORE_PAINT:
-      gdk_frame_clock_idle_run_before_paint (self);
+      gdk_frame_clock_idle_run_before_paint (self, start_time);
       G_GNUC_FALLTHROUGH;
 
     case GDK_FRAME_STAGE_UPDATE:

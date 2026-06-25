@@ -54,6 +54,8 @@ struct _GdkFrameTimings
   gint64 refresh_interval;
   gint64 predicted_presentation_time;
 
+  uint64_t stage_end_time[GDK_FRAME_N_STAGES];
+
   gint64 layout_start_time;
   gint64 paint_start_time;
   gint64 frame_end_time;
