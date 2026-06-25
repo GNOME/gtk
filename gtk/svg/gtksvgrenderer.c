@@ -3680,29 +3680,19 @@ text_create_layout (SvgElement       *self,
 }
 
 static gboolean
-generate_layouts (SvgElement      *self,
-                  PangoFontMap    *fontmap,
-                  double          *x,
-                  double          *y,
-                  gboolean        *lastwasspace,
-                  graphene_rect_t *bounds)
+do_generate_layouts (SvgElement       *self,
+                     PangoFontMap     *fontmap,
+                     double           *x,
+                     double           *y,
+                     TextNode        **lastwithspace,
+                     graphene_rect_t  *bounds)
 {
-  double xs = 0.;
-  double ys = 0.;
-  gboolean lwss = TRUE;
   double dx, dy;
 
   g_assert (svg_element_type_is_text (self->type));
 
   if (svg_enum_get (self->current[SVG_PROPERTY_DISPLAY]) == DISPLAY_NONE)
     return FALSE;
-
-  if (!x)
-    x = &xs;
-  if (!y)
-    y = &ys;
-  if (!lastwasspace)
-    lastwasspace = &lwss;
 
   if (svg_element_is_specified (self, SVG_PROPERTY_X))
     *x = svg_number_get (self->current[SVG_PROPERTY_X], 1);
@@ -3735,7 +3725,7 @@ generate_layouts (SvgElement      *self,
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          node->shape.has_bounds = generate_layouts (node->shape.shape, fontmap, x, y, lastwasspace, &node->shape.bounds);
+          node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, x, y, lastwithspace, &node->shape.bounds);
           if (node->shape.has_bounds)
             ADD_BBOX (&node->shape.bounds)
           break;
@@ -3744,7 +3734,12 @@ generate_layouts (SvgElement      *self,
             graphene_point_t origin;
             graphene_rect_t cbounds;
             gboolean is_vertical;
-            char *text = text_chomp (node->characters.text, lastwasspace);
+            gboolean lastwasspace = *lastwithspace != NULL;
+            char *text = text_chomp (node->characters.text, &lastwasspace);
+            if (!lastwasspace)
+              *lastwithspace = NULL;
+            else if (*text != '\0')
+              *lastwithspace = node;
             node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
@@ -3767,6 +3762,34 @@ generate_layouts (SvgElement      *self,
 
 #undef ADD_BBOX
   return set_bounds;
+}
+
+static gboolean
+generate_layouts (SvgElement       *self,
+                  PangoFontMap     *fontmap,
+                  graphene_rect_t  *bounds)
+{
+  gboolean retval;
+  TextNode dummy;
+  TextNode *node = &dummy;
+  double x = 0;
+  double y = 0;
+
+  retval = do_generate_layouts (self, fontmap, &x, &y, &node, bounds);
+
+  if (node && node != &dummy)
+    {
+      const char *text;
+
+      /* Remove the leftover final space. Note that we rely on text_chomp
+       * only considering single-byte whitespace
+       */
+      g_assert (node->type == TEXT_NODE_CHARACTERS);
+      text = pango_layout_get_text (node->characters.layout);
+      pango_layout_set_text (node->characters.layout, text, strlen (text) - 1);
+    }
+
+  return retval;
 }
 
 static void
@@ -4234,7 +4257,7 @@ paint_shape (SvgElement   *shape,
 
       anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
       wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
-      if (!generate_layouts (shape, get_fontmap (context->svg), NULL, NULL, NULL, &bounds))
+      if (!generate_layouts (shape, get_fontmap (context->svg), &bounds))
         return;
 
       dx = dy = 0;
