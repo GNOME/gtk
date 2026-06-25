@@ -1,0 +1,4420 @@
+color {
+  color: rgb(128,128,128);
+  bounds: -1 -13 189 378;
+}
+transform {
+  transform: translate(0.0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0" url("data://;base64,AAEAAAAIAIAAAwAAY21hcAAIAHYAAAEMAAAALGdseWYVIkEkAAABPAAAABhoZWFkwQ7zSgAAAIwA\
+AAA2aGhlYQwBBAIAAADEAAAAJGhtdHgEAAAAAAABCAAAAARsb2NhAAAADAAAATgAAAAEbWF4cAAD\
+AAUAAADoAAAAIG5hbWVuh0Z1AAABVAAAABYAAQAAAAEZmrvUSClfDzz1AAIIAAAAAAB8JbCAAAAA\
+AOHT3DoAAAAABAAIAAAAAAEAAgAAAAAAAAABAAAIAAAAAAAEAAAAAAAEAAABAAAAAAAAAAAAAAAA\
+AAAAAQABAAAAAQAEAAEAAAAAAAEAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAEAAAADAAAADAAEACAA\
+AAAEAAQAAQAAAEH//wAAAEH///+/AAEAAAAAAAAADAABAAAAAAQACAAAAwAAMSERIQQA/AAIAAAA\
+AAEAEgABAAAAAAABAAQAAEZvbnQAAA==");
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 18.05;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 28.03125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 26.11875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 72.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 90.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 66.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 59.5;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 144.4;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 21.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 141.075;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 114.4875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 84.06250000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 189.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 27.068749999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 95.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 175.21875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.0, 18.6625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 288.1875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 342.95;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 360.1875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.8125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(3.0625, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 5.987500000000001 18.05;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 36.1;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.05 54.15;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(1.4375, 59.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.612500000000001 12.668750000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 29.96875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 60.28125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(8.9875, 56.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0625 51.76875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.05 126.35;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.05 144.4;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.7375, 162.45);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 6.312500000000001 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 165.21875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.05 15.28125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.84375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 6.206250000000001 198.55;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(8.75, 124.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.3000000000000007 92.25625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(4.08125, 71.86875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 4.968750000000001 162.78125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(7.14375, 225.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.9062500000000009 45.375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.05 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 84.5375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 222.31250000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(1.675, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.375000000000001 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.05, 105.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 255.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.1 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(16.6625, 3.4875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.4375 14.5625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(15.6875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.4125000000000014 36.1;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 24.49375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.1 29.65625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.1, 72.2);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.1, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.1, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 84.9125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.1 41.4375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(4.2875, 113.68125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 13.812500000000002 30.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(15.6875, 126.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.4125000000000014 36.19999999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.3125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.7875000000000014 180.5;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(16.31875, 69.26875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.78125 129.28125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.9375, 184.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.1625000000000014 32.068749999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(3.84375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 14.256250000000001 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(7.78125, 222.45);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 10.318750000000001 30.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(15.6, 248.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.5000000000000018 22.46875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.1, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.1, 306.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.9125, 309.46875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 17.1875 15.431249999999977;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0.59375, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 17.50625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.75625, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 15.343750000000002 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(22.4625, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 4.6875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(27.15, 6.40625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 11.64375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 31.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 4.162500000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(12.05625, 54.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 15.093749999999998 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(27.15, 72.2);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(3.49375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 23.65625 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(23.28125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.8687499999999986 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(1.24375, 117.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 25.90625 8.849999999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 92.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 52.056250000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(8.18125, 12.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.96875 149.6375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(27.15, 141.08125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 57.46875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(13.28125, 61.4375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 13.868749999999999 155.1625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(27.15, 189.125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 45.525000000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 252.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.775, 35.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 12.374999999999998 235.375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(25.80625, 24.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.34375 264.05;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 157.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 149.50625000000002;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.15 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(19.46875, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.681249999999999 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.9375, 310.15625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 24.2125 50.84375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.10625, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 22.093750000000004 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(11.98125, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 24.218750000000004 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(7.73125, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 28.468750000000004 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 51.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 2.2749999999999986;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.91875, 10.2);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 17.281250000000004 62.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(5.8875, 47.84375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 30.312500000000004 42.40625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 42.08125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 66.21875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(29.4375, 97.44375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 6.762500000000003 28.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 101.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 42.525000000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(24.71875, 157.79375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 11.481250000000003 4.65625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(36.2, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 180.5;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(28.35625, 45.45625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.8437500000000036 153.09375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.6875, 13.625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 4.512500000000003 202.975;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(13.8875, 13.93125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 22.312500000000004 220.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 41.6875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 211.0125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 270.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(36.2, 16.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 289.9125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 36.2 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(36.2, 288.98125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 53.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(27.0625, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.137500000000003 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.84375, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 42.40625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 24.4375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 11.662500000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.4375, 0.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 42.8125 53.80625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 10.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.25 61.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(1.15625, 67.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 44.09375 22.4375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(41.3125, 126.35);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.9375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 144.4;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(7.6875, 109.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 37.5625 53.19999999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 74.4375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.25 106.0625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(11.71875, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 33.53125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 216.6);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.25 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 150.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.25 101.94999999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 270.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(13.8125, 139.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 31.4375 149.08125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 217.46875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.25 89.38125000000002;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(38.25, 275.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.0 49.39999999999998;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 342.95;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(26.875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.375 361.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(51.8125, 0.08125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.487499999999997 17.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(47.0, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.299999999999997 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(43.375, 54.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 10.924999999999997 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 72.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 68.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 54.3 57.631249999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(36.5625, 7.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 17.737499999999997 136.5875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 162.45);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 54.3 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 21.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 54.3 177.4875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(48.9875, 135.46875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 5.3125 81.13125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(4.33125, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 49.96875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 44.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 54.3 208.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(50.875, 240.3125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.424999999999997 30.4375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(50.4875, 225.15625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.8125 63.64375000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 306.85;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 203.5875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 121.31249999999997;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(6.8, 326.78125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 47.5 16.16874999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.3, 155.15625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 205.84375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(23.9125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 39.4375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(62.06875, 2.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.28125 15.76875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(2.31875, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 61.03125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(63.35, 54.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 22.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 63.35 50.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.31875, 90.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 32.03125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(53.96875, 46.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 9.381250000000001 61.925;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 66.78125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 63.35 59.568749999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.09375, 92.3125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 49.25625 52.087500000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(35.5375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 27.8125 162.45;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(63.35, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 180.5;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.50625, 24.8625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 31.84375 173.6875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 216.6);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 63.35 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(56.4375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 6.912500000000001 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(63.35, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 63.35 270.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 78.59375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 63.35 210.20625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(44.5625, 306.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.7875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(11.6, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 51.75 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(11.44375, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 51.90625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(63.35, 211.90625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 149.09375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(43.15625, 4.95625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 29.243750000000006 13.09375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(40.34375, 17.46875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 32.056250000000006 18.63125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(40.625, 22.15625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 31.775000000000006 31.99375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 72.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 74.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 15.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 46.6125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 61.6875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 30.19375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 96.15625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 144.4);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 162.45;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 180.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.21875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(48.96875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 23.431250000000006 216.6;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(70.4375, 216.84375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 1.9625000000000057 17.806250000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 158.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 93.88749999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(39.9625, 192.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 32.43750000000001 78.21875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 122.1875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 166.6125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 306.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.4 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.4, 148.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 194.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(23.43125, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 48.96875000000001 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(34.16875, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 47.28125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 1.76875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 81.45 16.28125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 81.45 36.1;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(62.16875, 4.90625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 19.28125 49.24375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 21.96875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 81.45 50.23125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.65625, 90.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 71.79375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(36.5625, 108.3);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 44.8875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.45, 93.7875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 32.5625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.8125, 2.8375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 71.6375 141.5625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(13.3875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 68.0625 162.45;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(29.45, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 52.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(73.3875, 41.2375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 8.0625 157.3125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 9.69375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 81.45 206.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.45, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.45, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(4.59375, 270.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 76.85625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.45, 17.01875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 271.78125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 243.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 81.45 62.97500000000002;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(37.73125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 43.71875 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.45, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(24.0625, 59.65625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 57.3875 301.34375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(90.5, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(17.71875, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.78125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(87.75, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.75 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(44.6875, 5.24375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 45.8125 48.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(55.09375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 35.40625 72.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 82.03125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 90.5 8.21875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 90.5 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(30.53125, 115.03125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 59.96875 11.318749999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(55.03125, 118.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 35.46875 26.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(90.5, 20.48125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 141.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(51.15625, 129.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 39.34375 50.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(24.03125, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 66.46875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(70.21875, 3.09375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 20.28125 213.50625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.71875, 226.68125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 58.78125 7.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(33.3125, 135.15625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 57.1875 117.54374999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(90.5, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 270.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(90.5, 199.65625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 89.14375000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(43.34375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 47.15625 306.85;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 90.5 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(13.15625, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 77.34375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(90.5, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 361.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(44.175, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 55.375 18.05;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(85.9875, 16.975);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 13.5625 19.125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.55, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 68.0 54.15;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(99.55, 72.2);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 108.3);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(99.55, 126.35);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(21.75, 104.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 77.8 39.681250000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(61.76875, 136.85625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 37.78125 25.59375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(95.26875, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 4.28125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(99.55, 128.08125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 70.46875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(72.90625, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 26.643749999999997 216.6;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 169.61875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 65.03125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(77.175, 252.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 22.375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(14.53125, 130.78125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 85.01875 139.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 239.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 49.30000000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.89375, 306.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 53.65625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(77.5, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 22.049999999999997 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 180.575);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55 162.375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(99.55, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(57.44375, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 51.15624999999999 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 6.8);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 11.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(94.09375, 18.7875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 14.506249999999994 17.3125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 13.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 40.275;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.6, 55.6875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 16.512500000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.6, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(21.13125, 79.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 87.46875 29.237499999999997;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(65.31875, 126.35);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 43.28125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.6, 144.4);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(68.375, 24.1875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 40.224999999999994 138.2625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(40.375, 10.46875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 68.225 170.03125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(47.71875, 125.3);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 60.881249999999994 73.25000000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 187.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 28.849999999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 214.4375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 20.212500000000006;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.6, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(100.90625, 113.21875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.693749999999994 157.53125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 127.125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 161.675;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.6, 96.5625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 210.28750000000002;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 167.525);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.6 157.37499999999997;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(69.2875, 95.54375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 39.3125 247.40625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(100.25625, 42.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 8.34375 318.0625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 13.31875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 22.78125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 39.2125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 14.9375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 42.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 29.481250000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(103.3375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 14.3125 90.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(44.7125, 108.3);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.9375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(41.74375, 83.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 75.90625 42.474999999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(73.0, 117.74375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 44.650000000000006 26.65625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(8.1875, 36.54375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 109.4625 125.90624999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 16.78125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 163.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 86.275 198.55;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 48.09375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 168.50625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(15.28125, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 102.36875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(33.09375, 66.79375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 84.55625 185.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 42.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 228.375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(82.99375, 70.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 34.65625 218.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 306.85;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(117.65, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 187.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.65 155.8875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(18.2125, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.4375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(119.48125, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.21875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(63.90625, 5.70625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 62.79375 12.34375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(74.9375, 20.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 51.7625 15.725000000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.575, 46.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.125 8.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 13.53125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 58.66875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 90.25);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(64.21875, 108.3);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 62.48125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(126.7, 62.00625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 64.34375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 144.4);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 4.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 157.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(126.7, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(57.625, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 69.075 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 163.96875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 52.631249999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 36.93125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 197.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 252.7;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(118.8875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.8125 270.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 56.21875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.7 232.58125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(87.59375, 288.21875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 39.10625 18.631250000000023;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(3.84375, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 122.85625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(110.53125, 277.1375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 16.168750000000003 65.8125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(59.875, 361.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 66.825 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 135.75 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(33.90625, 16.9875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 101.84375 1.0625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(95.59375, 2.94375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 40.15625 33.15625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(24.71875, 54.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 111.03125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(103.40625, 58.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 32.34375 13.700000000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.75, 54.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 35.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.75, 9.95625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 98.34375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(47.375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 88.375 126.35;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.75, 70.43125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 73.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(114.21875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 21.53125 162.45;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.75, 127.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 53.4375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 135.75 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(9.46875, 216.6);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 126.28125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(127.1875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 8.5625 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(125.75, 184.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 10.0 68.69999999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(55.875, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 79.875 270.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 135.75 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.75, 48.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 257.9125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(102.5625, 28.86875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 33.1875 296.03125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 154.3875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 135.75 188.5625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(95.0625, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 40.6875 361.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(45.25, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 99.55000000000001 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(142.20625, 1.425);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 2.59375 16.625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 54.15);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 144.8 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(64.01875, 28.09375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 80.78125000000001 44.10625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(136.15625, 77.6875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 8.643750000000011 12.5625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 34.9875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 73.3125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(37.1125, 89.63125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 107.68750000000001 36.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 65.61875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 144.8 78.78125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(5.9375, 24.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 138.8625 137.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 180.5;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 94.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 104.26875000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 115.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 100.6625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(15.6125, 170.5875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 129.1875 64.0625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(135.925, 252.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 8.875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(60.33125, 59.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 84.46875000000001 211.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(76.84375, 43.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 67.95625000000001 245.45625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 50.59375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 256.25625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(144.8, 3.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 321.025;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(49.40625, 342.95);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 95.39375000000001 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 144.8 361.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(128.6, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 25.25 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(37.4125, 15.33125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 116.4375 2.71875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 36.1;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(104.1625, 11.7125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 49.6875 42.4375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(153.85, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 72.2;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(106.06875, 34.40625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 47.78125 55.84375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(42.25, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 111.6 108.3;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(153.85, 6.5625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 119.7875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(91.6, 76.2125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 62.25 68.1875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(81.53125, 128.91875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 72.31875 33.53125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(51.4125, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 102.4375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 198.55);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 216.6);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(100.28125, 234.65);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 53.568749999999994 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(111.0, 64.73125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 42.849999999999994 187.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(64.65625, 217.875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 89.19375 52.875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 209.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 78.98750000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(132.4125, 306.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 21.4375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(153.85, 101.10625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 241.84375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 325.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 153.85 35.9375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(136.80625, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 26.09375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(68.65625, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 94.24375 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 36.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 13.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 162.9 40.86875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 11.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 162.9 60.3875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(108.3375, 49.65625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 54.5625 40.59375;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(113.0875, 41.1875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 49.8125 67.1125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(94.30625, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 68.59375 126.35;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 71.4375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 162.9 72.9625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 46.1375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 116.31249999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 118.84375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 162.9 61.65625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(93.775, 182.0625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 69.125 16.48750000000001;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 216.6);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(159.525, 4.03125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 3.375 248.66875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 270.75;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(133.59375, 288.8);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 29.306250000000006 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(109.40625, 246.1);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 53.493750000000006 60.75000000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 78.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 246.89999999999998;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.24375, 170.59375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 108.65625 172.35625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.9, 151.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 209.28125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(171.95, 18.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(171.95, 17.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 18.2875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 27.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 26.4;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 48.90625);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 23.293750000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(171.95, 21.34375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 68.90625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 94.05);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 14.25;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(110.6375, 111.225);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 61.312499999999986 15.125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(171.95, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 144.4;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(93.75, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 78.19999999999999 162.45;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(164.075, 180.5);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 7.875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(131.575, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 40.375 198.55;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 3.9125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 212.6875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.84375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.10624999999999 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 247.84375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 4.856249999999989;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(171.95, 270.75);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 171.95 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(97.10625, 6.375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 74.84374999999999 300.475;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(95.6375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 76.31249999999999 324.9;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(54.0125, 308.28125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 117.93749999999999 34.66874999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(6.59375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 165.35625 361.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(142.78125, 0.0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 38.21875 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(181.0, 14.9875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 3.0625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 181.0 36.1;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 5.275);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 181.0 48.875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(181.0, 41.78125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 30.418750000000003;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(128.5, 61.09375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 52.5 29.15625;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(181.0, 94.26875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 14.03125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(162.78125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 18.21875 126.35;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(174.875, 144.4);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 6.125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(141.6875, 93.3875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 39.3125 69.06249999999999;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(145.65625, 75.71875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 35.34375 104.78125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(124.3125, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 56.6875 198.55;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(20.375, 179.21875);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 160.625 37.381249999999994;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 181.0 234.65;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(136.71875, 252.7);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 44.28125 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(0, 24.9375);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 181.0 245.8125;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(88.34375, 0);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 92.65625 288.8;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(181.0, 0.85);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 0.0 306.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(102.34375, 324.9);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 78.65625 0.0;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(31.40625, 45.98125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 149.59375 296.96875;
+    hint-style: none;
+  }
+}
+transform {
+  transform: translate(170.46875, 309.8125);
+  child: text {
+    color: black;
+    font: "Font 9.0";
+    glyphs: 0 0;
+    offset: 10.53125 51.1875;
+    hint-style: none;
+  }
+}

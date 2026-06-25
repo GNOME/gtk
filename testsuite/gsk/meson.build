@@ -262,6 +262,7 @@ compare_render_tests = [
   'stroke-with-3d-contents-nocairo',
   'subpixel-positioning',
   'subpixel-positioning-hidpi-nocairo',
+  'subpixel-positioning-via-translate',
   'text-color-mix',
   'text-glyph-lsb',
   'text-mixed-color-nocairo',
