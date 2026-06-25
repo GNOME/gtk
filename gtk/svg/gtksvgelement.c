@@ -764,6 +764,7 @@ svg_element_get_current_bounds (SvgElement            *element,
       if (!element->valid_bounds)
         g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &element->bounds);
+      ret = TRUE;
       break;
     case SVG_ELEMENT_IMAGE:
       {
