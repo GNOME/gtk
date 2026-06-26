@@ -82,10 +82,7 @@ gtk_application_impl_x11_handle_window_map (GtkApplicationImpl *impl,
 
   state = gtk_application_impl_dbus_get_window_state (dbus, window);
   if (state)
-    {
-      gdk_x11_toplevel_restore_state (GDK_TOPLEVEL (gdk_surface), state);
-      g_variant_unref (state);
-    }
+    gdk_x11_toplevel_restore_state (GDK_TOPLEVEL (gdk_surface), state);
 }
 
 static void
