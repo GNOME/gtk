@@ -1512,7 +1512,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        "activate", NULL);
 
   /* Deleting text */
-  gtk_widget_class_add_binding_action (widget_class,
+  gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Delete, GDK_NO_MODIFIER_MASK,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_CHARS, 1);
