@@ -302,28 +302,36 @@ apply_transform (GskRenderNode *node,
 
 static char *
 text_chomp (const char *in,
+            XmlSpace    space,
             gboolean   *lastwasspace)
 {
   size_t len = strlen (in);
-  GString *ret = g_string_sized_new (len);
+  GString *str = g_string_sized_new (len);
 
   for (size_t i = 0; i < len; i++)
     {
-      if (in[i] == '\n' || in[i] == '\r')
-        continue;
-      if (in[i] == '\t' || in[i] == ' ')
+      if (in[i] == '\r')
         {
-          if (*lastwasspace)
-            continue;
-          g_string_append_c (ret, ' ');
-          *lastwasspace = TRUE;
+          if (in[i+1] == '\n')
+            i++;
+        }
+
+      if (in[i] == '\r' || in[i] == '\n' ||
+          (space == XML_SPACE_DEFAULT && (in[i] == '\t' || in[i] == ' ')))
+        {
+          if (!*lastwasspace)
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
           continue;
         }
-      g_string_append_c (ret, in[i]);
+
+      g_string_append_c (str, in[i]);
       *lastwasspace = FALSE;
     }
 
-  return g_string_free_and_steal (ret);
+  return g_string_free_and_steal (str);
 }
 
 /* }}} */
@@ -3632,12 +3640,14 @@ text_create_layout (SvgElement       *self,
 static gboolean
 do_generate_layouts (SvgElement       *self,
                      PangoFontMap     *fontmap,
+                     XmlSpace          space,
                      double           *x,
                      double           *y,
                      TextNode        **lastwithspace,
                      graphene_rect_t  *bounds)
 {
   double dx, dy;
+  gboolean set_bounds = FALSE;
 
   g_assert (svg_element_type_is_text (self->type));
 
@@ -3654,7 +3664,6 @@ do_generate_layouts (SvgElement       *self,
   *x += dx;
   *y += dy;
 
-  gboolean set_bounds = FALSE;
 #define ADD_BBOX(box) do {                          \
   if (!set_bounds)                                  \
     {                                               \
@@ -3675,21 +3684,31 @@ do_generate_layouts (SvgElement       *self,
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, x, y, lastwithspace, &node->shape.bounds);
-          if (node->shape.has_bounds)
-            ADD_BBOX (&node->shape.bounds)
+          {
+            XmlSpace space2;
+
+            space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, x, y, lastwithspace, &node->shape.bounds);
+            if (node->shape.has_bounds)
+              ADD_BBOX (&node->shape.bounds)
+          }
           break;
         case TEXT_NODE_CHARACTERS:
           {
             graphene_point_t origin;
             graphene_rect_t cbounds;
             gboolean is_vertical;
-            gboolean lastwasspace = *lastwithspace != NULL;
-            char *text = text_chomp (node->characters.text, &lastwasspace);
+            gboolean lastwasspace;
+            char *text;
+
+            lastwasspace = *lastwithspace != NULL;
+            text = text_chomp (node->characters.text, space, &lastwasspace);
+
             if (!lastwasspace)
               *lastwithspace = NULL;
             else if (*text != '\0')
               *lastwithspace = node;
+
             node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
@@ -3751,12 +3770,15 @@ generate_layouts (SvgElement       *self,
   TextNode *node = &dummy;
   double x = 0;
   double y = 0;
+  XmlSpace space;
 
 #if 0
   print_chunks (self, TRUE);
 #endif
 
-  retval = do_generate_layouts (self, fontmap, &x, &y, &node, bounds);
+  space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
+
+  retval = do_generate_layouts (self, fontmap, space, &x, &y, &node, bounds);
 
   if (node && node != &dummy)
     {

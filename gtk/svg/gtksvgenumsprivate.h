@@ -394,6 +394,12 @@ typedef enum
 
 typedef enum
 {
+  XML_SPACE_DEFAULT,
+  XML_SPACE_PRESERVE,
+} XmlSpace;
+
+typedef enum
+{
   GPA_TRANSITION_NONE,
   GPA_TRANSITION_ANIMATE,
   GPA_TRANSITION_MORPH,

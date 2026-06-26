@@ -881,6 +881,11 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = BIT (SVG_ELEMENT_MARKER),
     .parse_value = svg_orient_parse,
   },
+  [SVG_PROPERTY_SPACE] = {
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
+    .applies_to = ELEMENT_ANY,
+    .parse_value = svg_xml_space_parse,
+  },
   [SVG_PROPERTY_LANG] = {
     .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
     .applies_to = ELEMENT_ANY,
@@ -1202,6 +1207,7 @@ static void
 shape_attrs_init_default_values (void)
 {
   shape_attrs[SVG_PROPERTY_LANG].initial_value = svg_language_new_default ();
+  shape_attrs[SVG_PROPERTY_SPACE].initial_value = svg_xml_space_new (XML_SPACE_DEFAULT);
   shape_attrs[SVG_PROPERTY_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SVG_PROPERTY_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SVG_PROPERTY_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
@@ -1516,6 +1522,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "refY", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_REF_Y },
   { "markerUnits", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_UNITS },
   { "orient", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_ORIENT },
+  { "xml:space", ELEMENT_ANY, 0, SVG_PROPERTY_SPACE },
   { "lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "xml:lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "text-anchor", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_ANCHOR },
