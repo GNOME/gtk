@@ -67,6 +67,33 @@ _gdk_frame_timings_steal (GdkFrameTimings *timings,
 }
 
 /**
+ * gdk_frame_timings_setup:
+ * @self: the timings
+ * @frame_time: the frame time
+ * @predicted_presentation_time: The predicted presentation time
+ * @frame_start_time: The time this frame started the
+ *   `GDK_FRAME_STAGE_FLUSH_EVENTS` stage
+ * @stage_start_time: The time this frame started the
+ *   `GDK_FRAME_STAGE_BEFORE_PAINT` stage
+ *
+ * Initializes the required values for a `GdkFrameTimings`.
+ *
+ * All provided timestamps are in nanoseconds.
+ **/
+void
+gdk_frame_timings_setup (GdkFrameTimings *self,
+                         uint64_t         frame_time,
+                         uint64_t         predicted_presentation_time,
+                         uint64_t         frame_start_time,
+                         uint64_t         stage_start_time)
+{
+  self->frame_time = frame_time / 1000;
+  self->predicted_presentation_time = predicted_presentation_time / 1000;
+  self->stage_end_time[GDK_FRAME_STAGE_NONE] = frame_start_time;
+  self->stage_end_time[GDK_FRAME_STAGE_FLUSH_EVENTS] = stage_start_time;
+}
+
+/**
  * gdk_frame_timings_ref:
  * @timings: a `GdkFrameTimings`
  *

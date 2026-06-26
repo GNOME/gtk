@@ -62,6 +62,11 @@ struct _GdkFrameTimings
 GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
 gboolean         _gdk_frame_timings_steal (GdkFrameTimings *timings,
                                            gint64           frame_counter);
+void             gdk_frame_timings_setup                        (GdkFrameTimings        *self,
+                                                                 uint64_t                frame_time,
+                                                                 uint64_t                predicted_presentation_time,
+                                                                 uint64_t                frame_start_time,
+                                                                 uint64_t                stage_start_time);
 
 uint64_t         gdk_frame_timings_get_start_time               (GdkFrameTimings        *self,
                                                                  GdkFrameStage           stage);

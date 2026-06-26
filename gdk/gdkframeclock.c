@@ -488,9 +488,6 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
         }
     }
 
-  timings->frame_time = frame_time;
-  timings->stage_end_time[GDK_FRAME_STAGE_NONE] = frame_start_time;
-  timings->stage_end_time[GDK_FRAME_STAGE_FLUSH_EVENTS] = stage_start_time;
   if (priv->latest_presentation_time != 0)
     {
       if (priv->latest_presentation_time < stage_start_time)
@@ -508,7 +505,12 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
     {
       predicted_presentation_time = frame_time * 1000 + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
     }
-  timings->predicted_presentation_time = predicted_presentation_time / 1000;
+
+  gdk_frame_timings_setup (timings,
+                           frame_time * 1000,
+                           predicted_presentation_time,
+                           frame_start_time,
+                           stage_start_time);
 }
 
 static inline GdkFrameTimings *
