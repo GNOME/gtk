@@ -97,8 +97,10 @@ void gdk_frame_clock_start               (GdkFrameClock *clock);
 void gdk_frame_clock_stop                (GdkFrameClock *clock);
 gboolean gdk_frame_clock_is_stopped      (GdkFrameClock *clock);
 
-void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock,
-                                           gint64           monotonic_time);
+void gdk_frame_clock_begin_frame          (GdkFrameClock   *self,
+                                           gint64           frame_time,
+                                           uint64_t         frame_start_time,
+                                           uint64_t         stage_start_time);
 void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                            GdkFrameTimings *timings);
 void _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock *frame_clock,

@@ -447,26 +447,29 @@ gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 }
 
 void
-_gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock,
-                              gint64         monotonic_time)
+gdk_frame_clock_begin_frame (GdkFrameClock *self,
+                             gint64         frame_time,
+                             uint64_t       frame_start_time,
+                             uint64_t       stage_start_time)
 {
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
-
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GdkFrameTimings *timings;
+  gint64 frame_interval, presentation_time;
 
   priv->frame_counter++;
 
   if (G_UNLIKELY (timings_get_size (&priv->timings) == 0))
-    timings_append (&priv->timings, _gdk_frame_timings_new (priv->frame_counter));
+    {
+      timings = _gdk_frame_timings_new (priv->frame_counter);
+      timings_append (&priv->timings, timings);
+    }
   else
     {
-      GdkFrameTimings *timings;
-
       priv->current = (priv->current + 1) % timings_get_size (&priv->timings);
 
       timings = timings_get (&priv->timings, priv->current);
 
-      if (timings->frame_time + G_USEC_PER_SEC > monotonic_time)
+      if (timings->frame_time + G_USEC_PER_SEC > frame_time)
         {
           /* Keep the timings, not a second old yet */
           timings = _gdk_frame_timings_new (priv->frame_counter);
@@ -483,6 +486,21 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock,
           timings = _gdk_frame_timings_new (priv->frame_counter);
           timings_splice (&priv->timings, priv->current, 1, FALSE, &timings, 1);
         }
+    }
+
+  timings->frame_time = frame_time;
+  timings->stage_end_time[GDK_FRAME_STAGE_NONE] = frame_start_time;
+  timings->stage_end_time[GDK_FRAME_STAGE_FLUSH_EVENTS] = stage_start_time;
+  gdk_frame_clock_get_refresh_info (self,
+                                    frame_time,
+                                    &frame_interval, &presentation_time);
+  if (presentation_time != 0)
+    {
+      timings->predicted_presentation_time = presentation_time + frame_interval;
+    }
+  else
+    {
+      timings->predicted_presentation_time = frame_time + frame_interval / 2 + frame_interval;
     }
 }
 
