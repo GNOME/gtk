@@ -100,6 +100,9 @@ struct _GdkFrameClockPrivate
   gint64 frame_counter;
   int current;
   Timings timings;
+  uint64_t latest_presentation_time;
+  uint64_t latest_refresh_interval;
+
   int n_started;
 };
 
@@ -256,6 +259,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
   priv->frame_counter = -1;
   priv->current = 0;
   timings_init (&priv->timings);
+  priv->latest_refresh_interval = (G_NSEC_PER_SEC + 30) / 60;
 
   if (fps_counter == 0)
     fps_counter = gdk_profiler_define_counter ("fps", "Frames per Second");
@@ -885,7 +889,11 @@ gdk_frame_clock_submitted (GdkFrameClock *self,
                            gint64         frame_counter,
                            uint64_t       refresh)
 {
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   GdkFrameTimings *timings;
+
+  if (refresh)
+    priv->latest_refresh_interval = refresh;
 
   timings = gdk_frame_clock_get_timings (self, frame_counter);
   if (timings == NULL)
@@ -1003,9 +1011,17 @@ gdk_frame_clock_presented (GdkFrameClock *self,
                            uint64_t       presentation_time,
                            uint64_t       refresh)
 {
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   GdkFrameTimings *timings;
 
   g_return_if_fail (presentation_time != 0);
+
+  if (presentation_time > priv->latest_presentation_time)
+    {
+      priv->latest_presentation_time = presentation_time;
+      if (refresh)
+        priv->latest_refresh_interval = refresh;
+    }
 
   timings = gdk_frame_clock_get_timings (self, frame_counter);
   if (timings == NULL)
