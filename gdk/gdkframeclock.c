@@ -454,7 +454,7 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   GdkFrameTimings *timings;
-  gint64 frame_interval, presentation_time;
+  uint64_t predicted_presentation_time;
 
   priv->frame_counter++;
 
@@ -491,17 +491,24 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
   timings->frame_time = frame_time;
   timings->stage_end_time[GDK_FRAME_STAGE_NONE] = frame_start_time;
   timings->stage_end_time[GDK_FRAME_STAGE_FLUSH_EVENTS] = stage_start_time;
-  gdk_frame_clock_get_refresh_info (self,
-                                    frame_time,
-                                    &frame_interval, &presentation_time);
-  if (presentation_time != 0)
+  if (priv->latest_presentation_time != 0)
     {
-      timings->predicted_presentation_time = presentation_time + frame_interval;
+      if (priv->latest_presentation_time < stage_start_time)
+        {
+          uint64_t n_frames;
+          n_frames = (stage_start_time - priv->latest_presentation_time) / priv->latest_refresh_interval + 1;
+          predicted_presentation_time = priv->latest_presentation_time + n_frames * priv->latest_refresh_interval;
+        }
+      else
+        {
+          predicted_presentation_time = priv->latest_presentation_time + priv->latest_refresh_interval;
+        }
     }
   else
     {
-      timings->predicted_presentation_time = frame_time + frame_interval / 2 + frame_interval;
+      predicted_presentation_time = frame_time * 1000 + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
     }
+  timings->predicted_presentation_time = predicted_presentation_time / 1000;
 }
 
 static inline GdkFrameTimings *
