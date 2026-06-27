@@ -54,6 +54,17 @@ struct _GtkColumnViewTitleClass
 
 G_DEFINE_TYPE (GtkColumnViewTitle, gtk_column_view_title, GTK_TYPE_WIDGET)
 
+static GtkSizeRequestMode
+gtk_column_view_title_get_request_mode (GtkWidget *widget)
+{
+  GtkWidget *child = gtk_widget_get_first_child (widget);
+
+  if (child)
+    return gtk_widget_get_request_mode (child);
+  else
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static int
 unadjust_width (GtkWidget *widget,
                 int        width)
@@ -85,22 +96,6 @@ gtk_column_view_title_measure (GtkWidget      *widget,
 
   fixed_width = gtk_column_view_column_get_fixed_width (self->column);
   unadj_width = unadjust_width (widget, fixed_width);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      if (fixed_width > -1)
-        {
-          int min;
-
-          if (for_size == -1)
-            for_size = unadj_width;
-          else
-            for_size = MIN (for_size, unadj_width);
-
-          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-          for_size = MAX (for_size, min);
-        }
-    }
 
   if (child)
     gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
@@ -156,6 +151,7 @@ gtk_column_view_title_class_init (GtkColumnViewTitleClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  widget_class->get_request_mode = gtk_column_view_title_get_request_mode;
   widget_class->measure = gtk_column_view_title_measure;
   widget_class->size_allocate = gtk_column_view_title_size_allocate;
 
