@@ -1177,7 +1177,6 @@ static void
 gtk_popover_show (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_realize (widget);
@@ -1186,11 +1185,8 @@ gtk_popover_show (GtkWidget *widget)
 
   gtk_widget_map (widget);
 
-  if (priv->autohide)
-    {
-      if (!gtk_widget_get_focus_child (widget))
-        gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
-    }
+  if (!gtk_widget_get_focus_child (widget))
+    gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
 }
 
 static void
