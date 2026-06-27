@@ -1,0 +1,375 @@
+mask {
+  source: linear-gradient {
+    bounds: 50 56 50 55;
+    start: 45.2489 61.2262;
+    end: 100 111;
+    stops: 0 rgb(0,128,0), 1 rgb(255,255,255);
+    repeat: reflect;
+    premultiplied: false;
+  }
+  mask: transform {
+    transform: translate(50, 56);
+    child: fill {
+      child: color {
+        bounds: 0 50 50 3;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 50\
+L 50 50\
+L 50 53\
+L 0 53\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 50 56 50 55;
+    color: rgb(255,255,0);
+  }
+  mask: transform {
+    transform: translate(50, 56);
+    child: stroke {
+      child: color {
+        bounds: -4 46 58 11;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 50\
+L 50 50\
+L 50 53\
+L 0 53\
+Z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+mask {
+  source: linear-gradient {
+    bounds: 50 56 50 55;
+    start: 0 0;
+    end: 20 20;
+    stops: 0 rgb(255,0,0), 1 rgb(255,255,0);
+    repeat: reflect;
+    premultiplied: false;
+  }
+  mask: text {
+    font: "FreeSerif 48px" url("data:font/ttf;base64,\
+T1RUTwAKAIAAAwAgQ0ZGIJDEyrUAAAQ8AAADH0dERUYBOgEvAAAA+AAAAChPUy8yYVBoDwAAAaQA\
+AABgY21hcAGSAcIAAAFYAAAATGhlYWT+8laZAAABIAAAADZoaGVhBz8C/wAAANQAAAAkaG10eAkd\
+AHoAAALUAAABaG1heHAAWlAAAAAArAAAAAZuYW1lDDsjJgAAAgQAAADOcG9zdP+GADIAAAC0AAAA\
+IAAAUAAAWgAAAAMAAAAAAAD/gwAyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA4T/JgBaA7D/uv/O\
+A6QAAQAAAAAAAAAAAAAAAAAAAFoAAQAAAAwAAAAAAAAAAgAEADUANQABAEYARgABAFUAVQABAFkA\
+WQABAAEAAAABAAB/AIz6Xw889QALA+gAAAAAzjqJhQAAAADOOomF/7r/JgOkA4QAAAAIAAIAAAAA\
+AAAAAAACAAAAAwAAABQAAwABAAAAFAAEADgAAAAKAAgAAgACAFQAZQB0AHj//wAAAFQAZQB0AHj/\
+///h/+H/4f/hAAEAAAAAAAAAAAAAAAMCAwGQAAUACAKKArwAAACMAooCvAAAAeAAMQECAAACAgYD\
+BQQFAgMEAAAAAQAAAAAAAAAAAAAAAFBmRWQAQABUAHgDIP84AFoDhADaAAAAAQAAAAABwgKWACAA\
+IAABAAAABgBOAAMAAQQJAAEAEgBuAAMAAQQJAAIADgBgAAMAAQQJAAMASgAWAAMAAQQJAAQAEgBu\
+AAMAAQQJAAUAFgAAAAMAAQQJAAYAEgBuAFYAZQByAHMAaQBvAG4AIAAxAC4AMABGAG8AbgB0AEYA\
+bwByAGcAZQAgADIALgAwACAAOgAgAEYAcgBlAGUAUwBlAHIAaQBmACAAOgAgADIAMQAtADgALQAy\
+ADAAMQAzAFIAZQBnAHUAbABhAHIARgByAGUAZQBTAGUAcgBpAGYAAAH0ADIAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmMAEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABvAAZAAAAAAAAAAAAAAAAAAAAAAAA\
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABFgANAAAAAAAAAAAAAAAAAfQA\
+EQEABAQAAQEBCkZyZWVTZXJpZgABAQEuHAGHABwBiAIcAYkDHAGEBEX7bvo4+hgFHQAAAGIPHQAA\
+AOIRHAAqHQAAAHISAAMBAQQNFjEuMEZyZWVTZXJpZkZyZWVTZXJpZgAAAQABBgBoAAAJNwB8AABC\
+F/iIFPfuFX2Z+FaV916ZkosG+26MBx4KA5Yl/wwJiwwKHgoG/wwSHAAqEwACAQEzQffIBnz3DVbJ\
+JIsI+w0zKvsp+x7TNfcHH+qL1sa19wAIe5IFWz9gbkuLSos2s4X3RggLltmtsMiLyIujb5g0CAsA\
+WgIAAQAWABcAGAAZABoAGwAcAB0AHgAfACAAIQAiACMAJAAlACYAJwAoACkAKgArACwALQAuAC8A\
+MAAxADIAMwA0ADUANgA3ADgAOQA6ADsAPAA9AD4APwBAAEEAQgBDAEQARQBGAEcASABJAEoAjACN\
+AI4AjwCQAJEAkgCTAJQAlQCWAJcAmACZAJoAmwCcAKkAqgCrAKwArQCuAK8AsACxALIAswC0ALUA\
+tgC3AP4A/wEAAQEBhb0W+CT4qfwkBr38dxX4RffA/EUHDg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4O\
+Dg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg4ODg73nfeS+QAV/IgHizaAgDiGCHj3uJ4HOY99mIvU\
+CPiTwQf3BouheaL7Agiji4X3PvzIi4X7PqOLBaP3AaKe9wSLCA4ODg4ODg4ODg4ODg4ODg4O7ez3\
+qRUgCo2rFSEKDg4ODg4ODg4ODg4ODg4OR/eT+FYVJvcIBpWKjoUehIKFgoSBMvsUcqGLd4uIjImO\
+iQjA+8EGN6lgxh68i7GjrL8IfpYFdnJ6gXWLCGZ8psof97LwBw4ODg73jPfEFX2fBW+1ea2LmIuZ\
+mJKpjAia+2N8lAepi5t+qlwI6fsk+wb7OQVuYYCFaogIfPclmgdvf5CYH4uRkpqYnwja9w/m+yAF\
+j4WNhYuFi3mEh2qJCHz3XZoHbIt3m2y3CPsU91je9wwFnqapm6uMCJr7MnwHqYmVhYt9i3VubmVR\
+CA4A\
+");
+    glyphs: 53 29, 70 21;
+    offset: 50 100;
+  }
+}
+mask {
+  source: color {
+    bounds: 50 56 50 55;
+    color: rgb(255,0,255);
+  }
+  mask: transform {
+    transform: translate(50, 56);
+    child: stroke {
+      child: color {
+        bounds: -1.1875 10.2344 52.5312 36.25;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 12.1875 14.25\
+L 12.1875 38.25\
+C 12.1875 42.328125, 11.65625 42.859375, 7.671875 43.09375\
+L 7.671875 44\
+L 21.6875 44\
+L 21.6875 43.09375\
+C 17.75 42.90625, 17.078125 42.28125, 17.078125 38.78125\
+L 17.078125 14.25\
+L 19.671875 14.25\
+C 25.140625 14.25, 26.203125 15.109375, 27.3125 20.390625\
+L 28.453125 20.390625\
+L 28.171875 12.234375\
+L 1.09375 12.234375\
+L 0.8125 20.390625\
+L 1.953125 20.390625\
+C 3.109375 15.15625, 4.21875 14.25, 9.59375 14.25\
+Z\
+M 33.65625 30.703125\
+L 48.4375 30.703125\
+C 47.71875 24.90625, 45.171875 21.921875, 40.21875 21.921875\
+C 34.421875 21.921875, 30.1875 26.578125, 30.1875 33.734375\
+C 30.1875 40.359375, 33.65625 44.484375, 39.171875 44.484375\
+C 43.734375 44.484375, 47.328125 41.65625, 49.34375 36.46875\
+L 48.578125 36.140625\
+C 46.28125 39.78125, 44.203125 41.171875, 41.140625 41.171875\
+C 38.015625 41.171875, 33.9375 39.25, 33.65625 30.703125\
+Z\
+M 33.75 29.171875\
+C 34.265625 25.4375, 35.90625 23.65625, 38.828125 23.65625\
+C 41.765625 23.65625, 42.90625 25, 43.53125 29.171875\
+Z";
+      line-width: 0.5;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 50 56 50 55;
+    color: rgb(0,0,255);
+  }
+  mask: transform {
+    transform: translate(50, 56);
+    child: fill {
+      child: color {
+        bounds: 0 31 50 3;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 31\
+L 50 31\
+L 50 34\
+L 0 34\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 50 56 50 55;
+    color: rgb(255,255,0);
+  }
+  mask: transform {
+    transform: translate(50, 56);
+    child: stroke {
+      child: color {
+        bounds: -4 27 58 11;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 31\
+L 50 31\
+L 50 34\
+L 0 34\
+Z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 100 56 37 55;
+    color: rgb(255,255,255);
+  }
+  mask: transform {
+    transform: translate(100, 56);
+    child: fill {
+      child: color {
+        bounds: 0 50 38 3;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 50\
+L 38 50\
+L 38 53\
+L 0 53\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 100 56 37 55;
+    color: rgb(128,0,128);
+  }
+  mask: transform {
+    transform: translate(100, 56);
+    child: stroke {
+      child: color {
+        bounds: -4 46 46 11;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 50\
+L 38 50\
+L 38 53\
+L 0 53\
+Z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+text {
+  color: rgb(255,255,255);
+  font: "FreeSerif 48px";
+  glyphs: "x", 85 13;
+  offset: 100 100;
+}
+mask {
+  source: color {
+    bounds: 100 56 37 55;
+    color: rgb(128,0,128);
+  }
+  mask: transform {
+    transform: translate(100, 56);
+    child: stroke {
+      child: color {
+        bounds: -3.1875 12.2188 44.5781 36.2656;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 11.890625 29.421875\
+L 11.21875 28.453125\
+C 9.875 26.4375, 9.015625 24.8125, 9.015625 24.1875\
+C 9.015625 23.515625, 9.640625 23.171875, 11.078125 23.125\
+L 11.078125 22.40625\
+L 1.140625 22.40625\
+L 1.140625 23.125\
+L 1.578125 23.125\
+C 3.015625 23.125, 3.78125 23.75, 5.265625 26\
+L 9.78125 32.921875\
+L 4.3125 40.84375\
+C 2.921875 42.859375, 2.390625 43.140625, 0.8125 43.28125\
+L 0.8125 44\
+L 7.765625 44\
+L 7.765625 43.28125\
+C 6.421875 43.28125, 5.84375 43.046875, 5.84375 42.421875\
+C 5.84375 42.140625, 6.1875 41.421875, 6.8125 40.453125\
+L 10.59375 34.546875\
+L 14.96875 41.265625\
+C 15.15625 41.5625, 15.25 41.84375, 15.25 42.140625\
+C 15.25 43, 14.921875 43.1875, 13.34375 43.28125\
+L 13.34375 44\
+L 22.984375 44\
+L 22.984375 43.28125\
+C 21.5 43.28125, 20.53125 42.515625, 19.046875 40.40625\
+L 12.90625 31\
+L 16.890625 25.234375\
+C 17.796875 23.9375, 19.234375 23.171875, 20.78125 23.125\
+L 20.78125 22.40625\
+L 13.1875 22.40625\
+L 13.1875 23.125\
+C 14.640625 23.21875, 15.109375 23.515625, 15.109375 24.1875\
+C 15.109375 25.234375, 13.71875 26.625, 11.890625 29.421875\
+Z\
+M 36.234375 22.40625\
+L 31.390625 22.40625\
+L 31.390625 16.84375\
+C 31.390625 16.359375, 31.34375 16.21875, 31.046875 16.21875\
+C 30.71875 16.640625, 30.421875 17.078125, 30.09375 17.5625\
+C 25.8125 23.703125, 24.609375 22.640625, 24.609375 23.609375\
+C 24.609375 23.75, 24.671875 23.84375, 24.8125 23.9375\
+L 27.359375 23.9375\
+L 27.359375 38.390625\
+C 27.359375 42.421875, 28.796875 44.484375, 31.625 44.484375\
+C 33.984375 44.484375, 35.796875 43.328125, 37.390625 40.84375\
+L 36.765625 40.3125\
+C 35.75 41.515625, 34.9375 41.984375, 33.875 41.984375\
+C 32.109375 41.984375, 31.390625 40.703125, 31.390625 37.671875\
+L 31.390625 23.9375\
+L 36.234375 23.9375\
+Z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 100 56 37 55;
+    color: rgb(0,0,255);
+  }
+  mask: transform {
+    transform: translate(100, 56);
+    child: fill {
+      child: color {
+        bounds: 0 31 38 3;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 31\
+L 38 31\
+L 38 34\
+L 0 34\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 100 56 37 55;
+    color: rgb(255,255,0);
+  }
+  mask: transform {
+    transform: translate(100, 56);
+    child: stroke {
+      child: color {
+        bounds: -4 27 46 11;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 31\
+L 38 31\
+L 38 34\
+L 0 34\
+Z";
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
+stroke {
+  child: color {
+    bounds: 0.5 0.5 199 199;
+    color: rgb(0,0,0);
+  }
+  path: "\
+M 1 1 h 198 v 198 h -198 z";
+  line-width: 1;
+  line-cap: butt;
+  line-join: miter;
+}

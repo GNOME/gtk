@@ -144,15 +144,33 @@ roibeYtmCPySB4tmendpiAhz94OjB2qMe56LswgODg73j/htFSAKjGwVIQoO\
   glyphs: 35 21, "o", 77 9, 69 18;
   offset: 257 60;
 }
+mask {
+  source: color {
+    bounds: 224 81 139 36;
+    color: rgb(0,0,255);
+  }
+  mask: transform {
+    transform: translate(224, 81);
+    child: fill {
+      child: color {
+        bounds: 0 33 128 2;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 33\
+L 128 33\
+L 128 35\
+L 0 35\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
 text {
   color: rgb(0,0,255);
   font: "FreeSerif 32px";
   glyphs: 54 23, "nd", 70 14, 83 11, 77 9, 74 9, "n", 70 14;
   offset: 224 110;
-}
-color {
-  bounds: 224 114 128 2;
-  color: rgb(0,0,255);
 }
 text {
   color: rgb(255,0,255);
@@ -160,9 +178,49 @@ text {
   glyphs: 45 20, 74 9, "n", 70 14, 1 11, 85 9, "h", 83 11, "ough";
   offset: 39 147;
 }
-color {
-  bounds: 39 138 170 2;
-  color: rgb(255,0,255);
+mask {
+  source: color {
+    bounds: 39 118 181 36;
+    color: rgb(255,0,255);
+  }
+  mask: transform {
+    transform: translate(39, 118);
+    child: fill {
+      child: color {
+        bounds: 0 20 170 2;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M 0 20\
+L 170 20\
+L 170 22\
+L 0 22\
+Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 1 171 374 36;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(1, 171);
+    child: fill {
+      child: color {
+        bounds: -1 33 365 2;
+        color: rgb(0,0,0);
+      }
+      path: "\
+M -1 33\
+L 364 33\
+L 364 35\
+L -1 35\
+Z";
+      fill-rule: winding;
+    }
+  }
 }
 text {
   font: "FreeSerif Bold Italic 32px" url("data:font/ttf;base64,\
@@ -222,10 +280,6 @@ ACJCQf8AeoAACKz3Ct6LBQ40+Gv3GRUoCg4AAA==\
 ");
   glyphs: 35 21, "o", 77 9, "d,", 1 11, 74 9, 85 9, "a", 77 9, 74 9, 68 14, 1 11, "a", 79 18, "d", 1 11, 86 18, 79 18, "d", 70 14, 83 12, 77 9, 74 9, 79 18, 70 14, "d";
   offset: 1 200;
-}
-color {
-  bounds: 0 204 365 2;
-  color: rgb(0,0,0);
 }
 stroke {
   child: color {

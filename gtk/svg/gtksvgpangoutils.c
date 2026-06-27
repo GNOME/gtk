@@ -25,7 +25,8 @@
 #include "gsk/gskpathbuilder.h"
 
 GskPath *
-svg_pango_layout_to_path (PangoLayout *layout)
+svg_pango_layout_to_path (PangoLayout          *layout,
+                          PangoRenderComponent  component)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -38,7 +39,7 @@ svg_pango_layout_to_path (PangoLayout *layout)
                                             &(cairo_rectangle_t) { rect.x, rect.y, rect.width, rect.height });
 
   cr = cairo_create (surface);
-  pango_cairo_layout_path (cr, layout);
+  pango_cairo_layout_path_for_components (cr, layout, component);
   path = cairo_copy_path (cr);
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_cairo_path (builder, path);
