@@ -3708,7 +3708,12 @@ do_generate_layouts (SvgElement             *self,
             space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
             node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, x, &y2, lastwithspace, viewport, &node->shape.bounds);
             if (node->shape.has_bounds)
-              ADD_BBOX (&node->shape.bounds)
+              {
+                graphene_rect_init_from_rect (&node->shape.shape->bounds, &node->shape.bounds);
+                node->shape.shape->valid_bounds = TRUE;
+
+                ADD_BBOX (&node->shape.bounds)
+              }
           }
           break;
         case TEXT_NODE_CHARACTERS:
@@ -3780,6 +3785,7 @@ do_generate_layouts (SvgElement             *self,
             node->characters.y = *y + origin.y + baseline_shift;
 
             graphene_rect_offset (&cbounds, *x, *y);
+
             ADD_BBOX (&cbounds)
 
             if (is_vertical)
@@ -4217,7 +4223,23 @@ paint_text (SvgElement            *self,
             if (svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_VISIBILITY)) == VISIBILITY_HIDDEN)
               continue;
 
+            context->depth++;
+
+            if (context->depth > NESTING_LIMIT)
+              {
+                gtk_svg_rendering_error (context->svg,
+                                         "excessive rendering depth (> %d), aborting",
+                                         NESTING_LIMIT);
+                return;
+              }
+
+            push_group (node->shape.shape, context);
+
             paint_text (node->shape.shape, context, node->shape.has_bounds ? &node->shape.bounds : bounds);
+
+            pop_group (node->shape.shape, context);
+
+            context->depth--;
           }
           break;
 
