@@ -1,3 +1,147 @@
+Overview of Changes in 4.23.2, 27-06-2026
+=========================================
+
+* GTK now respects the reduced motion setting in various places
+  and avoids animations (GtkSpinner, GtkStack, GtkRevealer)
+
+* New GtkShortcutTrigger functions it easier to handle synonymous
+  keys (in particular keypad keys). The new functions are
+  gtk_alternative_trigger_newv,
+  gtk_shortcut_trigger_create_with_aliases and
+  gtk_shortcut_trigger_create_for_menu
+
+* Type-to-search (in particular interaction with input methods)
+  has been redone, switching from a "pull" to a "push" approach.
+  See gtk_editable_set_input_interceptor for more details.
+  As part of this, gtk_event_controller_key_forward has been
+  deprecated.
+
+* The first part of ongoing frameclock work has landed, improving
+  our ability to deliver frames on time
+
+* A number of GtkList/Grid/ColumnView size allocation issues
+  have been addressed. Please let us know if you spot any remaining
+  or new problems.
+
+* GtkSvg:
+ - Support feTurbulence
+ - Improved text handling, including baseline-shift, whitespace
+   handling, text-decoration, proper fill+stroke, and more
+
+* Build:
+ - The pango dependency has been bumped to 1.58.0
+
+* Bugs fixed:
+  - #8230 GtkMenuButton with an autohide=false popover does not focus the
+    popover when showing
+  - !9906 Fix Gtk.ListView/Gtk.GridView measure with for_size != -1 (Vladimir
+    Romanov)
+  - !9958 Logically focus IM context in type-to-search (Carlos Garnacho)
+  - !10001 columnview layout (Sergey Bugaev)
+  - !10023 gtkpopover: Always set focus to a child during show (Lukáš Tyrychtr)
+  - #8075 Tooltips unminimize windows unexpectedly
+  - #8187 EventControllerLegacy macos: one-pixel difference between position of
+    button press and release events
+  - #8194 Blurry text regression in 4.23.0
+  - #8223 New svg spinner rendering issues
+  - #8229 The accessible parent of the application should not be null
+  - #8235 Inspector crashes with CSS with malformed inline svg effects (Matthias
+    Clasen)
+  - #8241 Shaper: wrong tooltip for created icon (Matthias Clasen)
+  - #8244 Shaper: Weight now only affects the active icon (Matthias Clasen)
+  - #8246 Shaper: crash on changing visibility for states
+  - #8248 Shaper: Changing the state from "Display Settings" does not change it
+    in the sidebar (Matthias Clasen)
+  - #8249 Shaper: Problem with "Overlaps" icon (Matthias Clasen)
+  - #8250 Shaper: Doesn't ask for saving changes when loadinga file or an
+    example (Matthias Clasen)
+  - #8258 Shaper: cannot add states (Matthias Clasen)
+  - #8259 Crash when transitioning between filter: none and filter: url()
+    (Matthias Clasen)
+  - #8262 svg: animateTransform doesn't work for specific file (Matthias Clasen)
+  - #8264 svg: fractional values for repeatCount don't work (Matthias Clasen)
+  - #8265 Coordinates for turbulence seem computed wrong (Matthias Clasen)
+  - #8268 Shaper: XML changes reset the state to 0 (Matthias Clasen)
+  - #8270 Shaper: Invalid changes to XML, related to shape geometry, crash it
+    (Matthias Clasen)
+  - #8278 GtkRevealer uses too much space (g.willems, Matthias Clasen)
+  - #8279 Shaper: 'empty' state doesn't get saved (Matthias Clasen)
+  - #8280 Shaper: state management issues (Matthias Clasen)
+  - !9569 macos: unmap window when minimized (Arjan Molenaar)
+  - !9890 gdk/macos: Convert mouse event coordinates consistently (Dario Marino
+    Saccavino)
+  - !9990 Add GtkActivateTrigger (Matthias Clasen)
+  - !9991 Improvements for the filebrowser demo (g.willems)
+  - !9992 spinner: Debug things (Matthias Clasen)
+  - !9993 doc: input-handling: fix link to event controllers (Peter Shkenev)
+  - !9995 Fix the build with tracker (Matthias Clasen)
+  - !9996 Fix parsing of conic-gradient() CSS (Benjamin Otte)
+  - !9998 Fix various issues with svg animations (Matthias Clasen)
+  - !9999 Update Romanian translation
+  - !10000 svg: Fix handling of transform-origin (Matthias Clasen)
+  - !10002 Update Slovenian translation
+  - !10003 spinner: Respect reduced motion (Matthias Clasen)
+  - !10004 various cleanups (Benjamin Otte)
+  - !10005 frameclock: Rename (un)inhibit_freeze to start/stop and clean up
+    (Benjamin Otte)
+  - !10006 gdk/wayland: Make clipboard and primary selection updates less racy
+    (Vlad Zahorodnii)
+  - !10007 gtk4-demo: Tweak the error states demo (Matthias Clasen)
+  - !10009 gtkatspiroot: Return the desktop as its parent (Lukáš Tyrychtr)
+  - !10015 shortcuttrigger: Expand docs a little (Matthias Clasen)
+  - !10016 inspector: Be robust against far out errors (Matthias Clasen)
+  - !10017 css: Fix a thinko (Matthias Clasen)
+  - !10018 svg: Allow file:// urls in hrefs (Matthias Clasen)
+  - !10019 Fix another few crashes in GtkSvg (Matthias Clasen)
+  - !10020 svg: Fix rendering of some wikipedia examples (Matthias Clasen)
+  - !10021 svg: Use correct namespace (Guido Günther)
+  - !10024 Cosmetic fixes (Matthias Clasen)
+  - !10025 Support turbulence (Matthias Clasen)
+  - !10027 gtk: Fix shortcuts regressions (g.willems)
+  - !10028 entry: Avoid blank leftovers when removing icons (g.willems)
+  - !10029 frameclock: More cleanup (Christian Hergert, Benjamin Otte)
+  - !10031 docs: Add missing nodes to the node format docs (Matthias Clasen)
+  - !10032 Assorted svg fixes (Matthias Clasen)
+  - !10033 Some icon editor fixes (Matthias Clasen)
+  - !10035 Next FrameClock refactoring step (Benjamin Otte)
+  - !10040 icon editor: Clean up one example (Matthias Clasen)
+  - !10042 Drop an erroneous file (Matthias Clasen)
+  - !10046 display: Add gdk_display_get/set_prefer_vulkan() (Benjamin Otte)
+  - !10048 gsk: fix GskTransform leak in gsk_gpu_render_pass_push_transform
+    (Ampernic)
+  - !10052 svg: Add a missing turbulence test (Matthias Clasen)
+  - !10058 rendernode-tool: Make info tool deal better with recursive nodes
+    (Benjamin Otte)
+  - !10059 testsuite: Add a test that causes lots of globals (Benjamin Otte)
+  - !10061 docs: fix typo in node-format.md (John Bampton)
+  - !10062 Fix mipmap sampling for dmabufs (Benjamin Otte)
+  - !10064 icon editor: Preserve state when swapping svgs (Matthias Clasen)
+  - !10065 memoryformat: Add missing GDK_MEMORY_ABGR2101010_PREMULTIPLIED docs
+    (Sebastian Dröge)
+  - !10067 Update Slovenian translation
+  - !10070 revealer: Respect the reduced motion setting (Matthias Clasen)
+  - !10072 Shaper: Set foreground color for demo5 (Jakub Steiner)
+  - !10074 svg: Handle details for text decoration (Matthias Clasen)
+  - !10075 svg: Rework text rendering (Matthias Clasen)
+  - !10079 Revert "filechooserutils: Stop using pixbufs"
+  - !10082 Update Polish translation (Victoria Niedzielska)
+  - !10083 Fix the build against pango main (Matthias Clasen)
+  - !10084 icon editor: Handle states a bit better (Matthias Clasen)
+  - !10085 Center state names in state editor (Urtsi Santsi)
+  - !10087 stack: Avoid resizing animation in reduce-motion mode (g.willems)
+  - !10090 gl: Actually report partial damage (Benjamin Otte)
+  - !10091 gsk: Account for render offset when snapping glyphs (Alessandro
+    Astone)
+  - !10093 android: Fix timestamp unit (Benjamin Otte)
+  - !10094 svg: Redo whitespace handling (Matthias Clasen)
+  - !10096 application-x11: Fix saved state ownership (Alessandro Astone)
+  - !10097 svg: More whitespace handling (Matthias Clasen)
+
+* Translation updates:
+  - Polish (Victoria Niedzielska)
+  - Romanian (Antonio Marin)
+  - Slovenian (Martin)
+
 Overview of Changes in 4.23.1, 29-05-2026
 =========================================
 
