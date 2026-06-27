@@ -333,20 +333,24 @@ svg_numbers_resolve (const SvgValue    *value,
   if (orig->n_values == 0)
     return svg_value_ref ((SvgValue *) orig);
 
-  if (attr == SVG_PROPERTY_TRANSFORM_ORIGIN)
+  if (attr == SVG_PROPERTY_TRANSFORM_ORIGIN ||
+      attr == SVG_PROPERTY_TEXT_X ||
+      attr == SVG_PROPERTY_TEXT_Y ||
+      attr == SVG_PROPERTY_TEXT_DX ||
+      attr == SVG_PROPERTY_TEXT_DY)
     {
       double font_size;
 
       if (value == svg_numbers_new_00 ())
         return svg_value_ref ((SvgValue *) value);
 
-      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (2));
-      p->n_values = 2;
-      memcpy (p->values, orig->values, sizeof (Number) * 2);
+      p = (SvgNumbers *) svg_value_alloc (&SVG_NUMBERS_CLASS, svg_numbers_size (svg_numbers_get_length (value)));
+      p->n_values = svg_numbers_get_length (value);
+      memcpy (p->values, orig->values, sizeof (Number) * p->n_values);
 
       font_size = shape_get_current_font_size (shape, attr, context);
 
-      for (unsigned int i = 0; i < 2; i++)
+      for (unsigned int i = 0; i < p->n_values; i++)
         {
           switch ((unsigned int) p->values[i].unit)
             {

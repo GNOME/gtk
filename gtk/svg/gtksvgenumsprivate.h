@@ -278,6 +278,15 @@ typedef enum {
 
 typedef enum
 {
+  BASELINE_SHIFT_SUB,
+  BASELINE_SHIFT_SUPER,
+  BASELINE_SHIFT_TOP,
+  BASELINE_SHIFT_CENTER,
+  BASELINE_SHIFT_BOTTOM,
+} BaselineShift;
+
+typedef enum
+{
   COLOR_INTERPOLATION_AUTO,
   COLOR_INTERPOLATION_SRGB,
   COLOR_INTERPOLATION_LINEAR,
@@ -391,6 +400,12 @@ typedef enum
   POINTER_EVENTS_ALL,
   POINTER_EVENTS_NONE,
 } PointerEvents;
+
+typedef enum
+{
+  XML_SPACE_DEFAULT,
+  XML_SPACE_PRESERVE,
+} XmlSpace;
 
 typedef enum
 {
