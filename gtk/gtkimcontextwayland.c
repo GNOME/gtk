@@ -105,7 +105,10 @@ struct _GtkIMContextWayland
 
   uint32_t pending_action;
 
+  gulong after_layout_id;
+
   cairo_rectangle_int_t cursor_rect;
+  cairo_rectangle_int_t surface_cursor_rect;
   guint use_preedit : 1;
 };
 
@@ -444,7 +447,7 @@ notify_cursor_location (GtkIMContextWayland *context)
   if (global == NULL)
     return;
 
-  rect = context->cursor_rect;
+  rect = context->surface_cursor_rect;
   zwp_text_input_v3_set_cursor_rectangle (global->text_input,
                                           rect.x, rect.y,
                                           rect.width, rect.height);
@@ -579,8 +582,8 @@ gtk_im_context_wayland_finalize (GObject *object)
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (object);
 
   gtk_im_context_wayland_focus_out (GTK_IM_CONTEXT (context));
+  gtk_im_context_set_client_widget (GTK_IM_CONTEXT (context), NULL);
 
-  g_clear_object (&context->widget);
   g_free (context->surrounding.text);
   g_free (context->current_preedit.text);
   g_clear_pointer (&context->current_preedit.style_hints, g_array_unref);
@@ -614,6 +617,69 @@ on_widget_state_changed (GtkWidget            *widget,
 }
 
 static void
+after_layout_cb (GtkIMContext *context)
+{
+  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+  cairo_rectangle_int_t rect;
+  GtkNative *native;
+  graphene_point_t p;
+  double nx, ny;
+
+  native = gtk_widget_get_native (context_wayland->widget);
+  if (!native)
+    return;
+
+  /* Compute surface-local coordinates */
+  rect = context_wayland->cursor_rect;
+
+  if (!gtk_widget_compute_point (context_wayland->widget,
+                                 GTK_WIDGET (native),
+                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
+                                 &p))
+    graphene_point_init (&p, rect.x, rect.y);
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  rect.x = p.x + nx;
+  rect.y = p.y + ny;
+
+  if (context_wayland->surface_cursor_rect.x != rect.x ||
+      context_wayland->surface_cursor_rect.y != rect.y ||
+      context_wayland->surface_cursor_rect.width != rect.width ||
+      context_wayland->surface_cursor_rect.height != rect.height)
+    {
+      context_wayland->surface_cursor_rect = rect;
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+    }
+}
+
+static void
+on_widget_realize (GtkWidget           *widget,
+                   GtkIMContextWayland *context)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  if (frame_clock)
+    {
+      context->after_layout_id =
+        g_signal_connect_object (frame_clock, "layout",
+                                 G_CALLBACK (after_layout_cb), context,
+                                 G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+    }
+}
+
+static void
+on_widget_unrealize (GtkWidget           *widget,
+                     GtkIMContextWayland *context)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (context->widget);
+  g_clear_signal_handler (&context->after_layout_id, frame_clock);
+}
+
+static void
 gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
                                           GtkWidget    *widget)
 {
@@ -625,18 +691,35 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
   if (context_wayland->widget)
     {
       g_hash_table_remove_all (context_wayland->style_css_nodes);
+      on_widget_unrealize (widget, context_wayland);
       g_signal_handlers_disconnect_by_func (context_wayland->widget,
                                             on_widget_state_changed,
                                             context);
+      g_signal_handlers_disconnect_by_func (context_wayland->widget,
+                                            on_widget_realize,
+                                            context);
+      g_signal_handlers_disconnect_by_func (context_wayland->widget,
+                                            on_widget_unrealize,
+                                            context);
       gtk_im_context_wayland_focus_out (context);
+
+      g_clear_weak_pointer (&context_wayland->widget);
     }
 
-  g_set_object (&context_wayland->widget, widget);
+  context_wayland->widget = widget;
 
   if (context_wayland->widget)
     {
+      g_object_add_weak_pointer (G_OBJECT (context_wayland->widget),
+                                 (gpointer*) &context_wayland->widget);
+
       g_signal_connect (context_wayland->widget, "state-flags-changed",
                         G_CALLBACK (on_widget_state_changed), context);
+      g_signal_connect (context_wayland->widget, "realize",
+                        G_CALLBACK (on_widget_realize), context);
+      g_signal_connect (context_wayland->widget, "unrealize",
+                        G_CALLBACK (on_widget_unrealize), context);
+      on_widget_realize (widget, context_wayland);
     }
 }
 
@@ -1184,38 +1267,23 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
                                             GdkRectangle *cursor_rect)
 {
   GtkIMContextWayland *context_wayland;
-  double nx, ny;
-  GdkRectangle rect;
-  graphene_point_t p;
+  GdkFrameClock *frame_clock = NULL;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
-  /* May happen along destruction */
-  if (!context_wayland->widget)
+  if (context_wayland->cursor_rect.x == cursor_rect->x &&
+      context_wayland->cursor_rect.y == cursor_rect->y &&
+      context_wayland->cursor_rect.width == cursor_rect->width &&
+      context_wayland->cursor_rect.height == cursor_rect->height)
     return;
 
-  /* Compute surface-local coordinates */
-  rect = *cursor_rect;
-  if (!gtk_widget_compute_point (context_wayland->widget,
-                                 GTK_WIDGET (gtk_widget_get_native (context_wayland->widget)),
-                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
-                                 &p))
-    graphene_point_init (&p, rect.x, rect.y);
+  context_wayland->cursor_rect = *cursor_rect;
 
-  gtk_native_get_surface_transform (gtk_widget_get_native (context_wayland->widget),
-                                    &nx, &ny);
-  rect.x = p.x + nx;
-  rect.y = p.y + ny;
+  if (context_wayland->widget)
+    frame_clock = gtk_widget_get_frame_clock (context_wayland->widget);
 
-  if (context_wayland->cursor_rect.x != rect.x ||
-      context_wayland->cursor_rect.y != rect.y ||
-      context_wayland->cursor_rect.width != rect.width ||
-      context_wayland->cursor_rect.height != rect.height)
-    {
-      context_wayland->cursor_rect = rect;
-      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
-                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
-    }
+  if (frame_clock)
+    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
 }
 
 static void

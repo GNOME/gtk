@@ -145,7 +145,6 @@ struct _GtkSearchEntry
   GtkWidget *clear_icon;
 
   guint delayed_changed_id;
-  gboolean content_changed;
   gboolean search_stopped;
 };
 
@@ -168,12 +167,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_WIDGET,
                                                 gtk_search_entry_accessible_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_search_entry_editable_init))
-
-static void
-text_changed (GtkSearchEntry *entry)
-{
-  entry->content_changed = TRUE;
-}
 
 static void
 gtk_search_entry_finalize (GObject *object)
@@ -819,6 +812,15 @@ activate_cb (GtkText  *text,
 }
 
 static void
+input_intercepted_cb (GtkText  *text,
+                      gpointer  user_data)
+{
+  GtkSearchEntry *entry = user_data;
+
+  g_signal_emit (entry, signals[SEARCH_STARTED], 0);
+}
+
+static void
 catchall_click_press (GtkGestureClick *gesture,
                       int              n_press,
                       double           x,
@@ -846,11 +848,10 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   gtk_widget_set_parent (entry->entry, GTK_WIDGET (entry));
   gtk_widget_set_hexpand (entry->entry, TRUE);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
-  g_signal_connect_swapped (entry->entry, "changed", G_CALLBACK (text_changed), entry);
   g_signal_connect_after (entry->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
-  g_signal_connect_swapped (entry->entry, "preedit-changed", G_CALLBACK (text_changed), entry);
   g_signal_connect (entry->entry, "notify", G_CALLBACK (notify_cb), entry);
   g_signal_connect (entry->entry, "activate", G_CALLBACK (activate_cb), entry);
+  g_signal_connect (entry->entry, "input-intercepted", G_CALLBACK (input_intercepted_cb), entry);
 
   entry->clear_icon = g_object_new (GTK_TYPE_IMAGE,
                                     "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
@@ -909,42 +910,6 @@ gtk_search_entry_is_keynav (guint           keyval,
   return FALSE;
 }
 
-static gboolean
-capture_widget_key_handled (GtkEventControllerKey *controller,
-                            guint                  keyval,
-                            guint                  keycode,
-                            GdkModifierType        state,
-                            GtkWidget             *widget)
-{
-  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
-  gboolean handled, was_empty;
-
-  if (gtk_search_entry_is_keynav (keyval, state) ||
-      keyval == GDK_KEY_space ||
-      keyval == GDK_KEY_KP_Space ||
-      keyval == GDK_KEY_Menu ||
-      keyval == GDK_KEY_Return ||
-      keyval == GDK_KEY_KP_Enter ||
-      keyval == GDK_KEY_ISO_Enter)
-    return FALSE;
-
-  entry->content_changed = FALSE;
-  entry->search_stopped = FALSE;
-  was_empty = (gtk_text_get_complete_text_length (GTK_TEXT (entry->entry)) == 0);
-
-  handled = gtk_event_controller_key_forward (controller, entry->entry);
-
-  if (handled)
-    {
-      if (was_empty && entry->content_changed && !entry->search_stopped)
-        g_signal_emit (entry, signals[SEARCH_STARTED], 0);
-
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 /**
  * gtk_search_entry_set_key_capture_widget:
  * @entry: a `GtkSearchEntry`
@@ -980,27 +945,17 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
 
   if (entry->capture_widget)
     {
-      gtk_widget_remove_controller (entry->capture_widget,
-                                    entry->capture_widget_controller);
       g_object_remove_weak_pointer (G_OBJECT (entry->capture_widget),
                                     (gpointer *) &entry->capture_widget);
     }
 
   entry->capture_widget = widget;
+  gtk_editable_set_input_interceptor (GTK_EDITABLE (entry), entry->capture_widget);
 
   if (widget)
     {
       g_object_add_weak_pointer (G_OBJECT (entry->capture_widget),
                                  (gpointer *) &entry->capture_widget);
-
-      entry->capture_widget_controller = gtk_event_controller_key_new ();
-      gtk_event_controller_set_propagation_phase (entry->capture_widget_controller,
-                                                  GTK_PHASE_BUBBLE);
-      g_signal_connect (entry->capture_widget_controller, "key-pressed",
-                        G_CALLBACK (capture_widget_key_handled), entry);
-      g_signal_connect (entry->capture_widget_controller, "key-released",
-                        G_CALLBACK (capture_widget_key_handled), entry);
-      gtk_widget_add_controller (widget, entry->capture_widget_controller);
     }
 
   g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_KEY_CAPTURE_WIDGET]);

@@ -32,6 +32,8 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkenums.h"
 #include "gtkmain.h"
+#include "gtktext.h"
+#include "gtktextview.h"
 #include "gtktypebuiltins.h"
 
 #include <gdk/gdk.h>
@@ -149,31 +151,38 @@ gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
   gboolean start_crossing, end_crossing;
   gboolean is_focus;
 
+  if (!key->im_context)
+    return;
+
   if (crossing->type != GTK_CROSSING_FOCUS &&
       crossing->type != GTK_CROSSING_ACTIVE)
     return;
 
   start_crossing = crossing->direction == GTK_CROSSING_OUT &&
-                   widget == crossing->old_target;
+    (widget == crossing->old_target ||
+     gtk_widget_is_ancestor (crossing->old_target, widget));
   end_crossing = crossing->direction == GTK_CROSSING_IN &&
-                 widget == crossing->new_target;
+    (widget == crossing->new_target ||
+     (gtk_widget_is_ancestor (crossing->new_target, widget) &&
+      !GTK_IS_TEXT (crossing->new_target) &&
+      !GTK_IS_TEXT_VIEW (crossing->new_target)));
 
   if (!start_crossing && !end_crossing)
     return;
 
-  is_focus = end_crossing;
+  is_focus = end_crossing ||
+    /* Keep IM focused if focus moves from an input capture widget to the real one */
+    (start_crossing &&
+     gtk_im_context_get_client_widget (key->im_context) == crossing->new_target);
 
   if (key->is_focus != is_focus)
     {
       key->is_focus = is_focus;
 
-      if (key->im_context)
-        {
-          if (is_focus)
-            gtk_im_context_focus_in (key->im_context);
-          else
-            gtk_im_context_focus_out (key->im_context);
-        }
+      if (is_focus)
+        gtk_im_context_focus_in (key->im_context);
+      else
+        gtk_im_context_focus_out (key->im_context);
     }
 }
 
@@ -338,6 +347,8 @@ gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
  * or [signal@Gtk.EventControllerKey::modifiers] signals.
  *
  * Returns: whether the @widget handled the event
+ *
+ * Deprecated: 4.24: Use [method@Gtk.Editable.set_input_interceptor] instead
  */
 gboolean
 gtk_event_controller_key_forward (GtkEventControllerKey *controller,

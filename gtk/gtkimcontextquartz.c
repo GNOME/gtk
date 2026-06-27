@@ -41,13 +41,14 @@ typedef struct _GtkIMContextQuartz
 {
   GtkIMContext parent;
   GtkIMContext *helper;
-  GdkSurface *client_surface;
   GtkWidget *client_widget;
   char *preedit_str;
   unsigned int cursor_index;
   unsigned int selected_len;
   GdkRectangle *cursor_rect;
+  GdkRectangle *surface_cursor_rect;
   gboolean focused;
+  gulong after_layout_id;
 } GtkIMContextQuartz;
 
 typedef struct _GtkIMContextQuartzClass
@@ -61,6 +62,89 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_
                                                          g_define_type_id,
                                                          "quartz",
                                                          0))
+
+static GdkSurface *
+surface_from_widget (GtkIMContext *context)
+{
+  GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  GtkNative *native;
+
+  if (!qc->client_widget)
+    return NULL;
+
+  native = GTK_NATIVE (gtk_widget_get_root (qc->client_widget));
+  if (!native)
+    return NULL;
+
+  return gtk_native_get_surface (native);
+}
+
+static void
+after_layout_cb (GtkIMContext *context)
+{
+  GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  cairo_rectangle_int_t rect;
+  GdkSurface *surface;
+  GtkNative *native;
+  graphene_point_t p;
+  double nx, ny;
+
+  surface = surface_from_widget (context);
+  if (!GDK_IS_MACOS_SURFACE (surface))
+    return;
+
+  native = GTK_NATIVE (gtk_widget_get_root (qc->client_widget));
+  if (!native)
+    return;
+
+  /* Compute surface-local coordinates */
+  rect = *qc->cursor_rect;
+
+  if (!gtk_widget_compute_point (qc->client_widget,
+                                 GTK_WIDGET (native),
+                                 &GRAPHENE_POINT_INIT (rect.x, rect.y),
+                                 &p))
+    graphene_point_init (&p, rect.x, rect.y);
+
+  gtk_native_get_surface_transform (native, &nx, &ny);
+  rect.x = p.x + nx;
+  rect.y = p.y + ny;
+
+  if (qc->surface_cursor_rect->x != rect.x ||
+      qc->surface_cursor_rect->y != rect.y ||
+      qc->surface_cursor_rect->width != rect.width ||
+      qc->surface_cursor_rect->height != rect.height)
+    {
+      *qc->surface_cursor_rect = rect;
+      g_object_set_data (G_OBJECT (surface), GIC_CURSOR_RECT, qc->cursor_rect);
+    }
+}
+
+static void
+on_widget_realize (GtkWidget          *widget,
+                   GtkIMContextQuartz *qc)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  if (frame_clock)
+    {
+      qc->after_layout_id =
+        g_signal_connect_object (frame_clock, "layout",
+                                 G_CALLBACK (after_layout_cb), qc,
+                                 G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+    }
+}
+
+static void
+on_widget_unrealize (GtkWidget          *widget,
+                     GtkIMContextQuartz *qc)
+{
+  GdkFrameClock *frame_clock;
+
+  frame_clock = gtk_widget_get_frame_clock (qc->client_widget);
+  g_clear_signal_handler (&qc->after_layout_id, frame_clock);
+}
 
 static void
 quartz_get_preedit_string (GtkIMContext *context,
@@ -171,13 +255,16 @@ quartz_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   GdkEventType event_type;
+  GdkSurface *client_surface;
   gboolean retval;
   guint keyval;
   guint keycode;
 
   GTK_DEBUG (MODULES, "quartz_filter_keypress");
 
-  if (!GDK_IS_MACOS_SURFACE (qc->client_surface))
+  client_surface = surface_from_widget (context);
+
+  if (!GDK_IS_MACOS_SURFACE (client_surface))
     return FALSE;
 
   event_type = gdk_event_get_event_type (event);
@@ -190,7 +277,7 @@ quartz_filter_keypress (GtkIMContext *context,
     {
       if (keycode == 0 && keyval == 0xffffff)
         /* update text input changes by mouse events */
-        return output_result (context, qc->client_surface);
+        return output_result (context, client_surface);
       else
         return gtk_im_context_filter_keypress (qc->helper, event);
     }
@@ -204,8 +291,8 @@ quartz_filter_keypress (GtkIMContext *context,
   NSEventType etype = [nsevent type];
   if (etype == NSEventTypeKeyDown)
     {
-      NSView *nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (qc->client_surface));
-      g_object_set_data (G_OBJECT (qc->client_surface),
+      NSView *nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (client_surface));
+      g_object_set_data (G_OBJECT (client_surface),
                          TIC_IN_KEY_DOWN,
                          GUINT_TO_POINTER (TRUE));
       [nsview keyDown: nsevent];
@@ -214,8 +301,8 @@ quartz_filter_keypress (GtkIMContext *context,
   if (keycode == 102 || keycode == 104)
     return FALSE;
 
-  retval = output_result(context, qc->client_surface);
-  g_object_set_data (G_OBJECT (qc->client_surface),
+  retval = output_result(context, client_surface);
+  g_object_set_data (G_OBJECT (client_surface),
                      TIC_IN_KEY_DOWN,
                      GUINT_TO_POINTER (FALSE));
   GTK_DEBUG (MODULES, "quartz_filter_keypress done");
@@ -227,14 +314,17 @@ static void
 discard_preedit (GtkIMContext *context)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  GdkSurface *client_surface;
 
-  if (!qc->client_surface)
+  client_surface = surface_from_widget (context);
+
+  if (!client_surface)
     return;
 
-  if (!GDK_IS_MACOS_SURFACE (qc->client_surface))
+  if (!GDK_IS_MACOS_SURFACE (client_surface))
     return;
 
-  NSView *nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (qc->client_surface));
+  NSView *nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (client_surface));
   if (!nsview)
     return;
 
@@ -259,22 +349,38 @@ quartz_reset (GtkIMContext *context)
 }
 
 static void
-quartz_set_client_surface (GtkIMContext *context,
-                           GtkWidget    *widget)
+quartz_set_client_widget (GtkIMContext *context,
+                          GtkWidget    *widget)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  GTK_DEBUG (MODULES, "quartz_set_client_surface: %p", widget);
+  GTK_DEBUG (MODULES, "quartz_set_client_widget: %p", widget);
+
+  if (qc->client_widget)
+    {
+      on_widget_unrealize (widget, qc);
+      g_signal_handlers_disconnect_by_func (qc->client_widget,
+                                            on_widget_realize,
+                                            context);
+      g_signal_handlers_disconnect_by_func (qc->client_widget,
+                                            on_widget_unrealize,
+                                            context);
+
+      g_clear_weak_pointer (&qc->client_widget);
+    }
 
   qc->client_widget = widget;
-  qc->client_surface = NULL;
 
-  if (widget != NULL)
+  if (widget)
     {
-      GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
+      g_object_add_weak_pointer (G_OBJECT (qc->client_widget),
+                                 (gpointer*) &qc->client_widget);
 
-      if (native != NULL)
-        qc->client_surface = gtk_native_get_surface (native);
+      g_signal_connect (qc->client_widget, "realize",
+                        G_CALLBACK (on_widget_realize), context);
+      g_signal_connect (qc->client_widget, "unrealize",
+                        G_CALLBACK (on_widget_unrealize), context);
+      on_widget_realize (widget, qc);
     }
 }
 
@@ -303,37 +409,19 @@ static void
 quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
-  GtkWidget* surface_widget;
-  int sx, sy;
-  graphene_point_t p;
 
   GTK_DEBUG (MODULES, "quartz_set_cursor_location");
 
-  if (!qc->client_surface || !qc->client_widget)
-    return;
+  *qc->cursor_rect = *area;
 
-  if (!qc->focused)
-    return;
+  if (qc->client_widget)
+    {
+      GdkFrameClock *frame_clock;
 
-  surface_widget = GTK_WIDGET (gtk_widget_get_native (qc->client_widget));
-
-  if (!surface_widget)
-    return;
-
-  gdk_surface_get_origin (qc->client_surface, &sx, &sy);
-  if (!gtk_widget_compute_point (qc->client_widget, surface_widget,
-                                 &GRAPHENE_POINT_INIT (area->x, area->y), &p))
-    graphene_point_init (&p, area->x, area->y);
-
-  qc->cursor_rect->x = sx + (int) p.x;
-  qc->cursor_rect->y = sy + (int) p.y;
-  qc->cursor_rect->width = area->width;
-  qc->cursor_rect->height = area->height;
-
-  if (!GDK_IS_MACOS_SURFACE (qc->client_surface))
-    return;
-
-  g_object_set_data (G_OBJECT (qc->client_surface), GIC_CURSOR_RECT, qc->cursor_rect);
+      frame_clock = gtk_widget_get_frame_clock (qc->client_widget);
+      if (frame_clock)
+        gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_LAYOUT);
+    }
 }
 
 static void
@@ -356,6 +444,9 @@ imquartz_finalize (GObject *obj)
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (obj);
   g_clear_pointer (&qc->preedit_str, g_free);
   g_clear_pointer (&qc->cursor_rect, g_free);
+  g_clear_pointer (&qc->surface_cursor_rect, g_free);
+
+  quartz_set_client_widget (GTK_IM_CONTEXT (qc), NULL);
 
   g_signal_handlers_disconnect_by_func (qc->helper, (gpointer)commit_cb, qc);
   g_object_unref (qc->helper);
@@ -374,7 +465,7 @@ gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
   klass->get_preedit_string = quartz_get_preedit_string;
   klass->filter_keypress = quartz_filter_keypress;
   klass->reset = quartz_reset;
-  klass->set_client_widget = quartz_set_client_surface;
+  klass->set_client_widget = quartz_set_client_widget;
   klass->focus_in = quartz_focus_in;
   klass->focus_out = quartz_focus_out;
   klass->set_cursor_location = quartz_set_cursor_location;
@@ -392,6 +483,7 @@ gtk_im_context_quartz_init (GtkIMContextQuartz *qc)
   qc->cursor_index = 0;
   qc->selected_len = 0;
   qc->cursor_rect = g_new (GdkRectangle, 1);
+  qc->surface_cursor_rect = g_new (GdkRectangle, 1);
   qc->focused = FALSE;
 
   qc->helper = g_object_new (GTK_TYPE_IM_CONTEXT_SIMPLE, NULL);

@@ -209,6 +209,18 @@ close_button_clicked_cb (GtkWidget    *button,
 }
 
 static void
+input_intercepted_cb (GtkEditable  *editable,
+                      GtkSearchBar *bar)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), TRUE);
+
+  if (GTK_IS_ENTRY (editable))
+    gtk_entry_grab_focus_without_selecting (GTK_ENTRY (editable));
+  else if (GTK_IS_SEARCH_ENTRY (editable))
+    gtk_widget_grab_focus (GTK_WIDGET (editable));
+}
+
+static void
 gtk_search_bar_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -409,10 +421,8 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
   if (bar->entry != NULL)
     {
       if (GTK_IS_SEARCH_ENTRY (bar->entry))
-        {
-          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (bar->entry), NULL);
-          g_signal_handlers_disconnect_by_func (bar->entry, stop_search_cb, bar);
-        }
+        g_signal_handlers_disconnect_by_func (bar->entry, stop_search_cb, bar);
+      g_signal_handlers_disconnect_by_func (bar->entry, input_intercepted_cb, bar);
       g_object_remove_weak_pointer (G_OBJECT (bar->entry), (gpointer *) &bar->entry);
     }
 
@@ -421,14 +431,14 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
   if (bar->entry != NULL)
     {
       g_object_add_weak_pointer (G_OBJECT (bar->entry), (gpointer *) &bar->entry);
+      g_signal_connect (bar->entry, "input-intercepted",
+                        G_CALLBACK (input_intercepted_cb), bar);
+
       if (GTK_IS_SEARCH_ENTRY (bar->entry))
         {
           g_signal_connect (bar->entry, "stop-search",
                             G_CALLBACK (stop_search_cb), bar);
-          gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (bar->entry),
-                                                   GTK_WIDGET (bar));
         }
-
     }
 }
 
@@ -528,85 +538,6 @@ gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
     }
 }
 
-static void
-changed_cb (gboolean *changed)
-{
-  *changed = TRUE;
-}
-
-static gboolean
-capture_widget_key_handled (GtkEventControllerKey *controller,
-                            guint                  keyval,
-                            guint                  keycode,
-                            GdkModifierType        state,
-                            GtkSearchBar          *bar)
-{
-  gboolean handled;
-
-  if (!gtk_widget_get_mapped (GTK_WIDGET (bar)))
-    return GDK_EVENT_PROPAGATE;
-
-  if (bar->reveal_child)
-    return GDK_EVENT_PROPAGATE;
-
-  if (bar->entry == NULL)
-    {
-      g_warning ("The search bar does not have an entry connected to it. Call gtk_search_bar_connect_entry() to connect one.");
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  if (GTK_IS_SEARCH_ENTRY (bar->entry))
-    {
-      /* The search entry was told to listen to events from the search bar, so
-       * just forward the event to self, so the search entry has an opportunity
-       * to intercept those.
-       */
-      handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (bar));
-    }
-  else
-    {
-      gboolean preedit_changed, buffer_changed;
-      guint preedit_change_id, buffer_change_id;
-      gboolean res;
-
-      if (gtk_search_entry_is_keynav (keyval, state) ||
-          keyval == GDK_KEY_space ||
-          keyval == GDK_KEY_Menu)
-        return GDK_EVENT_PROPAGATE;
-
-      if (keyval == GDK_KEY_Escape)
-        {
-          if (gtk_revealer_get_reveal_child (GTK_REVEALER (bar->revealer)))
-            {
-              stop_search_cb (bar->entry, bar);
-              return GDK_EVENT_STOP;
-            }
-
-          return GDK_EVENT_PROPAGATE;
-        }
-
-      handled = GDK_EVENT_PROPAGATE;
-      preedit_changed = buffer_changed = FALSE;
-      preedit_change_id = g_signal_connect_swapped (bar->entry, "preedit-changed",
-                                                    G_CALLBACK (changed_cb), &preedit_changed);
-      buffer_change_id = g_signal_connect_swapped (bar->entry, "changed",
-                                                   G_CALLBACK (changed_cb), &buffer_changed);
-
-      res = gtk_event_controller_key_forward (controller, bar->entry);
-
-      g_signal_handler_disconnect (bar->entry, preedit_change_id);
-      g_signal_handler_disconnect (bar->entry, buffer_change_id);
-
-      if ((res && buffer_changed) || preedit_changed)
-        handled = GDK_EVENT_STOP;
-    }
-
-  if (handled == GDK_EVENT_STOP)
-    gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), TRUE);
-
-  return handled;
-}
-
 /**
  * gtk_search_bar_set_key_capture_widget:
  * @bar: a `GtkSearchBar`
@@ -637,29 +568,19 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 
   if (bar->capture_widget)
     {
-      gtk_widget_remove_controller (bar->capture_widget,
-                                    bar->capture_widget_controller);
       g_object_remove_weak_pointer (G_OBJECT (bar->capture_widget),
                                     (gpointer *) &bar->capture_widget);
     }
 
   bar->capture_widget = widget;
 
+  if (bar->entry)
+    gtk_editable_set_input_interceptor (GTK_EDITABLE (bar->entry), bar->capture_widget);
+
   if (widget)
     {
       g_object_add_weak_pointer (G_OBJECT (bar->capture_widget),
                                  (gpointer *) &bar->capture_widget);
-
-      bar->capture_widget_controller = gtk_event_controller_key_new ();
-      gtk_event_controller_set_static_name (bar->capture_widget_controller,
-                                            "gtk-search-bar-capture");
-      gtk_event_controller_set_propagation_phase (bar->capture_widget_controller,
-                                                  GTK_PHASE_BUBBLE);
-      g_signal_connect (bar->capture_widget_controller, "key-pressed",
-                        G_CALLBACK (capture_widget_key_handled), bar);
-      g_signal_connect (bar->capture_widget_controller, "key-released",
-                        G_CALLBACK (capture_widget_key_handled), bar);
-      gtk_widget_add_controller (widget, bar->capture_widget_controller);
     }
 
   g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_KEY_CAPTURE_WIDGET]);

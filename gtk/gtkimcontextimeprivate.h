@@ -38,11 +38,13 @@ struct _GtkIMContextIME
 
   GtkWidget *client_widget;
   GdkSurface *client_surface;
+  gulong after_layout_id;
   guint use_preedit : 1;
   guint preediting : 1;
   guint opened : 1;
   guint focus : 1;
   GdkRectangle cursor_location;
+  GdkRectangle surface_cursor_location;
   char *commit_string;
 
   GtkIMContextIMEPrivate *priv;
