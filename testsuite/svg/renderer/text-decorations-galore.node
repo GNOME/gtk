@@ -1,8 +1,8 @@
 mask {
   source: linear-gradient {
-    bounds: 50 56 50 55;
-    start: 45.2489 61.2262;
-    end: 100 111;
+    bounds: 50 56 87 55;
+    start: 87.3162 32.4093;
+    end: 137 111;
     stops: 0 rgb(0,128,0), 1 rgb(255,255,255);
     repeat: reflect;
     premultiplied: false;
@@ -26,7 +26,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 50 56 50 55;
+    bounds: 50 56 87 55;
     color: rgb(255,255,0);
   }
   mask: transform {
@@ -50,7 +50,7 @@ Z";
 }
 mask {
   source: linear-gradient {
-    bounds: 50 56 50 55;
+    bounds: 50 56 87 55;
     start: 0 0;
     end: 20 20;
     stops: 0 rgb(255,0,0), 1 rgb(255,255,0);
@@ -100,7 +100,7 @@ CA4A\
 }
 mask {
   source: color {
-    bounds: 50 56 50 55;
+    bounds: 50 56 87 55;
     color: rgb(255,0,255);
   }
   mask: transform {
@@ -150,7 +150,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 50 56 50 55;
+    bounds: 50 56 87 55;
     color: rgb(0,0,255);
   }
   mask: transform {
@@ -172,7 +172,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 50 56 50 55;
+    bounds: 50 56 87 55;
     color: rgb(255,255,0);
   }
   mask: transform {
@@ -196,7 +196,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 100 56 37 55;
+    bounds: 50 56 87 55;
     color: rgb(255,255,255);
   }
   mask: transform {
@@ -218,7 +218,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 100 56 37 55;
+    bounds: 50 56 87 55;
     color: rgb(128,0,128);
   }
   mask: transform {
@@ -248,7 +248,7 @@ text {
 }
 mask {
   source: color {
-    bounds: 100 56 37 55;
+    bounds: 50 56 87 55;
     color: rgb(128,0,128);
   }
   mask: transform {
@@ -318,7 +318,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 100 56 37 55;
+    bounds: 50 56 87 55;
     color: rgb(0,0,255);
   }
   mask: transform {
@@ -340,7 +340,7 @@ Z";
 }
 mask {
   source: color {
-    bounds: 100 56 37 55;
+    bounds: 50 56 87 55;
     color: rgb(255,255,0);
   }
   mask: transform {

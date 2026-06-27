@@ -4235,7 +4235,7 @@ paint_text (SvgElement            *self,
 
             push_group (node->shape.shape, context);
 
-            paint_text (node->shape.shape, context, node->shape.has_bounds ? &node->shape.bounds : bounds);
+            paint_text (node->shape.shape, context, bounds);
 
             pop_group (node->shape.shape, context);
 
