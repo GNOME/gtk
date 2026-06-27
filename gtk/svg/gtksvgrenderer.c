@@ -83,6 +83,8 @@
 
 #include "gdk/gdkrgbaprivate.h"
 
+#include <hb-ot.h>
+
 typedef enum
 {
   CLIPPING,
@@ -3393,11 +3395,11 @@ text_create_layout (SvgElement       *self,
   char *text_with_bidi = NULL;
 
   context = pango_font_map_create_context (fontmap);
-  pango_context_set_language (context, svg_language_get (self->current[SVG_PROPERTY_LANG], 0));
+  pango_context_set_language (context, svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0));
 
-  uni = svg_enum_get (self->current[SVG_PROPERTY_UNICODE_BIDI]);
-  dir = direction = svg_enum_get (self->current[SVG_PROPERTY_DIRECTION]);
-  wmode = svg_enum_get (self->current[SVG_PROPERTY_WRITING_MODE]);
+  uni = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_UNICODE_BIDI));
+  dir = direction = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DIRECTION));
+  wmode = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_WRITING_MODE));
   switch (wmode)
     {
     case WRITING_MODE_HORIZONTAL_TB:
@@ -3480,7 +3482,7 @@ text_create_layout (SvgElement       *self,
 
   font_desc = pango_font_description_copy (pango_context_get_font_description (context));
 
-  font_family = self->current[SVG_PROPERTY_FONT_FAMILY];
+  font_family = svg_element_get_current_value (self, SVG_PROPERTY_FONT_FAMILY);
   if (svg_string_list_get_length (font_family) > 0)
     {
       GString *s = g_string_new ("");
@@ -3495,13 +3497,13 @@ text_create_layout (SvgElement       *self,
       g_string_free (s, TRUE);
     }
 
-  pango_font_description_set_style (font_desc, svg_enum_get (self->current[SVG_PROPERTY_FONT_STYLE]));
-  pango_font_description_set_variant (font_desc, svg_enum_get (self->current[SVG_PROPERTY_FONT_VARIANT]));
-  pango_font_description_set_weight (font_desc, (unsigned int) svg_number_get (self->current[SVG_PROPERTY_FONT_WEIGHT], 1000.));
-  pango_font_description_set_stretch (font_desc, (unsigned int) svg_number_get (self->current[SVG_PROPERTY_FONT_STRETCH], 100));
+  pango_font_description_set_style (font_desc, svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_STYLE)));
+  pango_font_description_set_variant (font_desc, svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_VARIANT)));
+  pango_font_description_set_weight (font_desc, (unsigned int) svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_WEIGHT), 1000.));
+  pango_font_description_set_stretch (font_desc, (unsigned int) svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_STRETCH), 100));
 
   pango_font_description_set_size (font_desc,
-                                   svg_number_get (self->current[SVG_PROPERTY_FONT_SIZE], 1.) *
+                                   svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_SIZE), 1.) *
                                    PANGO_SCALE / SVG_DEFAULT_DPI * 72);
 
   layout = pango_layout_new (context);
@@ -3515,12 +3517,12 @@ text_create_layout (SvgElement       *self,
 
   attr_list = pango_attr_list_new ();
 
-  attr = pango_attr_letter_spacing_new (svg_number_get (self->current[SVG_PROPERTY_LETTER_SPACING], 1.) * PANGO_SCALE);
+  attr = pango_attr_letter_spacing_new (svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_LETTER_SPACING), 1.) * PANGO_SCALE);
   attr->start_index = 0;
   attr->end_index = G_MAXINT;
   pango_attr_list_insert (attr_list, attr);
 
-  decoration = svg_text_decoration_get (self->current[SVG_PROPERTY_TEXT_DECORATION]);
+  decoration = svg_text_decoration_get (svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DECORATION));
   if (text)
     {
       if (decoration & TEXT_DECORATION_UNDERLINE)
@@ -3550,6 +3552,8 @@ text_create_layout (SvgElement       *self,
   pango_attr_list_unref (attr_list);
 
   pango_layout_set_text (layout, text_with_bidi ? text_with_bidi : text, -1);
+
+  pango_layout_set_auto_dir (layout, FALSE);
 
   pango_layout_set_alignment (layout, (direction == PANGO_DIRECTION_LTR) ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT);
 
@@ -3638,29 +3642,42 @@ text_create_layout (SvgElement       *self,
 }
 
 static gboolean
-do_generate_layouts (SvgElement       *self,
-                     PangoFontMap     *fontmap,
-                     XmlSpace          space,
-                     double           *x,
-                     double           *y,
-                     TextNode        **lastwithspace,
-                     graphene_rect_t  *bounds)
+do_generate_layouts (SvgElement             *self,
+                     PangoFontMap           *fontmap,
+                     XmlSpace                space,
+                     double                 *x,
+                     double                 *y,
+                     TextNode              **lastwithspace,
+                     const graphene_rect_t  *viewport,
+                     graphene_rect_t        *bounds)
 {
-  double dx, dy;
+  double dx = 0;
+  double dy = 0;
   gboolean set_bounds = FALSE;
+  SvgValue *v;
+  double baseline_shift = 0;
 
   g_assert (svg_element_type_is_text (self->type));
 
-  if (svg_enum_get (self->current[SVG_PROPERTY_DISPLAY]) == DISPLAY_NONE)
+  if (svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
     return FALSE;
 
-  if (svg_element_is_specified (self, SVG_PROPERTY_X))
-    *x = svg_number_get (self->current[SVG_PROPERTY_X], 1);
-  if (svg_element_is_specified (self, SVG_PROPERTY_Y))
-    *y = svg_number_get (self->current[SVG_PROPERTY_Y], 1);
+  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_X);
+  if (svg_numbers_get_length (v) > 0)
+    *x = svg_numbers_get (v, 0, viewport->size.width);
 
-  dx = svg_number_get (self->current[SVG_PROPERTY_DX], 1);
-  dy = svg_number_get (self->current[SVG_PROPERTY_DY], 1);
+  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_Y);
+  if (svg_numbers_get_length (v) > 0)
+    *y = svg_numbers_get (v, 0, viewport->size.height);
+
+  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DX);
+  if (svg_numbers_get_length (v) > 0)
+    dx = svg_numbers_get (v, 0, viewport->size.width);
+
+  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DY);
+  if (svg_numbers_get_length (v) > 0)
+    dy = svg_numbers_get (v, 0, viewport->size.height);
+
   *x += dx;
   *y += dy;
 
@@ -3686,9 +3703,10 @@ do_generate_layouts (SvgElement       *self,
         case TEXT_NODE_SHAPE:
           {
             XmlSpace space2;
+            double y2 = *y + baseline_shift;
 
             space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, x, y, lastwithspace, &node->shape.bounds);
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, x, &y2, lastwithspace, viewport, &node->shape.bounds);
             if (node->shape.has_bounds)
               ADD_BBOX (&node->shape.bounds)
           }
@@ -3712,8 +3730,54 @@ do_generate_layouts (SvgElement       *self,
             node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
+            if (svg_element_get_type (self) == SVG_ELEMENT_TSPAN)
+              {
+                const PangoFontDescription *font_desc = pango_layout_get_font_description (node->characters.layout);
+                PangoContext *context = pango_layout_get_context (node->characters.layout);
+                PangoFontMetrics *metrics = pango_context_get_metrics (context, font_desc, pango_context_get_language (context));
+
+                SvgValue *bshift = svg_element_get_current_value (self, SVG_PROPERTY_BASELINE_SHIFT);
+                if (svg_value_is_number (bshift))
+                  {
+                    baseline_shift = - svg_number_get (bshift, pango_font_metrics_get_height (metrics) / 1024.0);
+                  }
+                else
+                  {
+                    PangoFont *font = pango_context_load_font (context, font_desc);
+                    hb_font_t *hb_font = pango_font_get_hb_font (font);
+                    int offset = 0;
+
+                    switch (svg_enum_get (bshift))
+                      {
+                      case BASELINE_SHIFT_SUB:
+                        hb_ot_metrics_get_position (hb_font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &offset);
+                        baseline_shift = offset / 1024.0;
+                        break;
+                      case BASELINE_SHIFT_SUPER:
+                        hb_ot_metrics_get_position (hb_font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &offset);
+                        baseline_shift = - offset / 1024.0;
+                        break;
+                      case BASELINE_SHIFT_TOP:
+                        baseline_shift = pango_font_metrics_get_height (metrics) / 1024.0;
+                        break;
+                      case BASELINE_SHIFT_CENTER:
+                        baseline_shift = 0.5 * pango_font_metrics_get_height (metrics) / 1024.0;
+                        break;
+                      case BASELINE_SHIFT_BOTTOM:
+                        baseline_shift = 0;
+                        break;
+                      default:
+                        g_assert_not_reached ();
+                      }
+
+                    g_object_unref (font);
+                  }
+
+                pango_font_metrics_unref (metrics);
+              }
+
             node->characters.x = *x + origin.x;
-            node->characters.y = *y + origin.y;
+            node->characters.y = *y + origin.y + baseline_shift;
 
             graphene_rect_offset (&cbounds, *x, *y);
             ADD_BBOX (&cbounds)
@@ -3761,9 +3825,10 @@ print_chunks (SvgElement *self,
 #endif
 
 static gboolean
-generate_layouts (SvgElement       *self,
-                  PangoFontMap     *fontmap,
-                  graphene_rect_t  *bounds)
+generate_layouts (SvgElement            *self,
+                  PangoFontMap          *fontmap,
+                  const graphene_rect_t *viewport,
+                  graphene_rect_t       *bounds)
 {
   gboolean retval;
   TextNode dummy;
@@ -3778,7 +3843,7 @@ generate_layouts (SvgElement       *self,
 
   space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
 
-  retval = do_generate_layouts (self, fontmap, space, &x, &y, &node, bounds);
+  retval = do_generate_layouts (self, fontmap, space, &x, &y, &node, viewport, bounds);
 
   if (node && node != &dummy)
     {
@@ -4429,7 +4494,7 @@ paint_shape (SvgElement   *shape,
 
       anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
       wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
-      if (!generate_layouts (shape, get_fontmap (context->svg), &bounds))
+      if (!generate_layouts (shape, get_fontmap (context->svg), context->viewport, &bounds))
         return;
 
       dx = dy = 0;
