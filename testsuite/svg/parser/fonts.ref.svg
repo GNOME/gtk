@@ -3,11 +3,12 @@
         xmlns:svg='http://www.w3.org/2000/svg'>
   <g
           font-size='xx-large'
-          font-weight='normal'>
+          font-weight='normal'
+          font-width='ultra-condensed'>
     <g
             font-size='larger'
             font-weight='bolder'
-            font-stretch='wider'>
+            font-width='91.5%'>
       <g
               font-size='88%'
               font-weight='666'>
@@ -16,7 +17,7 @@
     <g
             font-size='large'
             font-weight='bold'
-            font-stretch='semi-expanded'>
+            font-width='semi-expanded'>
     </g>
   </g>
 </svg>

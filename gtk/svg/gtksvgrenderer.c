@@ -3499,7 +3499,7 @@ text_create_layout (SvgElement       *self,
   pango_font_description_set_style (font_desc, svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_STYLE)));
   pango_font_description_set_variant (font_desc, svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_VARIANT)));
   pango_font_description_set_weight (font_desc, (unsigned int) svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_WEIGHT), 1000.));
-  pango_font_description_set_stretch (font_desc, (unsigned int) svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_STRETCH), 100));
+  pango_font_description_set_width (font_desc, (unsigned int) svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_WIDTH), 1000.));
 
   pango_font_description_set_size (font_desc,
                                    svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_FONT_SIZE), 1.) *

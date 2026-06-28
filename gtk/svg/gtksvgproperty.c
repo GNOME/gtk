@@ -234,6 +234,18 @@ parse_font_weight (GtkCssParser *parser)
 }
 
 static SvgValue *
+parse_font_width (GtkCssParser *parser)
+{
+  SvgValue *v;
+
+  v = svg_font_width_try_parse (parser);
+  if (v)
+    return v;
+
+  return svg_number_parse (parser, 0, DBL_MAX, SVG_PARSE_PERCENTAGE);
+}
+
+static SvgValue *
 parse_font_size (GtkCssParser *parser)
 {
   SvgValue *v;
@@ -623,10 +635,10 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = ELEMENT_ANY,
     .parse_value = parse_font_weight,
   },
-  [SVG_PROPERTY_FONT_STRETCH] = {
+  [SVG_PROPERTY_FONT_WIDTH] = {
     .flags = SVG_PROPERTY_IS_INHERITED,
     .applies_to = ELEMENT_ANY,
-    .parse_value = svg_font_stretch_parse,
+    .parse_value = parse_font_width,
   },
   [SVG_PROPERTY_FILTER] = {
     .applies_to = (ELEMENT_CONTAINERS & ~BIT (SVG_ELEMENT_DEFS)) | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE),
@@ -1261,7 +1273,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_FONT_STYLE].initial_value = svg_font_style_new (PANGO_STYLE_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_VARIANT].initial_value = svg_font_variant_new (PANGO_VARIANT_NORMAL);
   shape_attrs[SVG_PROPERTY_FONT_WEIGHT].initial_value = svg_font_weight_new (FONT_WEIGHT_NORMAL);
-  shape_attrs[SVG_PROPERTY_FONT_STRETCH].initial_value = svg_font_stretch_new (FONT_STRETCH_NORMAL);
+  shape_attrs[SVG_PROPERTY_FONT_WIDTH].initial_value = svg_font_width_new (PANGO_WIDTH_NORMAL);
   shape_attrs[SVG_PROPERTY_FILL].initial_value = svg_paint_new_black ();
   shape_attrs[SVG_PROPERTY_FILL_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_FILL_RULE].initial_value = svg_fill_rule_new (GSK_FILL_RULE_WINDING);
@@ -1495,7 +1507,8 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "font-style", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_STYLE },
   { "font-variant", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_VARIANT },
   { "font-weight", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_WEIGHT },
-  { "font-stretch", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_STRETCH },
+  { "font-width", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_WIDTH },
+  { "font-stretch", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_WIDTH },
   { "filter", (ELEMENT_CONTAINERS & ~BIT (SVG_ELEMENT_DEFS)) | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_FILTER },
   { "fill", ELEMENT_ANY, 0, SVG_PROPERTY_FILL },
   { "fill-opacity", ELEMENT_ANY, 0, SVG_PROPERTY_FILL_OPACITY },
