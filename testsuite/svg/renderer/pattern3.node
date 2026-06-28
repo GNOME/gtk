@@ -4,6 +4,7 @@ clip {
     transform: translate(100, 100) rotate(45) translate(-100, -100);
     child: repeat {
       bounds: 29.2893 29.2893 141.421 141.421;
+      child-bounds: 0 0 20 20;
       child: container {
         color {
           bounds: 0 0 20 10;

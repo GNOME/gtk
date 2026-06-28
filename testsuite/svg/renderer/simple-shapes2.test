@@ -1,4 +1,0 @@
-[test]
-input=simple-shapes.svg
-reference=simple-shapes.node
-animations=false

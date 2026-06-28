@@ -17,5 +17,6 @@ color-matrix {
       }
     }
   }
+  bounds: 28 28 36 36;
   color-state: srgb-linear;
 }

@@ -1,5 +1,6 @@
 repeat {
   bounds: 4 4 12 12;
+  child-bounds: 5 5 10 10;
   child: color {
     bounds: 5 5 10 10;
     color: rgb(0,0,255);
