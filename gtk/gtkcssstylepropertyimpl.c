@@ -178,13 +178,18 @@ font_weight_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-font_stretch_parse (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser)
+font_width_parse (GtkCssStyleProperty *property,
+                  GtkCssParser        *parser)
 {
-  GtkCssValue *value = _gtk_css_font_stretch_value_try_parse (parser);
+  GtkCssValue *value = _gtk_css_font_width_value_try_parse (parser);
 
   if (value == NULL)
-    gtk_css_parser_error_syntax (parser, "unknown font stretch value");
+    {
+      value = gtk_css_number_value_parse (parser, GTK_CSS_POSITIVE_ONLY | GTK_CSS_PARSE_PERCENT);
+
+      if (value == NULL)
+        gtk_css_parser_error_syntax (parser, "unknown font width value");
+    }
 
   return value;
 }
@@ -919,12 +924,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_weight_parse,
                                           gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER));
-  gtk_css_style_property_register        ("font-stretch",
-                                          GTK_CSS_PROPERTY_FONT_STRETCH,
+  gtk_css_style_property_register        ("font-width",
+                                          GTK_CSS_PROPERTY_FONT_WIDTH,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
-                                          font_stretch_parse,
-                                          _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
+                                          font_width_parse,
+                                          _gtk_css_font_width_value_new (PANGO_WIDTH_NORMAL));
 
   gtk_css_style_property_register        ("letter-spacing",
                                           GTK_CSS_PROPERTY_LETTER_SPACING,

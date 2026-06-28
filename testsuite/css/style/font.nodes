@@ -4,7 +4,7 @@ window.background:dir(ltr)
     font-family: "Comic Sans"; /* font.css:2:3-27 */
     font-style: normal; /* font.css:2:3-27 */
     font-weight: 400; /* font.css:2:3-27 */
-    font-stretch: normal; /* font.css:2:3-27 */
+    font-width: 100%; /* font.css:2:3-27 */
     font-variant-caps: normal; /* font.css:2:3-27 */
 
     label#label1:dir(ltr)
@@ -14,7 +14,7 @@ window.background:dir(ltr)
       font-family: "Cantarell", "sans-serif"; /* font.css:10:3-36 */
       font-style: normal; /* font.css:10:3-36 */
       font-weight: 400; /* font.css:10:3-36 */
-      font-stretch: normal; /* font.css:10:3-36 */
+      font-width: 100%; /* font.css:10:3-36 */
       font-variant-caps: normal; /* font.css:10:3-36 */
       line-height: normal; /* font.css:11:3-23 */
     label#label3:dir(ltr)
@@ -22,7 +22,7 @@ window.background:dir(ltr)
       font-family: "monospace"; /* font.css:15:3-35 */
       font-style: italic; /* font.css:15:3-35 */
       font-weight: 700; /* font.css:15:3-35 */
-      font-stretch: normal; /* font.css:15:3-35 */
+      font-width: 100%; /* font.css:15:3-35 */
       font-variant-caps: normal; /* font.css:15:3-35 */
       line-height: 1.5; /* font.css:16:3-20 */
     label#label4:dir(ltr)
@@ -30,7 +30,7 @@ window.background:dir(ltr)
       font-family: "serif"; /* font.css:20:3-41 */
       font-style: oblique; /* font.css:20:3-41 */
       font-weight: 700; /* font.css:29:3-23 */
-      font-stretch: expanded; /* font.css:20:3-41 */
+      font-width: 125%; /* font.css:20:3-41 */
       font-kerning: normal; /* font.css:27:3-24 */
       font-variant-position: normal; /* font.css:24:3-33 */
       font-variant-caps: normal; /* font.css:21:3-29 */
@@ -44,7 +44,7 @@ window.background:dir(ltr)
       font-family: "21st Century"; /* font.css:34:3-29 */
       font-style: normal; /* font.css:34:3-29 */
       font-weight: 400; /* font.css:34:3-29 */
-      font-stretch: normal; /* font.css:34:3-29 */
+      font-width: 100%; /* font.css:34:3-29 */
       font-kerning: auto; /* font.css:41:3-22 */
       font-variant-position: super; /* font.css:38:3-32 */
       font-variant-caps: unicase; /* font.css:35:3-30 */

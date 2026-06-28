@@ -477,7 +477,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
       if (values[4] == NULL)
         {
-          values[4] = _gtk_css_font_stretch_value_try_parse (parser);
+          values[4] = _gtk_css_font_width_value_try_parse (parser);
           parsed_one = parsed_one || values[4] != NULL;
         }
     }
@@ -1081,6 +1081,15 @@ found:
 }
 
 static gboolean
+parse_font_stretch (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser)
+{
+  values[0] = _gtk_css_font_width_value_try_parse (parser);
+  return TRUE;
+}
+
+static gboolean
 parse_all (GtkCssShorthandProperty  *shorthand,
            GtkCssValue             **values,
            GtkCssParser             *parser)
@@ -1130,7 +1139,7 @@ void
 _gtk_css_shorthand_property_init_properties (void)
 {
   /* The order is important here, be careful when changing it */
-  const char *font_subproperties[] = { "font-family", "font-style", "font-variant-caps", "font-weight", "font-stretch", "font-size", NULL };
+  const char *font_subproperties[] = { "font-family", "font-style", "font-variant-caps", "font-weight", "font-width", "font-size", NULL };
   const char *margin_subproperties[] = { "margin-top", "margin-right", "margin-bottom", "margin-left", NULL };
   const char *padding_subproperties[] = { "padding-top", "padding-right", "padding-bottom", "padding-left", NULL };
   const char *border_width_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width", NULL };
@@ -1155,6 +1164,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
   const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-style", "text-decoration-color", NULL };
   const char *font_variant_subproperties[] = { "font-variant-ligatures", "font-variant-position", "font-variant-caps", "font-variant-numeric", "font-variant-alternates", "font-variant-east-asian", NULL };
+  const char *font_stretch_subproperties[] = { "font-width", NULL };
 
   const char **all_subproperties;
 
@@ -1234,6 +1244,10 @@ _gtk_css_shorthand_property_init_properties (void)
                                          GTK_CSS_SHORTHAND_PROPERTY_FONT_VARIANT,
                                          font_variant_subproperties,
                                          parse_font_variant);
+  gtk_css_shorthand_property_register   ("font-stretch",
+                                         GTK_CSS_SHORTHAND_PROPERTY_FONT_STRETCH,
+                                         font_stretch_subproperties,
+                                         parse_font_stretch);
 
   all_subproperties = get_all_subproperties ();
   gtk_css_shorthand_property_register   ("all",

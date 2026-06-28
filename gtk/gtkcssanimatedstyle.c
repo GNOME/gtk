@@ -252,9 +252,9 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_font (animated);
       gtk_css_take_value (&style->font->font_weight, value);
       break;
-    case GTK_CSS_PROPERTY_FONT_STRETCH:
+    case GTK_CSS_PROPERTY_FONT_WIDTH:
       unshare_font (animated);
-      gtk_css_take_value (&style->font->font_stretch, value);
+      gtk_css_take_value (&style->font->font_width, value);
       break;
     case GTK_CSS_PROPERTY_LETTER_SPACING:
       unshare_font (animated);
