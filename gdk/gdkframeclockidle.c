@@ -386,8 +386,6 @@ gdk_frame_clock_idle_run_before_paint (GdkFrameClockIdle *self,
   gint64 frame_time;
   GdkFrameTimings *prev_timings;
 
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
 
   /* We always emit ::before-paint and ::after-paint if
    * any of the intermediate phases are requested and
@@ -518,9 +516,6 @@ gdk_frame_clock_idle_run_update (GdkFrameClockIdle *self)
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
-
   if ((priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE) != 0 ||
       priv->updating_count > 0)
     {
@@ -528,9 +523,6 @@ gdk_frame_clock_idle_run_update (GdkFrameClockIdle *self)
       gdk_frame_clock_idle_doing_work (self);
       _gdk_frame_clock_emit_update (clock);
     }
-
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
 
   gdk_frame_clock_idle_set_stage (self, GDK_FRAME_STAGE_LAYOUT);
 }
@@ -542,9 +534,6 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   int iter;
 
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
-
   /* We loop in the layout phase, because we don't want to progress
    * into the paint phase with invalid size allocations. This may
    * happen in some situation like races between user window
@@ -552,7 +541,6 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
    */
   iter = 0;
   while ((priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT) &&
-         !gdk_frame_clock_is_stopped (clock) &&
          iter++ < 4)
     {
       priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
@@ -562,9 +550,6 @@ gdk_frame_clock_idle_run_layout (GdkFrameClockIdle *self)
   if (iter == 5)
     g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
 
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
-
   gdk_frame_clock_idle_set_stage (self, GDK_FRAME_STAGE_PAINT);
 }
 
@@ -573,9 +558,6 @@ gdk_frame_clock_idle_run_paint (GdkFrameClockIdle *self)
 {
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
     {
@@ -592,9 +574,6 @@ gdk_frame_clock_idle_run_after_paint (GdkFrameClockIdle *self)
 {
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
-
-  if (gdk_frame_clock_is_stopped (clock))
-    return;
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_AFTER_PAINT)
     {
@@ -623,8 +602,7 @@ gdk_frame_clock_idle_run_resume_events (GdkFrameClockIdle *self)
       _gdk_frame_clock_emit_resume_events (clock);
     }
 
-  if (!gdk_frame_clock_is_stopped (clock))
-    gdk_frame_clock_idle_set_stage (self, GDK_FRAME_STAGE_NONE);
+  gdk_frame_clock_idle_set_stage (self, GDK_FRAME_STAGE_NONE);
 }
 
 static void
