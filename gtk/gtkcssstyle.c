@@ -177,8 +177,8 @@ gtk_css_style_get_computed_value (GtkCssStyle *style,
       return style->font->font_style;
     case GTK_CSS_PROPERTY_FONT_WEIGHT:
       return style->font->font_weight;
-    case GTK_CSS_PROPERTY_FONT_STRETCH:
-      return style->font->font_stretch;
+    case GTK_CSS_PROPERTY_FONT_WIDTH:
+      return style->font->font_width;
     case GTK_CSS_PROPERTY_LETTER_SPACING:
       return style->font->letter_spacing;
     case GTK_CSS_PROPERTY_LINE_HEIGHT:
@@ -860,8 +860,8 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
   v = style->font->font_weight;
   pango_font_description_set_weight (description, gtk_css_number_value_get (v, 100));
 
-  v = style->font->font_stretch;
-  pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
+  v = style->font->font_width;
+  pango_font_description_set_width (description, gtk_css_number_value_get (v, 1000));
 
   v = style->font->font_variation_settings;
   str = gtk_css_font_variations_value_get_variations (v);

@@ -214,12 +214,16 @@ serialize_shape_attrs (GString              *s,
             }
 
           if (value &&
-              attr == SVG_PROPERTY_FONT_STRETCH &&
+              attr == SVG_PROPERTY_FONT_WIDTH &&
               strcmp (value->class->name, "SvgNumber") == 0)
             {
-              SvgValue *tmp = svg_font_stretch_new ((FontStretch) svg_number_get (value, 100));
-              svg_value_unref (value);
-              value = tmp;
+              double width = svg_number_get (value, 1000);
+
+              if (width == 1000)
+                {
+                  svg_value_unref (value);
+                  value = svg_font_width_new (PANGO_WIDTH_NORMAL);
+                }
             }
 
           initial = svg_property_ref_initial_value (attr, svg_element_get_type (shape), svg_element_get_parent (shape) != NULL);

@@ -496,12 +496,20 @@ gtk_css_font_weight_value_get (const GtkCssValue *value)
 #undef LIGHTER
 
 /* }}} */
-/* {{{ PangoStretch */
+/* {{{ PangoWidth */
 
-static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
-  "GtkCssFontStretchValue",
+static GtkCssValue *
+gtk_css_value_font_width_compute (GtkCssValue          *value,
+                                  unsigned int          property_id,
+                                  GtkCssComputeContext *context)
+{
+  return gtk_css_number_value_new (value->value * 0.1, GTK_CSS_PERCENT);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_WIDTH = {
+  "GtkCssFontWidthValue",
   gtk_css_value_enum_free,
-  gtk_css_value_enum_compute,
+  gtk_css_value_font_width_compute,
   NULL,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
@@ -510,46 +518,48 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
   gtk_css_value_enum_print
 };
 
-static GtkCssValue font_stretch_values[] = {
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_ULTRA_CONDENSED, "ultra-condensed" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_EXTRA_CONDENSED, "extra-condensed" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_CONDENSED, "condensed" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_SEMI_CONDENSED, "semi-condensed" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_NORMAL, "normal" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_SEMI_EXPANDED, "semi-expanded" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_EXPANDED, "expanded" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_EXTRA_EXPANDED, "extra-expanded" },
-  { &GTK_CSS_VALUE_FONT_STRETCH, 1, 1, 0, 0, PANGO_STRETCH_ULTRA_EXPANDED, "ultra-expanded" },
+static GtkCssValue font_width_values[] = {
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_ULTRA_CONDENSED, "ultra-condensed" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_EXTRA_CONDENSED, "extra-condensed" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_CONDENSED, "condensed" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_SEMI_CONDENSED, "semi-condensed" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_SEMI_EXPANDED, "semi-expanded" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_EXPANDED, "expanded" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_EXTRA_EXPANDED, "extra-expanded" },
+  { &GTK_CSS_VALUE_FONT_WIDTH, 1, 0, 0, 0, PANGO_WIDTH_ULTRA_EXPANDED, "ultra-expanded" },
 };
 
 GtkCssValue *
-_gtk_css_font_stretch_value_new (PangoStretch font_stretch)
+_gtk_css_font_width_value_new (PangoWidth font_width)
 {
-  g_return_val_if_fail (font_stretch < G_N_ELEMENTS (font_stretch_values), NULL);
+  for (unsigned int i = 0; i < G_N_ELEMENTS (font_width_values); i++)
+    {
+      if (font_width_values[i].value == font_width)
+        return gtk_css_value_ref (&font_width_values[i]);
+    }
 
-  return gtk_css_value_ref (&font_stretch_values[font_stretch]);
+  g_assert_not_reached ();
 }
 
 GtkCssValue *
-_gtk_css_font_stretch_value_try_parse (GtkCssParser *parser)
+_gtk_css_font_width_value_try_parse (GtkCssParser *parser)
 {
-  guint i;
-
   g_return_val_if_fail (parser != NULL, NULL);
 
-  for (i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
+  for (unsigned int i = 0; i < G_N_ELEMENTS (font_width_values); i++)
     {
-      if (gtk_css_parser_try_ident (parser, font_stretch_values[i].name))
-        return gtk_css_value_ref (&font_stretch_values[i]);
+      if (gtk_css_parser_try_ident (parser, font_width_values[i].name))
+        return gtk_css_value_ref (&font_width_values[i]);
     }
 
   return NULL;
 }
 
-PangoStretch
-_gtk_css_font_stretch_value_get (const GtkCssValue *value)
+PangoWidth
+_gtk_css_font_width_value_get (const GtkCssValue *value)
 {
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_STRETCH, PANGO_STRETCH_NORMAL);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_WIDTH, PANGO_WIDTH_NORMAL);
 
   return value->value;
 }

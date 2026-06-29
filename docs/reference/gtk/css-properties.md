@@ -188,21 +188,22 @@ done with
 |color       | [CSS Color Level 3](https://www.w3.org/TR/css3-color/#foreground) | |
 |opacity     | [CSS Color Level 3](https://www.w3.org/TR/css3-color/#opacity) | |
 |filter      | [CSS Filter Effect Level 1](https://www.w3.org/TR/filter-effects-1/#typedef-filter-value-list) | |
-|font-family | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-family-prop) | defaults to gtk-font-name setting |
-|font-size   | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-size-prop) | defaults to gtk-font-name setting |
-|font-style  | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-style-prop) | |
-|font-variant| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#descdef-font-variant) | only CSS2 values supported |
-|font-weight | [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-weight-prop) | |
-|font-stretch| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-stretch-prop) | |
-|font-kerning| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-kerning-prop) | |
-|font-variant-ligatures| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-ligatures-prop) | |
-|font-variant-position| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-position-prop) | |
-|font-variant-caps| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-position-prop) | |
-|font-variant-numeric| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-numeric-prop) | |
-|font-variant-alternates| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-alternates-prop) | |
-|font-variant-east-asian| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-east-asian-prop) | |
-|font-feature-settings| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-feature-settings-prop) | |
-|font-variation-settings| [CSS Fonts Level 4](https://www.w3.org/TR/css-fonts-4/#font-variation-settings-def) | |
+|font-family | [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-family-prop) | defaults to gtk-font-name setting |
+|font-size   | [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-size-prop) | defaults to gtk-font-name setting |
+|font-style  | [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-style-prop) | |
+|font-variant| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#descdef-font-variant) | only CSS2 values supported |
+|font-weight | [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-weight-prop) | |
+|font-width| [CSS Fonts Level 4](https://www.w3.org/TR/css-fonts/#font-width-prop) | |
+|font-stretch| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-stretch-prop) | |
+|font-kerning| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-kerning-prop) | |
+|font-variant-ligatures| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-ligatures-prop) | |
+|font-variant-position| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-position-prop) | |
+|font-variant-caps| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-position-prop) | |
+|font-variant-numeric| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-numeric-prop) | |
+|font-variant-alternates| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-alternates-prop) | |
+|font-variant-east-asian| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-variant-east-asian-prop) | |
+|font-feature-settings| [CSS Fonts Level 3](https://www.w3.org/TR/css-fonts/#font-feature-settings-prop) | |
+|font-variation-settings| [CSS Fonts Level 4](https://www.w3.org/TR/css-fonts/#font-variation-settings-def) | |
 |-gtk-dpi|[Number](https://www.w3.org/TR/css3-values/#number-value) | defaults to screen resolution |
 |font| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-prop) | CSS allows line-height, etc |
 |font-variant| [CSS Fonts Level 3](https://www.w3.org/TR/css3-fonts/#font-variant-prop) | |

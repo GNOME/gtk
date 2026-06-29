@@ -394,6 +394,8 @@ test_data = [
   'font-weight-invalid2.css',
   'font-weight-invalid2.errors',
   'font-weight-invalid2.ref.css',
+  'font-width.css',
+  'font-width.ref.css',
   'freed-string-in-error-messages.css',
   'freed-string-in-error-messages.errors',
   'freed-string-in-error-messages.ref.css',

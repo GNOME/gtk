@@ -157,7 +157,7 @@ struct _GtkCssFontValues {
   GtkCssValue *font_family;
   GtkCssValue *font_style;
   GtkCssValue *font_weight;
-  GtkCssValue *font_stretch;
+  GtkCssValue *font_width;
   GtkCssValue *letter_spacing;
   GtkCssValue *text_shadow;
   GtkCssValue *caret_color;

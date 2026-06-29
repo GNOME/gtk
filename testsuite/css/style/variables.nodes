@@ -72,7 +72,7 @@ window.background:dir(ltr)
       font-family: "Sans"; /* variables.css:85:3-14 */
       font-style: normal; /* variables.css:85:3-14 */
       font-weight: 400; /* variables.css:85:3-14 */
-      font-stretch: normal; /* variables.css:85:3-14 */
+      font-width: 100%; /* variables.css:85:3-14 */
       letter-spacing: 0; /* variables.css:85:3-14 */
       text-decoration-line: none; /* variables.css:85:3-14 */
       text-decoration-color: rgb(255,0,0); /* variables.css:85:3-14 */
