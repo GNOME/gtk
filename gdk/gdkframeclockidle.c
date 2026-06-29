@@ -66,7 +66,6 @@ struct _GdkFrameClockIdlePrivate
   uint64_t stage_start_time;
 
   guint work_performed : 1;
-  guint in_frame : 1;
   guint paint_is_thaw : 1;
 #ifdef G_OS_WIN32
   guint begin_period : 1;
@@ -251,7 +250,7 @@ should_run_source (GdkFrameClockIdle *self)
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
 
   return !gdk_frame_clock_is_stopped (GDK_FRAME_CLOCK (self)) &&
-         !priv->in_frame &&
+         priv->stage == GDK_FRAME_STAGE_NONE &&
          (priv->requested != 0 || priv->updating_count > 0);
 }
 
@@ -613,7 +612,6 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  priv->in_frame = TRUE;
   priv->min_next_frame_time = 0;
 
   if (priv->stage == GDK_FRAME_STAGE_NONE)
@@ -655,8 +653,6 @@ gdk_frame_clock_idle_frame (GdkFrameClockIdle *self)
     default:
       g_assert_not_reached ();
     }
-
-  priv->in_frame = FALSE;
 
   /* If there is throttling in the backend layer, then we'll do another
    * update as soon as the backend unthrottles (if there is work to do),
