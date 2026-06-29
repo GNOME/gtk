@@ -403,7 +403,7 @@ D-Bus interface on the accessibility bus.
 
 ## Other resources
 
-The Orca screenreader has [Tips for Application Developers](https://gitlab.gnome.org/GNOME/orca/-/blob/main/README-APPLICATION-DEVELOPERS.md).
+The Orca screenreader has [Tips for Application Developers](https://gitlab.gnome.org/GNOME/orca/-/blob/main/docs/application-developers.md).
 
 The [Web Content Accessibility Guidelines](https://www.w3.org/TR/WCAG21/) are Web-focused,
 but useful nevertheless.
