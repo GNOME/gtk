@@ -267,6 +267,9 @@ shape_apply_state (GtkSvg       *self,
         {
           SvgAnimation *a = g_ptr_array_index (shape->animations, i - 1);
 
+          if (a->id == NULL || !g_str_has_prefix (a->id, "gpa:"))
+            continue;
+
           if ((visibility == VISIBILITY_VISIBLE &&
                g_str_has_prefix (a->id, "gpa:transition:fade-in")) ||
               (visibility == VISIBILITY_HIDDEN &&
