@@ -10,7 +10,7 @@ transform {
   child: container {
     stroke {
       child: color {
-        bounds: -30 -533 57.5 60;
+        bounds: -27.5 -530.5 55 55;
         color: rgb(230,45,66);
       }
       path: "\

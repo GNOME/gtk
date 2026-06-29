@@ -125,7 +125,7 @@ Z";
         transform: translate(20, 70);
         child: stroke {
           child: color {
-            bounds: 99 99 101.5 102;
+            bounds: 99.5 99.5 101 101;
             color: rgb(0,0,0);
           }
           path: "\
@@ -142,7 +142,7 @@ M 200 150 o 0 50, -50 50, 0.707106769 o -50 0, -50 -50, 0.707106769 o 0 -50, 50 
         transform: translate(20, 70);
         child: stroke {
           child: color {
-            bounds: 49 49 101.5 102;
+            bounds: 49.5 49.5 101 101;
             color: rgb(0,0,0);
           }
           path: "\
@@ -257,7 +257,7 @@ Z";
       transform: translate(250, 70);
       child: stroke {
         child: color {
-          bounds: 49 49 101.5 102;
+          bounds: 49.5 49.5 101 101;
           color: rgb(0,0,0);
         }
         path: "\

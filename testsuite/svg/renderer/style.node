@@ -7,7 +7,7 @@ rounded-clip {
 }
 stroke {
   child: color {
-    bounds: 27 27 44.5 46;
+    bounds: 28.5 28.5 43 43;
     color: rgb(0,0,0);
   }
   path: "\

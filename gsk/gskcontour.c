@@ -1541,12 +1541,13 @@ gsk_circle_contour_get_stroke_bounds (const GskContour *contour,
                                       GskBoundingBox   *bounds)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
+  float offset = stroke->line_width / 2;
 
   gsk_bounding_box_init (bounds,
-                         &GRAPHENE_POINT_INIT (self->center.x - self->radius - stroke->line_width,
-                                               self->center.y - self->radius - stroke->line_width),
-                         &GRAPHENE_POINT_INIT (self->center.x + self->radius + stroke->line_width/2,
-                                               self->center.y + self->radius + stroke->line_width));
+                         &GRAPHENE_POINT_INIT (self->center.x - self->radius - offset,
+                                               self->center.y - self->radius - offset),
+                         &GRAPHENE_POINT_INIT (self->center.x + self->radius + offset,
+                                               self->center.y + self->radius + offset));
 
   return TRUE;
 }

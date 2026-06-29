@@ -3370,6 +3370,7 @@ static PangoLayout *
 text_create_layout (SvgElement       *self,
                     PangoFontMap     *fontmap,
                     const char       *text,
+                    WritingMode       wmode,
                     graphene_point_t *origin,
                     graphene_rect_t  *bounds,
                     gboolean         *is_vertical,
@@ -3378,7 +3379,6 @@ text_create_layout (SvgElement       *self,
   PangoContext *context;
   UnicodeBidi uni;
   PangoDirection direction, dir;
-  WritingMode wmode;
   PangoGravity gravity;
   PangoFontDescription *font_desc;
   PangoLayout *layout;
@@ -3399,7 +3399,6 @@ text_create_layout (SvgElement       *self,
 
   uni = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_UNICODE_BIDI));
   dir = direction = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DIRECTION));
-  wmode = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_WRITING_MODE));
   switch (wmode)
     {
     case WRITING_MODE_HORIZONTAL_TB:
@@ -3645,6 +3644,7 @@ static gboolean
 do_generate_layouts (SvgElement             *self,
                      PangoFontMap           *fontmap,
                      XmlSpace                space,
+                     WritingMode             wmode,
                      double                 *x,
                      double                 *y,
                      TextNode              **lastwithspace,
@@ -3706,7 +3706,7 @@ do_generate_layouts (SvgElement             *self,
             double y2 = *y + baseline_shift;
 
             space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, x, &y2, lastwithspace, viewport, &node->shape.bounds);
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, wmode, x, &y2, lastwithspace, viewport, &node->shape.bounds);
             if (node->shape.has_bounds)
               {
                 graphene_rect_init_from_rect (&node->shape.shape->bounds, &node->shape.bounds);
@@ -3732,7 +3732,7 @@ do_generate_layouts (SvgElement             *self,
             else if (*text != '\0')
               *lastwithspace = node;
 
-            node->characters.layout = text_create_layout (self, fontmap, text, &origin, &cbounds, &is_vertical, &node->characters.r);
+            node->characters.layout = text_create_layout (self, fontmap, text, wmode, &origin, &cbounds, &is_vertical, &node->characters.r);
             g_free (text);
 
             if (svg_element_get_type (self) == SVG_ELEMENT_TSPAN)
@@ -3842,14 +3842,16 @@ generate_layouts (SvgElement            *self,
   double x = 0;
   double y = 0;
   XmlSpace space;
+  WritingMode wmode;
 
 #if 0
   print_chunks (self, TRUE);
 #endif
 
   space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
+  wmode = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_WRITING_MODE));
 
-  retval = do_generate_layouts (self, fontmap, space, &x, &y, &node, viewport, bounds);
+  retval = do_generate_layouts (self, fontmap, space, wmode, &x, &y, &node, viewport, bounds);
 
   if (node && node != &dummy)
     {

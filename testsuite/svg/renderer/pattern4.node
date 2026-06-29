@@ -1,5 +1,6 @@
 repeat {
   bounds: 40 40 120 120;
+  child-bounds: 0 0 30 30;
   child: container {
     color {
       bounds: 0 0 15 15;

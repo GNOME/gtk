@@ -17,6 +17,7 @@ transform {
       blur: 20;
       child: repeat {
         bounds: 10 10 120 120;
+        child-bounds: 20 20 100 100;
         child: container {
           color {
             bounds: 20 20 100 100;
@@ -40,6 +41,7 @@ transform {
       blur: 20;
       child: repeat {
         bounds: 10 10 120 120;
+        child-bounds: 20 20 100 100;
         child: container {
           color {
             bounds: 20 20 100 100;
