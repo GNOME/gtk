@@ -1734,18 +1734,27 @@ shape_editor_update (ShapeEditor *self)
       if (svg_element_type_is_graphical (type))
         {
           double pos;
+          SvgElement *attach;
 
           repopulate_attach_to (self);
 
-          svg_element_get_gpa_attachment (self->shape, NULL, &pos, NULL);
-#if 0
-          if (self->shape->gpa.attach.shape == NULL)
-            gtk_drop_down_set_selected (self->attach_to, 0);
-          else if (to < self->path)
-            gtk_drop_down_set_selected (self->attach_to, to + 1);
+          svg_element_get_gpa_attachment (self->shape, NULL, &pos, &attach);
+
+          if (attach == NULL || svg_element_get_id (attach) == NULL)
+            {
+              gtk_drop_down_set_selected (self->attach_to, 0);
+            }
           else
-            gtk_drop_down_set_selected (self->attach_to, to);
-#endif
+            {
+              GtkStringList *ids;
+              unsigned int item;
+
+              ids = GTK_STRING_LIST (gtk_drop_down_get_model (self->attach_to));
+              item = gtk_string_list_find (ids, svg_element_get_id (attach));
+              if (item == G_MAXUINT)
+                item = 0;
+              gtk_drop_down_set_selected (self->attach_to, item);
+            }
 
           gtk_range_set_value (GTK_RANGE (self->attach_at), pos);
         }
