@@ -87,7 +87,8 @@ after_layout_cb (GtkIMContext *context)
   GdkSurface *surface;
   GtkNative *native;
   graphene_point_t p;
-  double nx, ny;
+  double nx = 0, ny = 0;
+  int sx, sy;
 
   surface = surface_from_widget (context);
   if (!GDK_IS_MACOS_SURFACE (surface))
@@ -106,9 +107,10 @@ after_layout_cb (GtkIMContext *context)
                                  &p))
     graphene_point_init (&p, rect.x, rect.y);
 
+  gdk_surface_get_origin (surface, &sx, &sy);
   gtk_native_get_surface_transform (native, &nx, &ny);
-  rect.x = p.x + nx;
-  rect.y = p.y + ny;
+  rect.x = sx + p.x + nx;
+  rect.y = sy + p.y + ny;
 
   if (qc->surface_cursor_rect->x != rect.x ||
       qc->surface_cursor_rect->y != rect.y ||
@@ -116,7 +118,7 @@ after_layout_cb (GtkIMContext *context)
       qc->surface_cursor_rect->height != rect.height)
     {
       *qc->surface_cursor_rect = rect;
-      g_object_set_data (G_OBJECT (surface), GIC_CURSOR_RECT, qc->cursor_rect);
+      g_object_set_data (G_OBJECT (surface), GIC_CURSOR_RECT, qc->surface_cursor_rect);
     }
 }
 
