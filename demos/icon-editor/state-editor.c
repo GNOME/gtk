@@ -252,7 +252,7 @@ update_one (GtkWidget   *check,
   shape = (SvgElement *) g_object_get_data (G_OBJECT (label), "shape");
 
   states = 0;
-  for (unsigned int i = 0; i < self->max_state; i++)
+  for (unsigned int i = 0; i <= self->max_state; i++)
     {
       GtkWidget *child;
 
