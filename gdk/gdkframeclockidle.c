@@ -216,10 +216,8 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   gint64 now;
   gint64 new_smoothed_time;
 
-  /* can't change frame time during a paint */
   if (priv->stage != GDK_FRAME_STAGE_NONE &&
-      priv->stage != GDK_FRAME_STAGE_FLUSH_EVENTS &&
-      (priv->stage != GDK_FRAME_STAGE_BEFORE_PAINT || priv->in_frame))
+      priv->stage != GDK_FRAME_STAGE_FLUSH_EVENTS)
     return priv->smoothed_frame_time_base;
 
   /* Outside a paint, pick something smoothed close to now */
