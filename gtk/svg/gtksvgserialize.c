@@ -183,7 +183,8 @@ serialize_shape_attrs (GString              *s,
       if (svg_element_is_specified (shape, attr) ||
           (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME))
         {
-          SvgValue *value, *initial;
+          SvgValue *value = NULL;
+          SvgValue *initial = NULL;
 
           if (flags & GTK_SVG_SERIALIZE_AT_CURRENT_TIME)
             value = svg_element_get_current_value (shape, attr);
@@ -239,8 +240,8 @@ serialize_shape_attrs (GString              *s,
                 }
             }
 
-          svg_value_unref (initial);
-          svg_value_unref (value);
+          g_clear_pointer (&initial, svg_value_unref);
+          g_clear_pointer (&value, svg_value_unref);
         }
     }
 }
