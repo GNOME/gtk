@@ -594,7 +594,7 @@ open_shared_memory (void)
         {
           char name[NAME_MAX - 1] = "";
 
-          sprintf (name, "/gdk-broadway-%x", g_random_int ());
+          snprintf (name, sizeof (name), "/gdk-broadway-%x", g_random_int ());
 
           ret = shm_open (name, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
 
