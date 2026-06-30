@@ -1106,7 +1106,7 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
                                 GUINT_TO_POINTER (ev->deviceid));
 
   if (device != NULL &&
-      ev->property == gdk_x11_get_xatom_by_name ("Wacom Serial IDs"))
+      ev->property == gdk_x11_get_xatom_by_name_for_display (gdk_device_get_display (device), "Wacom Serial IDs"))
     {
       GdkDeviceTool *tool = NULL;
       guint serial_id = 0, tool_id = 0;
