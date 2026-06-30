@@ -27,7 +27,6 @@
 #include "gdkframeclockprivate.h"
 
 #include "gdkdebugprivate.h"
-#include "gdkenumtypes.h"
 #include "gdkframetimingsprivate.h"
 #include "gdkprofilerprivate.h"
 
@@ -888,14 +887,10 @@ gdk_frame_clock_outstanding (GdkFrameClock *self)
   GdkFrameTimings *timings;
 
   timings = gdk_frame_clock_get_current_timings (self);
+  if (timings == NULL)
+    return;
 
-  /* frames can only be completed in AFTER_PAINT, so we must still be in progress.
-   * We might however be OUTSTANDING already because of a different surface submitting
-   * a buffer.
-   */
-  g_warn_if_fail (timings->result == GDK_FRAME_PREPARING || timings->result == GDK_FRAME_OUTSTANDING);
-
-  timings->result = GDK_FRAME_OUTSTANDING;
+  gdk_frame_timings_outstanding (timings);
 }
 
 /**
@@ -926,38 +921,7 @@ gdk_frame_clock_submitted (GdkFrameClock *self,
   if (timings == NULL)
     return;
 
-  switch (timings->result)
-    {
-      case GDK_FRAME_PREPARING:
-        timings->result = GDK_FRAME_SKIPPED;
-        break;
-
-      case GDK_FRAME_OUTSTANDING:
-        timings->result = GDK_FRAME_SUBMITTED;
-        break;
-
-      case GDK_FRAME_SKIPPED:
-      case GDK_FRAME_PRESENTED:
-        /* duplicate calls are allowed, but must have the same values */
-        if (timings->refresh_interval / 1000 != refresh)
-          {
-            g_warning_once ("Duplicate call with different values.");
-          }
-        return;
-
-      case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
-      case GDK_FRAME_DISCARDED:
-        g_warning_once ("Called on already %s frame.",
-                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
-        return;
-
-      default:
-        g_assert_not_reached ();
-    }
-
-  if (refresh != 0)
-    timings->refresh_interval = refresh / 1000;
+  gdk_frame_timings_submitted (timings, refresh);
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);
@@ -984,32 +948,7 @@ gdk_frame_clock_discarded (GdkFrameClock *self,
   if (timings == NULL)
     return;
 
-  switch (timings->result)
-    {
-      case GDK_FRAME_PREPARING:
-        timings->result = GDK_FRAME_SKIPPED;
-        break;
-
-      case GDK_FRAME_OUTSTANDING:
-        timings->result = GDK_FRAME_DISCARDED;
-        break;
-
-      case GDK_FRAME_SKIPPED:
-      case GDK_FRAME_DISCARDED:
-        /* duplicate calls are allowed */
-        return;
-
-      case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
-      case GDK_FRAME_PRESENTED:
-        g_warning_once ("Called on already %s frame.",
-                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
-        return;
-
-      default:
-        g_assert_not_reached ();
-        return;
-    }
+  gdk_frame_timings_discarded (timings);
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);
@@ -1054,40 +993,7 @@ gdk_frame_clock_presented (GdkFrameClock *self,
   if (timings == NULL)
     return;
 
-  switch (timings->result)
-    {
-      case GDK_FRAME_PREPARING:
-        timings->result = GDK_FRAME_EMPTY;
-        break;
-
-      case GDK_FRAME_OUTSTANDING:
-        timings->result = GDK_FRAME_PRESENTED;
-        break;
-
-      case GDK_FRAME_EMPTY:
-      case GDK_FRAME_PRESENTED:
-        /* duplicate calls are allowed, but must have the same values */
-        if (timings->presentation_time != presentation_time / 1000 ||
-            timings->refresh_interval != refresh / 1000)
-          {
-            g_warning_once ("Duplicate call with different values.");
-          }
-        return;
-
-      case GDK_FRAME_SKIPPED:
-      case GDK_FRAME_SUBMITTED:
-      case GDK_FRAME_DISCARDED:
-        g_warning_once ("Called on already %s frame.",
-                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), timings->result)->value_nick);
-        return;
-
-      default:
-        g_assert_not_reached ();
-    }
-
-  timings->presentation_time = presentation_time / 1000;
-  if (refresh != 0)
-    timings->refresh_interval = refresh / 1000;
+  gdk_frame_timings_presented (timings, presentation_time, refresh);
 
   if (GDK_DEBUG_CHECK (FRAMES))
     _gdk_frame_clock_debug_print_timings (self, timings);

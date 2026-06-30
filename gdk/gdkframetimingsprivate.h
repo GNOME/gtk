@@ -73,5 +73,13 @@ uint64_t         gdk_frame_timings_get_start_time               (GdkFrameTimings
 uint64_t         gdk_frame_timings_get_end_time                 (GdkFrameTimings        *self,
                                                                  GdkFrameStage           stage);
 
+void             gdk_frame_timings_outstanding                  (GdkFrameTimings        *self);
+void             gdk_frame_timings_submitted                    (GdkFrameTimings        *self,
+                                                                 uint64_t                refresh);
+void             gdk_frame_timings_discarded                    (GdkFrameTimings        *self);
+void             gdk_frame_timings_presented                    (GdkFrameTimings        *self,
+                                                                 uint64_t                presentation_time,
+                                                                 uint64_t                refresh);
+
 G_END_DECLS
 

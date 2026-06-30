@@ -21,6 +21,8 @@
 
 #include "gdkframetimingsprivate.h"
 
+#include "gdkenumtypes.h"
+
 /**
  * GdkFrameTimings:
  *
@@ -355,5 +357,127 @@ gdk_frame_timings_get_end_time (GdkFrameTimings *self,
     stage--;
 
   return self->stage_end_time[stage];
+}
+
+void
+gdk_frame_timings_outstanding (GdkFrameTimings *self)
+{
+  /* frames can only be completed in AFTER_PAINT, so we must still be in progress.
+   * We might however be OUTSTANDING already because of a different surface submitting
+   * a buffer.
+   */
+  g_warn_if_fail (self->result == GDK_FRAME_PREPARING || self->result == GDK_FRAME_OUTSTANDING);
+
+  self->result = GDK_FRAME_OUTSTANDING;
+}
+
+void
+gdk_frame_timings_submitted (GdkFrameTimings *self,
+                             uint64_t         refresh)
+{
+  switch (self->result)
+    {
+      case GDK_FRAME_PREPARING:
+        self->result = GDK_FRAME_SKIPPED;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        self->result = GDK_FRAME_SUBMITTED;
+        break;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_PRESENTED:
+        /* duplicate calls are allowed, but must have the same values */
+        if (self->refresh_interval / 1000 != refresh)
+          {
+            g_warning_once ("Duplicate call with different values.");
+          }
+        return;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_DISCARDED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  if (refresh != 0)
+    self->refresh_interval = refresh / 1000;
+}
+
+void
+gdk_frame_timings_discarded (GdkFrameTimings *self)
+{
+  switch (self->result)
+    {
+      case GDK_FRAME_PREPARING:
+        self->result = GDK_FRAME_SKIPPED;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        self->result = GDK_FRAME_DISCARDED;
+        break;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_DISCARDED:
+        /* duplicate calls are allowed */
+        return;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_PRESENTED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+        return;
+    }
+}
+
+void
+gdk_frame_timings_presented (GdkFrameTimings *self,
+                             uint64_t         presentation_time,
+                             uint64_t         refresh)
+{
+  switch (self->result)
+    {
+      case GDK_FRAME_PREPARING:
+        self->result = GDK_FRAME_EMPTY;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        self->result = GDK_FRAME_PRESENTED;
+        break;
+
+      case GDK_FRAME_EMPTY:
+      case GDK_FRAME_PRESENTED:
+        /* duplicate calls are allowed, but must have the same values */
+        if (self->presentation_time != presentation_time / 1000 ||
+            self->refresh_interval != refresh / 1000)
+          {
+            g_warning_once ("Duplicate call with different values.");
+          }
+        return;
+
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_DISCARDED:
+        g_warning_once ("Called on already %s frame.",
+                        g_enum_get_value (g_type_class_ref (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
+        return;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  self->presentation_time = presentation_time / 1000;
+  if (refresh != 0)
+    self->refresh_interval = refresh / 1000;
 }
 
