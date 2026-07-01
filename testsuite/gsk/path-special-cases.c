@@ -262,6 +262,10 @@ test_rsvg_parse (void)
     { "M 10 10 z ", "M 10 10 z" },
     // unexpected char
     { "M 10 ;", NULL },
+    // If either rx or ry have negative signs, these are dropped; the absolute value is used instead.
+    { "M 0 0 A -5 5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    { "M 0 0 A 5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    { "M 0 0 A -5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
   };
   int i;
 

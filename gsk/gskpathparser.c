@@ -909,8 +909,8 @@ gsk_path_parse_full (const char    *string,
             int large_arc, sweep;
             double x1, y1;
 
-            if (parse_nonnegative_number (&p, &rx) &&
-                parse_nonnegative_number (&p, &ry) &&
+            if (parse_number (&p, &rx) &&
+                parse_number (&p, &ry) &&
                 parse_number (&p, &x_axis_rotation) &&
                 parse_flag (&p, &large_arc) &&
                 parse_flag (&p, &sweep) &&
@@ -921,6 +921,13 @@ gsk_path_parse_full (const char    *string,
                     x1 += x;
                     y1 += y;
                   }
+
+                /* If either rx or ry have negative signs, these are dropped;
+                 * the absolute value is used instead. */
+                if (rx < 0)
+                  rx = -rx;
+                if (ry < 0)
+                  ry = -ry;
 
                 if (prev_cmd == 'Z')
                   {
