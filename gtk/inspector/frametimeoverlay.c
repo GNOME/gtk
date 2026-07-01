@@ -154,8 +154,6 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
-  /* gray for the frame cycle */
-  color = 0xFFAAAAAA;
   for (i = start; i >= end; i--)
     {
       uint64_t st, et;
@@ -163,16 +161,30 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
       timings = gdk_frame_clock_get_timings (clock, i);
       g_assert (timings);
 
+      st = gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
+      st = MIN (st, max_time);
+      et = gdk_frame_timings_get_throttling_hint (timings);
+      et = MIN (et, max_time);
+      if (et > st)
+        {
+          /* dark red for the throttle time */
+          color = 0x44220000;
+          if (!draw_line (data, size, color, st, et, max_time, nspp))
+            break;
+        }
+
       st = gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_FLUSH_EVENTS);
       st = MIN (st, max_time);
       et = gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
       et = MIN (et, max_time);
 
+      /* gray for the frame cycle */
+      color = 0xFFAAAAAA;
       if (!draw_line (data, size, color, st, et, max_time, nspp))
         break;
     }
 
-  /* all the predicted resentation times in blue */
+  /* all the predicted presentation times in blue */
   color = 0xFF0000FF;
   for (i = start; i >= end; i--)
     {
