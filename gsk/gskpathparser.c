@@ -87,8 +87,8 @@ parse_coordinate_pair (const char **p,
 }
 
 static gboolean
-parse_nonnegative_number (const char **p,
-                          double      *x)
+parse_positive_number (const char **p,
+                       double      *x)
 {
   const char *o = *p;
   double n;
@@ -96,7 +96,7 @@ parse_nonnegative_number (const char **p,
   if (!parse_number (p, &n))
     return FALSE;
 
-  if (n < 0)
+  if (n <= 0)
     {
       *p = o;
       return FALSE;
@@ -249,19 +249,19 @@ parse_circle (const char **p,
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x1, &y1) &&
       parse_coordinate_pair (p, &x2, &y2) &&
-      parse_nonnegative_number (p, &w0) &&
+      parse_positive_number (p, &w0) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x3, &y3) &&
       parse_coordinate_pair (p, &x4, &y4) &&
-      parse_nonnegative_number (p, &w1) &&
+      parse_positive_number (p, &w1) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
-      parse_nonnegative_number (p, &w2) &&
+      parse_positive_number (p, &w2) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_coordinate_pair (p, &x8, &y8) &&
-      parse_nonnegative_number (p, &w3) &&
+      parse_positive_number (p, &w3) &&
       parse_string (p, "z"))
     {
       rr = y1;
@@ -307,25 +307,25 @@ parse_rounded_rect (const char     **p,
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x2, &y2) &&
       parse_coordinate_pair (p, &x3, &y3) &&
-      parse_nonnegative_number (p, &w0) &&
+      parse_positive_number (p, &w0) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x4, &y4) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
-      parse_nonnegative_number (p, &w1) &&
+      parse_positive_number (p, &w1) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x8, &y8) &&
       parse_coordinate_pair (p, &x9, &y9) &&
-      parse_nonnegative_number (p, &w2) &&
+      parse_positive_number (p, &w2) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x10, &y10) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x11, &y11) &&
       parse_coordinate_pair (p, &x12, &y12) &&
-      parse_nonnegative_number (p, &w3) &&
+      parse_positive_number (p, &w3) &&
       parse_string (p, "Z"))
     {
       if (NEAR (x0, x12) && NEAR (y0, y12) &&
@@ -877,7 +877,7 @@ gsk_path_parse_full (const char    *string,
 
             if (parse_coordinate_pair (&p, &x1, &y1) &&
                 parse_coordinate_pair (&p, &x2, &y2) &&
-                parse_nonnegative_number (&p, &weight))
+                parse_positive_number (&p, &weight))
               {
                 if (cmd == 'o')
                   {

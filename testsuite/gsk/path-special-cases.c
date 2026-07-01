@@ -273,6 +273,9 @@ test_rsvg_parse (void)
     { "M 0 0 A -5 5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
     { "M 0 0 A 5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
     { "M 0 0 A -5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    // conic weights must be > 0
+    { "M 0 0 O 5 0 5 5 0", NULL },
+    { "M 0 0 O 5 0 5 5 -1", NULL },
   };
   int i;
 
