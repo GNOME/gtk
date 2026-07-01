@@ -137,6 +137,12 @@ demo2_layout_allocate (GtkLayoutManager *layout_manager,
                       &q1, &q2, &q3, &q4,
                       &m);
 
+      if (graphene_matrix_is_singular (&m))
+        {
+          gtk_widget_set_child_visible (child, FALSE);
+          continue;
+        }
+
       transform = gsk_transform_matrix (NULL, &m);
 
       /* Since our matrix was built for transforming points with z = 1,
@@ -145,6 +151,7 @@ demo2_layout_allocate (GtkLayoutManager *layout_manager,
       transform = gsk_transform_translate_3d (transform,
                                               &GRAPHENE_POINT3D_INIT (0, 0, 1));
 
+      gtk_widget_set_child_visible (child, TRUE);
       gtk_widget_allocate (child, w, h, -1, transform);
     }
 }
