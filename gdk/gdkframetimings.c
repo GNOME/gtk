@@ -359,6 +359,36 @@ gdk_frame_timings_get_end_time (GdkFrameTimings *self,
   return self->stage_end_time[stage];
 }
 
+/*<private>
+ * gdk_frame_timings_get_throttling_hint:
+ * @self: the timings
+ *
+ * Gets the timestamp of when the compositor suggested to resume rendering.
+ *
+ * Many backends implement a hint to allow clients to throttle painting. This
+ * is modeled after 
+ * [wl_surface::frame](https://wayland.app/protocols/wayland#wl_surface:request:frame)
+ * or [AChoreographer::postFrameCallback](https://developer.android.com/ndk/reference/group/choreographer#achoreographer_framecallback)
+ * and is the timestamp of when GTK's callback was called, not any timestamp
+ * carried by the event.
+ *
+ * If the frame has not finished throttling yet - either because
+ * it is still in-process or because the compositor has not
+ * indicated to stop throttling yet - then 0 will be returned.
+ *
+ * If the compositor did not do any throttling for this frame, either because
+ * GTK didn't request it or because the compositor does not support throttling
+ * hints, then this time will be less than or equal to the end of the frame
+ * timings queried via `gdk_frame_timings_get_end_time(self, GDK_FRAME_STAGE_RESUME_EVENTS)`.
+ *
+ * Returns: the timestamp in nanoseconds
+ **/
+uint64_t
+gdk_frame_timings_get_throttling_hint (GdkFrameTimings *self)
+{
+  return self->throttling_hint;
+}
+
 void
 gdk_frame_timings_outstanding (GdkFrameTimings *self)
 {
@@ -369,6 +399,16 @@ gdk_frame_timings_outstanding (GdkFrameTimings *self)
   g_warn_if_fail (self->result == GDK_FRAME_PREPARING || self->result == GDK_FRAME_OUTSTANDING);
 
   self->result = GDK_FRAME_OUTSTANDING;
+}
+
+void
+gdk_frame_timings_throttling_hint (GdkFrameTimings *self,
+                                   uint64_t         timestamp)
+{
+  g_warn_if_fail (self->result != GDK_FRAME_PREPARING);
+  g_warn_if_fail (self->throttling_hint == 0);
+
+  self->throttling_hint = timestamp;
 }
 
 void

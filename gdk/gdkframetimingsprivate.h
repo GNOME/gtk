@@ -55,6 +55,7 @@ struct _GdkFrameTimings
   gint64 predicted_presentation_time;
 
   uint64_t stage_end_time[GDK_FRAME_N_STAGES];
+  uint64_t throttling_hint;
 
   GdkFrameResult result;
 };
@@ -72,8 +73,11 @@ uint64_t         gdk_frame_timings_get_start_time               (GdkFrameTimings
                                                                  GdkFrameStage           stage);
 uint64_t         gdk_frame_timings_get_end_time                 (GdkFrameTimings        *self,
                                                                  GdkFrameStage           stage);
+uint64_t         gdk_frame_timings_get_throttling_hint          (GdkFrameTimings        *self);
 
 void             gdk_frame_timings_outstanding                  (GdkFrameTimings        *self);
+void             gdk_frame_timings_throttling_hint              (GdkFrameTimings        *self,
+                                                                 uint64_t                timestamp);
 void             gdk_frame_timings_submitted                    (GdkFrameTimings        *self,
                                                                  uint64_t                refresh);
 void             gdk_frame_timings_discarded                    (GdkFrameTimings        *self);
