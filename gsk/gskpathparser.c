@@ -935,8 +935,18 @@ gsk_path_parse_full (const char    *string,
                     path_x = x;
                     path_y = y;
                   }
-                if (!parser->add_arc (rx, ry, x_axis_rotation, large_arc, sweep, x1, y1, builder))
-                  return FALSE;
+
+                /* If either rx or ry is 0, then this arc is treated as a straight line segment
+                 * (a "lineto") joining the endpoints */
+                if (rx == 0 || ry == 0)
+                  {
+                    line_to (builder, x1, y1);
+                  }
+                else
+                  {
+                    if (!parser->add_arc (rx, ry, x_axis_rotation, large_arc, sweep, x1, y1, builder))
+                      return FALSE;
+                  }
                 x = x1;
                 y = y1;
               }
