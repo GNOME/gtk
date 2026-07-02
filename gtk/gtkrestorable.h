@@ -108,6 +108,8 @@ struct _GtkRestorableInterface
 {
   GTypeInterface parent_iface;
 
+  GtkRestorable *(*get_delegate)           (GtkRestorable *self);
+
   void           (*save_state)             (GtkRestorable  *self,
                                             GtkSaveContext *context);
   void           (*save_state_async)       (GtkRestorable       *self,

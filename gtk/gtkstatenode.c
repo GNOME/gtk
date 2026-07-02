@@ -29,6 +29,11 @@
  * Implementation of [iface@Gtk.Restorable] that allows apps to construct their
  * state tree out of bindings to object properties, other `GtkRestorable`
  * objects, or constant data.
+ *
+ * Rather than implementing `GtkRestorable` manually, objects could construct
+ * a `GtkStateNode`, declare the state they want in the tree via bindings,
+ * and then delegate their implementation of `GtkRestorable`. See the
+ * documentation of `GtkRestorable` for details.
  */
 
 struct _GtkStateNode {

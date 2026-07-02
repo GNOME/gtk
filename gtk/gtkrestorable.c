@@ -529,6 +529,32 @@ gtk_restore_context_lookup_value (GtkRestoreContext  *self,
  * GTK will re-collect state during the app's next save. Note that GTK may still
  * collect the object's state even if you return `FALSE`.
  *
+ * ## Delegation
+ *
+ * An easy way to implement `GtkRestorable` is via [class@Gtk.StateNode], which
+ * comes with the ability to bind state directly into your state tree. Rather
+ * than overriding all of the normal vfuncs for this interface, an object could
+ * instead override [vfunc@Gtk.Restorable.get_delegate] to delegate its implementation
+ * to its `GtkStateNode` (or some other `GtkRestorable`):
+ *
+ * ```c
+ * static GtkRestorable *
+ * get_restorable_delegate (GtkRestorable *restorable)
+ * {
+ *   MyObject *self = MY_OBJECT (restorable);
+ *   return GTK_RESTORABLE (self->state_node);
+ * }
+ *
+ * static void
+ * my_object_restorable_iface_init (GtkRestorableInterface *iface)
+ * {
+ *   iface->get_delegate = get_restorable_delegate;
+ * }
+ * ```
+ *
+ * Note that if you implement `get_delegate`, you should not implement any of
+ * the other vfuncs in this interface.
+ *
  * Since: 4.24
  */
 
@@ -538,6 +564,33 @@ G_DEFINE_INTERFACE (GtkRestorable, gtk_restorable, G_TYPE_OBJECT)
 static void
 gtk_restorable_default_init (GtkRestorableInterface *iface)
 {
+}
+
+static GtkRestorable *
+gtk_restorable_resolve_delegate (GtkRestorable *self)
+{
+  GtkRestorableInterface *iface;
+
+  while (TRUE)
+    {
+      g_return_val_if_fail (GTK_IS_RESTORABLE (self), NULL);
+      iface = GTK_RESTORABLE_GET_IFACE (self);
+
+      if (!iface->get_delegate)
+        return self;
+
+      /* If we have a delegate, then we can't have our own impl! */
+      g_return_val_if_fail (!iface->save_state &&
+                            !iface->save_state_async &&
+                            !iface->save_state_finish &&
+                            !iface->restore_state &&
+                            !iface->restore_state_async &&
+                            !iface->restore_state_finish &&
+                            !iface->check_state_dirty,
+                            NULL);
+
+      self = iface->get_delegate (self);
+    }
 }
 
 static void
@@ -579,12 +632,13 @@ gtk_restorable_save_state (GtkRestorable       *self,
   GTask *task;
   GtkRestorableInterface *iface;
 
-  g_return_if_fail (GTK_IS_RESTORABLE (self));
-  iface = GTK_RESTORABLE_GET_IFACE (self);
-
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_return_on_cancel (task, TRUE);
   g_task_set_source_tag (task, gtk_restorable_save_state);
+
+  self = gtk_restorable_resolve_delegate (self);
+  g_return_if_fail (self);
+  iface = GTK_RESTORABLE_GET_IFACE (self);
 
   if (iface->save_state)
     iface->save_state (self, context);
@@ -666,12 +720,13 @@ gtk_restorable_restore_state (GtkRestorable       *self,
   GTask *task;
   GtkRestorableInterface *iface;
 
-  g_return_if_fail (GTK_IS_RESTORABLE (self));
-  iface = GTK_RESTORABLE_GET_IFACE (self);
-
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_return_on_cancel (task, TRUE);
   g_task_set_source_tag (task, gtk_restorable_restore_state);
+
+  self = gtk_restorable_resolve_delegate (self);
+  g_return_if_fail (self);
+  iface = GTK_RESTORABLE_GET_IFACE (self);
 
   if (iface->restore_state)
     iface->restore_state (self, context);
@@ -729,7 +784,8 @@ gtk_restorable_check_state_dirty (GtkRestorable *self)
 {
   GtkRestorableInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_RESTORABLE (self), FALSE);
+  self = gtk_restorable_resolve_delegate (self);
+  g_return_val_if_fail (self, TRUE);
   iface = GTK_RESTORABLE_GET_IFACE (self);
 
   if (iface->check_state_dirty)
