@@ -262,6 +262,20 @@ test_rsvg_parse (void)
     { "M 10 10 z ", "M 10 10 z" },
     // unexpected char
     { "M 10 ;", NULL },
+    // If either rx or ry is 0, then this arc is treated as a straight line segment (a "lineto") joining the endpoints
+    { "M 0 0 A 5 0 0 00 10 0", "M 0 0 L 10 0" },
+    { "M 0 0 A 0 5 0 00 10 0", "M 0 0 L 10 0" },
+    { "M 0 0 A 0 0 0 00 10 0", "M 0 0 L 10 0" },
+    { "M 0 0 A 5 -0 0 00 10 0", "M 0 0 L 10 0" },
+    { "M 0 0 A -0 5 0 00 10 0", "M 0 0 L 10 0" },
+    { "M 0 0 A -0 -0 0 00 10 0", "M 0 0 L 10 0" },
+    // If either rx or ry have negative signs, these are dropped; the absolute value is used instead.
+    { "M 0 0 A -5 5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    { "M 0 0 A 5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    { "M 0 0 A -5 -5 0 00 10 0", "M 0 0 A 5 5 0 0 0 10 0" },
+    // conic weights must be > 0
+    { "M 0 0 O 5 0 5 5 0", NULL },
+    { "M 0 0 O 5 0 5 5 -1", NULL },
   };
   int i;
 

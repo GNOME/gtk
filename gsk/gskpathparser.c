@@ -87,8 +87,8 @@ parse_coordinate_pair (const char **p,
 }
 
 static gboolean
-parse_nonnegative_number (const char **p,
-                          double      *x)
+parse_positive_number (const char **p,
+                       double      *x)
 {
   const char *o = *p;
   double n;
@@ -96,7 +96,7 @@ parse_nonnegative_number (const char **p,
   if (!parse_number (p, &n))
     return FALSE;
 
-  if (n < 0)
+  if (n <= 0)
     {
       *p = o;
       return FALSE;
@@ -249,19 +249,19 @@ parse_circle (const char **p,
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x1, &y1) &&
       parse_coordinate_pair (p, &x2, &y2) &&
-      parse_nonnegative_number (p, &w0) &&
+      parse_positive_number (p, &w0) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x3, &y3) &&
       parse_coordinate_pair (p, &x4, &y4) &&
-      parse_nonnegative_number (p, &w1) &&
+      parse_positive_number (p, &w1) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
-      parse_nonnegative_number (p, &w2) &&
+      parse_positive_number (p, &w2) &&
       parse_string (p, "o") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_coordinate_pair (p, &x8, &y8) &&
-      parse_nonnegative_number (p, &w3) &&
+      parse_positive_number (p, &w3) &&
       parse_string (p, "z"))
     {
       rr = y1;
@@ -307,25 +307,25 @@ parse_rounded_rect (const char     **p,
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x2, &y2) &&
       parse_coordinate_pair (p, &x3, &y3) &&
-      parse_nonnegative_number (p, &w0) &&
+      parse_positive_number (p, &w0) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x4, &y4) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
-      parse_nonnegative_number (p, &w1) &&
+      parse_positive_number (p, &w1) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x8, &y8) &&
       parse_coordinate_pair (p, &x9, &y9) &&
-      parse_nonnegative_number (p, &w2) &&
+      parse_positive_number (p, &w2) &&
       parse_string (p, "L") &&
       parse_coordinate_pair (p, &x10, &y10) &&
       parse_string (p, "O") &&
       parse_coordinate_pair (p, &x11, &y11) &&
       parse_coordinate_pair (p, &x12, &y12) &&
-      parse_nonnegative_number (p, &w3) &&
+      parse_positive_number (p, &w3) &&
       parse_string (p, "Z"))
     {
       if (NEAR (x0, x12) && NEAR (y0, y12) &&
@@ -877,7 +877,7 @@ gsk_path_parse_full (const char    *string,
 
             if (parse_coordinate_pair (&p, &x1, &y1) &&
                 parse_coordinate_pair (&p, &x2, &y2) &&
-                parse_nonnegative_number (&p, &weight))
+                parse_positive_number (&p, &weight))
               {
                 if (cmd == 'o')
                   {
@@ -909,8 +909,8 @@ gsk_path_parse_full (const char    *string,
             int large_arc, sweep;
             double x1, y1;
 
-            if (parse_nonnegative_number (&p, &rx) &&
-                parse_nonnegative_number (&p, &ry) &&
+            if (parse_number (&p, &rx) &&
+                parse_number (&p, &ry) &&
                 parse_number (&p, &x_axis_rotation) &&
                 parse_flag (&p, &large_arc) &&
                 parse_flag (&p, &sweep) &&
@@ -922,14 +922,31 @@ gsk_path_parse_full (const char    *string,
                     y1 += y;
                   }
 
+                /* If either rx or ry have negative signs, these are dropped;
+                 * the absolute value is used instead. */
+                if (rx < 0)
+                  rx = -rx;
+                if (ry < 0)
+                  ry = -ry;
+
                 if (prev_cmd == 'Z')
                   {
                     move_to (builder, x, y);
                     path_x = x;
                     path_y = y;
                   }
-                if (!parser->add_arc (rx, ry, x_axis_rotation, large_arc, sweep, x1, y1, builder))
-                  return FALSE;
+
+                /* If either rx or ry is 0, then this arc is treated as a straight line segment
+                 * (a "lineto") joining the endpoints */
+                if (rx == 0 || ry == 0)
+                  {
+                    line_to (builder, x1, y1);
+                  }
+                else
+                  {
+                    if (!parser->add_arc (rx, ry, x_axis_rotation, large_arc, sweep, x1, y1, builder))
+                      return FALSE;
+                  }
                 x = x1;
                 y = y1;
               }
