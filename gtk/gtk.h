@@ -226,6 +226,7 @@
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrecentmanager.h>
 #include <gtk/deprecated/gtkrender.h>
+#include <gtk/gtkrestorable.h>
 #include <gtk/gtkrevealer.h>
 #include <gtk/gtkroot.h>
 #include <gtk/gtkscale.h>
