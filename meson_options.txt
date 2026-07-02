@@ -27,21 +27,21 @@ option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
 
 # Documentation and introspection
-option('gtk_doc', type: 'boolean', value: 'false',
+option('gtk_doc', type: 'boolean', value: false,
   description : 'Build API reference with gtk-doc')
-option('man', type: 'boolean', value: 'false',
+option('man', type: 'boolean', value: false,
   description : 'Build man pages for installed tools')
-option('introspection', type: 'boolean', value: 'true',
+option('introspection', type: 'boolean', value: true,
   description : 'Build introspection data (requires gobject-introspection)')
 
 # Demos and binaries
-option('demos', type: 'boolean', value: 'true',
+option('demos', type: 'boolean', value: true,
   description : 'Build demo programs')
-option('examples', type: 'boolean', value: 'true',
+option('examples', type: 'boolean', value: true,
   description : 'Build examples')
-option('tests', type: 'boolean', value: 'true',
+option('tests', type: 'boolean', value: true,
   description : 'Build tests')
-option('installed_tests', type: 'boolean', value: 'false',
+option('installed_tests', type: 'boolean', value: false,
   description : 'enable installed tests')
 
 # input modules
