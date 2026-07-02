@@ -87,6 +87,9 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkExpressionWatch, gtk_expression_watch_unref)
 #define GTK_TYPE_PROPERTY_EXPRESSION (gtk_property_expression_get_type())
 typedef struct _GtkPropertyExpression   GtkPropertyExpression;
 
+#define GTK_IS_PROPERTY_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PROPERTY_EXPRESSION))
+#define GTK_PROPERTY_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PROPERTY_EXPRESSION, GtkPropertyExpression))
+
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_property_expression_get_type        (void) G_GNUC_CONST;
 
@@ -106,6 +109,9 @@ GParamSpec *            gtk_property_expression_get_pspec       (GtkExpression  
 #define GTK_TYPE_CONSTANT_EXPRESSION (gtk_constant_expression_get_type())
 typedef struct _GtkConstantExpression   GtkConstantExpression;
 
+#define GTK_IS_CONSTANT_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CONSTANT_EXPRESSION))
+#define GTK_CONSTANT_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONSTANT_EXPRESSION, GtkConstantExpression))
+
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_constant_expression_get_type        (void) G_GNUC_CONST;
 
@@ -121,6 +127,9 @@ const GValue *          gtk_constant_expression_get_value       (GtkExpression  
 #define GTK_TYPE_OBJECT_EXPRESSION (gtk_object_expression_get_type())
 typedef struct _GtkObjectExpression     GtkObjectExpression;
 
+#define GTK_IS_OBJECT_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_OBJECT_EXPRESSION))
+#define GTK_OBJECT_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_OBJECT_EXPRESSION, GtkObjectExpression))
+
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_object_expression_get_type          (void) G_GNUC_CONST;
 
@@ -133,6 +142,9 @@ GObject *               gtk_object_expression_get_object        (GtkExpression  
 #define GTK_TYPE_CLOSURE_EXPRESSION (gtk_closure_expression_get_type())
 typedef struct _GtkClosureExpression    GtkClosureExpression;
 
+#define GTK_IS_CLOSURE_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLOSURE_EXPRESSION))
+#define GTK_CLOSURE_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLOSURE_EXPRESSION, GtkClosureExpression))
+
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_closure_expression_get_type         (void) G_GNUC_CONST;
 
@@ -144,6 +156,9 @@ GtkExpression *         gtk_closure_expression_new              (GType          
 
 #define GTK_TYPE_CCLOSURE_EXPRESSION (gtk_cclosure_expression_get_type())
 typedef struct _GtkCClosureExpression   GtkCClosureExpression;
+
+#define GTK_IS_CCLOSURE_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CCLOSURE_EXPRESSION))
+#define GTK_CCLOSURE_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CCLOSURE_EXPRESSION, GtkCClosureExpression))
 
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_cclosure_expression_get_type        (void) G_GNUC_CONST;
@@ -159,6 +174,9 @@ GtkExpression *         gtk_cclosure_expression_new             (GType          
 
 #define GTK_TYPE_TRY_EXPRESSION (gtk_try_expression_get_type())
 typedef struct _GtkTryExpression   GtkTryExpression;
+
+#define GTK_IS_TRY_EXPRESSION(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TRY_EXPRESSION))
+#define GTK_TRY_EXPRESSION(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TRY_EXPRESSION, GtkTryExpression))
 
 GDK_AVAILABLE_IN_4_22
 GType                   gtk_try_expression_get_type             (void) G_GNUC_CONST;

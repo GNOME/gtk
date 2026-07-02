@@ -972,9 +972,7 @@ gtk_constant_expression_new_for_value (const GValue *value)
 const GValue *
 gtk_constant_expression_get_value (GtkExpression *expression)
 {
-  GtkConstantExpression *self = (GtkConstantExpression *) expression;
-
-  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_CONSTANT_EXPRESSION), NULL);
+  GtkConstantExpression *self = GTK_CONSTANT_EXPRESSION (expression);
 
   return &self->value;
 }
@@ -1174,10 +1172,8 @@ gtk_object_expression_new (GObject *object)
 GObject *
 gtk_object_expression_get_object (GtkExpression *expression)
 {
-  GtkObjectExpression *self = (GtkObjectExpression *) expression;
+  GtkObjectExpression *self = GTK_OBJECT_EXPRESSION (expression);
   GObject *object;
-
-  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_OBJECT_EXPRESSION), NULL);
 
   object = g_weak_ref_get (&self->object_wr);
 
@@ -1510,9 +1506,7 @@ gtk_property_expression_new_for_pspec (GtkExpression *expression,
 GtkExpression *
 gtk_property_expression_get_expression (GtkExpression *expression)
 {
-  GtkPropertyExpression *self = (GtkPropertyExpression *) expression;
-
-  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION), NULL);
+  GtkPropertyExpression *self = GTK_PROPERTY_EXPRESSION (expression);
 
   return self->expr;
 }
@@ -1529,9 +1523,7 @@ gtk_property_expression_get_expression (GtkExpression *expression)
 GParamSpec *
 gtk_property_expression_get_pspec (GtkExpression *expression)
 {
-  GtkPropertyExpression *self = (GtkPropertyExpression *) expression;
-
-  g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_PROPERTY_EXPRESSION), NULL);
+  GtkPropertyExpression *self = GTK_PROPERTY_EXPRESSION (expression);
 
   return self->pspec;
 }
