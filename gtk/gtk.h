@@ -266,6 +266,7 @@
 #include <gtk/gtkspinner.h>
 #include <gtk/gtkstack.h>
 #include <gtk/gtkstackswitcher.h>
+#include <gtk/gtkstatenode.h>
 #include <gtk/deprecated/gtkstatusbar.h>
 #include <gtk/gtkstringfilter.h>
 #include <gtk/gtkstringlist.h>
