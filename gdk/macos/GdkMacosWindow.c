@@ -340,8 +340,8 @@ static Class _contentViewClass = nil;
   event = _gdk_macos_display_get_last_nsevent ();
 
   if (event == NULL)
-    return; 
-  
+    return;
+
   inManualMove = YES;
 
   /* The docs state it has to be a button press event,
