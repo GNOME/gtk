@@ -324,6 +324,8 @@ select_thread_func (void *arg)
               select_thread_set_state (WAITING);
             }
           break;
+        default:
+          g_assert_not_reached ();
         }
     }
 }
