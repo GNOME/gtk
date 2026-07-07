@@ -43,6 +43,36 @@ struct _GtkFrameTimeOverlayClass
 
 G_DEFINE_TYPE (GtkFrameTimeOverlay, gtk_frame_time_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
+static uint64_t
+frame_timings_get_frame_start (GdkFrameTimings *timings)
+{
+  return gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_FLUSH_EVENTS);
+}
+
+static uint64_t
+frame_timings_get_frame_end (GdkFrameTimings *timings)
+{
+  return gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
+}
+
+struct {
+  GdkRGBA color;
+  uint64_t (* get_time) (GdkFrameTimings *timings);
+} const points[] = {
+  { { 0.0, 1.0, 0.0, 1.0 }, gdk_frame_timings_get_frame_time_ns },
+  { { 0.0, 0.0, 1.0, 1.0 }, gdk_frame_timings_get_presentation_time_ns },
+  { { 0.4, 0.0, 1.0, 1.0 }, gdk_frame_timings_get_predicted_presentation_time_ns },
+};
+
+struct {
+  GdkRGBA color;
+  uint64_t (* get_start_time) (GdkFrameTimings *timings);
+  uint64_t (* get_end_time) (GdkFrameTimings *timings);
+} const ranges[] = {
+  { { 0.7, 0.7, 0.7, 1.0 }, frame_timings_get_frame_start, frame_timings_get_frame_end, },
+  { { 0.5, 0.0, 0.0, 0.25 }, frame_timings_get_frame_end, gdk_frame_timings_get_throttling_hint },
+};
+
 static gsize
 get_point (uint64_t t,
            uint64_t max_time,
@@ -126,6 +156,15 @@ gtk_frame_time_overlay_get_timeline_values (GdkFrameClock *clock,
   *ns_per_pixel = refresh / size;
 }
 
+static guint32
+rgba_to_color (const GdkRGBA *rgba)
+{
+  return ((guint32) (0xFF * 1.0f        * rgba->alpha)) << 24 |
+         ((guint32) (0xFF * rgba->red   * rgba->alpha)) << 16 |
+         ((guint32) (0xFF * rgba->green * rgba->alpha)) <<  8 |
+         ((guint32) (0xFF * rgba->blue  * rgba->alpha)) <<  0;
+}
+
 static void
 gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
                                  GtkSnapshot         *snapshot,
@@ -133,7 +172,6 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
                                  GtkWidget           *widget)
 {
   guint32 *data;
-  guint32 color;
   gsize width, height, stride, size;
   gint64 start, end, i;
   GdkFrameClock *clock;
@@ -144,6 +182,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   GdkTexture *texture;
   uint64_t max_time, t, nspp; /* nanoseconds per pixel */
   float scale;
+  gsize j;
 
   scale = gdk_surface_get_scale (gtk_native_get_surface (gtk_widget_get_native (widget)));
   clock = gtk_widget_get_frame_clock (widget);
@@ -162,66 +201,38 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
-  for (i = start; i >= end; i--)
+  for (j = G_N_ELEMENTS (ranges); j-- > 0; )
     {
-      uint64_t st, et;
-
-      timings = gdk_frame_clock_get_timings (clock, i);
-      g_assert (timings);
-
-      st = gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
-      st = MIN (st, max_time);
-      et = gdk_frame_timings_get_throttling_hint (timings);
-      et = MIN (et, max_time);
-      if (et > st)
+      for (i = start; i >= end; i--)
         {
-          /* dark red for the throttle time */
-          color = 0x44220000;
-          if (!draw_line (data, size, color, st, et, max_time, nspp))
-            break;
-        }
+          uint64_t st, et;
 
-      st = gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_FLUSH_EVENTS);
-      st = MIN (st, max_time);
-      et = gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
-      et = MIN (et, max_time);
+          timings = gdk_frame_clock_get_timings (clock, i);
+          g_assert (timings);
 
-      /* gray for the frame cycle */
-      color = 0xFFAAAAAA;
-      if (!draw_line (data, size, color, st, et, max_time, nspp))
-        break;
-    }
-
-  /* all the predicted presentation times in blue */
-  color = 0xFF0000FF;
-  for (i = start; i >= end; i--)
-    {
-      timings = gdk_frame_clock_get_timings (clock, i);
-      g_assert (timings);
-
-      t = gdk_frame_timings_get_predicted_presentation_time_ns (timings);
-      if (!draw_point (data, size, color, t, max_time, nspp))
-        break;
-      color = 0xFF0000C0;
-      t = gdk_frame_timings_get_presentation_time_ns (timings);
-      if (t > 0)
-        {
-          if (!draw_point (data, size, 0xFF6000C0, t, max_time, nspp))
-            break;
+          st = ranges[j].get_start_time (timings);
+          st = MIN (st, max_time);
+          et = ranges[j].get_end_time (timings);
+          et = MIN (et, max_time);
+          if (et > st)
+            {
+              if (!draw_line (data, size, rgba_to_color (&ranges[j].color), st, et, max_time, nspp))
+                break;
+            }
         }
     }
 
-  /* all the frame times in green */
-  color = 0xFF00FF00;
-  for (i = start; i >= end; i--)
+  for (j = G_N_ELEMENTS (points); j-- > 0; )
     {
-      timings = gdk_frame_clock_get_timings (clock, i);
-      g_assert (timings);
+      for (i = start; i >= end; i--)
+        {
+          timings = gdk_frame_clock_get_timings (clock, i);
+          g_assert (timings);
 
-      t = gdk_frame_timings_get_frame_time_ns (timings);
-      if (!draw_point (data, size, color, t, max_time, nspp))
-        break;
-      color = 0xFF00C000;
+          t = points[j].get_time (timings);
+          if (!draw_point (data, size, rgba_to_color (&points[j].color), t, max_time, nspp))
+            break;
+        }
     }
 
   if (GTK_IS_WINDOW (widget))
