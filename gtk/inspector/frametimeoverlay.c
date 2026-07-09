@@ -43,35 +43,166 @@ struct _GtkFrameTimeOverlayClass
 
 G_DEFINE_TYPE (GtkFrameTimeOverlay, gtk_frame_time_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
-static uint64_t
-frame_timings_get_frame_start (GdkFrameTimings *timings)
-{
-  return gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_FLUSH_EVENTS);
-}
+#define STAGE_FUNC(name, stage) \
+static uint64_t \
+frame_timings_get_ ## name ## _start (GdkFrameTimings *timings) \
+{ \
+  return gdk_frame_timings_get_end_time (timings, stage - 1); \
+}\
+\
+static uint64_t \
+frame_timings_get_ ## name ## _end (GdkFrameTimings *timings) \
+{ \
+  return gdk_frame_timings_get_end_time (timings, stage); \
+}\
 
-static uint64_t
-frame_timings_get_frame_end (GdkFrameTimings *timings)
-{
-  return gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
-}
+STAGE_FUNC (flush_events, GDK_FRAME_STAGE_FLUSH_EVENTS)
+STAGE_FUNC (before_paint, GDK_FRAME_STAGE_BEFORE_PAINT)
+STAGE_FUNC (update, GDK_FRAME_STAGE_UPDATE)
+STAGE_FUNC (layout, GDK_FRAME_STAGE_LAYOUT)
+STAGE_FUNC (paint, GDK_FRAME_STAGE_PAINT)
+STAGE_FUNC (after_paint, GDK_FRAME_STAGE_AFTER_PAINT)
+STAGE_FUNC (resume_events, GDK_FRAME_STAGE_RESUME_EVENTS)
 
-struct {
-  GdkRGBA color;
-  uint64_t (* get_time) (GdkFrameTimings *timings);
-} const points[] = {
-  { { 0.0, 1.0, 0.0, 1.0 }, gdk_frame_timings_get_frame_time_ns },
-  { { 0.0, 0.0, 1.0, 1.0 }, gdk_frame_timings_get_presentation_time_ns },
-  { { 0.4, 0.0, 1.0, 1.0 }, gdk_frame_timings_get_predicted_presentation_time_ns },
+static const struct {
+  const char *name;
+  uint64_t (* get_start_time) (GdkFrameTimings *timings);
+  uint64_t (* get_end_time) (GdkFrameTimings *timings);
+} definitions[] = {
+  { "frametime", gdk_frame_timings_get_frame_time_ns, NULL },
+  { "presentation", gdk_frame_timings_get_presentation_time_ns, NULL },
+  { "predicted", gdk_frame_timings_get_predicted_presentation_time_ns, NULL },
+  { "frame", frame_timings_get_flush_events_start, frame_timings_get_resume_events_end },
+  { "flush-events", frame_timings_get_flush_events_start, frame_timings_get_flush_events_end },
+  { "before-paint", frame_timings_get_before_paint_start, frame_timings_get_before_paint_end },
+  { "update", frame_timings_get_update_start, frame_timings_get_update_end },
+  { "layout", frame_timings_get_layout_start, frame_timings_get_layout_end },
+  { "paint", frame_timings_get_paint_start, frame_timings_get_paint_end },
+  { "after-paint", frame_timings_get_after_paint_start, frame_timings_get_after_paint_end },
+  { "resume-events", frame_timings_get_resume_events_start, frame_timings_get_resume_events_end },
+  { "throttle", frame_timings_get_resume_events_end, gdk_frame_timings_get_throttling_hint },
 };
 
-struct {
+static const char *default_setup =
+  "#7f000040 throttle, #bbbbbb frame, #7f000040 throttle,"
+  "#6600ff predicted, blue presentation, lime frametime";
+
+typedef struct _Time Time;
+
+struct _Time {
   GdkRGBA color;
   uint64_t (* get_start_time) (GdkFrameTimings *timings);
   uint64_t (* get_end_time) (GdkFrameTimings *timings);
-} const ranges[] = {
-  { { 0.7, 0.7, 0.7, 1.0 }, frame_timings_get_frame_start, frame_timings_get_frame_end, },
-  { { 0.5, 0.0, 0.0, 0.25 }, frame_timings_get_frame_end, gdk_frame_timings_get_throttling_hint },
 };
+
+static gboolean
+parse_definition (const char *name,
+                  Time       *time)
+{
+  gsize len = strlen (name);
+  gsize i;
+  enum { START, END, ALL } type;
+
+  if (g_str_has_suffix (name, "-end"))
+    {
+      len -= strlen ("-end");
+      type = END;
+    }
+  else if (g_str_has_suffix (name, "-start"))
+    {
+      len -= strlen ("-start");
+      type = START;
+    }
+  else
+    type = ALL;
+
+  for (i = 0; i < G_N_ELEMENTS (definitions); i++)
+    {
+      if (g_ascii_strncasecmp (definitions[i].name, name, len) == 0 &&
+          definitions[i].name[len] == 0)
+        {
+          switch (type)
+            {
+            case START:
+              if (!definitions[i].get_end_time)
+                return FALSE;
+              time->get_start_time = definitions[i].get_start_time;
+              break;
+            case END:
+              if (!definitions[i].get_end_time)
+                return FALSE;
+              time->get_start_time = definitions[i].get_end_time;
+              break;
+            case ALL:
+              time->get_start_time = definitions[i].get_start_time;
+              time->get_end_time = definitions[i].get_end_time;
+              break;
+            default:
+              g_assert_not_reached ();
+              break;
+            }
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static Time *
+parse_times (const char *definition,
+             gsize      *out_n_times)
+{
+  char **split;
+  Time *times;
+  gsize i, j, n;
+
+  split = g_strsplit_set (definition, ",", -1);
+  if (split == NULL)
+    goto error;
+
+  times = g_new (Time, g_strv_length (split));
+  for (n = 0, i = 0; split[i] != NULL; i++)
+    {
+      char **tokens = g_strsplit_set (split[i], " \t\n\r", -1);
+      const char *color = NULL, *def = NULL;
+
+      for (j = 0; tokens[j] != NULL; j++)
+        {
+          if (tokens[j][0] == '\0')
+            continue;
+          else if (color == NULL)
+            color = tokens[j];
+          else if (def == NULL)
+            def = tokens[j];
+          else
+            {
+              g_strfreev (tokens);
+              goto error;
+            }
+        }
+
+      if (color == NULL || def == NULL ||
+          !gdk_rgba_parse (&times[n].color, color) ||
+          !parse_definition (def, &times[n]))
+        {
+          g_strfreev (tokens);
+          goto error;
+        }
+
+      g_strfreev (tokens);
+      n++;
+    }
+
+  g_clear_pointer (&split, g_strfreev);
+  *out_n_times = n;
+  return times;
+
+error:
+  g_clear_pointer (&split, g_strfreev);
+  *out_n_times = 0;
+  return NULL;
+}
+
 
 static gsize
 get_point (uint64_t t,
@@ -180,9 +311,10 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   gboolean has_bounds;
   GBytes *bytes;
   GdkTexture *texture;
-  uint64_t max_time, t, nspp; /* nanoseconds per pixel */
+  uint64_t max_time, nspp; /* nanoseconds per pixel */
   float scale;
-  gsize j;
+  gsize j, n_times;
+  Time *times;
 
   scale = gdk_surface_get_scale (gtk_native_get_surface (gtk_widget_get_native (widget)));
   clock = gtk_widget_get_frame_clock (widget);
@@ -201,7 +333,8 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
-  for (j = G_N_ELEMENTS (ranges); j-- > 0; )
+  times = parse_times (default_setup, &n_times);
+  for (j = 0; j < n_times; j++)
     {
       for (i = start; i >= end; i--)
         {
@@ -210,28 +343,21 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
           timings = gdk_frame_clock_get_timings (clock, i);
           g_assert (timings);
 
-          st = ranges[j].get_start_time (timings);
+          st = times[j].get_start_time (timings);
           st = MIN (st, max_time);
-          et = ranges[j].get_end_time (timings);
-          et = MIN (et, max_time);
-          if (et > st)
+          if (times[j].get_end_time)
             {
-              if (!draw_line (data, size, rgba_to_color (&ranges[j].color), st, et, max_time, nspp))
-                break;
+              /* a range */
+              et = times[j].get_end_time (timings);
+              et = MIN (et, max_time);
+              if (et > st)
+                draw_line (data, size, rgba_to_color (&times[j].color), st, et, max_time, nspp);
             }
-        }
-    }
-
-  for (j = G_N_ELEMENTS (points); j-- > 0; )
-    {
-      for (i = start; i >= end; i--)
-        {
-          timings = gdk_frame_clock_get_timings (clock, i);
-          g_assert (timings);
-
-          t = points[j].get_time (timings);
-          if (!draw_point (data, size, rgba_to_color (&points[j].color), t, max_time, nspp))
-            break;
+          else
+            {
+              /* a point */
+              draw_point (data, size, rgba_to_color (&times[j].color), st, max_time, nspp);
+            }
         }
     }
 
