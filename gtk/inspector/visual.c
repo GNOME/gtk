@@ -98,6 +98,7 @@ struct _GtkInspectorVisual
   GtkWidget *debug_box;
   GtkWidget *fps_switch;
   GtkWidget *frametime_switch;
+  GtkWidget *frametime_config;
   GtkWidget *updates_switch;
   GtkWidget *cairo_switch;
   GtkWidget *baselines_switch;
@@ -332,6 +333,11 @@ frametime_activate (GtkSwitch          *sw,
           vis->frametime_overlay = gtk_frame_time_overlay_new ();
           gtk_inspector_window_add_overlay (iw, vis->frametime_overlay);
           g_object_unref (vis->frametime_overlay);
+          gtk_editable_set_text (GTK_EDITABLE (vis->frametime_config),
+                                 gtk_frame_time_overlay_get_config (GTK_FRAME_TIME_OVERLAY (vis->frametime_overlay)));
+          g_object_bind_property (vis->frametime_config, "text",
+                                  vis->frametime_overlay, "config",
+                                  G_BINDING_DEFAULT);
         }
     }
   else
@@ -1329,6 +1335,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fps_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, frametime_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, frametime_config);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cairo_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, baselines_switch);
