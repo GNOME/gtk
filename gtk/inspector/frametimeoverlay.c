@@ -31,15 +31,37 @@
 #define WIDTH 300
 #define HEIGHT 50
 
+#define DEFAULT_CONFIG "#7f000040 throttle, #bbbbbb frame," \
+                       "#6600ff predicted, blue presentation, lime frametime"
+
+typedef struct _Time Time;
+
+struct _Time {
+  GdkRGBA color;
+  uint64_t (* get_start_time) (GdkFrameTimings *timings);
+  uint64_t (* get_end_time) (GdkFrameTimings *timings);
+};
+
 struct _GtkFrameTimeOverlay
 {
   GtkInspectorOverlay parent_instance;
+
+  char *config;
+  Time *times;
+  gsize n_times;
 };
 
 struct _GtkFrameTimeOverlayClass
 {
   GtkInspectorOverlayClass parent_class;
 };
+
+enum {
+  PROP_CONFIG = 1,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (GtkFrameTimeOverlay, gtk_frame_time_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
@@ -81,18 +103,6 @@ static const struct {
   { "after-paint", frame_timings_get_after_paint_start, frame_timings_get_after_paint_end },
   { "resume-events", frame_timings_get_resume_events_start, frame_timings_get_resume_events_end },
   { "throttle", frame_timings_get_resume_events_end, gdk_frame_timings_get_throttling_hint },
-};
-
-static const char *default_setup =
-  "#7f000040 throttle, #bbbbbb frame, #7f000040 throttle,"
-  "#6600ff predicted, blue presentation, lime frametime";
-
-typedef struct _Time Time;
-
-struct _Time {
-  GdkRGBA color;
-  uint64_t (* get_start_time) (GdkFrameTimings *timings);
-  uint64_t (* get_end_time) (GdkFrameTimings *timings);
 };
 
 static gboolean
@@ -149,8 +159,8 @@ parse_definition (const char *name,
 }
 
 static Time *
-parse_times (const char *definition,
-             gsize      *out_n_times)
+parse_config (const char *definition,
+              gsize      *out_n_times)
 {
   char **split;
   Time *times;
@@ -302,6 +312,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
                                  GskRenderNode       *node,
                                  GtkWidget           *widget)
 {
+  GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (overlay);
   guint32 *data;
   gsize width, height, stride, size;
   gint64 start, end, i;
@@ -313,8 +324,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   GdkTexture *texture;
   uint64_t max_time, nspp; /* nanoseconds per pixel */
   float scale;
-  gsize j, n_times;
-  Time *times;
+  gsize j;
 
   scale = gdk_surface_get_scale (gtk_native_get_surface (gtk_widget_get_native (widget)));
   clock = gtk_widget_get_frame_clock (widget);
@@ -333,8 +343,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
-  times = parse_times (default_setup, &n_times);
-  for (j = 0; j < n_times; j++)
+  for (j = 0; j < self->n_times; j++)
     {
       for (i = start; i >= end; i--)
         {
@@ -343,20 +352,20 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
           timings = gdk_frame_clock_get_timings (clock, i);
           g_assert (timings);
 
-          st = times[j].get_start_time (timings);
+          st = self->times[j].get_start_time (timings);
           st = MIN (st, max_time);
-          if (times[j].get_end_time)
+          if (self->times[j].get_end_time)
             {
               /* a range */
-              et = times[j].get_end_time (timings);
+              et = self->times[j].get_end_time (timings);
               et = MIN (et, max_time);
               if (et > st)
-                draw_line (data, size, rgba_to_color (&times[j].color), st, et, max_time, nspp);
+                draw_line (data, size, rgba_to_color (&self->times[j].color), st, et, max_time, nspp);
             }
           else
             {
               /* a point */
-              draw_point (data, size, rgba_to_color (&times[j].color), st, max_time, nspp);
+              draw_point (data, size, rgba_to_color (&self->times[j].color), st, max_time, nspp);
             }
         }
     }
@@ -398,16 +407,80 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 }
 
 static void
+gtk_frame_time_overlay_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (object);
+
+  switch (prop_id)
+    {
+    case PROP_CONFIG:
+      gtk_frame_time_overlay_set_config (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_frame_time_overlay_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (object);
+
+  switch (prop_id)
+    {
+    case PROP_CONFIG:
+      g_value_set_string (value, self->config);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_frame_time_overlay_finalize (GObject *object)
+{
+  GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (object);
+
+  g_free (self->config);
+  g_free (self->times);
+
+  G_OBJECT_CLASS (gtk_frame_time_overlay_parent_class)->finalize (object);
+}
+
+static void
 gtk_frame_time_overlay_class_init (GtkFrameTimeOverlayClass *klass)
 {
   GtkInspectorOverlayClass *overlay_class = GTK_INSPECTOR_OVERLAY_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   overlay_class->snapshot = gtk_frame_time_overlay_snapshot;
+
+  object_class->set_property = gtk_frame_time_overlay_set_property;
+  object_class->get_property = gtk_frame_time_overlay_get_property;
+  object_class->finalize = gtk_frame_time_overlay_finalize;
+
+  properties[PROP_CONFIG] =
+      g_param_spec_string ("config", NULL, NULL,
+                           DEFAULT_CONFIG,
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 }
 
 static void
 gtk_frame_time_overlay_init (GtkFrameTimeOverlay *self)
 {
+  self->config = g_strdup ("");
 }
 
 GtkInspectorOverlay *
@@ -418,5 +491,35 @@ gtk_frame_time_overlay_new (void)
   self = g_object_new (GTK_TYPE_FRAME_TIME_OVERLAY, NULL);
 
   return GTK_INSPECTOR_OVERLAY (self);
+}
+
+void
+gtk_frame_time_overlay_set_config (GtkFrameTimeOverlay *self,
+                                   const char          *config)
+{
+  Time *times;
+  gsize n_times;
+
+  if (config == NULL ||
+      g_str_equal (self->config, config))
+    return;
+
+  times = parse_config (config, &n_times);
+  if (times == NULL)
+    return;
+
+  g_free (self->config);
+  self->config = g_strdup (config);
+  g_free (self->times);
+  self->times = times;
+  self->n_times = n_times;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CONFIG]);
+}
+
+const char *
+gtk_frame_time_overlay_get_config (GtkFrameTimeOverlay *self)
+{
+  return self->config;
 }
 

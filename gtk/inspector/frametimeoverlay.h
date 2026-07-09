@@ -28,5 +28,9 @@ G_DECLARE_FINAL_TYPE (GtkFrameTimeOverlay, gtk_frame_time_overlay, GTK, FRAME_TI
 
 GtkInspectorOverlay *   gtk_frame_time_overlay_new              (void);
 
+void                    gtk_frame_time_overlay_set_config       (GtkFrameTimeOverlay    *self,
+                                                                 const char             *config);
+const char *            gtk_frame_time_overlay_get_config       (GtkFrameTimeOverlay    *self);
+
 G_END_DECLS
 
