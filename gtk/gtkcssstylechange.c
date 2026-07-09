@@ -79,12 +79,18 @@ compute_change (GtkCssStyleChange *change)
                                                      &change->changes,
                                                      &change->affects);
 
-  if (change->old_style->font_variant != change->new_style->font_variant ||
-      (color_changed && gtk_css_value_contains_current_color (change->old_style->text_decoration->text_decoration_color)))
+  if (change->old_style->font_variant != change->new_style->font_variant)
     gtk_css_font_variant_values_compute_changes_and_affects (change->old_style,
                                                              change->new_style,
                                                              &change->changes,
                                                              &change->affects);
+
+  if (change->old_style->text_decoration != change->new_style->text_decoration ||
+      (color_changed && gtk_css_value_contains_current_color (change->old_style->text_decoration->text_decoration_color)))
+    gtk_css_text_decoration_values_compute_changes_and_affects (change->old_style,
+                                                                change->new_style,
+                                                                &change->changes,
+                                                                &change->affects);
 
   if (change->old_style->animation != change->new_style->animation)
     gtk_css_animation_values_compute_changes_and_affects (change->old_style,
