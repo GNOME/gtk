@@ -272,8 +272,9 @@ draw_line (guint32 *data,
             
 static void
 gtk_frame_time_overlay_get_timeline_values (GdkFrameClock *clock,
+                                            gsize          size,
                                             uint64_t      *end_time,
-                                            uint64_t      *out_refresh)
+                                            uint64_t      *ns_per_pixel)
 {
   GdkFrameTimings *timings;
   gint64 presentation, predicted, refresh;
@@ -293,7 +294,7 @@ gtk_frame_time_overlay_get_timeline_values (GdkFrameClock *clock,
    * newest time we might get */
   *end_time = ((predicted - presentation + refresh - 1) / refresh
               * refresh + presentation);
-  *out_refresh = refresh;
+  *ns_per_pixel = refresh / size;
 }
 
 static guint32
@@ -313,7 +314,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 {
   GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (overlay);
   guint32 *data;
-  gsize width, height, stride; //, size;
+  gsize width, height, stride, size;
   gint64 start, end, i;
   GdkFrameClock *clock;
   GdkFrameTimings *timings;
@@ -321,7 +322,7 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   gboolean has_bounds;
   GBytes *bytes;
   GdkTexture *texture;
-  uint64_t max_time, refresh, nspp; /* nanoseconds per pixel */
+  uint64_t max_time, nspp; /* nanoseconds per pixel */
   float scale;
   gsize j;
 
@@ -332,35 +333,24 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   if (end >= start)
     return;
 
-  width = ceil (50 * scale) * 4;
+  width = ceil (75 * scale);
   height = 600;
   height = MIN (height, gtk_widget_get_width (widget));
   //height = ceil (height * scale);
-  //size = width * height;
+  size = width * height;
   stride = sizeof (guint32) * width;
   data = g_malloc0_n (stride, height);
 
-  gtk_frame_time_overlay_get_timeline_values (clock, &max_time, &refresh);
-  nspp = 4 * refresh / width;
-  max_time += 2 * refresh;
+  gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
   for (j = 0; j < self->n_times; j++)
     {
       for (i = start; i >= end; i--)
         {
           uint64_t st, et;
-          gsize n;
-          guint32 *slice_data;
-          uint64_t slice_max_time;
-
-          n = start - i;
-          if (n >= height)
-            break;
 
           timings = gdk_frame_clock_get_timings (clock, i);
           g_assert (timings);
-          slice_data = data + (stride * n / sizeof (guint32));
-          slice_max_time = max_time - n * refresh;
 
           st = self->times[j].get_start_time (timings);
           st = MIN (st, max_time);
@@ -370,12 +360,12 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
               et = self->times[j].get_end_time (timings);
               et = MIN (et, max_time);
               if (et > st)
-                draw_line (slice_data, width, rgba_to_color (&self->times[j].color), st, et, slice_max_time, nspp);
+                draw_line (data, size, rgba_to_color (&self->times[j].color), st, et, max_time, nspp);
             }
           else
             {
               /* a point */
-              draw_point (slice_data, width, rgba_to_color (&self->times[j].color), st, slice_max_time, nspp);
+              draw_point (data, size, rgba_to_color (&self->times[j].color), st, max_time, nspp);
             }
         }
     }
