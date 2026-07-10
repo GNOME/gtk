@@ -21,6 +21,7 @@
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
 #include "gtkexpression.h"
+#include "gtkstatenode.h"
 
 enum {
   TAG_PROPERTY,
@@ -33,6 +34,7 @@ enum {
   TAG_INTERFACE,
   TAG_TEMPLATE,
   TAG_EXPRESSION,
+  TAG_STATE,
 };
 
 typedef struct {
@@ -147,6 +149,17 @@ typedef struct
   int col;
 } BindingExpressionInfo;
 
+typedef struct
+{
+  guint tag_type;
+  GtkStateNode *node;
+  char *key;
+  GtkStateNodeBindingFlags flags;
+  ExpressionInfo *expr;
+  int line;
+  int col;
+} StateInfo;
+
 typedef struct {
   guint    tag_type;
   char    *library;
@@ -239,6 +252,7 @@ void _free_signal_info (SignalInfo *info,
 void _free_binding_info (BindingInfo *info,
                          gpointer user_data);
 void free_binding_expression_info (BindingExpressionInfo *info);
+void free_state_info (StateInfo *info);
 GtkExpression * expression_info_construct (GtkBuilder      *builder,
                                            const char      *domain,
                                            ExpressionInfo  *info,

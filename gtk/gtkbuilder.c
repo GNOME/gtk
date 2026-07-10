@@ -396,6 +396,7 @@
 #include "gtkprivate.h"
 #include "gtkshortcutactionprivate.h"
 #include "gtkshortcuttrigger.h"
+#include "gtkstatenodeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkiconthemeprivate.h"
 #include "gtkdebug.h"
@@ -888,6 +889,11 @@ gtk_builder_take_bindings (GtkBuilder *builder,
           BindingExpressionInfo *info = l->data;
           info->target = target;
         }
+      else if (common_info->tag_type == TAG_STATE)
+        {
+          StateInfo *info = l->data;
+          info->node = GTK_STATE_NODE (target);
+        }
       else
         {
           g_assert_not_reached ();
@@ -1342,6 +1348,39 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
             }
 
           free_binding_expression_info (info);
+        }
+      else if (common_info->tag_type == TAG_STATE)
+        {
+          StateInfo *info = l->data;
+          GtkExpression *expression;
+
+          expression = expression_info_construct (builder, priv->domain, info->expr, error);
+          if (expression == NULL)
+            {
+              g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+              error = NULL;
+              result = FALSE;
+            }
+          else
+            {
+              if (gtk_state_node_validate_expression (expression,
+                                                       info->flags,
+                                                       error))
+                {
+                  gtk_state_node_bind_expression (info->node, info->key,
+                                                  expression, info->flags);
+                }
+              else
+                {
+                  g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+                  error = NULL;
+                  result = FALSE;
+                }
+
+              gtk_expression_unref (expression);
+            }
+
+          free_state_info (info);
         }
       else
         g_assert_not_reached ();

@@ -34,6 +34,38 @@
  * a `GtkStateNode`, declare the state they want in the tree via bindings,
  * and then delegate their implementation of `GtkRestorable`. See the
  * documentation of `GtkRestorable` for details.
+ *
+ * ## GtkStateNode in .ui files
+ *
+ * `GtkBuilder` has support for `GtkStateNode`. This further simplifies the
+ * process of setting up the state tree, by allowing apps to create bindings
+ * declaratively.
+ *
+ * Inside of an `<object class="GtkStateNode">`, `GtkBuilder` permits `<state>`
+ * elements, which declare `GtkStateNode` bindings. Each `<state>` binding
+ * requires a `key` attribute to specify the name of the binding, and then
+ * as a value takes the syntax for constructing a `GtkExpression` (similar to
+ * the `<binding>` element).
+ *
+ * Flags are exposed as optional boolean attributes on the `<state>` element.
+ * `save-only` controls `GTK_STATE_NODE_BINDING_FLAGS_SAVE_ONLY`.
+ * `restore-only` controls `GTK_STATE_NODE_BINDING_FLAGS_RESTORE_ONLY`.
+ * `restore-always` controls `GTK_STATE_NODE_BINDING_FLAGS_RESTORE_ALWAYS`.
+ *
+ * For example:
+ *
+ * ```xml
+ * <object class="GtkStateNode">
+ *   <state key="some_state">
+ *     <lookup name="some_property">some_object</lookup>
+ *   </state>
+ *   <state key="some_legacy_state" restore-only="true">
+ *     <lookup name="some_other_property">
+ *       <lookup name="some_inner_object">some_object</lookup>
+ *     </lookup>
+ *   </state>
+ * </object>
+ * ```
  */
 
 struct _GtkStateNode {

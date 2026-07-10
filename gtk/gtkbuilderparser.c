@@ -1095,6 +1095,77 @@ free_expression_info (ExpressionInfo *info)
   g_free (info);
 }
 
+static void
+parse_state (ParserData  *data,
+             const char  *element_name,
+             const char **names,
+             const char **values,
+             GError     **error)
+{
+  StateInfo *info;
+  const char *key;
+  gboolean save_only = FALSE;
+  gboolean restore_only = FALSE;
+  gboolean restore_always = FALSE;
+  GtkStateNodeBindingFlags flags = GTK_STATE_NODE_BINDING_FLAGS_NONE;
+  ObjectInfo *object_info;
+
+  object_info = state_peek_info (data, ObjectInfo);
+  if (!object_info ||
+      !(object_info->tag_type == TAG_OBJECT ||
+        object_info->tag_type == TAG_TEMPLATE))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "key", &key,
+                                    G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "save-only", &save_only,
+                                    G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "restore-only", &restore_only,
+                                    G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "restore-always", &restore_always,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  if (save_only)
+    flags |= GTK_STATE_NODE_BINDING_FLAGS_SAVE_ONLY;
+  if (restore_only)
+    flags |= GTK_STATE_NODE_BINDING_FLAGS_RESTORE_ONLY;
+  if (restore_always)
+    flags |= GTK_STATE_NODE_BINDING_FLAGS_RESTORE_ALWAYS;
+
+  if (!g_type_is_a (object_info->type, GTK_TYPE_STATE_NODE))
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_TAG,
+                   "State bindings are only valid in GtkStateNode objects");
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  info = g_new0 (StateInfo, 1);
+  info->tag_type = TAG_STATE;
+  info->node = NULL;
+  info->key = g_strdup (key);
+  info->flags = flags;
+  gtk_buildable_parse_context_get_position (&data->ctx, &info->line, &info->col);
+
+  state_push (data, info);
+}
+
+void
+free_state_info (StateInfo *info)
+{
+  if (info->expr)
+    free_expression_info (info->expr);
+  g_free (info->key);
+  g_free (info);
+}
+
 static gboolean
 check_expression_parent (ParserData *data)
 {
@@ -1114,6 +1185,12 @@ check_expression_parent (ParserData *data)
       BindingExpressionInfo *expr_info = (BindingExpressionInfo *) common_info;
 
       return expr_info->expr == NULL;
+    }
+  else if (common_info->tag_type == TAG_STATE)
+    {
+      StateInfo *state_info = (StateInfo *) common_info;
+
+      return state_info->expr == NULL;
     }
   else if (common_info->tag_type == TAG_EXPRESSION)
     {
@@ -1933,6 +2010,8 @@ start_element (GtkBuildableParseContext  *context,
     parse_property (data, element_name, names, values, error);
   else if (strcmp (element_name, "binding") == 0)
     parse_binding (data, element_name, names, values, error);
+  else if (strcmp (element_name, "state") == 0)
+    parse_state (data, element_name, names, values, error);
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
   else if (strcmp (element_name, "signal") == 0)
@@ -2053,6 +2132,29 @@ end_element (GtkBuildableParseContext  *context,
       else
         g_assert_not_reached ();
     }
+  else if (strcmp (element_name, "state") == 0)
+    {
+      StateInfo *sinfo = state_pop_info (data, StateInfo);
+      CommonInfo *info = state_peek_info (data, CommonInfo);
+
+      g_assert (info != NULL);
+
+      if (sinfo->expr == NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_TAG,
+                       "State tag requires an expression");
+          free_state_info (sinfo);
+        }
+      else if (info->tag_type == TAG_OBJECT || info->tag_type == TAG_TEMPLATE)
+        {
+          ObjectInfo *object_info = (ObjectInfo *) info;
+          object_info->bindings = g_slist_prepend (object_info->bindings, sinfo);
+        }
+      else
+        g_assert_not_reached ();
+    }
   else if (strcmp (element_name, "object") == 0 ||
            strcmp (element_name, "template") == 0)
     {
@@ -2141,6 +2243,12 @@ end_element (GtkBuildableParseContext  *context,
           BindingExpressionInfo *expr_info = (BindingExpressionInfo *) parent_info;
 
           expr_info->expr = expression_info;
+        }
+      else if (parent_info->tag_type == TAG_STATE)
+        {
+          StateInfo *state_info = (StateInfo *) parent_info;
+
+          state_info->expr = expression_info;
         }
       else if (parent_info->tag_type == TAG_PROPERTY)
         {
