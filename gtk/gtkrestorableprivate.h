@@ -21,6 +21,16 @@
 
 G_BEGIN_DECLS
 
+/* This is a soft size limit of an entire serialized state tree. If exceeded,
+ * we'll warn about it but still allow it. Ideally, apps shouldn't be shoving
+ * too much state into their state trees, and should use bulk state directories
+ * for large bits of data.
+ *
+ * For reference: macOS and iOS don't seem to have a hard limit, but Android
+ * has a hard maximum of 1 MiB.
+ * */
+#define GTK_SAVE_CONTEXT_MAX_SIZE (1 * 1024 * 1024)
+
 GtkSaveContext *gtk_save_context_new_root (GFile *bulk_dir);
 
 GVariant *gtk_save_context_serialize (GtkSaveContext *self);

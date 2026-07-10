@@ -246,6 +246,7 @@ gtk_save_context_serialize (GtkSaveContext *self)
 {
   GVariantBuilder builder;
   GVariant *variant;
+  gsize size;
 
   g_return_val_if_fail (self, NULL);
 
@@ -253,6 +254,21 @@ gtk_save_context_serialize (GtkSaveContext *self)
   fill_builder_recursive (self, &builder);
   variant = g_variant_builder_end (&builder);
   g_variant_ref_sink (variant);
+
+  size = g_variant_get_size (variant);
+  if (size > GTK_SAVE_CONTEXT_MAX_SIZE)
+    {
+      char *fmt_size, *fmt_max;
+      fmt_size = g_format_size_full (size, G_FORMAT_SIZE_IEC_UNITS);
+      fmt_max = g_format_size_full (GTK_SAVE_CONTEXT_MAX_SIZE,
+                                    G_FORMAT_SIZE_IEC_UNITS);
+      g_warning ("GtkSaveContext exceeded maximum size: %s (max: %s). "
+                 "Make sure you're not storing bulk state in the state tree!",
+                 fmt_size, fmt_max);
+      g_free (fmt_size);
+      g_free (fmt_max);
+    }
+
   return variant;
 }
 
