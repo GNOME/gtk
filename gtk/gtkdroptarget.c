@@ -138,8 +138,7 @@ struct _GtkDropTargetClass
   GdkDragAction         (* motion)                              (GtkDropTarget  *self,
                                                                  double          x,
                                                                  double          y);
-  void                  (* leave)                               (GtkDropTarget  *self,
-                                                                 GdkDrop        *drop);
+  void                  (* leave)                               (GtkDropTarget  *self);
   gboolean              (* drop)                                (GtkDropTarget  *self,
                                                                  const GValue   *value,
                                                                  double          x,
