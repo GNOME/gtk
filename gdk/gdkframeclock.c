@@ -120,6 +120,31 @@ struct _GdkFrameClockPrivate
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 
+static uint64_t
+gdk_frame_clock_default_predict_presentation_time (GdkFrameClock *self,
+                                                   uint64_t       now)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  if (priv->latest_presentation_time != 0)
+    {
+      if (priv->latest_presentation_time < now)
+        {
+          uint64_t n_frames;
+          n_frames = (now - priv->latest_presentation_time) / priv->latest_refresh_interval + 1;
+          return priv->latest_presentation_time + n_frames * priv->latest_refresh_interval;
+        }
+      else
+        {
+          return priv->latest_presentation_time + priv->latest_refresh_interval;
+        }
+    }
+  else
+    {
+      return now + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
+    }
+}
+
 static void
 gdk_frame_clock_finalize (GObject *object)
 {
@@ -139,7 +164,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
-  gobject_class->finalize     = gdk_frame_clock_finalize;
+  klass->predict_presentation_time = gdk_frame_clock_default_predict_presentation_time;
+
+  gobject_class->finalize = gdk_frame_clock_finalize;
 
   /**
    * GdkFrameClock::flush-events:
@@ -551,6 +578,13 @@ gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
   return _gdk_frame_clock_get_history_start (frame_clock);
 }
 
+static uint64_t
+gdk_frame_clock_predict_presentation_time (GdkFrameClock *self,
+                                           uint64_t       now)
+{
+  return GDK_FRAME_CLOCK_GET_CLASS (self)->predict_presentation_time (self, now);
+}
+
 static void
 gdk_frame_clock_begin_frame (GdkFrameClock *self,
                              uint64_t       frame_time,
@@ -559,7 +593,6 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   GdkFrameTimings *timings;
-  uint64_t predicted_presentation_time;
 
   priv->frame_counter++;
   priv->frame_time = frame_time;
@@ -594,27 +627,9 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
         }
     }
 
-  if (priv->latest_presentation_time != 0)
-    {
-      if (priv->latest_presentation_time < stage_start_time)
-        {
-          uint64_t n_frames;
-          n_frames = (stage_start_time - priv->latest_presentation_time) / priv->latest_refresh_interval + 1;
-          predicted_presentation_time = priv->latest_presentation_time + n_frames * priv->latest_refresh_interval;
-        }
-      else
-        {
-          predicted_presentation_time = priv->latest_presentation_time + priv->latest_refresh_interval;
-        }
-    }
-  else
-    {
-      predicted_presentation_time = frame_time + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
-    }
-
   gdk_frame_timings_setup (timings,
                            frame_time,
-                           predicted_presentation_time,
+                           gdk_frame_clock_predict_presentation_time (self, priv->stage_start_time),
                            frame_start_time,
                            stage_start_time);
 }

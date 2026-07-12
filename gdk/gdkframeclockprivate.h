@@ -76,6 +76,8 @@ struct _GdkFrameClockClass
   uint64_t              (* compute_frame_time)                  (GdkFrameClock          *self,
                                                                  uint64_t                now,
                                                                  gboolean                for_frame_start);
+  uint64_t              (* predict_presentation_time)           (GdkFrameClock          *self,
+                                                                 uint64_t                now);
 
   void                  (* request_phase)                       (GdkFrameClock          *self,
                                                                  GdkFrameClockPhase      phase);
