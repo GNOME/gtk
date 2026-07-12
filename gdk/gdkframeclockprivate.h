@@ -73,26 +73,17 @@ struct _GdkFrameClockClass
 
   /*< public >*/
 
-  uint64_t (* compute_frame_time) (GdkFrameClock *clock,
-                                   uint64_t       now,
-                                   gboolean       for_frame_start);
+  uint64_t              (* compute_frame_time)                  (GdkFrameClock          *self,
+                                                                 uint64_t                now,
+                                                                 gboolean                for_frame_start);
 
-  void     (* request_phase)  (GdkFrameClock      *clock,
-                               GdkFrameClockPhase  phase);
-  void     (* begin_updating) (GdkFrameClock      *clock);
-  void     (* end_updating)   (GdkFrameClock      *clock);
+  void                  (* request_phase)                       (GdkFrameClock          *self,
+                                                                 GdkFrameClockPhase      phase);
+  void                  (* begin_updating)                      (GdkFrameClock          *self);
+  void                  (* end_updating)                        (GdkFrameClock          *self);
 
-  void     (* start)             (GdkFrameClock *clock);
-  void     (* stop)              (GdkFrameClock *clock);
-
-  /* signals */
-  /* void (* flush_events)       (GdkFrameClock *clock); */
-  /* void (* before_paint)       (GdkFrameClock *clock); */
-  /* void (* update)             (GdkFrameClock *clock); */
-  /* void (* layout)             (GdkFrameClock *clock); */
-  /* void (* paint)              (GdkFrameClock *clock); */
-  /* void (* after_paint)        (GdkFrameClock *clock); */
-  /* void (* resume_events)      (GdkFrameClock *clock); */
+  void                  (* start)                               (GdkFrameClock          *self);
+  void                  (* stop)                                (GdkFrameClock          *self);
 };
 
 void                    gdk_frame_clock_start                   (GdkFrameClock          *clock);
