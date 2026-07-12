@@ -199,7 +199,8 @@ struct _GtkPlacesSidebarClass {
   void    (* show_other_locations_with_flags)   (GtkPlacesSidebar   *sidebar,
                                                  GtkPlacesOpenFlags  open_flags);
 
-  void    (* show_starred_location)    (GtkPlacesSidebar   *sidebar);
+  void    (* show_starred_location)    (GtkPlacesSidebar   *sidebar,
+                                        GtkPlacesOpenFlags  open_flags);
 
   void    (* mount)                  (GtkPlacesSidebar   *sidebar,
                                       GMountOperation    *mount_operation);
