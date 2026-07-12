@@ -31,8 +31,8 @@
 #define WIDTH 300
 #define HEIGHT 50
 
-#define DEFAULT_CONFIG "#7f000040 throttle, #bbbbbb frame," \
-                       "#6600ff predicted, blue presentation, lime frametime"
+#define DEFAULT_CONFIG "#7f000040 end throttle, #bbbbbb start end," \
+                       "#6600ff predicted, blue presentation, lime frame"
 
 typedef struct _Time Time;
 
@@ -67,17 +67,12 @@ G_DEFINE_TYPE (GtkFrameTimeOverlay, gtk_frame_time_overlay, GTK_TYPE_INSPECTOR_O
 
 #define STAGE_FUNC(name, stage) \
 static uint64_t \
-frame_timings_get_ ## name ## _start (GdkFrameTimings *timings) \
-{ \
-  return gdk_frame_timings_get_end_time (timings, stage - 1); \
-}\
-\
-static uint64_t \
 frame_timings_get_ ## name ## _end (GdkFrameTimings *timings) \
 { \
   return gdk_frame_timings_get_end_time (timings, stage); \
 }\
 
+STAGE_FUNC (none, GDK_FRAME_STAGE_NONE)
 STAGE_FUNC (flush_events, GDK_FRAME_STAGE_FLUSH_EVENTS)
 STAGE_FUNC (before_paint, GDK_FRAME_STAGE_BEFORE_PAINT)
 STAGE_FUNC (update, GDK_FRAME_STAGE_UPDATE)
@@ -86,76 +81,38 @@ STAGE_FUNC (paint, GDK_FRAME_STAGE_PAINT)
 STAGE_FUNC (after_paint, GDK_FRAME_STAGE_AFTER_PAINT)
 STAGE_FUNC (resume_events, GDK_FRAME_STAGE_RESUME_EVENTS)
 
+typedef uint64_t (* GetTimeFunc) (GdkFrameTimings *timings);
+
 static const struct {
   const char *name;
-  uint64_t (* get_start_time) (GdkFrameTimings *timings);
-  uint64_t (* get_end_time) (GdkFrameTimings *timings);
+  GetTimeFunc get_time;
 } definitions[] = {
-  { "frametime", gdk_frame_timings_get_frame_time_ns, NULL },
-  { "presentation", gdk_frame_timings_get_presentation_time_ns, NULL },
-  { "predicted", gdk_frame_timings_get_predicted_presentation_time_ns, NULL },
-  { "frame", frame_timings_get_flush_events_start, frame_timings_get_resume_events_end },
-  { "flush-events", frame_timings_get_flush_events_start, frame_timings_get_flush_events_end },
-  { "before-paint", frame_timings_get_before_paint_start, frame_timings_get_before_paint_end },
-  { "update", frame_timings_get_update_start, frame_timings_get_update_end },
-  { "layout", frame_timings_get_layout_start, frame_timings_get_layout_end },
-  { "paint", frame_timings_get_paint_start, frame_timings_get_paint_end },
-  { "after-paint", frame_timings_get_after_paint_start, frame_timings_get_after_paint_end },
-  { "resume-events", frame_timings_get_resume_events_start, frame_timings_get_resume_events_end },
-  { "throttle", frame_timings_get_resume_events_end, gdk_frame_timings_get_throttling_hint },
+  { "frame", gdk_frame_timings_get_frame_time_ns },
+  { "presentation", gdk_frame_timings_get_presentation_time_ns },
+  { "predicted", gdk_frame_timings_get_predicted_presentation_time_ns },
+  { "start", frame_timings_get_none_end },
+  { "events", frame_timings_get_flush_events_end },
+  { "before-paint", frame_timings_get_before_paint_end },
+  { "update", frame_timings_get_update_end },
+  { "layout", frame_timings_get_layout_end },
+  { "paint", frame_timings_get_paint_end },
+  { "after-paint", frame_timings_get_after_paint_end },
+  { "end", frame_timings_get_resume_events_end },
+  { "throttle", gdk_frame_timings_get_throttling_hint },
 };
 
-static gboolean
-parse_definition (const char *name,
-                  Time       *time)
+static GetTimeFunc
+parse_definition (const char *name)
 {
-  gsize len = strlen (name);
   gsize i;
-  enum { START, END, ALL } type;
-
-  if (g_str_has_suffix (name, "-end"))
-    {
-      len -= strlen ("-end");
-      type = END;
-    }
-  else if (g_str_has_suffix (name, "-start"))
-    {
-      len -= strlen ("-start");
-      type = START;
-    }
-  else
-    type = ALL;
 
   for (i = 0; i < G_N_ELEMENTS (definitions); i++)
     {
-      if (g_ascii_strncasecmp (definitions[i].name, name, len) == 0 &&
-          definitions[i].name[len] == 0)
-        {
-          switch (type)
-            {
-            case START:
-              if (!definitions[i].get_end_time)
-                return FALSE;
-              time->get_start_time = definitions[i].get_start_time;
-              break;
-            case END:
-              if (!definitions[i].get_end_time)
-                return FALSE;
-              time->get_start_time = definitions[i].get_end_time;
-              break;
-            case ALL:
-              time->get_start_time = definitions[i].get_start_time;
-              time->get_end_time = definitions[i].get_end_time;
-              break;
-            default:
-              g_assert_not_reached ();
-              break;
-            }
-          return TRUE;
-        }
+      if (g_ascii_strcasecmp (definitions[i].name, name) == 0)
+        return definitions[i].get_time;
     }
 
-  return FALSE;
+  return NULL;
 }
 
 static Time *
@@ -170,11 +127,11 @@ parse_config (const char *definition,
   if (split == NULL)
     goto error;
 
-  times = g_new (Time, g_strv_length (split));
+  times = g_new0 (Time, g_strv_length (split));
   for (n = 0, i = 0; split[i] != NULL; i++)
     {
       char **tokens = g_strsplit_set (split[i], " \t\n\r", -1);
-      const char *color = NULL, *def = NULL;
+      const char *color = NULL, *def_start = NULL, *def_end = NULL;
 
       for (j = 0; tokens[j] != NULL; j++)
         {
@@ -182,8 +139,10 @@ parse_config (const char *definition,
             continue;
           else if (color == NULL)
             color = tokens[j];
-          else if (def == NULL)
-            def = tokens[j];
+          else if (def_start == NULL)
+            def_start = tokens[j];
+          else if (def_end == NULL)
+            def_end = tokens[j];
           else
             {
               g_strfreev (tokens);
@@ -191,9 +150,10 @@ parse_config (const char *definition,
             }
         }
 
-      if (color == NULL || def == NULL ||
+      if (color == NULL || def_start == NULL ||
           !gdk_rgba_parse (&times[n].color, color) ||
-          !parse_definition (def, &times[n]))
+          !(times[n].get_start_time = parse_definition (def_start)) ||
+          (def_end != NULL && !(times[n].get_end_time = parse_definition (def_end)))) 
         {
           g_strfreev (tokens);
           goto error;
