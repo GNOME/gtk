@@ -214,8 +214,7 @@ gdk_macos_drag_cancel (GdkDrag             *drag,
 }
 
 static void
-gdk_macos_drag_drop_performed (GdkDrag *drag,
-                               guint32  time)
+gdk_macos_drag_drop_performed (GdkDrag *drag)
 {
   GdkMacosDrag *self = (GdkMacosDrag *)drag;
 

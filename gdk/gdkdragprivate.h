@@ -34,8 +34,7 @@ struct _GdkDragClass {
   void        (*update_cursor)  (GdkDrag      *drag);
   void        (*cancel)         (GdkDrag      *drag,
                                  GdkDragCancelReason  reason);
-  void        (*drop_performed) (GdkDrag  *drag,
-                                 guint32          time);
+  void        (*drop_performed) (GdkDrag  *drag);
   void        (*dnd_finished)   (GdkDrag  *drag);
 
   gboolean    (*handle_event)   (GdkDrag  *drag,
