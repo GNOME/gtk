@@ -536,7 +536,10 @@ gdk_frame_timings_presented (GdkFrameTimings *self,
         if (self->presentation_time != presentation_time ||
             self->refresh_interval != refresh)
           {
-            g_warning_once ("Duplicate call to gdk_frame_timings_presented() with different values.");
+            int64_t time_diff = (int64_t) (presentation_time - self->presentation_time);
+            g_warning_once ("Duplicate call to gdk_frame_timings_presented() with different values: "
+                            "presentation time is %" PRId64 ".%" PRId64 "ms off from expected",
+                            time_diff / (1000 * 1000), (time_diff / 1000) % 1000);
           }
         return;
 
