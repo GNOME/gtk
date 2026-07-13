@@ -806,20 +806,34 @@ gdk_frame_clock_get_fps (GdkFrameClock *frame_clock)
   start_counter = _gdk_frame_clock_get_history_start (frame_clock);
   end_counter = _gdk_frame_clock_get_frame_counter (frame_clock);
   for (start = _gdk_frame_clock_get_timings (frame_clock, start_counter);
-       end_counter > start_counter && start != NULL && !gdk_frame_timings_get_complete (start);
+       end_counter > start_counter && start != NULL && gdk_frame_timings_get_presentation_time (start) == 0;
        start = _gdk_frame_clock_get_timings (frame_clock, start_counter))
     start_counter++;
   for (end = _gdk_frame_clock_get_timings (frame_clock, end_counter);
-       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
+       end_counter > start_counter && end != NULL && gdk_frame_timings_get_presentation_time (end) == 0;
        end = _gdk_frame_clock_get_timings (frame_clock, end_counter))
     end_counter--;
-  if (end_counter - start_counter < 4)
-    return 0.0;
-
-  start_timestamp = gdk_frame_timings_get_presentation_time (start);
-  end_timestamp = gdk_frame_timings_get_presentation_time (end);
-  if (start_timestamp == 0 || end_timestamp == 0)
+  if (end_counter - start_counter >= 4)
     {
+      start_timestamp = gdk_frame_timings_get_presentation_time (start);
+      end_timestamp = gdk_frame_timings_get_presentation_time (end);
+      g_assert (start_timestamp != 0);
+      g_assert (end_timestamp != 0);
+    }
+  else
+    {
+      start_counter = _gdk_frame_clock_get_history_start (frame_clock);
+      end_counter = _gdk_frame_clock_get_frame_counter (frame_clock);
+      for (start = _gdk_frame_clock_get_timings (frame_clock, start_counter);
+           end_counter > start_counter && start != NULL && gdk_frame_timings_get_frame_time (start) == 0;
+           start = _gdk_frame_clock_get_timings (frame_clock, start_counter))
+        start_counter++;
+      for (end = _gdk_frame_clock_get_timings (frame_clock, end_counter);
+           end_counter > start_counter && end != NULL && gdk_frame_timings_get_frame_time (end) == 0;
+           end = _gdk_frame_clock_get_timings (frame_clock, end_counter))
+        end_counter--;
+      if (end_counter - start_counter < 4)
+        return 0.0;
       start_timestamp = gdk_frame_timings_get_frame_time (start);
       end_timestamp = gdk_frame_timings_get_frame_time (end);
     }
