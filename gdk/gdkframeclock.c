@@ -30,9 +30,22 @@
 #include "gdkframetimingsprivate.h"
 #include "gdkprofilerprivate.h"
 
+#include <math.h>
+
 #ifdef G_OS_WIN32
 #include <windows.h>
 #endif
+
+/* expected presentation time is computed by this formula:
+ * priv->expected_delay = PRESENTATION_DELAY_KEEP * priv->expected_delay
+ *                      + PRESENTATION_DELAY_REPLACE * latest_delay
+ */
+#define PRESENTATION_DELAY_KEEP 5
+#define PRESENTATION_DELAY_REPLACE 3
+/* The expected delay can never grow larger than this many refresh cycles.
+ * We assume those are caused by frame drops, not by normal operations.
+ */
+#define PRESENTATION_DELAY_MAX_FRAMES 5
 
 /**
  * GdkFrameClock:
@@ -106,6 +119,7 @@ struct _GdkFrameClockPrivate
   Timings timings;
   uint64_t latest_presentation_time;
   uint64_t latest_refresh_interval;
+  uint64_t expected_presentation_delay;
   uint64_t frame_time;
 
   GdkFrameClockPhase requested;
@@ -125,24 +139,30 @@ gdk_frame_clock_default_predict_presentation_time (GdkFrameClock *self,
                                                    uint64_t       now)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  uint64_t predicted;
 
-  if (priv->latest_presentation_time != 0)
+  if (priv->expected_presentation_delay != 0)
+    predicted = now + priv->expected_presentation_delay;
+  else
+    predicted = now + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
+
+  if (priv->latest_presentation_time)
     {
-      if (priv->latest_presentation_time < now)
+      if (priv->latest_presentation_time < predicted)
         {
-          uint64_t n_frames;
-          n_frames = (now - priv->latest_presentation_time) / priv->latest_refresh_interval + 1;
-          return priv->latest_presentation_time + n_frames * priv->latest_refresh_interval;
+          double n_frames;
+          n_frames = (double) (predicted - priv->latest_presentation_time) / priv->latest_refresh_interval;
+          n_frames = round (n_frames);
+          n_frames = MAX (n_frames, 1);
+          predicted = priv->latest_presentation_time + ((guint) n_frames) * priv->latest_refresh_interval;
         }
       else
         {
-          return priv->latest_presentation_time + priv->latest_refresh_interval;
+          predicted = priv->latest_presentation_time + priv->latest_refresh_interval;
         }
     }
-  else
-    {
-      return now + priv->latest_refresh_interval + priv->latest_refresh_interval / 2;
-    }
+
+  return predicted;
 }
 
 static void
@@ -981,14 +1001,35 @@ gdk_frame_clock_presented (GdkFrameClock *self,
 
   g_return_if_fail (presentation_time != 0);
 
+  timings = gdk_frame_clock_get_timings (self, frame_counter);
+
   if (presentation_time > priv->latest_presentation_time)
     {
       priv->latest_presentation_time = presentation_time;
       if (refresh)
         priv->latest_refresh_interval = refresh;
+
+      if (timings != NULL)
+        {
+          uint64_t delay;
+
+          delay = presentation_time - gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_BEFORE_PAINT);
+          if (refresh)
+              delay = MIN (PRESENTATION_DELAY_MAX_FRAMES * refresh, delay);
+
+          if (priv->expected_presentation_delay == 0)
+            {
+              priv->expected_presentation_delay = delay;
+            }
+          else
+            {
+              priv->expected_presentation_delay = (PRESENTATION_DELAY_KEEP * priv->expected_presentation_delay
+                                                   + PRESENTATION_DELAY_REPLACE * delay)
+                                                  / (PRESENTATION_DELAY_KEEP + PRESENTATION_DELAY_REPLACE);
+            }
+        }
     }
 
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
   if (timings == NULL)
     return;
 
