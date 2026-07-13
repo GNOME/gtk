@@ -786,40 +786,6 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
     }
 }
 
-static gint64
-guess_refresh_interval (GdkFrameClock *frame_clock)
-{
-  gint64 interval;
-  gint64 i;
-
-  interval = G_MAXINT64;
-
-  for (i = _gdk_frame_clock_get_history_start (frame_clock);
-       i < _gdk_frame_clock_get_frame_counter (frame_clock);
-       i++)
-    {
-      GdkFrameTimings *t, *before;
-      gint64 ts, before_ts;
-
-      t = _gdk_frame_clock_get_timings (frame_clock, i);
-      before = _gdk_frame_clock_get_timings (frame_clock, i - 1);
-      if (t == NULL || before == NULL)
-        continue;
-
-      ts = gdk_frame_timings_get_frame_time (t);
-      before_ts = gdk_frame_timings_get_frame_time (before);
-      if (ts == 0 || before_ts == 0)
-        continue;
-
-      interval = MIN (interval, ts - before_ts);
-    }
-
-  if (interval == G_MAXINT64)
-    return 0;
-
-  return interval;
-}
-
 /**
  * gdk_frame_clock_get_fps:
  * @frame_clock: a `GdkFrameClock`
@@ -857,13 +823,10 @@ gdk_frame_clock_get_fps (GdkFrameClock *frame_clock)
       start_timestamp = gdk_frame_timings_get_frame_time (start);
       end_timestamp = gdk_frame_timings_get_frame_time (end);
     }
+
   interval = gdk_frame_timings_get_refresh_interval (end);
   if (interval == 0)
-    {
-      interval = guess_refresh_interval (frame_clock);
-      if (interval == 0)
-        return 0.0;
-    }
+    interval = (gdk_frame_clock_get_refresh_interval (frame_clock) + 500) / 1000;
 
   return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
 }
