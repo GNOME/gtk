@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-03-09 17:00+0000\n"
-"PO-Revision-Date: 2026-03-11 08:25+0100\n"
+"POT-Creation-Date: 2026-06-25 16:39+0000\n"
+"PO-Revision-Date: 2026-07-13 13:46+0200\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -282,12 +282,12 @@ msgstr "Bas"
 #: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page haut"
+msgstr "Page_précédente"
 
 #: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page bas"
+msgstr "Page_suivante"
 
 #: gdk/keynamesprivate.h:6876
 msgctxt "keyboard label"
@@ -358,7 +358,7 @@ msgstr "Bas (pavé num.)"
 #: gdk/keynamesprivate.h:6890
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Page haut (pavé num.)"
+msgstr "Page précédente (pavé num.)"
 
 #: gdk/keynamesprivate.h:6891
 msgctxt "keyboard label"
@@ -368,7 +368,7 @@ msgstr "Précédent (pavé num.)"
 #: gdk/keynamesprivate.h:6892
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "Page bas (pavé num.)"
+msgstr "Page suivante (pavé num.)"
 
 #: gdk/keynamesprivate.h:6893
 msgctxt "keyboard label"
@@ -2402,7 +2402,7 @@ msgstr "Sélectionne les types de fichiers à afficher"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserutils.c:365
+#: gtk/gtkfilechooserutils.c:364
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s sur %2$s"
@@ -4163,9 +4163,9 @@ msgstr ""
 "La raison la plus probable est qu’un fichier temporaire n’a pas pu être créé."
 
 #. window
-#: gtk/print/gtkprintoperation-portal.c:273
-#: gtk/print/gtkprintoperation-portal.c:617
-#: gtk/print/gtkprintoperation-portal.c:686 gtk/print/gtkprintunixdialog.c:2992
+#: gtk/print/gtkprintoperation-portal.c:287
+#: gtk/print/gtkprintoperation-portal.c:634
+#: gtk/print/gtkprintoperation-portal.c:703 gtk/print/gtkprintunixdialog.c:2992
 msgid "Print"
 msgstr "Imprimer"
 
