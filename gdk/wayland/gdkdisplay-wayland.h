@@ -27,6 +27,7 @@
 #include <wayland-client.h>
 #include <wayland-egl.h>
 #include <gdk/wayland/tablet-v2-client-protocol.h>
+#include <gdk/wayland/ext-background-effect-v1-client-protocol.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-unstable-v6-client-protocol.h>
@@ -134,6 +135,7 @@ struct _GdkWaylandDisplay
   struct xdg_toplevel_icon_manager_v1 *toplevel_icon;
   struct xdg_session_manager_v1 *session_manager;
   struct xdg_session_v1 *session;
+  struct ext_background_effect_manager_v1 *ext_background_effect_manager;
 
   GdkWaylandColor *color;
 

@@ -98,6 +98,7 @@
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
 #define ACTIVATION_VERSION              1
+#define BACKGROUND_EFFECT_VERSION       1
 #define COMPOSITOR_VERSION              6
 #define CURSOR_SHAPE_VERSION            2
 #define DATA_DEVICE_MANAGER_VERSION     3
@@ -750,6 +751,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->wl_fixes =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wl_fixes_interface, MIN (version, WL_FIXES_VERSION));
+    }
+  else if (match_global (display_wayland, interface, version, ext_background_effect_manager_v1_interface.name, 0))
+    {
+      display_wayland->ext_background_effect_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &ext_background_effect_manager_v1_interface, BACKGROUND_EFFECT_VERSION);
     }
 
   g_hash_table_insert (display_wayland->known_globals,
