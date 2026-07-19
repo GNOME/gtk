@@ -97,37 +97,35 @@
 
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
+#define ACTIVATION_VERSION              1
 #define COMPOSITOR_VERSION              6
-#define SHM_VERSION                     1
-#define LINUX_DMABUF_MIN_VERSION        4
-#define LINUX_DMABUF_VERSION            5
+#define CURSOR_SHAPE_VERSION            2
 #define DATA_DEVICE_MANAGER_VERSION     3
-#define SUBCOMPOSITOR_VERSION           1
-#define SEAT_VERSION                    10
-#define POINTER_GESTURES_VERSION        3
-#define PRIMARY_SELECTION_VERSION       1
-#define OUTPUT_MIN_VERSION              2
-#define OUTPUT_VERSION                  4
-#define XDG_OUTPUT_MIN_VERSION          3
-#define XDG_OUTPUT_VERSION              3
-#define TABLET_VERSION                  2
 #define EXPORTER_V1_VERSION             1
 #define EXPORTER_V2_VERSION             1
+#define FRACTIONAL_SCALE_VERSION        1
+#define GTK_SHELL1_VERSION              7
+#define IDLE_INHIBIT_VERSION            1
 #define IMPORTER_V1_VERSION             1
 #define IMPORTER_V2_VERSION             1
-#define SHORTCUTS_INHIBIT_VERSION       1
-#define SERVER_DECORATION_VERSION       1
-#define XDG_OUTPUT_VERSION              3
-#define IDLE_INHIBIT_VERSION            1
-#define ACTIVATION_VERSION              1
-#define FRACTIONAL_SCALE_VERSION        1
-#define VIEWPORTER_VERSION              1
+#define LINUX_DMABUF_MIN_VERSION        4
+#define LINUX_DMABUF_VERSION            5
+#define OUTPUT_MIN_VERSION              2
+#define OUTPUT_VERSION                  4
+#define POINTER_GESTURES_VERSION        3
 #define PRESENTATION_VERSION            1
+#define PRIMARY_SELECTION_VERSION       1
+#define SEAT_VERSION                    10
+#define SERVER_DECORATION_VERSION       1
+#define SHM_VERSION                     1
+#define SHORTCUTS_INHIBIT_VERSION       1
 #define SINGLE_PIXEL_BUFFER_VERSION     1
 #define SYSTEM_BELL_VERSION             1
-#define CURSOR_SHAPE_VERSION            2
-#define GTK_SHELL1_VERSION              7
-#define XDG_WM_DIALOG_VERSION           1
+#define SUBCOMPOSITOR_VERSION           1
+#define TABLET_VERSION                  2
+#define VIEWPORTER_VERSION              1
+#define XDG_OUTPUT_MIN_VERSION          3
+#define XDG_OUTPUT_VERSION              3
 #define XDG_TOPLEVEL_ICON_VERSION       1
 #define XDG_WM_BASE_VERSION             7
 #ifdef WL_FIXES_ACK_GLOBAL_REMOVE
@@ -135,6 +133,7 @@
 #else
 #define WL_FIXES_VERSION                1
 #endif
+#define XDG_WM_DIALOG_VERSION           1
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
