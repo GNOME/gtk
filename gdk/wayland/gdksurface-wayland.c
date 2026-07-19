@@ -59,6 +59,7 @@
 #include "gdkdmabuffourccprivate.h"
 
 #include "gsk/gskrectprivate.h"
+#include "gsk/gskblurutilsprivate.h"
 
 /**
  * GdkWaylandSurface:
@@ -761,6 +762,27 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_color_state (surface);
   gdk_wayland_surface_sync_viewport (surface);
   gdk_wayland_surface_sync_background_effect (surface);
+}
+
+void
+gdk_wayland_surface_update_content (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+  GskRenderNode *content;
+
+  content = gdk_surface_get_content (surface);
+
+  if (self->display_server.background_effect)
+    {
+      cairo_region_t *blur = gsk_render_node_compute_background_blur (content);
+
+      self->background_effect_dirty = (blur == NULL && self->background_blur != NULL) ||
+                                      (blur != NULL && self->background_blur == NULL) ||
+                                      (blur != NULL && self->background_blur != NULL &&
+                                       !cairo_region_equal (blur, self->background_blur));
+      g_clear_pointer (&self->background_blur, cairo_region_destroy);
+      self->background_blur = blur;
+    }
 }
 
 static gboolean

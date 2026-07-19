@@ -127,6 +127,7 @@ void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
 void gdk_wayland_surface_frame_callback (GdkSurface *surface,
                                          uint32_t    time);
 
+void            gdk_wayland_surface_update_content         (GdkSurface           *surface);
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
 void            gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface);
 void            gdk_wayland_surface_commit                 (GdkSurface           *surface);

@@ -71,6 +71,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   impl->pending_buffer_offset_x = 0;
   impl->pending_buffer_offset_y = 0;
 
+  gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
