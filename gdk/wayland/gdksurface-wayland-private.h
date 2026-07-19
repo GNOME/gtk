@@ -35,6 +35,7 @@ struct _GdkWaylandSurface
     struct zxdg_surface_v6 *zxdg_surface_v6;
     struct wp_fractional_scale_v1 *fractional_scale;
     struct wp_viewport *viewport;
+    struct ext_background_effect_surface_v1 *background_effect;
     GdkWaylandColorSurface *color;
   } display_server;
 
@@ -69,6 +70,9 @@ struct _GdkWaylandSurface
 
   cairo_region_t *input_region;
   gboolean input_region_dirty;
+
+  cairo_region_t *background_blur;
+  gboolean background_effect_dirty;
 
   GdkRectangle last_sent_window_geometry;
 

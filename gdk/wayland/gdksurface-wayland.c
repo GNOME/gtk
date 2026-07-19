@@ -551,6 +551,7 @@ gdk_wayland_surface_finalize (GObject *object)
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
+  g_clear_pointer (&impl->background_blur, cairo_region_destroy);
 
   G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->finalize (object);
 }
@@ -698,6 +699,29 @@ gdk_wayland_surface_sync_viewport (GdkSurface *surface)
 }
 
 static void
+gdk_wayland_surface_sync_background_effect (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  struct wl_region *wl_region;
+
+  if (!self->display_server.background_effect)
+    return;
+
+  if (!self->background_effect_dirty)
+    return;
+
+  if (self->background_blur)
+    wl_region = wl_region_from_cairo_region (display, self->background_blur);
+  else
+    wl_region = NULL;
+  ext_background_effect_surface_v1_set_blur_region (self->display_server.background_effect, wl_region);
+  g_clear_pointer (&wl_region, wl_region_destroy);
+
+  self->background_effect_dirty = FALSE;
+}
+
+static void
 gdk_wayland_surface_sync_color_state (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -736,6 +760,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_buffer_scale (surface);
   gdk_wayland_surface_sync_color_state (surface);
   gdk_wayland_surface_sync_viewport (surface);
+  gdk_wayland_surface_sync_background_effect (surface);
 }
 
 static gboolean
@@ -748,7 +773,8 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->input_region_dirty ||
          self->buffer_scale_dirty ||
          self->color_state_changed ||
-         self->viewport_dirty;
+         self->viewport_dirty ||
+         self->background_effect_dirty;
 }
 
 void
@@ -911,6 +937,11 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
                                                               preferred_changed,
                                                               self);
 
+  if (display_wayland->ext_background_effect_manager)
+    {
+      self->display_server.background_effect = ext_background_effect_manager_v1_get_background_effect (display_wayland->ext_background_effect_manager, wl_surface); /* It's a good thing the wayland people care about short protocol names so that there's no need for line breaking even if one decides to add an informative comment. */
+    }
+
   self->display_server.wl_surface = wl_surface;
 }
 
@@ -942,6 +973,7 @@ gdk_wayland_surface_constructed (GObject *object)
 static void
 gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 {
+  g_clear_pointer (&self->display_server.background_effect, ext_background_effect_surface_v1_destroy);
   g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
   g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
   g_clear_pointer (&self->display_server.color, gdk_wayland_color_surface_free);
