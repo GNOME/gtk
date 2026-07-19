@@ -1,0 +1,344 @@
+/* GSK - The GTK Scene Kit
+ *
+ * Copyright 2026  Benjamin Otte
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include "gskblurutilsprivate.h"
+
+#include <gsk/gsk.h>
+
+#include "gskrectprivate.h"
+#include "gskrendernodeprivate.h"
+
+#define BACKGROUND_BLUR_THRESHOLD 20.0
+
+typedef struct {
+  cairo_region_t *unblurred_bg;
+  cairo_region_t *blurred_bg;
+} Render;
+
+static void
+render_clear (Render *render)
+{
+  g_clear_pointer (&render->unblurred_bg, cairo_region_destroy);
+  g_clear_pointer (&render->blurred_bg, cairo_region_destroy);
+}
+
+static void
+render_copy (Render *dest,
+             Render *src)
+{
+  if (src->unblurred_bg)
+    dest->unblurred_bg = cairo_region_copy (src->unblurred_bg);
+  else
+    dest->unblurred_bg = NULL;
+
+  if (src->blurred_bg)
+    dest->blurred_bg = cairo_region_copy (src->blurred_bg);
+  else
+    dest->blurred_bg = NULL;
+}
+
+static void
+render_clip_rect (Render                *render,
+                  cairo_rectangle_int_t *rect)
+{
+  if (render->unblurred_bg)
+    cairo_region_intersect_rectangle (render->unblurred_bg, rect);
+  if (render->blurred_bg)
+    cairo_region_intersect_rectangle (render->blurred_bg, rect);
+}
+
+static void
+render_subtract_rect (Render                *render,
+                      cairo_rectangle_int_t *rect)
+{
+  if (render->unblurred_bg)
+    cairo_region_subtract_rectangle (render->unblurred_bg, rect);
+  if (render->blurred_bg)
+    cairo_region_subtract_rectangle (render->blurred_bg, rect);
+}
+
+static void
+render_merge (Render *render,
+              Render *child)
+{
+  if (child->unblurred_bg)
+    {
+      if (render->unblurred_bg)
+        cairo_region_union (render->unblurred_bg, child->unblurred_bg);
+      else
+        render->unblurred_bg = cairo_region_copy (child->unblurred_bg);
+      if (render->blurred_bg)
+        cairo_region_subtract (render->blurred_bg, child->unblurred_bg);
+    }
+  if (child->blurred_bg)
+    {
+      if (render->unblurred_bg)
+        cairo_region_subtract (render->unblurred_bg, child->blurred_bg);
+      if (render->blurred_bg)
+        cairo_region_union (render->blurred_bg, child->blurred_bg);
+      else
+        render->blurred_bg = cairo_region_copy (child->blurred_bg);
+    }
+}
+
+static void
+compute_background_blur (GskRenderNode *node,
+                         Render        *render,
+                         GSList         *copies);
+
+static void
+compute_isolation_node_blur (GskRenderNode *node,
+                             Render        *render,
+                             GSList        *copies)
+{
+  GskIsolation isolations;
+  GskRenderNode *child;
+
+  isolations = gsk_isolation_node_get_isolations (node);
+  child = gsk_isolation_node_get_child (node);
+
+  if (isolations & GSK_ISOLATION_COPY_PASTE)
+    copies = NULL;
+
+  if (isolations & GSK_ISOLATION_BACKGROUND)
+    {
+      Render child_render = { NULL, NULL };
+      compute_background_blur (child, &child_render, copies);
+      render_merge (render, &child_render);
+      render_clear (&child_render);
+    }
+  else
+    {
+      compute_background_blur (child, render, copies);
+    }
+}
+
+static void
+compute_copy_node_blur (GskRenderNode *node,
+                        Render        *render,
+                        GSList        *copies)
+{
+  Render copy_render = {
+    .unblurred_bg = render->unblurred_bg ? cairo_region_copy (render->unblurred_bg) : NULL,
+    .blurred_bg = render->blurred_bg ? cairo_region_copy (render->blurred_bg) : NULL,
+  };
+  GSList copy = { &copy_render, copies };
+
+  compute_background_blur (gsk_copy_node_get_child (node), render, &copy);
+
+  render_clear (&copy_render);
+}
+
+static void
+compute_paste_node_blur (GskRenderNode *node,
+                         Render        *render,
+                         GSList        *copies)
+{
+  GSList *copy;
+  Render paste;
+  graphene_rect_t bounds;
+  cairo_rectangle_int_t clip;
+
+  copy = g_slist_nth (copies, gsk_paste_node_get_depth (node));
+  if (copy == NULL)
+    return;
+
+  render_copy (&paste, copy->data);
+
+  gsk_render_node_get_bounds (node, &bounds);
+  gsk_rect_to_cairo_grow (&bounds, &clip);
+  render_clip_rect (&paste, &clip);
+  
+  render_merge (render, &paste);
+  render_clear (&paste);
+}
+
+static void
+compute_blur_node_blur (GskRenderNode *node,
+                        Render        *render,
+                        GSList        *copies)
+{
+  Render child_render = { NULL, };
+
+  compute_background_blur (gsk_blur_node_get_child (node), &child_render, copies);
+
+  if (gsk_blur_node_get_radius (node) >= BACKGROUND_BLUR_THRESHOLD)
+    {
+      if (child_render.unblurred_bg)
+        {
+          if (child_render.blurred_bg)
+            {
+              cairo_region_union (child_render.blurred_bg, child_render.unblurred_bg);
+              g_clear_pointer (&child_render.unblurred_bg, cairo_region_destroy);
+            }
+          else
+            {
+              child_render.blurred_bg = g_steal_pointer (&child_render.unblurred_bg);
+            }
+        }
+    }
+  render_merge (render, &child_render);
+  render_clear (&child_render);
+}
+
+static void
+compute_clip_node_blur (GskRenderNode *node,
+                        Render        *render,
+                        GSList        *copies)
+{
+  Render child_render;
+  cairo_rectangle_int_t clip;
+
+  render_copy (&child_render, render);
+  compute_background_blur (gsk_clip_node_get_child (node), &child_render, copies);
+
+  gsk_rect_to_cairo_grow (gsk_clip_node_get_clip (node), &clip);
+  render_clip_rect (&child_render, &clip);
+  render_subtract_rect (render, &clip);
+  render_merge (render, &child_render);
+  render_clear (&child_render);
+}
+
+static void
+compute_rounded_clip_node_blur (GskRenderNode *node,
+                                Render        *render,
+                                GSList        *copies)
+{
+  Render child_render;
+  cairo_rectangle_int_t clip;
+
+  render_copy (&child_render, render);
+  compute_background_blur (gsk_rounded_clip_node_get_child (node), &child_render, copies);
+
+  gsk_rect_to_cairo_grow (&gsk_rounded_clip_node_get_clip (node)->bounds, &clip);
+  render_clip_rect (&child_render, &clip);
+  render_subtract_rect (render, &clip);
+  render_merge (render, &child_render);
+  render_clear (&child_render);
+}
+
+static void
+compute_background_blur (GskRenderNode *node,
+                         Render        *render,
+                         GSList        *copies)
+{
+  GskRenderNode **children;
+  gsize i, n_children;
+
+  switch (gsk_render_node_get_node_type (node))
+  {
+    case GSK_ISOLATION_NODE:
+      compute_isolation_node_blur (node, render, copies);
+      break;
+
+    case GSK_COPY_NODE:
+      compute_copy_node_blur (node, render, copies);
+      break;
+
+    case GSK_PASTE_NODE:
+      compute_paste_node_blur (node, render, copies);
+      break;
+
+    case GSK_BLUR_NODE:
+      compute_blur_node_blur (node, render, copies);
+      break;
+
+    case GSK_CLIP_NODE:
+      compute_clip_node_blur (node, render, copies);
+      break;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      compute_rounded_clip_node_blur (node, render, copies);
+      break;
+
+    case GSK_TRANSFORM_NODE:
+    case GSK_CONTAINER_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_COMPONENT_TRANSFER_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_TEXTURE_SCALE_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_GL_SHADER_NODE:
+    case GSK_MASK_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_FILL_NODE:
+    case GSK_STROKE_NODE:
+    case GSK_SUBSURFACE_NODE:
+    case GSK_COMPOSITE_NODE:
+    case GSK_DISPLACEMENT_NODE:
+    case GSK_ARITHMETIC_NODE:
+    case GSK_TURBULENCE_NODE:
+      children = gsk_render_node_get_children (node, &n_children);
+      for (i = 0; i < n_children; i++)
+        {
+          if (gsk_render_node_isolates_background (node))
+            {
+              Render child_render = { NULL, NULL };
+              compute_background_blur (children[i], &child_render, copies);
+              render_merge (render, &child_render);
+              render_clear (&child_render);
+            }
+          else
+            {
+              compute_background_blur (children[i], render, copies);
+            }
+        }
+      break;
+
+    case GSK_NOT_A_RENDER_NODE:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
+cairo_region_t *
+gsk_render_node_compute_background_blur (GskRenderNode *node)
+{
+  Render render;
+  graphene_rect_t bounds;
+  cairo_rectangle_int_t cairo_bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  gsk_rect_to_cairo_grow (&bounds, &cairo_bounds);
+  render.blurred_bg = NULL;
+  render.unblurred_bg = cairo_region_create_rectangle (&cairo_bounds);
+
+  compute_background_blur (node, &render, NULL);
+
+  cairo_region_destroy (render.unblurred_bg);
+  
+  return render.blurred_bg;
+}
