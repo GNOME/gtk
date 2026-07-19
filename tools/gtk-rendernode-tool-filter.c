@@ -96,6 +96,11 @@ struct _Filter
 
 static const Filter filters[] = {
   {
+    .name = "background-blur",
+    .description = "Show where background blur would take effect",
+    .run = filter_background_blur,
+  },
+  {
     .name = "copypaste",
     .description = "Replace copy/paste nodes with copies of nodes",
     .run = filter_copypaste,
