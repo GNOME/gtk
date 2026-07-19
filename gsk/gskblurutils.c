@@ -24,6 +24,7 @@
 
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
+#include "gskroundedrectprivate.h"
 
 #define BACKGROUND_BLUR_THRESHOLD 20.0
 
@@ -55,6 +56,16 @@ render_copy (Render *dest,
 }
 
 static void
+render_clip_region (Render               *render,
+                    const cairo_region_t *region)
+{
+  if (render->unblurred_bg)
+    cairo_region_intersect (render->unblurred_bg, region);
+  if (render->blurred_bg)
+    cairo_region_intersect (render->blurred_bg, region);
+}
+
+static void
 render_clip_rect (Render                *render,
                   cairo_rectangle_int_t *rect)
 {
@@ -62,6 +73,16 @@ render_clip_rect (Render                *render,
     cairo_region_intersect_rectangle (render->unblurred_bg, rect);
   if (render->blurred_bg)
     cairo_region_intersect_rectangle (render->blurred_bg, rect);
+}
+
+static void
+render_subtract_region (Render               *render,
+                        const cairo_region_t *region)
+{
+  if (render->unblurred_bg)
+    cairo_region_subtract (render->unblurred_bg, region);
+  if (render->blurred_bg)
+    cairo_region_subtract (render->blurred_bg, region);
 }
 
 static void
@@ -96,6 +117,94 @@ render_merge (Render *render,
       else
         render->blurred_bg = cairo_region_copy (child->blurred_bg);
     }
+}
+
+/*<private>
+ * region_create_from_bitmap:
+ * @data: bitmap data
+ * @width: width of the bitmap
+ * @height: height of the bitmap
+ * @stride: stride of the bitmap
+ *
+ * Creates region for the given bitmap.
+ *
+ * Returns: (transfer full): a #cairo_region_t
+ */
+static cairo_region_t *
+region_create_from_bitmap (const guchar *data,
+                           gsize         width,
+                           gsize         height,
+                           gsize         stride)
+{
+  cairo_region_t *region;
+  GdkRectangle rect;
+  gsize x, y;
+
+  region = cairo_region_create ();
+
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          /* Search for a continuous range of "non transparent pixels"*/
+          gint x0 = x;
+          while (x < width)
+            {
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+              if (((data[x / 8] >> (x%8)) & 1) == 0)
+#else
+              if (((data[x / 8] >> (7-(x%8))) & 1) == 0)
+#endif
+                /* This pixel is "transparent"*/
+                break;
+              x++;
+            }
+
+          if (x > x0)
+            {
+              /* Add the pixels (x0, y) to (x, y+1) as a new rectangle
+               * in the region
+               */
+              rect.x = x0;
+              rect.width = x - x0;
+              rect.y = y;
+              rect.height = 1;
+
+              cairo_region_union_rectangle (region, &rect);
+            }
+        }
+      data += stride;
+    }
+
+  return region;
+}
+
+static cairo_region_t *
+region_create_for_rounded_rect (const GskRoundedRect *rect)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  cairo_rectangle_int_t clip;
+  cairo_region_t *result;
+
+  gsk_rect_to_cairo_grow (&rect->bounds, &clip);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_A1, clip.width, clip.height);
+  cr = cairo_create (surface);
+  cairo_translate (cr, - clip.x, - clip.y);
+  gsk_rounded_rect_path (rect, cr);
+  cairo_fill (cr);
+  cairo_destroy (cr);
+
+  cairo_surface_flush (surface);
+
+  result = region_create_from_bitmap (cairo_image_surface_get_data (surface),
+                                      clip.width, clip.height,
+                                      cairo_image_surface_get_stride (surface));
+  cairo_surface_destroy (surface);
+
+  cairo_region_translate (result, clip.x, clip.y);
+
+  return result;
 }
 
 static void
@@ -222,16 +331,18 @@ compute_rounded_clip_node_blur (GskRenderNode *node,
                                 GSList        *copies)
 {
   Render child_render;
-  cairo_rectangle_int_t clip;
+  cairo_region_t *clip;
 
   render_copy (&child_render, render);
   compute_background_blur (gsk_rounded_clip_node_get_child (node), &child_render, copies);
 
-  gsk_rect_to_cairo_grow (&gsk_rounded_clip_node_get_clip (node)->bounds, &clip);
-  render_clip_rect (&child_render, &clip);
-  render_subtract_rect (render, &clip);
+  clip = region_create_for_rounded_rect (gsk_rounded_clip_node_get_clip (node));
+
+  render_clip_region (&child_render, clip);
+  render_subtract_region (render, clip);
   render_merge (render, &child_render);
   render_clear (&child_render);
+  cairo_region_destroy (clip);
 }
 
 static void
