@@ -106,6 +106,11 @@ static const Filter filters[] = {
     .run = filter_cut,
   },
   {
+    .name = "diff",
+    .description = "Show where two nodes differ",
+    .run = filter_diff,
+  },
+  {
     .name = "opaque",
     .description = "Show the opaque part",
     .run = filter_opaque,
