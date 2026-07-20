@@ -3,6 +3,7 @@
 #include "gskgputransformprivate.h"
 
 #include "gskrectprivate.h"
+#include "gskroundedrectprivate.h"
 
 void
 gsk_gpu_transform_init (GskGpuTransform        *self,
@@ -92,6 +93,22 @@ gsk_gpu_transform_transform_rect (const GskGpuTransform *self,
                             rect->size.width * self->scale.width,
                             rect->size.height * self->scale.height);
   gsk_rect_dihedral (&tmp, self->dihedral, result);
+}
+
+void
+gsk_gpu_transform_transform_rounded_rect (const GskGpuTransform *self,
+                                          const GskRoundedRect  *rect,
+                                          GskRoundedRect        *result)
+{
+  GskRoundedRect tmp;
+
+  gsk_rounded_rect_scale_affine (&tmp,
+                                 rect,
+                                 self->scale.width,
+                                 self->scale.height,
+                                 self->offset.x,
+                                 self->offset.y);
+  gsk_rounded_rect_dihedral (result, &tmp, self->dihedral);
 }
 
 void

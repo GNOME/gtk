@@ -37,6 +37,9 @@ void                    gsk_gpu_transform_transform_rect        (const GskGpuTra
 void                    gsk_gpu_transform_invert_rect           (const GskGpuTransform  *self,
                                                                  const graphene_rect_t  *rect,
                                                                  graphene_rect_t        *result);
+void                    gsk_gpu_transform_transform_rounded_rect (const GskGpuTransform *self,
+                                                                  const GskRoundedRect  *rect,
+                                                                  GskRoundedRect        *result);
 
 G_END_DECLS
 

@@ -22,6 +22,7 @@
 
 #include <gsk/gsk.h>
 
+#include "gpu/gskgputransformprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
@@ -29,6 +30,8 @@
 #define BACKGROUND_BLUR_THRESHOLD 20.0
 
 typedef struct {
+  GskGpuTransform transform;
+  /* these are in device pixels */
   cairo_region_t *unblurred_bg;
   cairo_region_t *blurred_bg;
 } Render;
@@ -44,6 +47,8 @@ static void
 render_copy (Render *dest,
              Render *src)
 {
+  dest->transform = src->transform;
+
   if (src->unblurred_bg)
     dest->unblurred_bg = cairo_region_copy (src->unblurred_bg);
   else
@@ -228,7 +233,7 @@ compute_isolation_node_blur (GskRenderNode *node,
 
   if (isolations & GSK_ISOLATION_BACKGROUND)
     {
-      Render child_render = { NULL, NULL };
+      Render child_render = { render->transform, NULL, NULL };
       compute_background_blur (child, &child_render, copies);
       render_merge (render, &child_render);
       render_clear (&child_render);
@@ -245,6 +250,7 @@ compute_copy_node_blur (GskRenderNode *node,
                         GSList        *copies)
 {
   Render copy_render = {
+    .transform = GSK_GPU_TRANSFORM_IDENTITY,
     .unblurred_bg = render->unblurred_bg ? cairo_region_copy (render->unblurred_bg) : NULL,
     .blurred_bg = render->blurred_bg ? cairo_region_copy (render->blurred_bg) : NULL,
   };
@@ -272,6 +278,11 @@ compute_paste_node_blur (GskRenderNode *node,
   render_copy (&paste, copy->data);
 
   gsk_render_node_get_bounds (node, &bounds);
+  gsk_gpu_transform_transform_rect (&render->transform,
+                                    &bounds,
+                                    &bounds);
+  if (!gsk_rect_snap (&bounds, gsk_paste_node_get_snap (node), &bounds))
+    return;
   gsk_rect_to_cairo_grow (&bounds, &clip);
   render_clip_rect (&paste, &clip);
   
@@ -284,7 +295,7 @@ compute_blur_node_blur (GskRenderNode *node,
                         Render        *render,
                         GSList        *copies)
 {
-  Render child_render = { NULL, };
+  Render child_render = { render->transform, NULL, };
 
   compute_background_blur (gsk_blur_node_get_child (node), &child_render, copies);
 
@@ -308,17 +319,42 @@ compute_blur_node_blur (GskRenderNode *node,
 }
 
 static void
+compute_transform_node_blur (GskRenderNode *node,
+                             Render        *render,
+                             GSList        *copies)
+{
+  GskGpuTransform save;
+
+  save = render->transform;
+
+  /* give up if the transform cannot be represented */
+  if (!gsk_gpu_transform_transform (&render->transform, gsk_transform_node_get_transform (node)))
+    return;
+
+  compute_background_blur (gsk_transform_node_get_child (node), render, copies);
+  
+  render->transform = save;
+}
+
+static void
 compute_clip_node_blur (GskRenderNode *node,
                         Render        *render,
                         GSList        *copies)
 {
   Render child_render;
+  graphene_rect_t transformed;
   cairo_rectangle_int_t clip;
 
   render_copy (&child_render, render);
   compute_background_blur (gsk_clip_node_get_child (node), &child_render, copies);
 
-  gsk_rect_to_cairo_grow (gsk_clip_node_get_clip (node), &clip);
+  gsk_gpu_transform_transform_rect (&render->transform,
+                                    gsk_clip_node_get_clip (node),
+                                    &transformed);
+  if (!gsk_rect_snap (&transformed, gsk_clip_node_get_snap (node), &transformed))
+    return;
+
+  gsk_rect_to_cairo_grow (&transformed, &clip);
   render_clip_rect (&child_render, &clip);
   render_subtract_rect (render, &clip);
   render_merge (render, &child_render);
@@ -331,12 +367,21 @@ compute_rounded_clip_node_blur (GskRenderNode *node,
                                 GSList        *copies)
 {
   Render child_render;
+  GskRoundedRect transformed;
   cairo_region_t *clip;
 
   render_copy (&child_render, render);
   compute_background_blur (gsk_rounded_clip_node_get_child (node), &child_render, copies);
 
-  clip = region_create_for_rounded_rect (gsk_rounded_clip_node_get_clip (node));
+  gsk_gpu_transform_transform_rounded_rect (&render->transform,
+                                            gsk_rounded_clip_node_get_clip (node),
+                                            &transformed);
+  if (!gsk_rect_snap (&transformed.bounds,
+                      gsk_rounded_clip_node_get_snap (node),
+                      &transformed.bounds))
+    return;
+
+  clip = region_create_for_rounded_rect (&transformed);
 
   render_clip_region (&child_render, clip);
   render_subtract_region (render, clip);
@@ -380,6 +425,9 @@ compute_background_blur (GskRenderNode *node,
       break;
 
     case GSK_TRANSFORM_NODE:
+      compute_transform_node_blur (node, render, copies);
+      break;
+
     case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
     case GSK_COLOR_NODE:
@@ -416,7 +464,7 @@ compute_background_blur (GskRenderNode *node,
         {
           if (gsk_render_node_isolates_background (node))
             {
-              Render child_render = { NULL, NULL };
+              Render child_render = { render->transform, NULL, NULL };
               compute_background_blur (children[i], &child_render, copies);
               render_merge (render, &child_render);
               render_clear (&child_render);
@@ -444,6 +492,7 @@ gsk_render_node_compute_background_blur (GskRenderNode *node)
 
   gsk_render_node_get_bounds (node, &bounds);
   gsk_rect_to_cairo_grow (&bounds, &cairo_bounds);
+  render.transform = GSK_GPU_TRANSFORM_IDENTITY;
   render.blurred_bg = NULL;
   render.unblurred_bg = cairo_region_create_rectangle (&cairo_bounds);
 
