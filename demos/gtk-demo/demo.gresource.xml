@@ -15,6 +15,9 @@
     <file>ducky.png</file>
     <file>aspect_frame.css</file>
   </gresource>
+  <gresource prefix="/badapple">
+    <file>gtk-logo-mask.webm</file>
+  </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>
   </gresource>
@@ -228,6 +231,7 @@
     <file>application_demo.c</file>
     <file>aspect_frame.c</file>
     <file>assistant.c</file>
+    <file>badapple.c</file>
     <file>builder.c</file>
     <file>clipboard.c</file>
     <file>combobox.c</file>
