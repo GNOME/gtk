@@ -48,7 +48,7 @@ void _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface);
 void _gtk_file_chooser_set_delegate        (GtkFileChooser *receiver,
 					    GtkFileChooser *delegate);
 
-GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
+GQuark _gtk_file_chooser_delegate_get_quark (void);
 
 GList *_gtk_file_chooser_extract_recent_folders (GList *infos);
 

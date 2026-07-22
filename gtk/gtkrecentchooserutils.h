@@ -53,7 +53,7 @@ void   _gtk_recent_chooser_delegate_iface_init (GtkRecentChooserIface *iface);
 void   _gtk_recent_chooser_set_delegate        (GtkRecentChooser      *receiver,
 						GtkRecentChooser      *delegate);
 
-GQuark _gtk_recent_chooser_delegate_get_quark  (void) G_GNUC_CONST;
+GQuark _gtk_recent_chooser_delegate_get_quark  (void);
 
 G_END_DECLS
 
