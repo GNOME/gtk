@@ -239,7 +239,7 @@ GDK_AVAILABLE_IN_ALL
 GtkTextAttributes *gtk_text_attributes_ref         (GtkTextAttributes *values);
 
 GDK_AVAILABLE_IN_ALL
-GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
+GType              gtk_text_attributes_get_type    (void);
 
 
 G_END_DECLS

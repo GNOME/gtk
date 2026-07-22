@@ -131,7 +131,7 @@ struct _GtkBuildableIface
 
 
 GDK_AVAILABLE_IN_ALL
-GType     gtk_buildable_get_type               (void) G_GNUC_CONST;
+GType     gtk_buildable_get_type               (void);
 
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_name               (GtkBuildable        *buildable,

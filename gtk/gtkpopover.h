@@ -59,7 +59,7 @@ struct _GtkPopoverClass
 };
 
 GDK_AVAILABLE_IN_3_12
-GType           gtk_popover_get_type        (void) G_GNUC_CONST;
+GType           gtk_popover_get_type        (void);
 
 GDK_AVAILABLE_IN_3_12
 GtkWidget *     gtk_popover_new             (GtkWidget             *relative_to);

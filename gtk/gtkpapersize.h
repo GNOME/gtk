@@ -85,7 +85,7 @@ typedef struct _GtkPaperSize GtkPaperSize;
 #define GTK_PAPER_NAME_LEGAL "na_legal"
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_paper_size_get_type (void) G_GNUC_CONST;
+GType gtk_paper_size_get_type (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new          (const gchar  *name);

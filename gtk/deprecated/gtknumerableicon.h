@@ -57,7 +57,7 @@ struct _GtkNumerableIconClass {
 };
 
 GDK_DEPRECATED_IN_3_14
-GType             gtk_numerable_icon_get_type                 (void) G_GNUC_CONST;
+GType             gtk_numerable_icon_get_type                 (void);
 
 GDK_DEPRECATED_IN_3_14
 GIcon *           gtk_numerable_icon_new                      (GIcon            *base_icon);

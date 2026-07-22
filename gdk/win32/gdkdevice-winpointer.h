@@ -57,7 +57,7 @@ struct _GdkDeviceWinpointerClass
   GdkDeviceClass parent_class;
 };
 
-GType gdk_device_winpointer_get_type (void) G_GNUC_CONST;
+GType gdk_device_winpointer_get_type (void);
 
 G_END_DECLS
 

@@ -1444,10 +1444,10 @@ union _GdkEvent
 };
 
 GDK_AVAILABLE_IN_ALL
-GType     gdk_event_get_type            (void) G_GNUC_CONST;
+GType     gdk_event_get_type            (void);
 
 GDK_AVAILABLE_IN_3_14
-GType     gdk_event_sequence_get_type   (void) G_GNUC_CONST;
+GType     gdk_event_sequence_get_type   (void);
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_pending	 	(void);

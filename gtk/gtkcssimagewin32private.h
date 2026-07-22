@@ -56,7 +56,7 @@ struct _GtkCssImageWin32Class
   GtkCssImageClass parent_class;
 };
 
-GType          _gtk_css_image_win32_get_type             (void) G_GNUC_CONST;
+GType          _gtk_css_image_win32_get_type             (void);
 
 
 G_END_DECLS

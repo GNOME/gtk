@@ -67,7 +67,7 @@ struct _GtkFontChooserWidgetClass
 };
 
 GDK_AVAILABLE_IN_3_2
-GType        gtk_font_chooser_widget_get_type                 (void) G_GNUC_CONST;
+GType        gtk_font_chooser_widget_get_type                 (void);
 
 GDK_AVAILABLE_IN_3_2
 GtkWidget*   gtk_font_chooser_widget_new                      (void);

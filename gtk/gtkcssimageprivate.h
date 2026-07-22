@@ -82,7 +82,7 @@ struct _GtkCssImageClass
                                                     GString                    *string);
 };
 
-GType          _gtk_css_image_get_type             (void) G_GNUC_CONST;
+GType          _gtk_css_image_get_type             (void);
 
 gboolean       _gtk_css_image_can_parse            (GtkCssParser               *parser);
 GtkCssImage *  _gtk_css_image_new_parse            (GtkCssParser               *parser);

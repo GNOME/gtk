@@ -115,7 +115,7 @@ typedef GtkWidget * (*GtkFlowBoxCreateWidgetFunc) (gpointer item,
                                                    gpointer  user_data);
 
 GDK_AVAILABLE_IN_3_12
-GType                 gtk_flow_box_child_get_type            (void) G_GNUC_CONST;
+GType                 gtk_flow_box_child_get_type            (void);
 GDK_AVAILABLE_IN_3_12
 GtkWidget*            gtk_flow_box_child_new                 (void);
 GDK_AVAILABLE_IN_3_12
@@ -127,7 +127,7 @@ void                  gtk_flow_box_child_changed             (GtkFlowBoxChild *c
 
 
 GDK_AVAILABLE_IN_3_12
-GType                 gtk_flow_box_get_type                  (void) G_GNUC_CONST;
+GType                 gtk_flow_box_get_type                  (void);
 
 GDK_AVAILABLE_IN_3_12
 GtkWidget            *gtk_flow_box_new                       (void);

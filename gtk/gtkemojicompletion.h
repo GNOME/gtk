@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 typedef struct _GtkEmojiCompletion      GtkEmojiCompletion;
 typedef struct _GtkEmojiCompletionClass GtkEmojiCompletionClass;
 
-GType      gtk_emoji_completion_get_type (void) G_GNUC_CONST;
+GType      gtk_emoji_completion_get_type (void);
 GtkWidget *gtk_emoji_completion_new      (GtkEntry *entry);
 
 G_END_DECLS

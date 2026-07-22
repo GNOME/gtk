@@ -50,7 +50,7 @@ struct _GtkCssTransitionClass
   GtkStyleAnimationClass parent_class;
 };
 
-GType                   _gtk_css_transition_get_type        (void) G_GNUC_CONST;
+GType                   _gtk_css_transition_get_type        (void);
 
 GtkStyleAnimation *     _gtk_css_transition_new             (guint               property,
                                                              GtkCssValue        *start,

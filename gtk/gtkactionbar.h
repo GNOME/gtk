@@ -58,7 +58,7 @@ struct _GtkActionBarClass
 };
 
 GDK_AVAILABLE_IN_3_12
-GType        gtk_action_bar_get_type          (void) G_GNUC_CONST;
+GType        gtk_action_bar_get_type          (void);
 GDK_AVAILABLE_IN_3_12
 GtkWidget   *gtk_action_bar_new               (void);
 GDK_AVAILABLE_IN_3_12

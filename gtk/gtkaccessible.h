@@ -60,7 +60,7 @@ struct _GtkAccessibleClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_accessible_get_type                 (void) G_GNUC_CONST;
+GType      gtk_accessible_get_type                 (void);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_accessible_set_widget               (GtkAccessible *accessible,

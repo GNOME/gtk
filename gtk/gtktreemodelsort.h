@@ -60,7 +60,7 @@ struct _GtkTreeModelSortClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_tree_model_sort_get_type                   (void) G_GNUC_CONST;
+GType         gtk_tree_model_sort_get_type                   (void);
 GDK_AVAILABLE_IN_ALL
 GtkTreeModel *gtk_tree_model_sort_new_with_model             (GtkTreeModel     *child_model);
 

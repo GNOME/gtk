@@ -86,7 +86,7 @@ struct _GtkTextMarkClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                 gtk_text_mark_get_type         (void) G_GNUC_CONST;
+GType                 gtk_text_mark_get_type         (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkTextMark          *gtk_text_mark_new              (const gchar *name,

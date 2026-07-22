@@ -36,7 +36,7 @@ typedef struct _GtkPageSetup GtkPageSetup;
 #define GTK_IS_PAGE_SETUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PAGE_SETUP))
 
 GDK_AVAILABLE_IN_ALL
-GType              gtk_page_setup_get_type          (void) G_GNUC_CONST;
+GType              gtk_page_setup_get_type          (void);
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup *     gtk_page_setup_new               (void);
 GDK_AVAILABLE_IN_ALL

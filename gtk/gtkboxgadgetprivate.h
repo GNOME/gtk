@@ -45,7 +45,7 @@ struct _GtkBoxGadgetClass
   GtkCssGadgetClass  parent_class;
 };
 
-GType                   gtk_box_gadget_get_type                 (void) G_GNUC_CONST;
+GType                   gtk_box_gadget_get_type                 (void);
 
 GtkCssGadget *          gtk_box_gadget_new                      (const char             *name,
                                                                  GtkWidget              *owner,

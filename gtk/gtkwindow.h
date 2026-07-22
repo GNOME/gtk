@@ -142,7 +142,7 @@ typedef enum
 
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_window_get_type                 (void) G_GNUC_CONST;
+GType      gtk_window_get_type                 (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 GDK_AVAILABLE_IN_ALL

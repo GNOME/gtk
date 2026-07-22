@@ -31,7 +31,7 @@ struct _GtkGearsClass {
   GtkGLAreaClass parent_class;
 };
 
-GType      gtk_gears_get_type      (void) G_GNUC_CONST;
+GType      gtk_gears_get_type      (void);
 
 GtkWidget *gtk_gears_new           (void);
 void       gtk_gears_set_axis      (GtkGears *gears,

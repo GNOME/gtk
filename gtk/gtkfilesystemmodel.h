@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 
-GType _gtk_file_system_model_get_type (void) G_GNUC_CONST;
+GType _gtk_file_system_model_get_type (void);
 
 typedef gboolean (*GtkFileSystemModelGetValue)   (GtkFileSystemModel *model,
                                                   GFile              *file,

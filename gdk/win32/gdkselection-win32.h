@@ -203,7 +203,7 @@ struct _GdkWin32SelectionClass
   GObjectClass parent_class;
 };
 
-GType gdk_win32_selection_get_type (void) G_GNUC_CONST;
+GType gdk_win32_selection_get_type (void);
 
 void    _gdk_win32_clear_clipboard_queue                          ();
 gchar * _gdk_win32_get_clipboard_format_name                      (UINT               fmt,

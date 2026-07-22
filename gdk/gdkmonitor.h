@@ -63,7 +63,7 @@ typedef enum {
 } GdkSubpixelLayout;
 
 GDK_AVAILABLE_IN_3_22
-GType             gdk_monitor_get_type            (void) G_GNUC_CONST;
+GType             gdk_monitor_get_type            (void);
 
 GDK_AVAILABLE_IN_3_22
 GdkDisplay  *     gdk_monitor_get_display         (GdkMonitor   *monitor);

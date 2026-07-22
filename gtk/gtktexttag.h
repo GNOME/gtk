@@ -99,7 +99,7 @@ struct _GtkTextTagClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_text_tag_get_type     (void) G_GNUC_CONST;
+GType        gtk_text_tag_get_type     (void);
 GDK_AVAILABLE_IN_ALL
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
 GDK_AVAILABLE_IN_ALL

@@ -105,7 +105,7 @@ struct _GtkRecentFilterInfo
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                 gtk_recent_filter_get_type (void) G_GNUC_CONST;
+GType                 gtk_recent_filter_get_type (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkRecentFilter *     gtk_recent_filter_new      (void);

@@ -86,7 +86,7 @@ struct _GtkLevelBarClass {
 };
 
 GDK_AVAILABLE_IN_3_6
-GType      gtk_level_bar_get_type           (void) G_GNUC_CONST;
+GType      gtk_level_bar_get_type           (void);
 
 GDK_AVAILABLE_IN_3_6
 GtkWidget *gtk_level_bar_new                (void);

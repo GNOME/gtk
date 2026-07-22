@@ -76,7 +76,7 @@ struct _GtkToolButtonClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_tool_button_get_type       (void) G_GNUC_CONST;
+GType        gtk_tool_button_get_type       (void);
 GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_tool_button_new            (GtkWidget   *icon_widget,
 					     const gchar *label);

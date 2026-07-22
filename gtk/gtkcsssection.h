@@ -78,7 +78,7 @@ typedef enum
 typedef struct _GtkCssSection GtkCssSection;
 
 GDK_AVAILABLE_IN_3_2
-GType              gtk_css_section_get_type            (void) G_GNUC_CONST;
+GType              gtk_css_section_get_type            (void);
 
 GDK_AVAILABLE_IN_3_2
 GtkCssSection *    gtk_css_section_ref                 (GtkCssSection        *section);

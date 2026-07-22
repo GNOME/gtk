@@ -63,7 +63,7 @@ struct _GtkWindowGroupClass
 /* Window groups
  */
 GDK_AVAILABLE_IN_ALL
-GType            gtk_window_group_get_type      (void) G_GNUC_CONST;
+GType            gtk_window_group_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup * gtk_window_group_new           (void);

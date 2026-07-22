@@ -50,7 +50,7 @@ struct _GtkCssAnimatedStyleClass
   GtkCssStyleClass parent_class;
 };
 
-GType                   gtk_css_animated_style_get_type         (void) G_GNUC_CONST;
+GType                   gtk_css_animated_style_get_type         (void);
 
 GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle            *base_style,
                                                                  GtkCssStyle            *parent_style,

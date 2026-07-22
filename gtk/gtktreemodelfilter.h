@@ -106,7 +106,7 @@ struct _GtkTreeModelFilterClass
 
 /* base */
 GDK_AVAILABLE_IN_ALL
-GType         gtk_tree_model_filter_get_type                   (void) G_GNUC_CONST;
+GType         gtk_tree_model_filter_get_type                   (void);
 GDK_AVAILABLE_IN_ALL
 GtkTreeModel *gtk_tree_model_filter_new                        (GtkTreeModel                 *child_model,
                                                                 GtkTreePath                  *root);

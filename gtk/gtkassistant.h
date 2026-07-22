@@ -133,7 +133,7 @@ struct _GtkAssistantClass
 typedef gint (*GtkAssistantPageFunc) (gint current_page, gpointer data);
 
 GDK_AVAILABLE_IN_ALL
-GType                 gtk_assistant_get_type              (void) G_GNUC_CONST;
+GType                 gtk_assistant_get_type              (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_assistant_new                   (void);
 GDK_AVAILABLE_IN_ALL

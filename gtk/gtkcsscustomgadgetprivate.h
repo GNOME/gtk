@@ -64,7 +64,7 @@ struct _GtkCssCustomGadgetClass
   GtkCssGadgetClass  parent_class;
 };
 
-GType           gtk_css_custom_gadget_get_type                 (void) G_GNUC_CONST;
+GType           gtk_css_custom_gadget_get_type                 (void);
 
 GtkCssGadget *  gtk_css_custom_gadget_new                      (const char                      *name,
                                                                 GtkWidget                       *owner,

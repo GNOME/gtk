@@ -198,7 +198,7 @@ GDK_DEPRECATED_IN_3_0_FOR(GtkStyleContext)
 gboolean  gtk_rc_reparse_all            (void);
 
 GDK_DEPRECATED_IN_3_0
-GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
+GType       gtk_rc_style_get_type   (void);
 GDK_DEPRECATED_IN_3_0_FOR(GtkStyleContext)
 GtkRcStyle* gtk_rc_style_new        (void);
 GDK_DEPRECATED_IN_3_0_FOR(GtkStyleContext)

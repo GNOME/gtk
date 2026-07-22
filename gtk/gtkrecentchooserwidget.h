@@ -60,7 +60,7 @@ struct _GtkRecentChooserWidgetClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_recent_chooser_widget_get_type        (void) G_GNUC_CONST;
+GType      gtk_recent_chooser_widget_get_type        (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_recent_chooser_widget_new             (void);
 GDK_AVAILABLE_IN_ALL

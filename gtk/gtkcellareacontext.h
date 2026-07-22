@@ -91,7 +91,7 @@ struct _GtkCellAreaContextClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_cell_area_context_get_type              (void) G_GNUC_CONST;
+GType        gtk_cell_area_context_get_type              (void);
 
 /* Main apis */
 GDK_AVAILABLE_IN_ALL

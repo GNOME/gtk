@@ -64,7 +64,7 @@ typedef void (* GtkFileSystemVolumeMountCallback)  (GCancellable        *cancell
 						    gpointer             data);
 
 /* GtkFileSystem methods */
-GType           _gtk_file_system_get_type     (void) G_GNUC_CONST;
+GType           _gtk_file_system_get_type     (void);
 
 GtkFileSystem * _gtk_file_system_new          (void);
 

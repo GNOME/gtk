@@ -48,7 +48,7 @@ struct _GtkCssImageBuiltinClass
   GtkCssImageClass parent_class;
 };
 
-GType          gtk_css_image_builtin_get_type              (void) G_GNUC_CONST;
+GType          gtk_css_image_builtin_get_type              (void);
 
 GtkCssImage *  gtk_css_image_builtin_new                   (void);
 

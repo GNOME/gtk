@@ -72,7 +72,7 @@ struct _GtkTearoffMenuItemClass
 
 
 GDK_DEPRECATED_IN_3_4
-GType	   gtk_tearoff_menu_item_get_type     (void) G_GNUC_CONST;
+GType	   gtk_tearoff_menu_item_get_type     (void);
 GDK_DEPRECATED_IN_3_4
 GtkWidget* gtk_tearoff_menu_item_new	      (void);
 

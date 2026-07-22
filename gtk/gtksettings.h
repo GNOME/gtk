@@ -86,7 +86,7 @@ struct _GtkSettingsValue
 
 /* --- functions --- */
 GDK_AVAILABLE_IN_ALL
-GType           gtk_settings_get_type                (void) G_GNUC_CONST;
+GType           gtk_settings_get_type                (void);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_default             (void);
 GDK_AVAILABLE_IN_ALL

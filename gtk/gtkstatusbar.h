@@ -76,7 +76,7 @@ struct _GtkStatusbarClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_statusbar_get_type     	(void) G_GNUC_CONST;
+GType      gtk_statusbar_get_type     	(void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_statusbar_new          	(void);
 /* If you don't want to use contexts, 0 is a predefined global

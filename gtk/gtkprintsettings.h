@@ -52,7 +52,7 @@ struct _GtkPageRange
 };
 
 GDK_AVAILABLE_IN_ALL
-GType             gtk_print_settings_get_type                (void) G_GNUC_CONST;
+GType             gtk_print_settings_get_type                (void);
 GDK_AVAILABLE_IN_ALL
 GtkPrintSettings *gtk_print_settings_new                     (void);
 

@@ -38,7 +38,7 @@ typedef struct _GdkWaylandMonitor      GdkWaylandMonitor;
 typedef struct _GdkWaylandMonitorClass GdkWaylandMonitorClass;
 
 GDK_AVAILABLE_IN_3_22
-GType             gdk_wayland_monitor_get_type            (void) G_GNUC_CONST;
+GType             gdk_wayland_monitor_get_type            (void);
 
 GDK_AVAILABLE_IN_3_22
 struct wl_output *gdk_wayland_monitor_get_wl_output       (GdkMonitor *monitor);

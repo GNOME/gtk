@@ -72,7 +72,7 @@ struct _GtkCssGadgetClass
                                                          GtkCssStyleChange      *change);
 };
 
-GType           gtk_css_gadget_get_type                 (void) G_GNUC_CONST;
+GType           gtk_css_gadget_get_type                 (void);
 
 GtkCssNode *    gtk_css_gadget_get_node                 (GtkCssGadget           *gadget);
 GtkCssStyle *   gtk_css_gadget_get_style                (GtkCssGadget           *gadget);

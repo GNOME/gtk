@@ -56,7 +56,7 @@ struct _GtkHSeparatorClass
 
 
 GDK_DEPRECATED_IN_3_2
-GType      gtk_hseparator_get_type (void) G_GNUC_CONST;
+GType      gtk_hseparator_get_type (void);
 GDK_DEPRECATED_IN_3_2_FOR(gtk_separator_new)
 GtkWidget* gtk_hseparator_new      (void);
 

@@ -59,7 +59,7 @@ struct _GtkIMMulticontextClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_im_multicontext_get_type (void) G_GNUC_CONST;
+GType         gtk_im_multicontext_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkIMContext *gtk_im_multicontext_new      (void);
 

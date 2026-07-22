@@ -36,7 +36,7 @@ struct _GtkOffscreenBoxClass
   GtkBinClass parent_class;
 };
 
-GType	   gtk_offscreen_box_get_type           (void) G_GNUC_CONST;
+GType	   gtk_offscreen_box_get_type           (void);
 GtkWidget* gtk_offscreen_box_new       (void);
 void       gtk_offscreen_box_add1      (GtkOffscreenBox *offscreen,
 					GtkWidget       *child);

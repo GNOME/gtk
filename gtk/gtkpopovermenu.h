@@ -47,7 +47,7 @@ struct _GtkPopoverMenuClass
 };
 
 GDK_AVAILABLE_IN_3_16
-GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
+GType       gtk_popover_menu_get_type (void);
 
 GDK_AVAILABLE_IN_3_16
 GtkWidget * gtk_popover_menu_new      (void);

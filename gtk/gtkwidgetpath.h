@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define GTK_TYPE_WIDGET_PATH (gtk_widget_path_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_widget_path_get_type            (void) G_GNUC_CONST;
+GType           gtk_widget_path_get_type            (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_widget_path_new                 (void);
 

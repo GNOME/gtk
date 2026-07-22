@@ -65,7 +65,7 @@ struct _GtkInvisibleClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_invisible_get_type (void) G_GNUC_CONST;
+GType gtk_invisible_get_type (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_invisible_new            (void);

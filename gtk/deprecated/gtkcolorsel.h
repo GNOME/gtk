@@ -102,7 +102,7 @@ struct _GtkColorSelectionClass
 /* ColorSelection */
 
 GDK_DEPRECATED_IN_3_4
-GType      gtk_color_selection_get_type                (void) G_GNUC_CONST;
+GType      gtk_color_selection_get_type                (void);
 GDK_DEPRECATED_IN_3_4_FOR(gtk_color_chooser_widget_new)
 GtkWidget *gtk_color_selection_new                     (void);
 GDK_DEPRECATED_IN_3_4_FOR(gtk_color_chooser_get_use_alpha)

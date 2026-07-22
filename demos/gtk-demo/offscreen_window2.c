@@ -29,7 +29,7 @@ struct _GtkMirrorBinClass
   GtkContainerClass parent_class;
 };
 
-GType      gtk_mirror_bin_get_type  (void) G_GNUC_CONST;
+GType      gtk_mirror_bin_get_type  (void);
 GtkWidget* gtk_mirror_bin_new       (void);
 
 /*** implementation ***/

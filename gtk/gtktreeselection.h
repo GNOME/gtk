@@ -104,7 +104,7 @@ struct _GtkTreeSelectionClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType            gtk_tree_selection_get_type            (void) G_GNUC_CONST;
+GType            gtk_tree_selection_get_type            (void);
 
 GDK_AVAILABLE_IN_ALL
 void             gtk_tree_selection_set_mode            (GtkTreeSelection            *selection,

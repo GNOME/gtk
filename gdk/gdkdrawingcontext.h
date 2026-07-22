@@ -35,7 +35,7 @@ typedef struct _GdkDrawingContext       GdkDrawingContext;
 typedef struct _GdkDrawingContextClass  GdkDrawingContextClass;
 
 GDK_AVAILABLE_IN_3_22
-GType gdk_drawing_context_get_type (void) G_GNUC_CONST;
+GType gdk_drawing_context_get_type (void);
 
 GDK_AVAILABLE_IN_3_22
 GdkWindow *     gdk_drawing_context_get_window          (GdkDrawingContext *context);

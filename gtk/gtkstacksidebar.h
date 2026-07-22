@@ -59,7 +59,7 @@ struct _GtkStackSidebarClass
 };
 
 GDK_AVAILABLE_IN_3_16
-GType       gtk_stack_sidebar_get_type  (void) G_GNUC_CONST;
+GType       gtk_stack_sidebar_get_type  (void);
 GDK_AVAILABLE_IN_3_16
 GtkWidget * gtk_stack_sidebar_new       (void);
 GDK_AVAILABLE_IN_3_16

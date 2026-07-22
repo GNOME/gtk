@@ -139,7 +139,7 @@ typedef enum
 /* Application-level methods */
 
 GDK_AVAILABLE_IN_ALL
-GType   gtk_container_get_type		 (void) G_GNUC_CONST;
+GType   gtk_container_get_type		 (void);
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);

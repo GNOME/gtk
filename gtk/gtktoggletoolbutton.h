@@ -72,7 +72,7 @@ struct _GtkToggleToolButtonClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_toggle_tool_button_get_type       (void) G_GNUC_CONST;
+GType        gtk_toggle_tool_button_get_type       (void);
 GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_toggle_tool_button_new            (void);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_toggle_tool_button_new)

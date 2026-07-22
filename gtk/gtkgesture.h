@@ -40,7 +40,7 @@ typedef struct _GtkGesture GtkGesture;
 typedef struct _GtkGestureClass GtkGestureClass;
 
 GDK_AVAILABLE_IN_3_14
-GType       gtk_gesture_get_type             (void) G_GNUC_CONST;
+GType       gtk_gesture_get_type             (void);
 
 GDK_AVAILABLE_IN_3_14
 GdkDevice * gtk_gesture_get_device           (GtkGesture       *gesture);

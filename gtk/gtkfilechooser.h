@@ -84,7 +84,7 @@ typedef enum
 } GtkFileChooserConfirmation;
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
+GType gtk_file_chooser_get_type (void);
 
 /* GError enumeration for GtkFileChooser */
 /**

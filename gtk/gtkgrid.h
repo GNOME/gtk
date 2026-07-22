@@ -70,7 +70,7 @@ struct _GtkGridClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_grid_get_type               (void) G_GNUC_CONST;
+GType      gtk_grid_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_grid_new                    (void);
 GDK_AVAILABLE_IN_ALL

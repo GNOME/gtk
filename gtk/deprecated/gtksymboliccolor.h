@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 #define GTK_TYPE_SYMBOLIC_COLOR (gtk_symbolic_color_get_type ())
 
 GDK_DEPRECATED_IN_3_8
-GType              gtk_symbolic_color_get_type    (void) G_GNUC_CONST;
+GType              gtk_symbolic_color_get_type    (void);
 
 GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_literal (const GdkRGBA      *color);

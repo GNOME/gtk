@@ -60,7 +60,7 @@ struct _GtkRecentActionClass
 };
 
 GDK_DEPRECATED_IN_3_10
-GType      gtk_recent_action_get_type         (void) G_GNUC_CONST;
+GType      gtk_recent_action_get_type         (void);
 GDK_DEPRECATED_IN_3_10
 GtkAction *gtk_recent_action_new              (const gchar      *name,
                                                const gchar      *label,

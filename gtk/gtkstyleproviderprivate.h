@@ -56,7 +56,7 @@ struct _GtkStyleProviderPrivateInterface
   void                  (* changed)             (GtkStyleProviderPrivate *provider);
 };
 
-GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_CONST;
+GType                   _gtk_style_provider_private_get_type     (void);
 
 GtkSettings *           _gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider);
 GtkCssValue *           _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,

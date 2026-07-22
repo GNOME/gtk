@@ -43,7 +43,7 @@ struct _GdkSeatDefaultClass
   GdkSeatClass parent_class;
 };
 
-GType     gdk_seat_default_get_type     (void) G_GNUC_CONST;
+GType     gdk_seat_default_get_type     (void);
 
 GdkSeat * gdk_seat_default_new_for_master_pair (GdkDevice *pointer,
                                                 GdkDevice *keyboard);

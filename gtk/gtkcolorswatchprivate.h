@@ -57,7 +57,7 @@ struct _GtkColorSwatchClass
 };
 
 
-GType       gtk_color_swatch_get_type         (void) G_GNUC_CONST;
+GType       gtk_color_swatch_get_type         (void);
 GtkWidget * gtk_color_swatch_new              (void);
 void        gtk_color_swatch_set_rgba         (GtkColorSwatch *swatch,
                                                const GdkRGBA  *color);

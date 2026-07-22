@@ -40,7 +40,7 @@ typedef struct _GtkGestureZoom GtkGestureZoom;
 typedef struct _GtkGestureZoomClass GtkGestureZoomClass;
 
 GDK_AVAILABLE_IN_3_14
-GType        gtk_gesture_zoom_get_type        (void) G_GNUC_CONST;
+GType        gtk_gesture_zoom_get_type        (void);
 
 GDK_AVAILABLE_IN_3_14
 GtkGesture * gtk_gesture_zoom_new             (GtkWidget      *widget);

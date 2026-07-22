@@ -68,7 +68,7 @@ typedef void (*GtkPrinterOptionSetFunc) (GtkPrinterOption  *option,
 
 
 GDK_AVAILABLE_IN_ALL
-GType   gtk_printer_option_set_get_type       (void) G_GNUC_CONST;
+GType   gtk_printer_option_set_get_type       (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkPrinterOptionSet *gtk_printer_option_set_new              (void);

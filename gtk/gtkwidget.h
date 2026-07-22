@@ -610,7 +610,7 @@ struct _GtkWidgetClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
+GType	   gtk_widget_get_type		  (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_widget_new		  (GType		type,
 					   const gchar	       *first_property_name,
@@ -1296,7 +1296,7 @@ void       gtk_cairo_transform_to_window    (cairo_t     *cr,
                                              GdkWindow   *window);
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_requisition_get_type (void) G_GNUC_CONST;
+GType           gtk_requisition_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;
 GDK_AVAILABLE_IN_ALL

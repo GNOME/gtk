@@ -67,7 +67,7 @@ struct _GtkMiscClass
 };
 
 GDK_DEPRECATED_IN_3_14
-GType   gtk_misc_get_type      (void) G_GNUC_CONST;
+GType   gtk_misc_get_type      (void);
 GDK_DEPRECATED_IN_3_14
 void	gtk_misc_set_alignment (GtkMisc *misc,
 				gfloat	 xalign,

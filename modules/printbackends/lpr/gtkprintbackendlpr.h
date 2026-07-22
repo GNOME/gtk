@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 typedef struct _GtkPrintBackendLpr      GtkPrintBackendLpr;
 
 GtkPrintBackend *gtk_print_backend_lpr_new      (void);
-GType          gtk_print_backend_lpr_get_type (void) G_GNUC_CONST;
+GType          gtk_print_backend_lpr_get_type (void);
 
 G_END_DECLS
 

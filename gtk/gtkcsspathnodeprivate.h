@@ -46,7 +46,7 @@ struct _GtkCssPathNodeClass
   GtkCssNodeClass node_class;
 };
 
-GType                   gtk_css_path_node_get_type         (void) G_GNUC_CONST;
+GType                   gtk_css_path_node_get_type         (void);
 
 GtkCssNode *            gtk_css_path_node_new              (GtkStyleContext *context);
 

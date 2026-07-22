@@ -59,7 +59,7 @@ struct _GtkCustomPaperUnixDialogClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;
+GType             gtk_custom_paper_unix_dialog_get_type           (void);
 GtkWidget *       _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
 								   const gchar *title);
 GtkUnit           _gtk_print_get_default_user_units                (void);

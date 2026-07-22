@@ -66,7 +66,7 @@ struct _GtkProgressBarClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_progress_bar_get_type             (void) G_GNUC_CONST;
+GType      gtk_progress_bar_get_type             (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_progress_bar_new                  (void);
 

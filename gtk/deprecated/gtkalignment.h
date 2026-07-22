@@ -74,7 +74,7 @@ struct _GtkAlignmentClass
 
 
 GDK_DEPRECATED_IN_3_14
-GType      gtk_alignment_get_type   (void) G_GNUC_CONST;
+GType      gtk_alignment_get_type   (void);
 GDK_DEPRECATED_IN_3_14
 GtkWidget* gtk_alignment_new        (gfloat             xalign,
 				     gfloat             yalign,

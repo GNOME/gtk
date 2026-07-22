@@ -63,7 +63,7 @@ struct _GtkCssStylePropertyClass
   GPtrArray *style_properties;
 };
 
-GType                   _gtk_css_style_property_get_type        (void) G_GNUC_CONST;
+GType                   _gtk_css_style_property_get_type        (void);
 
 void                    _gtk_css_style_property_init_properties (void);
 

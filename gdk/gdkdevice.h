@@ -123,7 +123,7 @@ struct _GdkTimeCoord
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                 gdk_device_get_type       (void) G_GNUC_CONST;
+GType                 gdk_device_get_type       (void);
 
 GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_device_get_name       (GdkDevice *device);

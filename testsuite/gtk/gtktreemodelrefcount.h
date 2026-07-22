@@ -48,7 +48,7 @@ struct _GtkTreeModelRefCountClass
 };
 
 
-GType         gtk_tree_model_ref_count_get_type    (void) G_GNUC_CONST;
+GType         gtk_tree_model_ref_count_get_type    (void);
 GtkTreeModel *gtk_tree_model_ref_count_new         (void);
 
 void          gtk_tree_model_ref_count_dump        (GtkTreeModelRefCount *ref_model);

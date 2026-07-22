@@ -81,7 +81,7 @@ struct _GtkInfoBarClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType          gtk_info_bar_get_type               (void) G_GNUC_CONST;
+GType          gtk_info_bar_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_new                    (void);
 

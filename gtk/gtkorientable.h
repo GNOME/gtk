@@ -48,7 +48,7 @@ struct _GtkOrientableIface
 
 
 GDK_AVAILABLE_IN_ALL
-GType          gtk_orientable_get_type        (void) G_GNUC_CONST;
+GType          gtk_orientable_get_type        (void);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_orientable_set_orientation (GtkOrientable  *orientable,

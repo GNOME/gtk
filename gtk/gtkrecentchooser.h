@@ -161,7 +161,7 @@ struct _GtkRecentChooserIface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType   gtk_recent_chooser_get_type    (void) G_GNUC_CONST;
+GType   gtk_recent_chooser_get_type    (void);
 
 /*
  * Configuration

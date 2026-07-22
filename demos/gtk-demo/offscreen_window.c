@@ -30,7 +30,7 @@ struct _GtkRotatedBinClass
   GtkContainerClass parent_class;
 };
 
-GType      gtk_rotated_bin_get_type  (void) G_GNUC_CONST;
+GType      gtk_rotated_bin_get_type  (void);
 GtkWidget* gtk_rotated_bin_new       (void);
 void       gtk_rotated_bin_set_angle (GtkRotatedBin *bin,
                                       gdouble        angle);

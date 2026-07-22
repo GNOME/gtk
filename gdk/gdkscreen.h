@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 
 
 GDK_AVAILABLE_IN_ALL
-GType        gdk_screen_get_type              (void) G_GNUC_CONST;
+GType        gdk_screen_get_type              (void);
 
 GDK_AVAILABLE_IN_ALL
 GdkVisual *  gdk_screen_get_system_visual     (GdkScreen   *screen);

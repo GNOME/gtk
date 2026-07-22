@@ -109,7 +109,7 @@ typedef enum
 
 
 GDK_AVAILABLE_IN_ALL
-GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
+GType            gdk_drag_context_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
 void             gdk_drag_context_set_device           (GdkDragContext *context,

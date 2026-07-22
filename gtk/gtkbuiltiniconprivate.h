@@ -44,7 +44,7 @@ struct _GtkBuiltinIconClass
   GtkCssGadgetClass  parent_class;
 };
 
-GType                   gtk_builtin_icon_get_type               (void) G_GNUC_CONST;
+GType                   gtk_builtin_icon_get_type               (void);
 
 GtkCssGadget *          gtk_builtin_icon_new                    (const char             *name,
                                                                  GtkWidget              *owner,
