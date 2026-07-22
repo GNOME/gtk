@@ -43,7 +43,7 @@ G_BEGIN_DECLS
 #endif
 
 GDK_AVAILABLE_IN_ALL
-GType       gdk_display_get_type (void) G_GNUC_CONST;
+GType       gdk_display_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_open                (const gchar *display_name);
 

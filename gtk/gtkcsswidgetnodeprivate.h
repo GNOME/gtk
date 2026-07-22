@@ -47,7 +47,7 @@ struct _GtkCssWidgetNodeClass
   GtkCssNodeClass node_class;
 };
 
-GType                   gtk_css_widget_node_get_type            (void) G_GNUC_CONST;
+GType                   gtk_css_widget_node_get_type            (void);
 
 GtkCssNode *            gtk_css_widget_node_new                 (GtkWidget              *widget);
 

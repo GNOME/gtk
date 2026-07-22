@@ -70,7 +70,7 @@ struct _GtkSearchBarClass
 };
 
 GDK_AVAILABLE_IN_3_10
-GType       gtk_search_bar_get_type        (void) G_GNUC_CONST;
+GType       gtk_search_bar_get_type        (void);
 
 GDK_AVAILABLE_IN_3_10
 GtkWidget*  gtk_search_bar_new             (void);

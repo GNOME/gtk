@@ -58,7 +58,7 @@ struct _GtkCssStyleClass
   gboolean              (* is_static)                           (GtkCssStyle            *style);
 };
 
-GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
+GType                   gtk_css_style_get_type                  (void);
 
 GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle            *style,
                                                                  guint                   id);

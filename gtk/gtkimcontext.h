@@ -94,7 +94,7 @@ struct _GtkIMContextClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType    gtk_im_context_get_type            (void) G_GNUC_CONST;
+GType    gtk_im_context_get_type            (void);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_set_client_window   (GtkIMContext       *context,

@@ -163,7 +163,7 @@ struct _GtkTextBufferClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
+GType        gtk_text_buffer_get_type       (void);
 
 
 

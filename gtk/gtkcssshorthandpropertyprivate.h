@@ -68,7 +68,7 @@ struct _GtkCssShorthandPropertyClass
 
 void                    _gtk_css_shorthand_property_init_properties     (void);
 
-GType                   _gtk_css_shorthand_property_get_type            (void) G_GNUC_CONST;
+GType                   _gtk_css_shorthand_property_get_type            (void);
 
 GtkCssStyleProperty *   _gtk_css_shorthand_property_get_subproperty     (GtkCssShorthandProperty *shorthand,
                                                                          guint                    property);

@@ -62,7 +62,7 @@ typedef enum {
 } GdkDeviceToolType;
 
 GDK_AVAILABLE_IN_3_22
-GType gdk_device_tool_get_type (void) G_GNUC_CONST;
+GType gdk_device_tool_get_type (void);
 
 GDK_AVAILABLE_IN_3_22
 guint64 gdk_device_tool_get_serial (GdkDeviceTool *tool);

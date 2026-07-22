@@ -123,7 +123,7 @@ struct _GtkNotebookClass
  ***********************************************************/
 
 GDK_AVAILABLE_IN_ALL
-GType   gtk_notebook_get_type       (void) G_GNUC_CONST;
+GType   gtk_notebook_get_type       (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_notebook_new        (void);
 GDK_AVAILABLE_IN_ALL

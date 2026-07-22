@@ -65,7 +65,7 @@ struct _GtkSeparatorToolItemClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_separator_tool_item_get_type (void) G_GNUC_CONST;
+GType        gtk_separator_tool_item_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_separator_tool_item_new      (void);
 

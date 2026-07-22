@@ -70,7 +70,7 @@ struct _GtkRadioActionClass
 };
 
 GDK_DEPRECATED_IN_3_10
-GType           gtk_radio_action_get_type          (void) G_GNUC_CONST;
+GType           gtk_radio_action_get_type          (void);
 GDK_DEPRECATED_IN_3_10
 GtkRadioAction *gtk_radio_action_new               (const gchar           *name,
                                                     const gchar           *label,

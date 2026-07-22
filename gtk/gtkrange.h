@@ -91,7 +91,7 @@ struct _GtkRangeClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType              gtk_range_get_type                      (void) G_GNUC_CONST;
+GType              gtk_range_get_type                      (void);
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_range_set_adjustment                (GtkRange      *range,

@@ -173,7 +173,7 @@ struct _GtkEntryClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
+GType      gtk_entry_get_type       		(void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_entry_new            		(void);
 GDK_AVAILABLE_IN_ALL

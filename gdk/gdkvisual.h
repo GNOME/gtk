@@ -80,7 +80,7 @@ typedef enum
  */
 
 GDK_AVAILABLE_IN_ALL
-GType         gdk_visual_get_type            (void) G_GNUC_CONST;
+GType         gdk_visual_get_type            (void);
 
 GDK_DEPRECATED_IN_3_22
 gint          gdk_visual_get_best_depth      (void);

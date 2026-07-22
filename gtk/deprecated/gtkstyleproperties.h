@@ -66,7 +66,7 @@ typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
                                              GError      **error);
 
 GDK_DEPRECATED_IN_3_16
-GType gtk_style_properties_get_type (void) G_GNUC_CONST;
+GType gtk_style_properties_get_type (void);
 
 /* Next 2 are implemented in gtkcsscustomproperty.c */
 GDK_DEPRECATED_IN_3_8

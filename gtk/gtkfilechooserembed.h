@@ -51,7 +51,7 @@ struct _GtkFileChooserEmbedIface
   void (*response_requested)      (GtkFileChooserEmbed *chooser_embed);
 };
 
-GType _gtk_file_chooser_embed_get_type (void) G_GNUC_CONST;
+GType _gtk_file_chooser_embed_get_type (void);
 
 void  _gtk_file_chooser_embed_get_default_size    (GtkFileChooserEmbed *chooser_embed,
 						   gint                *default_width,

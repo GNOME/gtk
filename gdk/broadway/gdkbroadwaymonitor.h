@@ -38,7 +38,7 @@ typedef struct _GdkBroadwayMonitor      GdkBroadwayMonitor;
 typedef struct _GdkBroadwayMonitorClass GdkBroadwayMonitorClass;
 
 GDK_AVAILABLE_IN_3_22
-GType             gdk_broadway_monitor_get_type            (void) G_GNUC_CONST;
+GType             gdk_broadway_monitor_get_type            (void);
 
 G_END_DECLS
 

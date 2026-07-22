@@ -66,7 +66,7 @@ struct _GtkTreeMenuClass
   void (*_gtk_reserved6) (void);
 };
 
-GType                 _gtk_tree_menu_get_type                       (void) G_GNUC_CONST;
+GType                 _gtk_tree_menu_get_type                       (void);
 
 GtkWidget            *_gtk_tree_menu_new                            (void);
 GtkWidget            *_gtk_tree_menu_new_with_area                  (GtkCellArea         *area);

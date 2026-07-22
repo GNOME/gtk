@@ -48,7 +48,7 @@ void   _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface);
 void   _gtk_font_chooser_set_delegate        (GtkFontChooser      *receiver,
                                               GtkFontChooser      *delegate);
 
-GQuark _gtk_font_chooser_delegate_get_quark  (void) G_GNUC_CONST;
+GQuark _gtk_font_chooser_delegate_get_quark  (void);
 
 G_END_DECLS
 

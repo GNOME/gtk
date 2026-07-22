@@ -58,7 +58,7 @@ struct _GtkFileChooserDialogClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_file_chooser_dialog_get_type         (void) G_GNUC_CONST;
+GType      gtk_file_chooser_dialog_get_type         (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_file_chooser_dialog_new              (const gchar          *title,
 						     GtkWindow            *parent,

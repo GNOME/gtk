@@ -38,7 +38,7 @@ struct _GtkSidebarRowClass
   GtkListBoxRowClass parent;
 };
 
-GType      gtk_sidebar_row_get_type   (void) G_GNUC_CONST;
+GType      gtk_sidebar_row_get_type   (void);
 
 GtkSidebarRow *gtk_sidebar_row_new    (void);
 GtkSidebarRow *gtk_sidebar_row_clone  (GtkSidebarRow *self);

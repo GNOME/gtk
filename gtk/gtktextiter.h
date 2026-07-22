@@ -109,7 +109,7 @@ void         gtk_text_iter_assign   (GtkTextIter       *iter,
                                      const GtkTextIter *other);
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_text_iter_get_type (void) G_GNUC_CONST;
+GType        gtk_text_iter_get_type (void);
 
 /*
  * Convert to different kinds of index

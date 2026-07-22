@@ -54,7 +54,7 @@ struct _GtkColorPlaneClass
 };
 
 
-GType       gtk_color_plane_get_type (void) G_GNUC_CONST;
+GType       gtk_color_plane_get_type (void);
 GtkWidget * gtk_color_plane_new      (GtkAdjustment *h_adj,
                                       GtkAdjustment *s_adj,
                                       GtkAdjustment *v_adj);

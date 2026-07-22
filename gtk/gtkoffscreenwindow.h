@@ -60,7 +60,7 @@ struct _GtkOffscreenWindowClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType            gtk_offscreen_window_get_type    (void) G_GNUC_CONST;
+GType            gtk_offscreen_window_get_type    (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget       *gtk_offscreen_window_new         (void);

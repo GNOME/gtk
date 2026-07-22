@@ -38,7 +38,7 @@ typedef struct _GdkQuartzGLContext   GdkQuartzGLContext;
 typedef struct _GdkQuartzGLContextClass  GdkQuartzGLContextClass;
 
 GDK_AVAILABLE_IN_3_24
-GType gdk_quartz_gl_context_get_type (void) G_GNUC_CONST;
+GType gdk_quartz_gl_context_get_type (void);
 
 G_END_DECLS
 

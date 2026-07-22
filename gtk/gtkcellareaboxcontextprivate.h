@@ -57,7 +57,7 @@ struct _GtkCellAreaBoxContextClass
 
 };
 
-GType   _gtk_cell_area_box_context_get_type                     (void) G_GNUC_CONST;
+GType   _gtk_cell_area_box_context_get_type                     (void);
 
 
 /* Create a duplicate of the context */

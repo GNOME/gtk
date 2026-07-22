@@ -114,7 +114,7 @@ typedef enum
 
 
 GDK_DEPRECATED_IN_3_4
-GType	   gtk_table_get_type	      (void) G_GNUC_CONST;
+GType	   gtk_table_get_type	      (void);
 GDK_DEPRECATED_IN_3_4_FOR(GtkGrid)
 GtkWidget* gtk_table_new	      (guint		rows,
 				       guint		columns,

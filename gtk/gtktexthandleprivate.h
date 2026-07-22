@@ -64,7 +64,7 @@ struct _GtkTextHandleClass
                            GtkTextHandlePosition  pos);
 };
 
-GType           _gtk_text_handle_get_type     (void) G_GNUC_CONST;
+GType           _gtk_text_handle_get_type     (void);
 
 GtkTextHandle * _gtk_text_handle_new          (GtkWidget             *parent);
 

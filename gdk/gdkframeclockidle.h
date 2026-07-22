@@ -56,7 +56,7 @@ struct _GdkFrameClockIdleClass
   GdkFrameClockClass parent_class;
 };
 
-GType           gdk_frame_clock_idle_get_type       (void) G_GNUC_CONST;
+GType           gdk_frame_clock_idle_get_type       (void);
 
 GdkFrameClock *_gdk_frame_clock_idle_new            (void);
 void           _gdk_frame_clock_idle_freeze_updates (GdkFrameClockIdle *clock_idle);

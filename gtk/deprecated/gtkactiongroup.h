@@ -170,7 +170,7 @@ struct _GtkRadioActionEntry
 };
 
 GDK_DEPRECATED_IN_3_10
-GType           gtk_action_group_get_type                (void) G_GNUC_CONST;
+GType           gtk_action_group_get_type                (void);
 GDK_DEPRECATED_IN_3_10
 GtkActionGroup *gtk_action_group_new                     (const gchar                *name);
 GDK_DEPRECATED_IN_3_10

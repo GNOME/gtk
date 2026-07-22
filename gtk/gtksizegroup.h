@@ -59,7 +59,7 @@ struct _GtkSizeGroupClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType            gtk_size_group_get_type      (void) G_GNUC_CONST;
+GType            gtk_size_group_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeGroup *   gtk_size_group_new           (GtkSizeGroupMode  mode);

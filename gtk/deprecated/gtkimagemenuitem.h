@@ -73,7 +73,7 @@ struct _GtkImageMenuItemClass
 };
 
 GDK_DEPRECATED_IN_3_10_FOR(gtk_menu_item_get_type)
-GType	   gtk_image_menu_item_get_type          (void) G_GNUC_CONST;
+GType	   gtk_image_menu_item_get_type          (void);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_menu_item_new)
 GtkWidget* gtk_image_menu_item_new               (void);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_menu_item_new_with_label)

@@ -52,7 +52,7 @@ struct _GtkActionableInterface
 };
 
 GDK_AVAILABLE_IN_3_4
-GType                   gtk_actionable_get_type                         (void) G_GNUC_CONST;
+GType                   gtk_actionable_get_type                         (void);
 
 GDK_AVAILABLE_IN_3_4
 const gchar *           gtk_actionable_get_action_name                  (GtkActionable *actionable);

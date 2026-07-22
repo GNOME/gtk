@@ -55,7 +55,7 @@ struct _GtkCssAnimationClass
   GtkStyleAnimationClass parent_class;
 };
 
-GType                   _gtk_css_animation_get_type        (void) G_GNUC_CONST;
+GType                   _gtk_css_animation_get_type        (void);
 
 GtkStyleAnimation *     _gtk_css_animation_new             (const char         *name,
                                                             GtkCssKeyframes    *keyframes,

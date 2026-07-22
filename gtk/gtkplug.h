@@ -74,7 +74,7 @@ struct _GtkPlugClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_plug_get_type              (void) G_GNUC_CONST;
+GType      gtk_plug_get_type              (void);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_plug_construct             (GtkPlug    *plug,

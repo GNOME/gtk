@@ -78,7 +78,7 @@ struct _GtkStatusIconClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
+GType                 gtk_status_icon_get_type           (void);
 
 GDK_DEPRECATED_IN_3_14
 GtkStatusIcon        *gtk_status_icon_new                (void);

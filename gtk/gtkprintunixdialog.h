@@ -60,7 +60,7 @@ struct _GtkPrintUnixDialogClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                gtk_print_unix_dialog_get_type                (void) G_GNUC_CONST;
+GType                gtk_print_unix_dialog_get_type                (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *          gtk_print_unix_dialog_new                     (const gchar *title,
                                                                     GtkWindow   *parent);

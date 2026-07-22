@@ -84,7 +84,7 @@ struct _GtkCellRendererAccelClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType            gtk_cell_renderer_accel_get_type        (void) G_GNUC_CONST;
+GType            gtk_cell_renderer_accel_get_type        (void);
 GDK_AVAILABLE_IN_ALL
 GtkCellRenderer *gtk_cell_renderer_accel_new             (void);
 

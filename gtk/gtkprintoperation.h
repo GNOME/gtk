@@ -227,7 +227,7 @@ GDK_AVAILABLE_IN_ALL
 GQuark gtk_print_error_quark (void);
 
 GDK_AVAILABLE_IN_ALL
-GType                   gtk_print_operation_get_type               (void) G_GNUC_CONST;
+GType                   gtk_print_operation_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 GtkPrintOperation *     gtk_print_operation_new                    (void);
 GDK_AVAILABLE_IN_ALL

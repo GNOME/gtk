@@ -34,7 +34,7 @@ typedef struct _GdkX11DeviceManagerCoreClass GdkX11DeviceManagerCoreClass;
 
 
 GDK_AVAILABLE_IN_ALL
-GType gdk_x11_device_manager_core_get_type (void) G_GNUC_CONST;
+GType gdk_x11_device_manager_core_get_type (void);
 
 
 G_END_DECLS

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 typedef struct _GtkPrintBackendTest    GtkPrintBackendTest;
 
 GtkPrintBackend *gtk_print_backend_test_new      (void);
-GType            gtk_print_backend_test_get_type (void) G_GNUC_CONST;
+GType            gtk_print_backend_test_get_type (void);
 
 G_END_DECLS
 

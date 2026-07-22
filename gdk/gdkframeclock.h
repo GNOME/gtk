@@ -73,7 +73,7 @@ typedef enum {
 } GdkFrameClockPhase;
 
 GDK_AVAILABLE_IN_3_8
-GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
+GType    gdk_frame_clock_get_type             (void);
 
 GDK_AVAILABLE_IN_3_8
 gint64   gdk_frame_clock_get_frame_time            (GdkFrameClock *frame_clock);

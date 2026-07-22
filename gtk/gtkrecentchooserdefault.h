@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkRecentChooserDefault GtkRecentChooserDefault;
 
-GType      _gtk_recent_chooser_default_get_type (void) G_GNUC_CONST;
+GType      _gtk_recent_chooser_default_get_type (void);
 GtkWidget *_gtk_recent_chooser_default_new      (GtkRecentManager *recent_manager);
 
 

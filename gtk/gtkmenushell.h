@@ -85,7 +85,7 @@ struct _GtkMenuShellClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType    gtk_menu_shell_get_type       (void) G_GNUC_CONST;
+GType    gtk_menu_shell_get_type       (void);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_append         (GtkMenuShell *menu_shell,

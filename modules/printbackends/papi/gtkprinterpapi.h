@@ -50,7 +50,7 @@ struct _GtkPrinterPapiClass
 
 };
 
-GType                    gtk_printer_papi_get_type      (void) G_GNUC_CONST;
+GType                    gtk_printer_papi_get_type      (void);
 void                     gtk_printer_papi_register_type (GTypeModule     *module);
 GtkPrinterPapi          *gtk_printer_papi_new           (const char      *name, GtkPrintBackend *backend);
 

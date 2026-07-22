@@ -70,7 +70,7 @@ struct _GtkActivatableIface
 
 
 GDK_DEPRECATED_IN_3_10
-GType      gtk_activatable_get_type                   (void) G_GNUC_CONST;
+GType      gtk_activatable_get_type                   (void);
 
 GDK_DEPRECATED_IN_3_10
 void       gtk_activatable_sync_action_properties     (GtkActivatable *activatable,

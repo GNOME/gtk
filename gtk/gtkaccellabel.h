@@ -80,7 +80,7 @@ struct _GtkAccelLabelClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
+GType	   gtk_accel_label_get_type	     (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_accel_label_new		     (const gchar   *string);
 GDK_AVAILABLE_IN_ALL

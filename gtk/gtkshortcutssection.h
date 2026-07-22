@@ -36,7 +36,7 @@ typedef struct _GtkShortcutsSection      GtkShortcutsSection;
 typedef struct _GtkShortcutsSectionClass GtkShortcutsSectionClass;
 
 GDK_AVAILABLE_IN_3_20
-GType        gtk_shortcuts_section_get_type (void) G_GNUC_CONST;
+GType        gtk_shortcuts_section_get_type (void);
 
 G_END_DECLS
 

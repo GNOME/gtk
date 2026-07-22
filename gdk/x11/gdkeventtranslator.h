@@ -51,7 +51,7 @@ struct _GdkEventTranslatorIface
                                          XEvent             *xevent);
 };
 
-GType      _gdk_x11_event_translator_get_type (void) G_GNUC_CONST;
+GType      _gdk_x11_event_translator_get_type (void);
 
 GdkEvent * _gdk_x11_event_translator_translate (GdkEventTranslator *translator,
                                                GdkDisplay         *display,

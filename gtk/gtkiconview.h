@@ -110,7 +110,7 @@ struct _GtkIconViewClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType          gtk_icon_view_get_type          (void) G_GNUC_CONST;
+GType          gtk_icon_view_get_type          (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *    gtk_icon_view_new               (void);
 GDK_AVAILABLE_IN_ALL

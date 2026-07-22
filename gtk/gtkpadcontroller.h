@@ -75,7 +75,7 @@ struct _GtkPadActionEntry {
 };
 
 GDK_AVAILABLE_IN_3_22
-GType gtk_pad_controller_get_type           (void) G_GNUC_CONST;
+GType gtk_pad_controller_get_type           (void);
 
 GDK_AVAILABLE_IN_3_22
 GtkPadController *gtk_pad_controller_new    (GtkWindow        *window,

@@ -38,7 +38,7 @@ typedef struct _GtkGestureStylus GtkGestureStylus;
 typedef struct _GtkGestureStylusClass GtkGestureStylusClass;
 
 GDK_AVAILABLE_IN_3_24
-GType             gtk_gesture_stylus_get_type (void) G_GNUC_CONST;
+GType             gtk_gesture_stylus_get_type (void);
 
 GDK_AVAILABLE_IN_3_24
 GtkGesture *      gtk_gesture_stylus_new      (GtkWidget *widget);

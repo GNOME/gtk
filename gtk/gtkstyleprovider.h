@@ -116,7 +116,7 @@ struct _GtkStyleProviderIface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_style_provider_get_type (void) G_GNUC_CONST;
+GType gtk_style_provider_get_type (void);
 
 GDK_DEPRECATED_IN_3_8
 GtkStyleProperties *gtk_style_provider_get_style (GtkStyleProvider *provider,

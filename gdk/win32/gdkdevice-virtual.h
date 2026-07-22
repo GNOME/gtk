@@ -43,7 +43,7 @@ struct _GdkDeviceVirtualClass
   GdkDeviceClass parent_class;
 };
 
-GType gdk_device_virtual_get_type (void) G_GNUC_CONST;
+GType gdk_device_virtual_get_type (void);
 
 void _gdk_device_virtual_set_active (GdkDevice *device,
 				     GdkDevice *new_active);

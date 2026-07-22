@@ -32,7 +32,7 @@
 typedef struct _GtkModelMenuItem                            GtkModelMenuItem;
 
 G_GNUC_INTERNAL
-GType                   gtk_model_menu_item_get_type                    (void) G_GNUC_CONST;
+GType                   gtk_model_menu_item_get_type                    (void);
 
 G_GNUC_INTERNAL
 GtkWidget *             gtk_model_menu_item_new                         (void);

@@ -37,7 +37,7 @@ typedef struct _GtkPrintContext GtkPrintContext;
 #define GTK_IS_PRINT_CONTEXT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_CONTEXT))
 
 GDK_AVAILABLE_IN_ALL
-GType          gtk_print_context_get_type (void) G_GNUC_CONST;
+GType          gtk_print_context_get_type (void);
 
 
 /* Rendering */

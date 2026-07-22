@@ -85,7 +85,7 @@ struct _GtkAppChooserWidgetClass {
 };
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_app_chooser_widget_get_type             (void) G_GNUC_CONST;
+GType         gtk_app_chooser_widget_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_app_chooser_widget_new                  (const gchar         *content_type);

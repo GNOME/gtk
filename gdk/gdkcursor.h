@@ -219,7 +219,7 @@ typedef enum
  */
 
 GDK_AVAILABLE_IN_ALL
-GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
+GType      gdk_cursor_get_type           (void);
 
 GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,

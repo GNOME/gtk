@@ -505,7 +505,7 @@ struct _GdkWindowClass
 /* Windows
  */
 GDK_AVAILABLE_IN_ALL
-GType         gdk_window_get_type              (void) G_GNUC_CONST;
+GType         gdk_window_get_type              (void);
 GDK_AVAILABLE_IN_ALL
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,

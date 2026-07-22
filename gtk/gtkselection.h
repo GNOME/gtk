@@ -111,7 +111,7 @@ struct _GtkTargetEntry
 };
 
 GDK_AVAILABLE_IN_ALL
-GType          gtk_target_list_get_type  (void) G_GNUC_CONST;
+GType          gtk_target_list_get_type  (void);
 GDK_AVAILABLE_IN_ALL
 GtkTargetList *gtk_target_list_new       (const GtkTargetEntry *targets,
                                           guint                 ntargets);
@@ -272,14 +272,14 @@ gboolean gtk_targets_include_uri                 (GdkAtom       *targets,
 
 
 GDK_AVAILABLE_IN_ALL
-GType             gtk_selection_data_get_type (void) G_GNUC_CONST;
+GType             gtk_selection_data_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkSelectionData *gtk_selection_data_copy     (const GtkSelectionData *data);
 GDK_AVAILABLE_IN_ALL
 void              gtk_selection_data_free     (GtkSelectionData *data);
 
 GDK_AVAILABLE_IN_ALL
-GType             gtk_target_entry_get_type    (void) G_GNUC_CONST;
+GType             gtk_target_entry_get_type    (void);
 GDK_AVAILABLE_IN_ALL
 GtkTargetEntry   *gtk_target_entry_new        (const gchar    *target,
                                                guint           flags,

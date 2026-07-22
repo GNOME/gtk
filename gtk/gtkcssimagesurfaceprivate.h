@@ -49,7 +49,7 @@ struct _GtkCssImageSurfaceClass
   GtkCssImageClass parent_class;
 };
 
-GType          _gtk_css_image_surface_get_type             (void) G_GNUC_CONST;
+GType          _gtk_css_image_surface_get_type             (void);
 
 GtkCssImage *  _gtk_css_image_surface_new                  (cairo_surface_t *surface);
 GtkCssImage *  _gtk_css_image_surface_new_for_pixbuf       (GdkPixbuf       *pixbuf);

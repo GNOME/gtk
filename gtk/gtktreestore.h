@@ -62,7 +62,7 @@ struct _GtkTreeStoreClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_tree_store_get_type         (void) G_GNUC_CONST;
+GType         gtk_tree_store_get_type         (void);
 GDK_AVAILABLE_IN_ALL
 GtkTreeStore *gtk_tree_store_new              (gint          n_columns,
 					       ...);

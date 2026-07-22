@@ -83,8 +83,8 @@ struct _GtkMessageRowPrivate
   GtkButton *expand_button;
 };
 
-GType      gtk_message_get_type  (void) G_GNUC_CONST;
-GType      gtk_message_row_get_type  (void) G_GNUC_CONST;
+GType      gtk_message_get_type  (void);
+GType      gtk_message_row_get_type  (void);
 
 G_DEFINE_TYPE (GtkMessage, gtk_message, G_TYPE_OBJECT);
 

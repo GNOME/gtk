@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 typedef struct _GtkStackCombo              GtkStackCombo;
 typedef struct _GtkStackComboClass         GtkStackComboClass;
 
-GType        gtk_stack_combo_get_type          (void) G_GNUC_CONST;
+GType        gtk_stack_combo_get_type          (void);
 
 G_END_DECLS
 

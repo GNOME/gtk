@@ -59,7 +59,7 @@ struct _GtkRevealerClass {
 };
 
 GDK_AVAILABLE_IN_3_10
-GType                      gtk_revealer_get_type                (void) G_GNUC_CONST;
+GType                      gtk_revealer_get_type                (void);
 GDK_AVAILABLE_IN_3_10
 GtkWidget*                 gtk_revealer_new                     (void);
 GDK_AVAILABLE_IN_3_10

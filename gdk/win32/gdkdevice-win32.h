@@ -42,7 +42,7 @@ struct _GdkDeviceWin32Class
   GdkDeviceClass parent_class;
 };
 
-GType gdk_device_win32_get_type (void) G_GNUC_CONST;
+GType gdk_device_win32_get_type (void);
 
 GdkWindow *_gdk_device_win32_window_at_position (GdkDevice       *device,
                                                  gdouble         *win_x,

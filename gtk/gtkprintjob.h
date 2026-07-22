@@ -77,7 +77,7 @@ struct _GtkPrintJobClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                    gtk_print_job_get_type               (void) G_GNUC_CONST;
+GType                    gtk_print_job_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 GtkPrintJob             *gtk_print_job_new                    (const gchar              *title,
 							       GtkPrinter               *printer,

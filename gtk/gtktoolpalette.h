@@ -85,7 +85,7 @@ struct _GtkToolPaletteClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType                          gtk_tool_palette_get_type              (void) G_GNUC_CONST;
+GType                          gtk_tool_palette_get_type              (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*                     gtk_tool_palette_new                   (void);
 

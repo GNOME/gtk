@@ -188,7 +188,7 @@ struct _GtkThemingEngineClass
 };
 
 GDK_DEPRECATED_IN_3_14
-GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
+GType gtk_theming_engine_get_type (void);
 
 /* function implemented in gtkcsscustomproperty.c */
 GDK_DEPRECATED_IN_3_8

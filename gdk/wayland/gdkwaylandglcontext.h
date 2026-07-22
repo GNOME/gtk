@@ -38,7 +38,7 @@ typedef struct _GdkWaylandGLContext		GdkWaylandGLContext;
 typedef struct _GdkWaylandGLContextClass	GdkWaylandGLContextClass;
 
 GDK_AVAILABLE_IN_3_16
-GType gdk_wayland_gl_context_get_type (void) G_GNUC_CONST;
+GType gdk_wayland_gl_context_get_type (void);
 
 G_END_DECLS
 

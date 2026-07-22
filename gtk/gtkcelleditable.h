@@ -61,7 +61,7 @@ struct _GtkCellEditableIface
 
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_cell_editable_get_type      (void) G_GNUC_CONST;
+GType gtk_cell_editable_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
 void  gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,

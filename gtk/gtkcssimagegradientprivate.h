@@ -49,7 +49,7 @@ struct _GtkCssImageGradientClass
   GtkCssImageClass parent_class;
 };
 
-GType          _gtk_css_image_gradient_get_type             (void) G_GNUC_CONST;
+GType          _gtk_css_image_gradient_get_type             (void);
 
 /* for lack of a better place to put it */
 GtkGradient *  _gtk_gradient_parse                          (GtkCssParser *parser);

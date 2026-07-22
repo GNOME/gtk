@@ -56,7 +56,7 @@ struct _GtkStackSwitcherClass
 };
 
 GDK_AVAILABLE_IN_3_10
-GType        gtk_stack_switcher_get_type          (void) G_GNUC_CONST;
+GType        gtk_stack_switcher_get_type          (void);
 GDK_AVAILABLE_IN_3_10
 GtkWidget *  gtk_stack_switcher_new               (void);
 GDK_AVAILABLE_IN_3_10

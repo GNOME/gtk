@@ -73,7 +73,7 @@ struct _GtkApplicationClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType            gtk_application_get_type      (void) G_GNUC_CONST;
+GType            gtk_application_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkApplication * gtk_application_new           (const gchar       *application_id,

@@ -190,7 +190,7 @@ typedef GtkWidget * (*GtkListBoxCreateWidgetFunc) (gpointer item,
                                                    gpointer user_data);
 
 GDK_AVAILABLE_IN_3_10
-GType      gtk_list_box_row_get_type      (void) G_GNUC_CONST;
+GType      gtk_list_box_row_get_type      (void);
 GDK_AVAILABLE_IN_3_10
 GtkWidget* gtk_list_box_row_new           (void);
 GDK_AVAILABLE_IN_3_10
@@ -220,7 +220,7 @@ GDK_AVAILABLE_IN_3_14
 gboolean   gtk_list_box_row_get_activatable (GtkListBoxRow *row);
 
 GDK_AVAILABLE_IN_3_10
-GType          gtk_list_box_get_type                     (void) G_GNUC_CONST;
+GType          gtk_list_box_get_type                     (void);
 GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_prepend                      (GtkListBox                    *box,
                                                           GtkWidget                     *child);

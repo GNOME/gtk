@@ -161,7 +161,7 @@ GDK_AVAILABLE_IN_ALL
 GQuark gtk_icon_theme_error_quark (void);
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_icon_theme_get_type              (void) G_GNUC_CONST;
+GType         gtk_icon_theme_get_type              (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_new                   (void);
@@ -277,7 +277,7 @@ void          gtk_icon_theme_add_builtin_icon      (const gchar *icon_name,
 					            GdkPixbuf   *pixbuf);
 
 GDK_AVAILABLE_IN_ALL
-GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
+GType                 gtk_icon_info_get_type           (void);
 GDK_DEPRECATED_IN_3_8_FOR(g_object_ref)
 GtkIconInfo *         gtk_icon_info_copy               (GtkIconInfo  *icon_info);
 GDK_DEPRECATED_IN_3_8_FOR(g_object_unref)

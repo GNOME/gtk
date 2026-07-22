@@ -75,7 +75,7 @@ struct _GtkIconFactoryClass
 };
 
 GDK_DEPRECATED_IN_3_10
-GType           gtk_icon_factory_get_type (void) G_GNUC_CONST;
+GType           gtk_icon_factory_get_type (void);
 GDK_DEPRECATED_IN_3_10
 GtkIconFactory* gtk_icon_factory_new      (void);
 GDK_DEPRECATED_IN_3_10
@@ -133,7 +133,7 @@ const gchar*          gtk_icon_size_get_name       (GtkIconSize  size);
 /* Icon sets */
 
 GDK_DEPRECATED_IN_3_10
-GType       gtk_icon_set_get_type        (void) G_GNUC_CONST;
+GType       gtk_icon_set_get_type        (void);
 GDK_DEPRECATED_IN_3_10
 GtkIconSet* gtk_icon_set_new             (void);
 GDK_DEPRECATED_IN_3_10
@@ -165,7 +165,7 @@ void           gtk_icon_set_get_sizes    (GtkIconSet          *icon_set,
                                           gint                *n_sizes);
 
 GDK_DEPRECATED_IN_3_10
-GType          gtk_icon_source_get_type                 (void) G_GNUC_CONST;
+GType          gtk_icon_source_get_type                 (void);
 GDK_DEPRECATED_IN_3_10
 GtkIconSource* gtk_icon_source_new                      (void);
 GDK_DEPRECATED_IN_3_10

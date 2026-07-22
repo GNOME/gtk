@@ -265,7 +265,7 @@ extern G_GNUC_INTERNAL PangoAttrType gtk_text_attr_appearance_type;
 #endif
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_text_layout_get_type    (void) G_GNUC_CONST;
+GType         gtk_text_layout_get_type    (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkTextLayout*     gtk_text_layout_new                   (void);

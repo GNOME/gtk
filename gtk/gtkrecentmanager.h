@@ -161,7 +161,7 @@ GQuark 	gtk_recent_manager_error_quark (void);
 
 
 GDK_AVAILABLE_IN_ALL
-GType 		  gtk_recent_manager_get_type       (void) G_GNUC_CONST;
+GType 		  gtk_recent_manager_get_type       (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkRecentManager *gtk_recent_manager_new            (void);
@@ -199,7 +199,7 @@ gint              gtk_recent_manager_purge_items    (GtkRecentManager     *manag
 
 
 GDK_AVAILABLE_IN_ALL
-GType	              gtk_recent_info_get_type             (void) G_GNUC_CONST;
+GType	              gtk_recent_info_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkRecentInfo *       gtk_recent_info_ref                  (GtkRecentInfo  *info);

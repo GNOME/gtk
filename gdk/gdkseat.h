@@ -82,7 +82,7 @@ struct _GdkSeat
 };
 
 GDK_AVAILABLE_IN_3_20
-GType          gdk_seat_get_type         (void) G_GNUC_CONST;
+GType          gdk_seat_get_type         (void);
 
 GDK_AVAILABLE_IN_3_20
 GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,

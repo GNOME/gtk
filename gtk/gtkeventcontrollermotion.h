@@ -40,7 +40,7 @@ typedef struct _GtkEventControllerMotion GtkEventControllerMotion;
 typedef struct _GtkEventControllerMotionClass GtkEventControllerMotionClass;
 
 GDK_AVAILABLE_IN_3_24
-GType               gtk_event_controller_motion_get_type (void) G_GNUC_CONST;
+GType               gtk_event_controller_motion_get_type (void);
 
 GDK_AVAILABLE_IN_3_24
 GtkEventController *gtk_event_controller_motion_new      (GtkWidget *widget);

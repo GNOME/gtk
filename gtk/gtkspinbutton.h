@@ -138,7 +138,7 @@ struct _GtkSpinButtonClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
+GType		gtk_spin_button_get_type	   (void);
 
 GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,

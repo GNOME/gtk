@@ -50,7 +50,7 @@ struct _GtkCssStaticStyleClass
   GtkCssStyleClass parent_class;
 };
 
-GType                   gtk_css_static_style_get_type           (void) G_GNUC_CONST;
+GType                   gtk_css_static_style_get_type           (void);
 
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,

@@ -65,7 +65,7 @@ struct _GtkTreeDragSourceIface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_tree_drag_source_get_type   (void) G_GNUC_CONST;
+GType           gtk_tree_drag_source_get_type   (void);
 
 /* Returns whether the given row can be dragged */
 GDK_AVAILABLE_IN_ALL
@@ -120,7 +120,7 @@ struct _GtkTreeDragDestIface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_tree_drag_dest_get_type   (void) G_GNUC_CONST;
+GType           gtk_tree_drag_dest_get_type   (void);
 
 /* Inserts a row before dest which contains data in selection_data,
  * or returns FALSE if it can't

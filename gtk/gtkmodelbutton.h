@@ -51,7 +51,7 @@ typedef enum {
 } GtkButtonRole;
 
 GDK_AVAILABLE_IN_3_16
-GType       gtk_model_button_get_type (void) G_GNUC_CONST;
+GType       gtk_model_button_get_type (void);
 
 GDK_AVAILABLE_IN_3_16
 GtkWidget * gtk_model_button_new      (void);

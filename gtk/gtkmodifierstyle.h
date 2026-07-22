@@ -52,7 +52,7 @@ struct _GtkModifierStyleClass
   void (*_gtk_reserved4) (void);
 };
 
-GType _gtk_modifier_style_get_type (void) G_GNUC_CONST;
+GType _gtk_modifier_style_get_type (void);
 
 GtkModifierStyle * _gtk_modifier_style_new (void);
 

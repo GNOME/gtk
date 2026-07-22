@@ -73,7 +73,7 @@ struct _GtkToolShellIface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType              gtk_tool_shell_get_type             (void) G_GNUC_CONST;
+GType              gtk_tool_shell_get_type             (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkIconSize        gtk_tool_shell_get_icon_size        (GtkToolShell *shell);

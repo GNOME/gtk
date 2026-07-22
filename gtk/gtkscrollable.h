@@ -47,7 +47,7 @@ struct _GtkScrollableInterface
 
 /* Public API */
 GDK_AVAILABLE_IN_ALL
-GType                gtk_scrollable_get_type               (void) G_GNUC_CONST;
+GType                gtk_scrollable_get_type               (void);
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment       *gtk_scrollable_get_hadjustment        (GtkScrollable       *scrollable);
 GDK_AVAILABLE_IN_ALL

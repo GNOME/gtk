@@ -45,7 +45,7 @@ struct _GdkRGBA
 #define GDK_TYPE_RGBA (gdk_rgba_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-GType     gdk_rgba_get_type  (void) G_GNUC_CONST;
+GType     gdk_rgba_get_type  (void);
 
 GDK_AVAILABLE_IN_ALL
 GdkRGBA * gdk_rgba_copy      (const GdkRGBA *rgba);

@@ -39,6 +39,6 @@ struct _GdkWaylandSeatClass
   GdkSeatClass parent_class;
 };
 
-GType gdk_wayland_seat_get_type (void) G_GNUC_CONST;
+GType gdk_wayland_seat_get_type (void);
 
 #endif /* __GDK_WAYLAND_SEAT_H__ */

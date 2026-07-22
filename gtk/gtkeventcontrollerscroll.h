@@ -63,7 +63,7 @@ typedef enum {
 } GtkEventControllerScrollFlags;
 
 GDK_AVAILABLE_IN_3_24
-GType               gtk_event_controller_scroll_get_type  (void) G_GNUC_CONST;
+GType               gtk_event_controller_scroll_get_type  (void);
 
 GDK_AVAILABLE_IN_3_24
 GtkEventController *gtk_event_controller_scroll_new (GtkWidget                     *widget,

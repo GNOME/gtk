@@ -81,7 +81,7 @@ struct _GtkEditableInterface
 };
 
 GDK_AVAILABLE_IN_ALL
-GType    gtk_editable_get_type             (void) G_GNUC_CONST;
+GType    gtk_editable_get_type             (void);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_select_region        (GtkEditable *editable,
 					    gint         start_pos,

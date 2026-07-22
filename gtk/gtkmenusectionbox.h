@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkMenuSectionBox                           GtkMenuSectionBox;
 
-GType                   gtk_menu_section_box_get_type                   (void) G_GNUC_CONST;
+GType                   gtk_menu_section_box_get_type                   (void);
 void                    gtk_menu_section_box_new_toplevel               (GtkStack    *stack,
                                                                          GMenuModel  *model,
                                                                          const gchar *action_namespace,

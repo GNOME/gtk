@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 
 
 GDK_AVAILABLE_IN_ALL
-GType              gdk_display_manager_get_type            (void) G_GNUC_CONST;
+GType              gdk_display_manager_get_type            (void);
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplayManager *gdk_display_manager_get                 (void);

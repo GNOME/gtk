@@ -53,7 +53,7 @@ struct _GtkGraphDataClass
 };
 
 
-GType            gtk_graph_data_get_type        (void) G_GNUC_CONST;
+GType            gtk_graph_data_get_type        (void);
 
 GtkGraphData    *gtk_graph_data_new             (guint           n_values);
 

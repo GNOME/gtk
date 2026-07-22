@@ -77,7 +77,7 @@ struct _GtkOverlayClass
 };
 
 GDK_AVAILABLE_IN_3_2
-GType      gtk_overlay_get_type    (void) G_GNUC_CONST;
+GType      gtk_overlay_get_type    (void);
 GDK_AVAILABLE_IN_3_2
 GtkWidget *gtk_overlay_new         (void);
 GDK_AVAILABLE_IN_3_2

@@ -62,7 +62,7 @@ struct _GtkSearchEntryClass
 };
 
 GDK_AVAILABLE_IN_3_6
-GType           gtk_search_entry_get_type       (void) G_GNUC_CONST;
+GType           gtk_search_entry_get_type       (void);
 
 GDK_AVAILABLE_IN_3_6
 GtkWidget*      gtk_search_entry_new            (void);

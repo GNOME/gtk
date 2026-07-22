@@ -57,7 +57,7 @@ struct _GtkBorder
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_border_get_type (void) G_GNUC_CONST;
+GType      gtk_border_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkBorder *gtk_border_new      (void) G_GNUC_MALLOC;
 GDK_AVAILABLE_IN_ALL

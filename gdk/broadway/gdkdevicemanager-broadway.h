@@ -45,7 +45,7 @@ struct _GdkBroadwayDeviceManagerClass
   GdkDeviceManagerClass parent_class;
 };
 
-GType gdk_broadway_device_manager_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_device_manager_get_type (void);
 GdkDeviceManager *_gdk_broadway_device_manager_new (GdkDisplay *display);
 
 G_END_DECLS

@@ -43,7 +43,7 @@ struct _GdkBroadwayDeviceClass
 };
 
 G_GNUC_INTERNAL
-GType gdk_broadway_device_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_device_get_type (void);
 
 G_END_DECLS
 

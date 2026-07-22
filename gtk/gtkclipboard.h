@@ -181,7 +181,7 @@ typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
 
 GDK_AVAILABLE_IN_ALL
-GType         gtk_clipboard_get_type (void) G_GNUC_CONST;
+GType         gtk_clipboard_get_type (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,

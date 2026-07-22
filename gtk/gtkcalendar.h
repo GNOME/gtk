@@ -124,7 +124,7 @@ struct _GtkCalendarClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
+GType	   gtk_calendar_get_type	(void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_calendar_new		(void);
 

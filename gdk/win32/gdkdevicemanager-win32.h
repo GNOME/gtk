@@ -57,7 +57,7 @@ struct _GdkDeviceManagerWin32Class
   GdkDeviceManagerClass parent_class;
 };
 
-GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
+GType gdk_device_manager_win32_get_type (void);
 
 typedef void
 (*crossing_cb_t)(GdkDisplay *display,

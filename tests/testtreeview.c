@@ -123,7 +123,7 @@ struct _GtkTreeModelTypesClass
 				    GtkTreePath  *path);
 };
 
-GType              gtk_tree_model_types_get_type      (void) G_GNUC_CONST;
+GType              gtk_tree_model_types_get_type      (void);
 GtkTreeModelTypes *gtk_tree_model_types_new           (void);
 
 typedef enum

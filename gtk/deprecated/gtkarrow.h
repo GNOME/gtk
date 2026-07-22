@@ -68,7 +68,7 @@ struct _GtkArrowClass
 
 
 GDK_DEPRECATED_IN_3_14
-GType      gtk_arrow_get_type   (void) G_GNUC_CONST;
+GType      gtk_arrow_get_type   (void);
 GDK_DEPRECATED_IN_3_14
 GtkWidget* gtk_arrow_new        (GtkArrowType   arrow_type,
 				 GtkShadowType  shadow_type);

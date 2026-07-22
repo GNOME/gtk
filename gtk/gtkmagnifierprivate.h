@@ -40,7 +40,7 @@ struct _GtkMagnifierClass
   GtkWidgetClass parent_class;
 };
 
-GType       _gtk_magnifier_get_type          (void) G_GNUC_CONST;
+GType       _gtk_magnifier_get_type          (void);
 
 GtkWidget * _gtk_magnifier_new               (GtkWidget       *inspected);
 
