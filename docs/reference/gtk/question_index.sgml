@@ -514,32 +514,6 @@ section of <ulink url="https://developer.gnome.org/pango/stable/">Pango manual</
 <qandaentry>
 <question>
 <para>
-Why are types not registered if I use their <literal>GTK_TYPE_BLAH</literal>
-macro ?
-</para>
-</question>
-
-<answer>
-<para>
-The <literal>GTK_TYPE_BLAH</literal> macros are defined as calls to
-<literal>gtk_blah_get_type(<!-- -->)</literal>, and the <literal>_get_type(<!-- -->)</literal>
-functions are declared as %G_GNUC_CONST which allows the compiler to optimize
-the call away if it appears that the value is not being used.
-</para>
-
-<para>
-A common workaround for this problem is to store the result in a volatile
-variable, which keeps the compiler from optimizing the call away.
-<informalexample><programlisting>
-volatile GType dummy = GTK_TYPE_BLAH;
-</programlisting></informalexample>
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>
 How do I create a transparent toplevel window ?
 </para>
 </question>
