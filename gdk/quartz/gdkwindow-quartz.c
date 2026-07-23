@@ -791,12 +791,27 @@ _gdk_quartz_window_did_become_main (GdkWindow *window)
 void
 _gdk_quartz_window_did_resign_main (GdkWindow *window)
 {
-  /* Don't try to make another window key when one resigns main.
-   * macOS handles this automatically, and GTK's attempt to manage focus
-   * here causes focus fighting between windows.
+  GdkWindow *new_window = window->transient_for;
+
+  /* Explicitly reassign focus only if a dialog/transient is closing.
+   * For normal window switches, macOS handles focus automatically.
+   * Unconditionally reassigning focus here causes fighting in
+   * multi-window apps.
    * See: https://gitlab.gnome.org/GNOME/gimp/-/issues/14901
    *      https://gitlab.gnome.org/GNOME/gimp/-/issues/15480
    */
+
+  if (new_window &&
+      new_window != window &&
+      GDK_WINDOW_IS_MAPPED (new_window) &&
+      WINDOW_IS_TOPLEVEL (new_window))
+    {
+      GdkWindowImplQuartz *impl = gdk_window_get_quartz_impl (new_window);
+
+      if (impl)
+        [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+    }
+
   clear_toplevel_order ();
 }
 
