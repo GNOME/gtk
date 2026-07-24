@@ -125,16 +125,19 @@ static void
 svg_element_dispose (GObject *object)
 {
   SvgElement *self = SVG_ELEMENT (object);
-  SvgElement *next;
+  gpointer next;
 
   if (self->child_observer)
     gtk_list_list_model_clear (self->child_observer);
 
-  for (SvgElement *s = self->first_child; s; s = next)
+  for (SvgElement *s = self->first_child; s; s = (SvgElement *) next)
     {
       next = s->next_sibling;
       g_object_unref (s);
     }
+
+  if (self->animation_observer)
+    gtk_list_list_model_clear (self->animation_observer);
 
   G_OBJECT_CLASS (svg_element_parent_class)->dispose (object);
 }
@@ -1223,6 +1226,22 @@ svg_element_add_animation (SvgElement   *shape,
   if (!shape->animations)
     shape->animations = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_animation_free);
   g_ptr_array_add (shape->animations, animation);
+
+  if (shape->first_animation == NULL)
+    {
+      shape->first_animation = shape->last_animation = animation;
+      animation->prev_sibling = animation->next_sibling = NULL;
+    }
+  else
+    {
+      shape->last_animation->next_sibling = animation;
+      animation->prev_sibling = shape->last_animation;
+      animation->next_sibling = NULL;
+      shape->last_animation = animation;
+    }
+
+  if (shape->animation_observer)
+    gtk_list_list_model_item_added (shape->animation_observer, animation);
 }
 
 /* What we call base value here is roughly the 'cascaded' value of CSS:
@@ -2609,6 +2628,9 @@ svg_element_clone (SvgElement *element,
   if (clone->type == SVG_ELEMENT_LINK)
     gtk_css_node_set_state (clone->css_node, GTK_STATE_FLAG_LINK);
 
+  if (element->text)
+    clone->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
+
   clone->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
   for (unsigned int i = 0; i < element->specified->len; i++)
     {
@@ -2661,15 +2683,11 @@ svg_element_clone (SvgElement *element,
       q->next = NULL;
     }
 
-  if (element->animations)
+  for (SvgAnimation *a = element->first_animation; a; a = a->next_sibling)
     {
-      for (unsigned int i = 0; i < element->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (element->animations, i);
-          SvgAnimation *a_clone = svg_animation_clone (a, clone, svg->timeline);
-          svg_element_add_animation (clone, a_clone);
-          g_hash_table_insert (data->map, a, a_clone);
-        }
+      SvgAnimation *a_clone = svg_animation_clone (a, clone, svg->timeline);
+      svg_element_add_animation (clone, a_clone);
+      g_hash_table_insert (data->map, a, a_clone);
     }
 
   if (element->color_stops)
@@ -2694,7 +2712,6 @@ svg_element_clone (SvgElement *element,
 
   if (element->text)
     {
-      clone->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
       for (unsigned int i = 0; i < element->text->len; i++)
         {
           TextNode *t = &g_array_index (element->text, TextNode, i);
@@ -3048,4 +3065,41 @@ svg_element_observe_children (SvgElement *element)
                                                      svg_element_child_observer_destroyed);
 
   return G_LIST_MODEL (element->child_observer);
+}
+
+static void
+svg_element_animation_observer_destroyed (gpointer element)
+{
+  SvgElement *self = (SvgElement *) element;
+
+  self->animation_observer = NULL;
+}
+
+SvgAnimation *
+svg_element_get_first_animation (SvgElement *element)
+{
+  return element->first_animation;
+}
+
+SvgAnimation *
+svg_element_get_last_animation (SvgElement *element)
+{
+  return element->last_animation;
+}
+
+GListModel *
+svg_element_observe_animations (SvgElement *element)
+{
+  if (element->animation_observer)
+    return g_object_ref (G_LIST_MODEL (element->animation_observer));
+
+  element->animation_observer = gtk_list_list_model_new ((gpointer) svg_element_get_first_animation,
+                                                         (gpointer) svg_animation_get_next_sibling,
+                                                         (gpointer) svg_animation_get_prev_sibling,
+                                                         (gpointer) svg_element_get_last_animation,
+                                                         (gpointer) g_object_ref,
+                                                         element,
+                                                         svg_element_animation_observer_destroyed);
+
+  return G_LIST_MODEL (element->animation_observer);
 }

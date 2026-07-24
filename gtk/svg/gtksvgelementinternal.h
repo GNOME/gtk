@@ -135,6 +135,9 @@ struct _SvgElement
 
   SvgElement *corresponding;
 
+  SvgAnimation *first_animation;
+  SvgAnimation *last_animation;
+
   GPtrArray *animations;
   GPtrArray *color_stops;
   GPtrArray *filters;
@@ -191,6 +194,7 @@ struct _SvgElement
   } gpa;
 
   GtkListListModel *child_observer;
+  GtkListListModel *animation_observer;
 };
 
 G_END_DECLS

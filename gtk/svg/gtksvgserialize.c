@@ -764,14 +764,10 @@ serialize_color_stop (GString              *s,
     }
   g_string_append (s, ">");
 
-  if (shape->animations)
+  for (SvgAnimation *a = shape->first_animation; a; a = a->next_sibling)
     {
-      for (unsigned int i = 0; i < shape->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
-          if (a->idx == idx + 1)
-            serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
-        }
+      if (a->idx == idx + 1)
+        serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
     }
 
   string_indent (s, indent);
@@ -831,14 +827,10 @@ serialize_filter_begin (GString              *s,
 
   g_string_append (s, ">");
 
-  if (shape->animations)
+  for (SvgAnimation *a = shape->first_animation; a; a = a->next_sibling)
     {
-      for (unsigned int i = 0; i < shape->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
-          if (a->idx == idx + 1)
-            serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
-        }
+      if (a->idx == idx + 1)
+        serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
     }
 }
 
@@ -997,14 +989,10 @@ serialize_shape (GString              *s,
         }
     }
 
-  if (shape->animations)
+  for (SvgAnimation *a = shape->first_animation; a; a = a->next_sibling)
     {
-      for (unsigned int i = 0; i < shape->animations->len; i++)
-        {
-          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
-          if (a->idx == 0)
-            serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
-        }
+      if (a->idx == 0)
+        serialize_animation (s, svg, indent + BASE_INDENT, a, flags);
     }
 
   if (svg_element_type_is_text (svg_element_get_element_type (shape)))

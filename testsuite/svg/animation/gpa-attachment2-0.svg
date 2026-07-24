@@ -32,20 +32,16 @@
             gpa:current-start-time='0ms'
             gpa:run-mode='discrete'
             gpa:last-start-time='0ms'/>
-    <animate
-            id='gpa:transition:fade-out:0:stroke-dasharray:line'
-            attributeName='stroke-dasharray'
-            begin='StateChange(0, not 0) -1000ms'
-            dur='1000ms'
-            repeatDur='1000ms'
-            fill='freeze'
-            from='1 0'
-            to='0 2'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            gpa:status='done'
-            gpa:run-mode='stopped'
+    <set
+            id='gpa:path-length:line'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
             gpa:last-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dasharray:line'
@@ -61,16 +57,20 @@
             calcMode='spline'
             gpa:status='inactive'
             gpa:run-mode='discrete'/>
-    <set
-            id='gpa:path-length:line'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'
-            gpa:run-mode='discrete'
+    <animate
+            id='gpa:transition:fade-out:0:stroke-dasharray:line'
+            attributeName='stroke-dasharray'
+            begin='StateChange(0, not 0) -1000ms'
+            dur='1000ms'
+            repeatDur='1000ms'
+            fill='freeze'
+            from='1 0'
+            to='0 2'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'
+            gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
   </path>
   <circle
@@ -90,6 +90,17 @@
             begin='StateChange(0, not 0); 0ms'
             end='StateChange(not 0, 0)'
             to='hidden'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
+    <set
+            id='gpa:path-length:red'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
             gpa:status='running'
             gpa:computed-simple-duration='indefinite'
             gpa:current-start-time='0ms'
@@ -142,16 +153,5 @@
             gpa:run-mode='discrete'>
       <mpath href='#line'/>
     </animateMotion>
-    <set
-            id='gpa:path-length:red'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'
-            gpa:run-mode='discrete'
-            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

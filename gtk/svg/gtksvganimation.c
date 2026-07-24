@@ -68,8 +68,6 @@ svg_animation_finalize (GObject *object)
 static void
 svg_animation_dispose (GObject *object)
 {
-  SvgAnimation *animation = SVG_ANIMATION (object);
-
   G_OBJECT_CLASS (svg_animation_parent_class)->dispose (object);
 }
 
@@ -994,7 +992,7 @@ svg_animation_update_state (SvgAnimation *a,
 }
 
 /* }}} */
-/* ((( Reference resolution */
+/* {{{ Reference resolution */
 
 void
 svg_animation_resolve_shadow_references (SvgAnimation *animation,
@@ -1148,5 +1146,17 @@ svg_animation_resolve_shadow_references (SvgAnimation *animation,
 }
 
 /* }}} */
+
+SvgAnimation *
+svg_animation_get_prev_sibling (SvgAnimation *animation)
+{
+  return animation->prev_sibling;
+}
+
+SvgAnimation *
+svg_animation_get_next_sibling (SvgAnimation *animation)
+{
+  return animation->next_sibling;
+}
 
 /* vim:set foldmethod=marker: */

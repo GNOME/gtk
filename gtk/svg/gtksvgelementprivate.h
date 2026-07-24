@@ -297,4 +297,9 @@ SvgElement *    svg_element_get_next_sibling    (SvgElement *element);
 
 GListModel *    svg_element_observe_children    (SvgElement *element);
 
+SvgAnimation *  svg_element_get_first_animation (SvgElement *element);
+SvgAnimation *  svg_element_get_last_animation  (SvgElement *element);
+
+GListModel *    svg_element_observe_animations  (SvgElement *element);
+
 G_END_DECLS
