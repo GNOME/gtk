@@ -251,7 +251,7 @@ shape_apply_state (GtkSvg       *self,
   else
     visibility = VISIBILITY_HIDDEN;
 
-  if (svg_element_type_is_renderable (svg_element_get_type (shape)))
+  if (svg_element_type_is_renderable (svg_element_get_element_type (shape)))
     {
       if ((self->features & GTK_SVG_ANIMATIONS) == 0)
         {
@@ -326,7 +326,7 @@ shape_apply_state (GtkSvg       *self,
         }
     }
 
-  if (svg_element_type_is_container (svg_element_get_type (shape)))
+  if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
       for (unsigned int i = 0; i < shape->shapes->len; i++)
         {

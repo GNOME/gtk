@@ -769,7 +769,7 @@ svg_element_get_current_bounds (SvgElement            *element,
     case SVG_ELEMENT_TSPAN:
       {
         SvgElement *elt = element;
-        while (svg_element_get_type (elt) != SVG_ELEMENT_TEXT)
+        while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
           elt = svg_element_get_parent (elt);
         if (!elt->valid_bounds)
           g_critical ("No valid bounds for text");
@@ -1061,7 +1061,7 @@ svg_element_set_base_value (SvgElement  *element,
     element->base[attr] = svg_value_ref (value);
   else
     element->base[attr] = svg_property_ref_initial_value (attr,
-                                                          svg_element_get_type (element),
+                                                          svg_element_get_element_type (element),
                                                           svg_element_get_parent (element) != NULL);
   element->important = _gtk_bitmask_set (element->important, attr, important);
 }
@@ -1180,7 +1180,7 @@ svg_element_get_current_value (SvgElement  *element,
 }
 
 SvgElementType
-svg_element_get_type (SvgElement *element)
+svg_element_get_element_type (SvgElement *element)
 {
   return element->type;
 }
@@ -1815,8 +1815,8 @@ svg_element_duplicate (SvgElement *element,
 }
 
 void
-svg_element_set_type (SvgElement     *element,
-                      SvgElementType  type)
+svg_element_set_element_type (SvgElement     *element,
+                              SvgElementType  type)
 {
   SvgElementType old_type;
 

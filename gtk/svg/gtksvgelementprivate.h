@@ -44,11 +44,11 @@ void         svg_element_free                (SvgElement            *element);
 SvgElement * svg_element_new                 (SvgElement            *parent,
                                               SvgElementType         type);
 
-void         svg_element_set_type            (SvgElement            *element,
+void         svg_element_set_element_type    (SvgElement            *element,
                                               SvgElementType         type);
 
 SvgElementType
-             svg_element_get_type            (SvgElement            *element);
+             svg_element_get_element_type    (SvgElement            *element);
 void         svg_element_add_color_stop      (SvgElement            *element,
                                               SvgColorStop          *stop);
 void         svg_element_add_filter          (SvgElement            *element,

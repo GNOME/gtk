@@ -184,7 +184,7 @@ activate_cb (SvgElement *element,
 {
   GtkSvgWidget *self = data;
 
-  if (svg_element_get_type (element) == SVG_ELEMENT_LINK)
+  if (svg_element_get_element_type (element) == SVG_ELEMENT_LINK)
     {
       const char *id = svg_element_get_id (element);
       SvgValue *href = svg_element_get_current_value (element, SVG_PROPERTY_HREF);
