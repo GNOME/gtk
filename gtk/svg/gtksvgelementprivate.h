@@ -285,4 +285,9 @@ void         svg_element_ensure_shadow_tree (SvgElement *element,
                                              GtkSvg     *svg);
 SvgElement * svg_element_get_corresponding  (SvgElement *element);
 
+SvgElement *    svg_element_get_first_child     (SvgElement *element);
+SvgElement *    svg_element_get_last_child      (SvgElement *element);
+SvgElement *    svg_element_get_prev_sibling    (SvgElement *element);
+SvgElement *    svg_element_get_next_sibling    (SvgElement *element);
+
 G_END_DECLS

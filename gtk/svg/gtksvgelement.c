@@ -2788,3 +2788,47 @@ svg_element_get_corresponding (SvgElement *element)
 {
   return element->corresponding;
 }
+
+SvgElement *
+svg_element_get_first_child (SvgElement *element)
+{
+  if (element->shapes && element->shapes->len > 0)
+    return g_ptr_array_index (element->shapes, 0);
+
+  return NULL;
+}
+
+SvgElement *
+svg_element_get_last_child (SvgElement *element)
+{
+  if (element->shapes && element->shapes->len > 0)
+    return g_ptr_array_index (element->shapes, element->shapes->len - 1);
+
+  return NULL;
+}
+
+SvgElement *
+svg_element_get_prev_sibling (SvgElement *element)
+{
+  unsigned int pos;
+
+  if (element->parent &&
+      g_ptr_array_find (element->parent->shapes, element, &pos) &&
+      pos > 0)
+    return g_ptr_array_index (element->parent->shapes, pos - 1);
+
+  return NULL;
+}
+
+SvgElement *
+svg_element_get_next_sibling (SvgElement *element)
+{
+  unsigned int pos;
+
+  if (element->parent &&
+      g_ptr_array_find (element->parent->shapes, element, &pos) &&
+      pos + 1 < element->parent->shapes->len)
+    return g_ptr_array_index (element->parent->shapes, pos + 1);
+
+  return NULL;
+}
