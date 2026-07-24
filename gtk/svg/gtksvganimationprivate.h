@@ -102,6 +102,8 @@ typedef struct
 
 struct _SvgAnimation
 {
+  GObject parent;
+
   AnimationType type;
   AnimationStatus status;
   char *id;
@@ -170,6 +172,15 @@ struct _SvgAnimation
     double attach_pos;
   } gpa;
 };
+
+struct _SvgAnimationClass
+{
+  GObjectClass parent_class;
+};
+
+#define SVG_TYPE_ANIMATION (svg_animation_get_type ())
+
+GDK_DECLARE_INTERNAL_TYPE (SvgAnimation, svg_animation, SVG, ANIMATION, GObject)
 
 SvgAnimation *   svg_animation_new           (AnimationType  type);
 
