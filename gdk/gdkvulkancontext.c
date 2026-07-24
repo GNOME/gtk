@@ -40,6 +40,9 @@
 #include "gsk/gskrenderer.h"
 #include "gsk/gskrendernodeprivate.h"
 
+#ifdef G_OS_UNIX
+#include <glib-unix.h>
+#endif
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
@@ -740,8 +743,11 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
 
   vframe->present = NULL;
   g_clear_pointer (&vframe->completion_source, g_source_destroy);
+  g_clear_fd (&vframe->completion_fd, NULL);
   gdk_draw_context_frame_gpu_complete ((GdkDrawContextFrame *) vframe, timestamp);
 }
+
+#define COMPLETION_FD_EVENTS (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_PRI | G_IO_HUP)
 
 static gboolean
 gdk_vulkan_present_is_busy (GdkVulkanContext *self,
@@ -755,9 +761,20 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
   if (!present->vk_fence)
     return TRUE;
   
-  res = vkGetFenceStatus (gdk_vulkan_context_get_device (self), present->vk_fence);
-  if (res != VK_SUCCESS)
-    return TRUE;
+  if (present->frame->completion_fd >= 0)
+    {
+      GPollFD poll_fd = { present->frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
+      if (g_poll (&poll_fd, 1, 0) <= 0)
+        return TRUE;
+      if (!(poll_fd.revents & COMPLETION_FD_EVENTS))
+        return TRUE;
+    }
+  else
+    {
+      res = vkGetFenceStatus (gdk_vulkan_context_get_device (self), present->vk_fence);
+      if (res != VK_SUCCESS)
+        return TRUE;
+    }
 
   return FALSE;
 }
@@ -782,6 +799,39 @@ gdk_vulkan_context_wait_present (GdkVulkanContext *self,
             {
               gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
               priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
+            }
+        }
+    }
+  else if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
+    {
+      GPollFD poll_fds[G_N_ELEMENTS (priv->presents)];
+      gsize i, n_polls;
+
+      n_polls = 0;
+      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+        {
+          if (priv->presents[i].frame)
+            {
+              poll_fds[n_polls++] = (GPollFD) { priv->presents[i].frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
+            }
+        }
+
+      while (n_polls > 0)
+        {
+          int res = g_poll (poll_fds, n_polls, -1);
+
+          g_warn_if_fail (res > 0);
+          if (!wait_all || res >= n_polls)
+            break;
+
+          for (i = n_polls; i > 0; i--)
+            {
+              if (poll_fds[i - 1].revents == 0)
+                {
+                  if (i < n_polls)
+                    poll_fds[i - 1] = poll_fds[n_polls - 1];
+                  n_polls--;
+                }
             }
         }
     }
@@ -876,18 +926,81 @@ gdk_vulkan_context_frame_complete_cb (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+gdk_vulkan_context_frame_complete_fd_cb (gint         fd,
+                                         GIOCondition condition,
+                                         gpointer     data)
+{
+  GdkVulkanContextFrame *vframe = data;
+  GdkDrawContextFrame *frame = data;
+  GdkVulkanContext *self = GDK_VULKAN_CONTEXT (frame->context);
+  uint64_t timestamp;
+
+  if (!(condition & COMPLETION_FD_EVENTS))
+    return G_SOURCE_CONTINUE;
+
+  timestamp = g_source_get_time_ns (vframe->completion_source);
+  vframe->completion_source = NULL;
+
+  gdk_vulkan_present_reset (self, vframe->present, timestamp);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 gdk_vulkan_context_frame_add_completion (GdkVulkanContextFrame *vframe)
 {
-  /* 50us accuracy is hopefully enough */
-  vframe->completion_source = g_timeout_source_new_ns (50 * 1000);
+  GdkDrawContextFrame *frame = (GdkDrawContextFrame *) vframe;
+#ifdef G_OS_UNIX
+  GdkVulkanContext *self = GDK_VULKAN_CONTEXT (frame->context);
+#endif
+
+  vframe->completion_fd = -1;
+
+#ifdef G_OS_UNIX
+  if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
+    {
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+      PFN_vkGetFenceFdKHR func_vkGetFenceFdKHR;
+      func_vkGetFenceFdKHR = (PFN_vkGetFenceFdKHR) vkGetDeviceProcAddr (display->vk_device, "vkGetFenceFdKHR");
+      if (func_vkGetFenceFdKHR)
+        {
+          GDK_VK_CHECK (func_vkGetFenceFdKHR, display->vk_device,
+                                              &(VkFenceGetFdInfoKHR) {
+                                                  .sType = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR,
+                                                  .fence = vframe->present->vk_fence,
+                                                  .handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT,
+                                              },
+                                              &vframe->completion_fd);
+        }
+      else
+        {
+          g_warning ("\"vkGetFenceFdKHR\" not defined.");
+        }
+      if (vframe->completion_fd > -1)
+        {
+          vframe->completion_source = g_unix_fd_source_new (vframe->completion_fd, COMPLETION_FD_EVENTS);
+          g_source_set_callback (vframe->completion_source,
+                                 (GSourceFunc) gdk_vulkan_context_frame_complete_fd_cb,
+                                 vframe,
+                                 NULL);
+        }
+    }
+#endif
+
+  if (vframe->completion_source == NULL)
+    {
+      /* 50us accuracy is hopefully enough */
+      vframe->completion_source = g_timeout_source_new_ns (50 * 1000);
+
+      g_source_set_callback (vframe->completion_source,
+                             gdk_vulkan_context_frame_complete_cb,
+                             vframe,
+                             NULL);
+    }
 
   g_source_set_static_name (vframe->completion_source, "[gtk] gdk_vulkan_context_end_frame");
   g_source_set_priority (vframe->completion_source, G_PRIORITY_DEFAULT_IDLE);
-  g_source_set_callback (vframe->completion_source,
-                         gdk_vulkan_context_frame_complete_cb,
-                         vframe,
-                         NULL);
   g_source_attach (vframe->completion_source, NULL);
   g_source_unref (vframe->completion_source);
 }
@@ -912,6 +1025,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 
   g_assert (context_data != NULL);
   draw_semaphore = *(VkSemaphore *) context_data;
+
+  vframe->completion_fd = -1;
 
   content = gdk_surface_get_content (surface);
   if (content)
