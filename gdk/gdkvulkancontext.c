@@ -64,6 +64,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
 
 struct _GdkVulkanPresent
 {
+  GdkVulkanContext *context;
   VkSemaphore vk_semaphore;
   VkFence vk_fence;
   VkSwapchainKHR vk_swapchain;
@@ -701,7 +702,8 @@ physical_device_check_features (VkPhysicalDevice device)
 
 static void
 gdk_vulkan_present_reset (GdkVulkanContext *self,
-                          GdkVulkanPresent *present)
+                          GdkVulkanPresent *present,
+                          uint64_t          timestamp)
 {
   GdkVulkanContextFrame *vframe;
 
@@ -719,6 +721,7 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
   present->frame = NULL;
 
   vframe->present = NULL;
+  g_clear_pointer (&vframe->completion_source, g_source_destroy);
   gdk_draw_context_frame_gpu_complete ((GdkDrawContextFrame *) vframe, timestamp);
 }
 
@@ -800,7 +803,7 @@ gdk_vulkan_context_start_present (GdkVulkanContext *self)
             {
               GdkVulkanPresent *result = &priv->presents[i];
 
-              gdk_vulkan_present_reset (self, result);
+              gdk_vulkan_present_reset (self, result, g_get_monotonic_time_ns ());
 
               priv->latest_present = i;
 
@@ -834,6 +837,41 @@ gdk_vulkan_context_release_presents (GdkVulkanContext *self,
           priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
         }
     }
+}
+
+static gboolean
+gdk_vulkan_context_frame_complete_cb (gpointer data)
+{
+  GdkVulkanContextFrame *vframe = data;
+  GdkDrawContextFrame *frame = data;
+  GdkVulkanContext *self = GDK_VULKAN_CONTEXT (frame->context);
+  uint64_t timestamp;
+
+  if (gdk_vulkan_present_is_busy (self, vframe->present))
+    return G_SOURCE_CONTINUE;
+
+  timestamp = g_source_get_time_ns (vframe->completion_source);
+  vframe->completion_source = NULL;
+
+  gdk_vulkan_present_reset (self, vframe->present, timestamp);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gdk_vulkan_context_frame_add_completion (GdkVulkanContextFrame *vframe)
+{
+  /* 50us accuracy is hopefully enough */
+  vframe->completion_source = g_timeout_source_new_ns (50 * 1000);
+
+  g_source_set_static_name (vframe->completion_source, "[gtk] gdk_vulkan_context_end_frame");
+  g_source_set_priority (vframe->completion_source, G_PRIORITY_DEFAULT_IDLE);
+  g_source_set_callback (vframe->completion_source,
+                         gdk_vulkan_context_frame_complete_cb,
+                         vframe,
+                         NULL);
+  g_source_attach (vframe->completion_source, NULL);
+  g_source_unref (vframe->completion_source);
 }
 
 static void
@@ -963,6 +1001,7 @@ gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkVulkanContextFrame *vframe = (GdkVulkanContextFrame *) frame;
   GdkVulkanPresent *present;
   VkPresentRegionsKHR present_regions;
   VkPresentRegionKHR present_region;
@@ -1031,6 +1070,8 @@ gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
                                        },
                                        .pNext = pNext,
                                    });
+
+  gdk_vulkan_context_frame_add_completion (vframe);
 
   cairo_region_destroy (priv->regions[present->image_index]);
   priv->regions[present->image_index] = cairo_region_create ();
@@ -1170,6 +1211,8 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
 
       for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
         {
+          priv->presents[i].context = self;
+
           GDK_VK_CHECK (vkCreateSemaphore, vk_device,
                                            &(VkSemaphoreCreateInfo) {
                                                .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
@@ -1217,11 +1260,6 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
   for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
     {
       g_assert (!gdk_vulkan_present_is_busy (self, &priv->presents[i]));
-      if (priv->presents[i].vk_swapchain)
-        {
-          gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
-          priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
-        }
       vkDestroySemaphore (vk_device,
                           priv->presents[i].vk_semaphore,
                           NULL);
