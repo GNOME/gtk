@@ -293,4 +293,6 @@ SvgElement *    svg_element_get_last_child      (SvgElement *element);
 SvgElement *    svg_element_get_prev_sibling    (SvgElement *element);
 SvgElement *    svg_element_get_next_sibling    (SvgElement *element);
 
+GListModel *    svg_element_observe_children    (SvgElement *element);
+
 G_END_DECLS

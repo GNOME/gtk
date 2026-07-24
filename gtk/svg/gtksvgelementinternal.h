@@ -24,6 +24,7 @@
 #include "gtksvgelementprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtksvgmediaqueryprivate.h"
+#include "gtk/gtklistlistmodelprivate.h"
 
 G_BEGIN_DECLS
 
@@ -183,6 +184,8 @@ struct _SvgElement
       double pos;
     } attach;
   } gpa;
+
+  GtkListListModel *child_observer;
 };
 
 G_END_DECLS
