@@ -42,6 +42,7 @@ struct _GdkVulkanContextFrame
   GdkDrawContextFrame parent;
 
   GdkVulkanPresent *present;
+  GSource *completion_source;
 };
 
 struct _GdkVulkanContext
