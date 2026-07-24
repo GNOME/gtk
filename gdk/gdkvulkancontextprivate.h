@@ -43,6 +43,7 @@ struct _GdkVulkanContextFrame
 
   GdkVulkanPresent *present;
   GSource *completion_source;
+  int completion_fd;
 };
 
 struct _GdkVulkanContext
