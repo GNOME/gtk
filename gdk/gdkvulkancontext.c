@@ -1240,9 +1240,21 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
 
           if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
             {
+              VkExportFenceCreateInfo export_info = {
+                  .sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO,
+                  .handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT,
+              };
+              const void *next;
+
+              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
+                next = &export_info;
+              else
+                next = NULL;
+
               GDK_VK_CHECK (vkCreateFence, vk_device,
                                            &(VkFenceCreateInfo) {
                                                .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                                               .pNext = next,
                                            },
                                            NULL,
                                            &priv->presents[i].vk_fence);
