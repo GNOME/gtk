@@ -58,6 +58,8 @@ void         svg_element_add_filter          (SvgElement            *element,
                                               SvgFilter             *filter);
 void         svg_element_add_child           (SvgElement            *element,
                                               SvgElement            *child);
+void         svg_element_prepend_child       (SvgElement            *element,
+                                              SvgElement            *child);
 void         svg_element_add_animation       (SvgElement            *element,
                                               SvgAnimation          *animation);
 

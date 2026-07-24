@@ -750,14 +750,8 @@ collect_next_update_for_shape (SvgElement    *shape,
         }
     }
 
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
-          collect_next_update_for_shape (s, current_time, run_mode, next_update);
-        }
-    }
+  for (SvgElement *s = shape->first_child; s; s = s->next_sibling)
+    collect_next_update_for_shape (s, current_time, run_mode, next_update);
 }
 
 static void
@@ -823,14 +817,8 @@ shape_update_animation_state (SvgElement *shape,
         g_ptr_array_sort_values (shape->animations, compare_anim);
     }
 
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
-          shape_update_animation_state (s, current_time);
-        }
-    }
+  for (SvgElement *s = shape->first_child; s; s = s->next_sibling)
+    shape_update_animation_state (s, current_time);
 }
 
 static void schedule_next_update (GtkSvg *self);
@@ -858,14 +846,8 @@ animations_update_for_pause (SvgElement *shape,
         }
     }
 
-  if (svg_element_type_is_path (svg_element_get_element_type (shape)))
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          animations_update_for_pause (sh, duration);
-        }
-    }
+  for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+    animations_update_for_pause (sh, duration);
 }
 
 /* }}} */
@@ -1767,7 +1749,7 @@ compute_current_values_for_shape (SvgElement        *shape,
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_USE)
     svg_element_ensure_shadow_tree (shape, context->svg);
 
-  if (shape->shapes)
+  if (shape->first_child)
     {
       SvgElement *parent = context->parent;
       context->parent = shape;
@@ -2196,14 +2178,8 @@ shape_dump_animation_state (SvgElement *shape, GString *string)
         }
     }
 
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shape->shapes, i);
-          shape_dump_animation_state (s, string);
-        }
-    }
+  for (SvgElement *s = shape->first_child; s; s = s->next_sibling)
+    shape_dump_animation_state (s, string);
 }
 
 static void

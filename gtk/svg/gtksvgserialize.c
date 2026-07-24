@@ -864,7 +864,7 @@ serialize_shape (GString              *s,
                  GtkSvgSerializeFlags  flags)
 {
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_DEFS &&
-      shape->shapes->len == 0)
+      shape->first_child == NULL)
     return;
 
   if (indent > 0) /* Hack: this is for <svg> */
@@ -1033,11 +1033,8 @@ serialize_shape (GString              *s,
     }
   else if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          serialize_shape (s, svg, indent + BASE_INDENT, sh, flags);
-        }
+      for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+        serialize_shape (s, svg, indent + BASE_INDENT, sh, flags);
     }
 
   if (indent > 0)

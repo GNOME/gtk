@@ -125,9 +125,16 @@ static void
 svg_element_dispose (GObject *object)
 {
   SvgElement *self = SVG_ELEMENT (object);
+  SvgElement *next;
 
   if (self->child_observer)
     gtk_list_list_model_clear (self->child_observer);
+
+  for (SvgElement *s = self->first_child; s; s = next)
+    {
+      next = s->next_sibling;
+      g_object_unref (s);
+    }
 
   G_OBJECT_CLASS (svg_element_parent_class)->dispose (object);
 }
@@ -226,7 +233,6 @@ svg_element_finalize (GObject *object)
     }
 
   g_clear_pointer (&element->styles, g_ptr_array_unref);
-  g_clear_pointer (&element->shapes, g_ptr_array_unref);
   g_clear_pointer (&element->animations, g_ptr_array_unref);
   g_clear_pointer (&element->color_stops, g_ptr_array_unref);
   g_clear_pointer (&element->filters, g_ptr_array_unref);
@@ -272,9 +278,6 @@ svg_element_setup (SvgElement     *element,
       element->base[attr] = svg_property_ref_initial_value (attr, type, parent != NULL);
       element->current[attr] = svg_value_ref (element->base[attr]);
     }
-
-  if (svg_element_type_is_container (type) || element->type == SVG_ELEMENT_USE)
-    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_gradient (type))
     element->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_color_stop_free);
@@ -850,9 +853,8 @@ svg_element_get_current_bounds (SvgElement            *element,
     case SVG_ELEMENT_SWITCH:
     case SVG_ELEMENT_LINK:
       has_any = FALSE;
-      for (unsigned int i = 0; i < element->shapes->len; i++)
+      for (SvgElement *sh = element->first_child; sh; sh = sh->next_sibling)
         {
-          SvgElement *sh = g_ptr_array_index (element->shapes, i);
           graphene_rect_t b2;
 
           if (svg_enum_get (sh->current[SVG_PROPERTY_DISPLAY]) == DISPLAY_NONE)
@@ -1033,9 +1035,8 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
     case SVG_ELEMENT_SWITCH:
     case SVG_ELEMENT_LINK:
       has_any = FALSE;
-      for (unsigned int i = 0; i < element->shapes->len; i++)
+      for (SvgElement *sh = element->first_child; sh; sh = sh->next_sibling)
         {
-          SvgElement *sh = g_ptr_array_index (element->shapes, i);
           graphene_rect_t b2;
 
           if (svg_enum_get (sh->current[SVG_PROPERTY_DISPLAY]) == DISPLAY_NONE)
@@ -1112,13 +1113,28 @@ svg_element_add_filter (SvgElement *element,
   g_ptr_array_add (element->filters, filter);
 }
 
+/* Child is transfer-full */
 void
 svg_element_add_child (SvgElement *element,
                        SvgElement *child)
 {
   g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
-  g_assert (svg_element_type_is_container (element->type));
-  g_ptr_array_add (element->shapes, child);
+  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+
+  child->parent = element;
+
+  if (element->first_child == NULL)
+    {
+      child->prev_sibling = child->next_sibling = NULL;
+      element->first_child = element->last_child = child;
+    }
+  else
+    {
+      child->prev_sibling = element->last_child;
+      child->next_sibling = NULL;
+      element->last_child->next_sibling = child;
+      element->last_child = child;
+    }
 
   if (child->type == SVG_ELEMENT_TSPAN)
     {
@@ -1145,17 +1161,59 @@ svg_element_add_child (SvgElement *element,
     gtk_list_list_model_item_added (element->child_observer, child);
 }
 
+/* Child is transfer-full */
+void
+svg_element_prepend_child (SvgElement *element,
+                           SvgElement *child)
+{
+  g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
+  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+  g_assert (child->type != SVG_ELEMENT_TSPAN);
+
+  child->parent = element;
+
+  if (element->first_child == NULL)
+    {
+      child->prev_sibling = child->next_sibling = NULL;
+      element->first_child = element->last_child = child;
+    }
+  else
+    {
+      child->next_sibling = element->first_child;
+      child->prev_sibling = NULL;
+      element->first_child->prev_sibling = child;
+      element->first_child = child;
+    }
+
+  if (element->child_observer)
+    gtk_list_list_model_item_added (element->child_observer, child);
+}
+
 unsigned int
 svg_element_get_n_children (SvgElement *element)
 {
-  return element->shapes->len;
+  unsigned int n = 0;
+
+  for (SvgElement *s = element->first_child; s; s = s->next_sibling)
+    n++;
+
+  return n;
 }
 
 SvgElement *
 svg_element_get_child (SvgElement   *element,
                        unsigned int  idx)
 {
-  return g_ptr_array_index (element->shapes, idx);
+  unsigned int n = 0;
+
+  for (SvgElement *s = element->first_child; s; s = s->next_sibling)
+    {
+      if (n == idx)
+        return s;
+      n++;
+    }
+
+  return NULL;
 }
 
 void
@@ -1533,7 +1591,7 @@ svg_element_get_origin (SvgElement     *element,
 void
 svg_element_delete (SvgElement *element)
 {
-  unsigned int pos;
+  SvgElement *prev, *parent;
 
   if (element->text)
     {
@@ -1548,17 +1606,31 @@ svg_element_delete (SvgElement *element)
         }
     }
 
-  if (g_ptr_array_find (element->parent->shapes, element, &pos))
+  prev = element->prev_sibling;
+  parent = element->parent;
+
+  if (parent)
     {
-      SvgElement *prev;
-      if (pos > 0)
-        prev = g_ptr_array_index (element->parent->shapes, pos - 1);
-      else
-        prev = NULL;
-      g_ptr_array_remove_index (element->parent->shapes, pos);
-      if (element->child_observer)
-        gtk_list_list_model_item_removed (element->child_observer, prev);
+      if (parent->first_child == element)
+        {
+          parent->first_child = element->next_sibling;
+          parent->first_child->prev_sibling = NULL;
+        }
+      if (parent->last_child == element)
+        {
+          parent->last_child = element->prev_sibling;
+          parent->last_child->next_sibling = NULL;
+        }
     }
+
+  element->prev_sibling = NULL;
+  element->next_sibling = NULL;
+  element->parent = NULL;
+
+  if (element->child_observer)
+    gtk_list_list_model_item_removed (element->child_observer, prev);
+
+  g_object_unref (element);
 }
 
 SvgElement *
@@ -1642,6 +1714,12 @@ gboolean
 svg_element_equal (SvgElement *element1,
                    SvgElement *element2)
 {
+  if (element1 == element2)
+    return TRUE;
+
+  if (!element1 || !element2)
+    return FALSE;
+
   if (element1->type != element2->type ||
       g_strcmp0 (svg_element_get_id (element1), svg_element_get_id (element2)) != 0)
     return FALSE;
@@ -1672,14 +1750,12 @@ svg_element_equal (SvgElement *element1,
 
   if (svg_element_type_is_container (element1->type))
     {
-      if (element1->shapes->len != element2->shapes->len)
-        return FALSE;
+      SvgElement *s1, *s2;
 
-      for (unsigned int i = 0; i < element1->shapes->len; i++)
+      for (s1 = element1->first_child, s2 = element2->first_child;
+           s1 != NULL || s2 != NULL;
+           s1 = s1->next_sibling, s2 = s2->next_sibling)
         {
-          SvgElement *s1 = g_ptr_array_index (element1->shapes, i);
-          SvgElement *s2 = g_ptr_array_index (element2->shapes, i);
-
           if (!svg_element_equal (s1, s2))
             return FALSE;
         }
@@ -1743,14 +1819,8 @@ svg_element_foreach (SvgElement       *element,
 {
   callback (element, user_data);
 
-  if (element->shapes)
-    {
-      for (unsigned int i = 0; i < element->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (element->shapes, i);
-          svg_element_foreach (sh, callback, user_data);
-        }
-    }
+  for (SvgElement *s = element->first_child; s; s = s->next_sibling)
+    svg_element_foreach (s, callback, user_data);
 }
 
 void
@@ -1937,7 +2007,6 @@ svg_element_duplicate (SvgElement *element,
       element->current[attr] = svg_value_ref (element->base[attr]);
     }
 
-  copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
 
   copy->gpa.states = element->gpa.states;
@@ -1987,13 +2056,19 @@ svg_element_set_element_type (SvgElement     *element,
   if (svg_element_type_is_container (old_type) &&
       !svg_element_type_is_container (type))
     {
-      g_clear_pointer (&element->shapes, g_ptr_array_unref);
+      SvgElement *next;
+
+      for (SvgElement *s = element->first_child; s; s = next)
+        {
+          next = s->next_sibling;
+          g_object_unref (s);
+        }
+
+      element->first_child = element->last_child = NULL;
+
       if (element->child_observer)
         gtk_list_list_model_clear (element->child_observer);
     }
-  if (!svg_element_type_is_container (old_type) &&
-      svg_element_type_is_container (type))
-    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_text (old_type) &&
       !svg_element_type_is_text (type))
@@ -2015,15 +2090,33 @@ void
 svg_element_move_child_down (SvgElement *element,
                              SvgElement *child)
 {
-  for (unsigned int i = 0; i < element->shapes->len; i++)
-    {
-      if (g_ptr_array_index (element->shapes, i) == child)
-        {
-          g_ptr_array_steal_index (element->shapes, i);
-          g_ptr_array_insert (element->shapes, i + 1, child);
-          return;
-        }
-    }
+  SvgElement *other = child->next_sibling;
+  SvgElement *prev = NULL;
+  SvgElement *next = NULL;
+
+  if (other == NULL)
+    return;
+
+  prev = child->prev_sibling;
+  next = other->next_sibling;
+
+  child->prev_sibling = other;
+  child->next_sibling = next;
+  other->next_sibling = child;
+  other->prev_sibling = prev;
+
+  if (prev)
+    prev->next_sibling = other;
+  else
+    element->first_child = other;
+
+  if (next)
+    next->prev_sibling = child;
+  else
+    element->last_child = child;
+
+  if (element->child_observer)
+    gtk_list_list_model_item_moved (element->child_observer, child, prev);
 }
 
 unsigned int
@@ -2059,9 +2152,8 @@ svg_element_find_animation (SvgElement *element,
 
   if (svg_element_type_is_container (element->type))
     {
-      for (unsigned int i = 0; i < element->shapes->len; i++)
+      for (SvgElement *child = element->first_child; child; child = child->next_sibling)
         {
-          SvgElement *child = g_ptr_array_index (element->shapes, i);
           SvgAnimation *a = svg_element_find_animation (child, id);
           if (a)
             return a;
@@ -2195,19 +2287,9 @@ static SvgElement *
 next_after (SvgElement *element,
             SvgElement *child)
 {
-  if (element->shapes)
-    {
-      for (unsigned int i = 0; i < element->shapes->len; i++)
-        {
-          if (g_ptr_array_index (element->shapes, i) == child)
-            {
-              if (i + 1 < element->shapes->len)
-                return g_ptr_array_index (element->shapes, i + 1);
-            }
-        }
-    }
-
-  if (element->parent)
+  if (child->next_sibling)
+    return child->next_sibling;
+  else if (element->parent)
     return next_after (element->parent, element);
   else
     return NULL;
@@ -2222,8 +2304,8 @@ svg_element_first (SvgElement *element)
 SvgElement *
 svg_element_last (SvgElement *element)
 {
-  if (element->shapes && element->shapes->len > 0)
-    return svg_element_last (g_ptr_array_index (element->shapes, element->shapes->len - 1));
+  if (element->last_child)
+    return svg_element_last (element->last_child);
   else
     return element;
 }
@@ -2231,8 +2313,8 @@ svg_element_last (SvgElement *element)
 SvgElement *
 svg_element_next (SvgElement *element)
 {
-  if (element->shapes && element->shapes->len > 0)
-    return g_ptr_array_index (element->shapes, 0);
+  if (element->first_child)
+    return element->first_child;
   else if (element->parent)
     return next_after (element->parent, element);
   else
@@ -2242,15 +2324,10 @@ svg_element_next (SvgElement *element)
 SvgElement *
 svg_element_previous (SvgElement *element)
 {
-  if (element->parent)
-    {
-      unsigned int idx;
-
-      if (g_ptr_array_find (element->parent->shapes, element, &idx) && idx > 0)
-        return svg_element_last (g_ptr_array_index (element->parent->shapes, idx - 1));
-      else
-        return element->parent;
-    }
+  if (element->prev_sibling)
+    return svg_element_last (element->prev_sibling);
+  else if (element->parent)
+    return element->parent;
   else
     return NULL;
 }
@@ -2262,17 +2339,11 @@ svg_element_find_by_id (SvgElement *element,
   if (g_strcmp0 (element->id, id) == 0)
     return element;
 
-  if (element->shapes)
+  for (SvgElement *child = element->first_child; child; child = child->next_sibling)
     {
-      for (unsigned int i = 0; i < element->shapes->len; i++)
-        {
-          SvgElement *child = g_ptr_array_index (element->shapes, i);
-          SvgElement *res;
-
-          res = svg_element_find_by_id (child, id);
-          if (res)
-            return res;
-        }
+      SvgElement *res = svg_element_find_by_id (child, id);
+      if (res)
+        return res;
     }
 
   return NULL;
@@ -2556,41 +2627,38 @@ svg_element_clone (SvgElement *element,
       clone->current[attr] = svg_property_ref_initial_value (attr, clone->type, clone->parent != NULL);
     }
 
-  if (element->shapes)
+  if (element->first_child)
     {
-      SvgElement *p, *q;
-      unsigned int idx;
+      SvgElement *p, *q, *r;
 
-      clone->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
-      for (unsigned int i = 0; i < element->shapes->len; i++)
+      for (SvgElement *child = element->first_child; child; child = child->next_sibling)
         {
-          SvgElement *child = g_ptr_array_index (element->shapes, i);
           SvgElement *child_clone = svg_element_clone (child, clone, svg, data);
           if (!child_clone)
             {
               g_object_unref (clone);
               return NULL;
             }
-          g_ptr_array_add (clone->shapes, child_clone);
+          svg_element_add_child (clone, child_clone);
         }
 
       /* Copy dependency order */
       q = NULL;
       for (p = element->first; p; p = p->next)
         {
-          g_ptr_array_find (element->shapes, p, &idx);
+          for (r = clone->first_child; r; r = r->next_sibling)
+            {
+              if (r->corresponding == p)
+                break;
+            }
 
-          if (p == element->first)
-            {
-              clone->first = g_ptr_array_index (clone->shapes, idx);
-              q = clone->first;
-            }
-          else if (q)
-            {
-              q->next = g_ptr_array_index (clone->shapes, idx);
-              q = q->next;
-            }
+          if (q)
+            q->next = r;
+          else
+            clone->first = r;
+          q = r;
         }
+      q->next = NULL;
     }
 
   if (element->animations)
@@ -2858,14 +2926,8 @@ svg_element_resolve_shadow_references (SvgElement *element,
         }
     }
 
-  if (element->shapes)
-    {
-      for (unsigned int i = 0; i < element->shapes->len; i++)
-        {
-          SvgElement *child = g_ptr_array_index (element->shapes, i);
-          svg_element_resolve_shadow_references (child, map);
-        }
-    }
+  for (SvgElement *child = element->first_child; child; child = child->next_sibling)
+    svg_element_resolve_shadow_references (child, map);
 }
 
 static void
@@ -2893,12 +2955,15 @@ svg_element_build_shadow_tree (SvgElement *element,
       return;
     }
 
-  if (element->shapes->len > 0)
+  if (element->first_child)
     {
-      SvgElement *current = g_ptr_array_index (element->shapes, 0);
+      SvgElement *current = element->first_child;
       if (current->corresponding == target)
         return;
-      g_ptr_array_remove_index (element->shapes, 0);
+      element->first_child = current->next_sibling;
+      if (element->first_child)
+        element->first_child->prev_sibling = NULL;
+      g_object_unref (current);
       element->first = NULL;
     }
 
@@ -2907,7 +2972,7 @@ svg_element_build_shadow_tree (SvgElement *element,
       SvgElement *clone = svg_element_clone (target, element, svg, data);
       if (clone)
         {
-          g_ptr_array_add (element->shapes, clone);
+          svg_element_add_child (element, clone);
           element->first = clone;
         }
     }
@@ -2924,11 +2989,8 @@ svg_element_ensure_shadow_tree (SvgElement *element,
 
   svg_element_build_shadow_tree (element, svg, &data);
 
-  if (element->shapes && element->shapes->len > 0)
-    {
-      SvgElement *clone = g_ptr_array_index (element->shapes, 0);
-      svg_element_resolve_shadow_references (clone, data.map);
-    }
+  if (element->first_child)
+    svg_element_resolve_shadow_references (element->first_child, data.map);
 
   g_hash_table_destroy (data.map);
 }
@@ -2942,45 +3004,25 @@ svg_element_get_corresponding (SvgElement *element)
 SvgElement *
 svg_element_get_first_child (SvgElement *element)
 {
-  if (element->shapes && element->shapes->len > 0)
-    return g_ptr_array_index (element->shapes, 0);
-
-  return NULL;
+  return element->first_child;
 }
 
 SvgElement *
 svg_element_get_last_child (SvgElement *element)
 {
-  if (element->shapes && element->shapes->len > 0)
-    return g_ptr_array_index (element->shapes, element->shapes->len - 1);
-
-  return NULL;
+  return element->last_child;
 }
 
 SvgElement *
 svg_element_get_prev_sibling (SvgElement *element)
 {
-  unsigned int pos;
-
-  if (element->parent &&
-      g_ptr_array_find (element->parent->shapes, element, &pos) &&
-      pos > 0)
-    return g_ptr_array_index (element->parent->shapes, pos - 1);
-
-  return NULL;
+  return element->prev_sibling;
 }
 
 SvgElement *
 svg_element_get_next_sibling (SvgElement *element)
 {
-  unsigned int pos;
-
-  if (element->parent &&
-      g_ptr_array_find (element->parent->shapes, element, &pos) &&
-      pos + 1 < element->parent->shapes->len)
-    return g_ptr_array_index (element->parent->shapes, pos + 1);
-
-  return NULL;
+  return element->next_sibling;
 }
 
 static void
@@ -2998,12 +3040,12 @@ svg_element_observe_children (SvgElement *element)
     return g_object_ref (G_LIST_MODEL (element->child_observer));
 
   element->child_observer = gtk_list_list_model_new ((gpointer) svg_element_get_first_child,
-                                                        (gpointer) svg_element_get_next_sibling,
-                                                        (gpointer) svg_element_get_prev_sibling,
-                                                        (gpointer) svg_element_get_last_child,
-                                                        (gpointer) g_object_ref,
-                                                        element,
-                                                        svg_element_child_observer_destroyed);
+                                                     (gpointer) svg_element_get_next_sibling,
+                                                     (gpointer) svg_element_get_prev_sibling,
+                                                     (gpointer) svg_element_get_last_child,
+                                                     (gpointer) g_object_ref,
+                                                     element,
+                                                     svg_element_child_observer_destroyed);
 
   return G_LIST_MODEL (element->child_observer);
 }

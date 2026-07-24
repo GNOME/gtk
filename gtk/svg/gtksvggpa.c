@@ -328,11 +328,8 @@ shape_apply_state (GtkSvg       *self,
 
   if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          shape_apply_state (self, sh, state);
-        }
+      for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+        shape_apply_state (self, sh, state);
     }
 }
 
@@ -726,13 +723,9 @@ create_morph_filter (SvgElement *shape,
   TimeSpec *begin;
   TimeSpec *end;
 
-  for (unsigned int i = 0; i < svg_element_get_parent (shape)->shapes->len; i++)
+
+  for (SvgElement *sh = shape->prev_sibling; sh; sh = sh->prev_sibling)
     {
-      SvgElement *sh = g_ptr_array_index (svg_element_get_parent (shape)->shapes, i);
-
-      if (sh == shape)
-        break;
-
       if (sh->type == SVG_ELEMENT_DEFS)
         {
           parent = sh;
@@ -742,8 +735,8 @@ create_morph_filter (SvgElement *shape,
 
   if (parent == NULL)
     {
-      parent = svg_element_new (svg_element_get_parent (shape), SVG_ELEMENT_DEFS);
-      g_ptr_array_insert (svg_element_get_parent (shape)->shapes, 0, parent);
+      parent = svg_element_new (shape->parent, SVG_ELEMENT_DEFS);
+      svg_element_prepend_child (shape->parent, parent);
     }
 
   filter = svg_element_new (parent, SVG_ELEMENT_FILTER);

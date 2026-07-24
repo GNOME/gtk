@@ -96,7 +96,13 @@ struct _SvgElement
   GObject parent_instance;
 
   SvgElementType type;
+
   SvgElement *parent;
+  SvgElement *first_child;
+  SvgElement *last_child;
+  SvgElement *prev_sibling;
+  SvgElement *next_sibling;
+
   char *id;
   char *style;
   char **classes;
@@ -129,7 +135,6 @@ struct _SvgElement
 
   SvgElement *corresponding;
 
-  GPtrArray *shapes;
   GPtrArray *animations;
   GPtrArray *color_stops;
   GPtrArray *filters;

@@ -1956,12 +1956,12 @@ push_group (SvgElement   *shape,
            * We special-case a single shape in the <clipPath> without
            * transforms and translate them to a clip or a fill.
            */
-          if (clip_shape->shapes->len > 0)
-            child = g_ptr_array_index (clip_shape->shapes, 0);
+          if (clip_shape->first_child)
+            child = clip_shape->first_child;
 
           if (svg_transform_is_none (ctf) &&
               svg_enum_get (svg_element_get_current_value (clip_shape, SVG_PROPERTY_CONTENT_UNITS)) == COORD_UNITS_USER_SPACE_ON_USE &&
-              clip_shape->shapes->len == 1 &&
+              child != NULL && child->next_sibling == NULL &&
               (child->type == SVG_ELEMENT_PATH || child->type == SVG_ELEMENT_RECT || child->type == SVG_ELEMENT_CIRCLE) &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_VISIBILITY)) != VISIBILITY_HIDDEN &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_DISPLAY)) != DISPLAY_NONE &&
@@ -2460,11 +2460,11 @@ gradient_get_gsk_gradient (SvgElement   *gradient,
   return g;
 }
 
-static GPtrArray *
+static SvgElement *
 pattern_get_shapes (SvgElement   *shape,
                     PaintContext *context)
 {
-  if (shape->shapes->len == 0)
+  if (shape->first_child == NULL)
     {
       SvgValue *href = svg_element_get_current_value (shape, SVG_PROPERTY_HREF);
       const char *ref = svg_href_get_id (href);
@@ -2484,7 +2484,7 @@ pattern_get_shapes (SvgElement   *shape,
           SvgElement *template = svg_href_get_shape (href);
           if (template_type_compatible (template->type, svg_element_get_element_type (shape)))
             {
-              GPtrArray *ret;
+              SvgElement *ret;
               context->depth++;
               ret = pattern_get_shapes (template, context);
               context->depth--;
@@ -2499,7 +2499,7 @@ pattern_get_shapes (SvgElement   *shape,
     }
 
 fail:
-  return shape->shapes;
+  return shape;
 }
 
 static gboolean
@@ -2731,7 +2731,7 @@ paint_pattern (SvgElement            *pattern,
   SvgValue *tf = paint_server_get_current_value (pattern, SVG_PROPERTY_TRANSFORM, context);
   SvgValue *vb = paint_server_get_current_value (pattern, SVG_PROPERTY_VIEW_BOX, context);
   SvgValue *cf = paint_server_get_current_value (pattern, SVG_PROPERTY_CONTENT_FIT, context);
-  GPtrArray *shapes;
+  SvgElement *shapes;
   graphene_rect_t view_box;
 
   if (svg_enum_get (bound_units) == COORD_UNITS_OBJECT_BOUNDING_BOX)
@@ -2837,11 +2837,8 @@ paint_pattern (SvgElement            *pattern,
       gsk_transform_unref (transform);
 
       shapes = pattern_get_shapes (pattern, context);
-      for (int i = 0; i < shapes->len; i++)
-        {
-          SvgElement *s = g_ptr_array_index (shapes, i);
-          render_shape (s, context);
-        }
+      for (SvgElement *s = shapes->first_child; s; s = s->next_sibling)
+        render_shape (s, context);
 
       pop_transform (context);
       gtk_snapshot_restore (context->snapshot);
@@ -4672,12 +4669,10 @@ paint_shape (SvgElement   *shape,
 
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_USE)
     {
-      if (shape->shapes->len > 0)
+      if (shape->first_child)
         {
-          SvgElement *use_shape = g_ptr_array_index (shape->shapes, 0);
-
           push_ctx_shape (context, shape);
-          render_shape (use_shape, context);
+          render_shape (shape->first_child, context);
           pop_ctx_shape (context);
         }
 
@@ -4808,14 +4803,12 @@ paint_shape (SvgElement   *shape,
       return;
     }
 
-  if (shape->shapes)
+  if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
       if (context->picking.picking)
         {
-          for (int i = 0; i < shape->shapes->len; i++)
+          for (SvgElement *s = shape->last_child; s; s = s->prev_sibling)
             {
-              SvgElement *s = g_ptr_array_index (shape->shapes, shape->shapes->len - 1 - i);
-
               if (context->picking.done)
                 break;
 
@@ -4828,10 +4821,8 @@ paint_shape (SvgElement   *shape,
         }
       else
         {
-          for (int i = 0; i < shape->shapes->len; i++)
+          for (SvgElement *s = shape->first_child; s; s = s->next_sibling)
             {
-              SvgElement *s = g_ptr_array_index (shape->shapes, i);
-
               render_shape (s, context);
 
               if (svg_element_get_element_type (shape) == SVG_ELEMENT_SWITCH &&
@@ -5031,12 +5022,9 @@ find_filter (SvgElement *shape,
 
   if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
+      for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
         {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          SvgElement *res;
-
-          res = find_filter (sh, filter_id);
+          SvgElement *res = find_filter (sh, filter_id);
           if (res)
             return res;
         }

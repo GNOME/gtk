@@ -3086,11 +3086,8 @@ resolve_animation_refs (SvgElement *shape,
 
   if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          resolve_animation_refs (sh, data);
-        }
+      for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+        resolve_animation_refs (sh, data);
     }
 }
 
@@ -3222,17 +3219,11 @@ do_compute_update_order (SvgElement *shape,
 
   g_assert (g_hash_table_size (waiting) == 0);
 
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
-    {
-      SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-      do_compute_update_order (sh, svg, waiting);
-    }
+  for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+    do_compute_update_order (sh, svg, waiting);
 
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
-    {
-      SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-      g_hash_table_add (waiting, sh);
-    }
+  for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+    g_hash_table_add (waiting, sh);
 
   n_waiting = g_hash_table_size (waiting);
   while (n_waiting > 0)
@@ -3264,11 +3255,8 @@ do_compute_update_order (SvgElement *shape,
       n_waiting = g_hash_table_size (waiting);
     }
 
-  for (unsigned int i = 0; i < shape->shapes->len; i++)
-    {
-      SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-      g_clear_pointer (&sh->deps, g_ptr_array_unref);
-    }
+  for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+    g_clear_pointer (&sh->deps, g_ptr_array_unref);
 }
 
 static void
@@ -3960,11 +3948,8 @@ load_styles_for_shape (SvgElement *shape,
 
   if (svg_element_type_is_container (svg_element_get_element_type (shape)))
     {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          load_styles_for_shape (sh, data);
-        }
+      for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+        load_styles_for_shape (sh, data);
     }
 }
 
@@ -4401,14 +4386,8 @@ apply_styles_to_shape (SvgElement *shape,
 
   apply_styles_here (shape, 0, svg);
 
-  if (shape->shapes)
-    {
-      for (unsigned int i = 0; i < shape->shapes->len; i++)
-        {
-          SvgElement *sh = g_ptr_array_index (shape->shapes, i);
-          apply_styles_to_shape (sh, svg);
-        }
-    }
+  for (SvgElement *sh = shape->first_child; sh; sh = sh->next_sibling)
+    apply_styles_to_shape (sh, svg);
 
   if (svg_element_type_is_gradient (svg_element_get_element_type (shape)))
     {
