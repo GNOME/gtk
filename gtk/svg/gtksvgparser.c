@@ -4664,7 +4664,7 @@ gtk_svg_init_from_bytes (GtkSvg *self,
     error_cb,
   };
 
-  g_clear_pointer (&self->content, svg_element_free);
+  g_clear_object (&self->content);
 
   if ((self->features & GTK_SVG_SYSTEM_RESOURCES) == 0)
     {

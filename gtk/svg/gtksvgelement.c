@@ -49,6 +49,37 @@
 
 #define CLONE_LIMIT 15000
 
+struct _SvgElementClass
+{
+  GObjectClass parent_class;
+};
+
+enum
+{
+  SVG_ELEMENT_PROP_ELEMENT_TYPE = 1,
+  SVG_ELEMENT_PROP_ID,
+  SVG_ELEMENT_NUM_PROPERTIES,
+};
+
+static GParamSpec *svg_element_prop[NUM_PROPERTIES];
+
+G_DEFINE_TYPE (SvgElement, svg_element, G_TYPE_OBJECT)
+
+static void
+svg_element_init (SvgElement *self)
+{
+}
+
+static void svg_element_finalize (GObject *object);
+
+static void
+svg_element_class_init (SvgElementClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = svg_element_finalize;
+}
+
 static void
 text_node_clear (TextNode *self)
 {
@@ -96,9 +127,11 @@ lang_string_clear (LangString *l)
   l->type = NULL;
 }
 
-void
-svg_element_free (SvgElement *element)
+static void
+svg_element_finalize (GObject *object)
 {
+  SvgElement *element = SVG_ELEMENT (object);
+
   g_clear_pointer (&element->id, g_free);
   g_clear_pointer (&element->style, g_free);
   g_clear_pointer (&element->classes, g_strfreev);
@@ -138,15 +171,14 @@ svg_element_free (SvgElement *element)
 
   _gtk_bitmask_free (element->attrs);
 
-  g_free (element);
+  G_OBJECT_CLASS (svg_element_parent_class)->finalize (object);
 }
 
-SvgElement *
-svg_element_new (SvgElement     *parent,
-                 SvgElementType  type)
+static SvgElement *
+svg_element_setup (SvgElement     *element,
+                   SvgElement     *parent,
+                   SvgElementType  type)
 {
-  SvgElement *element = g_new0 (SvgElement, 1);
-
   element->parent = parent;
   element->type = type;
 
@@ -166,7 +198,7 @@ svg_element_new (SvgElement     *parent,
     }
 
   if (svg_element_type_is_container (type) || element->type == SVG_ELEMENT_USE)
-    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
+    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_gradient (type))
     element->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_color_stop_free);
@@ -195,6 +227,17 @@ svg_element_new (SvgElement     *parent,
     gtk_css_node_set_state (element->css_node, GTK_STATE_FLAG_LINK);
 
   return element;
+}
+
+SvgElement *
+svg_element_new (SvgElement     *parent,
+                 SvgElementType  type)
+{
+  SvgElement *self = g_object_new (SVG_TYPE_ELEMENT, NULL);
+
+  svg_element_setup (self, parent, type);
+
+  return self;
 }
 
 /* {{{ Conditional exclusion */
@@ -1768,13 +1811,13 @@ SvgElement *
 svg_element_duplicate (SvgElement *element,
                        SvgElement *parent)
 {
-  SvgElement *copy = g_new0 (SvgElement, 1);
+  SvgElement *copy = g_object_new (SVG_TYPE_ELEMENT, NULL);
 
-  copy->type = element->type;
   copy->parent = parent;
+  copy->type = element->type;
+
   copy->attrs = _gtk_bitmask_copy (element->attrs);
   copy->important = _gtk_bitmask_copy (element->important);
-  copy->id = NULL;
   copy->style = g_strdup (element->style);
   copy->classes = g_strdupv (element->classes);
   copy->title = g_strdup (element->title);
@@ -1791,7 +1834,14 @@ svg_element_duplicate (SvgElement *element,
     gtk_css_node_set_state (copy->css_node, GTK_STATE_FLAG_LINK);
 
   copy->specified = g_array_ref (element->specified);
+  copy->inline_styles = g_array_ref (element->inline_styles);
   copy->styles = g_ptr_array_ref (element->styles);
+
+  for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
+    {
+      element->base[attr] = svg_property_ref_initial_value (attr, copy->type, parent != NULL);
+      element->current[attr] = svg_value_ref (element->base[attr]);
+    }
 
   copy->shapes = g_ptr_array_new ();
   copy->animations = g_ptr_array_new ();
@@ -1845,7 +1895,7 @@ svg_element_set_element_type (SvgElement     *element,
     g_clear_pointer (&element->shapes, g_ptr_array_unref);
   if (!svg_element_type_is_container (old_type) &&
       svg_element_type_is_container (type))
-    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
+    element->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_text (old_type) &&
       !svg_element_type_is_text (type))
@@ -2352,7 +2402,7 @@ svg_element_clone (SvgElement *element,
                    GtkSvg     *svg,
                    ShadowData *data)
 {
-  SvgElement *clone = g_new0 (SvgElement, 1);
+  SvgElement *clone = g_object_new (SVG_TYPE_ELEMENT, NULL);
 
   if (data->count++ > CLONE_LIMIT)
     {
@@ -2411,14 +2461,14 @@ svg_element_clone (SvgElement *element,
       SvgElement *p, *q;
       unsigned int idx;
 
-      clone->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_element_free);
+      clone->shapes = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
       for (unsigned int i = 0; i < element->shapes->len; i++)
         {
           SvgElement *child = g_ptr_array_index (element->shapes, i);
           SvgElement *child_clone = svg_element_clone (child, clone, svg, data);
           if (!child_clone)
             {
-              svg_element_free (clone);
+              g_object_unref (clone);
               return NULL;
             }
           g_ptr_array_add (clone->shapes, child_clone);

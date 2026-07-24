@@ -40,7 +40,10 @@
 
 G_BEGIN_DECLS
 
-void         svg_element_free                (SvgElement            *element);
+#define SVG_TYPE_ELEMENT (svg_element_get_type ())
+
+GDK_DECLARE_INTERNAL_TYPE (SvgElement, svg_element, SVG, ELEMENT, GObject)
+
 SvgElement * svg_element_new                 (SvgElement            *parent,
                                               SvgElementType         type);
 

@@ -1925,7 +1925,7 @@ gtk_svg_dispose (GObject *object)
   g_clear_pointer (&self->stylesheet, g_bytes_unref);
 
   /* clear_content recreates these */
-  g_clear_pointer (&self->content, svg_element_free);
+  g_clear_object (&self->content);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->images, g_hash_table_unref);
   g_clear_pointer (&self->user_styles, g_array_unref);
@@ -2512,7 +2512,7 @@ gtk_svg_clear_content (GtkSvg *self)
 
   g_clear_pointer (&self->resource, g_free);
   g_clear_pointer (&self->timeline, timeline_free);
-  g_clear_pointer (&self->content, svg_element_free);
+  g_clear_object (&self->content);
   g_clear_pointer (&self->images, g_hash_table_unref);
   g_clear_object (&self->fontmap);
   g_clear_pointer (&self->font_files, g_ptr_array_unref);

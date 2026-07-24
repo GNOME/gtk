@@ -92,6 +92,8 @@ typedef struct
 
 struct _SvgElement
 {
+  GObject parent_instance;
+
   SvgElementType type;
   SvgElement *parent;
   char *id;

@@ -5097,7 +5097,7 @@ gtk_svg_apply_filter (GtkSvg                *svg,
 
   result = apply_filter_tree (shape, filter, &paint_context, source);
 
-  svg_element_free (shape);
+  g_object_unref (shape);
 
   node = gtk_snapshot_free_to_node (paint_context.snapshot);
   g_assert (node == NULL);
