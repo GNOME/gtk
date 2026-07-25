@@ -1645,12 +1645,14 @@ svg_element_delete (SvgElement *element)
       if (parent->first_child == element)
         {
           parent->first_child = element->next_sibling;
-          parent->first_child->prev_sibling = NULL;
+          if (parent->first_child)
+            parent->first_child->prev_sibling = NULL;
         }
       if (parent->last_child == element)
         {
           parent->last_child = element->prev_sibling;
-          parent->last_child->next_sibling = NULL;
+          if (parent->last_child)
+            parent->last_child->next_sibling = NULL;
         }
     }
 
@@ -1658,8 +1660,8 @@ svg_element_delete (SvgElement *element)
   element->next_sibling = NULL;
   element->parent = NULL;
 
-  if (element->child_observer)
-    gtk_list_list_model_item_removed (element->child_observer, prev);
+  if (parent && parent->child_observer)
+    gtk_list_list_model_item_removed (parent->child_observer, prev);
 
   g_object_unref (element);
 }
