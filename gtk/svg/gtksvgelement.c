@@ -68,6 +68,55 @@ G_DEFINE_TYPE (SvgElement, svg_element, G_TYPE_OBJECT)
 static void
 svg_element_init (SvgElement *self)
 {
+  self->type = SVG_ELEMENT_PATH;
+}
+
+static void
+svg_element_get_property (GObject      *object,
+                          unsigned int  property_id,
+                          GValue       *value,
+                          GParamSpec   *pspec)
+{
+  SvgElement *self = SVG_ELEMENT (object);
+
+  switch (property_id)
+    {
+    case SVG_ELEMENT_PROP_ELEMENT_TYPE:
+      g_value_set_uint (value, self->type);
+      break;
+
+    case SVG_ELEMENT_PROP_ID:
+      g_value_set_string (value, self->id);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+svg_element_set_property (GObject      *object,
+                          unsigned int  property_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
+{
+  SvgElement *self = SVG_ELEMENT (object);
+
+  switch (property_id)
+    {
+    case SVG_ELEMENT_PROP_ELEMENT_TYPE:
+      svg_element_set_element_type (self, g_value_get_uint (value));
+      break;
+
+    case SVG_ELEMENT_PROP_ID:
+      svg_element_set_id (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
 }
 
 static void svg_element_finalize (GObject *object);
@@ -78,6 +127,21 @@ svg_element_class_init (SvgElementClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = svg_element_finalize;
+  object_class->get_property = svg_element_get_property;
+  object_class->set_property = svg_element_set_property;
+
+  svg_element_prop[SVG_ELEMENT_PROP_ELEMENT_TYPE] =
+    g_param_spec_uint ("element-type", NULL, NULL,
+                       SVG_ELEMENT_LINE, SVG_ELEMENT_VIEW,
+                       SVG_ELEMENT_PATH,
+                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  svg_element_prop[SVG_ELEMENT_PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+   g_object_class_install_properties (object_class, SVG_ELEMENT_NUM_PROPERTIES, svg_element_prop);
 }
 
 static void
@@ -1232,8 +1296,11 @@ void
 svg_element_set_id (SvgElement *element,
                     const char *id)
 {
-  g_set_str (&element->id, id);
+  if (!g_set_str (&element->id, id))
+    return;
+
   gtk_css_node_set_id (element->css_node, g_quark_from_string (id));
+  g_object_notify_by_pspec (G_OBJECT (element), svg_element_prop[SVG_ELEMENT_PROP_ID]);
 }
 
 const char *
@@ -1909,6 +1976,8 @@ svg_element_set_element_type (SvgElement     *element,
       if (!svg_property_applies_to (attr, type))
         svg_element_set_base_value (element, attr, NULL, FALSE);
     }
+
+  g_object_notify_by_pspec (G_OBJECT (element), svg_element_prop[SVG_ELEMENT_PROP_ELEMENT_TYPE]);
 }
 
 void
