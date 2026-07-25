@@ -4144,7 +4144,8 @@ shape_set_base_value (SvgElement   *shape,
                       SvgProperty   attr,
                       unsigned int  idx,
                       SvgValue     *value,
-                      gboolean      important)
+                      gboolean      important,
+                      GtkSvg       *svg)
 {
   if (idx == 0)
     {
@@ -4171,7 +4172,26 @@ shape_set_base_value (SvgElement   *shape,
       svg_filter_set_base_value (f, attr, value, important);
     }
   else
-    g_assert_not_reached ();
+    {
+      if (svg_element_type_is_gradient (svg_element_get_type (shape)))
+        {
+          gtk_svg_update_error (svg, "Ignoring %s on %s",
+                                svg_property_get_name (attr),
+                                "<stop>");
+        }
+      else if (svg_element_type_is_filter (svg_element_get_type (shape)))
+        {
+          SvgFilter *f = g_ptr_array_index (shape->filters, idx - 1);
+          gtk_svg_update_error (svg, "Ignoring %s on %s",
+                                svg_property_get_name (attr),
+                                svg_filter_type_get_name (svg_filter_get_type (f)));
+        }
+      else
+        {
+          gtk_svg_update_error (svg, "Ignoring %s", svg_property_get_name (attr));
+        }
+
+    }
 }
 
 static void
@@ -4179,7 +4199,8 @@ apply_ruleset_to_shape (SvgCssRuleset  *r,
                         gboolean        important,
                         SvgElement     *shape,
                         unsigned int    idx,
-                        GtkBitmask    **set)
+                        GtkBitmask    **set,
+                        GtkSvg         *svg)
 {
   for (unsigned int j = 0; j < r->n_styles; j++)
     {
@@ -4192,7 +4213,7 @@ apply_ruleset_to_shape (SvgCssRuleset  *r,
         continue;
 
       if (svg_property_applies_to (p->attr, svg_element_get_type (shape)))
-        shape_set_base_value (shape, p->attr, idx, p->value, important);
+        shape_set_base_value (shape, p->attr, idx, p->value, important, svg);
 
       *set = _gtk_bitmask_set (*set, p->attr, TRUE);
     }
@@ -4247,17 +4268,17 @@ apply_styles_here (SvgElement   *shape,
   if (idx == 0)
     {
       for (unsigned int i = FIRST_SVG_PROPERTY; i <= LAST_SVG_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE, svg);
     }
   else if (svg_element_type_is_gradient (shape->type))
     {
       for (unsigned int i = FIRST_STOP_PROPERTY; i <= LAST_STOP_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE, svg);
     }
   else if (svg_element_type_is_filter (shape->type))
     {
       for (unsigned int i = FIRST_FILTER_PROPERTY; i <= LAST_FILTER_PROPERTY; i++)
-        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE);
+        shape_set_base_value (shape, i, idx, svg_unset_new (), FALSE, svg);
     }
   else
     g_assert_not_reached ();
@@ -4272,7 +4293,7 @@ apply_styles_here (SvgElement   *shape,
     {
       SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
       if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
-        apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
+        apply_ruleset_to_shape (r, TRUE, shape, idx, &set, svg);
     }
 
   /* important inline styles */
@@ -4283,7 +4304,7 @@ apply_styles_here (SvgElement   *shape,
           PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
           if (p->important && !_gtk_bitmask_get (set, p->attr))
             {
-              shape_set_base_value (shape, p->attr, idx, p->value, TRUE);
+              shape_set_base_value (shape, p->attr, idx, p->value, TRUE, svg);
               set = _gtk_bitmask_set (set, p->attr, TRUE);
             }
         }
@@ -4294,7 +4315,7 @@ apply_styles_here (SvgElement   *shape,
     {
       SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
       if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
-        apply_ruleset_to_shape (r, TRUE, shape, idx, &set);
+        apply_ruleset_to_shape (r, TRUE, shape, idx, &set, svg);
     }
 
   /* inline styles */
@@ -4305,7 +4326,7 @@ apply_styles_here (SvgElement   *shape,
           PropertyValue *p = &g_array_index (inline_styles, PropertyValue, i);
           if (!p->important && !_gtk_bitmask_get (set, p->attr))
             {
-              shape_set_base_value (shape, p->attr, idx, p->value, FALSE);
+              shape_set_base_value (shape, p->attr, idx, p->value, FALSE, svg);
               set = _gtk_bitmask_set (set, p->attr, TRUE);
             }
         }
@@ -4316,7 +4337,7 @@ apply_styles_here (SvgElement   *shape,
     {
       SvgCssRuleset *r = &g_array_index (svg->author_styles, SvgCssRuleset, i);
       if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
-        apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
+        apply_ruleset_to_shape (r, FALSE, shape, idx, &set, svg);
     }
 
   /* user styles */
@@ -4324,7 +4345,7 @@ apply_styles_here (SvgElement   *shape,
     {
       SvgCssRuleset *r = &g_array_index (svg->user_styles, SvgCssRuleset, i);
       if (gtk_css_selector_matches (r->selector, node) && media_condition_is_true (r))
-        apply_ruleset_to_shape (r, FALSE, shape, idx, &set);
+        apply_ruleset_to_shape (r, FALSE, shape, idx, &set, svg);
     }
 
   /* presentation attributes */
