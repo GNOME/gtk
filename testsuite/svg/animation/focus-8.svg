@@ -30,17 +30,6 @@
           gpa:css-state='focused'>
     <animate
             attributeName='fill'
-            begin='rect1.blur'
-            dur='500ms'
-            fill='freeze'
-            from='rgb(255,0,0)'
-            to='rgb(255,255,0)'
-            keyTimes='0; 1'
-            gpa:status='done'
-            gpa:run-mode='stopped'
-            gpa:last-start-time='1000ms'/>
-    <animate
-            attributeName='fill'
             begin='rect1.focus'
             dur='500ms'
             fill='freeze'
@@ -50,6 +39,17 @@
             gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='7000ms'/>
+    <animate
+            attributeName='fill'
+            begin='rect1.blur'
+            dur='500ms'
+            fill='freeze'
+            from='rgb(255,0,0)'
+            to='rgb(255,255,0)'
+            keyTimes='0; 1'
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='1000ms'/>
   </rect>
   <g
           id='group'

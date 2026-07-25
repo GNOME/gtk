@@ -29,15 +29,16 @@
 
 G_BEGIN_DECLS
 
+#define SVG_TYPE_FILTER (svg_filter_get_type ())
+GDK_DECLARE_INTERNAL_TYPE (SvgFilter, svg_filter, SVG, FILTER, GObject);
+
 SvgFilter *    svg_filter_new               (SvgElement     *parent,
                                              SvgFilterType   type);
 
 SvgFilter *    svg_filter_clone             (SvgFilter      *filter,
                                              SvgElement     *parent);
 
-void           svg_filter_free              (SvgFilter      *filter);
-
-SvgFilterType  svg_filter_get_type          (SvgFilter      *filter);
+SvgFilterType  svg_filter_get_filter_type   (SvgFilter      *filter);
 
 SvgValue *     svg_filter_ref_initial_value (SvgFilter      *filter,
                                              SvgProperty     attr);
@@ -61,7 +62,7 @@ SvgValue *     svg_filter_get_base_value    (SvgFilter      *filter,
                                              SvgProperty     attr);
 
 void           svg_filter_set_current_value (SvgFilter      *filter,
-                                             SvgProperty     attr,
+                                             SvgProperty    attr,
                                              SvgValue       *value);
 SvgValue *     svg_filter_get_current_value (SvgFilter      *filter,
                                              SvgProperty     attr);

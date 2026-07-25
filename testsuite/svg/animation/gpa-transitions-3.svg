@@ -31,21 +31,6 @@
             gpa:run-mode='stopped'
             gpa:last-start-time='0ms'/>
     <animate
-            id='gpa:transition:fade-out:0:opacity:red'
-            attributeName='opacity'
-            begin='StateChange(0, not 0) -2000ms'
-            dur='2000ms'
-            repeatDur='2000ms'
-            fill='freeze'
-            from='1'
-            to='0'
-            keySplines='0 0 1 1'
-            keyTimes='0; 1'
-            calcMode='spline'
-            gpa:status='done'
-            gpa:run-mode='stopped'
-            gpa:last-start-time='0ms'/>
-    <animate
             id='gpa:transition:fade-in:0:opacity:red'
             attributeName='opacity'
             begin='StateChange(not 0, 0)'
@@ -60,5 +45,20 @@
             gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='2000ms'/>
+    <animate
+            id='gpa:transition:fade-out:0:opacity:red'
+            attributeName='opacity'
+            begin='StateChange(0, not 0) -2000ms'
+            dur='2000ms'
+            repeatDur='2000ms'
+            fill='freeze'
+            from='1'
+            to='0'
+            keySplines='0 0 1 1'
+            keyTimes='0; 1'
+            calcMode='spline'
+            gpa:status='done'
+            gpa:run-mode='stopped'
+            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

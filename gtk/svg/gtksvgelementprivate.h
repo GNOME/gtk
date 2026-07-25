@@ -40,20 +40,25 @@
 
 G_BEGIN_DECLS
 
-void         svg_element_free                (SvgElement            *element);
+#define SVG_TYPE_ELEMENT (svg_element_get_type ())
+
+GDK_DECLARE_INTERNAL_TYPE (SvgElement, svg_element, SVG, ELEMENT, GObject)
+
 SvgElement * svg_element_new                 (SvgElement            *parent,
                                               SvgElementType         type);
 
-void         svg_element_set_type            (SvgElement            *element,
+void         svg_element_set_element_type    (SvgElement            *element,
                                               SvgElementType         type);
 
 SvgElementType
-             svg_element_get_type            (SvgElement            *element);
+             svg_element_get_element_type    (SvgElement            *element);
 void         svg_element_add_color_stop      (SvgElement            *element,
                                               SvgColorStop          *stop);
 void         svg_element_add_filter          (SvgElement            *element,
                                               SvgFilter             *filter);
 void         svg_element_add_child           (SvgElement            *element,
+                                              SvgElement            *child);
+void         svg_element_prepend_child       (SvgElement            *element,
                                               SvgElement            *child);
 void         svg_element_add_animation       (SvgElement            *element,
                                               SvgAnimation          *animation);
@@ -284,5 +289,21 @@ gboolean svg_element_contains          (SvgElement             *element,
 void         svg_element_ensure_shadow_tree (SvgElement *element,
                                              GtkSvg     *svg);
 SvgElement * svg_element_get_corresponding  (SvgElement *element);
+
+SvgElement *    svg_element_get_first_child     (SvgElement *element);
+SvgElement *    svg_element_get_last_child      (SvgElement *element);
+SvgElement *    svg_element_get_prev_sibling    (SvgElement *element);
+SvgElement *    svg_element_get_next_sibling    (SvgElement *element);
+
+GListModel *    svg_element_observe_children    (SvgElement *element);
+
+SvgAnimation *  svg_element_get_first_animation (SvgElement *element);
+SvgAnimation *  svg_element_get_last_animation  (SvgElement *element);
+
+GListModel *    svg_element_observe_animations  (SvgElement *element);
+
+GListModel *    svg_element_observe_filters     (SvgElement *element);
+
+GListModel *    svg_element_observe_color_stops (SvgElement *element);
 
 G_END_DECLS

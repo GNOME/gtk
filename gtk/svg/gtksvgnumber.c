@@ -183,7 +183,7 @@ svg_number_resolve (const SvgValue    *value,
                     SvgComputeContext *context)
 {
   const SvgNumber *n = (const SvgNumber *) value;
-  SvgElementType type = svg_element_get_type (shape);
+  SvgElementType type = svg_element_get_element_type (shape);
 
   switch (n->unit)
     {

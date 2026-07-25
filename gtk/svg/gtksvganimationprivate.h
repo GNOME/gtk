@@ -102,6 +102,8 @@ typedef struct
 
 struct _SvgAnimation
 {
+  GObject parent;
+
   AnimationType type;
   AnimationStatus status;
   char *id;
@@ -118,6 +120,9 @@ struct _SvgAnimation
   SvgElement *shape;
   unsigned int attr;
   unsigned int idx;
+
+  SvgAnimation *prev_sibling;
+  SvgAnimation *next_sibling;
 
   unsigned int has_simple_duration : 1;
   unsigned int has_repeat_count    : 1;
@@ -139,7 +144,6 @@ struct _SvgAnimation
   GtkSvgRunMode run_mode;
   int64_t next_invalidate;
   gboolean state_changed;
-
 
   AnimationFill fill;
   AnimationRestart restart;
@@ -170,6 +174,15 @@ struct _SvgAnimation
     double attach_pos;
   } gpa;
 };
+
+struct _SvgAnimationClass
+{
+  GObjectClass parent_class;
+};
+
+#define SVG_TYPE_ANIMATION (svg_animation_get_type ())
+
+GDK_DECLARE_INTERNAL_TYPE (SvgAnimation, svg_animation, SVG, ANIMATION, GObject)
 
 SvgAnimation *   svg_animation_new           (AnimationType  type);
 
@@ -263,5 +276,8 @@ void             svg_animation_update_state (SvgAnimation *a,
 void             svg_animation_resolve_shadow_references
                                             (SvgAnimation *animation,
                                              GHashTable   *map);
+
+SvgAnimation *   svg_animation_get_prev_sibling (SvgAnimation *animation);
+SvgAnimation *   svg_animation_get_next_sibling (SvgAnimation *animation);
 
 G_END_DECLS

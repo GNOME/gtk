@@ -33,6 +33,17 @@
             gpa:current-start-time='6000ms'
             gpa:run-mode='discrete'
             gpa:last-start-time='6000ms'/>
+    <set
+            id='gpa:path-length:line'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
     <animate
             id='gpa:transition:fade-in:0:stroke-dasharray:line'
             attributeName='stroke-dasharray'
@@ -93,17 +104,6 @@
             gpa:status='done'
             gpa:run-mode='stopped'
             gpa:last-start-time='5000ms'/>
-    <set
-            id='gpa:path-length:line'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'
-            gpa:run-mode='discrete'
-            gpa:last-start-time='0ms'/>
   </path>
   <circle
           id='red'
@@ -127,6 +127,17 @@
             gpa:current-start-time='6000ms'
             gpa:run-mode='discrete'
             gpa:last-start-time='6000ms'/>
+    <set
+            id='gpa:path-length:red'
+            attributeName='pathLength'
+            begin='0ms'
+            end='indefinite'
+            to='1'
+            gpa:status='running'
+            gpa:computed-simple-duration='indefinite'
+            gpa:current-start-time='0ms'
+            gpa:run-mode='discrete'
+            gpa:last-start-time='0ms'/>
     <animateMotion
             id='gpa:attachment:red'
             begin='0ms'
@@ -174,16 +185,5 @@
             gpa:last-start-time='5000ms'>
       <mpath href='#line'/>
     </animateMotion>
-    <set
-            id='gpa:path-length:red'
-            attributeName='pathLength'
-            begin='0ms'
-            end='indefinite'
-            to='1'
-            gpa:status='running'
-            gpa:computed-simple-duration='indefinite'
-            gpa:current-start-time='0ms'
-            gpa:run-mode='discrete'
-            gpa:last-start-time='0ms'/>
   </circle>
 </svg>

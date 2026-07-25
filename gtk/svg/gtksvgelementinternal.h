@@ -24,6 +24,8 @@
 #include "gtksvgelementprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtksvgmediaqueryprivate.h"
+#include "gtk/gtklistlistmodelprivate.h"
+#include "gtk/gtkarraylistmodelprivate.h"
 
 G_BEGIN_DECLS
 
@@ -92,8 +94,16 @@ typedef struct
 
 struct _SvgElement
 {
+  GObject parent_instance;
+
   SvgElementType type;
+
   SvgElement *parent;
+  SvgElement *first_child;
+  SvgElement *last_child;
+  SvgElement *prev_sibling;
+  SvgElement *next_sibling;
+
   char *id;
   char *style;
   char **classes;
@@ -126,7 +136,9 @@ struct _SvgElement
 
   SvgElement *corresponding;
 
-  GPtrArray *shapes;
+  SvgAnimation *first_animation;
+  SvgAnimation *last_animation;
+
   GPtrArray *animations;
   GPtrArray *color_stops;
   GPtrArray *filters;
@@ -181,6 +193,11 @@ struct _SvgElement
       double pos;
     } attach;
   } gpa;
+
+  GtkListListModel *child_observer;
+  GtkListListModel *animation_observer;
+  GtkArrayListModel *filter_observer;
+  GtkArrayListModel *color_stop_observer;
 };
 
 G_END_DECLS

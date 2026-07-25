@@ -388,7 +388,7 @@ focus (gpointer data)
       if (svg_element_get_id (sd->svg->focus))
         g_print ("focus on %s\n", svg_element_get_id (sd->svg->focus));
       else
-        g_print ("focus on unnamed %s\n", svg_element_type_get_name (svg_element_get_type (sd->svg->focus)));
+        g_print ("focus on unnamed %s\n", svg_element_type_get_name (svg_element_get_element_type (sd->svg->focus)));
     }
   else
     g_print ("no focus\n");

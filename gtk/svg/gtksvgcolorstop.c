@@ -30,6 +30,8 @@
 
 struct _SvgColorStop
 {
+  GObject parent_instance;
+
   unsigned int attrs;
   unsigned int important;
   SvgValue *specified[N_STOP_PROPERTIES];
@@ -43,9 +45,23 @@ struct _SvgColorStop
   GArray *inline_styles;
 };
 
-void
-svg_color_stop_free (SvgColorStop *stop)
+struct _SvgColorStopClass
 {
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE (SvgColorStop, svg_color_stop, G_TYPE_OBJECT)
+
+static void
+svg_color_stop_init (SvgColorStop *stop)
+{
+}
+
+static void
+svg_color_stop_finalize (GObject *object)
+{
+  SvgColorStop *stop = SVG_COLOR_STOP (object);
+
   g_free (stop->id);
   g_free (stop->style);
   g_strfreev (stop->classes);
@@ -58,7 +74,16 @@ svg_color_stop_free (SvgColorStop *stop)
       g_clear_pointer (&stop->base[i], svg_value_unref);
       g_clear_pointer (&stop->current[i], svg_value_unref);
     }
-  g_free (stop);
+
+  G_OBJECT_CLASS (svg_color_stop_parent_class)->finalize (object);
+}
+
+static void
+svg_color_stop_class_init (SvgColorStopClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = svg_color_stop_finalize;
 }
 
 unsigned int
@@ -78,7 +103,7 @@ svg_color_stop_get_property (unsigned int idx)
 SvgColorStop *
 svg_color_stop_new (SvgElement *parent)
 {
-  SvgColorStop *stop = g_new0 (SvgColorStop, 1);
+  SvgColorStop *stop = g_object_new (SVG_TYPE_COLOR_STOP, NULL);
 
   for (SvgProperty attr = FIRST_STOP_PROPERTY; attr <= LAST_STOP_PROPERTY; attr++)
     stop->base[attr - FIRST_STOP_PROPERTY] = svg_property_ref_initial_value (attr, SVG_ELEMENT_LINEAR_GRADIENT, TRUE);
@@ -295,7 +320,7 @@ SvgColorStop *
 svg_color_stop_clone (SvgColorStop *stop,
                       SvgElement   *parent)
 {
-  SvgColorStop *clone = g_new0 (SvgColorStop, 1);
+  SvgColorStop *clone = g_object_new (SVG_TYPE_COLOR_STOP, NULL);
 
   clone->attrs = stop->attrs;
 

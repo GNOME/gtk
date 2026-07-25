@@ -31,6 +31,54 @@
 #include "gtksvgpaintprivate.h"
 #include "gtksvghrefprivate.h"
 
+G_DEFINE_TYPE (SvgAnimation, svg_animation, G_TYPE_OBJECT)
+
+static void
+svg_animation_init (SvgAnimation *self)
+{
+}
+
+static void
+svg_animation_finalize (GObject *object)
+{
+  SvgAnimation *animation = SVG_ANIMATION (object);
+
+  g_free (animation->id);
+  g_free (animation->href);
+
+  g_clear_pointer (&animation->begin, g_ptr_array_unref);
+  g_clear_pointer (&animation->end, g_ptr_array_unref);
+
+  if (animation->type != ANIMATION_TYPE_MOTION)
+    {
+      for (unsigned int i = 0; i < animation->n_frames; i++)
+        svg_value_unref (animation->frames[i].value);
+    }
+  g_free (animation->frames);
+
+  g_free (animation->motion.path_ref);
+  g_clear_pointer (&animation->motion.path, gsk_path_unref);
+  g_clear_pointer (&animation->motion.measure, gsk_path_measure_unref);
+
+  g_clear_pointer (&animation->deps, g_ptr_array_unref);
+
+  G_OBJECT_CLASS (svg_animation_parent_class)->finalize (object);
+}
+
+static void
+svg_animation_dispose (GObject *object)
+{
+  G_OBJECT_CLASS (svg_animation_parent_class)->dispose (object);
+}
+
+static void
+svg_animation_class_init (SvgAnimationClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = svg_animation_finalize;
+  object_class->dispose = svg_animation_dispose;
+}
 
 CalcMode
 svg_animation_type_default_calc_mode (AnimationType type)
@@ -44,8 +92,8 @@ svg_animation_type_default_calc_mode (AnimationType type)
 }
 
 static void
-svg_animation_init (SvgAnimation  *animation,
-                    AnimationType  type)
+svg_animation_setup (SvgAnimation  *animation,
+                     AnimationType  type)
 {
   animation->status = ANIMATION_STATUS_INACTIVE;
 
@@ -92,34 +140,17 @@ svg_animation_add_dep (SvgAnimation *base,
 SvgAnimation *
 svg_animation_new (AnimationType type)
 {
-  SvgAnimation *animation = g_new0 (SvgAnimation, 1);
-  svg_animation_init (animation, type);
+  SvgAnimation *animation = g_object_new (SVG_TYPE_ANIMATION, NULL);
+
+  svg_animation_setup (animation, type);
+
   return animation;
 }
 
 void
 svg_animation_free (SvgAnimation *animation)
 {
-  g_free (animation->id);
-  g_free (animation->href);
-
-  g_clear_pointer (&animation->begin, g_ptr_array_unref);
-  g_clear_pointer (&animation->end, g_ptr_array_unref);
-
-  if (animation->type != ANIMATION_TYPE_MOTION)
-    {
-      for (unsigned int i = 0; i < animation->n_frames; i++)
-        svg_value_unref (animation->frames[i].value);
-    }
-  g_free (animation->frames);
-
-  g_free (animation->motion.path_ref);
-  g_clear_pointer (&animation->motion.path, gsk_path_unref);
-  g_clear_pointer (&animation->motion.measure, gsk_path_measure_unref);
-
-  g_clear_pointer (&animation->deps, g_ptr_array_unref);
-
-  g_free (animation);
+  g_object_unref (animation);
 }
 
 void
@@ -134,7 +165,8 @@ svg_animation_drop_and_free (SvgAnimation *animation)
           time_spec_drop_animation (spec, animation);
         }
     }
-  svg_animation_free (animation);
+
+  g_object_unref (animation);
 }
 
 TimeSpec *
@@ -425,7 +457,7 @@ svg_animation_clone (SvgAnimation *a,
                      SvgElement   *parent,
                      Timeline     *timeline)
 {
-  SvgAnimation *clone = g_new0 (SvgAnimation, 1);
+  SvgAnimation *clone = g_object_new (SVG_TYPE_ANIMATION, NULL);
 
   clone->type = a->type;
   clone->status = a->status;
@@ -960,7 +992,7 @@ svg_animation_update_state (SvgAnimation *a,
 }
 
 /* }}} */
-/* ((( Reference resolution */
+/* {{{ Reference resolution */
 
 void
 svg_animation_resolve_shadow_references (SvgAnimation *animation,
@@ -1114,5 +1146,17 @@ svg_animation_resolve_shadow_references (SvgAnimation *animation,
 }
 
 /* }}} */
+
+SvgAnimation *
+svg_animation_get_prev_sibling (SvgAnimation *animation)
+{
+  return animation->prev_sibling;
+}
+
+SvgAnimation *
+svg_animation_get_next_sibling (SvgAnimation *animation)
+{
+  return animation->next_sibling;
+}
 
 /* vim:set foldmethod=marker: */

@@ -34,9 +34,10 @@
 #include "gtksvgfiltertypeprivate.h"
 #include "gtksvgelementinternal.h"
 
-
 struct _SvgFilter
 {
+  GObject parent_instance;
+
   SvgFilterType type;
   unsigned int attrs;
   unsigned int important;
@@ -48,12 +49,26 @@ struct _SvgFilter
   GArray *inline_styles;
   GArray *specified;
   SvgValue **current;
-  SvgValue *base[1];
+  SvgValue **base;
 };
 
-void
-svg_filter_free (SvgFilter *filter)
+struct _SvgFilterClass
 {
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE (SvgFilter, svg_filter, G_TYPE_OBJECT)
+
+static void
+svg_filter_init (SvgFilter *filter)
+{
+}
+
+static void
+svg_filter_finalize (GObject *object)
+{
+  SvgFilter *filter = SVG_FILTER (object);
+
   g_free (filter->id);
   g_free (filter->style);
   g_strfreev (filter->classes);
@@ -66,7 +81,17 @@ svg_filter_free (SvgFilter *filter)
       g_clear_pointer (&filter->base[i], svg_value_unref);
       g_clear_pointer (&filter->current[i], svg_value_unref);
     }
-  g_free (filter);
+  g_free (filter->base);
+
+  G_OBJECT_CLASS (svg_filter_parent_class)->finalize (object);
+}
+
+static void
+svg_filter_class_init (SvgFilterClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = svg_filter_finalize;
 }
 
 SvgValue *
@@ -326,11 +351,13 @@ svg_filter_new (SvgElement    *parent,
 
   g_assert (parent->type == SVG_ELEMENT_FILTER);
 
-  n_attrs = svg_filter_type_get_n_attrs (type);
-  filter = g_malloc0 (sizeof (SvgFilter) + sizeof (SvgValue *) * (2 * n_attrs - 1));
+  filter = g_object_new (SVG_TYPE_FILTER, NULL);
 
-  filter->type = type;
+  n_attrs = svg_filter_type_get_n_attrs (type);
+
+  filter->base = g_new0 (SvgValue *, 2 * n_attrs);
   filter->current = filter->base + n_attrs;
+  filter->type = type;
 
   filter->specified = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
   filter->inline_styles = array_new_with_clear_func (sizeof (PropertyValue), (GDestroyNotify) property_value_clear);
@@ -349,7 +376,7 @@ svg_filter_new (SvgElement    *parent,
 }
 
 SvgFilterType
-svg_filter_get_type (SvgFilter *filter)
+svg_filter_get_filter_type (SvgFilter *filter)
 {
   return filter->type;
 }
@@ -475,10 +502,12 @@ svg_filter_clone (SvgFilter  *filter,
   size_t n_attrs;
 
   n_attrs = svg_filter_type_get_n_attrs (filter->type);
-  clone = g_malloc0 (sizeof (SvgFilter) + sizeof (SvgValue *) * (2 * n_attrs - 1));
 
-  clone->type = filter->type;
+  clone = g_object_new (SVG_TYPE_FILTER, NULL);
+
+  clone->base = g_new0 (SvgValue *, 2 * n_attrs);
   clone->current = clone->base + n_attrs;
+  clone->type = filter->type;
   clone->specified = g_array_ref (filter->specified);
 
   for (unsigned int i = 0; i < n_attrs; i++)
