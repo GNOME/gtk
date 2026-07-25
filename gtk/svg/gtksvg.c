@@ -2508,6 +2508,8 @@ gtk_svg_set_playing (GtkSvg   *self,
 void
 gtk_svg_clear_content (GtkSvg *self)
 {
+  frame_clock_disconnect (self);
+
   g_clear_pointer (&self->resource, g_free);
   g_clear_pointer (&self->timeline, timeline_free);
   g_clear_pointer (&self->content, svg_element_free);
@@ -2528,7 +2530,11 @@ gtk_svg_clear_content (GtkSvg *self)
   self->initial_state = 0;
   self->state = 0;
   self->max_state = 0;
+  self->load_time = INDEFINITE;
   self->state_change_delay = 0;
+  self->next_update = INDEFINITE;
+  self->playing = FALSE;
+  self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
   self->used = 0;
   self->has_use_cycle = FALSE;
 
