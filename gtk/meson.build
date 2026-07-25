@@ -28,6 +28,7 @@ gtk_private_sources = files([
   'gtkallocatedbitmask.c',
   'gtkapplicationaccels.c',
   'gtkapplicationimpl.c',
+  'gtkarraylistmodel.c',
   'gtkbookmarksmanager.c',
   'gtkbuilder-menus.c',
   'gtkbuilderprecompile.c',
