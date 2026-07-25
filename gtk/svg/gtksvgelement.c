@@ -286,7 +286,7 @@ svg_element_setup (SvgElement     *element,
     element->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_color_stop_free);
 
   if (svg_element_type_is_filter (type))
-    element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_filter_free);
+    element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_text (type))
     element->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
@@ -2063,7 +2063,7 @@ svg_element_set_element_type (SvgElement     *element,
     g_clear_pointer (&element->filters, g_ptr_array_unref);
   else if (!svg_element_type_is_filter (old_type) &&
            svg_element_type_is_filter (type))
-    element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_filter_free);
+    element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
   if (svg_element_type_is_gradient (old_type) &&
       !svg_element_type_is_gradient (type))
@@ -2702,7 +2702,7 @@ svg_element_clone (SvgElement *element,
 
   if (element->filters)
     {
-      clone->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) svg_filter_free);
+      clone->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
       for (unsigned int i = 0; i < element->filters->len; i++)
         {
           SvgFilter *f = g_ptr_array_index (element->filters, i);
