@@ -1578,7 +1578,7 @@ shape_init_current_values (SvgElement        *shape,
       for (unsigned int idx = 0; idx < shape->filters->len; idx++)
         {
           SvgFilter *f = g_ptr_array_index (shape->filters, idx);
-          SvgFilterType type = svg_filter_get_type (f);
+          SvgFilterType type = svg_filter_get_filter_type (f);
 
           for (unsigned int i = 0; i < svg_filter_type_get_n_attrs (type); i++)
             {

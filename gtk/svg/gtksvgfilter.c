@@ -349,7 +349,7 @@ svg_filter_new (SvgElement    *parent,
 }
 
 SvgFilterType
-svg_filter_get_type (SvgFilter *filter)
+svg_filter_get_filter_type (SvgFilter *filter)
 {
   return filter->type;
 }

@@ -783,7 +783,7 @@ serialize_filter_begin (GString              *s,
                         unsigned int          idx,
                         GtkSvgSerializeFlags  flags)
 {
-  SvgFilterType type = svg_filter_get_type (f);
+  SvgFilterType type = svg_filter_get_filter_type (f);
 
   string_indent (s, indent);
   g_string_append_printf (s, "<%s", svg_filter_type_get_name (type));
@@ -842,7 +842,7 @@ serialize_filter_end (GString              *s,
                       SvgFilter            *f,
                       GtkSvgSerializeFlags  flags)
 {
-  SvgFilterType type = svg_filter_get_type (f);
+  SvgFilterType type = svg_filter_get_filter_type (f);
 
   string_indent (s, indent);
   g_string_append_printf (s, "</%s>", svg_filter_type_get_name (type));
@@ -949,12 +949,12 @@ serialize_shape (GString              *s,
 
           serialize_filter_begin (s, svg, indent + BASE_INDENT, shape, f, idx, flags);
 
-          if (svg_filter_get_type (f) == SVG_FILTER_MERGE)
+          if (svg_filter_get_filter_type (f) == SVG_FILTER_MERGE)
             {
               for (idx++; idx < shape->filters->len; idx++)
                 {
                   SvgFilter *f2 = g_ptr_array_index (shape->filters, idx);
-                  if (svg_filter_get_type (f2) != SVG_FILTER_MERGE_NODE)
+                  if (svg_filter_get_filter_type (f2) != SVG_FILTER_MERGE_NODE)
                     {
                       idx--;
                       break;
@@ -965,12 +965,12 @@ serialize_shape (GString              *s,
                 }
             }
 
-          if (svg_filter_get_type (f) == SVG_FILTER_COMPONENT_TRANSFER)
+          if (svg_filter_get_filter_type (f) == SVG_FILTER_COMPONENT_TRANSFER)
             {
               for (idx++; idx < shape->filters->len; idx++)
                 {
                   SvgFilter *f2 = g_ptr_array_index (shape->filters, idx);
-                  SvgFilterType t = svg_filter_get_type (f2);
+                  SvgFilterType t = svg_filter_get_filter_type (f2);
                   if (t != SVG_FILTER_FUNC_R &&
                       t != SVG_FILTER_FUNC_G &&
                       t != SVG_FILTER_FUNC_B &&

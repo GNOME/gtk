@@ -729,7 +729,7 @@ determine_filter_subregion (SvgFilter             *f,
                             GHashTable            *results,
                             graphene_rect_t       *subregion)
 {
-  SvgFilterType type = svg_filter_get_type (f);
+  SvgFilterType type = svg_filter_get_filter_type (f);
   gboolean x_set, y_set, w_set, h_set;
 
   if (type == SVG_FILTER_MERGE_NODE ||
@@ -846,7 +846,7 @@ determine_filter_subregion (SvgFilter             *f,
               {
                 SvgFilter *ff = g_ptr_array_index (filter->filters, idx);
 
-                if (svg_filter_get_type (ff) != SVG_FILTER_MERGE_NODE)
+                if (svg_filter_get_filter_type (ff) != SVG_FILTER_MERGE_NODE)
                   break;
 
                 refs[n_refs] = svg_filter_get_current_value (ff, SVG_PROPERTY_FE_IN);
@@ -935,24 +935,24 @@ apply_filter_tree (SvgElement    *shape,
           result = gsk_container_node_new (NULL, 0);
 
           /* Skip dependent filters */
-          if (svg_filter_get_type (f) == SVG_FILTER_MERGE)
+          if (svg_filter_get_filter_type (f) == SVG_FILTER_MERGE)
             {
               for (i++; i < filter->filters->len; i++)
                 {
                   SvgFilter *ff = g_ptr_array_index (filter->filters, i);
-                  if (svg_filter_get_type (ff) != SVG_FILTER_MERGE_NODE)
+                  if (svg_filter_get_filter_type (ff) != SVG_FILTER_MERGE_NODE)
                     {
                       i--;
                       break;
                     }
                 }
             }
-          else if (svg_filter_get_type (f) == SVG_FILTER_COMPONENT_TRANSFER)
+          else if (svg_filter_get_filter_type (f) == SVG_FILTER_COMPONENT_TRANSFER)
             {
               for (i++; i < filter->filters->len; i++)
                 {
                   SvgFilter *ff = g_ptr_array_index (filter->filters, i);
-                  SvgFilterType t = svg_filter_get_type (ff);
+                  SvgFilterType t = svg_filter_get_filter_type (ff);
                   if (t != SVG_FILTER_FUNC_R &&
                       t != SVG_FILTER_FUNC_G &&
                       t != SVG_FILTER_FUNC_B &&
@@ -967,7 +967,7 @@ apply_filter_tree (SvgElement    *shape,
           goto got_result;
         }
 
-      switch (svg_filter_get_type (f))
+      switch (svg_filter_get_filter_type (f))
         {
         case SVG_FILTER_BLUR:
           {
@@ -1053,7 +1053,7 @@ apply_filter_tree (SvgElement    *shape,
                 SvgFilter *ff = g_ptr_array_index (filter->filters, i);
                 FilterResult *in;
 
-                if (svg_filter_get_type (ff) != SVG_FILTER_MERGE_NODE)
+                if (svg_filter_get_filter_type (ff) != SVG_FILTER_MERGE_NODE)
                   {
                     i--;
                     break;
@@ -1212,7 +1212,7 @@ apply_filter_tree (SvgElement    *shape,
             for (i++; i < filter->filters->len; i++)
               {
                 SvgFilter *ff = g_ptr_array_index (filter->filters, i);
-                SvgFilterType t = svg_filter_get_type (ff);
+                SvgFilterType t = svg_filter_get_filter_type (ff);
                 if (t == SVG_FILTER_FUNC_R)
                   {
                     gsk_component_transfer_free (r);

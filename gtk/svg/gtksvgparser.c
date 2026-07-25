@@ -538,7 +538,7 @@ parse_base_animation_attrs (SvgAnimation         *a,
 
       f = g_ptr_array_index (current_shape->filters,
                               current_shape->filters->len - 1);
-      filter_type = svg_filter_get_type (f);
+      filter_type = svg_filter_get_filter_type (f);
     }
 
   attr = a->attr;
@@ -1866,7 +1866,7 @@ parse_filter_attrs (SvgElement           *shape,
                     ParserData           *data,
                     GMarkupParseContext  *context)
 {
-  SvgFilterType type = svg_filter_get_type (f);
+  SvgFilterType type = svg_filter_get_filter_type (f);
 
   for (unsigned int i = 0; attr_names[i]; i++)
     {
@@ -3101,7 +3101,7 @@ resolve_filter_image_refs (SvgElement *shape,
   for (unsigned int i = 0; i < shape->filters->len; i++)
     {
       SvgFilter *f = g_ptr_array_index (shape->filters, i);
-      SvgFilterType type = svg_filter_get_type (f);
+      SvgFilterType type = svg_filter_get_filter_type (f);
 
       if (type == SVG_FILTER_IMAGE)
         {
@@ -4169,7 +4169,7 @@ shape_set_base_value (SvgElement   *shape,
           SvgFilter *f = g_ptr_array_index (shape->filters, idx - 1);
           gtk_svg_update_error (svg, "Ignoring %s on %s",
                                 svg_property_get_name (attr),
-                                svg_filter_type_get_name (svg_filter_get_type (f)));
+                                svg_filter_type_get_name (svg_filter_get_filter_type (f)));
         }
       else
         {
@@ -4359,7 +4359,7 @@ apply_styles_here (SvgElement   *shape,
   else if (svg_element_type_is_filter (shape->type))
     {
       SvgFilter *filter = g_ptr_array_index (shape->filters, idx - 1);
-      SvgFilterType filter_type = svg_filter_get_type (filter);
+      SvgFilterType filter_type = svg_filter_get_filter_type (filter);
       unsigned int n_attrs = svg_filter_type_get_n_attrs (filter_type);
       for (unsigned int i = 0; i < n_attrs; i++)
         {
