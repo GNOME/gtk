@@ -28,12 +28,13 @@
 
 G_BEGIN_DECLS
 
+#define SVG_TYPE_COLOR_STOP (svg_color_stop_get_type ())
+GDK_DECLARE_INTERNAL_TYPE (SvgColorStop, svg_color_stop, SVG, COLOR_STOP, GObject);
+
 SvgColorStop * svg_color_stop_new               (SvgElement     *parent);
 
 SvgColorStop * svg_color_stop_clone             (SvgColorStop   *stop,
                                                  SvgElement     *parent);
-
-void           svg_color_stop_free              (SvgColorStop   *stop);
 
 unsigned int   svg_color_stop_get_index         (SvgProperty     attr);
 SvgProperty    svg_color_stop_get_property      (unsigned int    idx);
