@@ -568,6 +568,7 @@ gtk_svg_widget_load_from_bytes (GtkSvgWidget *self,
   g_return_if_fail (GTK_IS_SVG_WIDGET (self));
 
   gtk_svg_load_from_bytes (self->svg, bytes);
+  gtk_svg_play (self->svg);
 }
 
 /**
