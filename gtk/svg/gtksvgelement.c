@@ -139,6 +139,9 @@ svg_element_dispose (GObject *object)
   if (self->animation_observer)
     gtk_list_list_model_clear (self->animation_observer);
 
+  if (self->filter_observer)
+    gtk_array_list_model_clear (self->filter_observer);
+
   G_OBJECT_CLASS (svg_element_parent_class)->dispose (object);
 }
 
@@ -1114,6 +1117,9 @@ svg_element_add_filter (SvgElement *element,
   g_assert (gtk_css_node_get_parent (svg_filter_get_css_node (filter)) == element->css_node);
   g_assert (svg_element_type_is_filter (element->type));
   g_ptr_array_add (element->filters, filter);
+
+  if (element->filter_observer)
+    gtk_array_list_model_item_added (element->filter_observer);
 }
 
 /* Child is transfer-full */
@@ -2060,7 +2066,11 @@ svg_element_set_element_type (SvgElement     *element,
 
   if (svg_element_type_is_filter (old_type) &&
       !svg_element_type_is_filter (type))
-    g_clear_pointer (&element->filters, g_ptr_array_unref);
+    {
+      g_clear_pointer (&element->filters, g_ptr_array_unref);
+      if (element->filter_observer)
+        gtk_array_list_model_clear (element->filter_observer);
+    }
   else if (!svg_element_type_is_filter (old_type) &&
            svg_element_type_is_filter (type))
     element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
@@ -3102,4 +3112,25 @@ svg_element_observe_animations (SvgElement *element)
                                                          svg_element_animation_observer_destroyed);
 
   return G_LIST_MODEL (element->animation_observer);
+}
+
+static void
+svg_element_filter_observer_destroyed (gpointer element)
+{
+  SvgElement *self = (SvgElement *) element;
+
+  self->filter_observer = NULL;
+}
+
+GListModel *
+svg_element_observe_filters (SvgElement *element)
+{
+  if (element->filter_observer)
+    return g_object_ref (G_LIST_MODEL (element->filter_observer));
+
+  element->filter_observer = gtk_array_list_model_new (element->filters,
+                                                       element,
+                                                       svg_element_filter_observer_destroyed);
+
+  return G_LIST_MODEL (element->filter_observer);
 }

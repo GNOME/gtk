@@ -25,6 +25,7 @@
 #include "gtkcssselectorprivate.h"
 #include "gtksvgmediaqueryprivate.h"
 #include "gtk/gtklistlistmodelprivate.h"
+#include "gtk/gtkarraylistmodelprivate.h"
 
 G_BEGIN_DECLS
 
@@ -195,6 +196,7 @@ struct _SvgElement
 
   GtkListListModel *child_observer;
   GtkListListModel *animation_observer;
+  GtkArrayListModel *filter_observer;
 };
 
 G_END_DECLS

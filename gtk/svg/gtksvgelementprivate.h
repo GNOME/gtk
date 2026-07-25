@@ -302,4 +302,6 @@ SvgAnimation *  svg_element_get_last_animation  (SvgElement *element);
 
 GListModel *    svg_element_observe_animations  (SvgElement *element);
 
+GListModel *    svg_element_observe_filters     (SvgElement *element);
+
 G_END_DECLS
