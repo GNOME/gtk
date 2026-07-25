@@ -142,6 +142,9 @@ svg_element_dispose (GObject *object)
   if (self->filter_observer)
     gtk_array_list_model_clear (self->filter_observer);
 
+  if (self->color_stop_observer)
+    gtk_array_list_model_clear (self->color_stop_observer);
+
   G_OBJECT_CLASS (svg_element_parent_class)->dispose (object);
 }
 
@@ -1108,6 +1111,9 @@ svg_element_add_color_stop (SvgElement   *element,
   g_assert (gtk_css_node_get_parent (svg_color_stop_get_css_node (stop)) == element->css_node);
   g_assert (svg_element_type_is_gradient (element->type));
   g_ptr_array_add (element->color_stops, stop);
+
+  if (element->color_stop_observer)
+    gtk_array_list_model_item_added (element->color_stop_observer);
 }
 
 void
@@ -2077,7 +2083,11 @@ svg_element_set_element_type (SvgElement     *element,
 
   if (svg_element_type_is_gradient (old_type) &&
       !svg_element_type_is_gradient (type))
-    g_clear_pointer (&element->color_stops, g_ptr_array_unref);
+    {
+      g_clear_pointer (&element->color_stops, g_ptr_array_unref);
+      if (element->color_stop_observer)
+        gtk_array_list_model_clear (element->color_stop_observer);
+    }
   else if (!svg_element_type_is_gradient (old_type) &&
            svg_element_type_is_gradient (type))
     element->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
@@ -3133,4 +3143,25 @@ svg_element_observe_filters (SvgElement *element)
                                                        svg_element_filter_observer_destroyed);
 
   return G_LIST_MODEL (element->filter_observer);
+}
+
+static void
+svg_element_color_stop_observer_destroyed (gpointer element)
+{
+  SvgElement *self = (SvgElement *) element;
+
+  self->color_stop_observer = NULL;
+}
+
+GListModel *
+svg_element_observe_color_stops (SvgElement *element)
+{
+  if (element->color_stop_observer)
+    return g_object_ref (G_LIST_MODEL (element->color_stop_observer));
+
+  element->color_stop_observer = gtk_array_list_model_new (element->color_stops,
+                                                           element,
+                                                           svg_element_color_stop_observer_destroyed);
+
+  return G_LIST_MODEL (element->color_stop_observer);
 }

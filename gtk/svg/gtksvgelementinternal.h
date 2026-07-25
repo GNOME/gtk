@@ -197,6 +197,7 @@ struct _SvgElement
   GtkListListModel *child_observer;
   GtkListListModel *animation_observer;
   GtkArrayListModel *filter_observer;
+  GtkArrayListModel *color_stop_observer;
 };
 
 G_END_DECLS
