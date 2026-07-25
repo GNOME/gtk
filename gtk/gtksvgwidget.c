@@ -83,6 +83,7 @@ enum
   PROP_RESOURCE = 1,
   PROP_STATE,
   PROP_STYLESHEET,
+  PROP_SVG,
   NUM_PROPERTIES,
 };
 
@@ -251,6 +252,10 @@ gtk_svg_widget_get_property (GObject      *object,
 
     case PROP_STYLESHEET:
       g_value_set_boxed (value, gtk_svg_widget_get_stylesheet (self));
+      break;
+
+    case PROP_SVG:
+      g_value_set_object (value, self->svg);
       break;
 
     default:
@@ -448,6 +453,25 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
     g_param_spec_boxed ("stylesheet", NULL, NULL,
                         G_TYPE_BYTES,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSvgWidget:svg:
+   *
+   * The GtkSvg paintable used for rendering.
+   *
+   * This property is mainly useful for making details of the
+   * SVG rendering machinery available in the GTK inspector.
+   *
+   * You should not modify the returned object.
+   *
+   * Returns: the GtkSvg paintable
+   *
+   * Since: 4.24
+   */
+  properties[PROP_SVG] =
+    g_param_spec_object ("svg", NULL, NULL,
+                         GTK_TYPE_SVG,
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
