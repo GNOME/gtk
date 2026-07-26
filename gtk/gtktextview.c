@@ -226,6 +226,10 @@ struct _GtkTextViewPrivate
   GtkTextLayout *layout;
   GtkTextBuffer *buffer;
 
+  PangoContext *mru_line_height_context;
+  guint mru_line_height_context_serial;
+  int mru_line_height;
+
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
   char *im_module;
@@ -4109,6 +4113,7 @@ gtk_text_view_finalize (GObject *object)
 
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
+  g_clear_object (&priv->mru_line_height_context);
 
   G_OBJECT_CLASS (gtk_text_view_parent_class)->finalize (object);
 }
@@ -4697,6 +4702,35 @@ gtk_text_view_set_gutter (GtkTextView       *text_view,
   update_node_ordering (GTK_WIDGET (text_view));
 }
 
+static int
+gtk_text_view_get_mru_line_height (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkWidget *widget = GTK_WIDGET (text_view);
+  PangoContext *context;
+  PangoLayout *layout;
+  guint serial;
+  int height;
+
+  context = gtk_widget_get_pango_context (widget);
+  serial = pango_context_get_serial (context);
+
+  if (priv->mru_line_height_context == context &&
+      priv->mru_line_height_context_serial == serial)
+    return priv->mru_line_height;
+
+  layout = pango_layout_new (context);
+  pango_layout_set_text (layout, "X", 1);
+  pango_layout_get_pixel_size (layout, NULL, &height);
+  g_object_unref (layout);
+
+  g_set_object (&priv->mru_line_height_context, context);
+  priv->mru_line_height_context_serial = serial;
+  priv->mru_line_height = height;
+
+  return height;
+}
+
 static void
 gtk_text_view_size_allocate (GtkWidget *widget,
                              int        widget_width,
@@ -4712,7 +4746,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
   GtkWidget *chooser;
-  PangoLayout *layout;
   guint mru_size;
 
   text_view = GTK_TEXT_VIEW (widget);
@@ -4799,14 +4832,12 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   gtk_text_view_allocate_children (text_view);
 
   /* Optimize display cache size */
-  layout = gtk_widget_create_pango_layout (widget, "X");
-  pango_layout_get_pixel_size (layout, &width, &height);
+  height = gtk_text_view_get_mru_line_height (text_view);
   if (height > 0)
     {
       mru_size = SCREEN_HEIGHT (widget) / height * 3;
       gtk_text_layout_set_mru_size (priv->layout, mru_size);
     }
-  g_object_unref (layout);
 
   /* The GTK resize loop processes all the pending exposes right
    * after doing the resize stuff, so the idle sizer won't have a
