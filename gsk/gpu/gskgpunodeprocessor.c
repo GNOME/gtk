@@ -2680,6 +2680,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                                            &glyph_bounds,
                                            &glyph_offset);
 
+      if (glyph_bounds.size.width <= 0 ||
+          glyph_bounds.size.height <= 0)
+        {
+          offset.x += glyphs[i].geometry.width / pango_scale;
+          continue;
+        }
+
       glyph_origin.x -= glyph_offset.x / scale;
       glyph_origin.y -= glyph_offset.y / scale;
       glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
