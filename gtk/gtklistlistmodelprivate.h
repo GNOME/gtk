@@ -51,6 +51,8 @@ void                    gtk_list_list_model_item_added_at       (GtkListListMode
                                                                  guint                   position);
 void                    gtk_list_list_model_item_removed        (GtkListListModel       *self,
                                                                  gpointer                previous);
+void                    gtk_list_list_model_item_replaced       (GtkListListModel       *self,
+                                                                 gpointer                new_item);
 void                    gtk_list_list_model_item_removed_at     (GtkListListModel       *self,
                                                                  guint                   position);
 void                    gtk_list_list_model_item_moved          (GtkListListModel       *self,

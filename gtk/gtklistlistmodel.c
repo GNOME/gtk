@@ -317,6 +317,23 @@ gtk_list_list_model_item_added_at (GtkListListModel *self,
 }
 
 void
+gtk_list_list_model_item_replaced (GtkListListModel *self,
+                                   gpointer          new_item)
+{
+  unsigned int position;
+
+  g_return_if_fail (GTK_IS_LIST_LIST_MODEL (self));
+  g_return_if_fail (new_item != NULL);
+
+  position = gtk_list_list_model_find (self, new_item);
+
+  if (position == self->cache_pos)
+    gtk_list_list_model_invalidate_cache (self);
+
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 1);
+}
+
+void
 gtk_list_list_model_item_removed (GtkListListModel *self,
                                   gpointer          previous)
 {
