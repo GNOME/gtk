@@ -1257,9 +1257,9 @@ svg_element_add_animation (SvgElement   *shape,
 }
 
 /* What we call base value here is roughly the 'cascaded' value of CSS:
- * the result of applying styles. We carry an 'important' booleant to
- * indicate whether the applies styles was !important.
- * Values that are important have higher priority than animations.
+ * the result of applying styles. We carry an 'important' boolean to
+ * indicate whether the applied styles was !important. Values that are
+ * important have higher priority than animations.
  */
 void
 svg_element_set_base_value (SvgElement  *element,
