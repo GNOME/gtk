@@ -2124,6 +2124,12 @@ svg_element_set_element_type (SvgElement     *element,
         svg_element_set_base_value (element, attr, NULL, FALSE);
     }
 
+  if (element->parent && element->parent->child_observer &&
+      svg_element_type_is_container(old_type) != svg_element_type_is_container (type))
+    {
+      gtk_list_list_model_item_replaced (element->parent->child_observer, element);
+    }
+
   g_object_notify_by_pspec (G_OBJECT (element), svg_element_prop[SVG_ELEMENT_PROP_ELEMENT_TYPE]);
 }
 
