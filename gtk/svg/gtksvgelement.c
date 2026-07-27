@@ -2036,8 +2036,8 @@ svg_element_duplicate (SvgElement *element,
 
   for (SvgProperty attr = FIRST_SVG_PROPERTY; attr <= LAST_SVG_PROPERTY; attr++)
     {
-      element->base[attr] = svg_property_ref_initial_value (attr, copy->type, parent != NULL);
-      element->current[attr] = svg_value_ref (element->base[attr]);
+      copy->base[attr] = svg_property_ref_initial_value (attr, copy->type, parent != NULL);
+      copy->current[attr] = svg_value_ref (copy->base[attr]);
     }
 
   copy->animations = g_ptr_array_new ();
@@ -2708,7 +2708,8 @@ svg_element_clone (SvgElement *element,
             clone->first = r;
           q = r;
         }
-      q->next = NULL;
+      if (q)
+        q->next = NULL;
     }
 
   for (SvgAnimation *a = element->first_animation; a; a = a->next_sibling)
