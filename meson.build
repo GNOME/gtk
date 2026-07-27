@@ -194,6 +194,7 @@ cdata.set_quoted('GTK_DATADIR', gtk_datadir)
 cdata.set_quoted('GTK_LIBDIR', gtk_libdir)
 cdata.set_quoted('GTK_SYSCONFDIR', gtk_sysconfdir)
 cdata.set_quoted('GETTEXT_PACKAGE', 'gtk40')
+cdata.set_quoted('SYMBOL_VISIBILITY', get_option('symbol-visibility'))
 
 check_headers = [
   'dev/evdev/input.h',

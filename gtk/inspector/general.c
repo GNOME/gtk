@@ -120,6 +120,8 @@ struct _GtkInspectorGeneral
   GtkWidget *media_backend;
   GtkWidget *im_module;
   GtkWidget *a11y_backend;
+  GtkWidget *symbol_visibility;
+  GtkWidget *symbol_visibility_warning;
   GtkWidget *gl_backend_version;
   GtkWidget *gl_backend_version_row;
   GtkWidget *gl_backend_vendor;
@@ -545,6 +547,23 @@ dump_a11y_backend (GdkDisplay *display,
                    GString    *string)
 {
   g_string_append_printf (string, "| Accessibility backend | %s |\n", get_a11y_backend (display));
+}
+
+/* }}} */
+/* {{{ Symbol Visibility */
+
+static void
+init_symbol_visibility (GtkInspectorGeneral *gen)
+{
+  gtk_label_set_label (GTK_LABEL (gen->symbol_visibility), SYMBOL_VISIBILITY);
+  gtk_widget_set_visible (gen->symbol_visibility_warning, strcmp (SYMBOL_VISIBILITY, "hidden") != 0);
+}
+
+static void
+dump_symbol_visibility (GdkDisplay *display,
+                        GString    *string)
+{
+  g_string_append_printf (string, "| Symbol Visibility | %s |\n", SYMBOL_VISIBILITY);
 }
 
 /* }}} */
@@ -2173,6 +2192,8 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, im_module);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, a11y_backend);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, symbol_visibility);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, symbol_visibility_warning);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
@@ -2225,6 +2246,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
   init_media (gen);
   init_im_module (gen);
   init_a11y_backend (gen);
+  init_symbol_visibility (gen);
   init_app_id (gen);
   init_env (gen);
   init_display (gen);
@@ -2250,6 +2272,7 @@ generate_dump (GdkDisplay *display)
   dump_media (display, string);
   dump_im_module (display, string);
   dump_a11y_backend (display, string);
+  dump_symbol_visibility (display, string);
   g_string_append (string, "\n</details>\n");
 
   g_string_append (string, "\n<details><summary>Application</summary>\n\n");

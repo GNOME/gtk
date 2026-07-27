@@ -250,6 +250,45 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="symbol_visibility_label">
+                                <property name="label" translatable="yes">Symbol Visibility</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="spacing">10</property>
+                                <property name="hexpand">1</property>
+                                <property name="valign">baseline</property>
+                                <child>
+                                  <object class="GtkLabel" id="symbol_visibility">
+                                    <property name="hexpand">1</property>
+                                    <property name="halign">end</property>
+                                    <property name="selectable">1</property>
+                                    <property name="valign">baseline</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkImage" id="symbol_visibility_warning">
+                                    <property name="icon-name">dialog-warning-symbolic</property>
+                                    <property name="tooltip-text" translatable="yes">Not a supported build configuration</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
 
