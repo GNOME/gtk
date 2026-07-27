@@ -82,4 +82,5 @@ libgdk_win32 = static_library('gdk-win32',
     '-DINSIDE_GDK_WIN32',
   ],
   dependencies: [ gdk_deps, gdk_win32_deps ],
+  gnu_symbol_visibility: symbol_visibility,
 )

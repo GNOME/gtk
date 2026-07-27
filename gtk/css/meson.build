@@ -51,6 +51,7 @@ libgtk_css = static_library('gtk_css',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gtk"',
   ] + common_cflags,
+  gnu_symbol_visibility: symbol_visibility,
 )
 
 # We don't have link_with: to internal static libs here on purpose, just

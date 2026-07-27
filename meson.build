@@ -406,11 +406,11 @@ else
 endif
 
 # Symbol visibility
+symbol_visibility = 'hidden'
+
 if get_option('default_library') != 'static'
   if os_win32
     cdata.set('DLL_EXPORT', true)
-  else
-    test_cflags += ['-fvisibility=hidden']
   endif
 endif
 

@@ -55,4 +55,5 @@ libgdk_android = static_library('gdk-android',
   include_directories: [ confinc, gdkinc, ],
   c_args: [ libgdk_c_args, common_cflags, ],
   dependencies: [ gdk_deps, gdk_android_deps ],
+  gnu_symbol_visibility: symbol_visibility,
 )

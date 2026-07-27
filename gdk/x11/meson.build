@@ -81,6 +81,7 @@ libgdk_x11 = static_library('gdk-x11',
     '-DG_LOG_DOMAIN="Gdk"',
   ] + common_cflags,
   dependencies: [ gdk_deps, gdk_x11_deps, ],
+  gnu_symbol_visibility: symbol_visibility,
 )
 
 x11_public_deps = [x11_dep]
