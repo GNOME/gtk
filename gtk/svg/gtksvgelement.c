@@ -2708,7 +2708,8 @@ svg_element_clone (SvgElement *element,
             clone->first = r;
           q = r;
         }
-      q->next = NULL;
+      if (q)
+        q->next = NULL;
     }
 
   for (SvgAnimation *a = element->first_animation; a; a = a->next_sibling)
