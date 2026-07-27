@@ -733,6 +733,7 @@ endif
 
 cdata.set('HAVE_DMABUF', cc.has_header('linux/dma-buf.h'))
 cdata.set('HAVE_UDMABUF', cc.has_header('linux/udmabuf.h'))
+cdata.set('HAVE_SYNC_FILE', cc.has_header('linux/sync_file.h'))
 
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
