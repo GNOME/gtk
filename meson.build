@@ -406,7 +406,7 @@ else
 endif
 
 # Symbol visibility
-symbol_visibility = 'hidden'
+symbol_visibility = get_option('symbol-visibility')
 
 if get_option('default_library') != 'static'
   if os_win32

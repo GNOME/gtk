@@ -14,7 +14,7 @@ foreach t : internal_tests
   test_name = t
   test_srcs = ['@0@.c'.format(test_name)]
   test_exe = executable(test_name, test_srcs,
-    dependencies : libgtk_static_dep,
+    dependencies : libgtk_private_dep,
     c_args : test_cargs + common_cflags + ['-DGTK_COMPILATION'],
   )
 
