@@ -27,7 +27,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkscrolledwindow.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
@@ -352,9 +351,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
    * halign and valign properties to determine the position
    * and gives the widget its natural size (except that an
    * alignment of %GTK_ALIGN_FILL will cause the overlay to
-   * be full-width/height). If the main child is a
-   * `GtkScrolledWindow`, the overlays are placed relative
-   * to its contents.
+   * be full-width/height).
    *
    * Returns: %TRUE if the @allocation has been filled
    */
