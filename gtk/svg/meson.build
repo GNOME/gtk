@@ -89,6 +89,7 @@ libgtk_svg = static_library('gtk_svg',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gtk"',
   ] + common_cflags,
+  gnu_symbol_visibility: 'hidden',
 )
 
 # We don't have link_with: to internal static libs here on purpose, just

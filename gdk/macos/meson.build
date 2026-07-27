@@ -68,4 +68,5 @@ libgdk_macos = static_library('gdk-macos',
   c_args: [ libgdk_c_args, common_cflags, ],
   link_with: [],
   dependencies: [ gdk_deps, gdk_macos_deps, ],
+  gnu_symbol_visibility: 'hidden',
 )

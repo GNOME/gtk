@@ -221,6 +221,7 @@ libgdk_wayland = static_library('gdk-wayland',
     '-DG_LOG_DOMAIN="Gdk"',
   ] + common_cflags,
   dependencies: [ gdk_deps, gdk_wayland_deps ],
+  gnu_symbol_visibility: 'hidden',
 )
 
 # Used to generate pkg-config Requires
