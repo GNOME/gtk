@@ -261,7 +261,7 @@ libgsk_f16c = static_library('gsk_f16c',
     '-DG_LOG_DOMAIN="Gsk"',
     '-DG_LOG_STRUCTURED=1',
   ] + common_cflags + f16c_cflags,
-  gnu_symbol_visibility: 'hidden',
+  gnu_symbol_visibility: symbol_visibility,
 )
 
 libgsk = static_library('gsk',
@@ -282,7 +282,7 @@ libgsk = static_library('gsk',
     '-DG_LOG_STRUCTURED=1',
   ] + common_cflags,
   link_with: [ libgdk, libgsk_f16c],
-  gnu_symbol_visibility: 'hidden',
+  gnu_symbol_visibility: symbol_visibility,
 )
 
 # We don't have link_with: to internal static libs here on purpose, just
