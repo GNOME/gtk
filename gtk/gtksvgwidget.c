@@ -276,6 +276,7 @@ gtk_svg_widget_set_property (GObject      *object,
     {
     case PROP_RESOURCE:
       gtk_svg_load_from_resource (self->svg, g_value_get_string (value));
+      gtk_svg_play (self->svg);
       break;
 
     case PROP_STATE:
