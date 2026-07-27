@@ -46,6 +46,11 @@
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
+#ifdef HAVE_SYNC_FILE
+#include <sys/ioctl.h>
+#include <linux/sync_file.h>
+#endif
+
 #ifdef GDK_RENDERING_VULKAN
 const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "dual-source-blend", GDK_VULKAN_FEATURE_DUAL_SOURCE_BLEND, "Disable dual source blending" },
@@ -721,6 +726,25 @@ physical_device_check_features (VkPhysicalDevice device)
   return features;
 }
 
+static uint64_t
+read_timestamp_from_sync_fd (int fd)
+{
+#ifdef HAVE_SYNC_FILE
+  struct sync_file_info file_info = { { 0 } };
+  struct sync_fence_info fence_info = { { 0 } };
+
+  file_info.sync_fence_info = (uint64_t)(uintptr_t)&fence_info;
+  file_info.num_fences = 1;
+
+  if (ioctl (fd, SYNC_IOC_FILE_INFO, &file_info) < 0)
+    return 0;
+
+  return fence_info.timestamp_ns;
+#else
+  return 0;
+#endif
+}
+
 static void
 gdk_vulkan_present_reset (GdkVulkanContext *self,
                           GdkVulkanPresent *present,
@@ -939,7 +963,9 @@ gdk_vulkan_context_frame_complete_fd_cb (gint         fd,
   if (!(condition & COMPLETION_FD_EVENTS))
     return G_SOURCE_CONTINUE;
 
-  timestamp = g_source_get_time_ns (vframe->completion_source);
+  timestamp = read_timestamp_from_sync_fd (vframe->completion_fd);
+  if (timestamp == 0)
+    timestamp = g_source_get_time_ns (vframe->completion_source);
   vframe->completion_source = NULL;
 
   gdk_vulkan_present_reset (self, vframe->present, timestamp);
