@@ -61,6 +61,15 @@ enum
   SVG_ELEMENT_NUM_PROPERTIES,
 };
 
+static unsigned int changed_signal = 0;
+
+static void
+svg_element_changed (SvgElement *self,
+                     SvgProperty attr)
+{
+  g_signal_emit (self, changed_signal, 0, attr);
+}
+
 static GParamSpec *svg_element_prop[NUM_PROPERTIES];
 
 G_DEFINE_TYPE (SvgElement, svg_element, G_TYPE_OBJECT)
@@ -165,7 +174,24 @@ svg_element_class_init (SvgElementClass *class)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
-   g_object_class_install_properties (object_class, SVG_ELEMENT_NUM_PROPERTIES, svg_element_prop);
+  g_object_class_install_properties (object_class, SVG_ELEMENT_NUM_PROPERTIES, svg_element_prop);
+
+  /*< private>
+   * SvgElement:changed:
+   * @element: the element
+   * @attr: the property that was changed
+   *
+   * This signal is emitted when a specified value is changed.
+   */
+  changed_signal =
+    g_signal_new_class_handler ("changed",
+                                G_TYPE_FROM_CLASS (object_class),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                NULL, NULL,
+                                NULL,
+                                G_TYPE_NONE, 1,
+                                G_TYPE_UINT);
 }
 
 static void
@@ -1430,6 +1456,8 @@ svg_element_set_specified_value (SvgElement  *element,
     v->value = svg_value_ref (value);
 
   element->attrs = _gtk_bitmask_set (element->attrs, attr, value != NULL);
+
+  svg_element_changed (element, attr);
 }
 
 void
