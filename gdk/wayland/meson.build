@@ -178,7 +178,7 @@ proto_sources = [
 
 gdk_wayland_gen_headers = []
 
-wlmod = import('unstable-wayland')
+wlmod = import('wayland')
 foreach p: proto_sources
   if wlprotocolsdep.version().version_compare(p.get('required', '>=0'))
     if p.get('stability') == 'private'
