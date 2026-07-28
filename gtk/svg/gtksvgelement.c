@@ -452,6 +452,101 @@ resolve_rx (SvgElement            *element,
     g_assert_not_reached ();
 }
 
+void
+svg_element_get_circle (SvgElement            *element,
+                        graphene_point_t      *center,
+                        double                *radius,
+                        const graphene_rect_t *viewport,
+                        gboolean               current)
+{
+  SvgValue **values;
+
+  g_return_if_fail (element->type == SVG_ELEMENT_CIRCLE);
+
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
+
+  center->x = center->y = *radius = 0;
+
+  if (svg_value_is_set (values[SVG_PROPERTY_CX]))
+    center->x = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_CY]))
+    center->y = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_R]))
+    *radius = svg_number_get (values[SVG_PROPERTY_R], normalized_diagonal (viewport));
+}
+
+void
+svg_element_get_ellipse (SvgElement            *element,
+                         graphene_point_t      *center,
+                         double                *rx,
+                         double                *ry,
+                         const graphene_rect_t *viewport,
+                         gboolean               current)
+{
+  SvgValue **values;
+
+  g_return_if_fail (element->type == SVG_ELEMENT_ELLIPSE);
+
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
+
+  center->x = center->y = *rx = *ry = 0;
+
+  if (svg_value_is_set (values[SVG_PROPERTY_CX]))
+    center->x = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_CY]))
+    center->y = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
+
+  resolve_rx (element, viewport, current, rx, ry);
+}
+
+void
+svg_element_get_rect (SvgElement            *element,
+                      GskRoundedRect        *rect,
+                      const graphene_rect_t *viewport,
+                      gboolean               current)
+{
+  SvgValue **values;
+  double rx, ry;
+
+  g_return_if_fail (element->type == SVG_ELEMENT_RECT);
+
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
+
+  memset (rect, 0, sizeof (GskRoundedRect));
+
+  if (svg_value_is_set (values[SVG_PROPERTY_X]))
+    rect->bounds.origin.x = svg_number_get (values[SVG_PROPERTY_X], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_Y]))
+    rect->bounds.origin.y = svg_number_get (values[SVG_PROPERTY_Y], viewport->size.height);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_WIDTH]))
+    rect->bounds.size.width = svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_HEIGHT]))
+    rect->bounds.size.height = svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
+
+  resolve_rx (element, viewport, current, &rx, &ry);
+
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      rect->corner[i].width = rx;
+      rect->corner[i].height = ry;
+    }
+}
+
 GskPath *
 svg_element_get_path (SvgElement            *element,
                       const graphene_rect_t *viewport,

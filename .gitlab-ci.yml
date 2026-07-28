@@ -75,7 +75,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-06-24.0'
+    BASE_TAG: '2026-07-27.0'
     FDO_DISTRIBUTION_VERSION: 44
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -142,7 +142,7 @@ container:fedora:
 
 .container.android:
   variables:
-    BASE_TAG: '2026-04-27.0'
+    BASE_TAG: '2026-07-27.0'
     FDO_DISTRIBUTION_VERSION: sid
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:

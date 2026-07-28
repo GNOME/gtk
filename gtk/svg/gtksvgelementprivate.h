@@ -135,6 +135,22 @@ void         svg_element_set_origin          (SvgElement            *element,
 void         svg_element_get_origin          (SvgElement            *element,
                                               GtkSvgLocation        *location);
 
+void         svg_element_get_rect            (SvgElement            *element,
+                                              GskRoundedRect        *rect,
+                                              const graphene_rect_t *viewport,
+                                              gboolean               current);
+void         svg_element_get_circle          (SvgElement            *element,
+                                              graphene_point_t      *center,
+                                              double                *radius,
+                                              const graphene_rect_t *viewport,
+                                              gboolean               current);
+void         svg_element_get_ellipse         (SvgElement            *element,
+                                              graphene_point_t      *center,
+                                              double                *rx,
+                                              double                *ry,
+                                              const graphene_rect_t *viewport,
+                                              gboolean               current);
+
 GskPath *    svg_element_get_path            (SvgElement            *element,
                                               const graphene_rect_t *viewport,
                                               gboolean               current);
