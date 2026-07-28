@@ -721,17 +721,36 @@ texture_serializer (GdkContentSerializer *serializer)
 }
 
 static void
-string_serializer_finish (GObject      *source,
-                          GAsyncResult *result,
-                          gpointer      serializer)
+string_serializer_close_done (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      serializer)
 {
-  GOutputStream *stream = G_OUTPUT_STREAM (source);
-  GError *error = NULL;
+  GOutputStream *converter_stream = G_OUTPUT_STREAM (source);
+  GError *error = gdk_content_serializer_get_task_data (serializer);
 
-  if (!g_output_stream_write_all_finish (stream, result, NULL, &error))
+  if (error || !g_output_stream_close_finish (converter_stream, result, &error))
     gdk_content_serializer_return_error (serializer, error);
   else
     gdk_content_serializer_return_success (serializer);
+}
+
+static void
+string_serializer_write_done (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      serializer)
+{
+  GOutputStream *converter_stream = G_OUTPUT_STREAM (source);
+  /* gobject-linter-ignore-next-line: g_error_leak */
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (converter_stream, result, NULL, &error))
+    gdk_content_serializer_set_task_data (serializer, error, NULL);
+
+  g_output_stream_close_async (converter_stream,
+                               gdk_content_serializer_get_priority (serializer),
+                               gdk_content_serializer_get_cancellable (serializer),
+                               string_serializer_close_done,
+                               serializer);
 }
 
 static void
@@ -756,6 +775,8 @@ string_serializer (GdkContentSerializer *serializer)
                                           G_CONVERTER (converter));
   g_object_unref (converter);
 
+  g_filter_output_stream_set_close_base_stream (G_FILTER_OUTPUT_STREAM (filter), FALSE);
+
   text = g_value_get_string (gdk_content_serializer_get_value (serializer));
   if (text == NULL)
     text = "";
@@ -765,7 +786,7 @@ string_serializer (GdkContentSerializer *serializer)
                                    strlen (text),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   string_serializer_finish,
+                                   string_serializer_write_done,
                                    serializer);
   g_object_unref (filter);
 }
