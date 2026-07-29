@@ -1747,7 +1747,7 @@ compute_current_values_for_shape (SvgElement        *shape,
     }
 
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_USE)
-    svg_element_ensure_shadow_tree (shape, context->svg);
+    svg_element_ensure_shadow_tree (shape, context);
 
   if (shape->first_child)
     {

@@ -35,6 +35,8 @@ struct _SvgComputeContext
   const GdkRGBA *colors;
   size_t n_colors;
   GdkColorState *interpolation;
+  unsigned int clone_count;
+  GHashTable *shadow_tree_map;
 };
 
 typedef struct _SvgValueClass SvgValueClass;

@@ -302,8 +302,8 @@ gboolean svg_element_contains          (SvgElement             *element,
                                        GtkSvg                 *svg,
                                        const graphene_point_t *point);
 
-void         svg_element_ensure_shadow_tree (SvgElement *element,
-                                             GtkSvg     *svg);
+void         svg_element_ensure_shadow_tree (SvgElement        *element,
+                                             SvgComputeContext *context);
 SvgElement * svg_element_get_corresponding  (SvgElement *element);
 
 SvgElement *    svg_element_get_first_child     (SvgElement *element);

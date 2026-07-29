@@ -1112,8 +1112,12 @@ gtk_svg_serialize_full (GtkSvg               *self,
       context.colors = col;
       context.n_colors = n_col;
       context.interpolation = GDK_COLOR_STATE_SRGB;
+      context.clone_count = 0;
+      context.shadow_tree_map = NULL;
 
       compute_current_values_for_shape (self->content, &context);
+
+      g_assert (context.shadow_tree_map == NULL);
     }
 
   g_string_append (s, "<svg");
