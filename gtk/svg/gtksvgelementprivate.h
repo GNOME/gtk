@@ -53,10 +53,13 @@ void         svg_element_add_color_stop      (SvgElement            *element,
                                               SvgColorStop          *stop);
 void         svg_element_add_filter          (SvgElement            *element,
                                               SvgFilter             *filter);
-void         svg_element_add_child           (SvgElement            *element,
+void         svg_element_append_child        (SvgElement            *element,
                                               SvgElement            *child);
 void         svg_element_prepend_child       (SvgElement            *element,
                                               SvgElement            *child);
+void         svg_element_insert_after        (SvgElement            *element,
+                                              SvgElement            *child,
+                                              SvgElement            *sibling);
 void         svg_element_add_animation       (SvgElement            *element,
                                               SvgAnimation          *animation);
 
@@ -299,8 +302,8 @@ gboolean svg_element_contains          (SvgElement             *element,
                                        GtkSvg                 *svg,
                                        const graphene_point_t *point);
 
-void         svg_element_ensure_shadow_tree (SvgElement *element,
-                                             GtkSvg     *svg);
+void         svg_element_ensure_shadow_tree (SvgElement        *element,
+                                             SvgComputeContext *context);
 SvgElement * svg_element_get_corresponding  (SvgElement *element);
 
 SvgElement *    svg_element_get_first_child     (SvgElement *element);

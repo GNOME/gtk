@@ -266,8 +266,8 @@ svg_element_setup (SvgElement     *element,
                    SvgElement     *parent,
                    SvgElementType  type)
 {
-  element->parent = parent;
   element->type = type;
+  element->parent = parent;
 
   element->lang_strings = array_new_with_clear_func (sizeof (LangString), (GDestroyNotify) lang_string_clear);
 
@@ -300,12 +300,12 @@ svg_element_setup (SvgElement     *element,
 
   element->styles = g_ptr_array_new_with_free_func (style_elt_free);
 
+  element->focusable = svg_element_get_initial_focusable (element);
+
   element->css_node = gtk_css_node_new ();
   gtk_css_node_set_name (element->css_node, g_quark_from_static_string (svg_element_type_get_name (type)));
   if (parent)
     gtk_css_node_set_parent (element->css_node, parent->css_node);
-
-  element->focusable = svg_element_get_initial_focusable (element);
 
   if (type == SVG_ELEMENT_LINK)
     gtk_css_node_set_state (element->css_node, GTK_STATE_FLAG_LINK);
@@ -1221,11 +1221,12 @@ svg_element_add_filter (SvgElement *element,
 
 /* Child is transfer-full */
 void
-svg_element_add_child (SvgElement *element,
-                       SvgElement *child)
+svg_element_insert_after (SvgElement *element,
+                          SvgElement *child,
+                          SvgElement *sibling)
 {
-  g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
   g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+  g_assert (sibling == NULL || sibling->parent == element);
 
   child->parent = element;
 
@@ -1236,11 +1237,25 @@ svg_element_add_child (SvgElement *element,
     }
   else
     {
-      child->prev_sibling = element->last_child;
-      child->next_sibling = NULL;
-      element->last_child->next_sibling = child;
-      element->last_child = child;
+      child->prev_sibling = sibling;
+      if (sibling)
+        {
+          child->next_sibling = sibling->next_sibling;
+          sibling->next_sibling = child;
+          if (sibling == element->last_child)
+            element->last_child = child;
+        }
+      else
+        {
+          child->next_sibling = element->first_child;
+          element->first_child->prev_sibling = child;
+          element->first_child = child;
+        }
     }
+
+  gtk_css_node_insert_after (element->css_node,
+                             child->css_node,
+                             sibling ? sibling->css_node : NULL);
 
   if (child->type == SVG_ELEMENT_TSPAN)
     {
@@ -1269,30 +1284,18 @@ svg_element_add_child (SvgElement *element,
 
 /* Child is transfer-full */
 void
+svg_element_append_child (SvgElement *element,
+                          SvgElement *child)
+{
+  svg_element_insert_after (element, child, element->last_child);
+}
+
+/* Child is transfer-full */
+void
 svg_element_prepend_child (SvgElement *element,
                            SvgElement *child)
 {
-  g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
-  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
-  g_assert (child->type != SVG_ELEMENT_TSPAN);
-
-  child->parent = element;
-
-  if (element->first_child == NULL)
-    {
-      child->prev_sibling = child->next_sibling = NULL;
-      element->first_child = element->last_child = child;
-    }
-  else
-    {
-      child->next_sibling = element->first_child;
-      child->prev_sibling = NULL;
-      element->first_child->prev_sibling = child;
-      element->first_child = child;
-    }
-
-  if (element->child_observer)
-    gtk_list_list_model_item_added (element->child_observer, child);
+  svg_element_insert_after (element, child, element->last_child);
 }
 
 unsigned int
@@ -2622,32 +2625,26 @@ svg_element_has_ancestor_or_corresponding (SvgElement *element,
   return FALSE;
 }
 
-typedef struct
-{
-  unsigned int count;
-  GHashTable *map;
-} ShadowData;
-
-static void svg_element_build_shadow_tree (SvgElement *element,
-                                           GtkSvg     *svg,
-                                           ShadowData *data);
+static void svg_element_build_shadow_tree (SvgElement        *element,
+                                           SvgComputeContext *context);
 
 static SvgElement *
-svg_element_clone (SvgElement *element,
-                   SvgElement *parent,
-                   GtkSvg     *svg,
-                   ShadowData *data)
+svg_element_clone (SvgElement        *element,
+                   SvgElement        *parent,
+                   SvgComputeContext *context)
 {
-  SvgElement *clone = g_object_new (SVG_TYPE_ELEMENT, NULL);
+  SvgElement *clone;
 
-  if (data->count++ > CLONE_LIMIT)
+  if (context->clone_count++ > CLONE_LIMIT)
     {
-      gtk_svg_rendering_error (svg, "Excessive instance count, aborting");
+      gtk_svg_rendering_error (context->svg, "Excessive instance count, aborting");
       return NULL;
     }
 
   if (element->type == SVG_ELEMENT_USE)
-    svg_element_build_shadow_tree (element, svg, data);
+    svg_element_build_shadow_tree (element, context);
+
+  clone = g_object_new (SVG_TYPE_ELEMENT, NULL);
 
   clone->type = element->type;
   clone->parent = parent;
@@ -2666,7 +2663,6 @@ svg_element_clone (SvgElement *element,
   clone->next = NULL;
 
   clone->css_node = gtk_css_node_new ();
-  gtk_css_node_set_parent (clone->css_node, parent->css_node);
   gtk_css_node_set_name (clone->css_node, g_quark_from_static_string (svg_element_type_get_name (clone->type)));
   if (element->id)
     gtk_css_node_set_id (clone->css_node, g_quark_from_string (element->id));
@@ -2701,13 +2697,15 @@ svg_element_clone (SvgElement *element,
 
       for (SvgElement *child = element->first_child; child; child = child->next_sibling)
         {
-          SvgElement *child_clone = svg_element_clone (child, clone, svg, data);
+          SvgElement *child_clone = svg_element_clone (child, clone, context);
+
           if (!child_clone)
             {
               g_object_unref (clone);
               return NULL;
             }
-          svg_element_add_child (clone, child_clone);
+
+          svg_element_append_child (clone, child_clone);
         }
 
       /* Copy dependency order */
@@ -2732,9 +2730,9 @@ svg_element_clone (SvgElement *element,
 
   for (SvgAnimation *a = element->first_animation; a; a = a->next_sibling)
     {
-      SvgAnimation *a_clone = svg_animation_clone (a, clone, svg->timeline);
+      SvgAnimation *a_clone = svg_animation_clone (a, clone, context->svg->timeline);
       svg_element_add_animation (clone, a_clone);
-      g_hash_table_insert (data->map, a, a_clone);
+      g_hash_table_insert (context->shadow_tree_map, a, a_clone);
     }
 
   if (element->color_stops)
@@ -2812,7 +2810,7 @@ svg_element_clone (SvgElement *element,
 
   clone->corresponding = element;
 
-  g_hash_table_insert (data->map, element, clone);
+  g_hash_table_insert (context->shadow_tree_map, element, clone);
 
   return clone;
 }
@@ -2995,9 +2993,8 @@ svg_element_resolve_shadow_references (SvgElement *element,
 }
 
 static void
-svg_element_build_shadow_tree (SvgElement *element,
-                               GtkSvg     *svg,
-                               ShadowData *data)
+svg_element_build_shadow_tree (SvgElement        *element,
+                               SvgComputeContext *context)
 {
   SvgValue *href;
   SvgElement *target;
@@ -3013,9 +3010,9 @@ svg_element_build_shadow_tree (SvgElement *element,
   if (element == target || element->corresponding == target ||
       svg_element_has_ancestor_or_corresponding (element, target))
     {
-      if (!svg->has_use_cycle)
-        gtk_svg_rendering_error (svg, "Circular <use>, aborting");
-      svg->has_use_cycle = TRUE;
+      if (!context->svg->has_use_cycle)
+        gtk_svg_rendering_error (context->svg, "Circular <use>, aborting");
+      context->svg->has_use_cycle = TRUE;
       return;
     }
 
@@ -3024,39 +3021,35 @@ svg_element_build_shadow_tree (SvgElement *element,
       SvgElement *current = element->first_child;
       if (current->corresponding == target)
         return;
-      element->first_child = current->next_sibling;
-      if (element->first_child)
-        element->first_child->prev_sibling = NULL;
-      g_object_unref (current);
+      svg_element_delete (current);
       element->first = NULL;
     }
 
   if (target)
     {
-      SvgElement *clone = svg_element_clone (target, element, svg, data);
+      SvgElement *clone = svg_element_clone (target, element, context);
       if (clone)
         {
-          svg_element_add_child (element, clone);
+          svg_element_append_child (element, clone);
           element->first = clone;
         }
     }
 }
 
 void
-svg_element_ensure_shadow_tree (SvgElement *element,
-                                GtkSvg     *svg)
+svg_element_ensure_shadow_tree (SvgElement        *element,
+                                SvgComputeContext *context)
 {
-  ShadowData data;
+  g_assert (context->shadow_tree_map == NULL);
 
-  data.count = 0;
-  data.map = g_hash_table_new (g_direct_hash, g_direct_equal);
+  context->shadow_tree_map = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  svg_element_build_shadow_tree (element, svg, &data);
+  svg_element_build_shadow_tree (element, context);
 
   if (element->first_child)
-    svg_element_resolve_shadow_references (element->first_child, data.map);
+    svg_element_resolve_shadow_references (element->first_child, context->shadow_tree_map);
 
-  g_hash_table_destroy (data.map);
+  g_clear_pointer (&context->shadow_tree_map, g_hash_table_destroy);
 }
 
 SvgElement *

@@ -740,7 +740,7 @@ create_morph_filter (SvgElement *shape,
     }
 
   filter = svg_element_new (parent, SVG_ELEMENT_FILTER);
-  svg_element_add_child (parent, filter);
+  svg_element_append_child (parent, filter);
   filter->id = g_strdup_printf ("gpa:morph-filter:%s", svg_element_get_id (shape));
 
   g_hash_table_insert (shapes, filter->id, filter);

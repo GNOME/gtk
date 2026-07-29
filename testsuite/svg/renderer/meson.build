@@ -112,7 +112,7 @@ test_data = [
   'nested-svg-overflow.svg',
   'nested-svg-positioning.svg',
   'nested-svg-viewbox.svg',
-  'nested-use.test',
+  'nested-use.svg',
   'non-scaling-stroke.svg',
   'not-rendered.svg',
   'opacity.svg',

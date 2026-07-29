@@ -5115,8 +5115,12 @@ gtk_svg_pick_element (GtkSvg                 *self,
   compute_context.current_time = self->current_time;
   compute_context.parent = NULL;
   compute_context.interpolation = GDK_COLOR_STATE_SRGB;
+  compute_context.clone_count = 0;
+  compute_context.shadow_tree_map = NULL;
 
   compute_current_values_for_shape (self->content, &compute_context);
+
+  g_assert (compute_context.shadow_tree_map == NULL);
 
   snapshot = gtk_snapshot_new ();
 
@@ -5367,8 +5371,12 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       compute_context.current_time = self->current_time;
       compute_context.parent = NULL;
       compute_context.interpolation = GDK_COLOR_STATE_SRGB;
+      compute_context.clone_count = 0;
+      compute_context.shadow_tree_map = NULL;
 
       compute_current_values_for_shape (self->content, &compute_context);
+
+      g_assert (compute_context.shadow_tree_map == NULL);
 
       gtk_snapshot_push_collect (snapshot);
 
