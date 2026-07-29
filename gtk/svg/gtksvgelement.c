@@ -105,10 +105,6 @@ svg_element_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case SVG_ELEMENT_PROP_ELEMENT_TYPE:
-      svg_element_set_element_type (self, g_value_get_uint (value));
-      break;
-
     case SVG_ELEMENT_PROP_ID:
       svg_element_set_id (self, g_value_get_string (value));
       break;
@@ -162,7 +158,7 @@ svg_element_class_init (SvgElementClass *class)
     g_param_spec_uint ("element-type", NULL, NULL,
                        SVG_ELEMENT_LINE, SVG_ELEMENT_VIEW,
                        SVG_ELEMENT_PATH,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+                       G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   svg_element_prop[SVG_ELEMENT_PROP_ID] =
     g_param_spec_string ("id", NULL, NULL,
@@ -2153,79 +2149,6 @@ svg_element_duplicate (SvgElement *element,
   copy->gpa.attach.pos = 0;
 
   return copy;
-}
-
-void
-svg_element_set_element_type (SvgElement     *element,
-                              SvgElementType  type)
-{
-  SvgElementType old_type;
-
-  if (element->type == type)
-    return;
-
-  old_type = element->type;
-  element->type = type;
-
-  if (svg_element_type_is_filter (old_type) &&
-      !svg_element_type_is_filter (type))
-    {
-      g_clear_pointer (&element->filters, g_ptr_array_unref);
-      if (element->filter_observer)
-        gtk_array_list_model_clear (element->filter_observer);
-    }
-  else if (!svg_element_type_is_filter (old_type) &&
-           svg_element_type_is_filter (type))
-    element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
-
-  if (svg_element_type_is_gradient (old_type) &&
-      !svg_element_type_is_gradient (type))
-    {
-      g_clear_pointer (&element->color_stops, g_ptr_array_unref);
-      if (element->color_stop_observer)
-        gtk_array_list_model_clear (element->color_stop_observer);
-    }
-  else if (!svg_element_type_is_gradient (old_type) &&
-           svg_element_type_is_gradient (type))
-    element->color_stops = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
-
-  if (svg_element_type_is_container (old_type) &&
-      !svg_element_type_is_container (type))
-    {
-      SvgElement *next;
-
-      for (SvgElement *s = element->first_child; s; s = next)
-        {
-          next = s->next_sibling;
-          g_object_unref (s);
-        }
-
-      element->first_child = element->last_child = NULL;
-
-      if (element->child_observer)
-        gtk_list_list_model_clear (element->child_observer);
-    }
-
-  if (svg_element_type_is_text (old_type) &&
-      !svg_element_type_is_text (type))
-    g_clear_pointer (&element->text, g_array_unref);
-  if (!svg_element_type_is_text (old_type) &&
-      svg_element_type_is_text (type))
-    element->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
-
-  for (unsigned int attr = FIRST_SHAPE_PROPERTY; attr <= LAST_SHAPE_PROPERTY; attr++)
-    {
-      if (!svg_property_applies_to (attr, type))
-        svg_element_set_base_value (element, attr, NULL, FALSE);
-    }
-
-  if (element->parent && element->parent->child_observer &&
-      svg_element_type_is_container(old_type) != svg_element_type_is_container (type))
-    {
-      gtk_list_list_model_item_replaced (element->parent->child_observer, element);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (element), svg_element_prop[SVG_ELEMENT_PROP_ELEMENT_TYPE]);
 }
 
 void
