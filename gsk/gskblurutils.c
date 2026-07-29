@@ -23,6 +23,7 @@
 #include <gsk/gsk.h>
 
 #include "gpu/gskgputransformprivate.h"
+#include "gskpathprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
@@ -184,6 +185,57 @@ region_create_from_bitmap (const guchar *data,
   return region;
 }
 
+static void
+compute_background_blur (GskRenderNode *node,
+                         Render        *render,
+                         GSList         *copies);
+
+static void
+render_clipped_with_cairo (Render                *render,
+                           GSList                *copies,
+                           const graphene_rect_t *clip_bounds,
+                           GskRenderNode         *node,
+                           void                   (* clip_func) (cairo_t *, gpointer),
+                           gpointer               clip_data)
+{
+  cairo_surface_t *bitmap;
+  cairo_t *cr;
+  cairo_region_t *region;
+  graphene_rect_t transformed;
+  cairo_rectangle_int_t clip;
+  cairo_matrix_t matrix;
+  Render child_render;
+
+  render_copy (&child_render, render);
+  compute_background_blur (node, &child_render, copies);
+
+  gsk_gpu_transform_transform_rect (&render->transform, clip_bounds, &transformed);
+  gsk_rect_to_cairo_grow (&transformed, &clip);
+  bitmap = cairo_image_surface_create (CAIRO_FORMAT_A1, clip.width, clip.height);
+  cr = cairo_create (bitmap);
+  cairo_translate (cr, - clip.x, - clip.y);
+  gsk_gpu_transform_to_cairo_matrix (&render->transform, &matrix);
+  cairo_transform (cr, &matrix);
+
+  clip_func (cr, clip_data);
+
+  cairo_destroy (cr);
+
+  cairo_surface_flush (bitmap);
+  region = region_create_from_bitmap (cairo_image_surface_get_data (bitmap),
+                                      clip.width, clip.height,
+                                      cairo_image_surface_get_stride (bitmap));
+  cairo_surface_destroy (bitmap);
+
+  cairo_region_translate (region, clip.x, clip.y);
+
+  render_clip_region (&child_render, region);
+  render_subtract_region (render, region);
+  render_merge (render, &child_render);
+  render_clear (&child_render);
+  cairo_region_destroy (region);
+}
+
 static cairo_region_t *
 region_create_for_rounded_rect (const GskRoundedRect *rect)
 {
@@ -211,11 +263,6 @@ region_create_for_rounded_rect (const GskRoundedRect *rect)
 
   return result;
 }
-
-static void
-compute_background_blur (GskRenderNode *node,
-                         Render        *render,
-                         GSList         *copies);
 
 static void
 compute_isolation_node_blur (GskRenderNode *node,
@@ -391,6 +438,69 @@ compute_rounded_clip_node_blur (GskRenderNode *node,
 }
 
 static void
+render_fill_node (cairo_t  *cr,
+                  gpointer  node)
+{
+  switch (gsk_fill_node_get_fill_rule (node))
+  {
+    case GSK_FILL_RULE_WINDING:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+      break;
+    case GSK_FILL_RULE_EVEN_ODD:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+  gsk_path_to_cairo (gsk_fill_node_get_path (node), cr);
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_fill (cr);
+}
+
+static void
+compute_fill_node_blur (GskRenderNode *node,
+                        Render        *render,
+                        GSList        *copies)
+{
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  render_clipped_with_cairo (render,
+                             copies,
+                             &bounds,
+                             gsk_fill_node_get_child (node),
+                             render_fill_node,
+                             node);
+}
+
+static void
+render_stroke_node (cairo_t  *cr,
+                    gpointer  node)
+{
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  gsk_cairo_stroke_path (cr,
+                         gsk_stroke_node_get_path (node),
+                         gsk_stroke_node_get_stroke (node));
+}
+
+static void
+compute_stroke_node_blur (GskRenderNode *node,
+                          Render        *render,
+                          GSList        *copies)
+{
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  render_clipped_with_cairo (render,
+                             copies,
+                             &bounds,
+                             gsk_stroke_node_get_child (node),
+                             render_stroke_node,
+                             node);
+}
+
+static void
 compute_background_blur (GskRenderNode *node,
                          Render        *render,
                          GSList        *copies)
@@ -428,6 +538,14 @@ compute_background_blur (GskRenderNode *node,
       compute_transform_node_blur (node, render, copies);
       break;
 
+    case GSK_FILL_NODE:
+      compute_fill_node_blur (node, render, copies);
+      break;
+
+    case GSK_STROKE_NODE:
+      compute_stroke_node_blur (node, render, copies);
+      break;
+
     case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
     case GSK_COLOR_NODE:
@@ -452,8 +570,6 @@ compute_background_blur (GskRenderNode *node,
     case GSK_GL_SHADER_NODE:
     case GSK_MASK_NODE:
     case GSK_DEBUG_NODE:
-    case GSK_FILL_NODE:
-    case GSK_STROKE_NODE:
     case GSK_SUBSURFACE_NODE:
     case GSK_COMPOSITE_NODE:
     case GSK_DISPLACEMENT_NODE:
