@@ -2026,7 +2026,7 @@ start_element_cb (GMarkupParseContext  *context,
       gtk_svg_check_unhandled_attributes (data->svg, context, attr_names, handled);
 
       if (data->current_shape)
-        svg_element_add_child (data->current_shape, shape);
+        svg_element_append_child (data->current_shape, shape);
 
       data->shape_stack = g_slist_prepend (data->shape_stack, data->current_shape);
 

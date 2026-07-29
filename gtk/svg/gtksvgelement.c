@@ -1221,8 +1221,8 @@ svg_element_add_filter (SvgElement *element,
 
 /* Child is transfer-full */
 void
-svg_element_add_child (SvgElement *element,
-                       SvgElement *child)
+svg_element_append_child (SvgElement *element,
+                          SvgElement *child)
 {
   g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
   g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
@@ -2707,7 +2707,7 @@ svg_element_clone (SvgElement *element,
               g_object_unref (clone);
               return NULL;
             }
-          svg_element_add_child (clone, child_clone);
+          svg_element_append_child (clone, child_clone);
         }
 
       /* Copy dependency order */
@@ -3036,7 +3036,7 @@ svg_element_build_shadow_tree (SvgElement *element,
       SvgElement *clone = svg_element_clone (target, element, svg, data);
       if (clone)
         {
-          svg_element_add_child (element, clone);
+          svg_element_append_child (element, clone);
           element->first = clone;
         }
     }

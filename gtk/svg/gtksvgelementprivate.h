@@ -53,7 +53,7 @@ void         svg_element_add_color_stop      (SvgElement            *element,
                                               SvgColorStop          *stop);
 void         svg_element_add_filter          (SvgElement            *element,
                                               SvgFilter             *filter);
-void         svg_element_add_child           (SvgElement            *element,
+void         svg_element_append_child        (SvgElement            *element,
                                               SvgElement            *child);
 void         svg_element_prepend_child       (SvgElement            *element,
                                               SvgElement            *child);
