@@ -307,8 +307,11 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
       priv->notify = NULL;
     }
 
-  g_object_ref (stream);
-  priv->delete_pending = TRUE;
+  if (priv->incr)
+    {
+      g_object_ref (stream);
+      priv->delete_pending = TRUE;
+    }
   g_cond_broadcast (&priv->cond);
   g_mutex_unlock (&priv->mutex);
 
