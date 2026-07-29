@@ -133,7 +133,7 @@ gtk_tests = [
 if os_unix
   gtk_tests += [
     ['testfontchooserdialog'],
-    ['parallel', [], [ libgtk_static_dep, libm ] ],
+    ['parallel', [], [ libgtk_private_dep, libm ] ],
   ]
 endif
 

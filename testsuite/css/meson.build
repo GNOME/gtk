@@ -26,7 +26,7 @@ test_data = executable('data',
   sources: ['data.c'],
   c_args: common_cflags + ['-DGTK_COMPILATION'],
   include_directories: [confinc, ],
-  dependencies: libgtk_static_dep,
+  dependencies: libgtk_private_dep,
 )
 
 test('data', test_data,
@@ -39,7 +39,7 @@ test('data', test_data,
 transition = executable('transition',
   sources: ['transition.c'],
   c_args: common_cflags + ['-DGTK_COMPILATION'],
-  dependencies: libgtk_static_dep,
+  dependencies: libgtk_private_dep,
 )
 
 test('transition', transition,
@@ -52,7 +52,7 @@ test('transition', transition,
 color = executable('color',
   sources: ['color.c'],
   c_args: common_cflags + ['-DGTK_COMPILATION'],
-  dependencies: libgtk_static_dep,
+  dependencies: libgtk_private_dep,
 )
 
 test('color', color,
@@ -65,7 +65,7 @@ test('color', color,
 compute = executable('compute',
   sources: ['compute.c'],
   c_args: common_cflags + ['-DGTK_COMPILATION'],
-  dependencies: libgtk_static_dep
+  dependencies: libgtk_private_dep
 )
 
 test('compute', compute,

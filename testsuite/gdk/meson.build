@@ -99,7 +99,7 @@ foreach t : internal_tests
   test_exe = executable(test_name,
     sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
     c_args: common_cflags + ['-DGTK_COMPILATION'],
-    dependencies: libgtk_static_dep,
+    dependencies: libgtk_private_dep,
     install: false,
   )
 
@@ -123,7 +123,7 @@ foreach t : internal_test_executables
   test_executable = executable(test_name,
     sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
     c_args: common_cflags + ['-DGTK_COMPILATION'],
-    dependencies: libgtk_static_dep,
+    dependencies: libgtk_private_dep,
     install: false,
   )
   test_executables += {test_name: test_executable}

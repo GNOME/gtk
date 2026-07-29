@@ -97,6 +97,12 @@ option('android-runtime',
        value: 'enabled',
        description : 'Enable the runtime for running native applications on Android')
 
+option('symbol-visibility',
+       type: 'string',
+       value: 'hidden',
+       deprecated: true,
+       description: 'Set private symbol visibility for libgtk')
+
 # Introspection
 
 option('introspection',

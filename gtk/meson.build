@@ -1275,4 +1275,10 @@ libgtk_static_dep = declare_dependency(sources: gtk_dep_sources,
   link_args: common_ldflags,
 )
 
+if get_option('symbol-visibility') == 'default'
+  libgtk_private_dep = libgtk_dep
+else
+  libgtk_private_dep = libgtk_static_dep
+endif
+
 subdir('compose')
