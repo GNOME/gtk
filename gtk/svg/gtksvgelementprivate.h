@@ -47,9 +47,6 @@ GDK_DECLARE_INTERNAL_TYPE (SvgElement, svg_element, SVG, ELEMENT, GObject)
 SvgElement * svg_element_new                 (SvgElement            *parent,
                                               SvgElementType         type);
 
-void         svg_element_set_element_type    (SvgElement            *element,
-                                              SvgElementType         type);
-
 SvgElementType
              svg_element_get_element_type    (SvgElement            *element);
 void         svg_element_add_color_stop      (SvgElement            *element,
