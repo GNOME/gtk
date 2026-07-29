@@ -1269,6 +1269,64 @@ svg_element_append_child (SvgElement *element,
 
 /* Child is transfer-full */
 void
+svg_element_insert_after (SvgElement *element,
+                          SvgElement *child,
+                          SvgElement *sibling)
+{
+  g_assert (gtk_css_node_get_parent (svg_element_get_css_node (child)) == element->css_node);
+  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+  g_assert (sibling == NULL || sibling->parent == element);
+
+  child->parent = element;
+
+  if (element->first_child == NULL)
+    {
+      child->prev_sibling = child->next_sibling = NULL;
+      element->first_child = element->last_child = child;
+    }
+  else
+    {
+      child->prev_sibling = sibling;
+      if (sibling)
+        {
+          child->next_sibling = sibling->next_sibling;
+          sibling->next_sibling = child;
+        }
+      else
+        {
+          child->next_sibling = element->first_child;
+          element->first_child->prev_sibling = child;
+          element->first_child = child;
+        }
+    }
+
+  if (child->type == SVG_ELEMENT_TSPAN)
+    {
+      SvgElement *text_parent = NULL;
+
+      if (svg_element_type_is_text (element->type))
+        text_parent = element;
+      else if (element->parent &&
+               element->type == SVG_ELEMENT_LINK &&
+               svg_element_type_is_text (element->parent->type))
+        text_parent = element->parent;
+
+      if (text_parent)
+        {
+          TextNode node = {
+            .type = TEXT_NODE_SHAPE,
+            .shape = { .shape = child }
+          };
+          g_array_append_val (text_parent->text, node);
+        }
+    }
+
+  if (element->child_observer)
+    gtk_list_list_model_item_added (element->child_observer, child);
+}
+
+/* Child is transfer-full */
+void
 svg_element_prepend_child (SvgElement *element,
                            SvgElement *child)
 {

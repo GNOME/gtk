@@ -57,6 +57,9 @@ void         svg_element_append_child        (SvgElement            *element,
                                               SvgElement            *child);
 void         svg_element_prepend_child       (SvgElement            *element,
                                               SvgElement            *child);
+void         svg_element_insert_after        (SvgElement            *element,
+                                              SvgElement            *child,
+                                              SvgElement            *sibling);
 void         svg_element_add_animation       (SvgElement            *element,
                                               SvgAnimation          *animation);
 
