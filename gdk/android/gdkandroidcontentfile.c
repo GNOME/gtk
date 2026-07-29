@@ -1108,7 +1108,7 @@ manual:
       GFileInputStream *istream = g_file_read (file, cancellable, error);
       if (!istream)
         return FALSE;
-      GFileOutputStream *ostream = g_file_replace (file,
+      GFileOutputStream *ostream = g_file_replace (destination,
                                                    NULL,
                                                    FALSE,
                                                    G_FILE_CREATE_REPLACE_DESTINATION,
