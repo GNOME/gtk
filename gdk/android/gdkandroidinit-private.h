@@ -120,6 +120,7 @@ typedef struct
   struct
   {
     jclass klass;
+    jstring scheme_content;
     jmethodID get_type;
     jmethodID open_asset_fd;
     jmethodID open_typed_asset_fd;
