@@ -59,7 +59,6 @@ G_DEFINE_TYPE (GdkD3d12Context, gdk_d3d12_context, GDK_TYPE_DRAW_CONTEXT)
 static void
 gdk_d3d12_context_begin_frame (GdkDrawContext  *draw_context,
                                gpointer         context_data,
-                               GdkMemoryDepth   depth,
                                cairo_region_t  *region,
                                GdkColorState  **out_color_state,
                                GdkMemoryDepth  *out_depth)
