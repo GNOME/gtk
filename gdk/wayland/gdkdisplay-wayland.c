@@ -745,14 +745,12 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_toplevel_icon_manager_v1_interface, XDG_TOPLEVEL_ICON_VERSION);
     }
-#ifdef WL_FIXES_INTERFACE
   else if (match_global (display_wayland, interface, version, wl_fixes_interface.name, 0))
     {
       display_wayland->wl_fixes =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wl_fixes_interface, MIN (version, WL_FIXES_VERSION));
     }
-#endif
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -958,13 +956,11 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
 
-#ifdef WL_FIXES_INTERFACE
   if (display_wayland->wl_fixes)
     {
       wl_fixes_destroy_registry (display_wayland->wl_fixes, display_wayland->wl_registry);
       g_clear_pointer (&display_wayland->wl_fixes, wl_fixes_destroy);
     }
-#endif
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);
 
   g_list_store_remove_all (display_wayland->monitors);
