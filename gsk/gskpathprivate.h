@@ -70,7 +70,7 @@ void                    gsk_path_builder_add_op                 (GskPathBuilder 
 /* implemented in gskstrokenode.c */
 void                    gsk_cairo_stroke_path                   (cairo_t                *cr,
                                                                  GskPath                *path,
-                                                                 GskStroke              *stroke);
+                                                                 const GskStroke        *stroke);
 
 static inline void
 gsk_cairo_set_fill_rule (cairo_t     *cr,

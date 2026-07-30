@@ -190,6 +190,7 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
+  gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_attach_image (surface, self->paint_surface, painted);
   gdk_wayland_surface_request_frame (surface);

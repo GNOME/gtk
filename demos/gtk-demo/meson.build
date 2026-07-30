@@ -4,6 +4,7 @@ demos = files([
   'application_demo.c',
   'aspect_frame.c',
   'assistant.c',
+  'badapple.c',
   'builder.c',
   'clipboard.c',
   'combobox.c',

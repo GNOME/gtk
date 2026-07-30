@@ -82,3 +82,57 @@ overlay_config_render_rect (const OverlayConfig   *self,
 
   return gtk_snapshot_free_to_node (snapshot);
 }
+
+GskRenderNode *
+overlay_config_render_path (const OverlayConfig *self,
+                            GskRenderNode       *node,
+                            GskPath             *path)
+{
+  GtkSnapshot *snapshot;
+
+  snapshot = gtk_snapshot_new ();
+  if (self->include_original)
+    gtk_snapshot_append_node (snapshot, node);
+  gtk_snapshot_append_fill (snapshot,
+                            path,
+                            GSK_FILL_RULE_EVEN_ODD,
+                            &self->color);
+
+  return gtk_snapshot_free_to_node (snapshot);
+}
+
+static GskPath *
+create_path_for_region (const cairo_region_t *region)
+{
+  GskPathBuilder *builder;
+  gsize i, n;
+
+  builder = gsk_path_builder_new ();
+  n = cairo_region_num_rectangles (region);
+
+  for (i = 0; i < n; i++)
+    {
+      cairo_rectangle_int_t rect;
+
+      cairo_region_get_rectangle (region, i, &rect);
+      gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (rect.x, rect.y, rect.width, rect.height));
+    }
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
+GskRenderNode *
+overlay_config_render_region (const OverlayConfig  *self,
+                              GskRenderNode        *node,
+                              const cairo_region_t *region)
+{
+  GskPath *path;
+  GskRenderNode *result;
+
+  path = create_path_for_region (region);
+  result = overlay_config_render_path (self, node, path);
+  gsk_path_unref (path);
+
+  return result;
+}
+

@@ -2,6 +2,7 @@ gsk_public_sources = files([
   'gskarithmeticnode.c',
   'gskblendnode.c',
   'gskblurnode.c',
+  'gskblurutils.c',
   'gskbordernode.c',
   'gskcaironode.c',
   'gskcairorenderer.c',

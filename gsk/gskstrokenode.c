@@ -62,9 +62,9 @@ gsk_stroke_node_finalize (GskRenderNode *node)
 }
 
 void
-gsk_cairo_stroke_path (cairo_t   *cr,
-                       GskPath   *path,
-                       GskStroke *stroke)
+gsk_cairo_stroke_path (cairo_t         *cr,
+                       GskPath         *path,
+                       const GskStroke *stroke)
 {
   gsk_stroke_to_cairo (stroke, cr);
   gsk_path_to_cairo (path, cr);

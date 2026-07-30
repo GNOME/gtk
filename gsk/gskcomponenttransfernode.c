@@ -296,6 +296,7 @@ gsk_component_transfer_node_new2 (GskRenderNode              *child,
   node->is_hdr = gsk_render_node_is_hdr (child);
   node->fully_opaque = gsk_render_node_is_fully_opaque (child) &&
                        gsk_component_transfer_apply (a, 1) >= 1;
+  node->isolates_background = TRUE;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
 

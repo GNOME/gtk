@@ -17,3 +17,9 @@ GOptionGroup *  overlay_config_create_option_group      (OverlayConfig          
 GskRenderNode * overlay_config_render_rect              (const OverlayConfig    *self,
                                                          GskRenderNode          *node,
                                                          const graphene_rect_t  *rect);
+GskRenderNode * overlay_config_render_region            (const OverlayConfig    *self,
+                                                         GskRenderNode          *node,
+                                                         const cairo_region_t   *region);
+GskRenderNode * overlay_config_render_path              (const OverlayConfig    *self,
+                                                         GskRenderNode          *node,
+                                                         GskPath                *path);

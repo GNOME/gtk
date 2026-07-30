@@ -96,6 +96,11 @@ struct _Filter
 
 static const Filter filters[] = {
   {
+    .name = "background-blur",
+    .description = "Show where background blur would take effect",
+    .run = filter_background_blur,
+  },
+  {
     .name = "copypaste",
     .description = "Replace copy/paste nodes with copies of nodes",
     .run = filter_copypaste,
@@ -104,6 +109,11 @@ static const Filter filters[] = {
     .name = "cut",
     .description = "Cut out a part of the rendernode",
     .run = filter_cut,
+  },
+  {
+    .name = "diff",
+    .description = "Show where two nodes differ",
+    .run = filter_diff,
   },
   {
     .name = "opaque",

@@ -31,12 +31,18 @@ char *                  gsk_gpu_transform_to_string             (const GskGpuTra
 gboolean                gsk_gpu_transform_transform             (GskGpuTransform        *self,
                                                                  GskTransform           *transform);
 
+void                    gsk_gpu_transform_to_cairo_matrix       (const GskGpuTransform  *self,
+                                                                 cairo_matrix_t         *result);
+
 void                    gsk_gpu_transform_transform_rect        (const GskGpuTransform  *self,
                                                                  const graphene_rect_t  *rect,
                                                                  graphene_rect_t        *result);
 void                    gsk_gpu_transform_invert_rect           (const GskGpuTransform  *self,
                                                                  const graphene_rect_t  *rect,
                                                                  graphene_rect_t        *result);
+void                    gsk_gpu_transform_transform_rounded_rect (const GskGpuTransform *self,
+                                                                  const GskRoundedRect  *rect,
+                                                                  GskRoundedRect        *result);
 
 G_END_DECLS
 

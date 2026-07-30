@@ -3,6 +3,7 @@
 #include "gskgputransformprivate.h"
 
 #include "gskrectprivate.h"
+#include "gskroundedrectprivate.h"
 
 void
 gsk_gpu_transform_init (GskGpuTransform        *self,
@@ -95,6 +96,22 @@ gsk_gpu_transform_transform_rect (const GskGpuTransform *self,
 }
 
 void
+gsk_gpu_transform_transform_rounded_rect (const GskGpuTransform *self,
+                                          const GskRoundedRect  *rect,
+                                          GskRoundedRect        *result)
+{
+  GskRoundedRect tmp;
+
+  gsk_rounded_rect_scale_affine (&tmp,
+                                 rect,
+                                 self->scale.width,
+                                 self->scale.height,
+                                 self->offset.x,
+                                 self->offset.y);
+  gsk_rounded_rect_dihedral (result, &tmp, self->dihedral);
+}
+
+void
 gsk_gpu_transform_invert_rect (const GskGpuTransform *self,
                                const graphene_rect_t *rect,
                                graphene_rect_t       *result)
@@ -166,3 +183,14 @@ gsk_gpu_transform_to_string (const GskGpuTransform *self)
   return g_string_free (str, FALSE);
 }
 
+void
+gsk_gpu_transform_to_cairo_matrix (const GskGpuTransform  *self,
+                                   cairo_matrix_t         *result)
+{
+  float xx, xy, yx, yy;
+  
+  gdk_dihedral_get_mat2 (self->dihedral, &xx, &xy, &yx, &yy);
+  cairo_matrix_init (result, xx, yx, xy, yy, 0, 0);
+  cairo_matrix_scale (result, self->scale.width, self->scale.height);
+  cairo_matrix_translate (result, self->offset.x, self->offset.y);
+}
