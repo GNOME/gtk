@@ -377,6 +377,7 @@ msys2-ucrt64:
     when: always
     expose_as: 'Windows_DLL_MSYS2_UCRT64_toolchain'
     paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
@@ -390,6 +391,7 @@ msys2-clang64:
     when: always
     expose_as: 'Windows_DLL_MSYS2_CLANG64_toolchain'
     paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
