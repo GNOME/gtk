@@ -76,6 +76,9 @@ svg_value_equal (const SvgValue *value0,
   if (value0 == value1)
     return TRUE;
 
+  if (!value0 || !value1)
+    return FALSE;
+
   if (value0->class != value1->class)
     return FALSE;
 
