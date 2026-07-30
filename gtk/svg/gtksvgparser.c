@@ -3259,7 +3259,7 @@ do_compute_update_order (SvgElement *shape,
     g_clear_pointer (&sh->deps, g_ptr_array_unref);
 }
 
-static void
+void
 compute_update_order (SvgElement *shape,
                       GtkSvg     *svg)
 {
