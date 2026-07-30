@@ -1304,6 +1304,10 @@ svg_element_insert_after (SvgElement *element,
         }
     }
 
+  /* for lack of a better approach, assume the new shape has no deps */
+  child->next = element->first;
+  element->first = child;
+
   if (element->child_observer)
     gtk_list_list_model_item_added (element->child_observer, child);
 }
@@ -1792,6 +1796,23 @@ svg_element_delete (SvgElement *element)
   element->prev_sibling = NULL;
   element->next_sibling = NULL;
   element->parent = NULL;
+
+  /* keep the update order up-to-date */
+  if (parent->first == element)
+    {
+      parent->first = element->next;
+    }
+  else
+    {
+      for (SvgElement *t = parent->first; t; t = t->next)
+        {
+          if (t->next == element)
+            {
+              t->next = element->next;
+              break;
+            }
+        }
+    }
 
   if (parent && parent->child_observer)
     gtk_list_list_model_item_removed (parent->child_observer, prev);
