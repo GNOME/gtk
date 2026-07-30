@@ -1586,6 +1586,8 @@ gdk_android_content_file_query_info (GFile *file,
       GFileInfo *info = g_file_info_new ();
 
       GFileAttributeMatcher *matcher = g_file_attribute_matcher_new (attributes);
+      if (g_file_attribute_matcher_matches (matcher, G_FILE_ATTRIBUTE_STANDARD_TYPE))
+        g_file_info_set_file_type (info, G_FILE_TYPE_REGULAR);
       if (g_file_attribute_matcher_matches (matcher, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE))
         {
           JNIEnv *env = gdk_android_get_env ();
