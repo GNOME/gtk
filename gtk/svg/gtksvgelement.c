@@ -1404,6 +1404,8 @@ svg_element_set_specified_value (SvgElement  *element,
 
           if (v->attr == attr)
             {
+              if (svg_value_equal (value, v->value))
+                return;
               g_clear_pointer (&v->value, svg_value_unref);
               break;
             }
@@ -1415,6 +1417,9 @@ svg_element_set_specified_value (SvgElement  *element,
   if (i == element->specified->len)
     {
       PropertyValue pv = { attr, NULL };
+
+      if (value == NULL)
+        return;
       g_array_append_val (element->specified, pv);
     }
 
