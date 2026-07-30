@@ -1296,6 +1296,8 @@ svg_element_insert_after (SvgElement *element,
           sibling->next_sibling = child;
           if (sibling == element->last_child)
             element->last_child = child;
+          else
+            child->next_sibling->prev_sibling = child;
         }
       else
         {
