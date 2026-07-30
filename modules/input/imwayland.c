@@ -36,6 +36,9 @@ struct _GtkIMContextWaylandGlobal
 {
   struct wl_display *display;
   struct wl_registry *registry;
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  struct wl_fixes *fixes;
+#endif
   uint32_t text_input_manager_wl_id;
   struct zwp_text_input_manager_v3 *text_input_manager;
   struct zwp_text_input_v3 *text_input;
@@ -746,6 +749,14 @@ registry_handle_global (void               *data,
       zwp_text_input_v3_add_listener (global->text_input,
                                       &text_input_listener, global);
     }
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  else if (strcmp (interface, "wl_fixes") == 0)
+    {
+      global->fixes =
+        wl_registry_bind (global->registry, id,
+                          &wl_fixes_interface, MIN (version, WL_FIXES_ACK_GLOBAL_REMOVE_SINCE_VERSION));
+    }
+#endif
 }
 
 static void
@@ -755,11 +766,16 @@ registry_handle_global_remove (void               *data,
 {
   GtkIMContextWaylandGlobal *global = data;
 
-  if (id != global->text_input_manager_wl_id)
-    return;
+  if (id == global->text_input_manager_wl_id)
+    {
+      g_clear_pointer (&global->text_input, zwp_text_input_v3_destroy);
+      g_clear_pointer (&global->text_input_manager, zwp_text_input_manager_v3_destroy);
+    }
 
-  g_clear_pointer (&global->text_input, zwp_text_input_v3_destroy);
-  g_clear_pointer (&global->text_input_manager, zwp_text_input_manager_v3_destroy);
+#ifdef WL_FIXES_ACK_GLOBAL_REMOVE
+  if (global->fixes && wl_fixes_get_version (global->fixes) >= WL_FIXES_ACK_GLOBAL_REMOVE_SINCE_VERSION)
+    wl_fixes_ack_global_remove (global->fixes, registry, id);
+#endif
 }
 
 static const struct wl_registry_listener registry_listener = {
