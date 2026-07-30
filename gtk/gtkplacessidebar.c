@@ -490,13 +490,10 @@ special_directory_get_gicon (GUserDirectory directory)
     ICON_CASE (DOWNLOAD);
     ICON_CASE (MUSIC);
     ICON_CASE (PICTURES);
+    ICON_CASE (PROJECTS);
     ICON_CASE (PUBLIC_SHARE);
     ICON_CASE (TEMPLATES);
     ICON_CASE (VIDEOS);
-
-#if GLIB_CHECK_VERSION (2, 89, 0)
-    ICON_CASE (PROJECTS);
-#endif
 
     case G_USER_N_DIRECTORIES:
     default:

@@ -50,31 +50,19 @@ gtk_svg_location_init (GtkSvgLocation      *location,
   location->lines = MAX (lines - 1, 0);
   location->line_chars = chars;
 
-#if GLIB_CHECK_VERSION (2, 88, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   location->bytes = g_markup_parse_context_get_offset (context);
-G_GNUC_END_IGNORE_DEPRECATIONS
-#else
-  location->bytes = 0;
-#endif
 }
 
 void
 gtk_svg_location_init_tag_start (GtkSvgLocation      *location,
                                  GMarkupParseContext *context)
 {
-#if GLIB_CHECK_VERSION (2, 88, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_markup_parse_context_get_tag_start (context,
                                         &location->lines,
                                         &location->line_chars,
                                         &location->bytes);
   if (location->lines > 0)
     location->lines -= 1;
-G_GNUC_END_IGNORE_DEPRECATIONS
-#else
-  gtk_svg_location_init (location, context);
-#endif
 }
 
 void
@@ -100,9 +88,6 @@ gtk_svg_location_init_attr_range (GtkSvgLocation      *start,
                                   GMarkupParseContext *context,
                                   unsigned int         attr)
 {
-#if GLIB_CHECK_VERSION (2, 89, 0)
-  /* waiting for https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5106 */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_markup_parse_context_get_attribute_position (context, attr,
                                                  &start->lines, &start->line_chars, &start->bytes,
                                                  &end->lines, &end->line_chars, &end->bytes);
@@ -110,8 +95,4 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     start->lines -= 1;
   if (end->lines > 0)
     end->lines -= 1;
-G_GNUC_END_IGNORE_DEPRECATIONS
-#else
-  gtk_svg_location_init_tag_range (start, end, context);
-#endif
 }

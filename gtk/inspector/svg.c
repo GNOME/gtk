@@ -92,11 +92,6 @@ error_cb (GtkSvg   *svg,
           GError   *error,
           gpointer  data)
 {
-/* Without GLib 2.88, we don't get usable location
- * information from GMarkup, so don't try to highlight
- * errors
- */
-#if GLIB_CHECK_VERSION (2, 88, 0)
   ErrorData *d = data;
   GtkInspectorSvg *self = d->self;
   SvgError *svg_error;
@@ -134,7 +129,6 @@ error_cb (GtkSvg   *svg,
                                      tag,
                                      &svg_error->start,
                                      &svg_error->end);
-#endif
 }
 
 static void

@@ -56,10 +56,6 @@ struct _GskVulkanDebugFrameClass
 
 G_DEFINE_TYPE (GskVulkanDebugFrame, gsk_vulkan_debug_frame, GSK_TYPE_VULKAN_FRAME)
 
-#if !GLIB_CHECK_VERSION(2, 87, 3)
-#define g_get_monotonic_time_ns() (1000 * g_get_monotonic_time ())
-#endif
-
 static void
 gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                    GskVulkanCommandState *state,
@@ -131,14 +127,11 @@ gsk_vulkan_debug_frame_submit_ops (GskVulkanFrame        *frame,
                                self->vk_timestamp_pool,
                                self->n_ops * 2);
           entry = gsk_vulkan_debug_get (&self->debug, op->node_id);
-/* silence the warning about g_get_monotonic_time_ns() not existing yet, we actually check the version */
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           entry->profile.self.cpu_submit_ns -= g_get_monotonic_time_ns ();
 
           op = gsk_gpu_op_vk_command (op, GSK_GPU_FRAME (frame), state);
 
           entry->profile.self.cpu_submit_ns += g_get_monotonic_time_ns ();
-G_GNUC_END_IGNORE_DEPRECATIONS
 
           vkCmdWriteTimestamp (state->vk_command_buffer,
                                VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
@@ -410,9 +403,7 @@ gsk_vulkan_debug_frame_start_node (GskGpuFrame   *frame,
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   entry->profile.total.cpu_record_ns -= g_get_monotonic_time_ns ();
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
@@ -423,9 +414,7 @@ gsk_vulkan_debug_frame_end_node (GskGpuFrame *frame)
 
   entry = gsk_vulkan_debug_get (&self->debug, self->debug_current);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   entry->profile.total.cpu_record_ns += g_get_monotonic_time_ns ();
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   self->debug_current = entry->parent;
 

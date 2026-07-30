@@ -5823,19 +5823,10 @@ append_compressed_bytes_param (Printer    *p,
   GBytes *compressed_bytes;
 
   compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP, 9);
-#if GLIB_CHECK_VERSION (2, 85, 0)
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_zlib_compressor_set_os (compressor, 3);
-G_GNUC_END_IGNORE_DEPRECATIONS
-#endif
 
   compressed_bytes = g_converter_convert_bytes (G_CONVERTER (compressor), bytes, NULL);
   g_assert (compressed_bytes != NULL);
-
-#if !GLIB_CHECK_VERSION (2, 85, 0)
-  /* fallback for above */
-  ((guchar *) g_bytes_get_data (compressed_bytes, NULL))[9] = 3;
-#endif
 
   /* rough estimates for the length of each string */
   if (2 * g_bytes_get_size (bytes) <= 4 * g_bytes_get_size (compressed_bytes) / 3 + 25)
