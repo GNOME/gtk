@@ -102,6 +102,9 @@ struct _GdkWaylandDisplay
   /* Wayland fields below */
   struct wl_display *wl_display;
   struct wl_registry *wl_registry;
+#ifdef WL_FIXES_INTERFACE
+  struct wl_fixes *wl_fixes;
+#endif
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct zwp_linux_dmabuf_v1 *linux_dmabuf;
