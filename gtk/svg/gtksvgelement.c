@@ -1716,7 +1716,7 @@ svg_element_get_origin (SvgElement     *element,
 void
 svg_element_delete (SvgElement *element)
 {
-  SvgElement *prev, *parent;
+  SvgElement *prev, *next, *parent;
 
   if (element->text)
     {
@@ -1732,6 +1732,7 @@ svg_element_delete (SvgElement *element)
     }
 
   prev = element->prev_sibling;
+  next = element->next_sibling;
   parent = element->parent;
 
   if (parent)
@@ -1749,6 +1750,11 @@ svg_element_delete (SvgElement *element)
             parent->last_child->next_sibling = NULL;
         }
     }
+
+  if (prev)
+    prev->next_sibling = next;
+  if (next)
+    next->prev_sibling = prev;
 
   element->prev_sibling = NULL;
   element->next_sibling = NULL;
