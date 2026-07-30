@@ -38,6 +38,7 @@ stages:
     - subprojects/gdk-pixbuf/
     - subprojects/glib/
     - subprojects/graphene/
+    - subprojects/gvdb/
     - subprojects/libepoxy/
     - subprojects/pango/
 
