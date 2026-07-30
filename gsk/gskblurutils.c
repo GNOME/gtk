@@ -508,6 +508,10 @@ compute_background_blur (GskRenderNode *node,
   GskRenderNode **children;
   gsize i, n_children;
 
+  if (gsk_render_node_get_copy_mode (node) == GSK_COPY_NONE &&
+      copies == NULL)
+    return;
+
   switch (gsk_render_node_get_node_type (node))
   {
     case GSK_ISOLATION_NODE:
