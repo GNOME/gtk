@@ -56,21 +56,8 @@ struct _GtkApplicationWindowClass
 {
   GtkWindowClass parent_class;
 
-  /**
-   * GtkApplicationWindowClass::save_state:
-   * @dict: a dictionary to populate with application window state
-   *
-   * Class closure for the [signal@ApplicationWindow::save-state] signal.
-   *
-   * Returns: true to stop stop further handlers from running
-   *
-   * Since: 4.24
-   */
-  gboolean     (* save_state)           (GtkApplicationWindow   *window,
-                                         GVariantDict           *dict);
-
   /*< private >*/
-  gpointer padding[7];
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
