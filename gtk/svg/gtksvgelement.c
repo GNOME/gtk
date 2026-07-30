@@ -1245,30 +1245,6 @@ svg_element_add_filter (SvgElement *element,
     gtk_array_list_model_item_added (element->filter_observer);
 }
 
-static void
-svg_element_check (SvgElement *element)
-{
-  SvgElement *parent = element->parent;
-  unsigned int n, n2;
-
-  n = 0;
-  for (SvgElement *p = parent->first_child; p; p = p->next_sibling)
-    {
-      n++;
-      g_assert (p->parent == parent);
-      if (p->next_sibling == NULL)
-        g_assert (parent->last_child == p);
-      else
-        g_assert (p->next_sibling->prev_sibling == p);
-    }
-
-  n2 = 0;
-  for (SvgElement *p = parent->first; p; p = p->next)
-    n2++;
-
-  g_assert (n == n2);
-}
-
 /* Child is transfer-full */
 void
 svg_element_insert_after (SvgElement *element,
@@ -1277,8 +1253,6 @@ svg_element_insert_after (SvgElement *element,
 {
   g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
   g_assert (sibling == NULL || sibling->parent == element);
-
-  svg_element_check (child);
 
   child->parent = element;
 
@@ -1338,8 +1312,6 @@ svg_element_insert_after (SvgElement *element,
 
   if (element->child_observer)
     gtk_list_list_model_item_added (element->child_observer, child);
-
-  svg_element_check (child);
 }
 
 /* Child is transfer-full */
@@ -1785,8 +1757,6 @@ svg_element_delete (SvgElement *element)
 {
   SvgElement *prev, *next, *parent;
 
-  svg_element_check (element);
-
   if (element->text)
     {
       for (unsigned int i = 0; i < element->text->len; i++)
@@ -1850,11 +1820,6 @@ svg_element_delete (SvgElement *element)
     gtk_list_list_model_item_removed (parent->child_observer, prev);
 
   g_object_unref (element);
-
-  if (prev)
-    svg_element_check (prev);
-  else if (next)
-    svg_element_check (next);
 }
 
 SvgElement *
