@@ -2973,6 +2973,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_DWMCOMPOSITIONCHANGED:
+      _gdk_win32_display_update_composited (win32_display);
       gdk_win32_surface_enable_transparency (surface);
       break;
 
