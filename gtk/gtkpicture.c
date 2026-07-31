@@ -433,7 +433,7 @@ gtk_picture_clear_paintable (GtkPicture *self)
                                           gtk_picture_paintable_invalidate_size,
                                           self);
 
-  g_object_unref (self->paintable);
+  g_clear_object (&self->paintable);
 }
 
 static void
