@@ -921,7 +921,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       GdkModifierType no_text_input_mask;
       GdkModifierType consumed_modifiers = 0;
 
-      no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
+      no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK;
 
 #ifdef G_OS_WIN32
      /* On Win32, even Ctrl + Alt could be text input because AltGr = Ctrl
