@@ -2910,7 +2910,7 @@ shape_create_stroke (SvgElement   *shape,
   GskStroke *stroke;
   SvgValue *da;
 
-  stroke = svg_element_create_basic_stroke (shape, context->viewport, context->svg->features & GTK_SVG_EXTENSIONS, context->weight);
+  stroke = svg_element_create_basic_stroke (shape, context->viewport, TRUE, context->svg->features & GTK_SVG_EXTENSIONS, context->weight);
 
   da = svg_element_get_current_value (shape, SVG_PROPERTY_STROKE_DASHARRAY);
   if (svg_dash_array_get_kind (da) != DASH_ARRAY_NONE)
