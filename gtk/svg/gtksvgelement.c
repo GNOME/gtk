@@ -1098,7 +1098,10 @@ svg_element_create_basic_stroke (SvgElement            *element,
   else
     values = element->base;
 
-  width = svg_number_get (values[SVG_PROPERTY_STROKE_WIDTH], normalized_diagonal (viewport));
+  if (svg_value_is_set (values[SVG_PROPERTY_STROKE_WIDTH]))
+    width = svg_number_get (values[SVG_PROPERTY_STROKE_WIDTH], normalized_diagonal (viewport));
+  else
+    width = 1;
 
   if (allow_gpa &&
       svg_value_is_set (values[SVG_PROPERTY_STROKE_MINWIDTH]) &&
