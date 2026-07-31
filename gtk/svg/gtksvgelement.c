@@ -1085,29 +1085,41 @@ width_apply_weight (double width,
 GskStroke *
 svg_element_create_basic_stroke (SvgElement            *element,
                                  const graphene_rect_t *viewport,
+                                 gboolean               current,
                                  gboolean               allow_gpa,
                                  double                 weight)
 {
   GskStroke *stroke;
   double width;
+  SvgValue **values;
 
-  width = svg_number_get (element->current[SVG_PROPERTY_STROKE_WIDTH], normalized_diagonal (viewport));
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
 
-  if (allow_gpa)
+  width = svg_number_get (values[SVG_PROPERTY_STROKE_WIDTH], normalized_diagonal (viewport));
+
+  if (allow_gpa &&
+      svg_value_is_set (values[SVG_PROPERTY_STROKE_MINWIDTH]) &&
+      svg_value_is_set (values[SVG_PROPERTY_STROKE_MAXWIDTH]))
     {
       double min, max;
 
-      min = svg_number_get (element->current[SVG_PROPERTY_STROKE_MINWIDTH], width);
-      max = svg_number_get (element->current[SVG_PROPERTY_STROKE_MAXWIDTH], width);
+      min = svg_number_get (values[SVG_PROPERTY_STROKE_MINWIDTH], width);
+      max = svg_number_get (values[SVG_PROPERTY_STROKE_MAXWIDTH], width);
 
       width = width_apply_weight (width, min, max, weight);
     }
 
   stroke = gsk_stroke_new (width);
 
-  gsk_stroke_set_line_cap (stroke, svg_enum_get (element->current[SVG_PROPERTY_STROKE_LINECAP]));
-  gsk_stroke_set_line_join (stroke, svg_enum_get (element->current[SVG_PROPERTY_STROKE_LINEJOIN]));
-  gsk_stroke_set_miter_limit (stroke, svg_number_get (element->current[SVG_PROPERTY_STROKE_MITERLIMIT], 1));
+  if (svg_value_is_set (values[SVG_PROPERTY_STROKE_LINECAP]))
+    gsk_stroke_set_line_cap (stroke, svg_enum_get (values[SVG_PROPERTY_STROKE_LINECAP]));
+  if (svg_value_is_set (values[SVG_PROPERTY_STROKE_LINEJOIN]))
+    gsk_stroke_set_line_join (stroke, svg_enum_get (values[SVG_PROPERTY_STROKE_LINEJOIN]));
+  if (svg_value_is_set (values[SVG_PROPERTY_STROKE_MITERLIMIT]))
+    gsk_stroke_set_miter_limit (stroke, svg_number_get (values[SVG_PROPERTY_STROKE_MITERLIMIT], 1));
 
   return stroke;
 }
@@ -1135,7 +1147,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
     case SVG_ELEMENT_PATH:
       {
         GskPath *path = svg_element_get_current_path (element, viewport);
-        GskStroke *stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+        GskStroke *stroke = svg_element_create_basic_stroke (element, viewport, TRUE, TRUE, 400);
         if (!gsk_path_get_stroke_bounds (element->path, stroke, &b))
           graphene_rect_init (&b, 0, 0, 0, 0);
         gsk_path_unref (path);
@@ -2614,7 +2626,7 @@ svg_element_contains (SvgElement             *element,
 
     case POINTER_EVENTS_PAINTED:
       path = svg_element_get_current_path (element, viewport);
-      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, TRUE, 400);
       if (fill_kind != PAINT_NONE && gsk_path_in_fill (path, point, fill_rule))
         ret = TRUE;
       else if (stroke_kind != PAINT_NONE && path_in_stroke (path, point, stroke))
@@ -2644,7 +2656,7 @@ svg_element_contains (SvgElement             *element,
     case POINTER_EVENTS_STROKE:
       /* FIXME: not quite right */
       path = svg_element_get_current_path (element, viewport);
-      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, TRUE, 400);
       ret = path_in_stroke (path, point, stroke);
       gsk_stroke_free (stroke);
       gsk_path_unref (path);
@@ -2657,7 +2669,7 @@ svg_element_contains (SvgElement             *element,
 
     case POINTER_EVENTS_ALL:
       path = svg_element_get_current_path (element, viewport);
-      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, 400);
+      stroke = svg_element_create_basic_stroke (element, viewport, TRUE, TRUE, 400);
       if (gsk_path_in_fill (path, point, fill_rule))
         ret = TRUE;
       else if (path_in_stroke (path, point, stroke))

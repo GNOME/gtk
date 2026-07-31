@@ -171,6 +171,7 @@ gboolean     svg_element_get_current_stroke_bounds
                                               graphene_rect_t       *bounds);
 GskStroke *  svg_element_create_basic_stroke (SvgElement            *element,
                                               const graphene_rect_t *viewport,
+                                              gboolean               current,
                                               gboolean               allow_gpa,
                                               double                 weight);
 
