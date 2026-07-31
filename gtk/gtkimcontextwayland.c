@@ -953,7 +953,7 @@ gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
 {
   guint keyval, state;
   gunichar ch;
-  GdkModifierType no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
+  GdkModifierType no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK|GDK_SUPER_MASK|GDK_HYPER_MASK;
 
   if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
     return FALSE;
