@@ -493,6 +493,21 @@ update_accel (GtkShortcut    *shortcut,
     return;
 
   trigger = gtk_shortcut_get_trigger (shortcut);
+  while (GTK_IS_ALTERNATIVE_TRIGGER (trigger))
+    {
+      for (unsigned int i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (trigger)); i++)
+        {
+          GtkShortcutTrigger *child = g_list_model_get_item (G_LIST_MODEL (trigger), i);
+
+          g_object_unref (child);
+          if (GTK_IS_KEYVAL_TRIGGER (child) || GTK_IS_ALTERNATIVE_TRIGGER (child))
+            {
+              trigger = child;
+              break;
+            }
+        }
+    }
+
   if (!GTK_IS_KEYVAL_TRIGGER (trigger))
     return;
 
