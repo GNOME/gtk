@@ -843,9 +843,6 @@ destroy_controller (GtkEventController *controller)
   gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
 }
 
-static gboolean toplevel_filter_func (gpointer item,
-                                      gpointer data);
-
 static void
 map (GtkWidget *widget)
 {
