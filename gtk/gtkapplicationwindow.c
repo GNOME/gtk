@@ -404,12 +404,6 @@ enum {
 };
 static GParamSpec *gtk_application_window_properties[N_PROPS];
 
-enum {
-  SAVE_STATE,
-  LAST_SIGNAL
-};
-static guint gtk_application_window_signals[LAST_SIGNAL] = { 0 };
-
 static void
 gtk_application_window_measure (GtkWidget      *widget,
                                 GtkOrientation  orientation,
@@ -707,34 +701,6 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
                           FALSE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_NAME | G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
-
-  /**
-   * GtkApplicationWindow::save-state:
-   * @window: the window which emitted the signal
-   * @dict: a dictionary to populate with application window state
-   *
-   * The handler for this signal should persist any application-specific
-   * state of @window into @dict.
-   *
-   * Note that window management state such as maximized, fullscreen,
-   * or window size should not be saved as part of this. They are handled
-   * by GTK.
-   *
-   * See [signal@Gtk.Application::restore-window].
-   *
-   * Returns: true to stop stop further handlers from running
-   *
-   * Since: 4.24
-   */
-  gtk_application_window_signals[SAVE_STATE] =
-    g_signal_new (I_("save-state"),
-                  G_TYPE_FROM_CLASS (class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkApplicationWindowClass, save_state),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  NULL,
-                  G_TYPE_BOOLEAN, 1,
-                  G_TYPE_VARIANT_DICT);
 }
 
 /**
@@ -907,11 +873,12 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
   return priv->help_overlay;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-noreturn"
 void
 gtk_application_window_save_state (GtkApplicationWindow *window,
                                    GVariantDict         *state)
 {
-  gboolean ret;
-
-  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, state, &ret);
+  g_assert_not_reached ();
 }
+#pragma GCC diagnostic pop

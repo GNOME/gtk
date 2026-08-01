@@ -420,6 +420,7 @@ gtk_private_sources += print_backend_sources
 
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
+  'gtkenumsprivate.h',
   'gtkfontfilterprivate.h',
   'gtktexthandleprivate.h',
   'gtkplacessidebarprivate.h',
