@@ -1357,6 +1357,9 @@ gtk_window_close (GtkWindow *window)
   if (!_gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
+  if (window->priv->delete_event_handler)
+    return;
+
   window->priv->delete_event_handler = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT, send_delete_event, window, NULL);
   g_source_set_name_by_id (window->priv->delete_event_handler, "[gtk+] send_delete_event");
 }
