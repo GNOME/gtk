@@ -2639,7 +2639,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
 
   if (gsk_transform_get_fine_category (self->modelview) <= GSK_FINE_TRANSFORM_CATEGORY_2D)
     {
-      scale = ceilf (scale + 0.5);
+      scale = exp2f (ceilf (log2f (scale)));
       align_scale_x = align_scale_y = 1;
       flags_mask = 0;
     }

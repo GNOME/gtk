@@ -1,0 +1,6 @@
+transform {
+  transform: scale3d(0.0009765625,0.0009765625,-10);
+  child: fill {
+    path: "M0 0 h40960 v40960 h-40960 z";
+  }
+}

@@ -90,8 +90,6 @@ struct _GdkSurface
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
-  GdkDrawContext *paint_context;
-
   GdkSeat *current_shortcuts_inhibited_seat;
 
   GPtrArray *subsurfaces;

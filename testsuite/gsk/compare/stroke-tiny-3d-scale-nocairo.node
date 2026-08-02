@@ -1,0 +1,7 @@
+transform {
+  transform: scale3d(0.0009765625,0.0009765625,-10);
+  child: stroke {
+    path: 0 0 40960 40960;
+    line-width: 4096;
+  }
+}
