@@ -435,22 +435,11 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
         }
     }
 
-  if (priv->surface->paint_context != NULL)
+  if (priv->render_region != NULL)
     {
-      if (priv->surface->paint_context == context)
-        {
-          g_critical ("The surface %p is already drawing. You must finish the "
-                      "previous drawing operation with gdk_draw_context_end_frame() first.",
-                      priv->surface);
-        }
-      else
-        {
-          g_critical ("The surface %p is already being drawn by %s %p. "
-                      "You cannot draw a surface with multiple contexts at the same time.",
-                      priv->surface,
-                      G_OBJECT_TYPE_NAME (priv->surface->paint_context), priv->surface->paint_context);
-        }
-      return;
+      g_critical ("The surface %p is already drawing. You must finish the "
+                  "previous drawing operation with gdk_draw_context_end_frame() first.",
+                  priv->surface);
     }
 
   gdk_surface_set_content (priv->surface, node);
@@ -548,18 +537,28 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
   if (GDK_SURFACE_DESTROYED (priv->surface))
     return;
 
-  if (priv->surface->paint_context == NULL)
+  if (!gdk_draw_context_is_attached (context))
+    {
+      GdkDrawContext *attached = gdk_surface_get_attached_context (priv->surface);
+      if (attached)
+        {
+          g_critical ("The surface %p is not drawn by this context but by %s %p.",
+                      priv->surface, 
+                      G_OBJECT_TYPE_NAME (attached), attached);
+        }
+      else
+        {
+          g_critical ("The surface %p has no drawing context. You must call"
+                      "gdk_draw_context_begin_frame() before calling "
+                      "gdk_draw_context_end_frame().", priv->surface);
+        }
+      return;
+    }
+  if (priv->render_region == NULL)
     {
       g_critical ("The surface %p has no drawing context. You must call "
                   "gdk_draw_context_begin_frame() before calling "
                   "gdk_draw_context_end_frame().", priv->surface);
-      return;
-    }
-  else if (priv->surface->paint_context != context)
-    {
-      g_critical ("The surface %p is not drawn by this context but by %s %p.",
-                  priv->surface, 
-                  G_OBJECT_TYPE_NAME (priv->surface->paint_context), priv->surface->paint_context);
       return;
     }
 
