@@ -75,7 +75,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-07-27.0'
+    BASE_TAG: '2026-07-29.0'
     FDO_DISTRIBUTION_VERSION: 44
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -105,6 +105,7 @@ default:
       mingw64-glib2
       mingw64-libepoxy
       mingw64-pango
+      mold
       mutter
       python-devel
       python3-jinja2
@@ -271,6 +272,7 @@ fedora-x86_64:
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
+    - export CC_LD=mold
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -298,6 +300,7 @@ release-build:
     # - export PATH="$HOME/.local/bin:${CI_PROJECT_DIR}/_install/bin:$PATH"
     # - .gitlab-ci/install-meson-project.sh --prefix ${CI_PROJECT_DIR}/_install https://gitlab.gnome.org/jadahl/catch.git main
     - git config --global --add safe.directory $CI_PROJECT_DIR
+    - export CC_LD=mold
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
@@ -326,6 +329,7 @@ fedora-clang:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
     - export CC=clang
+    - export CC_LD=mold
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -680,6 +684,7 @@ static-scan:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
     - export PATH="$HOME/.local/bin:$PATH"
+    - export CC_LD=mold
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -703,7 +708,8 @@ asan-build:
   needs: ['container:fedora']
   script:
     - export PATH="$HOME/.local/bin:$PATH"
-    - CC=clang meson setup
+    - export CC=clang
+    - meson setup
             --buildtype=debugoptimized
             -Db_sanitize=address
             -Db_lundef=false
