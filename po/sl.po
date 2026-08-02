@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-07-20 19:27+0000\n"
-"PO-Revision-Date: 2026-07-22 16:36+0200\n"
+"POT-Creation-Date: 2026-07-30 14:37+0000\n"
+"PO-Revision-Date: 2026-07-31 08:34+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -84,11 +84,11 @@ msgstr "Ni mogoče določiti vsebine kot »%s«."
 msgid "Cannot provide contents as %s"
 msgstr "Ni mogoče določiti vsebine kot %s."
 
-#: gdk/gdkdisplay.c:179 gdk/gdkglcontext.c:472
+#: gdk/gdkdisplay.c:179 gdk/gdkglcontext.c:474
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1024 gdk/gdkvulkancontext.c:1941
+#: gdk/gdkdisplay.c:1024 gdk/gdkvulkancontext.c:1954
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
@@ -150,24 +150,24 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:654
+#: gdk/gdkglcontext.c:434 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:659
+#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:659
 #: gdk/win32/gdkglcontext-win32-wgl.c:782 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1436
+#: gdk/gdkglcontext.c:1446
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL ES API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1448
+#: gdk/gdkglcontext.c:1458
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1459
+#: gdk/gdkglcontext.c:1469
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
@@ -175,12 +175,12 @@ msgstr "Program ne podpira vmesnika API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2260
+#: gdk/gdkglcontext.c:2270
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
-#: gdk/gdkglcontext.c:2271
+#: gdk/gdkglcontext.c:2281
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
@@ -1845,7 +1845,7 @@ msgstr "_Zapri"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:578
+#: gtk/gtkapplication-dbus.c:580
 msgid "Reason not specified"
 msgstr "Vzrok ni naveden"
 
@@ -2276,12 +2276,12 @@ msgid "_Edit"
 msgstr "Ur_edi"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9211
+#: gtk/gtktextview.c:9242
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9289
+#: gtk/gtktextview.c:9320
 msgid "Context menu"
 msgstr "Vsebinski meni"
 
@@ -2362,8 +2362,8 @@ msgid "_Cancel"
 msgstr "_Prekliči"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3148
-#: gtk/gtkplacessidebar.c:3233 gtk/gtkplacesview.c:1645
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3153
+#: gtk/gtkplacessidebar.c:3238 gtk/gtkplacesview.c:1645
 msgid "_Open"
 msgstr "_Odpri"
 
@@ -2448,7 +2448,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9219
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9250
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -2484,8 +2484,8 @@ msgstr "Kopiraj _mesto"
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj med zaznamke"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2311
-#: gtk/gtkplacessidebar.c:3269 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2316
+#: gtk/gtkplacessidebar.c:3274 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "P_reimenuj"
 
@@ -2506,7 +2506,7 @@ msgstr "Razvrsti _mape pred datotekami"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1030
 msgid "Home"
 msgstr "Osebna mapa"
 
@@ -2657,7 +2657,7 @@ msgstr "_Vrsta"
 msgid "_Time"
 msgstr "_Čas"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2305
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2310
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -2805,15 +2805,15 @@ msgstr "Zapri"
 msgid "Close the infobar"
 msgstr "Zapri vrstico podrobnosti"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9207
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9238
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9215
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9246
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9240
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9271
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -3088,82 +3088,82 @@ msgid "_Show Text"
 msgstr "Pokaži _besedilo"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:912
+#: gtk/gtkplacessidebar.c:917
 #, c-format
 msgid "Open %s"
 msgstr "Odpri %s"
 
-#: gtk/gtkplacessidebar.c:1003
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent"
 msgstr "Nedavno"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1010
 msgid "Recent files"
 msgstr "Nedavno uporabljeno"
 
-#: gtk/gtkplacessidebar.c:1014
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred"
 msgstr "Z zvezdico"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1021
 msgid "Starred files"
 msgstr "Z zvezdico"
 
-#: gtk/gtkplacessidebar.c:1027
+#: gtk/gtkplacessidebar.c:1032
 msgid "Open your personal folder"
 msgstr "Odpri osebno mapo"
 
-#: gtk/gtkplacessidebar.c:1040
+#: gtk/gtkplacessidebar.c:1045
 msgid "Desktop"
 msgstr "Namizje"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1047
 msgid "Open the contents of your desktop in a folder"
 msgstr "Odpri vsebino namizja v mapi"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1061
 msgid "Enter Location"
 msgstr "Vpis mesta"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1063
 msgid "Manually enter a location"
 msgstr "Ročni vnos mesta"
 
-#: gtk/gtkplacessidebar.c:1068
+#: gtk/gtkplacessidebar.c:1073
 msgid "Trash"
 msgstr "Smeti"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1075
 msgid "Open the trash"
 msgstr "Odpri smeti"
 
-#: gtk/gtkplacessidebar.c:1180 gtk/gtkplacessidebar.c:1208
-#: gtk/gtkplacessidebar.c:1408
+#: gtk/gtkplacessidebar.c:1185 gtk/gtkplacessidebar.c:1213
+#: gtk/gtkplacessidebar.c:1413
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Priklopi in odpri »%s«"
 
-#: gtk/gtkplacessidebar.c:1303
+#: gtk/gtkplacessidebar.c:1308
 msgid "Open the contents of the file system"
 msgstr "Odpri vsebino datotečnega sistema"
 
-#: gtk/gtkplacessidebar.c:1386
+#: gtk/gtkplacessidebar.c:1391
 msgid "New bookmark"
 msgstr "Nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1393
 msgid "Add a new bookmark"
 msgstr "Dodaj nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1453
+#: gtk/gtkplacessidebar.c:1458
 msgid "Other Locations"
 msgstr "Druga mesta"
 
-#: gtk/gtkplacessidebar.c:1454
+#: gtk/gtkplacessidebar.c:1459
 msgid "Show other locations"
 msgstr "Pokaži druga mesta"
 
-#: gtk/gtkplacessidebar.c:1963 gtk/gtkplacessidebar.c:2982
+#: gtk/gtkplacessidebar.c:1968 gtk/gtkplacessidebar.c:2987
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Ni mogoče začeti »%s«"
@@ -3171,120 +3171,120 @@ msgstr "Ni mogoče začeti »%s«"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:1999
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Napaka odpiranja »%s«."
 
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2006
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do »%s«"
 
-#: gtk/gtkplacessidebar.c:2232
+#: gtk/gtkplacessidebar.c:2237
 msgid "This name is already taken"
 msgstr "To ime je že uporabljeno"
 
-#: gtk/gtkplacessidebar.c:2523
+#: gtk/gtkplacessidebar.c:2528
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ni mogoče odstraniti »%s«"
 
-#: gtk/gtkplacessidebar.c:2699
+#: gtk/gtkplacessidebar.c:2704
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Ni mogoče zaustaviti »%s«"
 
-#: gtk/gtkplacessidebar.c:2728
+#: gtk/gtkplacessidebar.c:2733
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ni mogoče izvreči »%s«"
 
-#: gtk/gtkplacessidebar.c:2757 gtk/gtkplacessidebar.c:2786
+#: gtk/gtkplacessidebar.c:2762 gtk/gtkplacessidebar.c:2791
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Ni mogoče izvreči %s"
 
-#: gtk/gtkplacessidebar.c:2934
+#: gtk/gtkplacessidebar.c:2939
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ni mogoče preveriti »%s« za spremembe nosilca"
 
-#: gtk/gtkplacessidebar.c:3154 gtk/gtkplacessidebar.c:3241
+#: gtk/gtkplacessidebar.c:3159 gtk/gtkplacessidebar.c:3246
 #: gtk/gtkplacesview.c:1649
 msgid "Open in New _Tab"
 msgstr "Odpri v novem _zavihku"
 
-#: gtk/gtkplacessidebar.c:3160 gtk/gtkplacessidebar.c:3250
+#: gtk/gtkplacessidebar.c:3165 gtk/gtkplacessidebar.c:3255
 #: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
-#: gtk/gtkplacessidebar.c:3261
+#: gtk/gtkplacessidebar.c:3266
 msgid "_Add Bookmark"
 msgstr "_Dodaj zaznamek"
 
-#: gtk/gtkplacessidebar.c:3265
+#: gtk/gtkplacessidebar.c:3270
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: gtk/gtkplacessidebar.c:3281 gtk/gtkplacesview.c:1679
+#: gtk/gtkplacessidebar.c:3286 gtk/gtkplacesview.c:1679
 msgid "_Mount"
 msgstr "_Priklopi"
 
-#: gtk/gtkplacessidebar.c:3290 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3295 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
 msgstr "_Odklopi"
 
-#: gtk/gtkplacessidebar.c:3297
+#: gtk/gtkplacessidebar.c:3302
 msgid "_Eject"
 msgstr "_Izvrzi"
 
-#: gtk/gtkplacessidebar.c:3307
+#: gtk/gtkplacessidebar.c:3312
 msgid "_Detect Media"
 msgstr "_Zaznaj medij"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Start"
 msgstr "_Začni"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Power On"
 msgstr "_Vklopi"
 
-#: gtk/gtkplacessidebar.c:3319
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Connect Drive"
 msgstr "_Poveži pogon"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3325
 msgid "_Start Multi-disk Device"
 msgstr "_Zaženi več-diskovno napravo"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3326
 msgid "_Unlock Device"
 msgstr "_Odkleni napravo"
 
-#: gtk/gtkplacessidebar.c:3331
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Stop"
 msgstr "_Zaustavi"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Safely Remove Drive"
 msgstr "_Varno odstrani pogon"
 
-#: gtk/gtkplacessidebar.c:3334
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Disconnect Drive"
 msgstr "_Prekini povezavo s pogonom"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3340
 msgid "_Stop Multi-disk Device"
 msgstr "_Zaustavi več-diskovno napravo"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3341
 msgid "_Lock Device"
 msgstr "_Zakleni napravo"
 
-#: gtk/gtkplacessidebar.c:3827 gtk/gtkplacesview.c:1089
+#: gtk/gtkplacessidebar.c:3832 gtk/gtkplacesview.c:1089
 msgid "Computer"
 msgstr "Računalnik"
 
@@ -4353,7 +4353,7 @@ msgstr "Stranska vrstica"
 msgid "Change di_rection"
 msgstr "Spremeni _usmerjenost"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9245
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9276
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
@@ -4513,11 +4513,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9227
+#: gtk/gtktextview.c:9258
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: gtk/gtktextview.c:9231
+#: gtk/gtktextview.c:9262
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
@@ -4721,41 +4721,41 @@ msgstr "Razredi slogov"
 msgid "CSS Property"
 msgstr "Lastnosti CSS"
 
-#: gtk/inspector/general.c:488
+#: gtk/inspector/general.c:490
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:663
+#: gtk/inspector/general.c:682
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:702
+#: gtk/inspector/general.c:721
 msgid "EGL extensions"
 msgstr "Razširitve EGL"
 
-#: gtk/inspector/general.c:728
+#: gtk/inspector/general.c:747
 msgid "GLX extensions"
 msgstr "Razširitve GLX"
 
-#: gtk/inspector/general.c:742
+#: gtk/inspector/general.c:761
 msgid "Microsoft WGL"
 msgstr "Microsoft WGL"
 
-#: gtk/inspector/general.c:749
+#: gtk/inspector/general.c:768
 msgid "WGL extensions"
 msgstr "Razširitve WGL"
 
-#: gtk/inspector/general.c:754
+#: gtk/inspector/general.c:773
 msgid "WGL extensions: none"
 msgstr "Razširitve WGL: brez"
 
-#: gtk/inspector/general.c:760
+#: gtk/inspector/general.c:779
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:1014 gtk/inspector/general.c:1053
+#: gtk/inspector/general.c:1033 gtk/inspector/general.c:1072
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
@@ -4796,99 +4796,107 @@ msgstr "Vnosni način"
 msgid "Accessibility Backend"
 msgstr "Zaledje dostopnosti"
 
-#: gtk/inspector/general.ui:272
+#: gtk/inspector/general.ui:261
+msgid "Symbol Visibility"
+msgstr "Vidnost simbolov"
+
+#: gtk/inspector/general.ui:283
+msgid "Not a supported build configuration"
+msgstr "To ni podprta prilagoditev gradnje"
+
+#: gtk/inspector/general.ui:311
 msgid "Application ID"
 msgstr "ID programa"
 
-#: gtk/inspector/general.ui:298
+#: gtk/inspector/general.ui:337
 msgid "Resource Path"
 msgstr "Pot vira"
 
-#: gtk/inspector/general.ui:335 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:374 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Predpona"
 
-#: gtk/inspector/general.ui:362
+#: gtk/inspector/general.ui:401
 msgid "Environment"
 msgstr "Okolje"
 
-#: gtk/inspector/general.ui:465
+#: gtk/inspector/general.ui:504
 msgid "Display"
 msgstr "Prikaz"
 
-#: gtk/inspector/general.ui:492
+#: gtk/inspector/general.ui:531
 msgid "RGBA Visual"
 msgstr "Vidni RGBA"
 
-#: gtk/inspector/general.ui:522
+#: gtk/inspector/general.ui:561
 msgid "Composited"
 msgstr "Sestavljeno"
 
-#: gtk/inspector/general.ui:547
+#: gtk/inspector/general.ui:586
 msgid "Protocols"
 msgstr "Protokoli"
 
-#: gtk/inspector/general.ui:603
+#: gtk/inspector/general.ui:642
 msgid "GL Renderer"
 msgstr "Izrisovalnik GL"
 
-#: gtk/inspector/general.ui:632
+#: gtk/inspector/general.ui:671
 msgid "GL Vendor"
 msgstr "Ponudnik GL"
 
-#: gtk/inspector/general.ui:661
+#: gtk/inspector/general.ui:700
 msgid "GL Version"
 msgstr "Različica GL"
 
-#: gtk/inspector/general.ui:688
+#: gtk/inspector/general.ui:727
 msgid "GL Backend Vendor"
 msgstr "Ponudnik ozadnjega programa GL"
 
-#: gtk/inspector/general.ui:715
+#: gtk/inspector/general.ui:754
 msgid "GL Backend Version"
 msgstr "Različica ozadnjega programa GL"
 
-#: gtk/inspector/general.ui:765
+#: gtk/inspector/general.ui:804
 msgid "GL Full Version"
 msgstr "Polna različica GL"
 
-#: gtk/inspector/general.ui:794
+#: gtk/inspector/general.ui:833
 msgid "GLSL Version"
 msgstr "Različica GLSL"
 
-#: gtk/inspector/general.ui:823
+#: gtk/inspector/general.ui:862
 msgid "GL Extensions"
 msgstr "Razširitve GL"
 
-#: gtk/inspector/general.ui:911
+#: gtk/inspector/general.ui:950
 msgid "EGL Extensions"
 msgstr "Razširitve EGL"
 
-#: gtk/inspector/general.ui:998
+#: gtk/inspector/general.ui:1037
 msgid "GL Features"
 msgstr "Zmožnosti GL"
 
-#: gtk/inspector/general.ui:1034
+#: gtk/inspector/general.ui:1073
 msgid "Vulkan Device"
 msgstr "Naprava Vulkan"
 
-#: gtk/inspector/general.ui:1061
+#: gtk/inspector/general.ui:1100
 msgid "Vulkan API Version"
 msgstr "Različica vmesnika Vulkan API"
 
-#: gtk/inspector/general.ui:1088
+#: gtk/inspector/general.ui:1127
 msgid "Vulkan Driver Version"
 msgstr "Različica gonilnika Vulkan"
 
-#: gtk/inspector/general.ui:1137
+#: gtk/inspector/general.ui:1176
 msgid "Vulkan Layers"
 msgstr "Plasti Vulkan"
 
-#: gtk/inspector/general.ui:1206
+#: gtk/inspector/general.ui:1245
 msgid "Vulkan Extensions"
 msgstr "Razširitve Vulkan"
 
-#: gtk/inspector/general.ui:1293
+#: gtk/inspector/general.ui:1332
 msgid "Vulkan Features"
 msgstr "Zmožnosti Vulkan"
 
