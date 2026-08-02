@@ -451,7 +451,6 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
 
   scale = gdk_surface_get_scale (priv->surface);
   priv->render_region = gdk_cairo_region_scale_grow (region, scale, scale);
-  priv->surface->paint_context = g_object_ref (context);
 
   g_assert (priv->color_state == NULL);
 
@@ -504,7 +503,6 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 
   priv->color_state = NULL;
   g_clear_pointer (&priv->render_region, cairo_region_destroy);
-  g_clear_object (&priv->surface->paint_context);
   priv->depth = GDK_N_DEPTHS;
 
   gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
