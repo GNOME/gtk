@@ -23,7 +23,7 @@ gdk_x11_public_sources = files([
 ])
 
 # All sources
-gdk_x11_sources = gdk_x11_public_sources + [
+gdk_x11_sources = gdk_x11_public_sources + files([
   'gdkapplaunchcontext-x11.c',
   'gdkasync.c',
   'gdkcairocontext-x11.c',
@@ -38,7 +38,7 @@ gdk_x11_sources = gdk_x11_public_sources + [
   'gdktextlistconverter-x11.c',
   'gdkvulkancontext-x11.c',
   'gdkxftdefaults.c',
-]
+])
 
 # Public headers; will be installed and introspected
 gdk_x11_public_headers = files([
@@ -58,6 +58,8 @@ gdk_x11_public_headers = files([
   'gdkx11utils.h',
   'gdkx11surface.h',
 ])
+
+gdk_x11_gen_headers = []
 
 install_headers(gdk_x11_public_headers, 'gdkx.h', subdir: 'gtk-4.0/gdk/x11/')
 
