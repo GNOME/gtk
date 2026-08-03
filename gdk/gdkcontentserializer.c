@@ -355,12 +355,24 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
   guint source_id;
 
   serializer->returned = TRUE;
-  source_id = g_idle_add_full (serializer->priority,
-                               gdk_content_serializer_emit_callback,
-                               serializer,
-                               g_object_unref);
-  gdk_source_set_static_name_by_id (source_id, "[gtk] gdk_content_serializer_emit_callback");
-  /* NB: the idle will destroy our reference */
+
+  if (g_main_context_get_thread_default () != NULL)
+    {
+      /* We're in a sub-context (like on macOS), so execute synchronously.
+       * Idle handlers can't be used because they are registered on
+       * the global default context. */
+      gdk_content_serializer_emit_callback (serializer);
+      g_object_unref (serializer);
+    }
+  else
+    {
+      source_id = g_idle_add_full (serializer->priority,
+                                  gdk_content_serializer_emit_callback,
+                                  serializer,
+                                  g_object_unref);
+      gdk_source_set_static_name_by_id (source_id, "[gtk] gdk_content_serializer_emit_callback");
+      /* NB: the idle will destroy our reference */
+    }
 }
 
 /**
