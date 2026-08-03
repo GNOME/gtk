@@ -187,6 +187,9 @@ struct context_vec {
 
 #define FUNCTION_CONTEXT_SIZE	55
 
+/* Initial capacity of change record allocation */
+#define MAX_CONTEXT		64
+
 
 #define diff_context 3
 #define Tflag FALSE
@@ -281,8 +284,8 @@ diffreg(const char *filename, GInputStream *file1, GInputStream *file2, GOutputS
 	op.lastline = 0;
 	op.lastmatchline = 0;
 
-	op.context_vec_start = NULL;
-	op.context_vec_end = NULL;
+	op.context_vec_start = g_malloc_n (MAX_CONTEXT, sizeof (*op.context_vec_start));
+	op.context_vec_end = op.context_vec_start + MAX_CONTEXT;
 	op.context_vec_ptr = op.context_vec_start - 1;
 
 	f1 = make_seekable_stream (file1);
@@ -817,8 +820,6 @@ static void
 change(DiffOperation *op, GInputStream *f1, GInputStream *f2, int a, int b, int c, int d,
     int *pflags)
 {
-	static size_t max_context = 64;
-
 	if (a > b && c > d)
 		return;
 
@@ -827,7 +828,7 @@ change(DiffOperation *op, GInputStream *f1, GInputStream *f2, int a, int b, int 
 	 */
 	if (op->context_vec_ptr == op->context_vec_end - 1) {
 		ptrdiff_t offset = op->context_vec_ptr - op->context_vec_start;
-		max_context <<= 1;
+		size_t max_context = (op->context_vec_end - op->context_vec_start) * 2;
 		op->context_vec_start = g_realloc_n(op->context_vec_start,
 		    max_context, sizeof(*op->context_vec_start));
 		op->context_vec_end = op->context_vec_start + max_context;
