@@ -25,9 +25,19 @@
  * dvalue=-1: generate random value within value range
  * dvalue=+2: initialize value from default_value
  */
+/* SELECT_VALUE computes in double, so the result may not be representable in
+ * the property's type (e.g. (double) G_MAXUINT64 rounds up to 2^64). Assign
+ * the bounds directly when we hit them.
+ */
 #define ASSIGN_VALUE(__g_value_set_func, value__, PSPECTYPE, __pspec, __default_value, __minimum, __maximum, __dvalue) do { \
   PSPECTYPE __p = (PSPECTYPE) __pspec; \
-  __g_value_set_func (value__, SELECT_VALUE (__dvalue, __p->__default_value, __p->__minimum, __p->__maximum)); \
+  double __v = SELECT_VALUE (__dvalue, (double) __p->__default_value, (double) __p->__minimum, (double) __p->__maximum); \
+  if (__v >= (double) __p->__maximum) \
+    __g_value_set_func (value__, __p->__maximum); \
+  else if (__v <= (double) __p->__minimum) \
+    __g_value_set_func (value__, __p->__minimum); \
+  else \
+    __g_value_set_func (value__, __v); \
 } while (0)
 #define SELECT_VALUE(__dvalue, __default_value, __minimum, __maximum) ( \
   __dvalue >= 0 && __dvalue <= 1 ? __minimum * (1 - __dvalue) + __dvalue * __maximum : \
