@@ -126,6 +126,8 @@ The following attributes can be set on the `<svg>` element:
 - `gpa:version`: The format version. Must be 1 if specified, currently.
 - `gpa:state-names`: A space-separated list of strings. The n-th string serves as name for state n. The strings 'all' and 'none' may not be used as state names, and state names cannot start with digits
 - `gpa:state`: The initial state, as an integer between 0 and 63 or as state name
+- `gpa:rendering`: Whether to follow SVG semantics, or use mask-based symbolic rendering to
+  avoid path overlaps showing through when using foreground alpha. Possible values: 'svg' or 'symbolic'. Default: 'svg'
 
 The following attributes can be set on elements that specify a path:
 

@@ -5322,6 +5322,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
     {
       SvgComputeContext compute_context;
       PaintContext paint_context;
+      SvgRendering rendering;
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
 
@@ -5341,8 +5342,12 @@ gtk_svg_snapshot_full (GtkSvg        *self,
        * Non-symbolic icons are responsible for dealing with
        * overlaps themselves, using the full svg machinery.
        */
-      if (self->gpa_version == 0 &&
-          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
+      if ((self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0)
+        rendering = SVG_RENDERING_SYMBOLIC;
+      else
+        rendering = self->rendering;
+
+      if (rendering == SVG_RENDERING_SYMBOLIC &&
           colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha < 1)
         {
           used_opacity = colors[GTK_SYMBOLIC_COLOR_FOREGROUND].alpha;
@@ -5380,12 +5385,8 @@ gtk_svg_snapshot_full (GtkSvg        *self,
 
       gtk_snapshot_push_collect (snapshot);
 
-      if (self->gpa_version == 0 &&
-          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
-          used_opacity < 1)
-        {
-          gtk_snapshot_push_opacity (snapshot, used_opacity);
-        }
+      if (rendering == SVG_RENDERING_SYMBOLIC && used_opacity < 1)
+        gtk_snapshot_push_opacity (snapshot, used_opacity);
 
       paint_context.svg = self;
       paint_context.viewport = &viewport;
@@ -5418,12 +5419,8 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       g_assert (paint_context.ctx_shape_stack == NULL);
       g_assert (paint_context.transforms == NULL);
 
-      if (self->gpa_version == 0 &&
-          (self->features & GTK_SVG_TRADITIONAL_SYMBOLIC) != 0 &&
-          used_opacity < 1)
-        {
-          gtk_snapshot_pop (snapshot);
-        }
+      if (rendering == SVG_RENDERING_SYMBOLIC && used_opacity < 1)
+        gtk_snapshot_pop (snapshot);
 
       self->node = gtk_snapshot_pop_collect (snapshot);
 

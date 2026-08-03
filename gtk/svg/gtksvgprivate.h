@@ -101,6 +101,7 @@ struct _GtkSvg
   int64_t current_time;
   int64_t pause_time;
 
+  SvgRendering rendering;
   GtkOverflow overflow;
   gboolean playing;
   GtkSvgRunMode run_mode;

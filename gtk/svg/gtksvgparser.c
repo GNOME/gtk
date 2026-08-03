@@ -1423,6 +1423,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
   const char *state_attr = NULL;
   const char *version_attr = NULL;
   const char *keywords_attr = NULL;
+  const char *rendering_attr = NULL;
 
   markup_filter_attributes (element_name,
                             attr_names, attr_values,
@@ -1431,6 +1432,7 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
                             "gpa:state", &state_attr,
                             "gpa:version", &version_attr,
                             "gpa:keywords", &keywords_attr,
+                            "gpa:rendering", &rendering_attr,
                             NULL);
 
   if (state_names_attr)
@@ -1479,6 +1481,17 @@ parse_svg_gpa_attrs (GtkSvg               *svg,
 
   if (keywords_attr)
     g_set_str (&svg->keywords, keywords_attr);
+
+  if (rendering_attr)
+    {
+      const char *values[] = { "svg", "symbolic" };
+      SvgRendering rendering;
+
+      if (!parse_enum (rendering_attr, values, G_N_ELEMENTS (values), &rendering))
+        gtk_svg_invalid_attribute (svg,context, attr_names, "gpa:rendering", NULL);
+      else
+        svg->rendering = rendering;
+    }
 }
 
 static void
