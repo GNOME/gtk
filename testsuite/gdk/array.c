@@ -100,6 +100,14 @@ main (int argc, char *argv[])
   g_test_add_func ("/intarray/null/prealloc/splice", null_pre_int_array_test_splice);
   g_test_add_func ("/intarray/null/freefunc/splice", null_free_int_array_test_splice);
   g_test_add_func ("/intarray/null/prealloc/freefunc/splice", null_pre_free_int_array_test_splice);
+  g_test_add_func ("/intarray/steal", int_array_test_steal);
+  g_test_add_func ("/intarray/prealloc/steal", pre_int_array_test_steal);
+  g_test_add_func ("/intarray/freefunc/steal", free_int_array_test_steal);
+  g_test_add_func ("/intarray/prealloc/freefunc/steal", pre_free_int_array_test_steal);
+  g_test_add_func ("/intarray/null/steal", null_int_array_test_steal);
+  g_test_add_func ("/intarray/null/prealloc/steal", null_pre_int_array_test_steal);
+  g_test_add_func ("/intarray/null/freefunc/steal", null_free_int_array_test_steal);
+  g_test_add_func ("/intarray/null/prealloc/freefunc/steal", null_pre_free_int_array_test_steal);
 
   return g_test_run ();
 }

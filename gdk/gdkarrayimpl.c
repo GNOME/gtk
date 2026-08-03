@@ -133,17 +133,27 @@ gdk_array(clear) (GdkArray *self)
  * If you need to know the size of the data, you should query it
  * beforehand.
  *
- * Returns: The array's data
+ * Returns: (nullable): The array's data, or NULL if the array is empty
+ *   and not NULL-terminated
  **/
 G_GNUC_UNUSED static inline _T_ *
 gdk_array(steal) (GdkArray *self)
 {
   _T_ *result;
+  gsize size = GDK_ARRAY_REAL_SIZE (gdk_array(get_size) (self));
+
+  /* An empty array has nothing to hand out unless it is NULL-terminated,
+   * in which case the terminator still needs to be copied - that is what
+   * GDK_ARRAY_REAL_SIZE() accounts for, so it is never 0 in that case. */
+  if (size == 0)
+    {
+      gdk_array(clear) (self);
+      return NULL;
+    }
 
 #ifdef GDK_ARRAY_PREALLOC
   if (self->start == self->preallocated)
     {
-      gsize size = GDK_ARRAY_REAL_SIZE (gdk_array(get_size) (self));
       result = g_new (_T_, size);
       memcpy (result, self->preallocated, sizeof (_T_) * size);
     }
