@@ -424,4 +424,10 @@ typedef enum
   GPA_EASING_EASE,
 } GpaEasing;
 
+typedef enum
+{
+  SVG_RENDERING_SVG,
+  SVG_RENDERING_SYMBOLIC,
+} SvgRendering;
+
 G_END_DECLS

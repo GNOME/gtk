@@ -2515,6 +2515,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->has_use_cycle = FALSE;
 
   self->gpa_version = 0;
+  self->rendering = SVG_RENDERING_SVG;
 
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->license, g_free);
