@@ -214,7 +214,12 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
                    monitor->output_geometry.x, monitor->output_geometry.y,
                    monitor->output_geometry.width, monitor->output_geometry.height);
 
-  if (monitor_has_xdg_output (monitor))
+  /* The logical geometry is only known once the compositor has sent us the
+   * xdg_output logical size; until then, fall back to the integer scale.
+   */
+  if (monitor_has_xdg_output (monitor) &&
+      monitor->logical_geometry.width > 0 &&
+      monitor->logical_geometry.height > 0)
     {
       scale = MAX (monitor->output_geometry.width / (double) monitor->logical_geometry.width,
                    monitor->output_geometry.height / (double) monitor->logical_geometry.height);
