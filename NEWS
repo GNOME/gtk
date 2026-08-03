@@ -1,3 +1,131 @@
+Overview of Changes in 4.23.3, 02-08-2026
+=========================================
+
+* GTK supports the ext-background-effect Wayland protocol to allow
+  blurred background behind windows
+
+* The visible focus timeout can be changed with the new
+  gtk-keyboard-focus-visible-timeout setting
+
+* The GDK frameclock has been reworked to improve precision and reduce
+  frame drops
+
+* Support for the CSS font-width property has been added
+
+* Session save/restore functionality has been deferred to 4.26
+
+* Bugs fixed:
+  - #223 Remove notebook->focus_tab (John Cardullo)
+  - #6493 X11 selection clipboard consumes excessive CPU over time (Alexey
+    Lukashov)
+  - #8195 Animated SVG frequently disappears (John Cardullo)
+  - #8287 Shaper: more state woes (Matthias Clasen)
+  - #8288 Shaper: patch attachment properties aren't reflected in the sidebar
+    (Matthias Clasen)
+  - #8290 gdk_cairo_error_quark() failure (Matthias Clasen)
+  - #8291 Type to search broken in Epiphany dialogs (Carlos Garnacho)
+  - #8302 Change to GdkWaylandTopLevel breaks API (Matthias Clasen)
+  - #8303 GLArea leaks memory on unrealize (Matthias Clasen)
+  - #8304 Css text-decoration rule requires a resize to take effect (regression)
+    (Matthias Clasen)
+  - #8322 Setting tooltips on visible but unmapped widgets blocks on X11 (Tim
+    Wright)
+  - #8325 GtkSvg assertion failure on Remmina-symbolic.svg (Matthias Clasen)
+  - #8329 application menu items with more than one shortcuts don't show any
+    (Matthias Clasen)
+  - #8335 GtkPicture dispose leaves self->paintable dangling, a second dispose
+    steals a reference or unrefs freed memory (Melroy van den Berg)
+  - !9648 gdk/wayland: Add support for wl_fixes.ack_global_remove (Vlad
+    Zahorodnii)
+  - !10071 events: Always collect motion history (Benjamin Otte)
+  - !10089 widget: Allow to disable the visible focus timeout (Sergio Costas
+    Rodriguez, Sergio Costas)
+  - !10099 css: Support font-width (Matthias Clasen)
+  - !10100 docs: Update orca developer tips link (Guido Günther)
+  - !10102 Fix stroke bounds for circles (Matthias Clasen)
+  - !10103 gtkimcontextquartz: Convert (again) IM cursor location to global
+    coords (Carlos Garnacho)
+  - !10104 svg: Avoid some criticals (Matthias Clasen)
+  - !10106 Update Turkish translation
+  - !10107 gpu: Don't scale caches too far (Benjamin Otte)
+  - !10108 More frameclock work (Benjamin Otte)
+  - !10110 gsk: Work a little harder to classify transforms (Matthias Clasen)
+  - !10111 pathparser: various fixes (Benjamin Otte)
+  - !10113 transformnode: Fix a typo (Matthias Clasen)
+  - !10114 gtk/searchentry: Unset capture widget on dispose instead of finalize
+    (Carlos Garnacho)
+  - !10116 gdk: Use modern boilerplate (Matthias Clasen)
+  - !10119 Revert "gtkpopover: Always set focus to a child during show"
+    (g.willems)
+  - !10121 svg: Handle text chunks better (Matthias Clasen)
+  - !10122 frameclockidle: Fix deadlock due to underflow (Benjamin Otte)
+  - !10123 svg: Small fixes for blur filters (Matthias Clasen)
+  - !10124 svg: Small fixes for blur filters (Matthias Clasen)
+  - !10126 x11: Don't update completed frames (Benjamin Otte)
+  - !10127 svg: Fix cloning animateMotion (Matthias Clasen)
+  - !10137 Update French translation
+  - !10138 Update French translation
+  - !10139 rendernodeparser: More flexible path parsing (Matthias Clasen)
+  - !10141 frameclock: Redo predicted presentation time (Benjamin Otte)
+  - !10143 wayland: Get rid of POPUP_STATE_WAITING_FOR_FRAME (Benjamin Otte)
+  - !10144 Fix newest gobject-linter warnings (Benjamin Otte)
+  - !10145 Add support for ext-background-effect (Benjamin Otte)
+  - !10146 gdk/wayland: Avoid destroying toplevel icon buffers twice (Sterling-
+    Ash)
+  - !10147 Drop the shaper demo (Matthias Clasen)
+  - !10149 svg: Add more private api (Matthias Clasen)
+  - !10150 Improve rendernode-tool (Benjamin Otte)
+  - !10151 svg: Fix new api (Matthias Clasen)
+  - !10156 Update Slovenian translation
+  - !10157 svg: list models (Matthias Clasen)
+  - !10158 Pass GSK rendernode to GDK surface (Benjamin Otte)
+  - !10159 svg: Add more private api (Matthias Clasen)
+  - !10160 svg: Fully clear state when reloading (Matthias Clasen)
+  - !10162 svg: Fix list model updates (Matthias Clasen)
+  - !10163 textview: cache pixel height of X (Christian Hergert)
+  - !10164 Some fixes for the new shape tree in shaper (Matthias Clasen)
+  - !10166 wayland: Fix munmap() of the wrong pointer in the dmabuf format table
+    (Andrew Gaspar)
+  - !10167 svgwidget: Make resource loading repeatable (Matthias Clasen)
+  - !10168 svg: Fix an oversight (Matthias Clasen)
+  - !10169 build: Set hidden visibility via meson properties (Benjamin Otte)
+  - !10170 Link our internal tests dynamically if we can
+  - !10172 Some new SVG apis (Matthias Clasen)
+  - !10173 Bump the meson dep (Matthias Clasen)
+  - !10176 svg: Drop an unused function (Matthias Clasen)
+  - !10177 ci: Use mold for linking (Matthias Clasen)
+  - !10178 android/contentfile: Accept plain content URIs in from_uri (Zhou
+    Qiankang)
+  - !10180 Revert "Add a test for leaked symbols" (Matthias Clasen)
+  - !10181 ci: Drop icon-editor related jobs (Matthias Clasen)
+  - !10182 svg: Rename a function (Matthias Clasen)
+  - !10185 svg: Fix svg_elmeent_delete (Matthias Clasen)
+  - !10186 svg: Short-circuit setting specified values (Matthias Clasen)
+  - !10187 Add a SvgElement::changed signal
+  - !10189 svg: Make svg_value_equal NULL-safe (Matthias Clasen)
+  - !10191 svg: Export more api for shaper (Matthias Clasen)
+  - !10192 svg: Better approach to deps in shaper (Matthias Clasen)
+  - !10195 svg: Fix linked list handling (Matthias Clasen)
+  - !10196 application: Drop public save/restore API (Adrian Vovk)
+  - !10197 input: Treat Super and Hyper as no-text modifiers (Matthias Clasen)
+  - !10199 svg: Tweak the api (Matthias Clasen)
+  - !10200 svg: Avoid a crash (Matthias Clasen)
+  - !10204 build: Add a missing files() incantation (Matthias Clasen)
+  - !10205 various small fixes (Benjamin Otte)
+  - !10206 Update Czech translation
+  - !10207 Update Slovenian translation
+  - !10208 Update Georgian translation
+  - !10209 Update Ukrainian translation
+
+* Translation updates:
+  - Czech (Daniel Rusek)
+  - French (Guillaume Bernard)
+  - Georgian (Ekaterine Papava)
+  - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
+  - Ukrainian (Yuri Chornoivan)
+
+
 Overview of Changes in 4.23.2, 27-06-2026
 =========================================
 
