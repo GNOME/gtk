@@ -5428,7 +5428,8 @@ gtk_svg_snapshot_full (GtkSvg        *self,
 
       self->node_for.width = width;
       self->node_for.height = height;
-      memcpy (self->node_for.colors, colors, n_colors * sizeof (GdkRGBA));
+      if (n_colors > 0)
+        memcpy (self->node_for.colors, colors, n_colors * sizeof (GdkRGBA));
       self->node_for.n_colors = n_colors;
       self->node_for.weight = weight;
     }
