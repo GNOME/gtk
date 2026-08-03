@@ -260,8 +260,7 @@ gdk_array(splice) (GdkArray *self,
     }
 
 
-  /* might overflow, but does the right thing */
-  self->end += added - removed;
+  self->end = self->start + (size - removed + added);
 }
 
 G_GNUC_UNUSED static void
