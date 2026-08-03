@@ -1,0 +1,5 @@
+# test that gpa:rendering='symbolic' works
+[test]
+input=symbolic-rendering-1.svg
+reference=symbolic-rendering-1.node
+colors=#00000088,red,green,orange
