@@ -25,7 +25,7 @@
 #define INCPTR(x) ((gpointer) ((char *) (x) + WIDTH))
 #define DECPTR(x) ((gpointer) ((char *) (x) - WIDTH))
 #define ELEM(a, i) ((char *) (a) + (i) * WIDTH)
-#define ELEM_REV(a, i) ELEM(a, 0 - (i))
+#define ELEM_REV(a, i) ((char *) (a) - (i) * WIDTH)
 #define LEN(n) ((n) * WIDTH)
 
 #define CONCAT(x, y) gtk_tim_sort_ ## x ## _ ## y
