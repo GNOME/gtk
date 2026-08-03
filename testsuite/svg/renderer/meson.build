@@ -162,6 +162,8 @@ test_data = [
   'symbolic-color2.test',
   'symbolic-color3.test',
   'symbolic-color4.test',
+  'symbolic-rendering-1.test',
+  'symbolic-rendering-2.test',
   'text-align-01-b.svg',
   'text-decorations-galore.svg',
   'text-dominant-baseline-01.svg',

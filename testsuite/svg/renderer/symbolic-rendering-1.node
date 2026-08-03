@@ -1,0 +1,25 @@
+opacity {
+  opacity: 0.533333;
+  child: container {
+    stroke {
+      child: color {
+        bounds: 5 5 60 60;
+        color: rgb(0,0,0);
+      }
+      path: 10 10 50 50;
+      line-width: 10;
+      line-cap: butt;
+      line-join: miter;
+    }
+    stroke {
+      child: color {
+        bounds: 5 5 35 35;
+        color: rgb(0,0,0);
+      }
+      path: 10 10 25 25;
+      line-width: 10;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+}
