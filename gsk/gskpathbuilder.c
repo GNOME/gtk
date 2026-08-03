@@ -175,7 +175,7 @@ static inline gskpathop
 gsk_pathop_encode_index (GskPathOperation op,
                          gsize            index)
 {
-  return gsk_pathop_encode (op, ((GskAlignedPoint *) NULL) + index);
+  return gsk_pathop_encode (op, GSIZE_TO_POINTER (index * sizeof (GskAlignedPoint)));
 }
 
 static void

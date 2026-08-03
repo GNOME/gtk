@@ -1395,9 +1395,13 @@ gsk_standard_contour_init (GskContour             *contour,
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
 
   offset += self->points - points;
+  /* The points of ops[] may be encoded relative to NULL (see gskpathbuilder.c),
+   * so do the offsetting in the integer domain to avoid overflowing a pointer.
+   */
   for (gsize i = 0; i < n_ops; i++)
     self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
-                                      gsk_pathop_aligned_points (ops[i]) + offset);
+                                      GSIZE_TO_POINTER (GPOINTER_TO_SIZE (gsk_pathop_aligned_points (ops[i])) +
+                                                        (gsize) offset * sizeof (GskAlignedPoint)));
 
   gsk_bounding_box_init (&self->bounds,  &self->points[0].pt, &self->points[0].pt);
   for (gsize i = 1; i < self->n_points; i ++)
