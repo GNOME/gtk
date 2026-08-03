@@ -463,7 +463,7 @@ on_data_ready_cb (GObject      *object,
 -(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSPasteboardType)type
 {
   const char *mime_type = _gdk_macos_pasteboard_from_ns_type (type);
-  GMainContext *main_context = g_main_context_default ();
+  GMainContext *main_context;
   WriteRequest *wr;
 
   if (self->_contentProvider == NULL || mime_type == NULL)
@@ -471,6 +471,12 @@ on_data_ready_cb (GObject      *object,
       [item setData:[NSData data] forType:type];
       return;
     }
+
+  if (!GDK_IS_CLIPBOARD (self->_clipboard) && !GDK_IS_DRAG (self->_drag))
+    return;
+
+  main_context = g_main_context_new ();
+  g_main_context_push_thread_default (main_context);
 
   wr = g_new0 (WriteRequest, 1);
   wr->item = [item retain];
@@ -498,15 +504,17 @@ on_data_ready_cb (GObject      *object,
   else
     g_return_if_reached ();
 
-  /* We're forced to provide data synchronously via this API
-   * so we must block on the main loop. Using another main loop
-   * than the default tends to get us locked up here, so that is
-   * what we'll do for now.
-   */
   while (!wr->done)
-    g_main_context_iteration (wr->main_context, TRUE);
+    g_main_context_iteration (main_context, TRUE);
+
+  /* Run any remaining idles */
+  while (g_main_context_iteration (main_context, FALSE))
+    ;
 
   write_request_free (wr);
+
+  g_main_context_pop_thread_default (main_context);
+  g_main_context_unref (main_context);
 }
 
 -(void)pasteboardFinishedWithDataProvider:(NSPasteboard *)pasteboard
