@@ -491,6 +491,9 @@ find_first_time (GPtrArray *specs,
     {
       TimeSpec *spec = g_ptr_array_index (specs, i);
 
+      if (spec->time == INDEFINITE)
+        continue;
+
       if (after <= spec->time + slop && spec->time < first)
         first = spec->time;
     }
