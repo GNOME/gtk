@@ -204,10 +204,7 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
             }
 
           *(guint32 *)(first_data + y * first_stride + 4 * x) =
-              CLAMP ((int) roundf (a * 255), 0, 255) << 24 |
-              CLAMP ((int) roundf (r * 255), 0, 255) << 16 |
-              CLAMP ((int) roundf (g * 255), 0, 255) << 8 |
-              CLAMP ((int) roundf (b * 255), 0, 255) << 0;
+              gdk_cairo_pixel_from_float ((float[4]) { r, g, b, a });
         }
     }
 

@@ -24,6 +24,8 @@
 #include "gskrectprivate.h"
 #include "gskrenderreplay.h"
 
+#include "gdk/gdkcairoprivate.h"
+
 #include <tgmath.h>
 
 /*< private >
@@ -420,10 +422,7 @@ gsk_turbulence_node_draw (GskRenderNode *node,
           g *= a;
           b *= a;
 
-          row[x] = CLAMP ((int) round (a * 255), 0, 255) << 24 |
-                   CLAMP ((int) round (r * 255), 0, 255) << 16 |
-                   CLAMP ((int) round (g * 255), 0, 255) << 8 |
-                   CLAMP ((int) round (b * 255), 0, 255) << 0;
+          row[x] = gdk_cairo_pixel_from_float ((float[4]) { r, g, b, a });
         }
     }
 

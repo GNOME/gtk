@@ -10,6 +10,7 @@
 
 #include <cairo.h>
 #include <graphene.h>
+#include <math.h>
 
 static inline cairo_format_t
 gdk_cairo_format_for_depth (GdkMemoryDepth depth)
@@ -341,6 +342,46 @@ static inline gboolean
 gdk_cairo_region_is_rectangle (cairo_region_t *region)
 {
   return cairo_region_num_rectangles (region) == 1;
+}
+
+/*
+ * gdk_cairo_color_component_to_u8:
+ * @v: a color component, nominally in [0, 1]
+ *
+ * Converts a color component to the 8 bit value cairo wants.
+ *
+ * Shaders divide by zero and input textures contain junk, so infinities and
+ * NaN do turn up here. Infinities clamp to the ends of the range, and NaN
+ * becomes 0: comparisons against NaN are all false, so it takes the same
+ * branch as a negative value. Clamping before the conversion also means the
+ * conversion never sees a value that a guint32 cannot represent.
+ *
+ * Returns: @v as a value in [0, 255]
+ */
+static inline guint32
+gdk_cairo_color_component_to_u8 (float v)
+{
+  float f = roundf (v * 255.f);
+
+  return f > 0.f ? (f < 255.f ? (guint32) f : 255) : 0;
+}
+
+/*
+ * gdk_cairo_pixel_from_float:
+ * @rgba: premultiplied color components, in the order red, green, blue, alpha
+ *
+ * Packs premultiplied float color components into the pixel format used by
+ * cairo's ARGB32 surfaces.
+ *
+ * Returns: the packed pixel
+ */
+static inline guint32
+gdk_cairo_pixel_from_float (const float rgba[4])
+{
+  return gdk_cairo_color_component_to_u8 (rgba[3]) << 24 |
+         gdk_cairo_color_component_to_u8 (rgba[0]) << 16 |
+         gdk_cairo_color_component_to_u8 (rgba[1]) << 8 |
+         gdk_cairo_color_component_to_u8 (rgba[2]) << 0;
 }
 
 static inline void
