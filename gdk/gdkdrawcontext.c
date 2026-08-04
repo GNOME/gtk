@@ -455,6 +455,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   g_assert (priv->color_state == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
+                                                     NULL,
                                                      context_data,
                                                      priv->render_region,
                                                      &priv->color_state,
@@ -497,7 +498,7 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, context_data, priv->render_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, NULL, context_data, priv->render_region);
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->render_region));
 

@@ -145,11 +145,12 @@ gdk_wayland_cairo_context_create_surface (GdkWaylandCairoContext *self)
 }
 
 static void
-gdk_wayland_cairo_context_begin_frame (GdkDrawContext  *draw_context,
-                                       gpointer         context_data,
-                                       cairo_region_t  *region,
-                                       GdkColorState  **out_color_state,
-                                       GdkMemoryDepth  *out_depth)
+gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
+                                       GdkDrawContextFrame *frame,
+                                       gpointer             context_data,
+                                       cairo_region_t      *region,
+                                       GdkColorState      **out_color_state,
+                                       GdkMemoryDepth      *out_depth)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
   const cairo_region_t *surface_region;
@@ -183,9 +184,10 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 }
 
 static void
-gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                     gpointer        context_data,
-                                     cairo_region_t *painted)
+gdk_wayland_cairo_context_end_frame (GdkDrawContext      *draw_context,
+                                     GdkDrawContextFrame *frame,
+                                     gpointer             context_data,
+                                     cairo_region_t      *painted)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);

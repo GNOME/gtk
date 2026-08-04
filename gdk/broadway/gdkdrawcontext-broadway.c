@@ -33,11 +33,12 @@ gdk_broadway_draw_context_dispose (GObject *object)
 }
 
 static void
-gdk_broadway_draw_context_begin_frame (GdkDrawContext  *draw_context,
-                                       gpointer         context_data,
-                                       cairo_region_t  *region,
-                                       GdkColorState  **out_color_state,
-                                       GdkMemoryDepth  *out_depth)
+gdk_broadway_draw_context_begin_frame (GdkDrawContext      *draw_context,
+                                       GdkDrawContextFrame *frame,
+                                       gpointer             context_data,
+                                       cairo_region_t      *region,
+                                       GdkColorState      **out_color_state,
+                                       GdkMemoryDepth      *out_depth)
 {
   GdkBroadwayDrawContext *self = GDK_BROADWAY_DRAW_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
@@ -60,9 +61,10 @@ gdk_broadway_draw_context_begin_frame (GdkDrawContext  *draw_context,
 }
 
 static void
-gdk_broadway_draw_context_end_frame (GdkDrawContext *draw_context,
-                                     gpointer        context_data,
-                                     cairo_region_t *painted)
+gdk_broadway_draw_context_end_frame (GdkDrawContext      *draw_context,
+                                     GdkDrawContextFrame *frame,
+                                     gpointer             context_data,
+                                     cairo_region_t      *painted)
 {
   GdkBroadwayDrawContext *self = GDK_BROADWAY_DRAW_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
