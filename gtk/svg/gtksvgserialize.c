@@ -1194,6 +1194,11 @@ gtk_svg_serialize_full (GtkSvg               *self,
       append_string_attr (s, 0, "gpa:run-mode", run_modes[self->run_mode]);
     }
 
+  if (self->gpa_version > 0 && self->rendering != SVG_RENDERING_SVG)
+    {
+      append_string_attr (s, 0, "gpa:rendering", "symbolic");
+    }
+
   serialize_shape_attrs (s, self, 0, self->content, flags);
   g_string_append (s, ">");
 
