@@ -461,7 +461,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
  * the preference. The depth argument is only a hint and GDK is free
  * to choose.
  */
-void
+const GdkDrawContextFrame *
 gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
                                    gpointer               context_data,
                                    GskRenderNode         *node,
@@ -473,7 +473,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   graphene_rect_t opaque;
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
-    return;
+    return NULL;
 
   if (!gdk_draw_context_is_attached (context))
     {
@@ -503,7 +503,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
         {
           g_critical ("Failed to attach context: %s", error->message);
           g_error_free (error);
-          return;
+          return NULL;
         }
     }
 
@@ -512,6 +512,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
       g_critical ("The surface %p is already drawing. You must finish the "
                   "previous drawing operation with gdk_draw_context_end_frame() first.",
                   priv->surface);
+      return NULL;
     }
 
   gdk_surface_set_content (priv->surface, node);
@@ -544,6 +545,8 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
                                       0, 0,
                                       buffer_width, buffer_height
                                     });
+
+  return priv->current_frame;
 }
 
 #ifdef HAVE_SYSPROF

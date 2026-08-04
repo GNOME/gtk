@@ -74,7 +74,8 @@ struct _GdkDrawContextClass
 
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
-void                    gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
+const GdkDrawContextFrame *
+                        gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
                                                                  gpointer                context_data,
                                                                  GskRenderNode          *node,
                                                                  const cairo_region_t   *region);
