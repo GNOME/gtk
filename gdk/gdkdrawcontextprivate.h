@@ -33,6 +33,11 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
 
+struct _GdkDrawContextFrame
+{
+  GdkDrawContext *context;
+};
+
 struct _GdkDrawContext
 {
   GObject parent_instance;
@@ -41,6 +46,8 @@ struct _GdkDrawContext
 struct _GdkDrawContextClass
 {
   GObjectClass parent_class;
+
+  gsize                 frame_size;
 
   void                  (* begin_frame)                         (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame,
@@ -52,6 +59,8 @@ struct _GdkDrawContextClass
                                                                  GdkDrawContextFrame    *frame,
                                                                  gpointer                context_data,
                                                                  cairo_region_t         *painted);
+  void                  (* finalize_frame)                      (GdkDrawContext         *context,
+                                                                 GdkDrawContextFrame    *frame);
   void                  (* empty_frame)                         (GdkDrawContext         *context);
   void                  (* surface_resized)                     (GdkDrawContext         *context);
   gboolean              (* surface_attach)                      (GdkDrawContext         *context,
