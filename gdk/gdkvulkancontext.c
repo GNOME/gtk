@@ -818,11 +818,12 @@ gdk_vulkan_context_release_presents (GdkVulkanContext *self,
 }
 
 static void
-gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
-                                gpointer         context_data,
-                                cairo_region_t  *region,
-                                GdkColorState  **out_color_state,
-                                GdkMemoryDepth  *out_depth)
+gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
+                                GdkDrawContextFrame *frame,
+                                gpointer             context_data,
+                                cairo_region_t      *region,
+                                GdkColorState      **out_color_state,
+                                GdkMemoryDepth      *out_depth)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
@@ -936,9 +937,10 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 }
 
 static void
-gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
-                              gpointer        context_data,
-                              cairo_region_t *painted)
+gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
+                              GdkDrawContextFrame *frame,
+                              gpointer             context_data,
+                              cairo_region_t      *painted)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);

@@ -701,11 +701,12 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
 #endif
 
 static void
-gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
-                                 gpointer         context_data,
-                                 cairo_region_t  *region,
-                                 GdkColorState  **out_color_state,
-                                 GdkMemoryDepth  *out_depth)
+gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
+                                 GdkDrawContextFrame *frame,
+                                 gpointer             context_data,
+                                 cairo_region_t      *region,
+                                 GdkColorState      **out_color_state,
+                                 GdkMemoryDepth      *out_depth)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
 #ifdef HAVE_EGL
@@ -772,9 +773,10 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
 }
 
 static void
-gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
-                               gpointer        context_data,
-                               cairo_region_t *painted)
+gdk_gl_context_real_end_frame (GdkDrawContext      *draw_context,
+                               GdkDrawContextFrame *frame,
+                               gpointer             context_data,
+                               cairo_region_t      *painted)
 {
 #ifdef HAVE_EGL
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);

@@ -33,11 +33,12 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 }
 
 static void
-gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
-                                        gpointer         context_data,
-                                        cairo_region_t  *region,
-                                        GdkColorState  **out_color_state,
-                                        GdkMemoryDepth  *out_depth)
+gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
+                                        GdkDrawContextFrame *frame,
+                                        gpointer             context_data,
+                                        cairo_region_t      *region,
+                                        GdkColorState      **out_color_state,
+                                        GdkMemoryDepth      *out_depth)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
   cairo_t *cr;
@@ -76,9 +77,10 @@ add_float (GArray *nodes, float f)
 }
 
 static void
-gdk_broadway_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                      gpointer        context_data,
-                                      cairo_region_t *painted)
+gdk_broadway_cairo_context_end_frame (GdkDrawContext      *draw_context,
+                                      GdkDrawContextFrame *frame,
+                                      gpointer             context_data,
+                                      cairo_region_t      *painted)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
   GdkDisplay *display = gdk_draw_context_get_display (draw_context);
