@@ -1896,6 +1896,8 @@ gtk_svg_init (GtkSvg *self)
   self->author_styles = array_new_with_clear_func (sizeof (SvgCssRuleset), (GDestroyNotify) svg_css_ruleset_clear);
 }
 
+static void setting_changed (GtkSvg *self);
+
 static void
 gtk_svg_dispose (GObject *object)
 {
@@ -1916,6 +1918,11 @@ gtk_svg_dispose (GObject *object)
   frame_clock_disconnect (self);
   g_clear_handle_id (&self->pending_advance, g_source_remove);
   g_clear_object (&self->clock);
+
+  if (self->settings)
+    g_signal_handlers_disconnect_by_func (self->settings, setting_changed, self);
+
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gtk_svg_parent_class)->dispose (object);
 }
@@ -3374,7 +3381,7 @@ gtk_svg_set_settings (GtkSvg      *self,
   if (self->settings)
     g_signal_handlers_disconnect_by_func (self->settings, setting_changed, self);
 
-  self->settings = settings;
+  g_set_object (&self->settings, settings);
 
   if (settings)
     {
