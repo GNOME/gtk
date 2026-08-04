@@ -547,9 +547,13 @@ static Class _contentViewClass = nil;
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
   GdkDrop *drop = _gdk_macos_display_find_drop (GDK_MACOS_DISPLAY (display), sequence_number);
   NSPoint location = [sender draggingLocation];
+  GMainContext *main_context;
 
   if (drop == NULL)
     return NO;
+
+  main_context = g_main_context_new ();
+  g_main_context_push_thread_default (main_context);
 
   gdk_drop_emit_drop_event (drop,
                             TRUE,
@@ -557,9 +561,18 @@ static Class _contentViewClass = nil;
                             GDK_SURFACE (gdk_surface)->height - location.y,
                             GDK_CURRENT_TIME);
 
+  while (!gdk_drop_is_finished (drop))
+    g_main_context_iteration (main_context, TRUE);
+
   gdk_drop_emit_leave_event (drop, TRUE, GDK_CURRENT_TIME);
 
-  return GDK_MACOS_DROP (drop)->finish_action != 0;
+  while (g_main_context_iteration (main_context, FALSE))
+    ;
+
+  g_main_context_pop_thread_default (main_context);
+  g_main_context_unref (main_context);
+
+  return GDK_MACOS_DROP (drop)->finish_action != GDK_ACTION_NONE;
 }
 
 -(BOOL)wantsPeriodicDraggingUpdates
