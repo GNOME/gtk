@@ -52,6 +52,8 @@ struct _GdkDrawContextPrivate {
   GdkDisplay *display;
   GdkSurface *surface;
 
+  GdkDrawContextFrame *current_frame;
+
   cairo_region_t *render_region;
   GdkColorState *color_state;
   GdkMemoryDepth depth;
@@ -79,6 +81,12 @@ gdk_draw_context_is_attached (GdkDrawContext *self)
     return FALSE;
 
   return gdk_surface_get_attached_context (priv->surface) == self;
+}
+
+static void
+gdk_draw_context_default_finalize_frame (GdkDrawContext      *context,
+                                         GdkDrawContextFrame *frame)
+{
 }
 
 static void
@@ -199,6 +207,9 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   gobject_class->get_property = gdk_draw_context_get_property;
   gobject_class->dispose = gdk_draw_context_dispose;
 
+  klass->frame_size = sizeof (GdkDrawContextFrame);
+
+  klass->finalize_frame = gdk_draw_context_default_finalize_frame;
   klass->surface_resized = gdk_draw_context_default_surface_resized;
   klass->surface_attach = gdk_draw_context_default_surface_attach;
   klass->surface_detach = gdk_draw_context_default_surface_detach;
@@ -318,6 +329,32 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
 
   return priv->surface;
 }
+
+static GdkDrawContextFrame *
+gdk_draw_context_frame_new (GdkDrawContext *self)
+{
+  GdkDrawContextClass *klass;
+  GdkDrawContextFrame *result;
+
+  klass = GDK_DRAW_CONTEXT_GET_CLASS (self);
+
+  result = g_malloc0 (klass->frame_size);
+  result->context = g_object_ref (self);
+
+  return result;
+}
+
+static void
+gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
+{
+  GdkDrawContext *self = frame->context;
+
+  GDK_DRAW_CONTEXT_GET_CLASS (self)->finalize_frame (self, frame);
+
+  g_object_unref (frame->context);
+  g_free (frame);
+}
+
 
 /**
  * gdk_draw_context_begin_frame:
@@ -449,13 +486,14 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   else
     gdk_surface_set_opaque_rect (priv->surface, NULL);
 
+  priv->current_frame = gdk_draw_context_frame_new (context);
   scale = gdk_surface_get_scale (priv->surface);
   priv->render_region = gdk_cairo_region_scale_grow (region, scale, scale);
 
   g_assert (priv->color_state == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
-                                                     NULL,
+                                                     priv->current_frame,
                                                      context_data,
                                                      priv->render_region,
                                                      &priv->color_state,
@@ -498,13 +536,14 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, NULL, context_data, priv->render_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->current_frame, context_data, priv->render_region);
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->render_region));
 
   priv->color_state = NULL;
   g_clear_pointer (&priv->render_region, cairo_region_destroy);
   priv->depth = GDK_N_DEPTHS;
+  g_clear_pointer (&priv->current_frame, gdk_draw_context_frame_free);
 
   gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
 }
@@ -748,4 +787,6 @@ gdk_draw_context_detach (GdkDrawContext *self)
 
   GDK_DRAW_CONTEXT_GET_CLASS (self)->surface_detach (self);
   gdk_surface_set_attached_context (priv->surface, NULL);
+
 }
+
