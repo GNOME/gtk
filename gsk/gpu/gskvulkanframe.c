@@ -163,7 +163,7 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
 }
 
-static void
+static GdkDrawContextFrame *
 gsk_vulkan_frame_begin (GskGpuFrame           *frame,
                         GdkDrawContext        *context,
                         GskRenderNode         *node,
@@ -172,11 +172,11 @@ gsk_vulkan_frame_begin (GskGpuFrame           *frame,
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self);
 
-  gdk_draw_context_begin_frame_full (context,
-                                     /* We pass a pointer here for 32bit architectures */
-                                     &priv->vk_acquire_semaphore,
-                                     node,
-                                     region);
+  return gdk_draw_context_begin_frame_full (context,
+                                            /* We pass a pointer here for 32bit architectures */
+                                            &priv->vk_acquire_semaphore,
+                                            node,
+                                            region);
 }
 
 static GskGpuImage *
