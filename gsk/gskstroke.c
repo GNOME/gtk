@@ -513,10 +513,10 @@ gsk_stroke_get_join_width (const GskStroke *stroke)
       width = 0;
       break;
     case GSK_LINE_CAP_ROUND:
-      width = stroke->line_width;
+      width = stroke->line_width / 2;
       break;
     case GSK_LINE_CAP_SQUARE:
-      width = G_SQRT2 * stroke->line_width;
+      width = G_SQRT2 * stroke->line_width / 2;
       break;
     default:
       g_assert_not_reached ();
@@ -529,7 +529,7 @@ gsk_stroke_get_join_width (const GskStroke *stroke)
       break;
     case GSK_LINE_JOIN_ROUND:
     case GSK_LINE_JOIN_BEVEL:
-      width = MAX (width, stroke->line_width);
+      width = MAX (width, stroke->line_width / 2);
       break;
     default:
       g_assert_not_reached ();
