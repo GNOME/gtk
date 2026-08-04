@@ -844,7 +844,13 @@ gtk_list_base_compute_scroll_align (int            cell_start,
   visible_end = visible_start + visible_size;
   cell_end = cell_start + cell_size;
 
-  if (cell_size <= visible_size)
+  if (visible_size == 0)
+    {
+      /* Avoid division by 0 */
+      *new_align = current_align;
+      *new_side = current_side;
+    }
+  else if (cell_size <= visible_size)
     {
       if (cell_start < visible_start)
         {
