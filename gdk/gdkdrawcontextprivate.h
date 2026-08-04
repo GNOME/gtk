@@ -31,6 +31,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
+
 struct _GdkDrawContext
 {
   GObject parent_instance;
@@ -41,11 +43,13 @@ struct _GdkDrawContextClass
   GObjectClass parent_class;
 
   void                  (* begin_frame)                         (GdkDrawContext         *context,
+                                                                 GdkDrawContextFrame    *frame,
                                                                  gpointer                context_data,
                                                                  cairo_region_t         *update_area,
                                                                  GdkColorState         **out_color_state,
                                                                  GdkMemoryDepth         *out_depth);
   void                  (* end_frame)                           (GdkDrawContext         *context,
+                                                                 GdkDrawContextFrame    *frame,
                                                                  gpointer                context_data,
                                                                  cairo_region_t         *painted);
   void                  (* empty_frame)                         (GdkDrawContext         *context);
