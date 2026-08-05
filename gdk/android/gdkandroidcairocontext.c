@@ -69,7 +69,6 @@ static void
 gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkDrawContextFrame *frame,
                                        gpointer             context_data,
-                                       cairo_region_t      *region,
                                        GdkColorState      **out_color_state,
                                        GdkMemoryDepth      *out_depth)
 {
@@ -97,7 +96,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
       ANativeWindow_acquire (self->surface.window);
 
       cairo_rectangle_int_t bounds;
-      cairo_region_get_extents (region, &bounds);
+      cairo_region_get_extents (gdk_draw_context_frame_get_damage (frame), &bounds);
 
       self->surface.bounds = (ARect){
         .left = bounds.x,
@@ -125,7 +124,9 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
         .width = self->surface.bounds.right - self->surface.bounds.left,
         .height = self->surface.bounds.bottom - self->surface.bounds.top,
       };
-      cairo_region_union_rectangle (region, &true_bounds);
+      cairo_region_t *region = cairo_region_create_rectangle (&true_bounds);
+      gdk_draw_context_frame_add_damage (frame, region);
+      cairo_region_destroy (region);
 
       self->active_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                          self->surface.bounds.right - self->surface.bounds.left,
@@ -156,7 +157,9 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
         .width = scaled_width,
         .height = scaled_height,
       };
-      cairo_region_union_rectangle (region, &bounds);
+      cairo_region_t *region = cairo_region_create_rectangle (&bounds);
+      gdk_draw_context_frame_add_damage (frame, region);
+      cairo_region_destroy (region);
     }
 
 cleanup:
@@ -169,8 +172,7 @@ cleanup:
 static void
 gdk_android_cairo_context_end_frame (GdkDrawContext      *draw_context,
                                      GdkDrawContextFrame *frame,
-                                     gpointer             context_data,
-                                     cairo_region_t      *painted)
+                                     gpointer             context_data)
 {
   GdkAndroidCairoContext *self = (GdkAndroidCairoContext *)draw_context;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
