@@ -101,7 +101,7 @@ do_show (int          *argc,
 {
   GOptionContext *context;
   char **filenames = NULL;
-  gboolean decorate = TRUE;
+  gboolean decorate = FALSE;
   gboolean offload = FALSE;
   const GOptionEntry entries[] = {
     { "offload", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &offload, N_("Put node into offload container"), NULL },
