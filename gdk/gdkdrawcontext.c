@@ -54,7 +54,6 @@ struct _GdkDrawContextPrivate {
 
   GdkDrawContextFrame *current_frame;
 
-  cairo_region_t *render_region;
   GdkColorState *color_state;
   GdkMemoryDepth depth;
 };
@@ -279,7 +278,7 @@ gdk_draw_context_is_in_frame (GdkDrawContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), FALSE);
 
-  return priv->render_region != NULL;
+  return priv->current_frame != NULL;
 }
 
 /*< private >
@@ -332,7 +331,8 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
 }
 
 static GdkDrawContextFrame *
-gdk_draw_context_frame_new (GdkDrawContext *self)
+gdk_draw_context_frame_new (GdkDrawContext *self,
+                            cairo_region_t *damage)
 {
   GdkDrawContextClass *klass;
   GdkDrawContextFrame *result;
@@ -341,6 +341,9 @@ gdk_draw_context_frame_new (GdkDrawContext *self)
 
   result = g_malloc0 (klass->frame_size);
   result->context = g_object_ref (self);
+
+  gdk_draw_context_get_buffer_size (self, &result->buffer_width, &result->buffer_height);
+  result->damage = damage;
 
   return result;
 }
@@ -352,10 +355,10 @@ gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 
   GDK_DRAW_CONTEXT_GET_CLASS (self)->finalize_frame (self, frame);
 
+  g_clear_pointer (&frame->damage, cairo_region_destroy);
   g_object_unref (frame->context);
   g_free (frame);
 }
-
 
 /**
  * gdk_draw_context_begin_frame:
@@ -427,7 +430,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
  * the preference. The depth argument is only a hint and GDK is free
  * to choose.
  */
-const GdkDrawContextFrame *
+GdkDrawContextFrame *
 gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
                                    gpointer               context_data,
                                    GskRenderNode         *node,
@@ -435,7 +438,6 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
   double scale;
-  guint buffer_width, buffer_height;
   graphene_rect_t opaque;
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
@@ -473,7 +475,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
         }
     }
 
-  if (priv->render_region != NULL)
+  if (priv->current_frame != NULL)
     {
       g_critical ("The surface %p is already drawing. You must finish the "
                   "previous drawing operation with gdk_draw_context_end_frame() first.",
@@ -488,16 +490,15 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   else
     gdk_surface_set_opaque_rect (priv->surface, NULL);
 
-  priv->current_frame = gdk_draw_context_frame_new (context);
   scale = gdk_surface_get_scale (priv->surface);
-  priv->render_region = gdk_cairo_region_scale_grow (region, scale, scale);
+  priv->current_frame = gdk_draw_context_frame_new (context,
+                                                    gdk_cairo_region_scale_grow (region, scale, scale));
 
   g_assert (priv->color_state == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      priv->current_frame,
                                                      context_data,
-                                                     priv->render_region,
                                                      &priv->color_state,
                                                      &priv->depth);
 
@@ -505,19 +506,12 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   g_assert (priv->color_state != NULL);
   g_assert (priv->depth < GDK_N_DEPTHS);
 
-  gdk_draw_context_get_buffer_size (context, &buffer_width, &buffer_height);
-  cairo_region_intersect_rectangle (priv->render_region,
-                                    &(cairo_rectangle_int_t) {
-                                      0, 0,
-                                      buffer_width, buffer_height
-                                    });
-
   return priv->current_frame;
 }
 
 #ifdef HAVE_SYSPROF
 static gint64
-region_get_pixels (cairo_region_t *region)
+region_get_pixels (const cairo_region_t *region)
 {
   int i, n;
   cairo_rectangle_int_t rect;
@@ -540,12 +534,11 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->current_frame, context_data, priv->render_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->current_frame, context_data);
 
-  gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->render_region));
+  gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (gdk_draw_context_frame_get_damage (priv->current_frame)));
 
   priv->color_state = NULL;
-  g_clear_pointer (&priv->render_region, cairo_region_destroy);
   priv->depth = GDK_N_DEPTHS;
   g_clear_pointer (&priv->current_frame, gdk_draw_context_frame_free);
 
@@ -596,7 +589,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
         }
       return;
     }
-  if (priv->render_region == NULL)
+  if (priv->current_frame == NULL)
     {
       g_critical ("The surface %p has no drawing context. You must call "
                   "gdk_draw_context_begin_frame() before calling "
@@ -658,7 +651,10 @@ gdk_draw_context_get_render_region (GdkDrawContext *self)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
 
-  return priv->render_region;
+  if (priv->current_frame == NULL)
+    return NULL;
+
+  return gdk_draw_context_frame_get_damage (priv->current_frame);
 }
 
 /*<private>
@@ -794,3 +790,50 @@ gdk_draw_context_detach (GdkDrawContext *self)
 
 }
 
+/*
+ * gdk_draw_context_frame_get_damage:
+ * @frame: the frame to query
+ *
+ * Returns the damage for this frame.
+ *
+ * While the frame is still being initialized in begin_frame,
+ * not all damage may have been recorded and more calls
+ * to add_damage() can happen.
+ *
+ * If the frame is not in use, NULL is returned.
+ *
+ * Returns: (nullable) the frame's current damage
+ **/
+const cairo_region_t *
+gdk_draw_context_frame_get_damage (GdkDrawContextFrame *frame)
+{
+  return frame->damage;
+}
+
+/**
+ * gdk_draw_context_frame_add_damage:
+ * @frame: the frame
+ * @damage: damage to add
+ *
+ * Adds the given damage to the damage of this frame.
+ *
+ * The damage will be clipped to the frame's buffer size, so it is okay
+ * to add too large a region.
+ *
+ * This function must only be called in GdkDrawContext::begin_frame()
+ * implementations.
+ **/
+void
+gdk_draw_context_frame_add_damage (GdkDrawContextFrame  *frame,
+                                   const cairo_region_t *damage)
+{
+  cairo_region_union (frame->damage, damage);
+
+  /* During resizes damage tracking can get out of sync sometimes.
+   * But damage tracking backends require accurate damage */
+  cairo_region_intersect_rectangle (frame->damage,
+                                    &(cairo_rectangle_int_t) {
+                                      0, 0,
+                                      frame->buffer_width, frame->buffer_height
+                                    });
+}
