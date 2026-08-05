@@ -48,7 +48,7 @@ guint                 _gdk_macos_buffer_get_stride       (GdkMacosBuffer  *self)
 double                _gdk_macos_buffer_get_device_scale (GdkMacosBuffer  *self);
 const cairo_region_t *_gdk_macos_buffer_get_damage       (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_set_damage       (GdkMacosBuffer  *self,
-                                                          cairo_region_t  *damage);
+                                                          const cairo_region_t *damage);
 gpointer              _gdk_macos_buffer_get_data         (GdkMacosBuffer  *self);
 gboolean              _gdk_macos_buffer_get_flipped      (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_set_flipped      (GdkMacosBuffer  *self,

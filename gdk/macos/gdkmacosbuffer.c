@@ -272,8 +272,8 @@ _gdk_macos_buffer_get_damage (GdkMacosBuffer *self)
 }
 
 void
-_gdk_macos_buffer_set_damage (GdkMacosBuffer *self,
-                              cairo_region_t *damage)
+_gdk_macos_buffer_set_damage (GdkMacosBuffer       *self,
+                              const cairo_region_t *damage)
 {
   g_return_if_fail (GDK_IS_MACOS_BUFFER (self));
 
