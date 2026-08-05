@@ -55,14 +55,13 @@ gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
 static void
 gdk_x11_vulkan_context_end_frame (GdkDrawContext      *context,
                                   GdkDrawContextFrame *frame,
-                                  gpointer             context_data,
-                                  cairo_region_t      *painted)
+                                  gpointer             context_data)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (context);
 
   gdk_x11_surface_pre_damage (surface);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_vulkan_context_parent_class)->end_frame (context, frame, context_data, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_vulkan_context_parent_class)->end_frame (context, frame, context_data);
 }
 
 static void

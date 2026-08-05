@@ -148,12 +148,11 @@ static void
 gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkDrawContextFrame *frame,
                                        gpointer             context_data,
-                                       cairo_region_t      *region,
                                        GdkColorState      **out_color_state,
                                        GdkMemoryDepth      *out_depth)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
-  const cairo_region_t *surface_region;
+  const cairo_region_t *region, *surface_region;
   GSList *l;
   cairo_t *cr;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
@@ -165,8 +164,9 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 
   surface_region = gdk_wayland_cairo_context_surface_get_region (self->paint_surface);
   if (surface_region)
-    cairo_region_union (region, surface_region);
+    gdk_draw_context_frame_add_damage (frame, surface_region);
 
+  region = gdk_draw_context_frame_get_damage (frame);
   for (l = self->surfaces; l; l = l->next)
     {
       gdk_wayland_cairo_context_surface_add_region (l->data, region);
@@ -186,15 +186,16 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 static void
 gdk_wayland_cairo_context_end_frame (GdkDrawContext      *draw_context,
                                      GdkDrawContextFrame *frame,
-                                     gpointer             context_data,
-                                     cairo_region_t      *painted)
+                                     gpointer             context_data)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
   gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_attach_image (surface, self->paint_surface, painted);
+  gdk_wayland_surface_attach_image (surface,
+                                    self->paint_surface,
+                                    gdk_draw_context_frame_get_damage (frame));
   gdk_wayland_surface_request_frame (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
