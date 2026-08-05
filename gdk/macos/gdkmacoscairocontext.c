@@ -92,8 +92,7 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
    * be unlocked as part of end_frame.
    */
 
-  if (!(cr = cairo_create (image_surface)))
-    goto failure;
+  cr = cairo_create (image_surface);
 
   /* Clip to the current damage region */
   if (damage != NULL)
@@ -112,7 +111,6 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
       cairo_restore (cr);
     }
 
-failure:
   cairo_surface_destroy (image_surface);
 
   return cr;
