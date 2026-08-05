@@ -475,6 +475,38 @@ resolve_rx (SvgElement            *element,
 }
 
 void
+svg_element_get_line (SvgElement            *element,
+                      graphene_point_t      *start,
+                      graphene_point_t      *end,
+                      const graphene_rect_t *viewport,
+                      gboolean               current)
+{
+  SvgValue **values;
+
+  g_return_if_fail (element->type == SVG_ELEMENT_LINE);
+
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
+
+  graphene_point_init (start, 0, 0);
+  graphene_point_init (end, 0, 0);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_X1]))
+    start->x = svg_number_get (values[SVG_PROPERTY_X1], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_Y1]))
+    start->y = svg_number_get (values[SVG_PROPERTY_Y1], viewport->size.height);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_X2]))
+    end->x = svg_number_get (values[SVG_PROPERTY_X2], viewport->size.width);
+
+  if (svg_value_is_set (values[SVG_PROPERTY_Y2]))
+    end->y = svg_number_get (values[SVG_PROPERTY_Y2], viewport->size.height);
+}
+
+void
 svg_element_get_circle (SvgElement            *element,
                         graphene_point_t      *center,
                         double                *radius,
