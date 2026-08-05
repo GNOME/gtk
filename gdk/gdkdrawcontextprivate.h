@@ -36,6 +36,10 @@ typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
 struct _GdkDrawContextFrame
 {
   GdkDrawContext *context;
+
+  guint buffer_width;
+  guint buffer_height;
+  cairo_region_t *damage;
 };
 
 struct _GdkDrawContext
@@ -52,13 +56,11 @@ struct _GdkDrawContextClass
   void                  (* begin_frame)                         (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame,
                                                                  gpointer                context_data,
-                                                                 cairo_region_t         *update_area,
                                                                  GdkColorState         **out_color_state,
                                                                  GdkMemoryDepth         *out_depth);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame,
-                                                                 gpointer                context_data,
-                                                                 cairo_region_t         *painted);
+                                                                 gpointer                context_data);
   void                  (* finalize_frame)                      (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame);
   void                  (* empty_frame)                         (GdkDrawContext         *context);
@@ -70,8 +72,7 @@ struct _GdkDrawContextClass
 
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
-const GdkDrawContextFrame *
-                        gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
+GdkDrawContextFrame *   gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
                                                                  gpointer                context_data,
                                                                  GskRenderNode          *node,
                                                                  const cairo_region_t   *region);
@@ -90,6 +91,10 @@ GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext 
 void                    gdk_draw_context_get_buffer_size        (GdkDrawContext         *self,
                                                                  guint                  *out_width,
                                                                  guint                  *out_height);
+
+const cairo_region_t *  gdk_draw_context_frame_get_damage       (GdkDrawContextFrame    *frame);
+void                    gdk_draw_context_frame_add_damage       (GdkDrawContextFrame    *frame,
+                                                                 const cairo_region_t   *damage);
 
 
 G_END_DECLS

@@ -90,13 +90,12 @@ gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 static void
 gdk_win32_gl_context_wgl_end_frame (GdkDrawContext      *draw_context,
                                     GdkDrawContextFrame *frame,
-                                    gpointer             context_data,
-                                    cairo_region_t      *painted)
+                                    gpointer             context_data)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, frame, context_data, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, frame, context_data);
 
   gdk_gl_context_make_current (context);
 
