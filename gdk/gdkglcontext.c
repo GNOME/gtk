@@ -704,7 +704,6 @@ static void
 gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
                                  GdkDrawContextFrame *frame,
                                  gpointer             context_data,
-                                 cairo_region_t      *region,
                                  GdkColorState      **out_color_state,
                                  GdkMemoryDepth      *out_depth)
 {
@@ -743,16 +742,13 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
-
   g_clear_pointer (&context->old_updated_area[GDK_GL_MAX_TRACKED_BUFFERS - 1], cairo_region_destroy);
   for (i = GDK_GL_MAX_TRACKED_BUFFERS - 1; i > 0; i--)
     {
       context->old_updated_area[i] = context->old_updated_area[i - 1];
     }
-  context->old_updated_area[0] = cairo_region_copy (region);
-
-  cairo_region_union (region, damage);
-  cairo_region_destroy (damage);
+  context->old_updated_area[0] = cairo_region_copy (gdk_draw_context_frame_get_damage (frame));
+  gdk_draw_context_frame_add_damage (frame, damage);
 
   gdk_draw_context_get_buffer_size (draw_context, &ww, &wh);
 
@@ -775,8 +771,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
 static void
 gdk_gl_context_real_end_frame (GdkDrawContext      *draw_context,
                                GdkDrawContextFrame *frame,
-                               gpointer             context_data,
-                               cairo_region_t      *painted)
+                               gpointer             context_data)
 {
 #ifdef HAVE_EGL
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
@@ -785,6 +780,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext      *draw_context,
   GdkDisplay *display = gdk_surface_get_display (surface);
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   guint buffer_width, buffer_height;
+  const cairo_region_t *painted;
 
   if (priv->egl_context == NULL)
     return;
@@ -793,6 +789,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext      *draw_context,
 
   gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
+  painted = gdk_draw_context_frame_get_damage (frame);
   if (priv->eglSwapBuffersWithDamage &&
       cairo_region_contains_rectangle (painted,
                                        &(cairo_rectangle_int_t) {
