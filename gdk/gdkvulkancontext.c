@@ -821,7 +821,6 @@ static void
 gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
                                 GdkDrawContextFrame *frame,
                                 gpointer             context_data,
-                                cairo_region_t      *region,
                                 GdkColorState      **out_color_state,
                                 GdkMemoryDepth      *out_depth)
 {
@@ -834,6 +833,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
   VkResult acquire_result;
   VkSemaphore draw_semaphore;
   GdkVulkanPresent *present;
+  const cairo_region_t *region;
   guint i;
 
   g_assert (context_data != NULL);
@@ -866,6 +866,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
             }
         }
     }
+
+  region = gdk_draw_context_frame_get_damage (frame);
   for (i = 0; i < priv->n_images; i++)
     {
       cairo_region_union (priv->regions[i], region);
@@ -930,7 +932,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
   gdk_vulkan_context_release_presents (context, present->image_index);
   present->vk_swapchain = priv->swapchain;
 
-  cairo_region_union (region, priv->regions[present->image_index]);
+  gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
 
   *out_color_state = color_state;
   *out_depth = priv->current_depth;
@@ -939,8 +941,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 static void
 gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
                               GdkDrawContextFrame *frame,
-                              gpointer             context_data,
-                              cairo_region_t      *painted)
+                              gpointer             context_data)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
@@ -967,6 +968,8 @@ gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
 
   if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT))
     {
+      const cairo_region_t *painted;
+
       present_regions = (VkPresentRegionsKHR) {
           .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
           .pNext = pNext,
@@ -975,6 +978,7 @@ gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
       };
       pNext = &present_regions;
 
+      painted = gdk_draw_context_frame_get_damage (frame);
       present_region.rectangleCount = cairo_region_num_rectangles (painted);
       present_region.pRectangles = g_alloca (sizeof (VkRectLayerKHR) * present_region.rectangleCount);
 

@@ -36,19 +36,20 @@ static void
 gdk_broadway_draw_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkDrawContextFrame *frame,
                                        gpointer             context_data,
-                                       cairo_region_t      *region,
                                        GdkColorState      **out_color_state,
                                        GdkMemoryDepth      *out_depth)
 {
   GdkBroadwayDrawContext *self = GDK_BROADWAY_DRAW_CONTEXT (draw_context);
-  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  guint width, height;
+  cairo_region_t *region;
 
-  cairo_region_union_rectangle (region,
-                                &(cairo_rectangle_int_t) {
-                                    0, 0,
-                                    gdk_surface_get_width (surface),
-                                    gdk_surface_get_height (surface)
-                                 });
+  gdk_draw_context_get_buffer_size (draw_context, &width, &height);
+  region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                              0, 0,
+                                              width, height
+                                          });
+  gdk_draw_context_frame_add_damage (frame, region);
+  cairo_region_destroy (region);
 
   g_assert (self->nodes == NULL);
   g_assert (self->node_textures == NULL);
@@ -63,8 +64,7 @@ gdk_broadway_draw_context_begin_frame (GdkDrawContext      *draw_context,
 static void
 gdk_broadway_draw_context_end_frame (GdkDrawContext      *draw_context,
                                      GdkDrawContextFrame *frame,
-                                     gpointer             context_data,
-                                     cairo_region_t      *painted)
+                                     gpointer             context_data)
 {
   GdkBroadwayDrawContext *self = GDK_BROADWAY_DRAW_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
