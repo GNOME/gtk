@@ -160,13 +160,13 @@ static void
 _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                       GdkDrawContextFrame *frame,
                                       gpointer             context_data,
-                                      cairo_region_t      *region,
                                       GdkColorState      **out_color_state,
                                       GdkMemoryDepth      *out_depth)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
   GdkMacosBuffer *buffer;
   GdkMacosSurface *surface;
+  const cairo_region_t *region;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
@@ -175,6 +175,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 
   surface = GDK_MACOS_SURFACE (gdk_draw_context_get_surface (draw_context));
   buffer = _gdk_macos_surface_get_buffer (surface);
+  region = gdk_draw_context_frame_get_damage (frame);
 
   _gdk_macos_buffer_set_damage (buffer, region);
   _gdk_macos_buffer_set_flipped (buffer, FALSE);
@@ -216,8 +217,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 static void
 _gdk_macos_cairo_context_end_frame (GdkDrawContext      *draw_context,
                                     GdkDrawContextFrame *frame,
-                                    gpointer             context_data,
-                                    cairo_region_t      *painted)
+                                    gpointer             context_data)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
   GdkMacosSurface *surface;
@@ -230,7 +230,7 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext      *draw_context,
 
   _gdk_macos_buffer_unlock (buffer);
 
-  _gdk_macos_surface_swap_buffers (surface, painted);
+  _gdk_macos_surface_swap_buffers (surface, gdk_draw_context_frame_get_damage (frame));
 
   [CATransaction commit];
 }
