@@ -85,6 +85,7 @@ gboolean                gdk_draw_context_attach                 (GdkDrawContext 
                                                                  GError                **error);
 void                    gdk_draw_context_detach                 (GdkDrawContext         *self);
 
+GdkDrawContextFrame *   gdk_draw_context_get_current_frame      (GdkDrawContext         *self);
 const cairo_region_t *  gdk_draw_context_get_render_region      (GdkDrawContext         *self);
 GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);
 GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext         *self);
