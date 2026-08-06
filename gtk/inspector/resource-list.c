@@ -228,6 +228,7 @@ populate_details (GtkInspectorResourceList *rl,
 
       g_free (content_image);
       g_free (content_text);
+      g_free (content_video);
     }
 
   return TRUE;
