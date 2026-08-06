@@ -270,12 +270,8 @@ server_list_add_server (GtkPlacesView *view,
 {
   GBookmarkFile *bookmarks;
   GFileInfo *info;
-  GError *error;
-  char *title;
   char *uri;
-  GDateTime *now;
 
-  error = NULL;
   bookmarks = server_list_load (view);
 
   if (!bookmarks)
@@ -287,20 +283,27 @@ server_list_add_server (GtkPlacesView *view,
                             G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
                             G_FILE_QUERY_INFO_NONE,
                             NULL,
-                            &error);
-  title = g_file_info_get_attribute_as_string (info, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+                            NULL);
+  if (info)
+    {
+      char *title;
+      GDateTime *now;
 
-  g_bookmark_file_set_title (bookmarks, uri, title);
-  now = g_date_time_new_now_utc ();
-  g_bookmark_file_set_visited_date_time (bookmarks, uri, now);
-  g_date_time_unref (now);
-  g_bookmark_file_add_application (bookmarks, uri, NULL, NULL);
+      title = g_file_info_get_attribute_as_string (info, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 
-  server_list_save (bookmarks);
+      g_bookmark_file_set_title (bookmarks, uri, title);
+      now = g_date_time_new_now_utc ();
+      g_bookmark_file_set_visited_date_time (bookmarks, uri, now);
+      g_bookmark_file_add_application (bookmarks, uri, NULL, NULL);
+
+      server_list_save (bookmarks);
+
+      g_date_time_unref (now);
+      g_free (title);
+    }
 
   g_bookmark_file_free (bookmarks);
   g_clear_object (&info);
-  g_free (title);
   g_free (uri);
 }
 
