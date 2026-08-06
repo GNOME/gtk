@@ -898,13 +898,13 @@ gtk_constraint_solver_new_expression (GtkConstraintSolver *self,
 
           eminus = gtk_constraint_variable_new_slack ("em");
           gtk_constraint_expression_set_variable (expr, eminus, 1.0);
-          gtk_constraint_variable_unref (eminus);
 
           z_row = g_hash_table_lookup (self->rows, self->objective);
           gtk_constraint_expression_set_variable (z_row, eminus, constraint->strength);
 
           gtk_constraint_solver_insert_error_variable (self, constraint, eminus);
           gtk_constraint_solver_note_added_variable (self, eminus, self->objective);
+
           gtk_constraint_variable_unref (eminus);
         }
     }
