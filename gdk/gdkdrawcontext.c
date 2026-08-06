@@ -624,6 +624,14 @@ gdk_draw_context_get_frame_region (GdkDrawContext *self)
   return NULL;
 }
 
+GdkDrawContextFrame *
+gdk_draw_context_get_current_frame (GdkDrawContext *self)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
+  return priv->current_frame;
+}
+
 /*<private>
  * gdk_draw_context_get_render_region:
  * @self: a `GdkDrawContext`
