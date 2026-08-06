@@ -28,6 +28,15 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkCairoContextFrame GdkCairoContextFrame;
+
+struct _GdkCairoContextFrame
+{
+  GdkDrawContextFrame parent;
+
+  cairo_surface_t *surface;
+};
+
 struct _GdkCairoContext
 {
   GdkDrawContext parent_instance;
@@ -39,6 +48,10 @@ struct _GdkCairoContextClass
 
   cairo_t *     (* cairo_create)                (GdkCairoContext        *self);
 };
+
+void                    gdk_cairo_context_frame_set_surface     (GdkCairoContextFrame   *frame,
+                                                                 cairo_surface_t        *surface);
+cairo_surface_t *       gdk_cairo_context_frame_get_surface     (GdkCairoContextFrame   *frame);
 
 G_END_DECLS
 
