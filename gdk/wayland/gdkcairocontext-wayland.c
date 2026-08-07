@@ -156,7 +156,6 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   cairo_surface_t *cairo_surface;
   const cairo_region_t *region, *surface_region;
   GSList *l;
-  cairo_t *cr;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
   if (self->cached_surface)
@@ -174,13 +173,6 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
     {
       gdk_wayland_cairo_context_surface_add_region (l->data, region);
     }
-
-  /* clear the repaint area */
-  cr = cairo_create (cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, region);
-  cairo_fill (cr);
-  cairo_destroy (cr);
 
   *out_color_state = gdk_surface_get_color_state (surface);
   *out_depth = GDK_MEMORY_U8;
