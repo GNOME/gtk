@@ -633,39 +633,6 @@ gdk_draw_context_get_current_frame (GdkDrawContext *self)
 }
 
 /*<private>
- * gdk_draw_context_get_render_region:
- * @self: a `GdkDrawContext`
- *
- * Retrieves the region that is currently being repainted.
- *
- * After a call to [method@Gdk.DrawContext.begin_frame] this function will
- * return the area of the current buffer that the @context determined needs
- * to be repainted.
- * This region is created by a union of the region passed to
- * [method@Gdk.DrawContext.begin_frame] converted to device pixels and any
- * additional pixels the context has determined need to be repainted.
- *
- * The region will never extend the buffer's size.
- *
- * If @context is not in between calls to [method@Gdk.DrawContext.begin_frame]
- * and [method@Gdk.DrawContext.end_frame], %NULL will be returned.
- *
- * Returns: (transfer none) (nullable): a Cairo region
- *
- * Returns:
- **/
-const cairo_region_t *
-gdk_draw_context_get_render_region (GdkDrawContext *self)
-{
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
-
-  if (priv->current_frame == NULL)
-    return NULL;
-
-  return gdk_draw_context_frame_get_damage (priv->current_frame);
-}
-
-/*<private>
  * gdk_draw_context_get_color_state:
  * @self: a `GdkDrawContext`
  *
