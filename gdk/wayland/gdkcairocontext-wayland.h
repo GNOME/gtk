@@ -35,7 +35,6 @@ struct _GdkWaylandCairoContext
 
   GSList *surfaces;
   cairo_surface_t *cached_surface;
-  cairo_surface_t *paint_surface;
 };
 
 struct _GdkWaylandCairoContextClass
