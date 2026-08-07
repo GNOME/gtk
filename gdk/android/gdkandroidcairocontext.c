@@ -47,7 +47,6 @@ struct _GdkAndroidCairoContext
       jintArray buffer;
     } drag;
   };
-  cairo_surface_t *active_surface;
 };
 
 struct _GdkAndroidCairoContextClass
@@ -57,14 +56,6 @@ struct _GdkAndroidCairoContextClass
 
 G_DEFINE_TYPE (GdkAndroidCairoContext, gdk_android_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
-static cairo_t *
-gdk_android_cairo_context_cairo_create (GdkCairoContext *cairo_context)
-{
-  GdkAndroidCairoContext *self = GDK_ANDROID_CAIRO_CONTEXT (cairo_context);
-  // TODO: having begin_frame return a boolean to indicate sucess state would be a lot nicer
-  return self->active_surface ? cairo_create (self->active_surface) : NULL;
-}
-
 static void
 gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkDrawContextFrame *frame,
@@ -73,6 +64,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkMemoryDepth      *out_depth)
 {
   GdkAndroidCairoContext *self = (GdkAndroidCairoContext *)draw_context;
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
   JNIEnv *env = gdk_android_get_env ();
@@ -88,7 +80,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
         {
           g_critical ("Native surface not available for current frame");
           g_mutex_unlock (&surface_impl->native_lock);
-          self->active_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+          gdk_cairo_context_frame_set_surface (cframe, cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0));
           goto cleanup;
         }
 
@@ -112,7 +104,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
           g_info ("failed to gain surface lock: %d", rc);
           g_clear_pointer (&self->surface.window, ANativeWindow_release);
           g_mutex_unlock (&surface_impl->native_lock);
-          self->active_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+          gdk_cairo_context_frame_set_surface (cframe, cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0));
           goto cleanup;
         }
 
@@ -125,20 +117,23 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
         .height = self->surface.bounds.bottom - self->surface.bounds.top,
       };
       cairo_region_t *region = cairo_region_create_rectangle (&true_bounds);
+      cairo_surface_t *cairo_surface;
       gdk_draw_context_frame_add_damage (frame, region);
       cairo_region_destroy (region);
 
-      self->active_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                         self->surface.bounds.right - self->surface.bounds.left,
-                                                         self->surface.bounds.bottom - self->surface.bounds.top);
-      cairo_surface_set_device_offset (self->active_surface,
+      cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                  self->surface.bounds.right - self->surface.bounds.left,
+                                                  self->surface.bounds.bottom - self->surface.bounds.top);
+      cairo_surface_set_device_offset (cairo_surface,
                                        -self->surface.bounds.left,
                                        -self->surface.bounds.top);
+      gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
     }
   else if (GDK_IS_ANDROID_DRAG_SURFACE (surface))
     {
       GdkAndroidDragSurface *surface_impl = (GdkAndroidDragSurface *)surface;
       GdkAndroidSurface *initiator = (GdkAndroidSurface *)gdk_drag_get_surface ((GdkDrag *)surface_impl->drag);
+      cairo_surface_t *cairo_surface;
 
       gint scaled_width = ceilf(surface->width * initiator->cfg.scale);
       gint scaled_height = ceilf(surface->height * initiator->cfg.scale);
@@ -146,10 +141,11 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
       jintArray buffer = (*env)->NewIntArray(env, scaled_width * scaled_height);
       self->drag.buffer = (*env)->NewGlobalRef(env, buffer);
       jint* native_buffer = (*env)->GetIntArrayElements(env, self->drag.buffer, NULL);
-      self->active_surface = cairo_image_surface_create_for_data((guchar *)native_buffer,
-                                                                 CAIRO_FORMAT_ARGB32,
-                                                                 scaled_width, scaled_height,
-                                                                 scaled_width*sizeof(jint));
+      cairo_surface = cairo_image_surface_create_for_data((guchar *)native_buffer,
+                                                          CAIRO_FORMAT_ARGB32,
+                                                          scaled_width, scaled_height,
+                                                          scaled_width*sizeof(jint));
+      gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
 
       cairo_rectangle_int_t bounds = {
         .x = 0,
@@ -175,7 +171,9 @@ gdk_android_cairo_context_end_frame (GdkDrawContext      *draw_context,
                                      gpointer             context_data)
 {
   GdkAndroidCairoContext *self = (GdkAndroidCairoContext *)draw_context;
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+
   if (GDK_IS_ANDROID_SURFACE (surface))
     {
       GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
@@ -184,17 +182,19 @@ gdk_android_cairo_context_end_frame (GdkDrawContext      *draw_context,
         {
           // for self->buffer.format == AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM
           const guint bpp = 4;
+          cairo_surface_t *cairo_surface;
 
-          cairo_surface_flush (self->active_surface);
-          gint width = cairo_image_surface_get_width (self->active_surface);
-          gint height = cairo_image_surface_get_height (self->active_surface);
+          cairo_surface = gdk_cairo_context_frame_get_surface (cframe);
+          cairo_surface_flush (cairo_surface);
+          gint width = cairo_image_surface_get_width (cairo_surface);
+          gint height = cairo_image_surface_get_height (cairo_surface);
           if (width > 0 && height > 0)
             gdk_memory_convert (&((guchar *) self->surface.buffer.bits)[(self->surface.buffer.stride * self->surface.bounds.top + self->surface.bounds.left) * bpp],
                                 // TODO: figure out if the android buffer actually is PREMULTIPLIED or not
                                 &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, width, height, self->surface.buffer.stride * bpp),
                                 GDK_COLOR_STATE_SRGB,
-                                cairo_image_surface_get_data (self->active_surface),
-                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, width, height, cairo_image_surface_get_stride (self->active_surface)),
+                                cairo_image_surface_get_data (cairo_surface),
+                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, width, height, cairo_image_surface_get_stride (cairo_surface)),
                                 GDK_COLOR_STATE_SRGB);
 
           ANativeWindow_unlockAndPost (self->surface.window);
@@ -204,27 +204,29 @@ gdk_android_cairo_context_end_frame (GdkDrawContext      *draw_context,
           g_mutex_unlock (&surface_impl->native_lock);
         }
 
-      g_clear_pointer(&self->active_surface, cairo_surface_destroy);
+      gdk_cairo_context_frame_set_surface (cframe, NULL);
     }
   else if (GDK_IS_ANDROID_DRAG_SURFACE (surface))
     {
       GdkAndroidDragSurface *surface_impl = (GdkAndroidDragSurface *)surface;
       GdkAndroidSurface *initiator = (GdkAndroidSurface *)gdk_drag_get_surface ((GdkDrag *)surface_impl->drag);
+      cairo_surface_t *cairo_surface;
 
       JNIEnv *env = gdk_android_get_env();
       (*env)->PushLocalFrame(env, 4);
 
-      cairo_surface_flush (self->active_surface);
-      jint* native_buffer = (jint *)cairo_image_surface_get_data (self->active_surface);
+      cairo_surface = gdk_cairo_context_frame_get_surface (cframe);
+      cairo_surface_flush (cairo_surface);
+      jint* native_buffer = (jint *)cairo_image_surface_get_data (cairo_surface);
       (*env)->ReleaseIntArrayElements(env, self->drag.buffer, native_buffer, 0);
 
-      g_info("New DragShadow: actual %dx%d", cairo_image_surface_get_width (self->active_surface), cairo_image_surface_get_height (self->active_surface));
+      g_info("New DragShadow: actual %dx%d", cairo_image_surface_get_width (cairo_surface), cairo_image_surface_get_height (cairo_surface));
 
       jobject bitmap = (*env)->CallStaticObjectMethod (env, gdk_android_get_java_cache ()->a_bitmap.klass,
                                                        gdk_android_get_java_cache ()->a_bitmap.create_from_array,
                                                        self->drag.buffer,
-                                                       cairo_image_surface_get_width (self->active_surface),
-                                                       cairo_image_surface_get_height (self->active_surface),
+                                                       cairo_image_surface_get_width (cairo_surface),
+                                                       cairo_image_surface_get_height (cairo_surface),
                                                        gdk_android_get_java_cache ()->a_bitmap.argb8888);
       jobject shadow = (*env)->NewObject (env,
                                           gdk_android_get_java_cache ()->clipboard_bitmap_drag_shadow.klass,
@@ -239,7 +241,7 @@ gdk_android_cairo_context_end_frame (GdkDrawContext      *draw_context,
       (*env)->DeleteGlobalRef(env, self->drag.buffer);
       self->drag.buffer = NULL;
 
-      g_clear_pointer(&self->active_surface, cairo_surface_destroy);
+      gdk_cairo_context_frame_set_surface (cframe, NULL);
 
       (*env)->PopLocalFrame(env, NULL);
     }
@@ -281,14 +283,11 @@ static void
 gdk_android_cairo_context_class_init (GdkAndroidCairoContextClass *klass)
 {
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
 
   draw_context_class->begin_frame = gdk_android_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_android_cairo_context_end_frame;
   draw_context_class->empty_frame = gdk_android_cairo_context_empty_frame;
   draw_context_class->surface_resized = gdk_android_cairo_context_surface_resized;
-
-  cairo_context_class->cairo_create = gdk_android_cairo_context_cairo_create;
 }
 
 static void
