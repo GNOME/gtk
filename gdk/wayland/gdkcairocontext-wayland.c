@@ -146,34 +146,37 @@ gdk_wayland_cairo_context_create_surface (GdkWaylandCairoContext *self)
 
 static void
 gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
-                                       GdkDrawContextFrame *frame,
+                                       GdkDrawContextFrame *draw_frame,
                                        gpointer             context_data,
                                        GdkColorState      **out_color_state,
                                        GdkMemoryDepth      *out_depth)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *frame = (GdkCairoContextFrame *) draw_frame;
+  cairo_surface_t *cairo_surface;
   const cairo_region_t *region, *surface_region;
   GSList *l;
   cairo_t *cr;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
   if (self->cached_surface)
-    self->paint_surface = g_steal_pointer (&self->cached_surface);
+    cairo_surface = g_steal_pointer (&self->cached_surface);
   else
-    self->paint_surface = gdk_wayland_cairo_context_create_surface (self);
+    cairo_surface = gdk_wayland_cairo_context_create_surface (self);
 
-  surface_region = gdk_wayland_cairo_context_surface_get_region (self->paint_surface);
+  gdk_cairo_context_frame_set_surface (frame, cairo_surface);
+  surface_region = gdk_wayland_cairo_context_surface_get_region (cairo_surface);
   if (surface_region)
-    gdk_draw_context_frame_add_damage (frame, surface_region);
+    gdk_draw_context_frame_add_damage (draw_frame, surface_region);
 
-  region = gdk_draw_context_frame_get_damage (frame);
+  region = gdk_draw_context_frame_get_damage (draw_frame);
   for (l = self->surfaces; l; l = l->next)
     {
       gdk_wayland_cairo_context_surface_add_region (l->data, region);
     }
 
   /* clear the repaint area */
-  cr = cairo_create (self->paint_surface);
+  cr = cairo_create (cairo_surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   gdk_cairo_region (cr, region);
   cairo_fill (cr);
@@ -185,24 +188,28 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 
 static void
 gdk_wayland_cairo_context_end_frame (GdkDrawContext      *draw_context,
-                                     GdkDrawContextFrame *frame,
+                                     GdkDrawContextFrame *draw_frame,
                                      gpointer             context_data)
 {
-  GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *frame = (GdkCairoContextFrame *) draw_frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  cairo_surface_t *cairo_surface;
+
+  cairo_surface = gdk_cairo_context_frame_get_surface (frame);
 
   gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_attach_image (surface,
-                                    self->paint_surface,
-                                    gdk_draw_context_frame_get_damage (frame));
+                                    cairo_surface_reference (cairo_surface),
+                                    gdk_draw_context_frame_get_damage (draw_frame));
   gdk_wayland_surface_request_frame (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   gdk_wayland_surface_commit (surface);
   gdk_wayland_surface_notify_committed (surface);
 
-  g_clear_pointer (&self->paint_surface, gdk_wayland_cairo_context_surface_clear_region);
+  gdk_wayland_cairo_context_surface_clear_region (cairo_surface);
+  gdk_cairo_context_frame_set_surface (frame, NULL);
 }
 
 static void
@@ -229,14 +236,6 @@ gdk_wayland_cairo_context_surface_resized (GdkDrawContext *draw_context)
   gdk_wayland_cairo_context_clear_all_cairo_surfaces (self);
 }
 
-static cairo_t *
-gdk_wayland_cairo_context_cairo_create (GdkCairoContext *context)
-{
-  GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (context);
-
-  return cairo_create (self->paint_surface);
-}
-
 static void
 gdk_wayland_cairo_context_dispose (GObject *object)
 {
@@ -244,7 +243,6 @@ gdk_wayland_cairo_context_dispose (GObject *object)
 
   gdk_wayland_cairo_context_clear_all_cairo_surfaces (self);
   g_assert (self->cached_surface == NULL);
-  g_assert (self->paint_surface == NULL);
 
   G_OBJECT_CLASS (gdk_wayland_cairo_context_parent_class)->dispose (object);
 }
@@ -254,7 +252,6 @@ gdk_wayland_cairo_context_class_init (GdkWaylandCairoContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
 
   gobject_class->dispose = gdk_wayland_cairo_context_dispose;
 
@@ -262,8 +259,6 @@ gdk_wayland_cairo_context_class_init (GdkWaylandCairoContextClass *klass)
   draw_context_class->end_frame = gdk_wayland_cairo_context_end_frame;
   draw_context_class->empty_frame = gdk_wayland_cairo_context_empty_frame;
   draw_context_class->surface_resized = gdk_wayland_cairo_context_surface_resized;
-
-  cairo_context_class->cairo_create = gdk_wayland_cairo_context_cairo_create;
 }
 
 static void
