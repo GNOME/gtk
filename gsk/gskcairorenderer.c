@@ -171,6 +171,10 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
   gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
   cairo_clip (cr);
 
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
   scale = gdk_surface_get_scale (gdk_draw_context_get_surface (draw_context));
   cairo_scale (cr, scale, scale);
 
