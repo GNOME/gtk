@@ -39,7 +39,6 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                         GdkColorState      **out_color_state,
                                         GdkMemoryDepth      *out_depth)
 {
-  cairo_t *cr;
   guint width, height;
   cairo_region_t *region;
   cairo_surface_t *cairo_surface;
@@ -53,12 +52,6 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                           });
   gdk_draw_context_frame_add_damage (frame, region);
   cairo_region_destroy (region);
-
-  /* clear the repaint area */
-  cr = cairo_create (cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  cairo_fill (cr);
-  cairo_destroy (cr);
 
   gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
 
