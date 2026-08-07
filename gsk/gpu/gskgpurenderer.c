@@ -447,6 +447,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GdkDrawContextFrame *draw_frame;
   GskGpuFrame *frame;
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
@@ -467,11 +468,11 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   frame = gsk_gpu_renderer_get_frame (self);
   scale = gdk_surface_get_scale (gdk_draw_context_get_surface (priv->context));
 
-  gsk_gpu_frame_begin (frame, priv->context, root, region);
+  draw_frame = gsk_gpu_frame_begin (frame, priv->context, root, region);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
-  render_region = cairo_region_copy (gdk_draw_context_get_render_region (priv->context));
+  render_region = cairo_region_copy (gdk_draw_context_frame_get_damage (draw_frame));
 
   if (!(priv->optimizations & GSK_GPU_OPTIMIZE_DAMAGE))
     {
