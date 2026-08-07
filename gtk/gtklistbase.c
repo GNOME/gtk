@@ -844,7 +844,13 @@ gtk_list_base_compute_scroll_align (int            cell_start,
   visible_end = visible_start + visible_size;
   cell_end = cell_start + cell_size;
 
-  if (cell_size <= visible_size)
+  if (visible_size == 0)
+    {
+      /* Avoid division by 0 */
+      *new_align = current_align;
+      *new_side = current_side;
+    }
+  else if (cell_size <= visible_size)
     {
       if (cell_start < visible_start)
         {
@@ -2279,6 +2285,9 @@ gtk_list_base_set_anchor (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   guint items_before;
+
+  g_return_if_fail (isfinite (anchor_align_across));
+  g_return_if_fail (isfinite (anchor_align_along));
 
   items_before = round (priv->center_widgets * CLAMP (anchor_align_along, 0, 1));
   gtk_list_item_tracker_set_position (priv->item_manager,
