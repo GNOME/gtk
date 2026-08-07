@@ -97,8 +97,6 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   GdkMacosSurface *surface;
   cairo_surface_t *image_surface;
   const cairo_region_t *region;
-  NSWindow *nswindow;
-  gboolean opaque;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
@@ -142,9 +140,6 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
         }
     }
 
-  nswindow = _gdk_macos_surface_get_native (surface);
-  opaque = [nswindow isOpaque];
-
   /* Instead of forcing cairo to do everything through a CGContext,
    * we just use an image surface backed by an IOSurfaceRef mapped
    * into user-space. We can then use pixman which is quite fast as
@@ -159,18 +154,6 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                                        _gdk_macos_buffer_get_width (buffer),
                                                        _gdk_macos_buffer_get_height (buffer),
                                                        _gdk_macos_buffer_get_stride (buffer));
-
-  if (!opaque)
-    {
-      cairo_t *cr = cairo_create (image_surface);
-
-      cairo_save (cr);
-
-      cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
-    }
 
   gdk_cairo_context_frame_set_surface (cframe, image_surface);
 
