@@ -45,8 +45,6 @@ struct _GdkCairoContext
 struct _GdkCairoContextClass
 {
   GdkDrawContextClass parent_class;
-
-  cairo_t *     (* cairo_create)                (GdkCairoContext        *self);
 };
 
 void                    gdk_cairo_context_frame_set_surface     (GdkCairoContextFrame   *frame,
