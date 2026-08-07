@@ -57,24 +57,6 @@ gdk_cairo_context_finalize_frame (GdkDrawContext      *context,
   GDK_DRAW_CONTEXT_CLASS (gdk_cairo_context_parent_class)->finalize_frame (context, draw_frame);
 }
 
-static cairo_t *
-gdk_cairo_context_default_cairo_create (GdkCairoContext *self)
-{
-  GdkCairoContextFrame *frame;
-  cairo_t *cr;
-
-  frame = (GdkCairoContextFrame *) gdk_draw_context_get_current_frame (GDK_DRAW_CONTEXT (self));
-  if (frame == NULL || frame->surface == NULL)
-    return NULL;
-
-  cr = cairo_create (frame->surface);
-
-  gdk_cairo_region (cr, gdk_draw_context_frame_get_damage ((GdkDrawContextFrame *) frame));
-  cairo_clip (cr);
-
-  return cr;
-}
-
 static void
 gdk_cairo_context_class_init (GdkCairoContextClass *klass)
 {
@@ -83,8 +65,6 @@ gdk_cairo_context_class_init (GdkCairoContextClass *klass)
   context_class->frame_size = sizeof (GdkCairoContextFrame);
 
   context_class->finalize_frame = gdk_cairo_context_finalize_frame;
-
-  klass->cairo_create = gdk_cairo_context_default_cairo_create;
 }
 
 static void
@@ -115,6 +95,8 @@ cairo_t *
 gdk_cairo_context_cairo_create (GdkCairoContext *self)
 {
   GdkDrawContext *draw_context;
+  GdkDrawContextFrame *frame;
+  GdkCairoContextFrame *cframe;
   cairo_t *cr;
   double scale;
 
@@ -127,9 +109,14 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     return NULL;
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-  cr = GDK_CAIRO_CONTEXT_GET_CLASS (self)->cairo_create (self);
+  frame = gdk_draw_context_get_current_frame (GDK_DRAW_CONTEXT (self));
+  cframe = (GdkCairoContextFrame *) frame;
+  if (cframe == NULL || cframe->surface == NULL)
+    return NULL;
 
-  gdk_cairo_region (cr, gdk_draw_context_get_render_region (draw_context));
+  cr = cairo_create (cframe->surface);
+
+  gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
   cairo_clip (cr);
 
   scale = gdk_surface_get_scale (gdk_draw_context_get_surface (draw_context));
