@@ -149,7 +149,6 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   cairo_surface_t *cairo_surface;
-  cairo_t *cr;
   GdkWin32Display *display;
   ID3D11Device *d3d11_device;
   ID3D11DeviceContext *d3d11_context;
@@ -176,12 +175,6 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
                                                        width,
                                                        height,
                                                        map.RowPitch);
-
-  cr = cairo_create (cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
-  cairo_fill (cr);
-  cairo_destroy (cr);
 
   gdk_win32_com_clear (&d3d11_context);
 
@@ -310,7 +303,6 @@ gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
   GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   cairo_surface_t *cairo_surface;
-  cairo_t *cr;
   HDC hdc;
 
   hdc = GetDC (gdk_win32_surface_get_handle (surface));
@@ -321,12 +313,6 @@ gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
     }
 
   cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
-
-  cr = cairo_create (cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
-  cairo_fill (cr);
-  cairo_destroy (cr);
 
   gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
 
