@@ -64,6 +64,7 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
   GdkRectangle clip_box;
   GdkSurface *surface;
+  cairo_surface_t *cairo_surface;
   cairo_format_t format;
 
   surface = gdk_draw_context_get_surface (draw_context);
@@ -72,12 +73,14 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   self->window_surface = create_cairo_surface_for_surface (surface);
 
   format = gdk_cairo_format_for_content (cairo_surface_get_content (self->window_surface)),
-  self->paint_surface = cairo_image_surface_create (format,
-                                                    MAX (clip_box.width, 1),
-                                                    MAX (clip_box.height, 1));
+  cairo_surface = cairo_image_surface_create (format,
+                                              MAX (clip_box.width, 1),
+                                              MAX (clip_box.height, 1));
 
-  cairo_surface_set_device_scale (self->paint_surface, 1.0, 1.0);
-  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x, -clip_box.y);
+  cairo_surface_set_device_scale (cairo_surface, 1.0, 1.0);
+  cairo_surface_set_device_offset (cairo_surface, -clip_box.x, -clip_box.y);
+
+  gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
@@ -89,11 +92,14 @@ gdk_x11_cairo_context_end_frame (GdkDrawContext      *draw_context,
                                  gpointer             context_data)
 {
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
+  cairo_surface_t *cairo_surface;
   cairo_t *cr;
 
+  cairo_surface = gdk_cairo_context_frame_get_surface (cframe);
   cr = cairo_create (self->window_surface);
 
-  cairo_set_source_surface (cr, self->paint_surface, 0, 0);
+  cairo_set_source_surface (cr, cairo_surface, 0, 0);
   gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
   cairo_clip (cr);
 
@@ -104,28 +110,17 @@ gdk_x11_cairo_context_end_frame (GdkDrawContext      *draw_context,
 
   cairo_surface_flush (self->window_surface);
 
-  g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
+  gdk_cairo_context_frame_set_surface (cframe, NULL);
   g_clear_pointer (&self->window_surface, cairo_surface_destroy);
-}
-
-static cairo_t *
-gdk_x11_cairo_context_cairo_create (GdkCairoContext *context)
-{
-  GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (context);
-
-  return cairo_create (self->paint_surface);
 }
 
 static void
 gdk_x11_cairo_context_class_init (GdkX11CairoContextClass *klass)
 {
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
 
   draw_context_class->begin_frame = gdk_x11_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_x11_cairo_context_end_frame;
-
-  cairo_context_class->cairo_create = gdk_x11_cairo_context_cairo_create;
 }
 
 static void
