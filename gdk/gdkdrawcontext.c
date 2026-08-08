@@ -431,6 +431,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
       if (!gdk_draw_context_attach (context, &error))
         {
           g_critical ("Failed to attach context: %s", error->message);
+          g_error_free (error);
           return;
         }
     }
