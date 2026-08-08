@@ -105,7 +105,8 @@ gsk_gl_renderer_restore_current (GskGpuRenderer *renderer,
 }
 
 static GskGpuImage *
-gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
+gsk_gl_renderer_get_backbuffer (GskGpuRenderer      *renderer,
+                                GdkDrawContextFrame *frame)
 {
   GdkDrawContext *context;
   GdkSurface *surface;
