@@ -337,6 +337,8 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
   result->damage = damage;
   result->color_state = gdk_color_state_ref (GDK_COLOR_STATE_SRGB);
 
+  result->frame_counter = gdk_frame_clock_get_frame_counter (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self)));
+
   return result;
 }
 
@@ -344,8 +346,12 @@ static void
 gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 {
   GdkDrawContext *self = frame->context;
+  GdkFrameClock *clock;
 
   GDK_DRAW_CONTEXT_GET_CLASS (self)->finalize_frame (self, frame);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self));
+  gdk_frame_clock_remove_frame (clock, frame);
 
   cairo_region_destroy (frame->damage);
   gdk_color_state_unref (frame->color_state);
@@ -490,6 +496,9 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      priv->current_frame,
                                                      context_data);
+
+  gdk_frame_clock_add_frame (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (context)),
+                             priv->current_frame);
 
   return priv->current_frame;
 }

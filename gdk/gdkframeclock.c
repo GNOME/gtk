@@ -129,6 +129,8 @@ struct _GdkFrameClockPrivate
   gsize n_started;
   gsize n_updating;
 
+  GSList *frames;
+
   guint work_performed : 1;
 };
 
@@ -1325,3 +1327,20 @@ gdk_frame_clock_frame (GdkFrameClock *self)
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
 }
 
+void
+gdk_frame_clock_add_frame (GdkFrameClock       *self,
+                           GdkDrawContextFrame *frame)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  priv->frames = g_slist_prepend (priv->frames, frame);
+}
+
+void
+gdk_frame_clock_remove_frame (GdkFrameClock       *self,
+                              GdkDrawContextFrame *frame)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  priv->frames = g_slist_remove (priv->frames, frame);
+}

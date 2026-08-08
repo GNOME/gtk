@@ -36,6 +36,7 @@ typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
 struct _GdkDrawContextFrame
 {
   GdkDrawContext *context;
+  gint64 frame_counter;
 
   guint buffer_width;
   guint buffer_height;
