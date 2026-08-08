@@ -732,7 +732,6 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
   if (priv->egl_context)
     gdk_gl_context_ensure_egl_surface (context, depth);
   
-  gdk_draw_context_frame_set_depth (frame, priv->egl_surface_depth);
   gdk_draw_context_frame_set_color_state (frame, color_state);
 #endif
 

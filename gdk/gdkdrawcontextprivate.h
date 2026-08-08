@@ -42,7 +42,6 @@ struct _GdkDrawContextFrame
   cairo_region_t *damage;
 
   GdkColorState *color_state;
-  GdkMemoryDepth depth;
 };
 
 struct _GdkDrawContext
@@ -97,9 +96,6 @@ void                    gdk_draw_context_frame_add_damage       (GdkDrawContextF
 GdkColorState *         gdk_draw_context_frame_get_color_state  (GdkDrawContextFrame    *frame);
 void                    gdk_draw_context_frame_set_color_state  (GdkDrawContextFrame    *frame,
                                                                  GdkColorState          *color_state);
-GdkMemoryDepth          gdk_draw_context_frame_get_depth        (GdkDrawContextFrame    *frame);
-void                    gdk_draw_context_frame_set_depth        (GdkDrawContextFrame    *frame,
-                                                                 GdkMemoryDepth          depth);
 
 
 G_END_DECLS
