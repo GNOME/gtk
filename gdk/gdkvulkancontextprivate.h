@@ -34,6 +34,15 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkVulkanContextFrame GdkVulkanContextFrame;
+
+struct _GdkVulkanContextFrame
+{
+  GdkDrawContextFrame parent;
+
+  uint32_t image_index;
+};
+
 struct _GdkVulkanContext
 {
   GdkDrawContext parent_instance;
@@ -88,9 +97,9 @@ GdkMemoryFormat         gdk_vulkan_context_get_memory_format            (GdkVulk
 uint32_t                gdk_vulkan_context_get_n_images                 (GdkVulkanContext      *context);
 VkImage                 gdk_vulkan_context_get_image                    (GdkVulkanContext      *context,
                                                                          guint                  id);
-uint32_t                gdk_vulkan_context_get_draw_index               (GdkVulkanContext      *context);
 VkSemaphore             gdk_vulkan_context_get_present_semaphore        (GdkVulkanContext      *context);
 
+uint32_t                gdk_vulkan_context_frame_get_image_index        (GdkVulkanContextFrame *frame);
 #else /* !GDK_RENDERING_VULKAN */
 
 
