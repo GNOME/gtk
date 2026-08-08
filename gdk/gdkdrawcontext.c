@@ -346,6 +346,12 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
   return result;
 }
 
+static gboolean
+gdk_draw_context_frame_is_complete (GdkDrawContextFrame *frame)
+{
+  return frame->cpu_complete;
+}
+
 static void
 gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 {
@@ -361,6 +367,15 @@ gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
   gdk_color_state_unref (frame->color_state);
   g_object_unref (frame->context);
   g_free (frame);
+}
+
+static void
+gdk_draw_context_frame_maybe_free (GdkDrawContextFrame *frame)
+{
+  if (!gdk_draw_context_frame_is_complete (frame))
+    return;
+
+  gdk_draw_context_frame_free (frame);
 }
 
 /**
@@ -533,7 +548,8 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (gdk_draw_context_frame_get_damage (priv->current_frame)));
 
-  g_clear_pointer (&priv->current_frame, gdk_draw_context_frame_free);
+  priv->current_frame->cpu_complete = TRUE;
+  g_clear_pointer (&priv->current_frame, gdk_draw_context_frame_maybe_free);
 
   gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
 }

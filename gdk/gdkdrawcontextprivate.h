@@ -43,6 +43,8 @@ struct _GdkDrawContextFrame
   cairo_region_t *damage;
 
   GdkColorState *color_state;
+
+  guint cpu_complete : 1;
 };
 
 struct _GdkDrawContext
