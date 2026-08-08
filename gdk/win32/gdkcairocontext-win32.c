@@ -142,9 +142,7 @@ gdk_win32_cairo_context_surface_detach (GdkDrawContext *context)
 static void
 gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
                                            GdkDrawContextFrame *frame,
-                                           gpointer             context_data,
-                                           GdkColorState      **out_color_state,
-                                           GdkMemoryDepth      *out_depth)
+                                           gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
@@ -179,9 +177,6 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
   gdk_win32_com_clear (&d3d11_context);
 
   gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void
@@ -296,9 +291,7 @@ gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext      *draw_context,
 static void
 gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
                                          GdkDrawContextFrame *frame,
-                                         gpointer             context_data,
-                                         GdkColorState      **out_color_state,
-                                         GdkMemoryDepth      *out_depth)
+                                         gpointer             context_data)
 {
   GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
@@ -315,9 +308,6 @@ gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
   cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
 
   gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void
@@ -342,16 +332,14 @@ gdk_win32_cairo_context_end_frame_gdi (GdkDrawContext      *draw_context,
 static void
 gdk_win32_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                      GdkDrawContextFrame *frame,
-                                     gpointer             context_data,
-                                     GdkColorState      **out_color_state,
-                                     GdkMemoryDepth      *out_depth)
+                                     gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
 
   if (self->swap_chain)
-    gdk_win32_cairo_context_begin_frame_dcomp (draw_context, frame, context_data, out_color_state, out_depth);
+    gdk_win32_cairo_context_begin_frame_dcomp (draw_context, frame, context_data);
   else
-    gdk_win32_cairo_context_begin_frame_gdi (draw_context, frame, context_data, out_color_state, out_depth);
+    gdk_win32_cairo_context_begin_frame_gdi (draw_context, frame, context_data);
 }
 
 static void

@@ -40,6 +40,9 @@ struct _GdkDrawContextFrame
   guint buffer_width;
   guint buffer_height;
   cairo_region_t *damage;
+
+  GdkColorState *color_state;
+  GdkMemoryDepth depth;
 };
 
 struct _GdkDrawContext
@@ -61,9 +64,7 @@ struct _GdkDrawContextClass
                                                                  GdkDrawContextFrame    *frame);
   void                  (* begin_frame)                         (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame,
-                                                                 gpointer                context_data,
-                                                                 GdkColorState         **out_color_state,
-                                                                 GdkMemoryDepth         *out_depth);
+                                                                 gpointer                context_data);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame,
                                                                  gpointer                context_data);
@@ -90,8 +91,6 @@ gboolean                gdk_draw_context_attach                 (GdkDrawContext 
 void                    gdk_draw_context_detach                 (GdkDrawContext         *self);
 
 GdkDrawContextFrame *   gdk_draw_context_get_current_frame      (GdkDrawContext         *self);
-GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);
-GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext         *self);
 void                    gdk_draw_context_get_buffer_size        (GdkDrawContext         *self,
                                                                  guint                  *out_width,
                                                                  guint                  *out_height);
@@ -99,6 +98,12 @@ void                    gdk_draw_context_get_buffer_size        (GdkDrawContext 
 const cairo_region_t *  gdk_draw_context_frame_get_damage       (GdkDrawContextFrame    *frame);
 void                    gdk_draw_context_frame_add_damage       (GdkDrawContextFrame    *frame,
                                                                  const cairo_region_t   *damage);
+GdkColorState *         gdk_draw_context_frame_get_color_state  (GdkDrawContextFrame    *frame);
+void                    gdk_draw_context_frame_set_color_state  (GdkDrawContextFrame    *frame,
+                                                                 GdkColorState          *color_state);
+GdkMemoryDepth          gdk_draw_context_frame_get_depth        (GdkDrawContextFrame    *frame);
+void                    gdk_draw_context_frame_set_depth        (GdkDrawContextFrame    *frame,
+                                                                 GdkMemoryDepth          depth);
 
 
 G_END_DECLS

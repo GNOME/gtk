@@ -53,9 +53,6 @@ struct _GdkDrawContextPrivate {
   GdkSurface *surface;
 
   GdkDrawContextFrame *current_frame;
-
-  GdkColorState *color_state;
-  GdkMemoryDepth depth;
 };
 
 enum {
@@ -92,6 +89,7 @@ static void
 gdk_draw_context_default_finalize_frame (GdkDrawContext      *context,
                                          GdkDrawContextFrame *frame)
 {
+  g_clear_pointer (&frame->color_state, gdk_color_state_unref);
 }
 
 static gboolean
@@ -262,12 +260,8 @@ static guint pixels_counter;
 static void
 gdk_draw_context_init (GdkDrawContext *self)
 {
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
-
   if (pixels_counter == 0)
     pixels_counter = gdk_profiler_define_int_counter ("frame pixels", "Pixels drawn per frame");
-
-  priv->depth = GDK_N_DEPTHS;
 }
 
 /**
@@ -355,6 +349,8 @@ gdk_draw_context_frame_new (GdkDrawContext *self)
 
   result = g_malloc0 (klass->frame_size);
   result->context = self;
+  result->color_state = gdk_color_state_ref (GDK_COLOR_STATE_SRGB);
+  result->depth = GDK_MEMORY_U8;
   klass->initialize_frame (self, result);
 
   return result;
@@ -530,17 +526,9 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   priv->current_frame = gdk_draw_context_frame_acquire (context,
                                                         gdk_cairo_region_scale_grow (region, scale, scale));
 
-  g_assert (priv->color_state == NULL);
-
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      priv->current_frame,
-                                                     context_data,
-                                                     &priv->color_state,
-                                                     &priv->depth);
-
-  /* The callback is meant to set them. Note that it does not return a ref */
-  g_assert (priv->color_state != NULL);
-  g_assert (priv->depth < GDK_N_DEPTHS);
+                                                     context_data);
 
   return priv->current_frame;
 }
@@ -574,8 +562,6 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (gdk_draw_context_frame_get_damage (priv->current_frame)));
 
-  priv->color_state = NULL;
-  priv->depth = GDK_N_DEPTHS;
   g_clear_pointer (&priv->current_frame, gdk_draw_context_frame_release);
 
   gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
@@ -666,38 +652,6 @@ gdk_draw_context_get_current_frame (GdkDrawContext *self)
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
 
   return priv->current_frame;
-}
-
-/*<private>
- * gdk_draw_context_get_color_state:
- * @self: a `GdkDrawContext`
- *
- * Gets the target color state while rendering. If no rendering is going on, %NULL is returned.
- *
- * Returns: (transfer none) (nullable): the target color state
- **/
-GdkColorState *
-gdk_draw_context_get_color_state (GdkDrawContext *self)
-{
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
-
-  return priv->color_state;
-}
-
-/*<private>
- * gdk_draw_context_get_depth:
- * @self: a `GdkDrawContext`
- *
- * Gets the target depth while rendering. If no rendering is going on, the return value is undefined.
- *
- * Returns: the target depth
- **/
-GdkMemoryDepth
-gdk_draw_context_get_depth (GdkDrawContext *self)
-{
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
-
-  return priv->depth;
 }
 
 void
@@ -847,4 +801,69 @@ gdk_draw_context_frame_add_damage (GdkDrawContextFrame  *frame,
                                       0, 0,
                                       frame->buffer_width, frame->buffer_height
                                     });
+}
+
+/**
+ * gdk_draw_context_frame_get_color_state:
+ * @frame: the frame
+ *
+ * Gets the color state that will be/was used to render this frame.
+ *
+ * Returns: the color state
+ **/
+GdkColorState *
+gdk_draw_context_frame_get_color_state (GdkDrawContextFrame *frame)
+{
+  return frame->color_state;
+}
+
+/**
+ * gdk_draw_context_frame_set_color_state:
+ * @frame: the frame
+ * @color_state: the color state
+ *
+ * Sets the color state to use for this frame.
+ * 
+ * This function may only be called by backends in the begin_frame() function.
+ *
+ * If the color state isn't set, the default is sRGB.
+ **/
+void
+gdk_draw_context_frame_set_color_state (GdkDrawContextFrame *frame,
+                                        GdkColorState       *color_state)
+{
+  g_clear_pointer (&frame->color_state, gdk_color_state_unref);
+  frame->color_state = gdk_color_state_ref (color_state);
+}
+
+/**
+ * gdk_draw_context_frame_get_depth:
+ * @frame: the frame
+ *
+ * Gets the depth used to render this frame.
+ *
+ * Returns: the depth
+ **/
+GdkMemoryDepth
+gdk_draw_context_frame_get_depth (GdkDrawContextFrame *frame)
+{
+  return frame->depth;
+}
+
+/**
+ * gdk_draw_context_frame_set_depth:
+ * @frame: the frame
+ * @depth: the depth used in this frame
+ *
+ * Sets the depth used by this frame.
+ *
+ * This function may only be called by backends in the begin_frame() function.
+ *
+ * If the depth isn't set, the default is GDK_MEMORY_U8.
+ **/
+void
+gdk_draw_context_frame_set_depth (GdkDrawContextFrame *frame,
+                                  GdkMemoryDepth       depth)
+{
+  frame->depth = depth;
 }

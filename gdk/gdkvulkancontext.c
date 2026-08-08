@@ -820,9 +820,7 @@ gdk_vulkan_context_release_presents (GdkVulkanContext *self,
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
                                 GdkDrawContextFrame *frame,
-                                gpointer             context_data,
-                                GdkColorState      **out_color_state,
-                                GdkMemoryDepth      *out_depth)
+                                gpointer             context_data)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
@@ -933,9 +931,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
   present->vk_swapchain = priv->swapchain;
 
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
-
-  *out_color_state = color_state;
-  *out_depth = priv->current_depth;
+  gdk_draw_context_frame_set_color_state (frame, color_state);
+  gdk_draw_context_frame_set_depth (frame, priv->current_depth);
 }
 
 static void
