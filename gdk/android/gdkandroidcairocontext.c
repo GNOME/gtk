@@ -59,9 +59,7 @@ G_DEFINE_TYPE (GdkAndroidCairoContext, gdk_android_cairo_context, GDK_TYPE_CAIRO
 static void
 gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        GdkDrawContextFrame *frame,
-                                       gpointer             context_data,
-                                       GdkColorState      **out_color_state,
-                                       GdkMemoryDepth      *out_depth)
+                                       gpointer             context_data)
 {
   GdkAndroidCairoContext *self = (GdkAndroidCairoContext *)draw_context;
   GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
@@ -160,9 +158,6 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 
 cleanup:
   (*env)->PopLocalFrame (env, NULL);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void
