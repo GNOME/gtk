@@ -486,7 +486,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_frame_render (frame,
                         timestamp,
                         backbuffer,
-                        gdk_draw_context_get_color_state (priv->context),
+                        gdk_draw_context_frame_get_color_state (draw_frame),
                         render_region,
                         root,
                         &GRAPHENE_RECT_INIT (
