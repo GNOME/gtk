@@ -329,6 +329,7 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
 {
   GdkDrawContextClass *klass;
   GdkDrawContextFrame *result;
+  GdkFrameClock *clock;
 
   klass = GDK_DRAW_CONTEXT_GET_CLASS (self);
 
@@ -338,6 +339,10 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
   result->damage = damage;
   result->color_state = gdk_color_state_ref (GDK_COLOR_STATE_SRGB);
 
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self));
+  result->frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  gdk_frame_clock_add_frame (clock, result);
+
   return result;
 }
 
@@ -345,8 +350,12 @@ static void
 gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 {
   GdkDrawContext *self = frame->context;
+  GdkFrameClock *clock;
 
   GDK_DRAW_CONTEXT_GET_CLASS (self)->finalize_frame (self, frame);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self));
+  gdk_frame_clock_remove_frame (clock, frame);
 
   cairo_region_destroy (frame->damage);
   gdk_color_state_unref (frame->color_state);
