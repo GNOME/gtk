@@ -932,7 +932,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
   gdk_draw_context_frame_set_color_state (frame, color_state);
-  gdk_draw_context_frame_set_depth (frame, priv->current_depth);
 }
 
 static void
