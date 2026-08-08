@@ -470,7 +470,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   draw_frame = gsk_gpu_frame_begin (frame, priv->context, root, region);
 
-  backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
+  backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self, draw_frame);
 
   render_region = cairo_region_copy (gdk_draw_context_frame_get_damage (draw_frame));
 

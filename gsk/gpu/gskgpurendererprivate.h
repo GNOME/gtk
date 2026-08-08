@@ -5,6 +5,8 @@
 #include "gskgputypesprivate.h"
 #include "gskrendererprivate.h"
 
+#include "gdk/gdkdrawcontextprivate.h"
+
 G_BEGIN_DECLS
 
 #define GSK_GPU_RENDERER_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GSK_TYPE_GPU_RENDERER, GskGpuRendererClass))
@@ -38,7 +40,8 @@ struct _GskGpuRendererClass
   gpointer              (* save_current)                                (GskGpuRenderer         *self);
   void                  (* restore_current)                             (GskGpuRenderer         *self,
                                                                          gpointer                current);
-  GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self);
+  GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self,
+                                                                         GdkDrawContextFrame    *frame);
 };
 
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);
