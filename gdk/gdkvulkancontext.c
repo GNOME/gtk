@@ -63,6 +63,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
 #define MAX_PRESENTS 8
 
 typedef struct _GdkVulkanPresent GdkVulkanPresent;
+
 struct _GdkVulkanPresent
 {
   VkSemaphore vk_semaphore;
@@ -824,6 +825,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkVulkanContextFrame *vframe = (GdkVulkanContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   GskRenderNode *content;
@@ -932,6 +934,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
   gdk_draw_context_frame_set_color_state (frame, color_state);
+  vframe->image_index = present->image_index;
 }
 
 static void
@@ -1255,6 +1258,8 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  draw_context_class->frame_size = sizeof (GdkVulkanContextFrame);
 
   draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
   draw_context_class->end_frame = gdk_vulkan_context_end_frame;
@@ -1652,25 +1657,18 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
   return priv->images[id];
 }
 
-/**
- * gdk_vulkan_context_get_draw_index:
+/*<private>
+ * gdk_vulkan_context_frame_get_image_index:
  * @context: a `GdkVulkanContext`
  *
  * Gets the index of the image that is currently being drawn.
  *
- * This function can only be used between [method@Gdk.DrawContext.begin_frame]
- * and [method@Gdk.DrawContext.end_frame] calls.
- *
  * Returns: the index of the images that is being drawn
  */
 uint32_t
-gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
+gdk_vulkan_context_frame_get_image_index (GdkVulkanContextFrame *frame)
 {
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
-
-  return priv->presents[priv->latest_present].image_index;
+  return frame->image_index;
 }
 
 VkSemaphore
