@@ -194,7 +194,7 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
       cairo_restore (cr);
     }
 
-  gsk_render_node_draw_with_color_state (root, cr, gdk_draw_context_get_color_state (GDK_DRAW_CONTEXT (self->cairo_context)));
+  gsk_render_node_draw_with_color_state (root, cr, gdk_draw_context_frame_get_color_state (frame));
 
   cairo_destroy (cr);
 
