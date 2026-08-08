@@ -128,7 +128,8 @@ gsk_vulkan_renderer_restore_current (GskGpuRenderer *renderer,
 }
 
 static GskGpuImage *
-gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
+gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer      *renderer,
+                                    GdkDrawContextFrame *frame)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkVulkanContext *context;
