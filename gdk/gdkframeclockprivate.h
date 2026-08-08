@@ -28,6 +28,8 @@
 
 #include <gdk/gdkframeclock.h>
 
+#include "gdkdrawcontextprivate.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -83,6 +85,11 @@ void                    gdk_frame_clock_frame                   (GdkFrameClock  
 
 GdkFrameTimings *       gdk_frame_clock_find_timings            (GdkFrameClock          *self,
                                                                  guint64                 serial);
+
+void                    gdk_frame_clock_add_frame               (GdkFrameClock          *self,
+                                                                 GdkDrawContextFrame    *frame);
+void                    gdk_frame_clock_remove_frame            (GdkFrameClock          *self,
+                                                                 GdkDrawContextFrame    *frame);
 
 uint64_t        gdk_frame_clock_get_refresh_interval            (GdkFrameClock          *self);
 uint64_t        gdk_frame_clock_get_latest_presentation_time    (GdkFrameClock          *self);
