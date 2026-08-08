@@ -35,9 +35,7 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 static void
 gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                         GdkDrawContextFrame *frame,
-                                        gpointer             context_data,
-                                        GdkColorState      **out_color_state,
-                                        GdkMemoryDepth      *out_depth)
+                                        gpointer             context_data)
 {
   guint width, height;
   cairo_region_t *region;
@@ -54,9 +52,6 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   cairo_region_destroy (region);
 
   gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void

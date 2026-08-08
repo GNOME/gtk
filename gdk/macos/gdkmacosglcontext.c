@@ -482,9 +482,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 static void
 gdk_macos_gl_context_begin_frame (GdkDrawContext      *context,
                                   GdkDrawContextFrame *frame,
-                                  gpointer             context_data,
-                                  GdkColorState      **out_color_state,
-                                  GdkMemoryDepth      *out_depth)
+                                  gpointer             context_data)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
   GdkMacosBuffer *buffer;
@@ -502,7 +500,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext      *context,
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   gdk_macos_gl_context_allocate (self);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, frame, context_data, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, frame, context_data);
 
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, self->fbo));

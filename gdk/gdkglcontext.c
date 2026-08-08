@@ -703,9 +703,7 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
                                  GdkDrawContextFrame *frame,
-                                 gpointer             context_data,
-                                 GdkColorState      **out_color_state,
-                                 GdkMemoryDepth      *out_depth)
+                                 gpointer             context_data)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
 #ifdef HAVE_EGL
@@ -734,11 +732,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
   if (priv->egl_context)
     gdk_gl_context_ensure_egl_surface (context, depth);
   
-  *out_depth = priv->egl_surface_depth;
-  *out_color_state = color_state;
-#else
-  *out_color_state = gdk_color_state_get_srgb ();
-  *out_depth = GDK_MEMORY_U8;
+  gdk_draw_context_frame_set_depth (frame, priv->egl_surface_depth);
+  gdk_draw_context_frame_set_color_state (frame, color_state);
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);

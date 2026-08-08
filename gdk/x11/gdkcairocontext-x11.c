@@ -57,9 +57,7 @@ create_cairo_surface_for_surface (GdkSurface *surface)
 static void
 gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                    GdkDrawContextFrame *frame,
-                                   gpointer             context_data,
-                                   GdkColorState      **out_color_state,
-                                   GdkMemoryDepth      *out_depth)
+                                   gpointer             context_data)
 {
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
   GdkRectangle clip_box;
@@ -81,9 +79,6 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   cairo_surface_set_device_offset (cairo_surface, -clip_box.x, -clip_box.y);
 
   gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void
