@@ -350,7 +350,6 @@ gdk_draw_context_frame_new (GdkDrawContext *self)
   result = g_malloc0 (klass->frame_size);
   result->context = self;
   result->color_state = gdk_color_state_ref (GDK_COLOR_STATE_SRGB);
-  result->depth = GDK_MEMORY_U8;
   klass->initialize_frame (self, result);
 
   return result;
@@ -836,34 +835,3 @@ gdk_draw_context_frame_set_color_state (GdkDrawContextFrame *frame,
   frame->color_state = gdk_color_state_ref (color_state);
 }
 
-/**
- * gdk_draw_context_frame_get_depth:
- * @frame: the frame
- *
- * Gets the depth used to render this frame.
- *
- * Returns: the depth
- **/
-GdkMemoryDepth
-gdk_draw_context_frame_get_depth (GdkDrawContextFrame *frame)
-{
-  return frame->depth;
-}
-
-/**
- * gdk_draw_context_frame_set_depth:
- * @frame: the frame
- * @depth: the depth used in this frame
- *
- * Sets the depth used by this frame.
- *
- * This function may only be called by backends in the begin_frame() function.
- *
- * If the depth isn't set, the default is GDK_MEMORY_U8.
- **/
-void
-gdk_draw_context_frame_set_depth (GdkDrawContextFrame *frame,
-                                  GdkMemoryDepth       depth)
-{
-  frame->depth = depth;
-}
