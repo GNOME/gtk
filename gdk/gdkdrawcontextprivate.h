@@ -43,6 +43,8 @@ struct _GdkDrawContextFrame
   cairo_region_t *damage;
 
   GdkColorState *color_state;
+
+  guint cpu_complete : 1;
 };
 
 struct _GdkDrawContext
@@ -92,6 +94,7 @@ void                    gdk_draw_context_get_buffer_size        (GdkDrawContext 
                                                                  guint                  *out_height);
 
 void                    gdk_draw_context_frame_free             (GdkDrawContextFrame    *frame);
+gboolean                gdk_draw_context_frame_is_complete      (GdkDrawContextFrame    *frame);
 const cairo_region_t *  gdk_draw_context_frame_get_damage       (GdkDrawContextFrame    *frame);
 void                    gdk_draw_context_frame_add_damage       (GdkDrawContextFrame    *frame,
                                                                  const cairo_region_t   *damage);
