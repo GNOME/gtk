@@ -4,8 +4,8 @@ acs_equals_ccs = false;
 acs_premultiplied = true;
 
 graphene_rect_t bounds;
-graphene_size_t base_frequency;
-guint32 num_octaves;
+graphene_size_t frequency;
+guint32 octaves;
 float tile_x;
 float tile_y;
 float tile_width;
@@ -19,8 +19,8 @@ variation: gboolean stitch_tiles;
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _bounds;
-PASS_FLAT(2) vec2 _base_frequency;
-PASS_FLAT(3) uint _num_octaves;
+PASS_FLAT(2) vec2 _frequency;
+PASS_FLAT(3) uint _octaves;
 PASS_FLAT(4) float _tile_x;
 PASS_FLAT(5) float _tile_y;
 PASS_FLAT(6) float _tile_width;
@@ -38,8 +38,8 @@ run (out vec2 pos)
 
   _pos = pos;
   _bounds = b;
-  _base_frequency = in_base_frequency;
-  _num_octaves = in_num_octaves;
+  _frequency = in_frequency;
+  _octaves = in_octaves;
   _tile_x = in_tile_x;
   _tile_y = in_tile_y;
   _tile_width = in_tile_width;
@@ -142,38 +142,38 @@ noise2 (vec2 pos, int stitch_width, int stitch_height, int stitch_wrap_x, int st
 }
 
 vec4
-turbulence (vec2 point, vec2 base_freq, uint n_octaves)
+turbulence (vec2 point, vec2 frequency, uint n_octaves)
 {
   int stitch_width = 0, stitch_height = 0, strich_wrap_x = 0, stitch_wrap_y = 0;
 
   if (VARIATION_STITCH_TILES)
     {
-      if (base_freq.x != 0.0)
+      if (frequency.x != 0.0)
         {
-          float freq_low = floor (_tile_width * base_freq.x) / _tile_width;
-          float freq_high = ceil (_tile_width * base_freq.x) / _tile_width;
-          if (base_freq.x / freq_low < freq_high / base_freq.x)
-            base_freq.x = freq_low;
+          float freq_low = floor (_tile_width * frequency.x) / _tile_width;
+          float freq_high = ceil (_tile_width * frequency.x) / _tile_width;
+          if (frequency.x / freq_low < freq_high / frequency.x)
+            frequency.x = freq_low;
           else
-            base_freq.x = freq_high;
+            frequency.x = freq_high;
         }
-      if (base_freq.y != 0.0)
+      if (frequency.y != 0.0)
         {
-          float freq_low = floor (_tile_height * base_freq.y) / _tile_height;
-          float freq_high = ceil (_tile_height * base_freq.y) / _tile_height;
-          if (base_freq.y / freq_low < freq_high / base_freq.y)
-            base_freq.y = freq_low;
+          float freq_low = floor (_tile_height * frequency.y) / _tile_height;
+          float freq_high = ceil (_tile_height * frequency.y) / _tile_height;
+          if (frequency.y / freq_low < freq_high / frequency.y)
+            frequency.y = freq_low;
           else
-            base_freq.y = freq_high;
+            frequency.y = freq_high;
         }
-      stitch_width = int (_tile_width * base_freq.x + 0.5);
+      stitch_width = int (_tile_width * frequency.x + 0.5);
       strich_wrap_x = PerlinN + stitch_width;
-      stitch_height = int (_tile_height * base_freq.y + 0.5);
+      stitch_height = int (_tile_height * frequency.y + 0.5);
       stitch_wrap_y = PerlinN + stitch_height;
     }
 
   vec4 sum = vec4(0.0, 0.0, 0.0, 0.0);
-  vec2 v = point * base_freq;
+  vec2 v = point * frequency;
   float ratio = 1.0;
 
   for (uint octave = 0u; octave < n_octaves; octave++)
@@ -210,7 +210,7 @@ run (out vec4 color,
   vec2 pixel_offset = (_pos - rect_bounds (_bounds).xy - 0.5 * fwidth(_pos)) / GSK_GLOBAL_SCALE;
   vec2 point = vec2 (_tile_x, _tile_y) + pixel_offset;
 
-  vec4 n = turbulence (point, _base_frequency, _num_octaves);
+  vec4 n = turbulence (point, _frequency, _octaves);
 
   float r, g, b, a;
 

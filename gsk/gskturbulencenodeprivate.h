@@ -47,15 +47,15 @@ GType                   gsk_turbulence_node_get_type             (void);
 GskRenderNode *         gsk_turbulence_node_new                  (const graphene_rect_t *bounds,
                                                                   GskRectSnap            snap,
                                                                   GdkColorState         *color_state,
-                                                                  const graphene_size_t *base_frequency,
-                                                                  unsigned int           num_octaves,
+                                                                  const graphene_size_t *frequency,
+                                                                  unsigned int           octaves,
                                                                   int                    seed,
                                                                   GskNoiseType           noise_type,
                                                                   gboolean               stitch_tiles);
 GdkColorState *         gsk_turbulence_node_get_color_state      (const GskRenderNode   *node) G_GNUC_PURE;
 GskRectSnap             gsk_turbulence_node_get_snap             (const GskRenderNode   *node) G_GNUC_PURE;
-const graphene_size_t * gsk_turbulence_node_get_base_frequency   (const GskRenderNode   *node) G_GNUC_PURE;
-unsigned int            gsk_turbulence_node_get_num_octaves      (const GskRenderNode   *node) G_GNUC_PURE;
+const graphene_size_t * gsk_turbulence_node_get_frequency        (const GskRenderNode   *node) G_GNUC_PURE;
+unsigned int            gsk_turbulence_node_get_octaves          (const GskRenderNode   *node) G_GNUC_PURE;
 int                     gsk_turbulence_node_get_seed             (const GskRenderNode   *node) G_GNUC_PURE;
 GskNoiseType            gsk_turbulence_node_get_noise_type       (const GskRenderNode   *node) G_GNUC_PURE;
 gboolean                gsk_turbulence_node_get_stitch_tiles     (const GskRenderNode   *node) G_GNUC_PURE;

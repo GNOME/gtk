@@ -1425,33 +1425,33 @@ apply_filter_tree (SvgElement    *shape,
 
         case SVG_FILTER_TURBULENCE:
           {
-            SvgValue *base_freq = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ);
+            SvgValue *frequency = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_BASE_FREQ);
             SvgValue *oct = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_NUM_OCTAVES);
             SvgValue *seed_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_SEED);
             SvgValue *type_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_TYPE);
             SvgValue *stitch_val = svg_filter_get_current_value (f, SVG_PROPERTY_FE_TURBULENCE_STITCH_TILES);
             graphene_size_t freq;
-            unsigned int num_octaves;
+            unsigned int octaves;
             int seed;
             GskNoiseType noise_type;
             gboolean stitch_tiles;
 
-            for (unsigned int idx = 0; idx < svg_numbers_get_length (base_freq); idx++)
+            for (unsigned int idx = 0; idx < svg_numbers_get_length (frequency); idx++)
               {
-                double val = svg_numbers_get (base_freq, idx, 1);
+                double val = svg_numbers_get (frequency, idx, 1);
                 if (val < 0)
                   {
-                    gtk_svg_rendering_error (context->svg, "Unsupported base-frequency value: %f", val);
+                    gtk_svg_rendering_error (context->svg, "Unsupported frequency value: %f", val);
                     break;
                   }
               }
 
             /* Limits here are copied from librsvg */
-            freq.width = CLAMP (svg_numbers_get (base_freq, 0, 1), 0, 32768.0);
+            freq.width = CLAMP (svg_numbers_get (frequency, 0, 1), 0, 32768.0);
             freq.height = freq.width;
-            if (svg_numbers_get_length (base_freq) == 2)
-              freq.height = CLAMP (svg_numbers_get (base_freq, 1, freq.width), 0, 32768.0);
-            num_octaves = (unsigned int) CLAMP (svg_number_get (oct, 1), 0, 9);
+            if (svg_numbers_get_length (frequency) == 2)
+              freq.height = CLAMP (svg_numbers_get (frequency, 1, freq.width), 0, 32768.0);
+            octaves = (unsigned int) CLAMP (svg_number_get (oct, 1), 0, 9);
             seed = (int) trunc (svg_number_get (seed_val, 0));
             noise_type = (svg_enum_get (type_val) == TURBULENCE_TYPE_TURBULENCE)
                           ? GSK_NOISE_TURBULENCE
@@ -1462,7 +1462,7 @@ apply_filter_tree (SvgElement    *shape,
                                               GSK_RECT_SNAP_NONE,
                                               color_state,
                                               &freq,
-                                              num_octaves,
+                                              octaves,
                                               seed,
                                               noise_type,
                                               stitch_tiles);

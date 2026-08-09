@@ -4651,8 +4651,8 @@ parse_turbulence_node (GtkCssParser *parser,
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GskRectSnap snap = GSK_RECT_SNAP_NONE;
-  graphene_size_t base_frequency = { 0, 0 };
-  size_t num_octaves = 1;
+  graphene_size_t frequency = { 0, 0 };
+  size_t octaves = 1;
   unsigned int seed = 0;
   GskNoiseType noise_type = GSK_NOISE_TURBULENCE;
   gboolean stitch_tiles = FALSE;
@@ -4660,8 +4660,8 @@ parse_turbulence_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "snap", parse_rect_snap, NULL, &snap },
-    { "base-frequency", parse_scale, NULL, &base_frequency },
-    { "num-octaves", parse_size, NULL, &num_octaves },
+    { "frequency", parse_scale, NULL, &frequency },
+    { "octaves", parse_size, NULL, &octaves },
     { "seed", parse_unsigned, NULL, &seed },
     { "noise-type", parse_noise_type, NULL, &noise_type },
     { "stitch-tiles", parse_boolean, NULL, &stitch_tiles },
@@ -4672,8 +4672,8 @@ parse_turbulence_node (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_turbulence_node_new (&bounds, snap, color_state,
-                                  &base_frequency,
-                                  num_octaves, seed, noise_type, stitch_tiles);
+                                  &frequency,
+                                  octaves, seed, noise_type, stitch_tiles);
 
   gdk_color_state_unref (color_state);
 
@@ -7338,16 +7338,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_TURBULENCE_NODE:
       {
-        const graphene_size_t *freq = gsk_turbulence_node_get_base_frequency (node);
+        const graphene_size_t *freq = gsk_turbulence_node_get_frequency (node);
 
         start_node (p, "turbulence", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
         append_snap_param (p, "snap", gsk_turbulence_node_get_snap (node));
         append_color_state_param (p, "color-state", gsk_turbulence_node_get_color_state (node), GDK_COLOR_STATE_SRGB);
-        append_two_float_param (p, "base-frequency", freq->width, freq->height);
-        if (gsk_turbulence_node_get_num_octaves (node) != 1)
-          append_size_param (p, "num-octaves", gsk_turbulence_node_get_num_octaves (node));
+        append_two_float_param (p, "frequency", freq->width, freq->height);
+        if (gsk_turbulence_node_get_octaves (node) != 1)
+          append_size_param (p, "octaves", gsk_turbulence_node_get_octaves (node));
         if (gsk_turbulence_node_get_seed (node) != 0)
           append_unsigned_param (p, "seed", gsk_turbulence_node_get_seed (node));
         if (gsk_turbulence_node_get_noise_type (node) != GSK_NOISE_TURBULENCE)

@@ -3778,8 +3778,8 @@ gtk_snapshot_push_subsurface (GtkSnapshot   *snapshot,
  * @snapshot: a `GtkSnapshot`
  * @bounds: the bounds for the new node
  * @color_state: the color state to add noise in
- * @base_freq: the base frequencies
- * @num_octaves: The number of octaves of noise
+ * @frequency: the base frequencies
+ * @octaves: The number of octaves of noise
  * @seed: The random seed
  * @noise_type: The type of noise pattern
  * @stitch_tiles: Whether to enable tile stitching
@@ -3792,8 +3792,8 @@ void
 gtk_snapshot_add_turbulence (GtkSnapshot           *snapshot,
                              const graphene_rect_t *bounds,
                              GdkColorState         *color_state,
-                             const graphene_size_t *base_freq,
-                             unsigned int           num_octaves,
+                             const graphene_size_t *frequency,
+                             unsigned int           octaves,
                              int                    seed,
                              GskNoiseType           noise_type,
                              gboolean               stitch_tiles)
@@ -3810,8 +3810,8 @@ gtk_snapshot_add_turbulence (GtkSnapshot           *snapshot,
   node = gsk_turbulence_node_new (bounds,
                                   state->props.snap,
                                   color_state,
-                                  base_freq,
-                                  num_octaves,
+                                  frequency,
+                                  octaves,
                                   seed,
                                   noise_type,
                                   stitch_tiles);
