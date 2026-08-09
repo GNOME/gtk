@@ -62,41 +62,6 @@ struct _GdkFrameClockIdlePrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
-typedef struct
-{
-  GSource source;
-} GdkTimeoutDeadlineSource;
-
-static gboolean
-gdk_timeout_deadline_source_dispatch (GSource     *source,
-                                      GSourceFunc  callback,
-                                      gpointer     user_data)
-{
-  if (callback == NULL)
-    return G_SOURCE_REMOVE;
-
-  return callback (user_data);
-}
-
-static GSourceFuncs gdk_timeout_deadline_source_funcs = {
-  NULL,
-  NULL,
-  gdk_timeout_deadline_source_dispatch,
-  NULL /* finalize */
-};
-
-static GSource *
-gdk_timeout_new_deadline (uint64_t deadline)
-{
-  GSource *source;
-
-  source = g_source_new (&gdk_timeout_deadline_source_funcs,
-                         sizeof (GdkTimeoutDeadlineSource));
-  g_source_set_ready_time (source, deadline / 1000);
-
-  return source;
-}
-
 static void
 gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
 {
@@ -221,13 +186,19 @@ maybe_start_idle (GdkFrameClockIdle *self,
 
   if (should_run_source (self) && priv->source == NULL)
     {
-      uint64_t ready_time = 0;
+      uint64_t interval = 0;
 
       if (priv->min_next_frame_time != 0 &&
           !GDK_DEBUG_CHECK (NO_VSYNC))
-        ready_time = priv->min_next_frame_time;
+        {
+          uint64_t now = g_get_monotonic_time_ns ();
+          if (now < priv->min_next_frame_time)
+            interval = priv->min_next_frame_time - now;
+        }
 
-      priv->source = gdk_timeout_new_deadline (ready_time);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      priv->source = g_timeout_source_new_ns (interval);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_source_set_static_name (priv->source, "[gtk] gdk_frame_clock_frame");
       g_source_set_callback (priv->source,
                              gdk_frame_clock_source_cb, 
