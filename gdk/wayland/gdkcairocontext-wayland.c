@@ -173,6 +173,7 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext      *draw_context,
     }
 
   gdk_draw_context_frame_set_color_state (frame, gdk_surface_get_color_state (surface));
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

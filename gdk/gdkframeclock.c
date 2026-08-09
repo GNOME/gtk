@@ -1074,6 +1074,36 @@ gdk_frame_clock_presented (GdkFrameClock *self,
   gdk_frame_clock_add_timings_to_profiler (self, timings);
 }
 
+/**
+ * gdk_draw_context_frame_gpu_complete:
+ * @frame: the frame
+ * @timestamp: the monotonic timestamp in nanoseconds for when the GPU completed
+ *   rendering this frame
+ *
+ * Marks this frame as completed on the GPU.
+ *
+ * If no GPU rendering is happening, then this function must be called during
+ * or before end_frame() with a value of 0.
+ **/
+void
+gdk_draw_context_frame_gpu_complete (GdkDrawContextFrame *frame,
+                                     uint64_t             timestamp)
+{
+  GdkFrameClock *clock;
+  GdkFrameTimings *timings;
+
+  g_return_if_fail (!frame->gpu_complete);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  timings = gdk_frame_clock_get_timings (clock, frame->frame_counter);
+  if (timestamp != 0 && timings != NULL)
+    gdk_frame_timings_gpu_complete (timings, timestamp);
+
+  frame->gpu_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
+}
+
 /*<private>
  * gdk_frame_clock_get_refresh_interval:
  * @self: the frame clock
@@ -1281,6 +1311,31 @@ gdk_frame_clock_run_paint (GdkFrameClock *self)
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_AFTER_PAINT);
 }
 
+#if 0
+static void
+gdk_frame_clock_foreach_frame (GdkFrameClock *self,
+                               gint64         frame_counter,
+                               void         (*func) (GdkDrawContextFrame *, gpointer),
+                               gpointer       user_data)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GSList *l;
+
+  l = priv->frames;
+  while (l)
+    {
+      GdkDrawContextFrame *frame = l->data;
+      l = l->next;
+      if (frame->frame_counter > frame_counter)
+        continue;
+      else if (frame->frame_counter < frame_counter)
+        break;
+
+      func (frame, user_data);
+    }
+}
+#endif
+
 static void
 gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 {
@@ -1314,6 +1369,8 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
         {
           gdk_frame_timings_throttling_hint (timings, priv->stage_start_time);
         }
+
+      gdk_frame_timings_gpu_complete (timings, priv->stage_start_time);
     }
   
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_RESUME_EVENTS);
