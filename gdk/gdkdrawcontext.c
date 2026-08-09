@@ -25,6 +25,7 @@
 #include "gdkcairoprivate.h"
 #include "gdkdebugprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
 
@@ -349,7 +350,8 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
 gboolean
 gdk_draw_context_frame_is_complete (GdkDrawContextFrame *frame)
 {
-  return frame->cpu_complete;
+  return frame->cpu_complete &&
+         frame->gpu_complete;
 }
 
 void
@@ -506,6 +508,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      priv->current_frame,
                                                      context_data);
+
 
   return priv->current_frame;
 }
@@ -820,3 +823,32 @@ gdk_draw_context_frame_set_color_state (GdkDrawContextFrame *frame,
   frame->color_state = gdk_color_state_ref (color_state);
 }
 
+/**
+ * gdk_draw_context_frame_gpu_complete:
+ * @frame: the frame
+ * @timestamp: the monotonic timestamp in nanoseconds for when the GPU completed
+ *   rendering this frame
+ *
+ * Marks this frame as completed on the GPU.
+ *
+ * If no GPU rendering is happening, then this function must be called during
+ * or before end_frame() with a value of 0.
+ **/
+void
+gdk_draw_context_frame_gpu_complete (GdkDrawContextFrame *frame,
+                                     uint64_t             timestamp)
+{
+  GdkFrameClock *clock;
+  GdkFrameTimings *timings;
+
+  g_return_if_fail (!frame->gpu_complete);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  timings = gdk_frame_clock_get_timings (clock, frame->frame_counter);
+  if (timestamp != 0 && timings != NULL)
+    gdk_frame_timings_gpu_complete (timings, timestamp);
+
+  frame->gpu_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (priv->current_frame))
+    gdk_draw_context_frame_free (priv->current_frame);
+}
