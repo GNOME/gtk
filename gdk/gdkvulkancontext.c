@@ -935,6 +935,9 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
   gdk_draw_context_frame_set_color_state (frame, color_state);
   vframe->image_index = present->image_index;
+
+  /* FIXME */
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

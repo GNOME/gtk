@@ -54,6 +54,8 @@ gdk_broadway_draw_context_begin_frame (GdkDrawContext      *draw_context,
 
   self->nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
   self->node_textures = g_ptr_array_new_with_free_func (g_object_unref);
+
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

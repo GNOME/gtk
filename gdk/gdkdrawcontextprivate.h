@@ -45,6 +45,7 @@ struct _GdkDrawContextFrame
   GdkColorState *color_state;
 
   guint cpu_complete : 1;
+  guint gpu_complete : 1;
 };
 
 struct _GdkDrawContext
@@ -101,6 +102,9 @@ void                    gdk_draw_context_frame_add_damage       (GdkDrawContextF
 GdkColorState *         gdk_draw_context_frame_get_color_state  (GdkDrawContextFrame    *frame);
 void                    gdk_draw_context_frame_set_color_state  (GdkDrawContextFrame    *frame,
                                                                  GdkColorState          *color_state);
+
+void                    gdk_draw_context_frame_gpu_complete     (GdkDrawContextFrame    *frame,
+                                                                 uint64_t                timestamp);
 
 
 G_END_DECLS

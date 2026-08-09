@@ -177,6 +177,7 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
   gdk_win32_com_clear (&d3d11_context);
 
   gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void
@@ -308,6 +309,7 @@ gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
   cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
 
   gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

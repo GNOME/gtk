@@ -52,6 +52,7 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   cairo_region_destroy (region);
 
   gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

@@ -25,6 +25,7 @@
 #include "gdkcairoprivate.h"
 #include "gdkdebugprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdkframetimingsprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
 
@@ -345,7 +346,8 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
 gboolean
 gdk_draw_context_frame_is_complete (GdkDrawContextFrame *frame)
 {
-  return frame->cpu_complete;
+  return frame->cpu_complete &&
+         frame->gpu_complete;
 }
 
 void
