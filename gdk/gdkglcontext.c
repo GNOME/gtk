@@ -735,6 +735,9 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
   gdk_draw_context_frame_set_color_state (frame, color_state);
 #endif
 
+  /* FIXME */
+  gdk_draw_context_frame_gpu_complete (frame, 0);
+
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
   g_clear_pointer (&context->old_updated_area[GDK_GL_MAX_TRACKED_BUFFERS - 1], cairo_region_destroy);
   for (i = GDK_GL_MAX_TRACKED_BUFFERS - 1; i > 0; i--)

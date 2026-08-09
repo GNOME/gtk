@@ -79,6 +79,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
           g_critical ("Native surface not available for current frame");
           g_mutex_unlock (&surface_impl->native_lock);
           gdk_cairo_context_frame_set_surface (cframe, cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0));
+          gdk_draw_context_frame_gpu_complete (frame, 0);
           goto cleanup;
         }
 
@@ -103,6 +104,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
           g_clear_pointer (&self->surface.window, ANativeWindow_release);
           g_mutex_unlock (&surface_impl->native_lock);
           gdk_cairo_context_frame_set_surface (cframe, cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0));
+          gdk_draw_context_frame_gpu_complete (frame, 0);
           goto cleanup;
         }
 
@@ -126,6 +128,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                        -self->surface.bounds.left,
                                        -self->surface.bounds.top);
       gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+      gdk_draw_context_frame_gpu_complete (frame, 0);
     }
   else if (GDK_IS_ANDROID_DRAG_SURFACE (surface))
     {
@@ -144,6 +147,7 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                                           scaled_width, scaled_height,
                                                           scaled_width*sizeof(jint));
       gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+      gdk_draw_context_frame_gpu_complete (frame, 0);
 
       cairo_rectangle_int_t bounds = {
         .x = 0,
