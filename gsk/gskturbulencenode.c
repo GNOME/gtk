@@ -199,13 +199,13 @@ noise2 (const float *lookup,
   int i, j;
   const float *q;
 
-  fx = vec[0] + PerlinN;
+  fx = round (vec[0] * PerlinN) / PerlinN;
   bx0 = (size_t) fx;
   bx1 = bx0 + 1;
   rx0 = fx - floor (fx);
   rx1 = rx0 - 1.0;
 
-  fy = vec[1] + PerlinN;
+  fy = round (vec[1] * PerlinN) / PerlinN;
   by0 = (size_t) fy;
   by1 = by0 + 1;
   ry0 = fy - floor (fy);

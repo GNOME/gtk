@@ -83,13 +83,13 @@ noise2 (vec2 pos, int stitch_width, int stitch_height, int stitch_wrap_x, int st
   vec2 q;
   vec4 res;
 
-  float fx = pos.x + float(PerlinN);
+  float fx = round (pos.x * float(PerlinN)) / float(PerlinN);
   bx0 = int (fx);
   bx1 = bx0 + 1;
   rx0 = fx - floor (fx);
   rx1 = rx0 - 1.0;
 
-  float fy = pos.y + float(PerlinN);
+  float fy = round (pos.y * float(PerlinN)) / float(PerlinN);
   by0 = int (fy);
   by1 = by0 + 1;
   ry0 = fy - floor (fy);
