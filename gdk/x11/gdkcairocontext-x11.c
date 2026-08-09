@@ -79,6 +79,7 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
   cairo_surface_set_device_offset (cairo_surface, -clip_box.x, -clip_box.y);
 
   gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

@@ -154,6 +154,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext      *draw_context,
                                                        _gdk_macos_buffer_get_stride (buffer));
 
   gdk_cairo_context_frame_set_surface (cframe, image_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void

@@ -1248,6 +1248,31 @@ gdk_frame_clock_run_paint (GdkFrameClock *self)
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_AFTER_PAINT);
 }
 
+#if 0
+static void
+gdk_frame_clock_foreach_frame (GdkFrameClock *self,
+                               gint64         frame_counter,
+                               void         (*func) (GdkDrawContextFrame *, gpointer),
+                               gpointer       user_data)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GSList *l;
+
+  l = priv->frames;
+  while (l)
+    {
+      GdkDrawContextFrame *frame = l->data;
+      l = l->next;
+      if (frame->frame_counter > frame_counter)
+        continue;
+      else if (frame->frame_counter < frame_counter)
+        break;
+
+      func (frame, user_data);
+    }
+}
+#endif
+
 static void
 gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 {
@@ -1281,6 +1306,8 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
         {
           gdk_frame_timings_throttling_hint (timings, priv->stage_start_time);
         }
+
+      gdk_frame_timings_gpu_complete (timings, priv->stage_start_time);
     }
   
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_RESUME_EVENTS);
