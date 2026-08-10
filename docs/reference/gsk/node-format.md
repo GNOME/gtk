@@ -788,8 +788,8 @@ Creates a node like `gsk_transform_node_new()` with the given properties.
 | bounds            | `<rect>`             | 50              | always      |
 | snap              | `<snap>`             | none            | non-default |
 | color-state       | `<color-state>`      | srgb            | non-default |
-| base-frequency    | `<number>{1,2}`      | 0 0             | always      |
-| num-octaves       | `<integer>`          | 1               | non-default |
+| frequency         | `<number>{1,2}`      | 0 0             | always      |
+| octaves           | `<integer>`          | 1               | non-default |
 | seed              | `<integer>`          | 0               | non-default |
 | noise-type        | `<noise-type>`       | turbulence      | non-default |
 | stitch-tiles      | `<boolean>`          | false           | non-default |

@@ -120,8 +120,8 @@ void                    gtk_snapshot_append_node_scaled         (GtkSnapshot    
 void                    gtk_snapshot_add_turbulence             (GtkSnapshot            *snapshot,
                                                                  const graphene_rect_t  *bounds,
                                                                  GdkColorState          *color_state,
-                                                                 const graphene_size_t  *base_freq,
-                                                                 unsigned int            num_octaves,
+                                                                 const graphene_size_t  *frequency,
+                                                                 unsigned int            octaves,
                                                                  int                     seed,
                                                                  GskNoiseType            noise_type,
                                                                  gboolean                stitch_tiles);

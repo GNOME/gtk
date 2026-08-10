@@ -1717,9 +1717,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         const graphene_size_t *s;
         const char *noise_types[] = { "Fractal Noise", "Turbulence" };
 
-        s = gsk_turbulence_node_get_base_frequency (node);
+        s = gsk_turbulence_node_get_frequency (node);
         add_text_row (store, "Base Frequency", "%f %f", s->width, s->height);
-        add_int_row (store, "Octaves", gsk_turbulence_node_get_num_octaves (node));
+        add_int_row (store, "Octaves", gsk_turbulence_node_get_octaves (node));
         add_int_row (store, "Seed", gsk_turbulence_node_get_seed (node));
 
         add_text_row (store, "Noise Type", "%s", noise_types[gsk_turbulence_node_get_noise_type (node)]);
