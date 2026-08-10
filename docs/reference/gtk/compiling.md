@@ -29,6 +29,8 @@ problematic, they can be turned off by defining the preprocessor
 symbol `GDK_DISABLE_DEPRECATION_WARNINGS` by using the commandline
 option `-DGDK_DISABLE_DEPRECATION_WARNINGS`.
 
+### Setting allowed versions
+
 GTK deprecation annotations are versioned; by defining the
 macros `GDK_VERSION_MIN_REQUIRED` and `GDK_VERSION_MAX_ALLOWED`,
 you can specify the range of GTK versions whose API you want
