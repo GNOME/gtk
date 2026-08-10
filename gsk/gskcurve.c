@@ -567,8 +567,8 @@ gsk_quad_curve_print (const GskCurve *curve,
   g_string_append_printf (string,
                           "M %g %g Q %g %g %g %g",
                           curve->quad.points[0].x, curve->quad.points[0].y,
-                          curve->quad.points[1].x, curve->cubic.points[1].y,
-                          curve->quad.points[2].x, curve->cubic.points[2].y);
+                          curve->quad.points[1].x, curve->quad.points[1].y,
+                          curve->quad.points[2].x, curve->quad.points[2].y);
 }
 
 static gskpathop
