@@ -35,12 +35,13 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkVulkanContextFrame GdkVulkanContextFrame;
+typedef struct _GdkVulkanPresent GdkVulkanPresent;
 
 struct _GdkVulkanContextFrame
 {
   GdkDrawContextFrame parent;
 
-  uint32_t image_index;
+  GdkVulkanPresent *present;
 };
 
 struct _GdkVulkanContext
