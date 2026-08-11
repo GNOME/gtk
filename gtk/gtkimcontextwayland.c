@@ -1061,8 +1061,14 @@ text_input_preedit_hint (void                                *data,
   GtkIMContextWaylandGlobal *global = data;
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (global->current);
   GtkIMContextPreeditSegment *segment, new_segment;
+  int start_idx, end_idx;
   int first_start_idx = G_MAXINT, last_end_idx = -1;
   unsigned int i;
+
+  g_return_if_fail (begin < G_MAXUINT16);
+  g_return_if_fail (end < G_MAXUINT16);
+  start_idx = (int)begin;
+  end_idx = (int)end;
 
   if (!context->pending_preedit.style_hints)
     {
@@ -1073,39 +1079,47 @@ text_input_preedit_hint (void                                *data,
   /* Convert to a list of non-overlapping segments */
   for (i = 0; i < context->pending_preedit.style_hints->len; i++)
     {
-      segment = &g_array_index (context->current_preedit.style_hints,
+      int increment = 0;
+      segment = &g_array_index (context->pending_preedit.style_hints,
                                 GtkIMContextPreeditSegment, i);
 
       /* This segment is unaffected by the new hint */
-      if (begin >= segment->end_idx || end < segment->start_idx)
+      if (start_idx >= segment->end_idx || end_idx < segment->start_idx)
         continue;
 
-      if (begin <= segment->start_idx && end >= segment->end_idx)
+      if (start_idx <= segment->start_idx && end_idx >= segment->end_idx)
         {
           /* Segment is affected as a whole */
           segment->hint_flags |= (1 << hint);
         }
       else
         {
-          if (end < segment->end_idx)
+          if (end_idx < segment->end_idx)
             {
               /* Partition at the end */
-              new_segment.start_idx = end;
+              new_segment.start_idx = end_idx;
               new_segment.end_idx = segment->end_idx;
               new_segment.hint_flags = (1 << hint);
-              segment->end_idx = end;
+              segment->end_idx = end_idx;
               g_array_insert_val (context->pending_preedit.style_hints, i + 1, new_segment);
+              segment = &g_array_index (context->pending_preedit.style_hints,
+                                        GtkIMContextPreeditSegment, i);
+              ++increment;
             }
 
-          if (begin > segment->start_idx)
+          if (start_idx > segment->start_idx)
             {
               /* Partition at the beginning */
               new_segment.start_idx = segment->start_idx;
-              new_segment.end_idx = begin;
+              new_segment.end_idx = start_idx;
               new_segment.hint_flags = (1 << hint);
-              segment->start_idx = begin;
+              segment->start_idx = start_idx;
               g_array_insert_val (context->pending_preedit.style_hints, i, new_segment);
+              segment = &g_array_index (context->pending_preedit.style_hints,
+                                        GtkIMContextPreeditSegment, i);
+              ++increment;
             }
+            i += increment;
         }
 
       first_start_idx = MIN (segment->start_idx, first_start_idx);
@@ -1113,20 +1127,20 @@ text_input_preedit_hint (void                                *data,
     }
 
   /* Prepend any missing segment */
-  if (begin < first_start_idx)
+  if (start_idx < first_start_idx)
     {
-      new_segment.start_idx = begin;
-      new_segment.end_idx = first_start_idx;
+      new_segment.start_idx = start_idx;
+      new_segment.end_idx = MIN(end_idx, first_start_idx);
       new_segment.hint_flags = (1 << hint);
       g_array_prepend_val (context->pending_preedit.style_hints, new_segment);
-      last_end_idx = MAX (last_end_idx, end);
+      last_end_idx = MAX (last_end_idx, end_idx);
     }
 
   /* Append any missing segment */
-  if (last_end_idx >= 0 && end > last_end_idx)
+  if (last_end_idx >= 0 && end_idx > last_end_idx)
     {
-      new_segment.start_idx = last_end_idx;
-      new_segment.end_idx = end;
+      new_segment.start_idx = MAX(start_idx, last_end_idx);
+      new_segment.end_idx = end_idx;
       new_segment.hint_flags = (1 << hint);
       g_array_append_val (context->pending_preedit.style_hints, new_segment);
     }
