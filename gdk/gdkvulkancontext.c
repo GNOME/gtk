@@ -703,6 +703,8 @@ static void
 gdk_vulkan_present_reset (GdkVulkanContext *self,
                           GdkVulkanPresent *present)
 {
+  GdkVulkanContextFrame *vframe;
+
   if (present->vk_swapchain == VK_NULL_HANDLE)
     return;
 
@@ -713,8 +715,11 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
   gdk_vulkan_context_unref_swapchain (self, present->vk_swapchain);
   present->vk_swapchain = VK_NULL_HANDLE;
 
-  present->frame->present = NULL;
+  vframe = present->frame;
   present->frame = NULL;
+
+  vframe->present = NULL;
+  gdk_draw_context_frame_gpu_complete ((GdkDrawContextFrame *) vframe, timestamp);
 }
 
 static gboolean
@@ -949,9 +954,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
   gdk_draw_context_frame_set_color_state (frame, color_state);
-
-  /* FIXME */
-  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void
