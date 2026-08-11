@@ -62,14 +62,13 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
 /* arbitrarily chosen to be 2 * GSK_GPU_MAX_FRAMES */
 #define MAX_PRESENTS 8
 
-typedef struct _GdkVulkanPresent GdkVulkanPresent;
-
 struct _GdkVulkanPresent
 {
   VkSemaphore vk_semaphore;
   VkFence vk_fence;
   VkSwapchainKHR vk_swapchain;
   guint32 image_index;
+  GdkVulkanContextFrame *frame;
 };
 #endif
 
@@ -713,6 +712,9 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
 
   gdk_vulkan_context_unref_swapchain (self, present->vk_swapchain);
   present->vk_swapchain = VK_NULL_HANDLE;
+
+  present->frame->present = NULL;
+  present->frame = NULL;
 }
 
 static gboolean
@@ -885,6 +887,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
     }
 
   present = gdk_vulkan_context_start_present (context);
+  present->frame = vframe;
+  vframe->present = present;
 
   while (TRUE)
     {
@@ -945,7 +949,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext      *draw_context,
 
   gdk_draw_context_frame_add_damage (frame, priv->regions[present->image_index]);
   gdk_draw_context_frame_set_color_state (frame, color_state);
-  vframe->image_index = present->image_index;
 
   /* FIXME */
   gdk_draw_context_frame_gpu_complete (frame, 0);
@@ -1682,7 +1685,7 @@ gdk_vulkan_context_get_image (GdkVulkanContext *context,
 uint32_t
 gdk_vulkan_context_frame_get_image_index (GdkVulkanContextFrame *frame)
 {
-  return frame->image_index;
+  return frame->present->image_index;
 }
 
 VkSemaphore
