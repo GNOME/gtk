@@ -296,9 +296,6 @@ release-build:
   script:
     - .gitlab-ci/show-info-linux.sh
     - mkdir _install
-    # don't use catch by default, since it causes sporadic test failures
-    # - export PATH="$HOME/.local/bin:${CI_PROJECT_DIR}/_install/bin:$PATH"
-    # - .gitlab-ci/install-meson-project.sh --prefix ${CI_PROJECT_DIR}/_install https://gitlab.gnome.org/jadahl/catch.git main
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
