@@ -700,6 +700,21 @@ physical_device_check_features (VkPhysicalDevice device)
   return features;
 }
 
+static void
+gdk_vulkan_present_reset (GdkVulkanContext *self,
+                          GdkVulkanPresent *present)
+{
+  if (present->vk_swapchain == VK_NULL_HANDLE)
+    return;
+
+  GDK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self),
+                               1,
+                               &present->vk_fence);
+
+  gdk_vulkan_context_unref_swapchain (self, present->vk_swapchain);
+  present->vk_swapchain = VK_NULL_HANDLE;
+}
+
 static gboolean
 gdk_vulkan_present_is_busy (GdkVulkanContext *self,
                             GdkVulkanPresent *present)
@@ -715,13 +730,6 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
   res = vkGetFenceStatus (gdk_vulkan_context_get_device (self), present->vk_fence);
   if (res != VK_SUCCESS)
     return TRUE;
-
-  GDK_VK_CHECK (vkResetFences, gdk_vulkan_context_get_device (self),
-                               1,
-                               &present->vk_fence);
-
-  gdk_vulkan_context_unref_swapchain (self, present->vk_swapchain);
-  present->vk_swapchain = VK_NULL_HANDLE;
 
   return FALSE;
 }
@@ -784,6 +792,9 @@ gdk_vulkan_context_start_present (GdkVulkanContext *self)
           if (!gdk_vulkan_present_is_busy (self, &priv->presents[i]))
             {
               GdkVulkanPresent *result = &priv->presents[i];
+
+              gdk_vulkan_present_reset (self, result);
+
               priv->latest_present = i;
 
               return result;
