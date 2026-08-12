@@ -3914,11 +3914,15 @@ parse_contour (GtkCssParser *parser,
       char *str = NULL;
       GskPath *path;
 
-      if (!parse_string (parser, context, &str))
-        return FALSE;
+      str = gtk_css_parser_consume_string (parser);
 
       path = gsk_path_parse (str);
       g_free (str);
+      if (path == NULL)
+        {
+          gtk_css_parser_error_value (parser, "Invalid path");
+          return NULL;
+        }
 
       return path;
     }
