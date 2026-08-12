@@ -696,9 +696,18 @@ static-scan:
       - _scan_build/meson-logs
   allow_failure: true
 
-# Run tests with the address sanitizer. We need to turn off introspection
-# and f16c, since they are incompatible with asan
-asan-build:
+# Run tests with the address and undefined behavior sanitizers. We need to
+# turn off introspection and f16c, since they are incompatible with asan.
+#
+# Two ubsan checks are turned off:
+#
+#  - "function", since GObject dispatches signal handlers through the generic
+#    prototypes that glib-genmarshal generates, which the check flags for
+#    every handler with a concrete signature.
+#
+#  - "object-size", since GtkTextLineSegment is allocated with room for just
+#    one member of its body union, which the check flags on every access.
+sanitizer-build:
   extends:
     - .test-runner
     - .build-fedora-default
@@ -710,7 +719,8 @@ asan-build:
     - export CC=clang
     - meson setup
             --buildtype=debugoptimized
-            -Db_sanitize=address
+            -Db_sanitize=address,undefined
+            -Dc_args=-fno-sanitize=function,object-size
             -Db_lundef=false
             -Dbuild-demos=false
             -Dbuild-tests=false

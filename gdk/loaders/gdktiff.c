@@ -380,7 +380,8 @@ static GdkTexture *
 load_fallback (TIFF    *tif,
                GError **error)
 {
-  int width, height;
+  guint32 width, height;
+  gsize size;
   guchar *data;
   GBytes *bytes;
   GdkTexture *texture;
@@ -388,7 +389,15 @@ load_fallback (TIFF    *tif,
   TIFFGetField (tif, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField (tif, TIFFTAG_IMAGELENGTH, &height);
 
-  data = g_malloc (width * height * 4);
+  if (!g_size_checked_mul (&size, width, height) ||
+      !g_size_checked_mul (&size, size, 4) ||
+      !(data = g_try_malloc (size)))
+    {
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
+                   _("Not enough memory for image size %ux%u"), width, height);
+      return NULL;
+    }
 
   if (!TIFFReadRGBAImageOriented (tif, width, height, (guint32 *)data, ORIENTATION_TOPLEFT, 1))
     {
@@ -399,12 +408,12 @@ load_fallback (TIFF    *tif,
       return NULL;
     }
 
-  bytes = g_bytes_new_take (data, width * height * 4);
+  bytes = g_bytes_new_take (data, size);
 
   texture = gdk_memory_texture_new (width, height,
                                     GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
                                     bytes,
-                                    width * 4);
+                                    (gsize) width * 4);
 
   g_bytes_unref (bytes);
 

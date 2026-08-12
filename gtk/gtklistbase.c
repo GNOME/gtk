@@ -243,12 +243,17 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   else
     side_along = GTK_PACK_START;
 
-  /* Compute the align based on side to keep the values identical */
-  if (side_across == GTK_PACK_START)
+  /* Compute the align based on side to keep the values identical.
+   * The viewport can be empty, so avoid dividing by zero. */
+  if (area.width == 0)
+    align_across = 0;
+  else if (side_across == GTK_PACK_START)
     align_across = (double) (cell_area.x - area.x) / area.width;
   else
     align_across = (double) (cell_area.x + cell_area.width - area.x) / area.width;
-  if (side_along == GTK_PACK_START)
+  if (area.height == 0)
+    align_along = 0;
+  else if (side_along == GTK_PACK_START)
     align_along = (double) (cell_area.y - area.y) / area.height;
   else
     align_along = (double) (cell_area.y + cell_area.height - area.y) / area.height;
@@ -852,7 +857,12 @@ gtk_list_base_compute_scroll_align (int            cell_start,
     }
   else if (cell_size <= visible_size)
     {
-      if (cell_start < visible_start)
+      if (visible_size <= 0)
+        {
+          *new_align = current_align;
+          *new_side = current_side;
+        }
+      else if (cell_start < visible_start)
         {
           *new_align = 0.0;
           *new_side = GTK_PACK_START;

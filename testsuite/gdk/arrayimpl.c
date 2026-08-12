@@ -104,6 +104,66 @@ gdk_array(test_splice) (void)
   gdk_array(clear) (&v);
 }
 
+static void
+gdk_array(test_steal) (void)
+{
+  GdkArray v;
+  _T_ *data;
+  gsize i;
+
+  /* Stealing from an array that was never touched. There is nothing to hand
+   * out, except for the terminator of a NULL-terminated array - and even that
+   * only exists if the array has preallocated storage. */
+  gdk_array(init) (&v);
+  data = gdk_array(steal) (&v);
+#if defined(GDK_ARRAY_NULL_TERMINATED) && defined(GDK_ARRAY_PREALLOC)
+  g_assert_nonnull (data);
+  g_assert_cmpint (data[0], ==, 0);
+  g_free (data);
+#else
+  g_assert_null (data);
+#endif
+  g_assert_cmpint (gdk_array(get_size) (&v), ==, 0);
+  gdk_array(clear) (&v);
+
+  /* Stealing the contents, then reusing the array */
+  gdk_array(init) (&v);
+  for (i = 0; i < 1000; i++)
+    gdk_array(append) (&v, i);
+
+  data = gdk_array(steal) (&v);
+  g_assert_nonnull (data);
+  for (i = 0; i < 1000; i++)
+    g_assert_cmpint (data[i], ==, (int) i);
+#ifdef GDK_ARRAY_NULL_TERMINATED
+  g_assert_cmpint (data[1000], ==, 0);
+#endif
+  g_free (data);
+
+  g_assert_true (gdk_array(is_empty) (&v));
+  gdk_array(append) (&v, 42);
+  g_assert_cmpint (gdk_array(get_size) (&v), ==, 1);
+  g_assert_cmpint (gdk_array(get) (&v, 0), ==, 42);
+  gdk_array(clear) (&v);
+
+  /* Stealing from an array that grew onto the heap and was emptied again */
+  gdk_array(init) (&v);
+  for (i = 0; i < 1000; i++)
+    gdk_array(append) (&v, i);
+  gdk_array(set_size) (&v, 0);
+
+  data = gdk_array(steal) (&v);
+#ifdef GDK_ARRAY_NULL_TERMINATED
+  g_assert_nonnull (data);
+  g_assert_cmpint (data[0], ==, 0);
+  g_free (data);
+#else
+  g_assert_null (data);
+#endif
+  g_assert_cmpint (gdk_array(get_size) (&v), ==, 0);
+  gdk_array(clear) (&v);
+}
+
 #undef _T_
 #undef GdkArray
 #undef gdk_array_paste_more

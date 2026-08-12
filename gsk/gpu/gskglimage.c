@@ -378,7 +378,7 @@ gsk_gl_image_bind_textures (GskGLImage *self,
     {
       gsize i;
 
-      for (i = 0; self->texture_id[i]; i++)
+      for (i = 0; i < G_N_ELEMENTS (self->texture_id) && self->texture_id[i]; i++)
         {
           glActiveTexture (target + i);
           glBindTexture (GL_TEXTURE_2D, self->texture_id[i]);
