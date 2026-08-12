@@ -189,6 +189,10 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
   pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);
+
+  if (ink_rect.width == 0 || ink_rect.height == 0)
+    return NULL;
+
   origin.x = floor (ink_rect.x * 1.0 / PANGO_SCALE + subpixel_x);
   origin.y = floor (ink_rect.y * 1.0 / PANGO_SCALE + subpixel_y);
   rect.size.width = ceil ((ink_rect.x + ink_rect.width) * 1.0 / PANGO_SCALE + subpixel_x) - origin.x;

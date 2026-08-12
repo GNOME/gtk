@@ -2680,33 +2680,36 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuRenderPass *self,
                                            &glyph_bounds,
                                            &glyph_offset);
 
-      glyph_origin.x -= glyph_offset.x / scale;
-      glyph_origin.y -= glyph_offset.y / scale;
-      glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
-                                           glyph_origin.y - glyph_bounds.origin.y / scale,
-                                           gsk_gpu_image_get_width (image) / scale,
-                                           gsk_gpu_image_get_height (image) / scale);
-      glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
-                                         glyph_origin.y,
-                                         glyph_bounds.size.width / scale,
-                                         glyph_bounds.size.height / scale);
+      if (image)
+        {
+          glyph_origin.x -= glyph_offset.x / scale;
+          glyph_origin.y -= glyph_offset.y / scale;
+          glyph_tex_rect = GRAPHENE_RECT_INIT (glyph_origin.x - glyph_bounds.origin.x / scale,
+                                               glyph_origin.y - glyph_bounds.origin.y / scale,
+                                               gsk_gpu_image_get_width (image) / scale,
+                                               gsk_gpu_image_get_height (image) / scale);
+          glyph_bounds = GRAPHENE_RECT_INIT (glyph_origin.x,
+                                             glyph_origin.y,
+                                             glyph_bounds.size.width / scale,
+                                             glyph_bounds.size.height / scale);
 
-      if (glyphs[i].attr.is_color)
-        gsk_gpu_texture_op (self,
-                            self->ccs,
-                            &glyph_bounds,
-                            image,
-                            GSK_GPU_SAMPLER_DEFAULT,
-                            &glyph_tex_rect);
-      else
-        gsk_gpu_colorize_op (self,
-                             self->ccs,
-                             acs,
-                             &glyph_bounds,
-                             image,
-                             GSK_GPU_SAMPLER_DEFAULT,
-                             &glyph_tex_rect,
-                             &color2);
+          if (glyphs[i].attr.is_color)
+            gsk_gpu_texture_op (self,
+                                self->ccs,
+                                &glyph_bounds,
+                                image,
+                                GSK_GPU_SAMPLER_DEFAULT,
+                                &glyph_tex_rect);
+          else
+            gsk_gpu_colorize_op (self,
+                                 self->ccs,
+                                 acs,
+                                 &glyph_bounds,
+                                 image,
+                                 GSK_GPU_SAMPLER_DEFAULT,
+                                 &glyph_tex_rect,
+                                 &color2);
+        }
 
       offset.x += glyphs[i].geometry.width / pango_scale;
     }
