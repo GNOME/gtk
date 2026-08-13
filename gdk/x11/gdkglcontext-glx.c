@@ -206,6 +206,8 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext      *draw_context,
 
   if (self->do_frame_sync && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&x11_surface->glx_frame_counter);
+
+  gdk_gl_context_frame_handle_gpu_completion ((GdkGLContextFrame *) frame);
 }
 
 static gboolean

@@ -65,6 +65,16 @@ typedef enum {
  * can provide a damage region for */
 #define GDK_GL_MAX_TRACKED_BUFFERS 4
 
+typedef struct _GdkGLContextFrame GdkGLContextFrame;
+
+struct _GdkGLContextFrame
+{
+  GdkDrawContextFrame parent;
+
+  GSource *completion_source;
+  GLsync completion_sync;
+};
+
 struct _GdkGLContext
 {
   GdkDrawContext parent_instance;
@@ -194,5 +204,8 @@ void                    gdk_gl_context_download                 (GdkGLContext   
 gboolean                gdk_gl_context_export_dmabuf            (GdkGLContext    *self,
                                                                  unsigned int     texture_id,
                                                                  GdkDmabuf       *dmabuf);
+
+void                    gdk_gl_context_frame_handle_gpu_completion
+                                                                (GdkGLContextFrame      *glframe);
 
 G_END_DECLS
