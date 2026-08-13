@@ -1,0 +1,56 @@
+<svg gpa:rendering="symbolic"
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+        xmlns:cc='http://creativecommons.org/ns#'
+        xmlns:dc='http://purl.org/dc/elements/1.1/'
+        xmlns:gpa='https://www.gtk.org/grappa'
+        gpa:version='1'
+        gpa:state-names='outline empty'
+        gpa:state='0'
+        id='svg1'
+        width='16'
+        height='16'>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <cc:license
+                rdf:resource='https://creativecommons.org/publicdomain/zero/1.0/'/>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Jakub Steiner</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>projects xdg ruler pencil prototype work stuff</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+          id='ruler-pencil'
+          class='transparent-fill foreground-stroke'
+          fill='none'
+          stroke='rgb(0,0,0)'
+          stroke-opacity='1'
+          stroke-width='2'
+          stroke-linecap='round'
+          stroke-linejoin='round'
+          d='M 4 15 L 15 4 L 15 15 Z M 0.998929 10 L 2 10 L 4 10 L 9.34828 4.65172 C 10.1843 3.81568, 10.1843 2.46018, 9.34828 1.62414 C 8.51223 0.803328, 7.16909 0.815679, 6.34828 1.65172 L 1 7 Z'
+          gpa:stroke-minwidth='25%'
+          gpa:stroke-maxwidth='150%'
+          gpa:stroke='foreground'
+          gpa:states='outline'>
+  </path>
+  <path
+          id='inner ruler'
+          gpa:stroke='foreground'
+          stroke='rgb(0,0,0)'
+          fill='none'
+          gpa:states='outline'
+          class='transparent-fill foreground-stroke'
+          d='M 12.5 9.5 L 9.5 12.5 L 12.5 12.5 Z'>
+  </path>
+</svg>
