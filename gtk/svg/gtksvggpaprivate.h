@@ -56,8 +56,8 @@ shape_apply_state (GtkSvg       *self,
                    unsigned int  state);
 
 void
-apply_state (GtkSvg   *self,
-             uint64_t  state);
+apply_state (GtkSvg       *self,
+             unsigned int  state);
 
 void
 create_states (SvgElement   *shape,
