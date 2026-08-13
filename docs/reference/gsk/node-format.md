@@ -154,7 +154,11 @@ Rounded rectangles use a CSS-like syntax:
 
 The syntax for paths is as follows:
 
-    path: <contour> | "{" <contour>+ "}"
+    path: "name" | <contour> | [ "name" ] "{" <contour>+ "}"
+
+Paths can reference a previously defined path by name just like textures can.
+When defining a named path, the long syntax must be used even when specifying a path with a single contour.
+
     contour: <string> | <rounded-rect> | rect { … } | rounded-rect { … } | circle { … }
 
 The string uses SVG path syntax.
