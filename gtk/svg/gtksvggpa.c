@@ -246,18 +246,17 @@ shape_apply_state (GtkSvg       *self,
 {
   Visibility visibility;
 
-  if (svg_element_get_states (shape) & BIT (state))
+  if (state_match (svg_element_get_states (shape), state))
     visibility = VISIBILITY_VISIBLE;
   else
     visibility = VISIBILITY_HIDDEN;
 
-  if (svg_element_type_is_renderable (svg_element_get_element_type (shape)))
+  if (svg_element_type_is_path (svg_element_get_element_type (shape)))
     {
       if ((self->features & GTK_SVG_ANIMATIONS) == 0)
         {
           SvgValue *value = svg_visibility_new (visibility);
-          svg_element_set_base_value (shape, SVG_PROPERTY_VISIBILITY, value, FALSE);
-          svg_value_unref (value);
+          svg_element_take_base_value (shape, SVG_PROPERTY_VISIBILITY, value);
         }
      }
 
@@ -334,8 +333,8 @@ shape_apply_state (GtkSvg       *self,
 }
 
 void
-apply_state (GtkSvg   *self,
-             uint64_t  state)
+apply_state (GtkSvg       *self,
+             unsigned int  state)
 {
   shape_apply_state (self, self->content, state);
 }

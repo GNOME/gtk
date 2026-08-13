@@ -87,6 +87,7 @@
 #include "gtksvgtimespecprivate.h"
 #include "gtksvggpaprivate.h"
 #include "gtksvgmediaqueryprivate.h"
+#include "gtksvggpaprivate.h"
 
 #include <glib/gstdio.h>
 
@@ -1659,7 +1660,7 @@ compute_current_values_for_shape (SvgElement        *shape,
     {
       Visibility visibility;
 
-      if (svg_element_get_states (shape) & context->svg->state)
+      if (state_match (svg_element_get_states (shape), context->svg->state))
         visibility = VISIBILITY_VISIBLE;
       else
         visibility = VISIBILITY_HIDDEN;
