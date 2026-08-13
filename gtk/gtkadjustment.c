@@ -27,6 +27,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtksettings.h"
 
 
 /**
@@ -567,10 +568,18 @@ void
 gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 			         double         value)
 {
+  GtkReducedMotion reduced_motion;
+  gboolean animate;
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
   g_return_if_fail (isfinite (value));
 
-  gtk_adjustment_set_value_internal (adjustment, value, TRUE);
+  g_object_get (gtk_settings_get_default (),
+                "gtk-interface-reduced-motion", &reduced_motion,
+                NULL);
+  animate = reduced_motion != GTK_REDUCED_MOTION_REDUCE;
+
+  gtk_adjustment_set_value_internal (adjustment, value, animate);
 }
 
 /**
