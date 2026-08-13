@@ -697,8 +697,8 @@ gtk_file_chooser_widget_finalize (GObject *object)
   if (priv->choices)
     g_hash_table_unref (priv->choices);
 
-  if (priv->location_changed_id > 0)
-    g_source_remove (priv->location_changed_id);
+  /* location_changed_id and load_timeout_id are removed in dispose. */
+  g_assert (priv->location_changed_id == 0);
 
   unset_file_system_backend (impl);
 
@@ -3651,6 +3651,14 @@ gtk_file_chooser_widget_dispose (GObject *object)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   cancel_all_operations (impl);
+
+  if (priv->location_changed_id > 0)
+    {
+      g_source_remove (priv->location_changed_id);
+      priv->location_changed_id = 0;
+    }
+
+  load_remove_timer (impl, LOAD_EMPTY);
 
   if (priv->rename_file_popover)
     gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), NULL);
