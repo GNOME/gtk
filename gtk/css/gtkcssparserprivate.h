@@ -85,7 +85,7 @@ void                    gtk_css_parser_consume_token            (GtkCssParser   
 void                    gtk_css_parser_start_block              (GtkCssParser                   *self); 
 void                    gtk_css_parser_start_semicolon_block    (GtkCssParser                   *self,
                                                                  GtkCssTokenType                 alternative_token);
-void                    gtk_css_parser_end_block_prelude        (GtkCssParser                   *self);
+gboolean                gtk_css_parser_end_block_prelude        (GtkCssParser                   *self);
 void                    gtk_css_parser_end_block                (GtkCssParser                   *self); 
 void                    gtk_css_parser_skip                     (GtkCssParser                   *self);
 void                    gtk_css_parser_skip_until               (GtkCssParser                   *self,

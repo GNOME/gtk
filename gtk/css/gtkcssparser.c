@@ -544,17 +544,20 @@ gtk_css_parser_start_semicolon_block (GtkCssParser    *self,
   gtk_css_parser_blocks_append (&self->blocks, block);
 }
 
-void
+/* Returns: true if there is a block, false if the block
+ * ends with EOF/semicolon
+ */
+gboolean
 gtk_css_parser_end_block_prelude (GtkCssParser *self)
 {
   GtkCssParserBlock *block;
 
-  g_return_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0);
+  g_return_val_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0, FALSE);
 
   block = gtk_css_parser_blocks_get_last (&self->blocks);
 
   if (block->alternative_token == GTK_CSS_TOKEN_EOF)
-    return;
+    return FALSE;
 
   gtk_css_parser_skip_until (self, GTK_CSS_TOKEN_EOF);
 
@@ -563,12 +566,16 @@ gtk_css_parser_end_block_prelude (GtkCssParser *self)
       if (gtk_css_token_is_preserved (&self->token, &block->end_token))
         {
           g_critical ("alternative token is not preserved");
-          return;
+          return FALSE;
         }
       block->alternative_token = GTK_CSS_TOKEN_EOF;
       block->inherited_end_token = GTK_CSS_TOKEN_EOF;
       gtk_css_token_clear (&self->token);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 void
