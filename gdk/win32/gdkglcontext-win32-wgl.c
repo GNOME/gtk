@@ -130,6 +130,8 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext      *draw_context,
     }
 
   SwapBuffers (GetDC (GDK_WIN32_GL_CONTEXT (context)->handle));
+
+  gdk_gl_context_frame_handle_gpu_completion ((GdkGLContextFrame *) frame);
 }
 
 static cairo_region_t *
