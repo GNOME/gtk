@@ -17,7 +17,9 @@ transform {
         bounds: 0 -5 10 10;
         color: rgb(0,0,0);
       }
-      path: "M 0 -5 L 10 0 L 0 5 Z";
+      path: "path1" {
+        "M 0 -5 L 10 0 L 0 5 Z";
+      }
       fill-rule: winding;
     }
   }
@@ -31,7 +33,7 @@ transform {
         bounds: 0 -5 10 10;
         color: rgb(0,0,0);
       }
-      path: "M 0 -5 L 10 0 L 0 5 Z";
+      path: "path1";
       fill-rule: winding;
     }
   }
