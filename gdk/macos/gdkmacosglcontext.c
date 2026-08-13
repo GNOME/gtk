@@ -537,6 +537,8 @@ gdk_macos_gl_context_end_frame (GdkDrawContext      *context,
   swapRect[3] = flush_rect.height;              /* height */
   CGLSetParameter (self->cgl_context, kCGLCPSwapRectangle, swapRect);
 
+  gdk_gl_context_frame_handle_gpu_completion ((GdkGLContextFrame *) frame);
+
   gdk_macos_gl_context_release (self);
 
   glFlush ();
