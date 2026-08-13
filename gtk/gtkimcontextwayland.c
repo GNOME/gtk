@@ -731,7 +731,7 @@ on_css_node_style_changed (GtkCssNode          *node,
                            GtkCssStyleChange   *change,
                            GtkIMContextWayland *context)
 {
-  if (context->widget)
+  if (!context->widget)
     return;
 
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
