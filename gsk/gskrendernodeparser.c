@@ -125,6 +125,7 @@ struct _Context
 {
   GHashTable *named_nodes;
   GHashTable *named_textures;
+  GHashTable *named_paths;
   GHashTable *named_color_states;
   PangoFontMap *fontmap;
 };
@@ -150,6 +151,7 @@ context_finish (Context *context)
 {
   g_clear_pointer (&context->named_nodes, g_hash_table_unref);
   g_clear_pointer (&context->named_textures, g_hash_table_unref);
+  g_clear_pointer (&context->named_paths, g_hash_table_unref);
   g_clear_pointer (&context->named_color_states, g_hash_table_unref);
   g_clear_object (&context->fontmap);
 }
@@ -3914,11 +3916,15 @@ parse_contour (GtkCssParser *parser,
       char *str = NULL;
       GskPath *path;
 
-      if (!parse_string (parser, context, &str))
-        return FALSE;
+      str = gtk_css_parser_consume_string (parser);
 
       path = gsk_path_parse (str);
       g_free (str);
+      if (path == NULL)
+        {
+          gtk_css_parser_error_value (parser, "Invalid path");
+          return NULL;
+        }
 
       return path;
     }
@@ -3981,17 +3987,83 @@ parse_path (GtkCssParser *parser,
             Context      *context,
             gpointer      out_path)
 {
+  GtkCssLocation start_location, end_location;
   GskPath *path = NULL;
+  char *path_name;
+
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+    {
+      path_name = gtk_css_parser_consume_string (parser);
+      start_location = *gtk_css_parser_get_start_location (parser);
+      end_location = *gtk_css_parser_get_end_location (parser);
+
+      if (context->named_paths)
+        path = g_hash_table_lookup (context->named_paths, path_name);
+      else
+        path = NULL;
+
+      if (path)
+        {
+          g_free (path_name);
+          if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+              gtk_css_parser_end_block_prelude (parser))
+            {
+              gtk_css_parser_error_syntax (parser, "Junk at end of path reference");
+            }
+          *(GskPath **) out_path = gsk_path_ref (path);
+          return TRUE;
+        }
+
+      if (context->named_paths && g_hash_table_lookup (context->named_paths, path_name))
+        {
+          gtk_css_parser_error_value (parser, "A path named \"%s\" already exists.", path_name);
+          g_clear_pointer (&path_name, g_free);
+        }
+    }
+  else
+    {
+      /* shut up compiler */
+      start_location = end_location = *gtk_css_parser_get_start_location (parser);
+      path_name = NULL;
+    }
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
+      if (path_name != NULL)
+        {
+          gtk_css_parser_error_syntax (parser, "Named paths must use long form syntax");
+          g_free (path_name);
+          return FALSE;
+        }
+
       path = parse_contour (parser, context);
+    }
+  else if (!gtk_css_parser_end_block_prelude (parser))
+    {
+      if (path_name == NULL)
+        {
+          GskPathBuilder *builder = gsk_path_builder_new ();
+          path = gsk_path_builder_free_to_path (builder);
+        }
+      else
+        {
+          path = gsk_path_parse (path_name);
+          g_clear_pointer (&path_name, g_free);
+
+          if (path == NULL)
+            {
+              gtk_css_parser_error (parser,
+                                    GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                    &start_location,
+                                    &end_location,
+                                    "Neither valid name nor valid path");
+              return FALSE;
+            }
+        }
     }
   else
     {
       GskPathBuilder *builder = gsk_path_builder_new ();
-
-      gtk_css_parser_end_block_prelude (parser);
 
       while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
         {
@@ -4012,6 +4084,14 @@ parse_path (GtkCssParser *parser,
 
       if (builder)
         path = gsk_path_builder_free_to_path (builder);
+    }
+
+  if (path_name)
+    {
+      if (context->named_paths == NULL)
+        context->named_paths = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                      g_free, (GDestroyNotify) gsk_path_unref);
+      g_hash_table_insert (context->named_paths, path_name, gsk_path_ref (path));
     }
 
   *((GskPath **) out_path) = path;
@@ -4898,6 +4978,8 @@ typedef struct
   gsize named_node_counter;
   GHashTable *named_textures;
   gsize named_texture_counter;
+  GHashTable *named_paths;
+  gsize named_path_counter;
   GHashTable *named_color_states;
   gsize named_color_state_counter;
   GHashTable *fonts;
@@ -4913,6 +4995,18 @@ printer_init_check_texture (Printer    *printer,
     g_hash_table_insert (printer->named_textures, texture, NULL);
   else if (name == NULL)
     g_hash_table_insert (printer->named_textures, texture, g_strdup (""));
+}
+
+static void
+printer_init_check_path (Printer *printer,
+                         GskPath *path)
+{
+  gpointer name;
+
+  if (!g_hash_table_lookup_extended (printer->named_paths, path, NULL, &name))
+    g_hash_table_insert (printer->named_paths, path, NULL);
+  else if (name == NULL)
+    g_hash_table_insert (printer->named_paths, path, g_strdup (""));
 }
 
 typedef struct {
@@ -5051,6 +5145,14 @@ printer_init_duplicates_for_node (Printer       *printer,
       printer_init_check_texture (printer, gsk_texture_scale_node_get_texture (node));
       break;
 
+    case GSK_FILL_NODE:
+      printer_init_check_path (printer, gsk_fill_node_get_path (node));
+      break;
+
+    case GSK_STROKE_NODE:
+      printer_init_check_path (printer, gsk_stroke_node_get_path (node));
+      break;
+
     case GSK_COLOR_NODE:
     case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
@@ -5071,8 +5173,6 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_ROUNDED_CLIP_NODE:
     case GSK_SHADOW_NODE:
     case GSK_DEBUG_NODE:
-    case GSK_FILL_NODE:
-    case GSK_STROKE_NODE:
     case GSK_BLEND_NODE:
     case GSK_MASK_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -5116,6 +5216,8 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
+  self->named_paths = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  self->named_path_counter = 0;
   self->named_color_states = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_color_state_counter = 0;
   self->fonts = g_hash_table_new_full (font_info_hash, font_info_equal, font_info_free, NULL);
@@ -6340,10 +6442,33 @@ append_path_param (Printer    *p,
                    const char *param_name,
                    GskPath    *path)
 {
+  const char *path_name;
+
   _indent (p);
   g_string_append (p->str, "path: ");
 
-  if (gsk_path_get_n_contours (path) == 1)
+  path_name = g_hash_table_lookup (p->named_paths, path);
+  if (path_name == NULL)
+    {
+      /* nothing to do here, path is unique */
+    }
+  else if (path_name[0])
+    {
+      /* path has been named already */
+      gtk_css_print_string (p->str, path_name, TRUE);
+      g_string_append (p->str, ";\n");
+      return;
+    }
+  else
+    {
+      /* path needs a name */
+      char *new_name = g_strdup_printf ("path%zu", ++p->named_path_counter);
+      gtk_css_print_string (p->str, new_name, TRUE);
+      g_string_append_c (p->str, ' ');
+      g_hash_table_insert (p->named_paths, path, new_name);
+    }
+
+  if (gsk_path_get_n_contours (path) == 1 && path_name == NULL)
     {
       append_contour (p, 6, gsk_path_get_contour (path, 0));
     }

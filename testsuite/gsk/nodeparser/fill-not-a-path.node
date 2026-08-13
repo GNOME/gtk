@@ -1,0 +1,7 @@
+fill {
+  path: "This is absolutely not a path";
+}
+
+fill {
+ path: "foo" "M 0 0 h 10 v 10 z";
+}

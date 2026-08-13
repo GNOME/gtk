@@ -15,7 +15,9 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1" {
+      "M 0 0 L 1 1 L 0 2 Z";
+    }
     fill-rule: winding;
   }
 }
@@ -26,7 +28,7 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1";
     fill-rule: winding;
   }
 }
@@ -47,7 +49,7 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1";
     fill-rule: winding;
   }
 }
@@ -58,7 +60,7 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1";
     fill-rule: winding;
   }
 }
@@ -79,7 +81,7 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1";
     fill-rule: winding;
   }
 }
@@ -90,7 +92,7 @@ transform {
       bounds: 0 0 1 2;
       color: rgb(0,0,255);
     }
-    path: "M 0 0 L 1 1 L 0 2 Z";
+    path: "path1";
     fill-rule: winding;
   }
 }

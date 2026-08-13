@@ -3,7 +3,7 @@ fill {
     bounds: 20 20 160 160;
     color: rgb(0,0,0);
   }
-  path: {
+  path: "path1" {
     "M 20 100 L 180 100";
     "M 100 20 L 100 180";
   }
@@ -14,10 +14,7 @@ stroke {
     bounds: 18 18 164 164;
     color: rgb(128,128,128);
   }
-  path: {
-    "M 20 100 L 180 100";
-    "M 100 20 L 100 180";
-  }
+  path: "path1";
   line-width: 0.5;
   line-cap: butt;
   line-join: miter;
