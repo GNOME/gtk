@@ -99,24 +99,40 @@ static guint signals[LAST_SIGNAL];
 
 static guint fps_counter;
 
+typedef struct _GdkFrameClockFrame GdkFrameClockFrame;
+
+struct _GdkFrameClockFrame
+{
+  GdkFrameTimings *timings;
+  GSList *frames;
+};
+
+static void
+gdk_frame_clock_frame_clear (GdkFrameClockFrame *frame)
+{
+  while (frame->frames)
+    gdk_draw_context_frame_free (frame->frames->data);
+
+  gdk_frame_timings_unref (frame->timings);
+}
+
 /* 60Hz plus some extra for monotonic time inaccuracy */
 #define FRAME_HISTORY_DEFAULT_LENGTH 64
 
-#define frame_timings_unref(x) gdk_frame_timings_unref((GdkFrameTimings *) (x))
-
-#define GDK_ARRAY_NAME timings
-#define GDK_ARRAY_TYPE_NAME Timings
-#define GDK_ARRAY_ELEMENT_TYPE GdkFrameTimings *
+#define GDK_ARRAY_NAME frames
+#define GDK_ARRAY_TYPE_NAME Frames
+#define GDK_ARRAY_ELEMENT_TYPE GdkFrameClockFrame
 #define GDK_ARRAY_PREALLOC FRAME_HISTORY_DEFAULT_LENGTH
-#define GDK_ARRAY_FREE_FUNC frame_timings_unref
+#define GDK_ARRAY_FREE_FUNC gdk_frame_clock_frame_clear
+#define GDK_ARRAY_BY_VALUE 1
 #include "gdk/gdkarrayimpl.c"
 
 typedef struct _GdkFrameClockPrivate GdkFrameClockPrivate;
 struct _GdkFrameClockPrivate
 {
   gint64 frame_counter;
-  int current;
-  Timings timings;
+  gsize current;
+  Frames frames;
   uint64_t latest_presentation_time;
   uint64_t latest_refresh_interval;
   uint64_t expected_presentation_delay;
@@ -128,8 +144,6 @@ struct _GdkFrameClockPrivate
 
   gsize n_started;
   gsize n_updating;
-
-  GSList *frames;
 
   guint work_performed : 1;
 };
@@ -176,7 +190,7 @@ gdk_frame_clock_finalize (GObject *object)
   g_warn_if_fail (priv->n_started == 0);
   g_warn_if_fail (priv->n_updating == 0);
 
-  timings_clear (&priv->timings);
+  frames_clear (&priv->frames);
 
   G_OBJECT_CLASS (gdk_frame_clock_parent_class)->finalize (object);
 }
@@ -322,7 +336,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
 
   priv->frame_counter = -1;
   priv->current = 0;
-  timings_init (&priv->timings);
+  frames_init (&priv->frames);
   priv->latest_refresh_interval = (G_NSEC_PER_SEC + 30) / 60;
 
   if (fps_counter == 0)
@@ -572,7 +586,7 @@ _gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
 
-  return priv->frame_counter + 1 - timings_get_size (&priv->timings);
+  return priv->frame_counter + 1 - frames_get_size (&priv->frames);
 }
 
 /**
@@ -614,68 +628,85 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
                              uint64_t       stage_start_time)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
+  GdkFrameClockFrame *frame;
 
   priv->frame_counter++;
   priv->frame_time = frame_time;
 
-  if (G_UNLIKELY (timings_get_size (&priv->timings) == 0))
+  if (G_UNLIKELY (frames_get_size (&priv->frames) == 0))
     {
-      timings = _gdk_frame_timings_new (priv->frame_counter);
-      timings_append (&priv->timings, timings);
+      GdkFrameClockFrame new_frame = {
+        .timings = _gdk_frame_timings_new (priv->frame_counter),
+      };
+      frames_append (&priv->frames, &new_frame);
+      frame = frames_get (&priv->frames, 0);
     }
   else
     {
-      priv->current = (priv->current + 1) % timings_get_size (&priv->timings);
+      priv->current = (priv->current + 1) % frames_get_size (&priv->frames);
 
-      timings = timings_get (&priv->timings, priv->current);
+      frame = frames_get (&priv->frames, priv->current);
 
-      if (gdk_frame_timings_get_frame_time (timings) + G_USEC_PER_SEC > frame_time / 1000)
+      if (gdk_frame_timings_get_frame_time (frame->timings) + G_USEC_PER_SEC > frame_time / 1000)
         {
-          /* Keep the timings, not a second old yet */
-          timings = _gdk_frame_timings_new (priv->frame_counter);
-          timings_splice (&priv->timings, priv->current, 0, FALSE, &timings, 1);
-        }
-      else if (_gdk_frame_timings_steal (timings, priv->frame_counter))
-        {
-          /* Stole the previous frame timing instead of discarding
-           * and allocating a new one, so nothing to do
-           */
+          /* Keep the frame, not a second old yet */
+          GdkFrameClockFrame new_frame = {
+            .timings = _gdk_frame_timings_new (priv->frame_counter),
+          };
+          frames_splice (&priv->frames, priv->current, 0, FALSE, &new_frame, 1);
         }
       else
         {
-          timings = _gdk_frame_timings_new (priv->frame_counter);
-          timings_splice (&priv->timings, priv->current, 1, FALSE, &timings, 1);
+          while (frame->frames)
+            gdk_draw_context_frame_free (frame->frames->data);
+
+          if (!_gdk_frame_timings_steal (frame->timings, priv->frame_counter))
+            {
+              gdk_frame_timings_unref (frame->timings);
+              frame->timings = _gdk_frame_timings_new (priv->frame_counter);
+            }
         }
     }
 
-  gdk_frame_timings_setup (timings,
+  gdk_frame_timings_setup (frame->timings,
                            frame_time,
                            gdk_frame_clock_predict_presentation_time (self, priv->stage_start_time),
                            frame_start_time,
                            stage_start_time);
 }
 
-static inline GdkFrameTimings *
-_gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
-                              gint64         frame_counter)
+static GdkFrameClockFrame *
+gdk_frame_clock_get_frame (GdkFrameClock *self,
+                           gint64         frame_counter)
 {
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   gsize size, pos;
 
   if (frame_counter > priv->frame_counter)
     return NULL;
 
-  size = timings_get_size (&priv->timings);
+  size = frames_get_size (&priv->frames);
   if (G_UNLIKELY (size == 0))
     return NULL;
 
   if (priv->frame_counter - frame_counter >= size)
     return NULL;
 
-  pos = (priv->current - (priv->frame_counter - frame_counter) + size) % size;
+  pos = (priv->current + size - (gsize) (priv->frame_counter - frame_counter)) % size;
+  return frames_get (&priv->frames, pos);
+}
 
-  return timings_get (&priv->timings, pos);
+static inline GdkFrameTimings *
+_gdk_frame_clock_get_timings (GdkFrameClock *self,
+                              gint64         frame_counter)
+{
+  GdkFrameClockFrame *frame;
+
+  frame = gdk_frame_clock_get_frame (self, frame_counter);
+  if (frame == NULL)
+    return NULL;
+
+  return frame->timings;
 }
 
 /**
@@ -731,12 +762,12 @@ gdk_frame_clock_find_timings (GdkFrameClock *self,
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   gsize i;
 
-  for (i = 0; i < timings_get_size (&priv->timings); i++)
+  for (i = 0; i < frames_get_size (&priv->frames); i++)
     {
-      GdkFrameTimings *timings = timings_get (&priv->timings, i);
+      GdkFrameClockFrame *frame = frames_get (&priv->frames, i);
 
-      if (gdk_frame_timings_get_serial (timings) == serial)
-        return timings;
+      if (gdk_frame_timings_get_serial (frame->timings) == serial)
+        return frame->timings;
     }
 
   return NULL;
@@ -1331,18 +1362,25 @@ void
 gdk_frame_clock_add_frame (GdkFrameClock       *self,
                            GdkDrawContextFrame *frame)
 {
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GdkFrameClockFrame *clock_frame;
 
-  priv->frames = g_slist_prepend (priv->frames, frame);
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  g_assert (clock_frame != NULL);
+
+  clock_frame->frames = g_slist_prepend (clock_frame->frames, frame);
 }
 
 void
 gdk_frame_clock_remove_frame (GdkFrameClock       *self,
                               GdkDrawContextFrame *frame)
 {
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GdkFrameClockFrame *clock_frame;
 
-  priv->frames = g_slist_remove (priv->frames, frame);
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  if (clock_frame == NULL)
+    return;
+
+  clock_frame->frames = g_slist_remove (clock_frame->frames, frame);
 }
 
 void
