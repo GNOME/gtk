@@ -342,7 +342,7 @@ gdk_draw_context_frame_new (GdkDrawContext *self,
   return result;
 }
 
-static void
+void
 gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 {
   GdkDrawContext *self = frame->context;
