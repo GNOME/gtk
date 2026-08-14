@@ -91,6 +91,7 @@ void                    gdk_draw_context_get_buffer_size        (GdkDrawContext 
                                                                  guint                  *out_width,
                                                                  guint                  *out_height);
 
+void                    gdk_draw_context_frame_free             (GdkDrawContextFrame    *frame);
 const cairo_region_t *  gdk_draw_context_frame_get_damage       (GdkDrawContextFrame    *frame);
 void                    gdk_draw_context_frame_add_damage       (GdkDrawContextFrame    *frame,
                                                                  const cairo_region_t   *damage);
