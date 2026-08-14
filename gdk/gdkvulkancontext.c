@@ -747,8 +747,7 @@ read_timestamp_from_sync_fd (int fd)
 
 static void
 gdk_vulkan_present_reset (GdkVulkanContext *self,
-                          GdkVulkanPresent *present,
-                          uint64_t          timestamp)
+                          GdkVulkanPresent *present)
 {
   GdkVulkanContextFrame *vframe;
 
@@ -768,7 +767,6 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
   vframe->present = NULL;
   g_clear_pointer (&vframe->completion_source, g_source_destroy);
   g_clear_fd (&vframe->completion_fd, NULL);
-  gdk_draw_context_frame_gpu_complete ((GdkDrawContextFrame *) vframe, timestamp);
 }
 
 #define COMPLETION_FD_EVENTS (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_PRI | G_IO_HUP)
@@ -805,9 +803,11 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
 
 static void
 gdk_vulkan_context_wait_present (GdkVulkanContext *self,
+                                 GdkVulkanPresent *presents,
+                                 gsize             n_presents,
                                  gboolean          wait_all)
 {
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+  g_assert (n_presents <= MAX_PRESENTS);
 
   if (!gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
     {
@@ -817,26 +817,26 @@ gdk_vulkan_context_wait_present (GdkVulkanContext *self,
        */
       vkDeviceWaitIdle (gdk_vulkan_context_get_device (self));
 
-      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+      for (i = 0; i < n_presents; i++)
         {
-          if (priv->presents[i].vk_swapchain)
+          if (presents[i].vk_swapchain)
             {
-              gdk_vulkan_context_unref_swapchain (self, priv->presents[i].vk_swapchain);
-              priv->presents[i].vk_swapchain = VK_NULL_HANDLE;
+              gdk_vulkan_context_unref_swapchain (self, presents[i].vk_swapchain);
+              presents[i].vk_swapchain = VK_NULL_HANDLE;
             }
         }
     }
   else if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
     {
-      GPollFD poll_fds[G_N_ELEMENTS (priv->presents)];
+      GPollFD poll_fds[MAX_PRESENTS];
       gsize i, n_polls;
 
       n_polls = 0;
-      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+      for (i = 0; i < n_presents; i++)
         {
-          if (priv->presents[i].frame)
+          if (presents[i].frame)
             {
-              poll_fds[n_polls++] = (GPollFD) { priv->presents[i].frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
+              poll_fds[n_polls++] = (GPollFD) { presents[i].frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
             }
         }
 
@@ -861,15 +861,15 @@ gdk_vulkan_context_wait_present (GdkVulkanContext *self,
     }
   else
     {
-      VkFence fences[G_N_ELEMENTS (priv->presents)];
+      VkFence fences[MAX_PRESENTS];
       gsize i, n_fences;
 
       n_fences = 0;
-      for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
+      for (i = 0; i < n_presents; i++)
         {
-          if (priv->presents[i].vk_swapchain)
+          if (presents[i].vk_swapchain)
             {
-              fences[n_fences++] = priv->presents[i].vk_fence;
+              fences[n_fences++] = presents[i].vk_fence;
             }
         }
 
@@ -894,16 +894,19 @@ gdk_vulkan_context_start_present (GdkVulkanContext *self)
           if (!gdk_vulkan_present_is_busy (self, &priv->presents[i]))
             {
               GdkVulkanPresent *result = &priv->presents[i];
+              GdkDrawContextFrame *frame = (GdkDrawContextFrame *) result->frame;
 
-              gdk_vulkan_present_reset (self, result, g_get_monotonic_time_ns ());
-
+              gdk_vulkan_present_reset (self, result);
               priv->latest_present = i;
+
+              if (frame)
+                gdk_draw_context_frame_gpu_complete (frame, g_get_monotonic_time_ns ());
 
               return result;
             }
         }
 
-      gdk_vulkan_context_wait_present (self, FALSE);
+      gdk_vulkan_context_wait_present (self, priv->presents, G_N_ELEMENTS (priv->presents), FALSE);
     }
 }
 
@@ -945,7 +948,9 @@ gdk_vulkan_context_frame_complete_cb (gpointer data)
   timestamp = g_source_get_time_ns (vframe->completion_source);
   vframe->completion_source = NULL;
 
-  gdk_vulkan_present_reset (self, vframe->present, timestamp);
+  gdk_vulkan_present_reset (self, vframe->present);
+
+  gdk_draw_context_frame_gpu_complete (frame, timestamp);
 
   return G_SOURCE_REMOVE;
 }
@@ -968,7 +973,9 @@ gdk_vulkan_context_frame_complete_fd_cb (gint         fd,
     timestamp = g_source_get_time_ns (vframe->completion_source);
   vframe->completion_source = NULL;
 
-  gdk_vulkan_present_reset (self, vframe->present, timestamp);
+  gdk_vulkan_present_reset (self, vframe->present);
+
+  gdk_draw_context_frame_gpu_complete (frame, timestamp);
 
   return G_SOURCE_REMOVE;
 }
@@ -1236,6 +1243,22 @@ gdk_vulkan_context_end_frame (GdkDrawContext      *draw_context,
   priv->regions[present->image_index] = cairo_region_create ();
 }
 
+static void
+gdk_vulkan_context_finalize_frame (GdkDrawContext      *context,
+                                   GdkDrawContextFrame *frame)
+{
+  GdkVulkanContext *self = GDK_VULKAN_CONTEXT (context);
+  GdkVulkanContextFrame *vframe = (GdkVulkanContextFrame *) frame;
+
+  if (vframe->present)
+    {
+      gdk_vulkan_context_wait_present (self, vframe->present, 1, FALSE);
+      gdk_vulkan_present_reset (self, vframe->present);
+    }
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_vulkan_context_parent_class)->finalize_frame (context, frame);
+}
+
 static gboolean
 gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
                                    GError         **error)
@@ -1426,7 +1449,7 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
 
   vk_device = gdk_vulkan_context_get_device (self);
 
-  gdk_vulkan_context_wait_present (self, TRUE);
+  gdk_vulkan_context_wait_present (self, priv->presents, G_N_ELEMENTS (priv->presents), FALSE);
 
   for (i = 0; i < G_N_ELEMENTS (priv->presents); i++)
     {
@@ -1491,6 +1514,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 
   draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
   draw_context_class->end_frame = gdk_vulkan_context_end_frame;
+  draw_context_class->finalize_frame = gdk_vulkan_context_finalize_frame;
   draw_context_class->surface_attach = gdk_vulkan_context_surface_attach;
   draw_context_class->surface_detach = gdk_vulkan_context_surface_detach;
   draw_context_class->surface_resized = gdk_vulkan_context_surface_resized;
