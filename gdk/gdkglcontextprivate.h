@@ -73,6 +73,7 @@ struct _GdkGLContextFrame
 
   GSource *completion_source;
   GLsync completion_sync;
+  int completion_fd;
 };
 
 struct _GdkGLContext
