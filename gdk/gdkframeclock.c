@@ -1344,3 +1344,26 @@ gdk_frame_clock_remove_frame (GdkFrameClock       *self,
 
   priv->frames = g_slist_remove (priv->frames, frame);
 }
+
+void
+gdk_frame_clock_remove_frames (GdkFrameClock  *self,
+                               GdkDrawContext *context)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  gsize i;
+
+  for (i = 0; i < frames_get_size (&priv->frames); i++)
+    {
+      GdkFrameClockFrame *clock_frame = frames_get (&priv->frames, i);
+      GSList *l;
+
+      for (l = clock_frame->frames; l; )
+        {
+          GdkDrawContextFrame *frame = l->data;
+          l = l->next;
+
+          if (frame->context == context)
+            gdk_draw_context_frame_free (frame);
+        }
+    }
+}
