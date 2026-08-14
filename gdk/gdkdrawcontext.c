@@ -716,13 +716,17 @@ void
 gdk_draw_context_detach (GdkDrawContext *self)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+  GdkFrameClock *clock;
 
   if (!gdk_draw_context_is_attached (self))
     return;
 
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self));
+  g_assert (clock);
+  gdk_frame_clock_remove_frames (clock, self);
+
   GDK_DRAW_CONTEXT_GET_CLASS (self)->surface_detach (self);
   gdk_surface_set_attached_context (priv->surface, NULL);
-
 }
 
 /*
