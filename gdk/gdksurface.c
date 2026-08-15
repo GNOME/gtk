@@ -544,6 +544,18 @@ gdk_surface_default_get_buffer_size (GdkSurface      *surface,
   *out_height = ceil (scale * surface->height);
 }
 
+static void
+gdk_surface_default_submit_frame (GdkSurface          *surface,
+                                  GdkDrawContextFrame *frame)
+{
+}
+
+static void
+gdk_surface_default_finalize_frame (GdkSurface          *surface,
+                                    GdkDrawContextFrame *frame)
+{
+}
+
 static GdkSubsurface *
 gdk_surface_real_create_subsurface (GdkSurface *surface)
 {
@@ -581,6 +593,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
   klass->get_buffer_size = gdk_surface_default_get_buffer_size;
+  klass->submit_frame = gdk_surface_default_submit_frame;
+  klass->finalize_frame = gdk_surface_default_finalize_frame;
   klass->create_subsurface = gdk_surface_real_create_subsurface;
   klass->set_opaque_region = gdk_surface_default_set_opaque_region;
 
