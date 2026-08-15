@@ -354,7 +354,10 @@ void
 gdk_draw_context_frame_free (GdkDrawContextFrame *frame)
 {
   GdkDrawContext *self = frame->context;
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
   GdkFrameClock *clock;
+
+  GDK_SURFACE_GET_CLASS (priv->surface)->finalize_frame (priv->surface, frame);
 
   GDK_DRAW_CONTEXT_GET_CLASS (self)->finalize_frame (self, frame);
 
@@ -537,6 +540,8 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->current_frame, context_data);
+
+  GDK_SURFACE_GET_CLASS (priv->surface)->submit_frame (priv->surface, priv->current_frame);
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (gdk_draw_context_frame_get_damage (priv->current_frame)));
 
