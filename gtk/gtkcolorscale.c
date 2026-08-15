@@ -130,8 +130,12 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
       graphene_point_t start, end;
       const GdkRGBA *color;
 
-      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
+        {
+          graphene_point_init (&start, 0, 0);
+          graphene_point_init (&end, 0, height);
+        }
+      else if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         {
           graphene_point_init (&start, width, 0);
           graphene_point_init (&end, 0, 0);
