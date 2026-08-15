@@ -183,6 +183,28 @@ get_point (uint64_t t,
   return (t + ns_scale - 1) / ns_scale;
 }
 
+static guint32
+gdk_cairo_composite_over (guint32 dest,
+                          guint32 src)
+{
+  guint8 a, r, g, b;
+  guint alpha;
+
+  a = dest >> 24;
+  r = dest >> 16;
+  g = dest >>  8;
+  b = dest >>  0;
+
+  alpha = 255 - (src >> 24);
+
+  a = a * alpha / 255 + (src >> 24);
+  r = r * alpha / 255 + (src >> 16);
+  g = g * alpha / 255 + (src >>  8);
+  b = b * alpha / 255 + (src >>  0);
+
+  return (a << 24) | (r << 16) | (g << 8) | (b << 0);
+}
+
 static gboolean
 draw_point (guint32 *data,
             gsize    size,
@@ -198,7 +220,7 @@ draw_point (guint32 *data,
   if (t >= size)
     return FALSE;
 
-  data[t] = color;
+  data[t] = gdk_cairo_composite_over (data[t], color);
   return TRUE;
 }
             
@@ -225,7 +247,7 @@ draw_line (guint32 *data,
   s = MIN (s + 1, size);
 
   for (i = e; i < s; i++)
-    data[i] = color;
+    data[i] = gdk_cairo_composite_over (data[i], color);
 
   return TRUE;
 }
