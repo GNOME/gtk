@@ -327,18 +327,33 @@ static GdkDrawContextFrame *
 gdk_draw_context_frame_new (GdkDrawContext *self,
                             cairo_region_t *damage)
 {
+  const gsize align = 2 * sizeof (gpointer);
   GdkDrawContextClass *klass;
   GdkDrawContextFrame *result;
+  GdkSurface *surface;
+  GdkSurfaceClass *surface_class;
+  gsize size;
 
   klass = GDK_DRAW_CONTEXT_GET_CLASS (self);
+  surface = gdk_draw_context_get_surface (self);
+  surface_class = GDK_SURFACE_GET_CLASS (surface);
 
-  result = g_malloc0 (klass->frame_size);
+  size = klass->frame_size;
+  /* round up to avoid alignent issues */
+  if (surface_class->frame_size)
+    {
+      size += (align - (size % align)) % align;
+      result = g_malloc0 (size + surface_class->frame_size);
+      result->surface_frame = (GdkSurfaceFrame *) ((guchar *) result + size);
+    }
+  else
+    result = g_malloc0 (size);
   result->context = g_object_ref (self);
   gdk_draw_context_get_buffer_size (self, &result->buffer_width, &result->buffer_height);
   result->damage = damage;
   result->color_state = gdk_color_state_ref (GDK_COLOR_STATE_SRGB);
 
-  result->frame_counter = gdk_frame_clock_get_frame_counter (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (self)));
+  result->frame_counter = gdk_frame_clock_get_frame_counter (gdk_surface_get_frame_clock (surface));
 
   return result;
 }
