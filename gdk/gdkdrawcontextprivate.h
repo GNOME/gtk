@@ -32,9 +32,11 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
+typedef struct _GdkSurfaceFrame GdkSurfaceFrame; /* forward decl */
 
 struct _GdkDrawContextFrame
 {
+  GdkSurfaceFrame *surface_frame;
   GdkDrawContext *context;
   gint64 frame_counter;
 
@@ -103,6 +105,7 @@ GdkColorState *         gdk_draw_context_frame_get_color_state  (GdkDrawContextF
 void                    gdk_draw_context_frame_set_color_state  (GdkDrawContextFrame    *frame,
                                                                  GdkColorState          *color_state);
 
+/* in gdkframeclock.c */
 void                    gdk_draw_context_frame_gpu_complete     (GdkDrawContextFrame    *frame,
                                                                  uint64_t                timestamp);
 
