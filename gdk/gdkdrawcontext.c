@@ -362,7 +362,8 @@ gboolean
 gdk_draw_context_frame_is_complete (GdkDrawContextFrame *frame)
 {
   return frame->cpu_complete &&
-         frame->gpu_complete;
+         frame->gpu_complete &&
+         frame->throttling_complete;
 }
 
 void
