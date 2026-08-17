@@ -158,6 +158,8 @@ gdk_win32_surface_submit_frame (GdkSurface          *surface,
   DWM_TIMING_INFO timing_info;
   LARGE_INTEGER tick_frequency;
 
+  gdk_draw_context_frame_stop_throttling (frame, 0);
+
   if (QueryPerformanceFrequency (&tick_frequency))
     {
       HRESULT hr;
