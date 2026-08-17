@@ -159,6 +159,8 @@ gdk_win32_surface_submit_frame (GdkSurface          *surface,
   LARGE_INTEGER tick_frequency;
   GdkFrameClock *clock;
 
+  gdk_draw_context_frame_stop_throttling (frame, 0);
+
   clock = gdk_surface_get_frame_clock (surface);
 
   if (QueryPerformanceFrequency (&tick_frequency))
