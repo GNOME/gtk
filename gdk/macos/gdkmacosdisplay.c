@@ -344,7 +344,6 @@ _gdk_macos_display_surface_added (GdkMacosDisplay *self,
   g_assert (!queue_contains (&self->main_surfaces, &surface->main));
   g_assert (surface->sorted.data == surface);
   g_assert (surface->main.data == surface);
-  g_assert (surface->frame.data == surface);
 
   if (GDK_IS_TOPLEVEL (surface))
     g_queue_push_tail_link (&self->main_surfaces, &surface->main);
