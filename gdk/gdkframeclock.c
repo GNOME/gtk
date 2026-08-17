@@ -105,6 +105,7 @@ struct _GdkFrameClockFrame
 {
   GdkFrameTimings *timings;
   GSList *frames;
+  gboolean throttling;
 };
 
 static void
@@ -1131,6 +1132,38 @@ gdk_draw_context_frame_gpu_complete (GdkDrawContextFrame *frame,
     gdk_draw_context_frame_free (frame);
 }
 
+/**
+ * gdk_draw_context_frame_stop_throttling:
+ * @frame: the frame
+ * @timestamp: The timestamp for the throttling hint or 0 if the compositor 
+ *   does not support throttling.
+ *
+ * Tells the frame clock to stop throttling redraws due to this frame
+ * at the given timestamp. See gdk_frame_timings_get_throttling_hint() for
+ * a longer discussion.
+ *
+ * If the compositor does not support throttling, then this function should
+ * be called in end_frame()/submit_frame() with a timestamp of 0.
+ **/
+void
+gdk_draw_context_frame_stop_throttling (GdkDrawContextFrame *frame,
+                                        uint64_t             timestamp)
+{
+  GdkFrameClock *clock;
+  GdkFrameClockFrame *clock_frame;
+
+  g_return_if_fail (!frame->throttling_complete);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  clock_frame = gdk_frame_clock_get_frame (clock, frame->frame_counter);
+  if (clock_frame != NULL)
+    clock_frame->throttling = FALSE;
+
+  frame->throttling_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
+}
+
 /*<private>
  * gdk_frame_clock_get_refresh_interval:
  * @self: the frame clock
@@ -1453,6 +1486,10 @@ gdk_frame_clock_add_frame (GdkFrameClock       *self,
   clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
   g_assert (clock_frame != NULL);
 
+  if (clock_frame->frames == NULL)
+    clock_frame->throttling = TRUE;
+  if (frame->throttling_complete)
+    clock_frame->throttling = FALSE;
   clock_frame->frames = g_slist_prepend (clock_frame->frames, frame);
 }
 
@@ -1467,6 +1504,8 @@ gdk_frame_clock_remove_frame (GdkFrameClock       *self,
     return;
 
   clock_frame->frames = g_slist_remove (clock_frame->frames, frame);
+  if (clock_frame->frames == NULL)
+    clock_frame->throttling = FALSE;
 }
 
 void
