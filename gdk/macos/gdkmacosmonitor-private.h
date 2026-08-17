@@ -36,10 +36,10 @@ GdkMacosMonitor   *_gdk_macos_monitor_new                   (GdkMacosDisplay   *
 CGDirectDisplayID  _gdk_macos_monitor_get_screen_id         (GdkMacosMonitor   *self);
 gboolean           _gdk_macos_monitor_reconfigure           (GdkMacosMonitor   *self);
 CGColorSpaceRef    _gdk_macos_monitor_copy_colorspace       (GdkMacosMonitor   *self);
-void               _gdk_macos_monitor_add_frame_callback    (GdkMacosMonitor   *self,
-                                                             GdkMacosSurface   *surface);
-void               _gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor   *self,
-                                                             GdkMacosSurface   *surface);
+void               gdk_macos_monitor_add_frame_callback     (GdkMacosMonitor      *self,
+                                                             GdkMacosSurfaceFrame *frame);
+void               gdk_macos_monitor_remove_frame_callback  (GdkMacosMonitor      *self,
+                                                             GdkMacosSurfaceFrame *frame);
 void               _gdk_macos_monitor_clamp                 (GdkMacosMonitor   *self,
                                                              GdkRectangle      *area);
 

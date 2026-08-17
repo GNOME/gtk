@@ -225,14 +225,12 @@ gdk_macos_monitor_display_link_cb (GdkMacosMonitor *self)
 
   while (iter != NULL)
     {
-      GdkMacosSurface *surface = iter->data;
-
-      g_assert (GDK_IS_MACOS_SURFACE (surface));
+      GList *cur = iter;
 
       iter = iter->next;
 
-      g_queue_unlink (&self->awaiting_frames, &surface->frame);
-      _gdk_macos_surface_frame_presented (surface, presentation_time, refresh_interval);
+      g_queue_unlink (&self->awaiting_frames, cur);
+      _gdk_macos_surface_frame_presented (cur->data, presentation_time, refresh_interval);
     }
 
   if (self->awaiting_frames.length == 0 && !self->display_link->paused)
@@ -385,24 +383,23 @@ _gdk_macos_monitor_copy_colorspace (GdkMacosMonitor *self)
 }
 
 void
-_gdk_macos_monitor_add_frame_callback (GdkMacosMonitor *self,
-                                       GdkMacosSurface *surface)
+gdk_macos_monitor_add_frame_callback (GdkMacosMonitor      *self,
+                                      GdkMacosSurfaceFrame *frame)
 {
   g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
-  g_return_if_fail (surface->frame.data == (gpointer)surface);
-  g_return_if_fail (surface->frame.prev == NULL);
-  g_return_if_fail (surface->frame.next == NULL);
-  g_return_if_fail (self->awaiting_frames.head != &surface->frame);
-  g_return_if_fail (self->awaiting_frames.tail != &surface->frame);
+  g_return_if_fail (frame->throttle.prev == NULL);
+  g_return_if_fail (frame->throttle.next == NULL);
+  g_return_if_fail (self->awaiting_frames.head != &frame->throttle);
+  g_return_if_fail (self->awaiting_frames.tail != &frame->throttle);
 
   /* Processing frames is always head to tail, so push to the
    * head so that we don't possibly re-enter this right after
    * adding to the queue.
    */
-  if (!queue_contains (&self->awaiting_frames, &surface->frame))
+  if (!queue_contains (&self->awaiting_frames, &frame->throttle))
     {
-      g_queue_push_head_link (&self->awaiting_frames, &surface->frame);
+      g_queue_push_head_link (&self->awaiting_frames, &frame->throttle);
 
       if (!self->in_frame && self->awaiting_frames.length == 1)
         gdk_display_link_source_unpause (self->display_link);
@@ -410,16 +407,14 @@ _gdk_macos_monitor_add_frame_callback (GdkMacosMonitor *self,
 }
 
 void
-_gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor *self,
-                                          GdkMacosSurface *surface)
+_gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor      *self,
+                                          GdkMacosSurfaceFrame *frame)
 {
   g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
-  g_return_if_fail (surface->frame.data == (gpointer)surface);
 
-  if (queue_contains (&self->awaiting_frames, &surface->frame))
+  if (queue_contains (&self->awaiting_frames, &frame->throttle))
     {
-      g_queue_unlink (&self->awaiting_frames, &surface->frame);
+      g_queue_unlink (&self->awaiting_frames, &frame->throttle);
 
       if (!self->in_frame && self->awaiting_frames.length == 0)
         gdk_display_link_source_pause (self->display_link);

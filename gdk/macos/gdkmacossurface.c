@@ -58,74 +58,19 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 void
-_gdk_macos_surface_request_frame (GdkMacosSurface *self)
+_gdk_macos_surface_frame_presented (GdkDrawContextFrame *frame,
+                                    gint64               presentation_time,
+                                    gint64               refresh_interval)
 {
-  g_assert (GDK_IS_MACOS_SURFACE (self));
+  GdkMacosSurfaceFrame *mac_frame = (GdkMacosSurfaceFrame *) frame->surface_frame;
 
-  if (self->awaiting_frame)
-    return;
+  mac_frame->monitor = NULL;
 
-  if (self->best_monitor != NULL)
-    {
-      self->awaiting_frame = TRUE;
-      _gdk_macos_monitor_add_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-      gdk_surface_freeze_updates (GDK_SURFACE (self));
-    }
-}
+  gdk_draw_context_frame_stop_throttling (frame, g_get_current_time_ns ());
 
-static void
-_gdk_macos_surface_cancel_frame (GdkMacosSurface *self)
-{
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-
-  if (!self->awaiting_frame)
-    return;
-
-  if (self->best_monitor != NULL)
-    {
-      self->awaiting_frame = FALSE;
-      _gdk_macos_monitor_remove_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-      gdk_surface_thaw_updates (GDK_SURFACE (self));
-    }
-}
-
-void
-_gdk_macos_surface_frame_presented (GdkMacosSurface *self,
-                                    gint64           presentation_time,
-                                    gint64           refresh_interval)
-{
-  GdkFrameClock *frame_clock;
-  gint64 frame_counter;
-
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
-
-  self->awaiting_frame = FALSE;
-
-  if (GDK_SURFACE_DESTROYED (self))
-    return;
-
-  frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
-  frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-
-  if (self->pending_frame_counter != frame_counter)
-    {
-      gdk_frame_clock_presented (frame_clock,
-                                 frame_counter,
-                                 presentation_time * 1000,
-                                 refresh_interval * 1000);
-    }
-
-  if (self->pending_frame_counter)
-    {
-      gdk_frame_clock_presented (frame_clock,
-                                 self->pending_frame_counter,
-                                 (presentation_time - refresh_interval) * 1000,
-                                 refresh_interval * 1000);
-
-      self->pending_frame_counter = 0;
-    }
-
-  gdk_surface_thaw_updates (GDK_SURFACE (self));
+  gdk_draw_context_frame_presented (frame,
+                                    presentation_time * 1000,
+                                    refresh_interval * 1000);
 }
 
 void
@@ -191,8 +136,6 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
   self->show_on_next_swap = FALSE;
 
-  _gdk_macos_surface_cancel_frame (self);
-
   was_key = [self->window isKeyWindow];
 
   if (self->popup_grab)
@@ -237,36 +180,27 @@ gdk_macos_surface_get_scale (GdkSurface *surface)
 }
 
 static void
-gdk_macos_surface_end_frame (GdkMacosSurface *self)
+gdk_macos_surface_submit_frame (GdkSurface          *surface,
+                                GdkDrawContextFrame *frame)
 {
-  GdkFrameClock *frame_clock;
+  GdkMacosSurface *self = GDK_MACOS_SURFACE (surface);
+  GdkMacosSurfaceFrame *mac_frame = (GdkMacosSurfaceFrame *) frame->surface_frame;
 
-  g_assert (GDK_IS_MACOS_SURFACE (self));
+  mac_frame->throttle.data = frame;
+  mac_frame->monitor = GDK_MACOS_MONITOR (self->best_monitor);
+  gdk_macos_monitor_add_frame_callback (mac_frame->monitor, mac_frame);
 
-  if (GDK_SURFACE_DESTROYED (self))
-    return;
-
-  frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
-
-  self->pending_frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-
-  _gdk_macos_surface_request_frame (self);
+  GDK_SURFACE_CLASS (gdk_macos_surface_parent_class)->submit_frame (surface, frame);
 }
 
 static void
-gdk_macos_surface_after_paint (GdkMacosSurface *self,
-                               GdkFrameClock   *frame_clock)
+gdk_macos_surface_finalize_frame (GdkSurface          *surface,
+                                  GdkDrawContextFrame *frame)
 {
-  GdkSurface *surface = (GdkSurface *)self;
+  if (mac_frame->monitor)
+    gdk_macos_monitor_remove_frame_callback (mac_frame->monitor, self);
 
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-  g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
-
-  if (GDK_SURFACE_DESTROYED (self))
-    return;
-
-  if (surface->update_freeze_count == 0)
-    gdk_macos_surface_end_frame (self);
+  GDK_SURFACE_CLASS (gdk_macos_surface_parent_class)->finalize_frame (surface, frame);
 }
 
 static void
@@ -397,7 +331,6 @@ gdk_macos_surface_destroy (GdkSurface *surface,
 
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkMacosWindow *window = g_steal_pointer (&self->window);
-  GdkFrameClock *frame_clock;
   GdkSeat *seat;
 
   seat = gdk_display_get_default_seat (surface->display);
@@ -409,15 +342,7 @@ gdk_macos_surface_destroy (GdkSurface *surface,
         gdk_macos_device_set_implicit_grab (pointer, NULL);
     }
 
-  _gdk_macos_surface_cancel_frame (self);
   g_clear_object (&self->best_monitor);
-
-  if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
-    {
-      g_signal_handlers_disconnect_by_func (frame_clock,
-                                            G_CALLBACK (gdk_macos_surface_after_paint),
-                                            self);
-    }
 
   g_clear_pointer (&self->title, g_free);
 
@@ -445,20 +370,10 @@ static void
 gdk_macos_surface_constructed (GObject *object)
 {
   GdkMacosSurface *self = (GdkMacosSurface *)object;
-  GdkFrameClock *frame_clock;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   G_OBJECT_CLASS (gdk_macos_surface_parent_class)->constructed (object);
-
-  if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
-    {
-      g_signal_connect_object (frame_clock,
-                               "after-paint",
-                               G_CALLBACK (gdk_macos_surface_after_paint),
-                               self,
-                               G_CONNECT_SWAPPED);
-    }
 
   gdk_surface_freeze_updates (GDK_SURFACE (self));
   _gdk_macos_surface_monitor_changed (self);
@@ -507,6 +422,8 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
   surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
+  surface_class->submit_frame = gdk_macos_surface_submit_frame;
+  surface_class->finalize_frame = gdk_macos_surface_finalize_frame;
 
   /**
    * GdkMacosSurface:native:
@@ -919,7 +836,6 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   self->in_change_monitor = TRUE;
 
-  _gdk_macos_surface_cancel_frame (self);
   _gdk_macos_surface_configure (self);
 
   rect.x = self->root_x;
@@ -988,7 +904,6 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
       if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
         {
-          _gdk_macos_surface_request_frame (self);
           gdk_surface_request_layout (GDK_SURFACE (self));
         }
 
