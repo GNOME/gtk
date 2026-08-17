@@ -49,6 +49,7 @@ struct _GdkDrawContextFrame
   guint cpu_complete : 1;
   guint gpu_complete : 1;
   guint presentation_complete : 1;
+  guint throttling_complete : 1;
 };
 
 struct _GdkDrawContext
@@ -114,6 +115,8 @@ void                    gdk_draw_context_frame_presented        (GdkDrawContextF
                                                                  uint64_t                presentation_time,
                                                                  uint64_t                refresh);
 void                    gdk_draw_context_frame_gpu_complete     (GdkDrawContextFrame    *frame,
+                                                                 uint64_t                timestamp);
+void                    gdk_draw_context_frame_stop_throttling  (GdkDrawContextFrame    *frame,
                                                                  uint64_t                timestamp);
 
 
