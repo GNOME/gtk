@@ -3652,11 +3652,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   cancel_all_operations (impl);
 
-  if (priv->location_changed_id > 0)
-    {
-      g_source_remove (priv->location_changed_id);
-      priv->location_changed_id = 0;
-    }
+  g_clear_handle_id (&priv->location_changed_id, g_source_remove);
 
   load_remove_timer (impl, LOAD_EMPTY);
 
