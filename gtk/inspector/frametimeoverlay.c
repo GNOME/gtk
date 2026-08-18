@@ -31,8 +31,15 @@
 #define WIDTH 300
 #define HEIGHT 50
 
-#define DEFAULT_CONFIG "#7f000040 end throttle, #bbbbbb start end," \
-                       "#6600ff predicted, blue presentation, lime frame"
+#define DEFAULT_CONFIG "#ffffff33 end throttle, " \
+                       "#fefefe start end, " \
+                       "#1a5fb466 start events, " \
+                       "#62a0ea66 before-paint update, " \
+                       "#9141ac66 update layout, " \
+                       "#2ec27e66 layout paint, " \
+                       "#d11aff predicted, " \
+                       "#1a1aff presentation, " \
+                       "#1aff1a frame"
 
 typedef struct _Time Time;
 
