@@ -106,6 +106,12 @@ void                    gdk_draw_context_frame_set_color_state  (GdkDrawContextF
                                                                  GdkColorState          *color_state);
 
 /* in gdkframeclock.c */
+void                    gdk_draw_context_frame_submitted        (GdkDrawContextFrame    *frame,
+                                                                 uint64_t                refresh);
+void                    gdk_draw_context_frame_discarded        (GdkDrawContextFrame    *frame);
+void                    gdk_draw_context_frame_presented        (GdkDrawContextFrame    *frame,
+                                                                 uint64_t                presentation_time,
+                                                                 uint64_t                refresh);
 void                    gdk_draw_context_frame_gpu_complete     (GdkDrawContextFrame    *frame,
                                                                  uint64_t                timestamp);
 
