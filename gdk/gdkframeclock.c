@@ -985,6 +985,15 @@ gdk_frame_clock_submitted (GdkFrameClock *self,
   gdk_frame_clock_add_timings_to_profiler (self, timings);
 }
 
+void
+gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
+                                  uint64_t             refresh)
+{
+  gdk_frame_clock_submitted (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
+                             frame->frame_counter,
+                             refresh);
+}
+
 /**
  * gdk_frame_clock_discarded:
  * @self: a frame clock
@@ -1008,6 +1017,13 @@ gdk_frame_clock_discarded (GdkFrameClock *self,
 
   gdk_frame_clock_debug_print_timings (self, timings);
   gdk_frame_clock_add_timings_to_profiler (self, timings);
+}
+
+void
+gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
+{
+  gdk_frame_clock_discarded (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
+                             frame->frame_counter);
 }
 
 /**
@@ -1072,6 +1088,17 @@ gdk_frame_clock_presented (GdkFrameClock *self,
 
   gdk_frame_clock_debug_print_timings (self, timings);
   gdk_frame_clock_add_timings_to_profiler (self, timings);
+}
+
+void
+gdk_draw_context_frame_presented (GdkDrawContextFrame *frame,
+                                  uint64_t             presentation_time,
+                                  uint64_t             refresh)
+{
+  gdk_frame_clock_presented (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
+                             frame->frame_counter,
+                             presentation_time,
+                             refresh);
 }
 
 /**
