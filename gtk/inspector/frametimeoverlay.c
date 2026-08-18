@@ -32,6 +32,7 @@
 #define HEIGHT 50
 
 #define DEFAULT_CONFIG "#ffffff33 end throttle, " \
+                       "#ffb3b533 end gpu, " \
                        "#fefefe start end, " \
                        "#1a5fb466 start events, " \
                        "#62a0ea66 before-paint update, " \
@@ -106,6 +107,7 @@ static const struct {
   { "after-paint", frame_timings_get_after_paint_end },
   { "end", frame_timings_get_resume_events_end },
   { "throttle", gdk_frame_timings_get_throttling_hint },
+  { "gpu", gdk_frame_timings_get_gpu_complete },
 };
 
 static GetTimeFunc
