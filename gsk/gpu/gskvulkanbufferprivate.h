@@ -14,6 +14,8 @@ GskGpuBuffer *          gsk_vulkan_buffer_new_vertex                    (GskVulk
                                                                          gsize                   size);
 GskGpuBuffer *          gsk_vulkan_buffer_new_storage                   (GskVulkanDevice        *device,
                                                                          gsize                   size);
+GskGpuBuffer *          gsk_vulkan_buffer_new_globals                   (GskVulkanDevice        *device,
+                                                                         gsize                   size);
 GskGpuBuffer *          gsk_vulkan_buffer_new_write                     (GskVulkanDevice        *device,
                                                                          gsize                   size);
 GskGpuBuffer *          gsk_vulkan_buffer_new_read                      (GskVulkanDevice        *device,

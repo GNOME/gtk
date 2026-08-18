@@ -1,22 +1,23 @@
 #include "enums.glsl"
 
-layout(push_constant) uniform PushConstants {
+layout(set = 3, binding = 0, std140) uniform GskGlobals {
     mat4 mvp;
     vec2 scale;
     vec2 color_volume1;
     vec2 color_volume2;
+    vec2 color_volume3;
     vec4 clip_mask_rect;
     mat3x4 clip;
-} push;
+} gsk_globals;
 
 layout(constant_id=0) const uint GSK_FLAGS = 0;
 layout(constant_id=1) const uint GSK_COLOR_STATES = 0;
 layout(constant_id=2) const uint GSK_VARIATION = 0;
 
-#define GSK_GLOBAL_MVP push.mvp
-#define GSK_GLOBAL_CLIP push.clip
-#define GSK_GLOBAL_CLIP_RECT push.clip[0]
-#define GSK_GLOBAL_SCALE push.scale
+#define GSK_GLOBAL_MVP gsk_globals.mvp
+#define GSK_GLOBAL_CLIP gsk_globals.clip
+#define GSK_GLOBAL_CLIP_RECT gsk_globals.clip[0]
+#define GSK_GLOBAL_SCALE gsk_globals.scale
 
 #define GSK_VERTEX_INDEX gl_VertexIndex
 
@@ -54,7 +55,7 @@ float
 gsk_clip_mask_coverage (void)
 {
 #ifdef GSK_VULKAN_HAS_CLIP_MASK
-  vec2 coord = rect_get_coord (rect_new_size (push.clip_mask_rect), gl_FragCoord.xy);
+  vec2 coord = rect_get_coord (rect_new_size (gsk_globals.clip_mask_rect), gl_FragCoord.xy);
   return texture (GSK_TEXTURE_MASK, coord).a;
 #else
   return 1.0;

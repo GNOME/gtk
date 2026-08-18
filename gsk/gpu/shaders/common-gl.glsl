@@ -11,6 +11,7 @@ uniform PushConstants
     vec2 scale;
     vec2 color_volume1;
     vec2 color_volume2;
+    vec2 color_volume3;
     vec4 clip_mask_rect;
     mat3x4 clip;
 } push;

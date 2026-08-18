@@ -35,6 +35,7 @@ struct _GskVulkanDevice
   VkSampler vk_samplers[GSK_GPU_SAMPLER_N_SAMPLERS];
   VkDescriptorSetLayout vk_image_set_layout;
   VkDescriptorSetLayout vk_mask_set_layout;
+  VkDescriptorSetLayout vk_globals_set_layout;
   VkPipelineLayout default_vk_pipeline_layout;
 };
 
@@ -132,6 +133,30 @@ gsk_vulkan_device_create_vk_image_set_layout (GskVulkanDevice *self,
   return result;
 }
 
+static VkDescriptorSetLayout
+gsk_vulkan_device_create_vk_globals_set_layout (GskVulkanDevice *self)
+{
+  VkDevice vk_device = gsk_vulkan_device_get_vk_device (self);
+  VkDescriptorSetLayout result;
+
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, vk_device,
+                                             &(VkDescriptorSetLayoutCreateInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                                                 .bindingCount = 1,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
+                                                     {
+                                                         .binding = 0,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+                                                         .descriptorCount = 1,
+                                                         .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                     }
+                                                 },
+                                             },
+                                             NULL,
+                                             &result);
+  return result;
+}
+
 VkPipelineLayout
 gsk_vulkan_device_create_vk_pipeline_layout (GskVulkanDevice       *self,
                                              VkDescriptorSetLayout  image1_layout,
@@ -145,20 +170,14 @@ gsk_vulkan_device_create_vk_pipeline_layout (GskVulkanDevice       *self,
   GSK_VK_CHECK (vkCreatePipelineLayout, vk_device,
                                         &(VkPipelineLayoutCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                            .setLayoutCount = 3,
-                                            .pSetLayouts = (VkDescriptorSetLayout[3]) {
+                                            .setLayoutCount = 4,
+                                            .pSetLayouts = (VkDescriptorSetLayout[4]) {
                                                 image1_layout,
                                                 image2_layout,
                                                 self->vk_mask_set_layout,
+                                                self->vk_globals_set_layout,
                                             },
-                                            .pushConstantRangeCount = 1,
-                                            .pPushConstantRanges = (VkPushConstantRange[1]) {
-                                                {
-                                                    .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                    .offset = 0,
-                                                    .size = sizeof (GskGpuGlobalsInstance)
-                                                }
-                                            }
+                                            .pushConstantRangeCount = 0,
                                         },
                                         NULL,
                                         &result);
@@ -348,6 +367,7 @@ gsk_vulkan_device_create_vk_objects (GskVulkanDevice *self)
 
   self->vk_image_set_layout = gsk_vulkan_device_create_vk_image_set_layout (self, 3);
   self->vk_mask_set_layout = gsk_vulkan_device_create_vk_image_set_layout (self, 1);
+  self->vk_globals_set_layout = gsk_vulkan_device_create_vk_globals_set_layout (self);
 
   self->default_vk_pipeline_layout = gsk_vulkan_device_create_vk_pipeline_layout (self,
                                                                                   self->vk_image_set_layout,
@@ -439,6 +459,12 @@ gsk_vulkan_device_get_vk_mask_set_layout (GskVulkanDevice *self)
   return self->vk_mask_set_layout;
 }
 
+VkDescriptorSetLayout
+gsk_vulkan_device_get_vk_globals_set_layout (GskVulkanDevice *self)
+{
+  return self->vk_globals_set_layout;
+}
+
 VkPipelineLayout
 gsk_vulkan_device_get_default_vk_pipeline_layout (GskVulkanDevice *self)
 {
@@ -523,11 +549,15 @@ gsk_vulkan_device_allocate_descriptor (GskVulkanDevice             *self,
                                             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                                             .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
                                             .maxSets = 100,
-                                            .poolSizeCount = 1,
-                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
+                                            .poolSizeCount = 2,
+                                            .pPoolSizes = (VkDescriptorPoolSize[2]) {
                                                 {
                                                     .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                     .descriptorCount = 100,
+                                                },
+                                                {
+                                                    .type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+                                                    .descriptorCount = 8,
                                                 },
                                             }
                                         },
