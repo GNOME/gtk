@@ -70,11 +70,6 @@ gdk_macos_vulkan_context_create_surface (GdkVulkanContext *context,
 }
 
 static void
-gdk_macos_vulkan_context_empty_frame (GdkDrawContext *context)
-{
-}
-
-static void
 gdk_macos_vulkan_context_surface_resized (GdkDrawContext *context)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (context);

@@ -86,11 +86,6 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
                        vk_surface);
 }
 
-static void
-gdk_win32_vulkan_context_empty_frame (GdkDrawContext *draw_context)
-{
-}
-
 static gboolean
 gdk_win32_vulkan_context_surface_attach (GdkDrawContext  *context,
                                          GError         **error)
@@ -197,7 +192,6 @@ gdk_win32_vulkan_context_class_init (GdkWin32VulkanContextClass *klass)
 
   context_class->create_surface = gdk_win32_vulkan_context_create_surface;
 
-  draw_context_class->empty_frame = gdk_win32_vulkan_context_empty_frame;
   draw_context_class->surface_attach = gdk_win32_vulkan_context_surface_attach;
   draw_context_class->surface_detach = gdk_win32_vulkan_context_surface_detach;
   draw_context_class->surface_resized = gdk_win32_vulkan_context_surface_resized;
