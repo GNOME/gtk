@@ -127,6 +127,12 @@ struct _SvgElement
   gboolean invalid_use;
   gboolean valid_bounds;
 
+  gboolean render_cacheable;
+  gboolean render_cache_valid;
+  GskRenderNode *render_cache_node;
+  uint64_t render_cache_instances;
+  int render_cache_depth;
+
   GtkBitmask *attrs;
   GtkBitmask *important;
 

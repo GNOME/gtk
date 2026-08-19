@@ -72,6 +72,7 @@ struct _GtkSvg
   char **state_names;
   int64_t state_change_delay;
   gboolean animations_allow_incremental_values;
+  gboolean subtree_cache_enabled;
   GtkSvgFeatures features;
   GtkSvgUses used;
   gboolean has_use_cycle;

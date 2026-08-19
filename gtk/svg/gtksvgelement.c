@@ -271,6 +271,7 @@ svg_element_finalize (GObject *object)
 
   g_clear_pointer (&element->path, gsk_path_unref);
   g_clear_pointer (&element->measure, gsk_path_measure_unref);
+  g_clear_pointer (&element->render_cache_node, gsk_render_node_unref);
 
   g_clear_pointer (&element->text, g_array_unref);
 
@@ -2237,6 +2238,7 @@ svg_element_duplicate (SvgElement *element,
   copy->line = element->line;
   copy->style_loc = element->style_loc;
   copy->focusable = element->focusable;
+  copy->render_cacheable = element->render_cacheable;
 
   copy->css_node = gtk_css_node_new ();
   gtk_css_node_set_parent (copy->css_node, parent->css_node);
@@ -2930,6 +2932,7 @@ svg_element_clone (SvgElement        *element,
   clone->gpa.attach.pos = 0;
 
   clone->corresponding = element;
+  clone->render_cacheable = element->render_cacheable;
 
   g_hash_table_insert (context->shadow_tree_map, element, clone);
 

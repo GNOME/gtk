@@ -111,6 +111,10 @@ typedef struct
   gboolean op_changed;
   int depth;
   uint64_t instance_count;
+  gboolean cache_enabled;
+  gboolean cache_capture;
+  int cache_start_depth;
+  int cache_max_depth;
   GSList *ctx_shape_stack;
   struct {
     gboolean picking;
@@ -4955,6 +4959,8 @@ render_shape (SvgElement   *shape,
               PaintContext *context)
 {
   gboolean op_changed;
+  gboolean capture = FALSE;
+  uint64_t instance_start = 0;
 
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_DEFS ||
       svg_element_get_element_type (shape) == SVG_ELEMENT_LINEAR_GRADIENT ||
@@ -4984,6 +4990,36 @@ render_shape (SvgElement   *shape,
   if (svg_element_conditionally_excluded (shape, context->svg))
     return;
 
+  if (context->cache_enabled &&
+      !context->cache_capture &&
+      context->op == RENDERING &&
+      shape->render_cacheable)
+    {
+      if (shape->render_cache_valid)
+        {
+          if (context->instance_count + shape->render_cache_instances > DRAWING_LIMIT + 1 ||
+              context->depth + shape->render_cache_depth > NESTING_LIMIT)
+            {
+              gtk_svg_rendering_error (context->svg, "cached subtree exceeds rendering limits");
+              return;
+            }
+
+          context->instance_count += shape->render_cache_instances;
+          if (shape->render_cache_node)
+            gtk_snapshot_append_node (context->snapshot, shape->render_cache_node);
+          dbg_print ("cache", "Reusing subtree <%s>",
+                     svg_element_type_get_name (shape->type));
+          return;
+        }
+
+      capture = TRUE;
+      context->cache_capture = TRUE;
+      context->cache_start_depth = context->depth;
+      context->cache_max_depth = 0;
+      instance_start = context->instance_count;
+      gtk_snapshot_push_collect (context->snapshot);
+    }
+
   if (context->instance_count++ > DRAWING_LIMIT)
     {
       gtk_svg_rendering_error (context->svg, "excessive instance count, aborting");
@@ -4991,6 +5027,9 @@ render_shape (SvgElement   *shape,
     }
 
   context->depth++;
+  if (context->cache_capture)
+    context->cache_max_depth = MAX (context->cache_max_depth,
+                                    context->depth - context->cache_start_depth);
 
   if (context->depth > NESTING_LIMIT)
     {
@@ -5012,6 +5051,37 @@ render_shape (SvgElement   *shape,
   pop_group (shape, context);
 
   context->depth--;
+
+  if (capture)
+    {
+      shape->render_cache_node = gtk_snapshot_pop_collect (context->snapshot);
+      shape->render_cache_instances = context->instance_count - instance_start;
+      shape->render_cache_depth = context->cache_max_depth;
+      shape->render_cache_valid = TRUE;
+      context->cache_capture = FALSE;
+      dbg_print ("cache", "Created subtree <%s>",
+                 svg_element_type_get_name (shape->type));
+      if (shape->render_cache_node)
+        gtk_snapshot_append_node (context->snapshot, shape->render_cache_node);
+    }
+}
+
+static void
+clear_render_cache (SvgElement *shape)
+{
+  if (shape->render_cache_valid)
+    {
+      dbg_print ("cache", "Invalidating subtree <%s>",
+                 svg_element_type_get_name (shape->type));
+    }
+
+  g_clear_pointer (&shape->render_cache_node, gsk_render_node_unref);
+  shape->render_cache_valid = FALSE;
+  shape->render_cache_instances = 0;
+  shape->render_cache_depth = 0;
+
+  for (SvgElement *child = shape->first_child; child; child = child->next_sibling)
+    clear_render_cache (child);
 }
 
 static SvgElement *
@@ -5078,6 +5148,8 @@ gtk_svg_apply_filter (GtkSvg                *svg,
   paint_context.depth = 0;
   paint_context.transforms = NULL;
   paint_context.instance_count = 0;
+  paint_context.cache_enabled = FALSE;
+  paint_context.cache_capture = FALSE;
   paint_context.picking.picking = FALSE;
 
   /* This is necessary so the filter has current values.
@@ -5145,6 +5217,8 @@ gtk_svg_pick_element (GtkSvg                 *self,
   paint_context.depth = 0;
   paint_context.transforms = NULL;
   paint_context.instance_count = 0;
+  paint_context.cache_enabled = FALSE;
+  paint_context.cache_capture = FALSE;
   paint_context.picking.picking = TRUE;
   paint_context.picking.p = *p;
   paint_context.picking.points = NULL;
@@ -5351,6 +5425,9 @@ gtk_svg_snapshot_full (GtkSvg        *self,
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
 
+      if (!animations_only)
+        clear_render_cache (self->content);
+
       if (self->style_changed)
         {
           apply_styles_to_shape (self->content, self);
@@ -5358,6 +5435,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
         }
 
       apply_view (self->content, self->view);
+      self->view_changed = FALSE;
 
       /* Traditional symbolics often have overlapping shapes,
        * causing things to look wrong when using colors with
@@ -5430,6 +5508,8 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       paint_context.depth = 0;
       paint_context.transforms = NULL;
       paint_context.instance_count = 0;
+      paint_context.cache_enabled = self->subtree_cache_enabled;
+      paint_context.cache_capture = FALSE;
       paint_context.picking.picking = FALSE;
 
       if (self->overflow == GTK_OVERFLOW_HIDDEN)
