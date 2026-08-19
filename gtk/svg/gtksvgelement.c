@@ -3158,7 +3158,20 @@ void
 svg_element_ensure_shadow_tree (SvgElement        *element,
                                 SvgComputeContext *context)
 {
+  SvgValue *href;
+  SvgElement *target;
+
   g_assert (context->shadow_tree_map == NULL);
+
+  href = svg_element_get_current_value (element, SVG_PROPERTY_HREF);
+  target = href ? svg_href_get_shape (href) : NULL;
+
+  /* The common case is a static href whose shadow tree was built during the
+   * first update. Avoid allocating a map and walking the clone on every frame.
+   */
+  if ((target == NULL && element->first_child == NULL) ||
+      (element->first_child != NULL && element->first_child->corresponding == target))
+    return;
 
   context->shadow_tree_map = g_hash_table_new (g_direct_hash, g_direct_equal);
 

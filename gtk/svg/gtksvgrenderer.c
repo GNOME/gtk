@@ -4975,6 +4975,11 @@ render_shape (SvgElement   *shape,
         return;
     }
 
+  if (!context->picking.picking &&
+      context->op == RENDERING &&
+      svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_OPACITY), 1) <= 0)
+    return;
+
   if (svg_element_conditionally_excluded (shape, context->svg))
     return;
 
