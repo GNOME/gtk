@@ -1557,6 +1557,9 @@ svg_element_set_current_value (SvgElement  *element,
                                SvgProperty  attr,
                                SvgValue    *value)
 {
+  if (element->current[attr] == value)
+    return;
+
   if (value)
     svg_value_ref (value);
   g_clear_pointer (&element->current[attr], svg_value_unref);

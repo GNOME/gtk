@@ -241,6 +241,9 @@ svg_filter_set_current_value (SvgFilter   *filter,
 {
   unsigned int pos = svg_filter_type_get_index (filter->type, attr);
 
+  if (filter->current[pos] == value)
+    return;
+
   if (value)
     svg_value_ref (value);
   g_clear_pointer (&filter->current[pos], svg_value_unref);

@@ -194,6 +194,9 @@ svg_color_stop_set_current_value (SvgColorStop *stop,
 {
   unsigned int pos = svg_color_stop_get_index (attr);
 
+  if (stop->current[pos] == value)
+    return;
+
   if (value)
     svg_value_ref (value);
   g_clear_pointer (&stop->current[pos], svg_value_unref);
