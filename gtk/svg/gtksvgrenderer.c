@@ -4652,6 +4652,7 @@ recompute_current_values (SvgElement   *shape,
   ctx.current_time = context->current_time;
   ctx.colors = context->colors;
   ctx.n_colors = context->n_colors;
+  ctx.animations_only = FALSE;
 
   compute_current_values_for_shape (shape, &ctx);
 }
@@ -5122,6 +5123,7 @@ gtk_svg_pick_element (GtkSvg                 *self,
   compute_context.interpolation = GDK_COLOR_STATE_SRGB;
   compute_context.clone_count = 0;
   compute_context.shadow_tree_map = NULL;
+  compute_context.animations_only = FALSE;
 
   compute_current_values_for_shape (self->content, &compute_context);
 
@@ -5299,6 +5301,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
   GdkRGBA solid_colors[5];
   size_t n_used_colors;
   float used_opacity;
+  gboolean animations_only;
 
   if (self->width < 0 || self->height < 0)
     return;
@@ -5328,6 +5331,23 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       SvgComputeContext compute_context;
       PaintContext paint_context;
       SvgRendering rendering;
+
+      /* If time is the only input that changed, static current values are
+       * still valid and only animation targets need to be reset.
+       */
+      animations_only = self->node != NULL &&
+                        !self->style_changed &&
+                        !self->view_changed &&
+                        self->current_width == width &&
+                        self->current_height == height &&
+                        self->node_for.state == self->state &&
+                        self->node_for.weight == weight &&
+                        self->node_for.n_colors == n_colors &&
+                        (n_colors == 0 ||
+                         memcmp (self->node_for.colors,
+                                 colors,
+                                 n_colors * sizeof (GdkRGBA)) == 0) &&
+                        self->animations_allow_incremental_values;
 
       g_clear_pointer (&self->node, gsk_render_node_unref);
 
@@ -5385,6 +5405,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
       compute_context.interpolation = GDK_COLOR_STATE_SRGB;
       compute_context.clone_count = 0;
       compute_context.shadow_tree_map = NULL;
+      compute_context.animations_only = animations_only;
 
       compute_current_values_for_shape (self->content, &compute_context);
 
@@ -5437,6 +5458,7 @@ gtk_svg_snapshot_full (GtkSvg        *self,
         memcpy (self->node_for.colors, colors, n_colors * sizeof (GdkRGBA));
       self->node_for.n_colors = n_colors;
       self->node_for.weight = weight;
+      self->node_for.time = self->current_time;
       self->node_for.state = self->state;
     }
 

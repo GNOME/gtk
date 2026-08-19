@@ -71,7 +71,7 @@ struct _GtkSvg
   unsigned int n_state_names;
   char **state_names;
   int64_t state_change_delay;
-  gboolean has_animations;
+  gboolean animations_allow_incremental_values;
   GtkSvgFeatures features;
   GtkSvgUses used;
   gboolean has_use_cycle;
@@ -231,5 +231,7 @@ GdkTexture *   get_texture               (GtkSvg               *svg,
 void           compute_current_values_for_shape
                                          (SvgElement        *shape,
                                           SvgComputeContext *context);
+gboolean       svg_animations_allow_incremental_values
+                                         (SvgElement        *shape);
 
 G_END_DECLS

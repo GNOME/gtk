@@ -4752,6 +4752,8 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   compute_update_order (self->content, self);
 
+  self->animations_allow_incremental_values = svg_animations_allow_incremental_values (self->content);
+
   self->state_change_delay = timeline_get_state_change_delay (self->timeline);
 
   g_hash_table_unref (data.shapes);

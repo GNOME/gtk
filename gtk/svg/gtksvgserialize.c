@@ -1114,6 +1114,7 @@ gtk_svg_serialize_full (GtkSvg               *self,
       context.interpolation = GDK_COLOR_STATE_SRGB;
       context.clone_count = 0;
       context.shadow_tree_map = NULL;
+      context.animations_only = FALSE;
 
       compute_current_values_for_shape (self->content, &context);
 
