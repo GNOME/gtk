@@ -803,7 +803,7 @@ _gdk_macos_display_break_all_grabs (GdkMacosDisplay *self,
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
 
-  while ((surface = gdk_seat_get_topmost_grab_surface (seat)) != NULL)
+  if ((surface = gdk_seat_get_topmost_grab_surface (seat)) != NULL)
     gdk_seat_break_grab (seat, surface);
 }
 
