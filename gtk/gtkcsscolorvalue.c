@@ -39,7 +39,6 @@ static GtkCssValue * gtk_css_color_value_new_alpha (GtkCssValue *color,
                                                     double       factor);
 static GtkCssValue * gtk_css_color_value_new_shade (GtkCssValue *color,
                                                     double       factor);
-static GtkCssValue * gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba);
 static GtkCssValue * gtk_css_color_value_new_color_mix (GtkCssColorSpace        color_space,
                                                         GtkCssHueInterpolation  hue_interpolation,
                                                         GtkCssValue            *color1,
@@ -931,8 +930,8 @@ gtk_css_color_value_new_color (GtkCssColorSpace color_space,
   return value;
 }
 
-static GtkCssValue *
-gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba)
+GtkCssValue *
+gtk_css_color_value_new_from_rgba (const GdkRGBA *rgba)
 {
   GtkCssValue *value;
 
@@ -1039,7 +1038,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
       apply_shade (&color->rgba, &c, factor);
 
-      return gtk_css_color_value_new_color_from_rgba (&c);
+      return gtk_css_color_value_new_from_rgba (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
@@ -1066,7 +1065,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
       apply_alpha (&color->rgba, &c, factor);
 
-      return gtk_css_color_value_new_color_from_rgba (&c);
+      return gtk_css_color_value_new_from_rgba (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
@@ -1136,7 +1135,7 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
 
       apply_mix (&color1->rgba, &color2->rgba, &result, factor);
 
-      return gtk_css_color_value_new_color_from_rgba (&result);
+      return gtk_css_color_value_new_from_rgba (&result);
 
     }
 
@@ -2179,7 +2178,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     }
 
   if (gdk_rgba_parser_parse (parser, &rgba))
-    return gtk_css_color_value_new_color_from_rgba (&rgba);
+    return gtk_css_color_value_new_from_rgba (&rgba);
   else
     return NULL;
 }
