@@ -1169,6 +1169,9 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
   g_return_val_if_fail (nsevent != NULL, NULL);
 
+  if ([nsevent modifierFlags] & NSEventModifierFlagFunction)
+    return NULL;
+
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
    */
