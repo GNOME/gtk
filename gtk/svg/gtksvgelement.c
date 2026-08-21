@@ -1980,7 +1980,16 @@ svg_element_equal (SvgElement *element1,
 
   for (unsigned int i = 0; i < N_SVG_PROPERTIES; i++)
     {
-      if (!svg_value_equal (element1->base[i], element2->base[i]))
+      SvgValue *v1 = svg_element_get_specified_value (element1, i);
+      SvgValue *v2 = svg_element_get_specified_value (element2, i);
+
+      if (v1 == v2)
+        continue;
+
+      if ((v1 && !v2) || (v2 && !v1))
+        return FALSE;
+
+      if (!svg_value_equal (v1, v2))
         return FALSE;
     }
 

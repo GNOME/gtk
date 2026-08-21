@@ -128,7 +128,7 @@ gtk_style_cascade_get_settings (GtkStyleProvider *provider)
 
 static GtkCssValue *
 gtk_style_cascade_get_color (GtkStyleProvider *provider,
-                             const char              *name)
+                             const char       *name)
 {
   GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
   GtkStyleCascadeIter iter;

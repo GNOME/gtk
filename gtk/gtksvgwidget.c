@@ -400,6 +400,21 @@ gtk_svg_widget_query_tooltip (GtkWidget  *widget,
 }
 
 static void
+gtk_svg_widget_css_changed (GtkWidget         *widget,
+                            GtkCssStyleChange *change)
+{
+  GtkSvgWidget *self = GTK_SVG_WIDGET (widget);
+
+  GTK_WIDGET_CLASS (gtk_svg_widget_parent_class)->css_changed (widget, change);
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW_SYMBOLIC) &&
+      self->svg && self->svg->used != 0)
+    {
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+static void
 gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -414,6 +429,7 @@ gtk_svg_widget_class_init (GtkSvgWidgetClass *class)
   widget_class->snapshot = gtk_svg_widget_snapshot;
   widget_class->focus = gtk_svg_widget_focus;
   widget_class->query_tooltip = gtk_svg_widget_query_tooltip;
+  widget_class->css_changed = gtk_svg_widget_css_changed;
 
   /**
    * GtkSvgWidget:resource:
