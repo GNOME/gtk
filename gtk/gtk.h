@@ -173,6 +173,7 @@
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/deprecated/gtkinfobar.h>
+#include <gtk/gtkinit.h>
 #include <gtk/gtkinscription.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayoutmanager.h>
@@ -313,4 +314,3 @@
 #include <gtk/gtkwindowhandle.h>
 
 #undef __GTK_H_INSIDE__
-
