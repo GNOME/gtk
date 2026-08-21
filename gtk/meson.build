@@ -111,6 +111,7 @@ gtk_private_sources = files([
   'gtkdrop.c',
   'gtkemojidata.c',
   'gtkemojiitem.c',
+  'gtkevents.c',
   'gtkfilechooserentry.c',
   'gtkfilechoosererrorstack.c',
   'gtkfilechoosernativeportal.c',
