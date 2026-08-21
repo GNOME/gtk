@@ -4642,6 +4642,49 @@ determine_size (GtkSvg *self)
     }
 }
 
+static gboolean
+prepare_render_cache (SvgElement *shape,
+                      gboolean    in_resource,
+                      gboolean   *eligible)
+{
+  gboolean resource;
+  gboolean animated;
+
+  resource = in_resource || svg_element_type_never_rendered (shape->type);
+  animated = shape->first_animation != NULL;
+
+  for (SvgAnimation *a = shape->first_animation; a; a = a->next_sibling)
+    {
+      if ((a->attr != SVG_PROPERTY_TRANSFORM && a->attr != SVG_PROPERTY_OPACITY) ||
+          resource || shape->id != NULL)
+        {
+          *eligible = FALSE;
+          dbg_print ("cache", "Subtree cache disabled by animation on <%s%s%s%s>",
+                     svg_element_type_get_name (shape->type),
+                     shape->id ? " id='" : "",
+                     shape->id ? shape->id : "",
+                     shape->id ? "'" : "");
+        }
+    }
+
+  for (SvgElement *child = shape->first_child; child; child = child->next_sibling)
+    animated |= prepare_render_cache (child, resource, eligible);
+
+  shape->render_cacheable = !resource && !animated;
+
+  return animated;
+}
+
+static void
+prepare_document_render_cache (GtkSvg *self)
+{
+  gboolean eligible = TRUE;
+  gboolean animated;
+
+  animated = prepare_render_cache (self->content, FALSE, &eligible);
+  self->subtree_cache_enabled = eligible && animated;
+}
+
 void
 gtk_svg_init_from_bytes (GtkSvg *self,
                          GBytes *bytes)
@@ -4750,7 +4793,11 @@ gtk_svg_init_from_bytes (GtkSvg *self,
 
   resolve_animation_refs (self->content, &data);
 
+  prepare_document_render_cache (self);
+
   compute_update_order (self->content, self);
+
+  self->animations_allow_incremental_values = svg_animations_allow_incremental_values (self->content);
 
   self->state_change_delay = timeline_get_state_change_delay (self->timeline);
 

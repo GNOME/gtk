@@ -1598,6 +1598,52 @@ shape_init_current_values (SvgElement        *shape,
     }
 }
 
+static void
+shape_init_animated_values (SvgElement        *shape,
+                            SvgComputeContext *context)
+{
+  for (unsigned int i = 0; i < shape->animations->len; i++)
+    {
+      SvgAnimation *a = g_ptr_array_index (shape->animations, i);
+      SvgValue *base;
+      SvgValue *value;
+
+      base = shape_ref_base_value (shape, context->parent, a->attr, a->idx);
+      value = resolve_value (shape, context, a->attr, a->idx, base);
+      shape_set_current_value (shape, a->attr, a->idx, value);
+      svg_value_unref (value);
+      svg_value_unref (base);
+    }
+}
+
+gboolean
+svg_animations_allow_incremental_values (SvgElement *shape)
+{
+  if (shape->animations)
+    {
+      for (unsigned int i = 0; i < shape->animations->len; i++)
+        {
+          SvgAnimation *a = g_ptr_array_index (shape->animations, i);
+
+          /* These properties can change how values on other elements resolve. */
+          if (svg_property_inherited (a->attr) ||
+              a->attr == SVG_PROPERTY_WIDTH ||
+              a->attr == SVG_PROPERTY_HEIGHT ||
+              a->attr == SVG_PROPERTY_VIEW_BOX ||
+              a->attr == SVG_PROPERTY_HREF)
+            return FALSE;
+        }
+    }
+
+  for (SvgElement *child = shape->first_child; child; child = child->next_sibling)
+    {
+      if (!svg_animations_allow_incremental_values (child))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 void
 apply_view (SvgElement *content,
             SvgElement *view)
@@ -1627,7 +1673,10 @@ compute_current_values_for_shape (SvgElement        *shape,
   const graphene_rect_t *old_viewport = context->viewport;
   graphene_rect_t viewport;
 
-  shape_init_current_values (shape, context);
+  if (!context->animations_only)
+    shape_init_current_values (shape, context);
+  else if (shape->animations)
+    shape_init_animated_values (shape, context);
 
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_SVG || svg_element_get_element_type (shape) == SVG_ELEMENT_SYMBOL)
     {
@@ -2522,6 +2571,7 @@ gtk_svg_clear_content (GtkSvg *self)
   self->run_mode = GTK_SVG_RUN_MODE_STOPPED;
   self->used = 0;
   self->has_use_cycle = FALSE;
+  self->animations_allow_incremental_values = FALSE;
 
   self->gpa_version = 0;
   self->rendering = SVG_RENDERING_SVG;

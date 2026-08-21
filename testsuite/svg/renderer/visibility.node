@@ -17,10 +17,6 @@ color {
   bounds: 80 80 60 60;
   color: rgb(0,128,128);
 }
-color {
-  bounds: 150 80 60 60;
-  color: rgba(0,0,0,0);
-}
 linear-gradient {
   bounds: 220 80 60 60;
   start: 220 80;

@@ -37,6 +37,7 @@ struct _SvgComputeContext
   GdkColorState *interpolation;
   unsigned int clone_count;
   GHashTable *shadow_tree_map;
+  gboolean animations_only;
 };
 
 typedef struct _SvgValueClass SvgValueClass;
