@@ -296,6 +296,62 @@ rgba_to_color (const GdkRGBA *rgba)
 }
 
 static void
+free_timings_queue (gpointer data)
+{
+  g_queue_free_full (data, (GDestroyNotify) gdk_frame_timings_unref);
+}
+
+static void
+gtk_timings_queue_drop_unused (GQueue *queue,
+                               gint    min_used)
+{
+  GdkFrameTimings *timings;
+
+  while ((timings = g_queue_peek_tail (queue)) &&
+         gdk_frame_timings_get_frame_counter (timings) < min_used)
+    {
+      g_queue_pop_tail (queue);
+      gdk_frame_timings_unref (timings);
+    }
+}
+
+static GQueue *
+gtk_frame_time_overlay_get_timings_queue (GtkWidget *widget)
+{
+  GQueue *result = g_object_get_data (G_OBJECT (widget), "-gtk-inspector-timing-queue");
+  GdkFrameClock *clock;
+  GdkFrameTimings *newest;
+  gint64 i, start;
+
+  if (result == NULL)
+    {
+      result = g_queue_new ();
+      g_object_set_data_full (G_OBJECT (widget),
+                              "-gtk-inspector-timing-queue",
+                              result,
+                              free_timings_queue);
+    }
+
+  clock = gtk_widget_get_frame_clock (widget);
+  newest = g_queue_peek_head (result);
+  if (newest)
+    start = gdk_frame_timings_get_frame_counter (newest) + 1;
+  else
+    start = 0;
+  if (gdk_frame_clock_get_history_start (clock) > start)
+    start = gdk_frame_clock_get_history_start (clock);
+
+  for (i = start; i <= gdk_frame_clock_get_frame_counter (clock); i++)
+    {
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock, i);
+      g_assert (timings);
+      g_queue_push_head (result, gdk_frame_timings_ref (timings));
+    }
+
+  return result;
+}
+
+static void
 gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
                                  GtkSnapshot         *snapshot,
                                  GskRenderNode       *node,
@@ -304,9 +360,11 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
   GtkFrameTimeOverlay *self = GTK_FRAME_TIME_OVERLAY (overlay);
   guint32 *data;
   gsize width, height, stride, size;
-  gint64 start, end, i;
+  GList *l;
+  gint64 min_frame_counter;
   GdkFrameClock *clock;
   GdkFrameTimings *timings;
+  GQueue *queue;
   graphene_rect_t bounds;
   gboolean has_bounds;
   GBytes *bytes;
@@ -317,29 +375,29 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   scale = gdk_surface_get_scale (gtk_native_get_surface (gtk_widget_get_native (widget)));
   clock = gtk_widget_get_frame_clock (widget);
-  start = gdk_frame_clock_get_frame_counter (clock);
-  end = gdk_frame_clock_get_history_start (clock);
-  if (end >= start)
-    return;
+  queue = gtk_frame_time_overlay_get_timings_queue (widget);
 
   width = ceil (75 * scale);
-  height = 600;
-  height = MIN (height, gtk_widget_get_width (widget));
-  //height = ceil (height * scale);
+  gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
+
+  height = ceil (gtk_widget_get_width (widget) * scale);
+  /* limit to 10s for performance reasons */
+  height = MIN (height, 10 * G_NSEC_PER_SEC / (nspp * width) + 1);
+
   size = width * height;
   stride = sizeof (guint32) * width;
   data = g_malloc0_n (stride, height);
 
-  gtk_frame_time_overlay_get_timeline_values (clock, width, &max_time, &nspp);
 
+  min_frame_counter = G_MAXINT64;
   for (j = 0; j < self->n_times; j++)
     {
-      for (i = start; i >= end; i--)
+      timings = NULL;
+      for (l = g_queue_peek_head_link (queue); l; l = l->next)
         {
           uint64_t st, et;
 
-          timings = gdk_frame_clock_get_timings (clock, i);
-          g_assert (timings);
+          timings = l->data;
 
           st = self->times[j].get_start_time (timings);
           st = MIN (st, max_time);
@@ -349,15 +407,22 @@ gtk_frame_time_overlay_snapshot (GtkInspectorOverlay *overlay,
               et = self->times[j].get_end_time (timings);
               et = MIN (et, max_time);
               if (et > st)
-                draw_line (data, size, rgba_to_color (&self->times[j].color), st, et, max_time, nspp);
+                if (!draw_line (data, size, rgba_to_color (&self->times[j].color), st, et, max_time, nspp))
+                  break;
             }
           else
             {
               /* a point */
-              draw_point (data, size, rgba_to_color (&self->times[j].color), st, max_time, nspp);
+              if (!draw_point (data, size, rgba_to_color (&self->times[j].color), st, max_time, nspp))
+                break;
             }
         }
+
+      if (timings)
+        min_frame_counter = MIN (min_frame_counter, gdk_frame_timings_get_frame_counter (timings));
     }
+
+  gtk_timings_queue_drop_unused (queue, min_frame_counter);
 
   if (GTK_IS_WINDOW (widget))
     {
