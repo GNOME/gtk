@@ -948,6 +948,12 @@ gsk_render_node_is_fully_opaque (const GskRenderNode *node)
 }
 
 gboolean
+gsk_render_node_is_bilevel_opacity (const GskRenderNode *node)
+{
+  return node->bilevel_opacity;
+}
+
+gboolean
 gsk_render_node_isolates_background (const GskRenderNode *node)
 {
   return node->isolates_background;
