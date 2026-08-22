@@ -22,6 +22,7 @@
 #include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
+#include "gtkimage.h"
 #include "gtkwidgetprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
@@ -286,12 +287,25 @@ display_shortcut (GtkWidget       *self,
       if (i > 0)
         gtk_widget_set_parent (dim_label ("+"), self);
 
-      disp = gtk_label_new (keys[i]);
-      if (i < n_mods)
-        gtk_widget_set_size_request (disp, 50, -1);
+      if (strcmp (keys[i], "Pointer_Button1") == 0)
+        {
+          disp = gtk_image_new ();
+          gtk_image_set_from_resource (GTK_IMAGE (disp), "/org/gtk/libgtk/icons/mouse-primary-click-symbolic.svg");
+        }
+      else if (strcmp (keys[i], "Pointer_Button3") == 0)
+        {
+          disp = gtk_image_new ();
+          gtk_image_set_from_resource (GTK_IMAGE (disp), "/org/gtk/libgtk/icons/mouse-secondary-click-symbolic.svg");
+        }
+      else
+        {
+          disp = gtk_label_new (keys[i]);
+          if (i < n_mods)
+            gtk_widget_set_size_request (disp, 50, -1);
 
-      gtk_widget_add_css_class (disp, "keycap");
-      gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
+          gtk_widget_add_css_class (disp, "keycap");
+          gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
+        }
 
       gtk_widget_set_parent (disp, self);
     }
