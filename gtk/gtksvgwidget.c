@@ -367,6 +367,9 @@ gtk_svg_widget_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
+  if (width == 0 || height == 0)
+    return;
+
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
   gtk_css_style_snapshot_icon_paintable (style,
