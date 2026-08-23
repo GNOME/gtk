@@ -372,11 +372,6 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
-gdk_win32_cairo_context_empty_frame (GdkDrawContext *draw_context)
-{
-}
-
-static void
 gdk_win32_cairo_context_surface_resized (GdkDrawContext *draw_context)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
@@ -424,7 +419,6 @@ gdk_win32_cairo_context_class_init (GdkWin32CairoContextClass *klass)
 
   draw_context_class->begin_frame = gdk_win32_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_win32_cairo_context_end_frame;
-  draw_context_class->empty_frame = gdk_win32_cairo_context_empty_frame;
   draw_context_class->surface_attach = gdk_win32_cairo_context_surface_attach;
   draw_context_class->surface_detach = gdk_win32_cairo_context_surface_detach;
   draw_context_class->surface_resized = gdk_win32_cairo_context_surface_resized;

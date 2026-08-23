@@ -68,10 +68,6 @@ gdk_android_gl_context_end_frame (GdkDrawContext *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_android_gl_context_parent_class)->end_frame (draw_context, context_data, painted);
 }
 
-static void
-gdk_android_gl_context_empty_frame (GdkDrawContext *draw_context)
-{}
-
 static gboolean
 gdk_android_gl_context_surface_attach (GdkDrawContext  *context,
                                        GError         **error)
@@ -138,7 +134,6 @@ gdk_android_gl_context_class_init (GdkAndroidGLContextClass *class)
 
   draw_context_class->begin_frame = gdk_android_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_android_gl_context_end_frame;
-  draw_context_class->empty_frame = gdk_android_gl_context_empty_frame;
   draw_context_class->surface_attach = gdk_android_gl_context_surface_attach;
   draw_context_class->surface_resized = gdk_android_gl_context_surface_resized;
   draw_context_class->surface_detach = gdk_android_gl_context_surface_detach;

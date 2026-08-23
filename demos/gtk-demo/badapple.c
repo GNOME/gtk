@@ -323,7 +323,7 @@ do_badapple (GtkWidget *do_widget)
       if (video == NULL)
         video = gtk_media_file_new_for_resource ("/badapple/gtk-logo-mask.webm");
       gtk_media_stream_set_loop (video, TRUE);
-      gtk_media_stream_play (video);
+      g_object_bind_property (window, "visible", video, "playing", G_BINDING_DEFAULT);
       ep = gtk_effect_paintable_new (GDK_PAINTABLE (video));
       picture = gtk_picture_new_for_paintable (ep);
       gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_CONTAIN);
@@ -332,6 +332,7 @@ do_badapple (GtkWidget *do_widget)
       handle = gtk_window_handle_new ();
       gtk_window_handle_set_child (GTK_WINDOW_HANDLE (handle), picture);
       gtk_window_set_child (GTK_WINDOW (window), handle);
+      g_object_unref (video);
       g_object_unref (ep);
     }
 

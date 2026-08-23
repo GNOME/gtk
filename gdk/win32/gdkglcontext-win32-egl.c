@@ -49,19 +49,11 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextEGLClass;
 G_DEFINE_TYPE (GdkWin32GLContextEGL, gdk_win32_gl_context_egl, GDK_TYPE_WIN32_GL_CONTEXT)
 
 static void
-gdk_win32_gl_context_egl_empty_frame (GdkDrawContext *draw_context)
-{
-}
-
-static void
 gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 {
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS(klass);
-  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS(klass);
 
   context_class->backend_type = GDK_GL_EGL;
-
-  draw_context_class->empty_frame = gdk_win32_gl_context_egl_empty_frame;
 }
 
 static void
