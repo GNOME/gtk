@@ -149,21 +149,25 @@ keys_contains (const unsigned int *keys,
 static void
 test_key_aliases (void)
 {
+  guint keyval;
   const unsigned int *keys;
   unsigned int n;
 
-  keys = gdk_keyval_get_aliases (GDK_KEY_Return, &n);
+  keyval = GDK_KEY_Return;
+  keys = gdk_keyval_get_aliases (&keyval, &n);
   g_assert_true (keys_contains (keys, n, GDK_KEY_Return));
   g_assert_true (keys_contains (keys, n, GDK_KEY_ISO_Enter));
   g_assert_true (keys_contains (keys, n, GDK_KEY_KP_Enter));
 
-  keys = gdk_keyval_get_aliases (GDK_KEY_Page_Down, &n);
+  keyval = GDK_KEY_Page_Down;
+  keys = gdk_keyval_get_aliases (&keyval, &n);
   g_assert_true (keys_contains (keys, n, GDK_KEY_Page_Down));
   g_assert_true (keys_contains (keys, n, GDK_KEY_KP_Page_Down));
 
-  keys = gdk_keyval_get_aliases (GDK_KEY_a, &n);
-  g_assert_true (n == 0);
-  g_assert_true (keys == NULL);
+  keyval = GDK_KEY_a;
+  keys = gdk_keyval_get_aliases (&keyval, &n);
+  g_assert_true (n == 1);
+  g_assert_true (keys == &keyval);
 }
 
 int

@@ -1412,7 +1412,7 @@ gtk_shortcut_trigger_create_with_aliases (unsigned int    keyval,
   unsigned int n_keys;
   GtkShortcutTrigger **triggers;
 
-  keys = gdk_keyval_get_aliases (keyval, &n_keys);
+  keys = gdk_keyval_get_aliases (&keyval, &n_keys);
 
   if (n_keys < 2)
     return gtk_keyval_trigger_new (keyval, modifiers);
@@ -1446,8 +1446,10 @@ gtk_shortcut_trigger_create_for_menu (void)
       const unsigned int *keys;
       unsigned int n_keys;
       GtkShortcutTrigger **triggers;
+      guint keyval;
 
-      keys = gdk_keyval_get_aliases (GDK_KEY_Menu, &n_keys);
+      keyval = GDK_KEY_Menu;
+      keys = gdk_keyval_get_aliases (&keyval, &n_keys);
 
       triggers = g_newa (GtkShortcutTrigger *, n_keys + 1);
       for (unsigned int i = 0; i < n_keys; i++)
