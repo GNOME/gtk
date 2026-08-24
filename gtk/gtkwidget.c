@@ -4587,7 +4587,7 @@ gtk_widget_class_add_binding (GtkWidgetClass  *widget_class,
 
   for (unsigned int i = 0; i < n_keys; i++)
     {
-      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[n_keys - i - 1], mods),
                                    gtk_callback_action_new (callback, NULL, NULL));
       if (format_string)
         {
@@ -4655,7 +4655,7 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
 
   for (unsigned int i = 0; i < n_keys; i++)
     {
-      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[n_keys - i - 1], mods),
                                    gtk_signal_action_new (signal));
       if (format_string)
         {
@@ -4720,7 +4720,7 @@ gtk_widget_class_add_binding_action (GtkWidgetClass  *widget_class,
 
   for (unsigned int i = 0; i < n_keys; i++)
     {
-      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[i], mods),
+      shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keys[n_keys - i - 1], mods),
                                    gtk_named_action_new (action_name));
       if (format_string)
         {
