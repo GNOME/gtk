@@ -1946,12 +1946,29 @@ gtk_svg_init (GtkSvg *self)
   self->author_styles = array_new_with_clear_func (sizeof (SvgCssRuleset), (GDestroyNotify) svg_css_ruleset_clear);
 }
 
+static void
+clear_animation_timespecs (SvgElement *shape,
+                           gpointer    data)
+{
+  for (unsigned int i = 0; i < svg_element_get_n_animations (shape); i++)
+    {
+      SvgAnimation *a = svg_element_get_animation (shape, i);
+      svg_animation_clear_begin (a);
+      svg_animation_clear_end (a);
+    }
+}
+
 static void setting_changed (GtkSvg *self);
 
 static void
 gtk_svg_dispose (GObject *object)
 {
   GtkSvg *self = GTK_SVG (object);
+
+  /* Shapes and animation objects can outlive the svg, so make sure
+   * they don't retain references to the timeline
+   */
+  svg_element_foreach (self->content, clear_animation_timespecs, NULL);
 
   gtk_svg_clear_content (self);
 
