@@ -3174,7 +3174,7 @@ update_for_state (GtkSvg       *self,
 {
   int64_t current_time;
 
-  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing)
+  if ((self->features & GTK_SVG_ANIMATIONS) == 0 || !self->playing || !self->clock)
     {
       if (self->gpa_version > 0)
         {

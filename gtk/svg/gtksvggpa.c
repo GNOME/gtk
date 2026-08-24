@@ -260,7 +260,7 @@ shape_apply_state (GtkSvg       *self,
         }
      }
 
-  if (!self->playing && shape->animations)
+  if ((!self->playing || !self->clock) && shape->animations)
     {
       for (unsigned int i = shape->animations->len; i > 0; i--)
         {
