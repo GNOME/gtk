@@ -111,6 +111,7 @@ struct _TranslationEntry {
     const char *s;
     int i;
     gboolean b;
+    GdkRGBA rgba;
   } fallback;
 };
 
@@ -262,6 +263,9 @@ update_xft_settings (GdkDisplay *display)
     }
 }
 
+/* Note: The types in the table must be compile-time constants.
+ * We use G_TYPE_NONE for any special-casing.
+ */
 static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.interface", "gtk-theme", "gtk-theme-name" , G_TYPE_STRING, { .s = "Adwaita" } },
   { FALSE, "org.gnome.desktop.interface", "icon-theme", "gtk-icon-theme-name", G_TYPE_STRING, { .s = "gnome" } },
@@ -305,6 +309,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.freedesktop.appearance", "color-scheme", "gtk-interface-color-scheme", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "contrast", "gtk-interface-contrast", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "reduced-motion", "gtk-interface-reduced-motion", G_TYPE_ENUM, { .i = 0 } },
+  { FALSE, "org.freedesktop.appearance", "accent-color", "gtk-accent-color", G_TYPE_NONE, { .rgba = (GdkRGBA) { 0, 0, 0, 1 } } },
   /* Note, this setting doesn't exist, the portal and gsd fake it */
   { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } },
 };
@@ -366,6 +371,17 @@ apply_portal_setting (TranslationEntry *entry,
       if (strcmp (entry->key, "serial") == 0)
         {
           entry->fallback.i = g_variant_get_int32 (value);
+          break;
+        }
+      if (strcmp (entry->key, "accent-color") == 0)
+        {
+          double r, g, b;
+          g_variant_get (value, "(ddd)", &r, &g, &b);
+
+          entry->fallback.rgba.red = r;
+          entry->fallback.rgba.green = g;
+          entry->fallback.rgba.blue = b;
+          entry->fallback.rgba.alpha = 1;
           break;
         }
       if (strcmp (entry->key, "antialiasing") == 0 ||
@@ -519,6 +535,7 @@ gdk_wayland_display_init_settings (GdkDisplay *display)
 fallback:
       g_debug ("Failed to use Settings portal, falling back to defaults");
     }
+
 }
 
 static void
@@ -557,6 +574,8 @@ set_value_from_entry (GdkDisplay       *display,
             g_value_set_static_string (value, display_wayland->xft_settings.rgba);
           else if (g_str_equal (entry->setting, "gtk-xft-dpi"))
             g_value_set_int (value, display_wayland->xft_settings.dpi);
+          else if (g_str_equal (entry->setting, "gtk-accent-color"))
+            g_value_set_boxed (value, &entry->fallback.rgba);
           else
             g_assert_not_reached ();
           break;
