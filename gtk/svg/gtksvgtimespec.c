@@ -393,7 +393,8 @@ void
 time_spec_drop_animation (TimeSpec     *spec,
                           SvgAnimation *a)
 {
-  g_ptr_array_remove (spec->animations, a);
+  if (spec->animations)
+    g_ptr_array_remove (spec->animations, a);
 }
 
 static void
