@@ -11829,7 +11829,10 @@ gtk_window_activate_menubar (GtkWindow   *window,
                 NULL);
 
   if (accel == NULL || *accel == 0)
-    return FALSE;
+    {
+      g_free (accel);
+      return FALSE;
+    }
 
   gtk_accelerator_parse (accel, &keyval, &mods);
 
