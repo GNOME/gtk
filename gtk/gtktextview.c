@@ -889,12 +889,7 @@ add_move_binding (GtkWidgetClass *widget_class,
 
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
 
-  keys = gdk_keyval_get_aliases (keyval, &n_keys);
-  if (keys == NULL)
-    {
-      keys = &keyval;
-      n_keys = 1;
-    }
+  keys = gdk_keyval_get_aliases (&keyval, &n_keys);
 
   for (unsigned int i = 0; i < n_keys; i++)
     {

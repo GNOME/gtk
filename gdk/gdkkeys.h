@@ -57,7 +57,7 @@ guint    gdk_unicode_to_keyval   (guint32      wc);
 
 GDK_AVAILABLE_IN_4_24
 const guint *
-         gdk_keyval_get_aliases  (guint        keyval,
+         gdk_keyval_get_aliases  (guint       *keyval,
                                   guint       *n_aliases);
 
 G_END_DECLS

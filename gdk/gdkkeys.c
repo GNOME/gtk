@@ -985,7 +985,7 @@ static const guint aliases[] = {
 
 /**
  * gdk_keyval_get_aliases:
- * @keyval: the keyval to get aliases for
+ * @keyval: (not nullable): pointer to the keyval to get aliases for
  * @n_aliases: (out): return location for the number of aliases
  *
  * Gets keyvals that are 'aliases' for @keyval.
@@ -996,13 +996,16 @@ static const guint aliases[] = {
  * aliases for their normal counterpart, such as
  * `GDK_KEY_KP_Left` and `GDK_KEY_Left`.
  *
+ * If no aliases exist the keyval pointer is returned with
+ * @n_aliases set to 1.
+ *
  * Returns: (transfer none) (nullable) (array length=n_aliases):
  *     an array of keyvals
  *
  * Since: 4.24
  */
 const guint *
-gdk_keyval_get_aliases (guint  keyval,
+gdk_keyval_get_aliases (guint *keyval,
                         guint *n_aliases)
 {
   guint start = 1, end = 1;
@@ -1012,7 +1015,7 @@ gdk_keyval_get_aliases (guint  keyval,
       if (aliases[i] == 0)
         start = i + 1;
 
-      if (aliases[i] == keyval)
+      if (aliases[i] == *keyval)
         {
           for (end = i + 1; aliases[end] != 0; end++) ;
 
@@ -1021,6 +1024,6 @@ gdk_keyval_get_aliases (guint  keyval,
         }
     }
 
-  *n_aliases = 0;
-  return NULL;
+  *n_aliases = 1;
+  return keyval;
 }
