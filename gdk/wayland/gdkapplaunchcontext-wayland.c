@@ -65,6 +65,36 @@ peek_launcher_toplevel (GdkSeat *seat)
   return wl_surface;
 }
 
+/* Try to find the appropriate app-id for the app being launched,
+ * to use with xdg-activation.
+ */
+static char *
+find_app_id (GAppInfo *info)
+{
+  const char *id;
+
+  /* For Flatpak, it's directly written in the desktop file */
+  if (G_IS_DESKTOP_APP_INFO (info))
+    {
+      id = g_desktop_app_info_get_string (G_DESKTOP_APP_INFO (info), "X-Flatpak");
+      if (id)
+        return (char *) id;
+    }
+
+  /* We could look at g_desktop_app_info_get_startup_wm_class here.
+   * However it appears that generally the desktop ID is more likely
+   * to result in a modern reverse DNS-like application ID.
+   */
+
+  id = g_app_info_get_id (info);
+
+  /* Strip ".desktop" from the name */
+  if (!id || !g_str_has_suffix (id, ".desktop"))
+    return g_strdup (id);
+
+  return g_strndup (id, strlen (id) - 8);
+}
+
 static char *
 gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                       GAppInfo          *info,
@@ -99,6 +129,16 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       wl_surface = peek_launcher_toplevel (GDK_SEAT (seat));
       if (wl_surface)
         xdg_activation_token_v1_set_surface (token, wl_surface);
+
+      if (info)
+        {
+          char *app_id = find_app_id (info);
+          if (app_id)
+            {
+              xdg_activation_token_v1_set_app_id (token, app_id);
+              g_free (app_id);
+            }
+        }
 
       xdg_activation_token_v1_commit (token);
 
