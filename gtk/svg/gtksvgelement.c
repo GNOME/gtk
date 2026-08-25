@@ -443,6 +443,9 @@ resolve_rx (SvgElement            *element,
     }
   else if (element->type == SVG_ELEMENT_RECT)
     {
+      double w = 0;
+      double h = 0;
+
       if (auto_or_unset (values[SVG_PROPERTY_RX]) &&
           auto_or_unset (values[SVG_PROPERTY_RY]))
         {
@@ -464,8 +467,11 @@ resolve_rx (SvgElement            *element,
           *ry = svg_number_get (values[SVG_PROPERTY_RY], viewport->size.height);
         }
 
-      double w = svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
-      double h = svg_number_get (values[SVG_PROPERTY_HEIGHT], viewport->size.height);
+      if (!auto_or_unset (values[SVG_PROPERTY_WIDTH]))
+        w = svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
+      if (!auto_or_unset (values[SVG_PROPERTY_HEIGHT]))
+        h = svg_number_get (values[SVG_PROPERTY_HEIGHT], viewport->size.height);
+
       if (*rx > w / 2)
         *rx = w / 2;
       if (*ry > h / 2)
@@ -587,10 +593,10 @@ svg_element_get_rect (SvgElement            *element,
   if (svg_value_is_set (values[SVG_PROPERTY_Y]))
     rect->bounds.origin.y = svg_number_get (values[SVG_PROPERTY_Y], viewport->size.height);
 
-  if (svg_value_is_set (values[SVG_PROPERTY_WIDTH]))
+  if (!auto_or_unset (values[SVG_PROPERTY_WIDTH]))
     rect->bounds.size.width = svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
 
-  if (svg_value_is_set (values[SVG_PROPERTY_HEIGHT]))
+  if (!auto_or_unset (values[SVG_PROPERTY_HEIGHT]))
     rect->bounds.size.height = svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
 
   resolve_rx (element, viewport, current, &rx, &ry);
