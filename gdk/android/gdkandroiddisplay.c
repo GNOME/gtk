@@ -231,6 +231,11 @@ gdk_android_display_get_setting (GdkDisplay *display,
       g_value_set_enum (value, color_schemes[self->night_mode]);
       return TRUE;
     }
+  else if (g_strcmp0 (name, "gtk-accent-color") == 0)
+    {
+      g_value_set_boxed (value, &self->accent_color_rgba);
+      return TRUE;
+    }
   else if (g_strcmp0 (name, "gtk-decoration-layout") == 0)
     {
       g_value_set_static_string (value, ":");
@@ -465,6 +470,7 @@ gdk_android_display_update_configuration (GdkAndroidDisplay *self, jobject conte
       self->accent_color = color;
       self->accent_color_rgba = GDK_RGBA_INIT_FROM_INT (color);
       g_debug ("accent color changed");
+      gdk_display_setting_changed ((GdkDisplay *) self, "gtk-accent-color");
       g_object_notify_by_pspec ((GObject *) self, obj_properties[PROP_ACCENT_COLOR]);
     }
 }
