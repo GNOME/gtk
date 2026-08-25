@@ -620,6 +620,10 @@ static void gtk_text_view_delete_range_handler   (GtkTextBuffer     *buffer,
                                                   GtkTextIter       *start,
                                                   GtkTextIter       *end,
                                                   gpointer           data);
+static void gtk_text_view_delete_range_after_handler (GtkTextBuffer     *buffer,
+                                                      GtkTextIter       *start,
+                                                      GtkTextIter       *end,
+                                                      gpointer           data);
 static void gtk_text_view_update_redo_action     (GtkTextView       *view);
 static void gtk_text_view_update_undo_action     (GtkTextView       *view);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
@@ -2243,6 +2247,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (priv->buffer,
                                             gtk_text_view_delete_range_handler,
                                             text_view);
+      g_signal_handlers_disconnect_by_func (priv->buffer,
+                                            gtk_text_view_delete_range_after_handler,
+                                            text_view);
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
@@ -2303,6 +2310,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_connect (priv->buffer, "delete-range",
                         G_CALLBACK (gtk_text_view_delete_range_handler),
                         text_view);
+      g_signal_connect_after (priv->buffer, "delete-range",
+                              G_CALLBACK (gtk_text_view_delete_range_after_handler),
+                              text_view);
 
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
@@ -7265,6 +7275,8 @@ gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
     }
 
   priv->scroll_after_paste = FALSE;
+
+  gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
 }
 
 static void
@@ -7308,6 +7320,17 @@ gtk_text_view_delete_range_handler (GtkTextBuffer *buffer,
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE,
                                        gtk_text_iter_get_offset (start),
                                        gtk_text_iter_get_offset (end));
+}
+
+static void
+gtk_text_view_delete_range_after_handler (GtkTextBuffer *buffer,
+                                          GtkTextIter   *start,
+                                          GtkTextIter   *end,
+                                          gpointer       data)
+{
+  GtkTextView *text_view = data;
+
+  gtk_text_view_set_virtual_cursor_pos (text_view, -1, -1);
 }
 
 static void
