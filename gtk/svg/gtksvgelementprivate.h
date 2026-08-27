@@ -150,6 +150,11 @@ void         svg_element_get_ellipse         (SvgElement            *element,
                                               double                *ry,
                                               const graphene_rect_t *viewport,
                                               gboolean               current);
+double *     svg_element_get_polyline        (SvgElement            *element,
+                                              unsigned int          *n_coords,
+                                              gboolean              *closed,
+                                              const graphene_rect_t *viewport,
+                                              gboolean               current);
 void         svg_element_get_line            (SvgElement            *element,
                                               graphene_point_t      *start,
                                               graphene_point_t      *end,

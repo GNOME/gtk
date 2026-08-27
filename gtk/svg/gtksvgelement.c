@@ -551,7 +551,15 @@ svg_element_get_ellipse (SvgElement            *element,
 {
   SvgValue **values;
 
-  g_return_if_fail (element->type == SVG_ELEMENT_ELLIPSE);
+  g_return_if_fail (element->type == SVG_ELEMENT_CIRCLE ||
+                    element->type == SVG_ELEMENT_ELLIPSE);
+
+  if (element->type == SVG_ELEMENT_CIRCLE)
+    {
+      svg_element_get_circle (element, center, rx, viewport, current);
+      *ry = *rx;
+      return;
+    }
 
   if (current)
     values = element->current;
@@ -578,7 +586,29 @@ svg_element_get_rect (SvgElement            *element,
   SvgValue **values;
   double rx, ry;
 
-  g_return_if_fail (element->type == SVG_ELEMENT_RECT);
+  g_return_if_fail (element->type == SVG_ELEMENT_CIRCLE ||
+                    element->type == SVG_ELEMENT_ELLIPSE ||
+                    element->type == SVG_ELEMENT_RECT);
+
+  if (element->type != SVG_ELEMENT_RECT)
+    {
+      graphene_point_t center;
+
+      svg_element_get_ellipse (element, &center, &rx, &ry, viewport, current);
+
+      rect->bounds.origin.x = center.x - rx;
+      rect->bounds.origin.y = center.y - ry;
+      rect->bounds.size.width = 2 * rx;
+      rect->bounds.size.height= 2 * ry;
+
+      for (unsigned int i = 0; i < 4; i++)
+        {
+          rect->corner[i].width = rx;
+          rect->corner[i].height = ry;
+        }
+
+      return;
+    }
 
   if (current)
     values = element->current;
@@ -606,6 +636,53 @@ svg_element_get_rect (SvgElement            *element,
       rect->corner[i].width = rx;
       rect->corner[i].height = ry;
     }
+}
+
+double *
+svg_element_get_polyline (SvgElement            *element,
+                          unsigned int          *n_coords,
+                          gboolean              *closed,
+                          const graphene_rect_t *viewport,
+                          gboolean               current)
+{
+  SvgValue **values;
+  double *coords;
+
+  g_return_val_if_fail (element->type == SVG_ELEMENT_LINE ||
+                        element->type == SVG_ELEMENT_POLYLINE ||
+                        element->type == SVG_ELEMENT_POLYGON,
+                        NULL);
+
+  if (current)
+    values = element->current;
+  else
+    values = element->base;
+
+  *closed = element->type == SVG_ELEMENT_POLYGON;
+
+  if (element->type == SVG_ELEMENT_LINE)
+    {
+      *n_coords = 4;
+      coords = g_new (double, *n_coords);
+
+      coords[0] = svg_number_get (values[SVG_PROPERTY_X1], viewport->size.width);
+      coords[1] = svg_number_get (values[SVG_PROPERTY_Y1], viewport->size.height);
+      coords[2] = svg_number_get (values[SVG_PROPERTY_X2], viewport->size.width);
+      coords[3] = svg_number_get (values[SVG_PROPERTY_Y2], viewport->size.height);
+    }
+  else
+    {
+      *n_coords = svg_numbers_get_length (values[SVG_PROPERTY_POINTS]);
+      coords = g_new (double, *n_coords);
+
+      for (unsigned int i = 0; i < *n_coords; i += 2)
+        {
+          coords[2 * i] = svg_numbers_get (values[SVG_PROPERTY_POINTS], 2 * i, viewport->size.width);
+          coords[2 * i + 1] = svg_numbers_get (values[SVG_PROPERTY_POINTS], 2 * i + 1, viewport->size.height);
+        }
+    }
+
+  return coords;
 }
 
 GskPath *
