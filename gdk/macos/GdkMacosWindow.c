@@ -548,6 +548,7 @@ static Class _contentViewClass = nil;
   GdkDrop *drop = _gdk_macos_display_find_drop (GDK_MACOS_DISPLAY (display), sequence_number);
   NSPoint location = [sender draggingLocation];
   GMainContext *main_context;
+  gint64 deadline= g_get_monotonic_time () + 5000000L; /* now + 5s */
 
   if (drop == NULL)
     return NO;
@@ -562,7 +563,14 @@ static Class _contentViewClass = nil;
                             GDK_CURRENT_TIME);
 
   while (!gdk_drop_is_finished (drop))
-    g_main_context_iteration (main_context, TRUE);
+    {
+      if (g_get_monotonic_time () > deadline)
+        {
+          g_warning ("Could not handle drop operation within a reasonable time (1s)");
+          break;
+        }
+      g_main_context_iteration (main_context, TRUE);
+    }
 
   gdk_drop_emit_leave_event (drop, TRUE, GDK_CURRENT_TIME);
 
