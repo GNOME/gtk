@@ -6449,9 +6449,12 @@ gtk_label_accessible_text_get_extents (GtkAccessibleText *self,
   cairo_rectangle_int_t clip_rect;
   int range[2];
 
-  layout = label->layout;
   text = label->text;
+  /* gtk_label_get_layout_location() ensures the layout, so it must
+   * be called before reading label->layout: the layout is cleared
+   * when the text changes and not rebuilt until the next frame */
   gtk_label_get_layout_location (label, &lx, &ly);
+  layout = label->layout;
 
   range[0] = g_utf8_pointer_to_offset (text, text + start);
   range[1] = g_utf8_pointer_to_offset (text, text + end);
