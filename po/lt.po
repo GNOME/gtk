@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-15 11:55+0000\n"
-"PO-Revision-Date: 2026-08-22 15:18+0300\n"
+"POT-Creation-Date: 2026-08-25 12:59+0000\n"
+"PO-Revision-Date: 2026-08-30 13:33+0300\n"
 "Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -156,8 +156,8 @@ msgstr "Nėra suderinamų formatų turinio perdavimui."
 msgid "No GL API allowed."
 msgstr "Nėra leidžiamas GL API."
 
-#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:659
-#: gdk/win32/gdkglcontext-win32-wgl.c:782 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:654
+#: gdk/win32/gdkglcontext-win32-wgl.c:777 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Nepavyko sukurti GL konteksto"
 
@@ -267,12 +267,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Žemyn"
 
-#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
+#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:230
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Psl_aukštyn"
 
-#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
+#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:233
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Psl_žemyn"
@@ -745,26 +745,26 @@ msgstr "IDataObject_GetData (0x%x) klaida, grąžinama 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Nepavyko konvertuoti tempiamų duomenų W32 formato 0x%x į %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:589
+#: gdk/win32/gdkglcontext-win32-wgl.c:584
 msgid "No GL implementation is available"
 msgstr "Nėra galimo GL realizacijos"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:673
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versija %d.%d yra per sena. GTK reikalauja bent %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:692
+#: gdk/win32/gdkglcontext-win32-wgl.c:687
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL realizacija negali dalintis GL kontekstais"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:851
+#: gdk/win32/gdkglcontext-win32-wgl.c:846
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr "Langui nustatytas nepalaikomas pikselių formatas %d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:860
+#: gdk/win32/gdkglcontext-win32-wgl.c:855
 msgid "No available configurations for the given pixel format"
 msgstr "Nėra galimų konfigūracijų nurodytam pikselių formatui"
 
@@ -1308,8 +1308,8 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:103
-#: gtk/deprecated/gtkshortcutlabel.c:139
+#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:104
+#: gtk/deprecated/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Lyg2"
@@ -1319,8 +1319,8 @@ msgstr "Lyg2"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:106
-#: gtk/deprecated/gtkshortcutlabel.c:141
+#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:107
+#: gtk/deprecated/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Vald"
@@ -1330,8 +1330,8 @@ msgstr "Vald"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:109
-#: gtk/deprecated/gtkshortcutlabel.c:143
+#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:110
+#: gtk/deprecated/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1341,8 +1341,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:115
-#: gtk/deprecated/gtkshortcutlabel.c:145
+#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:116
+#: gtk/deprecated/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1352,8 +1352,8 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:118
-#: gtk/deprecated/gtkshortcutlabel.c:147
+#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:119
+#: gtk/deprecated/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -1363,8 +1363,8 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:112
-#: gtk/deprecated/gtkshortcutlabel.c:150
+#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:113
+#: gtk/deprecated/gtkshortcutlabel.c:151
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1383,7 +1383,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "Tarpas"
 
-#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:178
+#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:179
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -2248,12 +2248,12 @@ msgid "_Edit"
 msgstr "K_eisti"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9242
+#: gtk/gtktextview.c:9265
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9320
+#: gtk/gtktextview.c:9343
 msgid "Context menu"
 msgstr "Kontekstinis meniu"
 
@@ -2420,7 +2420,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jei ištrinsite elementą, jis bus negrįžtamai prarastas."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9250
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
 msgid "_Delete"
 msgstr "Iš_trinti"
 
@@ -2777,15 +2777,15 @@ msgstr "Užverti"
 msgid "Close the infobar"
 msgstr "Užverti informacijos juostą"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9238
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9246
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9271
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
@@ -4237,7 +4237,7 @@ msgstr "Išvalyti lauką"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:81
+#: gtk/deprecated/gtkshortcutlabel.c:82
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "K"
@@ -4247,7 +4247,7 @@ msgstr "K"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:94
+#: gtk/deprecated/gtkshortcutlabel.c:95
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "D"
@@ -4324,7 +4324,7 @@ msgstr "Šoninė juosta"
 msgid "Change di_rection"
 msgstr "Keisti kryptį"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9276
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
 msgid "Insert _Emoji"
 msgstr "Įterpti _emoji"
 
@@ -4484,11 +4484,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS klasikinės"
 
-#: gtk/gtktextview.c:9258
+#: gtk/gtktextview.c:9281
 msgid "_Undo"
 msgstr "Atša_ukti"
 
-#: gtk/gtktextview.c:9262
+#: gtk/gtktextview.c:9285
 msgid "_Redo"
 msgstr "Paka_rtoti"
 
@@ -5284,11 +5284,11 @@ msgstr "Hierarchija"
 msgid "Implements"
 msgstr "Realizuoja"
 
-#: gtk/inspector/visual.c:698
+#: gtk/inspector/visual.c:741
 msgid "Set via GTK_THEME"
 msgstr "Nustatyta per GTK_THEME"
 
-#: gtk/inspector/visual.c:884 gtk/inspector/visual.c:921
+#: gtk/inspector/visual.c:927 gtk/inspector/visual.c:964
 msgid "Set by Compositor"
 msgstr "Nustatyta komponuotojo"
 
@@ -5387,11 +5387,15 @@ msgstr ""
 msgid "Show Framerate"
 msgstr "Rodyti kadrų dažnį"
 
-#: gtk/inspector/visual.ui:504
+#: gtk/inspector/visual.ui:507
+msgid "Show Frame Times"
+msgstr "Rodyti kadrų laikus"
+
+#: gtk/inspector/visual.ui:539
 msgid "Show Graphic Updates"
 msgstr "Rodyti grafikos atnaujinimus"
 
-#: gtk/inspector/visual.ui:524
+#: gtk/inspector/visual.ui:559
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
@@ -5399,51 +5403,51 @@ msgstr ""
 "Naudoja atspalvį visose vietose, kur dabartinis piešėjas naudoja Cairo "
 "vietoje GPU."
 
-#: gtk/inspector/visual.ui:530
+#: gtk/inspector/visual.ui:565
 msgid "Show Cairo Rendering"
 msgstr "Rodyti Cairo piešimą"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:590
 msgid "Show Baselines"
 msgstr "Rodyti bazines linijas"
 
-#: gtk/inspector/visual.ui:583
+#: gtk/inspector/visual.ui:618
 msgid "Show Layout Borders"
 msgstr "Rodyti išdėstymo rėmelius"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:683
 msgid "CSS Padding"
 msgstr "CSS tarpai"
 
-#: gtk/inspector/visual.ui:658
+#: gtk/inspector/visual.ui:693
 msgid "CSS Border"
 msgstr "CSS rėmelis"
 
-#: gtk/inspector/visual.ui:668
+#: gtk/inspector/visual.ui:703
 msgid "CSS Margin"
 msgstr "CSS paraštės"
 
-#: gtk/inspector/visual.ui:678
+#: gtk/inspector/visual.ui:713
 msgid "Widget Margin"
 msgstr "Valdiklio paraštės"
 
-#: gtk/inspector/visual.ui:713
+#: gtk/inspector/visual.ui:748
 msgid "Show Focus"
 msgstr "Rodyti fokusą"
 
-#: gtk/inspector/visual.ui:738
+#: gtk/inspector/visual.ui:773
 msgid "Show Accessibility warnings"
 msgstr "Rodyti prieigos įspėjimus"
 
-#: gtk/inspector/visual.ui:763
+#: gtk/inspector/visual.ui:798
 msgid "Show Graphics Offload"
 msgstr "Rodyti grafikos iškėlimus"
 
-#: gtk/inspector/visual.ui:798
+#: gtk/inspector/visual.ui:833
 msgid "Show Touch UI"
 msgstr "Rodyti lietimo sąsają"
 
-#: gtk/inspector/visual.ui:829
+#: gtk/inspector/visual.ui:864
 msgid "Inspect Inspector"
 msgstr "Inspektuoti inspektorių"
 
