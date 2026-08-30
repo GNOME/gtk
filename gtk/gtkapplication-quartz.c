@@ -405,6 +405,9 @@ gtk_application_impl_quartz_set_menubar (GtkApplicationImpl *impl,
 
   if (menubar)
     g_menu_append_section (quartz->combined, NULL, menubar);
+
+  /* Trigger an update to the menu, so the menu can be amended with macOS default entries. */
+  gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined), quartz->muxer);
 }
 
 static guint
