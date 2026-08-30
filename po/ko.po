@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-12 13:18+0000\n"
-"PO-Revision-Date: 2026-08-22 22:03+0900\n"
+"POT-Creation-Date: 2026-08-25 12:59+0000\n"
+"PO-Revision-Date: 2026-08-30 14:34+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -156,8 +156,8 @@ msgstr "내용을 전달할 호환 형식이 없습니다."
 msgid "No GL API allowed."
 msgstr "GL API를 허용하지 않습니다."
 
-#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:659
-#: gdk/win32/gdkglcontext-win32-wgl.c:782 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:654
+#: gdk/win32/gdkglcontext-win32-wgl.c:777 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "GL 컨텍스트를 만들 수 없습니다"
 
@@ -276,13 +276,13 @@ msgid "Down"
 msgstr "아래 화살표"
 
 # 키보드에 써 있는 단어이므로 번역하지 않는다
-#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
+#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:230
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
 # 키보드에 써 있는 단어이므로 번역하지 않는다
-#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
+#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:233
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
@@ -792,27 +792,27 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 "드래그앤드롭 W32 형식 0x%x에서 %p (%s) 형식으로 변환하는데 실패했습니다"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:589
+#: gdk/win32/gdkglcontext-win32-wgl.c:584
 msgid "No GL implementation is available"
 msgstr "GL 구현이 없습니다"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:673
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL %d.%d 버전은 너무 낮습니다. 최소 %d.%d 버전이 필요합니다."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:692
+#: gdk/win32/gdkglcontext-win32-wgl.c:687
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL 구현에서 GL 컨텍스트를 공유할 수 없습니다"
 
 # 창 아님
-#: gdk/win32/gdkglcontext-win32-wgl.c:851
+#: gdk/win32/gdkglcontext-win32-wgl.c:846
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr "윈도우에서 지원하지 않는 픽셀 형식 %d번 설정"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:860
+#: gdk/win32/gdkglcontext-win32-wgl.c:855
 msgid "No available configurations for the given pixel format"
 msgstr "주어진 픽셀 형식에 대한 설정이 없습니다"
 
@@ -1356,8 +1356,8 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:103
-#: gtk/deprecated/gtkshortcutlabel.c:139
+#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:104
+#: gtk/deprecated/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1367,8 +1367,8 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:106
-#: gtk/deprecated/gtkshortcutlabel.c:141
+#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:107
+#: gtk/deprecated/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1378,8 +1378,8 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:109
-#: gtk/deprecated/gtkshortcutlabel.c:143
+#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:110
+#: gtk/deprecated/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1389,8 +1389,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:115
-#: gtk/deprecated/gtkshortcutlabel.c:145
+#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:116
+#: gtk/deprecated/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1400,8 +1400,8 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:118
-#: gtk/deprecated/gtkshortcutlabel.c:147
+#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:119
+#: gtk/deprecated/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1411,8 +1411,8 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:112
-#: gtk/deprecated/gtkshortcutlabel.c:150
+#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:113
+#: gtk/deprecated/gtkshortcutlabel.c:151
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1431,7 +1431,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "스페이스"
 
-#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:178
+#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:179
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "백슬래시"
@@ -2303,12 +2303,12 @@ msgid "_Edit"
 msgstr "편집(_E)"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9242
+#: gtk/gtktextview.c:9265
 msgid "_Copy"
 msgstr "복사(_C)"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9320
+#: gtk/gtktextview.c:9343
 msgid "Context menu"
 msgstr "컨텍스트 메뉴"
 
@@ -2476,7 +2476,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "삭제하면 영구히 잃어버리게 됩니다."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9250
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
 msgid "_Delete"
 msgstr "삭제(_D)"
 
@@ -2835,15 +2835,15 @@ msgstr "닫기"
 msgid "Close the infobar"
 msgstr "정보 창을 닫습니다"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9238
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9246
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9271
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
@@ -4298,7 +4298,7 @@ msgstr "항목 지우기"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:81
+#: gtk/deprecated/gtkshortcutlabel.c:82
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "L"
@@ -4308,7 +4308,7 @@ msgstr "L"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:94
+#: gtk/deprecated/gtkshortcutlabel.c:95
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "R"
@@ -4386,7 +4386,7 @@ msgid "Change di_rection"
 msgstr "방향 바꾸기(_R)"
 
 # 키보드에 써 있는 단어이므로 번역하지 않는다
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9276
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
 msgid "Insert _Emoji"
 msgstr "에모지 입력(_E)"
 
@@ -4549,11 +4549,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "맥OS 클래식"
 
-#: gtk/gtktextview.c:9258
+#: gtk/gtktextview.c:9281
 msgid "_Undo"
 msgstr "입력 취소(_U)"
 
-#: gtk/gtktextview.c:9262
+#: gtk/gtktextview.c:9285
 msgid "_Redo"
 msgstr "다시 실행(_R)"
 
@@ -5350,11 +5350,11 @@ msgstr "계층 구조"
 msgid "Implements"
 msgstr "구현"
 
-#: gtk/inspector/visual.c:698
+#: gtk/inspector/visual.c:741
 msgid "Set via GTK_THEME"
 msgstr "GTK_THEME 통해 설정"
 
-#: gtk/inspector/visual.c:884 gtk/inspector/visual.c:921
+#: gtk/inspector/visual.c:927 gtk/inspector/visual.c:964
 msgid "Set by Compositor"
 msgstr "컴포지터가 설정"
 
@@ -5453,61 +5453,65 @@ msgstr ""
 msgid "Show Framerate"
 msgstr "프레임 수 표시"
 
-#: gtk/inspector/visual.ui:504
+#: gtk/inspector/visual.ui:507
+msgid "Show Frame Times"
+msgstr "프레임 시간 표시"
+
+#: gtk/inspector/visual.ui:539
 msgid "Show Graphic Updates"
 msgstr "그래픽 업데이트 표시"
 
-#: gtk/inspector/visual.ui:524
+#: gtk/inspector/visual.ui:559
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr "현재 렌더러가 GPU가 아닌 카이로를 사용하는 모든 부분에 색을 넣습니다."
 
-#: gtk/inspector/visual.ui:530
+#: gtk/inspector/visual.ui:565
 msgid "Show Cairo Rendering"
 msgstr "카이로 렌더링 표시"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:590
 msgid "Show Baselines"
 msgstr "베이스라인 표시"
 
-#: gtk/inspector/visual.ui:583
+#: gtk/inspector/visual.ui:618
 msgid "Show Layout Borders"
 msgstr "레이아웃 경계 표시"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:683
 msgid "CSS Padding"
 msgstr "CSS 채움"
 
-#: gtk/inspector/visual.ui:658
+#: gtk/inspector/visual.ui:693
 msgid "CSS Border"
 msgstr "CSS 가장자리"
 
-#: gtk/inspector/visual.ui:668
+#: gtk/inspector/visual.ui:703
 msgid "CSS Margin"
 msgstr "CSS 여백"
 
-#: gtk/inspector/visual.ui:678
+#: gtk/inspector/visual.ui:713
 msgid "Widget Margin"
 msgstr "위젯 여백"
 
-#: gtk/inspector/visual.ui:713
+#: gtk/inspector/visual.ui:748
 msgid "Show Focus"
 msgstr "포커스 표시"
 
-#: gtk/inspector/visual.ui:738
+#: gtk/inspector/visual.ui:773
 msgid "Show Accessibility warnings"
 msgstr "접근성 경고 표시"
 
-#: gtk/inspector/visual.ui:763
+#: gtk/inspector/visual.ui:798
 msgid "Show Graphics Offload"
 msgstr "그래픽 오프로드 표시"
 
-#: gtk/inspector/visual.ui:798
+#: gtk/inspector/visual.ui:833
 msgid "Show Touch UI"
 msgstr "터치 UI 표시"
 
-#: gtk/inspector/visual.ui:829
+#: gtk/inspector/visual.ui:864
 msgid "Inspect Inspector"
 msgstr "인스펙터 검사"
 
