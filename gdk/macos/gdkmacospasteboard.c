@@ -376,14 +376,12 @@ typedef struct
   GMemoryOutputStream *stream;
   NSPasteboardItem    *item;
   NSPasteboardType     type;
-  GMainContext        *main_context;
   guint                done : 1;
 } WriteRequest;
 
 static void
 write_request_free (WriteRequest *wr)
 {
-  g_clear_pointer (&wr->main_context, g_main_context_unref);
   g_clear_object (&wr->stream);
   [wr->item release];
   g_free (wr);
@@ -463,7 +461,7 @@ on_data_ready_cb (GObject      *object,
 -(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSPasteboardType)type
 {
   const char *mime_type = _gdk_macos_pasteboard_from_ns_type (type);
-  GMainContext *main_context = g_main_context_default ();
+  GMainContext *main_context;
   WriteRequest *wr;
 
   if (self->_contentProvider == NULL || mime_type == NULL)
@@ -472,11 +470,16 @@ on_data_ready_cb (GObject      *object,
       return;
     }
 
+  if (!GDK_IS_CLIPBOARD (self->_clipboard) && !GDK_IS_DRAG (self->_drag))
+    return;
+
+  main_context = g_main_context_new ();
+  g_main_context_push_thread_default (main_context);
+
   wr = g_new0 (WriteRequest, 1);
   wr->item = [item retain];
   wr->stream = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new_resizable ());
   wr->type = type;
-  wr->main_context = g_main_context_ref (main_context);
   wr->done = FALSE;
 
   if (GDK_IS_CLIPBOARD (self->_clipboard))
@@ -498,15 +501,17 @@ on_data_ready_cb (GObject      *object,
   else
     g_return_if_reached ();
 
-  /* We're forced to provide data synchronously via this API
-   * so we must block on the main loop. Using another main loop
-   * than the default tends to get us locked up here, so that is
-   * what we'll do for now.
-   */
   while (!wr->done)
-    g_main_context_iteration (wr->main_context, TRUE);
+    g_main_context_iteration (main_context, TRUE);
+
+  /* Run any remaining idles */
+  while (g_main_context_iteration (main_context, FALSE))
+    ;
 
   write_request_free (wr);
+
+  g_main_context_pop_thread_default (main_context);
+  g_main_context_unref (main_context);
 }
 
 -(void)pasteboardFinishedWithDataProvider:(NSPasteboard *)pasteboard

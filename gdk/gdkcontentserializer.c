@@ -350,16 +350,27 @@ gdk_content_serializer_emit_callback (gpointer data)
 void
 gdk_content_serializer_return_success (GdkContentSerializer *serializer)
 {
+  GSource *idle_source;
+
   g_return_if_fail (GDK_IS_CONTENT_SERIALIZER (serializer));
   g_return_if_fail (!serializer->returned);
-  guint source_id;
 
   serializer->returned = TRUE;
-  source_id = g_idle_add_full (serializer->priority,
-                               gdk_content_serializer_emit_callback,
-                               serializer,
-                               g_object_unref);
-  gdk_source_set_static_name_by_id (source_id, "[gtk] gdk_content_serializer_emit_callback");
+
+  idle_source = g_idle_source_new ();
+  g_source_set_priority (idle_source, serializer->priority);
+  g_source_set_callback (idle_source,
+                         gdk_content_serializer_emit_callback,
+                         serializer,
+                         g_object_unref);
+  g_source_set_static_name (idle_source, "[gtk] gdk_content_serializer_emit_callback");
+
+  /* If we're in a sub-context (like on macOS), attach the idle function
+   * to the thread-default context, default to the global context.
+   */
+  g_source_attach (idle_source, g_main_context_get_thread_default ());
+
+  g_source_unref (idle_source);
   /* NB: the idle will destroy our reference */
 }
 
