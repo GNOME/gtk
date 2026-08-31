@@ -352,6 +352,8 @@ gtk_center_box_init (GtkCenterBox *self)
   self->start_widget = NULL;
   self->center_widget = NULL;
   self->end_widget = NULL;
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 /**

@@ -397,12 +397,14 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
   int child_size[3];
   int child_pos[3];
   GtkRequestedSize sizes[3];
+  GtkBorder inset, child_inset[3];
   int size;
   int for_size;
   int i;
   int spacing;
 
   spacing = get_spacing (self, gtk_widget_get_css_node (widget));
+  gtk_widget_get_inset (widget, &inset);
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -437,6 +439,21 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
       child[2] = self->end_widget;
       child_size[0] = sizes[0].minimum_size;
       child_size[2] = sizes[2].minimum_size;
+    }
+
+  if (self->orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      child_inset[0] = child_inset[1] = child_inset[2] = inset;
+      child_inset[0].bottom = 0;
+      child_inset[1].bottom = child_inset[1].top = 0;
+      child_inset[2].top = 0;
+    }
+  else
+    {
+      child_inset[0] = child_inset[1] = child_inset[2] = inset;
+      child_inset[0].right = 0;
+      child_inset[1].right = child_inset[1].left = 0;
+      child_inset[2].left = 0;
     }
 
   /* Determine baseline */
@@ -536,6 +553,7 @@ gtk_center_layout_allocate (GtkLayoutManager *layout_manager,
           child_allocation.height = child_size[i];
         }
 
+      gtk_widget_allocate_inset (child[i], &child_inset[i]);
       gtk_widget_size_allocate (child[i], &child_allocation, baseline);
     }
 }
