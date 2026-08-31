@@ -231,38 +231,36 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
       pop_recursion_check (widget, orientation);
 
-      min_size = MAX (0, MAX (reported_min_size, css_min_size)) + css_extra_size;
-      nat_size = MAX (0, MAX (reported_nat_size, css_min_size)) + css_extra_size;
+      min_size = MAX (0, MAX (reported_min_size, css_min_size) + css_extra_size);
+      nat_size = MAX (0, MAX (reported_nat_size, css_min_size) + css_extra_size);
 
-      if (G_UNLIKELY (min_size > nat_size))
+      if (G_UNLIKELY (reported_min_size > reported_nat_size))
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               g_warning ("%s %p (%s) reported min width %d and natural width %d in measure() with for_size=%d; natural size must be >= min size",
                          G_OBJECT_TYPE_NAME (widget), widget,
                          g_quark_to_string (gtk_css_node_get_name (gtk_widget_get_css_node (widget))),
-                         min_size, nat_size, for_size);
+                         reported_min_size, reported_nat_size, adjusted_for_size);
             }
           else
             {
               g_warning ("%s %p (%s) reported min height %d and natural height %d in measure() with for_size=%d; natural size must be >= min size",
                          G_OBJECT_TYPE_NAME (widget), widget,
                          g_quark_to_string (gtk_css_node_get_name (gtk_widget_get_css_node (widget))),
-                         min_size, nat_size, for_size);
+                         reported_min_size, reported_nat_size, adjusted_for_size);
 
             }
 
           nat_size = min_size;
         }
-      else if (G_UNLIKELY (min_size < 0))
+      else if (G_UNLIKELY (reported_min_size < 0))
         {
           g_warning ("%s %p (%s) reported min %s %d, but sizes must be >= 0",
                      G_OBJECT_TYPE_NAME (widget), widget,
                      g_quark_to_string (gtk_css_node_get_name (gtk_widget_get_css_node (widget))),
                      orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
-                     min_size);
-          min_size = 0;
-          nat_size = MAX (0, min_size);
+                     reported_min_size);
         }
 
       adjusted_min     = min_size;
