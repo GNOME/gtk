@@ -440,6 +440,7 @@ gtk_viewport_init (GtkViewport *viewport)
   widget = GTK_WIDGET (viewport);
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (widget, GTK_INSET_EXTEND);
 
   viewport->adjustment[GTK_ORIENTATION_HORIZONTAL] = NULL;
   viewport->adjustment[GTK_ORIENTATION_VERTICAL] = NULL;
@@ -506,6 +507,7 @@ gtk_viewport_size_allocate (GtkWidget *widget,
                             int        baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkBorder inset;
   int child_size[2];
 
   g_object_freeze_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]));
@@ -513,6 +515,8 @@ gtk_viewport_size_allocate (GtkWidget *widget,
 
   child_size[GTK_ORIENTATION_HORIZONTAL] = width;
   child_size[GTK_ORIENTATION_VERTICAL] = height;
+
+  gtk_widget_get_inset (widget, &inset);
 
   if (viewport->child && gtk_widget_get_visible (viewport->child))
     {
@@ -550,12 +554,19 @@ gtk_viewport_size_allocate (GtkWidget *widget,
   if (viewport->child && gtk_widget_get_visible (viewport->child))
     {
       GtkAllocation child_allocation;
+      GtkBorder child_inset;
 
       child_allocation.width = child_size[GTK_ORIENTATION_HORIZONTAL];
       child_allocation.height = child_size[GTK_ORIENTATION_VERTICAL];
       child_allocation.x = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
       child_allocation.y = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
 
+      child_inset.top = MAX (0, inset.top + child_allocation.y);
+      child_inset.left = MAX (0, inset.left + child_allocation.x);
+      child_inset.bottom = MAX (0, inset.bottom + child_size[GTK_ORIENTATION_VERTICAL] - height - child_allocation.y);
+      child_inset.right = MAX (0, inset.right + child_size[GTK_ORIENTATION_HORIZONTAL] - width - child_allocation.x);
+
+      gtk_widget_allocate_inset (viewport->child, &child_inset);
       gtk_widget_size_allocate (viewport->child, &child_allocation, -1);
     }
 
