@@ -45,6 +45,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gtknative.h"
+#include "gtknativeprivate.h"
 #include "gtkbinlayout.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
@@ -109,6 +110,7 @@ struct _GtkInspectorVisual
 
   GtkWidget *misc_box;
   GtkWidget *touchscreen_switch;
+  GtkWidget *cutouts_switch;
 
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *frametime_overlay;
@@ -1127,6 +1129,34 @@ init_touchscreen (GtkInspectorVisual *vis)
                     G_CALLBACK (update_touchscreen), NULL);
 }
 
+static void
+update_cutsouts (GtkSwitch *sw)
+{
+  GtkDebugFlags flags;
+  GList *all_windows;
+
+  flags = gtk_get_debug_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= GTK_DEBUG_SIMULATE_CUTOUTS;
+  else
+    flags &= ~GTK_DEBUG_SIMULATE_CUTOUTS;
+
+  gtk_set_debug_flags (flags);
+
+  all_windows = gtk_window_list_toplevels ();
+  g_list_foreach (all_windows, (GFunc) gtk_native_queue_relayout, NULL);
+  g_list_free (all_windows);
+}
+
+static void
+init_cutouts (GtkInspectorVisual *vis)
+{
+  gtk_switch_set_active (GTK_SWITCH (vis->cutouts_switch), gtk_get_debug_flags () & GTK_DEBUG_SIMULATE_CUTOUTS);
+  g_signal_connect (vis->cutouts_switch, "notify::active",
+                    G_CALLBACK (update_cutsouts), NULL);
+}
+
 static gboolean
 keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual *vis)
 {
@@ -1204,6 +1234,11 @@ row_activated (GtkListBox         *box,
   else if (gtk_widget_is_ancestor (vis->touchscreen_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->touchscreen_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->cutouts_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->cutouts_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
   else if (gtk_widget_is_ancestor (vis->a11y_switch, GTK_WIDGET (row)))
@@ -1327,6 +1362,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, touchscreen_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cutouts_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_rendering_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, debug_box);
@@ -1382,6 +1418,7 @@ gtk_inspector_visual_set_display (GtkInspectorVisual *vis,
   init_animation (vis);
   init_slowdown (vis);
   init_touchscreen (vis);
+  init_cutouts (vis);
   init_gl (vis);
 }
 

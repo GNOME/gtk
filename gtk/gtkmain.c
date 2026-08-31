@@ -98,14 +98,14 @@ typedef struct {
 
 #define N_DEBUG_DISPLAYS 4
 
-DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
+static DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
 
 /* This is a flag to speed up development builds. We set it to TRUE when
  * any of the debug displays has debug flags >0, but we never set it back
  * to FALSE. This way we don't need to call gtk_widget_get_display() in
  * hot paths.
  */
-gboolean any_display_debug_flags_set = FALSE;
+static gboolean any_display_debug_flags_set = FALSE;
 
 GtkDebugFlags
 gtk_get_display_debug_flags (GdkDisplay *display)
@@ -208,6 +208,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "builder", GTK_DEBUG_BUILDER, "Information about deprecated GtkBuilder features" },
   { "session-mgmt", GTK_DEBUG_SESSION, "Information about session saving" },
   { "general-info", GTK_DEBUG_GENERAL_INFO, "General information (in markdown)" },
+  { "simulate-cutouts", GTK_DEBUG_SIMULATE_CUTOUTS, "Simulate display cutouts" },
 };
 
 /* This checks to see if the process is running suid or sgid

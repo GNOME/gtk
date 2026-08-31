@@ -759,12 +759,16 @@ static void
 gtk_window_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->snapshot (widget, snapshot);
-  return;
-
-  GtkBorder inset = hack_gtk_make_window_insets ();
+  GtkBorder inset;
   GskPath *cutouts_path;
   GskPathBuilder *builder;
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->snapshot (widget, snapshot);
+
+  if (!GTK_DEBUG_CHECK (SIMULATE_CUTOUTS))
+    return;
+
+  gtk_widget_get_inset (widget, &inset);
 
   builder = gsk_path_builder_new ();
 
@@ -2399,16 +2403,17 @@ gtk_window_native_layout (GtkNative *native,
 
   if (gtk_widget_needs_allocate (widget))
     {
+      GtkBorder inset;
+
       gtk_window_update_csd_size (window,
                                   &width, &height,
                                   EXCLUDE_CSD_SIZE);
-#if 0
-      // XXXXXXXXXX HACK HACK
-      GtkBorder inset = hack_gtk_make_window_insets ();
-#else
-      GtkBorder inset;
-      gdk_toplevel_get_inset (GDK_TOPLEVEL (priv->surface), &inset);
-#endif
+
+      if (GTK_DEBUG_CHECK (SIMULATE_CUTOUTS))
+        inset = hack_gtk_make_window_insets ();
+      else
+        gdk_toplevel_get_inset (GDK_TOPLEVEL (priv->surface), &inset);
+
       gtk_widget_allocate_inset (widget, &inset);
 
       gtk_widget_allocate (widget,

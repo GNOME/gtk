@@ -117,31 +117,41 @@ G_BEGIN_DECLS
  * Since: 4.24
  */
 
+/**
+ * GTK_DEBUG_SIMULATE_CUTOUTS:
+ *
+ * Simulate display cut-outs, such as rounded corners and
+ * camera notches.
+ *
+ * Since: 4.24
+ */
+
 typedef enum {
-  GTK_DEBUG_TEXT            = 1 <<  0,
-  GTK_DEBUG_TREE            = 1 <<  1,
-  GTK_DEBUG_KEYBINDINGS     = 1 <<  2,
-  GTK_DEBUG_MODULES         = 1 <<  3,
-  GTK_DEBUG_GEOMETRY        = 1 <<  4,
-  GTK_DEBUG_ICONTHEME       = 1 <<  5,
-  GTK_DEBUG_PRINTING        = 1 <<  6,
-  GTK_DEBUG_BUILDER_TRACE   = 1 <<  7,
-  GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
-  GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
-  GTK_DEBUG_INTERACTIVE     = 1 << 10,
-  GTK_DEBUG_TOUCHSCREEN     = 1 << 11,
-  GTK_DEBUG_ACTIONS         = 1 << 12,
-  GTK_DEBUG_LAYOUT          = 1 << 13,
-  GTK_DEBUG_SNAPSHOT        = 1 << 14,
-  GTK_DEBUG_CONSTRAINTS     = 1 << 15,
-  GTK_DEBUG_BUILDER_OBJECTS = 1 << 16,
-  GTK_DEBUG_A11Y            = 1 << 17,
-  GTK_DEBUG_ICONFALLBACK    = 1 << 18,
-  GTK_DEBUG_INVERT_TEXT_DIR = 1 << 19,
-  GTK_DEBUG_CSS             = 1 << 20,
-  GTK_DEBUG_BUILDER         = 1 << 21,
-  GTK_DEBUG_SESSION         = 1 << 22,
-  GTK_DEBUG_GENERAL_INFO    = 1 << 23,
+  GTK_DEBUG_TEXT             = 1 <<  0,
+  GTK_DEBUG_TREE             = 1 <<  1,
+  GTK_DEBUG_KEYBINDINGS      = 1 <<  2,
+  GTK_DEBUG_MODULES          = 1 <<  3,
+  GTK_DEBUG_GEOMETRY         = 1 <<  4,
+  GTK_DEBUG_ICONTHEME        = 1 <<  5,
+  GTK_DEBUG_PRINTING         = 1 <<  6,
+  GTK_DEBUG_BUILDER_TRACE    = 1 <<  7,
+  GTK_DEBUG_SIZE_REQUEST     = 1 <<  8,
+  GTK_DEBUG_NO_CSS_CACHE     = 1 <<  9,
+  GTK_DEBUG_INTERACTIVE      = 1 << 10,
+  GTK_DEBUG_TOUCHSCREEN      = 1 << 11,
+  GTK_DEBUG_ACTIONS          = 1 << 12,
+  GTK_DEBUG_LAYOUT           = 1 << 13,
+  GTK_DEBUG_SNAPSHOT         = 1 << 14,
+  GTK_DEBUG_CONSTRAINTS      = 1 << 15,
+  GTK_DEBUG_BUILDER_OBJECTS  = 1 << 16,
+  GTK_DEBUG_A11Y             = 1 << 17,
+  GTK_DEBUG_ICONFALLBACK     = 1 << 18,
+  GTK_DEBUG_INVERT_TEXT_DIR  = 1 << 19,
+  GTK_DEBUG_CSS              = 1 << 20,
+  GTK_DEBUG_BUILDER          = 1 << 21,
+  GTK_DEBUG_SESSION          = 1 << 22,
+  GTK_DEBUG_GENERAL_INFO     = 1 << 23,
+  GTK_DEBUG_SIMULATE_CUTOUTS = 1 << 24,
 } GtkDebugFlags;
 
 /**
@@ -153,7 +163,7 @@ typedef enum {
 #define GTK_DEBUG_CHECK(type) G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_##type)
 
 GDK_AVAILABLE_IN_ALL
-GtkDebugFlags gtk_get_debug_flags (void);
+GtkDebugFlags gtk_get_debug_flags (void) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 void          gtk_set_debug_flags (GtkDebugFlags flags);
 

@@ -59,7 +59,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_init_check           (void);
 
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_is_initialized       (void);
+gboolean gtk_is_initialized       (void) G_GNUC_PURE;
 
 #ifdef G_OS_WIN32
 
