@@ -4213,6 +4213,41 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
     }
 }
 
+static void
+place_border_into_inset (GtkBorder *border,
+                         GtkBorder *inset)
+{
+  int s;
+
+  if (G_LIKELY (border->top >= 0))
+    {
+      s = MIN (border->top, inset->top);
+      border->top -= s;
+      inset->top -= s;
+    }
+
+  if (G_LIKELY (border->bottom >= 0))
+    {
+      s = MIN (border->bottom, inset->bottom);
+      border->bottom -= s;
+      inset->bottom -= s;
+    }
+
+  if (G_LIKELY (border->left >= 0))
+    {
+      s = MIN (border->left, inset->left);
+      border->left -= s;
+      inset->left -= s;
+    }
+
+  if (G_LIKELY (border->right >= 0))
+    {
+      s = MIN (border->right, inset->right);
+      border->right -= s;
+      inset->right -= s;
+    }
+}
+
 /**
  * gtk_widget_allocate:
  * @widget: a widget
@@ -4333,6 +4368,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->allocated_height = height;
   priv->allocated_baseline = baseline;
 
+  /* TODO: place_border_into_inset (priv->margin) */
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     adjusted.x = priv->margin.left;
   else
@@ -4364,7 +4400,49 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (priv->inset_mode == GTK_INSET_PAD)
     inset = (GtkBorder) { 0 };
   else
-    inset = priv->allocated_inset;
+    {
+      inset = priv->allocated_inset;
+
+      switch (priv->valign)
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_BASELINE_FILL:
+        default:
+          break;
+        case GTK_ALIGN_START:
+          inset.bottom = 0;
+          break;
+        case GTK_ALIGN_END:
+          inset.top = 0;
+          break;
+        case GTK_ALIGN_CENTER:
+        case GTK_ALIGN_BASELINE_CENTER:
+          inset.top = inset.bottom = 0;
+          break;
+        }
+
+      switch (effective_align (priv->halign, _gtk_widget_get_direction (widget)))
+        {
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_BASELINE_FILL:
+        case GTK_ALIGN_BASELINE_CENTER:
+        default:
+          break;
+        case GTK_ALIGN_START:
+          inset.right = 0;
+          break;
+        case GTK_ALIGN_END:
+          inset.left = 0;
+          break;
+        case GTK_ALIGN_CENTER:
+          inset.left = inset.right = 0;
+          break;
+        }
+
+      place_border_into_inset (&margin, &inset);
+      place_border_into_inset (&border, &inset);
+      place_border_into_inset (&padding, &inset);
+    }
   priv->inner_inset = inset;
 
   /* Apply CSS transformation */

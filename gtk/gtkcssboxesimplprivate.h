@@ -35,7 +35,7 @@ gtk_css_boxes_init (GtkCssBoxes *boxes,
 
   gtk_css_boxes_init_content_box (boxes,
                                   gtk_css_node_get_style (priv->cssnode),
-                                  NULL,
+                                  &priv->inner_inset,
                                   0, 0,
                                   priv->width,
                                   priv->height);
