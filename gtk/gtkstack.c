@@ -2801,9 +2801,14 @@ gtk_stack_size_allocate (GtkWidget *widget,
 
   if (priv->visible_child)
     {
+      GtkBorder inset;
+
       adjust_child_allocation (priv->visible_child->widget,
                                &child_allocation);
 
+      // FIXME: should this be adjusted according to child_allocation?
+      gtk_widget_get_inset (widget, &inset);
+      gtk_widget_allocate_inset (priv->visible_child->widget, &inset);
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);
     }
 }
@@ -2953,6 +2958,8 @@ gtk_stack_init (GtkStack *stack)
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
   priv->children = g_ptr_array_new();
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (stack), GTK_INSET_EXTEND);
 }
 
 /**
