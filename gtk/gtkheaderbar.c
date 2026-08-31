@@ -654,6 +654,8 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   bar->show_title_buttons = TRUE;
   bar->use_native_controls = FALSE;
 
+  gtk_widget_set_inset_mode (GTK_WIDGET (bar), GTK_INSET_EXTEND);
+
   bar->handle = gtk_window_handle_new ();
   gtk_widget_set_parent (bar->handle, GTK_WIDGET (bar));
 

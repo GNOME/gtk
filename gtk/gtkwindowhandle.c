@@ -558,16 +558,20 @@ gtk_window_handle_class_init (GtkWindowHandleClass *klass)
 static void
 gtk_window_handle_init (GtkWindowHandle *self)
 {
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  gtk_widget_set_inset_mode (widget, GTK_INSET_EXTEND);
+
   self->click_gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click_gesture), 0);
   g_signal_connect (self->click_gesture, "pressed",
                     G_CALLBACK (click_gesture_pressed_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->click_gesture));
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (self->click_gesture));
 
   self->drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (self->drag_gesture, "drag-update",
                     G_CALLBACK (drag_gesture_update_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->drag_gesture));
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (self->drag_gesture));
 }
 
 static GtkBuildableIface *parent_buildable_iface;

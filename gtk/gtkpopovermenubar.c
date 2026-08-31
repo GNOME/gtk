@@ -651,6 +651,8 @@ gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
 {
   GtkEventController *controller;
 
+  gtk_widget_set_inset_mode (GTK_WIDGET (bar), GTK_INSET_EXTEND);
+
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect (controller, "leave", G_CALLBACK (bar_leave_cb), NULL);

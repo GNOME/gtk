@@ -1518,6 +1518,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->has_scrolled = FALSE;
 
   gtk_widget_set_focusable (GTK_WIDGET (notebook), TRUE);
+  gtk_widget_set_inset_mode (GTK_WIDGET (notebook), GTK_INSET_EXTEND);
 
   notebook->header_widget = g_object_new (GTK_TYPE_BOX,
                                           "css-name", "header",
@@ -1535,6 +1536,7 @@ gtk_notebook_init (GtkNotebook *notebook)
                                                    (GtkGizmoFocusFunc)gtk_widget_focus_self,
                                                    (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
   gtk_widget_set_hexpand (notebook->tabs_widget, TRUE);
+  gtk_widget_set_inset_mode (notebook->tabs_widget, GTK_INSET_EXTEND);
   gtk_box_append (GTK_BOX (notebook->header_widget), notebook->tabs_widget);
 
   notebook->stack_widget = gtk_stack_new ();

@@ -4027,6 +4027,8 @@ gtk_flow_box_init (GtkFlowBox *box)
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_flow_box_key_controller_key_pressed), box);
   gtk_widget_add_controller (GTK_WIDGET (box), controller);
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (box), GTK_INSET_EXTEND);
 }
 
 static void

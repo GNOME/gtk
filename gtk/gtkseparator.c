@@ -146,6 +146,8 @@ gtk_separator_init (GtkSeparator *separator)
 
   gtk_widget_update_orientation (GTK_WIDGET (separator),
                                  separator->orientation);
+  gtk_widget_set_inset_mode (GTK_WIDGET (separator),
+                             GTK_INSET_EXTEND);
 }
 
 static void
