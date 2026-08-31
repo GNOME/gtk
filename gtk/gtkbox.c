@@ -320,6 +320,7 @@ static void
 gtk_box_init (GtkBox *box)
 {
   gtk_widget_update_orientation (GTK_WIDGET (box), GTK_ORIENTATION_HORIZONTAL);
+  gtk_widget_set_inset_mode (GTK_WIDGET (box), GTK_INSET_EXTEND);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

@@ -908,6 +908,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   GtkTextDirection direction;
   GtkAllocation child_allocation;
   GtkRequestedSize *sizes;
+  GtkBorder inset, child_inset;
   int child_minimum_baseline, child_natural_baseline;
   int minimum_above, natural_above;
   int minimum_below, natural_below;
@@ -931,6 +932,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   direction = _gtk_widget_get_direction (widget);
   sizes = g_newa (GtkRequestedSize, nvis_children);
   spacing = get_spacing (self, gtk_widget_get_css_node (widget));
+  gtk_widget_get_inset (widget, &inset);
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     extra_space = width - (nvis_children - 1) * spacing;
@@ -1147,6 +1149,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
         continue;
 
       child_size = sizes[i].natural_size;
+      child_inset = inset;
 
       /* Assign the child's position. */
       if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1157,7 +1160,20 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
           x += child_size + spacing;
 
           if (direction == GTK_TEXT_DIR_RTL)
-            child_allocation.x = width - child_allocation.x - child_allocation.width;
+            {
+              child_allocation.x = width - child_allocation.x - child_allocation.width;
+              if (i != 0)
+                child_inset.right = 0;
+              if (i + 1 != nvis_children)
+                child_inset.left = 0;
+            }
+          else
+            {
+              if (i != 0)
+                child_inset.left = 0;
+              if (i + 1 != nvis_children)
+                child_inset.right = 0;
+            }
 
         }
       else /* (self->orientation == GTK_ORIENTATION_VERTICAL) */
@@ -1166,8 +1182,14 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
           child_allocation.y = y;
 
           y += child_size + spacing;
+
+          if (i != 0)
+            child_inset.top = 0;
+          if (i + 1 != nvis_children)
+            child_inset.bottom = 0;
         }
 
+      gtk_widget_allocate_inset (child, &child_inset);
       gtk_widget_size_allocate (child, &child_allocation, baseline);
 
       i++;
