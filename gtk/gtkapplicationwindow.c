@@ -470,10 +470,12 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
     {
       GtkAllocation menubar_allocation;
       GtkAllocation child_allocation;
+      GtkBorder child_inset, menubar_inset;
       int menubar_height;
       GtkWidget *child;
 
-      _gtk_window_set_allocation (GTK_WINDOW (widget), width, height, &child_allocation);
+      _gtk_window_set_allocation (GTK_WINDOW (widget), width, height,
+                                  &child_allocation, &child_inset);
       menubar_allocation = child_allocation;
 
       gtk_widget_measure (priv->menubar, GTK_ORIENTATION_VERTICAL,
@@ -481,7 +483,10 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
                           &menubar_height, NULL, NULL, NULL);
 
       menubar_allocation.height = menubar_height;
-      gtk_widget_size_allocate  (priv->menubar, &menubar_allocation, -1);
+      menubar_inset = child_inset;
+      menubar_inset.bottom = 0;
+      gtk_widget_allocate_inset (priv->menubar, &menubar_inset);
+      gtk_widget_size_allocate (priv->menubar, &menubar_allocation, -1);
 
       child_allocation.y += menubar_height;
       child_allocation.height -= menubar_height;
@@ -489,7 +494,10 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
         baseline -= child_allocation.y;
       child = gtk_window_get_child (GTK_WINDOW (window));
       if (child != NULL && gtk_widget_get_visible (child))
-        gtk_widget_size_allocate (child, &child_allocation, baseline);
+        {
+          gtk_widget_allocate_inset (child, &child_inset);
+          gtk_widget_size_allocate (child, &child_allocation, baseline);
+        }
 
       gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
     }

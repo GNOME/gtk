@@ -108,6 +108,15 @@
 #define GDK_ARRAY_PREALLOC 16
 #include "gdk/gdkarrayimpl.c"
 
+#define HACK_CUTOUT_CORNER_RADIUS 30
+
+static GtkBorder
+hack_gtk_make_window_insets ()
+{
+  int off = HACK_CUTOUT_CORNER_RADIUS * (1 - M_SQRT1_2);
+  return (GtkBorder) { off, off, 24, off };
+}
+
 /**
  * GtkWindow:
  *
@@ -746,6 +755,58 @@ gtk_window_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
+static void
+gtk_window_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
+{
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->snapshot (widget, snapshot);
+  return;
+
+  GtkBorder inset = hack_gtk_make_window_insets ();
+  GskPath *cutouts_path;
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_move_to (builder, -inset.left, -inset.top);
+  gsk_path_builder_line_to (builder, HACK_CUTOUT_CORNER_RADIUS - inset.left, -inset.top);
+  gsk_path_builder_arc_to (builder,
+                           -inset.left, -inset.top,
+                           -inset.left, HACK_CUTOUT_CORNER_RADIUS - inset.top);
+  gsk_path_builder_close (builder);
+
+  gsk_path_builder_move_to (builder, -inset.left, gtk_widget_get_height (widget) + inset.bottom);
+  gsk_path_builder_line_to (builder, -inset.left, gtk_widget_get_height (widget) + inset.bottom - HACK_CUTOUT_CORNER_RADIUS);
+  gsk_path_builder_arc_to (builder,
+                           -inset.left, gtk_widget_get_height (widget) + inset.bottom,
+                           HACK_CUTOUT_CORNER_RADIUS - inset.left, gtk_widget_get_height (widget) + inset.bottom);
+  gsk_path_builder_close (builder);
+
+  gsk_path_builder_move_to (builder, gtk_widget_get_width (widget) + inset.right, -inset.top);
+  gsk_path_builder_line_to (builder, gtk_widget_get_width (widget) + inset.right, HACK_CUTOUT_CORNER_RADIUS - inset.top);
+  gsk_path_builder_arc_to (builder,
+                           gtk_widget_get_width (widget) + inset.right, -inset.top,
+                           gtk_widget_get_width (widget) + inset.right - HACK_CUTOUT_CORNER_RADIUS, -inset.top);
+  gsk_path_builder_close (builder);
+
+  gsk_path_builder_move_to (builder, gtk_widget_get_width (widget) + inset.right, gtk_widget_get_height (widget) + inset.bottom);
+  gsk_path_builder_line_to (builder, gtk_widget_get_width (widget) + inset.right - HACK_CUTOUT_CORNER_RADIUS,
+                            gtk_widget_get_height (widget) + inset.bottom);
+  gsk_path_builder_arc_to (builder,
+                           gtk_widget_get_width (widget) + inset.right, gtk_widget_get_height (widget) + inset.bottom,
+                           gtk_widget_get_width (widget) + inset.right, gtk_widget_get_height (widget) + inset.bottom - HACK_CUTOUT_CORNER_RADIUS);
+  gsk_path_builder_close (builder);
+
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (gtk_widget_get_width (widget) * 0.5, inset.top * -0.5), inset.top * 0.5);
+
+  cutouts_path = gsk_path_builder_free_to_path (builder);
+
+  gtk_snapshot_append_fill (snapshot, cutouts_path, GSK_FILL_RULE_WINDING,
+                            &(GdkRGBA) { 0, 0, 0, 0.7 });
+
+  gsk_path_unref (cutouts_path);
+}
+
 static GdkGravity
 get_gdk_gravity (GtkWindow *window)
 {
@@ -847,6 +908,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
+  widget_class->snapshot = gtk_window_snapshot;
   widget_class->direction_changed = gtk_window_direction_changed;
 
   klass->activate_default = gtk_window_real_activate_default;
@@ -1829,6 +1891,7 @@ gtk_window_init (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (widget, GTK_INSET_EXTEND);
 
   priv->title = NULL;
   priv->geometry_info = NULL;
@@ -2281,6 +2344,10 @@ gtk_window_native_get_surface_transform (GtkNative *native,
   gtk_css_boxes_init (&css_boxes, GTK_WIDGET (native));
   margin_rect = gtk_css_boxes_get_margin_rect (&css_boxes);
 
+  /* TODO: if we get allocated an inset, and someone resets
+   * us to GTK_INSET_PAD for giggles, we would have to account
+   * for the inset here */
+
   *x = shadow.left - margin_rect->origin.x;
   *y = shadow.top  - margin_rect->origin.y;
 }
@@ -2335,7 +2402,14 @@ gtk_window_native_layout (GtkNative *native,
       gtk_window_update_csd_size (window,
                                   &width, &height,
                                   EXCLUDE_CSD_SIZE);
-      gtk_widget_allocate (widget, width, height, -1, NULL);
+      // XXXXXXXXXX HACK HACK
+      GtkBorder inset = hack_gtk_make_window_insets ();
+      gtk_widget_allocate_inset (widget, &inset);
+
+      gtk_widget_allocate (widget,
+                           width - inset.left - inset.right,
+                           height - inset.top - inset.bottom,
+                           -1, NULL);
     }
   else
     {
@@ -4719,19 +4793,22 @@ void
 _gtk_window_set_allocation (GtkWindow           *window,
                             int                  width,
                             int                  height,
-                            GtkAllocation       *allocation_out)
+                            GtkAllocation       *allocation_out,
+                            GtkBorder           *inset_out)
 {
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkAllocation child_allocation;
 
   g_assert (allocation_out != NULL);
+  g_assert (inset_out != NULL);
 
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = width;
   child_allocation.height = height;
 
+  gtk_widget_get_inset (widget, inset_out);
   if (_gtk_widget_get_realized (widget))
     {
       update_realized_window_properties (window);
@@ -4746,6 +4823,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
       !priv->fullscreen)
     {
       GtkAllocation title_allocation;
+      GtkBorder title_inset;
 
       title_allocation.x = 0;
       title_allocation.y = 0;
@@ -4758,7 +4836,13 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
       title_allocation.height = priv->title_height;
 
+      title_inset = *inset_out;
+      title_inset.bottom = 0;
+
+      gtk_widget_allocate_inset (priv->title_box, &title_inset);
       gtk_widget_size_allocate (priv->title_box, &title_allocation, -1);
+
+      inset_out->top = 0;
     }
 
   if (priv->decorated &&
@@ -4781,11 +4865,15 @@ gtk_window_size_allocate (GtkWidget *widget,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child = priv->child;
   GtkAllocation child_allocation;
+  GtkBorder child_inset;
 
-  _gtk_window_set_allocation (window, width, height, &child_allocation);
+  _gtk_window_set_allocation (window, width, height, &child_allocation, &child_inset);
 
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation, -1);
+    {
+      gtk_widget_allocate_inset (child, &child_inset);
+      gtk_widget_size_allocate (child, &child_allocation, -1);
+    }
 
   gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
 }

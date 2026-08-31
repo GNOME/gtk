@@ -41,7 +41,8 @@ void            _gtk_window_update_focus_visible (GtkWindow       *window,
 void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,
-                                                    GtkAllocation *allocation_out);
+                                                    GtkAllocation *allocation_out,
+                                                    GtkBorder     *inset_out);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
