@@ -85,13 +85,18 @@ gtk_bin_layout_allocate (GtkLayoutManager *layout_manager,
                          int               baseline)
 {
   GtkWidget *child;
+  GtkBorder inset;
+
+  gtk_widget_get_inset (widget, &inset);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (child && gtk_widget_should_layout (child))
-        gtk_widget_allocate (child, width, height, baseline, NULL);
+      if (!gtk_widget_should_layout (child))
+        continue;
+      gtk_widget_allocate_inset (child, &inset);
+      gtk_widget_allocate (child, width, height, baseline, NULL);
     }
 }
 static void
