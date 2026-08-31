@@ -6062,7 +6062,7 @@ draw_text (GtkWidget   *widget,
                                                SCREEN_HEIGHT (widget)));
 
   style = gtk_css_node_get_style (text_view->priv->text_window->css_node);
-  gtk_css_boxes_init_border_box (&boxes, style,
+  gtk_css_boxes_init_border_box (&boxes, style, NULL,
                                  -priv->xoffset, -priv->yoffset - priv->top_margin,
                                  MAX (SCREEN_WIDTH (text_view), priv->width),
                                  MAX (SCREEN_HEIGHT (text_view), priv->height));

@@ -1705,7 +1705,7 @@ create_arrow_render_node (GtkPopover *popover)
 
   /* Render the arrow background */
   bg_snapshot = gtk_snapshot_new ();
-  gtk_css_boxes_init_border_box (&boxes, style,
+  gtk_css_boxes_init_border_box (&boxes, style, NULL,
                                  0, 0,
                                  gtk_widget_get_width (widget),
                                  gtk_widget_get_height (widget));

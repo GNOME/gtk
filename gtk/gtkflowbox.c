@@ -2642,7 +2642,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           cairo_clip (cr);
 
           bg_snapshot = gtk_snapshot_new ();
-          gtk_css_boxes_init_border_box (&boxes, style, x, y, width, height);
+          gtk_css_boxes_init_border_box (&boxes, style, NULL, x, y, width, height);
           gtk_css_style_snapshot_background (&boxes, bg_snapshot);
           node = gtk_snapshot_free_to_node (bg_snapshot);
           if (node)

@@ -575,6 +575,7 @@ gtk_snapshot_render_background (GtkSnapshot     *snapshot,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  x, y, width, height);
   gtk_css_style_snapshot_background (&boxes, snapshot);
 }
@@ -609,6 +610,7 @@ gtk_snapshot_render_frame (GtkSnapshot     *snapshot,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  x, y, width, height);
   gtk_css_style_snapshot_border (&boxes, snapshot);
 }
@@ -643,6 +645,7 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  x, y, width, height);
   gtk_css_style_snapshot_outline (&boxes, snapshot);
 }
@@ -676,6 +679,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  x, y, 0, 0);
   gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
 }
@@ -713,6 +717,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  x, y, 0, 0);
 
   display = gtk_style_context_get_display (context);

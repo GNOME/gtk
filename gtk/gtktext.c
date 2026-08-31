@@ -2714,7 +2714,7 @@ gtk_text_draw_undershoot (GtkText     *self,
   if (priv->scroll_offset > min_offset)
     {
       style = gtk_css_node_get_style (priv->undershoot_node[0]);
-      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_css_boxes_init_border_box (&boxes, style, NULL, 0, 0, UNDERSHOOT_SIZE, text_height);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2722,7 +2722,7 @@ gtk_text_draw_undershoot (GtkText     *self,
   if (priv->scroll_offset < max_offset)
     {
       style = gtk_css_node_get_style (priv->undershoot_node[1]);
-      gtk_css_boxes_init_border_box (&boxes, style,
+      gtk_css_boxes_init_border_box (&boxes, style, NULL,
                                      text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
@@ -4889,7 +4889,7 @@ gtk_text_draw_text (GtkText     *self,
       clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
       cairo_region_get_extents (clip, &clip_extents);
 
-      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
+      gtk_css_boxes_init_border_box (&boxes, style, NULL, 0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents));
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
@@ -4948,7 +4948,7 @@ gtk_text_draw_cursor (GtkText     *self,
       bounds.size.height = PANGO_PIXELS (cursor_rect.height);
 
       style = gtk_css_node_get_style (priv->block_cursor_node);
-      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
+      gtk_css_boxes_init_border_box (&boxes, style, NULL, 0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);

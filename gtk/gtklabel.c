@@ -1475,7 +1475,7 @@ gtk_label_snapshot (GtkWidget   *widget,
       range[1] = MAX (info->selection_anchor, info->selection_end);
 
       style = gtk_css_node_get_style (info->selection_node);
-      gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
+      gtk_css_boxes_init_border_box (&boxes, style, NULL, 0, 0, width, height);
 
       range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
       for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1524,7 +1524,7 @@ gtk_label_snapshot (GtkWidget   *widget,
           range[1] = active_link->end;
 
           style = gtk_css_node_get_style (active_link->cssnode);
-          gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
+          gtk_css_boxes_init_border_box (&boxes, style, NULL, 0, 0, width, height);
 
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           for (i = 0; i < cairo_region_num_rectangles (range_clip); i++)
@@ -1550,7 +1550,7 @@ gtk_label_snapshot (GtkWidget   *widget,
           range_clip = gdk_pango_layout_get_clip_region (self->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &rect);
 
-          gtk_css_boxes_init_border_box (&boxes, style, rect.x, rect.y, rect.width, rect.height);
+          gtk_css_boxes_init_border_box (&boxes, style, NULL, rect.x, rect.y, rect.width, rect.height);
           gtk_css_style_snapshot_outline (&boxes, snapshot);
 
           cairo_region_destroy (range_clip);

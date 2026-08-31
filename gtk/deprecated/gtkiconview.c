@@ -1710,6 +1710,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
 
       gtk_css_boxes_init_border_box (&boxes,
                                      gtk_style_context_lookup_style (context),
+                                     NULL,
                                      rect.x, rect.y, rect.width, rect.height);
       gtk_css_style_snapshot_border (&boxes, snapshot);
 
@@ -2838,6 +2839,7 @@ gtk_icon_view_snapshot_item (GtkIconView     *icon_view,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (style_context),
+                                 NULL,
                                  x - priv->item_padding,
                                  y - priv->item_padding,
                                  item->cell_area.width  + priv->item_padding * 2,
@@ -2878,6 +2880,7 @@ gtk_icon_view_snapshot_rubberband (GtkIconView *icon_view,
 
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_style_context_lookup_style (context),
+                                 NULL,
                                  rect.x, rect.y,
                                  rect.width, rect.height);
   gtk_css_style_snapshot_background (&boxes, snapshot);

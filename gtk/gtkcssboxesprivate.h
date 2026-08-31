@@ -19,6 +19,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtktypes.h"
+#include "gtkborder.h"
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,7 @@ typedef struct _GtkCssBoxes GtkCssBoxes;
 struct _GtkCssBoxes
 {
   GtkCssStyle *style;
+  const GtkBorder *inset;
   GskRoundedRect box[GTK_CSS_AREA_N_BOXES];
   gboolean has_rect[GTK_CSS_AREA_N_BOXES]; /* TRUE if we have initialized just the bounds rect */
   gboolean has_box[GTK_CSS_AREA_N_BOXES]; /* TRUE if we have initialized the whole box */
@@ -56,12 +58,14 @@ static inline void                      gtk_css_boxes_init                      
                                                                                  GtkWidget        *widget);
 static inline void                      gtk_css_boxes_init_content_box          (GtkCssBoxes      *boxes,
                                                                                  GtkCssStyle      *style,
+                                                                                 const GtkBorder  *inset,
                                                                                  double            x,
                                                                                  double            y,
                                                                                  double            width,
                                                                                  double            height);
 static inline void                      gtk_css_boxes_init_border_box           (GtkCssBoxes      *boxes,
                                                                                  GtkCssStyle      *style,
+                                                                                 const GtkBorder  *inset,
                                                                                  double            x,
                                                                                  double            y,
                                                                                  double            width,

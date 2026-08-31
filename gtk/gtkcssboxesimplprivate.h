@@ -35,37 +35,42 @@ gtk_css_boxes_init (GtkCssBoxes *boxes,
 
   gtk_css_boxes_init_content_box (boxes,
                                   gtk_css_node_get_style (priv->cssnode),
+                                  NULL,
                                   0, 0,
                                   priv->width,
                                   priv->height);
 }
 
 static inline void
-gtk_css_boxes_init_content_box (GtkCssBoxes *boxes,
-                                GtkCssStyle *style,
-                                double       x,
-                                double       y,
-                                double       width,
-                                double       height)
+gtk_css_boxes_init_content_box (GtkCssBoxes     *boxes,
+                                GtkCssStyle     *style,
+                                const GtkBorder *inset,
+                                double           x,
+                                double           y,
+                                double           width,
+                                double           height)
 {
   memset (boxes, 0, sizeof (GtkCssBoxes));
 
   boxes->style = style;
+  boxes->inset = inset;
   boxes->box[GTK_CSS_AREA_CONTENT_BOX].bounds = GRAPHENE_RECT_INIT (x, y, width, height);
   boxes->has_rect[GTK_CSS_AREA_CONTENT_BOX] = TRUE;
 }
 
 static inline void
-gtk_css_boxes_init_border_box (GtkCssBoxes *boxes,
-                               GtkCssStyle *style,
-                               double       x,
-                               double       y,
-                               double       width,
-                               double       height)
+gtk_css_boxes_init_border_box (GtkCssBoxes     *boxes,
+                               GtkCssStyle     *style,
+                               const GtkBorder *inset,
+                               double           x,
+                               double           y,
+                               double           width,
+                               double           height)
 {
   memset (boxes, 0, sizeof (GtkCssBoxes));
 
   boxes->style = style;
+  boxes->inset = inset;
   boxes->box[GTK_CSS_AREA_BORDER_BOX].bounds = GRAPHENE_RECT_INIT (x, y, width, height);
   boxes->has_rect[GTK_CSS_AREA_BORDER_BOX] = TRUE;
 }
@@ -200,6 +205,14 @@ gtk_css_boxes_compute_padding_rect (GtkCssBoxes *boxes)
                                boxes->style->size->padding_right,
                                boxes->style->size->padding_bottom,
                                boxes->style->size->padding_left);
+
+      if (boxes->inset)
+        {
+          boxes->box[GTK_CSS_AREA_PADDING_BOX].bounds.origin.x -= boxes->inset->left;
+          boxes->box[GTK_CSS_AREA_PADDING_BOX].bounds.origin.y -= boxes->inset->top;
+          boxes->box[GTK_CSS_AREA_PADDING_BOX].bounds.size.width += boxes->inset->left + boxes->inset->right;
+          boxes->box[GTK_CSS_AREA_PADDING_BOX].bounds.size.height += boxes->inset->top + boxes->inset->bottom;
+        }
     }
 
   boxes->has_rect[GTK_CSS_AREA_PADDING_BOX] = TRUE;
@@ -219,6 +232,14 @@ gtk_css_boxes_compute_content_rect (GtkCssBoxes *boxes)
                              boxes->style->size->padding_right,
                              boxes->style->size->padding_bottom,
                              boxes->style->size->padding_left);
+
+  if (boxes->inset)
+    {
+      boxes->box[GTK_CSS_AREA_CONTENT_BOX].bounds.origin.x += boxes->inset->left;
+      boxes->box[GTK_CSS_AREA_CONTENT_BOX].bounds.origin.y += boxes->inset->top;
+      boxes->box[GTK_CSS_AREA_CONTENT_BOX].bounds.size.width -= boxes->inset->left + boxes->inset->right;
+      boxes->box[GTK_CSS_AREA_CONTENT_BOX].bounds.size.height -= boxes->inset->top + boxes->inset->bottom;
+    }
 
   boxes->has_rect[GTK_CSS_AREA_CONTENT_BOX] = TRUE;
 }

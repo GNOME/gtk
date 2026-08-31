@@ -150,7 +150,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
       pango_layout_get_size (layout, &layout_width, &layout_height);
 
       style = gtk_css_node_get_style (gtk_widget_get_css_node (bg_widget));
-      gtk_css_boxes_init_border_box (&boxes, style,
+      gtk_css_boxes_init_border_box (&boxes, style, NULL,
                                      0, 0,
                                      layout_width / PANGO_SCALE,
                                      layout_height / PANGO_SCALE);
@@ -281,7 +281,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
       GtkCssStyle *css_style;
 
       css_style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-      gtk_css_boxes_init_border_box (&boxes, css_style,
+      gtk_css_boxes_init_border_box (&boxes, css_style, NULL,
                                      0, 0, layout_width, layout_height);
       gtk_css_style_snapshot_background (&boxes, snapshot);
     }
