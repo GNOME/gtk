@@ -76,12 +76,13 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext      *context,
   gdk_wayland_surface_notify_committed (surface);
 }
 
-static void
-gdk_vulkan_context_wayland_empty_frame (GdkDrawContext *context)
+static gboolean
+gdk_vulkan_context_wayland_empty_frame (GdkDrawContext      *context,
+                                        GdkDrawContextFrame *frame)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
-  gdk_wayland_surface_handle_empty_frame (surface);
+  return gdk_wayland_surface_handle_empty_frame (surface, frame);
 }
 
 static void
