@@ -2015,11 +2015,17 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
   GtkCssStyle *style;
   GdkRectangle rect;
   GtkCssBoxes boxes;
+  GtkBorder inset;
 
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
   gtk_scrolled_window_inner_allocation (scrolled_window, &rect);
+
+  if (priv->child)
+    gtk_widget_get_inset (priv->child, &inset);
+  else
+    inset = (GtkBorder) { 0 };
 
   overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
   overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
@@ -2028,7 +2034,10 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->overshoot_node[GTK_POS_RIGHT]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+                                     rect.x + rect.width - overshoot_x,
+                                     rect.y - inset.top,
+                                     overshoot_x,
+                                     rect.height + inset.top + inset.bottom);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2036,7 +2045,10 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->overshoot_node[GTK_POS_LEFT]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y, -overshoot_x, rect.height);
+                                     rect.x,
+                                     rect.y - inset.top,
+                                     -overshoot_x,
+                                     rect.height + inset.top + inset.bottom);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2045,7 +2057,10 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->overshoot_node[GTK_POS_BOTTOM]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+                                     rect.x - inset.left,
+                                     rect.y + rect.height - overshoot_y,
+                                     rect.width + inset.left + inset.right,
+                                     overshoot_y);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2053,7 +2068,10 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->overshoot_node[GTK_POS_TOP]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y, rect.width, -overshoot_y);
+                                     rect.x - inset.left,
+                                     rect.y,
+                                     rect.width + inset.left + inset.right,
+                                     -overshoot_y);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2068,15 +2086,23 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
   GdkRectangle rect;
   GtkAdjustment *adj;
   GtkCssBoxes boxes;
+  GtkBorder inset;
 
   gtk_scrolled_window_inner_allocation (scrolled_window, &rect);
+
+  if (priv->child)
+    gtk_widget_get_inset (priv->child, &inset);
+  else
+    inset = (GtkBorder) { 0 };
 
   adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
   if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
     {
       style = gtk_css_node_get_style (priv->undershoot_node[GTK_POS_RIGHT]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+                                     rect.x + rect.width - UNDERSHOOT_SIZE,
+                                     rect.y - inset.top, UNDERSHOOT_SIZE,
+                                     rect.height + inset.top + inset.bottom);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2084,7 +2110,9 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->undershoot_node[GTK_POS_LEFT]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+                                     rect.x, rect.y - inset.top,
+                                     UNDERSHOOT_SIZE,
+                                     rect.height + inset.top + inset.bottom);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2094,7 +2122,10 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->undershoot_node[GTK_POS_BOTTOM]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
+                                     rect.x - inset.left,
+                                     rect.y + rect.height - UNDERSHOOT_SIZE,
+                                     rect.width + inset.left + inset.right,
+                                     UNDERSHOOT_SIZE);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
@@ -2102,7 +2133,9 @@ gtk_scrolled_window_snapshot_undershoot (GtkScrolledWindow *scrolled_window,
     {
       style = gtk_css_node_get_style (priv->undershoot_node[GTK_POS_TOP]);
       gtk_css_boxes_init_border_box (&boxes, style, NULL,
-                                     rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
+                                     rect.x - inset.left, rect.y,
+                                     rect.width + inset.left + inset.right,
+                                     UNDERSHOOT_SIZE);
       gtk_css_style_snapshot_background (&boxes, snapshot);
       gtk_css_style_snapshot_border (&boxes, snapshot);
     }
