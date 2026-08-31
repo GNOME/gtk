@@ -5997,6 +5997,8 @@ gtk_text_view_paint (GtkWidget   *widget,
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GtkBorder inset;
+  graphene_rect_t rect;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -6018,16 +6020,20 @@ gtk_text_view_paint (GtkWidget   *widget,
       g_assert_not_reached ();
     }
 
+  gtk_widget_get_inset (widget, &inset);
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (inset.left - priv->xoffset,
+                                                          inset.top - priv->yoffset));
+
+  rect.origin.x = priv->xoffset - inset.left;
+  rect.origin.y = priv->yoffset - inset.top;
+  rect.size.width = gtk_widget_get_width (widget) + inset.left + inset.right;
+  rect.size.height = gtk_widget_get_height (widget) + inset.top + inset.bottom;
 
   gtk_text_layout_snapshot (priv->layout,
                             widget,
                             snapshot,
-                            &GRAPHENE_RECT_INIT (priv->xoffset,
-                                                 priv->yoffset,
-                                                 gtk_widget_get_width (widget),
-                                                 gtk_widget_get_height (widget)),
+                            &rect,
                             priv->selection_style_changed,
                             priv->cursor_alpha);
 
@@ -6062,6 +6068,7 @@ draw_text (GtkWidget   *widget,
                                                SCREEN_HEIGHT (widget)));
 
   style = gtk_css_node_get_style (text_view->priv->text_window->css_node);
+  // FIXME: might have to pass the inset here
   gtk_css_boxes_init_border_box (&boxes, style, NULL,
                                  -priv->xoffset, -priv->yoffset - priv->top_margin,
                                  MAX (SCREEN_WIDTH (text_view), priv->width),
