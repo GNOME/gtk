@@ -2402,8 +2402,13 @@ gtk_window_native_layout (GtkNative *native,
       gtk_window_update_csd_size (window,
                                   &width, &height,
                                   EXCLUDE_CSD_SIZE);
+#if 0
       // XXXXXXXXXX HACK HACK
       GtkBorder inset = hack_gtk_make_window_insets ();
+#else
+      GtkBorder inset;
+      gdk_toplevel_get_inset (GDK_TOPLEVEL (priv->surface), &inset);
+#endif
       gtk_widget_allocate_inset (widget, &inset);
 
       gtk_widget_allocate (widget,

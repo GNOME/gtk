@@ -2,6 +2,7 @@
 
 #include "gdktoplevel.h"
 #include "gdktoplevelsizeprivate.h"
+#include "gtk/gtkborder.h"
 
 #include <graphene.h>
 
@@ -51,6 +52,9 @@ struct _GdkToplevelInterface
 
   void          (* unexport_handle)        (GdkToplevel          *toplevel,
                                             const char           *handle);
+
+  void          (*get_inset)               (GdkToplevel          *toplevel,
+                                            GtkBorder            *inset);
 };
 
 typedef enum
@@ -87,6 +91,9 @@ char *gdk_toplevel_export_handle_finish (GdkToplevel          *toplevel,
 
 void  gdk_toplevel_unexport_handle      (GdkToplevel          *toplevel,
                                          const char           *handle);
+
+void  gdk_toplevel_get_inset            (GdkToplevel          *toplevel,
+                                         GtkBorder            *inset);
 
 G_END_DECLS
 

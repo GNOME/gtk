@@ -154,6 +154,8 @@ struct _GdkWaylandToplevel
   int bounds_height;
   gboolean has_bounds;
 
+  GtkBorder inset;
+
   GdkToplevelCapabilities capabilities;
 
   GdkGravity gravity;
@@ -2125,6 +2127,18 @@ gdk_wayland_toplevel_real_unexport_handle (GdkToplevel *toplevel,
   g_warn_if_reached ();
 }
 
+static void
+gdk_wayland_toplevel_real_get_inset (GdkToplevel *toplevel,
+                                     GtkBorder   *inset)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  g_return_if_fail (inset != NULL);
+
+  *inset = wayland_toplevel->inset;
+}
+
 static gboolean
 gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
                                        GdkEvent    *event)
@@ -2448,6 +2462,7 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->export_handle = gdk_wayland_toplevel_real_export_handle;
   iface->export_handle_finish = gdk_wayland_toplevel_real_export_handle_finish;
   iface->unexport_handle = gdk_wayland_toplevel_real_unexport_handle;
+  iface->get_inset = gdk_wayland_toplevel_real_get_inset;
 }
 
 /* }}} */

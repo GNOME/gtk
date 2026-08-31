@@ -142,6 +142,13 @@ gdk_toplevel_default_unexport_handle (GdkToplevel *toplevel,
 }
 
 static void
+gdk_toplevel_default_get_inset (GdkToplevel *toplevel,
+                                GtkBorder   *inset)
+{
+  *inset = (GtkBorder) { 0 };
+}
+
+static void
 gdk_toplevel_default_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_toplevel_default_present;
@@ -156,6 +163,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->export_handle = gdk_toplevel_default_export_handle;
   iface->export_handle_finish = gdk_toplevel_default_export_handle_finish;
   iface->unexport_handle = gdk_toplevel_default_unexport_handle;
+  iface->get_inset = gdk_toplevel_default_get_inset;
 
   /**
    * GdkToplevel:state:
@@ -865,6 +873,17 @@ gdk_toplevel_unexport_handle (GdkToplevel *toplevel,
                               const char  *handle)
 {
   GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel, handle);
+}
+
+/*< private >
+ * gdk_toplevel_get_inset:
+ * @inset: (out) (not optional)
+ */
+void
+gdk_toplevel_get_inset (GdkToplevel *toplevel,
+                        GtkBorder   *inset)
+{
+  GDK_TOPLEVEL_GET_IFACE (toplevel)->get_inset (toplevel, inset);
 }
 
 /**
