@@ -244,6 +244,7 @@ gdk_array(splice) (GdkArray *self,
 
   size = gdk_array(get_size) (self);
   g_assert (pos + removed <= size);
+  g_assert (additions < gdk_array(index) (self, 0) || additions >= gdk_array(index) (self, size));
   remaining = size - pos - removed;
 
   if (!stolen)
