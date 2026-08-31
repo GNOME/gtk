@@ -201,13 +201,15 @@ unadjust_width (GtkWidget *widget,
                 int        width)
 {
   GtkCssBoxes boxes;
+  GtkBorder inset;
 
   if (width <= -1)
     return -1;
 
+  gtk_widget_get_inset (widget, &inset);
   gtk_css_boxes_init_border_box (&boxes,
                                  gtk_css_node_get_style (gtk_widget_get_css_node (widget)),
-                                 NULL,
+                                 &inset,
                                  0, 0,
                                  width, 100000);
   return MAX (0, floor (gtk_css_boxes_get_content_rect (&boxes)->size.width));

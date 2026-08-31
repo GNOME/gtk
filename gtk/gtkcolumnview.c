@@ -505,8 +505,10 @@ gtk_column_view_allocate (GtkWidget *widget,
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
   int full_width, header_height, min, nat, x, dx;
+  GtkBorder inset, child_inset;
 
   x = gtk_adjustment_get_value (self->hadjustment);
+  gtk_widget_get_inset (widget, &inset);
   full_width = gtk_column_view_allocate_columns (self, width);
 
   gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
@@ -517,9 +519,15 @@ gtk_column_view_allocate (GtkWidget *widget,
 
   dx = (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL) ? -x : width - full_width + x;
 
+  child_inset = inset;
+  child_inset.bottom = 0;
+  gtk_widget_allocate_inset (self->header, &child_inset);
   gtk_widget_allocate (self->header, full_width, header_height, -1,
                        gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, 0)));
 
+  child_inset = inset;
+  child_inset.top = 0;
+  gtk_widget_allocate_inset (GTK_WIDGET (self->listview), &child_inset);
   gtk_widget_allocate (GTK_WIDGET (self->listview),
                        full_width, height - header_height, -1,
                        gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, header_height)));
@@ -1532,6 +1540,7 @@ gtk_column_view_init (GtkColumnView *self)
                           g_quark_from_static_string (I_("view")));
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 
   self->reorderable = TRUE;
 }

@@ -786,7 +786,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   tile = gtk_list_item_manager_get_first (self->item_manager);
   if (tile == NULL)
     {
-      gtk_list_base_allocate (GTK_LIST_BASE (self));
+      gtk_list_base_allocate (GTK_LIST_BASE (self), &(GtkBorder) { 0 });
       return;
     }
 
@@ -928,7 +928,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     }
 
   /* step 5: allocate the rest */
-  gtk_list_base_allocate (GTK_LIST_BASE (self));
+  gtk_list_base_allocate (GTK_LIST_BASE (self), &(GtkBorder) { 0 });
 }
 
 static void

@@ -569,6 +569,7 @@ static void
 gtk_column_view_row_widget_init (GtkColumnViewRowWidget *self)
 {
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 GtkWidget *

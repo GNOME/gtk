@@ -36,7 +36,6 @@
 #include "gtkscrollable.h"
 #include "gtkscrollinfoprivate.h"
 #include "gtksingleselection.h"
-#include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -1503,19 +1502,21 @@ update_autoscroll (GtkListBase *self,
  * @y: top right coordinate in the along direction
  * @width: size in the across direction
  * @height: size in the along direction
+ * @inset: inset for the child
  *
  * Allocates a child widget in the list coordinate system,
  * but with the coordinates already offset by the scroll
  * offset.
  **/
 static void
-gtk_list_base_size_allocate_child (GtkListBase *self,
-                                   GtkCssBoxes *boxes,
-                                   GtkWidget   *child,
-                                   int          x,
-                                   int          y,
-                                   int          width,
-                                   int          height)
+gtk_list_base_size_allocate_child (GtkListBase     *self,
+                                   GtkCssBoxes     *boxes,
+                                   GtkWidget       *child,
+                                   int              x,
+                                   int              y,
+                                   int              width,
+                                   int              height,
+                                   const GtkBorder *inset)
 {
   GtkAllocation child_allocation;
   int self_width;
@@ -1569,12 +1570,14 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
 
   gtk_widget_set_child_visible (child, TRUE);
 
+  gtk_widget_allocate_inset (child, inset);
   gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
 static void
-gtk_list_base_allocate_children (GtkListBase *self,
-                                 GtkCssBoxes *boxes)
+gtk_list_base_allocate_children (GtkListBase     *self,
+                                 GtkCssBoxes     *boxes,
+                                 const GtkBorder *inset)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkListTile *tile;
@@ -1595,7 +1598,8 @@ gtk_list_base_allocate_children (GtkListBase *self,
                                              tile->area.x - dx,
                                              tile->area.y - dy,
                                              tile->area.width,
-                                             tile->area.height);
+                                             tile->area.height,
+                                             inset);
         }
     }
 }
@@ -1710,7 +1714,8 @@ gtk_list_base_allocate_rubberband (GtkListBase *self,
   gtk_list_base_size_allocate_child (self,
                                      boxes,
                                      priv->rubberband->widget,
-                                     rect.x, rect.y, rect.width, rect.height);
+                                     rect.x, rect.y, rect.width, rect.height,
+                                     &(GtkBorder) { 0 });
 }
 
 static void
@@ -2086,6 +2091,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   controller = gtk_drop_controller_motion_new ();
@@ -2181,7 +2187,8 @@ gtk_list_base_update_adjustments (GtkListBase *self)
 }
 
 void
-gtk_list_base_allocate (GtkListBase *self)
+gtk_list_base_allocate (GtkListBase     *self,
+                        const GtkBorder *child_inset)
 {
   GtkCssBoxes boxes;
 
@@ -2189,7 +2196,7 @@ gtk_list_base_allocate (GtkListBase *self)
 
   gtk_list_base_update_adjustments (self);
 
-  gtk_list_base_allocate_children (self, &boxes);
+  gtk_list_base_allocate_children (self, &boxes, child_inset);
   gtk_list_base_allocate_rubberband (self, &boxes);
 }
 
