@@ -2124,6 +2124,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   int i;
 
   gtk_widget_set_focusable (widget, TRUE);
+  gtk_widget_set_inset_mode (widget, GTK_INSET_EXTEND);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
    * which are both construct properties
@@ -3179,8 +3180,10 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow   *swindow,
   GtkAllocation child_allocation;
   int sb_width;
   int sb_height;
+  GtkBorder inset;
 
   child_allocation = (GtkAllocation) {0, 0, width, height};
+  gtk_widget_get_inset (widget, &inset);
 
   /* Get possible scrollbar dimensions */
   gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
@@ -3201,7 +3204,12 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow   *swindow,
           (is_rtl &&
            (priv->window_placement == GTK_CORNER_TOP_LEFT ||
             priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
-        child_allocation.x += sb_width;
+        {
+          child_allocation.x += sb_width;
+          inset.left = 0;
+        }
+      else
+        inset.right = 0;
 
       child_allocation.width = MAX (1, child_allocation.width - sb_width);
     }
@@ -3211,11 +3219,17 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow   *swindow,
 
       if (priv->window_placement == GTK_CORNER_BOTTOM_LEFT ||
           priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)
-        child_allocation.y += (sb_height);
+        {
+          child_allocation.y += sb_height;
+          inset.top = 0;
+        }
+      else
+        inset.bottom = 0;
 
       child_allocation.height = MAX (1, child_allocation.height - sb_height);
     }
 
+  gtk_widget_allocate_inset (priv->child, &inset);
   gtk_widget_size_allocate (priv->child, &child_allocation, -1);
 }
 
