@@ -129,7 +129,8 @@ void gdk_wayland_surface_frame_callback (GdkSurface *surface,
 
 void            gdk_wayland_surface_update_content         (GdkSurface           *surface);
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
-void            gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface);
+gboolean        gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface,
+                                                            GdkDrawContextFrame  *frame);
 void            gdk_wayland_surface_commit                 (GdkSurface           *surface);
 void            gdk_wayland_surface_notify_committed       (GdkSurface           *surface);
 void            gdk_wayland_surface_request_frame          (GdkSurface           *surface);
