@@ -54,4 +54,17 @@ void            gtk_overlay_layout_child_set_clip_overlay (GtkOverlayLayoutChild
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_overlay_layout_child_get_clip_overlay (GtkOverlayLayoutChild *child);
 
+GDK_AVAILABLE_IN_4_24
+void            gtk_overlay_layout_child_set_vinset (GtkOverlayLayoutChild *child,
+                                                    gboolean                inset);
+GDK_AVAILABLE_IN_4_24
+void            gtk_overlay_layout_child_set_hinset (GtkOverlayLayoutChild *child,
+                                                    gboolean                inset);
+
+GDK_AVAILABLE_IN_4_24
+gboolean        gtk_overlay_layout_child_get_vinset (GtkOverlayLayoutChild *child) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_4_24
+gboolean        gtk_overlay_layout_child_get_hinset (GtkOverlayLayoutChild *child) G_GNUC_PURE;
+
 G_END_DECLS

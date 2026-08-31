@@ -59,12 +59,16 @@ struct _GtkOverlayLayoutChild
 
   guint measure : 1;
   guint clip_overlay : 1;
+  guint vinset : 1;
+  guint hinset : 1;
 };
 
 enum
 {
   PROP_MEASURE = 1,
   PROP_CLIP_OVERLAY,
+  PROP_VINSET,
+  PROP_HINSET,
 
   N_CHILD_PROPERTIES
 };
@@ -91,6 +95,14 @@ gtk_overlay_layout_child_set_property (GObject      *gobject,
       gtk_overlay_layout_child_set_clip_overlay (self, g_value_get_boolean (value));
       break;
 
+    case PROP_VINSET:
+      gtk_overlay_layout_child_set_vinset (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_HINSET:
+      gtk_overlay_layout_child_set_hinset (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -113,6 +125,14 @@ gtk_overlay_layout_child_get_property (GObject    *gobject,
 
     case PROP_CLIP_OVERLAY:
       g_value_set_boolean (value, self->clip_overlay);
+      break;
+
+    case PROP_VINSET:
+      g_value_set_boolean (value, self->vinset);
+      break;
+
+    case PROP_HINSET:
+      g_value_set_boolean (value, self->hinset);
       break;
 
     default:
@@ -147,6 +167,16 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
    */
   child_props[PROP_CLIP_OVERLAY] =
     g_param_spec_boolean ("clip-overlay", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  child_props[PROP_VINSET] =
+    g_param_spec_boolean ("vinset", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  child_props[PROP_HINSET] =
+    g_param_spec_boolean ("hinset", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -242,6 +272,58 @@ gtk_overlay_layout_child_get_clip_overlay (GtkOverlayLayoutChild *child)
   return child->clip_overlay;
 }
 
+gboolean
+gtk_overlay_layout_child_get_vinset (GtkOverlayLayoutChild *child)
+{
+  g_return_val_if_fail (GTK_IS_OVERLAY_LAYOUT_CHILD (child), FALSE);
+
+  return child->vinset;
+}
+
+gboolean
+gtk_overlay_layout_child_get_hinset (GtkOverlayLayoutChild *child)
+{
+  g_return_val_if_fail (GTK_IS_OVERLAY_LAYOUT_CHILD (child), FALSE);
+
+  return child->hinset;
+}
+
+void
+gtk_overlay_layout_child_set_vinset (GtkOverlayLayoutChild *child,
+                                     gboolean               inset)
+{
+  GtkLayoutManager *layout;
+
+  g_return_if_fail (GTK_IS_OVERLAY_LAYOUT_CHILD (child));
+
+  inset = !!inset;
+  if (child->vinset == inset)
+    return;
+  child->vinset = inset;
+
+  layout = gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child));
+  gtk_layout_manager_layout_changed (layout);
+  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_VINSET]);
+}
+
+void
+gtk_overlay_layout_child_set_hinset (GtkOverlayLayoutChild *child,
+                                     gboolean               inset)
+{
+  GtkLayoutManager *layout;
+
+  g_return_if_fail (GTK_IS_OVERLAY_LAYOUT_CHILD (child));
+
+  inset = !!inset;
+  if (child->hinset == inset)
+    return;
+  child->hinset = inset;
+
+  layout = gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child));
+  gtk_layout_manager_layout_changed (layout);
+  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_HINSET]);
+}
+
 G_DEFINE_TYPE (GtkOverlayLayout, gtk_overlay_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static void
@@ -332,9 +414,11 @@ effective_align (GtkAlign         align,
 }
 
 static void
-gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
-                                        GtkWidget *child,
-                                        GtkAllocation *child_allocation)
+gtk_overlay_child_update_style_classes (GtkOverlay            *overlay,
+                                        GtkWidget             *child,
+                                        GtkOverlayLayoutChild *layout_child,
+                                        GtkAllocation         *child_allocation,
+                                        GtkBorder             *inner_inset)
 {
   GtkWidget *widget = GTK_WIDGET (overlay);
   int width, height;
@@ -386,12 +470,28 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
     gtk_widget_remove_css_class (child, "bottom");
   else if (!has_bottom && is_bottom)
     gtk_widget_add_css_class (child, "bottom");
+
+  if (layout_child->vinset)
+    {
+      if (is_top)
+        inner_inset->top = MAX (inner_inset->top, child_allocation->height);
+      if (is_bottom)
+        inner_inset->bottom = MAX (inner_inset->bottom, child_allocation->height);
+    }
+  if (layout_child->hinset)
+    {
+      if (is_left)
+        inner_inset->left = MAX (inner_inset->left, child_allocation->width);
+      if (is_right)
+        inner_inset->right = MAX (inner_inset->right, child_allocation->width);
+    }
 }
 
 static void
 gtk_overlay_child_allocate (GtkOverlay            *overlay,
                             GtkWidget             *widget,
-                            GtkOverlayLayoutChild *child)
+                            GtkOverlayLayoutChild *child,
+                            GtkBorder             *inner_inset)
 {
   GtkAllocation child_allocation;
 
@@ -400,7 +500,7 @@ gtk_overlay_child_allocate (GtkOverlay            *overlay,
 
   gtk_overlay_compute_child_allocation (overlay, widget, child, &child_allocation);
 
-  gtk_overlay_child_update_style_classes (overlay, widget, &child_allocation);
+  gtk_overlay_child_update_style_classes (overlay, widget, child, &child_allocation, inner_inset);
   gtk_widget_size_allocate (widget, &child_allocation, -1);
 }
 
@@ -413,12 +513,10 @@ gtk_overlay_layout_allocate (GtkLayoutManager *layout_manager,
 {
   GtkWidget *child;
   GtkWidget *main_widget;
+  GtkBorder inner_inset = { 0 };
+  GtkBorder inset;
 
   main_widget = gtk_overlay_get_child (GTK_OVERLAY (widget));
-  if (main_widget && gtk_widget_get_visible (main_widget))
-    gtk_widget_size_allocate (main_widget,
-                              &(GtkAllocation) { 0, 0, width, height },
-                              -1);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
@@ -429,8 +527,30 @@ gtk_overlay_layout_allocate (GtkLayoutManager *layout_manager,
           GtkOverlayLayoutChild *child_data;
           child_data = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
 
-          gtk_overlay_child_allocate (GTK_OVERLAY (widget), child, child_data);
+          gtk_overlay_child_allocate (GTK_OVERLAY (widget), child, child_data, &inner_inset);
         }
+    }
+
+  if (main_widget && gtk_widget_get_visible (main_widget))
+    {
+      GtkBorder outer_inset;
+
+      gtk_widget_get_inset (widget, &outer_inset);
+      inset.top = outer_inset.top + inner_inset.top;
+      inset.bottom = outer_inset.bottom + inner_inset.bottom;
+      inset.left = outer_inset.left + inner_inset.left;
+      inset.right = outer_inset.right + inner_inset.right;
+
+      gtk_widget_allocate_inset (main_widget, &inset);
+      gtk_widget_size_allocate (main_widget,
+                                &(GtkAllocation)
+                                {
+                                  inner_inset.left,
+                                  inner_inset.top,
+                                  width - inner_inset.left - inner_inset.right,
+                                  height - inner_inset.top - inner_inset.bottom
+                                },
+                                -1);
     }
 }
 
