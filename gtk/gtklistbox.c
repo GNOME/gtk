@@ -785,6 +785,7 @@ gtk_list_box_init (GtkListBox *box)
   GtkGesture *gesture;
 
   gtk_widget_set_focusable (GTK_WIDGET (box), TRUE);
+  gtk_widget_set_inset_mode (GTK_WIDGET (box), GTK_INSET_EXTEND);
 
   box->selection_mode = GTK_SELECTION_SINGLE;
   box->activate_single_click = TRUE;
@@ -2819,7 +2820,7 @@ gtk_list_box_size_allocate (GtkWidget *widget,
   int i = 0;
   int n_vexpand_children = 0;
   int extra_height = height;
-
+  GtkBorder inset;
 
   child_allocation.x = 0;
   child_allocation.y = 0;
@@ -2831,6 +2832,9 @@ gtk_list_box_size_allocate (GtkWidget *widget,
   header_allocation.width = width;
   header_allocation.height = 0;
 
+  gtk_widget_get_inset (widget, &inset);
+  inset.top = inset.bottom = 0;
+
   if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
     {
       gtk_widget_measure (box->placeholder, GTK_ORIENTATION_VERTICAL,
@@ -2838,6 +2842,7 @@ gtk_list_box_size_allocate (GtkWidget *widget,
                           &child_min, NULL, NULL, NULL);
       header_allocation.height = height;
       header_allocation.y = child_allocation.y;
+      gtk_widget_allocate_inset (box->placeholder, &inset);
       gtk_widget_size_allocate (box->placeholder, &header_allocation, -1);
       child_allocation.y += child_min;
     }
@@ -2955,6 +2960,7 @@ do_allocate:
           if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
             header_allocation.height += extra_height / n_vexpand_children;
           header_allocation.y = child_allocation.y;
+          gtk_widget_allocate_inset (ROW_PRIV (row)->header, &inset);
           gtk_widget_size_allocate (ROW_PRIV (row)->header,
                                     &header_allocation,
                                     -1);
@@ -2981,6 +2987,7 @@ do_allocate:
 
       ROW_PRIV (row)->y = child_allocation.y;
       ROW_PRIV (row)->height = child_allocation.height;
+      gtk_widget_allocate_inset (GTK_WIDGET (row), &inset);
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation, -1);
       child_allocation.y += child_allocation.height;
       i++;
@@ -3962,6 +3969,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   ROW_PRIV (row)->selectable = TRUE;
 
   gtk_widget_set_focusable (GTK_WIDGET (row), TRUE);
+  gtk_widget_set_inset_mode (GTK_WIDGET (row), GTK_INSET_EXTEND);
   gtk_widget_add_css_class (GTK_WIDGET (row), "activatable");
 }
 
