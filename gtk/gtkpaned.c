@@ -1308,6 +1308,9 @@ gtk_paned_size_allocate (GtkWidget *widget,
                          int        baseline)
 {
   GtkPaned *paned = GTK_PANED (widget);
+  GtkBorder inset;
+
+  gtk_widget_get_inset (widget, &inset);
 
   if (paned->start_child && gtk_widget_get_visible (paned->start_child) &&
       paned->end_child && gtk_widget_get_visible (paned->end_child))
@@ -1316,6 +1319,9 @@ gtk_paned_size_allocate (GtkWidget *widget,
       GtkAllocation end_child_allocation;
       GtkAllocation handle_allocation;
       int handle_size;
+      GtkBorder start_child_inset;
+      GtkBorder end_child_inset;
+      GtkBorder handle_inset;
 
       gtk_widget_measure (paned->handle_widget,
                           paned->orientation,
@@ -1344,6 +1350,12 @@ gtk_paned_size_allocate (GtkWidget *widget,
             0,
             handle_size,
             height
+          };
+          handle_inset = (GtkBorder) {
+            0,
+            0,
+            inset.top,
+            inset.bottom
           };
 
           start_child_allocation.height = end_child_allocation.height = height;
@@ -1374,6 +1386,22 @@ gtk_paned_size_allocate (GtkWidget *widget,
                 end_child_allocation.x -= end_child_width - end_child_allocation.width;
               end_child_allocation.width = end_child_width;
             }
+
+          start_child_inset = end_child_inset = inset;
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+            {
+              start_child_inset.right = 0;
+              end_child_inset.left = 0;
+              start_child_inset.left = MAX (0, inset.left + start_child_allocation.x);
+              end_child_inset.right = MAX (0, inset.right + width - end_child_allocation.x - end_child_allocation.width);
+            }
+          else
+            {
+              start_child_inset.left = 0;
+              end_child_inset.right = 0;
+              start_child_inset.right = MAX (0, inset.right + width - start_child_allocation.x - start_child_allocation.width);
+              end_child_inset.left = MAX (0, inset.left + end_child_allocation.x);
+            }
         }
       else
         {
@@ -1397,6 +1425,12 @@ gtk_paned_size_allocate (GtkWidget *widget,
             width,
             handle_size,
           };
+          handle_inset = (GtkBorder) {
+            inset.left,
+            inset.right,
+            0,
+            0
+          };
 
           start_child_allocation.width = end_child_allocation.width = width;
           start_child_allocation.height = MAX (1, paned->start_child_size);
@@ -1414,12 +1448,21 @@ gtk_paned_size_allocate (GtkWidget *widget,
 
           if (end_child_height > end_child_allocation.height)
             end_child_allocation.height = end_child_height;
+
+          start_child_inset = end_child_inset = inset;
+          start_child_inset.bottom = 0;
+          end_child_inset.top = 0;
+          start_child_inset.top = MAX (0, inset.top + start_child_allocation.y);
+          end_child_inset.bottom = MAX (0, inset.bottom + height - end_child_allocation.y - end_child_allocation.height);
         }
 
       gtk_widget_set_child_visible (paned->handle_widget, TRUE);
 
+      gtk_widget_allocate_inset (paned->handle_widget, &handle_inset);
       gtk_widget_size_allocate (paned->handle_widget, &handle_allocation, -1);
+      gtk_widget_allocate_inset (paned->start_child, &start_child_inset);
       gtk_widget_size_allocate (paned->start_child, &start_child_allocation, -1);
+      gtk_widget_allocate_inset (paned->end_child, &end_child_inset);
       gtk_widget_size_allocate (paned->end_child, &end_child_allocation, -1);
     }
   else
@@ -1428,6 +1471,7 @@ gtk_paned_size_allocate (GtkWidget *widget,
         {
           gtk_widget_set_child_visible (paned->start_child, TRUE);
 
+          gtk_widget_allocate_inset (paned->start_child, &inset);
           gtk_widget_size_allocate (paned->start_child,
                                     &(GtkAllocation) {0, 0, width, height}, -1);
         }
@@ -1435,6 +1479,7 @@ gtk_paned_size_allocate (GtkWidget *widget,
         {
           gtk_widget_set_child_visible (paned->end_child, TRUE);
 
+          gtk_widget_allocate_inset (paned->end_child, &inset);
           gtk_widget_size_allocate (paned->end_child,
                                     &(GtkAllocation) {0, 0, width, height}, -1);
 
@@ -1485,6 +1530,7 @@ gtk_paned_init (GtkPaned *paned)
 
   gtk_widget_set_focusable (GTK_WIDGET (paned), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (paned), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (GTK_WIDGET (paned), GTK_INSET_EXTEND);
 
   paned->orientation = GTK_ORIENTATION_HORIZONTAL;
 

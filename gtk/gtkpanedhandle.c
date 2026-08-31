@@ -105,6 +105,7 @@ gtk_paned_handle_class_init (GtkPanedHandleClass *klass)
 static void
 gtk_paned_handle_init (GtkPanedHandle *self)
 {
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 GtkWidget *
