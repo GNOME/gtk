@@ -799,18 +799,22 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->background_effect_dirty;
 }
 
-void
-gdk_wayland_surface_handle_empty_frame (GdkSurface *surface)
+gboolean
+gdk_wayland_surface_handle_empty_frame (GdkSurface          *surface,
+                                        GdkDrawContextFrame *frame)
 {
   if (!gdk_wayland_surface_needs_commit (surface))
-    return;
+    return TRUE;
 
+  gdk_draw_context_frame_gpu_complete (frame, 0);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   gdk_wayland_surface_commit (surface);
   gdk_wayland_surface_notify_committed (surface);
+
+  return FALSE;
 }
 
 static void

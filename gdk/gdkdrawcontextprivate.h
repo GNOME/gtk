@@ -70,7 +70,8 @@ struct _GdkDrawContextClass
                                                                  gpointer                context_data);
   void                  (* finalize_frame)                      (GdkDrawContext         *context,
                                                                  GdkDrawContextFrame    *frame);
-  void                  (* empty_frame)                         (GdkDrawContext         *context);
+  gboolean              (* empty_frame)                         (GdkDrawContext         *context,
+                                                                 GdkDrawContextFrame    *frame);
   void                  (* surface_resized)                     (GdkDrawContext         *context);
   gboolean              (* surface_attach)                      (GdkDrawContext         *context,
                                                                  GError                **error);
@@ -86,7 +87,7 @@ GdkDrawContextFrame *   gdk_draw_context_begin_frame_full       (GdkDrawContext 
 void                    gdk_draw_context_end_frame_full         (GdkDrawContext         *context,
                                                                  gpointer                context_data);
 
-void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
+void                    gdk_draw_context_empty_frame            (GdkDrawContext         *self);
 
 gboolean                gdk_draw_context_attach                 (GdkDrawContext         *self,
                                                                  GError                **error);

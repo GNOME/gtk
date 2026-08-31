@@ -103,9 +103,11 @@ gdk_draw_context_default_surface_detach (GdkDrawContext *context)
 {
 }
 
-static void
-gdk_draw_context_default_empty_frame (GdkDrawContext *context)
+static gboolean
+gdk_draw_context_default_empty_frame (GdkDrawContext      *context,
+                                      GdkDrawContextFrame *frame)
 {
+  return TRUE;
 }
 
 static void
@@ -657,17 +659,28 @@ gdk_draw_context_get_current_frame (GdkDrawContext *self)
 }
 
 void
-gdk_draw_context_empty_frame (GdkDrawContext *context)
+gdk_draw_context_empty_frame (GdkDrawContext *self)
 {
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+  GdkDrawContextFrame *frame;
 
-  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (self));
   g_return_if_fail (priv->surface != NULL);
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
     return;
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->empty_frame (context);
+  frame = gdk_draw_context_frame_new (self, NULL);
+  if (GDK_DRAW_CONTEXT_GET_CLASS (self)->empty_frame (self, frame))
+    {
+      gdk_draw_context_frame_free (frame);
+    }
+  else
+    {
+      frame->cpu_complete = TRUE;
+      if (gdk_draw_context_frame_is_complete (frame))
+        gdk_draw_context_frame_free (frame);
+    }
 }
 
 /*<private>
