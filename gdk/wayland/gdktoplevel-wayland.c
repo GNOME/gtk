@@ -91,6 +91,7 @@ struct _GdkWaylandToplevel
     struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
     struct xdg_dialog_v1 *xdg_dialog;
     struct xdg_toplevel_icon_v1 *toplevel_icon;
+    struct xx_cutouts_v1 *cutouts;
   } display_server;
 
   GdkWaylandToplevel *transient_for;
@@ -972,6 +973,21 @@ attempt_restore_toplevel (GdkWaylandToplevel *wayland_toplevel)
 }
 
 static void
+toplevel_init_cutouts (GdkWaylandToplevel *wayland_toplevel)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (wayland_toplevel);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (wayland_toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->cutouts_manager)
+    {
+      wayland_toplevel->display_server.cutouts =
+        xx_cutouts_manager_v1_get_cutouts (display_wayland->cutouts_manager,
+                                           impl->display_server.wl_surface);
+    }
+}
+
+static void
 gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
@@ -1023,6 +1039,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 
   maybe_set_xdg_toplevel_icon (wayland_toplevel);
   attempt_restore_toplevel (wayland_toplevel);
+  toplevel_init_cutouts (wayland_toplevel);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (wayland_surface->display_server.wl_surface);
@@ -1612,6 +1629,8 @@ gdk_wayland_toplevel_finalize (GObject *object)
 
   g_clear_pointer (&self->display_server.toplevel_icon, xdg_toplevel_icon_v1_destroy);
   g_list_free (self->icons);
+
+  g_clear_pointer (&self->display_server.cutouts, xx_cutouts_v1_destroy);
 
   g_clear_pointer (&self->a11y.dbus_name, g_free);
   g_clear_pointer (&self->a11y.toplevel_object_path, g_free);

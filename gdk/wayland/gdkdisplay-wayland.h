@@ -47,6 +47,7 @@
 #include <gdk/wayland/cursor-shape-v1-client-protocol.h>
 #include <gdk/wayland/xdg-toplevel-icon-v1-client-protocol.h>
 #include <gdk/wayland/xdg-session-management-v1-client-protocol.h>
+#include <gdk/wayland/xx-cutouts-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -136,6 +137,7 @@ struct _GdkWaylandDisplay
   struct xdg_session_manager_v1 *session_manager;
   struct xdg_session_v1 *session;
   struct ext_background_effect_manager_v1 *ext_background_effect_manager;
+  struct xx_cutouts_manager_v1 *cutouts_manager;
 
   GdkWaylandColor *color;
 

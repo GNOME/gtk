@@ -135,6 +135,7 @@
 #define WL_FIXES_VERSION                1
 #endif
 #define XDG_WM_DIALOG_VERSION           1
+#define XX_CUTOUTS_VERSION              1
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
@@ -757,6 +758,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->ext_background_effect_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &ext_background_effect_manager_v1_interface, BACKGROUND_EFFECT_VERSION);
+    }
+  else if (match_global (display_wayland, interface, version, xx_cutouts_manager_v1_interface.name, 0))
+    {
+      display_wayland->cutouts_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xx_cutouts_manager_v1_interface, XX_CUTOUTS_VERSION);
     }
 
   g_hash_table_insert (display_wayland->known_globals,
