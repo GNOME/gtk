@@ -2863,12 +2863,16 @@ gtk_stack_measure (GtkWidget      *widget,
         }
 
       /* Work out which for_size we want to pass for measuring our children */
-      if (for_size == -1 || for_size == last_opposite_size ||
-          priv->homogeneous[OPPOSITE_ORIENTATION(orientation)])
+      if (priv->homogeneous[OPPOSITE_ORIENTATION(orientation)])
         child_for_size = for_size;
       else if (t <= 0.0)
-        /* We're going to return last_size anyway */
+        /* We're still reporting our previous size, and the incoming child can
+         * have any size it wants.
+         */
         child_for_size = -1;
+      else if (for_size == -1 || for_size == last_opposite_size)
+        /* Interpolation is a no-op */
+        child_for_size = for_size;
       else
         {
           double d = inverse_lerp (last_opposite_size, for_size, t);
@@ -2897,33 +2901,23 @@ gtk_stack_measure (GtkWidget      *widget,
       child_info = g_ptr_array_index (priv->children, idx);
       child = child_info->widget;
 
+      /* Unless we're homogeneous, skip all but the visible child */
       if (!priv->homogeneous[orientation] &&
           priv->visible_child != child_info)
         continue;
       if (!gtk_widget_get_visible (child))
         continue;
 
-      if (!priv->homogeneous[OPPOSITE_ORIENTATION(orientation)] && priv->visible_child != child_info)
-        {
-          int measure_for_size;
-
-          /* Make sure to measure at least for the minimum size */
-          if (child_for_size == -1)
-            measure_for_size = -1;
-          else
-            {
-              gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation),
-                                  -1,
-                                  &measure_for_size, NULL,
-                                  NULL, NULL);
-              measure_for_size = MAX (measure_for_size, child_for_size);
-            }
-
-          gtk_widget_measure (child, orientation,
-                              measure_for_size,
-                              &child_min, &child_nat,
-                              NULL, NULL);
-        }
+      if (!priv->homogeneous[OPPOSITE_ORIENTATION(orientation)] &&
+          priv->visible_child != child_info)
+        /* We're homogeneous in the orientation we're measuring for, but
+         * not in the opposite orientation. This is not the visible child;
+         * when we switch to it, it can have any different size in the
+         * opposite orientation.
+         */
+        gtk_widget_measure (child, orientation, -1,
+                            &child_min, &child_nat,
+                            NULL, NULL);
       else
         gtk_widget_measure (child, orientation,
                             child_for_size,
@@ -2940,6 +2934,10 @@ gtk_stack_measure (GtkWidget      *widget,
     {
       *minimum = ceil (lerp (last_size, *minimum, t));
       *natural = ceil (lerp (last_size, *natural, t));
+    }
+  else if (t <= 0.0 && priv->homogeneous[orientation])
+    {
+      *minimum = *natural = last_size;
     }
 }
 
