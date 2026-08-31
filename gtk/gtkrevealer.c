@@ -456,12 +456,16 @@ gtk_revealer_size_allocate (GtkWidget *widget,
   GskTransform *transform;
   double hscale, vscale;
   int child_width, child_height;
+  GtkBorder inset;
 
   if (revealer->child == NULL || !gtk_widget_get_visible (revealer->child))
     return;
 
+  gtk_widget_get_inset (widget, &inset);
+
   if (revealer->current_pos >= 1.0)
     {
+      gtk_widget_allocate_inset (revealer->child, &inset);
       gtk_widget_allocate (revealer->child, width, height, baseline, NULL);
       return;
     }
@@ -770,6 +774,8 @@ gtk_revealer_init (GtkRevealer *revealer)
   revealer->transition_duration = 250;
   revealer->current_pos = 0.0;
   revealer->target_pos = 0.0;
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (revealer), GTK_INSET_EXTEND);
 }
 
 /**
