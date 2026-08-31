@@ -648,6 +648,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
   GtkSorter *sorter;
 
   gtk_widget_init_template (GTK_WIDGET (rl));
+  gtk_widget_set_inset_mode (GTK_WIDGET (rl), GTK_INSET_EXTEND);
 
   g_signal_connect (rl, "map", G_CALLBACK (on_map), NULL);
 

@@ -1237,6 +1237,7 @@ static void
 gtk_inspector_visual_init (GtkInspectorVisual *vis)
 {
   gtk_widget_init_template (GTK_WIDGET (vis));
+  gtk_widget_set_inset_mode (GTK_WIDGET (vis), GTK_INSET_EXTEND);
 }
 
 static void

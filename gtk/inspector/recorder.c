@@ -2648,6 +2648,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   recorder->record_events = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (recorder));
+  gtk_widget_set_inset_mode (GTK_WIDGET (recorder), GTK_INSET_EXTEND);
 
   if (GSK_DEBUG_CHECK (PROFILE))
     gtk_widget_set_sensitive (recorder->rendering_mode_dropdown, TRUE);
@@ -2704,7 +2705,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   recorder->event_properties = g_list_store_new (object_property_get_type ());
   recorder->event_properties_selection = gtk_single_selection_new (G_LIST_MODEL (recorder->event_properties));
   g_signal_connect (recorder->event_properties_selection, "notify::selected-item", G_CALLBACK (event_properties_list_selection_changed), recorder);
- gtk_column_view_set_model (GTK_COLUMN_VIEW (recorder->event_property_tree), GTK_SELECTION_MODEL (recorder->event_properties_selection));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (recorder->event_property_tree), GTK_SELECTION_MODEL (recorder->event_properties_selection));
 
   column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (recorder->event_property_tree)), 0);
 
