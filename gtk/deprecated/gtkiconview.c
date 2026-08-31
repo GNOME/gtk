@@ -912,6 +912,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->mouse_y = -1;
 
   gtk_widget_set_overflow (GTK_WIDGET (icon_view), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (GTK_WIDGET (icon_view), GTK_INSET_EXTEND);
   gtk_widget_set_focusable (GTK_WIDGET (icon_view), TRUE);
 
   icon_view->priv->item_orientation = GTK_ORIENTATION_VERTICAL;
@@ -1620,12 +1621,14 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   int width, height;
   double offset_x, offset_y;
   GtkCssBoxes boxes;
+  GtkBorder inset;
 
   icon_view = GTK_ICON_VIEW (widget);
 
   context = gtk_widget_get_style_context (widget);
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
+  gtk_widget_get_inset (widget, &inset);
 
   offset_x = gtk_adjustment_get_value (icon_view->priv->hadjustment);
   offset_y = gtk_adjustment_get_value (icon_view->priv->vadjustment);
@@ -1647,15 +1650,22 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
     {
       GtkIconViewItem *item = icons->data;
       graphene_rect_t area;
+      GdkRectangle viewport;
 
       graphene_rect_init (&area,
                           item->cell_area.x - icon_view->priv->item_padding,
                           item->cell_area.y - icon_view->priv->item_padding,
                           item->cell_area.width  + icon_view->priv->item_padding * 2,
                           item->cell_area.height + icon_view->priv->item_padding * 2);
+      viewport = (GdkRectangle)
+        {
+          offset_x - inset.left,
+          offset_y - inset.top,
+          width + inset.left + inset.right,
+          height + inset.top + inset.bottom
+        };
 
-      if (gdk_rectangle_intersect (&item->cell_area,
-                                   &(GdkRectangle) { offset_x, offset_y, width, height }, NULL))
+      if (gdk_rectangle_intersect (&item->cell_area, &viewport, NULL))
         {
           gtk_icon_view_snapshot_item (icon_view, snapshot, item,
                                        item->cell_area.x, item->cell_area.y,
