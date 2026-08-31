@@ -2066,4 +2066,14 @@ typedef enum {
   GTK_REDUCED_MOTION_REDUCE,
 } GtkReducedMotion;
 
+/**
+ * GtkInsetMode:
+ *
+ * Since: 4.24
+ */
+typedef enum {
+  GTK_INSET_PAD,
+  GTK_INSET_EXTEND,
+} GtkInsetMode;
+
 G_END_DECLS

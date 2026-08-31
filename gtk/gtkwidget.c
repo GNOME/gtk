@@ -571,6 +571,7 @@ enum {
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
   PROP_LIMIT_EVENTS,
+  PROP_INSET_MODE,
   /* GtkAccessible */
   PROP_ACCESSIBLE_ROLE,
   NUM_PROPERTIES,
@@ -1061,6 +1062,9 @@ gtk_widget_set_property (GObject      *object,
     case PROP_LIMIT_EVENTS:
       gtk_widget_set_limit_events (widget, g_value_get_boolean (value));
       break;
+    case PROP_INSET_MODE:
+      gtk_widget_set_inset_mode (widget, g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1196,6 +1200,9 @@ gtk_widget_get_property (GObject    *object,
       break;
     case PROP_LIMIT_EVENTS:
       g_value_set_boolean (value, gtk_widget_get_limit_events (widget));
+      break;
+    case PROP_INSET_MODE:
+      g_value_set_enum (value, gtk_widget_get_inset_mode (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1689,6 +1696,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_boolean ("limit-events", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_INSET_MODE] =
+      g_param_spec_enum ("inset-mode", NULL, NULL,
+                         GTK_TYPE_INSET_MODE, GTK_INSET_PAD,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
   /* GtkAccessible */
   iface = g_type_default_interface_peek (GTK_TYPE_ACCESSIBLE);
@@ -2720,6 +2732,8 @@ gtk_widget_unparent (GtkWidget *widget)
    */
   priv->width = 0;
   priv->height = 0;
+  priv->allocated_inset = (GtkBorder) { 0 };
+  priv->inner_inset = (GtkBorder) { 0 };
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -2959,6 +2973,8 @@ gtk_widget_real_hide (GtkWidget *widget)
   priv->width = 0;
   priv->height = 0;
   priv->baseline = 0;
+  priv->allocated_inset = (GtkBorder) { 0 };
+  priv->inner_inset = (GtkBorder) { 0 };
   gtk_widget_update_paintables (widget);
 }
 
@@ -3902,6 +3918,55 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                        transform);
 }
 
+GtkInsetMode
+gtk_widget_get_inset_mode (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_INSET_PAD);
+
+  priv = gtk_widget_get_instance_private (widget);
+  return priv->inset_mode;
+}
+
+void
+gtk_widget_set_inset_mode (GtkWidget   *widget,
+                           GtkInsetMode mode)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = gtk_widget_get_instance_private (widget);
+  if (priv->inset_mode == mode)
+    return;
+  priv->inset_mode = mode;
+
+  gtk_widget_queue_allocate (widget);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_INSET_MODE]);
+}
+
+void
+gtk_widget_allocate_inset (GtkWidget       *widget,
+                           const GtkBorder *inset)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (inset != NULL);
+
+  priv = gtk_widget_get_instance_private (widget);
+  priv->allocated_inset = *inset;
+
+#ifdef G_ENABLE_DEBUG
+  if (G_UNLIKELY (inset->left < 0 || inset->top < 0 || inset->right < 0 || inset->bottom < 0))
+    g_warning ("%s %p allocated with a negative inset", gtk_widget_get_name (widget), widget);
+#endif
+
+  /* TODO: this needs to be integrated into the generic allocate code flow,
+     and at the very least do the same "did insets change" checks */
+}
+
 /* translate initial/final into start/end */
 static GtkAlign
 effective_align (GtkAlign         align,
@@ -4183,6 +4248,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   gboolean transform_changed;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
+  GtkBorder inset;
   GskTransform *css_transform;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -4294,6 +4360,12 @@ gtk_widget_allocate (GtkWidget    *widget,
   get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
+
+  if (priv->inset_mode == GTK_INSET_PAD)
+    inset = (GtkBorder) { 0 };
+  else
+    inset = priv->allocated_inset;
+  priv->inner_inset = inset;
 
   /* Apply CSS transformation */
   adjusted.x += margin.left;
@@ -6073,6 +6145,8 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       g_clear_pointer (&priv->transform, gsk_transform_unref);
       priv->width = 0;
       priv->height = 0;
+      priv->allocated_inset = (GtkBorder) { 0 };
+      priv->inner_inset = (GtkBorder) { 0 };
       gtk_widget_update_paintables (widget);
     }
 }
@@ -10834,6 +10908,26 @@ int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)
 {
   return gtk_widget_get_baseline (widget);
+}
+
+/**
+ * gtk_widget_get_inset:
+ * @widget: the widget to query
+ * @inset: (out) (not optional): return location for the inset
+ *
+ * Since: 4.24
+ */
+void
+gtk_widget_get_inset (GtkWidget *widget,
+                      GtkBorder *inset)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (inset != NULL);
+
+  priv = gtk_widget_get_instance_private (widget);
+  *inset = priv->inner_inset;
 }
 
 /**

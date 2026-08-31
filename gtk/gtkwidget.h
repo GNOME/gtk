@@ -34,6 +34,7 @@
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutaction.h>
 #include <gtk/gtktypes.h>
+#include <gtk/gtkborder.h>
 
 G_BEGIN_DECLS
 
@@ -477,6 +478,20 @@ GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_height)
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
 GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_get_baseline)
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);
+
+GDK_AVAILABLE_IN_4_24
+void                  gtk_widget_get_inset              (GtkWidget     *widget,
+                                                         GtkBorder     *inset);
+
+GDK_AVAILABLE_IN_4_24
+void                  gtk_widget_allocate_inset         (GtkWidget       *widget,
+                                                         const GtkBorder *inset);
+
+GDK_AVAILABLE_IN_4_24
+GtkInsetMode          gtk_widget_get_inset_mode         (GtkWidget     *widget);
+GDK_AVAILABLE_IN_4_24
+void                  gtk_widget_set_inset_mode         (GtkWidget     *widget,
+                                                         GtkInsetMode   mode);
 
 GDK_DEPRECATED_IN_4_12_FOR(gtk_widget_compute_bounds)
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,

@@ -98,7 +98,9 @@ struct _GtkWidgetPrivate
   guint vexpand               : 1;
   guint hexpand_set           : 1; /* whether to use application-forced  */
   guint vexpand_set           : 1; /* instead of computing from children */
+
   guint has_tooltip           : 1;
+  guint inset_mode            : 1;
 
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
@@ -126,6 +128,8 @@ struct _GtkWidgetPrivate
 
   void (* resize_func) (GtkWidget *);
   GtkBorder margin;
+  GtkBorder allocated_inset;
+  GtkBorder inner_inset;
 
   /* Surface relative transform updates callbacks */
   GtkWidgetSurfaceTransformData *surface_transform_data;
