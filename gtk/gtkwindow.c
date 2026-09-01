@@ -4517,15 +4517,21 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   int width, height;
-  GtkBorder shadow;
+  GtkBorder shadow, inset;
   int bounds_width, bounds_height;
   int min_width, min_height;
 
   gdk_toplevel_size_get_bounds (size, &bounds_width, &bounds_height);
 
+  if (GTK_DEBUG_CHECK (SIMULATE_CUTOUTS))
+    inset = hack_gtk_make_window_insets ();
+  else
+    gdk_toplevel_get_inset (toplevel, &inset);
+
   gtk_window_compute_default_size (window,
                                    priv->default_width, priv->default_height,
-                                   bounds_width, bounds_height,
+                                   MAX (bounds_width - inset.left - inset.right, 0),
+                                   MAX (bounds_height - inset.top - inset.bottom, 0),
                                    &min_width, &min_height,
                                    &width, &height);
 
@@ -4543,6 +4549,11 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   gtk_window_update_csd_size (window,
                               &min_width, &min_height,
                               INCLUDE_CSD_SIZE);
+
+  width += inset.left + inset.right;
+  height += inset.top + inset.bottom;
+  min_width += inset.left + inset.right;
+  min_height += inset.top + inset.bottom;
 
   gdk_toplevel_size_set_min_size (size, min_width, min_height);
 
@@ -4983,14 +4994,21 @@ surface_size_changed (GtkWidget *widget,
                       int        height)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   if (should_remember_size (window))
     {
+      GtkBorder inset;
       int width_to_remember;
       int height_to_remember;
 
-      width_to_remember = width;
-      height_to_remember = height;
+      if (GTK_DEBUG_CHECK (SIMULATE_CUTOUTS))
+        inset = hack_gtk_make_window_insets ();
+      else
+        gdk_toplevel_get_inset (GDK_TOPLEVEL (priv->surface), &inset);
+
+      width_to_remember = width - inset.left - inset.right;
+      height_to_remember = height - inset.top - inset.bottom;
       gtk_window_update_csd_size (window,
                                   &width_to_remember, &height_to_remember,
                                   EXCLUDE_CSD_SIZE);
