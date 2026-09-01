@@ -1,3 +1,138 @@
+Overview of Changes in 4.23.4, 01-09-2026
+=========================================
+
+* Bugs fixed:
+  - #7879 AT-SPI attempts to use /org/a11y/atspi/cache before it is ready w/gtk
+    4 apps (Mike Gorse)
+  - #8137 GtkListView misses items (Sergey Bugaev)
+  - #8263 MacOS:  GMainContext uses stale poll array after re-entrant GPollFunc
+  - #8293 macos: Drop to GTK4 app is not handled instantly
+  - #8320 Issue: Fix Memory Leaks and Potential Crashes in GTK Components
+    (Matthias Clasen)
+  - #8330 GtkConstraintLayout: non-required inequality constraints release an
+    error variable twice (Emmanuele Bassi)
+  - #8334 Wayland: SIGSEGV in text_input_preedit_hint() when using IBus Chewing
+    in GTK 4 applications (Takao Fujiwara)
+  - #8343 macOS: Massive memory leak when unfocusing a window with an open popup
+  - #8351 (GtkTextView) Cutting, pasting, or deleting text does not reset
+    virtual cursor position (Greg Beauchesne)
+  - #8355 GtkText's input interceptor logic is too eager (Carlos Garnacho)
+  - #8357 gtk4-demo empty context menu on tabs (Matthias Clasen)
+  - #8359 The menu bar focusing with F10 is wrong
+  - #8360 GtkAccessibleTextInterface mismatch between interface documentation
+    and its implementations (Matthias Clasen)
+  - #8362 `gtk_test_init` docs incorrect about locale (Matthias Clasen)
+  - #8367 Shortcut labels in menus started showing keypad/numpad keys instead of
+    regular ones (Sebastian Keller)
+  - !6178 Enable ubsan in the sanitizers CI build (Matt Turner)
+  - !9639 rendernode: Add bilevel opacity flag (Benjamin Otte)
+  - !9778 listbase: Sanity-check alignment values (Sergey Bugaev)
+  - !9982 inspector: Add a frametime overlay (Benjamin Otte)
+  - !10049 gsk/vulkan: put the globals in a UBO instead of push constant
+    (Ampernic)
+  - !10120 macos: Instantly react to dropped content (Arjan Molenaar)
+  - !10183 demos/gtk-demo: Drop nonexistent session-id property (Harsh Verma)
+  - !10190 android/contentfile: Return NOT_SUPPORTED for foreign copy sources
+    (Zhou Qiankang)
+  - !10193 Update glib and GStreamer deps and move Fedora CI to F45 (Benjamin
+    Otte)
+  - !10212 Update Romanian translation
+  - !10214 svg: Make symbolic rendering opt-in (Matthias Clasen)
+  - !10215 svg: Add tests for symbolic rendering (Matthias Clasen)
+  - !10216 macos(dnd): Use thread default context for populating the pastboard
+    (Arjan Molenaar)
+  - !10217 svg: Avoid a crash (Matthias Clasen)
+  - !10219 Update Bulgarian translation
+  - !10220 svg: Serialize gpa:rendering (Matthias Clasen)
+  - !10221 svg: Serialize gpa:rendering (Matthias Clasen)
+  - !10222 Update Persian translation
+  - !10223 placesview: Small cleanup (Matthias Clasen)
+  - !10226 Update Basque translation
+  - !10231 Update Chinese (China) translation
+  - !10232 Update Chinese (China) translation
+  - !10233 Update Catalan translation
+  - !10234 Update Catalan translation
+  - !10235 various fixes (Benjamin Otte)
+  - !10236 gsk: Fix a typo in quad printing (Matthias Clasen)
+  - !10240 Update Galician translation (Francisco Diéguez Souto)
+  - !10241 Update Hebrew translation
+  - !10243 build: Fix static linking on Windows (Matthias Clasen, Christoph
+    Reiter)
+  - !10244 gsk/gpu: avoid GPU draw ops for zero-ink glyphs (Matthias Clasen)
+  - !10247 Update Brazilian Portuguese translation
+  - !10248 rendernodeparser: Allow naming paths (Benjamin Otte)
+  - !10249 svg: Fix some state handling mishaps (Matthias Clasen)
+  - !10250 icons: Add folder-projects-symbolic (g.willems)
+  - !10251 adjustment: Respect the reduced-motion setting (g.willems)
+  - !10252 gdkcontentserializer: close the string serializer's converter stream
+    (Marc-Antoine Perennou)
+  - !10253 color scale: Make vertical alpha scales work (Matthias Clasen)
+  - !10260 svg: Avoid unnecessary rendering work (Christian Hergert)
+  - !10261 macos: fix ungrab when popovers are open (Arjan Molenaar)
+  - !10266 Add a setting for accent color (Matthias Clasen)
+  - !10267 color scale: Make vertical alpha scales work (Matthias Clasen)
+  - !10268 shortcutswindow: Allow documenting clicks (Matthias Clasen)
+  - !10269 testutils: Small docs updates (Matthias Clasen)
+  - !10270 Updated Lithuanian translation
+  - !10271 various cleanups (Benjamin Otte)
+  - !10275 svg: Be more careful (Matthias Clasen)
+  - !10276 Update Swedish translation
+  - !10277 Update Norwegian Bokmål translation
+  - !10278 svg: Really apply states if animation is off (Matthias Clasen)
+  - !10279 Update Korean translation
+  - !10280 Update Chinese (China) translation
+  - !10281 Update Slovenian translation
+  - !10282 Update Kazakh translation
+  - !10283 svg: Make svg_element_get_rect more robust (Matthias Clasen)
+  - !10284 Update Georgian translation
+  - !10285 Update Occitan translation
+  - !10286 android: Expose gtk-accent-color XSetting (Florian "sp1rit"​)
+  - !10287 gdk/wayland: Set app_id on xdg-activation token (Sergey Bugaev)
+  - !10288 Update Ukrainian translation
+  - !10289 Update Persian translation
+  - !10291 Update Galician translation
+  - !10292 Update Catalan translation
+  - !10293 Update Bulgarian translation
+  - !10294 Update Czech translation
+  - !10295 Fix pomenubar behavior to match Gtk 3 (Lukáš Tyrychtr)
+  - !10298 Update Hebrew translation
+  - !10299 Update Hebrew translation
+  - !10300 Add svg_element_get_polyline (Matthias Clasen)
+  - !10301 Update Turkish translation
+  - !10302 gtksettings: Add missing Since annotation (Maximiliano Sandoval)
+  - !10303 label: Ensure the layout before computing accessible text extents
+  - !10307 Update French translation
+  - !10308 Update Uighur translation
+  - !10309 Update Korean translation
+  - !10310 Update Lithuanian translation
+  - !10312 Update Basque translation
+  - !10315 array: Assert that added items don't point into array (Benjamin Otte)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Bulgarian (Alexander Alexandrov Shopov)
+  - Catalan (Xavi Ivars)
+  - Chinese (China) (luming zh)
+  - Czech (Daniel Rusek)
+  - French (Guillaume Bernard)
+  - Galician (Francisco Diéguez Souto)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yaron Shahrabani)
+  - Kazakh (Baurzhan Muftakhidinov)
+  - Korean (Changwoo Ryu)
+  - Lithuanian (Aurimas Černius)
+  - Norwegian Bokmål (Kjartan Maraas)
+  - Occitan (post 1500) (Quentin PAGÈS)
+  - Persian (Danial Behzadi)
+  - Portuguese (Brazil) (Rafael Fontenelle)
+  - Romanian (Antonio Marin)
+  - Slovenian (Martin)
+  - Swedish (Anders Jonsson)
+  - Turkish (Emin Tufan Çetin)
+  - Uighur (Abduqadir Abliz)
+  - Ukrainian (Yuri Chornoivan)
+
+
 Overview of Changes in 4.23.3, 02-08-2026
 =========================================
 
