@@ -10659,9 +10659,12 @@ gtk_text_view_accessible_text_get_selection (GtkAccessibleText       *self,
 
   *n_ranges = 1;
 
-  *ranges = g_new (GtkAccessibleTextRange, 1);
-  (*ranges)[0].start = start;
-  (*ranges)[0].length = end - start;
+  if (ranges != NULL)
+    {
+      *ranges = g_new (GtkAccessibleTextRange, 1);
+      (*ranges)[0].start = start;
+      (*ranges)[0].length = end - start;
+    }
 
   return TRUE;
 }
@@ -10688,32 +10691,46 @@ gtk_text_view_accessible_text_get_attributes (GtkAccessibleText        *self,
     {
       g_hash_table_unref (attrs);
       *n_ranges = 0;
-      *ranges = NULL;
-      *attribute_names = NULL;
-      *attribute_values = NULL;
+      if (ranges != NULL)
+        *ranges = NULL;
+      if (attribute_names != NULL)
+        *attribute_names = NULL;
+      if (attribute_values != NULL)
+        *attribute_values = NULL;
       return FALSE;
     }
 
   *n_ranges = n_attrs;
-  *ranges = g_new (GtkAccessibleTextRange, n_attrs);
-  *attribute_names = g_new (char *, n_attrs + 1);
-  *attribute_values = g_new (char *, n_attrs + 1);
+
+  if (ranges != NULL)
+    *ranges = g_new (GtkAccessibleTextRange, n_attrs);
+  if (attribute_names != NULL)
+    *attribute_names = g_new (char *, n_attrs + 1);
+  if (attribute_values != NULL)
+    *attribute_values = g_new (char *, n_attrs + 1);
 
   i = 0;
   g_hash_table_iter_init (&iter, attrs);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      ((*ranges)[i]).start = start;
-      ((*ranges)[i]).length = end - start;
+      if (ranges != NULL)
+        {
+          ((*ranges)[i]).start = start;
+          ((*ranges)[i]).length = end - start;
+        }
 
-      (*attribute_names)[i] = g_strdup (key);
-      (*attribute_values)[i] = g_strdup (value);
+      if (attribute_names != NULL)
+        (*attribute_names)[i] = g_strdup (key);
+      if (attribute_values != NULL)
+        (*attribute_values)[i] = g_strdup (value);
 
       i += 1;
     }
 
-  (*attribute_names)[n_attrs] = NULL;
-  (*attribute_values)[n_attrs] = NULL;
+  if (attribute_names != NULL)
+    (*attribute_names)[n_attrs] = NULL;
+  if (attribute_values != NULL)
+    (*attribute_values)[n_attrs] = NULL;
 
   return TRUE;
 }
@@ -10852,26 +10869,34 @@ gtk_text_view_accessible_text_get_default_attributes (GtkAccessibleText   *self,
   if (n_attrs == 0)
     {
       g_hash_table_unref (attrs);
-      *attribute_names = NULL;
-      *attribute_values = NULL;
+      if (attribute_names != NULL)
+        *attribute_names = NULL;
+      if (attribute_values != NULL)
+        *attribute_values = NULL;
       return;
     }
 
-  *attribute_names = g_new (char *, n_attrs + 1);
-  *attribute_values = g_new (char *, n_attrs + 1);
+  if (attribute_names != NULL)
+    *attribute_names = g_new (char *, n_attrs + 1);
+  if (attribute_values != NULL)
+    *attribute_values = g_new (char *, n_attrs + 1);
 
   i = 0;
   g_hash_table_iter_init (&iter, attrs);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      (*attribute_names)[i] = g_strdup (key);
-      (*attribute_values)[i] = g_strdup (value);
+      if (attribute_names != NULL)
+        (*attribute_names)[i] = g_strdup (key);
+      if (attribute_values != NULL)
+        (*attribute_values)[i] = g_strdup (value);
 
       i += 1;
     }
 
-  (*attribute_names)[n_attrs] = NULL;
-  (*attribute_values)[n_attrs] = NULL;
+  if (attribute_names != NULL)
+    (*attribute_names)[n_attrs] = NULL;
+  if (attribute_values != NULL)
+    (*attribute_values)[n_attrs] = NULL;
 
   g_hash_table_unref (attrs);
 }
