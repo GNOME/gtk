@@ -140,6 +140,45 @@ get_accessible_for_widget (GtkWidget *widget,
   return obj;
 }
 
+/*
+ * gail_notebook_page_focus_is_real:
+ * @notebook_widget: a #GtkNotebook
+ *
+ * GNOME bug 693586: GtkNotebook's "switch-page" signal (and the deferred
+ * focus notification that gail_switch_page_watcher() schedules because of
+ * it, see below) fires whenever the notebook's current page changes for
+ * *any* reason, including a purely programmatic gtk_notebook_set_current_page()
+ * call that has nothing to do with real keyboard focus. This is especially
+ * visible with "tabless" notebooks (show-tabs == FALSE) that applications
+ * use purely as page containers driven by the selection of some completely
+ * unrelated sibling widget (e.g. a GtkTreeView list next to the notebook):
+ * GAIL would otherwise unconditionally claim ATK focus on behalf of the
+ * notebook's new current page tab, even though real keyboard focus never
+ * left the sibling widget.
+ *
+ * Returns: %TRUE if real GTK keyboard focus is currently somewhere inside
+ * @notebook_widget (the notebook itself, or a descendant, such as the
+ * content of its current page), or if this cannot be determined (in which
+ * case we deliberately do not change existing behavior).
+ */
+static gboolean
+gail_notebook_page_focus_is_real (GtkWidget *notebook_widget)
+{
+  GtkWidget *toplevel;
+  GtkWidget *focus_widget;
+
+  toplevel = gtk_widget_get_toplevel (notebook_widget);
+  if (!GTK_IS_WINDOW (toplevel))
+    return TRUE;
+
+  focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  if (focus_widget == NULL)
+    return FALSE;
+
+  return (focus_widget == notebook_widget ||
+          gtk_widget_is_ancestor (focus_widget, notebook_widget));
+}
+
 static gboolean
 gail_focus_watcher (GSignalInvocationHint *ihint,
                     guint                  n_param_values,
@@ -490,6 +529,15 @@ gail_focus_notify (GtkWidget *widget)
 {
   AtkObject *atk_obj;
   gboolean transient;
+
+  /* See the comment on gail_notebook_page_focus_is_real(): a GtkNotebook
+   * can end up here purely because its current page changed
+   * programmatically, with real keyboard focus never having moved from
+   * some unrelated widget. Bail out before we hijack _focus_widget and
+   * claim ATK focus on behalf of the notebook's current page tab. */
+  if (widget && GTK_IS_NOTEBOOK (widget) &&
+      !gail_notebook_page_focus_is_real (widget))
+    return;
 
   if (widget != _focus_widget)
     {
