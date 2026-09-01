@@ -351,6 +351,14 @@ gtk_at_spi_cache_constructed (GObject *gobject)
 
   GTK_DEBUG (A11Y, "Cache registered at %s", self->cache_path);
 
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->cache_path,
+                                 "org.a11y.atspi.Cache",
+                                 "Ready",
+                                 NULL,
+                                 NULL);
+
   G_OBJECT_CLASS (gtk_at_spi_cache_parent_class)->constructed (gobject);
 }
 
