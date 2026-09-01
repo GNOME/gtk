@@ -340,8 +340,8 @@ static Class _contentViewClass = nil;
   event = _gdk_macos_display_get_last_nsevent ();
 
   if (event == NULL)
-    return; 
-  
+    return;
+
   inManualMove = YES;
 
   /* The docs state it has to be a button press event,
@@ -547,9 +547,14 @@ static Class _contentViewClass = nil;
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
   GdkDrop *drop = _gdk_macos_display_find_drop (GDK_MACOS_DISPLAY (display), sequence_number);
   NSPoint location = [sender draggingLocation];
+  GMainContext *main_context;
+  gint64 deadline= g_get_monotonic_time () + 5000000L; /* now + 5s */
 
   if (drop == NULL)
     return NO;
+
+  main_context = g_main_context_new ();
+  g_main_context_push_thread_default (main_context);
 
   gdk_drop_emit_drop_event (drop,
                             TRUE,
@@ -557,9 +562,25 @@ static Class _contentViewClass = nil;
                             GDK_SURFACE (gdk_surface)->height - location.y,
                             GDK_CURRENT_TIME);
 
+  while (!gdk_drop_is_finished (drop))
+    {
+      if (g_get_monotonic_time () > deadline)
+        {
+          g_warning ("Could not handle drop operation within a reasonable time (1s)");
+          break;
+        }
+      g_main_context_iteration (main_context, TRUE);
+    }
+
   gdk_drop_emit_leave_event (drop, TRUE, GDK_CURRENT_TIME);
 
-  return GDK_MACOS_DROP (drop)->finish_action != 0;
+  while (g_main_context_iteration (main_context, FALSE))
+    ;
+
+  g_main_context_pop_thread_default (main_context);
+  g_main_context_unref (main_context);
+
+  return GDK_MACOS_DROP (drop)->finish_action != GDK_ACTION_NONE;
 }
 
 -(BOOL)wantsPeriodicDraggingUpdates
