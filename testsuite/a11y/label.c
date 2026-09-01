@@ -125,6 +125,7 @@ more_label_text_interface (void)
   int width, height;
   gboolean res;
   unsigned int offset;
+  graphene_rect_t extents;
 
   window = gtk_window_new ();
   label = gtk_label_new ("AAA");
@@ -136,6 +137,15 @@ more_label_text_interface (void)
 
   while (gtk_widget_get_width (label) == 0)
     g_main_context_iteration (NULL, TRUE);
+
+  /* Changing the text drops the cached layout; the accessible text
+   * interface must still work before the next frame rebuilds it.
+   */
+  gtk_label_set_text (GTK_LABEL (label), "BBB");
+  res = gtk_accessible_text_get_extents (GTK_ACCESSIBLE_TEXT (label),
+                                         0, 1, &extents);
+  g_assert_true (res);
+  g_assert_true (extents.size.width > 0);
 
   width = gtk_widget_get_width (label);
   height = gtk_widget_get_height (label);
