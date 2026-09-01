@@ -961,6 +961,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Time in seconds that the focus is visible when using keyboard navigation. A zero value means "forever", and a negative
    * value means "toolkit default timeout".
+   *
+   * Since: 4.24
    */
   pspecs[PROP_KEYBOARD_FOCUS_VISIBLE_TIMEOUT] = g_param_spec_int ("gtk-keyboard-focus-visible-timeout", NULL, NULL,
                                                                   -1, G_MAXINT, -1,
