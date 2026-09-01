@@ -6383,9 +6383,13 @@ gtk_label_accessible_text_get_selection (GtkAccessibleText       *self,
     return FALSE;
 
   *n_ranges = 1;
-  *ranges = g_new (GtkAccessibleTextRange, 1);
-  (*ranges)[0].start = start;
-  (*ranges)[0].length = end - start;
+
+  if (ranges != NULL)
+    {
+      *ranges = g_new (GtkAccessibleTextRange, 1);
+      (*ranges)[0].start = start;
+      (*ranges)[0].length = end - start;
+    }
 
   return TRUE;
 }
@@ -6400,8 +6404,15 @@ gtk_label_accessible_text_get_default_attributes (GtkAccessibleText   *self,
 
   gtk_pango_get_default_attributes (layout, &names, &values);
 
-  *attribute_names = names;
-  *attribute_values = values;
+  if (attribute_names != NULL)
+    *attribute_names = names;
+  else
+    g_strfreev (names);
+
+  if (attribute_values != NULL)
+    *attribute_values = values;
+  else
+    g_strfreev (values);
 }
 
 static gboolean
@@ -6419,18 +6430,28 @@ gtk_label_accessible_text_get_attributes (GtkAccessibleText        *self,
   gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
 
   *n_ranges = g_strv_length (names);
-  *ranges = g_new (GtkAccessibleTextRange, *n_ranges);
 
-  for (unsigned i = 0; i < *n_ranges; i++)
+  if (ranges != NULL)
     {
-      GtkAccessibleTextRange *range = &(*ranges)[i];
+      *ranges = g_new (GtkAccessibleTextRange, *n_ranges);
+      for (unsigned int i = 0; i < *n_ranges; i++)
+        {
+          GtkAccessibleTextRange *range = &(*ranges)[i];
 
-      range->start = start;
-      range->length = end - start;
+          range->start = start;
+          range->length = end - start;
+        }
     }
 
-  *attribute_names = names;
-  *attribute_values = values;
+  if (attribute_names != NULL)
+    *attribute_names = names;
+  else
+    g_strfreev (names);
+
+  if (attribute_values != NULL)
+    *attribute_values = values;
+  else
+    g_strfreev (values);
 
   return TRUE;
 }
