@@ -131,10 +131,16 @@ close_submenu (GtkPopoverMenuBarItem *item)
   gtk_popover_popdown (item->popover);
 }
 
+typedef enum {
+  ACTIVE_ITEM_NONE,   /* just select; focus only if FOCUS_WITHIN */
+  ACTIVE_ITEM_FOCUS,  /* select + always grab focus, do not pop up */
+  ACTIVE_ITEM_POPUP   /* select + pop up submenu */
+} ActiveItemAction;
+
 static void
 set_active_item (GtkPopoverMenuBar     *bar,
                  GtkPopoverMenuBarItem *item,
-                 gboolean               popup)
+                 ActiveItemAction       action)
 {
   gboolean changed;
   gboolean was_popup;
@@ -164,8 +170,10 @@ set_active_item (GtkPopoverMenuBar     *bar,
     {
       GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (bar));
 
-      if (popup || (was_popup && changed))
+      if (action == ACTIVE_ITEM_POPUP || (was_popup && changed))
         open_submenu (bar->active_item);
+      else if (action == ACTIVE_ITEM_FOCUS)
+        gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
       else if (changed && (state & GTK_STATE_FLAG_FOCUS_WITHIN))
         gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
     }
@@ -184,7 +192,7 @@ clicked_cb (GtkGesture *gesture,
   target = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU_BAR));
 
-  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), TRUE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), ACTIVE_ITEM_POPUP);
 }
 
 static void
@@ -199,7 +207,7 @@ item_enter_cb (GtkEventController   *controller,
   target = gtk_event_controller_get_widget (controller);
   bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU_BAR));
 
-  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), FALSE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), ACTIVE_ITEM_NONE);
 }
 
 static void
@@ -214,7 +222,7 @@ bar_leave_cb (GtkEventController   *controller,
 
   if (bar->active_item &&
       !gtk_widget_get_mapped (GTK_WIDGET (bar->active_item->popover)))
-    set_active_item (bar, NULL, FALSE);
+    set_active_item (bar, NULL, ACTIVE_ITEM_NONE);
 }
 
 static gboolean
@@ -254,7 +262,7 @@ gtk_popover_menu_bar_focus (GtkWidget        *widget,
   else
     return FALSE;
 
-  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (next), FALSE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (next), ACTIVE_ITEM_NONE);
 
   return TRUE;
 }
@@ -306,7 +314,22 @@ gtk_popover_menu_bar_item_activate (GtkPopoverMenuBarItem *item)
 
   bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (GTK_WIDGET (item), GTK_TYPE_POPOVER_MENU_BAR));
 
-  set_active_item (bar, item, TRUE);
+  set_active_item (bar, item, ACTIVE_ITEM_POPUP);
+}
+
+static gboolean
+gtk_popover_menu_bar_item_open (GtkWidget *widget,
+                                GVariant  *args,
+                                gpointer   user_data)
+{
+  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
+  GtkPopoverMenuBar *bar;
+
+  bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (widget, GTK_TYPE_POPOVER_MENU_BAR));
+
+  set_active_item (bar, item, ACTIVE_ITEM_POPUP);
+
+  return TRUE;
 }
 
 static void
@@ -347,6 +370,15 @@ gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Down, GDK_NO_MODIFIER_MASK,
+                                gtk_popover_menu_bar_item_open, NULL);
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_KP_Down, GDK_NO_MODIFIER_MASK,
+                                gtk_popover_menu_bar_item_open, NULL);
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Up, GDK_NO_MODIFIER_MASK,
+                                gtk_popover_menu_bar_item_open, NULL);
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_KP_Up, GDK_NO_MODIFIER_MASK,
+                                gtk_popover_menu_bar_item_open, NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("item"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_MENU_ITEM);
@@ -393,7 +425,7 @@ popover_unmap (GtkPopover        *popover,
                GtkPopoverMenuBar *bar)
 {
   if (bar->active_item && bar->active_item->popover == popover)
-    set_active_item (bar, NULL, FALSE);
+    set_active_item (bar, NULL, ACTIVE_ITEM_NONE);
 }
 
 static void
@@ -763,7 +795,7 @@ gtk_popover_menu_bar_select_first (GtkPopoverMenuBar *bar)
   GtkPopoverMenuBarItem *item;
 
   item = GTK_POPOVER_MENU_BAR_ITEM (gtk_widget_get_first_child (GTK_WIDGET (bar)));
-  set_active_item (bar, item, TRUE);
+  set_active_item (bar, item, ACTIVE_ITEM_FOCUS);
 }
 
 /**
