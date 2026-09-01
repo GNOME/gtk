@@ -6355,27 +6355,15 @@ find_good_size_from_style (GtkWidget *widget,
 {
   GtkStyleContext *context;
   double font_size;
-  GdkScreen *screen;
-  double resolution;
 
   context = gtk_widget_get_style_context (widget);
-
-  screen = gtk_widget_get_screen (widget);
-  if (screen)
-    {
-      resolution = gdk_screen_get_resolution (screen);
-      if (resolution < 0.0) /* will be -1 if the resolution is not defined in the GdkScreen */
-        resolution = 96.0;
-    }
-  else
-    resolution = 96.0; /* wheeee */
 
   gtk_style_context_get (context,
                          gtk_style_context_get_state (context),
                          "font-size", &font_size,
                          NULL);
-  font_size = font_size * resolution / 72.0 + 0.5;
 
+  /* The computed CSS font size is already in pixels. */
   *width = font_size * NUM_CHARS;
   *height = font_size * NUM_LINES;
 }
