@@ -4322,8 +4322,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       GtkWidget *parent = gtk_widget_get_parent (page->menu_label);
 
       if (parent)
-        gtk_notebook_menu_label_unparent (parent);
-      gtk_popover_set_child (GTK_POPOVER (notebook->menu), NULL);
+        {
+          gtk_notebook_menu_label_unparent (parent);
+          gtk_widget_unparent (parent);
+        }
 
       gtk_widget_queue_resize (notebook->menu);
     }
