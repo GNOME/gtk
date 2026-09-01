@@ -7637,9 +7637,16 @@ gtk_text_update_history (GtkText *self)
 }
 
 static void
-input_interceptor_im_update (GtkEventControllerKey *controller,
+input_interceptor_im_update (GtkEventControllerKey *key_controller,
                              GtkText               *self)
 {
+  GtkEventController *controller = GTK_EVENT_CONTROLLER (key_controller);
+  GdkEvent *event = gtk_event_controller_get_current_event (controller);
+  unsigned int keyval = gdk_key_event_get_keyval (event);
+
+  if (keyval == GDK_KEY_space)
+    return;
+
   g_signal_emit_by_name (self, "input-intercepted");
 }
 
