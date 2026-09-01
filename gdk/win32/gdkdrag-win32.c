@@ -1785,8 +1785,7 @@ send_source_state_update (GdkWin32Clipdrop    *clipdrop,
 }
 
 static void
-gdk_win32_drag_drop (GdkDrag *drag,
-                     guint32  time_)
+gdk_win32_drag_drop (GdkDrag *drag)
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
   GdkWin32Clipdrop *clipdrop = gdk_win32_display_get_clipdrop (gdk_surface_get_display (drag_win32->drag_surface));
@@ -2039,14 +2038,12 @@ gdk_win32_drag_cancel (GdkDrag             *drag,
 }
 
 static void
-gdk_win32_drag_drop_performed (GdkDrag *drag,
-                               guint32  time_)
+gdk_win32_drag_drop_performed (GdkDrag *drag)
 {
-  GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_performed: 0x%p %u\n",
-                          drag,
-                          time_));
+  GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_performed: 0x%p\n",
+                          drag));
 
-  gdk_win32_drag_drop (drag, time_);
+  gdk_win32_drag_drop (drag);
   gdk_win32_drag_set_cursor (drag, NULL);
   drag_context_ungrab (drag);
 }

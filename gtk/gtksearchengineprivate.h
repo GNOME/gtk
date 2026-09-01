@@ -61,7 +61,8 @@ struct _GtkSearchEngineClass
   /* Signals */
   void     (*hits_added)      (GtkSearchEngine *engine, 
 			       GList           *hits);
-  void     (*finished)        (GtkSearchEngine *engine);
+  void     (*finished)        (GtkSearchEngine *engine,
+                               gboolean         got_results);
   void     (*error)           (GtkSearchEngine *engine, 
 			       const char      *error_message);
 };

@@ -172,8 +172,7 @@ gdk_wayland_drag_update_cursor (GdkDrag *drag)
 }
 
 static void
-gdk_wayland_drag_drop_performed (GdkDrag  *drag,
-                                 uint32_t  time_)
+gdk_wayland_drag_drop_performed (GdkDrag *drag)
 {
   gdk_wayland_drag_set_cursor (drag, NULL);
 }

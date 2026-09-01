@@ -106,6 +106,7 @@ struct _GdkX11Drag
   guint16 last_x;              /* Coordinates from last event */
   guint16 last_y;
   gulong timestamp;            /* Timestamp we claimed the DND selection with */
+  guint32 drop_time;           /* Timestamp of the event that performed the drop */
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
   guint version;               /* Xdnd protocol version */
 
@@ -180,8 +181,7 @@ static void        gdk_x11_drag_drop_done    (GdkDrag         *drag,
 static void        gdk_x11_drag_update_cursor (GdkDrag        *drag);
 static void        gdk_x11_drag_cancel       (GdkDrag             *drag,
                                               GdkDragCancelReason  reason);
-static void        gdk_x11_drag_drop_performed (GdkDrag           *drag,
-                                                guint32            time);
+static void        gdk_x11_drag_drop_performed (GdkDrag           *drag);
 
 static void
 gdk_x11_drag_class_init (GdkX11DragClass *klass)
@@ -1981,10 +1981,11 @@ gdk_x11_drag_cancel (GdkDrag             *drag,
 }
 
 static void
-gdk_x11_drag_drop_performed (GdkDrag *drag,
-                             guint32  time_)
+gdk_x11_drag_drop_performed (GdkDrag *drag)
 {
-  gdk_x11_drag_drop (drag, time_);
+  GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
+
+  gdk_x11_drag_drop (drag, x11_drag->drop_time);
   drag_ungrab (drag);
 }
 
@@ -2129,6 +2130,7 @@ gdk_dnd_handle_button_event (GdkDrag  *drag,
   if ((gdk_drag_get_selected_action (drag) != 0) &&
       (x11_drag->proxy_xid != None))
     {
+      x11_drag->drop_time = gdk_event_get_time (event);
       g_signal_emit_by_name (drag, "drop-performed");
     }
   else
