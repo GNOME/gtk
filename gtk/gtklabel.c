@@ -6450,9 +6450,6 @@ gtk_label_accessible_text_get_extents (GtkAccessibleText *self,
   int range[2];
 
   text = label->text;
-  /* gtk_label_get_layout_location() ensures the layout, so it must
-   * be called before reading label->layout: the layout is cleared
-   * when the text changes and not rebuilt until the next frame */
   gtk_label_get_layout_location (label, &lx, &ly);
   layout = label->layout;
 

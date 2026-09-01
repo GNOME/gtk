@@ -139,7 +139,8 @@ more_label_text_interface (void)
     g_main_context_iteration (NULL, TRUE);
 
   /* Changing the text drops the cached layout; the accessible text
-   * interface must still work before the next frame rebuilds it. */
+   * interface must still work before the next frame rebuilds it.
+   */
   gtk_label_set_text (GTK_LABEL (label), "BBB");
   res = gtk_accessible_text_get_extents (GTK_ACCESSIBLE_TEXT (label),
                                          0, 1, &extents);
