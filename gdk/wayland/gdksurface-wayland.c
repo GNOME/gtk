@@ -395,7 +395,6 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
     }
 
   self->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  gdk_frame_clock_outstanding (clock);
 }
 
 gboolean
