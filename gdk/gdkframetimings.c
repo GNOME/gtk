@@ -449,12 +449,33 @@ gdk_frame_timings_get_gpu_complete (GdkFrameTimings *self)
 void
 gdk_frame_timings_outstanding (GdkFrameTimings *self)
 {
-  /* frames can only be completed in AFTER_PAINT, so we must still be in progress.
-   * We might however be OUTSTANDING already because of a different surface submitting
-   * a buffer.
-   */
-  g_warn_if_fail (self->result == GDK_FRAME_PREPARING || self->result == GDK_FRAME_OUTSTANDING);
+  switch (self->result)
+    {
+      case GDK_FRAME_PRESENTED:
+      case GDK_FRAME_DISCARDED:
+        /* is this true for these 2?
+         * Better be strict now, so we can check that it's not a bug
+         * when it does indeed happen later.*/
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
+        g_warning ("%s frame is trying to render a new frame. This should not happen.",
+                   g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
+        self->result = GDK_FRAME_OUTSTANDING;
+        break;
 
+      case GDK_FRAME_PREPARING:
+        self->result = GDK_FRAME_OUTSTANDING;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+      case GDK_FRAME_SUBMITTED:
+        /* frames have been rendered already */
+        break;
+
+      default:
+        g_assert_not_reached ();
+    }
+ 
   self->result = GDK_FRAME_OUTSTANDING;
 }
 
