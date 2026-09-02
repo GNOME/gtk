@@ -443,13 +443,12 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
     {
       helper->action_name = g_strdup (action_name);
 
-      gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                               helper->action_name,
-                                               GTK_ACTION_OBSERVER (helper));
-
-      if (gtk_action_muxer_query_action (helper->action_context, helper->action_name,
-                                         &enabled, &parameter_type,
-                                         NULL, NULL, &state))
+      if (gtk_action_observable_subscribe (GTK_ACTION_OBSERVABLE (helper->action_context),
+                                           helper->action_name,
+                                           GTK_ACTION_OBSERVER (helper),
+                                           &enabled,
+                                           &parameter_type,
+                                           &state))
         {
           GTK_DEBUG (ACTIONS, "%s: action %s existed from the start", "actionhelper", helper->action_name);
 
@@ -607,4 +606,3 @@ gtk_action_helper_get_role (GtkActionHelper *helper)
 
   return helper->role;
 }
-
