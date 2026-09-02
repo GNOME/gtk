@@ -242,30 +242,6 @@ gdk_android_cairo_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
-gdk_android_cairo_context_empty_frame (GdkDrawContext *draw_context)
-{
-  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-
-  JNIEnv *env = gdk_android_get_env ();
-  (*env)->PushLocalFrame (env, 2);
-
-  if (GDK_IS_ANDROID_SURFACE (surface))
-    {
-      GdkAndroidSurface *surface_impl = (GdkAndroidSurface *)surface;
-
-      jobject surface_holder = (*env)->CallObjectMethod (env, surface_impl->surface, gdk_android_get_java_cache ()->surface.get_holder);
-      jobject canvas = (*env)->CallObjectMethod (env, surface_holder, gdk_android_get_java_cache ()->a_surfaceholder.lock_canvas);
-      (*env)->CallVoidMethod (env, surface_holder, gdk_android_get_java_cache ()->a_surfaceholder.unlock_canvas_and_post, canvas);
-    }
-  else if (GDK_IS_ANDROID_DRAG_SURFACE (surface))
-    {
-      // noop
-    }
-
-  (*env)->PopLocalFrame (env, NULL);
-}
-
-static void
 gdk_android_cairo_context_surface_resized (GdkDrawContext *draw_context)
 {
   g_assert (GDK_IS_ANDROID_CAIRO_CONTEXT (draw_context));
@@ -281,7 +257,6 @@ gdk_android_cairo_context_class_init (GdkAndroidCairoContextClass *klass)
 
   draw_context_class->begin_frame = gdk_android_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_android_cairo_context_end_frame;
-  draw_context_class->empty_frame = gdk_android_cairo_context_empty_frame;
   draw_context_class->surface_resized = gdk_android_cairo_context_surface_resized;
 
   cairo_context_class->cairo_create = gdk_android_cairo_context_cairo_create;
