@@ -96,6 +96,12 @@ test_inheritance (void)
   g_assert_cmpint (win_activated, ==, 2);
   g_assert_cmpint (box_activated, ==, 1);
 
+  found = gtk_widget_activate_action (button, "box.missing", NULL);
+
+  g_assert_false (found);
+  g_assert_cmpint (win_activated, ==, 2);
+  g_assert_cmpint (box_activated, ==, 1);
+
   found = gtk_widget_activate_action (window, "box.action", NULL);
 
   g_assert_false (found);
@@ -389,6 +395,226 @@ test_inheritance4 (void)
 
   g_object_unref (win_actions);
   g_object_unref (box_actions);
+}
+
+static GSimpleActionGroup *
+create_enabled_action_group (const char *name,
+                             gboolean    enabled)
+{
+  GSimpleActionGroup *group;
+  GSimpleAction *action;
+
+  group = g_simple_action_group_new ();
+  action = g_simple_action_new (name, NULL);
+  g_simple_action_set_enabled (action, enabled);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  g_object_unref (action);
+
+  return group;
+}
+
+static void
+test_insert_group_above_consumer (void)
+{
+  GSimpleActionGroup *inherited;
+  GSimpleActionGroup *local;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+  inherited = create_enabled_action_group ("action", FALSE);
+  local = create_enabled_action_group ("action", TRUE);
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_widget_insert_action_group (window, "test", G_ACTION_GROUP (inherited));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "test.action");
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  /* @box had no muxer when @button subscribed. */
+  gtk_widget_insert_action_group (box, "test", G_ACTION_GROUP (local));
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (inherited);
+  g_object_unref (local);
+}
+
+static void
+test_remove_shadowing_action (void)
+{
+  GSimpleActionGroup *inherited;
+  GSimpleActionGroup *local;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+  inherited = create_enabled_action_group ("action", TRUE);
+  local = create_enabled_action_group ("action", FALSE);
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_widget_insert_action_group (window, "test", G_ACTION_GROUP (inherited));
+  gtk_widget_insert_action_group (box, "test", G_ACTION_GROUP (local));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "test.action");
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  g_action_map_remove_action (G_ACTION_MAP (local), "action");
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (inherited);
+  g_object_unref (local);
+}
+
+typedef struct
+{
+  GtkWidget *widget;
+  GSimpleActionGroup *group;
+  gboolean added;
+} ReaddActionData;
+
+static void
+add_action_on_sensitive_notify (GtkWidget       *widget,
+                                GParamSpec      *pspec,
+                                ReaddActionData *data)
+{
+  if (data->added)
+    return;
+
+  data->added = TRUE;
+  gtk_widget_insert_action_group (data->widget, "test", G_ACTION_GROUP (data->group));
+}
+
+static void
+test_readd_shadowing_action_during_removal (void)
+{
+  GSimpleActionGroup *inherited;
+  GSimpleActionGroup *local;
+  GSimpleActionGroup *replacement;
+  ReaddActionData data;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+  inherited = create_enabled_action_group ("action", FALSE);
+  local = create_enabled_action_group ("action", TRUE);
+  replacement = create_enabled_action_group ("action", TRUE);
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_widget_insert_action_group (window, "test", G_ACTION_GROUP (inherited));
+  gtk_widget_insert_action_group (box, "test", G_ACTION_GROUP (local));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "test.action");
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  data.widget = box;
+  data.group = replacement;
+  data.added = FALSE;
+  g_signal_connect (button, "notify::sensitive",
+                    G_CALLBACK (add_action_on_sensitive_notify), &data);
+  g_action_map_remove_action (G_ACTION_MAP (local), "action");
+
+  g_assert_true (data.added);
+  g_assert_true (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (inherited);
+  g_object_unref (local);
+  g_object_unref (replacement);
+}
+
+static void
+test_inherit_action_from_same_prefix_group (void)
+{
+  GSimpleActionGroup *inherited;
+  GSimpleActionGroup *local;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new ();
+  inherited = create_enabled_action_group ("action", FALSE);
+  local = create_enabled_action_group ("other-action", TRUE);
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), button);
+  gtk_widget_insert_action_group (window, "test", G_ACTION_GROUP (inherited));
+  gtk_widget_insert_action_group (box, "test", G_ACTION_GROUP (local));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "test.action");
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (inherited);
+  g_object_unref (local);
+}
+
+typedef struct
+{
+  GtkWidget *box;
+  GtkWidget *sibling;
+} RemoveSiblingData;
+
+static void
+remove_sibling_on_sensitive_notify (GtkWidget         *widget,
+                                    GParamSpec        *pspec,
+                                    RemoveSiblingData *data)
+{
+  if (data->sibling)
+    {
+      gtk_box_remove (GTK_BOX (data->box), data->sibling);
+      data->sibling = NULL;
+    }
+}
+
+static void
+test_remove_observer_during_notification (void)
+{
+  RemoveSiblingData data;
+  GSimpleActionGroup *group;
+  GAction *action;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *first;
+  GtkWidget *second;
+
+  window = gtk_window_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  first = gtk_button_new ();
+  second = gtk_button_new ();
+  group = create_enabled_action_group ("action", TRUE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), "action");
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+  gtk_box_append (GTK_BOX (box), first);
+  gtk_box_append (GTK_BOX (box), second);
+  gtk_widget_insert_action_group (window, "test", G_ACTION_GROUP (group));
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (first), "test.action");
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (second), "test.action");
+
+  data.box = box;
+  data.sibling = g_object_ref (second);
+  g_signal_connect (first, "notify::sensitive",
+                    G_CALLBACK (remove_sibling_on_sensitive_notify), &data);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+  g_assert_false (gtk_widget_get_sensitive (first));
+  g_assert_null (gtk_widget_get_parent (second));
+
+  g_object_unref (second);
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (group);
 }
 
 static int cut_activated;
@@ -783,6 +1009,11 @@ main (int   argc,
   g_test_add_func ("/action/inheritance2", test_inheritance2);
   g_test_add_func ("/action/inheritance3", test_inheritance3);
   g_test_add_func ("/action/inheritance4", test_inheritance4);
+  g_test_add_func ("/action/insert-group-above-consumer", test_insert_group_above_consumer);
+  g_test_add_func ("/action/remove-shadowing-action", test_remove_shadowing_action);
+  g_test_add_func ("/action/readd-shadowing-action-during-removal", test_readd_shadowing_action_during_removal);
+  g_test_add_func ("/action/inherit-action-from-same-prefix-group", test_inherit_action_from_same_prefix_group);
+  g_test_add_func ("/action/remove-observer-during-notification", test_remove_observer_during_notification);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
