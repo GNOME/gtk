@@ -932,27 +932,6 @@ gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 }
 
 /**
- * gdk_frame_clock_outstanding:
- * @self: The frame clock
- *
- * Called whenever there is a buffer submitted to the compositor, usually
- * by gdk_draw_context_end_frame() automatically.
- *
- * Note that gdk_draw_context_empty_frame() does not call this function.
- */
-void
-gdk_frame_clock_outstanding (GdkFrameClock *self)
-{
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_current_timings (self);
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_outstanding (timings);
-}
-
-/**
  * gdk_frame_clock_submitted:
  * @self: a frame clock
  * @frame_counter: the frame to provide info for
@@ -1491,6 +1470,8 @@ gdk_frame_clock_add_frame (GdkFrameClock       *self,
   if (frame->throttling_complete)
     clock_frame->throttling = FALSE;
   clock_frame->frames = g_slist_prepend (clock_frame->frames, frame);
+
+  gdk_frame_timings_outstanding (clock_frame->timings);
 }
 
 void

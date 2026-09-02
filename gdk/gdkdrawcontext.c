@@ -567,8 +567,6 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context,
   if (gdk_draw_context_frame_is_complete (priv->current_frame))
     gdk_draw_context_frame_free (priv->current_frame);
   priv->current_frame = NULL;
-
-  gdk_frame_clock_outstanding (gdk_surface_get_frame_clock (priv->surface));
 }
 
 /**
