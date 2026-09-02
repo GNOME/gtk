@@ -74,7 +74,7 @@ gboolean                gtk_action_muxer_query_action                   (GtkActi
                                                                          const GVariantType **state_type,
                                                                          GVariant           **state_hint,
                                                                          GVariant           **state) G_GNUC_WARN_UNUSED_RESULT;
-void                    gtk_action_muxer_activate_action                (GtkActionMuxer      *muxer,
+gboolean                gtk_action_muxer_activate_action                (GtkActionMuxer      *muxer,
                                                                          const char          *action_name,
                                                                          GVariant            *parameter);
 void                    gtk_action_muxer_change_action_state            (GtkActionMuxer      *muxer,
@@ -108,4 +108,3 @@ char *                  gtk_print_action_and_target                     (const c
 char *                  gtk_normalise_detailed_action_name              (const char          *detailed_action_name);
 
 G_END_DECLS
-

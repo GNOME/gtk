@@ -48,6 +48,24 @@ gtk_action_observable_register_observer (GtkActionObservable *observable,
     ->register_observer (observable, action_name, observer);
 }
 
+gboolean
+gtk_action_observable_subscribe (GtkActionObservable *observable,
+                                 const char          *action_name,
+                                 GtkActionObserver   *observer,
+                                 gboolean            *enabled,
+                                 const GVariantType **parameter_type,
+                                 GVariant           **state)
+{
+  g_return_val_if_fail (GTK_IS_ACTION_OBSERVABLE (observable), FALSE);
+
+  return GTK_ACTION_OBSERVABLE_GET_IFACE (observable)->subscribe (observable,
+                                                                  action_name,
+                                                                  observer,
+                                                                  enabled,
+                                                                  parameter_type,
+                                                                  state);
+}
+
 /**
  * gtk_action_observable_unregister_observer:
  * @observable: a `GtkActionObservable`
