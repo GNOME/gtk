@@ -117,8 +117,8 @@ linux_dmabuf_format_table (void *data,
 {
   DmabufFormatsInfo *info = data;
 
-  if (info->dmabuf_formats)
-    munmap (info->dmabuf_formats, sizeof (DmabufFormat) * info->n_dmabuf_formats);
+  if (info->dmabuf_format_table)
+    munmap (info->dmabuf_format_table, sizeof (DmabufFormat) * info->n_dmabuf_formats);
 
   info->n_dmabuf_formats = size / 16;
   info->dmabuf_format_table = mmap (NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
