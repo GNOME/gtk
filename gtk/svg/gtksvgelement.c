@@ -785,8 +785,8 @@ svg_element_get_path (SvgElement            *element,
         {
           double x = svg_number_get (values[SVG_PROPERTY_X], viewport->size.width);
           double y = svg_number_get (values[SVG_PROPERTY_Y], viewport->size.height);
-          double width = svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
-          double height = svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
+          double width = svg_value_is_auto (values[SVG_PROPERTY_WIDTH]) ? 0 : svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
+          double height = svg_value_is_auto (values[SVG_PROPERTY_HEIGHT]) ? 0 : svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
           double rx, ry;
           resolve_rx (element, viewport, current, &rx, &ry);
           if (rx == 0 || ry == 0)
