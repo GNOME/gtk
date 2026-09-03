@@ -3453,9 +3453,18 @@ svg_css_compare_rule (gconstpointer a_,
 {
   const SvgCssRuleset *a = (const SvgCssRuleset *) a_;
   const SvgCssRuleset *b = (const SvgCssRuleset *) b_;
+  int cmp;
 
   /* Sort from highest to lowest specificity */
-  return _gtk_css_selector_compare (b->selector, a->selector);
+  cmp = _gtk_css_selector_compare (b->selector, a->selector);
+  if (cmp != 0)
+    return cmp;
+  else if (a->lines > b->lines)
+    return -1;
+  else if (a->lines < b->lines)
+    return 1;
+  else
+    return 0;
 }
 
 static void load_internal (ParserData    *data,
@@ -3747,6 +3756,7 @@ static void
 parse_declarations_into_ruleset (SvgCssScanner *scanner,
                                  SvgCssRuleset *r)
 {
+  r->lines = gtk_css_parser_get_start_location (scanner->parser)->lines;
   while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
       PropertyValue p = { 0, };
