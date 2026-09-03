@@ -245,7 +245,7 @@ gnomeos-x86_64:
     - .test-runner
   needs: []
   stage: build
-  image: "quay.io/gnome_infrastructure/gnome-build-meta:core-nightly"
+  image: "quay.io/gnome_infrastructure/gnome-build-meta:gnomeos-devel-nightly"
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
