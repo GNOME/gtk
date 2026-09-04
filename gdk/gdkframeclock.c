@@ -1490,6 +1490,29 @@ gdk_frame_clock_remove_frame (GdkFrameClock       *self,
 }
 
 void
+gdk_frame_clock_foreach_frame (GdkFrameClock  *self,
+                               gint64          frame_counter,
+                               void          (*func) (GdkDrawContextFrame *, gpointer),
+                               gpointer        user_data)
+{
+  GdkFrameClockFrame *clock_frame;
+  GSList *l, *next;
+
+  clock_frame = gdk_frame_clock_get_frame (self, frame_counter);
+  if (clock_frame == NULL)
+    return;
+
+  next = clock_frame->frames;
+  for (l = next;
+       l;
+       l = next)
+    {
+      next = l->next;
+      func (l->data, user_data);
+    }
+}
+
+void
 gdk_frame_clock_remove_frames (GdkFrameClock  *self,
                                GdkDrawContext *context)
 {

@@ -192,7 +192,7 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext      *draw_context,
   gdk_wayland_surface_attach_image (surface,
                                     cairo_surface_reference (cairo_surface),
                                     gdk_draw_context_frame_get_damage (draw_frame));
-  gdk_wayland_surface_request_frame (surface);
+  gdk_wayland_surface_request_frame (surface, draw_frame);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   gdk_wayland_surface_commit (surface);

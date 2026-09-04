@@ -20,9 +20,9 @@
 #include "gdkwaylandsurface.h"
 #include "gdkfractionalscale-private.h"
 #include "gdkwaylandcolor-private.h"
-#include "gdkwaylandpresentationtime-private.h"
 #include "gdkseat-wayland.h"
 
+typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 
 struct _GdkWaylandSurface
 {
@@ -40,9 +40,6 @@ struct _GdkWaylandSurface
   } display_server;
 
   struct wl_event_queue *event_queue;
-  struct wl_callback *frame_callback;
-
-  GdkWaylandPresentationTime *presentation_time;
 
   unsigned int color_state_changed : 1;
   unsigned int initial_configure_received : 1;
@@ -54,7 +51,6 @@ struct _GdkWaylandSurface
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
 
-  gint64 pending_frame_counter;
   GdkFractionalScale scale;
   gboolean buffer_is_fractional;
   gboolean buffer_scale_dirty;
@@ -93,7 +89,6 @@ struct _GdkWaylandSurface
   int state_freeze_count;
 };
 
-typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
 struct _GdkWaylandSurfaceClass
 {
   GdkSurfaceClass parent_class;
@@ -124,16 +119,14 @@ void gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
 void gdk_wayland_surface_freeze_state (GdkSurface *surface);
 void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
 
-void gdk_wayland_surface_frame_callback (GdkSurface *surface,
-                                         uint32_t    time);
-
 void            gdk_wayland_surface_update_content         (GdkSurface           *surface);
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
 gboolean        gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface,
                                                             GdkDrawContextFrame  *frame);
 void            gdk_wayland_surface_commit                 (GdkSurface           *surface);
 void            gdk_wayland_surface_notify_committed       (GdkSurface           *surface);
-void            gdk_wayland_surface_request_frame          (GdkSurface           *surface);
+void            gdk_wayland_surface_request_frame          (GdkSurface           *surface,
+                                                            GdkDrawContextFrame  *frame);
 gboolean        gdk_wayland_surface_has_surface            (GdkSurface           *surface);
 void            gdk_wayland_surface_attach_image           (GdkSurface           *surface,
                                                             cairo_surface_t      *cairo_surface,
