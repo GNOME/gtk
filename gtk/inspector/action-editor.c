@@ -27,7 +27,8 @@
 #include "gtkbox.h"
 #include "gtkboxlayout.h"
 #include "gtkorientable.h"
-#include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkInspectorActionEditor
 {
@@ -35,8 +36,9 @@ struct _GtkInspectorActionEditor
 
   GObject *owner;
   char *name;
+  GtkActionKey *key;
   gboolean enabled;
-  const GVariantType *parameter_type;
+  GVariantType *parameter_type;
   GVariantType *state_type;
   GVariant *state;
   GtkWidget *activate_button;
@@ -72,10 +74,15 @@ activate_action (GtkWidget                *button,
 
   if (r->parameter_entry)
     parameter = gtk_inspector_variant_editor_get_value (r->parameter_entry);
-  if (G_IS_ACTION_GROUP (r->owner))
+  if (GTK_IS_WIDGET (r->owner))
+    {
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (r->owner), FALSE);
+
+      if (node != NULL && r->key != NULL)
+        gtk_action_node_activate (node, r->key, parameter);
+    }
+  else if (G_IS_ACTION_GROUP (r->owner))
     g_action_group_activate_action (G_ACTION_GROUP (r->owner), r->name, parameter);
-  else if (GTK_IS_ACTION_MUXER (r->owner))
-    gtk_action_muxer_activate_action (GTK_ACTION_MUXER (r->owner), r->name, parameter);
 
   update_widgets (r);
 }
@@ -111,10 +118,15 @@ state_changed (GtkWidget *editor,
       return;
     }
 
-  if (G_IS_ACTION_GROUP (r->owner))
+  if (GTK_IS_WIDGET (r->owner))
+    {
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (r->owner), FALSE);
+
+      if (node != NULL && r->key != NULL)
+        gtk_action_node_change_state (node, r->key, value);
+    }
+  else if (G_IS_ACTION_GROUP (r->owner))
     g_action_group_change_action_state (G_ACTION_GROUP (r->owner), r->name, value);
-  else if (GTK_IS_ACTION_MUXER (r->owner))
-    gtk_action_muxer_change_action_state (GTK_ACTION_MUXER (r->owner), r->name, value);
 
   g_variant_unref (value);
 }
@@ -157,28 +169,40 @@ static void
 update_widgets (GtkInspectorActionEditor *r)
 {
   g_clear_pointer (&r->state, g_variant_unref);
+  g_clear_pointer (&r->parameter_type, g_variant_type_free);
 
-  if (G_IS_ACTION_GROUP (r->owner))
+  if (GTK_IS_WIDGET (r->owner))
     {
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (r->owner), FALSE);
+      const GVariantType *parameter_type = NULL;
+      GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+
+      if (node == NULL || r->key == NULL ||
+          !gtk_action_resolution_init (&resolution, node, r->key) ||
+          !gtk_action_resolution_query (&resolution, &r->enabled, &parameter_type,
+                                        NULL, NULL, &r->state))
+        {
+          r->enabled = FALSE;
+          r->state = NULL;
+        }
+      if (parameter_type != NULL)
+        r->parameter_type = g_variant_type_copy (parameter_type);
+
+      gtk_action_resolution_clear (&resolution);
+    }
+  else if (G_IS_ACTION_GROUP (r->owner))
+    {
+      const GVariantType *parameter_type = NULL;
+
       if (!g_action_group_query_action (G_ACTION_GROUP (r->owner), r->name,
-                                        &r->enabled, &r->parameter_type, NULL, NULL,
+                                        &r->enabled, &parameter_type, NULL, NULL,
                                         &r->state))
         {
           r->enabled = FALSE;
-          r->parameter_type = NULL;
           r->state = NULL;
         }
-    }
-  else if (GTK_IS_ACTION_MUXER (r->owner))
-    {
-      if (!gtk_action_muxer_query_action (GTK_ACTION_MUXER (r->owner), r->name,
-                                          &r->enabled, &r->parameter_type, NULL, NULL,
-                                          &r->state))
-        {
-          r->enabled = FALSE;
-          r->parameter_type = NULL;
-          r->state = NULL;
-        }
+      if (parameter_type != NULL)
+        r->parameter_type = g_variant_type_copy (parameter_type);
     }
   else
     {
@@ -213,6 +237,8 @@ dispose (GObject *object)
     gtk_widget_unparent (child);
 
   g_clear_pointer (&r->name, g_free);
+  g_clear_pointer (&r->key, gtk_action_key_unref);
+  g_clear_pointer (&r->parameter_type, g_variant_type_free);
   g_clear_pointer (&r->state_type, g_variant_type_free);
   g_clear_pointer (&r->state, g_variant_unref);
 
@@ -256,13 +282,16 @@ set_property (GObject      *object,
     case PROP_OWNER:
       r->owner = g_value_get_object (value);
       g_assert (r->owner == NULL ||
-                G_IS_ACTION_GROUP (r->owner) ||
-                GTK_IS_ACTION_MUXER (r->owner));
+                GTK_IS_WIDGET (r->owner) ||
+                G_IS_ACTION_GROUP (r->owner));
       break;
 
     case PROP_NAME:
       g_free (r->name);
       r->name = g_value_dup_string (value);
+      g_clear_pointer (&r->key, gtk_action_key_unref);
+      if (r->name != NULL)
+        r->key = gtk_action_key_new (r->name);
       break;
 
     default:

@@ -32,6 +32,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "gtkaccessibletextprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -9478,7 +9479,9 @@ append_bubble_item (GtkTextView *text_view,
   const char *action_name;
   GMenuModel *link;
   gboolean is_toggle_action = FALSE;
-  GtkActionMuxer *muxer;
+  GtkActionNode *node;
+  GtkActionKey *key;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
   gboolean enabled;
   const GVariantType *param_type;
   const GVariantType *state_type;
@@ -9506,19 +9509,33 @@ append_bubble_item (GtkTextView *text_view,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE);
-  if (muxer)
+  key = gtk_action_key_new (action_name);
+  if (key != NULL)
     {
-      if (!gtk_action_muxer_query_action (muxer, action_name, &enabled, &param_type, &state_type, NULL, NULL))
-        return;
+      node = _gtk_widget_get_action_node (GTK_WIDGET (text_view), TRUE);
+      if (!gtk_action_resolution_init (&resolution, node, key) ||
+          !gtk_action_resolution_query (&resolution,
+                                        &enabled, &param_type, &state_type,
+                                        NULL, NULL))
+        {
+          gtk_action_resolution_clear (&resolution);
+          gtk_action_key_unref (key);
+          return;
+        }
 
       if (!enabled)
-        return;
+        {
+          gtk_action_resolution_clear (&resolution);
+          gtk_action_key_unref (key);
+          return;
+        }
 
       if (param_type == NULL &&
           state_type != NULL &&
           g_variant_type_equal (state_type, G_VARIANT_TYPE_BOOLEAN))
         is_toggle_action = TRUE;
+
+      gtk_action_key_unref (key);
     }
 
   if (is_toggle_action)
@@ -9532,6 +9549,8 @@ append_bubble_item (GtkTextView *text_view,
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
   gtk_box_append (GTK_BOX (toolbar), item);
+
+  gtk_action_resolution_clear (&resolution);
 }
 
 static void

@@ -116,7 +116,6 @@ gtk/gtkaccelgroup.c
 gtk/gtkaccessible.c
 gtk/gtkactionable.c
 gtk/gtkactionbar.c
-gtk/gtkactionmuxer.c
 gtk/gtkadjustment.c
 gtk/gtkalertdialog.c
 gtk/gtkapplication.c

@@ -24,6 +24,7 @@
 #include "prop-list.h"
 
 #include "gtkactionable.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkadjustment.h"
 #include "gtkapplicationwindow.h"
 #include "deprecated/gtkcelllayout.h"
@@ -1659,6 +1660,11 @@ attribute_editor (GObject                *object,
 static GObject *
 find_action_owner (GtkActionable *actionable)
 {
+  GtkActionKey *key = NULL;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  GtkActionNode *node;
+  GtkActionNode *provider_node;
+  GObject *owner = NULL;
   GtkWidget *widget = GTK_WIDGET (actionable);
   const char *full_name;
   GtkWidget *win;
@@ -1668,29 +1674,31 @@ find_action_owner (GtkActionable *actionable)
     return NULL;
 
   win = gtk_widget_get_ancestor (widget, GTK_TYPE_APPLICATION_WINDOW);
-  if (g_str_has_prefix (full_name, "win.") == 0)
+  if (g_str_has_prefix (full_name, "win."))
     {
       if (G_IS_OBJECT (win))
         return (GObject *)win;
     }
-  else if (g_str_has_prefix (full_name, "app.") == 0)
+  else if (g_str_has_prefix (full_name, "app."))
     {
       if (GTK_IS_WINDOW (win))
         return (GObject *)gtk_window_get_application (GTK_WINDOW (win));
     }
 
-  while (widget != NULL)
+  key = gtk_action_key_new (full_name);
+  node = _gtk_widget_get_action_node (widget, FALSE);
+  if (key != NULL && node != NULL &&
+      gtk_action_resolution_init (&resolution, node, key))
     {
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-      if (muxer && gtk_action_muxer_find (muxer, full_name, NULL))
-        return (GObject *)widget;
-
-      widget = gtk_widget_get_parent (widget);
+      provider_node = gtk_action_resolution_get_provider_node (&resolution);
+      if (provider_node != NULL && G_IS_OBJECT (gtk_action_node_get_owner (provider_node)))
+        owner = G_OBJECT (gtk_action_node_get_owner (provider_node));
     }
 
-  return NULL;
+  gtk_action_resolution_clear (&resolution);
+  g_clear_pointer (&key, gtk_action_key_unref);
+
+  return owner;
 }
 
 static void
