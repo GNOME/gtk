@@ -754,6 +754,10 @@ gtk_widget_base_class_init (gpointer g_class)
 
   priv->template = NULL;
 
+  if (priv->actions != NULL)
+    priv->actions = g_ptr_array_copy (priv->actions, NULL, NULL);
+  priv->action_index = NULL;
+
   if (priv->shortcuts == NULL)
     {
       priv->shortcuts = g_list_store_new (GTK_TYPE_SHORTCUT);
@@ -7730,6 +7734,8 @@ gtk_widget_dispose (GObject *object)
   if (priv->muxer != NULL)
     g_object_run_dispose (G_OBJECT (priv->muxer));
 
+  _gtk_widget_remove_action_node (widget);
+
   if (priv->children_observer)
     gtk_list_list_model_clear (priv->children_observer);
   if (priv->controller_observer)
@@ -11317,11 +11323,11 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
-  if (priv->muxer == NULL)
-    return;
+  _gtk_widget_update_action_tree (widget);
 
-  gtk_action_muxer_set_parent (priv->muxer,
-                               gtk_widget_get_parent_muxer (widget, FALSE));
+  if (priv->muxer != NULL)
+    gtk_action_muxer_set_parent (priv->muxer,
+                                 gtk_widget_get_parent_muxer (widget, FALSE));
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
@@ -11341,6 +11347,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
   if (create || widget_class->priv->actions)
     {
       priv->muxer = gtk_action_muxer_new (widget);
+      _gtk_widget_get_action_node (widget, TRUE);
       _gtk_widget_update_parent_muxer (widget);
 
       return priv->muxer;
@@ -13062,13 +13069,29 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
                              GtkWidgetAction *action)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
+  guint i;
 
   GTK_DEBUG (ACTIONS, "%sClass: Adding %s action",
                       g_type_name (G_TYPE_FROM_CLASS (widget_class)),
                       action->name);
 
-  action->next = priv->actions;
-  priv->actions = action;
+  if (priv->actions == NULL)
+    priv->actions = g_ptr_array_new ();
+
+  action->slot = priv->n_action_slots++;
+  g_ptr_array_insert (priv->actions, 0, action);
+
+  if (priv->action_index != NULL)
+    {
+      g_hash_table_remove_all (priv->action_index);
+      for (i = 0; i < priv->actions->len; i++)
+        {
+          GtkWidgetAction *iter = g_ptr_array_index (priv->actions, i);
+
+          if (!g_hash_table_contains (priv->action_index, iter->name))
+            g_hash_table_insert (priv->action_index, iter->name, iter);
+        }
+    }
 }
 
 /**
@@ -13258,13 +13281,11 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
                                const char         **property_name)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
-  GtkWidgetAction *action = priv->actions;
+  GtkWidgetAction *action;
 
-  for (; index_ > 0 && action != NULL; index_--)
-    action = action->next;
-
-  if (action != NULL && index_ == 0)
+  if (priv->actions != NULL && index_ < priv->actions->len)
     {
+      action = g_ptr_array_index (priv->actions, index_);
       *owner = action->owner;
       *action_name = action->name;
       *parameter_type = action->parameter_type;

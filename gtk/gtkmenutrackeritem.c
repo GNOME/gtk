@@ -21,6 +21,7 @@
 
 #include "gtkmenutrackeritemprivate.h"
 #include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 
@@ -83,6 +84,9 @@ struct _GtkMenuTrackerItem
   GObject parent_instance;
 
   GtkActionObservable *observable;
+  GtkActionSubscription *accel_subscription;
+  GtkActionKey *action_key;
+  GVariant *action_target;
   char *action_namespace;
   char *action_and_target;
   GMenuItem *item;
@@ -201,6 +205,10 @@ gtk_menu_tracker_item_finalize (GObject *object)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
+  if (self->accel_subscription != NULL)
+    gtk_action_subscription_cancel (self->accel_subscription);
+  g_clear_pointer (&self->action_key, gtk_action_key_unref);
+  g_clear_pointer (&self->action_target, g_variant_unref);
   g_clear_pointer (&self->action_namespace, g_free);
   g_clear_pointer (&self->action_and_target, g_free);
   g_clear_object (&self->observable);
@@ -479,19 +487,14 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
 }
 
 static void
-gtk_menu_tracker_item_primary_accel_changed (GtkActionObserver   *observer,
-                                             GtkActionObservable *observable,
-                                             const char          *action_name,
-                                             const char          *action_and_target)
+gtk_menu_tracker_item_accel_changed (GtkActionSubscription   *subscription,
+                                     GtkActionChange          changed,
+                                     const GtkActionSnapshot *snapshot,
+                                     gpointer                 user_data)
 {
-  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-  const char *action;
+  GtkMenuTrackerItem *self = user_data;
 
-  action = strrchr (self->action_and_target, '|') + 1;
-
-  if ((action_and_target && g_str_equal (action_and_target, self->action_and_target)) ||
-      (action_name && g_str_equal (action_name, action)))
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
+  g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
 }
 
 static void
@@ -501,7 +504,6 @@ gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface)
   iface->action_enabled_changed = gtk_menu_tracker_item_action_enabled_changed;
   iface->action_state_changed = gtk_menu_tracker_item_action_state_changed;
   iface->action_removed = gtk_menu_tracker_item_action_removed;
-  iface->primary_accel_changed = gtk_menu_tracker_item_primary_accel_changed;
 }
 
 GtkMenuTrackerItem *
@@ -557,10 +559,21 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
 
       self->action_and_target = gtk_print_action_and_target (action_namespace, action_name, target);
 
-      if (target)
-        g_variant_unref (target);
-
       action_name = strrchr (self->action_and_target, '|') + 1;
+      self->action_key = gtk_action_key_new (action_name);
+      self->action_target = target != NULL ? g_variant_ref (target) : NULL;
+      if (self->action_key != NULL)
+        self->accel_subscription =
+          gtk_action_node_subscribe (gtk_action_muxer_get_node (muxer),
+                                     self->action_key,
+                                     self->action_target != NULL
+                                       ? g_variant_ref (self->action_target) : NULL,
+                                     GTK_ACTION_INTEREST_ACCEL,
+                                     gtk_menu_tracker_item_accel_changed,
+                                     self,
+                                     NULL);
+
+      g_clear_pointer (&target, g_variant_unref);
 
       if (GTK_DEBUG_CHECK (ACTIONS))
         {
@@ -733,8 +746,12 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
 
   if (!GTK_IS_ACTION_MUXER (self->observable))
     return NULL;
+  if (self->action_key == NULL)
+    return NULL;
 
-  return gtk_action_muxer_get_primary_accel (GTK_ACTION_MUXER (self->observable), self->action_and_target);
+  return gtk_action_muxer_get_primary_accel_for (GTK_ACTION_MUXER (self->observable),
+                                                 self->action_key,
+                                                 self->action_target);
 }
 
 const char *
