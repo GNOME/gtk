@@ -627,11 +627,14 @@ gsk_render_node_diff (GskRenderNode  *node1,
                       GskDiffData    *data)
 {
   static guint depth = 0;
+  gboolean debug;
 
   if (node1 == node2)
     return;
 
-  depth++;
+  debug = GSK_DEBUG_CHECK (DIFF);
+  if (debug)
+    depth++;
 
   if (gsk_render_node_get_node_type (node1) == gsk_render_node_get_node_type (node2))
     {
@@ -650,12 +653,11 @@ gsk_render_node_diff (GskRenderNode  *node1,
       gsk_render_node_diff_impossible (node1, node2, data);
     }
 
-  depth--;
-
-  if (GSK_DEBUG_CHECK (DIFF))
+  if (debug)
     {
       cairo_rectangle_int_t extents;
 
+      depth--;
       cairo_region_get_extents (data->region, &extents);
       if (extents.width > 0 && extents.height > 0)
         {
