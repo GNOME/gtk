@@ -84,6 +84,7 @@ static GskDiffResult
 gsk_container_node_keep_func (gconstpointer elem1, gconstpointer elem2, gpointer user_data)
 {
   GskDiffData *data = user_data;
+
   gsk_render_node_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2, data);
   if (cairo_region_num_rectangles (data->region) > MAX_RECTS_IN_DIFF)
     return GSK_DIFF_ABORTED;
@@ -119,6 +120,7 @@ gsk_container_node_get_diff_settings (void)
                                     gsk_container_node_change_func,
                                     gsk_container_node_change_func);
   gsk_diff_settings_set_allow_abort (settings, TRUE);
+  gsk_diff_settings_set_defer_callbacks (settings, TRUE);
 
   return settings;
 }
@@ -400,4 +402,3 @@ gsk_container_node_is_disjoint (const GskRenderNode *node)
 
   return self->disjoint;
 }
-
