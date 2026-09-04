@@ -945,6 +945,44 @@ test_enabled (void)
   g_object_unref (g_object_ref_sink (text));
 }
 
+static gulong
+find_visibility_notify_handler (GtkWidget *widget)
+{
+  return g_signal_handler_find (widget,
+                                (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DETAIL),
+                                g_signal_lookup ("notify", G_TYPE_OBJECT),
+                                g_quark_from_static_string ("visibility"),
+                                NULL, NULL, NULL);
+}
+
+static void
+test_lazy_property_action (void)
+{
+  GtkWidget *actionable;
+  GtkWidget *text;
+
+  text = g_object_ref_sink (gtk_text_new ());
+  g_assert_cmpuint (find_visibility_notify_handler (text), ==, 0);
+
+  actionable = g_object_ref_sink (gtk_check_button_new ());
+  gtk_widget_set_parent (actionable, text);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (actionable),
+                                  "misc.toggle-visibility");
+
+  g_assert_cmpuint (find_visibility_notify_handler (text), !=, 0);
+  g_assert_true (gtk_text_get_visibility (GTK_TEXT (text)));
+  g_assert_true (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
+
+  gtk_text_set_visibility (GTK_TEXT (text), FALSE);
+  g_assert_false (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
+
+  gtk_widget_unparent (actionable);
+  g_object_unref (actionable);
+  g_assert_cmpuint (find_visibility_notify_handler (text), ==, 0);
+
+  g_object_unref (text);
+}
+
 #define MY_TYPE_GTK_ACTIONABLE (my_gtk_actionable_get_type ())
 G_DECLARE_FINAL_TYPE          (MyGtkActionable, my_gtk_actionable, MY, GTK_ACTIONABLE, GtkButton)
 
@@ -1019,6 +1057,7 @@ main (int   argc,
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
   g_test_add_func ("/action/enabled", test_enabled);
+  g_test_add_func ("/action/lazy-property", test_lazy_property_action);
   g_test_add_func ("/action/reparenting", test_reparenting);
 
   return g_test_run();

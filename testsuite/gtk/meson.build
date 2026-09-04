@@ -141,6 +141,8 @@ internal_tests = [
     ],
   },
   { 'name': 'bitmask' },
+  { 'name': 'action-values' },
+  { 'name': 'action-tree' },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
@@ -226,6 +228,18 @@ foreach t : internal_tests
     suite: ['gtk'] + test_extra_suites,
   )
 endforeach
+
+action_performance = executable('action-performance',
+  sources: 'action-performance.c',
+  c_args: test_cargs + ['-DGTK_COMPILATION'],
+  dependencies: libgtk_private_dep,
+)
+
+benchmark('action-performance', action_performance,
+  env: test_env,
+  suite: ['gtk', 'performance'],
+  timeout: 300,
+)
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
 if add_languages('cpp', required: false, native: false)
