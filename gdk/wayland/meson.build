@@ -24,7 +24,6 @@ gdk_wayland_sources = files([
   'gdkpopup-wayland.c',
   'gdkvulkancontext-wayland.c',
   'gdkwaylandcolor.c',
-  'gdkwaylandpresentationtime.c',
 ])
 
 gdk_wayland_public_headers = files([

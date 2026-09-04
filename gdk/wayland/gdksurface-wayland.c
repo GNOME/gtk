@@ -71,6 +71,30 @@
  * [method@GdkWayland.WaylandSurface.get_wl_surface].
  */
 
+typedef struct _GdkWaylandSurfaceFrameElement GdkWaylandSurfaceFrameElement;
+
+struct _GdkWaylandSurfaceFrameElement
+{
+  struct wl_callback *frame_callback;
+  struct wp_presentation_feedback *presentation_feedback;
+};
+
+static void
+gdk_wayland_surface_frame_element_clear (GdkWaylandSurfaceFrameElement *e)
+{
+  g_clear_pointer (&e->frame_callback, wl_callback_destroy);
+  g_clear_pointer (&e->presentation_feedback, wp_presentation_feedback_destroy);
+}
+
+#define GDK_ARRAY_NAME gdk_wayland_surface_frame
+#define GDK_ARRAY_TYPE_NAME GdkWaylandSurfaceFrame
+#define GDK_ARRAY_ELEMENT_TYPE GdkWaylandSurfaceFrameElement
+#define GDK_ARRAY_BY_VALUE 1
+/* surface + 1 subsurface */
+#define GDK_ARRAY_PREALLOC 2
+#define GDK_ARRAY_FREE_FUNC gdk_wayland_surface_frame_element_clear
+#include "gdk/gdkarrayimpl.c"
+
 G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
 static void gdk_wayland_surface_configure (GdkSurface *surface);
@@ -253,45 +277,34 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
 }
 
 static void
-gdk_wayland_surface_clear_frame_callback (GdkWaylandSurface *self)
+gdk_wayland_surface_finalize_frame (GdkSurface          *surface,
+                                    GdkDrawContextFrame *frame)
 {
-  GdkSurface *surface = GDK_SURFACE (self);
+  GdkWaylandSurfaceFrame *wayland_frame = (GdkWaylandSurfaceFrame *) frame->surface_frame;
 
-  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
+  gdk_wayland_surface_frame_clear (wayland_frame); 
 
-  for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
-    {
-      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
-      gdk_wayland_subsurface_clear_frame_callback (subsurface);
-    }
+  GDK_SURFACE_CLASS (gdk_wayland_surface_parent_class)->finalize_frame (surface, frame);
 }
 
-void
-gdk_wayland_surface_frame_callback (GdkSurface *surface,
-                                    uint32_t    time)
+static void
+gdk_wayland_surface_frame_callback (void               *data,
+                                    struct wl_callback *callback,
+                                    uint32_t            time)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkDrawContextFrame *frame = data;
   GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+    GDK_WAYLAND_DISPLAY (gdk_draw_context_get_display (frame->context));
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland frame event", NULL);
-  GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
-  gdk_wayland_surface_clear_frame_callback (impl);
-
-  if (impl->awaiting_frame_frozen)
+  if (!display_wayland->presentation)
     {
-      impl->awaiting_frame_frozen = FALSE;
-      gdk_surface_thaw_updates (surface);
-    }
-
-  if (impl->presentation_time == NULL ||
-      !gdk_wayland_presentation_time_supported (impl->presentation_time))
-    {
+      GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (gdk_draw_context_get_surface (frame->context));
       uint64_t refresh, presentation_time;
 
       refresh = (G_NSEC_PER_SEC + 30) / 60;
-      if (impl->display_server.outputs)
+      if (self->display_server.outputs)
         {
           /* We pick a random output out of the outputs that the surface touches
            * The rate here is in milli-hertz
@@ -299,7 +312,7 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
           GdkMonitor *monitor;
 
           monitor = gdk_wayland_display_get_monitor (display_wayland,
-                                                     impl->display_server.outputs->data);
+                                                     self->display_server.outputs->data);
           if (monitor)
             {
               int monitor_refresh = gdk_monitor_get_refresh_rate (monitor);
@@ -311,37 +324,83 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
 
       if (presentation_time != 0)
         {
-          gdk_frame_clock_presented (gdk_surface_get_frame_clock (surface),
-                                     impl->pending_frame_counter,
-                                     presentation_time,
-                                     refresh);
+          gdk_draw_context_frame_presented (frame,
+                                            presentation_time,
+                                            refresh);
         }
       else
         {
-          gdk_frame_clock_submitted (gdk_surface_get_frame_clock (surface),
-                                     impl->pending_frame_counter,
-                                     refresh);
+          gdk_draw_context_frame_submitted (frame,
+                                            refresh);
         }
+    }
+}
 
-      impl->pending_frame_counter = 0;
+static const struct wl_callback_listener frame_listener = {
+  gdk_wayland_surface_frame_callback
+};
+
+static uint64_t
+presentation_time_to_monotonic (uint32_t tv_sec_hi,
+                                uint32_t tv_sec_lo,
+                                uint32_t tv_nsec)
+{
+  uint64_t t = tv_sec_hi;
+  t <<= 32;
+  t |= tv_sec_lo;
+  t *= G_NSEC_PER_SEC;
+  t += tv_nsec;
+  return t;
+}
+
+static void
+gdk_wayland_surface_presentation_feedback_sync_output (void                            *data,
+                                                       struct wp_presentation_feedback *feedback,
+                                                       struct wl_output                *output)
+{
+}
+
+static void
+gdk_wayland_surface_presentation_feedback_presented (void                            *data,
+                                                     struct wp_presentation_feedback *feedback,
+                                                     uint32_t                         tv_sec_hi,
+                                                     uint32_t                         tv_sec_lo,
+                                                     uint32_t                         tv_nsec,
+                                                     uint32_t                         refresh,
+                                                     uint32_t                         seq_hi,
+                                                     uint32_t                         seq_lo,
+                                                     uint32_t                         flags)
+{
+  GdkDrawContextFrame *frame = data;
+  uint64_t presentation_time;
+
+  presentation_time = presentation_time_to_monotonic (tv_sec_hi, tv_sec_lo, tv_nsec);
+  if (presentation_time != 0)
+    {
+      gdk_draw_context_frame_presented (frame,
+                                        presentation_time,
+                                        refresh);
+    }
+  else
+    {
+      gdk_draw_context_frame_submitted (frame,
+                                        refresh);
     }
 }
 
 static void
-frame_callback (void               *data,
-                struct wl_callback *callback,
-                uint32_t            time)
+gdk_wayland_surface_presentation_feedback_discarded (void                            *data,
+                                                     struct wp_presentation_feedback *feedback)
 {
-  GdkSurface *surface = data;
+  GdkDrawContextFrame *frame = data;
 
-  g_assert (GDK_WAYLAND_SURFACE (surface)->frame_callback == callback);
-  g_assert (!GDK_SURFACE_DESTROYED (surface));
-
-  gdk_wayland_surface_frame_callback (surface, time);
+  gdk_draw_context_frame_discarded (frame);
 }
 
-static const struct wl_callback_listener frame_listener = {
-  frame_callback
+static const struct wp_presentation_feedback_listener presentation_feedback_listener = {
+  gdk_wayland_surface_presentation_feedback_sync_output,
+  gdk_wayland_surface_presentation_feedback_presented,
+  gdk_wayland_surface_presentation_feedback_discarded,
 };
 
 static void
@@ -362,39 +421,45 @@ gdk_wayland_surface_request_layout (GdkSurface *surface)
   impl->next_layout.surface_geometry_dirty = TRUE;
 }
 
-void
-gdk_wayland_surface_request_frame (GdkSurface *surface)
+static void
+gdk_wayland_surface_request_frame_for_surface (GdkDrawContextFrame *frame,
+                                               struct wl_surface   *wl_surface)
 {
-  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
-  GdkFrameClock *clock;
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_draw_context_get_display (frame->context));
+  GdkWaylandSurfaceFrame *wayland_frame = (GdkWaylandSurfaceFrame *) frame->surface_frame;
+  GdkWaylandSurfaceFrameElement e;
 
-  if (self->frame_callback != NULL)
-    return;
+  e.frame_callback = wl_surface_frame (wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) e.frame_callback, NULL);
+  wl_callback_add_listener (e.frame_callback, &frame_listener, frame);
 
-  clock = gdk_surface_get_frame_clock (surface);
-
-  self->frame_callback = wl_surface_frame (self->display_server.wl_surface);
-  wl_proxy_set_queue ((struct wl_proxy *) self->frame_callback, NULL);
-  wl_callback_add_listener (self->frame_callback, &frame_listener, surface);
-
-  if (self->presentation_time == NULL)
+  if (wayland_display->presentation)
     {
-      GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-      self->presentation_time = gdk_wayland_presentation_time_new (wayland_display);
+      e.presentation_feedback = wp_presentation_feedback (wayland_display->presentation, wl_surface);
+      wp_presentation_feedback_add_listener (e.presentation_feedback,
+                                             &presentation_feedback_listener,
+                                             frame);
     }
 
-  gdk_wayland_presentation_time_track (self->presentation_time,
-                                       clock,
-                                       self->display_server.wl_surface,
-                                       gdk_frame_clock_get_frame_counter (clock));
+  gdk_wayland_surface_frame_append (wayland_frame, &e);
+}
+
+/* cannot use GdkSurfaceClass::submit_frame() here because that one
+ * runs after wl_surface_commit()ing
+ */
+void
+gdk_wayland_surface_request_frame (GdkSurface          *surface,
+                                   GdkDrawContextFrame *frame)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+
+  gdk_wayland_surface_request_frame_for_surface (frame, self->display_server.wl_surface);
 
   for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
     {
-      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
-      gdk_wayland_subsurface_request_frame (subsurface);
+      GdkWaylandSubsurface *subsurface = GDK_WAYLAND_SUBSURFACE (gdk_surface_get_subsurface (surface, i));
+      gdk_wayland_surface_request_frame_for_surface (frame, subsurface->surface);
     }
-
-  self->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 }
 
 gboolean
@@ -450,14 +515,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
     {
       gdk_wayland_surface_commit (surface);
       gdk_wayland_surface_notify_committed (surface);
-    }
-
-  if (impl->frame_callback &&
-      impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
-    {
-      g_assert (!impl->awaiting_frame_frozen);
-      impl->awaiting_frame_frozen = TRUE;
-      gdk_surface_freeze_updates (surface);
     }
 }
 
@@ -807,7 +864,7 @@ gdk_wayland_surface_handle_empty_frame (GdkSurface          *surface,
 
   gdk_draw_context_frame_gpu_complete (frame, 0);
   gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_request_frame (surface);
+  gdk_wayland_surface_request_frame (surface, frame);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   gdk_wayland_surface_commit (surface);
@@ -1148,14 +1205,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   unmap_popups_for_surface (surface);
 
-  g_clear_pointer (&impl->presentation_time, gdk_wayland_presentation_time_free);
-  gdk_wayland_surface_clear_frame_callback (impl);
-  if (impl->awaiting_frame_frozen)
-    {
-      impl->awaiting_frame_frozen = FALSE;
-      gdk_surface_thaw_updates (surface);
-    }
-
   GDK_WAYLAND_SURFACE_GET_CLASS (impl)->hide_surface (impl);
 
   if (impl->display_server.xdg_surface)
@@ -1376,6 +1425,8 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   object_class->dispose = gdk_wayland_surface_dispose;
   object_class->finalize = gdk_wayland_surface_finalize;
 
+  surface_class->frame_size = sizeof (GdkWaylandSurfaceFrame);
+
   surface_class->hide = gdk_wayland_surface_hide;
   surface_class->get_geometry = gdk_wayland_surface_get_geometry;
   surface_class->get_root_coords = gdk_wayland_surface_get_root_coords;
@@ -1391,6 +1442,8 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   surface_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   surface_class->request_layout = gdk_wayland_surface_request_layout;
   surface_class->create_subsurface = gdk_wayland_surface_create_subsurface;
+
+  surface_class->finalize_frame = gdk_wayland_surface_finalize_frame;
 
   klass->handle_configure = gdk_wayland_surface_default_handle_configure;
   klass->hide_surface = gdk_wayland_surface_default_hide_surface;

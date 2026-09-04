@@ -66,7 +66,7 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext      *context,
 
   gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_request_frame (surface);
+  gdk_wayland_surface_request_frame (surface, frame);
 
   if (wl_surface_get_version (impl->display_server.wl_surface) >= WL_SURFACE_OFFSET_SINCE_VERSION)
     wl_surface_offset (impl->display_server.wl_surface, dx, dy);
