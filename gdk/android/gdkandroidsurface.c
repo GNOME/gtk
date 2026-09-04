@@ -461,37 +461,43 @@ gdk_android_surface_finalize (GObject *object)
 }
 
 static void
-gdk_android_surface_frame_clock_after_paint (GdkFrameClock *clock,
-                                             GdkSurface    *surface)
+gdk_android_surface_submit_frame (GdkSurface          *surface,
+                                  GdkDrawContextFrame *frame)
 {
   GdkAndroidSurface *self = (GdkAndroidSurface *)surface;
+  GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
+
   if (!self->surface)
-    return;
+    {
+      gdk_draw_context_frame_discarded (frame);
+      return;
+    }
 
   JNIEnv *env = gdk_android_get_env();
   (*env)->PushLocalFrame (env, 1);
   jobject view = (*env)->CallObjectMethod (env, self->surface,
                                            gdk_android_get_java_cache ()->a_view.get_display);
   if (!view)
-    goto exit;
+    {
+      gdk_draw_context_frame_discarded (frame);
+      goto exit;
+    }
+
   float refresh = (*env)->CallFloatMethod (env, view,
                                            gdk_android_get_java_cache ()->a_display.get_refresh_rate);
   refresh = (float) G_NSEC_PER_SEC / refresh;
 
-  GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
   if (display->choreographer_source)
     {
-      gdk_frame_clock_presented (clock,
-                                 gdk_frame_clock_get_frame_counter (clock),
-                                 gdk_android_choreographer_source_get_presentation_time (
-                                   (GdkAndroidChoreographerSource *) display->choreographer_source),
-                                 refresh);
+      gdk_draw_context_frame_presented (frame,
+                                        gdk_android_choreographer_source_get_presentation_time (
+                                          (GdkAndroidChoreographerSource *) display->choreographer_source),
+                                        refresh);
     }
   else
     {
-      gdk_frame_clock_submitted (clock,
-                                 gdk_frame_clock_get_frame_counter (clock),
-                                 refresh);
+      gdk_draw_context_frame_submitted (frame,
+                                        refresh);
     }
 
 exit:
@@ -508,10 +514,6 @@ gdk_android_surface_constructed (GObject *object)
   GdkFrameClock *frame_clock = _gdk_frame_clock_idle_new ();
   gdk_surface_set_frame_clock (surface, frame_clock);
   // GDK_FRAME_CLOCK_GET_CLASS(frame_clock)->freeze(frame_clock);
-  g_signal_connect (frame_clock,
-                    "after-paint",
-                    G_CALLBACK (gdk_android_surface_frame_clock_after_paint),
-                    self);
   g_object_unref (frame_clock);
 
   gdk_android_display_add_surface (display, self);
