@@ -21,8 +21,8 @@
 #include "config.h"
 
 #include "gtk/gtkactionkeyprivate.h"
-#include "gtk/gtkactionmuxerprivate.h"
 #include "gtk/gtkactionsnapshotprivate.h"
+#include "gtk/gtkactiontreeprivate.h"
 
 static void
 test_action_key (void)
@@ -106,32 +106,36 @@ test_invocation_key (void)
 }
 
 static void
-test_muxer_structured_accels (void)
+test_node_structured_accels (void)
 {
-  GtkActionMuxer *parent;
-  GtkActionMuxer *child;
-  g_autofree char *first = NULL;
-  g_autofree char *second = NULL;
+  GtkActionKey *key = gtk_action_key_new ("app.open");
+  GVariant *first_target = g_variant_ref_sink (g_variant_new_string ("a|b"));
+  GVariant *second_target = g_variant_ref_sink (g_variant_new_string ("other"));
+  GtkActionNode *parent;
+  GtkActionNode *child;
+  int parent_owner;
+  int child_owner;
 
-  parent = gtk_action_muxer_new (NULL);
-  child = gtk_action_muxer_new (NULL);
-  gtk_action_muxer_set_parent (child, parent);
+  parent = gtk_action_node_new_synthetic (&parent_owner);
+  child = gtk_action_node_new_synthetic (&child_owner);
+  gtk_action_node_set_synthetic_parent (child, parent);
 
-  first = gtk_print_action_and_target (NULL, "app.open", g_variant_new_string ("a|b"));
-  second = gtk_print_action_and_target (NULL, "app.open", g_variant_new_string ("other"));
+  gtk_action_node_set_primary_accel (parent, key, first_target, "<Control>O");
+  gtk_action_node_set_primary_accel (parent, key, second_target, "<Control><Shift>O");
 
-  gtk_action_muxer_set_primary_accel (parent, first, "<Control>O");
-  gtk_action_muxer_set_primary_accel (parent, second, "<Control><Shift>O");
+  g_assert_cmpstr (gtk_action_node_get_primary_accel (child, key, first_target), ==, "<Control>O");
+  g_assert_cmpstr (gtk_action_node_get_primary_accel (child, key, second_target), ==, "<Control><Shift>O");
 
-  g_assert_cmpstr (gtk_action_muxer_get_primary_accel (child, first), ==, "<Control>O");
-  g_assert_cmpstr (gtk_action_muxer_get_primary_accel (child, second), ==, "<Control><Shift>O");
+  gtk_action_node_set_primary_accel (parent, key, first_target, NULL);
+  g_assert_null (gtk_action_node_get_primary_accel (child, key, first_target));
+  g_assert_cmpstr (gtk_action_node_get_primary_accel (child, key, second_target), ==, "<Control><Shift>O");
 
-  gtk_action_muxer_set_primary_accel (parent, first, NULL);
-  g_assert_null (gtk_action_muxer_get_primary_accel (child, first));
-  g_assert_cmpstr (gtk_action_muxer_get_primary_accel (child, second), ==, "<Control><Shift>O");
+  gtk_action_node_remove (child);
+  gtk_action_node_remove (parent);
 
-  g_object_unref (child);
-  g_object_unref (parent);
+  g_clear_pointer (&second_target, g_variant_unref);
+  g_clear_pointer (&first_target, g_variant_unref);
+  g_clear_pointer (&key, gtk_action_key_unref);
 }
 
 static void
@@ -193,12 +197,12 @@ int
 main (int   argc,
       char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
+  (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/action-key/canonical", test_action_key);
   g_test_add_func ("/action-key/invalid", test_action_key_invalid);
   g_test_add_func ("/action-key/invocation", test_invocation_key);
-  g_test_add_func ("/action-key/muxer-structured-accels", test_muxer_structured_accels);
+  g_test_add_func ("/action-key/node-structured-accels", test_node_structured_accels);
   g_test_add_func ("/action-snapshot/ownership-and-difference", test_snapshot);
 
   return g_test_run ();

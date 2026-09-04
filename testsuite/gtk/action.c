@@ -332,10 +332,8 @@ test_inheritance3 (void)
   g_object_unref (box1_actions);
 }
 
-/* this checks a particular bug I've seen: when the action muxer
- * hierarchy is already set up, adding action groups 'in the middle'
- * does not properly update the muxer hierarchy, causing actions
- * to be missed.
+/* This checks that adding an action node between existing nodes updates
+ * the compressed topology so actions are not missed.
  */
 static void
 test_inheritance4 (void)
@@ -374,8 +372,8 @@ test_inheritance4 (void)
 
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "box.action");
 
-  /* no box1.action yet, but the action muxers are set up, with windows' muxer
-   * being the parent of button's, since box has no muxer yet.
+  /* No box.action exists yet. The window action node is the button node's
+   * compressed parent because the box does not have a node yet.
    */
   g_assert_false (gtk_widget_get_sensitive (button));
 
@@ -386,8 +384,7 @@ test_inheritance4 (void)
 
   gtk_widget_insert_action_group (box, "box", G_ACTION_GROUP (box_actions));
 
-  /* now box has a muxer, and buttons muxer should be updated to inherit
-   * from it
+  /* The new box node is inserted between the window and button nodes.
    */
   g_assert_true (gtk_widget_get_sensitive (button));
 
@@ -434,7 +431,7 @@ test_insert_group_above_consumer (void)
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "test.action");
   g_assert_false (gtk_widget_get_sensitive (button));
 
-  /* @box had no muxer when @button subscribed. */
+  /* @box had no action node when @button subscribed. */
   gtk_widget_insert_action_group (box, "test", G_ACTION_GROUP (local));
   g_assert_true (gtk_widget_get_sensitive (button));
 
@@ -579,7 +576,7 @@ remove_sibling_on_sensitive_notify (GtkWidget         *widget,
 }
 
 static void
-test_remove_observer_during_notification (void)
+test_remove_subscription_during_notification (void)
 {
   RemoveSiblingData data;
   GSimpleActionGroup *group;
@@ -791,8 +788,8 @@ activate2 (GSimpleAction *action,
 /* Test that overlap also works as expected between
  * class action and inserted groups. Class actions
  * take precedence over inserted groups in the same
- * muxer, but inheritance works as normal between
- * muxers.
+ * node, but inheritance works as normal between
+ * action nodes.
  */
 static void
 test_overlap2 (void)
@@ -924,6 +921,10 @@ test_introspection (void)
 static void
 test_enabled (void)
 {
+  GActionEntry entries[] = {
+    { "toggle-visibility", activate1, NULL, NULL, NULL },
+  };
+  GSimpleActionGroup *group;
   GtkWidget *text;
 
   text = gtk_text_new ();
@@ -938,11 +939,18 @@ test_enabled (void)
 
   gtk_widget_action_set_enabled (text, "misc.toggle-visibility", FALSE);
 
-  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+  act1 = 0;
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
+  gtk_widget_insert_action_group (text, "misc", G_ACTION_GROUP (group));
+
+  g_assert_false (gtk_widget_activate_action (text, "misc.toggle-visibility", NULL));
 
   g_assert_cmpint (toggled, ==, 1);
+  g_assert_cmpint (act1, ==, 0);
 
   g_object_unref (g_object_ref_sink (text));
+  g_object_unref (group);
 }
 
 static gulong
@@ -976,6 +984,10 @@ test_lazy_property_action (void)
   gtk_text_set_visibility (GTK_TEXT (text), FALSE);
   g_assert_false (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
 
+  g_assert_true (gtk_widget_activate_action (text, "misc.toggle-visibility", NULL));
+  g_assert_true (gtk_text_get_visibility (GTK_TEXT (text)));
+  g_assert_true (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
+
   gtk_widget_unparent (actionable);
   g_object_unref (actionable);
   g_assert_cmpuint (find_visibility_notify_handler (text), ==, 0);
@@ -993,11 +1005,14 @@ struct _MyGtkActionable
 
 G_DEFINE_FINAL_TYPE (MyGtkActionable, my_gtk_actionable, GTK_TYPE_BUTTON);
 
+static int class_action_activated;
+
 static void
 test_cb (GtkWidget  *sender,
          const char *name,
          GVariant   *param)
 {
+  class_action_activated++;
 }
 
 static void
@@ -1012,6 +1027,30 @@ my_gtk_actionable_class_init (MyGtkActionableClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_install_action (widget_class, "test.test", NULL, test_cb);
+  gtk_widget_class_install_action (widget_class, "test.parameter", "s", test_cb);
+}
+
+static void
+test_direct_class_action (void)
+{
+  GtkWidget *widget;
+
+  widget = g_object_ref_sink (g_object_new (MY_TYPE_GTK_ACTIONABLE, NULL));
+  class_action_activated = 0;
+
+  g_assert_true (gtk_widget_activate_action (widget, "test.test", NULL));
+  g_assert_cmpint (class_action_activated, ==, 1);
+
+  g_assert_false (gtk_widget_activate_action (widget, "test.parameter", NULL));
+  g_assert_false (gtk_widget_activate_action_variant (widget, "test.parameter",
+                                                      g_variant_new_int32 (1)));
+  g_assert_cmpint (class_action_activated, ==, 1);
+
+  g_assert_true (gtk_widget_activate_action_variant (widget, "test.parameter",
+                                                     g_variant_new_string ("value")));
+  g_assert_cmpint (class_action_activated, ==, 2);
+
+  g_object_unref (widget);
 }
 
 /* Test that actions are correctly notified after reparenting */
@@ -1023,6 +1062,7 @@ test_reparenting (void)
   window = gtk_window_new ();
 
   actionable = g_object_new (MY_TYPE_GTK_ACTIONABLE, NULL);
+  g_assert_true (gtk_widget_get_sensitive (actionable));
   gtk_window_set_child (GTK_WINDOW (window), actionable);
   g_assert_true (gtk_widget_get_sensitive (actionable));
 
@@ -1035,6 +1075,38 @@ test_reparenting (void)
   g_assert_true (gtk_widget_get_sensitive (actionable));
 
   g_object_unref (window);
+}
+
+static void
+test_application_root (void)
+{
+  GtkApplication *application;
+  GtkWidget *window;
+  GtkWidget *button;
+  GSimpleAction *action;
+  GError *error = NULL;
+  int activated = 0;
+
+  application = gtk_application_new ("org.gtk.test.action-root",
+                                     G_APPLICATION_NON_UNIQUE);
+  g_assert_true (g_application_register (G_APPLICATION (application), NULL, &error));
+  g_assert_no_error (error);
+  action = g_simple_action_new ("root-action", NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (activate), &activated);
+  g_action_map_add_action (G_ACTION_MAP (application), G_ACTION (action));
+
+  window = g_object_new (GTK_TYPE_APPLICATION_WINDOW,
+                         "application", application,
+                         NULL);
+  button = gtk_button_new ();
+  gtk_window_set_child (GTK_WINDOW (window), button);
+
+  g_assert_true (gtk_widget_activate_action (button, "app.root-action", NULL));
+  g_assert_cmpint (activated, ==, 1);
+
+  g_object_unref (window);
+  g_object_unref (action);
+  g_object_unref (application);
 }
 
 int
@@ -1051,14 +1123,16 @@ main (int   argc,
   g_test_add_func ("/action/remove-shadowing-action", test_remove_shadowing_action);
   g_test_add_func ("/action/readd-shadowing-action-during-removal", test_readd_shadowing_action_during_removal);
   g_test_add_func ("/action/inherit-action-from-same-prefix-group", test_inherit_action_from_same_prefix_group);
-  g_test_add_func ("/action/remove-observer-during-notification", test_remove_observer_during_notification);
+  g_test_add_func ("/action/remove-subscription-during-notification", test_remove_subscription_during_notification);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
   g_test_add_func ("/action/enabled", test_enabled);
   g_test_add_func ("/action/lazy-property", test_lazy_property_action);
+  g_test_add_func ("/action/direct-class-action", test_direct_class_action);
   g_test_add_func ("/action/reparenting", test_reparenting);
+  g_test_add_func ("/action/application-root", test_application_root);
 
   return g_test_run();
 }

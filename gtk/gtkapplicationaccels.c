@@ -23,7 +23,6 @@
 
 #include "gtkapplicationaccelsprivate.h"
 
-#include "gtkactionmuxerprivate.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutaction.h"
 #include "gtkshortcuttrigger.h"

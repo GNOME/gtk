@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "gtkactionobservableprivate.h"
+#include "gtkactiontreeprivate.h"
 
-#define GTK_TYPE_MENU_TRACKER_ITEM                          (gtk_menu_tracker_item_get_type ())
+#define GTK_TYPE_MENU_TRACKER_ITEM                          (gtk_menu_tracker_item_get_type())
 #define GTK_MENU_TRACKER_ITEM(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
                                                              GTK_TYPE_MENU_TRACKER_ITEM, GtkMenuTrackerItem))
 #define GTK_IS_MENU_TRACKER_ITEM(inst)                      (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
@@ -29,7 +29,7 @@
 
 typedef struct _GtkMenuTrackerItem GtkMenuTrackerItem;
 
-#define GTK_TYPE_MENU_TRACKER_ITEM_ROLE                     (gtk_menu_tracker_item_role_get_type ())
+#define GTK_TYPE_MENU_TRACKER_ITEM_ROLE                     (gtk_menu_tracker_item_role_get_type())
 
 typedef enum  {
   GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
@@ -37,67 +37,39 @@ typedef enum  {
   GTK_MENU_TRACKER_ITEM_ROLE_RADIO,
 } GtkMenuTrackerItemRole;
 
-GType                   gtk_menu_tracker_item_get_type                  (void);
-
-GType                   gtk_menu_tracker_item_role_get_type             (void);
-
-GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActionObservable *observable,
-                                                                         GMenuModel          *model,
-                                                                         int                  item_index,
-                                                                         gboolean             mac_os_mode,
-                                                                         const char          *action_namespace,
-                                                                         gboolean             is_separator);
-
-const char *           gtk_menu_tracker_item_get_action_name           (GtkMenuTrackerItem *self);
-
-GVariant *             gtk_menu_tracker_item_get_action_target         (GtkMenuTrackerItem *self);
-
-const char *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
-
-const char *           gtk_menu_tracker_item_get_custom                (GtkMenuTrackerItem *self);
-
-const char *           gtk_menu_tracker_item_get_display_hint          (GtkMenuTrackerItem *self);
-
-const char *           gtk_menu_tracker_item_get_text_direction        (GtkMenuTrackerItem *self);
-
-GtkActionObservable *  _gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_has_link              (GtkMenuTrackerItem *self,
-                                                                         const char         *link_name);
-
-const char *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
-
-gboolean               gtk_menu_tracker_item_get_use_markup            (GtkMenuTrackerItem *self);
-
-GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);
-
-GIcon *                 gtk_menu_tracker_item_get_verb_icon             (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_sensitive             (GtkMenuTrackerItem *self);
-
-GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
-
-const char *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
-
-GMenuModel *           _gtk_menu_tracker_item_get_link                  (GtkMenuTrackerItem *self,
-                                                                         const char         *link_name);
-
-char *                _gtk_menu_tracker_item_get_link_namespace        (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_may_disappear             (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_is_visible            (GtkMenuTrackerItem *self);
-
-gboolean                gtk_menu_tracker_item_get_should_request_show   (GtkMenuTrackerItem *self);
-
-void                    gtk_menu_tracker_item_activated                 (GtkMenuTrackerItem *self);
-
-void                    gtk_menu_tracker_item_request_submenu_shown     (GtkMenuTrackerItem *self,
-                                                                         gboolean            shown);
-
-gboolean                gtk_menu_tracker_item_get_submenu_shown         (GtkMenuTrackerItem *self);
-
+GType                   gtk_menu_tracker_item_get_type                (void);
+GType                   gtk_menu_tracker_item_role_get_type           (void);
+GtkMenuTrackerItem     *_gtk_menu_tracker_item_new                    (GtkActionNode      *action_node,
+                                                                       GMenuModel         *model,
+                                                                       int                 item_index,
+                                                                       gboolean            mac_os_mode,
+                                                                       const char         *action_namespace,
+                                                                       gboolean            is_separator);
+const char             *gtk_menu_tracker_item_get_action_name         (GtkMenuTrackerItem *self);
+GVariant               *gtk_menu_tracker_item_get_action_target       (GtkMenuTrackerItem *self);
+const char             *gtk_menu_tracker_item_get_special             (GtkMenuTrackerItem *self);
+const char             *gtk_menu_tracker_item_get_custom              (GtkMenuTrackerItem *self);
+const char             *gtk_menu_tracker_item_get_display_hint        (GtkMenuTrackerItem *self);
+const char             *gtk_menu_tracker_item_get_text_direction      (GtkMenuTrackerItem *self);
+GtkActionNode          *_gtk_menu_tracker_item_get_action_node        (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_is_separator        (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_has_link            (GtkMenuTrackerItem *self,
+                                                                       const char         *link_name);
+const char             *gtk_menu_tracker_item_get_label               (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_use_markup          (GtkMenuTrackerItem *self);
+GIcon                  *gtk_menu_tracker_item_get_icon                (GtkMenuTrackerItem *self);
+GIcon                  *gtk_menu_tracker_item_get_verb_icon           (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_sensitive           (GtkMenuTrackerItem *self);
+GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_toggled             (GtkMenuTrackerItem *self);
+const char             *gtk_menu_tracker_item_get_accel               (GtkMenuTrackerItem *self);
+GMenuModel             *_gtk_menu_tracker_item_get_link               (GtkMenuTrackerItem *self,
+                                                                       const char         *link_name);
+char                   *_gtk_menu_tracker_item_get_link_namespace     (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_may_disappear           (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_is_visible          (GtkMenuTrackerItem *self);
+gboolean                gtk_menu_tracker_item_get_should_request_show (GtkMenuTrackerItem *self);
+void                    gtk_menu_tracker_item_activated               (GtkMenuTrackerItem *self);
+void                    gtk_menu_tracker_item_request_submenu_shown   (GtkMenuTrackerItem *self,
+                                                                       gboolean            shown);
+gboolean                gtk_menu_tracker_item_get_submenu_shown       (GtkMenuTrackerItem *self);

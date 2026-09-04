@@ -22,7 +22,9 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtkactiontreeprivate.h"
+#include "gtk/gtkmenutrackerprivate.h"
 #include "gtk/gtkmodelbuttonprivate.h"
+#include "gtk/inspector/actions.h"
 
 static void
 test_sparse_insertion (void)
@@ -39,17 +41,17 @@ test_sparse_insertion (void)
 
   inner_node = gtk_action_tree_add_widget (tree, inner);
   g_assert_null (gtk_action_node_get_parent (inner_node));
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (outer), ==, 1);
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (middle), ==, 1);
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (outer), ==, 1);
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (middle), ==, 1);
 
   outer_node = gtk_action_tree_add_widget (tree, outer);
   g_assert_true (gtk_action_node_get_parent (inner_node) == outer_node);
   g_assert_true (gtk_action_node_get_first_child (outer_node) == inner_node);
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (outer), ==, 2);
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (outer), ==, 2);
   g_assert_true (gtk_action_tree_check_invariants (tree));
 
   gtk_action_tree_free (tree);
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (outer), ==, 0);
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (outer), ==, 0);
   g_object_unref (outer);
 }
 
@@ -70,9 +72,9 @@ test_reparent_and_prune (void)
 
   gtk_box_append (GTK_BOX (left), branch);
   gtk_box_append (GTK_BOX (branch), leaf);
-  left_baseline = gtk_action_tree_get_widget_subtree (left);
-  right_baseline = gtk_action_tree_get_widget_subtree (right);
-  branch_baseline = gtk_action_tree_get_widget_subtree (branch);
+  left_baseline = gtk_widget_get_action_subtree_count (left);
+  right_baseline = gtk_widget_get_action_subtree_count (right);
+  branch_baseline = gtk_widget_get_action_subtree_count (branch);
   left_node = gtk_action_tree_add_widget (tree, left);
   right_node = gtk_action_tree_add_widget (tree, right);
   leaf_node = gtk_action_tree_add_widget (tree, leaf);
@@ -85,9 +87,9 @@ test_reparent_and_prune (void)
   gtk_action_node_sync_parent (leaf_node);
 
   g_assert_true (gtk_action_node_get_parent (leaf_node) == right_node);
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (left), ==,
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (left), ==,
                     left_baseline - branch_baseline + 1);
-  g_assert_cmpuint (gtk_action_tree_get_widget_subtree (right), ==,
+  g_assert_cmpuint (gtk_widget_get_action_subtree_count (right), ==,
                     right_baseline + branch_baseline + 2);
 
   gtk_action_node_remove (right_node);
@@ -376,21 +378,24 @@ test_large_route_subtree_move (void)
 
 typedef struct
 {
-  GtkActionNode *node;
-  guint          changes;
-  GtkActionChange changed;
-  gboolean       remove_source;
-} ProviderState;
+  GtkActionNode     *node;
+  GtkActionProvider *provider;
+  guint              changes;
+  GtkActionChange    changed;
+  gboolean           remove_source;
+} ProviderSubscriptionState;
 
 static void
-provider_changed (GtkActionProvider       *provider,
-                  GtkActionChange          changed,
-                  const GtkActionSnapshot *snapshot,
-                  gpointer                 user_data)
+provider_subscription_changed (GtkActionSubscription   *subscription,
+                               GtkActionChange          changed,
+                               const GtkActionSnapshot *snapshot,
+                               gpointer                 user_data)
 {
-  ProviderState *state = user_data;
+  ProviderSubscriptionState *state = user_data;
 
-  g_assert_true (snapshot->provider == provider);
+  g_assert_nonnull (subscription);
+  if (snapshot->provider != NULL)
+    g_assert_true (snapshot->provider == state->provider);
   state->changes++;
   state->changed |= changed;
 
@@ -412,19 +417,31 @@ test_group_provider_changes (void)
   GtkWidget *widget = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   GtkActionNode *node = gtk_action_tree_add_widget (tree, widget);
   GtkActionProvider *provider;
+  GtkActionSubscription *subscription;
   const GtkActionSnapshot *snapshot;
-  ProviderState state = { .node = node };
+  ProviderSubscriptionState state = { .node = node };
 
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
   gtk_action_node_insert_group (node, "win", G_ACTION_GROUP (group));
   gtk_action_node_add_route_interest (node, key);
-  provider = gtk_action_node_resolve (node, key);
+  provider = gtk_action_node_resolve_provider (node, key);
   g_assert_nonnull (provider);
   snapshot = gtk_action_provider_get_snapshot (provider);
   g_assert_true (snapshot->present);
   g_assert_true (snapshot->enabled);
   g_assert_cmpstr (g_variant_get_string (snapshot->state, NULL), ==, "a");
-  gtk_action_provider_add_observer (provider, provider_changed, &state, NULL);
+  state.provider = provider;
+  subscription = gtk_action_node_subscribe (node,
+                                            key,
+                                            NULL,
+                                            (GTK_ACTION_INTEREST_ENABLED |
+                                             GTK_ACTION_INTEREST_RAW_STATE),
+                                            provider_subscription_changed,
+                                            &state,
+                                            NULL);
+  g_assert_nonnull (subscription);
+  state.changes = 0;
+  state.changed = GTK_ACTION_CHANGE_NONE;
 
   g_simple_action_set_enabled (action, FALSE);
   g_simple_action_set_state (action, g_variant_new_string ("b"));
@@ -469,20 +486,20 @@ test_dynamic_shadow_and_replacement (void)
   gtk_action_node_insert_group (root_node, "win", G_ACTION_GROUP (parent_group));
   gtk_action_node_insert_group (leaf_node, "win", G_ACTION_GROUP (child_group));
   gtk_action_node_add_route_interest (leaf_node, key);
-  parent_provider = gtk_action_node_resolve (leaf_node, key);
+  parent_provider = gtk_action_node_resolve_provider (leaf_node, key);
   g_assert_nonnull (parent_provider);
   g_assert_null (gtk_action_node_lookup_route (leaf_node, unrelated));
 
   g_action_map_add_action (G_ACTION_MAP (child_group), G_ACTION (child_action));
-  child_provider = gtk_action_node_resolve (leaf_node, key);
+  child_provider = gtk_action_node_resolve_provider (leaf_node, key);
   g_assert_nonnull (child_provider);
   g_assert_true (child_provider != parent_provider);
   g_action_map_remove_action (G_ACTION_MAP (child_group), "save");
-  g_assert_true (gtk_action_node_resolve (leaf_node, key) == parent_provider);
+  g_assert_true (gtk_action_node_resolve_provider (leaf_node, key) == parent_provider);
 
   g_action_map_add_action (G_ACTION_MAP (replacement), G_ACTION (replacement_action));
   gtk_action_node_insert_group (leaf_node, "win", G_ACTION_GROUP (replacement));
-  g_assert_true (gtk_action_node_resolve (leaf_node, key) != parent_provider);
+  g_assert_true (gtk_action_node_resolve_provider (leaf_node, key) != parent_provider);
   g_assert_null (gtk_action_node_lookup_route (leaf_node, unrelated));
   g_assert_true (gtk_action_tree_check_invariants (tree));
 
@@ -510,15 +527,27 @@ test_provider_resolution_and_callback_removal (void)
   GtkWidget *widget = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   GtkActionNode *node = gtk_action_tree_add_widget (tree, widget);
   GtkActionProvider *provider;
-  ProviderState state = { .node = node, .remove_source = TRUE };
+  GtkActionSubscription *subscription;
+  ProviderSubscriptionState state = { .node = node };
   const char *local_name = NULL;
   GStrv actions = NULL;
 
   g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
   gtk_action_node_insert_group (node, "win", G_ACTION_GROUP (group));
   gtk_action_node_add_route_interest (node, key);
-  provider = gtk_action_node_resolve (node, key);
-  gtk_action_provider_add_observer (provider, provider_changed, &state, NULL);
+  provider = gtk_action_node_resolve_provider (node, key);
+  state.provider = provider;
+  subscription = gtk_action_node_subscribe (node,
+                                            key,
+                                            NULL,
+                                            GTK_ACTION_INTEREST_RAW_STATE,
+                                            provider_subscription_changed,
+                                            &state,
+                                            NULL);
+  g_assert_nonnull (subscription);
+  state.changes = 0;
+  state.changed = GTK_ACTION_CHANGE_NONE;
+  state.remove_source = TRUE;
 
   g_assert_true (gtk_action_node_find_group (node, key, &local_name) == G_ACTION_GROUP (group));
   g_assert_cmpstr (local_name, ==, "toggle");
@@ -527,9 +556,9 @@ test_provider_resolution_and_callback_removal (void)
   g_assert_cmpstr (actions[0], ==, "win.toggle");
   g_assert_null (actions[1]);
   g_assert_true (gtk_action_provider_change_state (provider, g_variant_new_boolean (TRUE)));
-  g_assert_cmpuint (state.changes, ==, 1);
+  g_assert_cmpuint (state.changes, ==, 2);
   g_assert_null (gtk_action_node_get_group (node, "win"));
-  g_assert_null (gtk_action_node_resolve (node, key));
+  g_assert_null (gtk_action_node_resolve_provider (node, key));
   g_assert_true (gtk_action_tree_check_invariants (tree));
 
   gtk_action_tree_free (tree);
@@ -561,6 +590,51 @@ test_source_destruction (void)
 
   gtk_action_tree_free (tree);
   g_object_unref (widget);
+}
+
+static void
+test_one_off_provider_node_resolution (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("win.save");
+  GtkActionKey *missing = gtk_action_key_new ("win.missing");
+  GSimpleActionGroup *parent_group = g_simple_action_group_new ();
+  GSimpleActionGroup *child_group = g_simple_action_group_new ();
+  GSimpleAction *parent_action = g_simple_action_new ("save", NULL);
+  GSimpleAction *child_action = g_simple_action_new ("save", NULL);
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkWidget *root = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  GtkWidget *child = gtk_button_new ();
+  GtkActionNode *root_node;
+  GtkActionNode *child_node;
+
+  gtk_box_append (GTK_BOX (root), child);
+  root_node = gtk_action_tree_add_widget (tree, root);
+  child_node = gtk_action_tree_add_widget (tree, child);
+  g_action_map_add_action (G_ACTION_MAP (parent_group), G_ACTION (parent_action));
+  gtk_action_node_insert_group (root_node, "win", G_ACTION_GROUP (parent_group));
+
+  g_assert_true (gtk_action_node_resolve_provider_node (root_node, key) == root_node);
+  g_assert_null (gtk_action_node_lookup_route (root_node, key));
+  g_assert_true (gtk_action_node_resolve_provider_node (child_node, key) == root_node);
+  g_assert_null (gtk_action_node_lookup_route (child_node, key));
+  g_assert_null (gtk_action_node_resolve_provider_node (child_node, missing));
+  g_assert_null (gtk_action_node_lookup_route (child_node, missing));
+
+  g_action_map_add_action (G_ACTION_MAP (child_group), G_ACTION (child_action));
+  gtk_action_node_insert_group (child_node, "win", G_ACTION_GROUP (child_group));
+  g_assert_true (gtk_action_node_resolve_provider_node (child_node, key) == child_node);
+  g_assert_null (gtk_action_node_lookup_route (child_node, key));
+  g_assert_true (gtk_action_tree_check_invariants (tree));
+
+  gtk_action_tree_free (tree);
+  g_object_unref (root);
+
+  g_clear_object (&child_action);
+  g_clear_object (&parent_action);
+  g_clear_object (&child_group);
+  g_clear_object (&parent_group);
+  g_clear_pointer (&missing, gtk_action_key_unref);
+  g_clear_pointer (&key, gtk_action_key_unref);
 }
 
 typedef struct
@@ -701,6 +775,32 @@ test_subscriptions (void)
 
   g_clear_object (&action);
   g_clear_object (&group);
+  g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+static void
+test_subscription_owner_location (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("win.action");
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkActionNode *node = gtk_action_tree_add_synthetic (tree, tree);
+  GtkActionSubscription *subscription;
+  SubscriptionState state = { 0 };
+
+  subscription = gtk_action_node_subscribe (node, key, NULL,
+                                             GTK_ACTION_INTEREST_PRESENT,
+                                             subscription_changed,
+                                             &state,
+                                             subscription_destroyed);
+  g_assert_nonnull (subscription);
+  gtk_action_subscription_set_owner_location (subscription, &subscription);
+
+  gtk_action_node_remove (node);
+
+  g_assert_null (subscription);
+  g_assert_cmpuint (state.destroy_count, ==, 1);
+  gtk_action_tree_free (tree);
+
   g_clear_pointer (&key, gtk_action_key_unref);
 }
 
@@ -1168,14 +1268,16 @@ test_target_indexes (void)
                                           target_binding_changed, &states[i], NULL);
     }
 
-  provider = gtk_action_node_resolve (node, key);
+  provider = gtk_action_node_resolve_provider (node, key);
   g_assert_nonnull (provider);
   g_assert_cmpuint (gtk_action_provider_get_target_count (provider), ==, 6);
   g_assert_true (gtk_action_provider_has_target_index (provider));
 
   gtk_action_provider_reset_touched_bindings (provider);
   g_simple_action_set_state (action, g_variant_new_string ("target-1"));
+#ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 2);
+#endif
   g_assert_cmpuint (states[0].deliveries, ==, 2);
   g_assert_cmpuint (states[1].deliveries, ==, 2);
   g_assert_cmpuint (states[2].deliveries, ==, 1);
@@ -1188,12 +1290,16 @@ test_target_indexes (void)
                                       target_binding_changed, &states[6], NULL);
   gtk_action_provider_reset_touched_bindings (provider);
   g_simple_action_set_state (action, g_variant_new_string ("target-2"));
+#ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 3);
+#endif
   g_assert_cmpuint (states[6].deliveries, ==, 1);
 
   gtk_action_provider_reset_touched_bindings (provider);
   g_simple_action_set_state (action, g_variant_new_string ("target-2"));
+#ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 0);
+#endif
 
   states[2].cancel = bindings[3];
   states[2].cancel_on_change = TRUE;
@@ -1210,6 +1316,758 @@ test_target_indexes (void)
   g_clear_object (&action);
   g_clear_object (&group);
   g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+static void
+test_resolution_lifetime (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("app.mode");
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  GSimpleAction *action =
+    g_simple_action_new_stateful ("mode", G_VARIANT_TYPE_STRING,
+                                  g_variant_new_string ("initial"));
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkActionNode *node = gtk_action_tree_add_synthetic (tree, tree);
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  const GVariantType *parameter_type = NULL;
+  const GVariantType *state_type = NULL;
+  GVariant *state_hint = NULL;
+  GVariant *state = NULL;
+  gboolean enabled = FALSE;
+
+  g_simple_action_set_state_hint (action, g_variant_new_strv ((const char *[]) { "initial", "other", NULL }, -1));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  gtk_action_node_insert_group (node, "app", G_ACTION_GROUP (group));
+
+  g_assert_true (gtk_action_resolution_init (&resolution, node, key));
+  g_assert_true (gtk_action_resolution_query (&resolution, &enabled,
+                                              &parameter_type, &state_type,
+                                              &state_hint, &state));
+  g_assert_true (enabled);
+  g_assert_true (g_variant_type_equal (parameter_type, G_VARIANT_TYPE_STRING));
+  g_assert_true (g_variant_type_equal (state_type, G_VARIANT_TYPE_STRING));
+  g_assert_cmpstr (g_variant_get_string (state, NULL), ==, "initial");
+  g_assert_nonnull (gtk_action_node_lookup_route (node, key));
+
+  gtk_action_resolution_clear (&resolution);
+  g_assert_null (gtk_action_node_lookup_route (node, key));
+  g_assert_cmpstr (g_variant_get_string (state, NULL), ==, "initial");
+  g_assert_cmpuint (g_variant_n_children (state_hint), ==, 2);
+
+  g_variant_unref (state_hint);
+  g_variant_unref (state);
+
+  g_assert_true (gtk_action_resolution_init (&resolution, node, key));
+  gtk_action_node_remove (node);
+  g_assert_null (gtk_action_resolution_get_provider_node (&resolution));
+  gtk_action_resolution_clear (&resolution);
+  g_assert_true (gtk_action_tree_check_invariants (tree));
+
+  gtk_action_tree_free (tree);
+
+  g_clear_object (&action);
+  g_clear_object (&group);
+  g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+typedef struct
+{
+  GtkActionNode *node;
+  guint          activations;
+} ResolutionRemovalState;
+
+static void
+remove_resolution_node (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  ResolutionRemovalState *state = user_data;
+
+  state->activations++;
+  g_clear_pointer (&state->node, gtk_action_node_remove);
+}
+
+static void
+test_resolution_reentrant_node_removal (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("app.remove");
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  GSimpleAction *action = g_simple_action_new ("remove", NULL);
+  GtkActionTree *tree = gtk_action_tree_new ();
+  ResolutionRemovalState state = { 0 };
+
+  state.node = gtk_action_tree_add_synthetic (tree, tree);
+  g_signal_connect (action,
+                    "activate",
+                    G_CALLBACK (remove_resolution_node),
+                    &state);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  gtk_action_node_insert_group (state.node, "app", G_ACTION_GROUP (group));
+
+  g_assert_true (gtk_action_node_activate (state.node, key, NULL));
+  g_assert_null (state.node);
+  g_assert_cmpuint (state.activations, ==, 1);
+  g_assert_true (gtk_action_tree_check_invariants (tree));
+
+  gtk_action_tree_free (tree);
+
+  g_clear_object (&action);
+  g_clear_object (&group);
+  g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+static void
+menu_tracker_insert (GtkMenuTrackerItem *item,
+                     int                 position,
+                     gpointer            user_data)
+{
+  GPtrArray *items = user_data;
+
+  g_ptr_array_insert (items, position, g_object_ref (item));
+}
+
+static void
+menu_tracker_remove (int      position,
+                     gpointer user_data)
+{
+  GPtrArray *items = user_data;
+
+  g_ptr_array_remove_index (items, position);
+}
+
+static void
+menu_action_activated (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       user_data)
+{
+  int *activated = user_data;
+
+  (*activated)++;
+}
+
+static void
+test_menu_tracker_node_context (void)
+{
+  GtkActionKey *run_key = gtk_action_key_new ("win.run");
+  GtkActionKey *open_key = gtk_action_key_new ("win.submenu-open");
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  GSimpleAction *run = g_simple_action_new ("run", NULL);
+  GSimpleAction *open =
+    g_simple_action_new_stateful ("submenu-open", NULL, g_variant_new_boolean (FALSE));
+  GMenu *menu = g_menu_new ();
+  GMenu *submenu = g_menu_new ();
+  GMenuItem *submenu_item = NULL;
+  GPtrArray *items = g_ptr_array_new_with_free_func (g_object_unref);
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkActionNode *node = gtk_action_tree_add_synthetic (tree, tree);
+  GtkMenuTracker *tracker;
+  GVariant *state = NULL;
+  int activated = 0;
+
+  g_signal_connect (run, "activate", G_CALLBACK (menu_action_activated), &activated);
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (run));
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (open));
+  gtk_action_node_insert_group (node, "win", G_ACTION_GROUP (group));
+
+  g_menu_append (menu, "Run", "win.run");
+  g_menu_append (submenu, "Child", "win.run");
+  submenu_item = g_menu_item_new_submenu ("Submenu", G_MENU_MODEL (submenu));
+  g_menu_item_set_attribute (submenu_item, "submenu-action", "s", "win.submenu-open");
+  g_menu_append_item (menu, submenu_item);
+
+  tracker = gtk_menu_tracker_new (node, G_MENU_MODEL (menu), FALSE, TRUE, FALSE, NULL,
+                                  menu_tracker_insert, menu_tracker_remove, items);
+  g_assert_cmpuint (items->len, ==, 2);
+  gtk_menu_tracker_item_activated (g_ptr_array_index (items, 0));
+  g_assert_cmpint (activated, ==, 1);
+
+  gtk_menu_tracker_item_request_submenu_shown (g_ptr_array_index (items, 1), TRUE);
+  g_assert_true (gtk_menu_tracker_item_get_submenu_shown (g_ptr_array_index (items, 1)));
+  state = g_action_group_get_action_state (G_ACTION_GROUP (group), "submenu-open");
+  g_assert_true (g_variant_get_boolean (state));
+  gtk_menu_tracker_item_request_submenu_shown (g_ptr_array_index (items, 1), FALSE);
+
+  gtk_menu_tracker_free (tracker);
+  g_ptr_array_set_size (items, 0);
+  g_assert_cmpuint (items->len, ==, 0);
+  g_assert_null (gtk_action_node_lookup_route (node, run_key));
+  g_assert_null (gtk_action_node_lookup_route (node, open_key));
+  gtk_action_tree_free (tree);
+
+  g_clear_pointer (&state, g_variant_unref);
+  g_clear_pointer (&items, g_ptr_array_unref);
+  g_clear_object (&submenu_item);
+  g_clear_object (&submenu);
+  g_clear_object (&menu);
+  g_clear_object (&open);
+  g_clear_object (&run);
+  g_clear_object (&group);
+  g_clear_pointer (&open_key, gtk_action_key_unref);
+  g_clear_pointer (&run_key, gtk_action_key_unref);
+}
+
+static void
+test_inspector_object_swap (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("test.action");
+  GSimpleActionGroup *first_group = g_simple_action_group_new ();
+  GSimpleActionGroup *second_group = g_simple_action_group_new ();
+  GSimpleAction *first_action = g_simple_action_new ("action", NULL);
+  GSimpleAction *second_action = g_simple_action_new ("action", NULL);
+  GtkWidget *first = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  GtkWidget *second = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  GtkWidget *button = g_object_ref_sink (gtk_button_new ());
+  GtkWidget *stack = g_object_ref_sink (gtk_stack_new ());
+  GtkInspectorActions *inspector;
+  GtkActionNode *first_node;
+  GtkActionNode *second_node;
+
+  g_action_map_add_action (G_ACTION_MAP (first_group), G_ACTION (first_action));
+  g_action_map_add_action (G_ACTION_MAP (second_group), G_ACTION (second_action));
+  gtk_widget_insert_action_group (first, "test", G_ACTION_GROUP (first_group));
+  gtk_widget_insert_action_group (second, "test", G_ACTION_GROUP (second_group));
+  first_node = _gtk_widget_get_action_node (first, FALSE);
+  second_node = _gtk_widget_get_action_node (second, FALSE);
+
+  inspector = g_object_new (GTK_TYPE_INSPECTOR_ACTIONS, "button", button, NULL);
+  gtk_stack_add_child (GTK_STACK (stack), GTK_WIDGET (inspector));
+
+  gtk_inspector_actions_set_object (inspector, G_OBJECT (first));
+  g_assert_nonnull (gtk_action_node_lookup_route (first_node, key));
+  gtk_inspector_actions_set_object (inspector, G_OBJECT (second));
+  g_assert_null (gtk_action_node_lookup_route (first_node, key));
+  g_assert_nonnull (gtk_action_node_lookup_route (second_node, key));
+  gtk_inspector_actions_set_object (inspector, NULL);
+  g_assert_null (gtk_action_node_lookup_route (second_node, key));
+
+  g_object_unref (stack);
+  g_object_unref (button);
+  g_object_unref (first);
+  g_object_unref (second);
+
+  g_clear_object (&second_action);
+  g_clear_object (&first_action);
+  g_clear_object (&second_group);
+  g_clear_object (&first_group);
+  g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+static void
+test_inspector_inherited_actions (void)
+{
+  GtkActionKey *key = gtk_action_key_new ("test.action");
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  GSimpleAction *action = g_simple_action_new ("action", NULL);
+  GtkWidget *parent = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  GtkWidget *child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  GtkWidget *button = g_object_ref_sink (gtk_button_new ());
+  GtkWidget *stack = g_object_ref_sink (gtk_stack_new ());
+  GtkInspectorActions *inspector;
+  GtkActionNode *child_node;
+
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  gtk_widget_insert_action_group (parent, "test", G_ACTION_GROUP (group));
+  gtk_box_append (GTK_BOX (parent), child);
+  g_assert_null (_gtk_widget_get_action_node (child, FALSE));
+
+  inspector = g_object_new (GTK_TYPE_INSPECTOR_ACTIONS, "button", button, NULL);
+  gtk_stack_add_child (GTK_STACK (stack), GTK_WIDGET (inspector));
+
+  gtk_inspector_actions_set_object (inspector, G_OBJECT (child));
+  child_node = _gtk_widget_get_action_node (child, FALSE);
+  g_assert_nonnull (child_node);
+  g_assert_nonnull (gtk_action_node_lookup_route (child_node, key));
+
+  gtk_inspector_actions_set_object (inspector, NULL);
+  g_assert_null (gtk_action_node_lookup_route (child_node, key));
+
+  g_object_unref (stack);
+  g_object_unref (button);
+  g_object_unref (parent);
+
+  g_clear_object (&action);
+  g_clear_object (&group);
+  g_clear_pointer (&key, gtk_action_key_unref);
+}
+
+#define N_MODEL_SCOPES 3
+#define N_MODEL_ACTIONS 2
+#define N_MODEL_BINDINGS 4
+
+typedef struct
+{
+  GtkWidget          *widget;
+  GtkActionNode      *node;
+  GSimpleActionGroup *group;
+  GSimpleAction      *actions[N_MODEL_ACTIONS];
+  char               *accels[N_MODEL_ACTIONS][2];
+  gboolean            attached;
+} ReferenceScope;
+
+typedef struct
+{
+  GtkActionBinding *binding;
+  GtkActionKey     *key;
+  GVariant         *target;
+  guint             deliveries;
+} ReferenceBinding;
+
+typedef struct
+{
+  GtkActionTree    *tree;
+  GtkWidget        *root;
+  GtkWidget        *left;
+  GtkWidget        *right;
+  GtkWidget        *leaf;
+  GtkActionNode    *leaf_node;
+  ReferenceScope    scopes[N_MODEL_SCOPES];
+  ReferenceBinding  bindings[N_MODEL_BINDINGS];
+  GtkActionKey     *keys[N_MODEL_ACTIONS];
+  GRand            *rand;
+} ReferenceModel;
+
+static void
+reference_binding_changed (GtkActionBinding            *binding,
+                           GtkActionChange              changed,
+                           const GtkActionBindingState *state,
+                           gpointer                     user_data)
+{
+  ReferenceBinding *model_binding = user_data;
+
+  g_assert_nonnull (binding);
+  g_assert_cmpint (changed, !=, GTK_ACTION_CHANGE_NONE);
+  g_assert_nonnull (state);
+  model_binding->deliveries++;
+}
+
+static ReferenceScope *
+reference_model_find_scope (ReferenceModel *model,
+                            GtkWidget      *widget)
+{
+  guint i;
+
+  for (i = 0; i < N_MODEL_SCOPES; i++)
+    {
+      if (model->scopes[i].widget == widget)
+        return &model->scopes[i];
+    }
+
+  return NULL;
+}
+
+static ReferenceScope *
+reference_model_resolve (ReferenceModel        *model,
+                         ReferenceBinding      *binding,
+                         gboolean              *enabled,
+                         const GVariantType   **parameter_type,
+                         const GVariantType   **state_type,
+                         GVariant             **state_hint,
+                         GVariant             **state)
+{
+  const char *local_name = gtk_action_key_get_local_name (binding->key);
+  GtkWidget *widget;
+
+  for (widget = model->leaf; widget != NULL; widget = gtk_widget_get_parent (widget))
+    {
+      ReferenceScope *scope = reference_model_find_scope (model, widget);
+
+      if (scope != NULL && scope->attached &&
+          g_action_group_query_action (G_ACTION_GROUP (scope->group),
+                                       local_name,
+                                       enabled,
+                                       parameter_type,
+                                       state_type,
+                                       state_hint,
+                                       state))
+        return scope;
+    }
+
+  return NULL;
+}
+
+static const char *
+reference_model_get_accel (ReferenceModel   *model,
+                           ReferenceBinding *binding)
+{
+  guint action_index = g_str_equal (gtk_action_key_get_full_name (binding->key),
+                                    "win.mode-0") ? 0 : 1;
+  guint target_index = binding->target != NULL &&
+                       g_str_equal (g_variant_get_string (binding->target, NULL), "b");
+  GtkWidget *widget;
+
+  for (widget = model->leaf; widget != NULL; widget = gtk_widget_get_parent (widget))
+    {
+      ReferenceScope *scope = reference_model_find_scope (model, widget);
+
+      if (scope != NULL && scope->accels[action_index][target_index] != NULL)
+        return scope->accels[action_index][target_index];
+    }
+
+  return NULL;
+}
+
+static gboolean
+variant_type_equal0 (const GVariantType *a,
+                     const GVariantType *b)
+{
+  return a == b || (a != NULL && b != NULL && g_variant_type_equal (a, b));
+}
+
+static gboolean
+variant_equal0 (GVariant *a,
+                GVariant *b)
+{
+  return a == b || (a != NULL && b != NULL && g_variant_equal (a, b));
+}
+
+static void
+reference_model_assert_binding (ReferenceModel   *model,
+                                ReferenceBinding *binding)
+{
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  const GtkActionBindingState *actual = gtk_action_binding_get_state (binding->binding);
+  const GVariantType *parameter_type = NULL;
+  const GVariantType *actual_parameter_type = NULL;
+  const GVariantType *state_type = NULL;
+  const GVariantType *actual_state_type = NULL;
+  GVariant *state_hint = NULL;
+  GVariant *actual_state_hint = NULL;
+  GVariant *state = NULL;
+  GVariant *actual_state = NULL;
+  ReferenceScope *provider;
+  gboolean present;
+  gboolean enabled = FALSE;
+  gboolean actual_enabled = FALSE;
+  gboolean activatable;
+  gboolean active = FALSE;
+  GtkButtonRole role = GTK_BUTTON_ROLE_NORMAL;
+  const char *accel;
+
+  provider = reference_model_resolve (model, binding, &enabled,
+                                      &parameter_type, &state_type,
+                                      &state_hint, &state);
+  present = provider != NULL;
+  activatable = present && parameter_type != NULL && binding->target != NULL &&
+                g_variant_is_of_type (binding->target, parameter_type);
+  if (activatable && state != NULL)
+    {
+      active = g_variant_equal (state, binding->target);
+      role = GTK_BUTTON_ROLE_RADIO;
+    }
+  accel = reference_model_get_accel (model, binding);
+
+  g_assert_cmpint (actual->present, ==, present);
+  g_assert_cmpint (actual->activatable, ==, activatable);
+  g_assert_cmpint (actual->enabled, ==, activatable && enabled);
+  g_assert_cmpint (actual->active, ==, active);
+  g_assert_cmpint (actual->role, ==, role);
+  g_assert_cmpstr (actual->primary_accel, ==, accel);
+  g_assert_cmpstr (gtk_action_node_get_primary_accel (
+                     model->leaf_node, binding->key, binding->target), ==, accel);
+
+  if (gtk_action_resolution_init (&resolution,
+                                  model->leaf_node,
+                                  binding->key))
+    {
+      g_assert_true (present);
+      g_assert_true (gtk_action_resolution_get_provider_node (&resolution) == provider->node);
+      g_assert_true (gtk_action_resolution_query (&resolution, &actual_enabled,
+                                                  &actual_parameter_type,
+                                                  &actual_state_type,
+                                                  &actual_state_hint,
+                                                  &actual_state));
+      g_assert_cmpint (actual_enabled, ==, enabled);
+      g_assert_true (variant_type_equal0 (actual_parameter_type, parameter_type));
+      g_assert_true (variant_type_equal0 (actual_state_type, state_type));
+      g_assert_true (variant_equal0 (actual_state_hint, state_hint));
+      g_assert_true (variant_equal0 (actual_state, state));
+    }
+  else
+    g_assert_false (present);
+
+  g_clear_pointer (&actual_state, g_variant_unref);
+  g_clear_pointer (&state, g_variant_unref);
+  g_clear_pointer (&actual_state_hint, g_variant_unref);
+  g_clear_pointer (&state_hint, g_variant_unref);
+  gtk_action_resolution_clear (&resolution);
+}
+
+static GSimpleAction *
+reference_action_new (guint action_index,
+                      guint state_index)
+{
+  GSimpleAction *action;
+  char name[16];
+  char state[16];
+
+  g_snprintf (name, sizeof name, "mode-%u", action_index);
+  g_snprintf (state, sizeof state, "%c", 'a' + state_index);
+  action = g_simple_action_new_stateful (name, G_VARIANT_TYPE_STRING,
+                                         g_variant_new_string (state));
+
+  return action;
+}
+
+static void
+reference_scope_replace_group (ReferenceScope *scope)
+{
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  guint i;
+
+  for (i = 0; i < N_MODEL_ACTIONS; i++)
+    {
+      if (scope->actions[i] != NULL &&
+          g_action_group_has_action (G_ACTION_GROUP (scope->group),
+                                     g_action_get_name (G_ACTION (scope->actions[i]))))
+        {
+          GVariant *state = g_action_get_state (G_ACTION (scope->actions[i]));
+          GSimpleAction *replacement =
+            g_simple_action_new_stateful (g_action_get_name (G_ACTION (scope->actions[i])),
+                                           G_VARIANT_TYPE_STRING,
+                                           state);
+
+          g_simple_action_set_enabled (replacement,
+                                       g_action_get_enabled (G_ACTION (scope->actions[i])));
+          g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (replacement));
+          g_clear_object (&scope->actions[i]);
+          scope->actions[i] = replacement;
+
+          g_clear_pointer (&state, g_variant_unref);
+        }
+      else
+        g_clear_object (&scope->actions[i]);
+    }
+
+  g_clear_object (&scope->group);
+  scope->group = group;
+  if (scope->attached)
+    gtk_action_node_insert_group (scope->node, "win", G_ACTION_GROUP (group));
+}
+
+static void
+reference_binding_rebind (ReferenceModel   *model,
+                          ReferenceBinding *binding,
+                          guint             action_index)
+{
+  if (binding->binding != NULL)
+    gtk_action_binding_cancel (binding->binding);
+  g_clear_pointer (&binding->key, gtk_action_key_unref);
+  binding->key = gtk_action_key_ref (model->keys[action_index]);
+  binding->binding =
+    gtk_action_node_bind (model->leaf_node,
+                          binding->key,
+                          binding->target,
+                          (GTK_ACTION_INTEREST_PRESENT |
+                           GTK_ACTION_INTEREST_ENABLED |
+                           GTK_ACTION_INTEREST_ACTIVE |
+                           GTK_ACTION_INTEREST_ROLE |
+                           GTK_ACTION_INTEREST_ACCEL |
+                           GTK_ACTION_INTEREST_RAW_STATE),
+                          reference_binding_changed,
+                          binding,
+                          NULL);
+  g_assert_nonnull (binding->binding);
+}
+
+static void
+reference_model_assert (ReferenceModel *model)
+{
+  guint i;
+
+  for (i = 0; i < N_MODEL_BINDINGS; i++)
+    reference_model_assert_binding (model, &model->bindings[i]);
+  g_assert_true (gtk_action_tree_check_invariants (model->tree));
+}
+
+static void
+reference_model_mutate (ReferenceModel *model)
+{
+  guint operation = g_rand_int_range (model->rand, 0, 9);
+  guint scope_index = g_rand_int_range (model->rand, 0, N_MODEL_SCOPES);
+  guint action_index = g_rand_int_range (model->rand, 0, N_MODEL_ACTIONS);
+  guint binding_index = g_rand_int_range (model->rand, 0, N_MODEL_BINDINGS);
+  ReferenceScope *scope = &model->scopes[scope_index];
+  ReferenceBinding *binding = &model->bindings[binding_index];
+  GSimpleAction *action = scope->actions[action_index];
+  guint deliveries_before = 0;
+  guint deliveries_after = 0;
+  char name[16];
+  guint i;
+
+  for (i = 0; i < N_MODEL_BINDINGS; i++)
+    deliveries_before += model->bindings[i].deliveries;
+
+  g_snprintf (name, sizeof name, "mode-%u", action_index);
+
+  switch (operation)
+    {
+    case 0:
+      scope->attached = !scope->attached;
+      if (scope->attached)
+        gtk_action_node_insert_group (scope->node, "win", G_ACTION_GROUP (scope->group));
+      else
+        gtk_action_node_remove_group (scope->node, "win");
+      break;
+
+    case 1:
+      if (action != NULL &&
+          g_action_group_has_action (G_ACTION_GROUP (scope->group), name))
+        g_action_map_remove_action (G_ACTION_MAP (scope->group), name);
+      else
+        {
+          if (action == NULL)
+            scope->actions[action_index] = action = reference_action_new (action_index, 0);
+          g_action_map_add_action (G_ACTION_MAP (scope->group), G_ACTION (action));
+        }
+      break;
+
+    case 2:
+      if (action != NULL)
+        g_simple_action_set_enabled (action, !g_action_get_enabled (G_ACTION (action)));
+      break;
+
+    case 3:
+      if (action != NULL)
+        {
+          guint state_index = g_rand_int_range (model->rand, 0, 2);
+
+          g_simple_action_set_state (action,
+                                     g_variant_new_string (state_index == 0 ? "a" : "b"));
+        }
+      break;
+
+    case 4:
+      if (gtk_widget_get_parent (model->leaf) != NULL)
+        gtk_widget_unparent (model->leaf);
+      if (scope_index == 0)
+        gtk_box_append (GTK_BOX (model->left), model->leaf);
+      else if (scope_index == 1)
+        gtk_box_append (GTK_BOX (model->right), model->leaf);
+      gtk_action_node_sync_parent (model->leaf_node);
+      break;
+
+    case 5:
+      g_clear_pointer (&binding->target, g_variant_unref);
+      binding->target = g_variant_ref_sink (
+        g_variant_new_string (g_rand_boolean (model->rand) ? "a" : "b"));
+      gtk_action_binding_set_target (binding->binding, binding->target);
+      break;
+
+    case 6:
+      {
+        guint target_index = g_rand_int_range (model->rand, 0, 2);
+        const char *accel = g_rand_boolean (model->rand) ? "<Control>M" : NULL;
+        GVariant *target = g_variant_new_string (target_index == 0 ? "a" : "b");
+
+        g_free (scope->accels[action_index][target_index]);
+        scope->accels[action_index][target_index] = g_strdup (accel);
+        gtk_action_node_set_primary_accel (scope->node, model->keys[action_index],
+                                           target, accel);
+      }
+      break;
+
+    case 7:
+      reference_scope_replace_group (scope);
+      for (i = 0; i < N_MODEL_BINDINGS; i++)
+        deliveries_after += model->bindings[i].deliveries;
+      g_assert_cmpuint (deliveries_after, ==, deliveries_before);
+      break;
+
+    case 8:
+      reference_binding_rebind (model, binding,
+                                g_str_equal (gtk_action_key_get_full_name (binding->key),
+                                             "win.mode-0") ? 1 : 0);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+test_seeded_reference_model (void)
+{
+  static const guint32 seeds[] = { 0x13579bdf, 0x2468ace0, 0xc0decafe };
+  guint seed_index;
+
+  for (seed_index = 0; seed_index < G_N_ELEMENTS (seeds); seed_index++)
+    {
+      ReferenceModel model = { 0 };
+      guint i;
+      guint j;
+
+      model.tree = gtk_action_tree_new ();
+      model.rand = g_rand_new_with_seed (seeds[seed_index]);
+      model.root = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+      model.left = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      model.right = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      model.leaf = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+      gtk_box_append (GTK_BOX (model.root), model.left);
+      gtk_box_append (GTK_BOX (model.root), model.right);
+      gtk_box_append (GTK_BOX (model.left), model.leaf);
+
+      model.scopes[0].widget = model.root;
+      model.scopes[1].widget = model.left;
+      model.scopes[2].widget = model.right;
+      for (i = 0; i < N_MODEL_SCOPES; i++)
+        {
+          ReferenceScope *scope = &model.scopes[i];
+
+          scope->node = gtk_action_tree_add_widget (model.tree, scope->widget);
+          scope->group = g_simple_action_group_new ();
+          scope->attached = TRUE;
+          for (j = 0; j < N_MODEL_ACTIONS; j++)
+            {
+              scope->actions[j] = reference_action_new (j, (i + j) % 2);
+              g_action_map_add_action (G_ACTION_MAP (scope->group),
+                                       G_ACTION (scope->actions[j]));
+            }
+          gtk_action_node_insert_group (scope->node, "win", G_ACTION_GROUP (scope->group));
+        }
+      model.leaf_node = gtk_action_tree_add_widget (model.tree, model.leaf);
+      model.keys[0] = gtk_action_key_new ("win.mode-0");
+      model.keys[1] = gtk_action_key_new ("win.mode-1");
+
+      for (i = 0; i < N_MODEL_BINDINGS; i++)
+        {
+          ReferenceBinding *binding = &model.bindings[i];
+
+          binding->target = g_variant_ref_sink (g_variant_new_string ((i & 1) ? "b" : "a"));
+          reference_binding_rebind (&model, binding, i % N_MODEL_ACTIONS);
+        }
+
+      reference_model_assert (&model);
+      for (i = 0; i < 500; i++)
+        {
+          reference_model_mutate (&model);
+          reference_model_assert (&model);
+        }
+
+      for (i = 0; i < N_MODEL_BINDINGS; i++)
+        {
+          gtk_action_binding_cancel (model.bindings[i].binding);
+          gtk_action_key_unref (model.bindings[i].key);
+          g_variant_unref (model.bindings[i].target);
+        }
+      for (i = 0; i < N_MODEL_SCOPES; i++)
+        {
+          for (j = 0; j < N_MODEL_ACTIONS; j++)
+            {
+              g_clear_object (&model.scopes[i].actions[j]);
+              g_clear_pointer (&model.scopes[i].accels[j][0], g_free);
+              g_clear_pointer (&model.scopes[i].accels[j][1], g_free);
+            }
+          g_clear_object (&model.scopes[i].group);
+        }
+      gtk_action_key_unref (model.keys[0]);
+      gtk_action_key_unref (model.keys[1]);
+      gtk_action_tree_free (model.tree);
+      if (gtk_widget_get_parent (model.leaf) != NULL)
+        gtk_widget_unparent (model.leaf);
+      g_object_unref (model.leaf);
+      g_object_unref (model.root);
+      g_rand_free (model.rand);
+    }
 }
 
 int
@@ -1233,7 +2091,10 @@ main (int   argc,
   g_test_add_func ("/action-tree/providers/resolution-and-callback-removal",
                    test_provider_resolution_and_callback_removal);
   g_test_add_func ("/action-tree/providers/source-destruction", test_source_destruction);
+  g_test_add_func ("/action-tree/providers/one-off-node-resolution",
+                   test_one_off_provider_node_resolution);
   g_test_add_func ("/action-tree/subscriptions/tokens-cancellation-coalescing", test_subscriptions);
+  g_test_add_func ("/action-tree/subscriptions/owner-location", test_subscription_owner_location);
   g_test_add_func ("/action-tree/consumers/initial-cancellation-during-dispatch",
                    test_initial_cancellation_during_dispatch);
   g_test_add_func ("/action-tree/accelerators/routing", test_accelerator_routing);
@@ -1243,6 +2104,14 @@ main (int   argc,
                    test_model_button_action_teardown);
   g_test_add_func ("/action-tree/bindings/derived-state-target-activation", test_bindings);
   g_test_add_func ("/action-tree/bindings/target-indexes", test_target_indexes);
+  g_test_add_func ("/action-tree/resolutions/transfer-and-lifetime", test_resolution_lifetime);
+  g_test_add_func ("/action-tree/resolutions/reentrant-node-removal",
+                   test_resolution_reentrant_node_removal);
+  g_test_add_func ("/action-tree/consumers/menu-node-context", test_menu_tracker_node_context);
+  g_test_add_func ("/action-tree/consumers/inspector-object-swap", test_inspector_object_swap);
+  g_test_add_func ("/action-tree/consumers/inspector-inherited-actions",
+                   test_inspector_inherited_actions);
+  g_test_add_func ("/action-tree/reference-model/seeded-mutations", test_seeded_reference_model);
 
   return g_test_run ();
 }

@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkicontheme.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
@@ -42,7 +43,7 @@
   GtkMenuTracker *tracker;
 }
 
-- (id)initWithTitle:(NSString *)title model:(GMenuModel *)model observable:(GtkActionObservable *)observable;
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)model actionNode:(GtkActionNode *)actionNode;
 
 - (id)initWithTitle:(NSString *)title trackerItem:(GtkMenuTrackerItem *)trackerItem;
 
@@ -324,12 +325,21 @@ tracker_item_changed (GObject    *object,
     {
       const char *action_name = gtk_menu_tracker_item_get_action_name (trackerItem);
       gboolean enabled = FALSE;
-      GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
+      gboolean found;
+      GtkActionNode *node = _gtk_widget_get_action_node (focus_widget, TRUE);
+      GtkActionKey *key = NULL;
+      GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
 
-      if (action_name == NULL || muxer == NULL)
+      if (action_name == NULL || node == NULL ||
+          (key = gtk_action_key_new (action_name)) == NULL)
         return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
 
-      if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
+      found = gtk_action_resolution_init (&resolution, node, key) &&
+              gtk_action_resolution_query (&resolution, &enabled, NULL, NULL, NULL, NULL);
+      gtk_action_resolution_clear (&resolution);
+      gtk_action_key_unref (key);
+
+      if (found)
         return enabled ? YES : NO;
     }
   return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
@@ -384,13 +394,13 @@ menu_item_removed (int      position,
 
 @implementation GNSMenu
 
-- (id)initWithTitle:(NSString *)title model:(GMenuModel *)model observable:(GtkActionObservable *)observable
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)model actionNode:(GtkActionNode *)actionNode
 {
   self = [super initWithTitle:title];
 
   if (self != nil)
     {
-      tracker = gtk_menu_tracker_new (observable,
+      tracker = gtk_menu_tracker_new (actionNode,
                                       model,
                                       NO,
                                       YES,
@@ -433,12 +443,12 @@ menu_item_removed (int      position,
 
 void
 gtk_application_impl_quartz_setup_menu (GMenuModel     *model,
-                                        GtkActionMuxer *muxer)
+                                        GtkActionNode  *action_node)
 {
   NSMenu *menu;
 
   if (model != NULL)
-    menu = [[GNSMenu alloc] initWithTitle:@"Main Menu" model:model observable:GTK_ACTION_OBSERVABLE (muxer)];
+    menu = [[GNSMenu alloc] initWithTitle:@"Main Menu" model:model actionNode:action_node];
   else
     menu = [[NSMenu alloc] init];
 

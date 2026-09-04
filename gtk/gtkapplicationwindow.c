@@ -623,8 +623,8 @@ gtk_application_window_dispose (GObject *object)
    * removed from the GtkApplication (which is done in the dispose
    * handler of GtkWindow).
    *
-   * That reduces our chances of being watched as a GActionGroup from a
-   * muxer constructed by GtkApplication.
+   * That ensures the application action node no longer references us as
+   * a GActionGroup before our own action group is released.
    */
   g_clear_object (&priv->actions);
 }

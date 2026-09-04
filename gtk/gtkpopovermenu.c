@@ -22,7 +22,6 @@
 #include "gtkstack.h"
 #include "gtkmenusectionboxprivate.h"
 #include "gtkmenubutton.h"
-#include "gtkactionmuxerprivate.h"
 #include "gtkmenutrackerprivate.h"
 #include "gtkpopoverprivate.h"
 #include "gtkwidgetprivate.h"

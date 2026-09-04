@@ -24,10 +24,8 @@
 
 #include "gtkapplication.h"
 #include "gtkapplicationwindow.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkactionmuxerprivate.h"
-#include "gtkactionobserverprivate.h"
-#include "gtkactionobservableprivate.h"
 #include "gtkpopover.h"
 #include "gtklabel.h"
 #include "gtkstack.h"
@@ -45,6 +43,8 @@ struct _GtkInspectorActions
   GtkWidget *button;
 
   GObject *object;
+
+  GPtrArray *subscriptions;
 
   GListStore *actions;
   GtkSortListModel *sorted;
@@ -64,10 +64,7 @@ enum {
 
 static GParamSpec *props[N_PROPS] = { NULL, };
 
-static void gtk_inspector_actions_observer_iface_init (GtkActionObserverInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GtkInspectorActions, gtk_inspector_actions, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER, gtk_inspector_actions_observer_iface_init))
+G_DEFINE_TYPE (GtkInspectorActions, gtk_inspector_actions, GTK_TYPE_WIDGET)
 
 static void
 gtk_inspector_actions_init (GtkInspectorActions *sl)
@@ -135,12 +132,22 @@ update_enabled (ActionHolder *holder,
   const char *name = action_holder_get_name (holder);
   gboolean enabled = FALSE;
 
-  if (G_IS_ACTION_GROUP (owner))
+  if (GTK_IS_WIDGET (owner))
+    {
+      GtkActionKey *key = gtk_action_key_new (name);
+      GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (owner), FALSE);
+
+      if (node == NULL || key == NULL ||
+          !gtk_action_resolution_init (&resolution, node, key) ||
+          !gtk_action_resolution_query (&resolution, &enabled, NULL, NULL, NULL, NULL))
+        enabled = FALSE;
+
+      gtk_action_resolution_clear (&resolution);
+      g_clear_pointer (&key, gtk_action_key_unref);
+    }
+  else if (G_IS_ACTION_GROUP (owner))
     enabled = g_action_group_get_action_enabled (G_ACTION_GROUP (owner), name);
-  else if (!GTK_IS_ACTION_MUXER (owner) ||
-           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                           &enabled, NULL, NULL, NULL, NULL))
-    enabled = FALSE;
 
   gtk_label_set_label (label, enabled ? "+" : "-");
 }
@@ -187,21 +194,45 @@ bind_parameter_cb (GtkSignalListItemFactory *factory,
   GtkWidget *label;
   GObject *owner;
   const char *name;
-  const char *parameter;
+  char *parameter = NULL;
 
   item = gtk_list_item_get_item (list_item);
   label = gtk_list_item_get_child (list_item);
 
   owner = action_holder_get_owner (ACTION_HOLDER (item));
   name = action_holder_get_name (ACTION_HOLDER (item));
-  if (G_IS_ACTION_GROUP (owner))
-    parameter = (const char *)g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
-  else if (!GTK_IS_ACTION_MUXER (owner) ||
-           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                           NULL, (const GVariantType **)&parameter, NULL, NULL, NULL))
-    parameter = "(Unknown)";
+  if (GTK_IS_WIDGET (owner))
+    {
+      GtkActionKey *key = gtk_action_key_new (name);
+      GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (owner), FALSE);
+      const GVariantType *parameter_type = NULL;
 
-  gtk_label_set_label (GTK_LABEL (label), parameter);
+      if (node == NULL || key == NULL ||
+          !gtk_action_resolution_init (&resolution, node, key) ||
+          !gtk_action_resolution_query (&resolution, NULL, &parameter_type,
+                                        NULL, NULL, NULL))
+        parameter = g_strdup ("(Unknown)");
+      else if (parameter_type != NULL)
+        parameter = g_variant_type_dup_string (parameter_type);
+
+      gtk_action_resolution_clear (&resolution);
+      g_clear_pointer (&key, gtk_action_key_unref);
+    }
+  else if (G_IS_ACTION_GROUP (owner))
+    {
+      const GVariantType *parameter_type;
+
+      parameter_type = g_action_group_get_action_parameter_type (G_ACTION_GROUP (owner), name);
+      if (parameter_type != NULL)
+        parameter = g_variant_type_dup_string (parameter_type);
+    }
+  else
+    parameter = g_strdup ("(Unknown)");
+
+  gtk_label_set_label (GTK_LABEL (label), parameter != NULL ? parameter : "");
+
+  g_clear_pointer (&parameter, g_free);
 }
 
 static void
@@ -226,11 +257,23 @@ update_state (ActionHolder *h,
   const char *name = action_holder_get_name (h);
   GVariant *state;
 
-  if (G_IS_ACTION_GROUP (owner))
+  if (GTK_IS_WIDGET (owner))
+    {
+      GtkActionKey *key = gtk_action_key_new (name);
+      GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+      GtkActionNode *node = _gtk_widget_get_action_node (GTK_WIDGET (owner), FALSE);
+
+      if (node == NULL || key == NULL ||
+          !gtk_action_resolution_init (&resolution, node, key) ||
+          !gtk_action_resolution_query (&resolution, NULL, NULL, NULL, NULL, &state))
+        state = NULL;
+
+      gtk_action_resolution_clear (&resolution);
+      g_clear_pointer (&key, gtk_action_key_unref);
+    }
+  else if (G_IS_ACTION_GROUP (owner))
     state = g_action_group_get_action_state (G_ACTION_GROUP (owner), name);
-  else if (!GTK_IS_ACTION_MUXER (owner) ||
-           !gtk_action_muxer_query_action (GTK_ACTION_MUXER (owner), name,
-                                           NULL, NULL, NULL, NULL, &state))
+  else
     state = NULL;
 
   if (state)
@@ -324,15 +367,16 @@ add_group (GtkInspectorActions *sl,
 }
 
 static void
-add_muxer (GtkInspectorActions *sl,
-           GtkActionMuxer      *muxer)
+add_node (GtkInspectorActions *sl,
+          GtkWidget           *widget,
+          GtkActionNode       *node)
 {
   int i;
   char **names;
 
-  names = gtk_action_muxer_list_actions (muxer, FALSE);
+  names = gtk_action_node_list_actions (node, FALSE);
   for (i = 0; names[i]; i++)
-    action_added (G_OBJECT (muxer), names[i], sl);
+    action_added (G_OBJECT (widget), names[i], sl);
   g_strfreev (names);
 }
 
@@ -344,21 +388,21 @@ reload (GtkInspectorActions *sl)
   g_object_unref (sl->actions);
   sl->actions = g_list_store_new (ACTION_TYPE_HOLDER);
 
-  if (GTK_IS_APPLICATION (sl->object))
+  if (GTK_IS_WIDGET (sl->object))
+    {
+      GtkActionNode *node;
+
+      node = _gtk_widget_get_action_node (GTK_WIDGET (sl->object), TRUE);
+      if (node != NULL)
+        {
+          add_node (sl, GTK_WIDGET (sl->object), node);
+          loaded = TRUE;
+        }
+    }
+  else if (GTK_IS_APPLICATION (sl->object))
     {
       add_group (sl, G_ACTION_GROUP (sl->object));
       loaded = TRUE;
-    }
-  else if (GTK_IS_WIDGET (sl->object))
-    {
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (sl->object), FALSE);
-      if (muxer)
-        {
-          add_muxer (sl, muxer);
-          loaded = TRUE;
-        }
     }
 
   gtk_sort_list_model_set_model (sl->sorted, G_LIST_MODEL (sl->actions));
@@ -413,113 +457,79 @@ action_state_changed (GActionGroup        *group,
 }
 
 static void
-observer_action_added (GtkActionObserver    *observer,
-                       GtkActionObservable  *observable,
-                       const char           *action_name,
-                       const GVariantType   *parameter_type,
-                       gboolean              enabled,
-                       GVariant             *state)
+subscription_changed (GtkActionSubscription   *subscription,
+                      GtkActionChange           changed,
+                      const GtkActionSnapshot *snapshot,
+                      gpointer                 user_data)
 {
-}
+  GtkInspectorActions *sl = user_data;
+  GtkActionKey *key = gtk_action_subscription_get_key (subscription);
 
-static void
-observer_action_removed (GtkActionObserver   *observer,
-                         GtkActionObservable *observable,
-                         const char          *action_name)
-{
-}
-
-static void
-observer_action_enabled_changed (GtkActionObserver   *observer,
-                                 GtkActionObservable *observable,
-                                 const char          *action_name,
-                                 gboolean             enabled)
-{
-  action_changed (GTK_INSPECTOR_ACTIONS (observer), action_name);
-}
-
-static void
-observer_action_state_changed (GtkActionObserver   *observer,
-                               GtkActionObservable *observable,
-                               const char          *action_name,
-                               GVariant            *state)
-{
-  action_changed (GTK_INSPECTOR_ACTIONS (observer), action_name);
-}
-
-static void
-observer_primary_accel_changed (GtkActionObserver   *observer,
-                                GtkActionObservable *observable,
-                                const char          *action_name,
-                                const char          *action_and_target)
-{
-}
-
-static void
-gtk_inspector_actions_observer_iface_init (GtkActionObserverInterface *iface)
-{
-  iface->action_added = observer_action_added;
-  iface->action_removed = observer_action_removed;
-  iface->action_enabled_changed = observer_action_enabled_changed;
-  iface->action_state_changed = observer_action_state_changed;
-  iface->primary_accel_changed = observer_primary_accel_changed;
+  action_changed (sl, gtk_action_key_get_full_name (key));
 }
 
 static void
 gtk_inspector_actions_connect (GtkInspectorActions *sl)
 {
-  if (G_IS_ACTION_GROUP (sl->object))
+  if (GTK_IS_WIDGET (sl->object))
+    {
+      GtkActionNode *node;
+
+      node = _gtk_widget_get_action_node (GTK_WIDGET (sl->object), TRUE);
+
+      if (node != NULL)
+        {
+          int i;
+          char **names;
+
+          names = gtk_action_node_list_actions (node, FALSE);
+          for (i = 0; names[i]; i++)
+            {
+              GtkActionKey *key = NULL;
+              GtkActionSubscription *subscription;
+
+              key = gtk_action_key_new (names[i]);
+              if (key == NULL)
+                continue;
+
+              subscription = gtk_action_node_subscribe (node,
+                                                        key,
+                                                        NULL,
+                                                        (GTK_ACTION_INTEREST_ENABLED |
+                                                         GTK_ACTION_INTEREST_RAW_STATE),
+                                                        subscription_changed,
+                                                        sl,
+                                                        NULL);
+              if (subscription != NULL)
+                g_ptr_array_add (sl->subscriptions, subscription);
+
+              g_clear_pointer (&key, gtk_action_key_unref);
+            }
+          g_strfreev (names);
+        }
+    }
+  else if (G_IS_ACTION_GROUP (sl->object))
     {
       g_signal_connect (sl->object, "action-enabled-changed",
                         G_CALLBACK (action_enabled_changed), sl);
       g_signal_connect (sl->object, "action-state-changed",
                         G_CALLBACK (action_state_changed), sl);
     }
-  else if (GTK_IS_WIDGET (sl->object))
-    {
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (sl->object), FALSE);
-
-      if (muxer)
-        {
-          int i;
-          char **names;
-  
-          names = gtk_action_muxer_list_actions (muxer, FALSE);
-          for (i = 0; names[i]; i++)
-            {
-              gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer), names[i], GTK_ACTION_OBSERVER (sl));
-            }
-          g_strfreev (names);
-        }
-    }
 }
 
 static void
 gtk_inspector_actions_disconnect (GtkInspectorActions *sl)
 {
-  if (G_IS_ACTION_GROUP (sl->object))
+  if (GTK_IS_WIDGET (sl->object))
+    {
+      for (guint i = 0; i < sl->subscriptions->len; i++)
+        gtk_action_subscription_cancel (g_ptr_array_index (sl->subscriptions, i));
+      g_ptr_array_set_size (sl->subscriptions, 0);
+    }
+  else if (G_IS_ACTION_GROUP (sl->object))
     {
       g_signal_handlers_disconnect_by_func (sl->object, action_enabled_changed, sl);
       g_signal_handlers_disconnect_by_func (sl->object, action_state_changed, sl);
-    }
-  else if (GTK_IS_WIDGET (sl->object))
-    {
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (sl->object), FALSE);
-
-      if (muxer)
-        {
-          int i;
-          char **names;
-
-          names = gtk_action_muxer_list_actions (muxer, FALSE);
-          for (i = 0; names[i]; i++)
-            gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer), names[i], GTK_ACTION_OBSERVER (sl));
-          g_strfreev (names);
-        }
     }
 }
 
@@ -615,6 +625,7 @@ constructed (GObject *object)
   g_object_unref (sorter);
 
   sl->actions = g_list_store_new (ACTION_TYPE_HOLDER);
+  sl->subscriptions = g_ptr_array_new ();
   sl->sorted = gtk_sort_list_model_new (g_object_ref (G_LIST_MODEL (sl->actions)),
                                         g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->list))));
   model = G_LIST_MODEL (gtk_no_selection_new (g_object_ref (G_LIST_MODEL (sl->sorted))));
@@ -633,6 +644,7 @@ dispose (GObject *object)
   g_clear_object (&sl->sorted);
   g_clear_object (&sl->actions);
   g_clear_object (&sl->object);
+  g_clear_pointer (&sl->subscriptions, g_ptr_array_unref);
 
   gtk_widget_dispose_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_ACTIONS);
 

@@ -28,7 +28,7 @@
 #include "a11y/atspi/atspi-action.h"
 
 #include "gtkactionable.h"
-#include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkbutton.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkentryprivate.h"
@@ -821,34 +821,38 @@ static const GDBusInterfaceVTable search_entry_action_vtable = {
 /* {{{ GtkWidget */
 
 static gboolean
-is_valid_action (GtkActionMuxer *muxer,
-                 const char     *action_name)
+is_valid_action (GtkActionNode *node,
+                 const char    *action_name)
 {
+  GtkActionKey *key = NULL;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
   const GVariantType *param_type = NULL;
   gboolean enabled = FALSE;
+  gboolean valid;
 
   /* Skip disabled or parametrized actions */
-  if (!gtk_action_muxer_query_action (muxer, action_name,
-                                      &enabled,
-                                      &param_type, NULL,
-                                      NULL, NULL))
-    return FALSE;
+  key = gtk_action_key_new (action_name);
+  valid = key != NULL &&
+          gtk_action_resolution_init (&resolution, node, key) &&
+          gtk_action_resolution_query (&resolution, &enabled, &param_type,
+                                       NULL, NULL, NULL) &&
+          enabled && param_type == NULL;
 
-  if (!enabled || param_type != NULL)
-    return FALSE;
+  gtk_action_resolution_clear (&resolution);
+  g_clear_pointer (&key, gtk_action_key_unref);
 
-  return TRUE;
+  return valid;
 }
 
 static void
-add_muxer_actions (GtkActionMuxer   *muxer,
-                   char            **actions,
-                   int               n_actions,
-                   GVariantBuilder  *builder)
+add_node_actions (GtkActionNode   *node,
+                  char           **actions,
+                  int              n_actions,
+                  GVariantBuilder *builder)
 {
   for (int i = 0; i < n_actions; i++)
     {
-      if (!is_valid_action (muxer, actions[i]))
+      if (!is_valid_action (node, actions[i]))
         continue;
 
       g_variant_builder_add (builder, "(sss)",
@@ -859,16 +863,16 @@ add_muxer_actions (GtkActionMuxer   *muxer,
 }
 
 static const char *
-get_action_at_index (GtkActionMuxer  *muxer,
-                     char           **actions,
-                     int              n_actions,
-                     int              pos)
+get_action_at_index (GtkActionNode *node,
+                     char         **actions,
+                     int            n_actions,
+                     int            pos)
 {
   int real_pos = 0;
 
   for (int i = 0; i < n_actions; i++)
     {
-      if (!is_valid_action (muxer, actions[i]))
+      if (!is_valid_action (node, actions[i]))
         continue;
 
       if (real_pos == pos)
@@ -881,15 +885,15 @@ get_action_at_index (GtkActionMuxer  *muxer,
 }
 
 static int
-get_valid_actions (GtkActionMuxer  *muxer,
-                   char           **actions,
-                   int              n_actions)
+get_valid_actions (GtkActionNode *node,
+                   char         **actions,
+                   int            n_actions)
 {
   int n_enabled_actions = 0;
 
   for (int i = 0; i < n_actions; i++)
     {
-      if (!is_valid_action (muxer, actions[i]))
+      if (!is_valid_action (node, actions[i]))
         continue;
 
       n_enabled_actions += 1;
@@ -911,17 +915,12 @@ widget_handle_method (GDBusConnection       *connection,
   GtkAtSpiContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   GtkWidget *widget = GTK_WIDGET (accessible);
-  GtkWidget *parent = gtk_widget_get_parent (widget);
-  GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  GtkActionMuxer *parent_muxer = parent ? _gtk_widget_get_action_muxer (parent, FALSE) : NULL;
+  GtkActionNode *node = _gtk_widget_get_action_node (widget, FALSE);
 
-  if (muxer == NULL)
+  if (node == NULL)
     return;
 
-  char **actions = NULL;
-
-  if (muxer != parent_muxer)
-    actions = gtk_action_muxer_list_actions (muxer, TRUE);
+  char **actions = gtk_action_node_list_actions (node, TRUE);
 
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
@@ -934,7 +933,7 @@ widget_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &action_idx);
 
-      const char *action = get_action_at_index (muxer, actions, n_actions, action_idx);
+      const char *action = get_action_at_index (node, actions, n_actions, action_idx);
 
       if (action != NULL && gtk_widget_is_sensitive (widget))
         g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", action));
@@ -951,13 +950,16 @@ widget_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &action_idx);
 
-      const char *action = get_action_at_index (muxer, actions, n_actions, action_idx);
+      const char *action = get_action_at_index (node, actions, n_actions, action_idx);
 
       if (action != NULL && gtk_widget_is_sensitive (widget))
         {
-          gboolean res = gtk_widget_activate_action_variant (widget, action, NULL);
+          GtkActionKey *key = gtk_action_key_new (action);
+          gboolean res = key != NULL && gtk_action_node_activate (node, key, NULL);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", res));
+
+          g_clear_pointer (&key, gtk_action_key_unref);
         }
       else
         {
@@ -974,7 +976,7 @@ widget_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &action_idx);
 
-      const char *action = get_action_at_index (muxer, actions, n_actions, action_idx);
+      const char *action = get_action_at_index (node, actions, n_actions, action_idx);
 
       if (action != NULL && gtk_widget_is_sensitive (widget))
         g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", ""));
@@ -990,7 +992,7 @@ widget_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a(sss)"));
 
       if (n_actions >= 0 && gtk_widget_is_sensitive (widget))
-        add_muxer_actions (muxer, actions, n_actions, &builder);
+        add_node_actions (node, actions, n_actions, &builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(sss))", &builder));
     }
@@ -1010,23 +1012,18 @@ widget_handle_get_property (GDBusConnection  *connection,
   GtkAtSpiContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   GtkWidget *widget = GTK_WIDGET (accessible);
-  GtkWidget *parent = gtk_widget_get_parent (widget);
-  GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  GtkActionMuxer *parent_muxer = parent ? _gtk_widget_get_action_muxer (parent, FALSE) : NULL;
+  GtkActionNode *node = _gtk_widget_get_action_node (widget, FALSE);
   GVariant *res = NULL;
 
-  if (muxer == NULL)
+  if (node == NULL)
     return res;
 
-  char **actions = NULL;
-
-  if (muxer != parent_muxer)
-    actions = gtk_action_muxer_list_actions (muxer, TRUE);
+  char **actions = gtk_action_node_list_actions (node, TRUE);
 
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   if (g_strcmp0 (property_name, "NActions") == 0)
-    res = g_variant_new_int32 (get_valid_actions (muxer, actions, n_actions));
+    res = g_variant_new_int32 (get_valid_actions (node, actions, n_actions));
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);

@@ -28,7 +28,7 @@
 
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessibleprivate.h"
-#include "gtkactionobserverprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -818,6 +818,15 @@ gtk_widget_real_root (GtkWidget *widget)
 }
 
 static void
+gtk_widget_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
+
+  if (GTK_WIDGET_GET_CLASS (object)->priv->actions)
+    _gtk_widget_get_action_node (GTK_WIDGET (object), TRUE);
+}
+
+static void
 gtk_widget_real_unroot (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -830,20 +839,6 @@ gtk_widget_real_unroot (GtkWidget *widget)
     }
 
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
-}
-
-static void
-gtk_widget_constructed (GObject *object)
-{
-  G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
-
-  if (GTK_WIDGET_GET_CLASS (object)->priv->actions)
-    {
-      GtkActionMuxer *muxer;
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (object), TRUE);
-      gtk_action_muxer_connect_class_actions (muxer);
-    }
 }
 
 static void
@@ -1223,8 +1218,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
-  gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
+  gobject_class->constructed = gtk_widget_constructed;
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
   gobject_class->get_property = gtk_widget_get_property;
@@ -2623,7 +2618,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (priv->surface_transform_data)
     add_parent_surface_transform_changed_listener (widget);
 
-  _gtk_widget_update_parent_muxer (widget);
+  _gtk_widget_update_action_tree (widget);
 
   if (priv->layout_manager)
     gtk_layout_manager_set_root (priv->layout_manager, priv->root);
@@ -2650,7 +2645,7 @@ gtk_widget_unroot (GtkWidget *widget)
       surface_transform_data->tracked_parent)
     remove_parent_surface_transform_changed_listener (widget);
 
-  _gtk_widget_update_parent_muxer (widget);
+  _gtk_widget_update_action_tree (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
@@ -2774,7 +2769,7 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
   gtk_css_node_set_parent (priv->cssnode, NULL);
 
-  _gtk_widget_update_parent_muxer (widget);
+  _gtk_widget_update_action_tree (widget);
 
   if (old_parent->priv->children_observer)
     gtk_list_list_model_item_removed (old_parent->priv->children_observer, old_prev_sibling);
@@ -6407,7 +6402,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
                              priv->cssnode,
                              previous_sibling ? previous_sibling->priv->cssnode : NULL);
 
-  _gtk_widget_update_parent_muxer (widget);
+  _gtk_widget_update_action_tree (widget);
 
   if (parent->priv->root && priv->root == NULL)
     gtk_widget_root (widget);
@@ -7731,9 +7726,6 @@ gtk_widget_dispose (GObject *object)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
 
-  if (priv->muxer != NULL)
-    g_object_run_dispose (G_OBJECT (priv->muxer));
-
   _gtk_widget_remove_action_node (widget);
 
   if (priv->children_observer)
@@ -7786,8 +7778,6 @@ gtk_widget_dispose (GObject *object)
       gtk_at_context_unrealize (priv->at_context);
       g_clear_object (&priv->at_context);
     }
-
-  g_clear_object (&priv->muxer);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -11300,60 +11290,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return priv->context;
 }
 
-static GtkActionMuxer *
-gtk_widget_get_parent_muxer (GtkWidget *widget,
-                             gboolean   create)
-{
-  GtkWidget *parent;
-
-  if (GTK_IS_WINDOW (widget))
-    return gtk_application_get_parent_muxer_for_window ((GtkWindow *)widget);
-
-  parent = _gtk_widget_get_parent (widget);
-
-  if (parent)
-    return _gtk_widget_get_action_muxer (parent, create);
-
-  return NULL;
-}
-
 void
-_gtk_widget_update_parent_muxer (GtkWidget *widget)
+_gtk_widget_update_action_tree (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
-  _gtk_widget_update_action_tree (widget);
-
-  if (priv->muxer != NULL)
-    gtk_action_muxer_set_parent (priv->muxer,
-                                 gtk_widget_get_parent_muxer (widget, FALSE));
+  if (priv->action_node != NULL)
+    gtk_action_node_sync_parent (priv->action_node);
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
-    _gtk_widget_update_parent_muxer (child);
-}
-
-GtkActionMuxer *
-_gtk_widget_get_action_muxer (GtkWidget *widget,
-                              gboolean   create)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (priv->muxer)
-    return priv->muxer;
-
-  if (create || widget_class->priv->actions)
-    {
-      priv->muxer = gtk_action_muxer_new (widget);
-      _gtk_widget_get_action_node (widget, TRUE);
-      _gtk_widget_update_parent_muxer (widget);
-
-      return priv->muxer;
-    }
-  else
-    return gtk_widget_get_parent_muxer (widget, FALSE);
+    _gtk_widget_update_action_tree (child);
 }
 
 /**
@@ -11381,17 +11329,17 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
                                 const char   *name,
                                 GActionGroup *group)
 {
-  GtkActionMuxer *muxer;
+  GtkActionNode *node;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (name != NULL);
 
-  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  node = _gtk_widget_get_action_node (widget, TRUE);
 
   if (group)
-    gtk_action_muxer_insert (muxer, name, group);
+    gtk_action_node_insert_group (node, name, group);
   else
-    gtk_action_muxer_remove (muxer, name);
+    gtk_action_node_remove_group (node, name);
 }
 
 /****************************************************************
@@ -11918,13 +11866,19 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
                                     const char *name,
                                     GVariant   *args)
 {
-  GtkActionMuxer *muxer;
+  GtkActionNode *node;
+  GtkActionKey *key;
+  gboolean ret;
 
-  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  if (muxer == NULL)
+  key = gtk_action_key_new (name);
+  if (key == NULL)
     return FALSE;
 
-  return gtk_action_muxer_activate_action (muxer, name, args);
+  node = _gtk_widget_get_action_node (widget, TRUE);
+  ret = gtk_action_node_activate (node, key, args);
+  gtk_action_key_unref (key);
+
+  return ret;
 }
 
 /**
@@ -13243,12 +13197,12 @@ gtk_widget_action_set_enabled (GtkWidget  *widget,
                                const char *action_name,
                                gboolean    enabled)
 {
-  GtkActionMuxer *muxer;
+  GtkActionNode *node;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
-  gtk_action_muxer_action_enabled_changed (muxer, action_name, enabled);
+  node = _gtk_widget_get_action_node (widget, TRUE);
+  gtk_action_node_set_class_action_enabled (node, action_name, enabled);
 }
 
 /**

@@ -184,7 +184,7 @@ typedef struct
 
   gboolean         register_session;
   gboolean         screensaver_active;
-  GtkActionMuxer  *muxer;
+  GtkActionNode   *action_node;
   GtkBuilder      *menus_builder;
   char            *help_overlay_path;
   gboolean         support_save;
@@ -326,7 +326,7 @@ gtk_application_startup (GApplication *g_application)
 
   G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
-  gtk_action_muxer_insert (priv->muxer, "app", G_ACTION_GROUP (application));
+  gtk_action_node_insert_group (priv->action_node, "app", G_ACTION_GROUP (application));
 
   gdk_set_portals_app_id (g_application_get_application_id (g_application));
 
@@ -359,7 +359,7 @@ gtk_application_shutdown (GApplication *g_application)
   gtk_application_impl_shutdown (priv->impl);
   g_clear_object (&priv->impl);
 
-  gtk_action_muxer_remove (priv->muxer, "app");
+  gtk_action_node_remove_group (priv->action_node, "app");
 
   gtk_main_sync ();
 
@@ -439,7 +439,7 @@ gtk_application_init (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  priv->muxer = gtk_action_muxer_new (NULL);
+  priv->action_node = gtk_action_node_new_synthetic (application);
 
   priv->accels = gtk_application_accels_new ();
 
@@ -637,7 +637,7 @@ gtk_application_finalize (GObject *object)
 
   g_clear_object (&priv->menus_builder);
   g_clear_object (&priv->menubar);
-  g_clear_object (&priv->muxer);
+  g_clear_pointer (&priv->action_node, gtk_action_node_remove);
   g_clear_object (&priv->accels);
 
   g_clear_pointer (&priv->kept_window_state, g_variant_unref);
@@ -1141,20 +1141,6 @@ gtk_application_uninhibit (GtkApplication *application,
   gtk_application_impl_uninhibit (priv->impl, cookie);
 }
 
-GtkActionMuxer *
-gtk_application_get_parent_muxer_for_window (GtkWindow *window)
-{
-  GtkApplication *application = gtk_window_get_application (window);
-  GtkApplicationPrivate *priv;
-
-  if (!application)
-    return NULL;
-
-  priv = gtk_application_get_instance_private (application);
-
-  return priv->muxer;
-}
-
 GtkApplicationAccels *
 gtk_application_get_application_accels (GtkApplication *application)
 {
@@ -1209,7 +1195,10 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
                                        const char * const *accels)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  char *action_and_target;
+  GtkActionKey *key = NULL;
+  GVariant *target = NULL;
+  GError *error = NULL;
+  char *action_name = NULL;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (detailed_action_name != NULL);
@@ -1219,11 +1208,18 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
                                                 detailed_action_name,
                                                 accels);
 
-  action_and_target = gtk_normalise_detailed_action_name (detailed_action_name);
-  gtk_action_muxer_set_primary_accel (priv->muxer, action_and_target, accels[0]);
-  g_free (action_and_target);
+  g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error);
+  g_assert_no_error (error);
+
+  if ((key = gtk_action_key_new (action_name)))
+    gtk_action_node_set_primary_accel (priv->action_node, key, target, accels[0]);
 
   gtk_application_update_accels (application);
+
+  g_clear_pointer (&action_name, g_free);
+  g_clear_pointer (&error, g_error_free);
+  g_clear_pointer (&target, g_variant_unref);
+  g_clear_pointer (&key, gtk_action_key_unref);
 }
 
 /**
@@ -1288,14 +1284,14 @@ gtk_application_get_actions_for_accel (GtkApplication *application,
   return gtk_application_accels_get_actions_for_accel (priv->accels, accel);
 }
 
-GtkActionMuxer *
-gtk_application_get_action_muxer (GtkApplication *application)
+GtkActionNode *
+gtk_application_get_action_node (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  g_assert (priv->muxer);
+  g_assert (priv->action_node != NULL);
 
-  return priv->muxer;
+  return priv->action_node;
 }
 
 void
@@ -1305,7 +1301,7 @@ gtk_application_insert_action_group (GtkApplication *application,
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  gtk_action_muxer_insert (priv->muxer, name, action_group);
+  gtk_action_node_insert_group (priv->action_node, name, action_group);
 }
 
 void

@@ -49,7 +49,7 @@ typedef struct
 {
   GtkApplicationImpl impl;
 
-  GtkActionMuxer *muxer;
+  GtkActionNode *action_node;
   GMenu *combined;
   GMenuModel *standard_app_menu;
 
@@ -288,8 +288,9 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   quartz->delegate = [[GtkApplicationQuartzDelegate alloc] initWithImpl:quartz];
   [NSApp setDelegate: (id<NSApplicationDelegate>)quartz->delegate];
 
-  quartz->muxer = gtk_action_muxer_new (NULL);
-  gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
+  quartz->action_node = gtk_action_node_new_synthetic (quartz);
+  gtk_action_node_set_synthetic_parent (quartz->action_node,
+                                        gtk_application_get_action_node (impl->application));
 
   gtk_application_impl_quartz_set_default_accels (impl);
 
@@ -333,7 +334,8 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   gtk_application_impl_set_menubar (impl, menubar);
 
   /* OK.  Now put it in the menu. */
-  gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined), quartz->muxer);
+  gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined),
+                                          quartz->action_node);
 
   [NSApp finishLaunching];
 }
@@ -361,8 +363,8 @@ on_window_unmap_cb (GtkApplicationImpl *impl,
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
 
-  if ((GActionGroup *)window == gtk_action_muxer_get_group (quartz->muxer, "win"))
-    gtk_action_muxer_remove (quartz->muxer, "win");
+  if ((GActionGroup *)window == gtk_action_node_get_group (quartz->action_node, "win"))
+    gtk_action_node_remove_group (quartz->action_node, "win");
 }
 
 static void
@@ -375,7 +377,7 @@ gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
    * Without this, we might hold on to a reference of the window
    * preventing it from getting disposed.
    */
-  if (window != NULL && !g_object_get_data (G_OBJECT (window), "quartz-muxer-unmap"))
+  if (window != NULL && !g_object_get_data (G_OBJECT (window), "quartz-action-node-unmap"))
     {
       gulong handler_id = g_signal_connect_object (window,
                                                    "unmap",
@@ -383,14 +385,14 @@ gtk_application_impl_quartz_active_window_changed (GtkApplicationImpl *impl,
                                                    impl,
                                                    G_CONNECT_SWAPPED);
       g_object_set_data (G_OBJECT (window),
-                         "quartz-muxer-unmap",
+                         "quartz-action-node-unmap",
                          GSIZE_TO_POINTER (handler_id));
     }
 
-  gtk_action_muxer_remove (quartz->muxer, "win");
+  gtk_action_node_remove_group (quartz->action_node, "win");
 
   if (G_IS_ACTION_GROUP (window))
-    gtk_action_muxer_insert (quartz->muxer, "win", G_ACTION_GROUP (window));
+    gtk_action_node_insert_group (quartz->action_node, "win", G_ACTION_GROUP (window));
 }
 
 static void
@@ -474,6 +476,7 @@ gtk_application_impl_quartz_finalize (GObject *object)
 
   g_clear_object (&quartz->combined);
   g_clear_object (&quartz->standard_app_menu);
+  g_clear_pointer (&quartz->action_node, gtk_action_node_remove);
 
   G_OBJECT_CLASS (gtk_application_impl_quartz_parent_class)->finalize (object);
 }

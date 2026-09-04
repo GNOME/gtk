@@ -2968,7 +2968,7 @@ gtk_window_set_application (GtkWindow      *window,
           gtk_widget_add_controller (GTK_WIDGET (window), priv->application_shortcut_controller);
         }
 
-      _gtk_widget_update_parent_muxer (GTK_WIDGET (window));
+      _gtk_widget_update_action_tree (GTK_WIDGET (window));
 
       _gtk_window_notify_keys_changed (window);
 
