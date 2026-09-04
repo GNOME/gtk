@@ -92,6 +92,10 @@ void                    gdk_frame_clock_remove_frame            (GdkFrameClock  
                                                                  GdkDrawContextFrame    *frame);
 void                    gdk_frame_clock_remove_frames           (GdkFrameClock          *self,
                                                                  GdkDrawContext         *context);
+void                    gdk_frame_clock_foreach_frame           (GdkFrameClock          *self,
+                                                                 gint64                  frame_counter,
+                                                                 void                  (*func) (GdkDrawContextFrame *, gpointer),
+                                                                 gpointer                user_data);
 
 uint64_t        gdk_frame_clock_get_refresh_interval            (GdkFrameClock          *self);
 uint64_t        gdk_frame_clock_get_latest_presentation_time    (GdkFrameClock          *self);

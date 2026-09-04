@@ -28,8 +28,6 @@ struct _GdkWaylandSubsurface
 
   struct wl_region *opaque_region;
 
-  struct wl_callback *frame_callback;
-
   struct wl_surface *bg_surface;
   struct wl_subsurface *bg_subsurface;
   struct wp_viewport *bg_viewport;
@@ -43,9 +41,6 @@ struct _GdkWaylandSubsurfaceClass
 {
   GdkSubsurfaceClass parent_class;
 };
-
-void gdk_wayland_subsurface_request_frame        (GdkSubsurface *subsurface);
-void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);
 
 GdkSubsurface * gdk_wayland_surface_create_subsurface (GdkSurface *surface);
 
