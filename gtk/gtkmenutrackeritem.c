@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "gtkmenutrackeritemprivate.h"
-#include "gtkactionmuxerprivate.h"
 #include "gtkactiontreeprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
@@ -83,13 +82,12 @@ struct _GtkMenuTrackerItem
 {
   GObject parent_instance;
 
-  GtkActionObservable *observable;
-  GtkActionSubscription *accel_subscription;
-  GtkActionKey *action_key;
-  GVariant *action_target;
-  char *action_namespace;
-  char *action_and_target;
-  GMenuItem *item;
+  GtkActionNode         *action_node;
+  GtkActionSubscription *action_subscription;
+  GtkActionKey          *action_key;
+  GVariant              *action_target;
+  char                  *action_namespace;
+  GMenuItem             *item;
   guint role : 4; /* GtkMenuTrackerItemRole */
   guint is_separator : 1;
   guint can_activate : 1;
@@ -124,9 +122,7 @@ enum {
 
 static GParamSpec *gtk_menu_tracker_item_pspecs[N_PROPS];
 
-static void gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface);
-G_DEFINE_TYPE_WITH_CODE (GtkMenuTrackerItem, gtk_menu_tracker_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER, gtk_menu_tracker_item_init_observer_iface))
+G_DEFINE_TYPE (GtkMenuTrackerItem, gtk_menu_tracker_item, G_TYPE_OBJECT)
 
 GType
 gtk_menu_tracker_item_role_get_type (void)
@@ -205,13 +201,11 @@ gtk_menu_tracker_item_finalize (GObject *object)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
-  if (self->accel_subscription != NULL)
-    gtk_action_subscription_cancel (self->accel_subscription);
+  g_clear_pointer (&self->action_subscription, gtk_action_subscription_cancel);
   g_clear_pointer (&self->action_key, gtk_action_key_unref);
   g_clear_pointer (&self->action_target, g_variant_unref);
   g_clear_pointer (&self->action_namespace, g_free);
-  g_clear_pointer (&self->action_and_target, g_free);
-  g_clear_object (&self->observable);
+  self->action_node = NULL;
   g_clear_object (&self->item);
 
   G_OBJECT_CLASS (gtk_menu_tracker_item_parent_class)->finalize (object);
@@ -256,10 +250,9 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
   g_object_class_install_properties (class, N_PROPS, gtk_menu_tracker_item_pspecs);
 }
 
-/* This syncs up the visibility for the hidden-when='' case.  We call it
- * from the action observer functions on changes to the action group and
- * on initialisation (via the action observer functions that are invoked
- * at that time).
+/* This syncs up the visibility for the hidden-when='' case. We call it
+ * when the action subscription's coherent snapshot changes and during
+ * subscription initialization.
  */
 static void
 gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
@@ -296,71 +289,63 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
 }
 
 static void
-gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
-                                    GtkActionObservable *observable,
-                                    const char          *action_name,
-                                    const GVariantType  *parameter_type,
-                                    gboolean             enabled,
-                                    GVariant            *state)
+gtk_menu_tracker_item_action_changed (GtkActionSubscription   *subscription,
+                                      GtkActionChange          changed,
+                                      const GtkActionSnapshot *snapshot,
+                                      gpointer                 user_data)
 {
-  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-  GVariant *action_target;
+  GtkMenuTrackerItem *self = user_data;
+  gboolean old_can_activate;
   gboolean old_sensitive;
   gboolean old_toggled;
   GtkMenuTrackerItemRole old_role;
   guint n_changed;
 
-  GTK_DEBUG (ACTIONS, "menutracker: action %s added", action_name);
-
+  old_can_activate = self->can_activate;
   old_sensitive = self->sensitive;
   old_toggled = self->toggled;
   old_role = self->role;
 
-  action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
+  self->can_activate = snapshot->present &&
+                       ((self->action_target == NULL && snapshot->parameter_type == NULL) ||
+                        (self->action_target != NULL && snapshot->parameter_type != NULL &&
+                         g_variant_is_of_type (self->action_target, snapshot->parameter_type)));
 
-  self->can_activate = (action_target == NULL && parameter_type == NULL) ||
-                        (action_target != NULL && parameter_type != NULL &&
-                        g_variant_is_of_type (action_target, parameter_type));
-
-  if (!self->can_activate)
+  if (snapshot->present && !self->can_activate)
     {
       GTK_DEBUG (ACTIONS, "menutracker: action %s can't be activated due to parameter type mismatch "
                           "(parameter type %s, target type %s)",
-                          action_name,
-                          parameter_type ? g_variant_type_peek_string (parameter_type) : "NULL",
-                          action_target ? g_variant_get_type_string (action_target) : "NULL");
-
-      if (action_target)
-        g_variant_unref (action_target);
-      return;
+                          gtk_action_key_get_full_name (self->action_key),
+                          snapshot->parameter_type != NULL
+                            ? g_variant_type_peek_string (snapshot->parameter_type) : "NULL",
+                          self->action_target != NULL
+                            ? g_variant_get_type_string (self->action_target) : "NULL");
     }
 
-  GTK_DEBUG (ACTIONS, "menutracker: action %s can be activated", action_name);
+  self->sensitive = self->can_activate && snapshot->enabled;
+  self->toggled = FALSE;
+  self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
 
-  self->sensitive = enabled;
-
-  GTK_DEBUG (ACTIONS, "menutracker: action %s is %s", action_name, enabled ? "enabled" : "disabled");
-
-  if (action_target != NULL && state != NULL)
+  if (self->can_activate && self->action_target != NULL && snapshot->state != NULL)
     {
-      self->toggled = g_variant_equal (state, action_target);
+      self->toggled = g_variant_equal (snapshot->state, self->action_target);
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_RADIO;
     }
-
-  else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
+  else if (self->can_activate &&
+           snapshot->state != NULL &&
+           g_variant_is_of_type (snapshot->state, G_VARIANT_TYPE_BOOLEAN))
     {
-      self->toggled = g_variant_get_boolean (state);
+      self->toggled = g_variant_get_boolean (snapshot->state);
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_CHECK;
     }
 
-  /* Avoid freeze/thaw_notify as they are quite expensive in runtime/memory
-   * unless we have more than one property to update. Additionally, only
-   * notify on properties that have changed to avoid extraneous signal
-   * emission. This code can get run a lot!
-   */
+  if (old_can_activate && !self->can_activate)
+    gtk_menu_tracker_item_update_visibility (self);
+
   n_changed = (old_role != self->role)
             + (old_toggled != self->toggled)
-            + (old_sensitive != self->sensitive);
+            + (old_sensitive != self->sensitive)
+            + ((changed & GTK_ACTION_CHANGE_ACCEL) != 0);
 
   if (n_changed > 1)
     g_object_freeze_notify (G_OBJECT (self));
@@ -374,140 +359,18 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
   if (self->role != old_role)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
 
+  if ((changed & GTK_ACTION_CHANGE_ACCEL) != 0)
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
+
   if (n_changed > 1)
     g_object_thaw_notify (G_OBJECT (self));
 
-  if (action_target)
-    g_variant_unref (action_target);
-
-  /* In case of hidden-when='', we want to Wait until after refreshing
-   * all of the properties to emit the signal that will cause the
-   * tracker to expose us (to prevent too much thrashing).
-   */
-  gtk_menu_tracker_item_update_visibility (self);
-}
-
-static void
-gtk_menu_tracker_item_action_enabled_changed (GtkActionObserver   *observer,
-                                              GtkActionObservable *observable,
-                                              const char          *action_name,
-                                              gboolean             enabled)
-{
-  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-
-  GTK_DEBUG (ACTIONS, "menutracker: action %s: enabled changed to %d", action_name, enabled);
-
-  if (!self->can_activate)
-    return;
-
-  if (self->sensitive == enabled)
-    return;
-
-  self->sensitive = enabled;
-
-  g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
-
-  gtk_menu_tracker_item_update_visibility (self);
-}
-
-static void
-gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
-                                            GtkActionObservable *observable,
-                                            const char          *action_name,
-                                            GVariant            *state)
-{
-  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-  GVariant *action_target;
-  gboolean was_toggled;
-
-  GTK_DEBUG (ACTIONS, "menutracker: action %s: state changed", action_name);
-
-  if (!self->can_activate)
-    return;
-
-  action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
-  was_toggled = self->toggled;
-
-  if (action_target)
-    {
-      self->toggled = g_variant_equal (state, action_target);
-      g_variant_unref (action_target);
-    }
-
-  else if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-    self->toggled = g_variant_get_boolean (state);
-
-  else
-    self->toggled = FALSE;
-
-  if (self->toggled != was_toggled)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
-}
-
-static void
-gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
-                                      GtkActionObservable *observable,
-                                      const char          *action_name)
-{
-  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
-  gboolean was_sensitive, was_toggled;
-  GtkMenuTrackerItemRole old_role;
-
-  GTK_DEBUG (ACTIONS, "menutracker: action %s was removed", action_name);
-
-  if (!self->can_activate)
-    return;
-
-  was_sensitive = self->sensitive;
-  was_toggled = self->toggled;
-  old_role = self->role;
-
-  self->can_activate = FALSE;
-  self->sensitive = FALSE;
-  self->toggled = FALSE;
-  self->role = GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
-
-  /* Backwards from adding: we want to remove ourselves from the menu
-   * -before- thrashing the properties.
-   */
-  gtk_menu_tracker_item_update_visibility (self);
-
-  g_object_freeze_notify (G_OBJECT (self));
-
-  if (was_sensitive)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
-
-  if (was_toggled)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
-
-  if (old_role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
-    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
-
-  g_object_thaw_notify (G_OBJECT (self));
-}
-
-static void
-gtk_menu_tracker_item_accel_changed (GtkActionSubscription   *subscription,
-                                     GtkActionChange          changed,
-                                     const GtkActionSnapshot *snapshot,
-                                     gpointer                 user_data)
-{
-  GtkMenuTrackerItem *self = user_data;
-
-  g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
-}
-
-static void
-gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface)
-{
-  iface->action_added = gtk_menu_tracker_item_action_added;
-  iface->action_enabled_changed = gtk_menu_tracker_item_action_enabled_changed;
-  iface->action_state_changed = gtk_menu_tracker_item_action_state_changed;
-  iface->action_removed = gtk_menu_tracker_item_action_removed;
+  if (!old_can_activate || self->can_activate)
+    gtk_menu_tracker_item_update_visibility (self);
 }
 
 GtkMenuTrackerItem *
-_gtk_menu_tracker_item_new (GtkActionObservable *observable,
+_gtk_menu_tracker_item_new (GtkActionNode       *action_node,
                             GMenuModel          *model,
                             int                  item_index,
                             gboolean             mac_os_mode,
@@ -518,13 +381,13 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
   const char *action_name;
   const char *hidden_when;
 
-  g_return_val_if_fail (GTK_IS_ACTION_OBSERVABLE (observable), NULL);
+  g_return_val_if_fail (action_node != NULL, NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   self = g_object_new (GTK_TYPE_MENU_TRACKER_ITEM, NULL);
   self->item = g_menu_item_new_from_model (model, item_index);
   self->action_namespace = g_strdup (action_namespace);
-  self->observable = g_object_ref (observable);
+  self->action_node = action_node;
   self->is_separator = is_separator;
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "hidden-when", "&s", &hidden_when))
@@ -548,58 +411,46 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "action", "&s", &action_name))
     {
-      GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
-      const GVariantType *parameter_type;
+      char *full_action_name = NULL;
       GVariant *target;
-      gboolean enabled;
-      GVariant *state;
-      gboolean found;
 
       target = g_menu_item_get_attribute_value (self->item, "target", NULL);
-
-      self->action_and_target = gtk_print_action_and_target (action_namespace, action_name, target);
-
-      action_name = strrchr (self->action_and_target, '|') + 1;
-      self->action_key = gtk_action_key_new (action_name);
+      full_action_name = action_namespace != NULL
+                       ? g_strconcat (action_namespace, ".", action_name, NULL)
+                       : g_strdup (action_name);
+      self->action_key = gtk_action_key_new (full_action_name);
       self->action_target = target != NULL ? g_variant_ref (target) : NULL;
       if (self->action_key != NULL)
-        self->accel_subscription =
-          gtk_action_node_subscribe (gtk_action_muxer_get_node (muxer),
+        {
+          self->action_subscription = gtk_action_node_subscribe (self->action_node,
                                      self->action_key,
                                      self->action_target != NULL
                                        ? g_variant_ref (self->action_target) : NULL,
-                                     GTK_ACTION_INTEREST_ACCEL,
-                                     gtk_menu_tracker_item_accel_changed,
+                                     (GTK_ACTION_INTEREST_PRESENT |
+                                      GTK_ACTION_INTEREST_ENABLED |
+                                      GTK_ACTION_INTEREST_RAW_STATE |
+                                      GTK_ACTION_INTEREST_ACCEL),
+                                     gtk_menu_tracker_item_action_changed,
                                      self,
                                      NULL);
+          if (self->action_subscription != NULL)
+            gtk_action_subscription_set_owner_location (self->action_subscription,
+                                                        &self->action_subscription);
+        }
 
       g_clear_pointer (&target, g_variant_unref);
 
       if (GTK_DEBUG_CHECK (ACTIONS))
         {
-          if (!strchr (action_name, '.'))
+          if (!strchr (full_action_name, '.'))
             gdk_debug_message ("menutracker: action name %s doesn't look like 'app.' or 'win.'; "
-                               "it is unlikely to work", action_name);
+                               "it is unlikely to work", full_action_name);
         }
 
-      state = NULL;
+      if (self->action_subscription == NULL)
+        gtk_menu_tracker_item_update_visibility (self);
 
-      gtk_action_observable_register_observer (self->observable, action_name, GTK_ACTION_OBSERVER (self));
-      found = gtk_action_muxer_query_action (muxer, action_name, &enabled, &parameter_type, NULL, NULL, &state);
-
-      if (found)
-        {
-          GTK_DEBUG (ACTIONS, "menutracker: action %s existed from the start", action_name);
-          gtk_menu_tracker_item_action_added (GTK_ACTION_OBSERVER (self), observable, action_name, parameter_type, enabled, state);
-        }
-      else
-        {
-          GTK_DEBUG (ACTIONS, "menutracker: action %s missing from the start", action_name);
-          gtk_menu_tracker_item_update_visibility (self);
-        }
-
-      if (state)
-        g_variant_unref (state);
+      g_clear_pointer (&full_action_name, g_free);
     }
   else
     {
@@ -610,10 +461,12 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
   return self;
 }
 
-GtkActionObservable *
-_gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
+GtkActionNode *
+_gtk_menu_tracker_item_get_action_node (GtkMenuTrackerItem *self)
 {
-  return self->observable;
+  g_return_val_if_fail (GTK_IS_MENU_TRACKER_ITEM (self), NULL);
+
+  return self->action_node;
 }
 
 /*< private >
@@ -738,30 +591,26 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
 {
   const char *accel;
 
-  if (!self->action_and_target)
+  if (self->action_key == NULL)
     return NULL;
 
   if (g_menu_item_get_attribute (self->item, "accel", "&s", &accel))
     return accel;
 
-  if (!GTK_IS_ACTION_MUXER (self->observable))
-    return NULL;
-  if (self->action_key == NULL)
+  if (self->action_subscription == NULL)
     return NULL;
 
-  return gtk_action_muxer_get_primary_accel_for (GTK_ACTION_MUXER (self->observable),
-                                                 self->action_key,
-                                                 self->action_target);
+  return gtk_action_subscription_get_snapshot (self->action_subscription)->primary_accel;
 }
 
 const char *
 gtk_menu_tracker_item_get_action_name (GtkMenuTrackerItem *self)
 {
 
-  if (!self->action_and_target)
+  if (self->action_key == NULL)
     return NULL;
 
-  return strrchr (self->action_and_target, '|') + 1;
+  return gtk_action_key_get_full_name (self->action_key);
 }
 
 GVariant *
@@ -859,41 +708,30 @@ gtk_menu_tracker_item_set_submenu_shown (GtkMenuTrackerItem *self,
 void
 gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
 {
-  const char *action_name;
-  GVariant *action_target;
-
   g_return_if_fail (GTK_IS_MENU_TRACKER_ITEM (self));
 
   if (!self->can_activate)
     return;
 
-  action_name = strrchr (self->action_and_target, '|') + 1;
-  action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
-
-  gtk_action_muxer_activate_action (GTK_ACTION_MUXER (self->observable), action_name, action_target);
-
-  if (action_target)
-    g_variant_unref (action_target);
+  gtk_action_node_activate (self->action_node, self->action_key, self->action_target);
 }
 
 typedef struct {
   GObject parent;
 
-  GtkMenuTrackerItem *item;
-  char               *submenu_action;
-  gboolean            first_time;
+  GtkMenuTrackerItem    *item;
+  GtkActionSubscription *subscription;
+  GtkActionKey          *action_key;
+  gboolean               first_time;
 } GtkMenuTrackerOpener;
 
 typedef struct {
   GObjectClass parent_class;
 } GtkMenuTrackerOpenerClass;
 
-static void gtk_menu_tracker_opener_observer_iface_init (GtkActionObserverInterface *iface);
-
 GType gtk_menu_tracker_opener_get_type (void);
 
-G_DEFINE_TYPE_WITH_CODE (GtkMenuTrackerOpener, gtk_menu_tracker_opener, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER, gtk_menu_tracker_opener_observer_iface_init))
+G_DEFINE_TYPE (GtkMenuTrackerOpener, gtk_menu_tracker_opener, G_TYPE_OBJECT)
 
 static void
 gtk_menu_tracker_opener_init (GtkMenuTrackerOpener *self)
@@ -911,21 +749,20 @@ gtk_menu_tracker_opener_finalize (GObject *object)
 
       g_clear_weak_pointer (&opener->item);
 
-      gtk_action_observable_unregister_observer (item->observable,
-                                                 opener->submenu_action,
-                                                 (GtkActionObserver *)opener);
+      if (opener->subscription != NULL)
+        gtk_action_subscription_cancel (opener->subscription);
+      opener->subscription = NULL;
 
-      if (GTK_IS_ACTION_MUXER (item->observable))
-        gtk_action_muxer_change_action_state (GTK_ACTION_MUXER (item->observable),
-                                              opener->submenu_action,
-                                              g_variant_new_boolean (FALSE));
+      gtk_action_node_change_state (item->action_node,
+                                    opener->action_key,
+                                    g_variant_new_boolean (FALSE));
 
       gtk_menu_tracker_item_set_submenu_shown (item, FALSE);
 
       g_object_unref (item);
     }
 
-  g_clear_pointer (&opener->submenu_action, g_free);
+  g_clear_pointer (&opener->action_key, gtk_action_key_unref);
 
   G_OBJECT_CLASS (gtk_menu_tracker_opener_parent_class)->finalize (object);
 }
@@ -937,11 +774,10 @@ gtk_menu_tracker_opener_class_init (GtkMenuTrackerOpenerClass *class)
 }
 
 static void
-gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
+gtk_menu_tracker_opener_update (GtkMenuTrackerOpener    *opener,
+                                const GtkActionSnapshot *snapshot)
 {
-  GtkActionMuxer *muxer = GTK_ACTION_MUXER (opener->item->observable);
   gboolean is_open = TRUE;
-  GVariant *state;
 
   /* We consider the menu as being "open" if the action does not exist
    * or if there is another problem (no state, wrong state type, etc.).
@@ -957,15 +793,10 @@ gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
    * That is handled in _free() below.
    */
 
-  if (gtk_action_muxer_query_action (muxer, opener->submenu_action, NULL, NULL, NULL, NULL, &state))
-    {
-      if (state)
-        {
-          if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-            is_open = g_variant_get_boolean (state);
-          g_variant_unref (state);
-        }
-    }
+  if (snapshot->present &&
+      snapshot->state != NULL &&
+      g_variant_is_of_type (snapshot->state, G_VARIANT_TYPE_BOOLEAN))
+    is_open = g_variant_get_boolean (snapshot->state);
 
   /* If it is already open, signal that.
    *
@@ -976,55 +807,20 @@ gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
 
   if (!is_open || opener->first_time)
     {
-      gtk_action_muxer_change_action_state (muxer, opener->submenu_action, g_variant_new_boolean (TRUE));
+      gtk_action_node_change_state (opener->item->action_node,
+                                    opener->action_key,
+                                    g_variant_new_boolean (TRUE));
       opener->first_time = FALSE;
     }
 }
 
 static void
-gtk_menu_tracker_opener_added (GtkActionObserver   *observer,
-                               GtkActionObservable *observable,
-                               const char          *action_name,
-                               const GVariantType  *parameter_type,
-                               gboolean             enabled,
-                               GVariant            *state)
+gtk_menu_tracker_opener_changed (GtkActionSubscription   *subscription,
+                                 GtkActionChange          changed,
+                                 const GtkActionSnapshot *snapshot,
+                                 gpointer                 user_data)
 {
-  gtk_menu_tracker_opener_update ((GtkMenuTrackerOpener *)observer);
-}
-
-static void
-gtk_menu_tracker_opener_removed (GtkActionObserver   *observer,
-                                 GtkActionObservable *observable,
-                                 const char          *action_name)
-{
-  gtk_menu_tracker_opener_update ((GtkMenuTrackerOpener *)observer);
-}
-
-static void
-gtk_menu_tracker_opener_enabled_changed (GtkActionObserver   *observer,
-                                         GtkActionObservable *observable,
-                                         const char          *action_name,
-                                         gboolean             enabled)
-{
-  gtk_menu_tracker_opener_update ((GtkMenuTrackerOpener *)observer);
-}
-
-static void
-gtk_menu_tracker_opener_state_changed (GtkActionObserver   *observer,
-                                       GtkActionObservable *observable,
-                                       const char          *action_name,
-                                       GVariant            *state)
-{
-  gtk_menu_tracker_opener_update ((GtkMenuTrackerOpener *)observer);
-}
-
-static void
-gtk_menu_tracker_opener_observer_iface_init (GtkActionObserverInterface *iface)
-{
-  iface->action_added = gtk_menu_tracker_opener_added;
-  iface->action_removed = gtk_menu_tracker_opener_removed;
-  iface->action_enabled_changed = gtk_menu_tracker_opener_enabled_changed;
-  iface->action_state_changed = gtk_menu_tracker_opener_state_changed;
+  gtk_menu_tracker_opener_update (user_data, snapshot);
 }
 
 static GtkMenuTrackerOpener *
@@ -1032,6 +828,7 @@ gtk_menu_tracker_opener_new (GtkMenuTrackerItem *item,
                              const char         *submenu_action)
 {
   GtkMenuTrackerOpener *opener;
+  char *full_name;
 
   opener = g_object_new (gtk_menu_tracker_opener_get_type (), NULL);
 
@@ -1039,16 +836,28 @@ gtk_menu_tracker_opener_new (GtkMenuTrackerItem *item,
 
   g_set_weak_pointer (&opener->item, item);
 
-  if (item->action_namespace)
-    opener->submenu_action = g_strjoin (".", item->action_namespace, submenu_action, NULL);
+  if (item->action_namespace != NULL)
+    full_name = g_strjoin (".", item->action_namespace, submenu_action, NULL);
   else
-    opener->submenu_action = g_strdup (submenu_action);
+    full_name = g_strdup (submenu_action);
 
-  gtk_action_observable_register_observer (item->observable,
-                                           opener->submenu_action,
-                                           (GtkActionObserver *)opener);
+  opener->action_key = gtk_action_key_new (full_name);
+  g_free (full_name);
 
-  gtk_menu_tracker_opener_update (opener);
+  if (opener->action_key != NULL)
+    {
+      opener->subscription = gtk_action_node_subscribe (item->action_node,
+                                 opener->action_key,
+                                 NULL,
+                                 (GTK_ACTION_INTEREST_PRESENT |
+                                  GTK_ACTION_INTEREST_RAW_STATE),
+                                 gtk_menu_tracker_opener_changed,
+                                 opener,
+                                 NULL);
+      if (opener->subscription != NULL)
+        gtk_action_subscription_set_owner_location (opener->subscription,
+                                                    &opener->subscription);
+    }
 
   return opener;
 }

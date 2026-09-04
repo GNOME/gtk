@@ -20,11 +20,15 @@
 
 #include <gtk/gtk.h>
 
-#include "gtk/gtkactionmuxerprofileprivate.h"
-
-#define N_BINDINGS 10000
-#define N_ACTIONS 100
-#define N_TARGETS 1000
+#ifndef N_BINDINGS
+# define N_BINDINGS 10000
+#endif
+#ifndef N_ACTIONS
+# define N_ACTIONS 100
+#endif
+#ifndef N_TARGETS
+# define N_TARGETS 1000
+#endif
 
 typedef void (*WorkloadFunc) (void);
 
@@ -33,6 +37,87 @@ typedef struct
   const char   *name;
   WorkloadFunc func;
 } Workload;
+
+typedef struct
+{
+  GtkWidget parent_instance;
+  gboolean active;
+} ActionPerformanceWidget;
+
+typedef GtkWidgetClass ActionPerformanceWidgetClass;
+
+enum
+{
+  PROP_0,
+  PROP_ACTIVE,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
+
+G_DEFINE_TYPE (ActionPerformanceWidget, action_performance_widget, GTK_TYPE_WIDGET)
+
+static void
+action_performance_widget_get_property (GObject    *object,
+                                        guint       prop_id,
+                                        GValue     *value,
+                                        GParamSpec *pspec)
+{
+  ActionPerformanceWidget *self = (ActionPerformanceWidget *)object;
+
+  switch (prop_id)
+    {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, self->active);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+action_performance_widget_set_property (GObject      *object,
+                                        guint         prop_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
+{
+  ActionPerformanceWidget *self = (ActionPerformanceWidget *)object;
+
+  switch (prop_id)
+    {
+    case PROP_ACTIVE:
+      self->active = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+action_performance_widget_class_init (ActionPerformanceWidgetClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->get_property = action_performance_widget_get_property;
+  object_class->set_property = action_performance_widget_set_property;
+
+  properties[PROP_ACTIVE] =
+    g_param_spec_boolean ("active", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+  gtk_widget_class_install_property_action (GTK_WIDGET_CLASS (class),
+                                            "bench.toggle", "active");
+}
+
+static void
+action_performance_widget_init (ActionPerformanceWidget *self)
+{
+}
 
 static GSimpleActionGroup *
 create_group (guint n_actions)
@@ -256,36 +341,30 @@ workload_property_actions (void)
   root = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
   for (i = 0; i < N_BINDINGS; i++)
     {
-      GtkWidget *text;
+      GtkWidget *widget;
 
-      text = gtk_text_new ();
-      gtk_box_append (GTK_BOX (root), text);
-      gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+      widget = g_object_new (action_performance_widget_get_type (), NULL);
+      gtk_box_append (GTK_BOX (root), widget);
+      gtk_widget_activate_action (widget, "bench.toggle", NULL);
     }
 
   g_object_unref (root);
 }
 
 static void
-run_workload (const Workload *workload)
+run_workload (const Workload *workload,
+              guint64         iterations)
 {
-  GtkActionMuxerProfile profile;
   gint64 begin;
   gint64 elapsed;
+  guint64 i;
 
-  _gtk_action_muxer_profile_reset ();
   begin = g_get_monotonic_time ();
-  workload->func ();
+  for (i = 0; i < iterations; i++)
+    workload->func ();
   elapsed = g_get_monotonic_time () - begin;
-  _gtk_action_muxer_profile_get (&profile);
 
-  g_print ("%-20s %10.3f ms  resolutions=%" G_GUINT64_FORMAT
-           " queries=%" G_GUINT64_FORMAT " callbacks=%" G_GUINT64_FORMAT
-           " allocations=%" G_GUINT64_FORMAT " relay-edges=%" G_GUINT64_FORMAT
-           " touched-bindings=%" G_GUINT64_FORMAT "\n",
-           workload->name, elapsed / 1000.0, profile.resolutions,
-           profile.source_queries, profile.callback_deliveries,
-           profile.allocations, profile.relay_edges, profile.touched_bindings);
+  g_print ("%-20s %10.3f ms\n", workload->name, elapsed / (1000.0 * iterations));
 }
 
 int
@@ -302,12 +381,33 @@ main (int   argc,
     { "group-replacement", workload_group_replacement },
     { "property-actions", workload_property_actions },
   };
+  guint64 iterations = 1;
   guint i;
 
   gtk_init_check ();
 
+  if (argc > 3)
+    {
+      g_printerr ("Usage: %s [workload [iterations]]\n", argv[0]);
+      return 1;
+    }
+
+  if (argc > 2 &&
+      (!g_ascii_string_to_unsigned (argv[2], 10, 1, G_MAXUINT, &iterations, NULL)))
+    {
+      g_printerr ("Invalid iteration count: %s\n", argv[2]);
+      return 1;
+    }
+
   for (i = 0; i < G_N_ELEMENTS (workloads); i++)
-    run_workload (&workloads[i]);
+    {
+      if (argc > 1 &&
+          !g_str_equal (argv[1], "all") &&
+          !g_str_equal (argv[1], workloads[i].name))
+        continue;
+
+      run_workload (&workloads[i], iterations);
+    }
 
   return 0;
 }
