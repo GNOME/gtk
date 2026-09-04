@@ -69,7 +69,6 @@
 #include "gtkmarshalers.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkactionmuxerprivate.h"
 #include "gtkmenutrackerprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmain.h"
@@ -748,7 +747,6 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
   if (g_set_object (&bar->model, model))
     {
       GtkWidget *child;
-      GtkActionMuxer *muxer;
 
       while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
         gtk_widget_unparent (child);
@@ -757,8 +755,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 
       if (model)
         {
-          muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
-          bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
+          bar->tracker = gtk_menu_tracker_new (_gtk_widget_get_action_node (GTK_WIDGET (bar), TRUE),
                                                model,
                                                FALSE,
                                                TRUE,

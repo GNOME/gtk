@@ -25,7 +25,7 @@
  * GtkMenuTracker:
  *
  * GtkMenuTracker is a simple object to ease implementations of GMenuModel.
- * Given a GtkActionObservable (usually a GActionMuxer) along with a
+ * Given a GtkActionNode along with a
  * GMenuModel, it will tell you which menu items to create and where to place
  * them. If a menu item is removed, it will tell you the position of the menu
  * item to remove.
@@ -57,7 +57,7 @@ typedef struct _GtkMenuTrackerSection GtkMenuTrackerSection;
 
 struct _GtkMenuTracker
 {
-  GtkActionObservable      *observable;
+  GtkActionNode            *action_node;
   guint                     merge_sections : 1;
   guint                     mac_os_mode    : 1;
   GtkMenuTrackerInsertFunc  insert_func;
@@ -199,7 +199,7 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
       /* Add a separator */
       GtkMenuTrackerItem *separator;
 
-      separator = _gtk_menu_tracker_item_new (tracker->observable, parent_model, parent_index, FALSE, NULL, TRUE);
+      separator = _gtk_menu_tracker_item_new (tracker->action_node, parent_model, parent_index, FALSE, NULL, TRUE);
       (* tracker->insert_func) (separator, offset, tracker->user_data);
       g_object_unref (separator);
 
@@ -348,7 +348,7 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
         {
           GtkMenuTrackerItem *item;
 
-          item = _gtk_menu_tracker_item_new (tracker->observable, model, position + n_items,
+          item = _gtk_menu_tracker_item_new (tracker->action_node, model, position + n_items,
                                              tracker->mac_os_mode,
                                              section->action_namespace, submenu != NULL);
 
@@ -552,7 +552,7 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * gtk_menu_tracker_free() is called.
  */
 GtkMenuTracker *
-gtk_menu_tracker_new (GtkActionObservable      *observable,
+gtk_menu_tracker_new (GtkActionNode            *action_node,
                       GMenuModel               *model,
                       gboolean                  with_separators,
                       gboolean                  merge_sections,
@@ -567,7 +567,7 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
   tracker = g_new (GtkMenuTracker, 1);
   tracker->merge_sections = merge_sections;
   tracker->mac_os_mode = mac_os_mode;
-  tracker->observable = g_object_ref (observable);
+  tracker->action_node = action_node;
   tracker->insert_func = insert_func;
   tracker->remove_func = remove_func;
   tracker->user_data = user_data;
@@ -594,7 +594,7 @@ gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
   submenu = _gtk_menu_tracker_item_get_link (item, link_name);
   namespace = _gtk_menu_tracker_item_get_link_namespace (item);
 
-  tracker = gtk_menu_tracker_new (_gtk_menu_tracker_item_get_observable (item), submenu,
+  tracker = gtk_menu_tracker_new (_gtk_menu_tracker_item_get_action_node (item), submenu,
                                   TRUE, merge_sections, mac_os_mode,
                                   namespace, insert_func, remove_func, user_data);
 
@@ -614,6 +614,6 @@ void
 gtk_menu_tracker_free (GtkMenuTracker *tracker)
 {
   gtk_menu_tracker_section_free (tracker->toplevel);
-  g_object_unref (tracker->observable);
+  tracker->action_node = NULL;
   g_free (tracker);
 }

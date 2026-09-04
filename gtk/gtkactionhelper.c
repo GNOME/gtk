@@ -20,8 +20,6 @@
 #include "config.h"
 
 #include "gtkactionhelperprivate.h"
-#include "gtkactionobservableprivate.h"
-#include "gtkactionobserverprivate.h"
 #include "gtkactiontreeprivate.h"
 
 #include "gtkdebug.h"
@@ -39,7 +37,6 @@ struct _GtkActionHelper
   GObject parent_instance;
 
   GtkWidget        *widget;
-  GtkActionMuxer   *action_context;
   GtkActionNode    *action_node;
   GtkActionBinding *binding;
   char             *action_name;
@@ -51,7 +48,6 @@ struct _GtkActionHelper
   guint             enabled : 1;
   guint             active : 1;
   guint             changing : 1;
-  guint             legacy_subscribed : 1;
 
   int               reporting;
 };
@@ -71,116 +67,7 @@ static GParamSpec *action_target_pspec;
 
 static void gtk_action_helper_report_change (GtkActionHelper *helper,
                                              guint            prop_id);
-static void gtk_action_helper_observer_iface_init (GtkActionObserverInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GtkActionHelper, gtk_action_helper, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER,
-                                                gtk_action_helper_observer_iface_init))
-
-static void
-gtk_action_helper_apply_legacy_state (GtkActionHelper    *helper,
-                                      gboolean            enabled,
-                                      const GVariantType *parameter_type,
-                                      GVariant           *state,
-                                      gboolean            notify)
-{
-  gboolean was_enabled = helper->enabled;
-  gboolean was_active = helper->active;
-  GtkButtonRole was_role = helper->role;
-
-  helper->can_activate = ((helper->target == NULL && parameter_type == NULL) ||
-                          (helper->target != NULL && parameter_type != NULL &&
-                           g_variant_is_of_type (helper->target, parameter_type)));
-  helper->enabled = helper->can_activate && enabled;
-  helper->active = FALSE;
-  helper->role = GTK_BUTTON_ROLE_NORMAL;
-
-  if (helper->can_activate && helper->target != NULL && state != NULL)
-    {
-      helper->active = g_variant_equal (state, helper->target);
-      helper->role = GTK_BUTTON_ROLE_RADIO;
-    }
-  else if (helper->can_activate && state != NULL &&
-           g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-    {
-      helper->active = g_variant_get_boolean (state);
-      helper->role = GTK_BUTTON_ROLE_CHECK;
-    }
-
-  if (!notify)
-    return;
-  if (helper->enabled != was_enabled)
-    gtk_action_helper_report_change (helper, PROP_ENABLED);
-  if (helper->active != was_active)
-    gtk_action_helper_report_change (helper, PROP_ACTIVE);
-  if (helper->role != was_role)
-    gtk_action_helper_report_change (helper, PROP_ROLE);
-}
-
-static void
-gtk_action_helper_observer_action_added (GtkActionObserver   *observer,
-                                         GtkActionObservable *observable,
-                                         const char          *action_name,
-                                         const GVariantType  *parameter_type,
-                                         gboolean             enabled,
-                                         GVariant            *state)
-{
-  gtk_action_helper_apply_legacy_state (GTK_ACTION_HELPER (observer),
-                                        enabled, parameter_type, state, TRUE);
-}
-
-static void
-gtk_action_helper_observer_action_removed (GtkActionObserver   *observer,
-                                           GtkActionObservable *observable,
-                                           const char          *action_name)
-{
-  GtkActionHelper *helper = GTK_ACTION_HELPER (observer);
-
-  gtk_action_helper_apply_legacy_state (helper, FALSE, NULL, NULL, TRUE);
-}
-
-static void
-gtk_action_helper_observer_action_enabled_changed (GtkActionObserver   *observer,
-                                                   GtkActionObservable *observable,
-                                                   const char          *action_name,
-                                                   gboolean             enabled)
-{
-  GtkActionHelper *helper = GTK_ACTION_HELPER (observer);
-
-  if (helper->can_activate && helper->enabled != enabled)
-    {
-      helper->enabled = enabled;
-      gtk_action_helper_report_change (helper, PROP_ENABLED);
-    }
-}
-
-static void
-gtk_action_helper_observer_action_state_changed (GtkActionObserver   *observer,
-                                                 GtkActionObservable *observable,
-                                                 const char          *action_name,
-                                                 GVariant            *state)
-{
-  GtkActionHelper *helper = GTK_ACTION_HELPER (observer);
-  const GVariantType *parameter_type;
-  gboolean enabled;
-  GVariant *current_state = NULL;
-
-  if (gtk_action_muxer_query_action (helper->action_context, helper->action_name,
-                                     &enabled, &parameter_type, NULL, NULL,
-                                     &current_state))
-    gtk_action_helper_apply_legacy_state (helper, enabled, parameter_type,
-                                          current_state, TRUE);
-  g_clear_pointer (&current_state, g_variant_unref);
-}
-
-static void
-gtk_action_helper_observer_iface_init (GtkActionObserverInterface *iface)
-{
-  iface->action_added = gtk_action_helper_observer_action_added;
-  iface->action_removed = gtk_action_helper_observer_action_removed;
-  iface->action_enabled_changed = gtk_action_helper_observer_action_enabled_changed;
-  iface->action_state_changed = gtk_action_helper_observer_action_state_changed;
-}
+G_DEFINE_TYPE (GtkActionHelper, gtk_action_helper, G_TYPE_OBJECT)
 
 static void
 gtk_action_helper_report_change (GtkActionHelper *helper,
@@ -244,8 +131,8 @@ gtk_action_helper_binding_changed (GtkActionBinding            *binding,
       const GtkActionSnapshot *snapshot;
       GtkActionProvider *provider;
 
-      provider = gtk_action_node_resolve (helper->action_node,
-                                          gtk_action_binding_get_key (binding));
+      provider = gtk_action_node_resolve_provider (helper->action_node,
+                                                   gtk_action_binding_get_key (binding));
       snapshot = provider != NULL ? gtk_action_provider_get_snapshot (provider) : NULL;
       g_warning ("actionhelper: action %s can't be activated due to parameter type mismatch "
                  "(parameter type %s, target type %s)",
@@ -298,10 +185,6 @@ gtk_action_helper_finalize (GObject *object)
 {
   GtkActionHelper *helper = GTK_ACTION_HELPER (object);
 
-  if (helper->legacy_subscribed)
-    gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                               helper->action_name,
-                                               GTK_ACTION_OBSERVER (helper));
   g_clear_pointer (&helper->binding, gtk_action_binding_cancel);
   g_clear_pointer (&helper->target, g_variant_unref);
   g_clear_pointer (&helper->action_name, g_free);
@@ -361,7 +244,6 @@ gtk_action_helper_new (GtkActionable *widget)
     }
 
   helper->action_node = _gtk_widget_get_action_node (helper->widget, TRUE);
-  helper->action_context = _gtk_widget_get_action_muxer (helper->widget, TRUE);
 
   return helper;
 }
@@ -390,13 +272,6 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   old_binding = helper->binding;
   helper->binding = NULL;
   helper->changing = TRUE;
-  if (helper->legacy_subscribed)
-    {
-      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                                 helper->action_name,
-                                                 GTK_ACTION_OBSERVER (helper));
-      helper->legacy_subscribed = FALSE;
-    }
   g_free (helper->action_name);
   helper->action_name = g_strdup (action_name);
 
@@ -422,26 +297,6 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
       helper->enabled = FALSE;
       helper->active = FALSE;
       helper->role = GTK_BUTTON_ROLE_NORMAL;
-    }
-
-  if (helper->binding != NULL &&
-      !gtk_action_binding_get_state (helper->binding)->present)
-    {
-      const GVariantType *parameter_type = NULL;
-      GVariant *state = NULL;
-      gboolean enabled = FALSE;
-
-      if (gtk_action_observable_subscribe (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                           helper->action_name,
-                                           GTK_ACTION_OBSERVER (helper),
-                                           &enabled, &parameter_type, &state))
-        {
-          gtk_action_helper_apply_legacy_state (helper, enabled, parameter_type, state, FALSE);
-        }
-      gtk_action_binding_cancel (helper->binding);
-      helper->binding = NULL;
-      helper->legacy_subscribed = TRUE;
-      g_clear_pointer (&state, g_variant_unref);
     }
 
   if (old_binding != NULL)
@@ -488,17 +343,6 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
                                      helper->target != NULL
                                        ? g_variant_ref (helper->target) : NULL);
       helper->changing = FALSE;
-    }
-  else if (helper->legacy_subscribed)
-    {
-      const GVariantType *parameter_type = NULL;
-      GVariant *state = NULL;
-      gboolean enabled = FALSE;
-
-      if (gtk_action_muxer_query_action (helper->action_context, helper->action_name,
-                                         &enabled, &parameter_type, NULL, NULL, &state))
-        gtk_action_helper_apply_legacy_state (helper, enabled, parameter_type, state, FALSE);
-      g_clear_pointer (&state, g_variant_unref);
     }
 
   if (helper->enabled != was_enabled)
@@ -547,10 +391,6 @@ gtk_action_helper_activate (GtkActionHelper *helper)
 
   if (helper->binding != NULL)
     gtk_action_binding_activate (helper->binding);
-  else if (helper->legacy_subscribed && helper->can_activate)
-    gtk_action_muxer_activate_action (helper->action_context,
-                                      helper->action_name,
-                                      helper->target);
 }
 
 GtkButtonRole

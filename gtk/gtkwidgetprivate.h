@@ -26,7 +26,6 @@
 
 #include "gtkwidget.h"
 
-#include "gtkactionmuxerprivate.h"
 #include "gtkactiontreeprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkborder.h"
@@ -45,6 +44,21 @@ G_BEGIN_DECLS
 typedef gboolean (*GtkSurfaceTransformChangedCallback) (GtkWidget               *widget,
                                                         const graphene_matrix_t *surface_transform,
                                                         gpointer                 user_data);
+
+typedef struct _GtkWidgetAction GtkWidgetAction;
+
+struct _GtkWidgetAction
+{
+  char  *name;
+  GType  owner;
+  guint  slot;
+
+  const GVariantType          *parameter_type;
+  GtkWidgetActionActivateFunc  activate;
+
+  const GVariantType *state_type;
+  GParamSpec         *pspec;
+};
 
 #define GTK_STATE_FLAGS_BITS 15
 
@@ -189,7 +203,6 @@ struct _GtkWidgetPrivate
   /* only created on-demand */
   GtkListListModel *children_observer;
   GtkListListModel *controller_observer;
-  GtkActionMuxer *muxer;
   GtkActionNode *action_node;
 
   GtkWidget *focus_child;
@@ -271,9 +284,7 @@ void              gtk_widget_system_setting_changed        (GtkWidget           
 void              gtk_system_setting_changed               (GdkDisplay          *display,
                                                             GtkSystemSetting     setting);
 
-void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
-GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,
-                                                            gboolean      create);
+void              _gtk_widget_update_action_tree           (GtkWidget *widget);
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 

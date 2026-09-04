@@ -21,19 +21,22 @@
 #include "config.h"
 
 #include "gtkactiontreeprivate.h"
-#include "gtkactionmuxerprofileprivate.h"
 #include "gtkapplication.h"
+#include "gtkbitmaskprivate.h"
+#include "gtkdebug.h"
+#include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gsettings-mapping.h"
 
 #include <string.h>
 
 typedef struct _GtkActionTreeWork GtkActionTreeWork;
-typedef struct _GtkActionProviderObserver GtkActionProviderObserver;
 typedef struct _GtkActionTargetBucket GtkActionTargetBucket;
 typedef struct _GtkActionPropertySource GtkActionPropertySource;
 
 #define TARGET_INDEX_LINEAR_LIMIT 4
+#define INLINE_ANCESTORS 4
 
 struct _GtkActionTargetBucket
 {
@@ -44,82 +47,73 @@ struct _GtkActionTargetBucket
 
 struct _GtkActionBinding
 {
-  GtkActionRoute          *route;
-  GtkActionProvider       *provider;
-  GtkActionBinding        *route_prev;
-  GtkActionBinding        *route_next;
-  GtkActionBinding        *provider_prev;
-  GtkActionBinding        *provider_next;
-  GtkActionBinding        *target_prev;
-  GtkActionBinding        *target_next;
-  GtkActionBinding        *dirty_next;
-  GtkActionTargetBucket   *target_bucket;
-  GtkActionKey            *key;
-  GVariant                *target;
-  char                    *primary_accel;
-  GtkActionBindingState    state;
-  GtkActionBindingCallback callback;
-  gpointer                 user_data;
-  GDestroyNotify           destroy;
-  GtkActionBinding       **owner_location;
-  GtkActionInterest        interest;
-  guint                    alive : 1;
-  guint                    dirty : 1;
-  guint                    queued : 1;
+  GtkActionRoute            *route;
+  GtkActionProvider         *provider;
+  GtkActionBinding          *route_prev;
+  GtkActionBinding          *route_next;
+  GtkActionBinding          *provider_prev;
+  GtkActionBinding          *provider_next;
+  GtkActionBinding          *target_prev;
+  GtkActionBinding          *target_next;
+  GtkActionBinding          *dirty_next;
+  GtkActionTargetBucket     *target_bucket;
+  GtkActionKey              *key;
+  GVariant                  *target;
+  char                      *primary_accel;
+  GtkActionBindingState      state;
+  GtkActionBindingCallback   callback;
+  gpointer                   user_data;
+  GDestroyNotify             destroy;
+  GtkActionBinding         **owner_location;
+  GtkActionInterest          interest;
+  guint                      alive : 1;
+  guint                      dirty : 1;
+  guint                      queued : 1;
 };
 
 struct _GtkActionSubscription
 {
-  GtkActionRoute                *route;
-  GtkActionProvider             *provider;
-  GtkActionSubscription         *route_prev;
-  GtkActionSubscription         *route_next;
-  GtkActionSubscription         *provider_prev;
-  GtkActionSubscription         *provider_next;
-  GtkActionSubscription         *state_prev;
-  GtkActionSubscription         *state_next;
-  GtkActionKey                  *key;
-  GVariant                      *target;
-  GtkActionSnapshot              snapshot;
-  GtkActionSubscriptionCallback  callback;
-  gpointer                       user_data;
-  GDestroyNotify                 destroy;
-  GtkActionInterest              interest;
-  guint                          queued : 1;
-  guint                          cancelled : 1;
-};
-
-struct _GtkActionProviderObserver
-{
-  GtkActionProviderObserver *next;
-  GtkActionProviderCallback  callback;
-  gpointer                   user_data;
-  GDestroyNotify             destroy;
-  gulong                     id;
-  guint                      removed : 1;
+  GtkActionRoute                 *route;
+  GtkActionProvider              *provider;
+  GtkActionSubscription          *route_prev;
+  GtkActionSubscription          *route_next;
+  GtkActionSubscription          *provider_prev;
+  GtkActionSubscription          *provider_next;
+  GtkActionSubscription          *state_prev;
+  GtkActionSubscription          *state_next;
+  GtkActionKey                   *key;
+  GVariant                       *target;
+  GtkActionSnapshot               snapshot;
+  GtkActionSubscriptionCallback   callback;
+  gpointer                        user_data;
+  GDestroyNotify                  destroy;
+  GtkActionSubscription         **owner_location;
+  GtkActionInterest               interest;
+  guint                           queued : 1;
+  guint                           cancelled : 1;
 };
 
 struct _GtkActionProvider
 {
-  GtkActionNode             *node;
-  GtkActionKey              *key;
-  GtkActionSource           *source;
-  GtkWidgetAction           *widget_action;
-  GtkActionPropertySource   *property_source;
-  GtkActionProvider         *property_next;
-  GtkActionSnapshot          snapshot;
-  GtkActionProviderObserver *observers;
-  GtkActionBinding          *first_binding;
-  GtkActionBinding          *boolean_bindings;
-  GtkActionBinding          *raw_state_bindings;
-  GPtrArray                 *target_buckets;
-  GHashTable                *target_index;
-  GtkActionSubscription     *first_subscription;
-  GtkActionSubscription     *first_raw_state_observer;
-  guint64                    revision;
-  guint64                    state_bindings_touched;
-  guint                      dispatch_depth;
-  guint                      retired : 1;
+  GtkActionNode           *node;
+  GtkActionKey            *key;
+  GtkActionSource         *source;
+  GtkWidgetAction         *widget_action;
+  GtkActionPropertySource *property_source;
+  GtkActionProvider       *property_next;
+  GtkActionSnapshot        snapshot;
+  GtkActionBinding        *first_binding;
+  GtkActionBinding        *boolean_bindings;
+  GtkActionBinding        *raw_state_bindings;
+  GPtrArray               *target_buckets;
+  GHashTable              *target_index;
+  GtkActionSubscription   *first_subscription;
+  GtkActionSubscription   *first_state_subscription;
+  guint64                  revision;
+#ifdef G_ENABLE_DEBUG
+  guint64                  state_bindings_touched;
+#endif
+  guint                    retired : 1;
 };
 
 struct _GtkActionPropertySource
@@ -142,68 +136,82 @@ struct _GtkActionSource
 
 struct _GtkActionRoute
 {
-  GtkActionNode  *node;
-  GtkActionKey   *key;
+  GtkActionNode         *node;
+  GtkActionKey          *key;
 
-  GtkActionRoute *parent;
-  GtkActionRoute *first_child;
-  GtkActionRoute *last_child;
-  GtkActionRoute *prev_sibling;
-  GtkActionRoute *next_sibling;
+  GtkActionRoute        *parent;
+  GtkActionRoute        *first_child;
+  GtkActionRoute        *last_child;
+  GtkActionRoute        *prev_sibling;
+  GtkActionRoute        *next_sibling;
 
-  gpointer        local_provider;
-  gpointer        effective_provider;
-  GtkActionBinding *first_local_binding;
+  gpointer               local_provider;
+  gpointer               effective_provider;
+  GtkActionBinding      *first_local_binding;
   GtkActionSubscription *first_subscription;
+  GtkActionResolution   *first_resolution;
 
-  guint           n_local_interests;
-  guint           n_subtree_interests;
-  guint64         revision;
+  guint                  n_local_interests;
+  guint                  n_subtree_interests;
+  guint64                revision;
 };
 
 struct _GtkActionTreeWork
 {
-  GtkActionTreeWork *next;
-  GtkActionTreeCallback callback;
-  gpointer data;
-  GDestroyNotify destroy;
+  GtkActionTreeWork     *next;
+  GtkActionTreeCallback  callback;
+  gpointer               data;
+  GDestroyNotify         destroy;
 };
 
+/*
+ * Nodes are plain records owned by their widget or synthetic scope. They do
+ * not own either pointer; the owner must remove the node before it is freed.
+ * Routes, sources, providers, bindings, and subscriptions are all reclaimed
+ * through the tree so callbacks can safely mutate the topology.
+ */
 struct _GtkActionNode
 {
-  GtkActionTree *tree;
-  GtkWidget *widget;
-  gpointer owner;
+  GtkActionTree  *tree;
+  GtkWidget      *widget;
+  gpointer        owner;
 
-  GtkActionNode *parent;
-  GtkActionNode *first_child;
-  GtkActionNode *last_child;
-  GtkActionNode *prev_sibling;
-  GtkActionNode *next_sibling;
-  GtkActionNode *next;
+  GtkActionNode  *parent;
+  GtkActionNode  *first_child;
+  GtkActionNode  *last_child;
+  GtkActionNode  *prev_sibling;
+  GtkActionNode  *next_sibling;
+  GtkActionNode  *tree_prev;
+  GtkActionNode  *next;
 
-  GtkActionNode *synthetic_parent;
-  GPtrArray *counted_ancestors;
-  GHashTable *routes;
-  GHashTable *sources;
-  GHashTable *property_sources;
-  GHashTable *primary_accels;
-  guint local_features;
-  guint auto_prunable : 1;
-  guint retired : 1;
+  GtkActionNode  *synthetic_parent;
+  GtkActionNode  *first_synthetic_child;
+  GtkActionNode  *synthetic_prev;
+  GtkActionNode  *synthetic_next;
+  GtkWidget     **counted_ancestors;
+  GtkWidget      *inline_ancestors[INLINE_ANCESTORS];
+  guint           n_counted_ancestors;
+  GHashTable     *routes;
+  GHashTable     *sources;
+  GHashTable     *property_sources;
+  GHashTable     *primary_accels;
+  GtkBitmask     *disabled_widget_actions;
+  guint           auto_prunable : 1;
+  guint           retired : 1;
 };
 
 struct _GtkActionTree
 {
-  GtkActionNode *nodes;
+  GtkActionNode     *nodes;
+  GHashTable        *widget_nodes;
   GtkActionTreeWork *dirty_head;
   GtkActionTreeWork *dirty_tail;
-  GtkActionBinding *dirty_binding_head;
-  GtkActionBinding *dirty_binding_tail;
+  GtkActionBinding  *dirty_binding_head;
+  GtkActionBinding  *dirty_binding_tail;
   GtkActionTreeWork *retired;
-  guint update_depth;
-  guint dispatch_depth;
-  guint committing : 1;
+  guint              update_depth;
+  guint              dispatch_depth;
+  guint              committing : 1;
 };
 
 static GtkActionTree *default_tree;
@@ -219,12 +227,188 @@ static void               remove_source             (GtkActionSource       *sour
 static void               sync_changed_node_routes  (GtkActionNode         *node,
                                                      GtkActionNode         *old_parent);
 
+static GtkWidgetAction *
+gtk_widget_class_lookup_action (GtkWidgetClass *widget_class,
+                                const char     *action_name)
+{
+  GtkWidgetClassPrivate *priv;
+  guint i;
+
+  g_assert (GTK_IS_WIDGET_CLASS (widget_class));
+  g_assert (action_name != NULL);
+
+  priv = widget_class->priv;
+  if (priv->actions == NULL)
+    return NULL;
+
+  if (priv->actions->len > 4)
+    {
+      if (priv->action_index == NULL)
+        {
+          priv->action_index = g_hash_table_new (g_str_hash, g_str_equal);
+          for (i = 0; i < priv->actions->len; i++)
+            {
+              GtkWidgetAction *action = g_ptr_array_index (priv->actions, i);
+
+              if (!g_hash_table_contains (priv->action_index, action->name))
+                g_hash_table_insert (priv->action_index, action->name, action);
+            }
+        }
+
+      return g_hash_table_lookup (priv->action_index, action_name);
+    }
+
+  for (i = 0; i < priv->actions->len; i++)
+    {
+      GtkWidgetAction *action = g_ptr_array_index (priv->actions, i);
+
+      if (strcmp (action->name, action_name) == 0)
+        return action;
+    }
+
+  return NULL;
+}
+
+static GVariant *
+property_action_get_state (GtkWidget       *widget,
+                           GtkWidgetAction *action)
+{
+  GValue value = G_VALUE_INIT;
+  GVariant *result;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (action != NULL);
+  g_assert (action->pspec != NULL);
+
+  g_value_init (&value, action->pspec->value_type);
+  g_object_get_property (G_OBJECT (widget), action->pspec->name, &value);
+
+  result = g_settings_set_mapping (&value, action->state_type, NULL);
+  g_value_unset (&value);
+
+  return g_variant_ref_sink (result);
+}
+
+static GVariant *
+property_action_get_state_hint (GtkWidgetAction *action)
+{
+  g_assert (action != NULL);
+  g_assert (action->pspec != NULL);
+
+  if (action->pspec->value_type == G_TYPE_INT)
+    {
+      GParamSpecInt *pspec = (GParamSpecInt *)action->pspec;
+
+      return g_variant_new ("(ii)", pspec->minimum, pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_UINT)
+    {
+      GParamSpecUInt *pspec = (GParamSpecUInt *)action->pspec;
+
+      return g_variant_new ("(uu)", pspec->minimum, pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_FLOAT)
+    {
+      GParamSpecFloat *pspec = (GParamSpecFloat *)action->pspec;
+
+      return g_variant_new ("(dd)", (double)pspec->minimum, (double)pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_DOUBLE)
+    {
+      GParamSpecDouble *pspec = (GParamSpecDouble *)action->pspec;
+
+      return g_variant_new ("(dd)", pspec->minimum, pspec->maximum);
+    }
+
+  return NULL;
+}
+
+static void
+property_action_set_state (GtkWidget       *widget,
+                           GtkWidgetAction *action,
+                           GVariant        *state)
+{
+  GValue value = G_VALUE_INIT;
+
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (action != NULL);
+  g_assert (action->pspec != NULL);
+  g_assert (state != NULL);
+
+  g_value_init (&value, action->pspec->value_type);
+  g_settings_get_mapping (&value, state, NULL);
+
+  g_object_set_property (G_OBJECT (widget), action->pspec->name, &value);
+  g_value_unset (&value);
+}
+
+static void
+property_action_activate (GtkWidget       *widget,
+                          GtkWidgetAction *action,
+                          GVariant        *parameter)
+{
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (action != NULL);
+  g_assert (action->pspec != NULL);
+
+  if (action->pspec->value_type == G_TYPE_BOOLEAN)
+    {
+      gboolean value;
+
+      g_assert (parameter == NULL);
+
+      g_object_get (G_OBJECT (widget), action->pspec->name, &value, NULL);
+      g_object_set (G_OBJECT (widget), action->pspec->name, !value, NULL);
+    }
+  else
+    {
+      g_assert (parameter != NULL);
+      g_assert (g_variant_is_of_type (parameter, action->state_type));
+
+      property_action_set_state (widget, action, parameter);
+    }
+}
+
+static gboolean
+widget_action_activate (GtkActionNode   *node,
+                        GtkWidgetAction *action,
+                        GVariant        *parameter)
+{
+  const GVariantType *expected;
+
+  g_assert (node != NULL);
+  g_assert (node->widget != NULL);
+  g_assert (action != NULL);
+
+  if (_gtk_bitmask_get (node->disabled_widget_actions, action->slot))
+    return FALSE;
+
+  expected = action->parameter_type;
+  if ((expected == NULL) != (parameter == NULL) ||
+      (expected != NULL && !g_variant_is_of_type (parameter, expected)))
+    return FALSE;
+
+  if (action->activate != NULL)
+    {
+      GTK_DEBUG (ACTIONS, "%s: activate action", action->name);
+      action->activate (node->widget, action->name, parameter);
+    }
+  else if (action->pspec != NULL)
+    {
+      GTK_DEBUG (ACTIONS, "%s: activate prop action", action->pspec->name);
+      property_action_activate (node->widget, action, parameter);
+    }
+
+  return TRUE;
+}
+
 static void
 target_bucket_free (gpointer data)
 {
   GtkActionTargetBucket *bucket = data;
 
-  g_assert_null (bucket->first_binding);
+  g_assert (bucket->first_binding == NULL);
+
   g_clear_pointer (&bucket->target, g_variant_unref);
   g_free (bucket);
 }
@@ -234,7 +418,6 @@ provider_lookup_target_bucket (GtkActionProvider *provider,
                                GVariant          *target)
 {
   guint hash;
-  guint i;
 
   g_assert (provider != NULL);
   g_assert (target != NULL);
@@ -246,7 +429,7 @@ provider_lookup_target_bucket (GtkActionProvider *provider,
     return NULL;
 
   hash = g_variant_hash (target);
-  for (i = 0; i < provider->target_buckets->len; i++)
+  for (guint i = 0; i < provider->target_buckets->len; i++)
     {
       GtkActionTargetBucket *bucket = g_ptr_array_index (provider->target_buckets, i);
 
@@ -263,7 +446,6 @@ provider_ensure_target_bucket (GtkActionProvider *provider,
                                GVariant          *target)
 {
   GtkActionTargetBucket *bucket;
-  guint i;
 
   g_assert (provider != NULL);
   g_assert (target != NULL);
@@ -283,7 +465,8 @@ provider_ensure_target_bucket (GtkActionProvider *provider,
       provider->target_index == NULL)
     {
       provider->target_index = g_hash_table_new (g_variant_hash, g_variant_equal);
-      for (i = 0; i < provider->target_buckets->len; i++)
+
+      for (guint i = 0; i < provider->target_buckets->len; i++)
         {
           GtkActionTargetBucket *indexed = g_ptr_array_index (provider->target_buckets, i);
 
@@ -291,7 +474,9 @@ provider_ensure_target_bucket (GtkActionProvider *provider,
         }
     }
   else if (provider->target_index != NULL)
-    g_hash_table_insert (provider->target_index, bucket->target, bucket);
+    {
+      g_hash_table_insert (provider->target_index, bucket->target, bucket);
+    }
 
   return bucket;
 }
@@ -321,8 +506,10 @@ binding_unlink_state_index (GtkActionBinding *self)
     self->target_prev->target_next = self->target_next;
   else
     *head = self->target_next;
+
   if (self->target_next != NULL)
     self->target_next->target_prev = self->target_prev;
+
   self->target_prev = NULL;
   self->target_next = NULL;
   self->target_bucket = NULL;
@@ -331,6 +518,7 @@ binding_unlink_state_index (GtkActionBinding *self)
     {
       if (provider->target_index != NULL)
         g_hash_table_remove (provider->target_index, bucket->target);
+
       g_ptr_array_remove (provider->target_buckets, bucket);
     }
 }
@@ -341,19 +529,25 @@ binding_link_state_index (GtkActionBinding *self)
   GtkActionBinding **head;
 
   g_assert (self != NULL);
-  g_assert_null (self->target_prev);
-  g_assert_null (self->target_next);
-  g_assert_null (self->target_bucket);
+  g_assert (self->target_prev == NULL);
+  g_assert (self->target_next == NULL);
+  g_assert (self->target_bucket == NULL);
 
   if (self->provider == NULL)
     return;
 
   if ((self->interest & GTK_ACTION_INTEREST_RAW_STATE) != 0)
-    head = &self->provider->raw_state_bindings;
+    {
+      head = &self->provider->raw_state_bindings;
+    }
   else if ((self->interest & GTK_ACTION_INTEREST_ACTIVE) == 0)
-    return;
+    {
+      return;
+    }
   else if (self->target == NULL)
-    head = &self->provider->boolean_bindings;
+    {
+      head = &self->provider->boolean_bindings;
+    }
   else
     {
       self->target_bucket = provider_ensure_target_bucket (self->provider, self->target);
@@ -363,6 +557,7 @@ binding_link_state_index (GtkActionBinding *self)
   self->target_next = *head;
   if (self->target_next != NULL)
     self->target_next->target_prev = self;
+
   *head = self;
 }
 
@@ -381,16 +576,20 @@ binding_set_provider (GtkActionBinding  *self,
     self->provider_prev->provider_next = self->provider_next;
   else if (self->provider != NULL)
     self->provider->first_binding = self->provider_next;
+
   if (self->provider_next != NULL)
     self->provider_next->provider_prev = self->provider_prev;
 
   self->provider = provider;
   self->provider_prev = NULL;
   self->provider_next = provider != NULL ? provider->first_binding : NULL;
+
   if (self->provider_next != NULL)
     self->provider_next->provider_prev = self;
+
   if (provider != NULL)
     provider->first_binding = self;
+
   binding_link_state_index (self);
 }
 
@@ -403,17 +602,22 @@ interest_changes (GtkActionInterest interest)
     changes |= (GTK_ACTION_CHANGE_PRESENT |
                 GTK_ACTION_CHANGE_PROVIDER |
                 GTK_ACTION_CHANGE_SIGNATURE);
+
   if ((interest & GTK_ACTION_INTEREST_ENABLED) != 0)
     changes |= GTK_ACTION_CHANGE_ENABLED;
+
   if ((interest & (GTK_ACTION_INTEREST_RAW_STATE |
                    GTK_ACTION_INTEREST_ACTIVE)) != 0)
     changes |= (GTK_ACTION_CHANGE_SIGNATURE | GTK_ACTION_CHANGE_STATE);
+
   if ((interest & GTK_ACTION_INTEREST_ACTIVE) != 0)
     changes |= GTK_ACTION_CHANGE_ACTIVE;
+
   if ((interest & GTK_ACTION_INTEREST_ROLE) != 0)
     changes |= (GTK_ACTION_CHANGE_SIGNATURE |
                 GTK_ACTION_CHANGE_STATE |
                 GTK_ACTION_CHANGE_ROLE);
+
   if ((interest & GTK_ACTION_INTEREST_ACCEL) != 0)
     changes |= GTK_ACTION_CHANGE_ACCEL;
 
@@ -451,15 +655,11 @@ snapshot_set_primary_accel (GtkActionSnapshot *snapshot,
                             GtkActionKey      *key,
                             GVariant          *target)
 {
-  const char *primary_accel;
-
   g_assert (snapshot != NULL);
   g_assert (node != NULL);
   g_assert (key != NULL);
 
-  primary_accel = lookup_primary_accel (node, key, target);
-  g_clear_pointer (&snapshot->primary_accel, g_free);
-  snapshot->primary_accel = g_strdup (primary_accel);
+  g_set_str (&snapshot->primary_accel, lookup_primary_accel (node, key, target));
 }
 
 static void
@@ -482,9 +682,11 @@ subscription_set_provider (GtkActionSubscription *self,
       if (self->state_prev != NULL)
         self->state_prev->state_next = self->state_next;
       else if (self->provider != NULL)
-        self->provider->first_raw_state_observer = self->state_next;
+        self->provider->first_state_subscription = self->state_next;
+
       if (self->state_next != NULL)
         self->state_next->state_prev = self->state_prev;
+
       self->state_prev = NULL;
       self->state_next = NULL;
     }
@@ -493,41 +695,45 @@ subscription_set_provider (GtkActionSubscription *self,
     self->provider_prev->provider_next = self->provider_next;
   else if (self->provider != NULL)
     self->provider->first_subscription = self->provider_next;
+
   if (self->provider_next != NULL)
     self->provider_next->provider_prev = self->provider_prev;
 
   self->provider = provider;
   self->provider_prev = NULL;
   self->provider_next = provider != NULL ? provider->first_subscription : NULL;
+
   if (self->provider_next != NULL)
     self->provider_next->provider_prev = self;
+
   if (provider != NULL)
     provider->first_subscription = self;
 
   if (provider != NULL && observes_state)
     {
-      self->state_next = provider->first_raw_state_observer;
+      self->state_next = provider->first_state_subscription;
+
       if (self->state_next != NULL)
         self->state_next->state_prev = self;
-      provider->first_raw_state_observer = self;
+
+      provider->first_state_subscription = self;
     }
 }
 
 static void
-adjust_subtree_count (GPtrArray *widgets,
-                      int        adjustment)
+adjust_subtree_count (GtkActionNode *node,
+                      int            adjustment)
 {
   guint i;
 
-  if (widgets == NULL)
-    return;
-
-  for (i = 0; i < widgets->len; i++)
+  for (i = 0; i < node->n_counted_ancestors; i++)
     {
-      GtkWidget *widget = g_ptr_array_index (widgets, i);
+      GtkWidget *widget = node->counted_ancestors[i];
 
       if (adjustment > 0)
-        widget->priv->action_subtree_count += adjustment;
+        {
+          widget->priv->action_subtree_count += adjustment;
+        }
       else
         {
           g_assert (widget->priv->action_subtree_count >= (guint) -adjustment);
@@ -536,33 +742,50 @@ adjust_subtree_count (GPtrArray *widgets,
     }
 }
 
-static GPtrArray *
-collect_ancestors (GtkWidget *widget)
+static void
+clear_ancestors (GtkActionNode *node)
 {
-  GPtrArray *widgets = g_ptr_array_new ();
+  if (node->counted_ancestors != node->inline_ancestors)
+    g_free (node->counted_ancestors);
 
-  for (; widget != NULL; widget = _gtk_widget_get_parent (widget))
-    g_ptr_array_add (widgets, widget);
+  node->counted_ancestors = NULL;
+  node->n_counted_ancestors = 0;
+}
 
-  return widgets;
+static void
+collect_ancestors (GtkActionNode *node)
+{
+  GtkWidget *widget;
+
+  for (widget = node->widget; widget != NULL; widget = _gtk_widget_get_parent (widget))
+    node->n_counted_ancestors++;
+
+  node->counted_ancestors = node->n_counted_ancestors <= INLINE_ANCESTORS
+                          ? node->inline_ancestors
+                          : g_new (GtkWidget *, node->n_counted_ancestors);
+
+  widget = node->widget;
+  for (guint i = 0; i < node->n_counted_ancestors; i++)
+    {
+      node->counted_ancestors[i] = widget;
+      widget = _gtk_widget_get_parent (widget);
+    }
 }
 
 static gboolean
-same_ancestors (GPtrArray *a,
-                GPtrArray *b)
+same_ancestors (GtkActionNode *node)
 {
-  guint i;
+  GtkWidget *widget = node->widget;
 
-  if (a->len != b->len)
-    return FALSE;
-
-  for (i = 0; i < a->len; i++)
+  for (guint i = 0; i < node->n_counted_ancestors; i++)
     {
-      if (g_ptr_array_index (a, i) != g_ptr_array_index (b, i))
+      if (node->counted_ancestors[i] != widget)
         return FALSE;
+
+      widget = _gtk_widget_get_parent (widget);
     }
 
-  return TRUE;
+  return widget == NULL;
 }
 
 static void
@@ -594,11 +817,29 @@ gtk_action_node_append (GtkActionNode *parent,
     return;
 
   self->prev_sibling = parent->last_child;
+
   if (parent->last_child != NULL)
     parent->last_child->next_sibling = self;
   else
     parent->first_child = self;
+
   parent->last_child = self;
+}
+
+static void
+gtk_action_node_unlink_synthetic (GtkActionNode *self)
+{
+  if (self->synthetic_prev != NULL)
+    self->synthetic_prev->synthetic_next = self->synthetic_next;
+  else if (self->synthetic_parent != NULL)
+    self->synthetic_parent->first_synthetic_child = self->synthetic_next;
+
+  if (self->synthetic_next != NULL)
+    self->synthetic_next->synthetic_prev = self->synthetic_prev;
+
+  self->synthetic_parent = NULL;
+  self->synthetic_prev = NULL;
+  self->synthetic_next = NULL;
 }
 
 static gboolean
@@ -618,24 +859,16 @@ static GtkActionNode *
 find_widget_node (GtkActionTree *tree,
                   GtkWidget     *widget)
 {
-  GtkActionNode *node;
-
-  for (node = tree->nodes; node != NULL; node = node->next)
-    {
-      if (!node->retired && node->widget == widget)
-        return node;
-    }
-
-  return NULL;
+  return tree->widget_nodes != NULL
+         ? g_hash_table_lookup (tree->widget_nodes, widget)
+         : NULL;
 }
 
 static GtkActionNode *
 find_synthetic_node (GtkActionTree *tree,
                      gpointer       owner)
 {
-  GtkActionNode *node;
-
-  for (node = tree->nodes; node != NULL; node = node->next)
+  for (GtkActionNode *node = tree->nodes; node != NULL; node = node->next)
     {
       if (!node->retired && node->widget == NULL && node->owner == owner)
         return node;
@@ -649,7 +882,7 @@ ensure_window_scope (GtkActionTree *tree,
                      GtkWindow     *window)
 {
   GtkApplication *application = gtk_window_get_application (window);
-  gpointer owner = application != NULL ? (gpointer)application : (gpointer)window;
+  gpointer owner = application ? (gpointer)application : (gpointer)window;
   GtkActionNode *scope;
 
   if (!(scope = find_synthetic_node (tree, owner)))
@@ -707,14 +940,17 @@ gtk_action_route_append (GtkActionRoute *parent,
   g_assert (self->parent == NULL);
 
   self->parent = parent;
+
   if (parent == NULL)
     return;
 
   self->prev_sibling = parent->last_child;
+
   if (parent->last_child != NULL)
     parent->last_child->next_sibling = self;
   else
     parent->first_child = self;
+
   parent->last_child = self;
 }
 
@@ -772,6 +1008,7 @@ inherited_provider (GtkActionRoute *self)
 {
   if (self->local_provider != NULL)
     return self->local_provider;
+
   if (self->parent != NULL)
     return self->parent->effective_provider;
 
@@ -839,6 +1076,7 @@ ensure_route (GtkActionNode *node,
   self->node = node;
   self->key = gtk_action_key_ref (key);
   self->effective_provider = parent != NULL ? parent->effective_provider : NULL;
+
   gtk_action_route_append (parent, self);
   g_hash_table_insert (node->routes, self->key, self);
   materialize_provider_full (self, include_widget_action);
@@ -853,7 +1091,9 @@ adjust_route_ancestors (GtkActionRoute *self,
   for (; self != NULL; self = self->parent)
     {
       if (adjustment > 0)
-        self->n_subtree_interests += adjustment;
+        {
+          self->n_subtree_interests += adjustment;
+        }
       else
         {
           g_assert (self->n_subtree_interests >= (guint) -adjustment);
@@ -862,33 +1102,18 @@ adjust_route_ancestors (GtkActionRoute *self,
     }
 }
 
-typedef struct
-{
-  GtkActionProvider *provider;
-  GtkActionSnapshot  snapshot;
-  GtkActionChange    changed;
-} ProviderDelivery;
-
-static void
-provider_delivery_free (gpointer data)
-{
-  ProviderDelivery *delivery = data;
-
-  gtk_action_snapshot_clear (&delivery->snapshot);
-  g_free (delivery);
-}
-
 static void
 subscription_free (gpointer data)
 {
   GtkActionSubscription *self = data;
 
   g_assert (self->cancelled);
-  g_assert_null (self->route);
-  g_assert_null (self->provider);
+  g_assert (self->route == NULL);
+  g_assert (self->provider == NULL);
 
   if (self->destroy != NULL)
     self->destroy (self->user_data);
+
   gtk_action_snapshot_clear (&self->snapshot);
   g_clear_pointer (&self->target, g_variant_unref);
   gtk_action_key_unref (self->key);
@@ -900,12 +1125,13 @@ binding_free (gpointer data)
 {
   GtkActionBinding *self = data;
 
-  g_assert_false (self->alive);
-  g_assert_null (self->route);
-  g_assert_null (self->provider);
+  g_assert (self->alive == FALSE);
+  g_assert (self->route == NULL);
+  g_assert (self->provider == NULL);
 
   if (self->destroy != NULL)
     self->destroy (self->user_data);
+
   g_clear_pointer (&self->primary_accel, g_free);
   g_clear_pointer (&self->target, g_variant_unref);
   gtk_action_key_unref (self->key);
@@ -930,10 +1156,11 @@ derive_binding_state (GtkActionBinding      *self,
       snapshot = &self->provider->snapshot;
       state->present = snapshot->present;
       state->activatable = snapshot->present &&
-        ((self->target == NULL && snapshot->parameter_type == NULL) ||
-         (self->target != NULL && snapshot->parameter_type != NULL &&
-          g_variant_is_of_type (self->target, snapshot->parameter_type)));
+                           ((self->target == NULL && snapshot->parameter_type == NULL) ||
+                            (self->target != NULL && snapshot->parameter_type != NULL &&
+                             g_variant_is_of_type (self->target, snapshot->parameter_type)));
       state->enabled = state->activatable && snapshot->enabled;
+
       if (state->activatable && self->target != NULL && snapshot->state != NULL)
         {
           state->active = g_variant_equal (snapshot->state, self->target);
@@ -947,19 +1174,21 @@ derive_binding_state (GtkActionBinding      *self,
         }
     }
 
-  state->primary_accel = lookup_primary_accel (self->route->node,
-                                                self->key,
-                                                self->target);
+  state->primary_accel = lookup_primary_accel (self->route->node, self->key, self->target);
 
   if (self->state.present != state->present ||
       self->state.activatable != state->activatable)
     changed |= (GTK_ACTION_CHANGE_PRESENT | GTK_ACTION_CHANGE_SIGNATURE);
+
   if (self->state.enabled != state->enabled)
     changed |= GTK_ACTION_CHANGE_ENABLED;
+
   if (self->state.active != state->active)
     changed |= GTK_ACTION_CHANGE_ACTIVE;
+
   if (self->state.role != state->role)
     changed |= GTK_ACTION_CHANGE_ROLE;
+
   if (g_strcmp0 (self->state.primary_accel, state->primary_accel) != 0)
     changed |= GTK_ACTION_CHANGE_ACCEL;
 
@@ -984,10 +1213,8 @@ binding_deliver (GtkActionBinding *self)
   if (changed != GTK_ACTION_CHANGE_NONE)
     {
       if (g_strcmp0 (self->primary_accel, state.primary_accel) != 0)
-        {
-          g_free (self->primary_accel);
-          self->primary_accel = g_strdup (state.primary_accel);
-        }
+        g_set_str (&self->primary_accel, state.primary_accel);
+
       state.primary_accel = self->primary_accel;
       self->state = state;
       self->callback (self, changed, &self->state, self->user_data);
@@ -1007,10 +1234,12 @@ queue_binding (GtkActionBinding *self)
 
   tree = self->route->node->tree;
   self->queued = TRUE;
+
   if (tree->dirty_binding_tail != NULL)
     tree->dirty_binding_tail->dirty_next = self;
   else
     tree->dirty_binding_head = self;
+
   tree->dirty_binding_tail = self;
 
   if (tree->update_depth == 0 && !tree->committing)
@@ -1035,10 +1264,12 @@ subscription_deliver (GtkActionTree *tree,
     gtk_action_snapshot_copy (&snapshot, &self->provider->snapshot);
   else
     snapshot.revision = self->route->revision;
+
   snapshot_set_primary_accel (&snapshot, self->route->node, self->key, self->target);
 
   changed = gtk_action_snapshot_difference (&self->snapshot, &snapshot);
   changed &= interest_changes (self->interest);
+
   if (changed != GTK_ACTION_CHANGE_NONE)
     {
       gtk_action_snapshot_copy (&self->snapshot, &snapshot);
@@ -1061,67 +1292,6 @@ queue_subscription (GtkActionSubscription *self)
                                   subscription_deliver,
                                   self,
                                   NULL);
-}
-
-static void
-provider_deliver (GtkActionTree *tree,
-                  gpointer       user_data)
-{
-  ProviderDelivery *delivery = user_data;
-  GtkActionProvider *provider = delivery->provider;
-  GtkActionProviderObserver *observer;
-  GtkActionProviderObserver **link;
-
-  g_assert (provider != NULL);
-  g_assert (tree == provider->node->tree);
-
-  provider->dispatch_depth++;
-  for (observer = provider->observers; observer != NULL; observer = observer->next)
-    {
-      if (!observer->removed)
-        observer->callback (provider, delivery->changed, &delivery->snapshot,
-                            observer->user_data);
-    }
-  provider->dispatch_depth--;
-
-  if (provider->dispatch_depth == 0)
-    {
-      for (link = &provider->observers; *link != NULL;)
-        {
-          observer = *link;
-          if (!observer->removed)
-            link = &observer->next;
-          else
-            {
-              *link = observer->next;
-              if (observer->destroy != NULL)
-                observer->destroy (observer->user_data);
-              g_free (observer);
-            }
-        }
-    }
-}
-
-static void
-queue_provider_change (GtkActionProvider       *provider,
-                       GtkActionChange          changed,
-                       const GtkActionSnapshot *snapshot)
-{
-  ProviderDelivery *delivery;
-
-  g_assert (provider != NULL);
-  g_assert (snapshot != NULL);
-
-  if (changed == GTK_ACTION_CHANGE_NONE || provider->observers == NULL)
-    return;
-
-  delivery = g_new0 (ProviderDelivery, 1);
-  delivery->provider = provider;
-  delivery->changed = changed;
-  gtk_action_snapshot_init (&delivery->snapshot);
-  gtk_action_snapshot_copy (&delivery->snapshot, snapshot);
-  gtk_action_tree_queue_callback (provider->node->tree, provider_deliver, delivery,
-                                  provider_delivery_free);
 }
 
 static void
@@ -1150,6 +1320,7 @@ provider_detach_property_source (GtkActionProvider *self)
           g_signal_handler_disconnect (node->widget, property_source->handler_id);
           g_hash_table_remove (node->property_sources, property_source->pspec);
           g_free (property_source);
+
           if (g_hash_table_size (node->property_sources) == 0)
             g_clear_pointer (&node->property_sources, g_hash_table_unref);
         }
@@ -1163,22 +1334,13 @@ static void
 free_provider (gpointer data)
 {
   GtkActionProvider *self = data;
-  GtkActionProviderObserver *observer;
 
-  g_assert_null (self->first_binding);
-  g_assert_null (self->first_subscription);
-  g_assert_null (self->first_raw_state_observer);
-  g_assert_null (self->boolean_bindings);
-  g_assert_null (self->raw_state_bindings);
-  g_assert_null (self->property_source);
-
-  while ((observer = self->observers) != NULL)
-    {
-      self->observers = observer->next;
-      if (observer->destroy != NULL)
-        observer->destroy (observer->user_data);
-      g_free (observer);
-    }
+  g_assert (self->first_binding == NULL);
+  g_assert (self->first_subscription == NULL);
+  g_assert (self->first_state_subscription == NULL);
+  g_assert (self->boolean_bindings == NULL);
+  g_assert (self->raw_state_bindings == NULL);
+  g_assert (self->property_source == NULL);
 
   gtk_action_snapshot_clear (&self->snapshot);
   g_clear_pointer (&self->target_index, g_hash_table_unref);
@@ -1199,8 +1361,11 @@ query_widget_snapshot (GtkActionNode     *node,
   g_assert (action != NULL);
   g_assert (snapshot != NULL);
 
-  gtk_widget_action_query (node->widget, action, &enabled,
-                           &snapshot->state_hint, &snapshot->state);
+  enabled = !_gtk_bitmask_get (node->disabled_widget_actions, action->slot);
+  snapshot->state_hint = action->pspec != NULL
+                       ? property_action_get_state_hint (action) : NULL;
+  snapshot->state = action->pspec != NULL
+                  ? property_action_get_state (node->widget, action) : NULL;
   snapshot->present = TRUE;
   snapshot->enabled = enabled;
   snapshot->parameter_type = action->parameter_type != NULL
@@ -1252,8 +1417,9 @@ queue_state_binding_list (GtkActionProvider *provider,
 
   for (; binding != NULL; binding = binding->target_next)
     {
+#ifdef G_ENABLE_DEBUG
       provider->state_bindings_touched++;
-      _gtk_action_muxer_profile_binding_touched ();
+#endif
       queue_binding (binding);
     }
 }
@@ -1272,13 +1438,16 @@ queue_state_bindings (GtkActionProvider       *provider,
 
   if (old_snapshot->state != NULL)
     old_bucket = provider_lookup_target_bucket (provider, old_snapshot->state);
+
   if (new_snapshot->state != NULL)
     new_bucket = provider_lookup_target_bucket (provider, new_snapshot->state);
 
   if (old_bucket != NULL)
     queue_state_binding_list (provider, old_bucket->first_binding);
+
   if (new_bucket != NULL && new_bucket != old_bucket)
     queue_state_binding_list (provider, new_bucket->first_binding);
+
   queue_state_binding_list (provider, provider->boolean_bindings);
   queue_state_binding_list (provider, provider->raw_state_bindings);
 }
@@ -1295,18 +1464,21 @@ update_provider_snapshot (GtkActionProvider       *provider,
   g_assert (snapshot != NULL);
 
   changed = gtk_action_snapshot_difference (&provider->snapshot, snapshot);
+
   if (changed != GTK_ACTION_CHANGE_NONE)
     {
       gboolean state_only;
 
       state_only = (changed & ~GTK_ACTION_CHANGE_STATE) == 0;
+
       if (state_only)
         queue_state_bindings (provider, &provider->snapshot, snapshot);
+
       provider->revision++;
       gtk_action_snapshot_copy (&provider->snapshot, snapshot);
       provider->snapshot.provider = provider;
       provider->snapshot.revision = provider->revision;
-      queue_provider_change (provider, changed, &provider->snapshot);
+
       if (!state_only)
         {
           for (binding = provider->first_binding;
@@ -1316,7 +1488,7 @@ update_provider_snapshot (GtkActionProvider       *provider,
         }
       if (state_only)
         {
-          for (subscription = provider->first_raw_state_observer;
+          for (subscription = provider->first_state_subscription;
                subscription != NULL;
                subscription = subscription->state_next)
             queue_subscription (subscription);
@@ -1342,6 +1514,7 @@ refresh_provider (GtkActionProvider *provider)
     query_widget_snapshot (provider->node, provider->widget_action, &snapshot);
   else
     query_source_snapshot (provider->source, provider->key, &snapshot);
+
   snapshot.provider = provider;
   update_provider_snapshot (provider, &snapshot);
   gtk_action_snapshot_clear (&snapshot);
@@ -1361,10 +1534,10 @@ property_source_notify (GtkWidget               *widget,
   g_assert (source->pspec == pspec);
 
   if (source->providers != NULL)
-    gtk_widget_action_query (widget, source->providers->widget_action,
-                             NULL, NULL, &state);
+    state = property_action_get_state (widget, source->providers->widget_action);
 
   gtk_action_tree_begin_update (source->node->tree);
+
   for (provider = source->providers;
        provider != NULL;
        provider = provider->property_next)
@@ -1375,7 +1548,9 @@ property_source_notify (GtkWidget               *widget,
       update_provider_snapshot (provider, &snapshot);
       gtk_action_snapshot_clear (&snapshot);
     }
+
   gtk_action_tree_end_update (source->node->tree);
+
   g_clear_pointer (&state, g_variant_unref);
 }
 
@@ -1391,8 +1566,7 @@ provider_attach_property_source (GtkActionProvider *provider)
   if (node->property_sources == NULL)
     node->property_sources = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  source = g_hash_table_lookup (node->property_sources, provider->widget_action->pspec);
-  if (source == NULL)
+  if (!(source = g_hash_table_lookup (node->property_sources, provider->widget_action->pspec)))
     {
       source = g_new0 (GtkActionPropertySource, 1);
       source->node = node;
@@ -1401,10 +1575,9 @@ provider_attach_property_source (GtkActionProvider *provider)
         g_signal_connect_closure_by_id (node->widget,
                                         g_signal_lookup ("notify", G_TYPE_OBJECT),
                                         g_param_spec_get_name_quark (source->pspec),
-                                        g_cclosure_new (G_CALLBACK (property_source_notify),
-                                                        source,
-                                                        NULL),
+                                        g_cclosure_new (G_CALLBACK (property_source_notify), source, NULL),
                                         FALSE);
+
       g_hash_table_insert (node->property_sources, source->pspec, source);
     }
 
@@ -1426,14 +1599,20 @@ materialize_provider_full (GtkActionRoute *route,
 
   if (route->local_provider != NULL)
     return route->local_provider;
+
   if (include_widget_action && route->node->widget != NULL)
     widget_action = gtk_widget_class_lookup_action (GTK_WIDGET_GET_CLASS (route->node->widget),
                                                     gtk_action_key_get_full_name (route->key));
+
   source = widget_action == NULL ? lookup_source_for_key (route->node, route->key) : NULL;
+
   if (widget_action == NULL && source == NULL)
     return NULL;
+
   if (widget_action != NULL)
-    query_widget_snapshot (route->node, widget_action, &snapshot);
+    {
+      query_widget_snapshot (route->node, widget_action, &snapshot);
+    }
   else if (!query_source_snapshot (source, route->key, &snapshot))
     {
       gtk_action_snapshot_clear (&snapshot);
@@ -1445,15 +1624,20 @@ materialize_provider_full (GtkActionRoute *route,
   provider->key = gtk_action_key_ref (route->key);
   provider->source = source;
   provider->widget_action = widget_action;
+
   gtk_action_snapshot_init (&provider->snapshot);
   gtk_action_snapshot_copy (&provider->snapshot, &snapshot);
+
   provider->revision = 1;
   provider->snapshot.provider = provider;
   provider->snapshot.revision = provider->revision;
+
   if (source != NULL)
     g_hash_table_insert (source->providers, provider->key, provider);
+
   if (widget_action != NULL && widget_action->pspec != NULL)
     provider_attach_property_source (provider);
+
   gtk_action_route_set_local_provider (route, provider);
   gtk_action_snapshot_clear (&snapshot);
 
@@ -1469,11 +1653,46 @@ materialize_provider (GtkActionRoute *route)
 static void
 free_route (GtkActionRoute *self)
 {
-  g_assert_null (self->first_local_binding);
-  g_assert_null (self->first_subscription);
+  g_assert (self->first_local_binding == NULL);
+  g_assert (self->first_subscription == NULL);
+  g_assert (self->first_resolution == NULL);
 
   gtk_action_key_unref (self->key);
   g_free (self);
+}
+
+static GtkActionRoute *
+resolution_unlink (GtkActionResolution *self)
+{
+  GtkActionRoute *route;
+
+  g_assert (self != NULL);
+  g_assert (self->route != NULL);
+
+  route = self->route;
+
+  if (self->prev != NULL)
+    self->prev->next = self->next;
+  else
+    route->first_resolution = self->next;
+
+  if (self->next != NULL)
+    self->next->prev = self->prev;
+
+  self->route = NULL;
+  self->prev = NULL;
+  self->next = NULL;
+
+  return route;
+}
+
+static void
+invalidate_route_resolutions (GtkActionRoute *route)
+{
+  g_assert (route != NULL);
+
+  while (route->first_resolution != NULL)
+    resolution_unlink (route->first_resolution);
 }
 
 static void
@@ -1484,21 +1703,29 @@ prune_route (GtkActionRoute *self)
       GtkActionRoute *parent = self->parent;
 
       g_assert (self->first_child == NULL);
+
       gtk_action_route_unlink (self);
+
       if (self->local_provider != NULL)
         {
           GtkActionProvider *provider = self->local_provider;
 
           gtk_action_route_set_local_provider (self, NULL);
+
           if (provider->source != NULL)
             g_hash_table_steal (provider->source->providers, provider->key);
+
           provider_detach_property_source (provider);
           provider->retired = TRUE;
+
           gtk_action_tree_retire (self->node->tree, provider, free_provider);
         }
+
       g_hash_table_remove (self->node->routes, self->key);
+
       if (g_hash_table_size (self->node->routes) == 0)
         g_clear_pointer (&self->node->routes, g_hash_table_unref);
+
       free_route (self);
       self = parent;
     }
@@ -1524,10 +1751,12 @@ sync_changed_node_routes (GtkActionNode *node,
 
       if (node->parent != NULL)
         new_parent = ensure_route (node->parent, self->key, TRUE);
+
       if (self->parent == new_parent)
         continue;
 
       old_route_parent = self->parent;
+
       adjust_route_ancestors (self->parent, -(int)count);
       gtk_action_route_unlink (self);
       gtk_action_route_append (new_parent, self);
@@ -1543,6 +1772,7 @@ sync_changed_node_routes (GtkActionNode *node,
           gtk_action_route_set_local_provider (self, NULL);
           provider_detach_property_source (provider);
           provider->retired = TRUE;
+
           gtk_action_tree_retire (node->tree, provider, free_provider);
         }
       else if (node->parent != NULL && self->local_provider == NULL)
@@ -1556,40 +1786,55 @@ sync_changed_node_routes (GtkActionNode *node,
 }
 
 static void
+queue_node_accel_consumers (GtkActionNode *node)
+{
+  GHashTableIter iter;
+  gpointer value;
+
+  g_assert (node != NULL);
+
+  if (node->retired || node->routes == NULL)
+    return;
+
+  g_hash_table_iter_init (&iter, node->routes);
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      GtkActionRoute *route = value;
+      GtkActionBinding *binding;
+      GtkActionSubscription *subscription;
+
+      for (binding = route->first_local_binding;
+           binding != NULL;
+           binding = binding->route_next)
+        if ((binding->interest & GTK_ACTION_INTEREST_ACCEL) != 0)
+          queue_binding (binding);
+
+      for (subscription = route->first_subscription;
+           subscription != NULL;
+           subscription = subscription->route_next)
+        if ((subscription->interest & GTK_ACTION_INTEREST_ACCEL) != 0)
+          queue_subscription (subscription);
+    }
+}
+
+static void
 queue_all_accel_consumers (GtkActionTree *tree)
 {
-  GtkActionNode *node;
-
   g_assert (tree != NULL);
 
-  for (node = tree->nodes; node != NULL; node = node->next)
-    {
-      GHashTableIter iter;
-      gpointer value;
+  for (GtkActionNode *node = tree->nodes; node != NULL; node = node->next)
+    queue_node_accel_consumers (node);
+}
 
-      if (node->retired || node->routes == NULL)
-        continue;
+static void
+queue_subtree_accel_consumers (GtkActionNode *node)
+{
+  queue_node_accel_consumers (node);
 
-      g_hash_table_iter_init (&iter, node->routes);
-      while (g_hash_table_iter_next (&iter, NULL, &value))
-        {
-          GtkActionRoute *route = value;
-          GtkActionBinding *binding;
-          GtkActionSubscription *subscription;
-
-          for (binding = route->first_local_binding;
-               binding != NULL;
-               binding = binding->route_next)
-            if ((binding->interest & GTK_ACTION_INTEREST_ACCEL) != 0)
-              queue_binding (binding);
-
-          for (subscription = route->first_subscription;
-               subscription != NULL;
-               subscription = subscription->route_next)
-            if ((subscription->interest & GTK_ACTION_INTEREST_ACCEL) != 0)
-              queue_subscription (subscription);
-        }
-    }
+  for (GtkActionNode *child = node->first_child;
+       child != NULL;
+       child = child->next_sibling)
+    queue_subtree_accel_consumers (child);
 }
 
 static void
@@ -1603,6 +1848,7 @@ rebuild_links (GtkActionTree *tree)
   for (node = tree->nodes; node != NULL; node = node->next)
     {
       g_hash_table_insert (old_parents, node, node->parent);
+
       node->parent = NULL;
       node->first_child = NULL;
       node->last_child = NULL;
@@ -1655,8 +1901,10 @@ reclaim_retired (GtkActionTree *tree)
   while ((work = tree->retired) != NULL)
     {
       tree->retired = work->next;
+
       if (work->destroy != NULL)
         work->destroy (work->data);
+
       g_free (work);
     }
 }
@@ -1670,6 +1918,7 @@ drain_updates (GtkActionTree *tree)
     return;
 
   tree->committing = TRUE;
+
   while (tree->dirty_head != NULL || tree->dirty_binding_head != NULL)
     {
       if (tree->dirty_head == NULL)
@@ -1700,9 +1949,11 @@ drain_updates (GtkActionTree *tree)
 
           if (work->destroy != NULL)
             work->destroy (work->data);
+
           g_free (work);
         }
     }
+
   tree->committing = FALSE;
 
   if (tree->dispatch_depth == 0)
@@ -1728,6 +1979,8 @@ gtk_action_tree_free (GtkActionTree *tree)
   while ((node = tree->nodes) != NULL)
     gtk_action_node_remove (node);
   reclaim_retired (tree);
+
+  g_clear_pointer (&tree->widget_nodes, g_hash_table_unref);
   g_free (tree);
 }
 
@@ -1746,6 +1999,7 @@ gtk_action_tree_end_update (GtkActionTree *tree)
   g_return_if_fail (tree->update_depth > 0);
 
   tree->update_depth--;
+
   if (tree->update_depth == 0)
     drain_updates (tree);
 }
@@ -1770,6 +2024,7 @@ gtk_action_tree_queue_callback (GtkActionTree         *tree,
     tree->dirty_tail->next = work;
   else
     tree->dirty_head = work;
+
   tree->dirty_tail = work;
 
   if (tree->update_depth == 0 && !tree->committing)
@@ -1785,10 +2040,13 @@ gtk_action_tree_retire (GtkActionTree *tree,
 
   g_return_if_fail (tree != NULL);
 
-  if (tree->update_depth == 0 && tree->dispatch_depth == 0 && !tree->committing)
+  if (tree->update_depth == 0 &&
+      tree->dispatch_depth == 0 &&
+      !tree->committing)
     {
       if (destroy != NULL)
         destroy (data);
+
       return;
     }
 
@@ -1796,6 +2054,7 @@ gtk_action_tree_retire (GtkActionTree *tree,
   work->data = data;
   work->destroy = destroy;
   work->next = tree->retired;
+
   tree->retired = work;
 }
 
@@ -1815,8 +2074,10 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
 
       if (node->retired)
         continue;
+
       if (node->tree != tree || node->parent != find_compressed_parent (node))
         return FALSE;
+
       if ((node->first_child == NULL) != (node->last_child == NULL))
         return FALSE;
 
@@ -1824,11 +2085,14 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
         {
           if (child->parent != node || child->prev_sibling != previous)
             return FALSE;
+
           if (node->widget != NULL && child->widget != NULL &&
               !widget_is_ancestor (node->widget, child->widget))
             return FALSE;
+
           previous = child;
         }
+
       if (previous != node->last_child)
         return FALSE;
 
@@ -1912,9 +2176,10 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                       if (!binding->alive || binding->provider != provider ||
                           binding->provider_prev != previous_binding)
                         return FALSE;
-                      if ((binding->interest & (GTK_ACTION_INTEREST_ACTIVE |
-                                                GTK_ACTION_INTEREST_RAW_STATE)) != 0)
+
+                      if ((binding->interest & (GTK_ACTION_INTEREST_ACTIVE | GTK_ACTION_INTEREST_RAW_STATE)) != 0)
                         expected_indexed_bindings++;
+
                       previous_binding = binding;
                     }
 
@@ -1922,8 +2187,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                     {
                       for (i = 0; i < provider->target_buckets->len; i++)
                         {
-                          GtkActionTargetBucket *bucket =
-                            g_ptr_array_index (provider->target_buckets, i);
+                          GtkActionTargetBucket *bucket = g_ptr_array_index (provider->target_buckets, i);
                           GtkActionBinding *target_previous = NULL;
 
                           if (bucket->first_binding == NULL ||
@@ -1941,6 +2205,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                                   binding->target_prev != target_previous ||
                                   !g_variant_equal (binding->target, bucket->target))
                                 return FALSE;
+
                               target_previous = binding;
                               indexed_bindings++;
                             }
@@ -1958,6 +2223,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                       if (binding->provider != provider || binding->target != NULL ||
                           binding->target_bucket != NULL)
                         return FALSE;
+
                       indexed_bindings++;
                     }
 
@@ -1967,6 +2233,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                     {
                       if (binding->provider != provider || binding->target_bucket != NULL)
                         return FALSE;
+
                       indexed_bindings++;
                     }
 
@@ -1980,6 +2247,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                       if (subscription->cancelled || subscription->provider != provider ||
                           subscription->provider_prev != previous_subscription)
                         return FALSE;
+
                       previous_subscription = subscription;
                     }
                 }
@@ -2000,17 +2268,24 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
           GtkActionBinding *previous_binding = NULL;
           GtkActionSubscription *subscription;
           GtkActionSubscription *previous_subscription = NULL;
+          GtkActionResolution *resolution;
+          GtkActionResolution *previous_resolution = NULL;
           guint expected_count = route->n_local_interests;
           guint n_subscriptions = 0;
           guint n_bindings = 0;
+          guint n_resolutions = 0;
 
           expected_parent = node->parent != NULL ? lookup_route (node->parent, route->key) : NULL;
+
           if (route->node != node || route->parent != expected_parent)
             return FALSE;
+
           if (g_hash_table_lookup (node->routes, route->key) != route)
             return FALSE;
+
           if ((route->first_child == NULL) != (route->last_child == NULL))
             return FALSE;
+
           if (route->effective_provider != inherited_provider (route))
             return FALSE;
 
@@ -2022,6 +2297,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                   binding->provider != route->effective_provider ||
                   binding->route_prev != previous_binding)
                 return FALSE;
+
               previous_binding = binding;
               n_bindings++;
             }
@@ -2034,10 +2310,23 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                   subscription->provider != route->effective_provider ||
                   subscription->route_prev != previous_subscription)
                 return FALSE;
+
               previous_subscription = subscription;
               n_subscriptions++;
             }
-          if (n_bindings + n_subscriptions > route->n_local_interests)
+
+          for (resolution = route->first_resolution;
+               resolution != NULL;
+               resolution = resolution->next)
+            {
+              if (resolution->route != route || resolution->prev != previous_resolution)
+                return FALSE;
+
+              previous_resolution = resolution;
+              n_resolutions++;
+            }
+
+          if (n_bindings + n_subscriptions + n_resolutions > route->n_local_interests)
             return FALSE;
 
           for (route_child = route->first_child;
@@ -2048,6 +2337,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                   route_child->prev_sibling != route_previous ||
                   route_child->key != route->key)
                 return FALSE;
+
               expected_count += route_child->n_subtree_interests;
               route_previous = route_child;
             }
@@ -2060,8 +2350,10 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
 
   if (tree->dirty_head == NULL && tree->dirty_tail != NULL)
     return FALSE;
+
   if (tree->dirty_binding_head == NULL && tree->dirty_binding_tail != NULL)
     return FALSE;
+
   if (tree->dispatch_depth > 0 && tree->update_depth > 0)
     return FALSE;
 
@@ -2072,6 +2364,7 @@ guint
 gtk_action_tree_get_update_depth (GtkActionTree *tree)
 {
   g_return_val_if_fail (tree != NULL, 0);
+
   return tree->update_depth;
 }
 
@@ -2079,13 +2372,15 @@ guint
 gtk_action_tree_get_dispatch_depth (GtkActionTree *tree)
 {
   g_return_val_if_fail (tree != NULL, 0);
+
   return tree->dispatch_depth;
 }
 
 guint
-gtk_action_tree_get_widget_subtree (GtkWidget *widget)
+gtk_widget_get_action_subtree_count (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
   return widget->priv->action_subtree_count;
 }
 
@@ -2094,20 +2389,38 @@ gtk_action_tree_add_widget (GtkActionTree *tree,
                             GtkWidget     *widget)
 {
   GtkActionNode *self;
+  gboolean has_descendant_nodes;
 
   g_return_val_if_fail (tree != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (find_widget_node (tree, widget) == NULL, NULL);
 
+  has_descendant_nodes = widget->priv->action_subtree_count > 0;
+
   self = g_new0 (GtkActionNode, 1);
   self->tree = tree;
   self->widget = widget;
   self->owner = widget;
+  self->disabled_widget_actions = _gtk_bitmask_new ();
   self->next = tree->nodes;
+
+  if (self->next != NULL)
+    self->next->tree_prev = self;
+
   tree->nodes = self;
-  self->counted_ancestors = collect_ancestors (widget);
-  adjust_subtree_count (self->counted_ancestors, 1);
-  rebuild_links (tree);
+
+  if (tree->widget_nodes == NULL)
+    tree->widget_nodes = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  g_hash_table_insert (tree->widget_nodes, widget, self);
+
+  collect_ancestors (self);
+  adjust_subtree_count (self, 1);
+
+  if (has_descendant_nodes)
+    rebuild_links (tree);
+  else
+    gtk_action_node_append (find_compressed_parent (self), self);
 
   return self;
 }
@@ -2124,7 +2437,12 @@ gtk_action_tree_add_synthetic (GtkActionTree *tree,
   self = g_new0 (GtkActionNode, 1);
   self->tree = tree;
   self->owner = owner;
+  self->disabled_widget_actions = _gtk_bitmask_new ();
   self->next = tree->nodes;
+
+  if (self->next != NULL)
+    self->next->tree_prev = self;
+
   tree->nodes = self;
   rebuild_links (tree);
 
@@ -2148,36 +2466,64 @@ gtk_action_node_set_synthetic_parent (GtkActionNode *self,
   g_return_if_fail (parent == NULL || self->tree == parent->tree);
   g_return_if_fail (self != parent);
 
+  if (self->synthetic_parent == parent)
+    return;
+
+  gtk_action_node_unlink_synthetic (self);
   self->synthetic_parent = parent;
+
+  if (parent != NULL)
+    {
+      self->synthetic_next = parent->first_synthetic_child;
+
+      if (self->synthetic_next != NULL)
+        self->synthetic_next->synthetic_prev = self;
+
+      parent->first_synthetic_child = self;
+    }
+
   rebuild_links (self->tree);
 }
 
 void
 gtk_action_node_sync_parent (GtkActionNode *self)
 {
-  GPtrArray *ancestors;
+  GtkActionNode *new_parent;
+  GtkActionNode *old_parent;
   GtkActionNode *old_synthetic_parent;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (!self->retired);
 
   old_synthetic_parent = self->synthetic_parent;
+  old_parent = self->parent;
+
   if (self->widget != NULL)
     {
       if (GTK_IS_WINDOW (self->widget))
-        self->synthetic_parent = ensure_window_scope (self->tree, GTK_WINDOW (self->widget));
+        gtk_action_node_set_synthetic_parent (self,
+                                              ensure_window_scope (self->tree,
+                                                                   GTK_WINDOW (self->widget)));
 
-      ancestors = collect_ancestors (self->widget);
-      if (!same_ancestors (self->counted_ancestors, ancestors))
+      if (!same_ancestors (self))
         {
-          adjust_subtree_count (self->counted_ancestors, -1);
-          adjust_subtree_count (ancestors, 1);
-          g_clear_pointer (&self->counted_ancestors, g_ptr_array_unref);
-          self->counted_ancestors = g_steal_pointer (&ancestors);
+          adjust_subtree_count (self, -1);
+          clear_ancestors (self);
+          collect_ancestors (self);
+          adjust_subtree_count (self, 1);
         }
-      g_clear_pointer (&ancestors, g_ptr_array_unref);
     }
-  rebuild_links (self->tree);
+
+  new_parent = find_compressed_parent (self);
+
+  if (new_parent != old_parent)
+    {
+      gtk_action_node_unlink (self);
+      gtk_action_node_append (new_parent, self);
+      sync_changed_node_routes (self, old_parent);
+      queue_subtree_accel_consumers (self);
+    }
+
   if (old_synthetic_parent != self->synthetic_parent)
     maybe_prune_synthetic (old_synthetic_parent);
 }
@@ -2189,17 +2535,23 @@ free_node (gpointer data)
   GHashTableIter iter;
   gpointer value;
 
-  g_clear_pointer (&self->counted_ancestors, g_ptr_array_unref);
-  g_assert_null (self->sources);
-  g_assert_null (self->property_sources);
+  clear_ancestors (self);
+
+  g_assert (self->sources == NULL);
+  g_assert (self->property_sources == NULL);
+
   g_clear_pointer (&self->primary_accels, g_hash_table_unref);
+  _gtk_bitmask_free (self->disabled_widget_actions);
+
   if (self->routes != NULL)
     {
       g_hash_table_iter_init (&iter, self->routes);
       while (g_hash_table_iter_next (&iter, NULL, &value))
         free_route (value);
+
       g_clear_pointer (&self->routes, g_hash_table_unref);
     }
+
   g_free (self);
 }
 
@@ -2207,18 +2559,20 @@ void
 gtk_action_node_remove (GtkActionNode *self)
 {
   GtkActionNode *node;
-  GtkActionNode **link;
   GtkActionNode *synthetic_parent;
   GtkActionTree *tree;
   GHashTableIter iter;
   gpointer value;
+  gboolean had_children;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (!self->retired);
 
   tree = self->tree;
+  had_children = self->first_child != NULL;
   gtk_action_tree_begin_update (tree);
   synthetic_parent = self->synthetic_parent;
+
   while (self->routes != NULL)
     {
       GtkActionBinding *binding = NULL;
@@ -2243,11 +2597,13 @@ gtk_action_node_remove (GtkActionNode *self)
 
       if (binding == NULL && subscription == NULL)
         break;
+
       if (binding != NULL)
         gtk_action_binding_cancel (binding);
       else
         gtk_action_subscription_cancel (subscription);
     }
+
   if (self->sources != NULL)
     {
       g_hash_table_iter_init (&iter, self->sources);
@@ -2256,8 +2612,10 @@ gtk_action_node_remove (GtkActionNode *self)
           g_hash_table_iter_steal (&iter);
           remove_source (value);
         }
+
       g_clear_pointer (&self->sources, g_hash_table_unref);
     }
+
   if (self->routes != NULL)
     {
       g_hash_table_iter_init (&iter, self->routes);
@@ -2265,6 +2623,7 @@ gtk_action_node_remove (GtkActionNode *self)
         {
           GtkActionRoute *route = value;
 
+          invalidate_route_resolutions (route);
           if (route->n_local_interests > 0)
             {
               adjust_route_ancestors (route, -(int)route->n_local_interests);
@@ -2272,27 +2631,34 @@ gtk_action_node_remove (GtkActionNode *self)
             }
         }
     }
+
   self->retired = TRUE;
-  for (node = tree->nodes; node != NULL; node = node->next)
-    {
-      if (node->synthetic_parent == self)
-        node->synthetic_parent = NULL;
-    }
+  while ((node = self->first_synthetic_child) != NULL)
+    gtk_action_node_unlink_synthetic (node);
+  gtk_action_node_unlink_synthetic (self);
+
   if (self->widget != NULL)
     {
-      adjust_subtree_count (self->counted_ancestors, -1);
-      g_clear_pointer (&self->counted_ancestors, g_ptr_array_unref);
+      g_hash_table_remove (tree->widget_nodes, self->widget);
+      adjust_subtree_count (self, -1);
+      clear_ancestors (self);
     }
+
   gtk_action_node_unlink (self);
-  for (link = &tree->nodes; *link != NULL; link = &(*link)->next)
-    {
-      if (*link == self)
-        {
-          *link = self->next;
-          break;
-        }
-    }
-  rebuild_links (tree);
+
+  if (self->tree_prev != NULL)
+    self->tree_prev->next = self->next;
+  else
+    tree->nodes = self->next;
+
+  if (self->next != NULL)
+    self->next->tree_prev = self->tree_prev;
+
+  self->tree_prev = NULL;
+  self->next = NULL;
+
+  if (had_children)
+    rebuild_links (tree);
 
   if (self->routes != NULL)
     {
@@ -2301,11 +2667,13 @@ gtk_action_node_remove (GtkActionNode *self)
         {
           GtkActionRoute *route = value;
 
-          g_assert_cmpuint (route->n_subtree_interests, ==, 0);
-          g_assert_null (route->first_child);
+          g_assert (route->n_subtree_interests == 0);
+          g_assert (route->first_child == NULL);
+
           gtk_action_route_unlink (route);
         }
     }
+
   gtk_action_tree_retire (tree, self, free_node);
   maybe_prune_synthetic (synthetic_parent);
   gtk_action_tree_end_update (tree);
@@ -2315,6 +2683,7 @@ GtkWidget *
 gtk_action_node_get_widget (GtkActionNode *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+
   return self->widget;
 }
 
@@ -2322,6 +2691,7 @@ gpointer
 gtk_action_node_get_owner (GtkActionNode *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+
   return self->owner;
 }
 
@@ -2329,6 +2699,7 @@ GtkActionNode *
 gtk_action_node_get_parent (GtkActionNode *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+
   return self->parent;
 }
 
@@ -2336,6 +2707,7 @@ GtkActionNode *
 gtk_action_node_get_first_child (GtkActionNode *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+
   return self->first_child;
 }
 
@@ -2343,6 +2715,7 @@ GtkActionNode *
 gtk_action_node_get_next_sibling (GtkActionNode *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+
   return self->next_sibling;
 }
 
@@ -2366,8 +2739,26 @@ gtk_action_node_add_route_interest (GtkActionNode *self,
   g_return_val_if_fail (!self->retired, NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  route = ensure_route (self, key, self->parent != NULL);
+  route = ensure_route (self, key, TRUE);
   route->n_local_interests++;
+
+  adjust_route_ancestors (route, 1);
+
+  return route;
+}
+
+static GtkActionRoute *
+add_resolution_interest (GtkActionNode *self,
+                         GtkActionKey  *key)
+{
+  GtkActionRoute *route;
+
+  g_assert (self != NULL);
+  g_assert (key != NULL);
+
+  route = ensure_route (self, key, TRUE);
+  route->n_local_interests++;
+
   adjust_route_ancestors (route, 1);
 
   return route;
@@ -2380,6 +2771,7 @@ gtk_action_route_remove_interest (GtkActionRoute *self)
   g_return_if_fail (self->n_local_interests > 0);
 
   self->n_local_interests--;
+
   adjust_route_ancestors (self, -1);
   prune_route (self);
 }
@@ -2462,11 +2854,11 @@ gtk_action_route_set_local_provider (GtkActionRoute *self,
 {
   g_return_if_fail (self != NULL);
 
-  if (self->local_provider == provider)
-    return;
-
-  self->local_provider = provider;
-  resolve_route (self);
+  if (self->local_provider != provider)
+    {
+      self->local_provider = provider;
+      resolve_route (self);
+    }
 }
 
 static GtkActionRoute *
@@ -2499,8 +2891,10 @@ source_action_added (GActionGroup    *group,
   GtkActionRoute *route;
 
   gtk_action_tree_begin_update (source->node->tree);
+
   if ((route = source_lookup_route (source, action_name)))
     materialize_provider (route);
+
   gtk_action_tree_end_update (source->node->tree);
 }
 
@@ -2513,6 +2907,7 @@ source_action_removed (GActionGroup    *group,
   GtkActionProvider *provider;
 
   gtk_action_tree_begin_update (source->node->tree);
+
   if ((route = source_lookup_route (source, action_name)) &&
       (provider = route->local_provider) != NULL &&
       provider->source == source)
@@ -2522,6 +2917,7 @@ source_action_removed (GActionGroup    *group,
       provider->retired = TRUE;
       gtk_action_tree_retire (source->node->tree, provider, free_provider);
     }
+
   gtk_action_tree_end_update (source->node->tree);
 }
 
@@ -2535,10 +2931,12 @@ source_action_enabled_changed (GActionGroup    *group,
   GtkActionProvider *provider;
 
   gtk_action_tree_begin_update (source->node->tree);
+
   if ((route = source_lookup_route (source, action_name)) &&
       (provider = route->local_provider) != NULL &&
       provider->source == source)
     refresh_provider (provider);
+
   gtk_action_tree_end_update (source->node->tree);
 }
 
@@ -2552,10 +2950,12 @@ source_action_state_changed (GActionGroup    *group,
   GtkActionProvider *provider;
 
   gtk_action_tree_begin_update (source->node->tree);
+
   if ((route = source_lookup_route (source, action_name)) &&
       (provider = route->local_provider) != NULL &&
       provider->source == source)
     refresh_provider (provider);
+
   gtk_action_tree_end_update (source->node->tree);
 }
 
@@ -2563,15 +2963,15 @@ static void
 free_source (gpointer data)
 {
   GtkActionSource *self = data;
-  guint i;
 
-  for (i = 0; i < G_N_ELEMENTS (self->handler_ids); i++)
+  for (guint i = 0; i < G_N_ELEMENTS (self->handler_ids); i++)
     {
       if (self->handler_ids[i] != 0)
         g_signal_handler_disconnect (self->group, self->handler_ids[i]);
     }
 
-  g_assert_cmpuint (g_hash_table_size (self->providers), ==, 0);
+  g_assert (g_hash_table_size (self->providers) == 0);
+
   g_clear_pointer (&self->providers, g_hash_table_unref);
   g_clear_object (&self->group);
   g_clear_pointer (&self->prefix, g_free);
@@ -2588,6 +2988,7 @@ remove_source (GtkActionSource *source)
   g_assert (!source->retired);
 
   source->retired = TRUE;
+
   g_hash_table_iter_init (&iter, source->providers);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
@@ -2596,7 +2997,9 @@ remove_source (GtkActionSource *source)
 
       if (route != NULL && route->local_provider == provider)
         gtk_action_route_set_local_provider (route, NULL);
+
       provider->retired = TRUE;
+
       gtk_action_tree_retire (source->node->tree, provider, free_provider);
       g_hash_table_iter_steal (&iter);
     }
@@ -2630,6 +3033,7 @@ gtk_action_node_insert_group (GtkActionNode *self,
           gtk_action_tree_end_update (self->tree);
           return old_source;
         }
+
       g_hash_table_steal (self->sources, prefix);
       remove_source (old_source);
     }
@@ -2639,14 +3043,23 @@ gtk_action_node_insert_group (GtkActionNode *self,
   source->group = g_object_ref (group);
   source->prefix = g_strdup (prefix);
   source->providers = g_hash_table_new (gtk_action_key_hash, gtk_action_key_equal);
-  source->handler_ids[0] = g_signal_connect (group, "action-added",
-                                             G_CALLBACK (source_action_added), source);
-  source->handler_ids[1] = g_signal_connect (group, "action-removed",
-                                             G_CALLBACK (source_action_removed), source);
-  source->handler_ids[2] = g_signal_connect (group, "action-enabled-changed",
-                                             G_CALLBACK (source_action_enabled_changed), source);
-  source->handler_ids[3] = g_signal_connect (group, "action-state-changed",
-                                             G_CALLBACK (source_action_state_changed), source);
+  source->handler_ids[0] = g_signal_connect (group,
+                                             "action-added",
+                                             G_CALLBACK (source_action_added),
+                                             source);
+  source->handler_ids[1] = g_signal_connect (group,
+                                             "action-removed",
+                                             G_CALLBACK (source_action_removed),
+                                             source);
+  source->handler_ids[2] = g_signal_connect (group,
+                                             "action-enabled-changed",
+                                             G_CALLBACK (source_action_enabled_changed),
+                                             source);
+  source->handler_ids[3] = g_signal_connect (group,
+                                             "action-state-changed",
+                                             G_CALLBACK (source_action_state_changed),
+                                             source);
+
   g_hash_table_insert (self->sources, source->prefix, source);
 
   if (self->routes != NULL)
@@ -2660,6 +3073,7 @@ gtk_action_node_insert_group (GtkActionNode *self,
             materialize_provider (route);
         }
     }
+
   gtk_action_tree_end_update (self->tree);
 
   return source;
@@ -2680,8 +3094,10 @@ gtk_action_node_remove_group (GtkActionNode *self,
   gtk_action_tree_begin_update (self->tree);
   g_hash_table_steal (self->sources, prefix);
   remove_source (source);
+
   if (g_hash_table_size (self->sources) == 0)
     g_clear_pointer (&self->sources, g_hash_table_unref);
+
   gtk_action_tree_end_update (self->tree);
 }
 
@@ -2694,8 +3110,8 @@ gtk_action_node_get_group (GtkActionNode *self,
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (prefix != NULL, NULL);
 
-  source = self->sources != NULL ? g_hash_table_lookup (self->sources, prefix) : NULL;
-  return source != NULL ? source->group : NULL;
+  source = self->sources ? g_hash_table_lookup (self->sources, prefix) : NULL;
+  return source ? source->group : NULL;
 }
 
 GActionGroup *
@@ -2708,13 +3124,15 @@ gtk_action_node_find_group (GtkActionNode  *self,
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  if (!(provider = gtk_action_node_resolve (self, key)))
+  if (!(provider = gtk_action_node_resolve_provider (self, key)))
     return NULL;
+
   if (provider->source == NULL)
     return NULL;
 
   if (local_name != NULL)
     *local_name = gtk_action_key_get_local_name (key);
+
   return provider->source->group;
 }
 
@@ -2765,6 +3183,7 @@ gtk_action_node_list_actions (GtkActionNode *self,
 
       if (node->sources == NULL)
         continue;
+
       g_hash_table_iter_init (&iter, node->sources);
       while (g_hash_table_iter_next (&iter, NULL, &value))
         append_source_actions (value, actions);
@@ -2778,8 +3197,8 @@ gtk_action_node_list_actions (GtkActionNode *self,
 }
 
 GtkActionProvider *
-gtk_action_node_resolve (GtkActionNode *self,
-                         GtkActionKey  *key)
+gtk_action_node_resolve_provider (GtkActionNode *self,
+                                  GtkActionKey  *key)
 {
   GtkActionRoute *route;
 
@@ -2793,12 +3212,165 @@ gtk_action_node_resolve (GtkActionNode *self,
   return route->effective_provider;
 }
 
+gboolean
+gtk_action_resolution_init (GtkActionResolution *self,
+                            GtkActionNode       *node,
+                            GtkActionKey        *key)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (self->route == NULL, FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+
+  self->route = add_resolution_interest (node, key);
+  self->next = self->route->first_resolution;
+
+  if (self->next != NULL)
+    self->next->prev = self;
+
+  self->route->first_resolution = self;
+
+  if (self->route->effective_provider == NULL)
+    {
+      gtk_action_resolution_clear (self);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+void
+gtk_action_resolution_clear (GtkActionResolution *self)
+{
+  GtkActionRoute *route;
+
+  g_return_if_fail (self != NULL);
+
+  if (self->route != NULL)
+    {
+      route = resolution_unlink (self);
+      gtk_action_route_remove_interest (route);
+    }
+}
+
+GtkActionNode *
+gtk_action_resolution_get_provider_node (GtkActionResolution *self)
+{
+  GtkActionProvider *provider;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  if (self->route == NULL || !(provider = self->route->effective_provider))
+    return NULL;
+
+  return provider->node;
+}
+
+gboolean
+gtk_action_resolution_query (GtkActionResolution *self,
+                             gboolean            *enabled,
+                             const GVariantType **parameter_type,
+                             const GVariantType **state_type,
+                             GVariant           **state_hint,
+                             GVariant           **state)
+{
+  GtkActionProvider *provider;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (self->route == NULL || !(provider = self->route->effective_provider))
+    return FALSE;
+
+  return gtk_action_provider_query (provider, enabled, parameter_type, state_type, state_hint, state);
+}
+
+gboolean
+gtk_action_resolution_activate (GtkActionResolution *self,
+                                GVariant            *parameter)
+{
+  GtkActionProvider *provider;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  if (self->route == NULL || !(provider = self->route->effective_provider))
+    return FALSE;
+
+  return gtk_action_provider_activate (provider, parameter);
+}
+
+gboolean
+gtk_action_resolution_change_state (GtkActionResolution *self,
+                                    GVariant            *state)
+{
+  GtkActionProvider *provider;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (state != NULL, FALSE);
+
+  if (self->route == NULL || !(provider = self->route->effective_provider))
+    return FALSE;
+
+  return gtk_action_provider_change_state (provider, state);
+}
+
+GtkActionNode *
+gtk_action_node_resolve_provider_node (GtkActionNode *self,
+                                       GtkActionKey  *key)
+{
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  GtkActionNode *node = NULL;
+
+  if (gtk_action_resolution_init (&resolution, self, key))
+    node = gtk_action_resolution_get_provider_node (&resolution);
+  gtk_action_resolution_clear (&resolution);
+
+  return node;
+}
+
+gboolean
+gtk_action_node_activate (GtkActionNode *self,
+                          GtkActionKey  *key,
+                          GVariant      *parameter)
+{
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  GtkWidgetAction *action;
+  gboolean activated = FALSE;
+
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+
+  if (self->widget != NULL &&
+      (action = gtk_widget_class_lookup_action (GTK_WIDGET_GET_CLASS (self->widget),
+                                                gtk_action_key_get_full_name (key))))
+    return widget_action_activate (self, action, parameter);
+
+  if (gtk_action_resolution_init (&resolution, self, key))
+    activated = gtk_action_resolution_activate (&resolution, parameter);
+  gtk_action_resolution_clear (&resolution);
+
+  return activated;
+}
+
+gboolean
+gtk_action_node_change_state (GtkActionNode *self,
+                              GtkActionKey  *key,
+                              GVariant      *state)
+{
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
+  gboolean changed = FALSE;
+
+  if (gtk_action_resolution_init (&resolution, self, key))
+    changed = gtk_action_resolution_change_state (&resolution, state);
+  gtk_action_resolution_clear (&resolution);
+
+  return changed;
+}
+
 static gboolean
 targets_equal (GVariant *a,
                GVariant *b)
 {
-  return (a == b ||
-          (a != NULL && b != NULL && g_variant_equal (a, b)));
+  return (a == b || (a && b && g_variant_equal (a, b)));
 }
 
 static void
@@ -2822,16 +3394,20 @@ queue_accel_change (GtkActionNode *self,
           for (binding = route->first_local_binding;
                binding != NULL;
                binding = binding->route_next)
-            if ((binding->interest & GTK_ACTION_INTEREST_ACCEL) != 0 &&
-                targets_equal (binding->target, target))
-              queue_binding (binding);
+            {
+              if ((binding->interest & GTK_ACTION_INTEREST_ACCEL) != 0 &&
+                  targets_equal (binding->target, target))
+                queue_binding (binding);
+            }
 
           for (subscription = route->first_subscription;
                subscription != NULL;
                subscription = subscription->route_next)
-            if ((subscription->interest & GTK_ACTION_INTEREST_ACCEL) != 0 &&
-                targets_equal (subscription->target, target))
-              queue_subscription (subscription);
+            {
+              if ((subscription->interest & GTK_ACTION_INTEREST_ACCEL) != 0 &&
+                  targets_equal (subscription->target, target))
+                queue_subscription (subscription);
+            }
         }
 
       if (node->first_child != NULL)
@@ -2855,6 +3431,7 @@ gtk_action_node_set_primary_accel (GtkActionNode *self,
   invocation = gtk_action_invocation_key_new (key, target);
   old_accel = self->primary_accels != NULL
             ? g_hash_table_lookup (self->primary_accels, invocation) : NULL;
+
   if (g_strcmp0 (old_accel, primary_accel) == 0)
     {
       gtk_action_invocation_key_unref (invocation);
@@ -2865,11 +3442,11 @@ gtk_action_node_set_primary_accel (GtkActionNode *self,
   if (primary_accel != NULL)
     {
       if (self->primary_accels == NULL)
-        self->primary_accels =
-          g_hash_table_new_full (gtk_action_invocation_key_hash,
-                                 gtk_action_invocation_key_equal,
-                                 (GDestroyNotify) gtk_action_invocation_key_unref,
-                                 g_free);
+        self->primary_accels = g_hash_table_new_full (gtk_action_invocation_key_hash,
+                                                      gtk_action_invocation_key_equal,
+                                                      (GDestroyNotify) gtk_action_invocation_key_unref,
+                                                      g_free);
+
       g_hash_table_replace (self->primary_accels,
                             gtk_action_invocation_key_ref (invocation),
                             g_strdup (primary_accel));
@@ -2880,6 +3457,7 @@ gtk_action_node_set_primary_accel (GtkActionNode *self,
       if (g_hash_table_size (self->primary_accels) == 0)
         g_clear_pointer (&self->primary_accels, g_hash_table_unref);
     }
+
   queue_accel_change (self, key, target);
   gtk_action_tree_end_update (self->tree);
 
@@ -2899,25 +3477,38 @@ gtk_action_node_get_primary_accel (GtkActionNode *self,
 }
 
 void
-gtk_action_node_class_action_enabled_changed (GtkActionNode *self,
-                                               const char    *action_name)
+gtk_action_node_set_class_action_enabled (GtkActionNode *self,
+                                          const char    *action_name,
+                                          gboolean       enabled)
 {
-  g_autoptr(GtkActionKey) key = NULL;
+  GtkActionKey *key = NULL;
+  GtkWidgetAction *action;
   GtkActionProvider *provider;
   GtkActionRoute *route;
 
   g_return_if_fail (self != NULL);
+  g_return_if_fail (self->widget != NULL);
   g_return_if_fail (action_name != NULL);
+
+  if (!(action = gtk_widget_class_lookup_action (GTK_WIDGET_GET_CLASS (self->widget), action_name)))
+    return;
+
+  self->disabled_widget_actions = _gtk_bitmask_set (self->disabled_widget_actions, action->slot, !enabled);
 
   if (!(key = gtk_action_key_new (action_name)) ||
       !(route = lookup_route (self, key)) ||
       !(provider = route->local_provider) ||
       provider->widget_action == NULL)
-    return;
+    {
+      g_clear_pointer (&key, gtk_action_key_unref);
+      return;
+    }
 
   gtk_action_tree_begin_update (self->tree);
   refresh_provider (provider);
   gtk_action_tree_end_update (self->tree);
+
+  g_clear_pointer (&key, gtk_action_key_unref);
 }
 
 GtkActionBinding *
@@ -2969,6 +3560,7 @@ gtk_action_node_bind (GtkActionNode            *self,
     {
       if (self->tree->dispatch_depth == 0)
         reclaim_retired (self->tree);
+
       return NULL;
     }
 
@@ -2989,6 +3581,7 @@ gtk_action_binding_cancel (GtkActionBinding *self)
   route = self->route;
   tree = route->node->tree;
   self->alive = FALSE;
+
   if (self->owner_location != NULL)
     {
       if (*self->owner_location == self)
@@ -3000,8 +3593,10 @@ gtk_action_binding_cancel (GtkActionBinding *self)
     self->route_prev->route_next = self->route_next;
   else
     route->first_local_binding = self->route_next;
+
   if (self->route_next != NULL)
     self->route_next->route_prev = self->route_prev;
+
   self->route_prev = NULL;
   self->route_next = NULL;
   binding_set_provider (self, NULL);
@@ -3033,7 +3628,7 @@ gtk_action_binding_set_target (GtkActionBinding *self,
   if (target == self->target)
     return;
 
-  if (target != NULL && self->target != NULL && g_variant_equal (target, self->target))
+  if (target && self->target && g_variant_equal (target, self->target))
     {
       g_variant_unref (g_variant_ref_sink (target));
       return;
@@ -3114,8 +3709,10 @@ gtk_action_node_subscribe (GtkActionNode                 *self,
   gtk_action_snapshot_init (&subscription->snapshot);
 
   subscription->route_next = route->first_subscription;
+
   if (subscription->route_next != NULL)
     subscription->route_next->route_prev = subscription;
+
   route->first_subscription = subscription;
   subscription_set_provider (subscription, route->effective_provider);
 
@@ -3123,6 +3720,7 @@ gtk_action_node_subscribe (GtkActionNode                 *self,
     gtk_action_snapshot_copy (&initial, &subscription->provider->snapshot);
   else
     initial.revision = route->revision;
+
   snapshot_set_primary_accel (&initial, self, key, subscription->target);
   gtk_action_snapshot_copy (&subscription->snapshot, &initial);
   self->tree->dispatch_depth++;
@@ -3134,6 +3732,7 @@ gtk_action_node_subscribe (GtkActionNode                 *self,
     {
       if (self->tree->dispatch_depth == 0)
         reclaim_retired (self->tree);
+
       return NULL;
     }
 
@@ -3155,12 +3754,21 @@ gtk_action_subscription_cancel (GtkActionSubscription *self)
   tree = route->node->tree;
   self->cancelled = TRUE;
 
+  if (self->owner_location != NULL)
+    {
+      if (*self->owner_location == self)
+        *self->owner_location = NULL;
+      self->owner_location = NULL;
+    }
+
   if (self->route_prev != NULL)
     self->route_prev->route_next = self->route_next;
   else
     route->first_subscription = self->route_next;
+
   if (self->route_next != NULL)
     self->route_next->route_prev = self->route_prev;
+
   self->route_prev = NULL;
   self->route_next = NULL;
   subscription_set_provider (self, NULL);
@@ -3168,6 +3776,18 @@ gtk_action_subscription_cancel (GtkActionSubscription *self)
 
   gtk_action_route_remove_interest (route);
   gtk_action_tree_retire (tree, self, subscription_free);
+}
+
+void
+gtk_action_subscription_set_owner_location (GtkActionSubscription  *self,
+                                            GtkActionSubscription **owner_location)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (!self->cancelled);
+  g_return_if_fail (owner_location != NULL);
+  g_return_if_fail (*owner_location == self);
+
+  self->owner_location = owner_location;
 }
 
 GtkActionNode *
@@ -3273,7 +3893,11 @@ gtk_action_provider_get_touched_bindings (GtkActionProvider *self)
 {
   g_return_val_if_fail (self != NULL, 0);
 
+#ifdef G_ENABLE_DEBUG
   return self->state_bindings_touched;
+#else
+  return 0;
+#endif
 }
 
 void
@@ -3281,7 +3905,9 @@ gtk_action_provider_reset_touched_bindings (GtkActionProvider *self)
 {
   g_return_if_fail (self != NULL);
 
+#ifdef G_ENABLE_DEBUG
   self->state_bindings_touched = 0;
+#endif
 }
 
 gboolean
@@ -3296,16 +3922,21 @@ gtk_action_provider_query (GtkActionProvider  *self,
 
   if (!self->snapshot.present)
     return FALSE;
+
   if (enabled != NULL)
     *enabled = self->snapshot.enabled;
+
   if (parameter_type != NULL)
     *parameter_type = self->snapshot.parameter_type;
+
   if (state_type != NULL)
     *state_type = self->snapshot.state_type;
+
   if (state_hint != NULL)
     *state_hint = self->snapshot.state_hint != NULL
                 ? g_variant_ref (self->snapshot.state_hint)
                 : NULL;
+
   if (state != NULL)
     *state = self->snapshot.state != NULL ? g_variant_ref (self->snapshot.state) : NULL;
 
@@ -3320,6 +3951,12 @@ gtk_action_provider_activate (GtkActionProvider *self,
 
   g_return_val_if_fail (self != NULL, FALSE);
 
+  if (!self->snapshot.present || !self->snapshot.enabled)
+    return FALSE;
+
+  if (self->widget_action != NULL)
+    return widget_action_activate (self->node, self->widget_action, parameter);
+
   expected = self->snapshot.parameter_type;
   if ((expected == NULL) != (parameter == NULL) ||
       (expected != NULL && !g_variant_is_of_type (parameter, expected)))
@@ -3328,15 +3965,14 @@ gtk_action_provider_activate (GtkActionProvider *self,
         g_action_group_activate_action (self->source->group,
                                         gtk_action_key_get_local_name (self->key),
                                         parameter);
+
       return FALSE;
     }
 
-  if (self->widget_action != NULL)
-    gtk_widget_action_activate (self->node->widget, self->widget_action, parameter);
-  else
-    g_action_group_activate_action (self->source->group,
-                                    gtk_action_key_get_local_name (self->key),
-                                    parameter);
+  g_action_group_activate_action (self->source->group,
+                                  gtk_action_key_get_local_name (self->key),
+                                  parameter);
+
   return TRUE;
 }
 
@@ -3354,67 +3990,23 @@ gtk_action_provider_change_state (GtkActionProvider *self,
         g_action_group_change_action_state (self->source->group,
                                             gtk_action_key_get_local_name (self->key),
                                             state);
+
       return FALSE;
     }
 
   if (self->widget_action != NULL)
-    gtk_widget_action_change_state (self->node->widget, self->widget_action, state);
+    {
+      if (self->widget_action->pspec != NULL)
+        property_action_set_state (self->node->widget,
+                                   self->widget_action,
+                                   state);
+    }
   else
     g_action_group_change_action_state (self->source->group,
                                         gtk_action_key_get_local_name (self->key),
                                         state);
+
   return TRUE;
-}
-
-gulong
-gtk_action_provider_add_observer (GtkActionProvider         *self,
-                                  GtkActionProviderCallback  callback,
-                                  gpointer                   user_data,
-                                  GDestroyNotify             destroy)
-{
-  static gulong next_observer_id;
-  GtkActionProviderObserver *observer;
-
-  g_return_val_if_fail (self != NULL, 0);
-  g_return_val_if_fail (callback != NULL, 0);
-
-  observer = g_new0 (GtkActionProviderObserver, 1);
-  observer->callback = callback;
-  observer->user_data = user_data;
-  observer->destroy = destroy;
-  observer->id = ++next_observer_id;
-  observer->next = self->observers;
-  self->observers = observer;
-
-  return observer->id;
-}
-
-void
-gtk_action_provider_remove_observer (GtkActionProvider *self,
-                                     gulong             observer_id)
-{
-  GtkActionProviderObserver *observer;
-  GtkActionProviderObserver **link;
-
-  g_return_if_fail (self != NULL);
-  g_return_if_fail (observer_id != 0);
-
-  for (link = &self->observers; (observer = *link) != NULL; link = &observer->next)
-    {
-      if (observer->id != observer_id)
-        continue;
-
-      if (self->dispatch_depth > 0)
-        observer->removed = TRUE;
-      else
-        {
-          *link = observer->next;
-          if (observer->destroy != NULL)
-            observer->destroy (observer->user_data);
-          g_free (observer);
-        }
-      return;
-    }
 }
 
 const char *
@@ -3445,7 +4037,9 @@ _gtk_widget_get_action_node (GtkWidget *widget,
     {
       if (default_tree == NULL)
         default_tree = gtk_action_tree_new ();
+
       priv->action_node = gtk_action_tree_add_widget (default_tree, widget);
+
       if (GTK_IS_WINDOW (widget))
         gtk_action_node_set_synthetic_parent (priv->action_node,
                                               ensure_window_scope (default_tree,
@@ -3453,17 +4047,6 @@ _gtk_widget_get_action_node (GtkWidget *widget,
     }
 
   return priv->action_node;
-}
-
-void
-_gtk_widget_update_action_tree (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (priv->action_node != NULL)
-    gtk_action_node_sync_parent (priv->action_node);
 }
 
 void

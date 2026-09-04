@@ -52,6 +52,7 @@
 
 #include "gtkshortcutactionprivate.h"
 
+#include "gtkactiontreeprivate.h"
 #include "gtkbuilder.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
@@ -1041,79 +1042,25 @@ gtk_named_action_finalize (GObject *gobject)
 }
 
 static gboolean
-check_parameter_type (GVariant           *args,
-                      const GVariantType *parameter_type)
-{
-  if (args)
-    {
-      if (parameter_type == NULL)
-        {
-          g_warning ("Trying to invoke action with arguments, but action has no parameter");
-          return FALSE;
-        }
-
-      if (!g_variant_is_of_type (args, parameter_type))
-        {
-          char *typestr = g_variant_type_dup_string (parameter_type);
-          char *targetstr = g_variant_print (args, TRUE);
-          g_warning ("Trying to invoke action with target '%s',"
-                     " but action expects parameter with type '%s'", targetstr, typestr);
-          g_free (targetstr);
-          g_free (typestr);
-          return FALSE;
-        }
-    }
-  else
-    {
-      if (parameter_type != NULL)
-        {
-          char *typestr = g_variant_type_dup_string (parameter_type);
-          g_warning ("Trying to invoke action without arguments,"
-                     " but action expects parameter with type '%s'", typestr);
-          g_free (typestr);
-          return FALSE;
-        }
-    }
-
-  return TRUE;
-}
-
-static gboolean
 gtk_named_action_activate (GtkShortcutAction      *action,
                            GtkShortcutActionFlags  flags,
                            GtkWidget              *widget,
                            GVariant               *args)
 {
   GtkNamedAction *self = GTK_NAMED_ACTION (action);
-  const GVariantType *parameter_type;
-  GtkActionMuxer *muxer;
-  gboolean enabled;
+  GtkActionNode *node;
+  GtkActionKey *key;
+  gboolean ret;
 
-  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  if (muxer == NULL)
+  key = gtk_action_key_new (self->name);
+  if (key == NULL)
     return FALSE;
+  node = _gtk_widget_get_action_node (widget, TRUE);
 
-  if (!gtk_action_muxer_query_action (muxer, self->name,
-                                      &enabled, &parameter_type,
-                                      NULL, NULL, NULL))
-    return FALSE;
+  ret = gtk_action_node_activate (node, key, args);
+  gtk_action_key_unref (key);
 
-  if (!enabled)
-    return FALSE;
-
-  /* We found an action with the correct name and it's enabled.
-   * This is the action that we are going to try to invoke.
-   *
-   * There is still the possibility that the args don't
-   * match the expected parameter type.  In that case, we will print
-   * a warning.
-   */
-  if (!check_parameter_type (args, parameter_type))
-    return FALSE;
-
-  gtk_action_muxer_activate_action (muxer, self->name, args);
-
-  return TRUE;
+  return ret;
 }
 
 static void

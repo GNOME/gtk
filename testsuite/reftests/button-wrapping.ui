@@ -14,12 +14,12 @@
             <property name="position_set">1</property>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
-                <child>
+                <property name="child">
                   <object class="GtkLabel" id="label1">
                     <property name="label" translatable="yes">Hello World</property>
                     <property name="wrap">1</property>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
@@ -40,12 +40,12 @@
             <child>
               <object class="GtkCheckButton" id="radiobutton1">
                 <property name="active">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkLabel" id="label2">
                     <property name="label" translatable="yes">Hello World</property>
                     <property name="wrap">1</property>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
