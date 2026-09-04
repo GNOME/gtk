@@ -467,6 +467,8 @@ gdk_android_surface_submit_frame (GdkSurface          *surface,
   GdkAndroidSurface *self = (GdkAndroidSurface *)surface;
   GdkAndroidDisplay *display = GDK_ANDROID_DISPLAY (gdk_surface_get_display (surface));
 
+  gdk_draw_context_frame_stop_throttling (frame, 0);
+
   if (!self->surface)
     {
       gdk_draw_context_frame_discarded (frame);
