@@ -27,6 +27,7 @@
 #include "gtkwidget.h"
 
 #include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkborder.h"
 #include "gtkcsstypesprivate.h"
@@ -82,6 +83,9 @@ struct _GtkWidgetPrivate
   guint child_visible         : 1;
   guint can_target            : 1;
   guint limit_events          : 1;
+
+  /* Number of compressed action nodes at or below this widget. */
+  guint action_subtree_count;
 
   /* Queue-resize related flags */
   guint resize_queued         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
@@ -186,6 +190,7 @@ struct _GtkWidgetPrivate
   GtkListListModel *children_observer;
   GtkListListModel *controller_observer;
   GtkActionMuxer *muxer;
+  GtkActionNode *action_node;
 
   GtkWidget *focus_child;
 
@@ -213,7 +218,9 @@ struct _GtkWidgetClassPrivate
   GtkWidgetTemplate *template;
   GListStore *shortcuts;
   GType layout_manager_type;
-  GtkWidgetAction *actions;
+  GPtrArray *actions;
+  GHashTable *action_index;
+  guint n_action_slots;
   GtkAccessibleRole accessible_role;
   guint activate_signal;
   GQuark css_name;

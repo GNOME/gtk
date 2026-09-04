@@ -480,9 +480,9 @@ update_accel (GtkShortcut    *shortcut,
 {
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
+  GtkActionKey *key = NULL;
   GVariant *target;
   const char *action_name;
-  char *action_and_target;
   char *accel = NULL;
 
   if (!muxer)
@@ -513,13 +513,15 @@ update_accel (GtkShortcut    *shortcut,
 
   target = gtk_shortcut_get_arguments (shortcut);
   action_name = gtk_named_action_get_action_name (GTK_NAMED_ACTION (action));
-  action_and_target = gtk_print_action_and_target (NULL, action_name, target);
+  if (!(key = gtk_action_key_new (action_name)))
+    return;
   if (set)
     accel = gtk_shortcut_trigger_to_string (trigger);
-  gtk_action_muxer_set_primary_accel (muxer, action_and_target, accel);
+  gtk_action_muxer_set_primary_accel_for (muxer, key, target, accel);
 
-  g_free (action_and_target);
   g_free (accel);
+
+  g_clear_pointer (&key, gtk_action_key_unref);
 }
 
 void
