@@ -3,21 +3,27 @@
 #ifdef GTK_ACCESSIBILITY_ATSPI
 # include "gtk/a11y/gtkatspiutilsprivate.h"
 #endif
-#include "gtk/gtkactionmuxerprivate.h"
+#include "gtk/gtkactiontreeprivate.h"
 #include "gtk/gtkcolumnviewcolumnprivate.h"
 #include "gtk/gtkwidgetprivate.h"
 
 static gboolean
 get_activate_enabled (GtkWidget *widget)
 {
-  GtkActionMuxer *muxer;
+  GtkActionKey *key;
+  GtkActionNode *node;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
   gboolean enabled;
 
-  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  g_assert_nonnull (muxer);
-  g_assert_true (gtk_action_muxer_query_action (muxer, "activate",
-                                                &enabled,
-                                                NULL, NULL, NULL, NULL));
+  key = gtk_action_key_new ("activate");
+  node = _gtk_widget_get_action_node (widget, FALSE);
+  g_assert_nonnull (node);
+  g_assert_true (gtk_action_resolution_init (&resolution, node, key));
+  g_assert_true (gtk_action_resolution_query (&resolution, &enabled,
+                                              NULL, NULL, NULL, NULL));
+
+  gtk_action_resolution_clear (&resolution);
+  gtk_action_key_unref (key);
 
   return enabled;
 }
@@ -85,7 +91,7 @@ column_header (void)
   primary = gtk_column_view_sorter_get_primary_sort_column (view_sorter);
   g_assert_null (primary);
   g_assert_false (get_activate_enabled (title));
-  g_assert_true (gtk_widget_activate_action (title, "activate", NULL));
+  g_assert_false (gtk_widget_activate_action (title, "activate", NULL));
   primary = gtk_column_view_sorter_get_primary_sort_column (view_sorter);
   g_assert_null (primary);
 

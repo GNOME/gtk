@@ -23,31 +23,27 @@
 
 typedef struct _GtkMenuTracker GtkMenuTracker;
 
-typedef void         (* GtkMenuTrackerInsertFunc)                       (GtkMenuTrackerItem       *item,
-                                                                         int                       position,
-                                                                         gpointer                  user_data);
+typedef void (*GtkMenuTrackerInsertFunc) (GtkMenuTrackerItem *item,
+                                          int                 position,
+                                          gpointer            user_data);
+typedef void (*GtkMenuTrackerRemoveFunc) (int                 position,
+                                          gpointer            user_data);
 
-typedef void         (* GtkMenuTrackerRemoveFunc)                       (int                       position,
-                                                                         gpointer                  user_data);
 
-
-GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActionObservable      *observer,
-                                                                         GMenuModel               *model,
-                                                                         gboolean                  with_separators,
-                                                                         gboolean                  merge_sections,
-                                                                         gboolean                  mac_os_mode,
-                                                                         const char               *action_namespace,
-                                                                         GtkMenuTrackerInsertFunc  insert_func,
-                                                                         GtkMenuTrackerRemoveFunc  remove_func,
-                                                                         gpointer                  user_data);
-
-GtkMenuTracker *        gtk_menu_tracker_new_for_item_link              (GtkMenuTrackerItem       *item,
-                                                                         const char               *link_name,
-                                                                         gboolean                  merge_sections,
-                                                                         gboolean                  mac_os_mode,
-                                                                         GtkMenuTrackerInsertFunc  insert_func,
-                                                                         GtkMenuTrackerRemoveFunc  remove_func,
-                                                                         gpointer                  user_data);
-
-void                    gtk_menu_tracker_free                           (GtkMenuTracker           *tracker);
-
+GtkMenuTracker *gtk_menu_tracker_new               (GtkActionNode            *action_node,
+                                                    GMenuModel               *model,
+                                                    gboolean                  with_separators,
+                                                    gboolean                  merge_sections,
+                                                    gboolean                  mac_os_mode,
+                                                    const char               *action_namespace,
+                                                    GtkMenuTrackerInsertFunc  insert_func,
+                                                    GtkMenuTrackerRemoveFunc  remove_func,
+                                                    gpointer                  user_data);
+GtkMenuTracker *gtk_menu_tracker_new_for_item_link (GtkMenuTrackerItem       *item,
+                                                    const char               *link_name,
+                                                    gboolean                  merge_sections,
+                                                    gboolean                  mac_os_mode,
+                                                    GtkMenuTrackerInsertFunc  insert_func,
+                                                    GtkMenuTrackerRemoveFunc  remove_func,
+                                                    gpointer                  user_data);
+void            gtk_menu_tracker_free              (GtkMenuTracker           *tracker);

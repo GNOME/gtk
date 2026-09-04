@@ -25,7 +25,7 @@
 
 #include "gtkaccessibletextprivate.h"
 #include "gtkactionable.h"
-#include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
@@ -6463,7 +6463,9 @@ append_bubble_item (GtkText    *self,
                     GMenuModel *model,
                     int         index)
 {
-  GtkActionMuxer *muxer;
+  GtkActionNode *node;
+  GtkActionKey *key;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
   GtkWidget *item, *image;
   GVariant *att;
   const char *icon_name;
@@ -6494,11 +6496,19 @@ append_bubble_item (GtkText    *self,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (self), FALSE);
-  if (!gtk_action_muxer_query_action (muxer, action_name, &enabled,
-                                      NULL, NULL, NULL, NULL) ||
-      !enabled)
+  key = gtk_action_key_new (action_name);
+  if (key == NULL)
     return;
+  node = _gtk_widget_get_action_node (GTK_WIDGET (self), TRUE);
+  if (!gtk_action_resolution_init (&resolution, node, key) ||
+      !gtk_action_resolution_query (&resolution, &enabled, NULL, NULL, NULL, NULL) ||
+      !enabled)
+    {
+      gtk_action_resolution_clear (&resolution);
+      gtk_action_key_unref (key);
+      return;
+    }
+  gtk_action_key_unref (key);
 
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
@@ -6507,6 +6517,8 @@ append_bubble_item (GtkText    *self,
   gtk_widget_add_css_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
   gtk_box_append (GTK_BOX (toolbar), item);
+
+  gtk_action_resolution_clear (&resolution);
 }
 
 static void
