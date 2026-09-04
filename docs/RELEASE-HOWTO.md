@@ -3,7 +3,13 @@ How to do a GTK release?
 
 ## Before we begin
 
-Make sure you have suitable versions of Meson and Ninja.
+This document was last update for GTK 4.24. If that is too long ago,
+it might be out of date. You may want to ask if anything changed
+since then.
+
+Our build uses Meson, and our release process relies on gitlab.gnome.org
+and its CI. Make sure you have suitable versions of Meson and Ninja,
+and an account on gitlab.gnome.org.
 
 ## Release check list
 
@@ -25,10 +31,12 @@ $ meson compile -C _build
   2. Update NEWS based on the content of git log; follow the format of prior
      entries. This includes finding noteworthy new features, collecting
      summaries for all the fixed bugs that are referenced and collecting all
-     updated translations. Also collect the names of all contributors that
-     are mentioned. We don't discriminate between bug reporters, patch
-     writers, committers, etc. Anybody who is mentioned in the commit log
-     gets a credit, but only real names, not email addresses or nicknames.
+     updated translations. The current best practice for this is to rely
+     on gitlab-changelog.py to produce a rough draft, and then edit it.
+
+```
+$ gitlab_changelog.py gnome/gtk 4.23.2...
+```
 
   3. Update the pot file and commit the changes:
 
@@ -39,73 +47,45 @@ $ ninja -C _build gtk40-pot
   4. If this is a major, stable, release, verify that the release notes
      in the API reference contain the relevant items.
 
-  5. Verify that the version in `meson.build` has been bumped after the last
-     release. **Note**: this is critical, a slip-up here will cause the soname
-     to change.
+  5. Verify that the version in `meson.build` is what you want it to be.
+     The micro version should have been bumped after the lastrelease, so
+     if the release you are making is a development snapshot or patch release,
+     no further work is needed. If the release is a new stable release, change
+     meson.build by bumping the minor version and resetting the micro version,
+     i.e. go from 2.23.3 to 2.24.0. **Note**: this is critical, a slip-up here
+     will cause the soname to change.
 
-  6. Make sure that `meson test` is happy (`ninja dist` will also run the test
-     suite, but it's better to catch issues before committing and tagging
-     the release). Typical problems to expect here (depending on whether this
-     is a devel  snapshot or a stable release):
+  6. If this is a devel release, make sure that the docs for new symbols are
+     in good shape. Make sure that all new symbols have proper Since: tags
+     and GDK_AVAILABLE_IN annotations.
 
-    * forgotten source files
-    * new symbols missing the `GDK_AVAILABLE_IN_` annotation
-    * wrong introspection annotations
-    * missing documentation
+  7. Commit the NEWS, meson.build and other changes on a branch and create
+     a merge request for it. The established practice is to name the branch
+     after the release: gtk-4-23-3, and use just the version number in the
+     commit message: GTK 4.23.3. You can go ahead and add another commit
+     on top that bumps the micro version number in meson.build, i.e. change
+     from 4.23.3 to 4.23.4.
 
-  7. If this is a devel release, make sure that the docs for new symbols are
-     in good shape. Look at the -unused.txt files and add stuff found there
-     to the corresponding `-sections.txt` file. Look at the `-undocumented.txt`
-     files and see if there is anything in there that should be documented.
-     If it is, this may be due to typos in the doc comments in the source.
-     Make sure that all new symbols have proper Since: tags, and that there
-     is an index in the main `-docs.xml` for the next stable version.
+  8. Fix broken stuff found by 7), update the branch with fixes until the
+     CI on the merge request is green.
 
-  8. Run `meson dist -C_build` to generate the tarball.
+  9. Merge the MR.
 
-  9. Fix broken stuff found by 8), commit changes, repeat.
-
-  10. Once `dist` succeeds, verify that the tree is clean and all the changes
-     needed to make the release have been committed: `git diff` should come
-     up empty. The last commit must be the commit that bumps up the version
-     of the release in the `meson.build` file. Use `git rebase` if you had to
-     add more commits after the version bump and `dist` successfully passing.
-     If you change the history, remember to rebuild the tarball.
-
-  11. Now you've got the tarball. Check that the tarball size looks reasonable
-    compared to previous releases. If the size goes down a lot, likely the
-    docs went missing for some reason. Or the translations. If the size goes
-    up by a lot, something else may be wrong.
-
-  12. Tag the release. The git command for doing that looks like:
+  10. Tag the commit with the version number in the name with a tag that
+      also uses the version number, either using the git commandline, or
+      using the gitlab web ui. *Note*: It is imperative that you tag
+      the right commit - if you tag the one that bumps the version number,
+      your release will be misnumbered.
 
 ```sh
-$ git tag -m "GTK 4.2.0" 4.2.0
+$ git tag -m "GTK 4.23.3" 4.23.3 5336dcfe3cbc2e8
+$ git push
 ```
 
-  13. Bump the version number in `meson.build`, and add a section for the next
-      release in NEWS and commit the change.
+  11. Thats it! The CI release service job gets triggered by the tag,
+      produces the release tarball, and uploads it to the right location.
+      If you don't trust it, check after a few minutes that it has appeared
+      in https://download.gnome.org/sources/gtk/
 
-  14. Push the changes upstream, and push the tag as well. The git command for
-    doing that is:
-
-```sh
-$ git push origin
-$ git push origin 4.2.0
-```
-
-  15. Upload the tarball to `master.gnome.org` and run `ftpadmin install` to
-    transfer it to `download.gnome.org`. If you don't have an account on
-    `master.gnome.org`, find someone who can do it for you. The command for
-    this looks like:
-
-```sh
-$ scp gtk-4.2.0.tar.xz matthiasc@master.gnome.org:
-$ ssh matthiasc@master.gnome.org
-$ ftpadmin install gtk-4.2.0.tar.xz
-```
-
-  16. Go to the gnome-announce list archives, find the last announce message,
-    create a new message in the same form, replacing version numbers,
-    commentary at the top about "what this release is about" and the
-    summary of changes.
+  12. If you haven't done it as part of the release MR, bump the version number
+      in `meson.build`, and commit that change as part of another MR.
