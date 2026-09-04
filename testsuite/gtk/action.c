@@ -945,6 +945,44 @@ test_enabled (void)
   g_object_unref (g_object_ref_sink (text));
 }
 
+static gulong
+find_visibility_notify_handler (GtkWidget *widget)
+{
+  return g_signal_handler_find (widget,
+                                (G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DETAIL),
+                                g_signal_lookup ("notify", G_TYPE_OBJECT),
+                                g_quark_from_static_string ("visibility"),
+                                NULL, NULL, NULL);
+}
+
+static void
+test_lazy_property_action (void)
+{
+  GtkWidget *actionable;
+  GtkWidget *text;
+
+  text = g_object_ref_sink (gtk_text_new ());
+  g_assert_cmpuint (find_visibility_notify_handler (text), ==, 0);
+
+  actionable = g_object_ref_sink (gtk_check_button_new ());
+  gtk_widget_set_parent (actionable, text);
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (actionable),
+                                  "misc.toggle-visibility");
+
+  g_assert_cmpuint (find_visibility_notify_handler (text), !=, 0);
+  g_assert_true (gtk_text_get_visibility (GTK_TEXT (text)));
+  g_assert_true (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
+
+  gtk_text_set_visibility (GTK_TEXT (text), FALSE);
+  g_assert_false (gtk_check_button_get_active (GTK_CHECK_BUTTON (actionable)));
+
+  gtk_widget_unparent (actionable);
+  g_object_unref (actionable);
+  g_assert_cmpuint (find_visibility_notify_handler (text), ==, 0);
+
+  g_object_unref (text);
+}
+
 #define MY_TYPE_GTK_ACTIONABLE (my_gtk_actionable_get_type ())
 G_DECLARE_FINAL_TYPE          (MyGtkActionable, my_gtk_actionable, MY, GTK_ACTIONABLE, GtkButton)
 
@@ -974,6 +1012,54 @@ my_gtk_actionable_class_init (MyGtkActionableClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_install_action (widget_class, "test.test", NULL, test_cb);
+}
+
+#define MY_TYPE_UNPREFIXED_ACTION_BOX (my_unprefixed_action_box_get_type ())
+G_DECLARE_FINAL_TYPE (MyUnprefixedActionBox, my_unprefixed_action_box, MY, UNPREFIXED_ACTION_BOX, GtkBox)
+
+struct _MyUnprefixedActionBox
+{
+  GtkBox parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (MyUnprefixedActionBox, my_unprefixed_action_box, GTK_TYPE_BOX);
+
+static void
+my_unprefixed_action_box_init (MyUnprefixedActionBox *self)
+{
+}
+
+static void
+my_unprefixed_action_box_class_init (MyUnprefixedActionBoxClass *klass)
+{
+  gtk_widget_class_install_action (GTK_WIDGET_CLASS (klass), "select-folder", NULL, test_cb);
+}
+
+static void
+test_unprefixed_class_action (void)
+{
+  GtkWidget *box;
+  GtkWidget *button;
+
+  box = g_object_ref_sink (g_object_new (MY_TYPE_UNPREFIXED_ACTION_BOX, NULL));
+  button = gtk_button_new ();
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "select-folder");
+  gtk_box_append (GTK_BOX (box), button);
+  class_action_activated = 0;
+
+  g_assert_true (gtk_widget_get_sensitive (button));
+  g_signal_emit_by_name (button, "clicked");
+  g_assert_cmpint (class_action_activated, ==, 1);
+
+  gtk_widget_action_set_enabled (box, "select-folder", FALSE);
+  g_assert_false (gtk_widget_get_sensitive (button));
+
+  gtk_widget_action_set_enabled (box, "select-folder", TRUE);
+  g_assert_true (gtk_widget_get_sensitive (button));
+  g_signal_emit_by_name (button, "clicked");
+  g_assert_cmpint (class_action_activated, ==, 2);
+
+  g_object_unref (box);
 }
 
 /* Test that actions are correctly notified after reparenting */
@@ -1019,6 +1105,8 @@ main (int   argc,
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
   g_test_add_func ("/action/enabled", test_enabled);
+  g_test_add_func ("/action/lazy-property", test_lazy_property_action);
+  g_test_add_func ("/action/unprefixed-class-action", test_unprefixed_class_action);
   g_test_add_func ("/action/reparenting", test_reparenting);
 
   return g_test_run();
