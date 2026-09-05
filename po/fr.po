@@ -26,10 +26,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-25 12:59+0000\n"
-"PO-Revision-Date: 2026-08-29 09:20+0200\n"
+"POT-Creation-Date: 2026-09-01 21:46+0000\n"
+"PO-Revision-Date: 2026-09-05 11:18+0200\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
-"Language-Team: French <international-french@discourse.gnome.org>\n"
+"Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2381,8 +2381,8 @@ msgid "_Cancel"
 msgstr "A_nnuler"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3150
-#: gtk/gtkplacessidebar.c:3235 gtk/gtkplacesview.c:1648
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3151
+#: gtk/gtkplacessidebar.c:3236 gtk/gtkplacesview.c:1648
 msgid "_Open"
 msgstr "_Ouvrir"
 
@@ -2505,8 +2505,8 @@ msgstr "_Copier l’emplacement"
 msgid "_Add to Bookmarks"
 msgstr "A_jouter aux signets"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2313
-#: gtk/gtkplacessidebar.c:3271 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:3272 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "_Renommer"
 
@@ -2527,7 +2527,7 @@ msgstr "Trier les dossiers avant les _fichiers"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1028
 msgid "Home"
 msgstr "Dossier personnel"
 
@@ -2678,7 +2678,7 @@ msgstr "T_ype"
 msgid "_Time"
 msgstr "D_ate"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2307
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2308
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -3004,8 +3004,8 @@ msgstr "_Terminer le processus"
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Impossible de tuer le processus ayant le PID %d. L’opération n’est pas "
-"implémentée."
+"Impossible de forcer l’arrêt du processus ayant le PID %d. L’opération n’est "
+"pas implémentée."
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:989
@@ -3045,7 +3045,7 @@ msgstr "Onglet précédent"
 msgid "Next tab"
 msgstr "Onglet suivant"
 
-#: gtk/gtknotebook.c:4364 gtk/gtknotebook.c:6572
+#: gtk/gtknotebook.c:4366 gtk/gtknotebook.c:6574
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
@@ -3110,82 +3110,82 @@ msgid "_Show Text"
 msgstr "Afficher le _texte"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:915
 #, c-format
 msgid "Open %s"
 msgstr "Ouvrir %s"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent"
 msgstr "Récents"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent files"
 msgstr "Fichiers récents"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred"
 msgstr "Favoris"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred files"
 msgstr "Fichiers favoris"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Open your personal folder"
 msgstr "Ouvre votre dossier personnel"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Desktop"
 msgstr "Bureau"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1045
 msgid "Open the contents of your desktop in a folder"
 msgstr "Ouvre le contenu de votre bureau dans un dossier"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Enter Location"
 msgstr "Saisir un emplacement"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1061
 msgid "Manually enter a location"
 msgstr "Saisir manuellement un emplacement"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Trash"
 msgstr "Corbeille"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1073
 msgid "Open the trash"
 msgstr "Ouvre la corbeille"
 
-#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
-#: gtk/gtkplacessidebar.c:1410
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Monter et ouvrir « %s »"
 
-#: gtk/gtkplacessidebar.c:1305
+#: gtk/gtkplacessidebar.c:1306
 msgid "Open the contents of the file system"
 msgstr "Ouvre le contenu du système de fichiers"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1389
 msgid "New bookmark"
 msgstr "Nouveau signet"
 
-#: gtk/gtkplacessidebar.c:1390
+#: gtk/gtkplacessidebar.c:1391
 msgid "Add a new bookmark"
 msgstr "Ajoute un nouveau signet"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Other Locations"
 msgstr "Autres emplacements"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1457
 msgid "Show other locations"
 msgstr "Affiche les autres emplacements"
 
-#: gtk/gtkplacessidebar.c:1965 gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Impossible de démarrer « %s »"
@@ -3193,123 +3193,123 @@ msgstr "Impossible de démarrer « %s »"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2002
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Erreur de déverrouillage de « %s »"
 
-#: gtk/gtkplacessidebar.c:2003
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Impossible d’accéder à « %s »"
 
-#: gtk/gtkplacessidebar.c:2234
+#: gtk/gtkplacessidebar.c:2235
 msgid "This name is already taken"
 msgstr "Ce nom est déjà pris"
 
-#: gtk/gtkplacessidebar.c:2525
+#: gtk/gtkplacessidebar.c:2526
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Impossible de démonter « %s »"
 
-#: gtk/gtkplacessidebar.c:2701
+#: gtk/gtkplacessidebar.c:2702
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Impossible d’arrêter « %s »"
 
-#: gtk/gtkplacessidebar.c:2730
+#: gtk/gtkplacessidebar.c:2731
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Impossible d’éjecter « %s »"
 
-#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2760 gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Impossible d’éjecter %s"
 
 # https://developer.gnome.org/gio/2.36/GDrive.html#g-drive-poll-for-media
-#: gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2937
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 "Impossible d’inspecter « %s » pour savoir si des médias ont été insérés ou "
 "enlevés"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3244
 #: gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Ouvrir dans un nouvel _onglet"
 
-#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3252
+#: gtk/gtkplacessidebar.c:3163 gtk/gtkplacessidebar.c:3253
 #: gtk/gtkplacesview.c:1657
 msgid "Open in New _Window"
 msgstr "Ouvrir dans une nouvelle _fenêtre"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3264
 msgid "_Add Bookmark"
 msgstr "A_jouter le signet"
 
-#: gtk/gtkplacessidebar.c:3267
+#: gtk/gtkplacessidebar.c:3268
 msgid "_Remove"
 msgstr "_Enlever"
 
-#: gtk/gtkplacessidebar.c:3283 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3284 gtk/gtkplacesview.c:1682
 msgid "_Mount"
 msgstr "_Monter"
 
-#: gtk/gtkplacessidebar.c:3292 gtk/gtkplacesview.c:1671
+#: gtk/gtkplacessidebar.c:3293 gtk/gtkplacesview.c:1671
 msgid "_Unmount"
 msgstr "_Démonter"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Eject"
 msgstr "É_jecter"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Detect Media"
 msgstr "_Détecter les médias"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Start"
 msgstr "_Démarrer"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Power On"
 msgstr "A_llumer"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Connect Drive"
 msgstr "_Connecter le volume"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Start Multi-disk Device"
 msgstr "_Démarrer l’appareil multidisque"
 
-#: gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Unlock Device"
 msgstr "_Déverrouiller l’appareil"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Stop"
 msgstr "_Arrêter"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Safely Remove Drive"
 msgstr "_Retirer le volume sans risque"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3337
 msgid "_Disconnect Drive"
 msgstr "_Déconnecter le volume"
 
-#: gtk/gtkplacessidebar.c:3337
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Stop Multi-disk Device"
 msgstr "_Arrêter l’appareil multidisque"
 
-#: gtk/gtkplacessidebar.c:3338
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Lock Device"
 msgstr "_Verrouiller l’appareil"
 
-#: gtk/gtkplacessidebar.c:3829 gtk/gtkplacesview.c:1092
+#: gtk/gtkplacessidebar.c:3830 gtk/gtkplacesview.c:1092
 msgid "Computer"
 msgstr "Ordinateur"
 
