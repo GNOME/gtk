@@ -2423,6 +2423,8 @@ gtk_svg_advance (GtkSvg  *self,
 
   self->current_time = current_time;
 
+  invalidate_for_next_update (self);
+
   update_animation_state (self);
 
 #ifdef DEBUG
