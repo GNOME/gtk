@@ -949,8 +949,8 @@ on_frame_clock_after_update (GdkFrameClock *clock,
 }
 
 static void
-on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkSurface     *surface)
+gdk_x11_surface_submit_frame (GdkSurface          *surface,
+                              GdkDrawContextFrame *frame)
 {
   if (surface->update_freeze_count > 0)
     return;
@@ -972,8 +972,6 @@ connect_frame_clock (GdkSurface *surface)
                         G_CALLBACK (on_frame_clock_before_paint), surface);
       g_signal_connect_after (frame_clock, "update",
                               G_CALLBACK (on_frame_clock_after_update), surface);
-      g_signal_connect (frame_clock, "after-paint",
-                        G_CALLBACK (on_frame_clock_after_paint), surface);
 
       impl->frame_clock_connected = TRUE;
     }
@@ -993,8 +991,6 @@ disconnect_frame_clock (GdkSurface *surface)
                                             on_frame_clock_before_paint, surface);
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             on_frame_clock_after_update, surface);
-      g_signal_handlers_disconnect_by_func (frame_clock,
-                                            on_frame_clock_after_paint, surface);
 
       impl->frame_clock_connected = FALSE;
     }
@@ -4809,6 +4805,7 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
+  impl_class->submit_frame = gdk_x11_surface_submit_frame;
 }
 
 static unsigned int
