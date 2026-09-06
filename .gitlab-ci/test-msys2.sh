@@ -40,7 +40,8 @@ export COMMON_MESON_FLAGS="-Dwerror=true -Dcairo:werror=false -Dgi-docgen:werror
 ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
-meson subprojects update --reset
+meson subprojects download glib || exit 137
+meson subprojects update --reset || exit 137
 meson setup \
     ${COMMON_MESON_FLAGS} \
     -Dx11-backend=false \
