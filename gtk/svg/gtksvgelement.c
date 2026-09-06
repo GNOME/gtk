@@ -1513,6 +1513,28 @@ svg_element_add_animation (SvgElement   *shape,
     gtk_list_list_model_item_added (shape->animation_observer, animation);
 }
 
+void
+svg_animation_delete (SvgAnimation *animation)
+{
+  SvgElement *shape = animation->shape;
+  SvgAnimation *previous = animation->prev_sibling;
+
+  if (shape->last_animation == animation)
+    shape->last_animation = animation->prev_sibling;
+  if (shape->first_animation == animation)
+    shape->first_animation = animation->next_sibling;
+  if (animation->prev_sibling)
+    animation->prev_sibling->next_sibling = animation->next_sibling;
+  if (animation->next_sibling)
+    animation->next_sibling->prev_sibling = animation->prev_sibling;
+
+  svg_animation_drop_and_free (g_object_ref (animation));
+  g_ptr_array_remove (shape->animations, animation);
+
+  if (shape->animation_observer)
+    gtk_list_list_model_item_removed (shape->animation_observer, previous);
+}
+
 /* What we call base value here is roughly the 'cascaded' value of CSS:
  * the result of applying styles. We carry an 'important' boolean to
  * indicate whether the applied styles was !important. Values that are
