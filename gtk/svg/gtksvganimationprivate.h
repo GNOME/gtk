@@ -280,4 +280,6 @@ void             svg_animation_resolve_shadow_references
 SvgAnimation *   svg_animation_get_prev_sibling (SvgAnimation *animation);
 SvgAnimation *   svg_animation_get_next_sibling (SvgAnimation *animation);
 
+void             svg_animation_delete (SvgAnimation *animation);
+
 G_END_DECLS
