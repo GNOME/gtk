@@ -28,15 +28,16 @@
 # Álvaro Burns <>, 2025.
 # Juliano de Souza Camargo <julianosc@pm.me>, 2024-2025.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2026.
+# Rafael Coelho Costa <coelho38r@proton.me>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-12 13:18+0000\n"
-"PO-Revision-Date: 2026-08-12 21:29-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
-"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao/>\n"
+"POT-Creation-Date: 2026-08-25 12:59+0000\n"
+"PO-Revision-Date: 2026-08-26 12:29-0300\n"
+"Last-Translator: Rafael Coelho Costa <coelho38r@proton.me>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -183,8 +184,8 @@ msgstr "Nenhum formato compatível para transferir conteúdo de transferência."
 msgid "No GL API allowed."
 msgstr "Nenhuma API GL permitida."
 
-#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:659
-#: gdk/win32/gdkglcontext-win32-wgl.c:782 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:457 gdk/win32/gdkglcontext-win32-wgl.c:654
+#: gdk/win32/gdkglcontext-win32-wgl.c:777 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Não foi possível criar um contexto GL"
 
@@ -294,12 +295,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Abaixo"
 
-#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:229
+#: gdk/keynamesprivate.h:6874 gtk/deprecated/gtkshortcutlabel.c:230
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:232
+#: gdk/keynamesprivate.h:6875 gtk/deprecated/gtkshortcutlabel.c:233
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
@@ -801,26 +802,26 @@ msgstr "IDataObject_GetData (0x%x) falhou, retornando 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Falha ao transmutar dados DnD W32 de formato 0x%x para %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:589
+#: gdk/win32/gdkglcontext-win32-wgl.c:584
 msgid "No GL implementation is available"
 msgstr "Nenhuma implementação GL está disponível"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:673
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versão %d.%d é muito baixa, é necessária pelo menos %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:692
+#: gdk/win32/gdkglcontext-win32-wgl.c:687
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "A implementação GL não consegue compartilhar contextos GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:851
+#: gdk/win32/gdkglcontext-win32-wgl.c:846
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
 msgstr "Formato de pixel %d não suportado definido em Window"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:860
+#: gdk/win32/gdkglcontext-win32-wgl.c:855
 msgid "No available configurations for the given pixel format"
 msgstr "Nenhuma configuração disponível para o formato de pixel dado"
 
@@ -1366,8 +1367,8 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:103
-#: gtk/deprecated/gtkshortcutlabel.c:139
+#: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:104
+#: gtk/deprecated/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1377,8 +1378,8 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:106
-#: gtk/deprecated/gtkshortcutlabel.c:141
+#: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:107
+#: gtk/deprecated/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1388,8 +1389,8 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:109
-#: gtk/deprecated/gtkshortcutlabel.c:143
+#: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:110
+#: gtk/deprecated/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1399,8 +1400,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:115
-#: gtk/deprecated/gtkshortcutlabel.c:145
+#: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:116
+#: gtk/deprecated/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1410,8 +1411,8 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:118
-#: gtk/deprecated/gtkshortcutlabel.c:147
+#: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:119
+#: gtk/deprecated/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1421,8 +1422,8 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:112
-#: gtk/deprecated/gtkshortcutlabel.c:150
+#: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:113
+#: gtk/deprecated/gtkshortcutlabel.c:151
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
@@ -1443,7 +1444,7 @@ msgstr "Espaço"
 
 # Espaços são permitidos?
 # Acelerador é usado?
-#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:178
+#: gtk/gtkaccelgroup.c:939 gtk/deprecated/gtkshortcutlabel.c:179
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Barra invertida"
@@ -2310,12 +2311,12 @@ msgid "_Edit"
 msgstr "_Editar"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9242
+#: gtk/gtktextview.c:9265
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9320
+#: gtk/gtktextview.c:9343
 msgid "Context menu"
 msgstr "Menu de contexto"
 
@@ -2483,7 +2484,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se você excluir um item, ele será permanentemente perdido."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9250
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -2845,15 +2846,15 @@ msgstr "Fechar"
 msgid "Close the infobar"
 msgstr "Fecha a barra de informações"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9238
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9246
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
 msgid "_Paste"
 msgstr "C_olar"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9271
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
@@ -4322,7 +4323,7 @@ msgstr "Limpar entrada"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:81
+#: gtk/deprecated/gtkshortcutlabel.c:82
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "E"
@@ -4333,7 +4334,7 @@ msgstr "E"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/deprecated/gtkshortcutlabel.c:94
+#: gtk/deprecated/gtkshortcutlabel.c:95
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "D"
@@ -4430,7 +4431,7 @@ msgstr "Barra lateral"
 msgid "Change di_rection"
 msgstr "Alterar di_reção"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9276
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
 msgid "Insert _Emoji"
 msgstr "Inserir _emoji"
 
@@ -4590,11 +4591,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Clássico"
 
-#: gtk/gtktextview.c:9258
+#: gtk/gtktextview.c:9281
 msgid "_Undo"
 msgstr "_Desfazer"
 
-#: gtk/gtktextview.c:9262
+#: gtk/gtktextview.c:9285
 msgid "_Redo"
 msgstr "_Refazer"
 
@@ -5405,11 +5406,11 @@ msgstr "Hierarquia"
 msgid "Implements"
 msgstr "Implementa"
 
-#: gtk/inspector/visual.c:698
+#: gtk/inspector/visual.c:741
 msgid "Set via GTK_THEME"
 msgstr "Definido via GTK_THEME"
 
-#: gtk/inspector/visual.c:884 gtk/inspector/visual.c:921
+#: gtk/inspector/visual.c:927 gtk/inspector/visual.c:964
 msgid "Set by Compositor"
 msgstr "Definido pelo compositor"
 
@@ -5508,62 +5509,66 @@ msgstr ""
 msgid "Show Framerate"
 msgstr "Mostrar taxa de quadros"
 
-#: gtk/inspector/visual.ui:504
+#: gtk/inspector/visual.ui:507
+msgid "Show Frame Times"
+msgstr "Mostrar tempos de quadro"
+
+#: gtk/inspector/visual.ui:539
 msgid "Show Graphic Updates"
 msgstr "Mostrar atualizações visuais"
 
-#: gtk/inspector/visual.ui:524
+#: gtk/inspector/visual.ui:559
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Realça todos os locais onde o renderizador atual usa Cairo em vez da GPU."
 
-#: gtk/inspector/visual.ui:530
+#: gtk/inspector/visual.ui:565
 msgid "Show Cairo Rendering"
 msgstr "Mostrar renderização do Cairo"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:590
 msgid "Show Baselines"
 msgstr "Mostrar linhas base"
 
-#: gtk/inspector/visual.ui:583
+#: gtk/inspector/visual.ui:618
 msgid "Show Layout Borders"
 msgstr "Mostrar bordas de layout"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:683
 msgid "CSS Padding"
 msgstr "Preenchimento CSS"
 
-#: gtk/inspector/visual.ui:658
+#: gtk/inspector/visual.ui:693
 msgid "CSS Border"
 msgstr "Borda CSS"
 
-#: gtk/inspector/visual.ui:668
+#: gtk/inspector/visual.ui:703
 msgid "CSS Margin"
 msgstr "Margem CSS"
 
-#: gtk/inspector/visual.ui:678
+#: gtk/inspector/visual.ui:713
 msgid "Widget Margin"
 msgstr "Margem do componente"
 
-#: gtk/inspector/visual.ui:713
+#: gtk/inspector/visual.ui:748
 msgid "Show Focus"
 msgstr "Mostrar foco"
 
-#: gtk/inspector/visual.ui:738
+#: gtk/inspector/visual.ui:773
 msgid "Show Accessibility warnings"
 msgstr "Mostrar avisos de acessibilidade"
 
-#: gtk/inspector/visual.ui:763
+#: gtk/inspector/visual.ui:798
 msgid "Show Graphics Offload"
 msgstr "Mostrar descarregamento de gráficos"
 
-#: gtk/inspector/visual.ui:798
+#: gtk/inspector/visual.ui:833
 msgid "Show Touch UI"
 msgstr "Mostrar UI de toque"
 
-#: gtk/inspector/visual.ui:829
+#: gtk/inspector/visual.ui:864
 msgid "Inspect Inspector"
 msgstr "Inspecionar com o Inspetor"
 
