@@ -758,24 +758,6 @@ gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
   return _gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
 }
 
-GdkFrameTimings *
-gdk_frame_clock_find_timings (GdkFrameClock *self,
-                              guint64        serial)
-{
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  gsize i;
-
-  for (i = 0; i < frames_get_size (&priv->frames); i++)
-    {
-      GdkFrameClockFrame *frame = frames_get (&priv->frames, i);
-
-      if (gdk_frame_timings_get_serial (frame->timings) == serial)
-        return frame->timings;
-    }
-
-  return NULL;
-}
-
 static void
 gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                      GdkFrameTimings *timings)

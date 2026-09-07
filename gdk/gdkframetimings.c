@@ -610,26 +610,3 @@ gdk_frame_timings_presented (GdkFrameTimings *self,
     self->refresh_interval = refresh;
 }
 
-guint64
-gdk_frame_timings_get_serial (GdkFrameTimings *self)
-{
-  return self->serial;
-}
-
-/*<private>
- * gdk_frame_timings_set_serial:
- * @self: the timings
- * @serial: the serial
- *
- * Allows backends to set a serial to map the frame timings
- * to OS-specific IDs.
- * Timings can then later be queried by backends using
- * `gdk_frame_clock_find_timings()`.
- **/
-void
-gdk_frame_timings_set_serial (GdkFrameTimings *self,
-                              guint64          serial)
-{
-  self->serial = serial;
-}
-
