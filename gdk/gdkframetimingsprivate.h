@@ -47,9 +47,6 @@ struct _GdkFrameTimings
   guint ref_count;
 
   gint64 frame_counter;
-  guint64 serial;
-
-  gint64 drawn_time;
 
   uint64_t frame_time;
   uint64_t presentation_time;
@@ -71,10 +68,6 @@ void             gdk_frame_timings_setup                        (GdkFrameTimings
                                                                  uint64_t                predicted_presentation_time,
                                                                  uint64_t                frame_start_time,
                                                                  uint64_t                stage_start_time);
-
-guint64          gdk_frame_timings_get_serial                   (GdkFrameTimings        *self);
-void             gdk_frame_timings_set_serial                   (GdkFrameTimings        *self,
-                                                                 guint64                 serial);
 
 uint64_t         gdk_frame_timings_get_frame_time_ns            (GdkFrameTimings        *self);
 uint64_t         gdk_frame_timings_get_presentation_time_ns     (GdkFrameTimings        *self);
