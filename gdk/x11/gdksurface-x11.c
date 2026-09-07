@@ -627,19 +627,11 @@ maybe_sync_counter_for_end_frame (GdkSurface *surface)
 #ifdef HAVE_XDAMAGE
   frame_done_painting = !impl->toplevel->frame_still_painting && frame_sync_negotiated;
 #else
-  frame_done_painting = !impl->toplevel->frame_pending;
+  frame_done_painting = TRUE;
 #endif
 
-  if (!impl->toplevel->frame_pending)
-    {
-      if (!frame_sync_negotiated || frame_done_painting)
-        sync_counter_for_end_frame (surface);
-    }
-  else
-    {
-      if (frame_done_painting)
-        sync_counter_for_end_frame (surface);
-    }
+  if (!frame_sync_negotiated || frame_done_painting)
+    sync_counter_for_end_frame (surface);
 }
 
 #ifdef HAVE_XDAMAGE
@@ -660,10 +652,10 @@ _gdk_x11_surface_set_frame_still_painting (GdkSurface *surface,
 #endif
 
 static void
-gdk_x11_surface_end_frame (GdkSurface *surface)
+gdk_x11_surface_end_frame (GdkSurface          *surface,
+                           GdkDrawContextFrame *frame)
 {
-  GdkFrameClock *clock;
-  GdkFrameTimings *timings;
+  GdkX11SurfaceFrame *x11_frame = (GdkX11SurfaceFrame *) frame->surface_frame;
   GdkX11Surface *impl;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
@@ -673,9 +665,6 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
   if (impl->toplevel->extended_update_counter == None ||
       !impl->toplevel->in_frame)
     return;
-
-  clock = gdk_surface_get_frame_clock (surface);
-  timings = gdk_frame_clock_get_current_timings (clock);
 
   /* Make sure we request timing updates even if nothing was damaged.
    * We want the frame clock to be accurate. */
@@ -703,11 +692,10 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 
       maybe_sync_counter_for_end_frame (surface);
 
-      if (_gdk_x11_surface_syncs_frames (surface) && !gdk_frame_timings_get_complete (timings))
+      if (_gdk_x11_surface_syncs_frames (surface))
         {
-          impl->toplevel->frame_pending = TRUE;
-          gdk_surface_freeze_updates (surface);
-          gdk_frame_timings_set_serial (timings, impl->toplevel->current_counter_value);
+          x11_frame->serial = impl->toplevel->current_counter_value;
+          impl->pending_frames = g_slist_prepend (impl->pending_frames, frame);
         }
     }
 
@@ -723,12 +711,30 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
       impl->toplevel->configure_counter_value = 0;
     }
 
-  if (!impl->toplevel->frame_pending && !gdk_frame_timings_get_complete (timings))
+  if (x11_frame->serial == 0)
     {
-      gdk_frame_clock_submitted (clock,
-                                 gdk_frame_clock_get_frame_counter (clock),
-                                 0);
+      gdk_draw_context_frame_submitted (frame, 0);
+      gdk_draw_context_frame_stop_throttling (frame, 0);
     }
+}
+
+GdkDrawContextFrame *
+gdk_x11_surface_find_frame (GdkSurface *surface,
+                            guint64     serial)
+{
+  GdkX11Surface *self = GDK_X11_SURFACE (surface);
+  GSList *l;
+
+  for (l = self->pending_frames; l; l = l->next)
+    {
+      GdkDrawContextFrame *frame = l->data;
+      GdkX11SurfaceFrame *x11_frame = (GdkX11SurfaceFrame *) frame->surface_frame;
+
+      if (x11_frame->serial == serial)
+        return frame;
+    }
+
+  return NULL;
 }
 
 /*****************************************************
@@ -953,9 +959,22 @@ gdk_x11_surface_submit_frame (GdkSurface          *surface,
                               GdkDrawContextFrame *frame)
 {
   if (surface->update_freeze_count > 0)
-    return;
+    {
+      gdk_draw_context_frame_submitted (frame, 0);
+      gdk_draw_context_frame_stop_throttling (frame, 0);
+      return;
+    }
 
-  gdk_x11_surface_end_frame (surface);
+  gdk_x11_surface_end_frame (surface, frame);
+}
+
+static void
+gdk_x11_surface_finalize_frame (GdkSurface          *surface,
+                                GdkDrawContextFrame *frame)
+{
+  GdkX11Surface *self = GDK_X11_SURFACE (surface);
+
+  self->pending_frames = g_slist_remove (self->pending_frames, frame);
 }
 
 static void
@@ -4791,6 +4810,8 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   object_class->constructed = gdk_x11_surface_constructed;
   object_class->finalize = gdk_x11_surface_finalize;
 
+  impl_class->frame_size = sizeof (GdkX11SurfaceFrame);
+
   impl_class->hide = gdk_x11_surface_hide;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
   impl_class->get_root_coords = gdk_x11_surface_get_root_coords;
@@ -4806,6 +4827,7 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
   impl_class->submit_frame = gdk_x11_surface_submit_frame;
+  impl_class->finalize_frame = gdk_x11_surface_finalize_frame;
 }
 
 static unsigned int
