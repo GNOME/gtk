@@ -6499,7 +6499,7 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
             premultiply (row, mc->layout.width);
 
           if (y % desc->block_size.height == desc->block_size.height - 1)
-            desc->from_float (mc->data, &mc->layout, row, y - (desc->block_size.height - 1));
+            desc->from_float (mc->data, &mc->layout, tmp, y - (desc->block_size.height - 1));
         }
     }
 
