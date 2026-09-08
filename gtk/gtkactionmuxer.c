@@ -179,12 +179,33 @@ enum
 
 static GParamSpec *properties[NUM_PROPERTIES];
 
-typedef struct
+typedef struct _Action Action;
+typedef struct _Watcher Watcher;
+
+struct _Watcher
+{
+  Action *action;
+  GtkActionObserver *observer;
+  Watcher *previous;
+  Watcher *next;
+  Watcher *garbage_next;
+  guint cancelled : 1;
+};
+
+struct _Action
 {
   GtkActionMuxer *muxer;
-  GSList       *watchers;
-  char         *fullname;
-} Action;
+  Watcher *watchers;
+  Watcher *garbage;
+  char *fullname;
+  const char *name;
+  guint prefix_len;
+  guint n_watchers;
+  guint dispatch_depth;
+  guint local_add_serial;
+  guint upstream_registered : 1;
+  guint pending_remove : 1;
+};
 
 typedef struct
 {
@@ -272,9 +293,9 @@ gtk_action_muxer_list_actions (GtkActionMuxer *muxer,
 }
 
 static Group *
-gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
-                             const char      *full_name,
-                             const char     **action_name)
+gtk_action_muxer_lookup_group (GtkActionMuxer  *muxer,
+                               const char      *full_name,
+                               const char     **action_name)
 {
   const char *dot;
   char *prefix;
@@ -298,11 +319,7 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
   if (action_name)
     *action_name = name;
 
-  if (group &&
-      g_action_group_has_action (group->group, name))
-    return group;
-
-  return NULL;
+  return group;
 }
 
 GActionGroup *
@@ -310,11 +327,17 @@ gtk_action_muxer_find (GtkActionMuxer  *muxer,
                        const char      *action_name,
                        const char     **unprefixed_name)
 {
+  const char *name;
   Group *group;
 
-  group = gtk_action_muxer_find_group (muxer, action_name, unprefixed_name);
-  if (group)
-    return group->group;
+  group = gtk_action_muxer_lookup_group (muxer, action_name, &name);
+  if (group && g_action_group_has_action (group->group, name))
+    {
+      if (unprefixed_name)
+        *unprefixed_name = name;
+
+      return group->group;
+    }
 
   return NULL;
 }
@@ -345,6 +368,48 @@ find_observers (GtkActionMuxer *muxer,
   return NULL;
 }
 
+static gboolean
+action_has_observer (Action            *action,
+                     GtkActionObserver *observer)
+{
+  Watcher *watcher;
+
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled && watcher->observer == observer)
+      return TRUE;
+
+  return FALSE;
+}
+
+static void
+action_collect_garbage (Action *action)
+{
+  Watcher *watcher;
+
+  g_assert (action->dispatch_depth == 0);
+
+  while ((watcher = action->garbage))
+    {
+      action->garbage = watcher->garbage_next;
+      g_free (watcher);
+    }
+}
+
+static void
+action_dispatch_end (Action *action)
+{
+  g_assert (action->dispatch_depth > 0);
+
+  action->dispatch_depth--;
+  if (action->dispatch_depth == 0)
+    {
+      action_collect_garbage (action);
+
+      if (action->pending_remove)
+        g_hash_table_remove (action->muxer->observed_actions, action->fullname);
+    }
+}
+
 void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
                                          const char     *action_name,
@@ -352,7 +417,7 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
 {
   GtkWidgetAction *iter;
   Action *action;
-  GSList *node;
+  Watcher *watcher;
 
   if (muxer->widget)
     {
@@ -373,8 +438,16 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
 
   action = find_observers (muxer, action_name);
 
-  for (node = action ? action->watchers : NULL; node; node = node->next)
-    gtk_action_observer_action_enabled_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, enabled);
+  if (action)
+    action->dispatch_depth++;
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled)
+      gtk_action_observer_action_enabled_changed (watcher->observer,
+                                                  GTK_ACTION_OBSERVABLE (muxer),
+                                                  action_name,
+                                                  enabled);
+  if (action)
+    action_dispatch_end (action);
 }
 
 static void
@@ -397,11 +470,19 @@ gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
                                        GVariant       *state)
 {
   Action *action;
-  GSList *node;
+  Watcher *watcher;
 
   action = find_observers (muxer, action_name);
-  for (node = action ? action->watchers : NULL; node; node = node->next)
-    gtk_action_observer_action_state_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, state);
+  if (action)
+    action->dispatch_depth++;
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled)
+      gtk_action_observer_action_state_changed (watcher->observer,
+                                                GTK_ACTION_OBSERVABLE (muxer),
+                                                action_name,
+                                                state);
+  if (action)
+    action_dispatch_end (action);
 }
 
 static void
@@ -426,81 +507,105 @@ static gboolean action_muxer_query_action (GtkActionMuxer      *muxer,
                                            GVariant           **state_hint,
                                            GVariant           **state,
                                            gboolean             recurse);
+static void gtk_action_muxer_action_added (GtkActionMuxer     *muxer,
+                                           const char         *action_name,
+                                           const GVariantType *parameter_type,
+                                           gboolean            enabled,
+                                           GVariant           *state);
+static void gtk_action_muxer_action_removed (GtkActionMuxer *muxer,
+                                             const char     *action_name);
 
 static void
 notify_observers_added (GtkActionMuxer *muxer,
                         GtkActionMuxer *parent)
 {
+  GPtrArray *names;
   GHashTableIter iter;
-  const char *action_name;
-  Action *action;
+  gpointer key;
 
   if (!muxer->observed_actions)
     return;
 
+  names = g_ptr_array_new_with_free_func (g_free);
   g_hash_table_iter_init (&iter, muxer->observed_actions);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action))
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    g_ptr_array_add (names, g_strdup (key));
+
+  for (guint i = 0; i < names->len; i++)
     {
+      const char *action_name = g_ptr_array_index (names, i);
       const GVariantType *parameter_type;
       gboolean enabled;
-      GVariant *state;
-      GSList *node;
-      GSList *action_watchers;
+      GVariant *state = NULL;
+      Action *action = find_observers (muxer, action_name);
+      Watcher *watcher;
 
-      action_watchers = action ? action->watchers : NULL;
-
-      if (!action_watchers)
+      if (!action || action->n_watchers == 0)
         continue;
 
-      for (node = action_watchers; node; node = node->next)
-        gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
-                                                   action_name, NULL);
+      action->dispatch_depth++;
+      for (watcher = action->watchers; watcher; watcher = watcher->next)
+        if (!watcher->cancelled)
+          gtk_action_observer_primary_accel_changed (watcher->observer,
+                                                     GTK_ACTION_OBSERVABLE (muxer),
+                                                     action_name,
+                                                     NULL);
+      action_dispatch_end (action);
 
-      gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (parent), action_name, GTK_ACTION_OBSERVER (muxer));
-
-      if (!action_muxer_query_action (muxer, action_name,
-                                      &enabled, &parameter_type,
-                                      NULL, NULL, &state,
-                                      TRUE))
+      action = find_observers (muxer, action_name);
+      if (!action || action->n_watchers == 0)
         continue;
 
-      for (node = action_watchers; node; node = node->next)
-        {
-          gtk_action_observer_action_added (node->data,
-                                            GTK_ACTION_OBSERVABLE (muxer),
-                                            action_name, parameter_type, enabled, state);
-        }
+      gtk_action_observable_subscribe (GTK_ACTION_OBSERVABLE (parent),
+                                       action_name,
+                                       GTK_ACTION_OBSERVER (muxer),
+                                       NULL, NULL, NULL);
+      action->upstream_registered = TRUE;
 
-      if (state)
-        g_variant_unref (state);
+      if (action_muxer_query_action (muxer, action_name,
+                                     &enabled, &parameter_type,
+                                     NULL, NULL, &state,
+                                     TRUE))
+        gtk_action_muxer_action_added (muxer, action_name, parameter_type, enabled, state);
+
+      g_clear_pointer (&state, g_variant_unref);
     }
+
+  g_ptr_array_unref (names);
 }
 
 static void
 notify_observers_removed (GtkActionMuxer *muxer,
                           GtkActionMuxer *parent)
 {
+  GPtrArray *names;
   GHashTableIter iter;
-  const char *action_name;
-  Action *action;
+  gpointer key;
 
   if (!muxer->observed_actions)
     return;
 
+  names = g_ptr_array_new_with_free_func (g_free);
   g_hash_table_iter_init (&iter, muxer->observed_actions);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&action_name, (gpointer *)&action))
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    g_ptr_array_add (names, g_strdup (key));
+
+  for (guint i = 0; i < names->len; i++)
     {
-      GSList *node;
+      const char *action_name = g_ptr_array_index (names, i);
+      Action *action = find_observers (muxer, action_name);
 
-      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (parent), action_name, GTK_ACTION_OBSERVER (muxer));
+      if (!action || !action->upstream_registered)
+        continue;
 
-      for (node = action->watchers; node; node = node->next)
-        {
-          gtk_action_observer_action_removed (node->data,
-                                              GTK_ACTION_OBSERVABLE (muxer),
-                                              action_name);
-        }
+      action->upstream_registered = FALSE;
+      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (parent),
+                                                 action_name,
+                                                 GTK_ACTION_OBSERVER (muxer));
+      gtk_action_muxer_action_removed (muxer, action_name);
     }
+
+  g_ptr_array_unref (names);
 }
 
 static void
@@ -511,13 +616,18 @@ gtk_action_muxer_action_added (GtkActionMuxer     *muxer,
                                GVariant           *state)
 {
   Action *action;
-  GSList *node;
+  Watcher *watcher;
 
   action = find_observers (muxer, action_name);
-  for (node = action ? action->watchers : NULL; node; node = node->next)
-    gtk_action_observer_action_added (node->data,
-                                      GTK_ACTION_OBSERVABLE (muxer),
-                                      action_name, parameter_type, enabled, state);
+  if (action)
+    action->dispatch_depth++;
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled)
+      gtk_action_observer_action_added (watcher->observer,
+                                        GTK_ACTION_OBSERVABLE (muxer),
+                                        action_name, parameter_type, enabled, state);
+  if (action)
+    action_dispatch_end (action);
 }
 
 static void
@@ -535,14 +645,20 @@ gtk_action_muxer_action_added_to_group (GActionGroup *action_group,
 
   fullname = g_strconcat (group->prefix, ".", action_name, NULL);
 
-   if (muxer->parent)
-     gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                                fullname,
-                                                GTK_ACTION_OBSERVER (muxer));
-
   action = find_observers (muxer, fullname);
 
-  if (action && action->watchers &&
+  if (action)
+    action->local_add_serial++;
+
+  if (action && action->upstream_registered)
+    {
+      action->upstream_registered = FALSE;
+      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                                 fullname,
+                                                 GTK_ACTION_OBSERVER (muxer));
+    }
+
+  if (action && action->n_watchers > 0 &&
       g_action_group_query_action (action_group, action_name,
                                    &enabled, &parameter_type, NULL, NULL, &state))
     {
@@ -560,11 +676,18 @@ gtk_action_muxer_action_removed (GtkActionMuxer *muxer,
                                  const char     *action_name)
 {
   Action *action;
-  GSList *node;
+  Watcher *watcher;
 
   action = find_observers (muxer, action_name);
-  for (node = action ? action->watchers : NULL; node; node = node->next)
-    gtk_action_observer_action_removed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name);
+  if (action)
+    action->dispatch_depth++;
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled)
+      gtk_action_observer_action_removed (watcher->observer,
+                                          GTK_ACTION_OBSERVABLE (muxer),
+                                          action_name);
+  if (action)
+    action_dispatch_end (action);
 }
 
 static void
@@ -574,24 +697,43 @@ gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
 {
   Group *group = user_data;
   GtkActionMuxer *muxer = group->muxer;
-  char *fullname;
   Action *action;
+  guint local_add_serial;
+  char *fullname;
 
   fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+  action = find_observers (muxer, fullname);
+  local_add_serial = action ? action->local_add_serial : 0;
   gtk_action_muxer_action_removed (muxer, fullname);
-  g_free (fullname);
 
-  action = find_observers (muxer, action_name);
+  action = find_observers (muxer, fullname);
 
-  if (action && action->watchers &&
-      !action_muxer_query_action (muxer, action_name,
-                                  NULL, NULL, NULL, NULL, NULL, FALSE))
+  if (action && action->local_add_serial == local_add_serial &&
+      action->n_watchers > 0 && muxer->parent)
     {
-      if (muxer->parent)
-         gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                                  action_name,
-                                                  GTK_ACTION_OBSERVER (muxer));
+      const GVariantType *parameter_type;
+      gboolean enabled;
+      GVariant *state = NULL;
+      gboolean present;
+
+      if (!action->upstream_registered)
+        {
+          action->upstream_registered = TRUE;
+          gtk_action_observable_subscribe (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                           fullname,
+                                           GTK_ACTION_OBSERVER (muxer),
+                                           NULL, NULL, NULL);
+        }
+
+      present = action_muxer_query_action (muxer->parent, fullname,
+                                           &enabled, &parameter_type,
+                                           NULL, NULL, &state, TRUE);
+      if (present)
+        gtk_action_muxer_action_added (muxer, fullname, parameter_type, enabled, state);
+      g_clear_pointer (&state, g_variant_unref);
     }
+
+  g_free (fullname);
 }
 
 static void
@@ -600,15 +742,22 @@ gtk_action_muxer_primary_accel_changed (GtkActionMuxer *muxer,
                                         const char     *action_and_target)
 {
   Action *action;
-  GSList *node;
+  Watcher *watcher;
 
   if (!action_name)
     action_name = strrchr (action_and_target, '|') + 1;
 
   action = find_observers (muxer, action_name);
-  for (node = action ? action->watchers : NULL; node; node = node->next)
-    gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
-                                               action_name, action_and_target);
+  if (action)
+    action->dispatch_depth++;
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
+    if (!watcher->cancelled)
+      gtk_action_observer_primary_accel_changed (watcher->observer,
+                                                 GTK_ACTION_OBSERVABLE (muxer),
+                                                 action_name,
+                                                 action_and_target);
+  if (action)
+    action_dispatch_end (action);
 }
 
 static GVariant *
@@ -795,9 +944,9 @@ action_muxer_query_action (GtkActionMuxer      *muxer,
         }
     }
 
-  group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
+  group = gtk_action_muxer_lookup_group (muxer, action_name, &unprefixed_name);
 
-  if (group)
+  if (group && g_action_group_has_action (group->group, unprefixed_name))
     return g_action_group_query_action (group->group, unprefixed_name, enabled,
                                         parameter_type, state_type, state_hint, state);
 
@@ -833,7 +982,7 @@ gtk_action_muxer_has_action (GtkActionMuxer *muxer,
                                     TRUE);
 }
 
-void
+gboolean
 gtk_action_muxer_activate_action (GtkActionMuxer *muxer,
                                   const char     *action_name,
                                   GVariant       *parameter)
@@ -867,17 +1016,22 @@ gtk_action_muxer_activate_action (GtkActionMuxer *muxer,
                     }
                 }
 
-              return;
+              return TRUE;
             }
         }
     }
 
-  group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
+  group = gtk_action_muxer_lookup_group (muxer, action_name, &unprefixed_name);
 
-  if (group)
-    g_action_group_activate_action (group->group, unprefixed_name, parameter);
+  if (group && g_action_group_has_action (group->group, unprefixed_name))
+    {
+      g_action_group_activate_action (group->group, unprefixed_name, parameter);
+      return TRUE;
+    }
   else if (muxer->parent)
-    gtk_action_muxer_activate_action (muxer->parent, action_name, parameter);
+    return gtk_action_muxer_activate_action (muxer->parent, action_name, parameter);
+
+  return FALSE;
 }
 
 void
@@ -906,61 +1060,80 @@ gtk_action_muxer_change_action_state (GtkActionMuxer *muxer,
         }
     }
 
-  group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
+  group = gtk_action_muxer_lookup_group (muxer, action_name, &unprefixed_name);
 
-  if (group)
+  if (group && g_action_group_has_action (group->group, unprefixed_name))
     g_action_group_change_action_state (group->group, unprefixed_name, state);
   else if (muxer->parent)
     gtk_action_muxer_change_action_state (muxer->parent, action_name, state);
 }
 
 static void
-gtk_action_muxer_unregister_internal (Action   *action,
-                                      gpointer  observer)
+gtk_action_muxer_unregister_internal (Watcher *watcher)
 {
+  Action *action = watcher->action;
   GtkActionMuxer *muxer = action->muxer;
-  GSList **ptr;
 
-  for (ptr = &action->watchers; *ptr; ptr = &(*ptr)->next)
-    if ((*ptr)->data == observer)
-      {
-        *ptr = g_slist_remove (*ptr, observer);
+  g_assert (!watcher->cancelled);
+  g_assert (action->n_watchers > 0);
 
-        if (action->watchers == NULL)
-          {
-            if (muxer->parent)
-              gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                                         action->fullname,
-                                                         GTK_ACTION_OBSERVER (muxer));
-            g_hash_table_remove (muxer->observed_actions, action->fullname);
-          }
+  watcher->cancelled = TRUE;
+  if (watcher->previous)
+    watcher->previous->next = watcher->next;
+  else
+    action->watchers = watcher->next;
+  if (watcher->next)
+    watcher->next->previous = watcher->previous;
 
-        break;
-      }
+  action->n_watchers--;
+  if (action->dispatch_depth > 0)
+    {
+      watcher->garbage_next = action->garbage;
+      action->garbage = watcher;
+    }
+  else
+    g_free (watcher);
+
+  if (action->n_watchers == 0)
+    {
+      if (action->upstream_registered)
+        {
+          action->upstream_registered = FALSE;
+          gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                                     action->fullname,
+                                                     GTK_ACTION_OBSERVER (muxer));
+        }
+
+      if (action->dispatch_depth > 0)
+        action->pending_remove = TRUE;
+      else
+        g_hash_table_remove (muxer->observed_actions, action->fullname);
+    }
 }
 
 static void
 gtk_action_muxer_weak_notify (gpointer  data,
                               GObject  *where_the_object_was)
 {
-  Action *action = data;
+  Watcher *watcher = data;
 
-  gtk_action_muxer_unregister_internal (action, where_the_object_was);
+  gtk_action_muxer_unregister_internal (watcher);
 }
 
 static void gtk_action_muxer_free_action (gpointer data);
 
-static void
-gtk_action_muxer_register_observer (GtkActionObservable *observable,
-                                    const char          *name,
-                                    GtkActionObserver   *observer)
+static gboolean
+gtk_action_muxer_subscribe (GtkActionObservable *observable,
+                            const char          *name,
+                            GtkActionObserver   *observer,
+                            gboolean            *enabled,
+                            const GVariantType **parameter_type,
+                            GVariant           **state)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
   Action *action;
-  gboolean enabled;
-  const GVariantType *parameter_type;
-  GVariant *state;
-  gboolean is_duplicate;
+  Watcher *watcher;
+  gboolean present;
 
   if (!muxer->observed_actions)
     muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_action);
@@ -969,35 +1142,65 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
 
   if (action == NULL)
     {
-      action = g_new (Action, 1);
+      const char *dot;
+
+      action = g_new0 (Action, 1);
       action->muxer = muxer;
       action->fullname = g_strdup (name);
-      action->watchers = NULL;
+      dot = strchr (action->fullname, '.');
+      action->prefix_len = dot ? dot - action->fullname : 0;
+      action->name = dot ? dot + 1 : action->fullname;
 
       g_hash_table_insert (muxer->observed_actions, action->fullname, action);
     }
 
-  is_duplicate = g_slist_find (action->watchers, observer) != NULL;
-  action->watchers = g_slist_prepend (action->watchers, observer);
-  g_object_weak_ref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
+  watcher = g_new0 (Watcher, 1);
+  action->pending_remove = FALSE;
+  watcher->action = action;
+  watcher->observer = observer;
+  watcher->next = action->watchers;
+  if (watcher->next)
+    watcher->next->previous = watcher;
+  action->watchers = watcher;
+  action->n_watchers++;
+  g_object_weak_ref (G_OBJECT (observer), gtk_action_muxer_weak_notify, watcher);
 
-  if (!is_duplicate)
+  if (action->n_watchers == 1 && muxer->parent)
     {
-      if (action_muxer_query_action (muxer, name,
-                                     &enabled, &parameter_type,
-                                     NULL, NULL, &state, TRUE))
-        {
-          gtk_action_muxer_action_added (muxer, name, parameter_type, enabled, state);
-          g_clear_pointer (&state, g_variant_unref);
-        }
-
-      if (muxer->parent)
-        {
-          gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                                   name,
-                                                   GTK_ACTION_OBSERVER (muxer));
-        }
+      gtk_action_observable_subscribe (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                       name,
+                                       GTK_ACTION_OBSERVER (muxer),
+                                       NULL, NULL, NULL);
+      action->upstream_registered = TRUE;
     }
+
+  present = action_muxer_query_action (muxer, name,
+                                       enabled, parameter_type,
+                                       NULL, NULL, state, TRUE);
+
+  return present;
+}
+
+static void
+gtk_action_muxer_register_observer (GtkActionObservable *observable,
+                                    const char          *name,
+                                    GtkActionObserver   *observer)
+{
+  GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
+  const GVariantType *parameter_type;
+  gboolean enabled;
+  gboolean duplicate;
+  GVariant *state = NULL;
+
+  duplicate = action_has_observer (find_observers (muxer, name), observer);
+
+  if (gtk_action_muxer_subscribe (observable, name, observer,
+                                  &enabled, &parameter_type, &state) &&
+      !duplicate)
+    gtk_action_observer_action_added (observer, observable, name,
+                                      parameter_type, enabled, state);
+
+  g_clear_pointer (&state, g_variant_unref);
 }
 
 static void
@@ -1007,13 +1210,15 @@ gtk_action_muxer_unregister_observer (GtkActionObservable *observable,
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
   Action *action = find_observers (muxer, name);
+  Watcher *watcher;
 
-  if (action)
+  for (watcher = action ? action->watchers : NULL; watcher; watcher = watcher->next)
     {
-      if (g_slist_find (action->watchers, observer) != NULL)
+      if (!watcher->cancelled && watcher->observer == observer)
         {
-          g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
-          gtk_action_muxer_unregister_internal (action, observer);
+          g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, watcher);
+          gtk_action_muxer_unregister_internal (watcher);
+          break;
         }
     }
 }
@@ -1038,12 +1243,19 @@ static void
 gtk_action_muxer_free_action (gpointer data)
 {
   Action *action = data;
-  GSList *it;
+  Watcher *watcher;
 
-  for (it = action->watchers; it; it = it->next)
-    g_object_weak_unref (G_OBJECT (it->data), gtk_action_muxer_weak_notify, action);
+  g_assert (action->dispatch_depth == 0);
 
-  g_slist_free (action->watchers);
+  while ((watcher = action->watchers))
+    {
+      action->watchers = watcher->next;
+      g_object_weak_unref (G_OBJECT (watcher->observer),
+                           gtk_action_muxer_weak_notify,
+                           watcher);
+      g_free (watcher);
+    }
+  action_collect_garbage (action);
   g_free (action->fullname);
 
   g_free (action);
@@ -1146,6 +1358,7 @@ gtk_action_muxer_observable_iface_init (GtkActionObservableInterface *iface)
 {
   iface->register_observer = gtk_action_muxer_register_observer;
   iface->unregister_observer = gtk_action_muxer_unregister_observer;
+  iface->subscribe = gtk_action_muxer_subscribe;
 }
 
 
@@ -1481,4 +1694,3 @@ gtk_normalise_detailed_action_name (const char *detailed_action_name)
 
   return action_and_target;
 }
-

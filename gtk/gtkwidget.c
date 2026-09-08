@@ -11917,12 +11917,7 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
   if (muxer == NULL)
     return FALSE;
 
-  if (!gtk_action_muxer_has_action (muxer, name))
-    return FALSE;
-
-  gtk_action_muxer_activate_action (muxer, name, args);
-
-  return TRUE;
+  return gtk_action_muxer_activate_action (muxer, name, args);
 }
 
 /**
