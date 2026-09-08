@@ -1024,3 +1024,43 @@ gdk_keyval_get_aliases (guint  keyval,
   *n_aliases = 0;
   return NULL;
 }
+
+/**
+ * gdk_keyval_is_alias:
+ * @keyval_a: a keyval
+ * @keyval_b: another keyval
+ *
+ * Checks whether @keyval_a and @keyval_b are 'aliases' of one another.
+ *
+ * See [func@Gdk.keyval_get_aliases] for more information
+ * on aliases.
+ *
+ * Returns: whether @keyval_a and @keyval_b are 'aliases' of one another.
+ *
+ * Since: 4.26
+ */
+gboolean
+gdk_keyval_is_alias (guint keyval_a,
+                     guint keyval_b)
+{
+  if (keyval_a == keyval_b)
+    return TRUE;
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (aliases); i++)
+    {
+      if (aliases[i] == keyval_a || aliases[i] == keyval_b)
+        {
+          for (unsigned int j = i + 1; aliases[j] != 0; j++)
+            {
+              if (aliases[j] == keyval_a || aliases[j] == keyval_b)
+                {
+                  return TRUE;
+                }
+            }
+
+          return FALSE;
+        }
+    }
+
+  return FALSE;
+}
