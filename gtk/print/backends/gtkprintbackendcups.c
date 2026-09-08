@@ -1345,7 +1345,6 @@ lookup_auth_info_cb (GObject      *source_object,
           GTK_DEBUG (PRINTING, "Failed to look up auth info.");
         }
       dispatch->backend->authentication_lock = FALSE;
-      g_object_unref (task);
       request_auth_info (dispatch);
       return;
     }
@@ -1359,8 +1358,6 @@ lookup_auth_info_cb (GObject      *source_object,
       auth_info[i] = NULL;
     }
   g_clear_pointer (auth_info, g_free);
-
-  g_object_unref (task);
 }
 
 static void
