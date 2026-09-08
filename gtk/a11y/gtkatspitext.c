@@ -474,6 +474,12 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
+      if (end <= start)
+        {
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(iiii)", 0, 0, 0, 0));
+          return;
+        }
+
       if (!gtk_accessible_text_get_extents (accessible_text, start, end - 1, &extents))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
