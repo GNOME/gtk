@@ -58,7 +58,7 @@ struct _GdkBroadwaySurface
   int pre_maximize_width;
   int pre_maximize_height;
 
-  gint64 pending_frame_counter;
+  GSList *pending_frames;
 
   gboolean dirty;
   gboolean last_synced;
