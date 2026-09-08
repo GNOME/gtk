@@ -97,15 +97,5 @@ void                    gdk_frame_clock_foreach_frame           (GdkFrameClock  
 uint64_t        gdk_frame_clock_get_refresh_interval            (GdkFrameClock          *self);
 uint64_t        gdk_frame_clock_get_latest_presentation_time    (GdkFrameClock          *self);
 
-void            gdk_frame_clock_submitted                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter,
-                                                                 uint64_t                refresh);
-void            gdk_frame_clock_discarded                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter);
-void            gdk_frame_clock_presented                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter,
-                                                                 uint64_t                presentation_time,
-                                                                 uint64_t                refresh);
-
 G_END_DECLS
 

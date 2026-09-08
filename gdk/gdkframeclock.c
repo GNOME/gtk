@@ -926,7 +926,7 @@ gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
  * submission when no further information about the compositor's use
  * can be provided for this frame.
  **/
-void
+static void
 gdk_frame_clock_submitted (GdkFrameClock *self,
                            gint64         frame_counter,
                            uint64_t       refresh)
@@ -969,7 +969,7 @@ gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
  *
  * This function should be called by GDK backends.
  **/
-void
+static void
 gdk_frame_clock_discarded (GdkFrameClock *self,
                            gint64         frame_counter)
 {
@@ -1011,7 +1011,7 @@ gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
  * presentation time is available. Otherwise call gdk_frame_clock_submitted()
  * instead.
  **/
-void
+static void
 gdk_frame_clock_presented (GdkFrameClock *self,
                            gint64         frame_counter,
                            uint64_t       presentation_time,
