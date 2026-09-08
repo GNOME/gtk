@@ -164,6 +164,15 @@ test_key_aliases (void)
   keys = gdk_keyval_get_aliases (GDK_KEY_a, &n);
   g_assert_true (n == 0);
   g_assert_true (keys == NULL);
+
+  g_assert_true (gdk_keyval_is_alias (GDK_KEY_Return, GDK_KEY_Return));
+  g_assert_true (gdk_keyval_is_alias (GDK_KEY_Return, GDK_KEY_ISO_Enter));
+  g_assert_true (gdk_keyval_is_alias (GDK_KEY_Return, GDK_KEY_KP_Enter));
+  g_assert_true (gdk_keyval_is_alias (GDK_KEY_ISO_Enter, GDK_KEY_KP_Enter));
+
+  g_assert_true (gdk_keyval_is_alias (GDK_KEY_Page_Down, GDK_KEY_KP_Page_Down));
+
+  g_assert_false (gdk_keyval_is_alias (GDK_KEY_Return, GDK_KEY_Page_Down));
 }
 
 int
