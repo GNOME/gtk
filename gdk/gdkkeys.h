@@ -60,5 +60,9 @@ const guint *
          gdk_keyval_get_aliases  (guint        keyval,
                                   guint       *n_aliases);
 
+GDK_AVAILABLE_IN_4_26
+gboolean gdk_keyval_is_alias     (guint        keyval_a,
+                                  guint        keyval_b);
+
 G_END_DECLS
 
