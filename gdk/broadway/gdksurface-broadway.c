@@ -195,21 +195,27 @@ gdk_broadway_surface_init (GdkBroadwaySurface *impl)
 }
 
 static void
-on_frame_clock_after_paint (GdkFrameClock *clock,
-                            GdkSurface    *surface)
+gdk_broadway_surface_submit_frame (GdkSurface          *surface,
+                                   GdkDrawContextFrame *frame)
 {
-  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
-  GdkBroadwayDisplay *broadway_display;
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  gdk_surface_freeze_updates (surface);
-
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  impl->pending_frames = g_slist_prepend (impl->pending_frames, frame);
 
   _gdk_broadway_server_roundtrip (broadway_display->server, impl->id, _gdk_display_get_next_serial (display));
 
   gdk_display_flush (display);
+}
+
+static void
+gdk_broadway_surface_finalize_frame (GdkSurface          *surface,
+                                     GdkDrawContextFrame *frame)
+{
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
+
+  impl->pending_frames = g_slist_remove (impl->pending_frames, frame);
 }
 
 static void
@@ -219,8 +225,6 @@ connect_frame_clock (GdkSurface *surface)
 
   g_signal_connect_after (frame_clock, "update",
 			  G_CALLBACK (on_frame_clock_after_update), surface);
-  g_signal_connect (frame_clock, "after-paint",
-                    G_CALLBACK (on_frame_clock_after_paint), surface);
 }
 
 static void
@@ -230,8 +234,6 @@ disconnect_frame_clock (GdkSurface *surface)
 
   g_signal_handlers_disconnect_by_func (frame_clock,
                                         on_frame_clock_after_update, surface);
-  g_signal_handlers_disconnect_by_func (frame_clock,
-                                        on_frame_clock_after_paint, surface);
 }
 
 static void
@@ -283,10 +285,20 @@ gdk_broadway_surface_finalize (GObject *object)
 }
 
 static void
-thaw_updates_cb (GdkSurface *surface)
+stop_throttling_cb (GdkSurface *surface)
 {
-  if (!GDK_SURFACE_DESTROYED (surface))
-    gdk_surface_thaw_updates (surface);
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
+  GSList *l, *next;
+  uint64_t now;
+
+  now = g_get_monotonic_time_ns ();
+
+  next = impl->pending_frames;
+  for (l = next; l; l = next)
+    {
+      next = l->next;
+      gdk_draw_context_frame_stop_throttling (l->data, now);
+    }
   g_object_unref (surface);
 }
 
@@ -296,19 +308,24 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
                                 gboolean     local_reply)
 {
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
-  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+  GSList *l, *next;
+  uint64_t now;
 
   /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
-    g_timeout_add_seconds_once (1, (GSourceOnceFunc) thaw_updates_cb, g_object_ref (surface));
-  else
-    gdk_surface_thaw_updates (surface);
+    g_timeout_add_seconds_once (1, (GSourceOnceFunc) stop_throttling_cb, g_object_ref (surface));
 
-  gdk_frame_clock_submitted (clock,
-                             impl->pending_frame_counter,
-                             G_NSEC_PER_SEC / 30); /* default to 1/30th of a second */
+  now = g_get_monotonic_time_ns ();
 
-  impl->pending_frame_counter = 0;
+  next = impl->pending_frames;
+  for (l = next; l; l = next)
+    {
+      next = l->next;
+      if (!local_reply)
+        gdk_draw_context_frame_stop_throttling (l->data, now);
+      gdk_draw_context_frame_submitted (l->data,
+                                        G_NSEC_PER_SEC / 30); /* default to 1/30th of a second */
+    }
 }
 
 static void
@@ -1310,6 +1327,8 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->get_scale = gdk_broadway_surface_get_scale;
   impl_class->request_layout = gdk_broadway_surface_request_layout;
   impl_class->compute_size = gdk_broadway_surface_compute_size;
+  impl_class->submit_frame = gdk_broadway_surface_submit_frame;
+  impl_class->finalize_frame = gdk_broadway_surface_finalize_frame;
 }
 
 #define LAST_PROP 1
