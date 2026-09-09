@@ -32,7 +32,7 @@
 #include "gdkprivate.h"
 #include "gdkprofilerprivate.h"
 
-#define FRAME_INTERVAL 16667 /* microseconds */
+#define FRAME_INTERVAL ((G_NSEC_PER_SEC + 30) / 60) /* nanoseconds */
 
 typedef enum {
   SMOOTH_PHASE_STATE_VALID = 0,    /* explicit, since we count on zero-init */
