@@ -32,7 +32,7 @@
 #include "gdkprivate.h"
 #include "gdkprofilerprivate.h"
 
-#define FRAME_INTERVAL 16667 /* microseconds */
+#define FRAME_INTERVAL ((G_NSEC_PER_SEC + 30) / 60) /* nanoseconds */
 
 typedef enum {
   SMOOTH_PHASE_STATE_VALID = 0,    /* explicit, since we count on zero-init */
@@ -293,7 +293,7 @@ gdk_frame_clock_idle_update_frame_time (GdkFrameClockIdle *self,
       if (priv->smoothed_frame_time_base >= frame_time)
         priv->smoothed_frame_time_phase = (priv->smoothed_frame_time_base - frame_time) % frame_interval;
       else
-        priv->smoothed_frame_time_phase = frame_interval - (frame_time - priv->smoothed_frame_time_base) % frame_interval;
+        priv->smoothed_frame_time_phase = (frame_interval - (frame_time - priv->smoothed_frame_time_base) % frame_interval) % frame_interval;
       priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
     }
 

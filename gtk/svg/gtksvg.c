@@ -2417,7 +2417,18 @@ gtk_svg_advance (GtkSvg  *self,
 {
   g_return_if_fail (GTK_IS_SVG (self));
   g_return_if_fail (self->load_time < INDEFINITE);
-  g_return_if_fail (self->current_time <= current_time);
+  if (self->current_time > current_time)
+    {
+      g_warning ("gtk_svg_advance: time went backward: "
+                 "self->current_time=%" G_GINT64_FORMAT " "
+                 "current_time=%" G_GINT64_FORMAT " "
+                 "delta=%" G_GINT64_FORMAT " "
+                 "clock_frame_time=%" G_GINT64_FORMAT,
+                 self->current_time, current_time,
+                 self->current_time - current_time,
+                 self->clock ? gdk_frame_clock_get_frame_time (self->clock) : (gint64) -1);
+      return;
+    }
 
   dbg_print ("run", "advancing current time to %s", format_time (current_time));
 
