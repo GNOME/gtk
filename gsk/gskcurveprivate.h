@@ -195,7 +195,8 @@ float                  gsk_curve_at_length                      (const GskCurve 
 
 int                    gsk_curve_get_curvature_points           (const GskCurve         *curve,
                                                                  float                   t[3]);
-
+int                    gsk_curve_get_extrema                    (const GskCurve         *curve,
+                                                                 float                   t[4]);
 int                    gsk_curve_get_cusps                      (const GskCurve         *curve,
                                                                  float                   t[2]);
 
