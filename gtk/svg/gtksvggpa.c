@@ -483,7 +483,7 @@ create_transition (SvgElement    *shape,
                    SvgValue      *to)
 {
   SvgAnimation *a;
-  TimeSpec *begin;
+  TimeSpec *begin, *end;
 
   a = svg_animation_new (ANIMATION_TYPE_ANIMATE);
 
@@ -494,12 +494,14 @@ create_transition (SvgElement    *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
+  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-in:%u:%s:%s", idx, svg_property_get_name (attr), svg_element_get_id (shape));
 
   begin = svg_animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, delay));
+  end = svg_animation_add_end (a, timeline_get_states (timeline, states, ALL_STATES & ~states, 0));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -517,6 +519,7 @@ create_transition (SvgElement    *shape,
 
   svg_element_add_animation (shape, a);
   time_spec_add_animation (begin, a);
+  time_spec_add_animation (end, a);
 
   a->gpa.transition = type;
   a->gpa.easing = easing;
@@ -531,12 +534,14 @@ create_transition (SvgElement    *shape,
   a->repeat_count = 1;
 
   a->has_begin = 1;
+  a->has_end = 1;
   a->has_simple_duration = 1;
   a->has_repeat_duration = 1;
 
   a->id = g_strdup_printf ("gpa:transition:fade-out:%u:%s:%s", idx, svg_property_get_name (attr), svg_element_get_id (shape));
 
   begin = svg_animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, - (duration + delay)));
+  end = svg_animation_add_end (a, timeline_get_states (timeline, ALL_STATES & ~states, states, - (duration + delay)));
 
   a->n_frames = 2;
   a->frames = g_new0 (Frame, a->n_frames);
@@ -554,6 +559,7 @@ create_transition (SvgElement    *shape,
 
   svg_element_add_animation (shape, a);
   time_spec_add_animation (begin, a);
+  time_spec_add_animation (end, a);
 
   a->gpa.transition = type;
   a->gpa.easing = easing;
@@ -572,9 +578,12 @@ create_transition (SvgElement    *shape,
 
       a->id = g_strdup_printf ("gpa:transition:delay-in:%u:%s:%s", idx, svg_property_get_name (attr), svg_element_get_id (shape));
       begin = svg_animation_add_begin (a, timeline_get_states (timeline, ALL_STATES & ~states, states, 0));
+      end = svg_animation_add_end (a, timeline_get_states (timeline, states, ALL_STATES & ~states, 0));
       time_spec_add_animation (begin, a);
+      time_spec_add_animation (end, a);
 
       a->has_begin = 1;
+      a->has_end = 1;
       a->has_simple_duration = 1;
       a->has_repeat_duration = 1;
 
@@ -601,9 +610,12 @@ create_transition (SvgElement    *shape,
 
       a->id = g_strdup_printf ("gpa:transition:delay-out:%u:%s:%s", idx, svg_property_get_name (attr), svg_element_get_id (shape));
       begin = svg_animation_add_begin (a, timeline_get_states (timeline, states, ALL_STATES & ~states, 0));
+      end = svg_animation_add_end (a, timeline_get_states (timeline, ALL_STATES & ~states, states, 0));
       time_spec_add_animation (begin, a);
+      time_spec_add_animation (end, a);
 
       a->has_begin = 1;
+      a->has_end = 1;
       a->has_simple_duration = 1;
       a->has_repeat_duration = 1;
 
