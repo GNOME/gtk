@@ -1,3 +1,52 @@
+Overview of Changes in 4.22.5, 09-09 2026
+=========================================
+
+* Bugs fixed:
+  - #8098 Crashes with SIGSEGV in `gdk_wayland_toplevel_remove_from_session()`
+    (Philip Withnall)
+  - #8222 gtk 4.22.4 fails to build on 32-bit arm (oreo639)
+  - #8304 Css text-decoration rule requires a resize to take effect (regression)
+    (Matthias Clasen)
+  - !9538 window: Fixup pointer focus when unmapping a popover (Alessandro
+    Astone)
+  - !9886 Update Slovak translation
+  - !9893 Update Persian translation
+  - !9905 [4.22] gpu: Trigger cache GC from dmabuf downloading code (Benjamin
+    Otte)
+  - !9912 Update Lithuanian translation
+  - !9989 gskvulkanimage: fix building on 32-bit (oreo639)
+  - !10011 Update Basque translation
+  - !10073 Update Belarusian translation
+  - !10078 Update Polish translation
+  - !10080 Revert "filechooserutils: Stop using pixbufs" (Julian Orth)
+  - !10081 Update Polish translation
+  - !10086 Fix the build with pango main (Matthias Clasen)
+  - !10090 gl: Actually report partial damage (Benjamin Otte)
+  - !10092 gl: Actually report partial damage (Benjamin Otte)
+  - !10101 gtkapplication-wayland: Add a missing NULL check when forgetting a
+    window (Philip Withnall)
+  - !10129 css: Fix invalidation for text decorations (Matthias Clasen)
+  - !10135 Update French translation
+  - !10136 Update French translation
+  - !10166 wayland: Fix munmap() of the wrong pointer in the dmabuf format table
+    (Benjamin Otte)
+  - !10305 wayland: Fix munmap() of the wrong pointer in the dmabuf format table
+    (Benjamin Otte)
+  - !10326 4.22: Fix CI (Benjamin Otte)
+  - !10327 android: Fix other XML file, too (Benjamin Otte)
+  - !10346 memoryconvert: Pass the correct pointer address (Benjamin Otte)
+  - !10347 memoryconvert: Pass the correct pointer address (Benjamin Otte)
+  - !10355 ci: Allow macos-arm64 to fail (Matthias Clasen)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Belarusian (Vasil Pupkin)
+  - French (Guillaume Bernard)
+  - Lithuanian (Aurimas Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Polish (Victoria Niedzielska)
+  - Slovak (Jose Riha)
+
 Overview of Changes in 4.22.4, 29-04-2026
 =========================================
 
