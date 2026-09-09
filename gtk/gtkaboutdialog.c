@@ -100,7 +100,7 @@
  *
  * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
  * e.g. using gtk_dialog_run(). In this case, you might need to know that
- * the “Close” button returns the #GTK_RESPONSE_CANCEL response id.
+ * the “Close” button returns the #GTK_RESPONSE_DELETE_EVENT response id.
  */
 
 typedef struct
