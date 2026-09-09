@@ -87,6 +87,8 @@ struct _GskCurveClass
   float                         (* get_at_length)       (const GskCurve         *curve,
                                                          float                   distance,
                                                          float                   epsilon);
+  int                           (* get_extrema)         (const GskCurve         *curve,
+                                                         float                   t[4]);
 };
 
 /* {{{ Utilities */
@@ -482,6 +484,13 @@ gsk_line_curve_get_at_length (const GskCurve *curve,
   return CLAMP (distance / length, 0, 1);
 }
 
+static int
+gsk_line_curve_get_extrema (const GskCurve *curve,
+                            float          t[4])
+{
+  return 0;
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -505,6 +514,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_crossing,
   gsk_line_curve_get_length_to,
   gsk_line_curve_get_at_length,
+  gsk_line_curve_get_extrema,
 };
 
 /* }}} */
@@ -906,6 +916,16 @@ gsk_quad_curve_get_at_length (const GskCurve *curve,
   return get_t_by_bisection (curve, t, epsilon);
 }
 
+static int
+gsk_quad_curve_get_extrema (const GskCurve *curve,
+                            float           t[4])
+{
+  const GskQuadCurve *self = &curve->quad;
+  const graphene_point_t *pts = self->points;
+
+  return get_quadratic_extrema (pts[0].y, pts[1].y, pts[2].y, t);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -929,6 +949,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_crossing,
   gsk_quad_curve_get_length_to,
   gsk_quad_curve_get_at_length,
+  gsk_quad_curve_get_extrema,
 };
 
 /* }}} */
@@ -1385,6 +1406,16 @@ gsk_cubic_curve_get_at_length (const GskCurve *curve,
   return get_t_by_bisection (curve, t, epsilon);
 }
 
+static int
+gsk_cubic_curve_get_extrema (const GskCurve *curve,
+                             float           t[4])
+{
+  const GskCubicCurve *self = &curve->cubic;
+  const graphene_point_t *pts = self->points;
+
+  return get_cubic_extrema (pts[0].y, pts[1].y, pts[2].y, pts[3].y, t);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -1408,6 +1439,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_crossing,
   gsk_cubic_curve_get_length_to,
   gsk_cubic_curve_get_at_length,
+  gsk_cubic_curve_get_extrema,
 };
 
  /*  }}} */
@@ -2118,6 +2150,17 @@ gsk_conic_curve_get_at_length (const GskCurve *curve,
   return get_t_by_bisection (curve, t, epsilon);
 }
 
+static int
+gsk_conic_curve_get_extrema (const GskCurve *curve,
+                             float           t[4])
+{
+  const GskConicCurve *self = &curve->conic;
+  float w = gsk_conic_curve_get_weight (self);
+  const graphene_point_t *pts = self->points;
+
+  return get_conic_extrema (pts[0].y, pts[1].y, pts[3].y, w, t);
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -2141,6 +2184,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_crossing,
   gsk_conic_curve_get_length_to,
   gsk_conic_curve_get_at_length,
+  gsk_conic_curve_get_extrema,
 };
 
 /*  }}} */
@@ -2367,6 +2411,15 @@ gsk_curve_at_length (const GskCurve *curve,
                      float           epsilon)
 {
   return get_class (curve->op)->get_at_length (curve, length, epsilon);
+}
+
+/* Note: this is just about local minima/maxima, excluding 0/1.
+ * To get x extrema, x/y flip the curve */
+int
+gsk_curve_get_extrema (const GskCurve *curve,
+                       float           t[4])
+{
+  return get_class (curve->op)->get_extrema (curve, t);
 }
 
 /* }}} */
