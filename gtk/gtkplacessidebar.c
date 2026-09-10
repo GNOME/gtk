@@ -234,24 +234,25 @@ enum {
 };
 
 /* Names for themed icons */
-#define ICON_NAME_HOME     "user-home-symbolic"
-#define ICON_NAME_DESKTOP  "user-desktop-symbolic"
-#define ICON_NAME_FILESYSTEM     "drive-harddisk-symbolic"
-#define ICON_NAME_EJECT    "media-eject-symbolic"
-#define ICON_NAME_NETWORK  "network-workgroup-symbolic"
-#define ICON_NAME_NETWORK_SERVER "network-server-symbolic"
-#define ICON_NAME_FOLDER_NETWORK "folder-remote-symbolic"
-#define ICON_NAME_OTHER_LOCATIONS "list-add-symbolic"
+#define ICON_NAME_HOME                  "user-home-symbolic"
+#define ICON_NAME_DESKTOP               "user-desktop-symbolic"
+#define ICON_NAME_FILESYSTEM            "drive-harddisk-symbolic"
+#define ICON_NAME_EJECT                 "media-eject-symbolic"
+#define ICON_NAME_NETWORK               "network-workgroup-symbolic"
+#define ICON_NAME_NETWORK_SERVER        "network-server-symbolic"
+#define ICON_NAME_OTHER_LOCATIONS       "list-add-symbolic"
 
 #define ICON_NAME_FOLDER                "folder-symbolic"
-#define ICON_NAME_FOLDER_DESKTOP  "user-desktop-symbolic"
+#define ICON_NAME_FOLDER_DESKTOP        "user-desktop-symbolic"
 #define ICON_NAME_FOLDER_DOCUMENTS      "folder-documents-symbolic"
 #define ICON_NAME_FOLDER_DOWNLOAD       "folder-download-symbolic"
-#define ICON_NAME_FOLDER_MUSIC    "folder-music-symbolic"
+#define ICON_NAME_FOLDER_MUSIC          "folder-music-symbolic"
+#define ICON_NAME_FOLDER_NETWORK        "folder-remote-symbolic"
 #define ICON_NAME_FOLDER_PICTURES       "folder-pictures-symbolic"
 #define ICON_NAME_FOLDER_PUBLIC_SHARE   "folder-publicshare-symbolic"
 #define ICON_NAME_FOLDER_TEMPLATES      "folder-templates-symbolic"
-#define ICON_NAME_FOLDER_VIDEOS   "folder-videos-symbolic"
+#define ICON_NAME_FOLDER_VIDEOS         "folder-videos-symbolic"
+#define ICON_NAME_FOLDER_PROJECTS       "folder-projects-symbolic"
 #define ICON_NAME_FOLDER_SAVED_SEARCH   "folder-saved-search-symbolic"
 
 static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
@@ -492,6 +493,10 @@ special_directory_get_gicon (GUserDirectory directory)
     ICON_CASE (PUBLIC_SHARE);
     ICON_CASE (TEMPLATES);
     ICON_CASE (VIDEOS);
+
+#if GLIB_CHECK_VERSION (2, 89, 0)
+    ICON_CASE (PROJECTS);
+#endif
 
     case G_USER_N_DIRECTORIES:
     default:
