@@ -353,6 +353,10 @@ fedora-mingw64:
   stage: build
   tags:
     - win32-ps
+  # Downloading subprojects can fail, see .container.fedora
+  retry:
+    max: 2
+    exit_codes: 137
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
