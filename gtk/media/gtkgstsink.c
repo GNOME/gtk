@@ -1081,6 +1081,7 @@ gtk_gst_sink_dispose (GObject *object)
 
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
   g_clear_object (&self->paintable);
+  g_clear_object (&self->gst_context);
   g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);
   g_clear_object (&self->gdk_context);
