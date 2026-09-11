@@ -1,3 +1,68 @@
+Overview of Changes in 4.24.0, 11-09-2026
+=========================================
+
+* Bugs fixed:
+  - #8195 Animated SVG frequently disappears (Matthias Clasen)
+  - #8307 drop-performed class handlers read a phantom timestamp and send it in
+    XdndDrop (Simeon Maxein)
+  - #8313 macos: No gtk-macos-special equivalent for the Edit menu ("Start
+    Dictation" / "Emoji & Symbols" missing with custom menubar)
+  - #8354 GtkColumnView: sortable column headers expose no AT-SPI action, so
+    sorting is unreachable for assistive technology
+  - #8382 Media queries are not respected (Matthias Clasen)
+  - #8390 svg: if the only animations in an svg are visibility animations
+    elementa stay at initial value (Matthias Clasen)
+  - #8400 Crash triggered by gtk_text_accessible_text_get_extents() (Matthias
+    Clasen)
+  - #8402 CUPS Secret Service authentication causes use-after-free in
+    lookup_auth_info_cb() (Patrick Lambein)
+  - !10132 Fix mismatches between parameters in four signal declarations and the
+    corresponding class slots (Simeon Maxein)
+  - !10245 gtkaccesskitcontext: Expose GActions as custom actions (Lukáš
+    Tyrychtr)
+  - !10265 macos: Default entries in Edit menu (Arjan Molenaar)
+  - !10322 android: Remove empty_frame implementation (Benjamin Otte)
+  - !10323 gtk: Repair action muxer subscriptions (Christian Hergert)
+  - !10324 gsk: Allow conics with weight zero (Matthias Clasen)
+  - !10328 CI: Switch glib CI back to a release (Benjamin Otte)
+  - !10329 Update CI to be less likely to break (Benjamin Otte)
+  - !10330 docs: Update release howto (Matthias Clasen)
+  - !10331 Update Russian translation
+  - !10333 Update Occitan translation
+  - !10334 Update Norwegian Bokmål translation (Kjartan Maraas)
+  - !10336 vulkan: Always update global buffer descriptor set (Benjamin Otte)
+  - !10337 Update Serbian translation
+  - !10338 Update French translation
+  - !10339 svg: Fix run mode discrete (Matthias Clasen)
+  - !10341 Update Basque translation (Asier Saratsua Garmendia)
+  - !10343 ci: Download glib before configuring on MSYS2 (u9g)
+  - !10344 Update Brazilian Portuguese translation
+  - !10345 Update Spanish translation
+  - !10346 memoryconvert: Pass the correct pointer address (Benjamin Otte)
+  - !10349 Update Hungarian translation
+  - !10350 Update Danish translation
+  - !10353 Update Romanian translation
+  - !10356 Update British English translation
+  - !10359 curve: Add gsk_curve_get_extrema (Matthias Clasen)
+  - !10360 Update Norwegian Nynorsk translation
+  - !10361 Some frame clock fixes (Matthias Clasen)
+  - !10365 gdkclipboard-x11: don't call a NULL converter (Marc-Antoine Perennou)
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Danish (Ask Hjorth Larsen)
+  - English (United Kingdom) (Bruce Cowan)
+  - French (Guillaume Bernard)
+  - Hungarian (Balázs Úr)
+  - Norwegian Bokmål (Kjartan Maraas)
+  - Norwegian Nynorsk (Roy-Magne Mo)
+  - Occitan (post 1500) (Quentin PAGÈS)
+  - Portuguese (Brazil) (Rafael Coelho Costa)
+  - Romanian (Antonio Marin)
+  - Russian (Artur S0)
+  - Serbian (Марко Костић)
+  - Spanish (Daniel Mustieles García)
+
 Overview of Changes in 4.23.4, 01-09-2026
 =========================================
 
