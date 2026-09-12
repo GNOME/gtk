@@ -942,9 +942,6 @@ gdk_frame_clock_submitted (GdkFrameClock *self,
     return;
 
   gdk_frame_timings_submitted (timings, refresh);
-
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
 }
 
 void
@@ -980,9 +977,6 @@ gdk_frame_clock_discarded (GdkFrameClock *self,
     return;
 
   gdk_frame_timings_discarded (timings);
-
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
 }
 
 void
@@ -1055,9 +1049,6 @@ gdk_frame_clock_presented (GdkFrameClock *self,
     return;
 
   gdk_frame_timings_presented (timings, presentation_time, refresh);
-
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
 }
 
 void
@@ -1377,7 +1368,7 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_AFTER_PAINT)
     {
-      GdkFrameTimings *timings;
+      GdkFrameClockFrame *clock_frame;
 
       priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
 
@@ -1385,25 +1376,26 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 
       g_signal_emit (self, signals[AFTER_PAINT], 0);
 
-      timings = gdk_frame_clock_get_current_timings (self);
-      if (gdk_frame_timings_get_result (timings) == GDK_FRAME_PREPARING)
+      clock_frame = gdk_frame_clock_get_frame (self, priv->frame_counter);
+      if (clock_frame->frames == NULL)
         {
-          /* Painting was done and if no surfaces transitioned the frame,
-           * either to OUTSTANDING when painting or a backend in
-           * after_paint(), then we mark this frame as SKIPPED.
+          /* Painting was done and no frames are remaining,
+           * so mark the frame as complete.
+           * Marking it as complete will ensure the correct state.
            */
-          gdk_frame_timings_discarded (timings);
+          clock_frame->throttling = FALSE;
+          gdk_frame_timings_complete (clock_frame->timings);
 
-          gdk_frame_clock_debug_print_timings (self, timings);
-          gdk_frame_clock_add_timings_to_profiler (self, timings);
+          gdk_frame_clock_debug_print_timings (self, clock_frame->timings);
+          gdk_frame_clock_add_timings_to_profiler (self, clock_frame->timings);
         }
 
       if (!gdk_frame_clock_is_stopped (clock))
         {
-          gdk_frame_timings_throttling_hint (timings, priv->stage_start_time);
+          gdk_frame_timings_throttling_hint (clock_frame->timings, priv->stage_start_time);
         }
 
-      gdk_frame_timings_gpu_complete (timings, priv->stage_start_time);
+      gdk_frame_timings_gpu_complete (clock_frame->timings, priv->stage_start_time);
     }
   
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_RESUME_EVENTS);
@@ -1473,14 +1465,23 @@ gdk_frame_clock_remove_frame (GdkFrameClock       *self,
                               GdkDrawContextFrame *frame)
 {
   GdkFrameClockFrame *clock_frame;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
 
   clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
   if (clock_frame == NULL)
     return;
 
   clock_frame->frames = g_slist_remove (clock_frame->frames, frame);
-  if (clock_frame->frames == NULL)
-    clock_frame->throttling = FALSE;
+  if (clock_frame->frames == NULL &&
+      (!gdk_frame_clock_is_in_frame (self) ||
+       frame->frame_counter != priv->frame_counter))
+    {
+      clock_frame->throttling = FALSE;
+      gdk_frame_timings_complete (clock_frame->timings);
+
+      gdk_frame_clock_debug_print_timings (self, clock_frame->timings);
+      gdk_frame_clock_add_timings_to_profiler (self, clock_frame->timings);
+    }
 }
 
 void

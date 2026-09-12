@@ -58,6 +58,7 @@ struct _GdkFrameTimings
   uint64_t gpu_complete;
 
   GdkFrameResult result;
+  gboolean complete;
 };
 
 GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
@@ -82,6 +83,8 @@ uint64_t         gdk_frame_timings_get_throttling_hint          (GdkFrameTimings
 uint64_t         gdk_frame_timings_get_gpu_complete             (GdkFrameTimings        *self);
 
 void             gdk_frame_timings_outstanding                  (GdkFrameTimings        *self);
+void             gdk_frame_timings_complete                     (GdkFrameTimings        *self);
+
 void             gdk_frame_timings_throttling_hint              (GdkFrameTimings        *self,
                                                                  uint64_t                timestamp);
 void             gdk_frame_timings_gpu_complete                 (GdkFrameTimings        *self,
