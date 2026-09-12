@@ -173,25 +173,7 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 {
   g_return_val_if_fail (timings != NULL, FALSE);
 
-  if (timings->throttling_hint == 0)
-    return FALSE;
-
-  switch (timings->result)
-  {
-    case GDK_FRAME_PREPARING:
-    case GDK_FRAME_OUTSTANDING:
-      return FALSE;
-
-    case GDK_FRAME_SKIPPED:
-    case GDK_FRAME_EMPTY:
-    case GDK_FRAME_SUBMITTED:
-    case GDK_FRAME_DISCARDED:
-    case GDK_FRAME_PRESENTED:
-      return TRUE;
-
-    default:
-      g_return_val_if_reached (TRUE);
-  }
+  return timings->complete;
 }
 
 /**
@@ -477,6 +459,38 @@ gdk_frame_timings_outstanding (GdkFrameTimings *self)
     }
  
   self->result = GDK_FRAME_OUTSTANDING;
+}
+
+void
+gdk_frame_timings_complete (GdkFrameTimings *self)
+{
+  g_assert (!self->complete);
+
+  switch (self->result)
+    {
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_PRESENTED:
+      case GDK_FRAME_DISCARDED:
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
+        /* already complete */
+        break;
+
+      case GDK_FRAME_PREPARING:
+        /* no frame was ever submitted */
+        self->result = GDK_FRAME_EMPTY;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        /* no outstanding frame ever transitioned to anything else */
+        self->result = GDK_FRAME_DISCARDED;
+        break;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  self->complete = TRUE;
 }
 
 void
