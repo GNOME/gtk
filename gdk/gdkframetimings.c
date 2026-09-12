@@ -483,7 +483,7 @@ gdk_frame_timings_complete (GdkFrameTimings *self)
         break;
 
       case GDK_FRAME_OUTSTANDING:
-        /* no outstanding frame ever transitioned to anything else */
+        /* all frames were discarded */
         self->result = GDK_FRAME_DISCARDED;
         break;
 
@@ -550,37 +550,6 @@ gdk_frame_timings_submitted (GdkFrameTimings *self,
 
   if (refresh != 0)
     self->refresh_interval = refresh;
-}
-
-void
-gdk_frame_timings_discarded (GdkFrameTimings *self)
-{
-  switch (self->result)
-    {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_SKIPPED;
-        break;
-
-      case GDK_FRAME_OUTSTANDING:
-        self->result = GDK_FRAME_DISCARDED;
-        break;
-
-      case GDK_FRAME_SKIPPED:
-      case GDK_FRAME_DISCARDED:
-        /* duplicate calls are allowed */
-        return;
-
-      case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
-      case GDK_FRAME_PRESENTED:
-        g_warning_once ("gdk_frame_timings_discarded() called on already %s frame.",
-                        g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
-        return;
-
-      default:
-        g_assert_not_reached ();
-        return;
-    }
 }
 
 void
