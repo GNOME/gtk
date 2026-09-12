@@ -413,18 +413,19 @@ gdk_frame_timings_get_throttling_hint (GdkFrameTimings *self)
  * Gets the timestamp of when all involved GPUs completed rendering the frame.
  *
  * If no GPU rendering was involved in rendering the frame - either because
- * of sofware rendering or because no rendering happened, then this time will
- * be less than or equal to the end of the frame timings queried via
- * `gdk_frame_timings_get_end_time(self, GDK_FRAME_STAGE_RESUME_EVENTS)`.
+ * of software rendering or because no rendering happened, then this time will
+ * be reported as 0.
  * 
- * While the GPU has not yet finished rendering, the value will be updating
- * intermittently.
+ * While the frame is not yet complete, the value is undefined,
  *
  * Returns: the timestamp in nanoseconds
  **/
 uint64_t
 gdk_frame_timings_get_gpu_complete (GdkFrameTimings *self)
 {
+  if (!self->complete)
+    return 0;
+
   return self->gpu_complete;
 }
 
@@ -507,6 +508,8 @@ void
 gdk_frame_timings_gpu_complete (GdkFrameTimings *self,
                                 uint64_t         timestamp)
 {
+  g_return_if_fail (!self->complete);
+
   if (timestamp > self->gpu_complete)
     self->gpu_complete = timestamp;
 }
