@@ -91,7 +91,6 @@ void             gdk_frame_timings_gpu_complete                 (GdkFrameTimings
                                                                  uint64_t                timestamp);
 void             gdk_frame_timings_submitted                    (GdkFrameTimings        *self,
                                                                  uint64_t                refresh);
-void             gdk_frame_timings_discarded                    (GdkFrameTimings        *self);
 void             gdk_frame_timings_presented                    (GdkFrameTimings        *self,
                                                                  uint64_t                presentation_time,
                                                                  uint64_t                refresh);
