@@ -165,7 +165,7 @@ to the Git repository and open a new merge request, to let the GTK
 maintainers review your contribution.
 
 **Important**: Do **not** attach a diff or a patch file to a GitLab issue.
-Patches cannot be reviewed, and do not not go through the CI pipeline. If
+Patches cannot be reviewed, and do not go through the CI pipeline. If
 you wish to submit your changes to GTK, always use a merge request.
 
 ### Code reviews
