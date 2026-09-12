@@ -992,6 +992,10 @@ gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
   gdk_frame_clock_submitted (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
                              frame->frame_counter,
                              refresh);
+
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /**
@@ -1024,6 +1028,10 @@ gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
 {
   gdk_frame_clock_discarded (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
                              frame->frame_counter);
+
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /**
@@ -1099,6 +1107,10 @@ gdk_draw_context_frame_presented (GdkDrawContextFrame *frame,
                              frame->frame_counter,
                              presentation_time,
                              refresh);
+
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /**
