@@ -958,33 +958,16 @@ gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
 }
 
 /**
- * gdk_frame_clock_discarded:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * gdk_draw_context_frame_discarded:
+ * @frame: the frame
  *
- * Marks the given frame as complete by the compositor discarding it.
+ * Marks the given frame as completed by the compositor discarding it.
  *
  * This function should be called by GDK backends.
  **/
-static void
-gdk_frame_clock_discarded (GdkFrameClock *self,
-                           gint64         frame_counter)
-{
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_discarded (timings);
-}
-
 void
 gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
 {
-  gdk_frame_clock_discarded (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
-                             frame->frame_counter);
-
   frame->presentation_complete = TRUE;
   if (gdk_draw_context_frame_is_complete (frame))
     gdk_draw_context_frame_free (frame);
