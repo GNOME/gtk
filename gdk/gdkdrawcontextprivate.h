@@ -48,6 +48,7 @@ struct _GdkDrawContextFrame
 
   guint cpu_complete : 1;
   guint gpu_complete : 1;
+  guint presentation_complete : 1;
 };
 
 struct _GdkDrawContext
