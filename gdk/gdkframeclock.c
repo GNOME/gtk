@@ -965,12 +965,11 @@ gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
 
 /**
  * gdk_frame_clock_presented:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * @frame: the frame
  * @presentation_time: the presentation time of the image in nanoseconds
  *   in the monotonic clock's time.
  * @refresh: the refresh interval to the next frame in nanoseconds
- *   or 0 to keep the predicted interval.
+ *   or 0 to keep the previous interval.
  *
  * Marks the given frame as presented by the compositor.
  *
@@ -978,18 +977,18 @@ gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
  * presentation time is available. Otherwise call gdk_frame_clock_submitted()
  * instead.
  **/
-static void
-gdk_frame_clock_presented (GdkFrameClock *self,
-                           gint64         frame_counter,
-                           uint64_t       presentation_time,
-                           uint64_t       refresh)
+void
+gdk_draw_context_frame_presented (GdkDrawContextFrame *frame,
+                                  uint64_t             presentation_time,
+                                  uint64_t             refresh)
 {
+  GdkFrameClock *self = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
+  GdkFrameClockFrame *clock_frame;
 
   g_return_if_fail (presentation_time != 0);
 
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
 
   if (presentation_time > priv->latest_presentation_time)
     {
@@ -997,11 +996,11 @@ gdk_frame_clock_presented (GdkFrameClock *self,
       if (refresh)
         priv->latest_refresh_interval = refresh;
 
-      if (timings != NULL)
+      if (clock_frame != NULL)
         {
           uint64_t delay;
 
-          delay = presentation_time - gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_BEFORE_PAINT);
+          delay = presentation_time - gdk_frame_timings_get_start_time (clock_frame->timings, GDK_FRAME_STAGE_BEFORE_PAINT);
           if (refresh)
               delay = MIN (PRESENTATION_DELAY_MAX_FRAMES * refresh, delay);
 
@@ -1018,21 +1017,10 @@ gdk_frame_clock_presented (GdkFrameClock *self,
         }
     }
 
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_presented (timings, presentation_time, refresh);
-}
-
-void
-gdk_draw_context_frame_presented (GdkDrawContextFrame *frame,
-                                  uint64_t             presentation_time,
-                                  uint64_t             refresh)
-{
-  gdk_frame_clock_presented (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
-                             frame->frame_counter,
-                             presentation_time,
-                             refresh);
+  if (clock_frame != NULL)
+    {
+      gdk_frame_timings_presented (clock_frame->timings, presentation_time, refresh);
+    }
 
   frame->presentation_complete = TRUE;
   if (gdk_draw_context_frame_is_complete (frame))

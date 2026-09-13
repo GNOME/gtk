@@ -558,28 +558,24 @@ gdk_frame_timings_presented (GdkFrameTimings *self,
 {
   switch (self->result)
     {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_EMPTY;
-        break;
-
       case GDK_FRAME_OUTSTANDING:
         self->result = GDK_FRAME_PRESENTED;
         break;
 
-      case GDK_FRAME_EMPTY:
       case GDK_FRAME_PRESENTED:
-        /* duplicate calls are allowed, but must have the same values */
-        if (self->presentation_time != presentation_time ||
-            self->refresh_interval != refresh)
-          {
-            int64_t time_diff = (int64_t) (presentation_time - self->presentation_time);
-            g_warning_once ("Duplicate call to gdk_frame_timings_presented() with different values: "
-                            "presentation time is %" PRId64 ".%" PRId64 "ms off from expected",
-                            time_diff / (1000 * 1000), (time_diff / 1000) % 1000);
-          }
-        return;
+        /* duplicate calls are allowed, we always consider the first to be relevant */
+        if (self->presentation_time > presentation_time)
+          return;
 
+        /* for idential presentation times, we keep the smaller refresh interval */
+        if (self->presentation_time == presentation_time &&
+            refresh != 0 && self->refresh_interval != 0)
+          refresh = MIN (self->refresh_interval, refresh);
+        break;
+
+      case GDK_FRAME_PREPARING:
       case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
       case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_DISCARDED:
         g_warning_once ("gdk_frame_timings_presented() called on %s frame.",
