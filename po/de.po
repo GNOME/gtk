@@ -37,8 +37,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-04-03 21:21+0000\n"
-"PO-Revision-Date: 2026-04-18 21:07+0200\n"
+"POT-Creation-Date: 2026-05-08 20:38+0000\n"
+"PO-Revision-Date: 2026-06-23 21:52+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -5043,20 +5043,21 @@ msgstr "Oberste Ebene"
 msgid "Child Visible"
 msgstr "Sichtbares Unterelement"
 
+# In the GTK library, "paintable" refers to the GdkPaintable interface, which is the core, modern abstraction for any content that can be drawn or rendered. Introduced in GTK 4, it serves as a universal, flexible replacement for older concepts like GdkPixbuf
 #. Paintable is a colloquial way to refer to the GdkPaintable interface
 #: gtk/inspector/misc-info.ui:686
 msgid "Paintable Size"
-msgstr ""
+msgstr "Größe des darstellbaren Inhalts"
 
 #. Paintable is a colloquial way to refer to the GdkPaintable interface
 #: gtk/inspector/misc-info.ui:712
 msgid "Paintable Aspect Ratio"
-msgstr ""
+msgstr "Seitenverhältnis des darstellbaren Inhalts"
 
 #. Paintable is a colloquial way to refer to the GdkPaintable interface
 #: gtk/inspector/misc-info.ui:738
 msgid "Paintable Flags"
-msgstr ""
+msgstr "Schalter des darstellbaren Inhalts"
 
 #: gtk/inspector/prop-editor.c:749
 #, c-format
@@ -5193,7 +5194,7 @@ msgstr "Aufgenommene Einzelbilder leeren"
 
 #: gtk/inspector/recorder.ui:82
 msgid "Profiling overlay (requires GSK_DEBUG=profile)"
-msgstr ""
+msgstr "Leistungsanalyse-Überlagerung (erfordert GSK_DEBUG=profile)"
 
 #: gtk/inspector/recorder.ui:108
 msgid "Use a dark background"
@@ -8808,7 +8809,7 @@ msgstr ""
 #: tools/gtk-rendernode-tool-render.c:353
 #, c-format
 msgid "Invalid rectangle given for bounds\n"
-msgstr ""
+msgstr "Ungültiges Rechteck für Begrenzung angegeben\n"
 
 #: tools/gtk-rendernode-tool-show.c:121
 msgid "Put node into offload container"
