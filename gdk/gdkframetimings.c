@@ -518,17 +518,15 @@ void
 gdk_frame_timings_submitted (GdkFrameTimings *self,
                              uint64_t         refresh)
 {
+  g_assert (!self->complete);
+
   switch (self->result)
     {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_SKIPPED;
-        break;
-
       case GDK_FRAME_OUTSTANDING:
         self->result = GDK_FRAME_SUBMITTED;
         break;
 
-      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_PRESENTED:
         /* duplicate calls are allowed, but must have the same values */
         if (self->refresh_interval != refresh)
@@ -537,8 +535,9 @@ gdk_frame_timings_submitted (GdkFrameTimings *self,
           }
         return;
 
+      case GDK_FRAME_PREPARING:
+      case GDK_FRAME_SKIPPED:
       case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_DISCARDED:
         g_warning_once ("gdk_frame_timings_submitted() called on %s frame.",
                         g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
