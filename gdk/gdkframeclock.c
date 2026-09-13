@@ -914,43 +914,33 @@ gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 }
 
 /**
- * gdk_frame_clock_submitted:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * gdk_draw_context_frame_submitted:
+ * @frame: the frame
  * @refresh: the refresh interval to the next frame in nanoseconds
- *   or 0 to keep the predicted interval.
+ *   or 0 to keep the existing interval.
  *
- * Marks the given frame as complete by submission to the compositor.
+ * Marks the given frame as submitted to the compositor.
  *
  * This function should be called by GDK backends upon frame
  * submission when no further information about the compositor's use
  * can be provided for this frame.
  **/
-static void
-gdk_frame_clock_submitted (GdkFrameClock *self,
-                           gint64         frame_counter,
-                           uint64_t       refresh)
-{
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
-
-  if (refresh)
-    priv->latest_refresh_interval = refresh;
-
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_submitted (timings, refresh);
-}
-
 void
 gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
                                   uint64_t             refresh)
 {
-  gdk_frame_clock_submitted (gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context)),
-                             frame->frame_counter,
-                             refresh);
+  GdkFrameClock *self = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GdkFrameClockFrame *clock_frame;
+
+  if (refresh)
+    priv->latest_refresh_interval = refresh;
+
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  if (clock_frame)
+    {
+      gdk_frame_timings_submitted (clock_frame->timings, refresh);
+    }
 
   frame->presentation_complete = TRUE;
   if (gdk_draw_context_frame_is_complete (frame))
