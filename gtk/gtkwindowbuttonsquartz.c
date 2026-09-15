@@ -271,8 +271,6 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
       return;
     }
 
-  [window setShowStandardWindowButtons:YES];
-
   enable_window_controls (self, TRUE);
 
   window_controls_bounds (window, &bounds);
@@ -280,14 +278,27 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
 }
 
 static void
-gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
+gtk_window_buttons_quartz_map (GtkWidget *widget)
+{
+  GdkMacosWindow *window;
+
+  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->map (widget);
+
+  window = native_window (widget);
+
+  if (GDK_IS_MACOS_WINDOW (window))
+    [window setShowStandardWindowButtons:YES];
+}
+
+static void
+gtk_window_buttons_quartz_unmap (GtkWidget *widget)
 {
   GdkMacosWindow *window = native_window (widget);
 
   if (GDK_IS_MACOS_WINDOW (window))
     [window setShowStandardWindowButtons:NO];
 
-  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unmap (widget);
 }
 
 static void
@@ -346,7 +357,8 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   widget_class->root = gtk_window_buttons_quartz_root;
   widget_class->unroot = gtk_window_buttons_quartz_unroot;
   widget_class->realize = gtk_window_buttons_quartz_realize;
-  widget_class->unrealize = gtk_window_buttons_quartz_unrealize;
+  widget_class->map = gtk_window_buttons_quartz_map;
+  widget_class->unmap = gtk_window_buttons_quartz_unmap;
 
   /**
    * GtkWindowButtonsQuartz:decoration-layout:
