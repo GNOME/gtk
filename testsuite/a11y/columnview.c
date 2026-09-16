@@ -1,5 +1,8 @@
 #include <gtk/gtk.h>
 
+#ifdef GTK_ACCESSIBILITY_ATSPI
+# include "gtk/a11y/gtkatspiutilsprivate.h"
+#endif
 #include "gtk/gtkactionmuxerprivate.h"
 #include "gtk/gtkcolumnviewcolumnprivate.h"
 #include "gtk/gtkwidgetprivate.h"
@@ -33,6 +36,9 @@ column_header (void)
   GtkSortType sort_order;
   GtkWidget *header_row;
   GtkWidget *title;
+#ifdef GTK_ACCESSIBILITY_ATSPI
+  GtkATContext *context;
+#endif
 
   g_object_ref_sink (view);
   gtk_window_set_child (GTK_WINDOW (window), view);
@@ -52,6 +58,15 @@ column_header (void)
   g_assert_false (gtk_widget_get_focusable (title));
   g_assert_false (gtk_widget_get_can_focus (header_row));
   g_assert_true (get_activate_enabled (title));
+
+#ifdef GTK_ACCESSIBILITY_ATSPI
+  context = gtk_at_context_create (GTK_ACCESSIBLE_ROLE_COLUMN_HEADER,
+                                   GTK_ACCESSIBLE (title),
+                                   gdk_display_get_default ());
+  g_assert_cmpint (gtk_atspi_role_for_context (context), ==,
+                   ATSPI_ROLE_COLUMN_HEADER);
+  g_object_unref (context);
+#endif
 
   primary = gtk_column_view_sorter_get_primary_sort_column (view_sorter);
   g_assert_null (primary);

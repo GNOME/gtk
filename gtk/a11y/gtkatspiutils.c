@@ -69,7 +69,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_CHECK_BOX;
 
     case GTK_ACCESSIBLE_ROLE_COLUMN_HEADER:
-      break;
+      return ATSPI_ROLE_COLUMN_HEADER;
 
     case GTK_ACCESSIBLE_ROLE_COMBO_BOX:
       return ATSPI_ROLE_COMBO_BOX;
