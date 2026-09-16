@@ -781,6 +781,7 @@ window_update_scale (GdkWindow *window)
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   guint32 scale;
   GSList *l;
+  int width, height;
 
   if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
@@ -808,7 +809,17 @@ window_update_scale (GdkWindow *window)
     }
 
   /* Notify app that scale changed */
-  gdk_wayland_window_maybe_configure (window, window->width, window->height, scale);
+  if (!impl->initial_configure_received)
+    {
+      width = impl->unconfigured_width;
+      height = impl->unconfigured_height;
+    }
+  else
+    {
+      width = window->width;
+      height = window->height;
+    }
+  gdk_wayland_window_maybe_configure (window, width, height, scale);
 }
 
 static void
