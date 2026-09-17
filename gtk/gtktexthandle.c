@@ -65,7 +65,8 @@ struct _GtkTextHandle
 
   GdkRectangle pointing_to;
   GtkBorder border;
-  graphene_matrix_t surface_transform;
+  graphene_point_t drag_origin;
+  graphene_matrix_t surface_transform, inv_surface_transform;
   guint surface_transform_changed_cb;
 
   guint role : 2;
@@ -200,6 +201,27 @@ gtk_text_handle_get_padding (GtkTextHandle *handle,
   padding->bottom = gtk_css_number_value_get (style->size->padding_bottom, 100);
 }
 
+/* The point where the handle is visually anchored (the bottom of the cursor).
+ * Specified in the parent widget's coordinate system.
+ * Also describes the origin of "tip-space".
+ */
+static void
+handle_get_anchor_point (GtkTextHandle *handle, graphene_point_t *point)
+{
+  point->x = handle->pointing_to.x;
+  point->y = handle->pointing_to.y + handle->pointing_to.height;
+}
+
+/* The point where the handle points for text selection (the center of the cursor).
+ * Specified in the parent widget's coordinate system.
+ */
+static void
+handle_get_selection_target_point (GtkTextHandle *handle, graphene_point_t *point)
+{
+  point->x = handle->pointing_to.x;
+  point->y = handle->pointing_to.y + handle->pointing_to.height / 2.;
+}
+
 static void
 gtk_text_handle_present_surface (GtkTextHandle *handle)
 {
@@ -209,7 +231,7 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   GtkRequisition req;
   GtkWidget *parent;
   GtkNative *native;
-  graphene_point_t point = GRAPHENE_POINT_INIT (handle->pointing_to.x, handle->pointing_to.y + handle->pointing_to.height);
+  graphene_point_t point;
   graphene_point_t transformed;
   double nx, ny;
 
@@ -223,10 +245,11 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
 
   if (!gtk_widget_compute_transform (GTK_WIDGET (native), parent, &handle->surface_transform))
     graphene_matrix_init_identity (&handle->surface_transform);
+  if (!gtk_widget_compute_transform (parent, GTK_WIDGET (native), &handle->inv_surface_transform))
+    graphene_matrix_init_identity (&handle->inv_surface_transform);
 
-  if (!gtk_widget_compute_point (parent, GTK_WIDGET (native),
-                                 &point, &transformed))
-    transformed = point;
+  handle_get_anchor_point (handle, &point);
+  graphene_matrix_transform_point (&handle->inv_surface_transform, &point, &transformed);
 
   rect.x = (int)(transformed.x + nx);
   rect.y = (int)(transformed.y + ny) - handle->border.top;
@@ -547,7 +570,7 @@ gtk_text_handle_class_init (GtkTextHandleClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
-/* Relative to pointing_to x/y */
+/* Relative to anchor_point / in tip-space */
 static void
 handle_get_input_extents (GtkTextHandle *handle,
                           GtkBorder     *border)
@@ -581,19 +604,17 @@ handle_get_input_extents (GtkTextHandle *handle,
 static void
 handle_do_toplevel_transform (GtkTextHandle *handle, gfloat *tx, gfloat *ty)
 {
-  graphene_point_t p;
+  graphene_point_t p, anchor_point;
 
-  /* controller-space to parent-space */
-  graphene_matrix_transform_point (&handle->surface_transform,
-                                   &GRAPHENE_POINT_INIT (*tx, *ty),
+  /* calculate tip-space origin in controller-space */
+  handle_get_anchor_point (handle, &anchor_point);
+  graphene_matrix_transform_point (&handle->inv_surface_transform,
+                                   &anchor_point,
                                    &p);
 
-  /* parent-space to tip-space */
-  p.x -= handle->pointing_to.x;
-  p.y -= handle->pointing_to.y + handle->pointing_to.height;
-
-  *tx = p.x;
-  *ty = p.y;
+  /* transform controller-space input by substracting transformed tip-space origin from it */
+  *tx -= p.x;
+  *ty -= p.y;
 }
 
 static void
@@ -603,7 +624,7 @@ handle_drag_begin (GtkGestureDrag *gesture,
                    GtkTextHandle  *handle)
 {
   GtkBorder input_extents;
-  graphene_point_t p;
+  graphene_point_t p, selection_target;
 
   handle_get_input_extents (handle, &input_extents);
 
@@ -619,6 +640,12 @@ handle_drag_begin (GtkGestureDrag *gesture,
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   handle->dragged = TRUE;
+
+  handle_get_selection_target_point (handle, &selection_target);
+  graphene_matrix_transform_point (&handle->inv_surface_transform,
+                                   &selection_target,
+                                   &handle->drag_origin);
+
   g_signal_emit (handle, signals[DRAG_STARTED], 0);
 }
 
@@ -629,15 +656,11 @@ handle_drag_update (GtkGestureDrag *gesture,
                     GtkWidget      *widget)
 {
   GtkTextHandle *handle = GTK_TEXT_HANDLE (widget);
-  double start_x, start_y;
-
-  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
   graphene_point_t p;
   graphene_matrix_transform_point (&handle->surface_transform,
-                                   &GRAPHENE_POINT_INIT (start_x + offset_x, start_y + offset_y),
+                                   &GRAPHENE_POINT_INIT (handle->drag_origin.x + offset_x, handle->drag_origin.y + offset_y),
                                    &p);
-  p.y -= handle->pointing_to.height / 2.f;
 
   g_signal_emit (widget, signals[HANDLE_DRAGGED], 0, (int)p.x, (int)p.y);
 }
