@@ -209,7 +209,7 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   GtkRequisition req;
   GtkWidget *parent;
   GtkNative *native;
-  graphene_point_t point = GRAPHENE_POINT_INIT (handle->pointing_to.x, handle->pointing_to.y);
+  graphene_point_t point = GRAPHENE_POINT_INIT (handle->pointing_to.x, handle->pointing_to.y + handle->pointing_to.height);
   graphene_point_t transformed;
   double nx, ny;
 
@@ -229,7 +229,7 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
     transformed = point;
 
   rect.x = (int)(transformed.x + nx);
-  rect.y = (int)(transformed.y + ny) + handle->pointing_to.height - handle->border.top;
+  rect.y = (int)(transformed.y + ny) - handle->border.top;
 
   rect.width = req.width - handle->border.left - handle->border.right;
   rect.height = 1;
