@@ -40,6 +40,9 @@ struct _GdkWaylandSurface
   } display_server;
 
   struct wl_event_queue *event_queue;
+  GQueue pipeline_frames;
+  guint pipeline_depth;
+  gint64 pipeline_frame_counter;
 
   unsigned int color_state_changed : 1;
   unsigned int initial_configure_received : 1;

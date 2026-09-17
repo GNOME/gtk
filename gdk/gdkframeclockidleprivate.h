@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_FRAME_CLOCK_IDLE            (gdk_frame_clock_idle_get_type ())
+#define GDK_TYPE_FRAME_CLOCK_IDLE            (gdk_frame_clock_idle_get_type())
 GDK_DECLARE_INTERNAL_TYPE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK, FRAME_CLOCK_IDLE, GdkFrameClock)
 
 struct _GdkFrameClockIdle
@@ -43,6 +43,8 @@ struct _GdkFrameClockIdleClass
   GdkFrameClockClass parent_class;
 };
 
-GdkFrameClock *_gdk_frame_clock_idle_new            (void);
+GdkFrameClock *_gdk_frame_clock_idle_new                     (void);
+void           _gdk_frame_clock_idle_set_pace_when_throttled (GdkFrameClockIdle *self,
+                                                              gboolean           enabled);
 
 G_END_DECLS
