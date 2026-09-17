@@ -42,6 +42,10 @@ struct _GdkWaylandSurface
   struct wl_event_queue *event_queue;
   struct wl_callback *frame_callback;
 
+  GQueue pipeline_frames;
+  guint pipeline_depth;
+  gint64 pipeline_frame_counter;
+
   GdkWaylandPresentationTime *presentation_time;
 
   unsigned int color_state_changed : 1;

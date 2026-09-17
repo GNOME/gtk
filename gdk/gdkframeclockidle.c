@@ -58,6 +58,7 @@ struct _GdkFrameClockIdlePrivate
   GSource *source;
 
   guint paint_is_thaw : 1;
+  guint pace_when_throttled : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
@@ -361,11 +362,11 @@ gdk_frame_clock_source_cb (void *data)
 
   gdk_frame_clock_frame (GDK_FRAME_CLOCK (self));
 
-  /* If there is throttling in the backend layer, then we'll do another
-   * update as soon as the backend unthrottles (if there is work to do),
-   * otherwise we need to figure when the next frame should be.
+  /* Normally a backend freeze allows an immediate update when thawed.
+   * A bounded pipeline retains its next eligible time across the freeze;
+   * maybe_start_idle() still refuses to run a stopped frame clock.
    */
-  if (!gdk_frame_clock_is_stopped (clock))
+  if (!gdk_frame_clock_is_stopped (clock) || priv->pace_when_throttled)
     {
       /*
        * If we don't receive "frame drawn" events, smooth_cycle_start will simply be advanced in constant increments of
@@ -480,4 +481,16 @@ _gdk_frame_clock_idle_new (void)
   clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
 
   return GDK_FRAME_CLOCK (clock);
+}
+
+void
+_gdk_frame_clock_idle_set_pace_when_throttled (GdkFrameClockIdle *self,
+                                               gboolean           enabled)
+{
+  GdkFrameClockIdlePrivate *priv;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK_IDLE (self));
+
+  priv = gdk_frame_clock_idle_get_instance_private (self);
+  priv->pace_when_throttled = !!enabled;
 }

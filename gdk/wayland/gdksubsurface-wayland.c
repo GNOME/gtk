@@ -1021,6 +1021,10 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   GdkWaylandSubsurface *sub;
   struct wl_region *region;
 
+  /* The experiment does not yet coordinate parent/child callbacks. */
+  if (impl->pipeline_depth != 0)
+    return NULL;
+
   if (disp->subcompositor == NULL || disp->viewporter == NULL)
     {
       GDK_DISPLAY_DEBUG (display, OFFLOAD, "Can't use subsurfaces without subcompositor and viewporter");

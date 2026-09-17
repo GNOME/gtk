@@ -43,6 +43,8 @@ struct _GdkFrameClockIdleClass
   GdkFrameClockClass parent_class;
 };
 
-GdkFrameClock *_gdk_frame_clock_idle_new            (void);
+GdkFrameClock *_gdk_frame_clock_idle_new                     (void);
+void           _gdk_frame_clock_idle_set_pace_when_throttled (GdkFrameClockIdle *self,
+                                                              gboolean           enabled);
 
 G_END_DECLS

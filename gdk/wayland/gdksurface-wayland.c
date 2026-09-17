@@ -75,6 +75,228 @@ G_DEFINE_TYPE (GdkWaylandSurface, gdk_wayland_surface, GDK_TYPE_SURFACE)
 
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
+/* Draft testing policy: 0 uses stock scheduling; 1 or 2 bounds callbacks.
+ * The feedback bound limits unresolved reports, independently of GPU buffers.
+ */
+#define WAYLAND_PIPELINE_DEPTH 2
+#define PIPELINE_FEEDBACK_LIMIT 3
+
+typedef struct
+{
+  GdkWaylandSurface                *surface;
+  gint64                           frame_counter;
+  struct wl_callback              *callback;
+  struct wp_presentation_feedback *feedback;
+} GdkWaylandPipelineFrame;
+
+static gboolean
+pipeline_admission_open (GdkWaylandSurface *self)
+{
+  GList *iter;
+  guint callbacks = 0;
+  guint feedbacks = 0;
+
+  for (iter = self->pipeline_frames.head; iter != NULL; iter = iter->next)
+    {
+      GdkWaylandPipelineFrame *frame = iter->data;
+
+      callbacks += frame->callback != NULL;
+      feedbacks += frame->feedback != NULL;
+    }
+
+  return callbacks < self->pipeline_depth && feedbacks < PIPELINE_FEEDBACK_LIMIT;
+}
+
+static void
+pipeline_maybe_thaw (GdkWaylandSurface *self)
+{
+  if (self->awaiting_frame_frozen && pipeline_admission_open (self))
+    {
+      self->awaiting_frame_frozen = FALSE;
+      gdk_surface_thaw_updates (GDK_SURFACE (self));
+    }
+}
+
+static void
+pipeline_maybe_retire (GdkWaylandPipelineFrame *frame)
+{
+  GdkWaylandSurface *self = frame->surface;
+
+  /* Admission can reopen before both protocol objects have finished.
+   * Keep their callback data alive until neither object can reference it.
+   */
+  if (frame->callback == NULL && frame->feedback == NULL)
+    {
+      g_queue_remove (&self->pipeline_frames, frame);
+      g_free (frame);
+    }
+
+  pipeline_maybe_thaw (self);
+}
+
+static void
+pipeline_frame_done (void               *data,
+                     struct wl_callback *callback,
+                     uint32_t            time)
+{
+  GdkWaylandPipelineFrame *frame = data;
+
+  g_assert (frame->callback == callback);
+
+  g_clear_pointer (&frame->callback, wl_callback_destroy);
+  pipeline_maybe_retire (frame);
+}
+
+static const struct wl_callback_listener pipeline_frame_listener = {
+  pipeline_frame_done
+};
+
+static void
+pipeline_feedback_sync_output (void                            *data,
+                               struct wp_presentation_feedback *feedback,
+                               struct wl_output                *output)
+{
+}
+
+static void
+pipeline_feedback_presented (void                            *data,
+                             struct wp_presentation_feedback *feedback,
+                             uint32_t                         tv_sec_hi,
+                             uint32_t                         tv_sec_lo,
+                             uint32_t                         tv_nsec,
+                             uint32_t                         refresh_ns,
+                             uint32_t                         seq_hi,
+                             uint32_t                         seq_lo,
+                             uint32_t                         flags)
+{
+  GdkWaylandPipelineFrame *frame = data;
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (GDK_SURFACE (frame->surface));
+  uint64_t presentation_ns = ((uint64_t) tv_sec_hi << 32) | tv_sec_lo;
+
+  g_assert (frame->feedback == feedback);
+
+  presentation_ns = presentation_ns * G_NSEC_PER_SEC + tv_nsec;
+  g_clear_pointer (&frame->feedback, wp_presentation_feedback_destroy);
+
+  if (presentation_ns != 0)
+    gdk_frame_clock_presented (clock, frame->frame_counter, presentation_ns, refresh_ns);
+  else
+    gdk_frame_clock_submitted (clock, frame->frame_counter, refresh_ns);
+
+  pipeline_maybe_retire (frame);
+}
+
+static void
+pipeline_feedback_discarded (void                            *data,
+                             struct wp_presentation_feedback *feedback)
+{
+  GdkWaylandPipelineFrame *frame = data;
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (GDK_SURFACE (frame->surface));
+
+  g_assert (frame->feedback == feedback);
+
+  g_clear_pointer (&frame->feedback, wp_presentation_feedback_destroy);
+  gdk_frame_clock_discarded (clock, frame->frame_counter);
+  pipeline_maybe_retire (frame);
+}
+
+static const struct wp_presentation_feedback_listener pipeline_feedback_listener = {
+  pipeline_feedback_sync_output,
+  pipeline_feedback_presented,
+  pipeline_feedback_discarded
+};
+
+static void
+pipeline_request_frame (GdkWaylandSurface *self)
+{
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+  gint64 frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  GdkWaylandPipelineFrame *frame;
+
+  if (self->pipeline_frame_counter == frame_counter)
+    return;
+
+  /* Freeze after paint rather than dropping a frame already rendered. */
+  if (!pipeline_admission_open (self))
+    g_error ("Wayland pipeline: frame requested while admission is closed");
+
+  g_assert (display->presentation != NULL);
+  g_assert (gdk_surface_get_n_subsurfaces (surface) == 0);
+
+  frame = g_new0 (GdkWaylandPipelineFrame, 1);
+  frame->surface = self; /* The surface owns and cancels these records. */
+  frame->frame_counter = frame_counter;
+  frame->callback = wl_surface_frame (self->display_server.wl_surface);
+  frame->feedback = wp_presentation_feedback (display->presentation,
+                                              self->display_server.wl_surface);
+  if (frame->callback == NULL || frame->feedback == NULL)
+    g_error ("Wayland pipeline: failed to create per-commit feedback objects");
+
+  /* Match the stock frame callback's delivery on the default queue. */
+  wl_proxy_set_queue ((struct wl_proxy *) frame->callback, NULL);
+  wl_proxy_set_queue ((struct wl_proxy *) frame->feedback, NULL);
+  wl_callback_add_listener (frame->callback, &pipeline_frame_listener, frame);
+  wp_presentation_feedback_add_listener (frame->feedback, &pipeline_feedback_listener, frame);
+  g_queue_push_tail (&self->pipeline_frames, frame);
+  self->pipeline_frame_counter = frame_counter;
+  gdk_frame_clock_outstanding (clock);
+}
+
+static void
+pipeline_after_paint (GdkWaylandSurface *self)
+{
+  if (!pipeline_admission_open (self) && !self->awaiting_frame_frozen)
+    {
+      self->awaiting_frame_frozen = TRUE;
+      gdk_surface_freeze_updates (GDK_SURFACE (self));
+    }
+}
+
+static void
+pipeline_clear (GdkWaylandSurface *self)
+{
+  GdkWaylandPipelineFrame *frame;
+
+  if (self->pipeline_depth == 0)
+    return;
+
+  while ((frame = g_queue_pop_head (&self->pipeline_frames)) != NULL)
+    {
+      g_clear_pointer (&frame->callback, wl_callback_destroy);
+      if (frame->feedback != NULL)
+        {
+          g_clear_pointer (&frame->feedback, wp_presentation_feedback_destroy);
+          gdk_frame_clock_discarded (gdk_surface_get_frame_clock (GDK_SURFACE (self)),
+                                     frame->frame_counter);
+        }
+      g_free (frame);
+    }
+
+  self->pipeline_frame_counter = -1;
+  pipeline_maybe_thaw (self);
+}
+
+static void
+pipeline_setup (GdkWaylandSurface *self)
+{
+  GdkSurface *surface = GDK_SURFACE (self);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+
+  self->pipeline_frame_counter = -1;
+
+  if (WAYLAND_PIPELINE_DEPTH == 0 ||
+      !GDK_IS_TOPLEVEL (surface) ||
+      display->presentation == NULL ||
+      !GDK_IS_FRAME_CLOCK_IDLE (clock))
+    return;
+
+  self->pipeline_depth = WAYLAND_PIPELINE_DEPTH;
+  _gdk_frame_clock_idle_set_pace_when_throttled (GDK_FRAME_CLOCK_IDLE (clock), TRUE);
+}
+
 /* {{{ Utilities */
 
 static uint64_t
@@ -368,6 +590,12 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
   GdkFrameClock *clock;
 
+  if (self->pipeline_depth != 0)
+    {
+      pipeline_request_frame (self);
+      return;
+    }
+
   if (self->frame_callback != NULL)
     return;
 
@@ -453,6 +681,12 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
       gdk_wayland_surface_notify_committed (surface);
     }
 
+  if (impl->pipeline_depth != 0)
+    {
+      pipeline_after_paint (impl);
+      return;
+    }
+
   if (impl->frame_callback &&
       impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
     {
@@ -527,6 +761,8 @@ gdk_wayland_surface_dispose (GObject *object)
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
 
   impl = GDK_WAYLAND_SURFACE (surface);
+
+  pipeline_clear (impl);
 
   if (impl->event_queue)
     {
@@ -984,6 +1220,8 @@ gdk_wayland_surface_constructed (GObject *object)
   self->scale = GDK_FRACTIONAL_SCALE_INIT_INT (scale_factor);
   self->buffer_scale_dirty = scale_factor != 1;
 
+  pipeline_setup (self);
+
   gdk_wayland_surface_create_wl_surface (surface);
 
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
@@ -1139,6 +1377,8 @@ void
 gdk_wayland_surface_hide_surface (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  pipeline_clear (impl);
 
   if (!impl->mapped)
     return;
