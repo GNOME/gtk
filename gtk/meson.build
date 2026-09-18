@@ -210,6 +210,7 @@ gtk_public_sources = files([
   'gtkcustomfilter.c',
   'gtkcustomlayout.c',
   'gtkcustomsorter.c',
+  'gtkdebug.c',
   'gtkdialogerror.c',
   'gtkdirectorylist.c',
   'gtkdragicon.c',
