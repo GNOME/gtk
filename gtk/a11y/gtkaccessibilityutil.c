@@ -147,9 +147,11 @@ _gtk_accessibility_key_snooper (GtkWidget   *widget,
 
   atk_key_event_from_gdk_event_key (event, &atk_event);
 
-  for (l = key_listener_list; l; l = l->next)
+  l = key_listener_list;
+  while (l != NULL)
     {
       KeyEventListener *listener = l->data;
+      l = l->next;
 
       result |= listener->func (&atk_event, listener->data);
     }
