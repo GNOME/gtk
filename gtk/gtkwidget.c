@@ -2952,6 +2952,8 @@ gtk_widget_real_hide (GtkWidget *widget)
     gtk_widget_unmap (widget);
 
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
+  priv->allocated_x = 0;
+  priv->allocated_y = 0;
   priv->allocated_width = 0;
   priv->allocated_height = 0;
   priv->allocated_baseline = 0;
@@ -4184,6 +4186,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   GskTransform *css_transform;
+  int x = 0, y = 0;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
@@ -4259,19 +4262,22 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->alloc_needed = FALSE;
 
   baseline_changed = priv->allocated_baseline != baseline;
-  transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
+  transform_changed = priv->allocated_x != x || priv->allocated_y != y ||
+                      !gsk_transform_equal (priv->allocated_transform, transform);
 
   gsk_transform_unref (priv->allocated_transform);
   priv->allocated_transform = gsk_transform_ref (transform);
+  priv->allocated_x = x;
+  priv->allocated_y = y;
   priv->allocated_width = width;
   priv->allocated_height = height;
   priv->allocated_baseline = baseline;
 
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    adjusted.x = priv->margin.left;
+    adjusted.x = x + priv->margin.left;
   else
-    adjusted.x = priv->margin.right;
-  adjusted.y = priv->margin.top;
+    adjusted.x = x + priv->margin.right;
+  adjusted.y = y + priv->margin.top;
   adjusted.width = width - priv->margin.left - priv->margin.right;
   adjusted.height = height - priv->margin.top - priv->margin.bottom;
   if (baseline >= 0)
