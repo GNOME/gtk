@@ -33,6 +33,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkAdjustment          GtkAdjustment;
+typedef struct _GtkAllocationDetails   GtkAllocationDetails;
 typedef struct _GtkATContext           GtkATContext;
 typedef struct _GtkBitset              GtkBitset;
 typedef struct _GtkBuilder             GtkBuilder;
