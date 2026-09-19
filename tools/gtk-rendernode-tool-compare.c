@@ -130,7 +130,7 @@ do_compare (int          *argc,
       if (diff)
         {
           if (opt_filename)
-            g_print (_("Differences witten to %s.\n"), opt_filename);
+            g_print (_("Differences written to %s.\n"), opt_filename);
           else
             g_print (_("The images are different.\n"));
         }
