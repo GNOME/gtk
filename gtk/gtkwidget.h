@@ -298,11 +298,18 @@ void       gtk_widget_size_allocate       (GtkWidget           *widget,
                                            const GtkAllocation *allocation,
                                            int                  baseline);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_allocate            (GtkWidget               *widget,
-                                           int                      width,
-                                           int                      height,
-                                           int                      baseline,
-                                           GskTransform            *transform);
+void       gtk_widget_allocate            (GtkWidget                  *widget,
+                                           int                         width,
+                                           int                         height,
+                                           int                         baseline,
+                                           GskTransform               *transform);
+GDK_AVAILABLE_IN_4_26
+void       gtk_widget_allocate_detailed   (GtkWidget                  *widget,
+                                           int                         x,
+                                           int                         y,
+                                           int                         width,
+                                           int                         height,
+                                           const GtkAllocationDetails *details);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);

@@ -4395,6 +4395,47 @@ gtk_widget_allocate (GtkWidget    *widget,
 }
 
 /**
+ * gtk_widget_allocate_detailed:
+ * @widget: a widget
+ * @x: new x coordinate
+ * @y: new y coordinate
+ * @width: new width
+ * @height: new height
+ * @details: (nullable): details of the allocation
+ *
+ * Assigns size, position, and further details to a child widget.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * The transform given by the details is applied first, before
+ * the `x`, `y`, `width` and `height` arguments are considered.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * Since: 4.26
+ */
+void
+gtk_widget_allocate_detailed (GtkWidget                  *widget,
+                              int                         x,
+                              int                         y,
+                              int                         width,
+                              int                         height,
+                              const GtkAllocationDetails *details)
+{
+  GtkAllocationDetails default_details = GTK_ALLOCATION_DETAILS_INIT;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (details == NULL)
+    details = &default_details;
+
+  gtk_widget_allocate_internal (widget, x, y, width, height, details);
+}
+
+/**
  * gtk_widget_size_allocate:
  * @widget: a widget
  * @allocation: position and size to be allocated to @widget
