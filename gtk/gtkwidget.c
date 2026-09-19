@@ -29,6 +29,7 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkactionobserverprivate.h"
+#include "gtkallocationdetailsprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -4121,13 +4122,12 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
 }
 
 static void
-gtk_widget_allocate_internal (GtkWidget    *widget,
-                              int           x,
-                              int           y,
-                              int           width,
-                              int           height,
-                              int           baseline,
-                              GskTransform *transform)
+gtk_widget_allocate_internal (GtkWidget                  *widget,
+                              int                         x,
+                              int                         y,
+                              int                         width,
+                              int                         height,
+                              const GtkAllocationDetails *details)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4137,15 +4137,13 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
   gboolean transform_changed;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
-  GskTransform *css_transform;
+  GskTransform *transform, *css_transform;
+  int baseline;
 
   gtk_widget_push_verify_invariants (widget);
 
   if (!priv->visible && !GTK_IS_ROOT (widget))
-    {
-      gsk_transform_unref (transform);
-      goto out;
-    }
+    goto out;
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
   {
@@ -4209,17 +4207,17 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
-  baseline_changed = priv->allocated_baseline != baseline;
+  baseline_changed = priv->allocated_baseline != details->baseline;
   transform_changed = priv->allocated_x != x || priv->allocated_y != y ||
-                      !gsk_transform_equal (priv->allocated_transform, transform);
+                      !gsk_transform_equal (priv->allocated_transform, details->transform);
 
   gsk_transform_unref (priv->allocated_transform);
-  priv->allocated_transform = gsk_transform_ref (transform);
+  priv->allocated_transform = gsk_transform_ref (details->transform);
   priv->allocated_x = x;
   priv->allocated_y = y;
   priv->allocated_width = width;
   priv->allocated_height = height;
-  priv->allocated_baseline = baseline;
+  priv->allocated_baseline = details->baseline;
 
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     adjusted.x = x + priv->margin.left;
@@ -4228,8 +4226,10 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
   adjusted.y = y + priv->margin.top;
   adjusted.width = width - priv->margin.left - priv->margin.right;
   adjusted.height = height - priv->margin.top - priv->margin.bottom;
-  if (baseline >= 0)
-    baseline -= priv->margin.top;
+  if (details->baseline >= 0)
+    baseline = details->baseline - priv->margin.top;
+  else
+    baseline = -1;
 
   gtk_widget_adjust_size_allocation (widget, &adjusted, &baseline);
 
@@ -4263,7 +4263,7 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
       origin_x = _gtk_css_position_value_get_x (style->other->transform_origin, adjusted.width);
       origin_y = _gtk_css_position_value_get_y (style->other->transform_origin, adjusted.height);
 
-      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+      transform = gsk_transform_translate (details->transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
       adjusted.x = adjusted.y = 0;
 
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (origin_x, origin_y));
@@ -4271,6 +4271,10 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- origin_x, - origin_y));
 
       gsk_transform_unref (css_transform);
+    }
+  else
+    {
+      transform = gsk_transform_ref (details->transform);
     }
 
   adjusted.x += border.left + padding.left;
@@ -4312,14 +4316,14 @@ gtk_widget_allocate_internal (GtkWidget    *widget,
           gtk_layout_manager_allocate (priv->layout_manager, widget,
                                        priv->width,
                                        priv->height,
-                                       baseline);
+                                       priv->baseline);
         }
       else
         {
           GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
                                                         priv->width,
                                                         priv->height,
-                                                        baseline);
+                                                        priv->baseline);
         }
 
       /* Size allocation is god... after consulting god, no further requests or allocations are needed */
@@ -4377,10 +4381,17 @@ gtk_widget_allocate (GtkWidget    *widget,
                      int           baseline,
                      GskTransform *transform)
 {
+  GtkAllocationDetails details = GTK_ALLOCATION_DETAILS_INIT;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
 
-  gtk_widget_allocate_internal (widget, 0, 0, width, height, baseline, transform);
+  details.baseline = baseline;
+  details.transform = g_steal_pointer (&transform);
+
+  gtk_widget_allocate_detailed (widget, 0, 0, width, height, &details);
+
+  gtk_allocation_details_clear (&details);
 }
 
 /**
@@ -4406,13 +4417,21 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                           const GtkAllocation *allocation,
                           int                  baseline)
 {
+  GtkAllocationDetails details = GTK_ALLOCATION_DETAILS_INIT;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (baseline >= -1);
+
+  details.baseline = baseline;
+
   gtk_widget_allocate_internal (widget,
                                 allocation->x,
                                 allocation->y,
                                 allocation->width,
                                 allocation->height,
-                                baseline,
-                                NULL);
+                                &details);
+
+  gtk_allocation_details_clear (&details);
 }
 
 /**
