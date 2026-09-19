@@ -3878,8 +3878,15 @@ get_box_padding (GtkCssStyle *style,
  * @allocation: position and size to be allocated to @widget
  * @baseline: the baseline of the child, or -1
  *
- * Allocates widget with a transformation that translates
- * the origin to the position in @allocation.
+ * Allocates widget with a transformation that translates the origin to
+ * the position in @allocation.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
  *
  * This is a simple form of [method@Gtk.Widget.allocate].
  */
@@ -4159,11 +4166,12 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
  * Assigns size, position, (optionally) a baseline and transform
  * to a child widget.
  *
- * In this function, the allocation and baseline may be adjusted.
- * The given allocation will be forced to be bigger than the
- * widget's minimum size, as well as at least 0×0 in size.
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
  *
- * This function is only used by widget implementations.
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
  *
  * For a version that does not take a transform, see
  * [method@Gtk.Widget.size_allocate].
