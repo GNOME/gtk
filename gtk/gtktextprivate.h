@@ -105,5 +105,7 @@ void                gtk_text_get_layout_offsets       (GtkText    *entry,
 void                gtk_text_reset_im_context         (GtkText    *entry);
 GtkEventController *gtk_text_get_key_controller       (GtkText    *entry);
 
-G_END_DECLS
+void                gtk_text_activate_osk             (GtkText    *self,
+                                                       GdkEvent   *event);
 
+G_END_DECLS
