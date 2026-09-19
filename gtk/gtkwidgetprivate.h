@@ -153,6 +153,8 @@ struct _GtkWidgetPrivate
 
   /* The widget's allocated size */
   GskTransform *allocated_transform;
+  int allocated_x;
+  int allocated_y;
   int allocated_width;
   int allocated_height;
   int allocated_baseline;
