@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include "gtkemojidataprivate.h"
+
 #include "gtkemojicompletionprivate.h"
 
 #include "gtktextprivate.h"
@@ -64,6 +66,29 @@ static int populate_completion (GtkEmojiCompletion *completion,
 #define MAX_ROWS 5
 
 G_DEFINE_TYPE (GtkEmojiCompletion, gtk_emoji_completion, GTK_TYPE_POPOVER)
+
+static GtkWidget *
+emoji_row_get_base (GtkListBoxRow *row)
+{
+  GtkWidget *box = gtk_list_box_row_get_child (row);
+
+  return gtk_widget_get_first_child (box);
+}
+
+static GtkStack *
+emoji_row_get_stack (GtkListBoxRow *row)
+{
+  return GTK_STACK (gtk_widget_get_next_sibling (emoji_row_get_base (row)));
+}
+
+static GtkLabel *
+emoji_child_get_label (GtkWidget *child)
+{
+  if (GTK_IS_LIST_BOX_ROW (child))
+    return GTK_LABEL (emoji_row_get_base (GTK_LIST_BOX_ROW (child)));
+
+  return GTK_LABEL (gtk_flow_box_child_get_child (GTK_FLOW_BOX_CHILD (child)));
+}
 
 static void
 gtk_emoji_completion_finalize (GObject *object)
@@ -142,7 +167,7 @@ emoji_activated (GtkWidget          *row,
 
   gtk_popover_popdown (GTK_POPOVER (completion));
 
-  emoji = (const char *)g_object_get_data (G_OBJECT (row), "text");
+  emoji = gtk_label_get_text (emoji_child_get_label (row));
 
   g_signal_handler_block (completion->entry, completion->changed_id);
 
@@ -232,7 +257,7 @@ show_variations (GtkEmojiCompletion *completion,
   if (!row)
     return;
 
-  stack = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "stack"));
+  stack = GTK_WIDGET (emoji_row_get_stack (GTK_LIST_BOX_ROW (row)));
   box = gtk_stack_get_child_by_name (GTK_STACK (stack), "variations");
   if (!box)
     return;
@@ -259,8 +284,8 @@ move_active_variation (GtkEmojiCompletion *completion,
   if (!completion->active)
     return FALSE;
 
-  base = GTK_WIDGET (g_object_get_data (G_OBJECT (completion->active), "base"));
-  stack = GTK_WIDGET (g_object_get_data (G_OBJECT (completion->active), "stack"));
+  base = emoji_row_get_base (GTK_LIST_BOX_ROW (completion->active));
+  stack = GTK_WIDGET (emoji_row_get_stack (GTK_LIST_BOX_ROW (completion->active)));
   box = gtk_stack_get_child_by_name (GTK_STACK (stack), "variations");
 
   if (gtk_stack_get_visible_child (GTK_STACK (stack)) != box)
@@ -396,58 +421,6 @@ disconnect_signals (GtkEmojiCompletion *completion)
   g_clear_object (&completion->entry);
 }
 
-static gboolean
-has_variations (GVariant *emoji_data)
-{
-  GVariant *codes;
-  gsize i;
-  gboolean has_variations;
-
-  has_variations = FALSE;
-  codes = g_variant_get_child_value (emoji_data, 0);
-  for (i = 0; i < g_variant_n_children (codes); i++)
-    {
-      gunichar code;
-      g_variant_get_child (codes, i, "u", &code);
-      if (code == 0 || code == 0x1f3fb)
-        {
-          has_variations = TRUE;
-          break;
-        }
-    }
-  g_variant_unref (codes);
-
-  return has_variations;
-}
-
-static void
-get_text (GVariant *emoji_data,
-          gunichar  modifier,
-          char     *text,
-          gsize     length)
-{
-  GVariant *codes;
-  gsize i;
-  char *p;
-
-  p = text;
-  codes = g_variant_get_child_value (emoji_data, 0);
-  for (i = 0; i < g_variant_n_children (codes); i++)
-    {
-      gunichar code;
-
-      g_variant_get_child (codes, i, "u", &code);
-      if (code == 0)
-        code = modifier != 0 ? modifier : 0xfe0f;
-      if (code == 0x1f3fb)
-        code = modifier;
-      if (code != 0)
-        p += g_unichar_to_utf8 (code, p);
-    }
-  g_variant_unref (codes);
-  p[0] = 0;
-}
-
 static void
 add_emoji_variation (GtkWidget *box,
                      GVariant  *emoji_data,
@@ -456,9 +429,9 @@ add_emoji_variation (GtkWidget *box,
   GtkWidget *child;
   GtkWidget *label;
   PangoAttrList *attrs;
-  char text[64];
+  g_autofree char *text = NULL;
 
-  get_text (emoji_data, modifier, text, 64);
+  text = gtk_emoji_data_dup_text (emoji_data, modifier);
 
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
@@ -467,13 +440,6 @@ add_emoji_variation (GtkWidget *box,
   pango_attr_list_unref (attrs);
 
   child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
-  g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
-  g_object_set_data_full (G_OBJECT (child), "emoji-data",
-                          g_variant_ref (emoji_data),
-                          (GDestroyNotify)g_variant_unref);
-  if (modifier != 0)
-    g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
-
   gtk_flow_box_child_set_child (GTK_FLOW_BOX_CHILD (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
 }
@@ -487,12 +453,12 @@ add_emoji (GtkWidget          *list,
   GtkWidget *label;
   GtkWidget *box;
   PangoAttrList *attrs;
-  char text[64];
+  g_autofree char *text = NULL;
   const char *name;
   GtkWidget *stack;
   gunichar modifier;
 
-  get_text (emoji_data, 0, text, 64);
+  text = gtk_emoji_data_dup_text (emoji_data, 0);
 
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
@@ -506,14 +472,12 @@ add_emoji (GtkWidget          *list,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (child), box);
   gtk_box_append (GTK_BOX (box), label);
-  g_object_set_data (G_OBJECT (child), "base", label);
 
   stack = gtk_stack_new ();
   gtk_stack_set_hhomogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), TRUE);
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT);
   gtk_box_append (GTK_BOX (box), stack);
-  g_object_set_data (G_OBJECT (child), "stack", stack);
 
   g_variant_get_child (emoji_data, 1, "&s", &name);
   label = gtk_label_new (name);
@@ -521,7 +485,7 @@ add_emoji (GtkWidget          *list,
 
   gtk_stack_add_named (GTK_STACK (stack), label, "text");
 
-  if (has_variations (emoji_data))
+  if (gtk_emoji_data_has_variations (emoji_data))
     {
       box = gtk_flow_box_new ();
       gtk_flow_box_set_homogeneous (GTK_FLOW_BOX (box), TRUE);
@@ -535,10 +499,6 @@ add_emoji (GtkWidget          *list,
 
       gtk_stack_add_named (GTK_STACK (stack), box, "variations");
     }
-
-  g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
-  g_object_set_data_full (G_OBJECT (child), "emoji-data",
-                          g_variant_ref (emoji_data), (GDestroyNotify)g_variant_unref);
 
   gtk_list_box_insert (GTK_LIST_BOX (list), child, -1);
 }
@@ -623,7 +583,7 @@ gtk_emoji_completion_init (GtkEmojiCompletion *completion)
 
   gtk_widget_init_template (GTK_WIDGET (completion));
 
-  bytes = get_emoji_data ();
+  bytes = gtk_emoji_data_load ();
   completion->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausasu)"), bytes, TRUE));
 
   g_bytes_unref (bytes);
