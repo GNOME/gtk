@@ -651,8 +651,9 @@ after_layout_cb (GtkIMContext *context)
       context_wayland->surface_cursor_rect.height != rect.height)
     {
       context_wayland->surface_cursor_rect = rect;
-      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
-                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+
+      notify_cursor_location (context_wayland);
+      commit_state (context_wayland);
     }
 }
 
