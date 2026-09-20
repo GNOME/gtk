@@ -3872,43 +3872,6 @@ get_box_padding (GtkCssStyle *style,
   border->right = get_number (style->size->padding_right);
 }
 
-/**
- * gtk_widget_size_allocate:
- * @widget: a widget
- * @allocation: position and size to be allocated to @widget
- * @baseline: the baseline of the child, or -1
- *
- * Allocates widget with a transformation that translates the origin to
- * the position in @allocation.
- *
- * The given allocation must be large enough for the widget's minimum
- * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
- * for querying a minimum size.
- *
- * This function is only used by widget implementations to allocate a size
- * for their direct children.
- *
- * This is a simple form of [method@Gtk.Widget.allocate].
- */
-void
-gtk_widget_size_allocate (GtkWidget           *widget,
-                          const GtkAllocation *allocation,
-                          int                  baseline)
-{
-  GskTransform *transform;
-
-  if (allocation->x || allocation->y)
-    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
-  else
-    transform = NULL;
-
-  gtk_widget_allocate (widget,
-                       allocation->width,
-                       allocation->height,
-                       baseline,
-                       transform);
-}
-
 /* translate initial/final into start/end */
 static GtkAlign
 effective_align (GtkAlign         align,
@@ -4155,33 +4118,12 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
     }
 }
 
-/**
- * gtk_widget_allocate:
- * @widget: a widget
- * @width: new width
- * @height: new height
- * @baseline: new baseline, or -1
- * @transform: (transfer full) (nullable): transformation to be applied
- *
- * Assigns size, position, (optionally) a baseline and transform
- * to a child widget.
- *
- * The given allocation must be large enough for the widget's minimum
- * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
- * for querying a minimum size.
- *
- * This function is only used by widget implementations to allocate a size
- * for their direct children.
- *
- * For a version that does not take a transform, see
- * [method@Gtk.Widget.size_allocate].
- */
-void
-gtk_widget_allocate (GtkWidget    *widget,
-                     int           width,
-                     int           height,
-                     int           baseline,
-                     GskTransform *transform)
+static void
+gtk_widget_allocate_internal (GtkWidget    *widget,
+                              int           width,
+                              int           height,
+                              int           baseline,
+                              GskTransform *transform)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4192,9 +4134,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   GskTransform *css_transform;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (baseline >= -1);
 
   gtk_widget_push_verify_invariants (widget);
 
@@ -4401,6 +4340,77 @@ gtk_widget_allocate (GtkWidget    *widget,
 
 out:
   gtk_widget_pop_verify_invariants (widget);
+}
+
+/**
+ * gtk_widget_allocate:
+ * @widget: a widget
+ * @width: new width
+ * @height: new height
+ * @baseline: new baseline, or -1
+ * @transform: (transfer full) (nullable): transformation to be applied
+ *
+ * Assigns size, position, (optionally) a baseline and transform
+ * to a child widget.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * For a version that does not take a transform, see
+ * [method@Gtk.Widget.size_allocate].
+ */
+void
+gtk_widget_allocate (GtkWidget    *widget,
+                     int           width,
+                     int           height,
+                     int           baseline,
+                     GskTransform *transform)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (baseline >= -1);
+
+  gtk_widget_allocate_internal (widget, width, height, baseline, transform);
+}
+
+/**
+ * gtk_widget_size_allocate:
+ * @widget: a widget
+ * @allocation: position and size to be allocated to @widget
+ * @baseline: the baseline of the child, or -1
+ *
+ * Allocates widget with a transformation that translates the origin to
+ * the position in @allocation.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * This is a simple form of [method@Gtk.Widget.allocate].
+ */
+void
+gtk_widget_size_allocate (GtkWidget           *widget,
+                          const GtkAllocation *allocation,
+                          int                  baseline)
+{
+  GskTransform *transform;
+
+  if (allocation->x || allocation->y)
+    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
+  else
+    transform = NULL;
+
+  gtk_widget_allocate_internal (widget,
+                                allocation->width,
+                                allocation->height,
+                                baseline,
+                                transform);
 }
 
 /**
