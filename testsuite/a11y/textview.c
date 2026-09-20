@@ -204,6 +204,62 @@ textview_accessible_text (void)
   g_object_unref (widget);
 }
 
+static void
+textview_accessible_text_tag_colors (void)
+{
+  /* Scenario: tag colors reach assistive technology unmangled
+   *   Given a text view whose buffer applies a tag with foreground #5fbf00
+   *     and background #ff8000 to a range
+   *   When the accessible text attributes for that range are read
+   *   Then fg-color and bg-color hold the 16-bit values of those colors,
+   *     not colors quantized to all-or-nothing channels
+   */
+  GtkWidget *widget = gtk_text_view_new ();
+  GtkTextBuffer *buffer;
+  GtkTextTag *tag;
+  GtkTextIter start, end;
+  gboolean res;
+  gsize n_ranges;
+  GtkAccessibleTextRange *ranges = NULL;
+  char **attr_names, **attr_values;
+  const char *fg_value = NULL;
+  const char *bg_value = NULL;
+
+  g_object_ref_sink (widget);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  gtk_text_buffer_set_text (buffer, "abc def", -1);
+
+  tag = gtk_text_tag_new ("colored");
+  g_object_set (tag, "foreground", "#5fbf00", "background", "#ff8000", NULL);
+  gtk_text_tag_table_add (gtk_text_buffer_get_tag_table (buffer), tag);
+  g_object_unref (tag);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 2);
+  gtk_text_buffer_apply_tag_by_name (buffer, "colored", &start, &end);
+
+  res = gtk_accessible_text_get_attributes (GTK_ACCESSIBLE_TEXT (widget), 1, &n_ranges, &ranges, &attr_names, &attr_values);
+  g_assert_true (res);
+
+  for (gsize i = 0; attr_names[i] != NULL; i++)
+    {
+      if (g_str_equal (attr_names[i], "fg-color"))
+        fg_value = attr_values[i];
+      else if (g_str_equal (attr_names[i], "bg-color"))
+        bg_value = attr_values[i];
+    }
+
+  /* 8-bit channels scale to 16 bit by * 257: 0x5f 0xbf 0x00 and 0xff 0x80 0x00 */
+  g_assert_cmpstr (fg_value, ==, "24415,49087,0");
+  g_assert_cmpstr (bg_value, ==, "65535,32896,0");
+
+  g_free (ranges);
+  g_strfreev (attr_names);
+  g_strfreev (attr_values);
+  g_object_unref (widget);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -212,6 +268,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/textview/role", textview_role);
   g_test_add_func ("/a11y/textview/properties", textview_properties);
   g_test_add_func ("/a11y/textview/text-accessible", textview_accessible_text);
+  g_test_add_func ("/a11y/textview/text-tag-colors", textview_accessible_text_tag_colors);
 
   return g_test_run ();
 }
