@@ -203,8 +203,14 @@ the `.data-table` style class.
 ## Sections
 
 List models can optionally group their items into **_sections_**, by implementing
-the `GtkSectionModel` interface. `GtkListView` can
-display headers for sections, by installing a separate **_header factory_**.
+the `GtkSectionModel` interface. `GtkListView` and (since GTK 4.26)
+`GtkGridView` can display headers for sections by installing a separate
+**_header factory_**. This factory configures `GtkListHeader` objects instead
+of `GtkListItem` objects.
+
+In a grid, each section starts a new row. Its header spans all columns and
+scrolls with the items. Headers do not have model positions and are not
+selectable. Without a header factory, sections do not affect grid layout.
 
 Many GTK list models support section inherently, or they pass through the
 section of a model they are wrapping.
