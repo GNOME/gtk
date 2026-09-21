@@ -229,6 +229,58 @@ test_label_parse_more (void)
   g_object_unref (label);
 }
 
+/* Scenario: attributes set on a markup label can be taken away again
+ *   Given a label whose text was set with markup, so it carries attributes
+ *     of its own, and a background attribute applied on top with
+ *     gtk_label_set_attributes()
+ *   When the attributes are replaced by an empty list and the layout is
+ *     rendered again
+ *   Then the layout no longer carries the background attribute, the same as
+ *     for a label whose text was set as plain text
+ */
+static void
+test_label_set_attributes_clears (void)
+{
+  const char *labels[] = { "plain", "markup" };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (labels); i++)
+    {
+      GtkWidget *label = gtk_label_new (NULL);
+      PangoAttrList *attrs;
+      PangoLayout *layout;
+      char *text;
+
+      if (i == 0)
+        gtk_label_set_text (GTK_LABEL (label), "Hello there");
+      else
+        gtk_label_set_markup (GTK_LABEL (label), "Hello <b>there</b>");
+
+      g_object_ref_sink (label);
+
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_background_new (65535, 0, 0));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+
+      /* Render the layout, as a draw would. */
+      layout = gtk_label_get_layout (GTK_LABEL (label));
+      g_assert_nonnull (pango_layout_get_attributes (layout));
+
+      attrs = pango_attr_list_new ();
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+
+      layout = gtk_label_get_layout (GTK_LABEL (label));
+      attrs = pango_layout_get_attributes (layout);
+      text = attrs ? pango_attr_list_to_string (attrs) : g_strdup ("");
+
+      g_assert_null (strstr (text, "background"));
+
+      g_free (text);
+      g_object_unref (label);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -237,6 +289,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/label/markup-parse", test_label_markup);
   g_test_add_func ("/label/underline-parse", test_label_underline);
   g_test_add_func ("/label/parse-more", test_label_parse_more);
+  g_test_add_func ("/label/set-attributes-clears", test_label_set_attributes_clears);
 
   return g_test_run ();
 }
