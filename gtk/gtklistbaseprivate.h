@@ -41,6 +41,8 @@ struct _GtkListBaseClass
                                                                  GtkListTile            *tile,
                                                                  guint                   position);
   GtkListHeaderBase *  (* create_header_widget)                 (GtkListBase            *self);
+  void                 (* adjust_anchor_area)                   (GtkListBase            *self,
+                                                                 GdkRectangle           *area);
 
   gboolean             (* get_allocation)                       (GtkListBase            *self,
                                                                  guint                   pos,
@@ -92,7 +94,7 @@ void                   gtk_list_base_set_tab_behavior           (GtkListBase    
 GtkListTabBehavior     gtk_list_base_get_tab_behavior           (GtkListBase            *self);
 
 
-void                   gtk_list_base_allocate                   (GtkListBase            *self);
+gboolean               gtk_list_base_allocate                   (GtkListBase            *self);
 
 void                   gtk_list_base_scroll_to                  (GtkListBase            *self,
                                                                  guint                   pos,
