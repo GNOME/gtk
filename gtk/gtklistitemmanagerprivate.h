@@ -138,7 +138,7 @@ gboolean                gtk_list_item_manager_get_has_sections  (GtkListItemMana
 GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
 void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,
                                                                  GtkListItemTracker     *tracker);
-void                    gtk_list_item_tracker_set_position      (GtkListItemManager     *self,
+gboolean                gtk_list_item_tracker_set_position      (GtkListItemManager     *self,
                                                                  GtkListItemTracker     *tracker,
                                                                  guint                   position,
                                                                  guint                   n_before,
