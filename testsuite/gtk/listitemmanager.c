@@ -378,6 +378,42 @@ test_create_with_items (void)
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
+static void
+test_tracker_changes (void)
+{
+  const char *strings[] = { "0", "1", "2", NULL };
+  GtkListItemTracker *tracker;
+  GtkNoSelection *selection;
+  GtkListItemManager *items;
+  GtkWidget *widget;
+
+  widget = gtk_window_new ();
+  items = gtk_list_item_manager_new (widget,
+                                     split_simple,
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
+  g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
+  tracker = gtk_list_item_tracker_new (items);
+
+  g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 2, 3));
+  g_assert_false (gtk_list_item_tracker_set_position (items, tracker, 2, 2, 3));
+
+  selection = gtk_no_selection_new (G_LIST_MODEL (gtk_string_list_new (strings)));
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+
+  g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 2, 3));
+  g_assert_false (gtk_list_item_tracker_set_position (items, tracker, 1, 2, 3));
+  g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 3, 3));
+  g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 3, 2));
+  g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 99, 3, 2));
+  g_assert_false (gtk_list_item_tracker_set_position (items, tracker, 3, 3, 2));
+
+  gtk_list_item_tracker_free (items, tracker);
+  g_object_unref (selection);
+  gtk_window_destroy (GTK_WINDOW (widget));
+}
+
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
@@ -560,6 +596,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/listitemmanager/create", test_create);
   g_test_add_func ("/listitemmanager/create_with_items", test_create_with_items);
+  g_test_add_func ("/listitemmanager/tracker/changes", test_tracker_changes);
   g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
 
   return g_test_run ();
