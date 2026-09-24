@@ -164,6 +164,7 @@ should_run_source (GdkFrameClockIdle *self)
 
   return !gdk_frame_clock_is_stopped (clock) &&
          !gdk_frame_clock_is_in_frame (clock) &&
+         gdk_frame_clock_get_throttling (clock) == 0 &&
          (gdk_frame_clock_get_requested (clock) != 0 || gdk_frame_clock_is_updating (clock));
 }
 
@@ -427,6 +428,15 @@ gdk_frame_clock_idle_end_updating (GdkFrameClock *clock)
 }
 
 static void
+gdk_frame_clock_idle_stop_throttling (GdkFrameClock *clock,
+                                      gint64         frame_counter)
+{
+  GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (clock);
+
+  maybe_start_idle (self, TRUE);
+}
+
+static void
 gdk_frame_clock_idle_stop (GdkFrameClock *clock)
 {
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (clock);
@@ -468,6 +478,7 @@ gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
   frame_clock_class->request_phase = gdk_frame_clock_idle_request_phase;
   frame_clock_class->begin_updating = gdk_frame_clock_idle_begin_updating;
   frame_clock_class->end_updating = gdk_frame_clock_idle_end_updating;
+  frame_clock_class->stop_throttling = gdk_frame_clock_idle_stop_throttling;
   frame_clock_class->start = gdk_frame_clock_idle_start;
   frame_clock_class->stop = gdk_frame_clock_idle_stop;
 }
