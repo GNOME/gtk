@@ -66,6 +66,7 @@ typedef enum {
   GDK_FEATURE_D3D12            = 1 << 9,
   GDK_FEATURE_OFFLOAD          = 1 << 10,
   GDK_FEATURE_THREADS          = 1 << 11,
+  GDK_FEATURE_THROTTLING       = 1 << 12,
 } GdkFeatures;
 
 #define GDK_ALL_FEATURES ((1 << 12) - 1)

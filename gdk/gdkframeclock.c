@@ -540,7 +540,8 @@ gdk_frame_clock_stop_throttling (GdkFrameClock *self,
   g_assert (priv->n_throttling > 0);
   priv->n_throttling--;
 
-  if (!gdk_frame_clock_is_in_frame (self))
+  if (!gdk_frame_clock_is_in_frame (self) &&
+      gdk_has_feature (GDK_FEATURE_THROTTLING))
     {
       GDK_FRAME_CLOCK_GET_CLASS (self)->stop_throttling (self, frame_counter);
     }
@@ -563,6 +564,9 @@ gsize
 gdk_frame_clock_get_throttling (GdkFrameClock *clock)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
+
+  if (!gdk_has_feature (GDK_FEATURE_THROTTLING))
+    return 0;
 
   return priv->n_throttling;
 }
