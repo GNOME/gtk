@@ -145,11 +145,18 @@ struct _GdkFrameClockPrivate
 
   gsize n_started;
   gsize n_updating;
+  gsize n_throttling;
 
   guint work_performed : 1;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
+
+static void
+gdk_frame_clock_default_stop_throttling (GdkFrameClock *self,
+                                         gint64         frame_counter)
+{
+}
 
 static uint64_t
 gdk_frame_clock_default_predict_presentation_time (GdkFrameClock *self,
@@ -201,6 +208,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
+  klass->stop_throttling = gdk_frame_clock_default_stop_throttling;
   klass->predict_presentation_time = gdk_frame_clock_default_predict_presentation_time;
 
   gobject_class->finalize = gdk_frame_clock_finalize;
@@ -523,6 +531,42 @@ gdk_frame_clock_stop (GdkFrameClock *clock)
     }
 }
 
+static void
+gdk_frame_clock_stop_throttling (GdkFrameClock *self,
+                                 gint64         frame_counter)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  g_assert (priv->n_throttling > 0);
+  priv->n_throttling--;
+
+  if (!gdk_frame_clock_is_in_frame (self))
+    {
+      GDK_FRAME_CLOCK_GET_CLASS (self)->stop_throttling (self, frame_counter);
+    }
+}
+
+/**
+ * gdk_frame_clock_get_throttling:
+ * @self: the frame clock 
+ *
+ * Gets the number of frames where the compositor hasn't sent a throttling
+ * hint yet. See gdk_frame_timings_get_throttling_hint() for
+ * a longer discussion.
+ *
+ * This function is intended to be used by frame clock implementations.
+ *
+ * Returns: the number of frames still waiting for a callback to stop
+ *   throttling
+ **/
+gsize
+gdk_frame_clock_get_throttling (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
+
+  return priv->n_throttling;
+}
+
 gboolean
 gdk_frame_clock_is_stopped (GdkFrameClock *clock)
 {
@@ -655,6 +699,12 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
         }
       else
         {
+          if (frame->throttling)
+            {
+              frame->throttling = FALSE;
+              gdk_frame_clock_stop_throttling (self, priv->frame_counter + 1 - frames_get_size (&priv->frames));
+            }
+
           while (frame->frames)
             gdk_draw_context_frame_free (frame->frames->data);
 
@@ -1083,8 +1133,11 @@ gdk_draw_context_frame_stop_throttling (GdkDrawContextFrame *frame,
 
   clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
   clock_frame = gdk_frame_clock_get_frame (clock, frame->frame_counter);
-  if (clock_frame != NULL)
-    clock_frame->throttling = FALSE;
+  if (clock_frame != NULL && clock_frame->throttling)
+    {
+      clock_frame->throttling = FALSE;
+      gdk_frame_clock_stop_throttling (clock, frame->frame_counter);
+    }
 
   frame->throttling_complete = TRUE;
   if (gdk_draw_context_frame_is_complete (frame))
@@ -1346,7 +1399,12 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
            * so mark the frame as complete.
            * Marking it as complete will ensure the correct state.
            */
-          clock_frame->throttling = FALSE;
+          if (clock_frame->throttling)
+            {
+              clock_frame->throttling = FALSE;
+              /* not calling end_throttling() here because we're still in_frame() */
+              priv->n_throttling--;
+            }
           gdk_frame_timings_complete (clock_frame->timings);
 
           gdk_frame_clock_debug_print_timings (self, clock_frame->timings);
@@ -1407,15 +1465,17 @@ void
 gdk_frame_clock_add_frame (GdkFrameClock       *self,
                            GdkDrawContextFrame *frame)
 {
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   GdkFrameClockFrame *clock_frame;
 
   clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
   g_assert (clock_frame != NULL);
 
-  if (clock_frame->frames == NULL)
-    clock_frame->throttling = TRUE;
-  if (frame->throttling_complete)
-    clock_frame->throttling = FALSE;
+  if (clock_frame->frames == NULL && !frame->throttling_complete)
+    {
+      clock_frame->throttling = TRUE;
+      priv->n_throttling++;
+    }
   clock_frame->frames = g_slist_prepend (clock_frame->frames, frame);
 
   gdk_frame_timings_outstanding (clock_frame->timings);
@@ -1437,7 +1497,11 @@ gdk_frame_clock_remove_frame (GdkFrameClock       *self,
       (!gdk_frame_clock_is_in_frame (self) ||
        frame->frame_counter != priv->frame_counter))
     {
-      clock_frame->throttling = FALSE;
+      if (clock_frame->throttling)
+        {
+          clock_frame->throttling = FALSE;
+          gdk_frame_clock_stop_throttling (self, frame->frame_counter);
+        }
       gdk_frame_timings_complete (clock_frame->timings);
 
       gdk_frame_clock_debug_print_timings (self, clock_frame->timings);

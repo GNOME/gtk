@@ -69,6 +69,9 @@ struct _GdkFrameClockClass
                                                                  GdkFrameClockPhase      phase);
   void                  (* begin_updating)                      (GdkFrameClock          *self);
   void                  (* end_updating)                        (GdkFrameClock          *self);
+  /* not emitted while in frame */
+  void                  (* stop_throttling)                     (GdkFrameClock          *self,
+                                                                 gint64                  frame_counter);
 
   void                  (* start)                               (GdkFrameClock          *self);
   void                  (* stop)                                (GdkFrameClock          *self);
@@ -80,6 +83,7 @@ gboolean                gdk_frame_clock_is_stopped              (GdkFrameClock  
 gboolean                gdk_frame_clock_is_updating             (GdkFrameClock          *self);
 gboolean                gdk_frame_clock_is_in_frame             (GdkFrameClock          *self);
 GdkFrameClockPhase      gdk_frame_clock_get_requested           (GdkFrameClock          *self);
+gsize                   gdk_frame_clock_get_throttling          (GdkFrameClock          *self);
 
 void                    gdk_frame_clock_frame                   (GdkFrameClock          *self);
 
