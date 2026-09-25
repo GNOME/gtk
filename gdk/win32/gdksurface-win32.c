@@ -956,6 +956,15 @@ gdk_win32_surface_dpi_changed (GdkSurface *surface,
       return;
     }
 
+  if (GDK_IS_DRAG_SURFACE (surface))
+    {
+      /* Moving a drag icon re-enters WM_DPICHANGED (gtk#7175); just resize + repaint. */
+      gdk_win32_surface_resize (surface, surface->width, surface->height);
+      _gdk_surface_update_size (surface);
+      gdk_surface_invalidate_rect (surface, NULL);
+      return;
+    }
+
   {
     /* Nullable: geometry may not have settled yet (e.g. just after restore). */
     GdkMonitor *monitor = gdk_display_get_monitor_at_surface (display, surface);
