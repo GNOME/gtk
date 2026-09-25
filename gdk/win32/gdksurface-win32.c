@@ -997,6 +997,22 @@ gdk_win32_surface_dpi_changed (GdkSurface *surface,
   gdk_surface_invalidate_rect (surface, NULL);
 
   gdk_surface_request_layout (surface);
+
+  /* update_cursor() never runs on a DPI change; re-apply for the new scale. */
+  {
+    GdkSeat *seat = gdk_display_get_default_seat (display);
+    GdkDevice *pointer = seat != NULL ? gdk_seat_get_pointer (seat) : NULL;
+    GdkCursor *cursor = NULL;
+
+    if (pointer != NULL)
+      cursor = gdk_surface_get_device_cursor (surface, pointer);
+    if (cursor == NULL)
+      cursor = gdk_surface_get_cursor (surface);
+
+    /* NULL would hit the default-cursor leak in the virtual device. */
+    if (pointer != NULL && cursor != NULL)
+      GDK_DEVICE_GET_CLASS (pointer)->set_surface_cursor (pointer, surface, cursor);
+  }
 }
 
 static void

@@ -103,6 +103,9 @@ struct _GdkWin32HCursor
   /* A copy of the "destoyable" attribute of
    * the handle */
   gboolean         readonly_destroyable;
+
+  /* DPI this handle was built at ({0} for scale-independent cursors) */
+  GdkWin32Dpi      dpi;
 };
 
 struct _GdkWin32HCursorClass
@@ -1470,6 +1473,7 @@ _gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
                                              const GdkWin32Dpi *dpi)
 {
   GdkWin32HCursor *win32hcursor;
+  gboolean         cached;
   const char      *cursor_name;
   GdkTexture      *texture;
   GdkCursor       *fallback;
@@ -1480,8 +1484,11 @@ _gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
     return NULL;
 
   win32hcursor = g_hash_table_lookup (display->cursors, cursor);
+  cached = win32hcursor != NULL;
 
-  if (win32hcursor != NULL)
+  /* dpi.dpi == 0 = scale-independent; otherwise rebuild on a DPI mismatch. */
+  if (win32hcursor != NULL &&
+      (win32hcursor->dpi.dpi == 0 || gdk_win32_dpi_equal (&win32hcursor->dpi, dpi)))
     return win32hcursor;
 
   cursor_name = gdk_cursor_get_name (cursor);
@@ -1512,13 +1519,24 @@ _gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
                                                               gdk_win32_dpi_to_device (dpi, hotspot_x),
                                                               gdk_win32_dpi_to_device (dpi, hotspot_y));
           g_object_unref (texture);
+
+          if (win32hcursor != NULL)
+            win32hcursor->dpi = *dpi;
         }
     }
 
   if (win32hcursor != NULL)
     {
-      g_object_weak_ref (G_OBJECT (cursor), gdk_win32_cursor_remove_from_cache, display);
-      g_hash_table_insert (display->cursors, cursor, win32hcursor);
+      if (cached)
+        {
+          /* Replaces the stale-DPI entry; keeps the existing weak ref. */
+          g_hash_table_replace (display->cursors, cursor, win32hcursor);
+        }
+      else
+        {
+          g_object_weak_ref (G_OBJECT (cursor), gdk_win32_cursor_remove_from_cache, display);
+          g_hash_table_insert (display->cursors, cursor, win32hcursor);
+        }
 
       return win32hcursor;
     }
