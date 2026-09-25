@@ -236,7 +236,6 @@ typedef struct
    * the context every time.
    */
   HWND                            source_window_handle;
-  guint                           scale;
 
   /* We get this from the OS via IDropSourceNotify and pass it to the
    * main thread.
@@ -811,7 +810,6 @@ gdk_drag_new (GdkDisplay         *display,
 
   drag = GDK_DRAG (drag_win32);
 
-  drag_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
   drag_win32->dnd_thread_items = display_win32->cb_dnd_items->clipdrop->dnd_thread_items;
 
   return drag;
@@ -1577,11 +1575,8 @@ static source_drag_context *
 source_context_new (GdkDrag           *drag,
                     GdkContentFormats *formats)
 {
-  GdkWin32Drag *drag_win32;
   source_drag_context *result;
   GdkSurface *surface;
-
-  drag_win32 = GDK_WIN32_DRAG (drag);
 
   g_object_get (drag, "surface", &surface, NULL);
 
@@ -1591,7 +1586,6 @@ source_context_new (GdkDrag           *drag,
   result->idsn.lpVtbl = &idsn_vtbl;
   result->ref_count = 1;
   result->source_window_handle = GDK_SURFACE_HWND (surface);
-  result->scale = drag_win32->scale;
   result->util_data.state = GDK_WIN32_DND_PENDING; /* Implicit */
   result->dest_window_handle = INVALID_HANDLE_VALUE;
 
@@ -2057,6 +2051,7 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
 {
   GdkModifierType state;
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (event->surface);
   DWORD key_state;
   double x, y;
   double x_root, y_root;
@@ -2085,8 +2080,8 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
   API_CALL (PostThreadMessage, (clipdrop->dnd_thread_id,
                                 WM_MOUSEMOVE,
                                 key_state,
-                                MAKELPARAM (x_root * drag_win32->scale,
-                                            y_root * drag_win32->scale)));
+                                MAKELPARAM (gdk_win32_surface_to_device (impl, x_root),
+                                            gdk_win32_surface_to_device (impl, y_root))));
 
   return TRUE;
 }

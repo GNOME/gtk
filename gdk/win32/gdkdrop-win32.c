@@ -78,7 +78,6 @@ struct _GdkWin32Drop
   /* The actions supported at GTK level. Set in gdk_win32_drop_status(). */
   GdkDragAction    actions;
 
-  guint            scale;          /* Temporarily caches the HiDPI scale */
   int              last_x;         /* Coordinates from last event, in GDK space */
   int              last_y;
   DWORD            last_key_state; /* Key state from last event */
@@ -168,7 +167,6 @@ gdk_drop_new (GdkDisplay        *display,
               GdkDragProtocol    protocol)
 {
   GdkWin32Drop *drop_win32;
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
 
   drop_win32 = g_object_new (GDK_TYPE_WIN32_DROP,
                              "device", device,
@@ -177,7 +175,6 @@ gdk_drop_new (GdkDisplay        *display,
                              "surface", surface,
                              NULL);
 
-  drop_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
   drop_win32->protocol = protocol;
 
   return GDK_DROP (drop_win32);
@@ -461,6 +458,7 @@ idroptarget_dragenter (LPDROPTARGET This,
   int pt_y;
   double x = 0.0;
   double y = 0.0;
+  GdkWin32Surface *impl;
   GdkDrag *drag;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
@@ -505,12 +503,13 @@ idroptarget_dragenter (LPDROPTARGET This,
                                               grfKeyState);
 
   set_data_object (&ctx->data_object, pDataObj);
-  pt_x = pt.x / drop_win32->scale;
-  pt_y = pt.y / drop_win32->scale;
+  impl = GDK_WIN32_SURFACE (ctx->surface);
+  pt_x = gdk_win32_surface_to_application (impl, pt.x);
+  pt_y = gdk_win32_surface_to_application (impl, pt.y);
 
   unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
-  x /= drop_win32->scale;
-  y /= drop_win32->scale;
+  x = gdk_win32_surface_to_application_double (impl, x);
+  y = gdk_win32_surface_to_application_double (impl, y);
 
   gdk_drop_emit_enter_event (drop, TRUE, x, y, GDK_CURRENT_TIME);
   drop_win32->last_key_state = grfKeyState;
@@ -545,8 +544,9 @@ idroptarget_dragover (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  int pt_x = pt.x / drop_win32->scale;
-  int pt_y = pt.y / drop_win32->scale;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (ctx->surface);
+  int pt_x = gdk_win32_surface_to_application (impl, pt.x);
+  int pt_y = gdk_win32_surface_to_application (impl, pt.y);
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
@@ -570,8 +570,8 @@ idroptarget_dragover (LPDROPTARGET This,
       double y = 0.0;
 
       unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
-      x /= drop_win32->scale;
-      y /= drop_win32->scale;
+      x = gdk_win32_surface_to_application_double (impl, x);
+      y = gdk_win32_surface_to_application_double (impl, y);
 
       set_source_actions_helper (ctx->drop, source_actions, grfKeyState);
 
@@ -616,6 +616,7 @@ idroptarget_drop (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (ctx->surface);
   double x = 0.0;
   double y = 0.0;
   GdkDragAction dest_action;
@@ -639,8 +640,8 @@ idroptarget_drop (LPDROPTARGET This,
   drop_win32->drop_finished = FALSE;
 
   unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
-  x /= drop_win32->scale;
-  y /= drop_win32->scale;
+  x = gdk_win32_surface_to_application_double (impl, x);
+  y = gdk_win32_surface_to_application_double (impl, y);
 
   gdk_drop_emit_motion_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
 
