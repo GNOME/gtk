@@ -432,6 +432,15 @@ accessible_text_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &coords_type);
 
+      if (offset < 0)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_INVALID_ARGS,
+                                                         "Not a valid offset");
+          return;
+        }
+
       if (coords_type != ATSPI_COORD_TYPE_PARENT && coords_type != ATSPI_COORD_TYPE_WINDOW)
         {
           g_dbus_method_invocation_return_error_literal (invocation,
