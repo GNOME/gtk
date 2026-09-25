@@ -971,6 +971,27 @@ gdk_win32_surface_dpi_changed (GdkSurface *surface,
                                     gdk_win32_surface_to_application (impl, y),
                                     surface->width, surface->height);
 
+  /* Re-base an in-flight CSD drag, or the next motion lurches off the pointer. */
+  {
+    GdkW32DragMoveResizeContext *drag = &impl->drag_move_resize_context;
+
+    if (drag->op != GDK_WIN32_DRAGOP_NONE)
+      {
+        POINT pt;
+
+        drag->start_rect.left = x;
+        drag->start_rect.top = y;
+        drag->start_rect.right = x + width;
+        drag->start_rect.bottom = y + height;
+
+        if (_gdk_win32_get_cursor_pos (display, &pt))
+          {
+            drag->start_root_x = gdk_win32_surface_to_application (impl, pt.x);
+            drag->start_root_y = gdk_win32_surface_to_application (impl, pt.y);
+          }
+      }
+  }
+
   /* A pure DPI change keeps the application size; force the framebuffer resize + repaint. */
   _gdk_surface_update_size (surface);
   gdk_surface_invalidate_rect (surface, NULL);
