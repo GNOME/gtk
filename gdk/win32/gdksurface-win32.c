@@ -971,6 +971,10 @@ gdk_win32_surface_dpi_changed (GdkSurface *surface,
                                     gdk_win32_surface_to_application (impl, y),
                                     surface->width, surface->height);
 
+  /* A pure DPI change keeps the application size; force the framebuffer resize + repaint. */
+  _gdk_surface_update_size (surface);
+  gdk_surface_invalidate_rect (surface, NULL);
+
   gdk_surface_request_layout (surface);
 }
 
