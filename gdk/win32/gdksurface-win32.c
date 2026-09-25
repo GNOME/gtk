@@ -2158,11 +2158,11 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *surface,
 
       if (GDK_IS_TOPLEVEL (surface))
         {
-          int scale = impl->surface_scale;
-
           impl->next_layout.configured_rect = new_rect;
-          impl->next_layout.configured_width = (new_rect.right - new_rect.left + scale - 1) / scale;
-          impl->next_layout.configured_height = (new_rect.bottom - new_rect.top + scale - 1) / scale;
+          impl->next_layout.configured_width =
+            gdk_win32_surface_to_application_ceil (impl, new_rect.right - new_rect.left);
+          impl->next_layout.configured_height =
+            gdk_win32_surface_to_application_ceil (impl, new_rect.bottom - new_rect.top);
         }
       gdk_win32_get_window_size_and_position_from_client_rect (surface,
                                                               &new_rect,
@@ -2784,7 +2784,6 @@ static void
 _gdk_win32_surface_request_layout (GdkSurface *surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-  int scale = impl->surface_scale;
   RECT rect;
 
   gdk_win32_get_surface_hwnd_rect (surface, &rect);
@@ -2793,13 +2792,15 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
   if (rect.right == rect.left || rect.bottom == rect.top)
     return;
 
-  impl->next_layout.configured_width = (rect.right - rect.left + scale - 1) / scale;
-  impl->next_layout.configured_height = (rect.bottom - rect.top + scale - 1) / scale;
+  impl->next_layout.configured_width =
+    gdk_win32_surface_to_application_ceil (impl, rect.right - rect.left);
+  impl->next_layout.configured_height =
+    gdk_win32_surface_to_application_ceil (impl, rect.bottom - rect.top);
 
   if (GDK_IS_TOPLEVEL (surface))
     {
-      surface->x = rect.left / scale;
-      surface->y = rect.top / scale;
+      surface->x = gdk_win32_surface_to_application (impl, rect.left);
+      surface->y = gdk_win32_surface_to_application (impl, rect.top);
     }
   else if (GDK_IS_POPUP (surface))
     {

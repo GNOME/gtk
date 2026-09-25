@@ -64,20 +64,10 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
   GdkDeviceWinpointer *device_winpointer;
   POINT point;
   HWND hwnd, hwndc;
-  int scale;
   GdkDisplay *display = gdk_device_get_display (device);
 
   device_winpointer = GDK_DEVICE_WINPOINTER (device);
-  if (surface)
-    {
-      scale = GDK_WIN32_SURFACE (surface)->surface_scale;
-      hwnd = GDK_SURFACE_HWND (surface);
-    }
-  else
-    {
-      scale = GDK_WIN32_DISPLAY (display)->surface_scale;
-      hwnd = NULL;
-    }
+  hwnd = surface ? GDK_SURFACE_HWND (surface) : NULL;
 
   _gdk_win32_get_cursor_pos (display, &point);
 
@@ -85,10 +75,12 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
     ScreenToClient (hwnd, &point);
 
   if (win_x)
-    *win_x = point.x / scale;
+    *win_x = surface ? gdk_win32_surface_to_application_double (GDK_WIN32_SURFACE (surface), point.x)
+                     : gdk_win32_display_to_application_double (GDK_WIN32_DISPLAY (display), point.x);
 
   if (win_y)
-    *win_y = point.y / scale;
+    *win_y = surface ? gdk_win32_surface_to_application_double (GDK_WIN32_SURFACE (surface), point.y)
+                     : gdk_win32_display_to_application_double (GDK_WIN32_DISPLAY (display), point.y);
 
   if (hwnd && child_surface)
     {
@@ -149,9 +141,9 @@ gdk_device_winpointer_surface_at_position (GdkDevice       *device,
       impl = GDK_WIN32_SURFACE (surface);
 
       if (win_x)
-        *win_x = client_pt.x / impl->surface_scale;
+        *win_x = gdk_win32_surface_to_application_double (impl, client_pt.x);
       if (win_y)
-        *win_y = client_pt.y / impl->surface_scale;
+        *win_y = gdk_win32_surface_to_application_double (impl, client_pt.y);
     }
 
   return surface;
