@@ -102,6 +102,10 @@ void    _gdk_win32_get_outer_rect_for_dpi (GdkSurface        *surface,
                                            int                height,
                                            const GdkWin32Dpi *dpi,
                                            RECT              *rect);
+void    _gdk_win32_surface_move_for_dpi (GdkSurface        *surface,
+                                         int                x,
+                                         int                y,
+                                         const GdkWin32Dpi *dpi);
 
 GdkSurface *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkSurface *surface);

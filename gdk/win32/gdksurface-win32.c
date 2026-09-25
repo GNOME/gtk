@@ -799,40 +799,48 @@ gdk_win32_surface_hide (GdkSurface *surface)
   GtkShowSurfaceHWND (surface, SW_HIDE);
 }
 
-static void
-gdk_win32_surface_do_move (GdkSurface *surface,
-                           int         x,
-                           int         y)
+void
+_gdk_win32_surface_move_for_dpi (GdkSurface        *surface,
+                                 int                x,
+                                 int                y,
+                                 const GdkWin32Dpi *dpi)
 {
-  RECT outer_rect;
-  GdkWin32Surface *impl;
+  int scaled_x, scaled_y;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_surface_move: %p: %+d%+d\n",
-                           GDK_SURFACE_HWND (surface), x, y));
+  GDK_NOTE (MISC, g_print ("_gdk_win32_surface_move_for_dpi: %p: %+d%+d @%u dpi\n",
+                           GDK_SURFACE_HWND (surface), x, y, dpi->dpi));
 
   if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
     return;
 
-  impl = GDK_WIN32_SURFACE (surface);
-  get_outer_rect (surface, surface->width, surface->height, &outer_rect);
+  scaled_x = gdk_win32_dpi_to_device (dpi, x);
+  scaled_y = gdk_win32_dpi_to_device (dpi, y);
 
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
                            "NOACTIVATE|NOSIZE|NOZORDER)\n",
                            GDK_SURFACE_HWND (surface),
-                           x * impl->surface_scale,
-                           y * impl->surface_scale));
+                           scaled_x, scaled_y));
 
   API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
                            SWP_NOZORDER_SPECIFIED,
-                           x * impl->surface_scale,
-                           y * impl->surface_scale,
+                           scaled_x,
+                           scaled_y,
                            0, 0,
                            SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+}
+
+static void
+gdk_win32_surface_do_move (GdkSurface *surface,
+                           int         x,
+                           int         y)
+{
+  _gdk_win32_surface_move_for_dpi (surface, x, y,
+                                   &GDK_WIN32_SURFACE (surface)->surface_dpi);
 }
 
 void
