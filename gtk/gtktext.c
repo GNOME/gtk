@@ -7841,14 +7841,21 @@ gtk_text_accessible_text_get_extents (GtkAccessibleText *self,
                                       graphene_rect_t   *extents)
 {
   PangoLayout *layout;
+  GtkEntryBuffer *buffer;
   const char *text;
+  unsigned int length;
   int lx, ly;
   int range[2];
   cairo_region_t *range_clip;
   cairo_rectangle_int_t clip_rect;
 
+  buffer = get_buffer (GTK_TEXT (self));
+  length = gtk_entry_buffer_get_length (buffer);
+  if (start >= length || end >= length)
+    return FALSE;
+
   layout = gtk_text_get_layout (GTK_TEXT (self));
-  text = gtk_entry_buffer_get_text (get_buffer (GTK_TEXT (self)));
+  text = gtk_entry_buffer_get_text (buffer);
   get_layout_position (GTK_TEXT (self), &lx, &ly);
 
   range[0] = g_utf8_pointer_to_offset (text, text + start);
