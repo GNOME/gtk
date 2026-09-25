@@ -1818,9 +1818,9 @@ gdk_win32_drag_set_cursor (GdkDrag   *drag,
       GdkSurface *surface = drag_win32->grab_surface;
 
       if (cursor != NULL)
-        win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
-                                                                        cursor,
-                                                                        gdk_surface_get_scale (surface));
+        win32_hcursor = _gdk_win32_display_get_win32hcursor_for_dpi (display,
+                                                                     cursor,
+                                                                     &GDK_WIN32_SURFACE (surface)->surface_dpi);
 
       g_set_object (&display->grab_cursor, win32_hcursor);
 

@@ -1465,11 +1465,10 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
 }
 
 GdkWin32HCursor *
-_gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
-                                                GdkCursor       *cursor,
-                                                int              scale)
+_gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
+                                             GdkCursor         *cursor,
+                                             const GdkWin32Dpi *dpi)
 {
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   GdkWin32HCursor *win32hcursor;
   const char      *cursor_name;
   GdkTexture      *texture;
@@ -1480,7 +1479,7 @@ _gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
   if (gdk_display_is_closed (GDK_DISPLAY (display)))
     return NULL;
 
-  win32hcursor = g_hash_table_lookup (win32_display->cursors, cursor);
+  win32hcursor = g_hash_table_lookup (display->cursors, cursor);
 
   if (win32hcursor != NULL)
     return win32hcursor;
@@ -1499,16 +1498,19 @@ _gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
     {
       int size = display->cursor_theme_size;
       int width, height, hotspot_x, hotspot_y;
+      double scale = gdk_win32_dpi_to_scale (dpi);
 
       texture = gdk_cursor_get_texture_for_size (cursor, size, scale,
                                                  &width, &height,
                                                  &hotspot_x, &hotspot_y);
       if (texture)
         {
+          /* Hotspot is reported in application pixels, texture is in device
+           * pixels; convert so it lands on the right texel. */
           win32hcursor = gdk_win32hcursor_create_for_texture (display,
                                                               texture,
-                                                              hotspot_x,
-                                                              hotspot_y);
+                                                              gdk_win32_dpi_to_device (dpi, hotspot_x),
+                                                              gdk_win32_dpi_to_device (dpi, hotspot_y));
           g_object_unref (texture);
         }
     }
@@ -1516,7 +1518,7 @@ _gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
   if (win32hcursor != NULL)
     {
       g_object_weak_ref (G_OBJECT (cursor), gdk_win32_cursor_remove_from_cache, display);
-      g_hash_table_insert (win32_display->cursors, cursor, win32hcursor);
+      g_hash_table_insert (display->cursors, cursor, win32hcursor);
 
       return win32hcursor;
     }
@@ -1524,7 +1526,7 @@ _gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
   fallback = gdk_cursor_get_fallback (cursor);
 
   if (fallback)
-    return _gdk_win32_display_get_win32hcursor_with_scale (display, fallback, scale);
+    return _gdk_win32_display_get_win32hcursor_for_dpi (display, fallback, dpi);
 
   return NULL;
 }
@@ -1546,5 +1548,7 @@ GdkWin32HCursor *
 gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
                                     GdkCursor       *cursor)
 {
-  return _gdk_win32_display_get_win32hcursor_with_scale (display, cursor, 1);
+  const GdkWin32Dpi dpi = GDK_WIN32_DPI_INIT (GDK_WIN32_DEFAULT_DPI);
+
+  return _gdk_win32_display_get_win32hcursor_for_dpi (display, cursor, &dpi);
 }
