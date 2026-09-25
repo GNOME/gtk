@@ -743,9 +743,11 @@ move_drag_surface (GdkDrag *drag,
 
   g_assert (check_drag_display_thread_status (drag, TRUE));
 
-  gdk_win32_surface_move (drag_win32->drag_surface,
-                          x_root - drag_win32->hot_x,
-                          y_root - drag_win32->hot_y);
+  /* Use the source surface's scale, not the icon's own drifting one. */
+  _gdk_win32_surface_move_for_dpi (drag_win32->drag_surface,
+                                   x_root - drag_win32->hot_x,
+                                   y_root - drag_win32->hot_y,
+                                   &GDK_WIN32_SURFACE (drag_win32->grab_surface)->surface_dpi);
   gdk_win32_surface_raise (drag_win32->drag_surface);
 }
 
@@ -1895,7 +1897,9 @@ gdk_drag_anim_timeout (gpointer data)
   y = (drag->util_data.last_y +
        (drag->start_y - drag->util_data.last_y) * t -
        drag->hot_y);
-  gdk_win32_surface_move (drag->drag_surface, x, y);
+  /* Same source-surface scale as move_drag_surface(), for the same reason. */
+  _gdk_win32_surface_move_for_dpi (drag->drag_surface, x, y,
+                                   &GDK_WIN32_SURFACE (drag->grab_surface)->surface_dpi);
 
   return G_SOURCE_CONTINUE;
 }
