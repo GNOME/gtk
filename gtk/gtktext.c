@@ -7840,7 +7840,7 @@ gtk_text_accessible_text_get_extents (GtkAccessibleText *self,
                                       unsigned int       end,
                                       graphene_rect_t   *extents)
 {
-  PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (self));
+  PangoLayout *layout;
   const char *text;
   int lx, ly;
   int range[2];
