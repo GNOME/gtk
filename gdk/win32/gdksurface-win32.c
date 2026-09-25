@@ -936,6 +936,44 @@ gdk_win32_surface_do_move_resize (GdkSurface *surface,
   }
 }
 
+void
+gdk_win32_surface_dpi_changed (GdkSurface *surface,
+                               int         x,
+                               int         y,
+                               int         width,
+                               int         height)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  /* Iconic: skip, but flag it for replay once the surface is shown again. */
+  if (IsIconic (GDK_SURFACE_HWND (surface)))
+    {
+      impl->dpi_changed_while_minimized = TRUE;
+      return;
+    }
+
+  {
+    /* Nullable: geometry may not have settled yet (e.g. just after restore). */
+    GdkMonitor *monitor = gdk_display_get_monitor_at_surface (display, surface);
+
+    if (monitor != NULL)
+      gdk_monitor_set_scale (monitor, gdk_surface_get_scale (surface));
+  }
+
+  /* Application size is invariant across a DPI change; recomputing it at the
+   * new scale reproduces Windows' suggested size without needing the rect verbatim. */
+  gdk_win32_surface_do_move_resize (surface,
+                                    gdk_win32_surface_to_application (impl, x),
+                                    gdk_win32_surface_to_application (impl, y),
+                                    surface->width, surface->height);
+
+  gdk_surface_request_layout (surface);
+}
+
 static void
 gdk_win32_surface_move_resize_internal (GdkSurface *surface,
                                         gboolean    with_move,

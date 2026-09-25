@@ -177,6 +177,9 @@ struct _GdkWin32Surface
 
   guint popup_grab : 1;
 
+  /* Set when WM_DPICHANGED arrives while minimized; consumed on restore. */
+  guint dpi_changed_while_minimized : 1;
+
   GdkW32DragMoveResizeContext drag_move_resize_context;
 
   /* Enable all decorations? */

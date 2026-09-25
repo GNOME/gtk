@@ -274,8 +274,8 @@ winpointer_make_event (GdkDeviceWinpointer *device,
   y = screen_y - client_area_coordinates.y;
 
   impl = GDK_WIN32_SURFACE (surface);
-  x /= impl->surface_scale;
-  y /= impl->surface_scale;
+  x = gdk_win32_surface_to_application_double (impl, x);
+  y = gdk_win32_surface_to_application_double (impl, y);
 
   state = 0;
   /* Note that info->dwKeyStates is not reliable, use GetKeyState() */

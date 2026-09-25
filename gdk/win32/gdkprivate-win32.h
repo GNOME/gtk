@@ -89,8 +89,8 @@ void     gdk_win32_display_handle_table_remove  (GdkDisplay *display,
 gpointer      gdk_win32_display_handle_table_lookup_ (GdkDisplay *display,
                                                       HWND        handle);
 
-cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
-                                              guint scale);
+cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN                  hrgn,
+                                              GdkWin32Surface       *surface);
 
 void    _gdk_win32_adjust_client_rect   (GdkSurface *surface,
                                          RECT      *RECT);
@@ -325,6 +325,11 @@ void gdk_win32_surface_raise (GdkSurface *surface);
 void gdk_win32_surface_resize (GdkSurface *surface,
                                int         width,
                                int         height);
+void gdk_win32_surface_dpi_changed (GdkSurface *surface,
+                                    int         x,
+                                    int         y,
+                                    int         width,
+                                    int         height);
 
 BOOL WINAPI GtkShowSurfaceHWND (GdkSurface *surface,
                                 int        cmd_show);
