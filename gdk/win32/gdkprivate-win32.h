@@ -21,6 +21,7 @@
 
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/gdkdebugprivate.h>
+#include <gdk/win32/gdkwin32dpi-private.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32keys.h>
@@ -93,6 +94,14 @@ cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
 
 void    _gdk_win32_adjust_client_rect   (GdkSurface *surface,
                                          RECT      *RECT);
+void    _gdk_win32_adjust_client_rect_for_dpi (GdkSurface        *surface,
+                                               RECT              *rect,
+                                               const GdkWin32Dpi *dpi);
+void    _gdk_win32_get_outer_rect_for_dpi (GdkSurface        *surface,
+                                           int                width,
+                                           int                height,
+                                           const GdkWin32Dpi *dpi,
+                                           RECT              *rect);
 
 GdkSurface *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkSurface *surface);

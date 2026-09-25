@@ -86,6 +86,8 @@ typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
  * Windows 10 Creator Edition and later.
  * funcGSMFD is GetSystemMetricsForDpi(), provided by user32.dll on
  * Windows 10 Anniversary Update and later.
+ * funcAWREFD is AdjustWindowRectExForDpi(), provided by user32.dll on
+ * Windows 10 Anniversary Update and later.
  * Treat HANDLE as void*, for convenience, since DPI_AWARENESS_CONTEXT is
  * declared using DEFINE_HANDLE.
  */
@@ -95,6 +97,7 @@ typedef BOOL (WINAPI *funcSPDAC)  (void *);
 typedef HANDLE (WINAPI *funcGTDAC)  (void);
 typedef BOOL (WINAPI *funcADACE) (void *, void *);
 typedef int (WINAPI *funcGSMFD) (int, UINT);
+typedef BOOL (WINAPI *funcAWREFD) (LPRECT, DWORD, BOOL, DWORD, UINT);
 
 typedef struct _GdkWin32User32DPIFuncs
 {
@@ -104,6 +107,7 @@ typedef struct _GdkWin32User32DPIFuncs
   funcGTDAC getTDAC;
   funcADACE areDACEqual;
   funcGSMFD getSysMetrics;
+  funcAWREFD adjustWinRectExForDpi;
 } GdkWin32User32DPIFuncs;
 
 typedef enum {

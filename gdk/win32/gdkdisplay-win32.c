@@ -1007,6 +1007,29 @@ get_system_metrics_for_dpi_fallback (int index, UINT dpi)
   return MulDiv (GetSystemMetrics (index), dpi, get_dpi_for_system_fallback ());
 }
 
+/* Polyfill for AdjustWindowRectExForDpi(): measures the margins at the
+ * system DPI, then scales them to the requested one. */
+static BOOL WINAPI
+adjust_window_rect_ex_for_dpi_fallback (LPRECT rect,
+                                        DWORD  style,
+                                        BOOL   menu,
+                                        DWORD  exstyle,
+                                        UINT   dpi)
+{
+  RECT margins = { 0, 0, 0, 0 };
+  guint system_dpi = get_dpi_for_system_fallback ();
+
+  if (!AdjustWindowRectEx (&margins, style, menu, exstyle))
+    return FALSE;
+
+  rect->left += MulDiv (margins.left, dpi, system_dpi);
+  rect->top += MulDiv (margins.top, dpi, system_dpi);
+  rect->right += MulDiv (margins.right, dpi, system_dpi);
+  rect->bottom += MulDiv (margins.bottom, dpi, system_dpi);
+
+  return TRUE;
+}
+
 static void
 _gdk_win32_enable_hidpi (GdkWin32Display *display)
 {
@@ -1037,6 +1060,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
         (funcADACE) GetProcAddress (user32, "AreDpiAwarenessContextsEqual");
       display->user32_dpi_funcs.getSysMetrics =
         (funcGSMFD) GetProcAddress (user32, "GetSystemMetricsForDpi");
+      display->user32_dpi_funcs.adjustWinRectExForDpi =
+        (funcAWREFD) GetProcAddress (user32, "AdjustWindowRectExForDpi");
     }
   if (!display->user32_dpi_funcs.getDpiForSystem)
     display->user32_dpi_funcs.getDpiForSystem = get_dpi_for_system_fallback;
@@ -1044,6 +1069,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     display->user32_dpi_funcs.getDpiForWindow = get_dpi_for_window_fallback;
   if (!display->user32_dpi_funcs.getSysMetrics)
     display->user32_dpi_funcs.getSysMetrics = get_system_metrics_for_dpi_fallback;
+  if (!display->user32_dpi_funcs.adjustWinRectExForDpi)
+    display->user32_dpi_funcs.adjustWinRectExForDpi = adjust_window_rect_ex_for_dpi_fallback;
 
   if (g_getenv ("GDK_WIN32_DISABLE_HIDPI") == NULL)
     {

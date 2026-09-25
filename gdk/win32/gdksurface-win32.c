@@ -160,14 +160,28 @@ gdk_win32_surface_submit_frame (GdkSurface          *surface,
 }
 
 void
-_gdk_win32_adjust_client_rect (GdkSurface *surface,
-                               RECT       *rect)
+_gdk_win32_adjust_client_rect_for_dpi (GdkSurface        *surface,
+                                       RECT              *rect,
+                                       const GdkWin32Dpi *dpi)
 {
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
   LONG style, exstyle;
 
   style = GetWindowLong (GDK_SURFACE_HWND (surface), GWL_STYLE);
   exstyle = GetWindowLong (GDK_SURFACE_HWND (surface), GWL_EXSTYLE);
-  API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
+
+  /* Always callable: falls back to plain AdjustWindowRectEx() if unavailable. */
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (rect, style, FALSE, exstyle, dpi->dpi));
+}
+
+void
+_gdk_win32_adjust_client_rect (GdkSurface *surface,
+                               RECT       *rect)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  _gdk_win32_adjust_client_rect_for_dpi (surface, rect, &impl->surface_dpi);
 }
 
 void
@@ -519,6 +533,20 @@ gdk_win32_surface_destroy_notify (GdkSurface *surface)
   g_object_unref (surface);
 }
 
+void
+_gdk_win32_get_outer_rect_for_dpi (GdkSurface        *surface,
+                                   int                width,
+                                   int                height,
+                                   const GdkWin32Dpi *dpi,
+                                   RECT              *rect)
+{
+  rect->left = rect->top = 0;
+  rect->right = gdk_win32_dpi_to_device (dpi, width);
+  rect->bottom = gdk_win32_dpi_to_device (dpi, height);
+
+  _gdk_win32_adjust_client_rect_for_dpi (surface, rect, dpi);
+}
+
 static void
 get_outer_rect (GdkSurface *surface,
                 int         width,
@@ -527,11 +555,7 @@ get_outer_rect (GdkSurface *surface,
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
-  rect->left = rect->top = 0;
-  rect->right = width * impl->surface_scale;
-  rect->bottom = height * impl->surface_scale;
-
-  _gdk_win32_adjust_client_rect (surface, rect);
+  _gdk_win32_get_outer_rect_for_dpi (surface, width, height, &impl->surface_dpi, rect);
 }
 
 static void
@@ -1550,6 +1574,9 @@ _gdk_win32_surface_lacks_wm_decorations (GdkSurface *surface)
 void
 _gdk_win32_surface_update_style_bits (GdkSurface *surface)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  UINT dpi = impl->surface_dpi.dpi;
   GdkWMDecoration decorations;
   LONG old_style, new_style, old_exstyle, new_exstyle;
   gboolean all;
@@ -1569,7 +1596,9 @@ _gdk_win32_surface_update_style_bits (GdkSurface *surface)
 
   GetClientRect (GDK_SURFACE_HWND (surface), &before);
   after = before;
-  AdjustWindowRectEx (&before, old_style, FALSE, old_exstyle);
+  /* Same dpi for the before/after rects, so their delta (below) stays correct. */
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (&before, old_style, FALSE, old_exstyle, dpi));
 
   was_topmost = (old_exstyle & WS_EX_TOPMOST) ? TRUE : FALSE;
   was_layered = (old_exstyle & WS_EX_LAYERED) ? TRUE : FALSE;
@@ -1645,7 +1674,8 @@ _gdk_win32_surface_update_style_bits (GdkSurface *surface)
         }
     }
 
-  AdjustWindowRectEx (&after, new_style, FALSE, new_exstyle);
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (&after, new_style, FALSE, new_exstyle, dpi));
 
   GetWindowRect (GDK_SURFACE_HWND (surface), &rect);
   rect.left += after.left - before.left;
