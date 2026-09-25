@@ -562,9 +562,9 @@ enum_monitor (HMONITOR hmonitor,
           GdkWin32Monitor *w32mon;
           GdkMonitor *mon;
           GdkRectangle rect;
-          HMONITOR scale_hmonitor;
+          HMONITOR dpi_hmonitor;
           POINT pt;
-          int scale;
+          GdkWin32Dpi dpi;
 
           memset (&dd_monitor, 0, sizeof (dd_monitor));
           dd_monitor.cb = sizeof (dd_monitor);
@@ -663,26 +663,23 @@ enum_monitor (HMONITOR hmonitor,
           /* This is temporary, scale will be applied below */
           w32mon->work_rect = rect;
 
-          /* First acquire the scale using the current screen */
-          scale = gdk_win32_display_get_monitor_scale_factor (data->display, NULL, NULL);
-
-          /* acquire the scale using the monitor which the window is nearest */
+          /* acquire the dpi using the monitor which the window is nearest */
           pt.x = w32mon->work_rect.x + w32mon->work_rect.width / 2;
           pt.y = w32mon->work_rect.y + w32mon->work_rect.height / 2;
-          scale_hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
-          scale = gdk_win32_display_get_monitor_scale_factor (data->display, NULL, scale_hmonitor);
+          dpi_hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
+          dpi = gdk_win32_display_get_monitor_dpi (data->display, NULL, dpi_hmonitor);
 
-          gdk_monitor_set_scale_factor (mon, scale);
+          gdk_monitor_set_scale (mon, gdk_win32_dpi_to_scale (&dpi));
           /* Now apply the scale to the work rectangle */
-          w32mon->work_rect.x /= scale;
-          w32mon->work_rect.y /= scale;
-          w32mon->work_rect.width /= scale;
-          w32mon->work_rect.height /= scale;
+          w32mon->work_rect.x = gdk_win32_dpi_to_application (&dpi, w32mon->work_rect.x);
+          w32mon->work_rect.y = gdk_win32_dpi_to_application (&dpi, w32mon->work_rect.y);
+          w32mon->work_rect.width = gdk_win32_dpi_to_application (&dpi, w32mon->work_rect.width);
+          w32mon->work_rect.height = gdk_win32_dpi_to_application (&dpi, w32mon->work_rect.height);
 
-          rect.x = monitor_info.rcMonitor.left / scale;
-          rect.y = monitor_info.rcMonitor.top / scale;
-          rect.width = (monitor_info.rcMonitor.right - monitor_info.rcMonitor.left) / scale;
-          rect.height = (monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top) / scale;
+          rect.x = gdk_win32_dpi_to_application (&dpi, monitor_info.rcMonitor.left);
+          rect.y = gdk_win32_dpi_to_application (&dpi, monitor_info.rcMonitor.top);
+          rect.width = gdk_win32_dpi_to_application (&dpi, monitor_info.rcMonitor.right - monitor_info.rcMonitor.left);
+          rect.height = gdk_win32_dpi_to_application (&dpi, monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top);
           gdk_monitor_set_geometry (mon, &rect);
 
           if (monitor_info.dwFlags & MONITORINFOF_PRIMARY && i != 0)
