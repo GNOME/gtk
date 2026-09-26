@@ -208,6 +208,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       GdkColorState *color_state;
       float factors[4];
     } arithmetic;
+    struct {
+      GdkColorState *ccs;
+    } ccs;
   } data;
 };
 
@@ -1333,6 +1336,45 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
 
   gsk_rounded_rect_scale_affine (&state->data.rounded_clip.bounds, bounds, scale_x, scale_y, dx, dy);
   state->data.rounded_clip.snap = state->props.snap;
+}
+
+static void
+gtk_snapshot_clear_compositing_color_state (GtkSnapshotState *state)
+{
+  gdk_color_state_unref (state->data.ccs.ccs);
+}
+
+/**
+ * gtk_snapshot_push_compositing_color_state:
+ * @snapshot: a `GtkSnapshot`
+ * @ccs: the color state to composite in
+ *
+ * Changes the compositing color state that is used to alpha-composite
+ * drawing operations.
+ *
+ * The color state will be used until the corresponding call to
+ * [method@Gtk.Snapshot.pop].
+ *
+ * Note: Sometimes the term "blending" or "alpha blending" is used for
+ * this, but GTK uses the term "compositing" to not confuse it with
+ * [method@Gtk.Snapshot.push_blend].
+ *
+ * Since: 4.26
+ **/
+void
+gtk_snapshot_push_compositing_color_state (GtkSnapshot   *snapshot,
+                                           GdkColorState *ccs)
+{
+  GtkSnapshotState *state, *current_state;
+
+  current_state = gtk_snapshot_get_current_state (snapshot);
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_default,
+                                   gtk_snapshot_clear_compositing_color_state);
+
+  state->data.ccs.ccs = gdk_color_state_ref (ccs);
+  state->props.ccs = ccs;
 }
 
 static GskRenderNode *

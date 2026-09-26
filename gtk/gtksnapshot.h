@@ -110,6 +110,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_shadow                (GtkSnapshot            *snapshot,
                                                          const GskShadow        *shadow,
                                                          gsize                   n_shadows);
+GDK_AVAILABLE_IN_4_26
+void            gtk_snapshot_push_compositing_color_state
+                                                        (GtkSnapshot            *snapshot,
+                                                         GdkColorState          *ccs);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_blend                 (GtkSnapshot            *snapshot,
                                                          GskBlendMode            blend_mode);
@@ -121,7 +125,6 @@ void            gtk_snapshot_push_copy                  (GtkSnapshot            
 GDK_AVAILABLE_IN_4_22
 void            gtk_snapshot_push_composite             (GtkSnapshot            *snapshot,
                                                          GskPorterDuff           op);
-
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
