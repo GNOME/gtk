@@ -255,7 +255,7 @@ gtk_font_button_update_font_data (GtkFontButton *font_button)
     {
       const char *name = pango_font_family_get_name (families[i]);
 
-      if (!g_ascii_strcasecmp (name, family))
+      if (g_ascii_strcasecmp (name, family) == 0)
         {
           font_button->font_family = g_object_ref (families[i]);
 
