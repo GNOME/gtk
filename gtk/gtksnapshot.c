@@ -2389,7 +2389,8 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 
   if (current_state)
     {
-      if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+      if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE &&
+          gdk_color_state_equal (gsk_container_node_get_color_state (node), current_state->props.ccs))
         {
           GskRenderNode **children;
           gsize i, n_children;
