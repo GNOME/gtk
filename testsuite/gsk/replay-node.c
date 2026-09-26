@@ -20,8 +20,13 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
 static void
 replay_container_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
+  gtk_snapshot_push_compositing_color_state (snapshot,
+                                             gsk_container_node_get_color_state (node));
+
   for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
     replay_node (gsk_container_node_get_child (node, i), snapshot);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
