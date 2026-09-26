@@ -2350,26 +2350,11 @@ parse_container_node (GtkCssParser *parser,
                       Context      *context)
 {
   GPtrArray *nodes;
-  const GtkCssToken *token;
   GskRenderNode *node;
 
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
-  for (token = gtk_css_parser_get_token (parser);
-       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
-       token = gtk_css_parser_get_token (parser))
-    {
-      node = NULL;
-      /* We don't want a semicolon here, but the parse_node function will figure
-       * that out itself and return an error if we encounter one.
-       */
-      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
-
-      if (parse_node (parser, context, &node))
-        g_ptr_array_add (nodes, node);
-
-      gtk_css_parser_end_block (parser);
-    }
+  parse_declarations (parser, context, nodes, NULL, 0);
 
   node = gsk_container_node_new ((GskRenderNode **) nodes->pdata, nodes->len);
 
