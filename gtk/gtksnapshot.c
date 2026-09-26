@@ -35,6 +35,7 @@
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
+#include "gsk/gskcontainernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskinsetshadownodeprivate.h"
 #include "gsk/gskisolationnodeprivate.h"
@@ -94,6 +95,7 @@ typedef void            (* GtkSnapshotClearFunc)   (GtkSnapshotState *state);
 
 struct _GtkSnapshotProperties {
   GskRectSnap            snap;
+  GdkColorState *        ccs; /* no reference, it's kept elsewhere */
 };
 
 struct _GtkSnapshotState {
@@ -281,7 +283,7 @@ gtk_snapshot_collect_default (GtkSnapshot       *snapshot,
     }
   else
     {
-      node = gsk_container_node_new (nodes, n_nodes);
+      node = gsk_container_node_new_with_color_state (state->props.ccs, nodes, n_nodes);
     }
 
   return node;
@@ -310,6 +312,7 @@ gtk_snapshot_push_state (GtkSnapshot                 *snapshot,
     {
       state->props = (GtkSnapshotProperties) {
           .snap = GSK_RECT_SNAP_NONE,
+          .ccs = GDK_COLOR_STATE_SRGB,
       };
     }
   state->transform = gsk_transform_ref (transform);
@@ -2432,6 +2435,7 @@ gtk_snapshot_push_collect (GtkSnapshot *snapshot)
   state = gtk_snapshot_get_current_state (snapshot);
   state->props = (GtkSnapshotProperties) {
       .snap = GSK_RECT_SNAP_NONE,
+      .ccs = GDK_COLOR_STATE_SRGB,
   };
 }
 
