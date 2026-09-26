@@ -2351,14 +2351,22 @@ parse_container_node (GtkCssParser *parser,
 {
   GPtrArray *nodes;
   GskRenderNode *node;
+  GdkColorState *ccs = NULL;
+  const Declaration declarations[] = {
+    { "color-state", parse_default_color_state, clear_color_state, &ccs },
+  };
 
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
-  parse_declarations (parser, context, nodes, NULL, 0);
+  parse_declarations (parser, context, nodes, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_container_node_new ((GskRenderNode **) nodes->pdata, nodes->len);
+  if (ccs == NULL)
+    ccs = gdk_color_state_get_srgb ();
+
+  node = gsk_container_node_new_with_color_state (ccs, (GskRenderNode **) nodes->pdata, nodes->len);
 
   g_ptr_array_unref (nodes);
+  g_clear_pointer (&ccs, gdk_color_state_unref);
 
   return node;
 }
@@ -6667,6 +6675,9 @@ render_node_print (Printer       *p,
         guint i;
 
         start_node (p, "container", node_name);
+        append_color_state_param (p, "color-state",
+                                  gsk_container_node_get_color_state (node),
+                                  GDK_COLOR_STATE_SRGB);
         for (i = 0; i < gsk_container_node_get_n_children (node); i ++)
           {
             GskRenderNode *child = gsk_container_node_get_child (node, i);

@@ -6,9 +6,10 @@ The format is a text format that follows the [CSS syntax rules](https://drafts.c
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
 
-    document: <@-rule>*<node>*
+    document: <@-rule>*<container>*
     @-rule: @cicp "name" { <property>* }
-    node: container [ "name" ] { <node>* } | <node-type> [ "name" ] { <property>* } | "name"
+    container: <node> | <property>
+    node: container [ "name" ] { <container>* } | <node-type> [ "name" ] { <property>* } | "name"
     property: <property-name>: <node> | <value> ;
 
 Each node has its own `<node-type>` and supports a custom set of properties, each with their own `<property-name>` and syntax. The following paragraphs document each of the nodes and their properties.
