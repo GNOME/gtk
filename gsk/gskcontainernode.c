@@ -40,6 +40,7 @@ struct _GskContainerNode
 {
   GskRenderNode render_node;
 
+  GdkColorState *ccs;
   gboolean disjoint;
   graphene_rect_t opaque; /* Can be 0 0 0 0 to mean no opacity */
   guint n_children;
@@ -56,8 +57,22 @@ gsk_container_node_finalize (GskRenderNode *node)
     gsk_render_node_unref (container->children[i]);
 
   g_free (container->children);
+  gdk_color_state_unref (container->ccs);
 
   parent_class->finalize (node);
+}
+
+static void
+gsk_container_node_draw_children (GskContainerNode *self,
+                                  cairo_t          *cr,
+                                  GskCairoData     *data)
+{
+  guint i;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      gsk_render_node_draw_full (self->children[i], cr, data);
+    }
 }
 
 static void
@@ -65,12 +80,27 @@ gsk_container_node_draw (GskRenderNode *node,
                          cairo_t       *cr,
                          GskCairoData  *data)
 {
-  GskContainerNode *container = (GskContainerNode *) node;
-  guint i;
+  GskContainerNode *self = (GskContainerNode *) node;
 
-  for (i = 0; i < container->n_children; i++)
+  if (gdk_color_state_equal (data->ccs, self->ccs) ||
+      gsk_render_node_is_bilevel_opacity (node))
     {
-      gsk_render_node_draw_full (container->children[i], cr, data);
+      gsk_container_node_draw_children (self, cr, data);
+    }
+  else
+    {
+      /* FIXME: limit this to the clip region */
+      gdk_cairo_surface_convert_color_state (cairo_get_group_target (cr),
+                                             data->ccs,
+                                             self->ccs);
+      gsk_container_node_draw_children (self,
+                                        cr,
+                                        &(GskCairoData) {
+                                          .ccs = self->ccs,
+                                        });
+      gdk_cairo_surface_convert_color_state (cairo_get_group_target (cr),
+                                             self->ccs,
+                                             data->ccs);
     }
 }
 
@@ -209,7 +239,7 @@ gsk_container_node_replay (GskRenderNode   *node,
   if (!changed)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+    result = gsk_container_node_new_with_color_state (self->ccs, (GskRenderNode **) array->pdata, array->len);
 
   g_ptr_array_unref (array);
 
@@ -269,8 +299,9 @@ gsk_container_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskContainerNode, gsk_container_node)
 
-/**
+/*
  * gsk_container_node_new:
+ * @ccs: (transfer none): compositing color state
  * @children: (array length=n_children) (transfer none): The children of the node
  * @n_children: Number of children in the @children array
  *
@@ -281,8 +312,9 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskContainerNode, gsk_container_node)
  * Returns: (transfer full) (type GskContainerNode): the new `GskRenderNode`
  */
 GskRenderNode *
-gsk_container_node_new (GskRenderNode **children,
-                        guint           n_children)
+gsk_container_node_new_with_color_state (GdkColorState  *ccs,
+                                         GskRenderNode **children,
+                                         guint           n_children)
 {
   GskContainerNode *self;
   GskRenderNode *node;
@@ -291,6 +323,7 @@ gsk_container_node_new (GskRenderNode **children,
   self = gsk_render_node_alloc (GSK_TYPE_CONTAINER_NODE);
   node = (GskRenderNode *) self;
 
+  self->ccs = gdk_color_state_ref (ccs);
   self->disjoint = TRUE;
   self->n_children = n_children;
 
@@ -344,6 +377,24 @@ gsk_container_node_new (GskRenderNode **children,
    }
 
   return node;
+}
+
+/**
+ * gsk_container_node_new:
+ * @children: (array length=n_children) (transfer none): The children of the node
+ * @n_children: Number of children in the @children array
+ *
+ * Creates a new `GskRenderNode` instance for holding the given @children.
+ *
+ * The new node will acquire a reference to each of the children.
+ *
+ * Returns: (transfer full) (type GskContainerNode): the new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_container_node_new (GskRenderNode **children,
+                        guint           n_children)
+{
+  return gsk_container_node_new_with_color_state (GDK_COLOR_STATE_SRGB, children, n_children);
 }
 
 /**
@@ -401,3 +452,21 @@ gsk_container_node_is_disjoint (const GskRenderNode *node)
   return self->disjoint;
 }
 
+/**
+ * gsk_container_node_get_color_state:
+ * @node: a container `GskRenderNode`
+ *
+ * Gets the compositing color state used for alpha-compositing
+ * the children.
+ *
+ * Returns: (transfer none): the compositing color state
+ *
+ * Since: 4.26
+ **/
+GdkColorState *
+gsk_container_node_get_color_state (const GskRenderNode *node)
+{
+  const GskContainerNode *self = (const GskContainerNode *) node;
+
+  return self->ccs;
+}

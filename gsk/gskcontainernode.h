@@ -40,6 +40,8 @@ guint                   gsk_container_node_get_n_children       (const GskRender
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_container_node_get_child            (const GskRenderNode      *node,
                                                                  guint                     idx) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_26
+GdkColorState *         gsk_container_node_get_color_state      (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS
 
