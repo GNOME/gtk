@@ -37,7 +37,7 @@ struct _GtkIMContextIME
   GtkIMContext object;
 
   GtkWidget *client_widget;
-  GdkSurface *client_surface;
+  GdkDisplay *filter_display;
   gulong after_layout_id;
   guint use_preedit : 1;
   guint preediting : 1;
