@@ -1256,6 +1256,8 @@ gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
     }
 }
 
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 static GskRenderNode *
 gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
                                    GtkSnapshotState *state,
@@ -1301,8 +1303,6 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
 
   return clip_node;
 }
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_snapshot_push_rounded_clip:
