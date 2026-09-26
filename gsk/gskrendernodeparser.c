@@ -156,9 +156,13 @@ context_finish (Context *context)
   g_clear_object (&context->fontmap);
 }
 
+static gboolean
+parse_node (GtkCssParser *parser, Context *context, gpointer out_node);
+
 static guint
 parse_declarations (GtkCssParser      *parser,
                     Context           *context,
+                    GPtrArray         *nodes,
                     const Declaration *declarations,
                     guint              n_declarations)
 {
@@ -210,7 +214,14 @@ parse_declarations (GtkCssParser      *parser,
         }
       if (i == n_declarations)
         {
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+          if (nodes)
+            {
+              GskRenderNode *node = NULL;
+
+              if (parse_node (parser, context, &node))
+                g_ptr_array_add (nodes, node);
+            }
+          else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
             gtk_css_parser_error_syntax (parser, "No variable named \"%s\"",
                                          gtk_css_token_get_string (gtk_css_parser_get_token (parser)));
           else
@@ -696,7 +707,7 @@ parse_dmabuf_texture (GtkCssParser *parser,
   start_location = *gtk_css_parser_get_start_location (parser);
   gtk_css_parser_end_block_prelude (parser);
 
-  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   /* deduce number of planes from given amount of strides */
   while (dmabuf.n_planes < GDK_DMABUF_MAX_PLANES && strides[dmabuf.n_planes] > 0)
@@ -875,7 +886,7 @@ parse_memory_texture (GtkCssParser *parser,
   start_location = *gtk_css_parser_get_start_location (parser);
   gtk_css_parser_end_block_prelude (parser);
 
-  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   n_planes = gdk_memory_format_get_n_planes (layout.format);
   for (i = 0; i < n_planes; i++)
@@ -987,7 +998,7 @@ parse_d3d12_texture (GtkCssParser *parser,
   start_location = *gtk_css_parser_get_start_location (parser);
   gtk_css_parser_end_block_prelude (parser);
 
-  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   if (format == GDK_MEMORY_N_FORMATS)
     {
@@ -2328,9 +2339,6 @@ clear_glyphs (gpointer inout_glyphs)
   g_clear_pointer ((PangoGlyphString **) inout_glyphs, pango_glyph_string_free);
 }
 
-static gboolean
-parse_node (GtkCssParser *parser, Context *context, gpointer out_node);
-
 static void
 clear_node (gpointer inout_node)
 {
@@ -2479,7 +2487,7 @@ parse_color_state_rule (GtkCssParser *parser,
 
   gtk_css_parser_end_block_prelude (parser);
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   cs = gdk_color_state_new_for_cicp (&cicp, &error);
 
@@ -2569,7 +2577,7 @@ parse_color_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_color_node_new2 (&color, &bounds, snap);
 
@@ -2634,7 +2642,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
       n_decls = n_decls - 1;
     }
 
-  parse_declarations (parser, context, declarations, n_decls);
+  parse_declarations (parser, context, NULL, declarations, n_decls);
   if (stops == NULL)
     {
       GskGradientStop from = {
@@ -2805,7 +2813,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
       n_decls = n_decls - 1;
     }
 
-  parse_declarations (parser, context, declarations, n_decls);
+  parse_declarations (parser, context, NULL, declarations, n_decls);
   if (stops == NULL)
     {
       GskGradientStop from = {
@@ -2907,7 +2915,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
   GskGradient *gradient;
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
       GskGradientStop from = {
@@ -2968,7 +2976,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_inset_shadow_node_new2 (&outline, snap, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
@@ -3187,7 +3195,7 @@ parse_glshader_node (GtkCssParser *parser,
   GBytes *args = NULL;
   int len, i;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   for (len = 0; len < 4; len++)
     {
@@ -3236,7 +3244,7 @@ parse_mask_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS(declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (source == NULL)
     source = create_default_render_node ();
   if (mask == NULL)
@@ -3272,7 +3280,7 @@ parse_border_node (GtkCssParser *parser,
     { "colors", parse_colors4, NULL, &colors },
   };
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   return gsk_border_node_new2 (&outline, snap, widths, border_snap, colors);
 }
@@ -3291,7 +3299,7 @@ parse_texture_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   if (texture == NULL)
     texture = create_default_texture ();
@@ -3318,7 +3326,7 @@ parse_texture_scale_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   if (texture == NULL)
     texture = create_default_texture ();
@@ -3344,7 +3352,7 @@ parse_cairo_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_cairo_node_new (&bounds);
 
@@ -3398,7 +3406,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_outset_shadow_node_new2 (&outline, snap, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
@@ -3419,7 +3427,7 @@ parse_transform_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3443,7 +3451,7 @@ parse_opacity_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3478,7 +3486,7 @@ parse_color_matrix_node (GtkCssParser *parser,
 
   graphene_vec4_init (&offset, 0, 0, 0, 0);
 
-  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (!(parse_result & (1 << 0)))
@@ -3509,7 +3517,7 @@ parse_cross_fade_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (start == NULL)
     start = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
   if (end == NULL)
@@ -3539,7 +3547,7 @@ parse_blend_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (bottom == NULL)
     bottom = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
   if (top == NULL)
@@ -3576,7 +3584,7 @@ parse_repeat_node (GtkCssParser *parser,
   GskRenderNode *result;
   guint parse_result;
 
-  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3721,7 +3729,7 @@ parse_text_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   if (font == NULL)
     {
@@ -3787,7 +3795,7 @@ parse_blur_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3812,7 +3820,7 @@ parse_clip_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3840,7 +3848,7 @@ parse_rounded_clip_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -3861,7 +3869,7 @@ parse_rect_path (GtkCssParser *parser,
   };
   GskPathBuilder *builder;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_rect (builder, &rect);
@@ -3878,7 +3886,7 @@ parse_rounded_rect_path (GtkCssParser *parser,
   };
   GskPathBuilder *builder;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   builder = gsk_path_builder_new ();
   if (gsk_rounded_rect_is_rectilinear (&rect))
@@ -3900,7 +3908,7 @@ parse_circle_path (GtkCssParser *parser,
   };
   GskPathBuilder *builder;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_circle (builder, &center, radius);
@@ -4173,7 +4181,7 @@ parse_fill_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (path == NULL)
     path = create_default_path ();
   if (child == NULL)
@@ -4236,7 +4244,7 @@ parse_stroke_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (path == NULL)
     path = create_default_path ();
 
@@ -4279,7 +4287,7 @@ parse_shadow_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -4310,7 +4318,7 @@ parse_debug_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -4331,7 +4339,7 @@ parse_subsurface_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -4376,7 +4384,7 @@ parse_component_transfer_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (red == NULL)
@@ -4412,7 +4420,7 @@ parse_copy_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -4437,7 +4445,7 @@ parse_paste_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_paste_node_new2 (&bounds, snap, depth);
 
@@ -4458,7 +4466,7 @@ parse_composite_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (mask == NULL)
@@ -4558,7 +4566,7 @@ parse_isolation_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
 
@@ -4669,7 +4677,7 @@ parse_displacement_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (displacement == NULL)
@@ -4710,7 +4718,7 @@ parse_arithmetic_node (GtkCssParser *parser,
   };
   GskRenderNode *result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
   if (first == NULL)
     first = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
   if (second == NULL)
@@ -4749,7 +4757,7 @@ parse_turbulence_node (GtkCssParser *parser,
   };
   GskRenderNode *node;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_declarations (parser, context, NULL, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_turbulence_node_new (&bounds, snap, color_state,
                                   &frequency,
