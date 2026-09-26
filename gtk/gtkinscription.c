@@ -283,6 +283,32 @@ gtk_inscription_update_layout_attributes (GtkInscription *self,
 }
 
 static void
+gtk_inscription_root (GtkWidget *widget)
+{
+  GtkInscription *self = GTK_INSCRIPTION (widget);
+  PangoLayout *old_layout;
+
+  GTK_WIDGET_CLASS (gtk_inscription_parent_class)->root (widget);
+
+  /* FIXME: GtkWidget really should not throw away Pango contexts when
+   * unrooting, so that users do not need to recreate their layouts here.
+   */
+  if (pango_layout_get_context (self->layout) == gtk_widget_get_pango_context (widget))
+    return;
+
+  old_layout = self->layout;
+  self->layout = gtk_widget_create_pango_layout (widget, pango_layout_get_text (old_layout));
+  pango_layout_set_attributes (self->layout, pango_layout_get_attributes (old_layout));
+  pango_layout_set_wrap (self->layout, pango_layout_get_wrap (old_layout));
+  pango_layout_set_ellipsize (self->layout, pango_layout_get_ellipsize (old_layout));
+  pango_layout_set_width (self->layout, pango_layout_get_width (old_layout));
+  pango_layout_set_height (self->layout, pango_layout_get_height (old_layout));
+  pango_layout_set_alignment (self->layout, pango_layout_get_alignment (old_layout));
+
+  g_object_unref (old_layout);
+}
+
+static void
 gtk_inscription_css_changed (GtkWidget         *widget,
                              GtkCssStyleChange *change)
 {
@@ -583,6 +609,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   gobject_class->set_property = gtk_inscription_set_property;
 
   widget_class->css_changed = gtk_inscription_css_changed;
+  widget_class->root = gtk_inscription_root;
   widget_class->direction_changed = gtk_inscription_direction_changed;
   widget_class->measure = gtk_inscription_measure;
   widget_class->size_allocate = gtk_inscription_allocate;
