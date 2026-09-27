@@ -50,6 +50,7 @@ typedef struct _GtkLayoutManager       GtkLayoutManager;
 typedef struct _GtkListItem            GtkListItem;
 typedef struct _GtkListItemFactory     GtkListItemFactory;
 typedef struct _GtkNative              GtkNative;
+typedef struct _GtkPopout              GtkPopout;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkRoot  	       GtkRoot;
 typedef struct _GtkScrollInfo  	       GtkScrollInfo;

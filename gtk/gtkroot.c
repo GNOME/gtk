@@ -75,6 +75,13 @@ gtk_root_default_set_focus (GtkRoot   *self,
 {
 }
 
+static gboolean
+gtk_root_default_set_popout (GtkRoot   *self,
+                             GtkPopout *popout)
+{
+  return popout == NULL;
+}
+
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
@@ -82,6 +89,7 @@ gtk_root_default_init (GtkRootInterface *iface)
   iface->get_constraint_solver = gtk_root_default_get_constraint_solver;
   iface->get_focus = gtk_root_default_get_focus;
   iface->set_focus = gtk_root_default_set_focus;
+  iface->set_popout = gtk_root_default_set_popout;
 }
 
 /**
@@ -176,3 +184,18 @@ gtk_root_queue_restyle (GtkRoot *self)
 {
   gtk_root_start_layout (self);
 }
+
+gboolean
+gtk_root_set_popout (GtkRoot   *self,
+                     GtkPopout *popout)
+{
+  gboolean result;
+
+  result = GTK_ROOT_GET_IFACE (self)->set_popout (self, popout);
+
+  /* unsetting must always succeed */
+  g_assert (result == TRUE || popout != NULL);
+
+  return result;
+}
+

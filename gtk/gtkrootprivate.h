@@ -25,6 +25,9 @@ struct _GtkRootInterface
   void         (* set_focus)    (GtkRoot   *self,
                                  GtkWidget *focus);
 
+  gboolean     (* set_popout)   (GtkRoot   *self,
+                                 GtkPopout *poput);
+
 };
 
 GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
@@ -32,6 +35,8 @@ GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
 void             gtk_root_start_layout  (GtkRoot *self);
 void             gtk_root_stop_layout   (GtkRoot *self);
 void             gtk_root_queue_restyle (GtkRoot *self);
+gboolean         gtk_root_set_popout    (GtkRoot *self,
+                                         GtkPopout *popout);
 
 G_END_DECLS
 
