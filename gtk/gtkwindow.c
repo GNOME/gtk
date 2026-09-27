@@ -45,6 +45,7 @@
 #include "gtkmarshalers.h"
 #include "deprecated/gtkmessagedialog.h"
 #include "gtkpointerfocusprivate.h"
+#include "gtkpopout.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
 #include "gtknativeprivate.h"
@@ -207,6 +208,7 @@ typedef struct
 {
   GtkWidget             *child;
 
+  GtkPopout             *popout;
   GtkWidget             *default_widget;
   GtkWidget             *focus_widget;
   GtkWidget             *move_focus_widget;
@@ -807,6 +809,23 @@ get_gdk_gravity (GtkWindow *window)
 }
 
 static void
+gtk_window_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
+{
+  GtkWindow *self = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->snapshot (widget, snapshot);
+
+  if (priv->popout)
+    {
+      GtkWidget *child = gtk_popout_get_child (priv->popout);
+      if (child)
+        gtk_widget_snapshot (child, snapshot);
+    }
+}
+
+static void
 gtk_window_direction_changed (GtkWidget        *widget,
                               GtkTextDirection  previous_direction)
 {
@@ -841,6 +860,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->unmap = gtk_window_unmap;
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
+  widget_class->snapshot = gtk_window_snapshot;
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->compute_expand = gtk_window_compute_expand;
   widget_class->get_request_mode = gtk_window_get_request_mode;
@@ -2268,6 +2288,24 @@ gtk_window_root_set_focus (GtkRoot   *root,
   g_object_notify_by_pspec (G_OBJECT (self), window_props[PROP_FOCUS_WIDGET]);
 }
 
+static gboolean
+gtk_window_root_set_popout (GtkRoot   *root,
+                            GtkPopout *popout)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  if (priv->popout)
+    {
+      g_warning ("fixme: unset previous popout");
+    }
+  priv->popout = popout;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  return TRUE;
+}
+
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
                                          double    *x,
@@ -2350,6 +2388,7 @@ gtk_window_root_interface_init (GtkRootInterface *iface)
   iface->get_constraint_solver = gtk_window_root_get_constraint_solver;
   iface->get_focus = gtk_window_root_get_focus;
   iface->set_focus = gtk_window_root_set_focus;
+  iface->set_popout = gtk_window_root_set_popout;
 }
 
 static void
