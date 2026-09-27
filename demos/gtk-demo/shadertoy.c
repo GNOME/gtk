@@ -57,6 +57,15 @@ clear_clicked_cb (GtkWidget *button,
 }
 
 static void
+fullscreen_clicked_cb (GtkWidget *button,
+                       gpointer   user_data)
+{
+  GtkPopout *popout = GTK_POPOUT (user_data);
+
+  gtk_popout_set_popped_out (popout, TRUE);
+}
+
+static void
 close_window (GtkWidget *widget)
 {
   /* Reset the state */
@@ -98,7 +107,7 @@ new_button (const char *path)
 static GtkWidget *
 create_shadertoy_window (GtkWidget *do_widget)
 {
-  GtkWidget *window, *box, *hbox, *button, *textview, *sw, *aspect, *centerbox;
+  GtkWidget *window, *box, *hbox, *button, *textview, *sw, *aspect, *centerbox, *popout;
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
@@ -120,7 +129,8 @@ create_shadertoy_window (GtkWidget *do_widget)
   gtk_box_append (GTK_BOX (box), aspect);
 
   shadertoy = new_shadertoy ("/shadertoy/alienplanet.glsl");
-  gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (aspect), gtk_graphics_offload_new (shadertoy));
+  popout = gtk_popout_new (shadertoy);
+  gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (aspect), gtk_graphics_offload_new (popout));
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 250);
@@ -163,6 +173,12 @@ create_shadertoy_window (GtkWidget *do_widget)
   gtk_widget_set_tooltip_text (button, "Clear the text view");
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   g_signal_connect (button, "clicked", G_CALLBACK (clear_clicked_cb), NULL);
+  gtk_box_append (GTK_BOX (hbox), button);
+
+  button = gtk_button_new_from_icon_name ("view-fullscreen-symbolic");
+  gtk_widget_set_tooltip_text (button, "Fullscreen the demo");
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  g_signal_connect (button, "clicked", G_CALLBACK (fullscreen_clicked_cb), popout);
   gtk_box_append (GTK_BOX (hbox), button);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE);
