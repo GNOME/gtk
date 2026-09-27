@@ -46,6 +46,8 @@ struct _GtkMediaControls
   GtkWidget parent_instance;
 
   GtkMediaStream *stream;
+  gboolean show_fullscreen;
+  gboolean fullscreen;
 
   GtkAdjustment *time_adjustment;
   GtkAdjustment *volume_adjustment;
@@ -61,7 +63,9 @@ struct _GtkMediaControls
 enum
 {
   PROP_0,
+  PROP_FULLSCREEN,
   PROP_MEDIA_STREAM,
+  PROP_SHOW_FULLSCREEN,
 
   N_PROPS
 };
@@ -227,8 +231,16 @@ gtk_media_controls_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_FULLSCREEN:
+      g_value_set_boolean (value, controls->fullscreen);
+      break;
+
     case PROP_MEDIA_STREAM:
       g_value_set_object (value, controls->stream);
+      break;
+
+    case PROP_SHOW_FULLSCREEN:
+      g_value_set_boolean (value, controls->show_fullscreen);
       break;
 
     default:
@@ -247,8 +259,16 @@ gtk_media_controls_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_FULLSCREEN:
+      gtk_media_controls_set_fullscreen (controls, g_value_get_boolean (value));
+      break;
+
     case PROP_MEDIA_STREAM:
       gtk_media_controls_set_media_stream (controls, g_value_get_object (value));
+      break;
+
+    case PROP_SHOW_FULLSCREEN:
+      gtk_media_controls_set_show_fullscreen (controls, g_value_get_boolean (value));
       break;
 
     default:
@@ -271,14 +291,38 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   gobject_class->set_property = gtk_media_controls_set_property;
 
   /**
+   * GtkMediaControls:fullscreen:
+   *
+   * If the media should be shown as fullscreen
+   *
+   * Since: 4.26
+   */
+  properties[PROP_FULLSCREEN] =
+    g_param_spec_boolean ("fullscreen", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+
+  /**
    * GtkMediaControls:media-stream:
    *
-   * The media-stream managed by this object or %NULL if none.
+   * The media stream managed by this object or %NULL if none.
    */
   properties[PROP_MEDIA_STREAM] =
     g_param_spec_object ("media-stream", NULL, NULL,
                          GTK_TYPE_MEDIA_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
+
+  /**
+   * GtkMediaControls:show-fullscreen:
+   *
+   * If fullscreen controls should be shown
+   *
+   * Since: 4.26
+   */
+  properties[PROP_SHOW_FULLSCREEN] =
+    g_param_spec_boolean ("show-fullscreen", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_NAME);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -525,4 +569,66 @@ gtk_media_controls_set_media_stream (GtkMediaControls *controls,
   gtk_widget_set_sensitive (controls->box, stream != NULL);
 
   g_object_notify_by_pspec (G_OBJECT (controls), properties[PROP_MEDIA_STREAM]);
+}
+
+/**
+ * gtk_media_controls_get_show_fullscreen:
+ * @self: a `GtkMediaControls`
+ *
+ * Gets if controls for fullscreening should be shown.
+ *
+ * By default no fullscreening controls are shown.
+ *
+ * Returns: true if fullscreening controls are shown
+ */
+gboolean
+gtk_media_controls_get_show_fullscreen (GtkMediaControls *self)
+{
+  g_return_val_if_fail (GTK_IS_MEDIA_CONTROLS (self), FALSE);
+
+  return self->show_fullscreen;
+}
+
+void
+gtk_media_controls_set_show_fullscreen (GtkMediaControls *self,
+                                        gboolean          show_fullscreen)
+{
+  g_return_if_fail (GTK_IS_MEDIA_CONTROLS (self));
+
+  if (self->show_fullscreen == show_fullscreen)
+    return;
+
+  self->show_fullscreen = show_fullscreen;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_FULLSCREEN]);
+}
+
+/**
+ * gtk_media_controls_get_fullscreen:
+ * @self: a `GtkMediaControls`
+ *
+ * Gets if the controls should present the stream as fullscreen.
+ *
+ * Returns: true if fullscreen
+ */
+gboolean
+gtk_media_controls_get_fullscreen (GtkMediaControls *self)
+{
+  g_return_val_if_fail (GTK_IS_MEDIA_CONTROLS (self), FALSE);
+
+  return self->fullscreen;
+}
+
+void
+gtk_media_controls_set_fullscreen (GtkMediaControls *self,
+                                   gboolean          fullscreen)
+{
+  g_return_if_fail (GTK_IS_MEDIA_CONTROLS (self));
+
+  if (self->fullscreen == fullscreen)
+    return;
+
+  self->fullscreen = fullscreen;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FULLSCREEN]);
 }

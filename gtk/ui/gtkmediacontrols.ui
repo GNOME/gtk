@@ -62,6 +62,17 @@
             </accessibility>
           </object>
         </child>
+        <child>
+          <object class="GtkToggleButton" id="fullscreen_button">
+            <property name="halign">3</property>
+            <property name="valign">3</property>
+            <property name="has-frame">0</property>
+            <property name="icon-name">view-fullscreen-symbolic</property>
+            <property name="tooltip-text" context="media controls tooltip" translatable="yes">Fullscreen</property>
+            <property name="active" bind-source="GtkMediaControls" bind-property="fullscreen" bind-flags="bidirectional" />
+            <property name="visible" bind-source="GtkMediaControls" bind-property="show-fullscreen">false</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

@@ -41,6 +41,16 @@ GtkMediaStream *gtk_media_controls_get_media_stream     (GtkMediaControls       
 GDK_AVAILABLE_IN_ALL
 void            gtk_media_controls_set_media_stream     (GtkMediaControls       *controls,
                                                          GtkMediaStream         *stream);
+GDK_AVAILABLE_IN_4_26
+gboolean        gtk_media_controls_get_show_fullscreen  (GtkMediaControls       *self);
+GDK_AVAILABLE_IN_4_26
+void            gtk_media_controls_set_show_fullscreen  (GtkMediaControls       *self,
+                                                         gboolean                show_fullscreen);
+GDK_AVAILABLE_IN_4_26
+gboolean        gtk_media_controls_get_fullscreen       (GtkMediaControls       *self);
+GDK_AVAILABLE_IN_4_26
+void            gtk_media_controls_set_fullscreen       (GtkMediaControls       *self,
+                                                         gboolean                show_fullscreen);
 
 
 G_END_DECLS
