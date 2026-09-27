@@ -2,55 +2,61 @@
 <interface domain="gtk40">
   <template class="GtkVideo" parent="GtkWidget">
     <child>
-      <object class="GtkOverlay" id="box">
+      <object class="GtkPopout" id="popout">
         <property name="child">
-          <object class="GtkGraphicsOffload" id="graphics_offload">
-            <property name="enabled">disabled</property>
-            <property name="black-background">1</property>
-            <property name="child"><object class="GtkPicture" id="video_picture"/></property>
-          </object>
-        </property>
-        <child type="overlay">
-          <object class="GtkImage" id="overlay_icon">
-            <style>
-              <class name="osd"/>
-              <class name="circular"/>
-            </style>
-            <property name="halign">3</property>
-            <property name="valign">3</property>
-            <property name="icon-name">media-playback-start-symbolic</property>
-            <property name="icon-size">2</property>
-            <property name="accessible-role">button</property>
-            <accessibility>
-              <property name="label" translatable="yes">Play</property>
-            </accessibility>
-            <child>
-              <object class="GtkGestureClick">
-                <signal name="pressed" handler="overlay_clicked_cb"/>
-              </object>
-            </child>
-            <layout>
-              <property name="measure">1</property>
-            </layout>
-          </object>
-        </child>
-        <child type="overlay">
-          <object class="GtkRevealer" id="controls_revealer">
-            <property name="valign">2</property>
-            <property name="transition-type">1</property>
+          <object class="GtkOverlay" id="box">
             <property name="child">
-              <object class="GtkMediaControls" id="controls">
-                <style>
-                  <class name="osd"/>
-                  <class name="bottom"/>
-                </style>
+              <object class="GtkGraphicsOffload" id="graphics_offload">
+                <property name="enabled">disabled</property>
+                <property name="black-background">1</property>
+                <property name="child"><object class="GtkPicture" id="video_picture"/></property>
               </object>
             </property>
-            <layout>
-              <property name="measure">1</property>
-            </layout>
+            <child type="overlay">
+              <object class="GtkImage" id="overlay_icon">
+                <style>
+                  <class name="osd"/>
+                  <class name="circular"/>
+                </style>
+                <property name="halign">3</property>
+                <property name="valign">3</property>
+                <property name="icon-name">media-playback-start-symbolic</property>
+                <property name="icon-size">2</property>
+                <property name="accessible-role">button</property>
+                <accessibility>
+                  <property name="label" translatable="yes">Play</property>
+                </accessibility>
+                <child>
+                  <object class="GtkGestureClick">
+                    <signal name="pressed" handler="overlay_clicked_cb"/>
+                  </object>
+                </child>
+                <layout>
+                  <property name="measure">1</property>
+                </layout>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="GtkRevealer" id="controls_revealer">
+                <property name="valign">2</property>
+                <property name="transition-type">1</property>
+                <property name="child">
+                  <object class="GtkMediaControls" id="controls">
+                    <property name="show-fullscreen">1</property>
+                    <property name="fullscreen" bind-source="popout" bind-property="popped-out" bind-flags="bidirectional" />
+                    <style>
+                      <class name="osd"/>
+                      <class name="bottom"/>
+                    </style>
+                  </object>
+                </property>
+                <layout>
+                  <property name="measure">1</property>
+                </layout>
+              </object>
+            </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child>
