@@ -553,8 +553,17 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
     }
   else if (strcmp ("gtk-xft-dpi", name) == 0)
     {
-      /* Report the 96-dpi application base; the surface scale applies the monitor DPI. */
-      int xft_dpi = 1024 * GDK_WIN32_DEFAULT_DPI;
+      /* 96-dpi base; monitor scale is applied elsewhere. Multiply in the
+       * user's Accessibility text-size setting (TextScaleFactor), if set. */
+      DWORD text_scale = 100;
+      DWORD sz = sizeof (text_scale);
+      int xft_dpi;
+
+      if (RegGetValueW (HKEY_CURRENT_USER, L"Software\\Microsoft\\Accessibility",
+                         L"TextScaleFactor", RRF_RT_DWORD, NULL, &text_scale, &sz) != ERROR_SUCCESS)
+        text_scale = 100;
+
+      xft_dpi = 1024 * GDK_WIN32_DEFAULT_DPI * (int) text_scale / 100;
 
       GDK_NOTE (MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
       g_value_set_int (value, xft_dpi);
