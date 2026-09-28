@@ -482,8 +482,7 @@ gdk_quartz_keymap_have_bidi_layouts (GdkKeymap *keymap)
 static gboolean
 gdk_quartz_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
-  /* FIXME: Implement this. */
-  return FALSE;
+  return ([NSEvent modifierFlags] & GDK_QUARTZ_ALPHA_SHIFT_KEY_MASK) != 0;
 }
 
 static gboolean
