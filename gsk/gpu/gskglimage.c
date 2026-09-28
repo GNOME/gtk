@@ -387,8 +387,8 @@ gsk_gl_image_bind_textures (GskGLImage *self,
 }
 
 void
-gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
-                                      GLenum      target)
+gsk_gl_image_bind_framebuffer (GskGLImage *self,
+                               GLenum      target)
 {
   GLenum status;
 
@@ -437,12 +437,6 @@ gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
       g_critical ("glCheckFramebufferStatus() returned %u (0x%x). Expect broken rendering.", status, status);
       break;
     }
-}
-
-void
-gsk_gl_image_bind_framebuffer (GskGLImage *self)
-{
-  gsk_gl_image_bind_framebuffer_target (self, GL_FRAMEBUFFER);
 }
 
 gboolean
