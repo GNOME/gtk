@@ -734,7 +734,7 @@ gtk_entry_completion_default_completion_func (GtkEntryCompletion *completion,
         {
           case_normalized_string = g_utf8_casefold (normalized_string, -1);
 
-          if (!strncmp (key, case_normalized_string, strlen (key)))
+          if (strncmp (key, case_normalized_string, strlen (key)) == 0)
             ret = TRUE;
 
           g_free (case_normalized_string);
