@@ -389,9 +389,6 @@ disable certain features.
 `threads`
 : Disable threads where possible
 
-`icon-nodes`
-: Disable the svg-to-node conversion for symbolic icons
-
 ### `GDK_GL_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to
