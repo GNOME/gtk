@@ -81,7 +81,7 @@ typedef struct
   PropertyValue *styles;
   unsigned int n_styles;
   gboolean owns_styles;
-  size_t lines;
+  size_t bytes;
 } SvgCssRuleset;
 
 void svg_css_ruleset_clear (SvgCssRuleset *ruleset);

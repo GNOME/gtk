@@ -3459,9 +3459,9 @@ svg_css_compare_rule (gconstpointer a_,
   cmp = _gtk_css_selector_compare (b->selector, a->selector);
   if (cmp != 0)
     return cmp;
-  else if (a->lines > b->lines)
+  else if (a->bytes > b->bytes)
     return -1;
-  else if (a->lines < b->lines)
+  else if (a->bytes < b->bytes)
     return 1;
   else
     return 0;
@@ -3756,7 +3756,7 @@ static void
 parse_declarations_into_ruleset (SvgCssScanner *scanner,
                                  SvgCssRuleset *r)
 {
-  r->lines = gtk_css_parser_get_start_location (scanner->parser)->lines;
+  r->bytes = gtk_css_parser_get_start_location (scanner->parser)->bytes;
   while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
       PropertyValue p = { 0, };
