@@ -153,8 +153,12 @@ gsk_gpu_blit_op_gl_command (GskGpuOp          *op,
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
   GLenum filter;
 
-  gsk_gl_image_bind_framebuffer_target (GSK_GL_IMAGE (self->src_image), GL_READ_FRAMEBUFFER);
-  gsk_gl_image_bind_framebuffer_target (GSK_GL_IMAGE (self->dest_image), GL_DRAW_FRAMEBUFFER);
+  gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->src_image),
+                                 state->fbos[1],
+                                 GL_READ_FRAMEBUFFER);
+  gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->dest_image),
+                                 state->fbos[0],
+                                 GL_DRAW_FRAMEBUFFER);
 
   switch (self->filter)
     {

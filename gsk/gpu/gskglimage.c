@@ -62,10 +62,6 @@ gsk_gl_image_finalize (GObject *object)
   GskGLImage *self = GSK_GL_IMAGE (object);
   gsize n_textures = gsk_gl_image_get_n_textures (self);
 
-
-  if (self->texture_id[0] && self->framebuffer_id)
-    glDeleteFramebuffers (1, &self->framebuffer_id);
-
   if (self->owns_texture)
     glDeleteTextures (n_textures, self->texture_id);
 
@@ -387,8 +383,9 @@ gsk_gl_image_bind_textures (GskGLImage *self,
 }
 
 void
-gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
-                                      GLenum      target)
+gsk_gl_image_bind_framebuffer (GskGLImage *self,
+                               GLuint      fbo,
+                               GLenum      target)
 {
   GLenum status;
 
@@ -407,8 +404,7 @@ gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
 
   g_assert (self->texture_id[1] == 0);
 
-  glGenFramebuffers (1, &self->framebuffer_id);
-  glBindFramebuffer (target, self->framebuffer_id);
+  glBindFramebuffer (target, fbo);
   glFramebufferTexture2D (target, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->texture_id[0], 0);
   status = glCheckFramebufferStatus (target);
 
@@ -437,12 +433,6 @@ gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
       g_critical ("glCheckFramebufferStatus() returned %u (0x%x). Expect broken rendering.", status, status);
       break;
     }
-}
-
-void
-gsk_gl_image_bind_framebuffer (GskGLImage *self)
-{
-  gsk_gl_image_bind_framebuffer_target (self, GL_FRAMEBUFFER);
 }
 
 gboolean

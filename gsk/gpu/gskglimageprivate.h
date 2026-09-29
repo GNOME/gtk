@@ -35,8 +35,8 @@ GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDe
 
 void                    gsk_gl_image_bind_textures                      (GskGLImage             *self,
                                                                          GLenum                  target);
-void                    gsk_gl_image_bind_framebuffer                   (GskGLImage             *self);
-void                    gsk_gl_image_bind_framebuffer_target            (GskGLImage             *self,
+void                    gsk_gl_image_bind_framebuffer                   (GskGLImage             *self,
+                                                                         GLuint                  fbo,
                                                                          GLenum                  target);
 
 gboolean                gsk_gl_image_is_flipped                         (GskGLImage             *self);

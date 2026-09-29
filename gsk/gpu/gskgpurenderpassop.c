@@ -207,7 +207,9 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
   /* nesting frame passes not allowed */
   g_assert (state->flip_y == 0);
 
-  gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->target));
+  gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->target),
+                                 state->fbos[0],
+                                 GL_FRAMEBUFFER);
 
   if (gsk_gl_image_is_flipped (GSK_GL_IMAGE (self->target)))
     state->flip_y = gsk_gpu_image_get_height (self->target);
