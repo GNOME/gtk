@@ -781,8 +781,12 @@ gsk_path_equal (const GskPath *path1,
       return FALSE;
 
   for (int i = 0; i < path1->n_contours; i++)
-    if (!gsk_contour_equal (path1->contours[i], path2->contours[i]))
-      return FALSE;
+    {
+      if (!gsk_contour_equal (path1->contours[i],
+                              path2->contours[i],
+                              &GRAPHENE_POINT_INIT (0, 0)))
+        return FALSE;
+    }
 
   return TRUE;
 }

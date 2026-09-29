@@ -104,7 +104,8 @@ struct _GskContourClass
                                                  const GskPathPoint     *point,
                                                  gpointer                measure_data);
   gboolean              (* equal)               (const GskContour       *contour1,
-                                                 const GskContour       *contour2);
+                                                 const GskContour       *contour2,
+                                                 const graphene_point_t *offset);
 };
 
 /* {{{ Utilities */
@@ -1315,8 +1316,9 @@ gsk_standard_contour_get_distance (const GskContour   *contour,
 }
 
 static gboolean
-gsk_standard_contour_equal (const GskContour *contour1,
-                            const GskContour *contour2)
+gsk_standard_contour_equal (const GskContour       *contour1,
+                            const GskContour       *contour2,
+                            const graphene_point_t *offset)
 {
   const GskStandardContour *std1 = (const GskStandardContour *) contour1;
   const GskStandardContour *std2 = (const GskStandardContour *) contour2;
@@ -1332,8 +1334,8 @@ gsk_standard_contour_equal (const GskContour *contour1,
 
   for (gsize i = 0; i < std1->n_points; i++)
     {
-      if (std1->points[i].pt.x != std2->points[i].pt.x ||
-          std1->points[i].pt.y != std2->points[i].pt.y)
+      if (std1->points[i].pt.x + offset->x != std2->points[i].pt.x ||
+          std1->points[i].pt.y + offset->y != std2->points[i].pt.y)
         return FALSE;
     }
 
@@ -1859,15 +1861,16 @@ gsk_circle_contour_get_distance (const GskContour   *contour,
 }
 
 static gboolean
-gsk_circle_contour_equal (const GskContour *contour1,
-                          const GskContour *contour2)
+gsk_circle_contour_equal (const GskContour       *contour1,
+                          const GskContour       *contour2,
+                          const graphene_point_t *offset)
 {
   const GskCircleContour *c1 = (const GskCircleContour *) contour1;
   const GskCircleContour *c2 = (const GskCircleContour *) contour2;
 
   return c1->radius == c2->radius &&
-         c1->center.x == c2->center.x &&
-         c1->center.y == c2->center.y &&
+         c1->center.x + offset->x == c2->center.x &&
+         c1->center.y + offset->y == c2->center.y &&
          c1->ccw == c2->ccw;
 }
 
@@ -2233,14 +2236,15 @@ gsk_rect_contour_get_distance (const GskContour   *contour,
 }
 
 static gboolean
-gsk_rect_contour_equal (const GskContour *contour1,
-                        const GskContour *contour2)
+gsk_rect_contour_equal (const GskContour       *contour1,
+                        const GskContour       *contour2,
+                        const graphene_point_t *offset)
 {
   const GskRectContour *c1 = (const GskRectContour *) contour1;
   const GskRectContour *c2 = (const GskRectContour *) contour2;
 
-  return c1->x == c2->x &&
-         c1->y == c2->y &&
+  return c1->x + offset->x == c2->x &&
+         c1->y + offset->y == c2->y &&
          c1->width == c2->width &&
          c1->height == c2->height;
 }
@@ -2618,13 +2622,20 @@ gsk_rounded_rect_contour_get_distance (const GskContour   *contour,
 }
 
 static gboolean
-gsk_rounded_rect_contour_equal (const GskContour *contour1,
-                                const GskContour *contour2)
+gsk_rounded_rect_contour_equal (const GskContour       *contour1,
+                                const GskContour       *contour2,
+                                const graphene_point_t *offset)
 {
   const GskRoundedRectContour *c1 = (const GskRoundedRectContour *) contour1;
   const GskRoundedRectContour *c2 = (const GskRoundedRectContour *) contour2;
 
-  return gsk_rounded_rect_equal (&c1->rect, &c2->rect) && c1->ccw == c2->ccw;
+  return c1->rect.bounds.origin.x + offset->x == c2->rect.bounds.origin.x
+      && c1->rect.bounds.origin.y + offset->x == c2->rect.bounds.origin.y
+      && gsk_size_equal (&c1->rect.bounds.size, &c2->rect.bounds.size)
+      && gsk_size_equal (&c1->rect.corner[0], &c2->rect.corner[0])
+      && gsk_size_equal (&c1->rect.corner[1], &c2->rect.corner[1])
+      && gsk_size_equal (&c1->rect.corner[2], &c2->rect.corner[2])
+      && gsk_size_equal (&c1->rect.corner[3], &c2->rect.corner[3]);
 }
 
 static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
@@ -2924,13 +2935,14 @@ gsk_contour_get_distance (const GskContour   *self,
 }
 
 gboolean
-gsk_contour_equal (const GskContour *contour1,
-                   const GskContour *contour2)
+gsk_contour_equal (const GskContour       *contour1,
+                   const GskContour       *contour2,
+                   const graphene_point_t *offset)
 {
   if (contour1->klass != contour2->klass)
     return FALSE;
 
-  return contour1->klass->equal (contour1, contour2);
+  return contour1->klass->equal (contour1, contour2, offset);
 }
 
 /* }}} */

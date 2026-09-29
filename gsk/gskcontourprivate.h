@@ -112,7 +112,8 @@ void                    gsk_contour_get_point                   (const GskContou
 float                   gsk_contour_get_distance                (const GskContour       *self,
                                                                  const GskPathPoint     *point,
                                                                  gpointer                measure_data);
-gboolean                gsk_contour_equal                       (const GskContour *contour1,
-                                                                 const GskContour *contour2);
+gboolean                gsk_contour_equal                       (const GskContour       *contour1,
+                                                                 const GskContour       *contour2,
+                                                                 const graphene_point_t *offset);
 
 G_END_DECLS
