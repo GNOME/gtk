@@ -57,6 +57,7 @@ struct _GskPath
   /*< private >*/
   guint ref_count;
 
+  GskBoundingBox bounds;
   GskPathFlags flags;
   guint hash;
 
@@ -79,14 +80,22 @@ gsk_path_new_from_contours (const GSList *contours)
   guint8 *contour_data;
   GskPathFlags flags;
   guint hash;
+  GskBoundingBox b;
 
   flags = GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
   hash = 0; /* could use a startup-initialized constant here */
   size = 0;
   n_contours = 0;
+  
+  if (contours)
+    gsk_contour_get_bounds (contours->data, &b);
+  else
+    gsk_bounding_box_init_from_rect (&b, &GRAPHENE_RECT_INIT (0, 0, 0, 0));
+
   for (l = contours; l; l = l->next)
     {
       GskContour *contour = l->data;
+      GskBoundingBox tmp;
 
       n_contours++;
       size += sizeof (GskContour *);
@@ -94,10 +103,16 @@ gsk_path_new_from_contours (const GSList *contours)
       flags &= gsk_contour_get_flags (contour);
       hash ^= gsk_uint_rotate_left (hash, 17);
       hash ^= gsk_contour_get_hash (contour);
+      if (l != contours)
+        {
+          gsk_contour_get_bounds (contour, &tmp);
+          gsk_bounding_box_union (&b, &tmp, &b);
+        }
     }
 
   path = g_malloc0 (sizeof (GskPath) + size);
   path->ref_count = 1;
+  path->bounds = b;
   path->flags = flags;
   path->hash = hash;
   path->n_contours = n_contours;
@@ -382,30 +397,12 @@ gboolean
 gsk_path_get_bounds (GskPath         *self,
                      graphene_rect_t *bounds)
 {
-  GskBoundingBox b;
-
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (bounds != NULL, FALSE);
 
-  if (self->n_contours == 0)
-    {
-      graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
-      return FALSE;
-    }
+  gsk_bounding_box_to_rect (&self->bounds, bounds);
 
-  gsk_contour_get_bounds (self->contours[0], &b);
-
-  for (gsize i = 1; i < self->n_contours; i++)
-    {
-      GskBoundingBox tmp;
-
-      gsk_contour_get_bounds (self->contours[i], &tmp);
-      gsk_bounding_box_union (&b, &tmp, &b);
-    }
-
-  gsk_bounding_box_to_rect (&b, bounds);
-
-  return TRUE;
+  return self->n_contours > 0;
 }
 
 /**
