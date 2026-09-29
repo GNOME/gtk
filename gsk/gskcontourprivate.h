@@ -62,6 +62,7 @@ GskContour *            gsk_contour_reverse                     (const GskContou
 
 gsize                   gsk_contour_get_size                    (const GskContour       *self);
 GskPathFlags            gsk_contour_get_flags                   (const GskContour       *self);
+guint                   gsk_contour_get_hash                    (const GskContour       *self);
 void                    gsk_contour_print                       (const GskContour       *self,
                                                                  GString                *string);
 gboolean                gsk_contour_get_bounds                  (const GskContour       *self,

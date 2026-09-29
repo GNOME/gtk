@@ -156,6 +156,9 @@ gboolean                gsk_path_foreach                        (GskPath        
 GDK_AVAILABLE_IN_4_22
 gboolean                gsk_path_equal                          (const GskPath          *path1,
                                                                  const GskPath          *path2);
+GDK_AVAILABLE_IN_4_26
+guint                   gsk_path_hash                           (const GskPath          *self);
+
 /**
  * GskPathIntersection:
  * @GSK_PATH_INTERSECTION_NONE: No intersection

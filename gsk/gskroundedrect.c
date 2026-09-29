@@ -989,13 +989,6 @@ gsk_rounded_rect_to_float (const GskRoundedRect   *self,
     }
 }
 
-static inline gboolean
-gsk_size_equal (const graphene_size_t *s1,
-                const graphene_size_t *s2)
-{
-  return s1->width == s2->width && s1->height == s2->height;
-}
-
 gboolean
 gsk_rounded_rect_equal (gconstpointer rect1,
                         gconstpointer rect2)

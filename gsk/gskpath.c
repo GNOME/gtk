@@ -58,6 +58,7 @@ struct _GskPath
   guint ref_count;
 
   GskPathFlags flags;
+  guint hash;
 
   gsize n_contours;
   GskContour *contours[];
@@ -77,8 +78,10 @@ gsk_path_new_from_contours (const GSList *contours)
   gsize n_contours;
   guint8 *contour_data;
   GskPathFlags flags;
+  guint hash;
 
   flags = GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
+  hash = 0; /* could use a startup-initialized constant here */
   size = 0;
   n_contours = 0;
   for (l = contours; l; l = l->next)
@@ -89,11 +92,14 @@ gsk_path_new_from_contours (const GSList *contours)
       size += sizeof (GskContour *);
       size += gsk_contour_get_size (contour);
       flags &= gsk_contour_get_flags (contour);
+      hash ^= gsk_uint_rotate_left (hash, 17);
+      hash ^= gsk_contour_get_hash (contour);
     }
 
   path = g_malloc0 (sizeof (GskPath) + size);
   path->ref_count = 1;
   path->flags = flags;
+  path->hash = hash;
   path->n_contours = n_contours;
   contour_data = (guint8 *) &path->contours[n_contours];
   n_contours = 0;
@@ -774,6 +780,30 @@ gsk_path_equal (const GskPath *path1,
       return FALSE;
 
   return TRUE;
+}
+
+/**
+ * gsk_path_hash:
+ * @self: a path
+ *
+ * Generates a hash value for the path suitable for use in a `GHashTable`.
+ *
+ * Paths that compare equal will have the same hash value and so will paths
+ * that are equal when translated. If it is important to generate different
+ * hash values for translated paths, consider xor-ing a hash of the path's
+ * bounds.
+ *
+ * The returned hash values may not be identical across multiple runs
+ * of the same program.
+ *
+ * Returns: The path's hash value.
+ *
+ * Since: 4.26
+ **/
+guint
+gsk_path_hash (const GskPath *self)
+{
+  return self->hash;
 }
 
 /* }}} */
