@@ -769,8 +769,16 @@ gsk_path_equal (const GskPath *path1,
   if (path1 == path2)
     return TRUE;
 
+  if (path1->hash != path2->hash)
+    return FALSE;
+
   if (path1->n_contours != path2->n_contours)
     return FALSE;
+
+  /* FIXME: Is this a worthwhile optimization? */
+  for (int i = 0; i < path1->n_contours; i++)
+    if (gsk_contour_get_hash (path1->contours[i]) != gsk_contour_get_hash (path2->contours[i]))
+      return FALSE;
 
   for (int i = 0; i < path1->n_contours; i++)
     if (!gsk_contour_equal (path1->contours[i], path2->contours[i]))
