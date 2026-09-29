@@ -5472,9 +5472,9 @@ gtk_text_buffer_add_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "foreground-rgba", &rgba, NULL);
           value = g_strdup_printf ("%u,%u,%u",
-                                   (guint) rgba->red * 65535,
-                                   (guint) rgba->green * 65535,
-                                   (guint) rgba->blue * 65535);
+                                   (guint) (rgba->red * 65535),
+                                   (guint) (rgba->green * 65535),
+                                   (guint) (rgba->blue * 65535));
           gdk_rgba_free (rgba);
 
           g_hash_table_insert (attributes, g_strdup ("fg-color"), value);
@@ -5496,9 +5496,9 @@ gtk_text_buffer_add_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "background-rgba", &rgba, NULL);
           value = g_strdup_printf ("%u,%u,%u",
-                                   (guint) rgba->red * 65535,
-                                   (guint) rgba->green * 65535,
-                                   (guint) rgba->blue * 65535);
+                                   (guint) (rgba->red * 65535),
+                                   (guint) (rgba->green * 65535),
+                                   (guint) (rgba->blue * 65535));
           gdk_rgba_free (rgba);
 
           g_hash_table_insert (attributes, g_strdup ("bg-color"), value);
