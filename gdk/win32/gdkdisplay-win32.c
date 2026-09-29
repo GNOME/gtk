@@ -1042,6 +1042,14 @@ use_per_monitor_hidpi (void)
   return value == NULL || g_strcmp0 (value, "0") != 0;
 }
 
+/* No-op fallback for SetThreadCursorCreationScaling() (Win11 22000+ only):
+ * callers don't need to guard the call, just a no-self-virtualization result. */
+static UINT WINAPI
+set_thread_cursor_creation_scaling_fallback (UINT dpi)
+{
+  return 0;
+}
+
 static void
 _gdk_win32_enable_hidpi (GdkWin32Display *display)
 {
@@ -1074,6 +1082,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
         (funcGSMFD) GetProcAddress (user32, "GetSystemMetricsForDpi");
       display->user32_dpi_funcs.adjustWinRectExForDpi =
         (funcAWREFD) GetProcAddress (user32, "AdjustWindowRectExForDpi");
+      display->user32_dpi_funcs.setThreadCursorCreationScaling =
+        (funcSTCCS) GetProcAddress (user32, "SetThreadCursorCreationScaling");
     }
   if (!display->user32_dpi_funcs.getDpiForSystem)
     display->user32_dpi_funcs.getDpiForSystem = get_dpi_for_system_fallback;
@@ -1081,6 +1091,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     display->user32_dpi_funcs.getDpiForWindow = get_dpi_for_window_fallback;
   if (!display->user32_dpi_funcs.getSysMetrics)
     display->user32_dpi_funcs.getSysMetrics = get_system_metrics_for_dpi_fallback;
+  if (!display->user32_dpi_funcs.setThreadCursorCreationScaling)
+    display->user32_dpi_funcs.setThreadCursorCreationScaling = set_thread_cursor_creation_scaling_fallback;
   if (!display->user32_dpi_funcs.adjustWinRectExForDpi)
     display->user32_dpi_funcs.adjustWinRectExForDpi = adjust_window_rect_ex_for_dpi_fallback;
 
