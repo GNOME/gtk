@@ -792,14 +792,68 @@ gsk_path_equal (const GskPath *path1,
 }
 
 /**
+ * gsk_path_translatable:
+ * @path1: a path
+ * @path2: another path
+ *
+ * Returns whether 2 paths only differ by an x/y translation and
+ * compare [method@Gsk.Path.equal] otherwise.
+ *
+ * If you want to know the translation, you can use
+ * [method@Gsk.Path.get_bounds] and compare the bounds.
+ *
+ * Note that this function may return false for otherwise translatable
+ * paths due to floating point quantization.
+ *
+ * Returns: true if @path1 and @path2 are equal when applying a
+ *     translation
+ *
+ * Since: 4.26
+ */
+gboolean
+gsk_path_translatable (const GskPath *path1,
+                       const GskPath *path2)
+{
+  graphene_point_t offset;
+
+  if (path1 == path2)
+    return TRUE;
+
+  if (path1->hash != path2->hash)
+    return FALSE;
+
+  if (path1->n_contours != path2->n_contours)
+    return FALSE;
+
+  /* FIXME: Is this a worthwhile optimization? */
+  for (int i = 0; i < path1->n_contours; i++)
+    if (gsk_contour_get_hash (path1->contours[i]) != gsk_contour_get_hash (path2->contours[i]))
+      return FALSE;
+
+  offset = GRAPHENE_POINT_INIT (path2->bounds.min.x - path1->bounds.min.x,
+                                path2->bounds.min.y - path1->bounds.min.y);
+
+  for (int i = 0; i < path1->n_contours; i++)
+    {
+      if (!gsk_contour_equal (path1->contours[i],
+                              path2->contours[i],
+                              &offset))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+/**
  * gsk_path_hash:
  * @self: a path
  *
  * Generates a hash value for the path suitable for use in a `GHashTable`.
  *
- * Paths that compare equal will have the same hash value and so will paths
- * that are equal when translated. If it is important to generate different
- * hash values for translated paths, consider xor-ing a hash of the path's
+ * Paths that compare equal with [method@Gsk.Path.equal] will have the same
+ * hash value and so will paths that compare equal with
+ * [method@Gsk.Path.translatable]. If it is important to generate different
+ * hash values for translatable paths, consider xor-ing a hash of the path's
  * bounds.
  *
  * The returned hash values may not be identical across multiple runs
