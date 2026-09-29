@@ -308,77 +308,77 @@ msgstr "Mellomrom (taltastatur)"
 #: gdk/keynamesprivate.h:6883
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "Tab (taltastur)"
+msgstr "Tab (taltastatur)"
 
 #: gdk/keynamesprivate.h:6884
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Enter  (taltastur)"
+msgstr "Enter (taltastatur)"
 
 #: gdk/keynamesprivate.h:6885
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "Home (taltastur)"
+msgstr "Home (taltastatur)"
 
 #: gdk/keynamesprivate.h:6886
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "Pil venstre (taltastur)"
+msgstr "Pil venstre (taltastatur)"
 
 #: gdk/keynamesprivate.h:6887
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Pil opp (taltastur)"
+msgstr "Pil opp (taltastatur)"
 
 #: gdk/keynamesprivate.h:6888
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "Pil høgre (taltastur)"
+msgstr "Pil høgre (taltastatur)"
 
 #: gdk/keynamesprivate.h:6889
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "Pil ned"
+msgstr "Pil ned (taltastatur)"
 
 #: gdk/keynamesprivate.h:6890
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Page Up (taltastur)"
+msgstr "Page Up (taltastatur)"
 
 #: gdk/keynamesprivate.h:6891
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "Forrige (taltastur)"
+msgstr "Førre (taltastatur)"
 
 #: gdk/keynamesprivate.h:6892
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "Page Down (taltastur)"
+msgstr "Page Down (taltastatur)"
 
 #: gdk/keynamesprivate.h:6893
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "Neste (taltastur)"
+msgstr "Neste (taltastatur)"
 
 #: gdk/keynamesprivate.h:6894
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "End (taltastur)"
+msgstr "End (taltastatur)"
 
 #: gdk/keynamesprivate.h:6895
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "Begin (taltastur)"
+msgstr "Begin (taltastatur)"
 
 #: gdk/keynamesprivate.h:6896
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "Insert (taltastur)"
+msgstr "Insert (taltastatur)"
 
 #: gdk/keynamesprivate.h:6897
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "Delete (taltastur)"
+msgstr "Delete (taltastatur)"
 
 #: gdk/keynamesprivate.h:6898
 msgctxt "keyboard label"
@@ -443,7 +443,7 @@ msgstr "Neste lydspor"
 #: gdk/keynamesprivate.h:6910
 msgctxt "keyboard label"
 msgid "AudioPrev"
-msgstr "Forrige lydspor"
+msgstr "Førre lydspor"
 
 #: gdk/keynamesprivate.h:6911
 msgctxt "keyboard label"
@@ -885,7 +885,7 @@ msgstr "Ustøtta koding «%s»"
 #: gsk/gpu/gskgldevice.c:215
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
-msgstr "OpenGL ES 3.0 er ikkje støtta av denne rendera."
+msgstr "OpenGL ES 3.0 er ikkje støtta av denne renderaren."
 
 #: gsk/gpu/gskglrenderer.c:64
 msgid "OpenGL 3.3 required"
@@ -1252,7 +1252,7 @@ msgstr "BSD 2-klausulslisensen"
 
 #: gtk/gtkaboutdialog.c:134
 msgid "The MIT License (MIT)"
-msgstr "MIT-licensen (MIT)"
+msgstr "MIT-lisensen (MIT)"
 
 #: gtk/gtkaboutdialog.c:135
 msgid "Artistic License 2.0"
@@ -1868,7 +1868,7 @@ msgstr "Grunn ikkje oppgitt"
 
 #: gtk/gtkapplicationwindow.c:235
 msgid "Menu bar"
-msgstr "Menyrad"
+msgstr "Menylinje"
 
 #: gtk/gtkbookmarksmanager.c:53
 #, c-format
@@ -2104,7 +2104,7 @@ msgstr "Mørk raud"
 #: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Very Dark Red"
-msgstr "Veld mørk raud"
+msgstr "Veldig mørk raud"
 
 #: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
@@ -4428,11 +4428,11 @@ msgstr "Roter mot klokka"
 
 #: gtk/deprecated/gtkshortcutsshortcut.c:163
 msgid "Two finger swipe left"
-msgstr "To fingerar sveip til venstre"
+msgstr "To fingrar sveip til venstre"
 
 #: gtk/deprecated/gtkshortcutsshortcut.c:167
 msgid "Two finger swipe right"
-msgstr "To fingerar sveip til høgre"
+msgstr "To fingrar sveip til høgre"
 
 #: gtk/deprecated/gtkshortcutsshortcut.c:171
 msgid "Swipe left"
@@ -5857,7 +5857,7 @@ msgstr "Stor bokstavavstand"
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr "Kontekstual swash"
+msgstr "Kontekstuell swash"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
@@ -7531,7 +7531,7 @@ msgstr "Vel font"
 
 #: gtk/ui/gtkfontchooserwidget.ui:67 gtk/ui/gtkfontchooserwidget.ui:70
 msgid "Search font name"
-msgstr "Søk skriftype"
+msgstr "Søk etter skriftnamn"
 
 #: gtk/ui/gtkfontchooserwidget.ui:77 gtk/ui/gtkfontchooserwidget.ui:80
 msgid "Filters"
@@ -8415,8 +8415,8 @@ msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
 msgstr ""
-"Start eit program (oppgjeve med filnamnet på skrivebordet), valfritt med "
-"eitt eller fleire URIs som argument."
+"Start eit program (oppgjeve med namnet på .desktop-fila),\n"
+"eventuelt med éin eller fleire URI-ar som argument."
 
 #: tools/gtk-launch.c:88
 #, c-format
