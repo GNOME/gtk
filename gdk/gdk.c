@@ -402,10 +402,23 @@ gdk_get_startup_notification_id (void)
   return startup_notification_id;
 }
 
+static gboolean
+is_running_in_flatpak (void)
+{
+  return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
+}
+
+static gboolean
+is_running_in_snap (void)
+{
+  return g_getenv ("SNAP") != NULL;
+}
+
 gboolean
 gdk_running_in_sandbox (void)
 {
-  return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
+  return is_running_in_flatpak () ||
+         is_running_in_snap (); // TODO: snaps could be unsandboxed
 }
 
 #define DBUS_BUS_NAME "org.freedesktop.DBus"
