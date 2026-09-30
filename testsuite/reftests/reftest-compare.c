@@ -353,7 +353,7 @@ reftest_compare_textures_with_tolerance (GdkTexture *texture1,
   downloader = gdk_texture_downloader_new (texture1);
   gdk_texture_downloader_set_color_state (downloader, color_state);
   high_depth = memory_format_is_high_depth (gdk_texture_get_format (texture1)) ||
-               memory_format_is_high_depth (gdk_texture_get_format (texture1));
+               memory_format_is_high_depth (gdk_texture_get_format (texture2));
   if (high_depth)
     {
       gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED);
