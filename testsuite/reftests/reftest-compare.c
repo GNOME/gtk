@@ -151,7 +151,7 @@ buffer_diff_u8 (GdkColorState *color_state,
 
           /* check if the pixels are the same */
           dist = 0;
-          for (channel = 0; channel < 3; channel++)
+          for (channel = 0; channel < 4; channel++)
             {
               int value_a = (row_a[x] >> (channel*8)) & 0xff;
               int value_b = (row_b[x] >> (channel*8)) & 0xff;
@@ -251,7 +251,7 @@ buffer_diff_float (GdkColorState *color_state,
 
           /* check if the pixels are the same */
           dist = 0;
-          for (channel = 0; channel < 3; channel++)
+          for (channel = 0; channel < 4; channel++)
             {
               float value_a = row_a[4 * x + channel];
               float value_b = row_b[4 * x + channel];
