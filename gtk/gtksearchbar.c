@@ -499,6 +499,19 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
 
   gtk_revealer_set_reveal_child (GTK_REVEALER (bar->revealer), search_mode);
+
+  if (search_mode && bar->entry)
+    {
+      GtkText *text = NULL;
+
+      if (GTK_IS_TEXT (bar->entry))
+        text = GTK_TEXT (bar->entry);
+      else if (GTK_IS_SEARCH_ENTRY (bar->entry))
+        text = gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (bar->entry));
+
+      if (text)
+        gtk_text_activate_osk (text, NULL);
+    }
 }
 
 /**
