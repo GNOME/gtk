@@ -7,7 +7,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: -4 96 1928 8;
+        bounds: -2 98 1924 4;
         color: rgb(0,0,255);
       }
       path: "M 0 100 L 1920 100";
@@ -17,7 +17,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: -4 271 1928 8;
+        bounds: -2 273 1924 4;
         color: rgb(0,0,255);
       }
       path: "M 0 275 L 1920 275";
@@ -27,7 +27,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: -4 446 1928 8;
+        bounds: -2 448 1924 4;
         color: rgb(0,0,255);
       }
       path: "M 0 450 L 1920 450";
