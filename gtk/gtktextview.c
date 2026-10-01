@@ -5369,8 +5369,6 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
       GtkTextDirection dir = GTK_TEXT_DIR_LTR;
       GtkTextAttributes attributes = { 0 };
 
-      gtk_widget_set_visible (GTK_WIDGET (handle), TRUE);
-
       rect.x = CLAMP (x, 0, SCREEN_WIDTH (text_view));
       rect.y = CLAMP (y, 0, SCREEN_HEIGHT (text_view));
       _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
@@ -5381,6 +5379,7 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
         dir = attributes.direction;
 
       gtk_widget_set_direction (GTK_WIDGET (handle), dir);
+      gtk_widget_set_visible (GTK_WIDGET (handle), TRUE);
     }
 }
 
