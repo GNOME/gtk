@@ -1,3 +1,37 @@
+Overview of Changes in 4.24.1, 01-10-2026
+=========================================
+
+* Bugs fixed:
+  - #8409 search-entry: Needs extra touch to show OSK although it has focus
+    (Guido Günther)
+  - #8419 text-input: Preedit gets cleared due to text-change-cause(1) (Guido
+    Günther)
+  - #8433 GtkSvgWidget can't parse '@media' if it is not on a new line (Matthias
+    Clasen)
+  - !10264 gtkmain: Split out debug code
+  - !10367 gtkgstsink: release GL context on disposal (Pierre Berube)
+  - !10369 Post-release version bump (Matthias Clasen)
+  - !10372 Fix typo in CONTRIBUTING.md (Michael Fohqul)
+  - !10385 texthandle: fix transformation issues & relative movement (Florian
+    "sp1rit"​)
+  - !10393 Fix typo ('witten' should be 'written') (ReinoutS)
+  - !10395 searchbar: Show OSK when search-mode gets enabled (Guido Günther)
+  - !10396 docs: Correct docs for allocation functions (Benjamin Otte)
+  - !10398 textbuffer: Fix tag colors in accessible text attributes (Sean Rowe)
+  - !10403 gtk/inscription: Refresh GtkInscription's PangoLayout when rooted
+    (Christian Hergert)
+  - !10409 text: Protect against invalid offset (Alessandro Astone)
+  - !10414 macos: fix cursor keys (Arjan Molenaar)
+  - !10421 various fixes (Benjamin Otte)
+  - !10422 Norwegian Nynorsk translation. (Roy-Magne Mo)
+  - !10423 gl: Create 2 fbos per frame instead of 1 per image (Benjamin Otte)
+  - !10425 Update Norwegian nynorsk translation (Roy-Magne Mo)
+  - !10429 textview: Make text handles visible after giving them a position
+    (Carlos Garnacho)
+
+* Translation updates:
+  - Norwegian Nynorsk (Roy-Magne Mo)
+
 Overview of Changes in 4.24.0, 11-09-2026
 =========================================
 
