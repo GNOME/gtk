@@ -62,6 +62,7 @@ GskContour *            gsk_contour_reverse                     (const GskContou
 
 gsize                   gsk_contour_get_size                    (const GskContour       *self);
 GskPathFlags            gsk_contour_get_flags                   (const GskContour       *self);
+guint                   gsk_contour_get_hash                    (const GskContour       *self);
 void                    gsk_contour_print                       (const GskContour       *self,
                                                                  GString                *string);
 gboolean                gsk_contour_get_bounds                  (const GskContour       *self,
@@ -111,7 +112,8 @@ void                    gsk_contour_get_point                   (const GskContou
 float                   gsk_contour_get_distance                (const GskContour       *self,
                                                                  const GskPathPoint     *point,
                                                                  gpointer                measure_data);
-gboolean                gsk_contour_equal                       (const GskContour *contour1,
-                                                                 const GskContour *contour2);
+gboolean                gsk_contour_equal                       (const GskContour       *contour1,
+                                                                 const GskContour       *contour2,
+                                                                 const graphene_point_t *offset);
 
 G_END_DECLS

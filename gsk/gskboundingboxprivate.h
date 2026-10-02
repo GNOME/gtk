@@ -2,6 +2,8 @@
 
 #include <gsk/gsktypes.h>
 
+#include "gskrectprivate.h"
+
 typedef struct _GskBoundingBox GskBoundingBox;
 
 struct _GskBoundingBox {
@@ -38,6 +40,15 @@ gsk_bounding_box_init_from_rect (GskBoundingBox        *self,
   self->max.x = bounds->origin.x + bounds->size.width;
   self->max.y = bounds->origin.y + bounds->size.height;
   return self;
+}
+
+static inline guint
+gsk_bounding_box_hash_size (GskBoundingBox *self)
+{
+  guint w = gsk_float_hash (self->max.x - self->min.x);
+  guint h = gsk_float_hash (self->max.y - self->min.y);
+
+  return gsk_uint_rotate_left (w, sizeof (guint) * 4) ^ h;
 }
 
 static inline void

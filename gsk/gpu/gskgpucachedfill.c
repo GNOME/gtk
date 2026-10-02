@@ -69,7 +69,7 @@ gsk_gpu_cached_fill_hash (gconstpointer data)
 {
   const GskGpuCachedFill *self = data;
 
-  return GPOINTER_TO_UINT (self->path) ^
+  return gsk_path_hash (self->path) ^
          (self->fill_rule) << 28 ^
          (((guint) (self->sx * 16)) << 16) ^
          ((guint) (self->sy * 16) << 8) ^
@@ -86,7 +86,7 @@ gsk_gpu_cached_fill_equal (gconstpointer v1,
 
   return fill1->fx == fill2->fx &&
          fill1->fy == fill2->fy &&
-         fill1->path == fill2->path &&
+         gsk_path_translatable (fill1->path, fill2->path) &&
          fill1->fill_rule == fill2->fill_rule &&
          fill1->sx == fill2->sx &&
          fill1->sy == fill2->sy;
@@ -197,13 +197,16 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
   gsize fx, fy, padding;
   cairo_rectangle_int_t area;
   GskGpuImage *image = NULL;
-  graphene_rect_t viewport;
+  graphene_rect_t path_bounds, viewport;
   size_t subpixel_scale;
+
+  if (!gsk_path_get_bounds (path, &path_bounds))
+    return NULL;
 
   determine_scale_and_subpixel_grid (scale, modelview, &sx, &sy, &subpixel_scale);
 
-  fx = mod_subpixel (bounds->origin.x, sx, subpixel_scale, &dx);
-  fy = mod_subpixel (bounds->origin.y, sy, subpixel_scale, &dy);
+  fx = mod_subpixel (bounds->origin.x - path_bounds.origin.x, sx, subpixel_scale, &dx);
+  fy = mod_subpixel (bounds->origin.y - path_bounds.origin.y, sy, subpixel_scale, &dy);
 
   cached = g_hash_table_lookup (priv->fill_cache,
                                 &(GskGpuCachedFill) {
@@ -219,16 +222,16 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
       gsk_gpu_cached_use ((GskGpuCached *) cached);
 
       graphene_rect_init (out_rect,
-                          cached->image_offset.x - dx,
-                          cached->image_offset.y - dy,
+                          cached->image_offset.x + path_bounds.origin.x - dx,
+                          cached->image_offset.y + path_bounds.origin.y - dy,
                           gsk_gpu_image_get_width (cached->image) / sx,
                           gsk_gpu_image_get_height (cached->image) / sy);
 
       return g_object_ref (cached->image);
     }
 
-  if (!gsk_path_get_bounds (path, &viewport) ||
-      !gsk_rect_snap_to_grid_grow (&viewport,
+  viewport = GRAPHENE_RECT_INIT (0, 0, path_bounds.size.width, path_bounds.size.height);
+  if (!gsk_rect_snap_to_grid_grow (&viewport,
                                    scale,
                                    &GRAPHENE_POINT_INIT ((float) fx / (sx * subpixel_scale),
                                                          (float) fy / (sy * subpixel_scale)),
@@ -262,6 +265,9 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
 
       g_hash_table_insert (priv->fill_cache, cached, cached);
       gsk_gpu_cached_use ((GskGpuCached *) cached);
+
+      viewport.origin.x += path_bounds.origin.x;
+      viewport.origin.y += path_bounds.origin.y;
     }
   else
     {

@@ -191,6 +191,57 @@ gsk_rect_coverage (const graphene_rect_t *r1,
   *res = r;
 }
 
+static inline guint
+gsk_uint_rotate_left (guint x, guint steps)
+{
+  steps %= sizeof (guint);
+
+  if (steps == 0)
+    return x;
+
+  return (x << steps) | (x >> (sizeof (guint) * 8 - steps));
+}
+
+static inline guint
+gsk_float_hash (float f)
+{
+  /* Convert to 24.8 fixed point to get enough accuracy for a pixel */
+  return (guint) (gint) fmod (f * 256.0f, G_MAXINT);
+}
+
+static inline guint
+gsk_point_hash (const graphene_point_t *pt)
+{
+  guint x = gsk_float_hash (pt->x);
+  guint y = gsk_float_hash (pt->y);
+
+  return gsk_uint_rotate_left (x, 6 * sizeof (guint)) ^
+         gsk_uint_rotate_left (y, 2 * sizeof (guint));
+}
+
+static inline gboolean
+gsk_point_equal (const graphene_point_t *p1,
+                 const graphene_point_t *p2)
+{
+  return p1->x == p2->x && p1->y == p2->y;
+}
+
+static inline guint
+gsk_size_hash (const graphene_size_t *size)
+{
+  guint w = gsk_float_hash (size->width);
+  guint h = gsk_float_hash (size->height);
+
+  return gsk_uint_rotate_left (w, sizeof (guint) * 4) ^ h;
+}
+
+static inline gboolean
+gsk_size_equal (const graphene_size_t *s1,
+                const graphene_size_t *s2)
+{
+  return s1->width == s2->width && s1->height == s2->height;
+}
+
 static inline float
 gsk_rect_snap_direction (float            value,
                          GskSnapDirection snap)

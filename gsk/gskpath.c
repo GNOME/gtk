@@ -57,7 +57,9 @@ struct _GskPath
   /*< private >*/
   guint ref_count;
 
+  GskBoundingBox bounds;
   GskPathFlags flags;
+  guint hash;
 
   gsize n_contours;
   GskContour *contours[];
@@ -77,23 +79,42 @@ gsk_path_new_from_contours (const GSList *contours)
   gsize n_contours;
   guint8 *contour_data;
   GskPathFlags flags;
+  guint hash;
+  GskBoundingBox b;
 
   flags = GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
+  hash = 0; /* could use a startup-initialized constant here */
   size = 0;
   n_contours = 0;
+  
+  if (contours)
+    gsk_contour_get_bounds (contours->data, &b);
+  else
+    gsk_bounding_box_init_from_rect (&b, &GRAPHENE_RECT_INIT (0, 0, 0, 0));
+
   for (l = contours; l; l = l->next)
     {
       GskContour *contour = l->data;
+      GskBoundingBox tmp;
 
       n_contours++;
       size += sizeof (GskContour *);
       size += gsk_contour_get_size (contour);
       flags &= gsk_contour_get_flags (contour);
+      hash ^= gsk_uint_rotate_left (hash, 17);
+      hash ^= gsk_contour_get_hash (contour);
+      if (l != contours)
+        {
+          gsk_contour_get_bounds (contour, &tmp);
+          gsk_bounding_box_union (&b, &tmp, &b);
+        }
     }
 
   path = g_malloc0 (sizeof (GskPath) + size);
   path->ref_count = 1;
+  path->bounds = b;
   path->flags = flags;
+  path->hash = hash;
   path->n_contours = n_contours;
   contour_data = (guint8 *) &path->contours[n_contours];
   n_contours = 0;
@@ -376,30 +397,12 @@ gboolean
 gsk_path_get_bounds (GskPath         *self,
                      graphene_rect_t *bounds)
 {
-  GskBoundingBox b;
-
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (bounds != NULL, FALSE);
 
-  if (self->n_contours == 0)
-    {
-      graphene_rect_init_from_rect (bounds, graphene_rect_zero ());
-      return FALSE;
-    }
+  gsk_bounding_box_to_rect (&self->bounds, bounds);
 
-  gsk_contour_get_bounds (self->contours[0], &b);
-
-  for (gsize i = 1; i < self->n_contours; i++)
-    {
-      GskBoundingBox tmp;
-
-      gsk_contour_get_bounds (self->contours[i], &tmp);
-      gsk_bounding_box_union (&b, &tmp, &b);
-    }
-
-  gsk_bounding_box_to_rect (&b, bounds);
-
-  return TRUE;
+  return self->n_contours > 0;
 }
 
 /**
@@ -766,14 +769,104 @@ gsk_path_equal (const GskPath *path1,
   if (path1 == path2)
     return TRUE;
 
+  if (path1->hash != path2->hash)
+    return FALSE;
+
   if (path1->n_contours != path2->n_contours)
     return FALSE;
 
+  /* FIXME: Is this a worthwhile optimization? */
   for (int i = 0; i < path1->n_contours; i++)
-    if (!gsk_contour_equal (path1->contours[i], path2->contours[i]))
+    if (gsk_contour_get_hash (path1->contours[i]) != gsk_contour_get_hash (path2->contours[i]))
       return FALSE;
 
+  for (int i = 0; i < path1->n_contours; i++)
+    {
+      if (!gsk_contour_equal (path1->contours[i],
+                              path2->contours[i],
+                              &GRAPHENE_POINT_INIT (0, 0)))
+        return FALSE;
+    }
+
   return TRUE;
+}
+
+/**
+ * gsk_path_translatable:
+ * @path1: a path
+ * @path2: another path
+ *
+ * Returns whether 2 paths only differ by an x/y translation and
+ * compare [method@Gsk.Path.equal] otherwise.
+ *
+ * If you want to know the translation, you can use
+ * [method@Gsk.Path.get_bounds] and compare the bounds.
+ *
+ * Note that this function may return false for otherwise translatable
+ * paths due to floating point quantization.
+ *
+ * Returns: true if @path1 and @path2 are equal when applying a
+ *     translation
+ *
+ * Since: 4.26
+ */
+gboolean
+gsk_path_translatable (const GskPath *path1,
+                       const GskPath *path2)
+{
+  graphene_point_t offset;
+
+  if (path1 == path2)
+    return TRUE;
+
+  if (path1->hash != path2->hash)
+    return FALSE;
+
+  if (path1->n_contours != path2->n_contours)
+    return FALSE;
+
+  /* FIXME: Is this a worthwhile optimization? */
+  for (int i = 0; i < path1->n_contours; i++)
+    if (gsk_contour_get_hash (path1->contours[i]) != gsk_contour_get_hash (path2->contours[i]))
+      return FALSE;
+
+  offset = GRAPHENE_POINT_INIT (path2->bounds.min.x - path1->bounds.min.x,
+                                path2->bounds.min.y - path1->bounds.min.y);
+
+  for (int i = 0; i < path1->n_contours; i++)
+    {
+      if (!gsk_contour_equal (path1->contours[i],
+                              path2->contours[i],
+                              &offset))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_hash:
+ * @self: a path
+ *
+ * Generates a hash value for the path suitable for use in a `GHashTable`.
+ *
+ * Paths that compare equal with [method@Gsk.Path.equal] will have the same
+ * hash value and so will paths that compare equal with
+ * [method@Gsk.Path.translatable]. If it is important to generate different
+ * hash values for translatable paths, consider xor-ing a hash of the path's
+ * bounds.
+ *
+ * The returned hash values may not be identical across multiple runs
+ * of the same program.
+ *
+ * Returns: The path's hash value.
+ *
+ * Since: 4.26
+ **/
+guint
+gsk_path_hash (const GskPath *self)
+{
+  return self->hash;
 }
 
 /* }}} */
