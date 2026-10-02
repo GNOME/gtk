@@ -2,7 +2,7 @@ transform {
   transform: translate(150, 100);
   child: stroke {
     child: color {
-      bounds: -4 -9 8 18;
+      bounds: -2 -7 4 14;
       color: rgb(255,0,0);
     }
     path: "path1" {
@@ -17,7 +17,7 @@ transform {
   transform: translate(275, 100) rotate(45);
   child: stroke {
     child: color {
-      bounds: -4 -9 8 18;
+      bounds: -2 -7 4 14;
       color: rgb(255,0,0);
     }
     path: "path1";
@@ -30,7 +30,7 @@ transform {
   transform: translate(275, 175) rotate(135);
   child: stroke {
     child: color {
-      bounds: -4 -9 8 18;
+      bounds: -2 -7 4 14;
       color: rgb(255,0,0);
     }
     path: "path1";
@@ -43,7 +43,7 @@ transform {
   transform: translate(150, 175) rotate(45);
   child: stroke {
     child: color {
-      bounds: -4 -9 8 18;
+      bounds: -2 -7 4 14;
       color: rgb(255,0,0);
     }
     path: "path1";
@@ -56,7 +56,7 @@ transform {
   transform: translate(150, 100) rotate(270);
   child: stroke {
     child: color {
-      bounds: -4 -9 8 18;
+      bounds: -2 -7 4 14;
       color: rgb(255,0,0);
     }
     path: "path1";

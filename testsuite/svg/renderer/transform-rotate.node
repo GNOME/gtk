@@ -23,7 +23,7 @@ transform {
     }
     stroke {
       child: color {
-        bounds: -35 -523 70 40;
+        bounds: -25 -513 50 20;
         color: rgb(230,45,66);
       }
       path: "M -15 -503 L 15 -503";
@@ -35,7 +35,7 @@ transform {
       transform: translate(0, -503) rotate(90) translate(-0, 503);
       child: stroke {
         child: color {
-          bounds: -35 -523 70 40;
+          bounds: -25 -513 50 20;
           color: rgb(230,45,66);
         }
         path: "M -15 -503 L 15 -503";
@@ -48,7 +48,7 @@ transform {
       transform: translate(0, -503) rotate(45) translate(-0, 503);
       child: stroke {
         child: color {
-          bounds: -35 -523 70 40;
+          bounds: -25 -513 50 20;
           color: rgb(230,45,66);
         }
         path: "M -15 -503 L 15 -503";
@@ -61,7 +61,7 @@ transform {
       transform: translate(0, -503) rotate(135) translate(-0, 503);
       child: stroke {
         child: color {
-          bounds: -35 -523 70 40;
+          bounds: -25 -513 50 20;
           color: rgb(230,45,66);
         }
         path: "M -15 -503 L 15 -503";

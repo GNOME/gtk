@@ -11,7 +11,7 @@ fill {
 }
 stroke {
   child: color {
-    bounds: 18 18 164 164;
+    bounds: 19 19 162 162;
     color: rgb(128,128,128);
   }
   path: "path1";
