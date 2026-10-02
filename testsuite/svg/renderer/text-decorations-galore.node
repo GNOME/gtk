@@ -30,7 +30,7 @@ mask {
     transform: translate(50, 56);
     child: stroke {
       child: color {
-        bounds: -4 46 58 11;
+        bounds: -2 48 54 7;
         color: rgb(0,0,0);
       }
       path: "path1";
@@ -99,7 +99,7 @@ mask {
     transform: translate(50, 56);
     child: stroke {
       child: color {
-        bounds: -1.1875 10.2344 52.5312 36.25;
+        bounds: -0.1875 11.2344 50.5312 34.25;
         color: rgb(0,0,0);
       }
       path: {
@@ -156,7 +156,7 @@ mask {
     transform: translate(50, 56);
     child: stroke {
       child: color {
-        bounds: -4 27 58 11;
+        bounds: -2 29 54 7;
         color: rgb(0,0,0);
       }
       path: "path2";
@@ -194,7 +194,7 @@ mask {
     transform: translate(100, 56);
     child: stroke {
       child: color {
-        bounds: -4 46 46 11;
+        bounds: -2 48 42 7;
         color: rgb(0,0,0);
       }
       path: "path3";
@@ -219,7 +219,7 @@ mask {
     transform: translate(100, 56);
     child: stroke {
       child: color {
-        bounds: -3.1875 12.2188 44.5781 36.2656;
+        bounds: -1.1875 14.2188 40.5781 32.2656;
         color: rgb(0,0,0);
       }
       path: {
@@ -286,7 +286,7 @@ mask {
     transform: translate(100, 56);
     child: stroke {
       child: color {
-        bounds: -4 27 46 11;
+        bounds: -2 29 42 7;
         color: rgb(0,0,0);
       }
       path: "path4";

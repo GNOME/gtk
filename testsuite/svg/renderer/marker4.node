@@ -1,6 +1,6 @@
 stroke {
   child: color {
-    bounds: 46 46 158 108;
+    bounds: 48 48 154 104;
     color: rgb(0,0,255);
   }
   path: "M 50 50 L 200 150";
@@ -23,7 +23,7 @@ transform {
     }
     stroke {
       child: color {
-        bounds: -4 -4 18 18;
+        bounds: -2 -2 14 14;
         color: rgb(0,0,255);
       }
       path: "path1";
@@ -46,7 +46,7 @@ transform {
     }
     stroke {
       child: color {
-        bounds: -4 -4 18 18;
+        bounds: -2 -2 14 14;
         color: rgb(0,0,255);
       }
       path: "path1";

@@ -73,7 +73,7 @@ transform {
   child: container {
     stroke {
       child: color {
-        bounds: -4 -4 58 8;
+        bounds: -2 -2 54 4;
         color: rgb(0,0,0);
       }
       path: "M 0 0 L 50 0";
@@ -100,7 +100,7 @@ transform {
   child: container {
     stroke {
       child: color {
-        bounds: -4 -4 58 8;
+        bounds: -2 -2 54 4;
         color: rgb(0,0,0);
       }
       path: "M 0 0 L 50 0";
@@ -127,7 +127,7 @@ transform {
   child: container {
     stroke {
       child: color {
-        bounds: -29 -4 58 8;
+        bounds: -27 -2 54 4;
         color: rgb(0,0,0);
       }
       path: "M -25 0 L 25 0";
@@ -155,7 +155,7 @@ transform {
   child: container {
     stroke {
       child: color {
-        bounds: -54 -4 58 8;
+        bounds: -52 -2 54 4;
         color: rgb(0,0,0);
       }
       path: "M -50 0 L 0 0";

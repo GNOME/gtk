@@ -25,7 +25,7 @@ linear-gradient {
 }
 stroke {
   child: color {
-    bounds: 94 104 192 32;
+    bounds: 102 112 176 16;
     color: rgb(255,165,0);
   }
   path: "M 110 120 L 270 120";
