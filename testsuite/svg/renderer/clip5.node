@@ -144,7 +144,7 @@ transform {
       transform: translate(20, 70);
       child: stroke {
         child: color {
-          bounds: 6 6 108 108;
+          bounds: 8 8 104 104;
           color: rgb(0,0,0);
         }
         path: "path1";

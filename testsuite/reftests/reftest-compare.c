@@ -151,7 +151,7 @@ buffer_diff_u8 (GdkColorState *color_state,
 
           /* check if the pixels are the same */
           dist = 0;
-          for (channel = 0; channel < 3; channel++)
+          for (channel = 0; channel < 4; channel++)
             {
               int value_a = (row_a[x] >> (channel*8)) & 0xff;
               int value_b = (row_b[x] >> (channel*8)) & 0xff;
@@ -251,7 +251,7 @@ buffer_diff_float (GdkColorState *color_state,
 
           /* check if the pixels are the same */
           dist = 0;
-          for (channel = 0; channel < 3; channel++)
+          for (channel = 0; channel < 4; channel++)
             {
               float value_a = row_a[4 * x + channel];
               float value_b = row_b[4 * x + channel];
@@ -353,7 +353,7 @@ reftest_compare_textures_with_tolerance (GdkTexture *texture1,
   downloader = gdk_texture_downloader_new (texture1);
   gdk_texture_downloader_set_color_state (downloader, color_state);
   high_depth = memory_format_is_high_depth (gdk_texture_get_format (texture1)) ||
-               memory_format_is_high_depth (gdk_texture_get_format (texture1));
+               memory_format_is_high_depth (gdk_texture_get_format (texture2));
   if (high_depth)
     {
       gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED);

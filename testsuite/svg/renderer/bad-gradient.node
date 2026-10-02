@@ -32,7 +32,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: -2.8686 -2.58737 53.5051 50.2031;
+        bounds: -0.868599 -0.58737 49.5051 46.2031;
         color: rgb(0,0,0);
       }
       path: "path1";
@@ -207,7 +207,7 @@ clip {
         }
         stroke {
           child: color {
-            bounds: -0.332173 32.923 15.5239 15.7933;
+            bounds: 1.66783 34.923 11.5239 11.7933;
             color: rgb(204,0,0);
           }
           path: "path2";
@@ -235,7 +235,7 @@ clip {
         }
         stroke {
           child: color {
-            bounds: 5.37989 9.93511 31.3396 32.6228;
+            bounds: 7.37989 11.9351 27.3396 28.6228;
             color: rgb(136,138,133);
           }
           path: "path3";
@@ -268,7 +268,7 @@ clip {
         }
         stroke {
           child: color {
-            bounds: 30.6766 -1.62589 16.5383 16.7865;
+            bounds: 32.6766 0.374114 12.5383 12.7865;
             color: rgb(46,52,54);
           }
           path: "path4";
@@ -298,7 +298,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: -2.2702 31.9569 12.7613 12.2005;
+        bounds: -0.270197 33.9569 8.76132 8.20046;
         color: rgb(136,138,133);
       }
       path: "path5";
@@ -308,7 +308,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: 36.38 3.76 18 18;
+        bounds: 38.38 5.76 14 14;
         color: rgb(46,52,54);
       }
       path: "M 45.380001068115234 7.7600002288818359\
@@ -357,7 +357,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: 8.8494 18.6663 23.8766 16.6133;
+        bounds: 10.7843 20.6012 20.0068 12.7436;
         color: rgb(0,0,0);
       }
       path: "path6";
@@ -367,7 +367,7 @@ clip {
     }
     stroke {
       child: linear-gradient {
-        bounds: 11.0646 19.5811 19.3688 14.8897;
+        bounds: 12.9995 21.516 15.499 11.02;
         start: 14.6639 26.2459;
         end: 28.3796 30.8421;
         stops: 0 rgba(255,255,255,0.450382), 1 rgba(255,255,255,0.312977);

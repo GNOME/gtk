@@ -1422,7 +1422,7 @@ gtk_css_font_variant_numeric_value_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_NUMERIC = {
-  "GtkCssFontVariantNumbericValue",
+  "GtkCssFontVariantNumericValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   NULL,

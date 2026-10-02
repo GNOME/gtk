@@ -525,7 +525,7 @@ gsk_stroke_get_join_width (const GskStroke *stroke)
   switch (stroke->line_join)
     {
     case GSK_LINE_JOIN_MITER:
-      width = MAX (width, MAX (stroke->miter_limit, 1.f) * stroke->line_width);
+      width = MAX (width, MAX (stroke->miter_limit / 2, 0.5f) * stroke->line_width);
       break;
     case GSK_LINE_JOIN_ROUND:
     case GSK_LINE_JOIN_BEVEL:
