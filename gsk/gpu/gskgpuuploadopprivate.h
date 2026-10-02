@@ -20,6 +20,7 @@ GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuF
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,
                                                                          const graphene_size_t          *scale,
                                                                          const graphene_rect_t          *viewport,
+                                                                         gboolean                        with_mipmap,
                                                                          GskGpuCairoFunc                 func,
                                                                          gpointer                        user_data,
                                                                          GDestroyNotify                  user_destroy);
