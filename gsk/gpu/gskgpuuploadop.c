@@ -564,6 +564,7 @@ GskGpuImage *
 gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
                          const graphene_size_t *scale,
                          const graphene_rect_t *viewport,
+                         gboolean               with_mipmap,
                          GskGpuCairoFunc        func,
                          gpointer               user_data,
                          GDestroyNotify         user_destroy)
@@ -571,7 +572,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   GskGpuImage *image;
 
   image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
-                                              FALSE,
+                                              with_mipmap,
                                               GDK_MEMORY_DEFAULT,
                                               gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
                                               ceil (scale->width * viewport->size.width),
