@@ -33,32 +33,26 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 }
 
 static void
-gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
-                                        gpointer         context_data,
-                                        cairo_region_t  *region,
-                                        GdkColorState  **out_color_state,
-                                        GdkMemoryDepth  *out_depth)
+gdk_broadway_cairo_context_begin_frame (GdkDrawContext      *draw_context,
+                                        GdkDrawContextFrame *frame,
+                                        gpointer             context_data)
 {
-  GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
-  cairo_t *cr;
-  cairo_region_t *repaint_region;
   guint width, height;
+  cairo_region_t *region;
+  cairo_surface_t *cairo_surface;
 
   gdk_draw_context_get_buffer_size (draw_context, &width, &height);
-  self->paint_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
-  repaint_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
-  cairo_region_union (region, repaint_region);
-  cairo_region_destroy (repaint_region);
+  region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                              0, 0,
+                                              width, height
+                                          });
+  gdk_draw_context_frame_add_damage (frame, region);
+  cairo_region_destroy (region);
 
-  /* clear the repaint area */
-  cr = cairo_create (self->paint_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  cairo_fill (cr);
-  cairo_destroy (cr);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+  gdk_cairo_context_frame_set_surface ((GdkCairoContextFrame *) frame, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void
@@ -76,13 +70,14 @@ add_float (GArray *nodes, float f)
 }
 
 static void
-gdk_broadway_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                      gpointer        context_data,
-                                      cairo_region_t *painted)
+gdk_broadway_cairo_context_end_frame (GdkDrawContext      *draw_context,
+                                      GdkDrawContextFrame *frame,
+                                      gpointer             context_data)
 {
-  GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkDisplay *display = gdk_draw_context_get_display (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  cairo_surface_t *cairo_surface = gdk_cairo_context_frame_get_surface (cframe);
   GdkTexture *texture;
   GPtrArray *node_textures;
   GArray *nodes;
@@ -91,22 +86,22 @@ gdk_broadway_cairo_context_end_frame (GdkDrawContext *draw_context,
   nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
   node_textures = g_ptr_array_new_with_free_func (g_object_unref);
 
-  texture = gdk_texture_new_for_surface ((cairo_surface_t *)self->paint_surface);
+  texture = gdk_texture_new_for_surface (cairo_surface);
   g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
   texture_id = gdk_broadway_display_ensure_texture (display, texture);
 
   add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
   add_float (nodes, 0);
   add_float (nodes, 0);
-  add_float (nodes, cairo_image_surface_get_width (self->paint_surface));
-  add_float (nodes, cairo_image_surface_get_height (self->paint_surface));
+  add_float (nodes, cairo_image_surface_get_width (cairo_surface));
+  add_float (nodes, cairo_image_surface_get_height (cairo_surface));
   add_uint32 (nodes, texture_id);
 
   gdk_broadway_surface_set_nodes (surface, nodes, node_textures);
   g_array_unref (nodes);
   g_ptr_array_unref (node_textures);
 
-  g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
+  gdk_cairo_context_frame_set_surface (cframe, NULL);
 }
 
 static void
@@ -114,28 +109,17 @@ gdk_broadway_cairo_context_surface_resized (GdkDrawContext *draw_context)
 {
 }
 
-static cairo_t *
-gdk_broadway_cairo_context_cairo_create (GdkCairoContext *context)
-{
-  GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (context);
-
-  return cairo_create (self->paint_surface);
-}
-
 static void
 gdk_broadway_cairo_context_class_init (GdkBroadwayCairoContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
 
   gobject_class->dispose = gdk_broadway_cairo_context_dispose;
 
   draw_context_class->begin_frame = gdk_broadway_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_broadway_cairo_context_end_frame;
   draw_context_class->surface_resized = gdk_broadway_cairo_context_surface_resized;
-
-  cairo_context_class->cairo_create = gdk_broadway_cairo_context_cairo_create;
 }
 
 static void

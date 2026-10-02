@@ -47,9 +47,6 @@ struct _GdkFrameTimings
   guint ref_count;
 
   gint64 frame_counter;
-  guint64 serial;
-
-  gint64 drawn_time;
 
   uint64_t frame_time;
   uint64_t presentation_time;
@@ -58,8 +55,10 @@ struct _GdkFrameTimings
 
   uint64_t stage_end_time[GDK_FRAME_N_STAGES];
   uint64_t throttling_hint;
+  uint64_t gpu_complete;
 
   GdkFrameResult result;
+  gboolean complete;
 };
 
 GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
@@ -71,10 +70,6 @@ void             gdk_frame_timings_setup                        (GdkFrameTimings
                                                                  uint64_t                frame_start_time,
                                                                  uint64_t                stage_start_time);
 
-guint64          gdk_frame_timings_get_serial                   (GdkFrameTimings        *self);
-void             gdk_frame_timings_set_serial                   (GdkFrameTimings        *self,
-                                                                 guint64                 serial);
-
 uint64_t         gdk_frame_timings_get_frame_time_ns            (GdkFrameTimings        *self);
 uint64_t         gdk_frame_timings_get_presentation_time_ns     (GdkFrameTimings        *self);
 uint64_t         gdk_frame_timings_get_refresh_interval_ns      (GdkFrameTimings        *self);
@@ -85,13 +80,17 @@ uint64_t         gdk_frame_timings_get_start_time               (GdkFrameTimings
 uint64_t         gdk_frame_timings_get_end_time                 (GdkFrameTimings        *self,
                                                                  GdkFrameStage           stage);
 uint64_t         gdk_frame_timings_get_throttling_hint          (GdkFrameTimings        *self);
+uint64_t         gdk_frame_timings_get_gpu_complete             (GdkFrameTimings        *self);
 
 void             gdk_frame_timings_outstanding                  (GdkFrameTimings        *self);
+void             gdk_frame_timings_complete                     (GdkFrameTimings        *self);
+
 void             gdk_frame_timings_throttling_hint              (GdkFrameTimings        *self,
+                                                                 uint64_t                timestamp);
+void             gdk_frame_timings_gpu_complete                 (GdkFrameTimings        *self,
                                                                  uint64_t                timestamp);
 void             gdk_frame_timings_submitted                    (GdkFrameTimings        *self,
                                                                  uint64_t                refresh);
-void             gdk_frame_timings_discarded                    (GdkFrameTimings        *self);
 void             gdk_frame_timings_presented                    (GdkFrameTimings        *self,
                                                                  uint64_t                presentation_time,
                                                                  uint64_t                refresh);

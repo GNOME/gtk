@@ -41,7 +41,6 @@ struct _GdkX11CairoContext
   GdkCairoContext parent_instance;
 
   cairo_surface_t *window_surface;
-  cairo_surface_t *paint_surface;
 };
 
 struct _GdkX11CairoContextClass

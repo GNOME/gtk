@@ -834,13 +834,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                 }
             }
 
-          if (surface_impl->toplevel &&
-              surface_impl->toplevel->frame_pending)
-            {
-              surface_impl->toplevel->frame_pending = FALSE;
-              gdk_surface_thaw_updates (surface);
-            }
-
 	  if (toplevel)
             gdk_surface_freeze_updates (surface);
 
@@ -1182,18 +1175,15 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
           guint32 d3 = xevent->xclient.data.l[3];
 
           guint64 serial = ((guint64)d1 << 32) | d0;
+          GdkDrawContextFrame *frame = gdk_x11_surface_find_frame (win, serial);
           gint64 frame_drawn_time = server_time_to_monotonic_time (GDK_X11_DISPLAY (display), ((guint64)d3 << 32) | d2);
 
-          GdkFrameClock *clock = gdk_surface_get_frame_clock (win);
-          GdkFrameTimings *timings = gdk_frame_clock_find_timings (clock, serial);
-
-          if (timings)
-            timings->drawn_time = frame_drawn_time;
-
-          if (!surface_impl->toplevel->frame_still_painting && surface_impl->toplevel->frame_pending)
+          if (frame)
             {
-              surface_impl->toplevel->frame_pending = FALSE;
-              gdk_surface_thaw_updates (win);
+              GdkX11SurfaceFrame *x11_frame = (GdkX11SurfaceFrame *) frame->surface_frame;
+              x11_frame->drawn_time = frame_drawn_time;
+
+              gdk_draw_context_frame_stop_throttling (frame, g_get_monotonic_time_ns ());
             }
         }
 
@@ -1213,27 +1203,23 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
 
           guint64 serial = ((guint64)d1 << 32) | d0;
 
-          GdkFrameClock *clock = gdk_surface_get_frame_clock (win);
-          GdkFrameTimings *timings = gdk_frame_clock_find_timings (clock, serial);
+          GdkDrawContextFrame *frame = gdk_x11_surface_find_frame (win, serial);
 
-          if (timings && !gdk_frame_timings_get_complete (timings))
+          if (frame)
             {
-              gint64 frame_counter = gdk_frame_timings_get_frame_counter (timings);
+              GdkX11SurfaceFrame *x11_frame = (GdkX11SurfaceFrame *) frame->surface_frame;
               gint32 presentation_time_offset = (gint32)d2;
               gint32 refresh_interval = d3;
 
-              if (timings->drawn_time && presentation_time_offset)
+              if (x11_frame->drawn_time && presentation_time_offset)
                 {
-                  gdk_frame_clock_presented (clock,
-                                             frame_counter,
-                                             (uint64_t) (timings->drawn_time + presentation_time_offset) * 1000,
-                                             refresh_interval * 1000);
+                  gdk_draw_context_frame_presented (frame,
+                                                    (uint64_t) (x11_frame->drawn_time + presentation_time_offset) * 1000,
+                                                    refresh_interval * 1000);
                 }
               else
                 {
-                  gdk_frame_clock_submitted (clock,
-                                             frame_counter,
-                                             refresh_interval * 1000);
+                  gdk_draw_context_frame_submitted (frame, refresh_interval * 1000);
                 }
             }
         }

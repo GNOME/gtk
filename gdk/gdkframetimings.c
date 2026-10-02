@@ -173,25 +173,7 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 {
   g_return_val_if_fail (timings != NULL, FALSE);
 
-  if (timings->throttling_hint == 0)
-    return FALSE;
-
-  switch (timings->result)
-  {
-    case GDK_FRAME_PREPARING:
-    case GDK_FRAME_OUTSTANDING:
-      return FALSE;
-
-    case GDK_FRAME_SKIPPED:
-    case GDK_FRAME_EMPTY:
-    case GDK_FRAME_SUBMITTED:
-    case GDK_FRAME_DISCARDED:
-    case GDK_FRAME_PRESENTED:
-      return TRUE;
-
-    default:
-      g_return_val_if_reached (TRUE);
-  }
+  return timings->complete;
 }
 
 /**
@@ -424,16 +406,92 @@ gdk_frame_timings_get_throttling_hint (GdkFrameTimings *self)
   return self->throttling_hint;
 }
 
+/*<private>
+ * gdk_frame_timings_get_gpu_complete:
+ * @self: the timings
+ *
+ * Gets the timestamp of when all involved GPUs completed rendering the frame.
+ *
+ * If no GPU rendering was involved in rendering the frame - either because
+ * of software rendering or because no rendering happened, then this time will
+ * be reported as 0.
+ * 
+ * While the frame is not yet complete, the value is undefined,
+ *
+ * Returns: the timestamp in nanoseconds
+ **/
+uint64_t
+gdk_frame_timings_get_gpu_complete (GdkFrameTimings *self)
+{
+  if (!self->complete)
+    return 0;
+
+  return self->gpu_complete;
+}
+
 void
 gdk_frame_timings_outstanding (GdkFrameTimings *self)
 {
-  /* frames can only be completed in AFTER_PAINT, so we must still be in progress.
-   * We might however be OUTSTANDING already because of a different surface submitting
-   * a buffer.
-   */
-  g_warn_if_fail (self->result == GDK_FRAME_PREPARING || self->result == GDK_FRAME_OUTSTANDING);
+  switch (self->result)
+    {
+      case GDK_FRAME_PRESENTED:
+      case GDK_FRAME_DISCARDED:
+        /* is this true for these 2?
+         * Better be strict now, so we can check that it's not a bug
+         * when it does indeed happen later.*/
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
+        g_warning ("%s frame is trying to render a new frame. This should not happen.",
+                   g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
+        self->result = GDK_FRAME_OUTSTANDING;
+        break;
 
+      case GDK_FRAME_PREPARING:
+        self->result = GDK_FRAME_OUTSTANDING;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+      case GDK_FRAME_SUBMITTED:
+        /* frames have been rendered already */
+        break;
+
+      default:
+        g_assert_not_reached ();
+    }
+ 
   self->result = GDK_FRAME_OUTSTANDING;
+}
+
+void
+gdk_frame_timings_complete (GdkFrameTimings *self)
+{
+  g_assert (!self->complete);
+
+  switch (self->result)
+    {
+      case GDK_FRAME_SUBMITTED:
+      case GDK_FRAME_PRESENTED:
+      case GDK_FRAME_DISCARDED:
+      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
+        /* already complete */
+        break;
+
+      case GDK_FRAME_PREPARING:
+        /* no frame was ever submitted */
+        self->result = GDK_FRAME_EMPTY;
+        break;
+
+      case GDK_FRAME_OUTSTANDING:
+        /* all frames were discarded */
+        self->result = GDK_FRAME_DISCARDED;
+        break;
+
+      default:
+        g_assert_not_reached ();
+    }
+
+  self->complete = TRUE;
 }
 
 void
@@ -447,20 +505,28 @@ gdk_frame_timings_throttling_hint (GdkFrameTimings *self,
 }
 
 void
+gdk_frame_timings_gpu_complete (GdkFrameTimings *self,
+                                uint64_t         timestamp)
+{
+  g_return_if_fail (!self->complete);
+
+  if (timestamp > self->gpu_complete)
+    self->gpu_complete = timestamp;
+}
+
+void
 gdk_frame_timings_submitted (GdkFrameTimings *self,
                              uint64_t         refresh)
 {
+  g_assert (!self->complete);
+
   switch (self->result)
     {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_SKIPPED;
-        break;
-
       case GDK_FRAME_OUTSTANDING:
         self->result = GDK_FRAME_SUBMITTED;
         break;
 
-      case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_PRESENTED:
         /* duplicate calls are allowed, but must have the same values */
         if (self->refresh_interval != refresh)
@@ -469,8 +535,9 @@ gdk_frame_timings_submitted (GdkFrameTimings *self,
           }
         return;
 
+      case GDK_FRAME_PREPARING:
+      case GDK_FRAME_SKIPPED:
       case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_DISCARDED:
         g_warning_once ("gdk_frame_timings_submitted() called on %s frame.",
                         g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
@@ -485,65 +552,30 @@ gdk_frame_timings_submitted (GdkFrameTimings *self,
 }
 
 void
-gdk_frame_timings_discarded (GdkFrameTimings *self)
-{
-  switch (self->result)
-    {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_SKIPPED;
-        break;
-
-      case GDK_FRAME_OUTSTANDING:
-        self->result = GDK_FRAME_DISCARDED;
-        break;
-
-      case GDK_FRAME_SKIPPED:
-      case GDK_FRAME_DISCARDED:
-        /* duplicate calls are allowed */
-        return;
-
-      case GDK_FRAME_EMPTY:
-      case GDK_FRAME_SUBMITTED:
-      case GDK_FRAME_PRESENTED:
-        g_warning_once ("gdk_frame_timings_discarded() called on already %s frame.",
-                        g_enum_get_value (g_type_class_get (GDK_TYPE_FRAME_RESULT), self->result)->value_nick);
-        return;
-
-      default:
-        g_assert_not_reached ();
-        return;
-    }
-}
-
-void
 gdk_frame_timings_presented (GdkFrameTimings *self,
                              uint64_t         presentation_time,
                              uint64_t         refresh)
 {
   switch (self->result)
     {
-      case GDK_FRAME_PREPARING:
-        self->result = GDK_FRAME_EMPTY;
-        break;
-
       case GDK_FRAME_OUTSTANDING:
         self->result = GDK_FRAME_PRESENTED;
         break;
 
-      case GDK_FRAME_EMPTY:
       case GDK_FRAME_PRESENTED:
-        /* duplicate calls are allowed, but must have the same values */
-        if (self->presentation_time != presentation_time ||
-            self->refresh_interval != refresh)
-          {
-            int64_t time_diff = (int64_t) (presentation_time - self->presentation_time);
-            g_warning_once ("Duplicate call to gdk_frame_timings_presented() with different values: "
-                            "presentation time is %" PRId64 ".%" PRId64 "ms off from expected",
-                            time_diff / (1000 * 1000), (time_diff / 1000) % 1000);
-          }
-        return;
+        /* duplicate calls are allowed, we always consider the first to be relevant */
+        if (self->presentation_time > presentation_time)
+          return;
 
+        /* for idential presentation times, we keep the smaller refresh interval */
+        if (self->presentation_time == presentation_time &&
+            refresh != 0 && self->refresh_interval != 0)
+          refresh = MIN (self->refresh_interval, refresh);
+        break;
+
+      case GDK_FRAME_PREPARING:
       case GDK_FRAME_SKIPPED:
+      case GDK_FRAME_EMPTY:
       case GDK_FRAME_SUBMITTED:
       case GDK_FRAME_DISCARDED:
         g_warning_once ("gdk_frame_timings_presented() called on %s frame.",
@@ -557,28 +589,5 @@ gdk_frame_timings_presented (GdkFrameTimings *self,
   self->presentation_time = presentation_time;
   if (refresh != 0)
     self->refresh_interval = refresh;
-}
-
-guint64
-gdk_frame_timings_get_serial (GdkFrameTimings *self)
-{
-  return self->serial;
-}
-
-/*<private>
- * gdk_frame_timings_set_serial:
- * @self: the timings
- * @serial: the serial
- *
- * Allows backends to set a serial to map the frame timings
- * to OS-specific IDs.
- * Timings can then later be queried by backends using
- * `gdk_frame_clock_find_timings()`.
- **/
-void
-gdk_frame_timings_set_serial (GdkFrameTimings *self,
-                              guint64          serial)
-{
-  self->serial = serial;
 }
 

@@ -59,9 +59,9 @@ struct _GdkWaylandGLContextClass
 G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void
-gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
-                                  gpointer        context_data,
-                                  cairo_region_t *painted)
+gdk_wayland_gl_context_end_frame (GdkDrawContext      *draw_context,
+                                  GdkDrawContextFrame *frame,
+                                  gpointer             context_data)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -73,7 +73,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_wayland_surface_update_content (surface);
   gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_request_frame (surface);
+  gdk_wayland_surface_request_frame (surface, frame);
 
   if (wl_surface_get_version (impl->display_server.wl_surface) >=
       WL_SURFACE_OFFSET_SINCE_VERSION)
@@ -82,17 +82,18 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   /* We should do this when setting up the EGLSurface, but we don't make_current then */
   eglSwapInterval (gdk_display_get_egl_display (gdk_draw_context_get_display (draw_context)), 0);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, context_data, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, frame, context_data);
 
   gdk_wayland_surface_notify_committed (surface);
 }
 
-static void
-gdk_wayland_gl_context_empty_frame (GdkDrawContext *draw_context)
+static gboolean
+gdk_wayland_gl_context_empty_frame (GdkDrawContext      *draw_context,
+                                    GdkDrawContextFrame *frame)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
 
-  gdk_wayland_surface_handle_empty_frame (surface);
+  return gdk_wayland_surface_handle_empty_frame (surface, frame);
 }
 
 static gboolean

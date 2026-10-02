@@ -480,11 +480,9 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 }
 
 static void
-gdk_macos_gl_context_begin_frame (GdkDrawContext  *context,
-                                  gpointer         context_data,
-                                  cairo_region_t  *region,
-                                  GdkColorState  **out_color_state,
-                                  GdkMemoryDepth  *out_depth)
+gdk_macos_gl_context_begin_frame (GdkDrawContext      *context,
+                                  GdkDrawContextFrame *frame,
+                                  gpointer             context_data)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
   GdkMacosBuffer *buffer;
@@ -496,36 +494,38 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext  *context,
   buffer = _gdk_macos_surface_get_buffer (GDK_MACOS_SURFACE (surface));
 
   _gdk_macos_buffer_set_flipped (buffer, TRUE);
-  _gdk_macos_buffer_set_damage (buffer, region);
+  _gdk_macos_buffer_set_damage (buffer, gdk_draw_context_frame_get_damage (frame));
 
   /* Create our render target and bind it */
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   gdk_macos_gl_context_allocate (self);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, context_data, region, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, frame, context_data);
 
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, self->fbo));
 }
 
 static void
-gdk_macos_gl_context_end_frame (GdkDrawContext *context,
-                                gpointer        context_data,
-                                cairo_region_t *painted)
+gdk_macos_gl_context_end_frame (GdkDrawContext      *context,
+                                GdkDrawContextFrame *frame,
+                                gpointer             context_data)
 {
   GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
   GdkSurface *surface;
+  const cairo_region_t *painted;
   cairo_rectangle_int_t flush_rect;
   GLint swapRect[4];
 
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
   g_assert (self->cgl_context != nil);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, context_data, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->end_frame (context, frame, context_data);
 
   surface = gdk_draw_context_get_surface (context);
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
 
+  painted = gdk_draw_context_frame_get_damage (frame);
   /* Coordinates are in display coordinates, where as flush_rect is
   * in GDK coordinates. Must flip Y to match display coordinates where
   * 0,0 is the bottom-left corner.
@@ -536,6 +536,8 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
   swapRect[2] = flush_rect.width;               /* width */
   swapRect[3] = flush_rect.height;              /* height */
   CGLSetParameter (self->cgl_context, kCGLCPSwapRectangle, swapRect);
+
+  gdk_gl_context_frame_handle_gpu_completion ((GdkGLContextFrame *) frame);
 
   gdk_macos_gl_context_release (self);
 

@@ -33,9 +33,6 @@ struct _GdkWin32CairoContext
 
   IDXGISwapChain3 *swap_chain;
   ID3D11Texture2D *staging_texture;
-
-  /* only set while drawing */
-  cairo_surface_t *cairo_surface;
 };
 struct _GdkWin32CairoContextClass
 {
@@ -143,14 +140,13 @@ gdk_win32_cairo_context_surface_detach (GdkDrawContext *context)
 }
 
 static void
-gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext  *draw_context,
-                                           gpointer         context_data,
-                                           cairo_region_t  *region,
-                                           GdkColorState  **out_color_state,
-                                           GdkMemoryDepth  *out_depth)
+gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext      *draw_context,
+                                           GdkDrawContextFrame *frame,
+                                           gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
-  cairo_t *cr;
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
+  cairo_surface_t *cairo_surface;
   GdkWin32Display *display;
   ID3D11Device *d3d11_device;
   ID3D11DeviceContext *d3d11_context;
@@ -172,35 +168,31 @@ gdk_win32_cairo_context_begin_frame_dcomp (GdkDrawContext  *draw_context,
                                     0,
                                     &map));
   
-  self->cairo_surface = cairo_image_surface_create_for_data (map.pData,
-                                                             CAIRO_FORMAT_ARGB32,
-                                                             width,
-                                                             height,
-                                                             map.RowPitch);
-
-  cr = cairo_create (self->cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, region);
-  cairo_fill (cr);
-  cairo_destroy (cr);
+  cairo_surface = cairo_image_surface_create_for_data (map.pData,
+                                                       CAIRO_FORMAT_ARGB32,
+                                                       width,
+                                                       height,
+                                                       map.RowPitch);
 
   gdk_win32_com_clear (&d3d11_context);
 
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+  gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void
-gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext *draw_context,
-                                         gpointer        context_data,
-                                         cairo_region_t *painted)
+gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext      *draw_context,
+                                         GdkDrawContextFrame *frame,
+                                         gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkWin32Display *display;
   ID3D11Device *d3d11_device;
   ID3D11DeviceContext *d3d11_context;
   ID3D11Texture2D *texture;
   guint width, height;
+  const cairo_region_t *painted;
 
   display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (draw_context));
   d3d11_device = gdk_win32_display_get_d3d11_device (display);
@@ -208,8 +200,8 @@ gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext *draw_context,
   ID3D11Device_GetImmediateContext (d3d11_device, &d3d11_context);
   gdk_draw_context_get_buffer_size (draw_context, &width, &height);
 
-  cairo_surface_flush (self->cairo_surface);
-  g_clear_pointer (&self->cairo_surface, cairo_surface_destroy);
+  cairo_surface_flush (gdk_cairo_context_frame_get_surface (cframe));
+  gdk_cairo_context_frame_set_surface (cframe, NULL);
 
   ID3D11DeviceContext_Unmap (d3d11_context, (ID3D11Resource *) self->staging_texture, 0);
 
@@ -218,6 +210,7 @@ gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext *draw_context,
                                       &IID_ID3D11Texture2D,
                                       (void **) &texture));
 
+  painted = gdk_draw_context_frame_get_damage (frame);
   if (cairo_region_contains_rectangle (painted,
                                        &(cairo_rectangle_int_t) {
                                            .x = 0,
@@ -297,15 +290,13 @@ gdk_win32_cairo_context_end_frame_dcomp (GdkDrawContext *draw_context,
 }
 
 static void
-gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext  *draw_context,
-                                         gpointer         context_data,
-                                         cairo_region_t  *region,
-                                         GdkColorState  **out_color_state,
-                                         GdkMemoryDepth  *out_depth)
+gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext      *draw_context,
+                                         GdkDrawContextFrame *frame,
+                                         gpointer             context_data)
 {
-  GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-  cairo_t *cr;
+  cairo_surface_t *cairo_surface;
   HDC hdc;
 
   hdc = GetDC (gdk_win32_surface_get_handle (surface));
@@ -315,60 +306,55 @@ gdk_win32_cairo_context_begin_frame_gdi (GdkDrawContext  *draw_context,
       return;
     }
 
-  self->cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
+  cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
 
-  cr = cairo_create (self->cairo_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  gdk_cairo_region (cr, region);
-  cairo_fill (cr);
-  cairo_destroy (cr);
-
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+  gdk_cairo_context_frame_set_surface (cframe, cairo_surface);
+  gdk_draw_context_frame_gpu_complete (frame, 0);
 }
 
 static void
-gdk_win32_cairo_context_end_frame_gdi (GdkDrawContext *draw_context,
-                                       gpointer        context_data,
-                                       cairo_region_t *painted)
+gdk_win32_cairo_context_end_frame_gdi (GdkDrawContext      *draw_context,
+                                       GdkDrawContextFrame *frame,
+                                       gpointer             context_data)
 {
-  GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkCairoContextFrame *cframe = (GdkCairoContextFrame *) frame;
+  cairo_surface_t *cairo_surface;
   HDC hdc;
 
-  hdc = cairo_win32_surface_get_dc (self->cairo_surface);
-  cairo_surface_flush (self->cairo_surface);
+  cairo_surface = gdk_cairo_context_frame_get_surface (cframe);
+  cairo_surface_flush (cairo_surface);
+  hdc = cairo_win32_surface_get_dc (cairo_surface);
 
   ReleaseDC (gdk_win32_surface_get_handle (surface), hdc);
-  g_clear_pointer (&self->cairo_surface, cairo_surface_destroy);
+
+  gdk_cairo_context_frame_set_surface (cframe, NULL);
 }
 
 static void
-gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
-                                     gpointer         context_data,
-                                     cairo_region_t  *region,
-                                     GdkColorState  **out_color_state,
-                                     GdkMemoryDepth  *out_depth)
+gdk_win32_cairo_context_begin_frame (GdkDrawContext      *draw_context,
+                                     GdkDrawContextFrame *frame,
+                                     gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
 
   if (self->swap_chain)
-    gdk_win32_cairo_context_begin_frame_dcomp (draw_context, context_data, region, out_color_state, out_depth);
+    gdk_win32_cairo_context_begin_frame_dcomp (draw_context, frame, context_data);
   else
-    gdk_win32_cairo_context_begin_frame_gdi (draw_context, context_data, region, out_color_state, out_depth);
+    gdk_win32_cairo_context_begin_frame_gdi (draw_context, frame, context_data);
 }
 
 static void
-gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
-                                   gpointer        context_data,
-                                   cairo_region_t *painted)
+gdk_win32_cairo_context_end_frame (GdkDrawContext      *draw_context,
+                                   GdkDrawContextFrame *frame,
+                                   gpointer             context_data)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
 
   if (self->swap_chain)
-    gdk_win32_cairo_context_end_frame_dcomp (draw_context, context_data, painted);
+    gdk_win32_cairo_context_end_frame_dcomp (draw_context, frame, context_data);
   else
-    gdk_win32_cairo_context_end_frame_gdi (draw_context, context_data, painted);
+    gdk_win32_cairo_context_end_frame_gdi (draw_context, frame, context_data);
 }
 
 static void
@@ -403,27 +389,16 @@ gdk_win32_cairo_context_surface_resized (GdkDrawContext *draw_context)
     }
 }
 
-static cairo_t *
-gdk_win32_cairo_context_cairo_create (GdkCairoContext *context)
-{
-  GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (context);
-
-  return cairo_create (self->cairo_surface);
-}
-
 static void
 gdk_win32_cairo_context_class_init (GdkWin32CairoContextClass *klass)
 {
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
 
   draw_context_class->begin_frame = gdk_win32_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_win32_cairo_context_end_frame;
   draw_context_class->surface_attach = gdk_win32_cairo_context_surface_attach;
   draw_context_class->surface_detach = gdk_win32_cairo_context_surface_detach;
   draw_context_class->surface_resized = gdk_win32_cairo_context_surface_resized;
-
-  cairo_context_class->cairo_create = gdk_win32_cairo_context_cairo_create;
 }
 
 static void

@@ -29,7 +29,9 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkDrawContextFrame GdkDrawContextFrame;
 typedef struct _GdkSubsurface GdkSubsurface;
+typedef struct _GdkSurfaceFrame GdkSurfaceFrame; /* empty typedef for now */
 
 struct _GdkSurface
 {
@@ -105,6 +107,8 @@ struct _GdkSurfaceClass
 {
   GObjectClass parent_class;
 
+  gsize                 frame_size;
+
   void         (* hide)                 (GdkSurface      *surface);
   void         (* get_geometry)         (GdkSurface      *surface,
                                          int             *x,
@@ -153,6 +157,10 @@ struct _GdkSurfaceClass
                                            GdkDrawContext  *context,
                                            guint           *out_width,
                                            guint           *out_height);
+  void         (* submit_frame)           (GdkSurface           *surface,
+                                           GdkDrawContextFrame  *frame);
+  void         (* finalize_frame)         (GdkSurface           *surface,
+                                           GdkDrawContextFrame  *frame);
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);

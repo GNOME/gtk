@@ -65,8 +65,6 @@ static void gdk_win32_surface_set_transient_for (GdkSurface *surface,
                                                  GdkSurface *parent);
 static void gdk_win32_push_modal_surface        (GdkSurface *surface);
 static void gdk_win32_remove_modal_surface      (GdkSurface *surface);
-static void gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
-                                                    gpointer       unused);
 
 static void gdk_win32_surface_maximize (GdkSurface *surface);
 static void gdk_win32_surface_unmaximize (GdkSurface *surface);
@@ -154,32 +152,11 @@ gdk_surface_win32_finalize (GObject *object)
 }
 
 static void
-gdk_win32_impl_frame_clock_after_paint (GdkFrameClock *clock,
-                                        gpointer       unused)
+gdk_win32_surface_submit_frame (GdkSurface          *surface,
+                                GdkDrawContextFrame *frame)
 {
-  DWM_TIMING_INFO timing_info;
-  LARGE_INTEGER tick_frequency;
-
-  if (QueryPerformanceFrequency (&tick_frequency))
-    {
-      HRESULT hr;
-
-      timing_info.cbSize = sizeof (timing_info);
-      hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
-
-      if (SUCCEEDED (hr))
-        {
-          gdk_frame_clock_presented (clock,
-                                     gdk_frame_clock_get_frame_counter (clock),
-                                     timing_info.qpcCompose * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart,
-                                     timing_info.qpcRefreshPeriod * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart);
-          return;
-        }
-    }
-
-  gdk_frame_clock_submitted (clock,
-                             gdk_frame_clock_get_frame_counter (clock),
-                             0);
+  gdk_draw_context_frame_submitted (frame, 0);
+  gdk_draw_context_frame_stop_throttling (frame, 0);
 }
 
 void
@@ -350,21 +327,6 @@ RegisterGdkClass (GType wtype)
   return klass;
 }
 
-static GdkFrameClock *
-gdk_win32_surface_create_frame_clock (void)
-{
-  GdkFrameClock *frame_clock;
-
-  frame_clock = _gdk_frame_clock_idle_new ();
-
-  g_signal_connect (frame_clock,
-                    "after-paint",
-                    G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
-                    NULL);
-
-  return frame_clock;
-}
-
 static void
 gdk_win32_surface_constructed (GObject *object)
 {
@@ -395,13 +357,13 @@ gdk_win32_surface_constructed (GObject *object)
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
-      frame_clock = gdk_win32_surface_create_frame_clock ();
+      frame_clock = _gdk_frame_clock_idle_new ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_DRAG_SURFACE)
     {
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       dwStyle |= WS_POPUP;
-      frame_clock = gdk_win32_surface_create_frame_clock ();
+      frame_clock = _gdk_frame_clock_idle_new ();
     }
   else if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_POPUP)
     {
@@ -2902,6 +2864,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->get_scale = _gdk_win32_surface_get_scale;
   impl_class->request_layout = _gdk_win32_surface_request_layout;
   impl_class->compute_size = gdk_win32_surface_compute_size;
+  impl_class->submit_frame = gdk_win32_surface_submit_frame;
 }
 
 /**

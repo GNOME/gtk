@@ -88,6 +88,9 @@
 #include "gdkprivate.h"
 
 #include <glib/gi18n-lib.h>
+#ifdef G_OS_UNIX
+#include <glib-unix.h>
+#endif
 
 #ifdef GDK_WINDOWING_WIN32
 # include "gdk/win32/gdkwin32.h"
@@ -96,6 +99,11 @@
 #include <epoxy/gl.h>
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
+#endif
+
+#ifdef HAVE_SYNC_FILE
+#include <sys/ioctl.h>
+#include <linux/sync_file.h>
 #endif
 
 #include "gsk/gskrendernodeprivate.h"
@@ -701,16 +709,15 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
 #endif
 
 static void
-gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
-                                 gpointer         context_data,
-                                 cairo_region_t  *region,
-                                 GdkColorState  **out_color_state,
-                                 GdkMemoryDepth  *out_depth)
+gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
+                                 GdkDrawContextFrame *frame,
+                                 gpointer             context_data)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
 #ifdef HAVE_EGL
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 #endif
+  GdkGLContextFrame *glframe = (GdkGLContextFrame *) frame;
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   GskRenderNode *content;
@@ -730,28 +737,23 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
 
+  glframe->completion_fd = -1;
+
 #ifdef HAVE_EGL
   if (priv->egl_context)
     gdk_gl_context_ensure_egl_surface (context, depth);
   
-  *out_depth = priv->egl_surface_depth;
-  *out_color_state = color_state;
-#else
-  *out_color_state = gdk_color_state_get_srgb ();
-  *out_depth = GDK_MEMORY_U8;
+  gdk_draw_context_frame_set_color_state (frame, color_state);
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
-
   g_clear_pointer (&context->old_updated_area[GDK_GL_MAX_TRACKED_BUFFERS - 1], cairo_region_destroy);
   for (i = GDK_GL_MAX_TRACKED_BUFFERS - 1; i > 0; i--)
     {
       context->old_updated_area[i] = context->old_updated_area[i - 1];
     }
-  context->old_updated_area[0] = cairo_region_copy (region);
-
-  cairo_region_union (region, damage);
-  cairo_region_destroy (damage);
+  context->old_updated_area[0] = cairo_region_copy (gdk_draw_context_frame_get_damage (frame));
+  gdk_draw_context_frame_add_damage (frame, damage);
 
   gdk_draw_context_get_buffer_size (draw_context, &ww, &wh);
 
@@ -771,18 +773,146 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
 #endif
 }
 
+#ifdef HAVE_EGL
+
+#ifdef G_OS_UNIX
+
+#define COMPLETION_FD_EVENTS (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_PRI | G_IO_HUP)
+
+static uint64_t
+read_timestamp_from_sync_fd (int fd)
+{
+#ifdef HAVE_SYNC_FILE
+  struct sync_file_info file_info = { { 0 } };
+  struct sync_fence_info fence_info = { { 0 } };
+
+  file_info.sync_fence_info = (uint64_t)(uintptr_t)&fence_info;
+  file_info.num_fences = 1;
+
+  if (ioctl (fd, SYNC_IOC_FILE_INFO, &file_info) < 0)
+    return 0;
+
+  return fence_info.timestamp_ns;
+#else
+  return 0;
+#endif
+}
+
+static gboolean
+gdk_gl_context_frame_complete_fd_cb (gint         fd,
+                                     GIOCondition condition,
+                                     gpointer     data)
+{
+  GdkGLContextFrame *glframe = data;
+  GdkDrawContextFrame *frame = data;
+  uint64_t timestamp;
+
+  if (!(condition & COMPLETION_FD_EVENTS))
+    return G_SOURCE_CONTINUE;
+
+  timestamp = read_timestamp_from_sync_fd (glframe->completion_fd);
+  if (timestamp == 0)
+    timestamp = g_source_get_time_ns (glframe->completion_source);
+  glframe->completion_source = NULL;
+  g_clear_fd (&glframe->completion_fd, NULL);
+
+  gdk_draw_context_frame_gpu_complete (frame, timestamp);
+
+  return G_SOURCE_REMOVE;
+}
+#endif
+
 static void
-gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
-                               gpointer        context_data,
-                               cairo_region_t *painted)
+gdk_gl_context_frame_egl_completion (GdkGLContextFrame *glframe)
+{
+#ifdef G_OS_UNIX
+  GdkDrawContextFrame *frame = (GdkDrawContextFrame *) glframe;
+  GdkDisplay *display = gdk_draw_context_get_display (frame->context);
+
+  if (display->have_egl_sync_fd)
+    {
+      EGLDisplay egl_display = gdk_display_get_egl_display (display);
+      EGLSync sync;
+
+      sync = eglCreateSync (egl_display, EGL_SYNC_NATIVE_FENCE_ANDROID, NULL);
+      if (sync != EGL_NO_SYNC)
+        {
+          glframe->completion_fd = eglDupNativeFenceFDANDROID (egl_display, sync);
+
+          eglDestroySync (egl_display, sync);
+        }
+
+      if (glframe->completion_fd > -1)
+        {
+          glframe->completion_source = g_unix_fd_source_new (glframe->completion_fd, COMPLETION_FD_EVENTS);
+          g_source_set_callback (glframe->completion_source,
+                                 (GSourceFunc) gdk_gl_context_frame_complete_fd_cb,
+                                 glframe,
+                                 NULL);
+          g_source_set_static_name (glframe->completion_source, "[gtk] gdk_gl_context_gpu_complete_egl");
+          g_source_attach (glframe->completion_source, NULL);
+          g_source_unref (glframe->completion_source);
+        }
+    }
+#endif
+}
+
+#endif
+
+static gboolean
+gdk_gl_context_frame_complete_cb (gpointer data)
+{
+  GdkGLContextFrame *glframe = data;
+  GdkDrawContextFrame *frame = data;
+  uint64_t timestamp;
+
+  gdk_gl_context_make_current (GDK_GL_CONTEXT (frame->context));
+
+  if (glClientWaitSync (glframe->completion_sync, 0, 0) == GL_TIMEOUT_EXPIRED)
+    return G_SOURCE_CONTINUE;
+
+  timestamp = g_source_get_time_ns (glframe->completion_source);
+  glframe->completion_source = NULL;
+
+  /* gobject-linter-ignore-next-line: use_clear_functions */
+  glDeleteSync (glframe->completion_sync);
+  glframe->completion_sync = NULL;
+
+  gdk_draw_context_frame_gpu_complete (frame, timestamp);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_gl_context_frame_handle_gpu_completion (GdkGLContextFrame *glframe)
+{
+  glframe->completion_sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+  /* 50us accuracy is hopefully enough */
+  glframe->completion_source = g_timeout_source_new_ns (50 * 1000);
+  g_source_set_callback (glframe->completion_source,
+                         gdk_gl_context_frame_complete_cb,
+                         glframe,
+                         NULL);
+  g_source_set_static_name (glframe->completion_source, "[gtk] gdk_gl_context_gpu_complete");
+  g_source_attach (glframe->completion_source, NULL);
+  g_source_unref (glframe->completion_source);
+}
+
+static void
+gdk_gl_context_real_end_frame (GdkDrawContext      *draw_context,
+                               GdkDrawContextFrame *frame,
+                               gpointer             context_data)
 {
 #ifdef HAVE_EGL
+  GdkGLContextFrame *glframe = (GdkGLContextFrame *) frame;
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   guint buffer_width, buffer_height;
+  const cairo_region_t *painted;
 
   if (priv->egl_context == NULL)
     return;
@@ -791,6 +921,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
 
   gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
+  painted = gdk_draw_context_frame_get_damage (frame);
   if (priv->eglSwapBuffersWithDamage &&
       cairo_region_contains_rectangle (painted,
                                        &(cairo_rectangle_int_t) {
@@ -823,9 +954,27 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
     }
   else
     eglSwapBuffers (gdk_display_get_egl_display (display), priv->egl_surface);
-#endif
+
+  gdk_gl_context_frame_egl_completion (glframe);
+  if (glframe->completion_source == NULL)
+    gdk_gl_context_frame_handle_gpu_completion (glframe);
 
   gdk_profiler_add_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, "EGL swap buffers", NULL);
+#endif
+}
+
+static void
+gdk_gl_context_finalize_frame (GdkDrawContext      *draw_context,
+                               GdkDrawContextFrame *frame)
+{
+  GdkGLContextFrame *glframe = (GdkGLContextFrame *) frame;
+
+  g_clear_pointer (&glframe->completion_source, g_source_destroy);
+  /* We can't always initialize the fd to -1, so it might be set to 0 */
+  if (glframe->completion_fd > 0)
+    g_clear_fd (&glframe->completion_fd, NULL);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_gl_context_parent_class)->finalize_frame (draw_context, frame);
 }
 
 static void
@@ -871,8 +1020,11 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   klass->is_current = gdk_gl_context_real_is_current;
   klass->get_default_framebuffer = gdk_gl_context_real_get_default_framebuffer;
 
+  draw_context_class->frame_size = sizeof (GdkGLContextFrame);
+
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
+  draw_context_class->finalize_frame = gdk_gl_context_finalize_frame;
   draw_context_class->surface_detach = gdk_gl_context_surface_detach;
   draw_context_class->surface_resized = gdk_gl_context_surface_resized;
 

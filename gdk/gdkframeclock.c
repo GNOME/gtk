@@ -99,24 +99,41 @@ static guint signals[LAST_SIGNAL];
 
 static guint fps_counter;
 
+typedef struct _GdkFrameClockFrame GdkFrameClockFrame;
+
+struct _GdkFrameClockFrame
+{
+  GdkFrameTimings *timings;
+  GSList *frames;
+  gboolean throttling;
+};
+
+static void
+gdk_frame_clock_frame_clear (GdkFrameClockFrame *frame)
+{
+  while (frame->frames)
+    gdk_draw_context_frame_free (frame->frames->data);
+
+  gdk_frame_timings_unref (frame->timings);
+}
+
 /* 60Hz plus some extra for monotonic time inaccuracy */
 #define FRAME_HISTORY_DEFAULT_LENGTH 64
 
-#define frame_timings_unref(x) gdk_frame_timings_unref((GdkFrameTimings *) (x))
-
-#define GDK_ARRAY_NAME timings
-#define GDK_ARRAY_TYPE_NAME Timings
-#define GDK_ARRAY_ELEMENT_TYPE GdkFrameTimings *
+#define GDK_ARRAY_NAME frames
+#define GDK_ARRAY_TYPE_NAME Frames
+#define GDK_ARRAY_ELEMENT_TYPE GdkFrameClockFrame
 #define GDK_ARRAY_PREALLOC FRAME_HISTORY_DEFAULT_LENGTH
-#define GDK_ARRAY_FREE_FUNC frame_timings_unref
+#define GDK_ARRAY_FREE_FUNC gdk_frame_clock_frame_clear
+#define GDK_ARRAY_BY_VALUE 1
 #include "gdk/gdkarrayimpl.c"
 
 typedef struct _GdkFrameClockPrivate GdkFrameClockPrivate;
 struct _GdkFrameClockPrivate
 {
   gint64 frame_counter;
-  int current;
-  Timings timings;
+  gsize current;
+  Frames frames;
   uint64_t latest_presentation_time;
   uint64_t latest_refresh_interval;
   uint64_t expected_presentation_delay;
@@ -128,11 +145,18 @@ struct _GdkFrameClockPrivate
 
   gsize n_started;
   gsize n_updating;
+  gsize n_throttling;
 
   guint work_performed : 1;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
+
+static void
+gdk_frame_clock_default_stop_throttling (GdkFrameClock *self,
+                                         gint64         frame_counter)
+{
+}
 
 static uint64_t
 gdk_frame_clock_default_predict_presentation_time (GdkFrameClock *self,
@@ -174,7 +198,7 @@ gdk_frame_clock_finalize (GObject *object)
   g_warn_if_fail (priv->n_started == 0);
   g_warn_if_fail (priv->n_updating == 0);
 
-  timings_clear (&priv->timings);
+  frames_clear (&priv->frames);
 
   G_OBJECT_CLASS (gdk_frame_clock_parent_class)->finalize (object);
 }
@@ -184,6 +208,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
+  klass->stop_throttling = gdk_frame_clock_default_stop_throttling;
   klass->predict_presentation_time = gdk_frame_clock_default_predict_presentation_time;
 
   gobject_class->finalize = gdk_frame_clock_finalize;
@@ -320,7 +345,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
 
   priv->frame_counter = -1;
   priv->current = 0;
-  timings_init (&priv->timings);
+  frames_init (&priv->frames);
   priv->latest_refresh_interval = (G_NSEC_PER_SEC + 30) / 60;
 
   if (fps_counter == 0)
@@ -506,6 +531,46 @@ gdk_frame_clock_stop (GdkFrameClock *clock)
     }
 }
 
+static void
+gdk_frame_clock_stop_throttling (GdkFrameClock *self,
+                                 gint64         frame_counter)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  g_assert (priv->n_throttling > 0);
+  priv->n_throttling--;
+
+  if (!gdk_frame_clock_is_in_frame (self) &&
+      gdk_has_feature (GDK_FEATURE_THROTTLING))
+    {
+      GDK_FRAME_CLOCK_GET_CLASS (self)->stop_throttling (self, frame_counter);
+    }
+}
+
+/**
+ * gdk_frame_clock_get_throttling:
+ * @self: the frame clock 
+ *
+ * Gets the number of frames where the compositor hasn't sent a throttling
+ * hint yet. See gdk_frame_timings_get_throttling_hint() for
+ * a longer discussion.
+ *
+ * This function is intended to be used by frame clock implementations.
+ *
+ * Returns: the number of frames still waiting for a callback to stop
+ *   throttling
+ **/
+gsize
+gdk_frame_clock_get_throttling (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (clock);
+
+  if (!gdk_has_feature (GDK_FEATURE_THROTTLING))
+    return 0;
+
+  return priv->n_throttling;
+}
+
 gboolean
 gdk_frame_clock_is_stopped (GdkFrameClock *clock)
 {
@@ -570,7 +635,7 @@ _gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
 
-  return priv->frame_counter + 1 - timings_get_size (&priv->timings);
+  return priv->frame_counter + 1 - frames_get_size (&priv->frames);
 }
 
 /**
@@ -612,68 +677,93 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
                              uint64_t       stage_start_time)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
+  GdkFrameClockFrame *frame;
+
+  if (G_UNLIKELY (frames_get_size (&priv->frames) == 0))
+    {
+      GdkFrameClockFrame new_frame = {
+        .timings = _gdk_frame_timings_new (priv->frame_counter),
+      };
+      frames_append (&priv->frames, &new_frame);
+      frame = frames_get (&priv->frames, 0);
+    }
+  else
+    {
+      gsize next = (priv->current + 1) % frames_get_size (&priv->frames);
+
+      frame = frames_get (&priv->frames, next);
+
+      if (gdk_frame_timings_get_frame_time (frame->timings) + G_USEC_PER_SEC > frame_time / 1000)
+        {
+          /* Keep the frame, not a second old yet */
+          GdkFrameClockFrame new_frame = {
+            .timings = _gdk_frame_timings_new (priv->frame_counter),
+          };
+          frames_splice (&priv->frames, next, 0, FALSE, &new_frame, 1);
+        }
+      else
+        {
+          if (frame->throttling)
+            {
+              frame->throttling = FALSE;
+              gdk_frame_clock_stop_throttling (self, priv->frame_counter + 1 - frames_get_size (&priv->frames));
+            }
+
+          while (frame->frames)
+            gdk_draw_context_frame_free (frame->frames->data);
+
+          if (!_gdk_frame_timings_steal (frame->timings, priv->frame_counter))
+            {
+              gdk_frame_timings_unref (frame->timings);
+              frame->timings = _gdk_frame_timings_new (priv->frame_counter);
+            }
+        }
+      
+      priv->current = next;
+    }
 
   priv->frame_counter++;
   priv->frame_time = frame_time;
 
-  if (G_UNLIKELY (timings_get_size (&priv->timings) == 0))
-    {
-      timings = _gdk_frame_timings_new (priv->frame_counter);
-      timings_append (&priv->timings, timings);
-    }
-  else
-    {
-      priv->current = (priv->current + 1) % timings_get_size (&priv->timings);
-
-      timings = timings_get (&priv->timings, priv->current);
-
-      if (gdk_frame_timings_get_frame_time (timings) + G_USEC_PER_SEC > frame_time / 1000)
-        {
-          /* Keep the timings, not a second old yet */
-          timings = _gdk_frame_timings_new (priv->frame_counter);
-          timings_splice (&priv->timings, priv->current, 0, FALSE, &timings, 1);
-        }
-      else if (_gdk_frame_timings_steal (timings, priv->frame_counter))
-        {
-          /* Stole the previous frame timing instead of discarding
-           * and allocating a new one, so nothing to do
-           */
-        }
-      else
-        {
-          timings = _gdk_frame_timings_new (priv->frame_counter);
-          timings_splice (&priv->timings, priv->current, 1, FALSE, &timings, 1);
-        }
-    }
-
-  gdk_frame_timings_setup (timings,
+  gdk_frame_timings_setup (frame->timings,
                            frame_time,
                            gdk_frame_clock_predict_presentation_time (self, priv->stage_start_time),
                            frame_start_time,
                            stage_start_time);
 }
 
-static inline GdkFrameTimings *
-_gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
-                              gint64         frame_counter)
+static GdkFrameClockFrame *
+gdk_frame_clock_get_frame (GdkFrameClock *self,
+                           gint64         frame_counter)
 {
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (frame_clock);
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   gsize size, pos;
 
   if (frame_counter > priv->frame_counter)
     return NULL;
 
-  size = timings_get_size (&priv->timings);
+  size = frames_get_size (&priv->frames);
   if (G_UNLIKELY (size == 0))
     return NULL;
 
   if (priv->frame_counter - frame_counter >= size)
     return NULL;
 
-  pos = (priv->current - (priv->frame_counter - frame_counter) + size) % size;
+  pos = (priv->current + size - (gsize) (priv->frame_counter - frame_counter)) % size;
+  return frames_get (&priv->frames, pos);
+}
 
-  return timings_get (&priv->timings, pos);
+static inline GdkFrameTimings *
+_gdk_frame_clock_get_timings (GdkFrameClock *self,
+                              gint64         frame_counter)
+{
+  GdkFrameClockFrame *frame;
+
+  frame = gdk_frame_clock_get_frame (self, frame_counter);
+  if (frame == NULL)
+    return NULL;
+
+  return frame->timings;
 }
 
 /**
@@ -720,24 +810,6 @@ gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
   return _gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
-}
-
-GdkFrameTimings *
-gdk_frame_clock_find_timings (GdkFrameClock *self,
-                              guint64        serial)
-{
-  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  gsize i;
-
-  for (i = 0; i < timings_get_size (&priv->timings); i++)
-    {
-      GdkFrameTimings *timings = timings_get (&priv->timings, i);
-
-      if (gdk_frame_timings_get_serial (timings) == serial)
-        return timings;
-    }
-
-  return NULL;
 }
 
 static void
@@ -896,93 +968,62 @@ gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 }
 
 /**
- * gdk_frame_clock_outstanding:
- * @self: The frame clock
- *
- * Called whenever there is a buffer submitted to the compositor, usually
- * by gdk_draw_context_end_frame() automatically.
- *
- * Note that gdk_draw_context_empty_frame() does not call this function.
- */
-void
-gdk_frame_clock_outstanding (GdkFrameClock *self)
-{
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_current_timings (self);
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_outstanding (timings);
-}
-
-/**
- * gdk_frame_clock_submitted:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * gdk_draw_context_frame_submitted:
+ * @frame: the frame
  * @refresh: the refresh interval to the next frame in nanoseconds
- *   or 0 to keep the predicted interval.
+ *   or 0 to keep the existing interval.
  *
- * Marks the given frame as complete by submission to the compositor.
+ * Marks the given frame as submitted to the compositor.
  *
  * This function should be called by GDK backends upon frame
  * submission when no further information about the compositor's use
  * can be provided for this frame.
  **/
 void
-gdk_frame_clock_submitted (GdkFrameClock *self,
-                           gint64         frame_counter,
-                           uint64_t       refresh)
+gdk_draw_context_frame_submitted (GdkDrawContextFrame *frame,
+                                  uint64_t             refresh)
 {
+  GdkFrameClock *self = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
+  GdkFrameClockFrame *clock_frame;
 
   if (refresh)
     priv->latest_refresh_interval = refresh;
 
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
-  if (timings == NULL)
-    return;
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  if (clock_frame)
+    {
+      gdk_frame_timings_submitted (clock_frame->timings, refresh);
+    }
 
-  gdk_frame_timings_submitted (timings, refresh);
-
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /**
- * gdk_frame_clock_discarded:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * gdk_draw_context_frame_discarded:
+ * @frame: the frame
  *
- * Marks the given frame as complete by the compositor discarding it.
+ * Marks the given frame as completed by the compositor discarding it.
  *
  * This function should be called by GDK backends.
  **/
 void
-gdk_frame_clock_discarded (GdkFrameClock *self,
-                           gint64         frame_counter)
+gdk_draw_context_frame_discarded (GdkDrawContextFrame *frame)
 {
-  GdkFrameTimings *timings;
-
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
-  if (timings == NULL)
-    return;
-
-  gdk_frame_timings_discarded (timings);
-
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /**
  * gdk_frame_clock_presented:
- * @self: a frame clock
- * @frame_counter: the frame to provide info for
+ * @frame: the frame
  * @presentation_time: the presentation time of the image in nanoseconds
  *   in the monotonic clock's time.
  * @refresh: the refresh interval to the next frame in nanoseconds
- *   or 0 to keep the predicted interval.
+ *   or 0 to keep the previous interval.
  *
  * Marks the given frame as presented by the compositor.
  *
@@ -991,17 +1032,17 @@ gdk_frame_clock_discarded (GdkFrameClock *self,
  * instead.
  **/
 void
-gdk_frame_clock_presented (GdkFrameClock *self,
-                           gint64         frame_counter,
-                           uint64_t       presentation_time,
-                           uint64_t       refresh)
+gdk_draw_context_frame_presented (GdkDrawContextFrame *frame,
+                                  uint64_t             presentation_time,
+                                  uint64_t             refresh)
 {
+  GdkFrameClock *self = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
-  GdkFrameTimings *timings;
+  GdkFrameClockFrame *clock_frame;
 
   g_return_if_fail (presentation_time != 0);
 
-  timings = gdk_frame_clock_get_timings (self, frame_counter);
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
 
   if (presentation_time > priv->latest_presentation_time)
     {
@@ -1009,11 +1050,11 @@ gdk_frame_clock_presented (GdkFrameClock *self,
       if (refresh)
         priv->latest_refresh_interval = refresh;
 
-      if (timings != NULL)
+      if (clock_frame != NULL)
         {
           uint64_t delay;
 
-          delay = presentation_time - gdk_frame_timings_get_start_time (timings, GDK_FRAME_STAGE_BEFORE_PAINT);
+          delay = presentation_time - gdk_frame_timings_get_start_time (clock_frame->timings, GDK_FRAME_STAGE_BEFORE_PAINT);
           if (refresh)
               delay = MIN (PRESENTATION_DELAY_MAX_FRAMES * refresh, delay);
 
@@ -1030,13 +1071,81 @@ gdk_frame_clock_presented (GdkFrameClock *self,
         }
     }
 
-  if (timings == NULL)
-    return;
+  if (clock_frame != NULL)
+    {
+      gdk_frame_timings_presented (clock_frame->timings, presentation_time, refresh);
+    }
 
-  gdk_frame_timings_presented (timings, presentation_time, refresh);
+  frame->presentation_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
+}
 
-  gdk_frame_clock_debug_print_timings (self, timings);
-  gdk_frame_clock_add_timings_to_profiler (self, timings);
+/**
+ * gdk_draw_context_frame_gpu_complete:
+ * @frame: the frame
+ * @timestamp: the monotonic timestamp in nanoseconds for when the GPU completed
+ *   rendering this frame
+ *
+ * Marks this frame as completed on the GPU.
+ *
+ * If no GPU rendering is happening, then this function must be called during
+ * or before end_frame() with a value of 0.
+ **/
+void
+gdk_draw_context_frame_gpu_complete (GdkDrawContextFrame *frame,
+                                     uint64_t             timestamp)
+{
+  GdkFrameClock *clock;
+
+  g_return_if_fail (!frame->gpu_complete);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  if (timestamp != 0)
+    {
+      GdkFrameClockFrame *clock_frame = gdk_frame_clock_get_frame (clock, frame->frame_counter);
+      if (clock_frame != NULL)
+        gdk_frame_timings_gpu_complete (clock_frame->timings, timestamp);
+    }
+
+  frame->gpu_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
+}
+
+/**
+ * gdk_draw_context_frame_stop_throttling:
+ * @frame: the frame
+ * @timestamp: The timestamp for the throttling hint or 0 if the compositor 
+ *   does not support throttling.
+ *
+ * Tells the frame clock to stop throttling redraws due to this frame
+ * at the given timestamp. See gdk_frame_timings_get_throttling_hint() for
+ * a longer discussion.
+ *
+ * If the compositor does not support throttling, then this function should
+ * be called in end_frame()/submit_frame() with a timestamp of 0.
+ **/
+void
+gdk_draw_context_frame_stop_throttling (GdkDrawContextFrame *frame,
+                                        uint64_t             timestamp)
+{
+  GdkFrameClock *clock;
+  GdkFrameClockFrame *clock_frame;
+
+  g_return_if_fail (!frame->throttling_complete);
+
+  clock = gdk_surface_get_frame_clock (gdk_draw_context_get_surface (frame->context));
+  clock_frame = gdk_frame_clock_get_frame (clock, frame->frame_counter);
+  if (clock_frame != NULL && clock_frame->throttling)
+    {
+      clock_frame->throttling = FALSE;
+      gdk_frame_clock_stop_throttling (clock, frame->frame_counter);
+    }
+
+  frame->throttling_complete = TRUE;
+  if (gdk_draw_context_frame_is_complete (frame))
+    gdk_draw_context_frame_free (frame);
 }
 
 /*<private>
@@ -1246,6 +1355,31 @@ gdk_frame_clock_run_paint (GdkFrameClock *self)
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_AFTER_PAINT);
 }
 
+#if 0
+static void
+gdk_frame_clock_foreach_frame (GdkFrameClock *self,
+                               gint64         frame_counter,
+                               void         (*func) (GdkDrawContextFrame *, gpointer),
+                               gpointer       user_data)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GSList *l;
+
+  l = priv->frames;
+  while (l)
+    {
+      GdkDrawContextFrame *frame = l->data;
+      l = l->next;
+      if (frame->frame_counter > frame_counter)
+        continue;
+      else if (frame->frame_counter < frame_counter)
+        break;
+
+      func (frame, user_data);
+    }
+}
+#endif
+
 static void
 gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 {
@@ -1254,7 +1388,7 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_AFTER_PAINT)
     {
-      GdkFrameTimings *timings;
+      GdkFrameClockFrame *clock_frame;
 
       priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
 
@@ -1262,22 +1396,29 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 
       g_signal_emit (self, signals[AFTER_PAINT], 0);
 
-      timings = gdk_frame_clock_get_current_timings (self);
-      if (gdk_frame_timings_get_result (timings) == GDK_FRAME_PREPARING)
+      clock_frame = gdk_frame_clock_get_frame (self, priv->frame_counter);
+      g_assert (clock_frame);
+      if (clock_frame->frames == NULL)
         {
-          /* Painting was done and if no surfaces transitioned the frame,
-           * either to OUTSTANDING when painting or a backend in
-           * after_paint(), then we mark this frame as SKIPPED.
+          /* Painting was done and no frames are remaining,
+           * so mark the frame as complete.
+           * Marking it as complete will ensure the correct state.
            */
-          gdk_frame_timings_discarded (timings);
+          if (clock_frame->throttling)
+            {
+              clock_frame->throttling = FALSE;
+              /* not calling end_throttling() here because we're still in_frame() */
+              priv->n_throttling--;
+            }
+          gdk_frame_timings_complete (clock_frame->timings);
 
-          gdk_frame_clock_debug_print_timings (self, timings);
-          gdk_frame_clock_add_timings_to_profiler (self, timings);
+          gdk_frame_clock_debug_print_timings (self, clock_frame->timings);
+          gdk_frame_clock_add_timings_to_profiler (self, clock_frame->timings);
         }
 
       if (!gdk_frame_clock_is_stopped (clock))
         {
-          gdk_frame_timings_throttling_hint (timings, priv->stage_start_time);
+          gdk_frame_timings_throttling_hint (clock_frame->timings, priv->stage_start_time);
         }
     }
   
@@ -1325,3 +1466,96 @@ gdk_frame_clock_frame (GdkFrameClock *self)
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
 }
 
+void
+gdk_frame_clock_add_frame (GdkFrameClock       *self,
+                           GdkDrawContextFrame *frame)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  GdkFrameClockFrame *clock_frame;
+
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  g_assert (clock_frame != NULL);
+
+  if (clock_frame->frames == NULL && !frame->throttling_complete)
+    {
+      clock_frame->throttling = TRUE;
+      priv->n_throttling++;
+    }
+  clock_frame->frames = g_slist_prepend (clock_frame->frames, frame);
+
+  gdk_frame_timings_outstanding (clock_frame->timings);
+}
+
+void
+gdk_frame_clock_remove_frame (GdkFrameClock       *self,
+                              GdkDrawContextFrame *frame)
+{
+  GdkFrameClockFrame *clock_frame;
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  clock_frame = gdk_frame_clock_get_frame (self, frame->frame_counter);
+  if (clock_frame == NULL)
+    return;
+
+  clock_frame->frames = g_slist_remove (clock_frame->frames, frame);
+  if (clock_frame->frames == NULL &&
+      (!gdk_frame_clock_is_in_frame (self) ||
+       frame->frame_counter != priv->frame_counter))
+    {
+      if (clock_frame->throttling)
+        {
+          clock_frame->throttling = FALSE;
+          gdk_frame_clock_stop_throttling (self, frame->frame_counter);
+        }
+      gdk_frame_timings_complete (clock_frame->timings);
+
+      gdk_frame_clock_debug_print_timings (self, clock_frame->timings);
+      gdk_frame_clock_add_timings_to_profiler (self, clock_frame->timings);
+    }
+}
+
+void
+gdk_frame_clock_foreach_frame (GdkFrameClock  *self,
+                               gint64          frame_counter,
+                               void          (*func) (GdkDrawContextFrame *, gpointer),
+                               gpointer        user_data)
+{
+  GdkFrameClockFrame *clock_frame;
+  GSList *l, *next;
+
+  clock_frame = gdk_frame_clock_get_frame (self, frame_counter);
+  if (clock_frame == NULL)
+    return;
+
+  next = clock_frame->frames;
+  for (l = next;
+       l;
+       l = next)
+    {
+      next = l->next;
+      func (l->data, user_data);
+    }
+}
+
+void
+gdk_frame_clock_remove_frames (GdkFrameClock  *self,
+                               GdkDrawContext *context)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+  gsize i;
+
+  for (i = 0; i < frames_get_size (&priv->frames); i++)
+    {
+      GdkFrameClockFrame *clock_frame = frames_get (&priv->frames, i);
+      GSList *l;
+
+      for (l = clock_frame->frames; l; )
+        {
+          GdkDrawContextFrame *frame = l->data;
+          l = l->next;
+
+          if (frame->context == context)
+            gdk_draw_context_frame_free (frame);
+        }
+    }
+}

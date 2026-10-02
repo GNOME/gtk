@@ -32,6 +32,7 @@
 #define HEIGHT 50
 
 #define DEFAULT_CONFIG "#ffffff33 end throttle, " \
+                       "#ffb3b533 end gpu, " \
                        "#fefefe start end, " \
                        "#1a5fb466 start events, " \
                        "#62a0ea66 before-paint update, " \
@@ -79,6 +80,17 @@ frame_timings_get_ ## name ## _end (GdkFrameTimings *timings) \
   return gdk_frame_timings_get_end_time (timings, stage); \
 }\
 
+static uint64_t
+frame_timings_get_gpu_complete (GdkFrameTimings *timings)
+{
+  uint64_t result = gdk_frame_timings_get_gpu_complete (timings);
+
+  if (result == 0 || !gdk_frame_timings_get_complete (timings))
+    return gdk_frame_timings_get_end_time (timings, GDK_FRAME_STAGE_RESUME_EVENTS);
+
+  return result;
+}
+
 STAGE_FUNC (none, GDK_FRAME_STAGE_NONE)
 STAGE_FUNC (flush_events, GDK_FRAME_STAGE_FLUSH_EVENTS)
 STAGE_FUNC (before_paint, GDK_FRAME_STAGE_BEFORE_PAINT)
@@ -106,6 +118,7 @@ static const struct {
   { "after-paint", frame_timings_get_after_paint_end },
   { "end", frame_timings_get_resume_events_end },
   { "throttle", gdk_frame_timings_get_throttling_hint },
+  { "gpu", frame_timings_get_gpu_complete },
 };
 
 static GetTimeFunc

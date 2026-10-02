@@ -26,6 +26,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
+#include "gdk/gdkcairocontextprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdktextureprivate.h"
 
@@ -151,15 +152,31 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
                            const cairo_region_t *region)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+  GdkDrawContext *draw_context;
+  GdkDrawContextFrame *frame;
+  GdkCairoContextFrame *cframe;
   cairo_t *cr;
+  float scale;
 
-  gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->cairo_context),
-                                     NULL,
-                                     root,
-                                     region);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  cr = gdk_cairo_context_cairo_create (self->cairo_context);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  draw_context = GDK_DRAW_CONTEXT (self->cairo_context);
+
+  frame = gdk_draw_context_begin_frame_full (draw_context,
+                                             NULL,
+                                             root,
+                                             region);
+  cframe = (GdkCairoContextFrame *) frame;
+
+  cr = cairo_create (gdk_cairo_context_frame_get_surface (cframe));
+
+  gdk_cairo_region (cr, gdk_draw_context_frame_get_damage (frame));
+  cairo_clip (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  scale = gdk_surface_get_scale (gdk_draw_context_get_surface (draw_context));
+  cairo_scale (cr, scale, scale);
 
   g_return_if_fail (cr != NULL);
 
@@ -177,7 +194,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       cairo_restore (cr);
     }
 
-  gsk_render_node_draw_with_color_state (root, cr, gdk_draw_context_get_color_state (GDK_DRAW_CONTEXT (self->cairo_context)));
+  gsk_render_node_draw_with_color_state (root, cr, gdk_draw_context_frame_get_color_state (frame));
 
   cairo_destroy (cr);
 

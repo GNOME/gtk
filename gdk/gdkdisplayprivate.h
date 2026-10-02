@@ -55,9 +55,10 @@ typedef enum {
   GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 6,
   GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 7,
   GDK_VULKAN_FEATURE_WIN32_SEMAPHORE            = 1 << 8,
-  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 9,
-  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 10,
-  GDK_VULKAN_FEATURE_PORTABILITY_SUBSET         = 1 << 11,
+  GDK_VULKAN_FEATURE_FENCE_FD                   = 1 << 9,
+  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 10,
+  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 11,
+  GDK_VULKAN_FEATURE_PORTABILITY_SUBSET         = 1 << 12,
 } GdkVulkanFeatures;
 
 #define GDK_VULKAN_N_FEATURES 11
@@ -128,6 +129,7 @@ struct _GdkDisplay
   guint have_egl_dma_buf_import : 1;
   guint have_egl_dma_buf_export : 1;
   guint have_egl_gl_colorspace : 1;
+  guint have_egl_sync_fd : 1;
 
   /* atomic */ GdkDmabufFormats *dmabuf_formats;
   GdkDmabufDownloader *egl_downloader;

@@ -28,6 +28,8 @@
 
 #include <gdk/gdkframeclock.h>
 
+#include "gdkdrawcontextprivate.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -67,6 +69,9 @@ struct _GdkFrameClockClass
                                                                  GdkFrameClockPhase      phase);
   void                  (* begin_updating)                      (GdkFrameClock          *self);
   void                  (* end_updating)                        (GdkFrameClock          *self);
+  /* not emitted while in frame */
+  void                  (* stop_throttling)                     (GdkFrameClock          *self,
+                                                                 gint64                  frame_counter);
 
   void                  (* start)                               (GdkFrameClock          *self);
   void                  (* stop)                                (GdkFrameClock          *self);
@@ -78,25 +83,23 @@ gboolean                gdk_frame_clock_is_stopped              (GdkFrameClock  
 gboolean                gdk_frame_clock_is_updating             (GdkFrameClock          *self);
 gboolean                gdk_frame_clock_is_in_frame             (GdkFrameClock          *self);
 GdkFrameClockPhase      gdk_frame_clock_get_requested           (GdkFrameClock          *self);
+gsize                   gdk_frame_clock_get_throttling          (GdkFrameClock          *self);
 
 void                    gdk_frame_clock_frame                   (GdkFrameClock          *self);
 
-GdkFrameTimings *       gdk_frame_clock_find_timings            (GdkFrameClock          *self,
-                                                                 guint64                 serial);
+void                    gdk_frame_clock_add_frame               (GdkFrameClock          *self,
+                                                                 GdkDrawContextFrame    *frame);
+void                    gdk_frame_clock_remove_frame            (GdkFrameClock          *self,
+                                                                 GdkDrawContextFrame    *frame);
+void                    gdk_frame_clock_remove_frames           (GdkFrameClock          *self,
+                                                                 GdkDrawContext         *context);
+void                    gdk_frame_clock_foreach_frame           (GdkFrameClock          *self,
+                                                                 gint64                  frame_counter,
+                                                                 void                  (*func) (GdkDrawContextFrame *, gpointer),
+                                                                 gpointer                user_data);
 
 uint64_t        gdk_frame_clock_get_refresh_interval            (GdkFrameClock          *self);
 uint64_t        gdk_frame_clock_get_latest_presentation_time    (GdkFrameClock          *self);
-
-void            gdk_frame_clock_outstanding                     (GdkFrameClock          *self);
-void            gdk_frame_clock_submitted                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter,
-                                                                 uint64_t                refresh);
-void            gdk_frame_clock_discarded                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter);
-void            gdk_frame_clock_presented                       (GdkFrameClock          *self,
-                                                                 gint64                  frame_counter,
-                                                                 uint64_t                presentation_time,
-                                                                 uint64_t                refresh);
 
 G_END_DECLS
 
