@@ -480,11 +480,10 @@ gtk_text_handle_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->map (widget);
 
-  if (handle->has_point)
-    {
-      gtk_text_handle_present_surface (handle);
-      text_handle_set_up_gesture (handle);
-    }
+  g_return_if_fail (handle->has_point);
+
+  gtk_text_handle_present_surface (handle);
+  text_handle_set_up_gesture (handle);
 }
 
 static void
