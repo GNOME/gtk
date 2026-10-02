@@ -155,28 +155,8 @@ static void
 gdk_win32_surface_submit_frame (GdkSurface          *surface,
                                 GdkDrawContextFrame *frame)
 {
-  DWM_TIMING_INFO timing_info;
-  LARGE_INTEGER tick_frequency;
-
-  gdk_draw_context_frame_stop_throttling (frame, 0);
-
-  if (QueryPerformanceFrequency (&tick_frequency))
-    {
-      HRESULT hr;
-
-      timing_info.cbSize = sizeof (timing_info);
-      hr = DwmGetCompositionTimingInfo (NULL, &timing_info);
-
-      if (SUCCEEDED (hr))
-        {
-          gdk_draw_context_frame_presented (frame,
-                                            timing_info.qpcCompose * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart,
-                                            timing_info.qpcRefreshPeriod * (double) G_NSEC_PER_SEC / tick_frequency.QuadPart);
-          return;
-        }
-    }
-
   gdk_draw_context_frame_submitted (frame, 0);
+  gdk_draw_context_frame_stop_throttling (frame, 0);
 }
 
 void
