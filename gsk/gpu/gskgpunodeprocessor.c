@@ -663,11 +663,15 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuRenderPass   *self,
 #define MAX_BLUR_RADIUS 8
 
 static guint
-gsk_gpu_blur_node_get_downscale_lod (const graphene_size_t *sigma)
+gsk_gpu_blur_node_get_downscale_lod (GskGpuFrame *frame,
+                                     const graphene_size_t *sigma)
 {
   float radius = MAX (sigma->width, sigma->height);
 
   if (radius <= MAX_BLUR_RADIUS)
+    return 0;
+
+  if (!gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_FAST_BLUR))
     return 0;
 
   return ceilf (log2f (radius / MAX_BLUR_RADIUS));
@@ -729,7 +733,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   graphene_size_t leftover_sigma;
   float downscale;
 
-  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (sigma);
+  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (self->frame, sigma);
 
   if (sigma->width > 0.f && sigma->height > 0.f)
     {
@@ -2284,7 +2288,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
       return;
     }
 
-  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (sigma);
+  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (self->frame, sigma);
 
   gsk_blur_node_get_padding (sigma, &padding);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
