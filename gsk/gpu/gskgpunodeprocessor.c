@@ -752,7 +752,7 @@ upscale_variance (float scale)
 }
 
 static void
-gsk_gpu_node_processor_downscale_blur (const graphene_size_t *scale,
+gsk_gpu_node_processor_downscale_blur (GskGpuRenderPass      *self,
                                        const graphene_size_t *sigma,
                                        graphene_size_t       *out_scale,
                                        graphene_size_t       *out_sigma)
@@ -760,22 +760,29 @@ gsk_gpu_node_processor_downscale_blur (const graphene_size_t *scale,
   const float MAX_SIGMA = 6.0;
   graphene_size_t scaled_sigma, downscale;
 
-  scaled_sigma = GRAPHENE_SIZE_INIT (scale->width * sigma->width,
-                                     scale->height * sigma->height);
+  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_FAST_BLUR))
+    {
+      *out_scale = self->scale;
+      *out_sigma = *sigma;
+      return;
+    }
+
+  scaled_sigma = GRAPHENE_SIZE_INIT (self->scale.width * sigma->width,
+                                     self->scale.height * sigma->height);
   /* compute next power of 2 as downscale factor */
   downscale = GRAPHENE_SIZE_INIT (fmax (1.0, exp2 (ceil (log2 (scaled_sigma.width / MAX_SIGMA)))), 
                                   fmax (1.0, exp2 (ceil (log2 (scaled_sigma.height / MAX_SIGMA)))));
 
-  *out_scale = GRAPHENE_SIZE_INIT (scale->width / downscale.width,
-                                   scale->height / downscale.height);
+  *out_scale = GRAPHENE_SIZE_INIT (self->scale.width / downscale.width,
+                                   self->scale.height / downscale.height);
   *out_sigma = GRAPHENE_SIZE_INIT (sqrtf (fmax (0.0,
                                                 scaled_sigma.width * scaled_sigma.width
                                                 - downscale_variance (downscale.width)
-                                                - upscale_variance (downscale.width))) / scale->width,
+                                                - upscale_variance (downscale.width))) / self->scale.width,
                                    sqrtf (fmax (0.0,
                                                 scaled_sigma.height * scaled_sigma.height
                                                 - downscale_variance (downscale.height)
-                                                - upscale_variance (downscale.height))) / scale->height);
+                                                - upscale_variance (downscale.height))) / self->scale.height);
 
 #if 0
   g_print ("downscaling by %gx,%gx to %gx,%gx transforming sigma from %g,%g => %g, %g\n",
@@ -2453,7 +2460,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
       return;
     }
 
-  gsk_gpu_node_processor_downscale_blur (&self->scale,
+  gsk_gpu_node_processor_downscale_blur (self,
                                          sigma,
                                          &scale,
                                          &scaled_sigma);

@@ -546,6 +546,9 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 `shadow`
 : Always use the slow fallback path for shadow nodes
 
+`fast-blur`
+: Don't use downsampling for larger blur radii, sample every pixel instead
+
 `profile`
 : Disable profiling support
 
