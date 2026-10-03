@@ -641,6 +641,44 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuRenderPass   *self,
   return result;
 }
 
+static GskGpuImage *
+gsk_gpu_node_processor_run_blur_pass (GskGpuFrame           *frame,
+                                      const graphene_size_t *radius,
+                                      GdkColorState         *ccs,
+                                      GdkMemoryDepth         depth,
+                                      const graphene_size_t *scale,
+                                      const graphene_rect_t *viewport,
+                                      GskGpuImage           *source,
+                                      const graphene_rect_t *source_rect)
+{
+  GskGpuRenderPass *pass;
+  GskGpuImage *result;
+
+  pass = gsk_gpu_node_processor_new_draw (frame,
+                                          ccs,
+                                          depth,
+                                          scale,
+                                          viewport,
+                                          &result);
+  g_return_val_if_fail (pass != NULL, NULL);
+
+  gsk_gpu_blur_op (pass,
+                   ccs,
+                   ccs,
+                   viewport,
+                   source,
+                   GSK_GPU_SAMPLER_TRANSPARENT,
+                   FALSE,
+                   viewport,
+                   &(GdkColor) { .color_state = ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
+                   source_rect,
+                   radius);
+
+  gsk_gpu_render_pass_free (pass);
+
+  return result;
+}
+
 static void
 gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 const graphene_rect_t     *rect,
@@ -651,7 +689,6 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 GdkMemoryDepth             source_depth,
                                 const graphene_rect_t     *source_rect)
 {
-  GskGpuRenderPass *other;
   GskGpuImage *intermediate;
   graphene_size_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
@@ -672,28 +709,15 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   if (!gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
     return;
 
-  other = gsk_gpu_node_processor_new_draw (self->frame,
-                                           self->ccs,
-                                           source_depth,
-                                           &self->scale,
-                                           &intermediate_rect,
-                                           &intermediate);
-  g_return_if_fail (other != NULL);
 
-  direction = GRAPHENE_SIZE_INIT (blur_radius, 0.0f);
-  gsk_gpu_blur_op (other,
-                   other->ccs,
-                   other->ccs,
-                   &intermediate_rect,
-                   source_image,
-                   GSK_GPU_SAMPLER_TRANSPARENT,
-                   FALSE,
-                   &intermediate_rect,
-                   &(GdkColor) { .color_state = other->ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
-                   source_rect,
-                   &direction);
-
-  gsk_gpu_render_pass_free (other);
+  intermediate = gsk_gpu_node_processor_run_blur_pass (self->frame,
+                                                       &GRAPHENE_SIZE_INIT (blur_radius, 0.0f),
+                                                       self->ccs,
+                                                       source_depth,
+                                                       &self->scale,
+                                                       &intermediate_rect,
+                                                       source_image,
+                                                       source_rect);
 
   gsk_gpu_render_pass_push_translate (self, shadow_offset, &storage);
   direction = GRAPHENE_SIZE_INIT (0.0f, blur_radius);
