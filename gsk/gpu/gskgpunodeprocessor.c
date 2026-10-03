@@ -660,6 +660,19 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuRenderPass   *self,
   return result;
 }
 
+#define MAX_BLUR_RADIUS 8
+
+static guint
+gsk_gpu_blur_node_get_downscale_lod (const graphene_size_t *sigma)
+{
+  float radius = MAX (sigma->width, sigma->height);
+
+  if (radius <= MAX_BLUR_RADIUS)
+    return 0;
+
+  return ceilf (log2f (radius / MAX_BLUR_RADIUS));
+}
+
 static GskGpuImage *
 gsk_gpu_node_processor_run_blur_pass (GskGpuFrame           *frame,
                                       const graphene_size_t *radius,
@@ -714,6 +727,9 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   graphene_rect_t intermediate_rect;
   GskGpuSampler intermediate_sampler;
   graphene_size_t leftover_sigma;
+  float downscale;
+
+  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (sigma);
 
   if (sigma->width > 0.f && sigma->height > 0.f)
     {
@@ -726,7 +742,10 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                                            &GRAPHENE_SIZE_INIT (sigma->width, 0.0f),
                                                            self->ccs,
                                                            source_depth,
-                                                           &self->scale,
+                                                           &GRAPHENE_SIZE_INIT (
+                                                             self->scale.width / downscale,
+                                                             self->scale.height / downscale
+                                                           ),
                                                            &intermediate_rect,
                                                            source_image,
                                                            source_rect,
@@ -742,33 +761,74 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
       intermediate_sampler = source_sampler;
     }
 
-  if (shadow_color)
+  if (downscale > 1)
     {
-      gsk_gpu_blur_op (self,
-                       self->ccs,
-                       gsk_gpu_color_states_find (self->ccs, shadow_color),
-                       rect,
-                       intermediate,
-                       intermediate_sampler,
-                       TRUE,
-                       rect,
-                       shadow_color,
-                       &intermediate_rect,
-                       sigma);
+      GskGpuImage *pass2 = gsk_gpu_node_processor_run_blur_pass (self->frame,
+                                                                 sigma,
+                                                                 self->ccs,
+                                                                 source_depth,
+                                                                 &GRAPHENE_SIZE_INIT (
+                                                                   self->scale.width / downscale,
+                                                                   self->scale.height / downscale
+                                                                 ),
+                                                                 rect,
+                                                                 intermediate,
+                                                                 &intermediate_rect,
+                                                                 intermediate_sampler);
+
+      if (shadow_color)
+        {
+          gsk_gpu_colorize_op (self,
+                               self->ccs,
+                               gsk_gpu_color_states_find (self->ccs, shadow_color),
+                               rect,
+                               pass2,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               rect,
+                               shadow_color);
+        }
+      else
+        {
+          gsk_gpu_node_processor_image_op (self,
+                                           pass2,
+                                           self->ccs,
+                                           GSK_GPU_SAMPLER_DEFAULT,
+                                           rect,
+                                           rect);
+        }
+
+      g_object_unref (pass2);
     }
   else
     {
-      gsk_gpu_blur_op (self,
-                       self->ccs,
-                       self->ccs,
-                       rect,
-                       intermediate,
-                       intermediate_sampler,
-                       FALSE,
-                       rect,
-                       &(GdkColor) { .color_state = self->ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
-                       &intermediate_rect,
-                       sigma);
+      if (shadow_color)
+        {
+          gsk_gpu_blur_op (self,
+                           self->ccs,
+                           gsk_gpu_color_states_find (self->ccs, shadow_color),
+                           rect,
+                           intermediate,
+                           intermediate_sampler,
+                           TRUE,
+                           rect,
+                           shadow_color,
+                           &intermediate_rect,
+                           sigma);
+        }
+      else
+        {
+          gsk_gpu_blur_op (self,
+                           self->ccs,
+                           self->ccs,
+                           rect,
+                           intermediate,
+                           intermediate_sampler,
+                           FALSE,
+                           rect,
+                           &(GdkColor) { .color_state = self->ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
+                           &intermediate_rect,
+                           sigma);
+        }
     }
 
   g_object_unref (intermediate);
@@ -2214,6 +2274,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
   GskGpuSampler tex_sampler;
   const graphene_size_t *sigma;
   graphene_size_t padding;
+  float downscale;
 
   child = gsk_blur_node_get_child (node);
   sigma = gsk_blur_node_get_blur_radius (node);
@@ -2222,6 +2283,8 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
       gsk_gpu_node_processor_add_node (self, child, 0);
       return;
     }
+
+  downscale = 1 << gsk_gpu_blur_node_get_downscale_lod (sigma);
 
   gsk_blur_node_get_padding (sigma, &padding);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
@@ -2233,13 +2296,19 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
       !gsk_rect_snap_to_grid_grow (&padded_clip, &self->scale, &self->offset, &padded_clip))
     return;
 
-  image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    0,
-                                                    &padded_clip,
-                                                    child,
-                                                    0,
-                                                    &tex_rect,
-                                                    &tex_sampler);
+  gsk_gpu_frame_start_node (self->frame, child, 0);
+  image = gsk_gpu_get_node_as_image (self->frame,
+                                     0,
+                                     self->ccs,
+                                     &padded_clip,
+                                     &GRAPHENE_SIZE_INIT (
+                                       self->scale.width / downscale,
+                                       self->scale.height / downscale
+                                     ),
+                                     child,
+                                     &tex_rect,
+                                     &tex_sampler);
+  gsk_gpu_frame_end_node (self->frame);
   if (image == NULL)
     return;
 
