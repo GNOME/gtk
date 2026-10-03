@@ -21,15 +21,18 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gskdiffprivate.h"
 
 
-#define XDL_MAX_COST_MIN 256
-#define XDL_HEUR_MIN_COST 256
 #define XDL_LINE_MAX G_MAXSSIZE
-#define XDL_SNAKE_CNT 20
-#define XDL_K_HEUR 4
 #define MAXCOST 20
+/* A successful bidirectional search has at most 2 * MAXCOST edits. Keep a
+ * generously sized inline buffer for common scripts; unusually long sequences
+ * of distinct-but-equal elements spill to the heap.
+ */
+#define MAX_DIFF_OPERATIONS (4 * MAXCOST + 1)
 
 struct _GskDiffSettings {
   GCompareDataFunc        compare_func;
@@ -38,12 +41,47 @@ struct _GskDiffSettings {
   GskInsertFunc           insert_func;
 
   guint allow_abort : 1;
+  guint defer_callbacks : 1;
 };
 
 typedef struct _SplitResult {
-  long i1, i2;
-  int min_lo, min_hi;
+  gssize i1, i2;
+  gboolean min_lo, min_hi;
 } SplitResult;
+
+typedef enum
+{
+  DIFF_OPERATION_KEEP,
+  DIFF_OPERATION_DELETE,
+  DIFF_OPERATION_INSERT,
+} DiffOperationKind;
+
+typedef struct
+{
+  DiffOperationKind kind;
+  union {
+    struct {
+      gssize index1;
+      gssize index2;
+    } keep;
+    struct {
+      gssize index;
+    } insert;
+    struct {
+      gssize index;
+    } delete;
+  };
+} DiffOperation;
+
+typedef struct
+{
+  DiffOperation operations[MAX_DIFF_OPERATIONS];
+  DiffOperation *overflow;
+  gsize n_operations;
+  gsize n_allocated;
+} DiffScript;
+
+G_STATIC_ASSERT (sizeof (DiffOperation) <= 3 * sizeof (gssize));
 
 GskDiffSettings *
 gsk_diff_settings_new (GCompareDataFunc compare_func,
@@ -71,9 +109,155 @@ gsk_diff_settings_set_allow_abort (GskDiffSettings *settings,
 }
 
 void
+gsk_diff_settings_set_defer_callbacks (GskDiffSettings *settings,
+                                       gboolean         defer_callbacks)
+{
+  settings->defer_callbacks = defer_callbacks;
+}
+
+void
 gsk_diff_settings_free (GskDiffSettings *settings)
 {
   g_free (settings);
+}
+
+static gboolean
+diff_elements_equal (gconstpointer          elem1,
+                     gconstpointer          elem2,
+                     const GskDiffSettings *settings,
+                     gpointer               data)
+{
+  if (elem1 == elem2)
+    return TRUE;
+
+  return settings->compare_func (elem1, elem2, data) == 0;
+}
+
+static GskDiffResult
+diff_script_append (DiffScript        *script,
+                    DiffOperationKind  kind,
+                    gssize             index1,
+                    gssize             index2)
+{
+  DiffOperation *operation;
+
+  if (script->n_operations == script->n_allocated)
+    {
+      script->n_allocated *= 2;
+      if (script->overflow == NULL)
+        {
+          script->overflow = g_new (DiffOperation, script->n_allocated);
+          memcpy (script->overflow, script->operations, sizeof script->operations);
+        }
+      else
+        script->overflow = g_renew (DiffOperation,
+                                    script->overflow,
+                                    script->n_allocated);
+    }
+
+  operation = script->overflow != NULL ? script->overflow : script->operations;
+  operation += script->n_operations++;
+  operation->kind = kind;
+
+  switch (kind)
+    {
+    case DIFF_OPERATION_KEEP:
+      operation->keep.index1 = index1;
+      operation->keep.index2 = index2;
+      break;
+
+    case DIFF_OPERATION_DELETE:
+      operation->delete.index = index1;
+      break;
+
+    case DIFF_OPERATION_INSERT:
+      operation->insert.index = index2;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return GSK_DIFF_OK;
+}
+
+static GskDiffResult
+diff_emit_operation (DiffScript            *script,
+                     DiffOperationKind      kind,
+                     gconstpointer         *elem1,
+                     gssize                 index1,
+                     gconstpointer         *elem2,
+                     gssize                 index2,
+                     const GskDiffSettings *settings,
+                     gpointer               data)
+{
+  if (script != NULL)
+    return diff_script_append (script, kind, index1, index2);
+
+  switch (kind)
+    {
+    case DIFF_OPERATION_KEEP:
+      return settings->keep_func (elem1[index1], elem2[index2], data);
+
+    case DIFF_OPERATION_DELETE:
+      return settings->delete_func (elem1[index1], index1, data);
+
+    case DIFF_OPERATION_INSERT:
+      return settings->insert_func (elem2[index2], index2, data);
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GskDiffResult
+diff_script_apply (const DiffScript      *script,
+                   gconstpointer         *elem1,
+                   gconstpointer         *elem2,
+                   const GskDiffSettings *settings,
+                   gpointer               data)
+{
+  const DiffOperation *operations;
+  gsize i;
+
+  operations = script->overflow != NULL ? script->overflow : script->operations;
+
+  for (i = 0; i < script->n_operations; i++)
+    {
+      const DiffOperation *operation;
+      GskDiffResult result;
+
+      operation = &operations[i];
+
+      switch (operation->kind)
+        {
+        case DIFF_OPERATION_KEEP:
+          result = settings->keep_func (elem1[operation->keep.index1],
+                                        elem2[operation->keep.index2],
+                                        data);
+          break;
+
+        case DIFF_OPERATION_DELETE:
+          result = settings->delete_func (elem1[operation->delete.index],
+                                          operation->delete.index,
+                                          data);
+          break;
+
+        case DIFF_OPERATION_INSERT:
+          result = settings->insert_func (elem2[operation->insert.index],
+                                          operation->insert.index,
+                                          data);
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      if (result != GSK_DIFF_OK)
+        return result;
+    }
+
+  return GSK_DIFF_OK;
 }
 
 /*
@@ -81,10 +265,14 @@ gsk_diff_settings_free (GskDiffSettings *settings)
  * Basically considers a "box" (off1, off2, lim1, lim2) and scan from both
  * the forward diagonal starting from (off1, off2) and the backward diagonal
  * starting from (lim1, lim2). If the K values on the same diagonal crosses
- * returns the furthest point of reach. We might end up having to expensive
- * cases using this algorithm is full, so a little bit of heuristic is needed
- * to cut the search and to return a suboptimal point.
+ * returns the furthest point of reach. Searches that exceed MAXCOST either
+ * abort or choose a suboptimal split, depending on the settings.
+ *
+ * Keep the frontier arrays out of compare()'s stack frame. Compilers may
+ * otherwise inline split(), keeping that storage alive while compare()
+ * recursively invokes callbacks.
  */
+G_GNUC_NO_INLINE
 static GskDiffResult
 split (gconstpointer         *elem1,
        gssize                 off1,
@@ -92,8 +280,6 @@ split (gconstpointer         *elem1,
        gconstpointer         *elem2,
        gssize                 off2,
        gssize                 lim2,
-       gssize                *kvdf,
-       gssize                *kvdb,
        gboolean               need_min,
        const GskDiffSettings *settings,
        gpointer               data,
@@ -104,17 +290,28 @@ split (gconstpointer         *elem1,
   gboolean odd = (fmid - bmid) & 1;
   gssize fmin = fmid, fmax = fmid;
   gssize bmin = bmid, bmax = bmid;
-  gssize ec, d, i1, i2, prev1, best, dd, v, k;
+  gssize kvdf[2 * MAXCOST + 3];
+  gssize kvdb[2 * MAXCOST + 3];
+  gssize *kvdf_center = kvdf + MAXCOST + 1;
+  gssize *kvdb_center = kvdb + MAXCOST + 1;
+  gssize ec, d, i1, i2;
+
+#define KVDF(diagonal) kvdf_center[(diagonal) - fmid]
+#define KVDB(diagonal) kvdb_center[(diagonal) - bmid]
 
   /*
    * Set initial diagonal values for both forward and backward path.
    */
-  kvdf[fmid] = off1;
-  kvdb[bmid] = lim1;
+  KVDF (fmid) = off1;
+  KVDB (bmid) = lim1;
 
   for (ec = 1;; ec++)
     {
-      gboolean got_snake = FALSE;
+      /* The non-minimal search stops at MAXCOST. A minimal box is
+       * always cut from one of those frontiers, so it cannot need a
+       * wider diagonal range either.
+       */
+      g_assert (ec <= MAXCOST);
 
       /*
        * We need to extent the diagonal "domain" by one. If the next
@@ -124,31 +321,28 @@ split (gconstpointer         *elem1,
        * avoid extra conditions check inside the core loop.
        */
       if (fmin > dmin)
-        kvdf[--fmin - 1] = -1;
+        KVDF (--fmin - 1) = -1;
       else
         ++fmin;
       if (fmax < dmax)
-        kvdf[++fmax + 1] = -1;
+        KVDF (++fmax + 1) = -1;
       else
         --fmax;
 
       for (d = fmax; d >= fmin; d -= 2)
         {
-          if (kvdf[d - 1] >= kvdf[d + 1])
-            i1 = kvdf[d - 1] + 1;
+          if (KVDF (d - 1) >= KVDF (d + 1))
+            i1 = KVDF (d - 1) + 1;
           else
-            i1 = kvdf[d + 1];
-          prev1 = i1;
+            i1 = KVDF (d + 1);
           i2 = i1 - d;
           for (; i1 < lim1 && i2 < lim2; i1++, i2++)
             {
-              if (settings->compare_func (elem1[i1], elem2[i2], data) != 0)
+              if (!diff_elements_equal (elem1[i1], elem2[i2], settings, data))
                 break;
             }
-          if (i1 - prev1 > XDL_SNAKE_CNT)
-            got_snake = TRUE;
-          kvdf[d] = i1;
-          if (odd && bmin <= d && d <= bmax && kvdb[d] <= i1)
+          KVDF (d) = i1;
+          if (odd && bmin <= d && d <= bmax && KVDB (d) <= i1)
             {
               spl->i1 = i1;
               spl->i2 = i2;
@@ -165,31 +359,28 @@ split (gconstpointer         *elem1,
        * avoid extra conditions check inside the core loop.
        */
       if (bmin > dmin)
-        kvdb[--bmin - 1] = XDL_LINE_MAX;
+        KVDB (--bmin - 1) = XDL_LINE_MAX;
       else
         ++bmin;
       if (bmax < dmax)
-        kvdb[++bmax + 1] = XDL_LINE_MAX;
+        KVDB (++bmax + 1) = XDL_LINE_MAX;
       else
         --bmax;
 
       for (d = bmax; d >= bmin; d -= 2)
         {
-          if (kvdb[d - 1] < kvdb[d + 1])
-            i1 = kvdb[d - 1];
+          if (KVDB (d - 1) < KVDB (d + 1))
+            i1 = KVDB (d - 1);
           else
-            i1 = kvdb[d + 1] - 1;
-          prev1 = i1;
+            i1 = KVDB (d + 1) - 1;
           i2 = i1 - d;
           for (; i1 > off1 && i2 > off2; i1--, i2--)
             {
-              if (settings->compare_func (elem1[i1 - 1], elem2[i2 - 1], data) != 0)
+              if (!diff_elements_equal (elem1[i1 - 1], elem2[i2 - 1], settings, data))
                 break;
             }
-          if (prev1 - i1 > XDL_SNAKE_CNT)
-            got_snake = TRUE;
-          kvdb[d] = i1;
-          if (!odd && fmin <= d && d <= fmax && i1 <= kvdf[d])
+          KVDB (d) = i1;
+          if (!odd && fmin <= d && d <= fmax && i1 <= KVDF (d))
             {
               spl->i1 = i1;
               spl->i2 = i2;
@@ -200,84 +391,6 @@ split (gconstpointer         *elem1,
 
       if (need_min)
         continue;
-
-      /*
-       * If the edit cost is above the heuristic trigger and if
-       * we got a good snake, we sample current diagonals to see
-       * if some of them have reached an "interesting" path. Our
-       * measure is a function of the distance from the diagonal
-       * corner (i1 + i2) penalized with the distance from the
-       * mid diagonal itself. If this value is above the current
-       * edit cost times a magic factor (XDL_K_HEUR) we consider
-       * it interesting.
-       */
-      if (got_snake && ec > XDL_HEUR_MIN_COST)
-        {
-          for (best = 0, d = fmax; d >= fmin; d -= 2)
-            {
-              dd = d > fmid ? d - fmid: fmid - d;
-              i1 = kvdf[d];
-              i2 = i1 - d;
-              v = (i1 - off1) + (i2 - off2) - dd;
-
-              if (v > XDL_K_HEUR * ec && v > best &&
-                  off1 + XDL_SNAKE_CNT <= i1 && i1 < lim1 &&
-                  off2 + XDL_SNAKE_CNT <= i2 && i2 < lim2)
-                {
-                  for (k = 1; ; k++)
-                    {
-                      if (settings->compare_func (elem1[i1 - k], elem2[i2 - k], data) != 0)
-                        break;
-                      if (k == XDL_SNAKE_CNT)
-                        {
-                          best = v;
-                          spl->i1 = i1;
-                          spl->i2 = i2;
-                          break;
-                        }
-                    }
-                }
-            }
-          if (best > 0)
-            {
-              spl->min_lo = 1;
-              spl->min_hi = 0;
-              return GSK_DIFF_OK;
-            }
-
-          for (best = 0, d = bmax; d >= bmin; d -= 2)
-            {
-              dd = d > bmid ? d - bmid: bmid - d;
-              i1 = kvdb[d];
-              i2 = i1 - d;
-              v = (lim1 - i1) + (lim2 - i2) - dd;
-
-              if (v > XDL_K_HEUR * ec && v > best &&
-                  off1 < i1 && i1 <= lim1 - XDL_SNAKE_CNT &&
-                  off2 < i2 && i2 <= lim2 - XDL_SNAKE_CNT)
-                {
-                  for (k = 0; ; k++)
-                    {
-                      if (settings->compare_func (elem1[i1 + k], elem2[i2 + k], data) != 0)
-                        break;
-
-                      if (k == XDL_SNAKE_CNT - 1)
-                        {
-                          best = v;
-                          spl->i1 = i1;
-                          spl->i2 = i2;
-                          break;
-                        }
-                    }
-                }
-            }
-          if (best > 0)
-            {
-              spl->min_lo = 0;
-              spl->min_hi = 1;
-              return GSK_DIFF_OK;
-            }
-        }
 
       /*
        * Enough is enough. We spent too much time here and now we collect
@@ -293,7 +406,7 @@ split (gconstpointer         *elem1,
           fbest = fbest1 = -1;
           for (d = fmax; d >= fmin; d -= 2)
             {
-              i1 = MIN (kvdf[d], lim1);
+              i1 = MIN (KVDF (d), lim1);
               i2 = i1 - d;
               if (lim2 < i2)
                 i1 = lim2 + d, i2 = lim2;
@@ -307,7 +420,7 @@ split (gconstpointer         *elem1,
           bbest = bbest1 = XDL_LINE_MAX;
           for (d = bmax; d >= bmin; d -= 2)
             {
-              i1 = MAX (off1, kvdb[d]);
+              i1 = MAX (off1, KVDB (d));
               i2 = i1 - d;
               if (i2 < off2)
                 i1 = off2 + d, i2 = off2;
@@ -336,12 +449,15 @@ split (gconstpointer         *elem1,
           return GSK_DIFF_OK;
         }
     }
+
+#undef KVDF
+#undef KVDB
 }
 
 /*
  * Rule: "Divide et Impera". Recursively split the box in sub-boxes by calling
- * the box splitting function. Note that the real job (marking changed lines)
- * is done in the two boundary reaching checks.
+ * the box splitting function. Operations are either sent directly to their
+ * callbacks or appended to a script for later replay.
  */
 static GskDiffResult
 compare (gconstpointer             *elem1,
@@ -350,8 +466,7 @@ compare (gconstpointer             *elem1,
          gconstpointer             *elem2,
          gssize                     off2,
          gssize                     lim2,
-         gssize                    *kvdf,
-         gssize                    *kvdb,
+         DiffScript                *script,
          gboolean                   need_min,
          const GskDiffSettings     *settings,
          gpointer                   data)
@@ -363,20 +478,30 @@ compare (gconstpointer             *elem1,
    */
   for (; off1 < lim1 && off2 < lim2; off1++, off2++)
     {
-      if (settings->compare_func (elem1[off1], elem2[off2], data) != 0)
+      if (elem1[off1] == elem2[off2])
+        continue;
+
+      if (!diff_elements_equal (elem1[off1], elem2[off2], settings, data))
         break;
 
-      res = settings->keep_func (elem1[off1], elem2[off2], data);
+      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
+                                 elem1, off1, elem2, off2,
+                                 settings, data);
       if (res != GSK_DIFF_OK)
         return res;
     }
 
   for (; off1 < lim1 && off2 < lim2; lim1--, lim2--)
     {
-      if (settings->compare_func (elem1[lim1 - 1], elem2[lim2 - 1], data) != 0)
+      if (elem1[lim1 - 1] == elem2[lim2 - 1])
+        continue;
+
+      if (!diff_elements_equal (elem1[lim1 - 1], elem2[lim2 - 1], settings, data))
         break;
 
-      res = settings->keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
+      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
+                                 elem1, lim1 - 1, elem2, lim2 - 1,
+                                 settings, data);
       if (res != GSK_DIFF_OK)
         return res;
     }
@@ -389,7 +514,9 @@ compare (gconstpointer             *elem1,
     {
       for (; off2 < lim2; off2++)
         {
-          res = settings->insert_func (elem2[off2], off2, data);
+          res = diff_emit_operation (script, DIFF_OPERATION_INSERT,
+                                     elem1, 0, elem2, off2,
+                                     settings, data);
           if (res != GSK_DIFF_OK)
             return res;
         }
@@ -398,7 +525,9 @@ compare (gconstpointer             *elem1,
     {
       for (; off1 < lim1; off1++)
         {
-          res = settings->delete_func (elem1[off1], off1, data);
+          res = diff_emit_operation (script, DIFF_OPERATION_DELETE,
+                                     elem1, off1, elem2, 0,
+                                     settings, data);
           if (res != GSK_DIFF_OK)
             return res;
         }
@@ -412,7 +541,7 @@ compare (gconstpointer             *elem1,
        */
       res = split (elem1, off1, lim1,
                    elem2, off2, lim2,
-                   kvdf, kvdb, need_min,
+                   need_min,
                    settings, data,
                    &spl);
       if (res != GSK_DIFF_OK)
@@ -423,13 +552,15 @@ compare (gconstpointer             *elem1,
        */
       res = compare (elem1, off1, spl.i1,
                      elem2, off2, spl.i2,
-                     kvdf, kvdb, spl.min_lo,
+                     script,
+                     spl.min_lo,
                      settings, data);
       if (res != GSK_DIFF_OK)
         return res;
       res = compare (elem1, spl.i1, lim1,
                      elem2, spl.i2, lim2,
-                     kvdf, kvdb, spl.min_hi,
+                     script,
+                     spl.min_hi,
                      settings, data);
       if (res != GSK_DIFF_OK)
         return res;
@@ -438,33 +569,39 @@ compare (gconstpointer             *elem1,
   return GSK_DIFF_OK;
 }
 
-#if 0
-  ndiags = xe->xdf1.nreff + xe->xdf2.nreff + 3;
-  if (!(kvd = (long *) xdl_malloc((2 * ndiags + 2) * sizeof(long)))) {
+/* Keep the operation buffer out of gsk_diff()'s stack frame when callbacks
+ * can be delivered directly without building a script.
+ */
+G_GNUC_NO_INLINE
+static GskDiffResult
+compare_deferred (gconstpointer         *elem1,
+                  gssize                 off1,
+                  gssize                 lim1,
+                  gconstpointer         *elem2,
+                  gssize                 off2,
+                  gssize                 lim2,
+                  const GskDiffSettings *settings,
+                  gpointer               data)
+{
+  DiffScript script;
+  GskDiffResult result;
 
-    xdl_free_env(xe);
-    return -1;
-  }
-  kvdf = kvd;
-  kvdb = kvdf + ndiags;
-  kvdf += xe->xdf2.nreff + 1;
-  kvdb += xe->xdf2.nreff + 1;
+  script.overflow = NULL;
+  script.n_operations = 0;
+  script.n_allocated = G_N_ELEMENTS (script.operations);
 
-  xenv.mxcost = xdl_bogosqrt(ndiags);
-  if (xenv.mxcost < XDL_MAX_COST_MIN)
-    xenv.mxcost = XDL_MAX_COST_MIN;
-  xenv.snake_cnt = XDL_SNAKE_CNT;
-  xenv.heur_min = XDL_HEUR_MIN_COST;
+  result = compare (elem1, off1, lim1,
+                    elem2, off2, lim2,
+                    &script,
+                    FALSE,
+                    settings, data);
+  if (result == GSK_DIFF_OK)
+    result = diff_script_apply (&script, elem1, elem2, settings, data);
 
-  dd1.nrec = xe->xdf1.nreff;
-  dd1.ha = xe->xdf1.ha;
-  dd1.rchg = xe->xdf1.rchg;
-  dd1.rindex = xe->xdf1.rindex;
-  dd2.nrec = xe->xdf2.nreff;
-  dd2.ha = xe->xdf2.ha;
-  dd2.rchg = xe->xdf2.rchg;
-  dd2.rindex = xe->xdf2.rindex;
-#endif
+  g_free (script.overflow);
+
+  return result;
+}
 
 GskDiffResult
 gsk_diff (gconstpointer             *elem1,
@@ -474,25 +611,35 @@ gsk_diff (gconstpointer             *elem1,
           const GskDiffSettings     *settings,
           gpointer                   data)
 {
-  gsize ndiags;
-  gssize *kvd, *kvdf, *kvdb;
-  GskDiffResult res;
+  gssize off1 = 0;
+  gssize off2 = 0;
+  gssize lim1 = n1;
+  gssize lim2 = n2;
 
-  ndiags = n1 + n2 + 3;
+  while (off1 < lim1 && off2 < lim2 && elem1[off1] == elem2[off2])
+    off1++, off2++;
 
-  kvd = g_new (gssize, 2 * ndiags + 2);
-  kvdf = kvd;
-  kvdb = kvd + ndiags;
-  kvdf += n2 + 1;
-  kvdb += n2 + 1;
+  while (off1 < lim1 && off2 < lim2 && elem1[lim1 - 1] == elem2[lim2 - 1])
+    lim1--, lim2--;
 
-  res = compare (elem1, 0, n1,
-                 elem2, 0, n2,
-                 kvdf, kvdb, FALSE,
-                 settings, data);
+  if (off1 == lim1 && off2 == lim2)
+    return GSK_DIFF_OK;
 
-  g_free (kvd);
+  /* The remaining lengths bound the edit cost. If their sum fits within
+   * MAXCOST, the search cannot structurally abort and callbacks need not
+   * be deferred.
+   */
+  if (!settings->allow_abort ||
+      !settings->defer_callbacks ||
+      (lim1 - off1 <= MAXCOST &&
+       lim2 - off2 <= MAXCOST - (lim1 - off1)))
+    return compare (elem1, off1, lim1,
+                    elem2, off2, lim2,
+                    NULL,
+                    FALSE,
+                    settings, data);
 
-  return res;
+  return compare_deferred (elem1, off1, lim1,
+                           elem2, off2, lim2,
+                           settings, data);
 }
-

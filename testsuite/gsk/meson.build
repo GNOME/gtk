@@ -820,6 +820,7 @@ internal_tests = [
   [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
   [ 'curve-intersect' ],
+  [ 'diff' ],
   [ 'half-float' ],
   [ 'not-diff' ],
   [ 'misc'],
@@ -853,5 +854,4 @@ foreach t : internal_tests
     suite: [ 'gsk' ] + test_extra_suites,
   )
 endforeach
-
 
