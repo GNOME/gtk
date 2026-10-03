@@ -34,6 +34,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "occlusion", GSK_GPU_OPTIMIZE_OCCLUSION_CULLING, "Disable occlusion culling via opaque node tracking" },
   { "repeat",    GSK_GPU_OPTIMIZE_REPEAT,            "Repeat drawing operations instead of using offscreen and GL_REPEAT" },
   { "damage",    GSK_GPU_OPTIMIZE_DAMAGE,            "Redraw the whole bounding box instead of doing fine grained damage tracking" },
+  { "fast-blur", GSK_GPU_OPTIMIZE_FAST_BLUR,         "Don't use downsampling for larger blur radii, sample every pixel instead" },
   { "profile",   GSK_GPU_OPTIMIZE_PROFILE,           "Disable profiling support" },
 };
 
