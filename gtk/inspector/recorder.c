@@ -1335,7 +1335,14 @@ populate_render_node_properties (GListStore            *store,
       break;
 
     case GSK_BLUR_NODE:
-      add_float_row (store, "Radius", gsk_blur_node_get_radius (node));
+      {
+        const graphene_size_t *sigma = gsk_blur_node_get_blur_radius (node);
+
+        if (sigma->width == sigma->height)
+          add_float_row (store, "Standard deviation", sigma->width);
+        else
+          add_text_row (store, "Standard deviation", "%f %f", sigma->width, sigma->height);
+      }
       break;
 
     case GSK_GL_SHADER_NODE:
