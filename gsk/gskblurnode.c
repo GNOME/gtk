@@ -449,6 +449,27 @@ gsk_blur_node_get_radius (const GskRenderNode *node)
   return MAX (self->sigma.width, self->sigma.height) * 2.0;
 }
 
+/**
+ * gsk_blur_node_get_blur_radius:
+ * @node: (type GskBlurNode): a blur `GskRenderNode`
+ *
+ * Retrieves the blur radius of the @node.
+ *
+ * The blur radius is the standard deviation of the blur to apply
+ * in the horizontal and vertical direction respectively.
+ *
+ * Returns: the blur radius
+ *
+ * Since: 4.26
+ */
+const graphene_size_t *
+gsk_blur_node_get_blur_radius (const GskRenderNode *node)
+{
+  const GskBlurNode *self = (const GskBlurNode *) node;
+
+  return &self->sigma;
+}
+
 /*<private>
  * gsk_blur_get_padding:
  * @sigma: std deviation of the blur
