@@ -33,6 +33,7 @@ compare_render_tests = [
   'blend-normal',
   'blurred-lines',
   'blur-child-bounds-oversize',
+  'blur-clip',
   'blur-contents-outside-of-clip',
   'blur-huge-contents-outside-of-clip',
   'blur-scaled',
