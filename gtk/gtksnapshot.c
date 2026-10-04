@@ -31,6 +31,7 @@
 
 #include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskbordernodeprivate.h"
+#include "gsk/gskblurnodeprivate.h"
 #include "gsk/gskclipnodeprivate.h"
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
@@ -110,7 +111,7 @@ struct _GtkSnapshotState {
       double             opacity;
     } opacity;
     struct {
-      double             radius;
+      graphene_size_t    sigma;
     } blur;
     struct {
       graphene_matrix_t matrix;
@@ -911,46 +912,51 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
                            guint             n_nodes)
 {
   GskRenderNode *node, *blur_node;
-  double radius;
+  graphene_size_t *sigma;
 
   node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
   if (node == NULL)
     return NULL;
 
-  radius = state->data.blur.radius;
+  sigma = &state->data.blur.sigma;
 
-  if (radius == 0.0)
+  if (sigma->width < 0.0f)
+    sigma->width = 0.0f;
+  if (sigma->height < 0.0f)
+    sigma->height = 0.0f;
+
+  if (sigma->width == 0.0f && sigma->height == 0.0f)
     return node;
 
-  if (radius < 0)
-    return node;
-
-  blur_node = gsk_blur_node_new (node, radius);
+  blur_node = gsk_blur_node_new2 (node, sigma);
 
   gsk_render_node_unref (node);
 
   return blur_node;
 }
 
-/**
- * gtk_snapshot_push_blur:
+/*<private>
+ * gtk_snapshot_push_blur2:
  * @snapshot: a `GtkSnapshot`
- * @radius: the blur radius to use. Must be positive
+ * @radius: the blur radius to use. Must be positive. May be 0
  *
- * Blurs an image.
+ * Blurs an image using a gaussian blur.
+ *
+ * The blur radius specifies the standard deviation of the blur in the horizontal
+ * and vertical direction respectively.
  *
  * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
-gtk_snapshot_push_blur (GtkSnapshot *snapshot,
-                        double       radius)
+gtk_snapshot_push_blur2 (GtkSnapshot           *snapshot,
+                         const graphene_size_t *sigma)
 {
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   float dx, dy, scale_x, scale_y;
 
   gtk_snapshot_ensure_affine_with_flags (snapshot,
-                                         ENSURE_POSITIVE_SCALE | ENSURE_UNIFORM_SCALE,
+                                         ENSURE_POSITIVE_SCALE,
                                          &scale_x, &scale_y,
                                          &dx, &dy);
 
@@ -958,7 +964,26 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
                                    current_state->transform,
                                    gtk_snapshot_collect_blur,
                                    NULL);
-  state->data.blur.radius = radius * scale_x;
+  state->data.blur.sigma.width = sigma->width * scale_x;
+  state->data.blur.sigma.height = sigma->height * scale_x;
+}
+
+/**
+ * gtk_snapshot_push_blur:
+ * @snapshot: a `GtkSnapshot`
+ * @radius: the blur radius to use. Must be positive. May be 0
+ *
+ * Blurs an image using a gaussian blur.
+ *
+ * The blur radius has to be set to 2x the std deviation of the blur.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_blur (GtkSnapshot *snapshot,
+                        double       radius)
+{
+  gtk_snapshot_push_blur2 (snapshot, &GRAPHENE_SIZE_INIT (radius / 2.0, radius / 2.0));
 }
 
 void
