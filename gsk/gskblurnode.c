@@ -439,7 +439,15 @@ gsk_blur_node_get_child (const GskRenderNode *node)
  *
  * Retrieves the blur radius of the @node.
  *
+ * The blur radius is 2x the standard deviation of the blur,
+ * which, uhm, don't ask.
+ *
  * Returns: the blur radius
+ *
+ * Deprecated: 4.26: Use [method@Gsk.BlurNode.get_blur_radius] to
+ *   get the separate horizontal and vertical radius.
+ *   And to not get confused by this function multiplying the std
+ *   deviation by 2.
  */
 float
 gsk_blur_node_get_radius (const GskRenderNode *node)
