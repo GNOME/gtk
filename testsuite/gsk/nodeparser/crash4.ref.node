@@ -1,5 +1,5 @@
 blur {
-  blur: 40;
+  radius: 20;
   child: color {
     bounds: 100 100 100 100;
     color: rgb(255,0,204);
