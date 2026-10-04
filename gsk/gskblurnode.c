@@ -53,8 +53,7 @@ gsk_blur_node_finalize (GskRenderNode *node)
 static void
 blur_once (cairo_surface_t *src,
            cairo_surface_t *dest,
-           int radius,
-           guchar *div_kernel_size)
+           int              radius)
 {
   int width, height, src_rowstride, dest_rowstride, n_channels;
   guchar *p_src, *p_dest, *c1, *c2;
@@ -90,10 +89,10 @@ blur_once (cairo_surface_t *src,
       for (x = 0; x < width; x++)
         {
           /* set as the mean of the kernel */
-          p_dest_row[0] = div_kernel_size[r];
-          p_dest_row[1] = div_kernel_size[g];
-          p_dest_row[2] = div_kernel_size[b];
-          p_dest_row[3] = div_kernel_size[a];
+          p_dest_row[0] = r / (2 * radius + 1);
+          p_dest_row[1] = g / (2 * radius + 1);
+          p_dest_row[2] = b / (2 * radius + 1);
+          p_dest_row[3] = a / (2 * radius + 1);
           p_dest_row += n_channels;
 
           /* the pixel to add to the kernel */
@@ -144,10 +143,10 @@ blur_once (cairo_surface_t *src,
         {
           /* set as the mean of the kernel */
 
-          p_dest_col[0] = div_kernel_size[r];
-          p_dest_col[1] = div_kernel_size[g];
-          p_dest_col[2] = div_kernel_size[b];
-          p_dest_col[3] = div_kernel_size[a];
+          p_dest_col[0] = r / (2 * radius + 1);
+          p_dest_col[1] = g / (2 * radius + 1);
+          p_dest_col[2] = b / (2 * radius + 1);
+          p_dest_col[3] = a / (2 * radius + 1);
           p_dest_col += dest_rowstride;
 
           /* the pixel to add to the kernel */
@@ -176,9 +175,6 @@ blur_once (cairo_surface_t *src,
 static void
 blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
 {
-  int kernel_size;
-  int i;
-  guchar *div_kernel_size;
   cairo_surface_t *tmp;
   int width, height;
 
@@ -188,15 +184,9 @@ blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
   height = cairo_image_surface_get_height (surface);
   tmp = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
-  kernel_size = 2 * radius + 1;
-  div_kernel_size = g_new (guchar, 256 * kernel_size);
-  for (i = 0; i < 256 * kernel_size; i++)
-    div_kernel_size[i] = (guchar) (i / kernel_size);
-
   while (iterations-- > 0)
-    blur_once (surface, tmp, radius, div_kernel_size);
+    blur_once (surface, tmp, radius);
 
-  g_free (div_kernel_size);
   cairo_surface_destroy (tmp);
 }
 
