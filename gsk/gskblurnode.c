@@ -53,18 +53,18 @@ gsk_blur_node_finalize (GskRenderNode *node)
 static void
 blur_once (cairo_surface_t *src,
            cairo_surface_t *dest,
-           int              radius)
+           int              hradius,
+           int              vradius)
 {
   int width, height, src_rowstride, dest_rowstride, n_channels;
   guchar *p_src, *p_dest, *c1, *c2;
-  int x, y, i, i1, i2, width_minus_1, height_minus_1, radius_plus_1;
+  int x, y, i, i1, i2, width_minus_1, height_minus_1;
   int r, g, b, a;
   guchar *p_dest_row, *p_dest_col;
 
   width = cairo_image_surface_get_width (src);
   height = cairo_image_surface_get_height (src);
   n_channels = 4;
-  radius_plus_1 = radius + 1;
 
   /* horizontal blur */
   p_src = cairo_image_surface_get_data (src);
@@ -77,7 +77,7 @@ blur_once (cairo_surface_t *src,
     {
       /* calc the initial sums of the kernel */
       r = g = b = a = 0;
-      for (i = -radius; i <= radius; i++)
+      for (i = -hradius; i <= hradius; i++)
         {
           c1 = p_src + (CLAMP (i, 0, width_minus_1) * n_channels);
           r += c1[0];
@@ -89,20 +89,20 @@ blur_once (cairo_surface_t *src,
       for (x = 0; x < width; x++)
         {
           /* set as the mean of the kernel */
-          p_dest_row[0] = r / (2 * radius + 1);
-          p_dest_row[1] = g / (2 * radius + 1);
-          p_dest_row[2] = b / (2 * radius + 1);
-          p_dest_row[3] = a / (2 * radius + 1);
+          p_dest_row[0] = r / (2 * hradius + 1);
+          p_dest_row[1] = g / (2 * hradius + 1);
+          p_dest_row[2] = b / (2 * hradius + 1);
+          p_dest_row[3] = a / (2 * hradius + 1);
           p_dest_row += n_channels;
 
           /* the pixel to add to the kernel */
-          i1 = x + radius_plus_1;
+          i1 = x + hradius + 1;
           if (i1 > width_minus_1)
             i1 = width_minus_1;
           c1 = p_src + (i1 * n_channels);
 
           /* the pixel to remove from the kernel */
-          i2 = x - radius;
+          i2 = x - hradius;
           if (i2 < 0)
             i2 = 0;
           c2 = p_src + (i2 * n_channels);
@@ -129,7 +129,7 @@ blur_once (cairo_surface_t *src,
     {
       /* calc the initial sums of the kernel */
       r = g = b = a = 0;
-      for (i = -radius; i <= radius; i++)
+      for (i = -vradius; i <= vradius; i++)
         {
           c1 = p_src + (CLAMP (i, 0, height_minus_1) * src_rowstride);
           r += c1[0];
@@ -143,20 +143,20 @@ blur_once (cairo_surface_t *src,
         {
           /* set as the mean of the kernel */
 
-          p_dest_col[0] = r / (2 * radius + 1);
-          p_dest_col[1] = g / (2 * radius + 1);
-          p_dest_col[2] = b / (2 * radius + 1);
-          p_dest_col[3] = a / (2 * radius + 1);
+          p_dest_col[0] = r / (2 * vradius + 1);
+          p_dest_col[1] = g / (2 * vradius + 1);
+          p_dest_col[2] = b / (2 * vradius + 1);
+          p_dest_col[3] = a / (2 * vradius + 1);
           p_dest_col += dest_rowstride;
 
           /* the pixel to add to the kernel */
-          i1 = y + radius_plus_1;
+          i1 = y + vradius + 1;
           if (i1 > height_minus_1)
             i1 = height_minus_1;
           c1 = p_src + (i1 * src_rowstride);
 
           /* the pixel to remove from the kernel */
-          i2 = y - radius;
+          i2 = y - vradius;
           if (i2 < 0)
             i2 = 0;
           c2 = p_src + (i2 * src_rowstride);
@@ -173,19 +173,23 @@ blur_once (cairo_surface_t *src,
 }
 
 static void
-blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
+blur_image_surface (cairo_surface_t *surface,
+                    int              hradius,
+                    int              vradius,
+                    int              iterations)
 {
   cairo_surface_t *tmp;
   int width, height;
 
-  g_assert (radius >= 0);
+  g_assert (hradius >= 0);
+  g_assert (vradius >= 0);
 
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
   tmp = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
   while (iterations-- > 0)
-    blur_once (surface, tmp, radius);
+    blur_once (surface, tmp, hradius, vradius);
 
   cairo_surface_destroy (tmp);
 }
@@ -220,7 +224,10 @@ gsk_blur_node_draw (GskRenderNode *node,
   gsk_render_node_draw_full (self->child, cr2, data);
   cairo_destroy (cr2);
 
-  blur_image_surface (surface, (int) ceil (0.5 * self->radius), 3);
+  blur_image_surface (surface,
+                      (int) ceil (0.5 * self->radius),
+                      (int) ceil (0.5 * self->radius),
+                      3);
   cairo_surface_mark_dirty (surface);
 
   cairo_set_source_surface (cr, surface, 0, 0);
