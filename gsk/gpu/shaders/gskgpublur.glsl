@@ -39,10 +39,9 @@ run (out vec2 pos)
   Rect tex_rect = rect_from_gsk (in_tex_rect);
   _tex_coord = rect_get_coord (tex_rect, pos);
 
-  float blur_radius = length (GSK_GLOBAL_SCALE * in_blur_direction);
-  _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / blur_radius / rect_size (tex_rect);
-  _samples_per_side = uint (floor (blur_radius));
-  float sigma = blur_radius / 2.0;
+  float sigma = length (GSK_GLOBAL_SCALE * in_blur_direction);
+  _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / sigma / rect_size (tex_rect);
+  _samples_per_side = uint (2.0 * floor (sigma));
   _initial_gaussian.x = 1.0 / (sqrt (2.0 * PI) * sigma);
   _initial_gaussian.y = exp (-0.5 / (sigma * sigma));
   _initial_gaussian.z = _initial_gaussian.y * _initial_gaussian.y;

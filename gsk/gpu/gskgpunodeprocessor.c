@@ -45,7 +45,7 @@
 
 #include "gskarithmeticnodeprivate.h"
 #include "gskblendnodeprivate.h"
-#include "gskblurnode.h"
+#include "gskblurnodeprivate.h"
 #include "gskbordernodeprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskclipnode.h"
@@ -670,44 +670,53 @@ static void
 gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 const graphene_rect_t     *rect,
                                 const graphene_point_t    *shadow_offset,
-                                float                      blur_radius,
+                                const graphene_size_t     *sigma,
                                 const GdkColor            *shadow_color,
                                 GskGpuImage               *source_image,
                                 GdkMemoryDepth             source_depth,
                                 const graphene_rect_t     *source_rect)
 {
   GskGpuImage *intermediate;
-  graphene_size_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
-  float clip_radius;
   GskGpuRenderPassTranslateStorage storage;
-
-  clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
+  graphene_size_t padding, leftover_sigma;
 
   /* FIXME: Handle clip radius growing the clip too much */
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
     return;
   clip_rect.origin.x -= shadow_offset->x;
   clip_rect.origin.y -= shadow_offset->y;
-  graphene_rect_inset (&clip_rect, 0.f, -clip_radius);
-  if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
-    return;
 
-  if (!gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
-    return;
+  if (sigma->width > 0.f && sigma->height > 0.f)
+    {
+      gsk_blur_node_get_padding (sigma, &padding);
+      graphene_rect_inset (&clip_rect, 0.f, - padding.height);
+      if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
+        return;
+
+      if (!gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
+        return;
 
 
-  intermediate = gsk_gpu_node_processor_run_blur_pass (self->frame,
-                                                       &GRAPHENE_SIZE_INIT (blur_radius, 0.0f),
-                                                       self->ccs,
-                                                       source_depth,
-                                                       &self->scale,
-                                                       &intermediate_rect,
-                                                       source_image,
-                                                       source_rect);
+      intermediate = gsk_gpu_node_processor_run_blur_pass (self->frame,
+                                                           &GRAPHENE_SIZE_INIT (sigma->width, 0.0f),
+                                                           self->ccs,
+                                                           source_depth,
+                                                           &self->scale,
+                                                           &intermediate_rect,
+                                                           source_image,
+                                                           source_rect);
+
+      leftover_sigma = GRAPHENE_SIZE_INIT (0.0f, sigma->height);
+      sigma = &leftover_sigma;
+    }
+  else
+    {
+      intermediate = g_object_ref (source_image);
+      intermediate_rect = *source_rect;
+    }
 
   gsk_gpu_render_pass_push_translate (self, shadow_offset, &storage);
-  direction = GRAPHENE_SIZE_INIT (0.0f, blur_radius);
   if (shadow_color)
     {
       gsk_gpu_blur_op (self,
@@ -720,7 +729,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                        rect,
                        shadow_color,
                        &intermediate_rect,
-                       &direction);
+                       sigma);
     }
   else
     {
@@ -734,7 +743,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                        rect,
                        &(GdkColor) { .color_state = self->ccs, .values = { 1, 1, 1, 1 } }, /* doesn't matter */
                        &intermediate_rect,
-                       &direction);
+                       sigma);
     }
   gsk_gpu_render_pass_pop_translate (self, &storage);
 
@@ -2142,20 +2151,21 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
   GskRenderNode *child;
   GskGpuImage *image;
   graphene_rect_t tex_rect, clip_rect;
-  float blur_radius, clip_radius;
+  const graphene_size_t *sigma;
+  graphene_size_t padding;
 
   child = gsk_blur_node_get_child (node);
-  blur_radius = gsk_blur_node_get_radius (node);
-  if (blur_radius <= 0.f)
+  sigma = gsk_blur_node_get_blur_radius (node);
+  if (sigma->width <= 0.f && sigma->height <= 0.f)
     {
       gsk_gpu_node_processor_add_node (self, child, 0);
       return;
     }
 
-  clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
+  gsk_blur_node_get_padding (sigma, &padding);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
     return;
-  graphene_rect_inset (&clip_rect, -clip_radius, -clip_radius);
+  graphene_rect_inset (&clip_rect, - padding.width, - padding.height);
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_rect,
@@ -2168,7 +2178,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
   gsk_gpu_node_processor_blur_op (self,
                                   &node->bounds,
                                   graphene_point_zero (),
-                                  blur_radius,
+                                  sigma,
                                   NULL,
                                   image,
                                   gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
@@ -2238,7 +2248,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
                                           &shadow->offset,
-                                          shadow->radius,
+                                          &GRAPHENE_SIZE_INIT (0.5 * shadow->radius, 0.5 * shadow->radius),
                                           &shadow->color,
                                           image,
                                           gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
