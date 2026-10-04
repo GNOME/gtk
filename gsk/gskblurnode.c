@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskblurnode.h"
+#include "gskblurnodeprivate.h"
 
 #include "gskrendernodeprivate.h"
 #include "gskrectprivate.h"
@@ -254,9 +254,10 @@ gsk_blur_node_diff (GskRenderNode *node1,
     {
       cairo_rectangle_int_t rect;
       cairo_region_t *sub;
-      int i, n, clip_radius;
+      int i, n;
+      graphene_size_t padding;
 
-      clip_radius = ceil (gsk_cairo_blur_compute_pixels (self1->radius / 2.0));
+      gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self1->radius / 2.0, self1->radius / 2.0), &padding);
       sub = cairo_region_create ();
       gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->copies, data->surface });
 
@@ -264,10 +265,10 @@ gsk_blur_node_diff (GskRenderNode *node1,
       for (i = 0; i < n; i++)
         {
           cairo_region_get_rectangle (sub, i, &rect);
-          rect.x -= clip_radius;
-          rect.y -= clip_radius;
-          rect.width += 2 * clip_radius;
-          rect.height += 2 * clip_radius;
+          rect.x -= ceilf (padding.width);
+          rect.y -= ceilf (padding.height);
+          rect.width += 2 * ceilf (padding.width);
+          rect.height += 2 * ceilf (padding.height);
           cairo_region_union_rectangle (data->region, &rect);
         }
       cairo_region_destroy (sub);
@@ -289,9 +290,11 @@ gsk_blur_node_render_opacity (GskRenderNode  *node,
 
   if (!gsk_rect_is_empty (&child_data.opaque))
     {
-      float clip_radius = gsk_cairo_blur_compute_pixels (self->radius / 2.0);
+      graphene_size_t padding;
 
-      graphene_rect_inset (&child_data.opaque, clip_radius, clip_radius);
+      gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self->radius / 2.0, self->radius / 2.0), &padding);
+
+      graphene_rect_inset (&child_data.opaque, padding.width, padding.height);
 
       if (!gsk_rect_is_empty (&child_data.opaque))
         {
@@ -369,7 +372,7 @@ gsk_blur_node_new (GskRenderNode *child,
 {
   GskBlurNode *self;
   GskRenderNode *node;
-  float clip_radius;
+  graphene_size_t padding;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (radius >= 0, NULL);
@@ -380,10 +383,10 @@ gsk_blur_node_new (GskRenderNode *child,
   self->child = gsk_render_node_ref (child);
   self->radius = radius;
 
-  clip_radius = gsk_cairo_blur_compute_pixels (radius / 2.0);
+  gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self->radius / 2.0, self->radius / 2.0), &padding);
 
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
-  graphene_rect_inset (&self->render_node.bounds, - clip_radius, - clip_radius);
+  graphene_rect_inset (&self->render_node.bounds, - padding.width, - padding.height);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
@@ -425,3 +428,25 @@ gsk_blur_node_get_radius (const GskRenderNode *node)
 
   return self->radius;
 }
+
+/*<private>
+ * gsk_blur_get_padding:
+ * @sigma: std deviation of the blur
+ * @out_padding: (out) (caller-allocates): Set to the extra size.
+ *   This value can be identical to the sigma pointer.
+ *
+ * Queries the extra size that should be allocated for blurs with
+ * the given standard deviation.
+ **/
+void
+gsk_blur_node_get_padding (const graphene_size_t  *sigma,
+                           graphene_size_t        *out_padding)
+{
+  /* https://en.wikipedia.org/wiki/68–95–99.7_rule
+   * 99.7% is more than 254/255, so there should be no visible remains
+   * for RGBA8 outside of 3 sigma
+   */
+  out_padding->width = 3 * sigma->width;
+  out_padding->height = 3 * sigma->height;
+}
+
