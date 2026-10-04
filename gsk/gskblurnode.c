@@ -36,7 +36,7 @@ struct _GskBlurNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
-  float radius;
+  graphene_size_t sigma; /* std deviation */
 };
 
 static void
@@ -203,14 +203,15 @@ gsk_blur_node_draw (GskRenderNode *node,
   cairo_surface_t *surface;
   cairo_t *cr2;
   graphene_rect_t blur_bounds;
-  double clip_radius;
+  double hclip_radius, vclip_radius;
 
-  clip_radius = gsk_cairo_blur_compute_pixels (0.5 * self->radius);
+  hclip_radius = gsk_cairo_blur_compute_pixels (self->sigma.width);
+  vclip_radius = gsk_cairo_blur_compute_pixels (self->sigma.height);
 
   /* We need to extend the clip by the blur radius
    * so we can blur pixels in that region */
   _graphene_rect_init_from_clip_extents (&blur_bounds, cr);
-  graphene_rect_inset (&blur_bounds, - clip_radius, - clip_radius);
+  graphene_rect_inset (&blur_bounds, - hclip_radius, - vclip_radius);
   if (!gsk_rect_intersection (&blur_bounds, &node->bounds, &blur_bounds))
     return;
   if (!gsk_cairo_rect_snap (cr, &blur_bounds, GSK_RECT_SNAP_GROW, &blur_bounds))
@@ -225,8 +226,8 @@ gsk_blur_node_draw (GskRenderNode *node,
   cairo_destroy (cr2);
 
   blur_image_surface (surface,
-                      (int) ceil (0.5 * self->radius),
-                      (int) ceil (0.5 * self->radius),
+                      (int) ceil (self->sigma.width),
+                      (int) ceil (self->sigma.height),
                       3);
   cairo_surface_mark_dirty (surface);
 
@@ -247,14 +248,14 @@ gsk_blur_node_diff (GskRenderNode *node1,
   GskBlurNode *self1 = (GskBlurNode *) node1;
   GskBlurNode *self2 = (GskBlurNode *) node2;
 
-  if (self1->radius == self2->radius)
+  if (gsk_size_equal (&self1->sigma, &self2->sigma))
     {
       cairo_rectangle_int_t rect;
       cairo_region_t *sub;
       int i, n;
       graphene_size_t padding;
 
-      gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self1->radius / 2.0, self1->radius / 2.0), &padding);
+      gsk_blur_node_get_padding (&self1->sigma, &padding);
       sub = cairo_region_create ();
       gsk_render_node_diff (self1->child, self2->child, &(GskDiffData) { sub, data->copies, data->surface });
 
@@ -289,7 +290,7 @@ gsk_blur_node_render_opacity (GskRenderNode  *node,
     {
       graphene_size_t padding;
 
-      gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self->radius / 2.0, self->radius / 2.0), &padding);
+      gsk_blur_node_get_padding (&self->sigma, &padding);
 
       graphene_rect_inset (&child_data.opaque, padding.width, padding.height);
 
@@ -329,7 +330,7 @@ gsk_blur_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_blur_node_new (child, self->radius);
+    result = gsk_blur_node_new2 (child, &self->sigma);
 
   gsk_render_node_unref (child);
 
@@ -354,33 +355,37 @@ gsk_blur_node_class_init (gpointer g_class,
 
 GSK_DEFINE_RENDER_NODE_TYPE (GskBlurNode, gsk_blur_node)
 
-/**
- * gsk_blur_node_new:
+/*<private>
+ * gsk_blur_node_new2:
  * @child: the child node to blur
- * @radius: the blur radius. Must be positive
+ * @sigma: the standard deviation of the gaussian blur.
+ *   Must be positive, but may be 0.
  *
- * Creates a render node that blurs the child.
+ * Creates a render node that blurs the child using a gaussian
+ * blur with the given standard deviation, which may differ in the
+ * horizontal and vertical direction.
  *
  * Returns: (transfer full) (type GskBlurNode): a new `GskRenderNode`
  */
 GskRenderNode *
-gsk_blur_node_new (GskRenderNode *child,
-                   float          radius)
+gsk_blur_node_new2 (GskRenderNode         *child,
+                    const graphene_size_t *sigma)
 {
   GskBlurNode *self;
   GskRenderNode *node;
   graphene_size_t padding;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
-  g_return_val_if_fail (radius >= 0, NULL);
+  g_return_val_if_fail (sigma->width >= 0, NULL);
+  g_return_val_if_fail (sigma->height >= 0, NULL);
 
   self = gsk_render_node_alloc (GSK_TYPE_BLUR_NODE);
   node = (GskRenderNode *) self;
 
   self->child = gsk_render_node_ref (child);
-  self->radius = radius;
+  self->sigma = *sigma;
 
-  gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (self->radius / 2.0, self->radius / 2.0), &padding);
+  gsk_blur_node_get_padding (&self->sigma, &padding);
 
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
   graphene_rect_inset (&self->render_node.bounds, - padding.width, - padding.height);
@@ -392,6 +397,24 @@ gsk_blur_node_new (GskRenderNode *child,
   node->contains_paste_node = gsk_render_node_contains_paste_node (child);
 
   return node;
+}
+
+/**
+ * gsk_blur_node_new:
+ * @child: the child node to blur
+ * @radius: the blur radius. Must be positive
+ *
+ * Creates a render node that blurs the child.
+ *
+ * The blur radius should be set to 2x the standard deviation.
+ *
+ * Returns: (transfer full) (type GskBlurNode): a new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_blur_node_new (GskRenderNode *child,
+                   float          radius)
+{
+  return gsk_blur_node_new2 (child, &GRAPHENE_SIZE_INIT (radius / 2.0, radius / 2.0));
 }
 
 /**
@@ -423,7 +446,7 @@ gsk_blur_node_get_radius (const GskRenderNode *node)
 {
   const GskBlurNode *self = (const GskBlurNode *) node;
 
-  return self->radius;
+  return MAX (self->sigma.width, self->sigma.height) * 2.0;
 }
 
 /*<private>
