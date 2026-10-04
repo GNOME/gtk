@@ -222,13 +222,9 @@ gsk_blur_node_draw (GskRenderNode *node,
   if (!gsk_cairo_rect_snap (cr, &blur_bounds, GSK_RECT_SNAP_GROW, &blur_bounds))
     return;
 
-  surface = cairo_surface_create_similar_image (cairo_get_target (cr),
-                                                CAIRO_FORMAT_ARGB32,
-                                                ceil (blur_bounds.size.width),
-                                                ceil (blur_bounds.size.height));
-  cairo_surface_set_device_offset (surface,
-                                   - blur_bounds.origin.x,
-                                   - blur_bounds.origin.y);
+  surface = gdk_cairo_create_similar_surface (cr,
+                                              CAIRO_CONTENT_COLOR_ALPHA,
+                                              &blur_bounds);
 
   cr2 = cairo_create (surface);
   gsk_render_node_draw_full (self->child, cr2, data);
