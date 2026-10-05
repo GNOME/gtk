@@ -878,7 +878,7 @@ apply_filter_tree (SvgElement    *shape,
   graphene_rect_t filter_region;
   GHashTable *results;
   graphene_rect_t bounds, rect;
-  GdkColorState *color_state;
+  GdkColorState *filter_color_state;
 
   if (filter->filters->len == 0)
     return empty_node ();
@@ -923,15 +923,24 @@ apply_filter_tree (SvgElement    *shape,
     g_hash_table_insert (results, (gpointer) "", filter_result_new (source, NULL));
 
   if (svg_enum_get (filter->current[SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS]) == COLOR_INTERPOLATION_LINEAR)
-    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    filter_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
   else
-    color_state = GDK_COLOR_STATE_SRGB;
+    filter_color_state = GDK_COLOR_STATE_SRGB;
 
   for (unsigned int i = 0; i < filter->filters->len; i++)
     {
       SvgFilter *f = g_ptr_array_index (filter->filters, i);
       graphene_rect_t subregion;
       GskRenderNode *result = NULL;
+      GdkColorState *color_state = filter_color_state;
+
+      if (svg_filter_is_specified (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS))
+        {
+          if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS)) == COLOR_INTERPOLATION_LINEAR)
+            color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+          else if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS)) == COLOR_INTERPOLATION_SRGB)
+            color_state = GDK_COLOR_STATE_SRGB;
+        }
 
       if (!determine_filter_subregion (f, filter, i, &bounds, context->viewport, &filter_region, results, &subregion))
         {
