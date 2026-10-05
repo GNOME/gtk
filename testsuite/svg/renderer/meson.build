@@ -24,6 +24,7 @@ test_data = [
   'clip6.svg',
   'clip7.svg',
   'color.svg',
+  'color-interpolation-filters.svg',
   'color-matrix.svg',
   'conditional.svg',
   'crash-accumulate-dasharray.svg',
