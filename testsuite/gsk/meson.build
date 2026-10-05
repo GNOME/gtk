@@ -36,6 +36,7 @@ compare_render_tests = [
   'blur-contents-outside-of-clip',
   'blur-huge-contents-outside-of-clip',
   'blur-scaled',
+  'blur-separable',
   'border-bottom-right',
   'border-circle-with-non-pixel-aligned-center',
   'border-colorstates',
