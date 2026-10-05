@@ -922,7 +922,7 @@ apply_filter_tree (SvgElement    *shape,
   else
     g_hash_table_insert (results, (gpointer) "", filter_result_new (source, NULL));
 
-  if (svg_enum_get (filter->current[SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS]) == COLOR_INTERPOLATION_LINEAR)
+  if (svg_enum_get (filter->current[SVG_PROPERTY_FE_COLOR_INTERPOLATION]) == COLOR_INTERPOLATION_LINEAR)
     filter_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
   else
     filter_color_state = GDK_COLOR_STATE_SRGB;
@@ -934,11 +934,11 @@ apply_filter_tree (SvgElement    *shape,
       GskRenderNode *result = NULL;
       GdkColorState *color_state = filter_color_state;
 
-      if (svg_filter_is_specified (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS))
+      if (svg_filter_is_specified (f, SVG_PROPERTY_FE_COLOR_INTERPOLATION))
         {
-          if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS)) == COLOR_INTERPOLATION_LINEAR)
+          if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COLOR_INTERPOLATION)) == COLOR_INTERPOLATION_LINEAR)
             color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-          else if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS)) == COLOR_INTERPOLATION_SRGB)
+          else if (svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_COLOR_INTERPOLATION)) == COLOR_INTERPOLATION_SRGB)
             color_state = GDK_COLOR_STATE_SRGB;
         }
 

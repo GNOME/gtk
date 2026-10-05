@@ -595,7 +595,7 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | ELEMENT_GRADIENTS | BIT (SVG_ELEMENT_USE),
     .parse_value = svg_color_interpolation_parse,
   },
-  [SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS] = {
+  [SVG_PROPERTY_FE_COLOR_INTERPOLATION] = {
     .flags = SVG_PROPERTY_IS_INHERITED,
     .applies_to = BIT (SVG_ELEMENT_FILTER),
     .parse_value = svg_color_interpolation_parse,
@@ -1262,7 +1262,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_OPACITY].initial_value = svg_number_new (1);
   shape_attrs[SVG_PROPERTY_COLOR].initial_value = svg_color_new_black ();
   shape_attrs[SVG_PROPERTY_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_SRGB);
-  shape_attrs[SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_LINEAR);
+  shape_attrs[SVG_PROPERTY_FE_COLOR_INTERPOLATION].initial_value = svg_color_interpolation_new (COLOR_INTERPOLATION_LINEAR);
   shape_attrs[SVG_PROPERTY_OVERFLOW].initial_value = svg_overflow_new (OVERFLOW_VISIBLE);
   shape_attrs[SVG_PROPERTY_VECTOR_EFFECT].initial_value = svg_vector_effect_new (VECTOR_EFFECT_NONE);
   shape_attrs[SVG_PROPERTY_FILTER].initial_value = svg_filter_functions_new_none ();
@@ -1499,8 +1499,8 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "opacity", ELEMENT_ANY, 0, SVG_PROPERTY_OPACITY },
   { "color", ELEMENT_ANY, 0, SVG_PROPERTY_COLOR },
   { "color-interpolation", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | ELEMENT_GRADIENTS | SVG_ELEMENT_USE, 0, SVG_PROPERTY_COLOR_INTERPOLATION },
-  { "color-interpolation-filters", BIT (SVG_ELEMENT_FILTER), FILTER_ANY, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS },
-  { "color-interpolation-filters", ELEMENT_ANY, 0, SVG_PROPERTY_COLOR_INTERPOLATION_FILTERS },
+  { "color-interpolation-filters", BIT (SVG_ELEMENT_FILTER), FILTER_ANY, SVG_PROPERTY_FE_COLOR_INTERPOLATION },
+  { "color-interpolation-filters", ELEMENT_ANY, 0, SVG_PROPERTY_FE_COLOR_INTERPOLATION },
   { "clip-path", (ELEMENT_CONTAINERS & ~BIT (SVG_ELEMENT_DEFS)) | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_CLIP_PATH },
   { "clip-rule", ELEMENT_ANY, 0, SVG_PROPERTY_CLIP_RULE },
   { "mask", (ELEMENT_CONTAINERS & ~BIT (SVG_ELEMENT_DEFS)) | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_MASK },
