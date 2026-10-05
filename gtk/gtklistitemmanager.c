@@ -1947,7 +1947,7 @@ gtk_list_item_tracker_free (GtkListItemManager *self,
   gtk_widget_queue_resize (self->widget);
 }
 
-void
+gboolean
 gtk_list_item_tracker_set_position (GtkListItemManager *self,
                                     GtkListItemTracker *tracker,
                                     guint               position,
@@ -1958,28 +1958,44 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
   GtkListTile *tile;
   guint n_items;
 
-  gtk_list_item_tracker_unset_position (self, tracker);
-
   if (self->model == NULL)
-    return;
+    position = GTK_INVALID_LIST_POSITION;
+  else
+    {
+      n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
+      if (position >= n_items)
+        position = n_items - 1; /* for n_items == 0 this underflows to GTK_INVALID_LIST_POSITION */
+    }
 
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
-  if (position >= n_items)
-    position = n_items - 1; /* for n_items == 0 this underflows to GTK_INVALID_LIST_POSITION */
+  if (tracker->position == position &&
+      tracker->n_before == n_before &&
+      tracker->n_after == n_after)
+    return FALSE;
 
+  gtk_list_item_tracker_unset_position (self, tracker);
   tracker->position = position;
   tracker->n_before = n_before;
   tracker->n_after = n_after;
+
+  if (position == GTK_INVALID_LIST_POSITION)
+    return TRUE;
 
   gtk_list_item_change_init (&change);
   gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT, 0);
   gtk_list_item_change_finish (&change);
 
-  tile = gtk_list_item_manager_get_nth (self, position, NULL);
-  if (tile)
-    tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
+  if (tracker->position == position &&
+      tracker->n_before == n_before &&
+      tracker->n_after == n_after)
+    {
+      tile = gtk_list_item_manager_get_nth (self, position, NULL);
+      if (tile)
+        tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
+    }
 
   gtk_widget_queue_resize (self->widget);
+
+  return TRUE;
 }
 
 guint
