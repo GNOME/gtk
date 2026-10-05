@@ -2166,6 +2166,9 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
     return;
   graphene_rect_inset (&clip_rect, - padding.width, - padding.height);
+  if (!gsk_rect_snap_to_grid_grow (&clip_rect, &self->scale, &self->offset, &clip_rect))
+    return;
+
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_rect,
