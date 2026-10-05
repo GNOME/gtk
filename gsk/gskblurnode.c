@@ -219,6 +219,8 @@ gsk_blur_node_draw (GskRenderNode *node,
   graphene_rect_inset (&blur_bounds, - clip_radius, - clip_radius);
   if (!gsk_rect_intersection (&blur_bounds, &node->bounds, &blur_bounds))
     return;
+  if (!gsk_cairo_rect_snap (cr, &blur_bounds, GSK_RECT_SNAP_GROW, &blur_bounds))
+    return;
 
   surface = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                 CAIRO_FORMAT_ARGB32,
