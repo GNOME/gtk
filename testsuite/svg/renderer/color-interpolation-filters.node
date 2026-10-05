@@ -1,0 +1,52 @@
+clip {
+  clip: 0 0 240 120;
+  child: container {
+    color-matrix {
+      matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1);
+      child: container {
+        color {
+          bounds: -12 -12 144 144;
+          color: rgba(0,0,0,0);
+        }
+        container {
+          color {
+            bounds: 0 0 120 120;
+            color: rgb(255,0,0);
+          }
+          rounded-clip {
+            clip: 20 20 80 80 / 40;
+            child: color {
+              bounds: 20 20 80 80;
+              color: rgb(128,128,128);
+            }
+          }
+        }
+      }
+      bounds: -12 -12 144 144;
+    }
+    color-matrix {
+      matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1);
+      child: container {
+        color {
+          bounds: 108 -12 144 144;
+          color: rgba(0,0,0,0);
+        }
+        container {
+          color {
+            bounds: 120 0 120 120;
+            color: rgb(255,0,0);
+          }
+          rounded-clip {
+            clip: 140 20 80 80 / 40;
+            child: color {
+              bounds: 140 20 80 80;
+              color: rgb(128,128,128);
+            }
+          }
+        }
+      }
+      bounds: 108 -12 144 144;
+      color-state: srgb-linear;
+    }
+  }
+}

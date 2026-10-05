@@ -1,0 +1,31 @@
+<svg
+  width="240"
+  height="120"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <filter id="linear">
+    <feColorMatrix color-interpolation-filters="linearRGB"
+      values="2 0 0 0 0
+              0 2 0 0 0
+              0 0 2 0 0
+              0 0 0 1 0"
+/>
+  </filter>
+  <filter id="srgb">
+    <feColorMatrix color-interpolation-filters="sRGB"
+      values="2 0 0 0 0
+              0 2 0 0 0
+              0 0 2 0 0
+              0 0 0 1 0"
+/>
+  </filter>
+ 
+  <g filter="url(#srgb)">
+    <rect x="0" width="120" height="120" fill="red"/>
+    <circle cx="60" cy="60" r="40" fill="#808080"/>
+  </g>
+  <g filter="url(#linear)">
+    <rect x="120" width="120" height="120" fill="red"/>
+    <circle cx="180" cy="60" r="40" fill="#808080"/>
+  </g>
+</svg>
