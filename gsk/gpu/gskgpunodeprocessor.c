@@ -154,7 +154,7 @@
 
 
 typedef enum {
-  /* The returned image will be sampled outside the bounds, so it is
+  /* The returned image will be sampled outside the returned bounds, so it is
    * important that it returns the right values.
    * In particular, opaque textures must ensure they return transparency
    * and images must not be contained in an atlas.
