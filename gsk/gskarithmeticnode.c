@@ -332,7 +332,6 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
 {
   GskArithmeticNode *self;
   GskRenderNode *node;
-  graphene_rect_t child_bounds;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (first), NULL);
   g_return_val_if_fail (GSK_IS_RENDER_NODE (second), NULL);
@@ -355,8 +354,16 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
   self->factors[2] = factors[2];
   self->factors[3] = factors[3];
 
-  graphene_rect_union (&first->bounds, &second->bounds, &child_bounds);
-  graphene_rect_intersection (bounds, &child_bounds, &node->bounds);
+  if (factors[3] > 0.0)
+    {
+      node->bounds = *bounds;
+    }
+  else
+    {
+      graphene_rect_t child_bounds;
+      graphene_rect_union (&first->bounds, &second->bounds, &child_bounds);
+      graphene_rect_intersection (bounds, &child_bounds, &node->bounds);
+    }
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (first),
                                                   gsk_render_node_get_preferred_depth (second));
