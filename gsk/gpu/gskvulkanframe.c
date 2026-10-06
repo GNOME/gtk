@@ -423,9 +423,12 @@ gsk_vulkan_frame_finalize (GObject *object)
   vk_device = gsk_vulkan_device_get_vk_device (device);
   vk_command_pool = gsk_vulkan_device_get_vk_command_pool (device);
 
-  gsk_vulkan_device_free_descriptor (device,
-                                     priv->globals_pool_id,
-                                     priv->vk_globals_descriptor_set);
+  if (priv->vk_globals_descriptor_set != VK_NULL_HANDLE)
+    {
+      gsk_vulkan_device_free_descriptor (device,
+                                         priv->globals_pool_id,
+                                         priv->vk_globals_descriptor_set);
+    }
   vkFreeCommandBuffers (vk_device,
                         vk_command_pool,
                         1, &priv->vk_command_buffer);
