@@ -1,0 +1,8 @@
+arithmetic {
+  bounds: 0 0 10 10;
+  k: 0 0 0 1;
+  first: container {
+  }
+  second: container {
+  }
+}
