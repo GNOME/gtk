@@ -1453,7 +1453,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   GdkColorState *image_cs;
   GskGpuImage *image;
   graphene_rect_t bounds;
-  gboolean should_mipmap;
+  gboolean should_mipmap, in_bounds;
 
   if (!gsk_rect_snap_to_grid (&node->bounds,
                               gsk_texture_node_get_snap (node),
@@ -1469,6 +1469,9 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   should_mipmap = texture_node_should_mipmap (node, frame, scale);
   image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
+  in_bounds = gsk_rect_contains_rect (&bounds, clip_bounds) &&
+              !(flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS);
+
   if (image == NULL)
     {
       image = gsk_gpu_get_texture_tiles_as_image (frame,
@@ -1479,7 +1482,10 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
                                                   gsk_texture_node_get_texture (node),
                                                   should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
       *out_bounds = *clip_bounds;
-      *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+      if (in_bounds)
+        *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+      else
+        *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
       return image;
     }
 
@@ -1492,8 +1498,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
-      ((flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS) &&
-       gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
+      (!in_bounds && gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
     {
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
       gdk_color_state_unref (image_cs);
@@ -1506,7 +1511,11 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
 
   gdk_color_state_unref (image_cs);
   *out_bounds = bounds;
-  *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+  if (in_bounds)
+    *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+  else
+    *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
+
   return image;
 }
 
