@@ -1,0 +1,7 @@
+blur {
+  radius: 25;
+  child: color {
+    color: black;
+    bounds: 0 0 50 50;
+  }
+}
