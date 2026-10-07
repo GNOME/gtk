@@ -2917,7 +2917,7 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuRenderPass *self,
 {
   GskGpuImage *image;
   GskRenderNode *child;
-  graphene_rect_t tex_rect;
+  graphene_rect_t clip_bounds, tex_rect;
   GskGpuSampler tex_sampler;
   float params[4];
   graphene_vec4_t params_vec[4];
@@ -2927,9 +2927,11 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuRenderPass *self,
 
   child = gsk_component_transfer_node_get_child (node);
 
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+    return;
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    NULL,
+                                                    &clip_bounds,
                                                     child,
                                                     0,
                                                     &tex_rect,
