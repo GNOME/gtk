@@ -684,7 +684,7 @@ grid_setup (GtkSignalListItemFactory *factory,
                            "activate",
                            G_CALLBACK (grid_popup_action),
                            list_item,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_action_map_add_action (G_ACTION_MAP (actions), G_ACTION (popup));
   gtk_widget_insert_action_group (label, "menu", G_ACTION_GROUP (actions));
   g_object_unref (popup);
@@ -699,12 +699,12 @@ grid_setup (GtkSignalListItemFactory *factory,
                            "pressed",
                            G_CALLBACK (grid_popup),
                            list_item,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_signal_connect_object (right_click,
                            "pressed",
                            G_CALLBACK (grid_pressed),
                            list_item,
-                           0);
+                           G_CONNECT_DEFAULT);
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (long_press));
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (right_click));
   gtk_list_item_set_child (list_item, label);
@@ -945,7 +945,7 @@ show_variations (GtkEmojiChooser *chooser,
                            "activate",
                            G_CALLBACK (grid_activated),
                            chooser,
-                           0);
+                           G_CONNECT_DEFAULT);
   gtk_popover_set_child (GTK_POPOVER (chooser->variation_popover), grid);
   gtk_popover_popup (GTK_POPOVER (chooser->variation_popover));
   g_variant_unref (record);
@@ -1040,7 +1040,7 @@ setup_grid (GtkEmojiChooser *chooser)
                                "items-changed",
                                G_CALLBACK (model_items_changed),
                                chooser,
-                               0);
+                               G_CONNECT_DEFAULT);
     }
 
   /* Each child is one GridView section, including the recent items. */
@@ -1049,12 +1049,12 @@ setup_grid (GtkEmojiChooser *chooser)
                            "items-changed",
                            G_CALLBACK (model_items_changed),
                            chooser,
-                           0);
+                           G_CONNECT_DEFAULT);
   g_signal_connect_object (chooser->page,
                            "notify::pending",
                            G_CALLBACK (search_pending_changed),
                            chooser,
-                           0);
+                           G_CONNECT_DEFAULT);
   selection = gtk_no_selection_new (g_object_ref (G_LIST_MODEL (chooser->browse)));
   gtk_grid_view_set_model (GTK_GRID_VIEW (chooser->grid_view), GTK_SELECTION_MODEL (selection));
   g_object_unref (selection);
@@ -1150,11 +1150,7 @@ gtk_emoji_chooser_unmap (GtkWidget *widget)
 {
   GtkEmojiChooser *chooser = GTK_EMOJI_CHOOSER (widget);
 
-  if (chooser->rejected_idle != 0)
-    {
-      g_source_remove (chooser->rejected_idle);
-      chooser->rejected_idle = 0;
-    }
+  g_clear_handle_id (&chooser->rejected_idle, g_source_remove);
 
   gtk_no_selection_set_model (GTK_NO_SELECTION (gtk_grid_view_get_model (GTK_GRID_VIEW (chooser->grid_view))),
                               NULL);
@@ -1162,7 +1158,7 @@ gtk_emoji_chooser_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_emoji_chooser_parent_class)->unmap (widget);
 }
 
-static gboolean
+static void
 grid_invalidate_font (gpointer data)
 {
   GtkEmojiChooser *chooser = data;
@@ -1212,8 +1208,6 @@ grid_invalidate_font (gpointer data)
     gtk_filter_changed (GTK_FILTER (chooser->search_filter), GTK_FILTER_CHANGE_DIFFERENT);
 
   update_sections (chooser);
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1224,7 +1218,7 @@ grid_schedule_font_invalidation (GtkEmojiChooser *chooser)
       chooser->font_idle == 0 &&
       (chooser->emoji_max_width != 0 ||
        !gtk_bitset_is_empty (chooser->tested_emoji)))
-    chooser->font_idle = g_idle_add (grid_invalidate_font, chooser);
+    chooser->font_idle = g_idle_add_once (grid_invalidate_font, chooser);
 }
 
 static void

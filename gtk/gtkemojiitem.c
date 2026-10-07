@@ -66,6 +66,8 @@ G_DEFINE_TYPE (GtkEmojiItem, gtk_emoji_item, G_TYPE_OBJECT)
 
 enum { PROP_0, PROP_ITEM_TYPE, PROP_N_ITEMS, N_PROPS };
 
+static GParamSpec *properties[N_PROPS];
+
 static GType
 gtk_emoji_database_get_item_type (GListModel *model)
 {
@@ -176,14 +178,15 @@ gtk_emoji_database_class_init (GtkEmojiDatabaseClass *klass)
   object_class->dispose = gtk_emoji_database_dispose;
   object_class->finalize = gtk_emoji_database_finalize;
 
-  g_object_class_install_property (object_class, PROP_ITEM_TYPE,
-                                   g_param_spec_gtype ("item-type", NULL, NULL,
-                                                       G_TYPE_OBJECT,
-                                                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
-  g_object_class_install_property (object_class, PROP_N_ITEMS,
-                                   g_param_spec_uint ("n-items", NULL, NULL,
-                                                      0, G_MAXUINT, 0,
-                                                      (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
+  properties[PROP_ITEM_TYPE] = g_param_spec_gtype ("item-type", NULL, NULL,
+                                                   G_TYPE_OBJECT,
+                                                   (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_N_ITEMS] = g_param_spec_uint ("n-items", NULL, NULL,
+                                                0, G_MAXUINT, 0,
+                                                (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
