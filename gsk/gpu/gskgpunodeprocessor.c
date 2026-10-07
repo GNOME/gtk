@@ -2310,23 +2310,26 @@ gsk_gpu_node_processor_add_blend_node (GskGpuRenderPass *self,
                                        GskRenderNode       *node)
 {
   GskRenderNode *bottom_child, *top_child;
-  graphene_rect_t bottom_rect, top_rect;
+  graphene_rect_t clip_bounds, bottom_rect, top_rect;
   GskGpuImage *bottom_image, *top_image;
   GskGpuSampler bottom_sampler, top_sampler;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+    return;
 
   bottom_child = gsk_blend_node_get_bottom_child (node);
   top_child = gsk_blend_node_get_top_child (node);
 
   bottom_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                            0,
-                                                           NULL,
+                                                           &clip_bounds,
                                                            bottom_child,
                                                            0,
                                                            &bottom_rect,
                                                            &bottom_sampler);
   top_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         0,
-                                                        NULL,
+                                                        &clip_bounds,
                                                         top_child,
                                                         1,
                                                         &top_rect,

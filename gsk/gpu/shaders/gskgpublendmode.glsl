@@ -55,11 +55,9 @@ run (out vec4 color,
 {
   vec4 bottom_color = texture (GSK_TEXTURE0, _bottom_coord);
   bottom_color = alt_color_from_output (bottom_color);
-  bottom_color = alt_color_alpha (bottom_color, rect_coverage (_bottom_rect, _pos));
 
   vec4 top_color = texture (GSK_TEXTURE1, _top_coord);
   top_color = alt_color_from_output (top_color);
-  top_color = alt_color_alpha (top_color, rect_coverage (_top_rect, _pos));
 
   color = blend_mode (bottom_color, top_color, VARIATION_BLEND_MODE);
   color = output_color_from_alt (color);
