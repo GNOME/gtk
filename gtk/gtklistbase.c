@@ -72,8 +72,7 @@ struct _GtkListBasePrivate
   GtkListTabBehavior tab_behavior;
 
   GtkListItemTracker *anchor;
-  GtkScrollInfo *pending_scroll;
-  guint64 pending_scroll_serial;
+  guint64 scroll_serial;
   double anchor_align_along;
   double anchor_align_across;
   GtkPackType anchor_side_along;
@@ -117,6 +116,12 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkListBase, gtk_list_base, GTK_TYPE_WIDGET,
 G_GNUC_UNUSED static void gtk_list_base_init (GtkListBase *self) { }
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+
+static void gtk_list_base_set_adjustment_values (GtkListBase    *self,
+                                                 GtkOrientation  orientation,
+                                                 int             value,
+                                                 int             size,
+                                                 int             page_size);
 
 static void
 gtk_list_base_adjust_anchor_area (GtkListBase  *self,
@@ -197,8 +202,6 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   double align_across, align_along;
   GtkPackType side_across, side_along;
   guint pos;
-
-  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
 
   gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &area.x, &total_size, &area.width);
   if (total_size == area.width)
@@ -690,8 +693,6 @@ gtk_list_base_dispose (GObject *object)
   GtkListBase *self = GTK_LIST_BASE (object);
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
-  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
-
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
@@ -935,19 +936,19 @@ gtk_list_base_scroll_to_item (GtkListBase   *self,
                               GtkScrollInfo *scroll)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GdkRectangle area, viewport;
+  GdkRectangle area, bounds, viewport;
   double align_along, align_across;
   GtkPackType side_along, side_across;
+  guint64 scroll_serial;
   int x, y;
+
+  scroll_serial = ++priv->scroll_serial;
 
   if (!gtk_list_base_get_allocation (self, pos, &area))
     {
       g_clear_pointer (&scroll, gtk_scroll_info_unref);
       return;
     }
-
-  if (scroll == NULL)
-    scroll = gtk_scroll_info_new ();
 
   gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation),
                                        &viewport.x, NULL, &viewport.width);
@@ -958,8 +959,30 @@ gtk_list_base_scroll_to_item (GtkListBase   *self,
   y = gtk_scroll_info_compute_for_orientation (scroll, priv->orientation,
                                                area.y, area.height, viewport.y, viewport.height);
 
-  /* Choose the widget range for the estimated destination. The pending request
-   * will resolve the scroll again once these widgets have been measured. */
+  gtk_list_item_manager_get_tile_bounds (priv->item_manager, &bounds);
+  gtk_list_base_set_adjustment_values (self,
+                                       OPPOSITE_ORIENTATION (priv->orientation),
+                                       x, bounds.width, viewport.width);
+  if (priv->scroll_serial != scroll_serial)
+    {
+      g_clear_pointer (&scroll, gtk_scroll_info_unref);
+      return;
+    }
+
+  gtk_list_base_set_adjustment_values (self,
+                                       priv->orientation,
+                                       y, bounds.height, viewport.height);
+  if (priv->scroll_serial != scroll_serial)
+    {
+      g_clear_pointer (&scroll, gtk_scroll_info_unref);
+      return;
+    }
+
+  gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation),
+                                       &x, NULL, NULL);
+  gtk_list_base_get_adjustment_values (self, priv->orientation,
+                                       &y, NULL, NULL);
+
   GTK_LIST_BASE_GET_CLASS (self)->adjust_anchor_area (self, &area);
   gtk_list_base_compute_scroll_align (area.x, area.width,
                                       x, viewport.width,
@@ -970,14 +993,19 @@ gtk_list_base_scroll_to_item (GtkListBase   *self,
                                       priv->anchor_align_along, priv->anchor_side_along,
                                       &align_along, &side_along);
 
+  if (viewport.width > 0)
+    align_across = (double) (area.x - x +
+      (side_across == GTK_PACK_END ? area.width : 0)) / viewport.width;
+  if (viewport.height > 0)
+    align_along = (double) (area.y - y +
+      (side_along == GTK_PACK_END ? area.height : 0)) / viewport.height;
+
   gtk_list_base_set_anchor (self,
                             pos,
                             align_across, side_across,
                             align_along, side_along);
-  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
-  priv->pending_scroll = scroll;
-  priv->pending_scroll_serial++;
-  gtk_widget_queue_allocate (GTK_WIDGET (self));
+
+  g_clear_pointer (&scroll, gtk_scroll_info_unref);
 }
 
 static void
@@ -2165,7 +2193,7 @@ gtk_list_base_set_adjustment_values (GtkListBase    *self,
   g_object_unref (adjustment);
 }
 
-static gboolean
+static void
 gtk_list_base_update_adjustments (GtkListBase *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
@@ -2184,7 +2212,6 @@ gtk_list_base_update_adjustments (GtkListBase *self)
   pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->anchor);
   if (pos == GTK_INVALID_LIST_POSITION)
     {
-      g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
       value_across = 0;
       value_along = 0;
     }
@@ -2194,103 +2221,6 @@ gtk_list_base_update_adjustments (GtkListBase *self)
 
       if (gtk_list_base_get_allocation (self, pos, &area))
         {
-          if (priv->pending_scroll != NULL)
-            {
-              GtkScrollInfo *scroll = gtk_scroll_info_ref (priv->pending_scroll);
-              GdkRectangle viewport;
-              double align_along, align_across;
-              GtkPackType side_along, side_across;
-              gboolean tracker_changed;
-              guint64 scroll_serial = priv->pending_scroll_serial;
-              int x, y;
-
-              gtk_list_base_get_adjustment_values (self,
-                                                   OPPOSITE_ORIENTATION (priv->orientation),
-                                                   &viewport.x, NULL, NULL);
-              gtk_list_base_get_adjustment_values (self,
-                                                   priv->orientation,
-                                                   &viewport.y, NULL, NULL);
-              viewport.width = page_across;
-              viewport.height = page_along;
-              if (page_across > 0 && page_along > 0 && area.width > 0 && area.height > 0)
-                {
-                  x = gtk_scroll_info_compute_for_orientation (scroll,
-                                                               OPPOSITE_ORIENTATION (priv->orientation),
-                                                               area.x, area.width, viewport.x, viewport.width);
-                  y = gtk_scroll_info_compute_for_orientation (scroll,
-                                                               priv->orientation,
-                                                               area.y, area.height, viewport.y, viewport.height);
-
-                  gtk_list_base_set_adjustment_values (self,
-                                                       OPPOSITE_ORIENTATION (priv->orientation),
-                                                       x, bounds.width, page_across);
-                  if (priv->pending_scroll != scroll ||
-                      priv->pending_scroll_serial != scroll_serial)
-                    {
-                      gtk_scroll_info_unref (scroll);
-                      return FALSE;
-                    }
-
-                  gtk_list_base_set_adjustment_values (self,
-                                                       priv->orientation,
-                                                       y, bounds.height, page_along);
-                  if (priv->pending_scroll != scroll ||
-                      priv->pending_scroll_serial != scroll_serial)
-                    {
-                      gtk_scroll_info_unref (scroll);
-                      return FALSE;
-                    }
-
-                  gtk_list_base_get_adjustment_values (self,
-                                                       OPPOSITE_ORIENTATION (priv->orientation),
-                                                       &x, NULL, NULL);
-                  gtk_list_base_get_adjustment_values (self,
-                                                       priv->orientation,
-                                                       &y, NULL, NULL);
-                  GTK_LIST_BASE_GET_CLASS (self)->adjust_anchor_area (self, &area);
-                  gtk_list_base_compute_scroll_align (area.x, area.width,
-                                                      x, page_across,
-                                                      priv->anchor_align_across,
-                                                      priv->anchor_side_across,
-                                                      &align_across,
-                                                      &side_across);
-                  gtk_list_base_compute_scroll_align (area.y, area.height,
-                                                      y, page_along,
-                                                      priv->anchor_align_along,
-                                                      priv->anchor_side_along,
-                                                      &align_along,
-                                                      &side_along);
-
-                  /* Preserve the actual clamped viewport, including on axes
-                   * where the request disabled scrolling. */
-                  align_across = (double) (area.x - x +
-                    (side_across == GTK_PACK_END ? area.width : 0)) / page_across;
-                  align_along = (double) (area.y - y +
-                    (side_along == GTK_PACK_END ? area.height : 0)) / page_along;
-
-                  priv->anchor_align_across = align_across;
-                  priv->anchor_side_across = side_across;
-                  priv->anchor_align_along = align_along;
-                  priv->anchor_side_along = side_along;
-
-                  /* The target may have moved from the bottom to the top of
-                   * the viewport. Realize the range around its new alignment,
-                   * then let the view measure and position the new tiles. */
-                  tracker_changed = gtk_list_base_update_anchor_tracker (self, pos);
-                  if (tracker_changed ||
-                      priv->pending_scroll != scroll ||
-                      priv->pending_scroll_serial != scroll_serial)
-                    {
-                      gtk_scroll_info_unref (scroll);
-                      return FALSE;
-                    }
-
-                  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
-                }
-
-              gtk_scroll_info_unref (scroll);
-            }
-
           GTK_LIST_BASE_GET_CLASS (self)->adjust_anchor_area (self, &area);
           value_across = area.x;
           value_along = area.y;
@@ -2318,26 +2248,19 @@ gtk_list_base_update_adjustments (GtkListBase *self)
                                        value_along,
                                        bounds.height,
                                        page_along);
-
-  return TRUE;
 }
 
-/* Returns FALSE if realizing the scroll destination changed the tiles and
- * the view must repeat its layout before allocating children. */
-gboolean
+void
 gtk_list_base_allocate (GtkListBase *self)
 {
   GtkCssBoxes boxes;
 
-  if (!gtk_list_base_update_adjustments (self))
-    return FALSE;
+  gtk_list_base_update_adjustments (self);
 
   gtk_css_boxes_init (&boxes, GTK_WIDGET (self));
 
   gtk_list_base_allocate_children (self, &boxes);
   gtk_list_base_allocate_rubberband (self, &boxes);
-
-  return TRUE;
 }
 
 GtkScrollablePolicy
@@ -2445,7 +2368,7 @@ gtk_list_base_set_anchor (GtkListBase *self,
   g_return_if_fail (isfinite (anchor_align_across));
   g_return_if_fail (isfinite (anchor_align_along));
 
-  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
+  priv->scroll_serial++;
 
   priv->anchor_align_across = anchor_align_across;
   priv->anchor_side_across = anchor_side_across;
@@ -2513,7 +2436,7 @@ gtk_list_base_set_model (GtkListBase       *self,
     return FALSE;
 
   g_clear_object (&priv->model);
-  g_clear_pointer (&priv->pending_scroll, gtk_scroll_info_unref);
+  priv->scroll_serial++;
 
   if (model)
     {

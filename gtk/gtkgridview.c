@@ -1029,7 +1029,6 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                          / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), &xspacing, &yspacing);
 
-retry:
   gtk_list_item_manager_gc_tiles (self->item_manager);
 
   /* step 0: exit early if list is empty */
@@ -1220,8 +1219,7 @@ retry:
         }
     }
   /* step 5: allocate the rest */
-  if (!gtk_list_base_allocate (GTK_LIST_BASE (self)))
-    goto retry;
+  gtk_list_base_allocate (GTK_LIST_BASE (self));
 }
 
 static void
