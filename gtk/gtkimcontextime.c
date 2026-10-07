@@ -243,6 +243,7 @@ static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
   context_ime->client_widget          = NULL;
+  context_ime->filter_display         = NULL;
   context_ime->use_preedit            = TRUE;
   context_ime->preediting             = FALSE;
   context_ime->opened                 = FALSE;
@@ -259,10 +260,34 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 
 
 static void
+gtk_im_context_ime_add_message_filter (GtkIMContextIME *context_ime,
+                                       GdkDisplay       *display)
+{
+  if (context_ime->filter_display)
+    return;
+
+  gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (display),
+                                gtk_im_context_ime_message_filter, context_ime);
+  g_set_weak_pointer (&context_ime->filter_display, display);
+}
+
+static void
+gtk_im_context_ime_remove_message_filter (GtkIMContextIME *context_ime)
+{
+  if (!context_ime->filter_display)
+    return;
+
+  gdk_win32_display_remove_filter (GDK_WIN32_DISPLAY (context_ime->filter_display),
+                                   gtk_im_context_ime_message_filter, context_ime);
+  g_clear_weak_pointer (&context_ime->filter_display);
+}
+
+static void
 gtk_im_context_ime_dispose (GObject *obj)
 {
   GtkIMContext *context = GTK_IM_CONTEXT (obj);
 
+  gtk_im_context_ime_remove_message_filter (GTK_IM_CONTEXT_IME (obj));
   gtk_im_context_ime_set_client_widget (context, NULL);
 
   G_OBJECT_CLASS (gtk_im_context_ime_parent_class)->dispose (obj);
@@ -642,8 +667,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   if (!himc)
     return;
 
-  gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_surface_get_display (toplevel)),
-                                gtk_im_context_ime_message_filter, context_ime);
+  gtk_im_context_ime_add_message_filter (context_ime, gdk_surface_get_display (toplevel));
 
   /* restore preedit context */
   context_ime->opened = ImmGetOpenStatus (himc);
@@ -737,12 +761,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
     }
 
   /* remove event filter */
-  if (GDK_IS_SURFACE (surface))
-    {
-      gdk_win32_display_remove_filter (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface)),
-                                       gtk_im_context_ime_message_filter,
-                                       context_ime);
-    }
+  gtk_im_context_ime_remove_message_filter (context_ime);
 
   if (was_preediting)
     {
