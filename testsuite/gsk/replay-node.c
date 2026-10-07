@@ -362,10 +362,10 @@ replay_text_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_blur_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  float radius = gsk_blur_node_get_radius (node);
   GskRenderNode *child = gsk_blur_node_get_child (node);
 
-  gtk_snapshot_push_blur (snapshot, radius);
+  gtk_snapshot_push_blur2 (snapshot,
+                           gsk_blur_node_get_blur_radius (node));
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
 }

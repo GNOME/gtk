@@ -240,10 +240,15 @@ Possible values for the mode property are:
 
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
-| blur     | `<number>`       | 1                      | non-default |
+| blur     | `<number>`       | 1                      | never       |
 | child    | `<node>`         | color { }              | always      |
+| radius   | `<number>{1,2}`  | 0.5                    | always      |
 
 Creates a node like `gsk_blur_node_new()` with the given properties.
+
+The "blur" property is a deprecated way to specify the blur radius
+using units of doubles of the std deviation. Use the "radius" property
+instead.
 
 ### border
 

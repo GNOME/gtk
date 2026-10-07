@@ -25,7 +25,7 @@
 
 #include "gskarithmeticnodeprivate.h"
 #include "gskblendnodeprivate.h"
-#include "gskblurnode.h"
+#include "gskblurnodeprivate.h"
 #include "gskbordernodeprivate.h"
 #include "gskcaironodeprivate.h"
 #include "gskclipnodeprivate.h"
@@ -349,6 +349,30 @@ parse_vec4 (GtkCssParser    *parser,
 
   graphene_vec4_init (out_vec4, numbers[0], numbers[1], numbers[2], numbers[3]);
 
+  return TRUE;
+}
+
+static gboolean
+parse_scale (GtkCssParser *parser,
+             Context      *context,
+             gpointer      out)
+{
+  double d1, d2;
+
+  if (!gtk_css_parser_consume_number (parser, &d1))
+    return FALSE;
+
+  if (gtk_css_parser_has_number (parser))
+    {
+      if (!gtk_css_parser_consume_number (parser, &d2))
+        return FALSE;
+    }
+  else
+    {
+      d2 = d1;
+    }
+
+  *(graphene_size_t *) out = GRAPHENE_SIZE_INIT (d1, d2);
   return TRUE;
 }
 
@@ -3780,18 +3804,35 @@ parse_blur_node (GtkCssParser *parser,
                  Context      *context)
 {
   GskRenderNode *child = NULL;
-  double blur_radius = 1.0;
+  double blur = 1.0;
+  graphene_size_t radius = GRAPHENE_SIZE_INIT (0.5, 0.5);
   const Declaration declarations[] = {
-    { "blur", parse_positive_double, NULL, &blur_radius },
+    { "blur", parse_positive_double, NULL, &blur },
+    { "radius", parse_scale, NULL, &radius },
     { "child", parse_node, clear_node, &child },
   };
   GskRenderNode *result;
+  guint parse_result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  /* if "blur" was parsed */
+  if (parse_result & (1 << 0))
+    {
+      /* "radius" was also parsed, so it takes precedence */
+      if (parse_result & (1 << 1))
+        {
+          gtk_css_parser_error_value (parser, "\"radius\" property takes precedence over deprecated \"blur\" property");
+        }
+      else
+        {
+          radius = GRAPHENE_SIZE_INIT (blur / 2.0, blur / 2.0);
+        }
+    }
+
   if (child == NULL)
     child = create_default_render_node ();
 
-  result = gsk_blur_node_new (child, blur_radius);
+  result = gsk_blur_node_new2 (child, &radius);
 
   gsk_render_node_unref (child);
 
@@ -4567,30 +4608,6 @@ parse_isolation_node (GtkCssParser *parser,
   gsk_render_node_unref (child);
 
   return result;
-}
-
-static gboolean
-parse_scale (GtkCssParser *parser,
-             Context      *context,
-             gpointer      out)
-{
-  double d1, d2;
-
-  if (!gtk_css_parser_consume_number (parser, &d1))
-    return FALSE;
-
-  if (gtk_css_parser_has_number (parser))
-    {
-      if (!gtk_css_parser_consume_number (parser, &d2))
-        return FALSE;
-    }
-  else
-    {
-      d2 = d1;
-    }
-
-  *(graphene_size_t *) out = GRAPHENE_SIZE_INIT (d1, d2);
-  return TRUE;
 }
 
 static gboolean
@@ -7121,9 +7138,10 @@ render_node_print (Printer       *p,
 
     case GSK_BLUR_NODE:
       {
+        const graphene_size_t *radius = gsk_blur_node_get_blur_radius (node);
         start_node (p, "blur", node_name);
 
-        append_float_param (p, "blur", gsk_blur_node_get_radius (node), 1.0f);
+        append_two_float_param (p, "radius", radius->width, radius->height);
         append_node_param (p, "child", gsk_blur_node_get_child (node));
 
         end_node (p);

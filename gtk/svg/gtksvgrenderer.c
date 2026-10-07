@@ -31,6 +31,7 @@
 #include "gskpangoprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskblendnodeprivate.h"
+#include "gsk/gskblurnodeprivate.h"
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
@@ -985,7 +986,7 @@ apply_filter_tree (SvgElement    *shape,
         case SVG_FILTER_BLUR:
           {
             FilterResult *in;
-            double std_dev;
+            graphene_size_t sigma;
             EdgeMode edge_mode;
             GskRenderNode *child;
             SvgValue *num;
@@ -996,20 +997,22 @@ apply_filter_tree (SvgElement    *shape,
             switch (svg_numbers_get_length (num))
               {
               case 2:
-                if (svg_numbers_get (num, 0, 1) != svg_numbers_get (num, 1, 1))
-                  gtk_svg_rendering_error (context->svg,
-                                           "Separate x/y values for stdDeviation not supported");
-                G_GNUC_FALLTHROUGH;
+                sigma.width = svg_numbers_get (num, 0, 1);
+                sigma.height = svg_numbers_get (num, 1, 1);
+                break;
               case 1:
-                std_dev = svg_numbers_get (num, 0, 1);
+                sigma.width = sigma.height = svg_numbers_get (num, 0, 1);
                 break;
               default:
-                std_dev = 0;
+                sigma.width = sigma.height = 0;
                 break;
               }
 
             if (svg_enum_get (filter->current[SVG_PROPERTY_CONTENT_UNITS]) == COORD_UNITS_OBJECT_BOUNDING_BOX)
-              std_dev *= normalized_diagonal (&bounds);
+              {
+                sigma.width *= bounds.size.width;
+                sigma.height *= bounds.size.height;
+              }
 
             edge_mode = svg_enum_get (svg_filter_get_current_value (f, SVG_PROPERTY_FE_BLUR_EDGE_MODE));
 
@@ -1027,14 +1030,14 @@ apply_filter_tree (SvgElement    *shape,
              default:
                g_assert_not_reached ();
              }
-             if (std_dev < 0)
+             if (sigma.width < 0 || sigma.height < 0)
                {
                  gtk_svg_rendering_error (context->svg, "stdDeviation < 0");
                  result = gsk_render_node_ref (child);
                }
              else
                {
-                 result = gsk_blur_node_new (child, 2 * std_dev);
+                 result = gsk_blur_node_new2 (child, &sigma);
                }
              gsk_render_node_unref (child);
              filter_result_unref (in);

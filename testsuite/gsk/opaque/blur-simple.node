@@ -1,7 +1,7 @@
 blur {
-  radius: 0.5;
+  radius: 25;
   child: color {
+    color: black;
     bounds: 0 0 50 50;
-    color: rgb(255,0,204);
   }
 }

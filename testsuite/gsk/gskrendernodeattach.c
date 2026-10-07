@@ -20,6 +20,7 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskarithmeticnodeprivate.h"
 #include "gsk/gskblendnodeprivate.h"
+#include "gsk/gskblurnodeprivate.h"
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
@@ -140,7 +141,7 @@ node_attach (const GskRenderNode *node,
 
     case GSK_BLUR_NODE:
       child = node_attach (gsk_blur_node_get_child (node), surface, idx);
-      res = gsk_blur_node_new (child, gsk_blur_node_get_radius (node));
+      res = gsk_blur_node_new2 (child, gsk_blur_node_get_blur_radius (node));
       gsk_render_node_unref (child);
       return res;
 

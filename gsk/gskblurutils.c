@@ -343,10 +343,13 @@ compute_blur_node_blur (GskRenderNode *node,
                         GSList        *copies)
 {
   Render child_render = { render->transform, NULL, };
+  const graphene_size_t *sigma;
 
   compute_background_blur (gsk_blur_node_get_child (node), &child_render, copies);
 
-  if (gsk_blur_node_get_radius (node) >= BACKGROUND_BLUR_THRESHOLD)
+  sigma = gsk_blur_node_get_blur_radius (node);
+  if (sigma->width >= BACKGROUND_BLUR_THRESHOLD ||
+      sigma->height >= BACKGROUND_BLUR_THRESHOLD)
     {
       if (child_render.unblurred_bg)
         {

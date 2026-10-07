@@ -65,6 +65,8 @@ void                    gtk_snapshot_push_arithmetic            (GtkSnapshot    
                                                                  const graphene_rect_t  *bounds,
                                                                  GdkColorState          *color_state,
                                                                  const float             factors[4]);
+void                    gtk_snapshot_push_blur2                 (GtkSnapshot            *snapshot,
+                                                                 const graphene_size_t  *sigma);
 
 void                    gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
                                                                  const GdkColor         *color,

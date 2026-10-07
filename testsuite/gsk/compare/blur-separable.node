@@ -1,0 +1,30 @@
+clip {
+  clip: 0 0 60 60;
+  child: color-matrix {
+    matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 255);
+    child: container {
+      blur {
+        radius: 50 0;
+        child: color {
+          bounds: 20 20 20 20;
+          color: rgb(255,0,0);
+        }
+      }
+      blur {
+        radius: 0 50;
+        child: color {
+          bounds: 20 20 20 20;
+          color: rgb(0,0,255);
+        }
+      }
+      blur {
+        radius: 0;
+        child: color {
+          bounds: 20 20 20 20;
+          color: rgb(0,255,0);
+        }
+      }
+    }
+    bounds: -130 -130 320 320;
+  }
+}
