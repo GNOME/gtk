@@ -65,11 +65,9 @@ run (out vec4 color,
 {
   vec4 first_color = texture (GSK_TEXTURE0, _first_coord);
   first_color = alt_color_from_output (first_color);
-  first_color = alt_color_alpha (first_color, rect_coverage (_first_rect, _pos));
 
   vec4 second_color = texture (GSK_TEXTURE1, _second_coord);
   second_color = alt_color_from_output (second_color);
-  second_color = alt_color_alpha (second_color, rect_coverage (_second_rect, _pos));
 
   color = arithmetic (first_color, second_color, _factors);
 
