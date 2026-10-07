@@ -17,6 +17,7 @@ struct _GskGpuShaderOp
   GskGpuImage *images[2];
   GskGpuSampler samplers[2];
   GskGpuImage *clip_mask;
+  GskGpuSampler clip_mask_sampler;
   GskGpuShaderFlags flags;
   GskGpuColorStates color_states;
   guint32 variation;
@@ -48,6 +49,7 @@ void                    gsk_gpu_shader_op_alloc                         (GskGpuF
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuImage            *clip_mask,
+                                                                         GskGpuSampler           clip_mask_sampler,
                                                                          GskGpuImage           **images,
                                                                          GskGpuSampler          *samplers,
                                                                          gpointer                out_vertex_data);

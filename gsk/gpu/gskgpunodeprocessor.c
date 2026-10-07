@@ -2600,6 +2600,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
           gsk_gpu_render_pass_push_clip_mask (self,
                                               &bounds,
                                               mask_image,
+                                              GSK_GPU_SAMPLER_DEFAULT,
                                               &mask_rect,
                                               !gsk_render_node_is_bilevel_opacity (mask_child),
                                               &storage);
@@ -3241,7 +3242,13 @@ gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
     {
       GskGpuRenderPassClipStorage storage;
 
-      gsk_gpu_render_pass_push_clip_mask (self, &clip_bounds, mask_image, &mask_rect, FALSE, &storage);
+      gsk_gpu_render_pass_push_clip_mask (self,
+                                          &clip_bounds,
+                                          mask_image,
+                                          GSK_GPU_SAMPLER_DEFAULT,
+                                          &mask_rect,
+                                          FALSE,
+                                          &storage);
       gsk_gpu_node_processor_add_node (self, child, 0);
       gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
@@ -3294,7 +3301,13 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
     {
       GskGpuRenderPassClipStorage storage;
 
-      gsk_gpu_render_pass_push_clip_mask (self, &clip_bounds, mask_image, &mask_rect, FALSE, &storage);
+      gsk_gpu_render_pass_push_clip_mask (self,
+                                          &clip_bounds,
+                                          mask_image,
+                                          GSK_GPU_SAMPLER_DEFAULT,
+                                          &mask_rect,
+                                          FALSE,
+                                          &storage);
       gsk_gpu_node_processor_add_node (self, child, 0);
       gsk_gpu_render_pass_pop_clip_mask (self, &storage);
     }
