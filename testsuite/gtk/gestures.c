@@ -18,6 +18,33 @@ static PointState touch_state[10]; /* touchpoint 0 gets pointer emulation,
 
 #define EVENT_SEQUENCE(point) (GdkEventSequence*) ((point) - touch_state + 1)
 
+typedef struct
+{
+  int n_press;
+  double x;
+  double y;
+  gboolean stopped;
+} ClickData;
+
+static void
+click_pressed_cb (GtkGestureClick *gesture,
+                  int              n_press,
+                  double           x,
+                  double           y,
+                  ClickData       *data)
+{
+  data->n_press = n_press;
+  data->x = x;
+  data->y = y;
+}
+
+static void
+click_stopped_cb (GtkGestureClick *gesture,
+                  ClickData       *data)
+{
+  data->stopped = TRUE;
+}
+
 static void
 show_toplevel (GtkWindow *window)
 {
@@ -1530,6 +1557,74 @@ test_multitouch_interaction (void)
   g_string_free (str, TRUE);
 }
 
+/* If a widget moves in the middle of a double click, it should still count as a double click */
+static void
+test_click_widget_moved (void)
+{
+  GtkWidget *window;
+  GtkWidget *fixed;
+  GtkWidget *child;
+  GtkGesture *gesture;
+  GdkDisplay *display;
+  graphene_rect_t before;
+  graphene_rect_t after;
+  double pointer_x;
+  double pointer_y;
+  double first_y;
+  ClickData data = { 0, };
+
+  window = gtk_window_new ();
+  display = gtk_widget_get_display (window);
+  if (gdk_display_get_default_seat (display) == NULL)
+    {
+      g_test_skip ("Display has no seat");
+      return;
+    }
+
+  /* Create a 100x100 child in a 100x100 window */
+  fixed = gtk_fixed_new ();
+  child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_size_request (child, 100, 100);
+  gtk_fixed_put (GTK_FIXED (fixed), child, 0, 0);
+  gtk_window_set_default_size (GTK_WINDOW (window), 100, 100);
+  gtk_window_set_child (GTK_WINDOW (window), fixed);
+  show_toplevel (GTK_WINDOW (window));
+
+  gesture = gtk_gesture_click_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (click_pressed_cb), &data);
+  g_signal_connect (gesture, "stopped", G_CALLBACK (click_stopped_cb), &data);
+  gtk_widget_add_controller (child, GTK_EVENT_CONTROLLER (gesture));
+
+  /* Click the child in the center */
+  g_assert_true (gtk_widget_compute_bounds (child, window, &before));
+  pointer_x = before.origin.x + before.size.width / 2;
+  pointer_y = before.origin.y + before.size.height / 2;
+  point_update (&mouse_state, window, pointer_x, pointer_y);
+  point_press (&mouse_state, window, GDK_BUTTON_PRIMARY);
+  g_assert_cmpint (data.n_press, ==, 1);
+  first_y = data.y;
+  point_release (&mouse_state, GDK_BUTTON_PRIMARY);
+
+  /* Move the child to y=-20 */
+  gtk_fixed_move (GTK_FIXED (fixed), child, 0, -20);
+  gtk_test_widget_wait_for_draw (window);
+  g_assert_true (gtk_widget_compute_bounds (child, window, &after));
+  g_assert_cmpfloat_with_epsilon (after.origin.y, before.origin.y - 20, 0.001);
+
+  /* Click again at the same mouse position */
+  point_press (&mouse_state, window, GDK_BUTTON_PRIMARY);
+  /* Should be counted as double click */
+  g_assert_cmpint (data.n_press, ==, 2);
+  /* Widget-relative coordinate should be offset now */
+  g_assert_cmpfloat_with_epsilon (data.y, first_y + 20, 0.001);
+
+  g_assert_false (data.stopped);
+
+  point_release (&mouse_state, GDK_BUTTON_PRIMARY);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1544,6 +1639,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/gestures/claim/early-capture", test_early_claim_capture);
   g_test_add_func ("/gestures/claim/late-capture", test_late_claim_capture);
   g_test_add_func ("/gestures/group", test_group);
+  g_test_add_func ("/gestures/click/widget-moved", test_click_widget_moved);
 #if 0
   g_test_add_func ("/gestures/grabs/gestures-outside-grab", test_gestures_outside_grab);
   g_test_add_func ("/gestures/grabs/gestures-inside-grab", test_gestures_inside_grab);

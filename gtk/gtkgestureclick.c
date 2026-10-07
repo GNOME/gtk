@@ -180,7 +180,8 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   GdkEvent *event;
   GdkEventType event_type;
   GdkDevice *device;
-  double x, y;
+  double surface_x, surface_y;
+  double widget_x, widget_y;
 
   if (!gtk_gesture_handles_sequence (gesture, sequence))
     return;
@@ -211,22 +212,29 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   priv->current_device = device;
   priv->current_button = button;
   _gtk_gesture_click_update_timeout (click);
-  gtk_gesture_get_point (gesture, current, &x, &y);
+
+  /* Check gtk-double-click-distance using surface coordinates (as returned by
+   * gdk_event_get_position), so that if the first click of a double click
+   * causes the widget to shift into view, the second click is still counted.
+   * See https://gitlab.gnome.org/GNOME/nautilus/-/work_items/3614 */
+  gdk_event_get_position (event, &surface_x, &surface_y);
 
   if (gdk_device_get_source (priv->current_device) == GDK_SOURCE_MOUSE &&
-      !_gtk_gesture_click_check_within_threshold (click, "gtk-double-click-distance", x, y))
+      !_gtk_gesture_click_check_within_threshold (click, "gtk-double-click-distance",
+                                                  surface_x, surface_y))
     _gtk_gesture_click_stop (click);
 
   /* Increment later the real counter, just if the gesture is
    * reset on the pressed handler */
   n_presses = priv->n_release = priv->n_presses + 1;
 
-  g_signal_emit (gesture, signals[PRESSED], 0, n_presses, x, y);
+  gtk_gesture_get_point (gesture, current, &widget_x, &widget_y);
+  g_signal_emit (gesture, signals[PRESSED], 0, n_presses, widget_x, widget_y);
 
   if (priv->n_presses == 0)
     {
-      priv->initial_press_x = x;
-      priv->initial_press_y = y;
+      priv->initial_press_x = surface_x;
+      priv->initial_press_y = surface_y;
     }
 
   priv->n_presses++;
@@ -238,13 +246,16 @@ gtk_gesture_click_update (GtkGesture       *gesture,
 {
   GtkGestureClick *click;
   GdkEventSequence *current;
-  double x, y;
+  GdkEvent *event;
+  double surface_x, surface_y;
 
   click = GTK_GESTURE_CLICK (gesture);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  gtk_gesture_get_point (gesture, current, &x, &y);
+  event = gtk_gesture_get_last_event (gesture, current);
+  gdk_event_get_position (event, &surface_x, &surface_y);
 
-  if (!_gtk_gesture_click_check_within_threshold (click, "gtk-dnd-drag-threshold", x, y))
+  if (!_gtk_gesture_click_check_within_threshold (click, "gtk-dnd-drag-threshold",
+                                                  surface_x, surface_y))
     _gtk_gesture_click_stop (click);
 }
 
