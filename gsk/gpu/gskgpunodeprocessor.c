@@ -2830,7 +2830,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    NULL,
+                                                    &bounds,
                                                     child,
                                                     0,
                                                     &tex_rect,
