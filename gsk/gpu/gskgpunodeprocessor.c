@@ -1453,7 +1453,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   GdkColorState *image_cs;
   GskGpuImage *image;
   graphene_rect_t bounds;
-  gboolean should_mipmap;
+  gboolean should_mipmap, in_bounds;
 
   if (!gsk_rect_snap_to_grid (&node->bounds,
                               gsk_texture_node_get_snap (node),
@@ -1489,10 +1489,12 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
       return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
     }
 
+  in_bounds = gsk_rect_contains_rect (&node->bounds, clip_bounds) &&
+              !(flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS);
+
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
-      ((flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS) &&
-       gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
+      (!in_bounds && gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
     {
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
       gdk_color_state_unref (image_cs);
@@ -1505,7 +1507,11 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
 
   gdk_color_state_unref (image_cs);
   *out_bounds = bounds;
-  *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+  if (in_bounds)
+    *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+  else
+    *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
+
   return image;
 }
 
