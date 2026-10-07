@@ -2442,7 +2442,11 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuRenderPass *self,
   graphene_rect_t start_rect, end_rect;
   GskGpuImage *start_image, *end_image;
   GskGpuSampler start_sampler, end_sampler;
+  graphene_rect_t clip_bounds;
   float progress;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
+    return;
 
   start_child = gsk_cross_fade_node_get_start_child (node);
   end_child = gsk_cross_fade_node_get_end_child (node);
@@ -2461,14 +2465,14 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuRenderPass *self,
 
   start_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           0,
-                                                          NULL,
+                                                          &clip_bounds,
                                                           start_child,
                                                           0,
                                                           &start_rect,
                                                           &start_sampler);
   end_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         0,
-                                                        NULL,
+                                                        &clip_bounds,
                                                         end_child,
                                                         1,
                                                         &end_rect,
