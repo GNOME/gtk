@@ -101,7 +101,7 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
   /* Usable space is really less... */
   for (i = 0; i < 3; i++)
     {
-      if (self->children[i])
+      if (self->children[i] && _gtk_widget_get_visible (self->children[i]))
         needed_spacing += spacing;
     }
   needed_spacing -= spacing;
@@ -112,13 +112,13 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
 
   for (i = 0; i < 3; i ++)
     {
-      if (self->children[i])
+      if (self->children[i] && _gtk_widget_get_visible (self->children[i]))
         gtk_widget_measure (self->children[i], self->orientation, for_size,
                             &sizes[i].minimum_size, &sizes[i].natural_size,
                             NULL, NULL);
     }
 
-  if (self->center_widget)
+  if (self->center_widget && _gtk_widget_get_visible (self->center_widget))
     {
       int natural_size;
 
@@ -133,21 +133,21 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
       center_expand = gtk_widget_compute_expand (self->center_widget, self->orientation);
     }
 
-  if (self->start_widget)
+  if (self->start_widget && _gtk_widget_get_visible (self->start_widget))
     {
       avail = size - needed_spacing - (center_size + sizes[2].minimum_size);
       start_size = CLAMP (avail, sizes[0].minimum_size, sizes[0].natural_size);
       start_expand = gtk_widget_compute_expand (self->start_widget, self->orientation);
     }
 
-   if (self->end_widget)
+   if (self->end_widget && _gtk_widget_get_visible (self->end_widget))
     {
       avail = size - needed_spacing - (center_size + sizes[0].minimum_size);
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
       end_expand = gtk_widget_compute_expand (self->end_widget, self->orientation);
     }
 
-  if (self->center_widget)
+  if (self->center_widget && _gtk_widget_get_visible (self->center_widget))
     {
       int center_pos;
 
