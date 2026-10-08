@@ -362,6 +362,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   extra_warnings = [
     'address',
     'array-bounds',
+    'comma',
     'empty-body',
     'enum-int-mismatch',
     'implicit',
