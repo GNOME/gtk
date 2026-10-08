@@ -795,10 +795,14 @@ gsk_gpu_node_processor_add_with_offscreen (GskGpuRenderPass *self,
   GskGpuImage *image;
   graphene_rect_t tex_rect;
   GskGpuSampler tex_sampler;
+  graphene_rect_t bounds;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
+    return;
 
   image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
                                                               0,
-                                                              NULL,
+                                                              &bounds,
                                                               node,
                                                               &tex_rect,
                                                               &tex_sampler);
@@ -809,7 +813,7 @@ gsk_gpu_node_processor_add_with_offscreen (GskGpuRenderPass *self,
                                    image,
                                    self->ccs,
                                    tex_sampler,
-                                   &node->bounds,
+                                   &bounds,
                                    &tex_rect);
 
   g_object_unref (image);
