@@ -127,7 +127,8 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
       if (self->shrink_center_last)
         natural_size = sizes[1].natural_size;
       else
-        natural_size = CLAMP (size - needed_spacing - (sizes[0].natural_size + sizes[2].natural_size), sizes[1].minimum_size, sizes[1].natural_size);
+        natural_size = CLAMP (size - needed_spacing - (sizes[0].natural_size + sizes[2].natural_size),
+                              sizes[1].minimum_size, sizes[1].natural_size);
 
       center_size = CLAMP (avail, sizes[1].minimum_size, natural_size);
       center_expand = gtk_widget_compute_expand (self->center_widget, self->orientation);
@@ -160,8 +161,19 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
         center_pos = size - center_size - end_size - spacing;
       else if (center_expand)
         {
-          center_size = size - 2 * (MAX (start_size, end_size) + spacing);
-          center_pos = (size / 2) - (center_size / 2) + spacing;
+          /* If neither of side children is visible,
+           * avoid adding the spacing that shouldn't be there.
+           */
+          if (needed_spacing > 0)
+            {
+              center_size = size - 2 * (MAX (start_size, end_size) + spacing);
+              center_pos = (size / 2) - (center_size / 2) + spacing;
+            }
+          else
+            {
+              center_size = size - 2 * MAX (start_size, end_size);
+              center_pos = (size / 2) - (center_size / 2);
+            }
         }
 
       if (start_expand)
@@ -238,7 +250,14 @@ gtk_center_layout_measure_orientation (GtkCenterLayout *self,
   if (n_visible_children > 0)
     {
       *minimum += (n_visible_children - 1) * spacing;
-      *natural += (n_visible_children - 1) * spacing;
+      /* With the center child and exactly one of the side children
+       * visible, we'd still like two units of spacing for symmetry.
+       */
+      if (n_visible_children == 2 && self->center_widget &&
+          _gtk_widget_get_visible (self->center_widget))
+        *natural += 2 * spacing;
+      else
+        *natural += (n_visible_children - 1) * spacing;
     }
 }
 
