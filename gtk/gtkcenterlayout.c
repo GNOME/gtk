@@ -81,31 +81,6 @@ get_spacing (GtkCenterLayout *self,
   return css_spacing;
 }
 
-static GtkSizeRequestMode
-gtk_center_layout_get_request_mode (GtkLayoutManager *layout_manager,
-                                    GtkWidget        *widget)
-{
-  GtkCenterLayout *self = GTK_CENTER_LAYOUT (layout_manager);
-  int count[3] = { 0, 0, 0 };
-
-  if (self->start_widget)
-    count[gtk_widget_get_request_mode (self->start_widget)]++;
-
-  if (self->center_widget)
-    count[gtk_widget_get_request_mode (self->center_widget)]++;
-
-  if (self->end_widget)
-    count[gtk_widget_get_request_mode (self->end_widget)]++;
-
-  if (!count[GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH] &&
-      !count[GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT])
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-  else
-    return count[GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT] > count[GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH]
-           ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
-           : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_center_layout_distribute (GtkCenterLayout  *self,
                               int               for_size,
@@ -602,7 +577,6 @@ gtk_center_layout_class_init (GtkCenterLayoutClass *klass)
   object_class->set_property = gtk_center_layout_set_property;
   object_class->dispose = gtk_center_layout_dispose;
 
-  layout_class->get_request_mode = gtk_center_layout_get_request_mode;
   layout_class->measure = gtk_center_layout_measure;
   layout_class->allocate = gtk_center_layout_allocate;
 
