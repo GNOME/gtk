@@ -1075,7 +1075,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.
  *
- * This functions creates and adds a `GtkCellRendererText` for the selected
+ * This function creates and adds a `GtkCellRendererText` for the selected
  * column. If you need to set the text column, but don't want the cell
  * renderer, use g_object_set() to set the
  * [property@Gtk.EntryCompletion:text-column] property directly.

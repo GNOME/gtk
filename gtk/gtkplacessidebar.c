@@ -1888,7 +1888,7 @@ dnd_cancel_cb (GdkDrag             *drag,
   stop_drop_feedback (sidebar);
 }
 
-/* This functions is called every time the drag source leaves
+/* This function is called every time the drag source leaves
  * the sidebar widget.
  * The problem is that, we start showing hints for drop when the source
  * start being above the sidebar or when the application request so show

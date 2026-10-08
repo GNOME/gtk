@@ -229,7 +229,7 @@ to it. `print_hello()` calls `g_print()` with the string "Hello World" which wil
 print Hello World in a terminal if the GTK application was started from one.
 
 After connecting `print_hello()`, another signal is connected to the "clicked"
-state of the button using `g_signal_connect_swapped()`. This functions is similar
+state of the button using `g_signal_connect_swapped()`. This function is similar
 to a `g_signal_connect()`, with the difference lying in how the callback function
 is treated; `g_signal_connect_swapped()` allows you to specify what the callback
 function should take as parameter by letting you pass it as data. In this case
