@@ -154,12 +154,6 @@
 
 
 typedef enum {
-  /* The returned image will be sampled outside the returned bounds, so it is
-   * important that it returns the right values.
-   * In particular, opaque textures must ensure they return transparency
-   * and images must not be contained in an atlas.
-   */
-  GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
   /* The returned image needs to be the exact size of the given clip
    * rect, for example because it will be repeated.
    * In detail: out_bounds must equal clip_bounds
@@ -1465,8 +1459,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   should_mipmap = texture_node_should_mipmap (node, frame, scale);
   image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
-  in_bounds = gsk_rect_contains_rect (&bounds, clip_bounds) &&
-              !(flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS);
+  in_bounds = gsk_rect_contains_rect (&bounds, clip_bounds);
 
   if (image == NULL)
     {
@@ -2228,7 +2221,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                                    0,
                                                     &clip_rect,
                                                     child,
                                                     0,
@@ -2279,7 +2272,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                                    0,
                                                     &clip_bounds, 
                                                     child,
                                                     0,
