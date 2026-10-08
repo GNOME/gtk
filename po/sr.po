@@ -6,14 +6,15 @@
 # Милош Поповић <gpopac@gmail.com>, 2010–2025.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011–2024.
 # Марко Костић <marko.m.kostic@gmail.com>, 2015-2026.
+# aceydot <aceydot@proton.me>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-25 12:59+0000\n"
-"PO-Revision-Date: 2026-08-30 11:44+0200\n"
-"Last-Translator: Марко Костић <marko.m.kostic@gmail.com>\n"
+"POT-Creation-Date: 2026-10-01 12:32+0000\n"
+"PO-Revision-Date: 2026-10-08 21:32+0200\n"
+"Last-Translator: aceydot <aceydot@proton.me>\n"
 "Language-Team: Serbian <Serbian <gnome-sr@googlegroups.com>>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +32,7 @@ msgstr "Нема усаглашених формата за пренос сад�
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:251 gdk/wayland/gdkdrop-wayland.c:205
 #: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1017
-#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:802
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Не могу да пронађем усаглашен формат преноса"
@@ -631,53 +632,73 @@ msgstr ""
 #: gdk/win32/gdkclipdrop-win32.c:694
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
-msgstr "Не могу да захтевам власништво над оставом. Други процес ју је заузео пре нас."
+msgstr ""
+"Не могу да захтевам власништво над оставом. Други процес ју је заузео пре "
+"нас."
 
 #: gdk/win32/gdkclipdrop-win32.c:708
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr "Не могу да захтевам власништво над оставом. Није успела функција „OpenClipboard()“: 0x%lx."
+msgstr ""
+"Не могу да захтевам власништво над оставом. Није успела функција "
+"„OpenClipboard()“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:718
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr "Не могу да захтевам власништво над оставом. Није успела функција „EmptyClipboard()“: 0x%lx."
+msgstr ""
+"Не могу да захтевам власништво над оставом. Није успела функција "
+"„EmptyClipboard()“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:760
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr "Не могу да поставим податке у оставу. Истекло је време за функцију „OpenClipboard()“."
+msgstr ""
+"Не могу да поставим податке у оставу. Истекло је време за функцију "
+"„OpenClipboard()“."
 
 #: gdk/win32/gdkclipdrop-win32.c:770 gdk/win32/gdkclipdrop-win32.c:801
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "Не могу да поставим податке у оставу. Други процес је захтевао власништво над оставом."
+msgstr ""
+"Не могу да поставим податке у оставу. Други процес је захтевао власништво "
+"над оставом."
 
 #: gdk/win32/gdkclipdrop-win32.c:784
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "Не могу да поставим податке у оставу. Није успела функција „OpenClipboard()“: 0x%lx."
+msgstr ""
+"Не могу да поставим податке у оставу. Није успела функција "
+"„OpenClipboard()“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr "Не могу да преузмем податке из оставе. Није успела функција „GlobalLock(0x%p)“: 0x%lx."
+msgstr ""
+"Не могу да преузмем податке из оставе. Није успела функција "
+"„GlobalLock(0x%p)“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:847
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr "Не могу да преузмем податке из оставе. Није успела функција „GlobalSize(0x%p)“: 0x%lx."
+msgstr ""
+"Не могу да преузмем податке из оставе. Није успела функција "
+"„GlobalSize(0x%p)“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:860
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
-msgstr "Не могу да преузмем податке из оставе. Нисам успео да резервишем %s бајтова за смештај података."
+msgstr ""
+"Не могу да преузмем податке из оставе. Нисам успео да резервишем %s бајтова "
+"за смештај података."
 
 #: gdk/win32/gdkclipdrop-win32.c:892
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr "Не могу да преузмем податке из оставе. Истекло је време за функцију „OpenClipboard()“."
+msgstr ""
+"Не могу да преузмем податке из оставе. Истекло је време за функцију "
+"„OpenClipboard()“."
 
 #: gdk/win32/gdkclipdrop-win32.c:902
 #, c-format
@@ -688,37 +709,51 @@ msgstr "Не могу да преузмем податке из оставе. В
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
-msgstr "Не могу да преузмем податке из оставе. Подаци из оставе су промењени пре него што смо могли да их преузмемо."
+msgstr ""
+"Не могу да преузмем податке из оставе. Подаци из оставе су промењени пре "
+"него што смо могли да их преузмемо."
 
 #: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "Не могу да преузмем податке из оставе. Није успела функција „OpenClipboard()“: 0x%lx."
+msgstr ""
+"Не могу да преузмем податке из оставе. Није успела функција "
+"„OpenClipboard()“: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
-msgstr "Не могу да преузмем податке из оставе. Није пронађен усаглашен формат преноса."
+msgstr ""
+"Не могу да преузмем податке из оставе. Није пронађен усаглашен формат "
+"преноса."
 
 #: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr "Не могу да преузмем податке из оставе. Није успела функција „GetClipboardData()“: 0x%lx."
+msgstr ""
+"Не могу да преузмем податке из оставе. Није успела функција "
+"„GetClipboardData()“: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:948
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr "Не могу да преузмем DnD податке. Није успела функција „GlobalLock(0x%p)“: 0x%lx."
+msgstr ""
+"Не могу да преузмем DnD податке. Није успела функција „GlobalLock(0x%p)“: "
+"0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr "Не могу да преузмем DnD податке. Није успела функција „GlobalSize(0x%p)“: 0x%lx."
+msgstr ""
+"Не могу да преузмем DnD податке. Није успела функција „GlobalSize(0x%p)“: "
+"0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:968
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
-msgstr "Не могу да преузмем DnD податке. Неуспешна додела %s бајтова за смештај података."
+msgstr ""
+"Не могу да преузмем DnD податке. Неуспешна додела %s бајтова за смештај "
+"података."
 
 #: gdk/win32/gdkdrop-win32.c:1038
 #, c-format
@@ -1160,7 +1195,8 @@ msgstr ""
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
-msgstr "Системска политика спречава измене.\n"
+msgstr ""
+"Системска политика спречава измене.\n"
 "Обратите се администратору система"
 
 #: gtk/deprecated/gtkshow.c:291
@@ -1296,7 +1332,8 @@ msgstr "Дизајн"
 msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
-msgstr "Овај програм се испоручује без икакве гаранције.\n"
+msgstr ""
+"Овај програм се испоручује без икакве гаранције.\n"
 "За појединости, погледајте <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
@@ -2245,12 +2282,12 @@ msgid "_Edit"
 msgstr "_Уреди"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9265
+#: gtk/gtktextview.c:9264
 msgid "_Copy"
 msgstr "_Копирај"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9342
 msgid "Context menu"
 msgstr "Контекстуални мени"
 
@@ -2331,8 +2368,8 @@ msgid "_Cancel"
 msgstr "От_кажи"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3150
-#: gtk/gtkplacessidebar.c:3235 gtk/gtkplacesview.c:1648
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3151
+#: gtk/gtkplacessidebar.c:3236 gtk/gtkplacesview.c:1648
 msgid "_Open"
 msgstr "_Отвори"
 
@@ -2419,7 +2456,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ако обришете ставку, она ће бити трајно изгубљена."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9272
 msgid "_Delete"
 msgstr "_Обриши"
 
@@ -2455,8 +2492,8 @@ msgstr "_Копирај путању"
 msgid "_Add to Bookmarks"
 msgstr "_Додај у обележиваче"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2313
-#: gtk/gtkplacessidebar.c:3271 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:3272 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "_Преименуј"
 
@@ -2478,7 +2515,7 @@ msgid "Unknown"
 msgstr "Непознато"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1028
 msgid "Home"
 msgstr "Лична фасцикла"
 
@@ -2603,7 +2640,8 @@ msgstr "Датотека под називом „%s“ већ постоји.  
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "Датотека већ постоји у „%s“.  Ако је замените, преписаћете њен садржај."
+msgstr ""
+"Датотека већ постоји у „%s“.  Ако је замените, преписаћете њен садржај."
 
 #: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:674
 msgid "_Replace"
@@ -2630,7 +2668,7 @@ msgstr "В_рста"
 msgid "_Time"
 msgstr "Вре_ме"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2307
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2308
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -2778,15 +2816,15 @@ msgstr "Затвори"
 msgid "Close the infobar"
 msgstr "Затворите траку с обавештењем"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9260
 msgid "Cu_t"
 msgstr "_Исеци"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9268
 msgid "_Paste"
 msgstr "У_баци"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9293
 msgid "Select _All"
 msgstr "Изабери _све"
 
@@ -2995,7 +3033,7 @@ msgstr "Претходни језичак"
 msgid "Next tab"
 msgstr "Следећи језичак"
 
-#: gtk/gtknotebook.c:4364 gtk/gtknotebook.c:6572
+#: gtk/gtknotebook.c:4366 gtk/gtknotebook.c:6574
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -3030,7 +3068,8 @@ msgid ""
 " Right: %s %s\n"
 " Top: %s %s\n"
 " Bottom: %s %s"
-msgstr "Маргине:\n"
+msgstr ""
+"Маргине:\n"
 " лево: %s %s\n"
 " десно: %s %s\n"
 " горе: %s %s\n"
@@ -3059,82 +3098,82 @@ msgid "_Show Text"
 msgstr "Прикажи _текст"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:915
 #, c-format
 msgid "Open %s"
 msgstr "Отвори „%s“"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent"
 msgstr "Скорашње"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent files"
 msgstr "Скорашње датотеке"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred"
 msgstr "Са звездицом"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred files"
 msgstr "Датотеке са звездицом"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Open your personal folder"
 msgstr "Отворите вашу личну фасциклу"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Desktop"
 msgstr "Радна површ"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1045
 msgid "Open the contents of your desktop in a folder"
 msgstr "Отворите садржај ваше радне површи унутар фасцикле"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Enter Location"
 msgstr "Унеси путању"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1061
 msgid "Manually enter a location"
 msgstr "Ручно унеси путању"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Trash"
 msgstr "Смеће"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1073
 msgid "Open the trash"
 msgstr "Отвори смеће"
 
-#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
-#: gtk/gtkplacessidebar.c:1410
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Прикачи и отвори „%s“"
 
-#: gtk/gtkplacessidebar.c:1305
+#: gtk/gtkplacessidebar.c:1306
 msgid "Open the contents of the file system"
 msgstr "Отвори садржај система датотека"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1389
 msgid "New bookmark"
 msgstr "Нови обележивач"
 
-#: gtk/gtkplacessidebar.c:1390
+#: gtk/gtkplacessidebar.c:1391
 msgid "Add a new bookmark"
 msgstr "Додај нови обележивач"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Other Locations"
 msgstr "Друга места"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1457
 msgid "Show other locations"
 msgstr "Прикажите друга места"
 
-#: gtk/gtkplacessidebar.c:1965 gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Не могу да покренем „%s“"
@@ -3142,120 +3181,120 @@ msgstr "Не могу да покренем „%s“"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2002
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Грешка откључавања „%s“"
 
-#: gtk/gtkplacessidebar.c:2003
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Не могу да приступим „%s“"
 
-#: gtk/gtkplacessidebar.c:2234
+#: gtk/gtkplacessidebar.c:2235
 msgid "This name is already taken"
 msgstr "Овај назив је већ заузет"
 
-#: gtk/gtkplacessidebar.c:2525
+#: gtk/gtkplacessidebar.c:2526
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Не могу да откачим „%s“"
 
-#: gtk/gtkplacessidebar.c:2701
+#: gtk/gtkplacessidebar.c:2702
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Не могу да зауставим „%s“"
 
-#: gtk/gtkplacessidebar.c:2730
+#: gtk/gtkplacessidebar.c:2731
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Не могу да избацим „%s“"
 
-#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2760 gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не могу да избацим „%s“"
 
-#: gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2937
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Не могу да пратим промене медија у „%s“"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3244
 #: gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Отвори у новом _језичку"
 
-#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3252
+#: gtk/gtkplacessidebar.c:3163 gtk/gtkplacessidebar.c:3253
 #: gtk/gtkplacesview.c:1657
 msgid "Open in New _Window"
 msgstr "Отвори у новом _прозору"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3264
 msgid "_Add Bookmark"
 msgstr "_Додај у обележиваче"
 
-#: gtk/gtkplacessidebar.c:3267
+#: gtk/gtkplacessidebar.c:3268
 msgid "_Remove"
 msgstr "_Уклони"
 
-#: gtk/gtkplacessidebar.c:3283 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3284 gtk/gtkplacesview.c:1682
 msgid "_Mount"
 msgstr "_Закачи"
 
-#: gtk/gtkplacessidebar.c:3292 gtk/gtkplacesview.c:1671
+#: gtk/gtkplacessidebar.c:3293 gtk/gtkplacesview.c:1671
 msgid "_Unmount"
 msgstr "_Откачи"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Eject"
 msgstr "_Избаци"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Detect Media"
 msgstr "_Препознај медијум"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Start"
 msgstr "_Покрени"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Power On"
 msgstr "_Укључи"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Connect Drive"
 msgstr "_Повежи уређај"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Start Multi-disk Device"
 msgstr "_Покрени уређај са више дискова"
 
-#: gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Unlock Device"
 msgstr "_Откључај уређај"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Stop"
 msgstr "_Заустави"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Safely Remove Drive"
 msgstr "_Безбедно уклони уређај"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3337
 msgid "_Disconnect Drive"
 msgstr "_Откачи уређај"
 
-#: gtk/gtkplacessidebar.c:3337
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Stop Multi-disk Device"
 msgstr "_Заустави уређај са више дискова"
 
-#: gtk/gtkplacessidebar.c:3338
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Lock Device"
 msgstr "_Закључај уређај"
 
-#: gtk/gtkplacessidebar.c:3829 gtk/gtkplacesview.c:1092
+#: gtk/gtkplacessidebar.c:3830 gtk/gtkplacesview.c:1092
 msgid "Computer"
 msgstr "Рачунар"
 
@@ -3373,25 +3412,25 @@ msgid "Unmount"
 msgstr "Откачи"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:496
-#: gtk/print/backends/gtkprintbackendcups.c:5695
+#: gtk/print/backends/gtkprintbackendcups.c:5692
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Хитно"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:497
-#: gtk/print/backends/gtkprintbackendcups.c:5696
+#: gtk/print/backends/gtkprintbackendcups.c:5693
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Висока"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:498
-#: gtk/print/backends/gtkprintbackendcups.c:5697
+#: gtk/print/backends/gtkprintbackendcups.c:5694
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Средња"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:499
-#: gtk/print/backends/gtkprintbackendcups.c:5698
+#: gtk/print/backends/gtkprintbackendcups.c:5695
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Ниска"
@@ -3400,7 +3439,7 @@ msgstr "Ниска"
 #. * dialog that controls the front cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:521
-#: gtk/print/backends/gtkprintbackendcups.c:5841
+#: gtk/print/backends/gtkprintbackendcups.c:5838
 msgctxt "printer option"
 msgid "Before"
 msgstr "Пре"
@@ -3409,7 +3448,7 @@ msgstr "Пре"
 #. * dialog that controls the back cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:528
-#: gtk/print/backends/gtkprintbackendcups.c:5856
+#: gtk/print/backends/gtkprintbackendcups.c:5853
 msgctxt "printer option"
 msgid "After"
 msgstr "После"
@@ -3429,35 +3468,35 @@ msgstr "Без ивица"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1481
-#: gtk/print/backends/gtkprintbackendcups.c:2633
+#: gtk/print/backends/gtkprintbackendcups.c:2630
 msgid "Paused; Rejecting Jobs"
 msgstr "Заустављен; Одбија послове"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1484
-#: gtk/print/backends/gtkprintbackendcups.c:2636
+#: gtk/print/backends/gtkprintbackendcups.c:2633
 #: gtk/print/gtkprintoperation-win32.c:624
 msgid "Paused"
 msgstr "Паузирано"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1487
-#: gtk/print/backends/gtkprintbackendcups.c:2639
+#: gtk/print/backends/gtkprintbackendcups.c:2636
 msgid "Rejecting Jobs"
 msgstr "Одбија послове"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1145
-#: gtk/print/backends/gtkprintbackendcups.c:1449
+#: gtk/print/backends/gtkprintbackendcups.c:1446
 msgid "Username:"
 msgstr "Корисничко име:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1146
-#: gtk/print/backends/gtkprintbackendcups.c:1458
+#: gtk/print/backends/gtkprintbackendcups.c:1455
 msgid "Password:"
 msgstr "Лозинка:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1184
-#: gtk/print/backends/gtkprintbackendcups.c:1471
+#: gtk/print/backends/gtkprintbackendcups.c:1468
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
@@ -3490,7 +3529,9 @@ msgstr "Потребно је потврђивање идентитета за �
 #: gtk/print/backends/gtkprintbackendcups.c:1201
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Потребно је потврђивање идентитета за прибављање подразумеваног штампача за „%s“"
+msgstr ""
+"Потребно је потврђивање идентитета за прибављање подразумеваног штампача за "
+"„%s“"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1204
 #, c-format
@@ -3507,302 +3548,302 @@ msgstr "Потребно је потврђивање идентитета за �
 msgid "Authentication is required on %s"
 msgstr "Потребно је потврђивање идентитета на „%s“"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1443
+#: gtk/print/backends/gtkprintbackendcups.c:1440
 msgid "Domain:"
 msgstr "Домен:"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1473
+#: gtk/print/backends/gtkprintbackendcups.c:1470
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Потврдите идентитет за штампање документа „%s“"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1478
+#: gtk/print/backends/gtkprintbackendcups.c:1475
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Потврдите идентитет за штампање овог документа на штампачу „%s“"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1480
+#: gtk/print/backends/gtkprintbackendcups.c:1477
 msgid "Authentication is required to print this document"
 msgstr "Потврдите идентитет за штампање овог документа"
 
-#: gtk/print/backends/gtkprintbackendcups.c:2565
+#: gtk/print/backends/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Штампач „%s“ ће ускоро остати без тонера."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2569
+#: gtk/print/backends/gtkprintbackendcups.c:2566
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Штампач „%s“ нема више тонера."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2574
+#: gtk/print/backends/gtkprintbackendcups.c:2571
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Штампач „%s“ ће ускоро остати без развијача."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2579
+#: gtk/print/backends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Штампач „%s“ је остао без развијача."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2584
+#: gtk/print/backends/gtkprintbackendcups.c:2581
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Штампачу „%s“ понестаје бар једна од боја."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2589
+#: gtk/print/backends/gtkprintbackendcups.c:2586
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Штампач „%s“ је остао без бар једне од боја."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2593
+#: gtk/print/backends/gtkprintbackendcups.c:2590
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Поклопац на штампачу „%s“ је отворен."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2597
+#: gtk/print/backends/gtkprintbackendcups.c:2594
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Врата на штампачу „%s“ су отворена."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2601
+#: gtk/print/backends/gtkprintbackendcups.c:2598
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Штампачу „%s“ ће ускоро остати без папира."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2605
+#: gtk/print/backends/gtkprintbackendcups.c:2602
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Нема више папира у штампачу „%s“."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2609
+#: gtk/print/backends/gtkprintbackendcups.c:2606
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Штампач „%s“ је тренутно ван мреже."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2613
+#: gtk/print/backends/gtkprintbackendcups.c:2610
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Постоји проблем са штампачем „%s“."
 
 #. Translators: this string connects multiple printer states together.
-#: gtk/print/backends/gtkprintbackendcups.c:2680
+#: gtk/print/backends/gtkprintbackendcups.c:2677
 msgid "; "
 msgstr "; "
 
-#: gtk/print/backends/gtkprintbackendcups.c:4625
-#: gtk/print/backends/gtkprintbackendcups.c:4693
+#: gtk/print/backends/gtkprintbackendcups.c:4622
+#: gtk/print/backends/gtkprintbackendcups.c:4690
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Двострано"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4626
+#: gtk/print/backends/gtkprintbackendcups.c:4623
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Врста папира"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4627
+#: gtk/print/backends/gtkprintbackendcups.c:4624
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Извор папира"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4628
-#: gtk/print/backends/gtkprintbackendcups.c:4694
+#: gtk/print/backends/gtkprintbackendcups.c:4625
+#: gtk/print/backends/gtkprintbackendcups.c:4691
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Излазна фиока"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4629
+#: gtk/print/backends/gtkprintbackendcups.c:4626
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Резолуција"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4630
+#: gtk/print/backends/gtkprintbackendcups.c:4627
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Гоуст-скрипт предфилтрирање"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4639
+#: gtk/print/backends/gtkprintbackendcups.c:4636
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Једнострано"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4641
+#: gtk/print/backends/gtkprintbackendcups.c:4638
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "По дужој ивици (обично)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4643
+#: gtk/print/backends/gtkprintbackendcups.c:4640
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "По краћој ивици (окренуто)"
 
 #. Translators: this is an option of "Paper Source"
-#: gtk/print/backends/gtkprintbackendcups.c:4645
-#: gtk/print/backends/gtkprintbackendcups.c:4647
-#: gtk/print/backends/gtkprintbackendcups.c:4655
+#: gtk/print/backends/gtkprintbackendcups.c:4642
+#: gtk/print/backends/gtkprintbackendcups.c:4644
+#: gtk/print/backends/gtkprintbackendcups.c:4652
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Сам одреди"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: gtk/print/backends/gtkprintbackendcups.c:4649
-#: gtk/print/backends/gtkprintbackendcups.c:4651
-#: gtk/print/backends/gtkprintbackendcups.c:4653
-#: gtk/print/backends/gtkprintbackendcups.c:4657
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+#: gtk/print/backends/gtkprintbackendcups.c:4654
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Подразумевано"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4659
+#: gtk/print/backends/gtkprintbackendcups.c:4656
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Само уграђени Гоуст-скрипт фонтови"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4661
+#: gtk/print/backends/gtkprintbackendcups.c:4658
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Претвори у ПС ниво 1"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4663
+#: gtk/print/backends/gtkprintbackendcups.c:4660
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Претвори у ПС ниво 2"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4662
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Без предфилтрирања"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: gtk/print/backends/gtkprintbackendcups.c:4674
+#: gtk/print/backends/gtkprintbackendcups.c:4671
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Разно"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4702
+#: gtk/print/backends/gtkprintbackendcups.c:4699
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Једнострано"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4704
+#: gtk/print/backends/gtkprintbackendcups.c:4701
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "По дужој ивици (стандардно)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4706
+#: gtk/print/backends/gtkprintbackendcups.c:4703
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "По краћој ивици (окренуто)"
 
 #. Translators: Top output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4709
+#: gtk/print/backends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Горња корпа"
 
 #. Translators: Middle output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4711
+#: gtk/print/backends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Средња корпа"
 
 #. Translators: Bottom output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4713
+#: gtk/print/backends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Доња корпа"
 
 #. Translators: Side output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4715
+#: gtk/print/backends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Корпа са стране"
 
 #. Translators: Left output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4717
+#: gtk/print/backends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Лева корпа"
 
 #. Translators: Right output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4719
+#: gtk/print/backends/gtkprintbackendcups.c:4716
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Десна корпа"
 
 #. Translators: Center output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4721
+#: gtk/print/backends/gtkprintbackendcups.c:4718
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Корпа на средини"
 
 #. Translators: Rear output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4723
+#: gtk/print/backends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Задња корпа"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: gtk/print/backends/gtkprintbackendcups.c:4725
+#: gtk/print/backends/gtkprintbackendcups.c:4722
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Корпа на лицу"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: gtk/print/backends/gtkprintbackendcups.c:4727
+#: gtk/print/backends/gtkprintbackendcups.c:4724
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Корпа на наличју"
 
 #. Translators: Large capacity output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4729
+#: gtk/print/backends/gtkprintbackendcups.c:4726
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Корпа велике запремине"
 
 #. Translators: Output stacker number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4751
+#: gtk/print/backends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Одлагач %d"
 
 #. Translators: Output mailbox number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4755
+#: gtk/print/backends/gtkprintbackendcups.c:4752
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Поштанско сандуче %d"
 
 #. Translators: Private mailbox
-#: gtk/print/backends/gtkprintbackendcups.c:4759
+#: gtk/print/backends/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Моје сандуче"
 
 #. Translators: Output tray number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4763
+#: gtk/print/backends/gtkprintbackendcups.c:4760
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Касета %d"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5245
+#: gtk/print/backends/gtkprintbackendcups.c:5242
 msgid "Printer Default"
 msgstr "Подразумевано"
 
@@ -3812,42 +3853,42 @@ msgstr "Подразумевано"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, top to bottom"
 msgstr "Слева надесно, одозго надоле"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, bottom to top"
 msgstr "Слева надесно, одоздо нагоре"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, top to bottom"
 msgstr "Сдесна налево, одозго надоле"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, bottom to top"
 msgstr "Сдесна налево, одоздо нагоре"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, left to right"
 msgstr "Одозго надоле, слева надесно"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, right to left"
 msgstr "Одозго надоле, сдесна налево"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, left to right"
 msgstr "Одоздо ка врху, с лева на десно"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, right to left"
 msgstr "Одоздо ка врху, с десна на лево"
@@ -3855,7 +3896,7 @@ msgstr "Одоздо ка врху, с десна на лево"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5729
+#: gtk/print/backends/gtkprintbackendcups.c:5726
 msgid "Job Priority"
 msgstr "Важност"
 
@@ -3863,44 +3904,44 @@ msgstr "Важност"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5740
+#: gtk/print/backends/gtkprintbackendcups.c:5737
 msgid "Billing Info"
 msgstr "Фактурисање"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5764
+#: gtk/print/backends/gtkprintbackendcups.c:5761
 msgctxt "cover page"
 msgid "None"
 msgstr "Ништа"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5765
+#: gtk/print/backends/gtkprintbackendcups.c:5762
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Строго поверљиво"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5766
+#: gtk/print/backends/gtkprintbackendcups.c:5763
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Поверљиво"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5767
+#: gtk/print/backends/gtkprintbackendcups.c:5764
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Тајна"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5768
+#: gtk/print/backends/gtkprintbackendcups.c:5765
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Обично"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5769
+#: gtk/print/backends/gtkprintbackendcups.c:5766
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Строго поверљиво"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5770
+#: gtk/print/backends/gtkprintbackendcups.c:5767
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Некатегорисано"
@@ -3908,7 +3949,7 @@ msgstr "Некатегорисано"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5782
+#: gtk/print/backends/gtkprintbackendcups.c:5779
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Страница по листу"
@@ -3916,7 +3957,7 @@ msgstr "Страница по листу"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5799
+#: gtk/print/backends/gtkprintbackendcups.c:5796
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Слагање страна"
@@ -3925,7 +3966,7 @@ msgstr "Слагање страна"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5876
+#: gtk/print/backends/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Закажи штампу"
@@ -3933,7 +3974,7 @@ msgstr "Закажи штампу"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5887
+#: gtk/print/backends/gtkprintbackendcups.c:5884
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Време за штампу"
@@ -3943,19 +3984,19 @@ msgstr "Време за штампу"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5935
+#: gtk/print/backends/gtkprintbackendcups.c:5932
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Прилагођено %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: gtk/print/backends/gtkprintbackendcups.c:6047
+#: gtk/print/backends/gtkprintbackendcups.c:6044
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Профил штампача"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: gtk/print/backends/gtkprintbackendcups.c:6054
+#: gtk/print/backends/gtkprintbackendcups.c:6051
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Недоступно"
@@ -4227,7 +4268,8 @@ msgstr "Не могу да преместим ставку са адресом �
 #: gtk/gtkrecentmanager.c:2324
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
-msgstr "Нисам пронашао регистрован програм под називом „%s“ за ставку са адресом „%s“"
+msgstr ""
+"Нисам пронашао регистрован програм под називом „%s“ за ставку са адресом „%s“"
 
 #: gtk/gtksearchentry.c:865
 msgid "Clear Entry"
@@ -4325,7 +4367,7 @@ msgstr "Бочна површ"
 msgid "Change di_rection"
 msgstr "Промени сме_р"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9298
 msgid "Insert _Emoji"
 msgstr "Убаци _емотивка"
 
@@ -4486,11 +4528,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Мек ОС класични"
 
-#: gtk/gtktextview.c:9281
+#: gtk/gtktextview.c:9280
 msgid "_Undo"
 msgstr "_Опозови"
 
-#: gtk/gtktextview.c:9285
+#: gtk/gtktextview.c:9284
 msgid "_Redo"
 msgstr "_Понови"
 
@@ -4505,7 +4547,10 @@ msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK application. Using it may cause the application to "
 "break or crash."
-msgstr "ГТК надзорник је интерактивни поправљач грешака тј. дебагер који вам омогућава да истражите и измените унутрашњост било ког ГТК програма. Његово коришћење може довести до неисправности или пада програма."
+msgstr ""
+"ГТК надзорник је интерактивни поправљач грешака тј. дебагер који вам "
+"омогућава да истражите и измените унутрашњост било ког ГТК програма. Његово "
+"коришћење може довести до неисправности или пада програма."
 
 #: gtk/gtkwindow.c:6458
 msgid "Don’t show this message again"
@@ -4654,7 +4699,8 @@ msgstr "Овде можете уписати ЦСС правило које ГТ
 #: gtk/inspector/css-editor.c:142
 msgid ""
 "You can temporarily disable this custom CSS by toggling the switch above."
-msgstr "Можете привремено онемогућити прилагођени ЦСС пребацивањем прекидача изнад."
+msgstr ""
+"Можете привремено онемогућити прилагођени ЦСС пребацивањем прекидача изнад."
 
 #: gtk/inspector/css-editor.c:143
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -5384,7 +5430,8 @@ msgctxt "Font rendering"
 msgid ""
 "Automatic\n"
 "Manual"
-msgstr "Самостално\n"
+msgstr ""
+"Самостално\n"
 "Ручно"
 
 # Треба проверити на шта се односи.
@@ -5406,7 +5453,8 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
-"Истиче сва места где тренутни исцртавач користи Каиро уместо графичке картице."
+"Истиче сва места где тренутни исцртавач користи Каиро уместо графичке "
+"картице."
 
 #: gtk/inspector/visual.ui:565
 msgid "Show Cairo Rendering"
@@ -7691,7 +7739,8 @@ msgid ""
 "  render       Take a screenshot of the file\n"
 "  screenshot   Take a screenshot of the file\n"
 "\n"
-msgstr "Начин коришћења:\n"
+msgstr ""
+"Начин коришћења:\n"
 "  gtk4-builder-tool [НАРЕДБА] [МОГУЋНОСТ…] ДАТОТЕКА\n"
 "\n"
 "Обавља разне задатке на „.ui“ датотекама Гтк Градитеља.\n"
@@ -7703,7 +7752,6 @@ msgstr "Начин коришћења:\n"
 "  preview        Приказује преглед датотеке\n"
 "  render         Прави снимак екрана датотеке\n"
 "  screenshot     Прави снимак екрана датотеке\n"
-""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:358
@@ -7725,7 +7773,6 @@ msgstr "Исписује све именоване објекте."
 #, c-format
 msgid "No object with ID '%s' found\n"
 msgstr "Није пронађен објекат са ИД-ом '%s'\n"
-""
 
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
@@ -7736,7 +7783,6 @@ msgstr "Није пронађен објекат који се може прег
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
 msgstr "Објекти врсте %s не могу да се прегледају\n"
-""
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
@@ -7753,7 +7799,6 @@ msgstr "Користи стил из ЦСС датотеке"
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Не могу да успоставим систем упрозоравања\n"
-""
 
 #: tools/gtk-builder-tool-preview.c:195
 msgid "Preview the file."
@@ -7774,13 +7819,11 @@ msgstr "Могу да прегледам само једну „.ui“ дато�
 #, c-format
 msgid "No object found\n"
 msgstr "Нисам пронашао објекат\n"
-""
 
 #: tools/gtk-builder-tool-screenshot.c:242
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
 msgstr "Не могу да направим снимак екрана за објекте врсте %s\n"
-""
 
 #: tools/gtk-builder-tool-screenshot.c:296
 #, c-format
@@ -7792,9 +7835,9 @@ msgstr "Не могу да направим снимак екрана\n"
 msgid ""
 "File %s exists.\n"
 "Use --force to overwrite.\n"
-msgstr "Датотека %s већ постоји.\n"
+msgstr ""
+"Датотека %s већ постоји.\n"
 "Користите --force да је препишете.\n"
-""
 
 #: tools/gtk-builder-tool-screenshot.c:330
 #: tools/gtk-rendernode-tool-render.c:251
@@ -7841,7 +7884,6 @@ msgstr "Могу да исцртам само једну .ui датотеку у
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: не могу да обрадим вредност за својство „%s“: %s\n"
-""
 
 #: tools/gtk-builder-tool-simplify.c:666
 #, c-format
@@ -7899,7 +7941,6 @@ msgstr "Нисам успео да прочитам „%s“: %s\n"
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "Не могу да упишем „%s“: „%s“\n"
-""
 
 #: tools/gtk-builder-tool-simplify.c:2707
 msgid "Replace the file"
@@ -7917,24 +7958,20 @@ msgstr "Поједностави датотеку."
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Могу да поједноставим само једну .ui датотеку без --replace\n"
-""
 
 #: tools/gtk-builder-tool-validate.c:45
 #, c-format
 msgid "Failed to lookup template parent type %s\n"
 msgstr "Не могу да потражим врсту родитеља шаблона %s\n"
-""
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
 msgstr "Застареле врсте:\n"
-""
 
 #: tools/gtk-builder-tool-validate.c:170
 #, c-format
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Не могу да направим примерак шаблона врсте %s\n"
-""
 
 #: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
@@ -7956,7 +7993,8 @@ msgid ""
 "  show         Show the image\n"
 "  play         Play an animation\n"
 "\n"
-msgstr "Начин коришћења:\n"
+msgstr ""
+"Начин коришћења:\n"
 "  gtk4-image-tool [НАРЕДБА] [МОГУЋНОСТ…] ДАТОТЕКА…\n"
 "\n"
 "Обавља разне задатке на сликама.\n"
@@ -7969,7 +8007,6 @@ msgstr "Начин коришћења:\n"
 "  show         Приказује слику\n"
 "  play         Пушта анимацију\n"
 "\n"
-""
 
 #: tools/gtk-image-tool-compare.c:44 tools/gtk-rendernode-tool-compare.c:68
 msgid "Output file"
@@ -7990,7 +8027,6 @@ msgstr "Није одређена датотека са сликом\n"
 #, c-format
 msgid "Can only accept two image files\n"
 msgstr "Могу да прихватим само две датотеке са сликом\n"
-""
 
 #: tools/gtk-image-tool-compare.c:90 tools/gtk-rendernode-tool-compare.c:123
 #, c-format
@@ -7999,9 +8035,8 @@ msgstr "Не могу да сачувам слику разлике у %s\n"
 
 #: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
-msgid "Differences witten to %s.\n"
-msgstr "Разлике су сачуване у %s.\n"
-""
+msgid "Differences written to %s.\n"
+msgstr "Разлике су уписане у %s.\n"
 
 #: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
 #, c-format
@@ -8012,7 +8047,6 @@ msgstr "Слике су различите.\n"
 #, c-format
 msgid "No differences.\n"
 msgstr "Нема разлика.\n"
-""
 
 #: tools/gtk-image-tool-convert.c:140
 msgid "Format to use"
@@ -8045,8 +8079,8 @@ msgstr "Претвори слику у други формат или стање
 #: tools/gtk-image-tool-convert.c:173 tools/gtk-image-tool-relabel.c:116
 #, c-format
 msgid "Can only accept a single image file and output file\n"
-msgstr "Могу да прихватим само једну датотеку са сликом и једну излазну датотеку\n"
-""
+msgstr ""
+"Могу да прихватим само једну датотеку са сликом и једну излазну датотеку\n"
 
 #: tools/gtk-image-tool-convert.c:187
 #, c-format
@@ -8054,10 +8088,10 @@ msgid ""
 "Not a memory format: %s\n"
 "Possible values:\n"
 "  %s\n"
-msgstr "Није формат меморије: %s\n"
+msgstr ""
+"Није формат меморије: %s\n"
 "Могуће вредности:\n"
 "  %s\n"
-""
 
 #: tools/gtk-image-tool-convert.c:204
 #, c-format
@@ -8065,22 +8099,20 @@ msgid ""
 "Not a color state: %s\n"
 "Possible values:\n"
 "  %s\n"
-msgstr "Није стање боје: %s\n"
+msgstr ""
+"Није стање боје: %s\n"
 "Могуће вредности:\n"
 "  %s\n"
-""
 
 #: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Не могу да одредим и --color-state и --cicp\n"
-""
 
 #: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Није подржана cicp торка: %s\n"
-""
 
 #: tools/gtk-image-tool-info.c:58
 msgid "Format:"
@@ -8103,7 +8135,6 @@ msgstr "Обезбеђује податке о слици."
 #, c-format
 msgid "Can only accept a single image file\n"
 msgstr "Могу да прихватим само једну датотеку са сликом\n"
-""
 
 #: tools/gtk-image-tool-play.c:331 tools/gtk-image-tool-show.c:118
 msgid "Don't add a titlebar"
@@ -8145,7 +8176,6 @@ msgstr "Прикажи једну или више анимација."
 #, c-format
 msgid "No animation file specified\n"
 msgstr "Није одређена датотека са анимацијом\n"
-""
 
 #: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
@@ -8180,7 +8210,8 @@ msgstr "ПРОГРАМ [ПУТАЊА…] - покреће ПРОГРАМ"
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
-msgstr "Покрени програм (наведен називом датотеке радне површи),\n"
+msgstr ""
+"Покрени програм (наведен називом датотеке радне површи),\n"
 "по избору прослеђујући једну или више адреса као аргументе."
 
 #: tools/gtk-launch.c:88
@@ -8203,7 +8234,9 @@ msgstr "%s: недостаје назив програма"
 #: tools/gtk-launch.c:137
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr "Стварање података о програму из ИД-а није подржано на не-Јуникс оперативним системима"
+msgstr ""
+"Стварање података о програму из ИД-а није подржано на не-Јуникс оперативним "
+"системима"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -8235,7 +8268,8 @@ msgid ""
 "  render       Render the path as an image\n"
 "  info         Print information about the path\n"
 "\n"
-msgstr "Начин коришћења:\n"
+msgstr ""
+"Начин коришћења:\n"
 "  gtk4-path-tool [НАРЕДБА] [МОГУЋНОСТ…] ПУТАЊА\n"
 "\n"
 "Извршава различите задатке над путањама.\n"
@@ -8248,7 +8282,6 @@ msgstr "Начин коришћења:\n"
 "  render       Исцртај путању као слику\n"
 "  info         Испиши податке о путањи\n"
 "\n"
-""
 
 #: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
@@ -8520,19 +8553,16 @@ msgstr "Могу да прикажем само једну или две пут�
 #, c-format
 msgid "Failed to read from standard input: %s\n"
 msgstr "Не могу да прочитам из стандардног улаза: %s\n"
-""
 
 #: tools/gtk-path-tool-utils.c:64
 #, c-format
 msgid "Error reading from standard input: %s\n"
 msgstr "Грешка при читању стандардног улаза: %s\n"
-""
 
 #: tools/gtk-path-tool-utils.c:83
 #, c-format
 msgid "Failed to parse '%s' as path.\n"
 msgstr "Не могу да рашчланим '%s' као путању.\n"
-""
 
 #: tools/gtk-path-tool-utils.c:109
 #, c-format
@@ -8571,7 +8601,8 @@ msgid ""
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
 "\n"
-msgstr "Начин коришћења:\n"
+msgstr ""
+"Начин коришћења:\n"
 "  gtk4-rendernode-tool [НАРЕДБА] [МОГУЋНОСТ…] ДАТОТЕКА\n"
 "\n"
 "Обавља разне задатке на ГТК чворовима за исцртавање.\n"
@@ -8585,7 +8616,6 @@ msgstr "Начин коришћења:\n"
 "  match        Поклопи образац у чвору\n"
 "  show         Прикажи чвор\n"
 "  render       Направи снимак екрана чвора\n"
-""
 
 #: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Add renderer to benchmark"
@@ -8624,7 +8654,6 @@ msgstr "Није одређена .node датотека\n"
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Могу да проверим брзину само једне .node датотеке\n"
-""
 
 #: tools/gtk-rendernode-tool-compare.c:66
 #: tools/gtk-rendernode-tool-render.c:308
@@ -8643,7 +8672,6 @@ msgstr "Упореди .node или .png датотеке."
 #, c-format
 msgid "Must specify two files\n"
 msgstr "Морате навести две датотеке\n"
-""
 
 #: tools/gtk-rendernode-tool-compare.c:103
 #: tools/gtk-rendernode-tool-render.c:213
@@ -8685,7 +8713,6 @@ msgstr "Није одређена .svg датотека\n"
 #, c-format
 msgid "Can only accept a single .svg file\n"
 msgstr "Могу прихватити само једну .svg датотеку\n"
-""
 
 #: tools/gtk-rendernode-tool-extract.c:70
 #: tools/gtk-rendernode-tool-extract.c:148
@@ -8713,7 +8740,6 @@ msgstr "Извлачи адресе података из чвора за исц
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Могу прихватити само једну .node датотеку\n"
-""
 
 #: tools/gtk-rendernode-tool-info.c:123 tools/gtk-rendernode-tool-info.c:127
 #: tools/gtk-rendernode-tool-info.c:129
@@ -8753,16 +8779,15 @@ msgstr "Обезбеђује податке о чвору исцртавања."
 msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
-msgstr "Већ постоји датотека %s.\n"
+msgstr ""
+"Већ постоји датотека %s.\n"
 "Уколико желите да је препишете, наведите назив датотеке.\n"
-""
 
 #: tools/gtk-rendernode-tool-render.c:187
 #: tools/gtk-rendernode-tool-render.c:199
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Не могу да направим СВГ: %s\n"
-""
 
 #: tools/gtk-rendernode-tool-render.c:309
 msgid "Keep node position unchanged"
@@ -8784,13 +8809,11 @@ msgstr "Исцртај .node датотеку у слику."
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Могу да исцртам само једну .node датотеку у једну излазну датотеку\n"
-""
 
 #: tools/gtk-rendernode-tool-render.c:353
 #, c-format
 msgid "Invalid rectangle given for bounds\n"
 msgstr "Задат је неисправан правоугаоник за границе\n"
-""
 
 #: tools/gtk-rendernode-tool-show.c:107 tools/gtk-rendernode-tool-show.c:167
 msgid "Put node into offload container"
@@ -8808,7 +8831,6 @@ msgstr "Прикажи чвор исцртавања."
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Могу да прегледам само једну .node датотеку\n"
-""
 
 #. translators: invalid UTF8 in filename
 #: tools/gtk-tool-utils.c:47
@@ -8819,7 +8841,6 @@ msgstr "<неисправно>"
 #, c-format
 msgid "Warning at %s: %s\n"
 msgstr "Упозорење на %s: %s\n"
-""
 
 #: tools/gtk-tool-utils.c:62
 #, c-format
@@ -8860,7 +8881,6 @@ msgstr "Нисам успео да запишем индекс фасцикле\
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Нисам успео да препишем заглавље\n"
-""
 
 #: tools/updateiconcache.c:1515
 #, c-format
@@ -8871,19 +8891,16 @@ msgstr "Нисам успео да отворим датотеку „%s“: %s\
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Не могу да запишем датотеку кеша: %s\n"
-""
 
 #: tools/updateiconcache.c:1563
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Створени кеш није исправан.\n"
-""
 
 #: tools/updateiconcache.c:1577
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Не могу да преименујем „%s“ у „%s“: %s, затим уклањам „%s“.\n"
-""
 
 #: tools/updateiconcache.c:1591
 #, c-format
@@ -8899,7 +8916,6 @@ msgstr "Не могу да преименујем „%s“ назад у „%s�
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Датотека кеша је успешно направљена.\n"
-""
 
 #: tools/updateiconcache.c:1663
 msgid "Overwrite an existing cache, even if up to date"
@@ -8938,7 +8954,6 @@ msgstr "Нисам нашао датотеку: %s\n"
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Није исправан кеш иконица: %s\n"
-""
 
 #: tools/updateiconcache.c:1754
 #, c-format
@@ -8950,6 +8965,7 @@ msgstr "Нема датотеке индекса за тему.\n"
 msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "Нема датотеке индекса теме у „%s“.\n"
-"Ако заиста желите да направите кеш иконица овде, користите --ignore-theme-index.\n"
-""
+msgstr ""
+"Нема датотеке индекса теме у „%s“.\n"
+"Ако заиста желите да направите кеш иконица овде, користите --ignore-theme-"
+"index.\n"
