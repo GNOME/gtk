@@ -578,35 +578,10 @@ gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuRenderPass   *self,
                                                     graphene_rect_t       *out_bounds,
                                                     GskGpuSampler         *out_sampler)
 {
-  graphene_rect_t clip;
-
-  if (flags & GSK_GPU_AS_IMAGE_EXACT_SIZE)
-    {
-      if (clip_bounds == NULL)
-        clip = node->bounds;
-      else
-        clip = *clip_bounds;
-    }
-  else
-    {
-      if (clip_bounds == NULL)
-        {
-          if (!gsk_gpu_node_processor_clip_bounds (self, &node->bounds, GSK_RECT_SNAP_NONE, &clip))
-            return NULL;
-        }
-      else
-        {
-          if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
-            return NULL;
-        }
-      if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip))
-        return NULL;
-    }
-
   return gsk_gpu_get_node_as_image (self->frame,
                                     flags,
                                     self->ccs,
-                                    &clip,
+                                    clip_bounds,
                                     &self->scale,
                                     node,
                                     out_bounds,
