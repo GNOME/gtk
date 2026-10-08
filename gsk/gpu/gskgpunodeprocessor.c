@@ -154,12 +154,6 @@
 
 
 typedef enum {
-  /* The returned image will be sampled outside the returned bounds, so it is
-   * important that it returns the right values.
-   * In particular, opaque textures must ensure they return transparency
-   * and images must not be contained in an atlas.
-   */
-  GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
   /* The returned image needs to be the exact size of the given clip
    * rect, for example because it will be repeated.
    * In detail: out_bounds must equal clip_bounds
@@ -1464,8 +1458,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
       return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
     }
 
-  in_bounds = gsk_rect_contains_rect (&node->bounds, clip_bounds) &&
-              !(flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS);
+  in_bounds = gsk_rect_contains_rect (&node->bounds, clip_bounds);
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
@@ -2196,7 +2189,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                                    0,
                                                     &clip_rect,
                                                     child,
                                                     0,
@@ -2247,7 +2240,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
+                                                    0,
                                                     &clip_bounds, 
                                                     child,
                                                     0,
