@@ -7061,7 +7061,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
                          GTK_EVENT_SEQUENCE_CLAIMED);
 
   surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (tree_view)));
-  device = gtk_gesture_get_device (GTK_GESTURE (priv->drag_gesture)),
+  device = gtk_gesture_get_device (GTK_GESTURE (priv->drag_gesture));
   content = gtk_tree_view_drag_data_get (tree_view, path);
   if (content == NULL)
     goto out;

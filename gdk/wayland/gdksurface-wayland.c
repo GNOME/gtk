@@ -232,7 +232,7 @@ gdk_wayland_surface_get_buffer_size (GdkSurface      *surface,
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
 
-  *out_width = gdk_fractional_scale_scale (&self->scale, surface->width),
+  *out_width = gdk_fractional_scale_scale (&self->scale, surface->width);
   *out_height = gdk_fractional_scale_scale (&self->scale, surface->height);
 }
 

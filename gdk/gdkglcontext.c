@@ -669,8 +669,8 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
       if (priv->egl_surface != NULL)
         eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
 
-      egl_display = gdk_display_get_egl_display (display),
-      egl_config = gdk_display_get_egl_config (display, depth),
+      egl_display = gdk_display_get_egl_display (display);
+      egl_config = gdk_display_get_egl_config (display, depth);
 
       i = 0;
 /*

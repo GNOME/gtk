@@ -87,7 +87,7 @@ gtk_inspector_event_recording_add_trace (GtkInspectorEventRecording *recording,
   trace.controller_type = G_OBJECT_TYPE (controller);
   trace.handled = handled;
 
-  native = gtk_widget_get_native (widget),
+  native = gtk_widget_get_native (widget);
   gtk_native_get_surface_transform (native, &x, &y);
 
   if (!gtk_widget_compute_bounds (widget, GTK_WIDGET (native), &trace.bounds))

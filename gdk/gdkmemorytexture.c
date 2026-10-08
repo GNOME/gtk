@@ -137,7 +137,7 @@ gdk_memory_texture_new_from_layout (GBytes                *bytes,
                        NULL);
   texture = GDK_TEXTURE (self);
 
-  texture->format = layout->format,
+  texture->format = layout->format;
   self->bytes = gdk_memory_sanitize (g_bytes_ref (bytes),
                                      layout,
                                      &self->layout);

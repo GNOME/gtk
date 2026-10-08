@@ -267,12 +267,12 @@ gsk_vulkan_pipeline_get (GskVulkanDevice           *device,
 
   result = gsk_gpu_cached_new (cache, &GSK_VULKAN_PIPELINE_CLASS);
   result->vk_layout = vk_layout;
-  result->op_class = op_class,
-  result->color_states = color_states,
-  result->variation = variation,
-  result->flags = flags,
-  result->blend = blend,
-  result->vk_format = vk_format,
+  result->op_class = op_class;
+  result->color_states = color_states;
+  result->variation = variation;
+  result->flags = flags;
+  result->blend = blend;
+  result->vk_format = vk_format;
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, display->vk_device,
                                            display->vk_pipeline_cache,

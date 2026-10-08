@@ -178,7 +178,7 @@ gsk_path_point_get_position (const GskPathPoint *point,
   g_return_if_fail (gsk_path_point_valid (point, path));
   g_return_if_fail (position != NULL);
 
-  contour = gsk_path_get_contour (path, point->contour),
+  contour = gsk_path_get_contour (path, point->contour);
   gsk_contour_get_position (contour, point, position);
 }
 
@@ -219,7 +219,7 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
   g_return_if_fail (gsk_path_point_valid (point, path));
   g_return_if_fail (tangent != NULL);
 
-  contour = gsk_path_get_contour (path, point->contour),
+  contour = gsk_path_get_contour (path, point->contour);
   gsk_contour_get_tangent (contour, point, direction, tangent);
 }
 

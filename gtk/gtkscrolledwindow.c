@@ -3694,7 +3694,7 @@ gtk_scrolled_window_update_animating (GtkScrolledWindow *sw)
 
   if (gtk_widget_should_animate (GTK_WIDGET (sw)))
     {
-      clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw)),
+      clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw));
       duration = ANIMATION_DURATION;
     }
 

@@ -70,7 +70,7 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext      *draw_context,
 
   self->window_surface = create_cairo_surface_for_surface (surface);
 
-  format = gdk_cairo_format_for_content (cairo_surface_get_content (self->window_surface)),
+  format = gdk_cairo_format_for_content (cairo_surface_get_content (self->window_surface));
   cairo_surface = cairo_image_surface_create (format,
                                               MAX (clip_box.width, 1),
                                               MAX (clip_box.height, 1));

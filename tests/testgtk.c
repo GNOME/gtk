@@ -141,21 +141,21 @@ build_alpha_widgets (void)
   gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 1, 1, 1);
   gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_button), GTK_CHECK_BUTTON (group));
 
-  radio_button = gtk_check_button_new_with_label ("Blue"),
+  radio_button = gtk_check_button_new_with_label ("Blue");
   gtk_widget_set_hexpand (radio_button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 2, 1, 1);
   gtk_check_button_set_group (GTK_CHECK_BUTTON (radio_button), GTK_CHECK_BUTTON (group));
   gtk_check_button_set_active (GTK_CHECK_BUTTON (group), TRUE);
 
-  check_button = gtk_check_button_new_with_label ("Sedentary"),
+  check_button = gtk_check_button_new_with_label ("Sedentary");
   gtk_widget_set_hexpand (check_button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), check_button, 1, 0, 1, 1);
 
-  check_button = gtk_check_button_new_with_label ("Nocturnal"),
+  check_button = gtk_check_button_new_with_label ("Nocturnal");
   gtk_widget_set_hexpand (check_button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
 
-  check_button = gtk_check_button_new_with_label ("Compulsive"),
+  check_button = gtk_check_button_new_with_label ("Compulsive");
   gtk_widget_set_hexpand (check_button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), check_button, 1, 2, 1, 1);
 
