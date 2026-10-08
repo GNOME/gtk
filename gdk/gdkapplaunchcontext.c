@@ -113,7 +113,7 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GAppLaunchContextClass *context_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
 
-  gobject_class->set_property = gdk_app_launch_context_set_property,
+  gobject_class->set_property = gdk_app_launch_context_set_property;
   gobject_class->get_property = gdk_app_launch_context_get_property;
 
   gobject_class->finalize = gdk_app_launch_context_finalize;

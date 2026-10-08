@@ -1481,7 +1481,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
 
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
-  sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter),
+  sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
   image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
   if (!gsk_gpu_render_pass_snap_rect (self,

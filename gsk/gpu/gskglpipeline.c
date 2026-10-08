@@ -421,10 +421,10 @@ gsk_gl_pipeline_use (GskGLDevice               *device,
     glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE_MASK"), 6);
 
   result = gsk_gpu_cached_new (cache, &GSK_GL_PIPELINE_CLASS);
-  result->op_class = op_class,
-  result->flags = flags,
-  result->color_states = color_states,
-  result->variation = variation,
+  result->op_class = op_class;
+  result->flags = flags;
+  result->color_states = color_states;
+  result->variation = variation;
   result->program_id = program_id;
 
   g_hash_table_insert (priv->pipeline_cache, result, result);

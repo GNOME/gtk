@@ -213,7 +213,12 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (gsk_gpu_cache_get_device (self), FALSE, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
+      image = gsk_gpu_device_create_upload_image (gsk_gpu_cache_get_device (self),
+                                                  FALSE,
+                                                  GDK_MEMORY_DEFAULT,
+                                                  FALSE,
+                                                  rect.size.width,
+                                                  rect.size.height);
       area.x = 0;
       area.y = 0;
       area.width = rect.size.width;

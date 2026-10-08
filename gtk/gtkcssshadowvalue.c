@@ -130,7 +130,7 @@ gtk_css_value_shadow_compute (GtkCssValue          *value,
       shadows[i].hoffset = gtk_css_value_compute (shadow->hoffset, property_id, context);
       shadows[i].voffset = gtk_css_value_compute (shadow->voffset, property_id, context);
       shadows[i].radius = gtk_css_value_compute (shadow->radius, property_id, context);
-      shadows[i].spread = gtk_css_value_compute (shadow->spread, property_id, context),
+      shadows[i].spread = gtk_css_value_compute (shadow->spread, property_id, context);
       shadows[i].color = gtk_css_value_compute (shadow->color, property_id, context);
       shadows[i].inset = shadow->inset;
     }

@@ -206,10 +206,15 @@ gtk_grid_view_get_section_bounds (GtkGridView *self,
 
   if (self->header_factory != NULL &&
       GTK_IS_SECTION_MODEL (gtk_list_base_get_model (GTK_LIST_BASE (self))))
-    gtk_section_model_get_section (GTK_SECTION_MODEL (gtk_list_base_get_model (GTK_LIST_BASE (self))),
-                                   position, start, end);
+    {
+      gtk_section_model_get_section (GTK_SECTION_MODEL (gtk_list_base_get_model (GTK_LIST_BASE (self))),
+                                     position, start, end);
+    }
   else
-    *start = 0, *end = n_items;
+    {
+      *start = 0;
+      *end = n_items;
+    }
 
   *start = MIN (*start, n_items);
   *end = CLAMP (*end, *start, n_items);

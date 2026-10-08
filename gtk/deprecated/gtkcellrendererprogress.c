@@ -710,7 +710,7 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
   priv->text_xalign = 0.5;
   priv->text_yalign = 0.5;
 
-  priv->orientation = GTK_ORIENTATION_HORIZONTAL,
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->inverted = FALSE;
 }
 

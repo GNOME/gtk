@@ -409,7 +409,10 @@ split (gconstpointer         *elem1,
               i1 = MIN (KVDF (d), lim1);
               i2 = i1 - d;
               if (lim2 < i2)
-                i1 = lim2 + d, i2 = lim2;
+                {
+                  i1 = lim2 + d;
+                  i2 = lim2;
+                }
               if (fbest < i1 + i2)
                 {
                   fbest = i1 + i2;
@@ -423,7 +426,10 @@ split (gconstpointer         *elem1,
               i1 = MAX (off1, KVDB (d));
               i2 = i1 - d;
               if (i2 < off2)
-                i1 = off2 + d, i2 = off2;
+                {
+                  i1 = off2 + d;
+                  i2 = off2;
+                }
               if (i1 + i2 < bbest)
                 {
                   bbest = i1 + i2;
@@ -617,10 +623,16 @@ gsk_diff (gconstpointer             *elem1,
   gssize lim2 = n2;
 
   while (off1 < lim1 && off2 < lim2 && elem1[off1] == elem2[off2])
-    off1++, off2++;
+    {
+      off1++;
+      off2++;
+    }
 
   while (off1 < lim1 && off2 < lim2 && elem1[lim1 - 1] == elem2[lim2 - 1])
-    lim1--, lim2--;
+    {
+      lim1--;
+      lim2--;
+    }
 
   if (off1 == lim1 && off2 == lim2)
     return GSK_DIFF_OK;
