@@ -2115,6 +2115,7 @@ push_group (SvgElement   *shape,
     {
       SvgElement *mask_shape = svg_mask_get_shape (mask);
       gboolean has_clip = FALSE;
+      GskRenderNode *mask_child, *color_node;
 
       push_op (context, MASKING);
 
@@ -2122,7 +2123,7 @@ push_group (SvgElement   *shape,
       if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
         gtk_snapshot_push_debug (context->snapshot, "mask for masking");
 #endif
-      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (svg_element_get_current_value (mask_shape, SVG_PROPERTY_MASK_TYPE)));
+      gtk_snapshot_push_collect (context->snapshot);
 
       if (svg_element_is_specified (mask_shape, SVG_PROPERTY_X) ||
           svg_element_is_specified (mask_shape, SVG_PROPERTY_Y) ||
@@ -2186,8 +2187,55 @@ push_group (SvgElement   *shape,
       if (has_clip)
         gtk_snapshot_pop (context->snapshot);
 
+      mask_child = gtk_snapshot_pop_collect (context->snapshot);
+      color_node = NULL;
+
+      /* Optimize the case of mask that is just a color.
+       * These happen quite a bit in inkscape svg, and by recognizing
+       * them and turning them into a clip we can avoid offscreens
+       * in the renderer.
+       */
+      if (mask_child)
+        {
+          if (gsk_render_node_get_node_type (mask_child) == GSK_COLOR_NODE)
+            {
+              color_node = mask_child;
+            }
+          else if (gsk_render_node_get_node_type (mask_child) == GSK_TRANSFORM_NODE)
+            {
+              GskTransform *transform = gsk_transform_node_get_transform (mask_child);
+
+              if (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+                color_node = gsk_transform_node_get_child (mask_child);
+            }
+        }
+
+      if (color_node)
+        {
+          float color[4];
+
+          gdk_color_to_float (gsk_color_node_get_gdk_color (color_node),
+                              GDK_COLOR_STATE_SRGB_LINEAR,
+                              color);
+
+          if (color[0] == 1 && color[1] == 1 && color[2] == 1)
+            {
+              gtk_snapshot_push_clip (context->snapshot, &mask_child->bounds);
+              gtk_snapshot_push_opacity (context->snapshot, color[3]);
+              goto masking_done;
+            }
+        }
+
+      gtk_snapshot_push_debug (context->snapshot, "mask for masking");
+      gtk_snapshot_push_mask (context->snapshot, svg_enum_get (svg_element_get_current_value (mask_shape, SVG_PROPERTY_MASK_TYPE)));
+      if (mask_child)
+        {
+          gtk_snapshot_append_node (context->snapshot, mask_child);
+          gsk_render_node_unref (mask_child);
+        }
       gtk_snapshot_pop (context->snapshot);
 
+  masking_done:
       pop_op (context);
     }
 
@@ -2242,6 +2290,7 @@ pop_group (SvgElement   *shape,
       svg_mask_get_shape (mask) != NULL &&
       context->op != CLIPPING)
     {
+      gtk_snapshot_pop (context->snapshot);
       gtk_snapshot_pop (context->snapshot);
 #ifdef DEBUG
       if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))

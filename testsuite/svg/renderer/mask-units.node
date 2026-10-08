@@ -41,14 +41,9 @@ mask {
     }
   }
 }
-mask {
-  mode: luminance;
-  source: color {
+opacity {
+  child: color {
     bounds: 10 110 80 80;
     color: rgb(0,128,0);
-  }
-  mask: color {
-    bounds: 10 110 80 80;
-    color: rgba(255,255,255,0.5);
   }
 }
