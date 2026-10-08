@@ -4466,7 +4466,7 @@ button.emoji-section {
   &:checked { border-color: $selected_bg_color; }
 }
 
-popover.emoji-picker emoji {
+popover.emoji-picker .emoji {
   font-size: x-large;
   padding: 6px;
   border-radius: 6px;
