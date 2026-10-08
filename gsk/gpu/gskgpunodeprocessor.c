@@ -578,35 +578,10 @@ gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuRenderPass   *self,
                                                     graphene_rect_t       *out_bounds,
                                                     GskGpuSampler         *out_sampler)
 {
-  graphene_rect_t clip;
-
-  if (flags & GSK_GPU_AS_IMAGE_EXACT_SIZE)
-    {
-      if (clip_bounds == NULL)
-        clip = node->bounds;
-      else
-        clip = *clip_bounds;
-    }
-  else
-    {
-      if (clip_bounds == NULL)
-        {
-          if (!gsk_gpu_node_processor_clip_bounds (self, &node->bounds, GSK_RECT_SNAP_NONE, &clip))
-            return NULL;
-        }
-      else
-        {
-          if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
-            return NULL;
-        }
-      if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip))
-        return NULL;
-    }
-
   return gsk_gpu_get_node_as_image (self->frame,
                                     flags,
                                     self->ccs,
-                                    &clip,
+                                    clip_bounds,
                                     &self->scale,
                                     node,
                                     out_bounds,
@@ -617,18 +592,39 @@ gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuRenderPass   *self,
  * gsk_gpu_node_processor_get_node_as_image:
  * @self: a node processor
  * @flags: flags for the image
- * @clip_bounds: (nullable): clip rectangle to use or NULL to use
- *   the current clip
+ * @clip_bounds: clip rectangle to use.
  * @node: the node to turn into an image
  * @pos: position of the node in the parent for tracking purposes or
  *   -1 to not do tracking
  * @out_bounds: bounds of the the image in node space
  * @out_sampler: the sampler to use when sampling from this image
  *
- * Generates an image for the given node. The validity of the image is
- * only guaranteed in the region of the clip bounds.
+ * Generates an image for the given node.
  *
- * The resulting image is guaranteed to be premultiplied.
+ * The function will assume that it shuld match a pixel grid with
+ * the scale of the node processor and the origin at the origin of the
+ * clip bounds. If you want to match the pixel grid of the node processor,
+ * you need to snap_to_grid the clip bounds.
+ *
+ * The validity of the image is only guaranteed in the region of the
+ * clip bounds, any values outside of that region are undefined. This
+ * is so that atlas textures can be used to represent contents.
+ *
+ * To give an equivalence in rendernode terms, the following node will
+ * produce valid results with the return value of this function:
+ *
+ * ```
+ * repeat {
+ *   bounds: @clip_bounds;
+ *   repeat: @out_sampler;
+ *   child: texture {
+ *     texture: @return_value;
+ *     bounds: @out_bounds;
+ *   }
+ * }
+ * ```
+ *
+ * The resulting image is guaranteed to use the default shader op.
  *
  * Returns: (nullable): The node as an image or %NULL if the node is fully
  *     clipped
