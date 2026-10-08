@@ -455,14 +455,35 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
   GskGpuImage *result;
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
+
+  if (!(flags & GSK_GPU_AS_IMAGE_EXACT_SIZE))
+    {
+      if (!gsk_rect_intersection (clip_bounds, &node->bounds, out_bounds))
+        return NULL;
+
+      if (!gsk_rect_snap_to_grid_grow (out_bounds,
+                                       scale,
+                                       &GRAPHENE_POINT_INIT (- clip_bounds->origin.x,
+                                                             - clip_bounds->origin.y),
+                                       out_bounds))
+        return NULL;
+
+      if (gsk_rect_contains_rect (out_bounds, clip_bounds))
+        *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+      else
+        *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
+    }
+  else
+    {
+      *out_bounds = *clip_bounds;
+      *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+    }
+
   result = gsk_gpu_node_processor_create_offscreen (frame,
                                                     ccs,
                                                     scale,
-                                                    clip_bounds,
+                                                    out_bounds,
                                                     node);
-
-  *out_bounds = *clip_bounds;
-  *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
 
   return result;
 }
