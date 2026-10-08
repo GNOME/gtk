@@ -2267,7 +2267,7 @@ gtk_spin_button_get_update_policy (GtkSpinButton *spin_button)
  * @spin_button: a `GtkSpinButton`
  * @numeric: flag indicating if only numeric entry is allowed
  *
- * Sets the flag that determines if non-numeric text can be typed
+ * Sets the flag that determines if only numeric text can be typed
  * into the spin button.
  */
 void
@@ -2297,7 +2297,7 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
  * gtk_spin_button_get_numeric:
  * @spin_button: a `GtkSpinButton`
  *
- * Returns whether non-numeric text can be typed into the spin button.
+ * Returns whether only numeric text can be typed into the spin button.
  *
  * Returns: %TRUE if only numeric text can be entered
  */
