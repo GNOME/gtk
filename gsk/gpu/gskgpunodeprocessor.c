@@ -2205,7 +2205,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     return;
 
   gsk_gpu_node_processor_blur_op (self,
-                                  &node->bounds,
+                                  &clip_rect,
                                   graphene_point_zero (),
                                   sigma,
                                   NULL,
@@ -2242,6 +2242,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                     clip_bounds.origin.y - node->bounds.size.height + child->bounds.size.height - node->bounds.origin.y + child->bounds.origin.y,
                                     clip_bounds.size.width + node->bounds.size.width - child->bounds.size.width,
                                     clip_bounds.size.height + node->bounds.size.height - child->bounds.size.height);
+  if (!gsk_rect_snap_to_grid_grow (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
+    return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
@@ -2265,7 +2267,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           gsk_gpu_colorize_op (self,
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
-                               &tex_rect,
+                               &clip_bounds,
                                image,
                                tex_sampler,
                                &tex_rect,
@@ -2291,7 +2293,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
 
   gsk_gpu_texture_op (self,
                       self->ccs,
-                      &tex_rect,
+                      &clip_bounds,
                       image,
                       tex_sampler,
                       &tex_rect);
