@@ -204,7 +204,7 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
 
   seq = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  if (gtk_gesture_get_sequence_state (gesture, seq) == GTK_EVENT_SEQUENCE_DENIED)
+  if (!gtk_gesture_handles_sequence (gesture, seq))
     return;
 
   if (gtk_gesture_is_active (gesture))
