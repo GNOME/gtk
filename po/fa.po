@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-25 12:59+0000\n"
-"PO-Revision-Date: 2026-08-25 22:12+0330\n"
+"POT-Creation-Date: 2026-10-01 12:32+0000\n"
+"PO-Revision-Date: 2026-10-08 23:46+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -30,7 +30,7 @@ msgstr "هیچ قالب سازگاری برای انتقال محتویات فر
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:251 gdk/wayland/gdkdrop-wayland.c:205
 #: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1017
-#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:802
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "هیچ قالب انتقال سازگاری پیدا نشد"
@@ -2233,12 +2233,12 @@ msgid "_Edit"
 msgstr "_ویرایش"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9265
+#: gtk/gtktextview.c:9264
 msgid "_Copy"
 msgstr "_رونوشت"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9342
 msgid "Context menu"
 msgstr "فهرست بافتاری"
 
@@ -2318,7 +2318,7 @@ msgid "_Cancel"
 msgstr "_انصراف"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3150 gtk/gtkplacessidebar.c:3235
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3151 gtk/gtkplacessidebar.c:3236
 #: gtk/gtkplacesview.c:1648
 msgid "_Open"
 msgstr "_گشودن"
@@ -2404,7 +2404,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9272
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2440,8 +2440,8 @@ msgstr "_رونوشت از مکان"
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2313
-#: gtk/gtkplacessidebar.c:3271 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:3272 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "_تغییر نام"
 
@@ -2462,7 +2462,7 @@ msgstr "مرتب کردن _شاخه‌ها پیش از پرونده‌ها"
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1028
 msgid "Home"
 msgstr "خانه"
 
@@ -2613,7 +2613,7 @@ msgstr "_گونه"
 msgid "_Time"
 msgstr "_زمان"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2307
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2308
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -2761,15 +2761,15 @@ msgstr "بستن"
 msgid "Close the infobar"
 msgstr "بستن نوار اطّلاعات"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9260
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9268
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9293
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -2978,7 +2978,7 @@ msgstr "زبانهٔ پیشین"
 msgid "Next tab"
 msgstr "_زبانهٔ بعدی"
 
-#: gtk/gtknotebook.c:4364 gtk/gtknotebook.c:6572
+#: gtk/gtknotebook.c:4366 gtk/gtknotebook.c:6574
 #, c-format
 msgid "Page %u"
 msgstr "صفحهٔ %Iu"
@@ -3041,82 +3041,82 @@ msgid "_Show Text"
 msgstr "_نمایش متن"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:915
 #, c-format
 msgid "Open %s"
 msgstr "گشودن %s"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent"
 msgstr "موارد اخیر"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent files"
 msgstr "پرونده‌های اخیر"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred"
 msgstr "ستاره‌دار"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred files"
 msgstr "پرونده‌های ستاره‌دار"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Open your personal folder"
 msgstr "گشودن شاخهٔ شخصیتان"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Desktop"
 msgstr "رومیزی"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1045
 msgid "Open the contents of your desktop in a folder"
 msgstr "گشودن محتوای میزکارتان در یک شاخه"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Enter Location"
 msgstr "ورود موقعیت"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1061
 msgid "Manually enter a location"
 msgstr "به‌طور دستی یک مکان وارد کنید"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Trash"
 msgstr "زباله‌دان"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1073
 msgid "Open the trash"
 msgstr "گشودن زباله‌دان"
 
-#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
-#: gtk/gtkplacessidebar.c:1410
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "سوار و گشودن «%s»"
 
-#: gtk/gtkplacessidebar.c:1305
+#: gtk/gtkplacessidebar.c:1306
 msgid "Open the contents of the file system"
 msgstr "گشودن محتوای سامانهٔ پرونده"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1389
 msgid "New bookmark"
 msgstr "نشانک جدید"
 
-#: gtk/gtkplacessidebar.c:1390
+#: gtk/gtkplacessidebar.c:1391
 msgid "Add a new bookmark"
 msgstr "اضافه کردن یک نشانک جدید"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Other Locations"
 msgstr "دیگر مکان‌ها"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1457
 msgid "Show other locations"
 msgstr "نمایش دیگر مکان‌ها"
 
-#: gtk/gtkplacessidebar.c:1965 gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "نتوانست %s را شروع کند"
@@ -3124,118 +3124,118 @@ msgstr "نتوانست %s را شروع کند"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2002
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "خطا در قفل‌گشایی %s"
 
-#: gtk/gtkplacessidebar.c:2003
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "نتوانست به %s دسترسی یابد"
 
-#: gtk/gtkplacessidebar.c:2234
+#: gtk/gtkplacessidebar.c:2235
 msgid "This name is already taken"
 msgstr "این نام از پیش گرفته شده"
 
-#: gtk/gtkplacessidebar.c:2525
+#: gtk/gtkplacessidebar.c:2526
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "نتوانست %s را پیاده کند"
 
-#: gtk/gtkplacessidebar.c:2701
+#: gtk/gtkplacessidebar.c:2702
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "نتوانست %s را متوقّف کند"
 
-#: gtk/gtkplacessidebar.c:2730
+#: gtk/gtkplacessidebar.c:2731
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "نتوانست %s را بیرون دهد"
 
-#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2760 gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to eject %s"
 msgstr "نتوانست %s را بیرون دهد"
 
-#: gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2937
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "نتوانست %s را برای تغییرات رسانه‌ای بررسی کند"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3243 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3244 gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "گشودن در _زبانهٔ جدید"
 
-#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3252 gtk/gtkplacesview.c:1657
+#: gtk/gtkplacessidebar.c:3163 gtk/gtkplacessidebar.c:3253 gtk/gtkplacesview.c:1657
 msgid "Open in New _Window"
 msgstr "گشودن در _پنجرهٔ جدید"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3264
 msgid "_Add Bookmark"
 msgstr "_افزودن نشانک"
 
-#: gtk/gtkplacessidebar.c:3267
+#: gtk/gtkplacessidebar.c:3268
 msgid "_Remove"
 msgstr "_برداشتن"
 
-#: gtk/gtkplacessidebar.c:3283 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3284 gtk/gtkplacesview.c:1682
 msgid "_Mount"
 msgstr "_سوار کردن"
 
-#: gtk/gtkplacessidebar.c:3292 gtk/gtkplacesview.c:1671
+#: gtk/gtkplacessidebar.c:3293 gtk/gtkplacesview.c:1671
 msgid "_Unmount"
 msgstr "_پیاده کردن"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Eject"
 msgstr "_بیرون دادن"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Detect Media"
 msgstr "_تشخیص رسانه"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Start"
 msgstr "_شروع"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Power On"
 msgstr "_روشن کردن"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Connect Drive"
 msgstr "_وصل کردن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Start Multi-disk Device"
 msgstr "_شروع افزارهٔ چنددیسکه"
 
-#: gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Unlock Device"
 msgstr "قفل‌_گشایی افزاره"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Stop"
 msgstr "_توقّف"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Safely Remove Drive"
 msgstr "_برداشتن امن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3337
 msgid "_Disconnect Drive"
 msgstr "_قطع کردن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3337
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Stop Multi-disk Device"
 msgstr "_توقف افزارهٔ چنددیسکه"
 
-#: gtk/gtkplacessidebar.c:3338
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Lock Device"
 msgstr "_قفل افزاره"
 
-#: gtk/gtkplacessidebar.c:3829 gtk/gtkplacesview.c:1092
+#: gtk/gtkplacessidebar.c:3830 gtk/gtkplacesview.c:1092
 msgid "Computer"
 msgstr "رایانه"
 
@@ -3351,25 +3351,25 @@ msgid "Unmount"
 msgstr "پیاده کردن"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:496
-#: gtk/print/backends/gtkprintbackendcups.c:5695
+#: gtk/print/backends/gtkprintbackendcups.c:5692
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "فوری"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:497
-#: gtk/print/backends/gtkprintbackendcups.c:5696
+#: gtk/print/backends/gtkprintbackendcups.c:5693
 msgctxt "Print job priority"
 msgid "High"
 msgstr "زیاد"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:498
-#: gtk/print/backends/gtkprintbackendcups.c:5697
+#: gtk/print/backends/gtkprintbackendcups.c:5694
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "متوسّط"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:499
-#: gtk/print/backends/gtkprintbackendcups.c:5698
+#: gtk/print/backends/gtkprintbackendcups.c:5695
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "کم"
@@ -3378,7 +3378,7 @@ msgstr "کم"
 #. * dialog that controls the front cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:521
-#: gtk/print/backends/gtkprintbackendcups.c:5841
+#: gtk/print/backends/gtkprintbackendcups.c:5838
 msgctxt "printer option"
 msgid "Before"
 msgstr "پیش از"
@@ -3387,7 +3387,7 @@ msgstr "پیش از"
 #. * dialog that controls the back cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:528
-#: gtk/print/backends/gtkprintbackendcups.c:5856
+#: gtk/print/backends/gtkprintbackendcups.c:5853
 msgctxt "printer option"
 msgid "After"
 msgstr "پس از"
@@ -3407,35 +3407,35 @@ msgstr "بی‌لبه"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1481
-#: gtk/print/backends/gtkprintbackendcups.c:2633
+#: gtk/print/backends/gtkprintbackendcups.c:2630
 msgid "Paused; Rejecting Jobs"
 msgstr "مکث؛ در حال رد کردن کار‌ها"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1484
-#: gtk/print/backends/gtkprintbackendcups.c:2636
+#: gtk/print/backends/gtkprintbackendcups.c:2633
 #: gtk/print/gtkprintoperation-win32.c:624
 msgid "Paused"
 msgstr "مکث شده"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1487
-#: gtk/print/backends/gtkprintbackendcups.c:2639
+#: gtk/print/backends/gtkprintbackendcups.c:2636
 msgid "Rejecting Jobs"
 msgstr "در حال رد کردن کار‌ها"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1145
-#: gtk/print/backends/gtkprintbackendcups.c:1449
+#: gtk/print/backends/gtkprintbackendcups.c:1446
 msgid "Username:"
 msgstr "نام کاربری:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1146
-#: gtk/print/backends/gtkprintbackendcups.c:1458
+#: gtk/print/backends/gtkprintbackendcups.c:1455
 msgid "Password:"
 msgstr "گذرواژه:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1184
-#: gtk/print/backends/gtkprintbackendcups.c:1471
+#: gtk/print/backends/gtkprintbackendcups.c:1468
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "تصدیق هویت برای چاپ سند «%s» برروی چاپگر %s لازم است"
@@ -3483,302 +3483,302 @@ msgstr "نیاز به تأیید هویت برای گرفتن یک پرونده 
 msgid "Authentication is required on %s"
 msgstr "نیاز به تأیید هویت روی %s"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1443
+#: gtk/print/backends/gtkprintbackendcups.c:1440
 msgid "Domain:"
 msgstr "دامنه:"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1473
+#: gtk/print/backends/gtkprintbackendcups.c:1470
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "تصدیق هویت برای چاپ سند‌ «%s» لازم است"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1478
+#: gtk/print/backends/gtkprintbackendcups.c:1475
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "نیاز به تأیید هویت برای چاپ این سند روی چاپگر %s"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1480
+#: gtk/print/backends/gtkprintbackendcups.c:1477
 msgid "Authentication is required to print this document"
 msgstr "تصدیق هویت برای چاپ این سند لازم است"
 
-#: gtk/print/backends/gtkprintbackendcups.c:2565
+#: gtk/print/backends/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "چاپگر «%s» جوهر کم دارد."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2569
+#: gtk/print/backends/gtkprintbackendcups.c:2566
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "چاپگر «%s» هیچ جوهری ندارد."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2574
+#: gtk/print/backends/gtkprintbackendcups.c:2571
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "چاپگر «%s» توسعه‌دهنده کم دارد."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2579
+#: gtk/print/backends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "چاپگر «%s» هیچ توسعه‌دهنده‌ای ندارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2584
+#: gtk/print/backends/gtkprintbackendcups.c:2581
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "چاپگر «%s» دست‌کم یک منبع نشانگر کم دارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2589
+#: gtk/print/backends/gtkprintbackendcups.c:2586
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "چاپگر «%s» دست‌کم از یک منبع نشانگر خالی است."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2593
+#: gtk/print/backends/gtkprintbackendcups.c:2590
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "روکش روی چاپگر «%s» باز است."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2597
+#: gtk/print/backends/gtkprintbackendcups.c:2594
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "در چاپگر «%s» باز است."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2601
+#: gtk/print/backends/gtkprintbackendcups.c:2598
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "چاپگر «%s» کاغذ کم دارد."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2605
+#: gtk/print/backends/gtkprintbackendcups.c:2602
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "چاپگر «%s» هیچ کاغذی ندارد."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2609
+#: gtk/print/backends/gtkprintbackendcups.c:2606
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "چاپگر «%s» هم‌اکنون برون‌خط است."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2613
+#: gtk/print/backends/gtkprintbackendcups.c:2610
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "چاپگر «%s» مشکلی دارد."
 
 #. Translators: this string connects multiple printer states together.
-#: gtk/print/backends/gtkprintbackendcups.c:2680
+#: gtk/print/backends/gtkprintbackendcups.c:2677
 msgid "; "
 msgstr "؛ "
 
-#: gtk/print/backends/gtkprintbackendcups.c:4625
-#: gtk/print/backends/gtkprintbackendcups.c:4693
+#: gtk/print/backends/gtkprintbackendcups.c:4622
+#: gtk/print/backends/gtkprintbackendcups.c:4690
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "دو رو"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4626
+#: gtk/print/backends/gtkprintbackendcups.c:4623
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "نوع کاغذ"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4627
+#: gtk/print/backends/gtkprintbackendcups.c:4624
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "منبع کاغذ"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4628
-#: gtk/print/backends/gtkprintbackendcups.c:4694
+#: gtk/print/backends/gtkprintbackendcups.c:4625
+#: gtk/print/backends/gtkprintbackendcups.c:4691
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "خروجی کاغذ"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4629
+#: gtk/print/backends/gtkprintbackendcups.c:4626
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "تفکیک‌پذیری"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4630
+#: gtk/print/backends/gtkprintbackendcups.c:4627
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "پیش‌پالایش GhostScript"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4639
+#: gtk/print/backends/gtkprintbackendcups.c:4636
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4641
+#: gtk/print/backends/gtkprintbackendcups.c:4638
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4643
+#: gtk/print/backends/gtkprintbackendcups.c:4640
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: this is an option of "Paper Source"
-#: gtk/print/backends/gtkprintbackendcups.c:4645
-#: gtk/print/backends/gtkprintbackendcups.c:4647
-#: gtk/print/backends/gtkprintbackendcups.c:4655
+#: gtk/print/backends/gtkprintbackendcups.c:4642
+#: gtk/print/backends/gtkprintbackendcups.c:4644
+#: gtk/print/backends/gtkprintbackendcups.c:4652
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "گزینش خودکار"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: gtk/print/backends/gtkprintbackendcups.c:4649
-#: gtk/print/backends/gtkprintbackendcups.c:4651
-#: gtk/print/backends/gtkprintbackendcups.c:4653
-#: gtk/print/backends/gtkprintbackendcups.c:4657
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+#: gtk/print/backends/gtkprintbackendcups.c:4654
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "پیش‌فرض چاپگر"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4659
+#: gtk/print/backends/gtkprintbackendcups.c:4656
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "تنها قلم‌های GhostScript نهفته شوند"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4661
+#: gtk/print/backends/gtkprintbackendcups.c:4658
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "تبدیل به سطح ۱ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4663
+#: gtk/print/backends/gtkprintbackendcups.c:4660
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "تبدیل به سطح ۲ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4662
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "بدون پیش‌پالایش"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: gtk/print/backends/gtkprintbackendcups.c:4674
+#: gtk/print/backends/gtkprintbackendcups.c:4671
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "متفرّقه"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4702
+#: gtk/print/backends/gtkprintbackendcups.c:4699
 msgctxt "sides"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4704
+#: gtk/print/backends/gtkprintbackendcups.c:4701
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4706
+#: gtk/print/backends/gtkprintbackendcups.c:4703
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: Top output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4709
+#: gtk/print/backends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "محفظه بالایی"
 
 #. Translators: Middle output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4711
+#: gtk/print/backends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "محفظه وسط"
 
 #. Translators: Bottom output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4713
+#: gtk/print/backends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "محفظه پایین"
 
 #. Translators: Side output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4715
+#: gtk/print/backends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "محفظه کنار"
 
 #. Translators: Left output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4717
+#: gtk/print/backends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "محفظه چپ"
 
 #. Translators: Right output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4719
+#: gtk/print/backends/gtkprintbackendcups.c:4716
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "محفظه راست"
 
 #. Translators: Center output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4721
+#: gtk/print/backends/gtkprintbackendcups.c:4718
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "محفظه مرکزی"
 
 #. Translators: Rear output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4723
+#: gtk/print/backends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "محفظه عقب"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: gtk/print/backends/gtkprintbackendcups.c:4725
+#: gtk/print/backends/gtkprintbackendcups.c:4722
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "محفظه رو به بالا"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: gtk/print/backends/gtkprintbackendcups.c:4727
+#: gtk/print/backends/gtkprintbackendcups.c:4724
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "محفطه رو به پایین"
 
 #. Translators: Large capacity output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4729
+#: gtk/print/backends/gtkprintbackendcups.c:4726
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "محفظه با گنجایش بالا"
 
 #. Translators: Output stacker number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4751
+#: gtk/print/backends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "پشته‌ساز %Id"
 
 #. Translators: Output mailbox number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4755
+#: gtk/print/backends/gtkprintbackendcups.c:4752
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "صندوق پستی %Id"
 
 #. Translators: Private mailbox
-#: gtk/print/backends/gtkprintbackendcups.c:4759
+#: gtk/print/backends/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "صندوق پستی من"
 
 #. Translators: Output tray number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4763
+#: gtk/print/backends/gtkprintbackendcups.c:4760
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "سینی %Id"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5245
+#: gtk/print/backends/gtkprintbackendcups.c:5242
 msgid "Printer Default"
 msgstr "پیش‌فرض چاپگر"
 
@@ -3788,49 +3788,49 @@ msgstr "پیش‌فرض چاپگر"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5704 gtk/print/gtkprintunixdialog.c:2712
+#: gtk/print/backends/gtkprintbackendcups.c:5701 gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, top to bottom"
 msgstr "از چپ به راست، از بالا به پایین"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5704 gtk/print/gtkprintunixdialog.c:2712
+#: gtk/print/backends/gtkprintbackendcups.c:5701 gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, bottom to top"
 msgstr "از چپ به راست، از پایین به ابتدا"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705 gtk/print/gtkprintunixdialog.c:2713
+#: gtk/print/backends/gtkprintbackendcups.c:5702 gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, top to bottom"
 msgstr "از راست به چپ، از بالا به پایین"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705 gtk/print/gtkprintunixdialog.c:2713
+#: gtk/print/backends/gtkprintbackendcups.c:5702 gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, bottom to top"
 msgstr "از راست به چپ، از پایین به بالا"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706 gtk/print/gtkprintunixdialog.c:2714
+#: gtk/print/backends/gtkprintbackendcups.c:5703 gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, left to right"
 msgstr "از بالا به پایین، از چپ به راست"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706 gtk/print/gtkprintunixdialog.c:2714
+#: gtk/print/backends/gtkprintbackendcups.c:5703 gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, right to left"
 msgstr "از بالا به پایین، از راست به چپ"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707 gtk/print/gtkprintunixdialog.c:2715
+#: gtk/print/backends/gtkprintbackendcups.c:5704 gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, left to right"
 msgstr "از انتها به ابتدا، از چپ به راست"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707 gtk/print/gtkprintunixdialog.c:2715
+#: gtk/print/backends/gtkprintbackendcups.c:5704 gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, right to left"
 msgstr "از پایین به بالا، از راست به چپ"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5729
+#: gtk/print/backends/gtkprintbackendcups.c:5726
 msgid "Job Priority"
 msgstr "اولویت کار"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5740
+#: gtk/print/backends/gtkprintbackendcups.c:5737
 msgid "Billing Info"
 msgstr "اطلاعات صورتحساب"
 
@@ -3838,37 +3838,37 @@ msgstr "اطلاعات صورتحساب"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5764
+#: gtk/print/backends/gtkprintbackendcups.c:5761
 msgctxt "cover page"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5765
+#: gtk/print/backends/gtkprintbackendcups.c:5762
 msgctxt "cover page"
 msgid "Classified"
 msgstr "طبقه‌بندی شده"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5766
+#: gtk/print/backends/gtkprintbackendcups.c:5763
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "محرمانه"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5767
+#: gtk/print/backends/gtkprintbackendcups.c:5764
 msgctxt "cover page"
 msgid "Secret"
 msgstr "سری"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5768
+#: gtk/print/backends/gtkprintbackendcups.c:5765
 msgctxt "cover page"
 msgid "Standard"
 msgstr "استاندارد"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5769
+#: gtk/print/backends/gtkprintbackendcups.c:5766
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "فوق سری"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5770
+#: gtk/print/backends/gtkprintbackendcups.c:5767
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "طبقه‌بندی نشده"
@@ -3876,7 +3876,7 @@ msgstr "طبقه‌بندی نشده"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5782
+#: gtk/print/backends/gtkprintbackendcups.c:5779
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "تعداد صفحه‌ها در برگه"
@@ -3884,7 +3884,7 @@ msgstr "تعداد صفحه‌ها در برگه"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5799
+#: gtk/print/backends/gtkprintbackendcups.c:5796
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "ترتیب صفحه‌ها"
@@ -3893,7 +3893,7 @@ msgstr "ترتیب صفحه‌ها"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5876
+#: gtk/print/backends/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Print at"
 msgstr "زمان چاپ"
@@ -3901,7 +3901,7 @@ msgstr "زمان چاپ"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5887
+#: gtk/print/backends/gtkprintbackendcups.c:5884
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "چاپ در زمان مشخص"
@@ -3911,19 +3911,19 @@ msgstr "چاپ در زمان مشخص"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5935
+#: gtk/print/backends/gtkprintbackendcups.c:5932
 #, c-format
 msgid "Custom %s×%s"
 msgstr "سفارشی %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: gtk/print/backends/gtkprintbackendcups.c:6047
+#: gtk/print/backends/gtkprintbackendcups.c:6044
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "نماگر چاپگر"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: gtk/print/backends/gtkprintbackendcups.c:6054
+#: gtk/print/backends/gtkprintbackendcups.c:6051
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "خارج از دسترس"
@@ -4288,7 +4288,7 @@ msgstr "نوار کناری"
 msgid "Change di_rection"
 msgstr "دگرگونی _جهت"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9298
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
@@ -4448,11 +4448,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "سامانه عامل کلاسیک مک"
 
-#: gtk/gtktextview.c:9281
+#: gtk/gtktextview.c:9280
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:9285
+#: gtk/gtktextview.c:9284
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
@@ -7933,7 +7933,7 @@ msgstr ""
 
 #: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
-msgid "Differences witten to %s.\n"
+msgid "Differences written to %s.\n"
 msgstr "تغییرات در %s نوشته شد.\n"
 
 #: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
