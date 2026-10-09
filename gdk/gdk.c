@@ -623,7 +623,7 @@ ensure_portals_app_id_registered (void)
  * - If we are in a sandbox, we always want to use portals
  * - Otherwise, we want to use the portal if it is available
  *
- * The upshot is: if this functions return true and using the
+ * The upshot is: if this function returns true and using the
  * portal fails, we should treat it as an error, not fall back
  * to something else.
  */

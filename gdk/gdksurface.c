@@ -694,8 +694,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * Emitted when the size of @surface is changed, or when relayout should
    * be performed.
    *
-   * Surface size is reported in ”application pixels”, not
-   * ”device pixels” (see gdk_surface_get_scale_factor()).
+   * Surface size is reported in “application pixels”, not
+   * “device pixels” (see gdk_surface_get_scale_factor()).
    */
   signals[LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),

@@ -5875,7 +5875,7 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
  * Setting a name allows you to refer to the widget from a
  * CSS file. You can apply a style to widgets with a particular name
  * in the CSS file. See the documentation for the CSS syntax (on the
- * same page as the docs for [class@Gtk.StyleContext].
+ * same page as the docs for [class@Gtk.StyleContext]).
  *
  * Note that the CSS syntax has certain special characters to delimit
  * and represent elements in a selector (period, #, >, *...), so using

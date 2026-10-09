@@ -409,7 +409,7 @@ gtk_tree_store_newv (int    n_columns,
  * `GtkTreeStore`, and should only be used when constructing a new
  * `GtkTreeStore`.
  *
- * This functions cannot be called after a row has been added,
+ * This function cannot be called after a row has been added,
  * or a method on the `GtkTreeModel` interface is called on the
  * tree store.
  *
@@ -470,7 +470,7 @@ gtk_tree_store_set_n_columns (GtkTreeStore *tree_store,
  * `GtkTreeStore`, and should only be used when constructing a new
  * `GtkTreeStore`.
  *
- * This functions cannot be called after a row has been added,
+ * This function cannot be called after a row has been added,
  * or a method on the `GtkTreeModel` interface is called on the
  * tree store.
  *
