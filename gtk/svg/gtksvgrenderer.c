@@ -2752,8 +2752,8 @@ paint_radial_gradient (SvgElement            *gradient,
   /* If the gradient transform is singular, we might end up with
    * nans or infs in the bounds :(
    */
-  if (!isnormal (gradient_bounds.size.width) ||
-      !isnormal (gradient_bounds.size.height))
+  if (!isfinite (gradient_bounds.size.width) ||
+      !isfinite (gradient_bounds.size.height))
     {
       GskRenderNode *node = gsk_container_node_new (NULL, 0);
       gtk_snapshot_append_node (context->snapshot, node);
