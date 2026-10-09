@@ -669,7 +669,6 @@ gsk_gpu_node_processor_run_blur_pass (GskGpuFrame           *frame,
 static void
 gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 const graphene_rect_t     *rect,
-                                const graphene_point_t    *shadow_offset,
                                 const graphene_size_t     *sigma,
                                 const GdkColor            *shadow_color,
                                 GskGpuImage               *source_image,
@@ -680,14 +679,11 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   GskGpuImage *intermediate;
   graphene_rect_t clip_rect, intermediate_rect;
   GskGpuSampler intermediate_sampler;
-  GskGpuRenderPassTranslateStorage storage;
   graphene_size_t padding, leftover_sigma;
 
   /* FIXME: Handle clip radius growing the clip too much */
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
     return;
-  clip_rect.origin.x -= shadow_offset->x;
-  clip_rect.origin.y -= shadow_offset->y;
 
   if (sigma->width > 0.f && sigma->height > 0.f)
     {
@@ -719,7 +715,6 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
       intermediate_sampler = source_sampler;
     }
 
-  gsk_gpu_render_pass_push_translate (self, shadow_offset, &storage);
   if (shadow_color)
     {
       gsk_gpu_blur_op (self,
@@ -748,7 +743,6 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                        &intermediate_rect,
                        sigma);
     }
-  gsk_gpu_render_pass_pop_translate (self, &storage);
 
   g_object_unref (intermediate);
 }
@@ -2200,7 +2194,6 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
 
   gsk_gpu_node_processor_blur_op (self,
                                   &clip_rect,
-                                  graphene_point_zero (),
                                   sigma,
                                   NULL,
                                   image,
@@ -2252,12 +2245,12 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   for (i = 0; i < n_shadows; i++)
     {
       const GskShadowEntry *shadow = gsk_shadow_node_get_shadow_entry (node, i);
+      GskGpuRenderPassTranslateStorage storage;
+
+      gsk_gpu_render_pass_push_translate (self, &shadow->offset, &storage);
 
       if (shadow->radius == 0)
         {
-          GskGpuRenderPassTranslateStorage storage;
-
-          gsk_gpu_render_pass_push_translate (self, &shadow->offset, &storage);
           gsk_gpu_colorize_op (self,
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
@@ -2266,7 +2259,6 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                tex_sampler,
                                &tex_rect,
                                &shadow->color);
-          gsk_gpu_render_pass_pop_translate (self, &storage);
         }
       else
         {
@@ -2275,7 +2267,6 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           graphene_rect_inset_r (&child->bounds, - clip_radius, - clip_radius, &bounds);
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
-                                          &shadow->offset,
                                           &GRAPHENE_SIZE_INIT (0.5 * shadow->radius, 0.5 * shadow->radius),
                                           &shadow->color,
                                           image,
@@ -2283,6 +2274,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                           &tex_rect,
                                           tex_sampler);
         }
+      gsk_gpu_render_pass_pop_translate (self, &storage);
     }
 
   gsk_gpu_texture_op (self,
