@@ -553,6 +553,9 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
+  /* Note: we can't optimize the opacity == 1.0 case,
+   * since the opacity node isolates the background.
+   */
   if (state->data.opacity.opacity == 0.0)
     {
       GdkRGBA color = GDK_RGBA ("00000000");

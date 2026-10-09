@@ -1314,19 +1314,19 @@ gsk_skew_transform_invert (GskTransform *transform,
                            GskTransform *next)
 {
   GskSkewTransform *self = (GskSkewTransform *) transform;
-  float tx, ty, d;
+  float tx, ty, dinv;
   graphene_matrix_t matrix;
 
   tx = tanf (DEG_TO_RAD (self->skew_x));
   ty = tanf (DEG_TO_RAD (self->skew_y));
 
-  d = 1 - tx * ty;
-  if (isnormal (d))
+  dinv = 1 / (1 - tx * ty);
+  if (isfinite (dinv))
     {
       graphene_matrix_init_from_2d (&matrix,
-                                       1 / d, - ty / d,
-                                    - tx / d,    1 / d,
-                                           0,        0);
+                                           dinv, - ty * dinv,
+                                    - tx * dinv,        dinv,
+                                              0,           0);
       return gsk_transform_matrix_with_category (next,
                                                  &matrix,
                                                  GSK_FINE_TRANSFORM_CATEGORY_2D);
@@ -1520,7 +1520,7 @@ gsk_scale_transform_invert (GskTransform *transform,
   float yinv = 1.f / self->factor_y;
   float zinv = 1.f / self->factor_z;
 
-  if (isnormal (xinv) && isnormal (yinv) && isnormal (zinv))
+  if (isfinite (xinv) && isfinite (yinv) && isfinite (zinv))
     return gsk_transform_scale_3d (next, xinv, yinv, zinv);
   else
     return NULL;
