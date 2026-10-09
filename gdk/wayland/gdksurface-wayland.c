@@ -355,7 +355,8 @@ gdk_wayland_surface_frame_callback (void               *data,
           if (monitor)
             {
               int monitor_refresh = gdk_monitor_get_refresh_rate (monitor);
-              refresh = (1000 * G_NSEC_PER_SEC + monitor_refresh / 2) / monitor_refresh;
+              if (monitor_refresh != 0)
+                refresh = (1000 * G_NSEC_PER_SEC + monitor_refresh / 2) / monitor_refresh;
             }
         }
 
