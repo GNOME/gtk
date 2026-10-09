@@ -629,7 +629,6 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   opposite_scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), opposite_orientation);
   gtk_list_base_get_border_spacing (GTK_LIST_BASE (self), NULL, &spacing);
 
-retry:
   gtk_list_item_manager_gc_tiles (self->item_manager);
 
   /* step 0: exit early if list is empty */
@@ -695,8 +694,7 @@ retry:
     }
 
   /* step 4: allocate the rest */
-  if (!gtk_list_base_allocate (GTK_LIST_BASE (self)))
-    goto retry;
+  gtk_list_base_allocate (GTK_LIST_BASE (self));
 }
 
 static void

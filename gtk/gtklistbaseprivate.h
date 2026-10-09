@@ -94,7 +94,7 @@ void                   gtk_list_base_set_tab_behavior           (GtkListBase    
 GtkListTabBehavior     gtk_list_base_get_tab_behavior           (GtkListBase            *self);
 
 
-gboolean               gtk_list_base_allocate                   (GtkListBase            *self);
+void                   gtk_list_base_allocate                   (GtkListBase            *self);
 
 void                   gtk_list_base_scroll_to                  (GtkListBase            *self,
                                                                  guint                   pos,
