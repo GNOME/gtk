@@ -669,6 +669,7 @@ gsk_gpu_node_processor_run_blur_pass (GskGpuFrame           *frame,
 static void
 gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 const graphene_rect_t     *rect,
+                                const graphene_rect_t     *padded_rect,
                                 const graphene_size_t     *sigma,
                                 const GdkColor            *shadow_color,
                                 GskGpuImage               *source_image,
@@ -677,23 +678,16 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 GskGpuSampler              source_sampler)
 {
   GskGpuImage *intermediate;
-  graphene_rect_t clip_rect, intermediate_rect;
+  graphene_rect_t intermediate_rect;
   GskGpuSampler intermediate_sampler;
-  graphene_size_t padding, leftover_sigma;
-
-  /* FIXME: Handle clip radius growing the clip too much */
-  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
-    return;
+  graphene_size_t leftover_sigma;
 
   if (sigma->width > 0.f && sigma->height > 0.f)
     {
-      gsk_blur_node_get_padding (sigma, &padding);
-      graphene_rect_inset (&clip_rect, 0.f, - padding.height);
-      if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
-        return;
-
-      if (!gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
-        return;
+      intermediate_rect = GRAPHENE_RECT_INIT (rect->origin.x,
+                                              padded_rect->origin.y,
+                                              rect->size.width,
+                                              padded_rect->size.height);
 
       intermediate = gsk_gpu_node_processor_run_blur_pass (self->frame,
                                                            &GRAPHENE_SIZE_INIT (sigma->width, 0.0f),
@@ -2162,7 +2156,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
 {
   GskRenderNode *child;
   GskGpuImage *image;
-  graphene_rect_t tex_rect, clip_rect;
+  graphene_rect_t tex_rect, clip, padded_clip;
   GskGpuSampler tex_sampler;
   const graphene_size_t *sigma;
   graphene_size_t padding;
@@ -2176,15 +2170,18 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     }
 
   gsk_blur_node_get_padding (sigma, &padding);
-  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_rect))
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
     return;
-  graphene_rect_inset (&clip_rect, - padding.width, - padding.height);
-  if (!gsk_rect_snap_to_grid_grow (&clip_rect, &self->scale, &self->offset, &clip_rect))
+  if (!gsk_rect_intersection (&clip, &node->bounds, &clip))
+    return;
+  graphene_rect_inset_r (&clip, - padding.width, - padding.height, &padded_clip);
+  if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip) ||
+      !gsk_rect_snap_to_grid_grow (&padded_clip, &self->scale, &self->offset, &padded_clip))
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    &clip_rect,
+                                                    &padded_clip,
                                                     child,
                                                     0,
                                                     &tex_rect,
@@ -2193,7 +2190,8 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
     return;
 
   gsk_gpu_node_processor_blur_op (self,
-                                  &clip_rect,
+                                  &clip,
+                                  &padded_clip,
                                   sigma,
                                   NULL,
                                   image,
@@ -2262,11 +2260,16 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
         }
       else
         {
-          graphene_rect_t bounds;
+          graphene_rect_t bounds, padded_bounds;
           float clip_radius = gsk_cairo_blur_compute_pixels (shadow->radius);
-          graphene_rect_inset_r (&child->bounds, - clip_radius, - clip_radius, &bounds);
+          bounds = child->bounds;
+          graphene_rect_inset_r (&bounds, - clip_radius, - clip_radius, &padded_bounds);
+          if (!gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds) ||
+              !gsk_rect_snap_to_grid_grow (&padded_bounds, &self->scale, &self->offset, &padded_bounds))
+            continue;
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
+                                          &padded_bounds,
                                           &GRAPHENE_SIZE_INIT (0.5 * shadow->radius, 0.5 * shadow->radius),
                                           &shadow->color,
                                           image,
