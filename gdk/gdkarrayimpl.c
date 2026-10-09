@@ -120,7 +120,7 @@ gdk_array(clear) (GdkArray *self)
 #ifdef GDK_ARRAY_PREALLOC
   if (self->start != self->preallocated)
 #endif
-    g_free_sized (self->start, gdk_array(get_capacity) (self) * sizeof (_T_));
+    g_free_sized (self->start, GDK_ARRAY_REAL_SIZE (gdk_array(get_capacity) (self)) * sizeof (_T_));
   gdk_array(init) (self);
 }
 
