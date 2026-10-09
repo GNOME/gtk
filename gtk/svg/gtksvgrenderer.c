@@ -870,6 +870,20 @@ determine_filter_subregion (SvgFilter             *f,
   return gsk_rect_intersection (filter_region, subregion, subregion);
 }
 
+static gboolean
+filter_source_needs_padding (SvgElement *filter)
+{
+  for (unsigned int i = 0; i < filter->filters->len; i++)
+    {
+      SvgFilter *f = g_ptr_array_index (filter->filters, i);
+
+      if (svg_filter_get_filter_type (f) != SVG_FILTER_BLUR)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static GskRenderNode *
 apply_filter_tree (SvgElement    *shape,
                    SvgElement    *filter,
@@ -910,7 +924,8 @@ apply_filter_tree (SvgElement    *shape,
   if (!gsk_rect_intersection (&filter_region, &source->bounds, &rect))
     return empty_node ();
 
-  if (!gsk_rect_equal (&filter_region, &rect))
+  if (!gsk_rect_equal (&filter_region, &rect) &&
+      filter_source_needs_padding (filter))
     {
       GskRenderNode *pad, *padded;
 

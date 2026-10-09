@@ -1,19 +1,10 @@
 clip {
-  clip: 0 0 200 100;
-  child: clip {
-    clip: 10 10 100 100;
-    child: blur {
-      blur: 10;
-      child: container {
-        color {
-          bounds: 10 10 100 100;
-          color: rgba(0,0,0,0);
-        }
-        color {
-          bounds: 20 20 60 60;
-          color: rgb(0,0,255);
-        }
-      }
+  clip: 10 10 100 100;
+  child: blur {
+    radius: 5;
+    child: color {
+      bounds: 20 20 60 60;
+      color: rgb(0,0,255);
     }
   }
 }
