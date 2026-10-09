@@ -34,6 +34,7 @@
 #include "gsk/gskblurnodeprivate.h"
 #include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskcomponenttransferprivate.h"
 #include "gsk/gskcomponenttransfernodeprivate.h"
 #include "gsk/gskdisplacementnodeprivate.h"
 #include "gsk/gskisolationnodeprivate.h"
@@ -876,9 +877,43 @@ filter_source_needs_padding (SvgElement *filter)
   for (unsigned int i = 0; i < filter->filters->len; i++)
     {
       SvgFilter *f = g_ptr_array_index (filter->filters, i);
+      GskComponentTransfer *t;
+      float a;
 
-      if (svg_filter_get_filter_type (f) != SVG_FILTER_BLUR)
-        return TRUE;
+      switch (svg_filter_get_filter_type (f))
+        {
+        case SVG_FILTER_BLUR:
+        case SVG_FILTER_MERGE:
+        case SVG_FILTER_MERGE_NODE:
+        case SVG_FILTER_COMPONENT_TRANSFER:
+        case SVG_FILTER_FUNC_R:
+        case SVG_FILTER_FUNC_G:
+        case SVG_FILTER_FUNC_B:
+          continue;
+
+        case SVG_FILTER_FUNC_A:
+          t = svg_filter_get_component_transfer (f);
+          a = gsk_component_transfer_apply (t, 0);
+          gsk_component_transfer_free (t);
+
+          if (a == 0)
+            continue;
+          else
+            return TRUE;
+
+        case SVG_FILTER_FLOOD:
+        case SVG_FILTER_BLEND:
+        case SVG_FILTER_COLOR_MATRIX:
+        case SVG_FILTER_COMPOSITE:
+        case SVG_FILTER_OFFSET:
+        case SVG_FILTER_DISPLACEMENT:
+        case SVG_FILTER_TILE:
+        case SVG_FILTER_IMAGE:
+        case SVG_FILTER_DROPSHADOW:
+        case SVG_FILTER_TURBULENCE:
+        default:
+          return TRUE;
+        }
     }
 
   return FALSE;

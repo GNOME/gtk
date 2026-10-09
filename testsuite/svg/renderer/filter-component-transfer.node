@@ -1,63 +1,34 @@
-clip {
-  clip: 0 0 200 100;
-  child: container {
-    component-transfer {
-      child: container {
-        color {
-          bounds: 6 6 48 48;
-          color: rgba(0,0,0,0);
-        }
-        color {
-          bounds: 10 10 40 40;
-          color: rgb(255,0,0);
-        }
-      }
-      red: table(0, 0.5, 1);
-      color-state: srgb-linear;
-    }
-    component-transfer {
-      child: container {
-        color {
-          bounds: 56 6 48 48;
-          color: rgba(0,0,0,0);
-        }
-        color {
-          bounds: 60 10 40 40;
-          color: rgb(255,0,0);
-        }
-      }
-      red: gamma(1, 2, 0);
-      green: gamma(1, 2, 0);
-      blue: gamma(1, 2, 0);
-      color-state: srgb-linear;
-    }
-    component-transfer {
-      child: container {
-        color {
-          bounds: 106 6 48 48;
-          color: rgba(0,0,0,0);
-        }
-        color {
-          bounds: 110 10 40 40;
-          color: rgb(255,0,0);
-        }
-      }
-      red: linear(0.5, 0.2);
-      color-state: srgb-linear;
-    }
-    component-transfer {
-      child: container {
-        color {
-          bounds: 6 56 48 48;
-          color: rgba(0,0,0,0);
-        }
-        color {
-          bounds: 10 60 40 40;
-          color: rgb(255,0,0);
-        }
-      }
-      red: discrete(0, 0.5, 1);
-      color-state: srgb-linear;
-    }
+component-transfer {
+  child: color {
+    bounds: 10 10 40 40;
+    color: rgb(255,0,0);
   }
+  red: table(0, 0.5, 1);
+  color-state: srgb-linear;
+}
+component-transfer {
+  child: color {
+    bounds: 60 10 40 40;
+    color: rgb(255,0,0);
+  }
+  red: gamma(1, 2, 0);
+  green: gamma(1, 2, 0);
+  blue: gamma(1, 2, 0);
+  color-state: srgb-linear;
+}
+component-transfer {
+  child: color {
+    bounds: 110 10 40 40;
+    color: rgb(255,0,0);
+  }
+  red: linear(0.5, 0.2);
+  color-state: srgb-linear;
+}
+component-transfer {
+  child: color {
+    bounds: 10 60 40 40;
+    color: rgb(255,0,0);
+  }
+  red: discrete(0, 0.5, 1);
+  color-state: srgb-linear;
 }
