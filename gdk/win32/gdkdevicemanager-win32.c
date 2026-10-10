@@ -1199,6 +1199,7 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
                                HCTX                  hctx)
 {
   GdkDisplay *display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  GdkSeat *seat = gdk_display_get_default_seat (display);
   int devix;
   wchar_t devname[100], csrname[100];
   gchar *devname_utf8, *csrname_utf8, *device_name;
@@ -1264,14 +1265,19 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
       device_name = g_strconcat (devname_utf8, " ", csrname_utf8, NULL);
       g_free (csrname_utf8);
 
+      /* Devices that drive the system cursor are slaves of the core
+       * pointer, like the WinPointer ones; others stay floating.
+       */
       device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
                               "name", device_name,
-                              "type", GDK_DEVICE_TYPE_FLOATING,
+                              "type", (lc.lcOptions & CXO_SYSTEM) ?
+                                      GDK_DEVICE_TYPE_SLAVE : GDK_DEVICE_TYPE_FLOATING,
                               "input-source", GDK_SOURCE_PEN,
                               "input-mode", GDK_MODE_SCREEN,
                               "has-cursor", lc.lcOptions & CXO_SYSTEM,
                               "display", display,
                               "device-manager", device_manager,
+                              "seat", seat,
                               NULL);
 
       device->sends_core = lc.lcOptions & CXO_SYSTEM;
@@ -1396,6 +1402,13 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
 
       device_manager->wintab_devices = g_list_append (device_manager->wintab_devices,
                                                       device);
+
+      if (device->sends_core)
+        {
+          gdk_seat_default_add_slave (GDK_SEAT_DEFAULT (seat), GDK_DEVICE (device));
+          g_signal_emit_by_name (device_manager, "device-added", device);
+        }
+
       num_new_cursors++;
       g_free (device_name);
     }
