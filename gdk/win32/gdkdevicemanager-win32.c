@@ -38,7 +38,7 @@
 
 #define WINTAB32_DLL "Wintab32.dll"
 
-#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
+#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_TANGENT_PRESSURE)
 /* We want everything in absolute mode */
 #define PACKETMODE (0)
 #include <pktdef.h>
@@ -397,7 +397,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
   LOGCONTEXTA lc;
   BOOL active;
   DWORD physid;
-  AXIS axis_x, axis_y, axis_npressure, axis_or[3];
+  AXIS axis_x, axis_y, axis_npressure, axis_or[3], axis_tpressure;
   int num_axes = 0;
   wchar_t devname[100], csrname[100];
   char *devname_utf8, *csrname_utf8, *device_name;
@@ -431,6 +431,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
   WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_Y, &axis_y);
   WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
   WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_TPRESSURE, &axis_tpressure);
 
   WINTAB_API_CALL (device_manager, WTInfoW) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
   devname_utf8 = g_utf16_to_utf8 (devname, -1, NULL, NULL, NULL);
@@ -489,8 +490,15 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
 
   if (device->pktdata & PK_ORIENTATION)
     {
+      /* Wacom's driver reports the twist of every pen, but only the Art
+       * Pen turns; on an airbrush it would hide that the wheel is used.
+       */
+      if (device->pktdata & PK_TANGENT_PRESSURE)
+        axis_or[2].axResolution = 0;
+
       device->orientation_axes[0] = axis_or[0];
       device->orientation_axes[1] = axis_or[1];
+      device->orientation_axes[2] = axis_or[2];
 
       /* Wintab gives us azimuth and altitude, which
        * we convert to x and y tilt in the -1000..1000 range
@@ -507,6 +515,28 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                             1000,
                             1000);
       num_axes += 2;
+
+      /* The barrel rotation of an Art Pen */
+      if (axis_or[2].axResolution != 0)
+        {
+          _gdk_device_add_axis (GDK_DEVICE (device),
+                                GDK_AXIS_ROTATION,
+                                axis_or[2].axMin,
+                                axis_or[2].axMax,
+                                axis_or[2].axResolution / 65535);
+          num_axes++;
+        }
+    }
+
+  /* The finger wheel of an airbrush */
+  if (device->pktdata & PK_TANGENT_PRESSURE)
+    {
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_WHEEL,
+                            axis_tpressure.axMin,
+                            axis_tpressure.axMax,
+                            axis_tpressure.axResolution / 65535);
+      num_axes++;
     }
 
   device->last_axis_data = g_new (int, num_axes);
@@ -1088,6 +1118,11 @@ wintab_update_tool (GdkDeviceManagerWin32 *device_manager,
         axes |= GDK_AXIS_FLAG_PRESSURE;
       if (device->pktdata & PK_ORIENTATION)
         axes |= GDK_AXIS_FLAG_XTILT | GDK_AXIS_FLAG_YTILT;
+      if (device->orientation_axes[2].axResolution != 0 &&
+          (csr_type == 0 || (csr_type & 0x0F06) == 0x0804))
+        axes |= GDK_AXIS_FLAG_ROTATION;
+      if (device->pktdata & PK_TANGENT_PRESSURE)
+        axes |= GDK_AXIS_FLAG_WHEEL;
 
       tool = gdk_device_tool_new (physid, csr_type, tool_type, axes);
       gdk_win32_seat_add_tool (GDK_WIN32_SEAT (seat), tool);
@@ -1235,7 +1270,11 @@ gdk_wintab_make_event (GdkDisplay *display,
           decode_tilt (source_device->last_axis_data + num_axes,
                        source_device->orientation_axes, &packet);
           num_axes += 2;
+          if (source_device->orientation_axes[2].axResolution != 0)
+            source_device->last_axis_data[num_axes++] = packet.pkOrientation.orTwist;
         }
+      if (source_device->pktdata & PK_TANGENT_PRESSURE)
+        source_device->last_axis_data[num_axes++] = packet.pkTangentPressure;
 
       translated_buttons = button_map[packet.pkButtons & 0x07] | (packet.pkButtons & ~0x07);
 
