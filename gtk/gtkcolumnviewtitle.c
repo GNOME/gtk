@@ -54,6 +54,16 @@ struct _GtkColumnViewTitleClass
 
 G_DEFINE_TYPE (GtkColumnViewTitle, gtk_column_view_title, GTK_TYPE_WIDGET)
 
+static void activate_sort (GtkColumnViewTitle *self);
+
+static void
+activate_action (GtkWidget  *widget,
+                 const char *action_name G_GNUC_UNUSED,
+                 GVariant   *parameter G_GNUC_UNUSED)
+{
+  gtk_widget_activate (widget);
+}
+
 static GtkSizeRequestMode
 gtk_column_view_title_get_request_mode (GtkWidget *widget)
 {
@@ -150,12 +160,26 @@ gtk_column_view_title_class_init (GtkColumnViewTitleClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  guint activate_signal;
 
   widget_class->get_request_mode = gtk_column_view_title_get_request_mode;
   widget_class->measure = gtk_column_view_title_measure;
   widget_class->size_allocate = gtk_column_view_title_size_allocate;
 
   gobject_class->dispose = gtk_column_view_title_dispose;
+
+  activate_signal =
+    g_signal_new_class_handler (I_("activate"),
+                                GTK_TYPE_COLUMN_VIEW_TITLE,
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (activate_sort),
+                                NULL, NULL,
+                                NULL,
+                                G_TYPE_NONE, 0);
+  gtk_widget_class_set_activate_signal (widget_class, activate_signal);
+
+  gtk_widget_class_install_action (widget_class, "activate", NULL,
+                                   activate_action);
 
   gtk_widget_class_set_css_name (widget_class, I_("button"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_COLUMN_HEADER);
@@ -231,7 +255,7 @@ click_released_cb (GtkGestureClick *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
 
   if (button == GDK_BUTTON_PRIMARY)
-    activate_sort (self);
+    gtk_widget_activate (widget);
   else if (button == GDK_BUTTON_SECONDARY)
     show_menu (self, x, y);
 }
@@ -306,7 +330,11 @@ gtk_column_view_title_set_menu (GtkColumnViewTitle *self,
 void
 gtk_column_view_title_update_sort (GtkColumnViewTitle *self)
 {
-  if (gtk_column_view_column_get_sorter (self->column))
+  gboolean sortable = gtk_column_view_column_get_sorter (self->column) != NULL;
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "activate", sortable);
+
+  if (sortable)
     {
       GtkColumnView *view;
       GtkColumnViewSorter *view_sorter;
