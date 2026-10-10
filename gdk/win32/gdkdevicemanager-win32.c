@@ -246,7 +246,7 @@ print_lc(LOGCONTEXTA *lc)
 }
 
 #define WINTAB_API_CHECK(device_manager,f)\
-  ((device_manager->wintab_items->p_##f = (t_##f) GetProcAddress (device_manager->wintab_items->wintab32, "##f##")) != NULL)
+  ((device_manager->wintab_items->p_##f = (t_##f) GetProcAddress (device_manager->wintab_items->wintab32, #f)) != NULL)
 #define WINTAB_API_CALL(device_manager,f) device_manager->wintab_items->p_##f
 
 static void
