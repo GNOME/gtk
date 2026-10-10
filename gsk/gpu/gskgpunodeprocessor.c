@@ -2359,6 +2359,12 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
       return;
     }
 
+  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_SHADOW))
+    {
+      gsk_gpu_node_processor_add_shadow_node_slow (self, node);
+      return;
+    }
+
   n_shadows = gsk_shadow_node_get_n_shadows (node);
   child = gsk_shadow_node_get_child (node);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
