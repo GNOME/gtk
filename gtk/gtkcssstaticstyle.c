@@ -95,7 +95,7 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle    *sstyle, \
     } \
 } \
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
-static GtkCssValues * gtk_css_ ## NAME ## _initial_values; \
+G_GNUC_UNUSED static GtkCssValues * gtk_css_ ## NAME ## _initial_values; \
 \
 static GtkCssValues * gtk_css_ ## NAME ## _create_initial_values (void); \
 \
