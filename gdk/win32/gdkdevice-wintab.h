@@ -50,6 +50,8 @@ struct _GdkDeviceWintab
   WTPKT pktdata;
   /* Azimuth and altitude axis */
   AXIS orientation_axes[2];
+  /* The physical tool currently using the cursor, owned by the seat */
+  GdkDeviceTool *tool;
 };
 
 struct _GdkDeviceWintabClass
