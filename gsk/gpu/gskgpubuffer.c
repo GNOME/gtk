@@ -13,8 +13,8 @@ struct _GskGpuBufferPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuBuffer, gsk_gpu_buffer, G_TYPE_OBJECT)
 
-static guint profiler_buffer_uploads_id;
-static gint64 profiler_buffer_uploads;
+G_GNUC_UNUSED static guint profiler_buffer_uploads_id;
+G_GNUC_UNUSED static gint64 profiler_buffer_uploads;
 
 static void
 gsk_gpu_buffer_class_init (GskGpuBufferClass *klass)
