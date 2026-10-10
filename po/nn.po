@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.x\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-09-11 16:50+0000\n"
-"PO-Revision-Date: 2026-09-09 22:28+0200\n"
+"POT-Creation-Date: 2026-10-01 12:32+0000\n"
+"PO-Revision-Date: 2026-10-10 16:00+0200\n"
 "Last-Translator: Roy-Magne Mo <rmo@sunnmore.net>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -1114,7 +1114,7 @@ msgstr "Ugyldig"
 #: gtk/deprecated/gtkcellrendereraccel.c:433
 #: gtk/deprecated/gtkcellrendereraccel.c:730
 msgid "New accelerator…"
-msgstr "Ny snøggtast …"
+msgstr "Ny snøggtast …"
 
 #: gtk/deprecated/gtkcellrendererprogress.c:136
 #: gtk/deprecated/gtkcellrendererprogress.c:326
@@ -2311,12 +2311,12 @@ msgid "_Edit"
 msgstr "_Endra"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9265
+#: gtk/gtktextview.c:9264
 msgid "_Copy"
 msgstr "_Kopier"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9342
 msgid "Context menu"
 msgstr "Kontekstmeny"
 
@@ -2495,7 +2495,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Dersom du slettar eit element, vil det verte permanent borte."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9272
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -2874,15 +2874,15 @@ msgstr "Lukk"
 msgid "Close the infobar"
 msgstr "Lukk infobeltet"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9260
 msgid "Cu_t"
 msgstr "_Klipp ut"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9268
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9293
 msgid "Select _All"
 msgstr "_Vel alt"
 
@@ -3108,7 +3108,7 @@ msgstr "Ikkje ei gyldig fil for sideoppsett"
 #
 #: gtk/print/gtkpagesetupunixdialog.c:201 gtk/print/gtkprintunixdialog.c:757
 msgid "Manage Custom Sizes…"
-msgstr "Handter tilpassa storleikar …"
+msgstr "Handter tilpassa storleikar …"
 
 #: gtk/print/gtkpagesetupunixdialog.c:286 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
@@ -4480,7 +4480,7 @@ msgstr "Sidestolpe"
 msgid "Change di_rection"
 msgstr "_Endre retning"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9298
 msgid "Insert _Emoji"
 msgstr "_Sett inn Emoji"
 
@@ -4641,11 +4641,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9281
+#: gtk/gtktextview.c:9280
 msgid "_Undo"
 msgstr "_Angre"
 
-#: gtk/gtktextview.c:9285
+#: gtk/gtktextview.c:9284
 msgid "_Redo"
 msgstr "_Klar"
 
@@ -8233,7 +8233,7 @@ msgstr "Klarte ikkje lagre diff-bilete til %s\n"
 
 #: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
-msgid "Differences witten to %s.\n"
+msgid "Differences written to %s.\n"
 msgstr "Forskjellar skrive til %s.\n"
 
 #: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
