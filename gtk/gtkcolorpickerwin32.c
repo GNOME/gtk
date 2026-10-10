@@ -43,7 +43,6 @@ struct _GtkColorPickerWin32Class
   GObjectClass parent_class;
 };
 
-static GInitableIface *initable_parent_iface;
 static void gtk_color_picker_win32_initable_iface_init (GInitableIface *iface);
 static void gtk_color_picker_win32_iface_init (GtkColorPickerInterface *iface);
 
@@ -62,7 +61,6 @@ gtk_color_picker_win32_initable_init (GInitable     *initable,
 static void
 gtk_color_picker_win32_initable_iface_init (GInitableIface *iface)
 {
-  initable_parent_iface = g_type_interface_peek_parent (iface);
   iface->init = gtk_color_picker_win32_initable_init;
 }
 
