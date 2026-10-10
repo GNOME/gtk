@@ -518,6 +518,9 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
   device_manager->wintab_devices = g_list_append (device_manager->wintab_devices,
                                                   device);
 
+  gdk_win32_seat_add_physical_device (GDK_WIN32_SEAT (gdk_display_get_default_seat (display)),
+                                      GDK_DEVICE (device));
+
   g_free (device_name);
 }
 
