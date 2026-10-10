@@ -29,6 +29,7 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkdevicetoolprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
@@ -1030,6 +1031,76 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
   return NULL;
 }
 
+static GdkDeviceToolType
+wintab_get_tool_type (UINT cursor,
+                      UINT csr_type)
+{
+  /* Drivers that don't report CSR_TYPE follow Wacom's convention of
+   * repeating cursors in groups of puck, pressure stylus and eraser.
+   */
+  if (csr_type == 0)
+    return cursor % 3 == 2 ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_PEN;
+
+  /* The general type of the tool is in the bits 0x0F06, as documented
+   * by Wacom. Erasers, the other ends of pens and airbrushes, have bit
+   * 0x0008 set.
+   */
+  switch (csr_type & 0x0F06)
+    {
+    case 0x0802: /* stylus */
+    case 0x0804: /* stylus with barrel rotation (Art Pen) */
+      return (csr_type & 0x0008) ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_PEN;
+    case 0x0902:
+      return (csr_type & 0x0008) ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_AIRBRUSH;
+    case 0x0004:
+      return GDK_DEVICE_TOOL_TYPE_MOUSE;
+    case 0x0006:
+      return GDK_DEVICE_TOOL_TYPE_LENS;
+    default:
+      return (csr_type & 0x0006) == 0x0002 ? GDK_DEVICE_TOOL_TYPE_PEN : GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+    }
+}
+
+/* Looks up the physical tool that is using a cursor, and creates it the
+ * first time it's seen. A cursor stands for a kind of tool, so with
+ * several pens of the same kind, each pen that comes into proximity is
+ * reported on the same cursor; CSR_PHYSID tells them apart.
+ */
+static void
+wintab_update_tool (GdkDeviceManagerWin32 *device_manager,
+                    GdkDeviceWintab       *device)
+{
+  GdkSeat *seat = gdk_display_get_default_seat (device_manager->display);
+  GdkDeviceToolType tool_type;
+  GdkAxisFlags axes = GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
+  GdkDeviceTool *tool;
+  DWORD physid = 0;
+  UINT csr_type = 0;
+
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + device->cursor, CSR_PHYSID, &physid);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + device->cursor, CSR_TYPE, &csr_type);
+  tool_type = wintab_get_tool_type (device->cursor, csr_type);
+
+  tool = gdk_seat_get_tool (seat, physid, csr_type, tool_type);
+  if (tool == NULL)
+    {
+      if (device->pktdata & PK_NORMAL_PRESSURE)
+        axes |= GDK_AXIS_FLAG_PRESSURE;
+      if (device->pktdata & PK_ORIENTATION)
+        axes |= GDK_AXIS_FLAG_XTILT | GDK_AXIS_FLAG_YTILT;
+
+      tool = gdk_device_tool_new (physid, csr_type, tool_type, axes);
+      gdk_win32_seat_add_tool (GDK_WIN32_SEAT (seat), tool);
+      g_object_unref (tool);
+    }
+
+  if (tool != device->tool)
+    {
+      device->tool = tool;
+      gdk_device_update_tool (GDK_DEVICE (device), tool);
+    }
+}
+
 GdkEvent *
 gdk_wintab_make_event (GdkDisplay *display,
                        MSG        *msg,
@@ -1094,6 +1165,9 @@ gdk_wintab_make_event (GdkDisplay *display,
 	   */
 	  device_manager->dev_entered_proximity -= 1;
 
+	  if (source_device != NULL)
+	    wintab_update_tool (device_manager, source_device);
+
 	  if (source_device != NULL &&
 	      source_device->sends_core)
 	    {
@@ -1125,6 +1199,9 @@ gdk_wintab_make_event (GdkDisplay *display,
 
       if (source_device == NULL)
 	return NULL;
+
+      if (source_device->tool == NULL)
+	wintab_update_tool (device_manager, source_device);
 
       /* Don't produce any button or motion events while a surface is being
        * moved or resized, see bug #151090.
@@ -1220,7 +1297,7 @@ gdk_wintab_make_event (GdkDisplay *display,
           event = gdk_button_event_new (event_type,
                                         surface,
                                         device_manager->core_pointer,
-                                        NULL,
+                                        source_device->tool,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
                                         event_button,
@@ -1253,7 +1330,7 @@ gdk_wintab_make_event (GdkDisplay *display,
 
           event = gdk_motion_event_new (surface,
                                         device_manager->core_pointer,
-                                        NULL,
+                                        source_device->tool,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
                                         event_x,
@@ -1296,6 +1373,8 @@ gdk_wintab_make_event (GdkDisplay *display,
 								      packet.pkCursor)) == NULL)
 	    return NULL;
 	}
+
+      wintab_update_tool (device_manager, source_device);
 
       if (source_device->sends_core)
 	{

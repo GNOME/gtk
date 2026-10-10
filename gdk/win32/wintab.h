@@ -320,7 +320,8 @@ typedef struct tagAXIS {
 	#define CSR_MINPKTDATA		17 /* 1.1 */
 	#define CSR_MINBUTTONS		18 /* 1.1 */
 	#define CSR_CAPABILITIES	19 /* 1.1 */
-	#define CSR_MAX				19
+	#define CSR_TYPE			20 /* 1.2 */
+	#define CSR_MAX				20
 
 #endif
 
