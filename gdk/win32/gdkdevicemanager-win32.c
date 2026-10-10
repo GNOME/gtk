@@ -1277,7 +1277,7 @@ _wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
       device->sends_core = lc.lcOptions & CXO_SYSTEM;
       if (device->sends_core)
         {
-          _gdk_device_set_associated_device (device_manager->system_pointer, GDK_DEVICE (device));
+          _gdk_device_set_associated_device (GDK_DEVICE (device), device_manager->core_pointer);
           _gdk_device_add_slave (device_manager->core_pointer, GDK_DEVICE (device));
         }
 
