@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-08-25 12:59+0000\n"
-"PO-Revision-Date: 2026-08-26 09:22+0000\n"
+"POT-Creation-Date: 2026-10-01 12:32+0000\n"
+"PO-Revision-Date: 2026-10-10 08:54+0000\n"
 "Last-Translator: Xavi Ivars <xavi.ivars@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -44,7 +44,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Minairó 1.2.0\n"
+"X-Generator: Minairó 1.6.0\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -55,7 +55,7 @@ msgstr ""
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:251 gdk/wayland/gdkdrop-wayland.c:205
 #: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1017
-#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:802
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "No s'ha trobat cap format de transferència compatible"
@@ -2317,12 +2317,12 @@ msgid "_Edit"
 msgstr "_Edita"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9265
+#: gtk/gtktextview.c:9264
 msgid "_Copy"
 msgstr "_Copia"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9342
 msgid "Context menu"
 msgstr "Menú contextual"
 
@@ -2403,8 +2403,8 @@ msgid "_Cancel"
 msgstr "_Cancel·la"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3150
-#: gtk/gtkplacessidebar.c:3235 gtk/gtkplacesview.c:1648
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3151
+#: gtk/gtkplacessidebar.c:3236 gtk/gtkplacesview.c:1648
 msgid "_Open"
 msgstr "_Obre"
 
@@ -2491,7 +2491,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9272
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2527,8 +2527,8 @@ msgstr "_Copia la ubicació"
 msgid "_Add to Bookmarks"
 msgstr "_Afegeix a les adreces d'interès"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2313
-#: gtk/gtkplacessidebar.c:3271 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:3272 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "Canvia el _nom"
 
@@ -2549,7 +2549,7 @@ msgstr "Ordena _les carpetes abans que els fitxers"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1028
 msgid "Home"
 msgstr "Carpeta de l'usuari"
 
@@ -2702,7 +2702,7 @@ msgstr "T_ipus"
 msgid "_Time"
 msgstr "_Data"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2307
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2308
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -2854,15 +2854,15 @@ msgstr "Tanca"
 msgid "Close the infobar"
 msgstr "Tanca la barra d'informació"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9260
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9268
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9293
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
@@ -3073,7 +3073,7 @@ msgstr "Pestanya anterior"
 msgid "Next tab"
 msgstr "Pestanya següent"
 
-#: gtk/gtknotebook.c:4364 gtk/gtknotebook.c:6572
+#: gtk/gtknotebook.c:4366 gtk/gtknotebook.c:6574
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -3138,82 +3138,82 @@ msgid "_Show Text"
 msgstr "M_ostra el text"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:915
 #, c-format
 msgid "Open %s"
 msgstr "Obre %s"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent"
 msgstr "Utilitzats recentment"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent files"
 msgstr "Fitxers utilitzats recentment"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred"
 msgstr "Destacat"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred files"
 msgstr "Fitxers destacats"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Open your personal folder"
 msgstr "Obriu la vostra carpeta personal"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Desktop"
 msgstr "Escriptori"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1045
 msgid "Open the contents of your desktop in a folder"
 msgstr "Obriu el contingut de l'escriptori en una carpeta"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Enter Location"
 msgstr "Introduïu una ubicació"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1061
 msgid "Manually enter a location"
 msgstr "Introduïu manualment una ubicació"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Trash"
 msgstr "Paperera"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1073
 msgid "Open the trash"
 msgstr "Obre la paperera"
 
-#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
-#: gtk/gtkplacessidebar.c:1410
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Munta i obre «%s»"
 
-#: gtk/gtkplacessidebar.c:1305
+#: gtk/gtkplacessidebar.c:1306
 msgid "Open the contents of the file system"
 msgstr "Obre el contingut del sistema de fitxers"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1389
 msgid "New bookmark"
 msgstr "Adreça d'interès nova"
 
-#: gtk/gtkplacessidebar.c:1390
+#: gtk/gtkplacessidebar.c:1391
 msgid "Add a new bookmark"
 msgstr "Afegeix una adreça d'interès nova"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Other Locations"
 msgstr "Altres ubicacions"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1457
 msgid "Show other locations"
 msgstr "Mostra altres ubicacions"
 
-#: gtk/gtkplacessidebar.c:1965 gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "No es pot iniciar «%s»"
@@ -3221,121 +3221,121 @@ msgstr "No es pot iniciar «%s»"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2002
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "S'ha produït un error en desbloquejar «%s»"
 
-#: gtk/gtkplacessidebar.c:2003
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "No es pot accedir a «%s»"
 
-#: gtk/gtkplacessidebar.c:2234
+#: gtk/gtkplacessidebar.c:2235
 msgid "This name is already taken"
 msgstr "Aquest nom ja està agafat"
 
-#: gtk/gtkplacessidebar.c:2525
+#: gtk/gtkplacessidebar.c:2526
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "No es pot desmuntar «%s»"
 
-#: gtk/gtkplacessidebar.c:2701
+#: gtk/gtkplacessidebar.c:2702
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "No es pot aturar «%s»"
 
-#: gtk/gtkplacessidebar.c:2730
+#: gtk/gtkplacessidebar.c:2731
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "No es pot expulsar «%s»"
 
-#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2760 gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to eject %s"
 msgstr "No es pot expulsar %s"
 
-#: gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2937
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 "No es pot comprovar «%s» per si hi ha canvis en el contingut multimèdia"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3244
 #: gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Obre en una _pestanya nova"
 
-#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3252
+#: gtk/gtkplacessidebar.c:3163 gtk/gtkplacessidebar.c:3253
 #: gtk/gtkplacesview.c:1657
 msgid "Open in New _Window"
 msgstr "Obre en una _finestra nova"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3264
 msgid "_Add Bookmark"
 msgstr "_Afegeix una adreça d'interès"
 
-#: gtk/gtkplacessidebar.c:3267
+#: gtk/gtkplacessidebar.c:3268
 msgid "_Remove"
 msgstr "_Elimina"
 
-#: gtk/gtkplacessidebar.c:3283 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3284 gtk/gtkplacesview.c:1682
 msgid "_Mount"
 msgstr "_Munta"
 
-#: gtk/gtkplacessidebar.c:3292 gtk/gtkplacesview.c:1671
+#: gtk/gtkplacessidebar.c:3293 gtk/gtkplacesview.c:1671
 msgid "_Unmount"
 msgstr "_Desmunta"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Eject"
 msgstr "_Expulsa"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Detect Media"
 msgstr "_Detecta el suport"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Start"
 msgstr "_Inicia"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Power On"
 msgstr "_Engega"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Connect Drive"
 msgstr "_Connecta el suport"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Start Multi-disk Device"
 msgstr "_Inicia el dispositiu de discs múltiples"
 
-#: gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Unlock Device"
 msgstr "_Desbloca el dispositiu"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Stop"
 msgstr "_Atura"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Safely Remove Drive"
 msgstr "Treu el suport de forma _segura"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3337
 msgid "_Disconnect Drive"
 msgstr "_Desconnecta el suport"
 
-#: gtk/gtkplacessidebar.c:3337
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Stop Multi-disk Device"
 msgstr "_Atura el dispositiu de discs múltiples"
 
-#: gtk/gtkplacessidebar.c:3338
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Lock Device"
 msgstr "_Bloca el dispositiu"
 
-#: gtk/gtkplacessidebar.c:3829 gtk/gtkplacesview.c:1092
+#: gtk/gtkplacessidebar.c:3830 gtk/gtkplacesview.c:1092
 msgid "Computer"
 msgstr "Ordinador"
 
@@ -3451,25 +3451,25 @@ msgid "Unmount"
 msgstr "Desmunta"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:496
-#: gtk/print/backends/gtkprintbackendcups.c:5695
+#: gtk/print/backends/gtkprintbackendcups.c:5692
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Urgent"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:497
-#: gtk/print/backends/gtkprintbackendcups.c:5696
+#: gtk/print/backends/gtkprintbackendcups.c:5693
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Alta"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:498
-#: gtk/print/backends/gtkprintbackendcups.c:5697
+#: gtk/print/backends/gtkprintbackendcups.c:5694
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Mitjana"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:499
-#: gtk/print/backends/gtkprintbackendcups.c:5698
+#: gtk/print/backends/gtkprintbackendcups.c:5695
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Baixa"
@@ -3479,7 +3479,7 @@ msgstr "Baixa"
 #. * dialog that controls the front cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:521
-#: gtk/print/backends/gtkprintbackendcups.c:5841
+#: gtk/print/backends/gtkprintbackendcups.c:5838
 msgctxt "printer option"
 msgid "Before"
 msgstr "Abans"
@@ -3489,7 +3489,7 @@ msgstr "Abans"
 #. * dialog that controls the back cover page.
 #.
 #: gtk/print/backends/gtkprintbackendcpdb.c:528
-#: gtk/print/backends/gtkprintbackendcups.c:5856
+#: gtk/print/backends/gtkprintbackendcups.c:5853
 msgctxt "printer option"
 msgid "After"
 msgstr "Després"
@@ -3510,35 +3510,35 @@ msgstr "Sense vores"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1481
-#: gtk/print/backends/gtkprintbackendcups.c:2633
+#: gtk/print/backends/gtkprintbackendcups.c:2630
 msgid "Paused; Rejecting Jobs"
 msgstr "En pausa; es refusen les tasques"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1484
-#: gtk/print/backends/gtkprintbackendcups.c:2636
+#: gtk/print/backends/gtkprintbackendcups.c:2633
 #: gtk/print/gtkprintoperation-win32.c:624
 msgid "Paused"
 msgstr "En pausa"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1487
-#: gtk/print/backends/gtkprintbackendcups.c:2639
+#: gtk/print/backends/gtkprintbackendcups.c:2636
 msgid "Rejecting Jobs"
 msgstr "Es refusen les tasques"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1145
-#: gtk/print/backends/gtkprintbackendcups.c:1449
+#: gtk/print/backends/gtkprintbackendcups.c:1446
 msgid "Username:"
 msgstr "Nom d'usuari:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1146
-#: gtk/print/backends/gtkprintbackendcups.c:1458
+#: gtk/print/backends/gtkprintbackendcups.c:1455
 msgid "Password:"
 msgstr "Contrasenya:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1184
-#: gtk/print/backends/gtkprintbackendcups.c:1471
+#: gtk/print/backends/gtkprintbackendcups.c:1468
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Cal autenticació per a imprimir el document «%s» a la impressora %s"
@@ -3586,48 +3586,48 @@ msgstr "Cal autenticació per a obtenir un fitxer de %s"
 msgid "Authentication is required on %s"
 msgstr "Cal autenticació a %s"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1443
+#: gtk/print/backends/gtkprintbackendcups.c:1440
 msgid "Domain:"
 msgstr "Domini:"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1473
+#: gtk/print/backends/gtkprintbackendcups.c:1470
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Cal autenticar-se per a imprimir un document a «%s»"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1478
+#: gtk/print/backends/gtkprintbackendcups.c:1475
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Cal autenticar-se per a imprimir aquest document a la impressora «%s»"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1480
+#: gtk/print/backends/gtkprintbackendcups.c:1477
 msgid "Authentication is required to print this document"
 msgstr "Cal autenticar-se per a imprimir aquest document"
 
-#: gtk/print/backends/gtkprintbackendcups.c:2565
+#: gtk/print/backends/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "El nivell del tòner de la impressora «%s» és baix."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2569
+#: gtk/print/backends/gtkprintbackendcups.c:2566
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "La impressora «%s» s'ha quedat sense tòner."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2574
+#: gtk/print/backends/gtkprintbackendcups.c:2571
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "El nivell del revelador de la impressora «%s» és baix."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2579
+#: gtk/print/backends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "La impressora «%s» s'ha quedat sense revelador."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2584
+#: gtk/print/backends/gtkprintbackendcups.c:2581
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr ""
@@ -3635,257 +3635,257 @@ msgstr ""
 "baix."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2589
+#: gtk/print/backends/gtkprintbackendcups.c:2586
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
 "La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de "
 "color."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2593
+#: gtk/print/backends/gtkprintbackendcups.c:2590
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "La tapa de la impressora «%s» és oberta."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2597
+#: gtk/print/backends/gtkprintbackendcups.c:2594
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "La porta de la impressora «%s» és oberta."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2601
+#: gtk/print/backends/gtkprintbackendcups.c:2598
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "El nivell del paper de la impressora «%s» és baix."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2605
+#: gtk/print/backends/gtkprintbackendcups.c:2602
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "La impressora «%s» s'ha quedat sense paper."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2609
+#: gtk/print/backends/gtkprintbackendcups.c:2606
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "La impressora «%s» no està en línia."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2613
+#: gtk/print/backends/gtkprintbackendcups.c:2610
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Hi ha un problema a la impressora «%s»."
 
 #. Translators: this string connects multiple printer states together.
-#: gtk/print/backends/gtkprintbackendcups.c:2680
+#: gtk/print/backends/gtkprintbackendcups.c:2677
 msgid "; "
 msgstr ", "
 
-#: gtk/print/backends/gtkprintbackendcups.c:4625
-#: gtk/print/backends/gtkprintbackendcups.c:4693
+#: gtk/print/backends/gtkprintbackendcups.c:4622
+#: gtk/print/backends/gtkprintbackendcups.c:4690
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4626
+#: gtk/print/backends/gtkprintbackendcups.c:4623
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4627
+#: gtk/print/backends/gtkprintbackendcups.c:4624
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4628
-#: gtk/print/backends/gtkprintbackendcups.c:4694
+#: gtk/print/backends/gtkprintbackendcups.c:4625
+#: gtk/print/backends/gtkprintbackendcups.c:4691
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Safata de sortida"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4629
+#: gtk/print/backends/gtkprintbackendcups.c:4626
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Resolució"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4630
+#: gtk/print/backends/gtkprintbackendcups.c:4627
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Filtrat previ del GhostScript"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4639
+#: gtk/print/backends/gtkprintbackendcups.c:4636
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4641
+#: gtk/print/backends/gtkprintbackendcups.c:4638
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Cantó llarg (estàndard)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4643
+#: gtk/print/backends/gtkprintbackendcups.c:4640
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Cantó curt (capgirat)"
 
 #. Translators: this is an option of "Paper Source"
-#: gtk/print/backends/gtkprintbackendcups.c:4645
-#: gtk/print/backends/gtkprintbackendcups.c:4647
-#: gtk/print/backends/gtkprintbackendcups.c:4655
+#: gtk/print/backends/gtkprintbackendcups.c:4642
+#: gtk/print/backends/gtkprintbackendcups.c:4644
+#: gtk/print/backends/gtkprintbackendcups.c:4652
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: gtk/print/backends/gtkprintbackendcups.c:4649
-#: gtk/print/backends/gtkprintbackendcups.c:4651
-#: gtk/print/backends/gtkprintbackendcups.c:4653
-#: gtk/print/backends/gtkprintbackendcups.c:4657
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+#: gtk/print/backends/gtkprintbackendcups.c:4654
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Per defecte de la impressora"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4659
+#: gtk/print/backends/gtkprintbackendcups.c:4656
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Incrusta només els tipus de lletra GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4661
+#: gtk/print/backends/gtkprintbackendcups.c:4658
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Converteix a PS nivell 1"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4663
+#: gtk/print/backends/gtkprintbackendcups.c:4660
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Converteix a PS nivell 2"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4662
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Sense filtratge previ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: gtk/print/backends/gtkprintbackendcups.c:4674
+#: gtk/print/backends/gtkprintbackendcups.c:4671
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Miscel·lània"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4702
+#: gtk/print/backends/gtkprintbackendcups.c:4699
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4704
+#: gtk/print/backends/gtkprintbackendcups.c:4701
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Cantó llarg (estàndard)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4706
+#: gtk/print/backends/gtkprintbackendcups.c:4703
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Cantó curt (capgirat)"
 
 #. Translators: Top output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4709
+#: gtk/print/backends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Safata superior"
 
 #. Translators: Middle output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4711
+#: gtk/print/backends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Safata del mig"
 
 #. Translators: Bottom output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4713
+#: gtk/print/backends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Safata inferior"
 
 #. Translators: Side output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4715
+#: gtk/print/backends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Safata lateral"
 
 #. Translators: Left output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4717
+#: gtk/print/backends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Safata esquerra"
 
 #. Translators: Right output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4719
+#: gtk/print/backends/gtkprintbackendcups.c:4716
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Safata dreta"
 
 #. Translators: Center output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4721
+#: gtk/print/backends/gtkprintbackendcups.c:4718
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Safata central"
 
 #. Translators: Rear output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4723
+#: gtk/print/backends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Safata posterior"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: gtk/print/backends/gtkprintbackendcups.c:4725
+#: gtk/print/backends/gtkprintbackendcups.c:4722
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Safata cara amunt"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: gtk/print/backends/gtkprintbackendcups.c:4727
+#: gtk/print/backends/gtkprintbackendcups.c:4724
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Safata cara avall"
 
 #. Translators: Large capacity output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4729
+#: gtk/print/backends/gtkprintbackendcups.c:4726
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Safata de gran capacitat"
 
 #. Translators: Output stacker number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4751
+#: gtk/print/backends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Apilador %d"
 
 #. Translators: Output mailbox number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4755
+#: gtk/print/backends/gtkprintbackendcups.c:4752
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Bústia %d"
 
 #. Translators: Private mailbox
-#: gtk/print/backends/gtkprintbackendcups.c:4759
+#: gtk/print/backends/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "La meva bústia"
 
 #. Translators: Output tray number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4763
+#: gtk/print/backends/gtkprintbackendcups.c:4760
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Safata %d"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5245
+#: gtk/print/backends/gtkprintbackendcups.c:5242
 msgid "Printer Default"
 msgstr "Per defecte de la impressora"
 
@@ -3895,42 +3895,42 @@ msgstr "Per defecte de la impressora"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
@@ -3938,51 +3938,51 @@ msgstr "De baix a dalt, de dreta a esquerra"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5729
+#: gtk/print/backends/gtkprintbackendcups.c:5726
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5740
+#: gtk/print/backends/gtkprintbackendcups.c:5737
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5764
+#: gtk/print/backends/gtkprintbackendcups.c:5761
 msgctxt "cover page"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5765
+#: gtk/print/backends/gtkprintbackendcups.c:5762
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Classificat"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5766
+#: gtk/print/backends/gtkprintbackendcups.c:5763
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5767
+#: gtk/print/backends/gtkprintbackendcups.c:5764
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Secret"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5768
+#: gtk/print/backends/gtkprintbackendcups.c:5765
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Estàndard"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5769
+#: gtk/print/backends/gtkprintbackendcups.c:5766
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5770
+#: gtk/print/backends/gtkprintbackendcups.c:5767
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "No classificat"
@@ -3990,7 +3990,7 @@ msgstr "No classificat"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5782
+#: gtk/print/backends/gtkprintbackendcups.c:5779
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Pàgines per full"
@@ -3998,7 +3998,7 @@ msgstr "Pàgines per full"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5799
+#: gtk/print/backends/gtkprintbackendcups.c:5796
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
@@ -4007,7 +4007,7 @@ msgstr "Ordenació de les pàgines"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5876
+#: gtk/print/backends/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Imprimeix a"
@@ -4016,7 +4016,7 @@ msgstr "Imprimeix a"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5887
+#: gtk/print/backends/gtkprintbackendcups.c:5884
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Imprimeix a una hora determinada"
@@ -4026,20 +4026,20 @@ msgstr "Imprimeix a una hora determinada"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: gtk/print/backends/gtkprintbackendcups.c:5935
+#: gtk/print/backends/gtkprintbackendcups.c:5932
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Personalitzat %sx%s"
 
 # Connectada? (josep)
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: gtk/print/backends/gtkprintbackendcups.c:6047
+#: gtk/print/backends/gtkprintbackendcups.c:6044
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Perfil de la impressora"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: gtk/print/backends/gtkprintbackendcups.c:6054
+#: gtk/print/backends/gtkprintbackendcups.c:6051
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "No està disponible"
@@ -4420,7 +4420,7 @@ msgstr "Barra lateral"
 msgid "Change di_rection"
 msgstr "Canvia la di_recció"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9298
 msgid "Insert _Emoji"
 msgstr "Insereix _emoji"
 
@@ -4580,11 +4580,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS clàssic"
 
-#: gtk/gtktextview.c:9281
+#: gtk/gtktextview.c:9280
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: gtk/gtktextview.c:9285
+#: gtk/gtktextview.c:9284
 msgid "_Redo"
 msgstr "_Refés"
 
@@ -8085,7 +8085,7 @@ msgstr "No s'ha pogut desar la imatge diff a %s\n"
 
 #: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
-msgid "Differences witten to %s.\n"
+msgid "Differences written to %s.\n"
 msgstr "Diferències escrites a %s.\n"
 
 #: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
