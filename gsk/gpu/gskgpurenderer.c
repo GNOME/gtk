@@ -290,7 +290,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                    width,
                                    height,
                                    1) ||
-      !(data = g_malloc (layout.size)))
+      !(data = g_try_malloc (layout.size)))
     {
       g_critical ("Image size %zux%zu too large", width, height);
       return NULL;

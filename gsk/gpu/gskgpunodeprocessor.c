@@ -2246,7 +2246,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
       else
         {
           graphene_rect_t bounds;
-          float clip_radius = gsk_cairo_blur_compute_pixels (0.5 * shadow->radius);
+          float clip_radius = gsk_cairo_blur_compute_pixels (shadow->radius);
           graphene_rect_inset_r (&child->bounds, - clip_radius, - clip_radius, &bounds);
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
