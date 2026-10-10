@@ -2207,7 +2207,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                         GskRenderNode       *node)
 {
   GskGpuImage *image;
-  graphene_rect_t clip_bounds, tex_rect;
+  graphene_rect_t clip, needed, tex_rect;
   GskGpuSampler tex_sampler;
   GskRenderNode *child;
   gsize i, n_shadows;
@@ -2220,19 +2220,21 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
 
   n_shadows = gsk_shadow_node_get_n_shadows (node);
   child = gsk_shadow_node_get_child (node);
-  /* enlarge clip for shadow offsets */
-  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_bounds))
+  if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
     return;
-  clip_bounds = GRAPHENE_RECT_INIT (clip_bounds.origin.x - node->bounds.size.width + child->bounds.size.width - node->bounds.origin.x + child->bounds.origin.x,
-                                    clip_bounds.origin.y - node->bounds.size.height + child->bounds.size.height - node->bounds.origin.y + child->bounds.origin.y,
-                                    clip_bounds.size.width + node->bounds.size.width - child->bounds.size.width,
-                                    clip_bounds.size.height + node->bounds.size.height - child->bounds.size.height);
-  if (!gsk_rect_snap_to_grid_grow (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
+
+  needed = child->bounds;
+  needed = GRAPHENE_RECT_INIT (clip.origin.x - node->bounds.size.width + child->bounds.size.width - node->bounds.origin.x + child->bounds.origin.x,
+                               clip.origin.y - node->bounds.size.height + child->bounds.size.height - node->bounds.origin.y + child->bounds.origin.y,
+                               clip.size.width + node->bounds.size.width - child->bounds.size.width,
+                               clip.size.height + node->bounds.size.height - child->bounds.size.height);
+
+  if (!gsk_rect_snap_to_grid_grow (&needed, &self->scale, &self->offset, &needed))
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    &clip_bounds, 
+                                                    &needed,
                                                     child,
                                                     0,
                                                     &tex_rect,
@@ -2243,49 +2245,66 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   for (i = 0; i < n_shadows; i++)
     {
       const GskShadowEntry *shadow = gsk_shadow_node_get_shadow_entry (node, i);
-      GskGpuRenderPassTranslateStorage storage;
+      graphene_rect_t bounds;
 
-      gsk_gpu_render_pass_push_translate (self, &shadow->offset, &storage);
+      gsk_rect_init_offset (&bounds, &child->bounds, &shadow->offset);
+      if (!gsk_rect_intersection (&bounds, &clip, &bounds) ||
+          !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds))
+        continue;
 
       if (shadow->radius == 0)
         {
           gsk_gpu_colorize_op (self,
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
-                               &clip_bounds,
+                               &bounds,
                                image,
                                tex_sampler,
-                               &tex_rect,
+                               &GRAPHENE_RECT_INIT (
+                                   tex_rect.origin.x + shadow->offset.x,
+                                   tex_rect.origin.y + shadow->offset.y,
+                                   tex_rect.size.width,
+                                   tex_rect.size.height
+                               ),
                                &shadow->color);
         }
       else
         {
-          graphene_rect_t bounds, padded_bounds;
-          float clip_radius = gsk_cairo_blur_compute_pixels (shadow->radius);
-          bounds = child->bounds;
-          graphene_rect_inset_r (&bounds, - clip_radius, - clip_radius, &padded_bounds);
-          if (!gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds) ||
-              !gsk_rect_snap_to_grid_grow (&padded_bounds, &self->scale, &self->offset, &padded_bounds))
+          graphene_size_t sigma = GRAPHENE_SIZE_INIT (shadow->radius, shadow->radius);
+          graphene_rect_t padded_bounds;
+          graphene_size_t padding;
+
+          gsk_blur_node_get_padding (&sigma, &padding);
+          graphene_rect_inset_r (&bounds, - padding.width, - padding.height, &padded_bounds);
+          if (!gsk_rect_snap_to_grid_grow (&padded_bounds, &self->scale, &self->offset, &padded_bounds))
             continue;
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
                                           &padded_bounds,
-                                          &GRAPHENE_SIZE_INIT (0.5 * shadow->radius, 0.5 * shadow->radius),
+                                          &sigma,
                                           &shadow->color,
                                           image,
                                           gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
-                                          &tex_rect,
+                                          &GRAPHENE_RECT_INIT (
+                                              tex_rect.origin.x + shadow->offset.x,
+                                              tex_rect.origin.y + shadow->offset.y,
+                                              tex_rect.size.width,
+                                              tex_rect.size.height
+                                          ),
                                           tex_sampler);
         }
-      gsk_gpu_render_pass_pop_translate (self, &storage);
     }
 
-  gsk_gpu_texture_op (self,
-                      self->ccs,
-                      &clip_bounds,
-                      image,
-                      tex_sampler,
-                      &tex_rect);
+  if (gsk_rect_intersection (&clip, &child->bounds, &clip) &&
+      gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip))
+    {
+      gsk_gpu_texture_op (self,
+                          self->ccs,
+                          &clip,
+                          image,
+                          tex_sampler,
+                          &tex_rect);
+  }
 
   g_object_unref (image);
 }
