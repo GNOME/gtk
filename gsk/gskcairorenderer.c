@@ -108,7 +108,12 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
 
       stride = width * 4;
       size = stride * height;
-      data = g_malloc_n (stride, height);
+      data = g_try_malloc_n (stride, height);
+      if (data == NULL)
+        {
+          g_critical ("Image size %dx%d too large", width, height);
+          return NULL;
+        }
 
       for (y = 0; y < height; y += MAX_IMAGE_SIZE)
         {
