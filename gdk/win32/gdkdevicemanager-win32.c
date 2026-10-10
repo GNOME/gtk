@@ -1203,7 +1203,7 @@ gdk_wintab_make_event (GdkDisplay *display,
       if (event_type == GDK_BUTTON_PRESS ||
           event_type == GDK_BUTTON_RELEASE)
         {
-          axes = g_new (double, GDK_AXIS_LAST);
+          axes = g_new0 (double, GDK_AXIS_LAST);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              surface,
@@ -1238,7 +1238,7 @@ gdk_wintab_make_event (GdkDisplay *display,
         }
       else
         {
-          axes = g_new (double, GDK_AXIS_LAST);
+          axes = g_new0 (double, GDK_AXIS_LAST);
           _gdk_device_wintab_translate_axes (source_device,
                                              surface,
                                              axes,
