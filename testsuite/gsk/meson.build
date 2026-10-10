@@ -244,10 +244,14 @@ compare_render_tests = [
   'scaled-texture-scale',
   'scaled-texture-scale-clip-nocairo',
   'scale0-crash',
+  'shadow-alignment',
+  'shadow-alignment-snap',
   'shadow-behind',
   'shadow-clip-contents',
   'shadow-dont-double-clip',
   'shadow-huge-offset',
+  'shadow-huge-offset-multiple',
+  'shadow-huge-offsets-that-are-clipped',
   'shadow-in-opacity',
   'shadow-offset-clip',
   'shadow-offset-to-outside-clip',
@@ -309,6 +313,10 @@ tests_with_rounding_issues = [
   'turbulence-seed1',
   'turbulence-turbulence',
   'turbulence-transformed',
+]
+
+tests_with_blur = [
+  'shadow-huge-offset-multiple-blurred',
 ]
 
 # These tests use dmabufs and fail in testrunners that have
@@ -413,7 +421,11 @@ testlists = [
   {
     'tests': tests_with_rounding_issues,
     'extra_args': ['--tolerance=2'],
-  }
+  },
+  {
+    'tests': tests_with_blur,
+    'extra_args': ['--tolerance=5'],
+  },
 ]
 
 foreach testlist : testlists

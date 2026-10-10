@@ -1,0 +1,24 @@
+clip {
+  clip: -25 -25 100 100;
+  child: shadow {
+    shadows: rgb(255,0,0) 0 100000, rgb(255,255,0) 100000 0, rgb(0,0,255) 0 -100000, rgb(0,255,0) -100000 0;
+    child: container {
+      color {
+        bounds: -100050 0 50 50;
+        color: rgb(0,0,0);
+      }
+      color {
+        bounds: 0 -100050 50 50;
+        color: rgb(0,0,0);
+      }
+      color {
+        bounds: 100050 0 50 50;
+        color: rgb(0,0,0);
+      }
+      color {
+        bounds: 0 100050 50 50;
+        color: rgb(0,0,0);
+      }
+    }
+  }
+}
