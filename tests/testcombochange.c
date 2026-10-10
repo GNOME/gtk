@@ -150,7 +150,6 @@ on_reorder (void)
 }
 
 static int n_animations = 0;
-static int timer = 0;
 
 static int
 animation_timer (gpointer data)
@@ -179,7 +178,7 @@ on_animate (void)
 {
   n_animations += 20;
  
-  timer = g_timeout_add (1000, (GSourceFunc) animation_timer, NULL);
+  g_timeout_add (1000, (GSourceFunc) animation_timer, NULL);
 }
 
 int

@@ -121,10 +121,10 @@ gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
 }
 
-static int invalidated_nodes;
-static int created_styles;
-static guint invalidated_nodes_counter;
-static guint created_styles_counter;
+G_GNUC_UNUSED static int invalidated_nodes;
+G_GNUC_UNUSED static int created_styles;
+G_GNUC_UNUSED static guint invalidated_nodes_counter;
+G_GNUC_UNUSED static guint created_styles_counter;
 
 static void
 gtk_css_node_set_invalid (GtkCssNode *node,

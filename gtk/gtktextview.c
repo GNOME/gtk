@@ -437,7 +437,6 @@ enum
 static GParamSpec *props[N_PROPS] = { NULL, };
 
 static GQuark quark_text_selection_data = 0;
-static GQuark quark_gtk_signal = 0;
 static GQuark quark_text_view_child = 0;
 
 static void gtk_text_view_finalize             (GObject         *object);
@@ -1957,7 +1956,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_TEXT_BOX);
 
   quark_text_selection_data = g_quark_from_static_string ("gtk-text-view-text-selection-data");
-  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_text_view_child = g_quark_from_static_string ("gtk-text-view-child");
 }
 
