@@ -27,7 +27,12 @@
 #include "gtksvgstringutilsprivate.h"
 #include "gtksvgutilsprivate.h"
 
+#include "gsk/gsktransformprivate.h"
+
 #include <tgmath.h>
+
+/* epsilon value used for decomposition of transformation matrices */
+#define DECOMPOSE_EPSILON 1e-4
 
 typedef struct
 {
@@ -1024,10 +1029,11 @@ primitive_transform_apply (const PrimitiveTransform *transform,
       return gsk_transform_skew (next, 0, transform->skew_y.angle);
 
     case TRANSFORM_MATRIX:
-      return gsk_transform_matrix_2d (next,
-                                      transform->matrix.xx, transform->matrix.yx,
-                                      transform->matrix.xy, transform->matrix.yy,
-                                      transform->matrix.dx, transform->matrix.dy);
+      return gsk_transform_decompose_2d (next,
+                                         DECOMPOSE_EPSILON,
+                                         transform->matrix.xx, transform->matrix.yx,
+                                         transform->matrix.xy, transform->matrix.yy,
+                                         transform->matrix.dx, transform->matrix.dy);
 
     case TRANSFORM_TRANSLATE_3D:
       return gsk_transform_translate_3d (next,
