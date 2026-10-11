@@ -1474,18 +1474,25 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
 
   if (image == NULL)
     {
+      if (in_bounds)
+        {
+          *out_bounds = *clip_bounds;
+          *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+        }
+      else
+        {
+          if (!gsk_rect_intersection (&bounds, clip_bounds, out_bounds) ||
+              !gsk_rect_snap_to_grid_grow (out_bounds, scale, &clip_bounds->origin, out_bounds))
+            return NULL;
+        }
+
       image = gsk_gpu_get_texture_tiles_as_image (frame,
                                                   ccs,
-                                                  clip_bounds,
+                                                  out_bounds,
                                                   scale,
                                                   &bounds,
                                                   gsk_texture_node_get_texture (node),
                                                   should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
-      *out_bounds = *clip_bounds;
-      if (in_bounds)
-        *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
-      else
-        *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
       return image;
     }
 
