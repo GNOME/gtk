@@ -543,6 +543,9 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 `repeat`
 : Repeat drawing operations instead of using offscreen and GL_REPEAT
 
+`shadow`
+: Always use the slow fallback path for shadow nodes
+
 `profile`
 : Disable profiling support
 

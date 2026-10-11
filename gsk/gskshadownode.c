@@ -140,7 +140,7 @@ gsk_shadow_node_diff (GskRenderNode *node1,
           return;
         }
 
-      clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius / 2.0);
+      clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius);
       top = MAX (top, ceil (clip_radius - shadow1->offset.y));
       right = MAX (right, ceil (clip_radius + shadow1->offset.x));
       bottom = MAX (bottom, ceil (clip_radius + shadow1->offset.y));
@@ -174,7 +174,7 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
 
   for (i = 0; i < self->n_shadows; i++)
     {
-      float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius / 2.0);
+      float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius);
       top = MAX (top, clip_radius - self->shadows[i].offset.y);
       right = MAX (right, clip_radius + self->shadows[i].offset.x);
       bottom = MAX (bottom, clip_radius + self->shadows[i].offset.y);

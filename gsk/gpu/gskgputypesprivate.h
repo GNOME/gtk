@@ -164,6 +164,7 @@ typedef enum {
   GSK_GPU_OPTIMIZE_REPEAT               = 1 <<  7,
   GSK_GPU_OPTIMIZE_DUAL_BLEND           = 1 <<  8,
   GSK_GPU_OPTIMIZE_DAMAGE               = 1 <<  9,
-  GSK_GPU_OPTIMIZE_PROFILE              = 1 << 10,
+  GSK_GPU_OPTIMIZE_SHADOW               = 1 << 10,
+  GSK_GPU_OPTIMIZE_PROFILE              = 1 << 11,
 } GskGpuOptimizations;
 
