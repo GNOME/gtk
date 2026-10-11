@@ -159,6 +159,10 @@ typedef enum {
    * In detail: out_bounds must equal clip_bounds
    */
   GSK_GPU_AS_IMAGE_EXACT_SIZE = (1 << 1),
+  /* The returned image needs only match in the alpha channel as it will
+   * only be used as a mask.
+   */
+  GSK_GPU_AS_IMAGE_MASK = (1 << 2),
 } GskGpuAsImageFlags;
 
 static void             gsk_gpu_node_processor_add_node_untracked       (GskGpuRenderPass            *self,
@@ -2346,7 +2350,7 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskGpuRenderPass *self,
               !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds))
             continue;
           image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
-                                                                      0,
+                                                                      GSK_GPU_AS_IMAGE_MASK,
                                                                       &GRAPHENE_RECT_INIT (
                                                                           bounds.origin.x - shadow->offset.x,
                                                                           bounds.origin.y - shadow->offset.y,
@@ -2390,7 +2394,7 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskGpuRenderPass *self,
             continue;
 
           image = gsk_gpu_node_processor_get_node_as_image_untracked (self,
-                                                                      0,
+                                                                      GSK_GPU_AS_IMAGE_MASK,
                                                                       &GRAPHENE_RECT_INIT (
                                                                           padded_bounds.origin.x - shadow->offset.x,
                                                                           padded_bounds.origin.y - shadow->offset.y,
@@ -2881,7 +2885,9 @@ gsk_gpu_node_processor_add_mask_node (GskGpuRenderPass *self,
     return;
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                         0,
+                                                         (mask_mode == GSK_MASK_MODE_ALPHA ||
+                                                          mask_mode == GSK_MASK_MODE_INVERTED_ALPHA) ?
+                                                         GSK_GPU_AS_IMAGE_MASK : 0,
                                                          &bounds,
                                                          mask_child,
                                                          1,
@@ -3832,7 +3838,7 @@ gsk_gpu_node_processor_add_composite_node (GskGpuRenderPass *self,
                                   &storage);
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                         0,
+                                                         GSK_GPU_AS_IMAGE_MASK,
                                                          &bounds,
                                                          gsk_composite_node_get_mask (node),
                                                          1,
