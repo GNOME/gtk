@@ -610,6 +610,96 @@ gsk_transform_matrix_2d (GskTransform *next,
   }
 }
 
+/*<orivate>
+ * gsk_transform_decompose_2d:
+ * @next: (nullable) (transfer full): the next transform
+ * @epsilon: epsilon value (FIXME: give this term a meaning
+ *   and figure out if it should be relative or absolute)
+ * @xx: the xx member
+ * @yx: the yx member
+ * @xy: the xy member
+ * @yy: the yy member
+ * @dx: the x0 member
+ * @dy: the y0 member
+ *
+ * Tries to decompose the given matrix into a simpler transform
+ * (rotation, scale, translation).
+ *
+ * If the decoposition is not possible, it falls back to
+ * [method@Gsk.Transform.matrix_2d]. You can check success by
+ * checking the category of the result is smaller than
+ * `GSK_TRANSFORM_CATEGORY_2D`.
+ *
+ * The epsilon value is a useful tool when the passed in matrix
+ * may have floating point rounding issues that you want to avoid.
+ *
+ * The decompositions done by this function are deliberately
+ * unspecified, so GTK can adjust this function in the future.
+ * If you have certain requirements, consider filing an issue so
+ * we can clarify the semantics of this function.
+ *
+ * Returns: (nullable): The new transform
+ **/
+GskTransform *
+gsk_transform_decompose_2d (GskTransform *next,
+                            float         epsilon,
+                            float         xx,
+                            float         yx,
+                            float         xy,
+                            float         yy,
+                            float         dx,
+                            float         dy)
+{
+  gboolean is_scale, is_rotated_scale, is_counter_clockwise;
+  gboolean has_scale, has_rotated_scale, has_translation;
+
+  is_scale = ABS (xy) <= epsilon && ABS (yx) <= epsilon;
+  has_scale = ABS (xy - 1) > epsilon || ABS (yx -1) > epsilon;
+  is_rotated_scale = ABS (xx) <= epsilon && ABS (yy) <= epsilon;
+  is_counter_clockwise = xy > 0 && yx < 0; /* otherwise we assume it's clockwise */
+  if (is_counter_clockwise)
+    has_rotated_scale = ABS (xy + 1) > epsilon || ABS (yx - 1) > epsilon;
+  else
+    has_rotated_scale = ABS (xy - 1) > epsilon || ABS (yx + 1) > epsilon;
+  has_translation = ABS (dx) > epsilon || ABS (dy) > epsilon;
+
+  if (is_scale)
+    {
+      if (is_rotated_scale)
+        {
+          /* non-invertible or very close, let's nope out */
+          return gsk_transform_matrix_2d (next, xx, yx, xy, yy, dx, dy);
+        }
+      if (has_translation)
+        next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
+      if (has_scale)
+        next = gsk_transform_scale (next, xx, yy);
+      return next;
+    }
+  else if (is_rotated_scale)
+    {
+      if (has_translation)
+        next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
+      if (is_counter_clockwise)
+        {
+          if (has_rotated_scale)
+            next = gsk_transform_scale (next, xy, -yx);
+          next = gsk_transform_rotate (next, 270);
+        }
+      else
+        {
+          if (has_rotated_scale)
+            next = gsk_transform_scale (next, -xy, yx);
+          next = gsk_transform_rotate (next, 90);
+        }
+      return next;
+    }
+  else
+    {
+      return gsk_transform_matrix_2d (next, xx, yx, xy, yy, dx, dy);
+    }
+}
+
 /* }}} */
 /* {{{ TRANSLATE */
 

@@ -97,8 +97,16 @@ void                    gsk_transform_to_dihedral               (GskTransform   
                                                                  float                  *out_dx,
                                                                  float                  *out_dy);
 
-GskTransform *           gsk_transform_dihedral                 (GskTransform *         next,
+GskTransform *           gsk_transform_dihedral                 (GskTransform          *next,
                                                                  GdkDihedral            dihedral);
+GskTransform *           gsk_transform_decompose_2d             (GskTransform          *next,
+                                                                 float                  epsilon,
+                                                                 float                  xx,
+                                                                 float                  yx,
+                                                                 float                  xy,
+                                                                 float                  yy,
+                                                                 float                  dx,
+                                                                 float                  dy);
 
 void gsk_matrix_transform_point   (const graphene_matrix_t  *m,
                                    const graphene_point_t   *p,

@@ -773,6 +773,57 @@ test_from_2d (void)
 }
 
 static void
+test_decompose_2d (void)
+{
+  /* careful: adding more numbers here makes the runtimes quickly grow */
+  static const float values_to_check[] = { -2, -1, -0.5, 0, 0.5, 1, 2 };
+  const float epsilon = 1e-4;
+  guint it[6] = { 0, };
+  float values[6], check[6];
+  guint i;
+
+  for (i = 0; i < 6; i++)
+    values[i] = values_to_check[it[i]];
+
+  do
+    {
+      GskTransform *test;
+
+      test = gsk_transform_decompose_2d (NULL,
+                                         epsilon,
+                                         values[0] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon),
+                                         values[1] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon),
+                                         values[2] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon),
+                                         values[3] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon),
+                                         values[4] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon),
+                                         values[5] + g_test_rand_double_range (-0.5 * epsilon, 0.5 * epsilon));
+      gsk_transform_to_2d (test, &check[0], &check[1], &check[2], &check[3], &check[4], &check[5]);
+      for (i = 0; i < 6; i++)
+        {
+          g_assert_cmpfloat_with_epsilon (check[i], values[i], epsilon);
+        }
+
+      gsk_transform_unref (test);
+
+      for (i = 6; i-- != 0;)
+        {
+          it[i]++;
+          if (it[i] < G_N_ELEMENTS (values_to_check))
+            {
+              values[i] = values_to_check[it[i]];
+              break;
+            }
+          else
+            {
+              it[i] = 0;
+              values[i] = values_to_check[it[i]];
+            }
+        }
+    }
+  while (i < 6);
+}
+
+static void
 test_transform_point (void)
 {
   GskTransform *t, *t2, *t3;
@@ -1235,6 +1286,7 @@ main (int   argc,
   g_test_add_func ("/transform/to-2d", test_to_2d);
   g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
   g_test_add_func ("/transform/from-2d", test_from_2d);
+  g_test_add_func ("/transform/decompose-2d", test_decompose_2d);
   g_test_add_func ("/transform/scale", test_scale_transform);
   g_test_add_func ("/transform/skew", test_skew_transform);
   g_test_add_func ("/transform/perspective", test_perspective_transform);
