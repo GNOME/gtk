@@ -800,7 +800,10 @@ test_decompose_2d (void)
       gsk_transform_to_2d (test, &check[0], &check[1], &check[2], &check[3], &check[4], &check[5]);
       for (i = 0; i < 6; i++)
         {
-          g_assert_cmpfloat_with_epsilon (check[i], values[i], epsilon);
+          if (floor (values[i]) == values[i])
+            g_assert_cmpfloat (check[i], ==, values[i]);
+          else
+            g_assert_cmpfloat_with_epsilon (check[i], values[i], epsilon);
         }
 
       gsk_transform_unref (test);

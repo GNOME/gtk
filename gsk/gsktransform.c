@@ -651,17 +651,17 @@ gsk_transform_decompose_2d (GskTransform *next,
                             float         dy)
 {
   gboolean is_scale, is_rotated_scale, is_counter_clockwise;
-  gboolean has_scale, has_rotated_scale, has_translation;
 
-  is_scale = ABS (xy) <= epsilon && ABS (yx) <= epsilon;
-  has_scale = ABS (xy - 1) > epsilon || ABS (yx -1) > epsilon;
-  is_rotated_scale = ABS (xx) <= epsilon && ABS (yy) <= epsilon;
+  xx = ABS (round (xx) - xx) <= epsilon ? round (xx) : xx;
+  yx = ABS (round (yx) - yx) <= epsilon ? round (yx) : yx;
+  xy = ABS (round (xy) - xy) <= epsilon ? round (xy) : xy;
+  yy = ABS (round (yy) - yy) <= epsilon ? round (yy) : yy;
+  dx = ABS (round (dx) - dx) <= epsilon ? round (dx) : dx;
+  dy = ABS (round (dy) - dy) <= epsilon ? round (dy) : dy;
+
+  is_scale = xy == 0 && yx == 0;
+  is_rotated_scale = xx == 0 && yy == 0;
   is_counter_clockwise = xy > 0 && yx < 0; /* otherwise we assume it's clockwise */
-  if (is_counter_clockwise)
-    has_rotated_scale = ABS (xy + 1) > epsilon || ABS (yx - 1) > epsilon;
-  else
-    has_rotated_scale = ABS (xy - 1) > epsilon || ABS (yx + 1) > epsilon;
-  has_translation = ABS (dx) > epsilon || ABS (dy) > epsilon;
 
   if (is_scale)
     {
@@ -670,26 +670,21 @@ gsk_transform_decompose_2d (GskTransform *next,
           /* non-invertible or very close, let's nope out */
           return gsk_transform_matrix_2d (next, xx, yx, xy, yy, dx, dy);
         }
-      if (has_translation)
-        next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
-      if (has_scale)
-        next = gsk_transform_scale (next, xx, yy);
+      next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
+      next = gsk_transform_scale (next, xx, yy);
       return next;
     }
   else if (is_rotated_scale)
     {
-      if (has_translation)
-        next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
+      next = gsk_transform_translate (next, &GRAPHENE_POINT_INIT (dx, dy));
       if (is_counter_clockwise)
         {
-          if (has_rotated_scale)
-            next = gsk_transform_scale (next, xy, -yx);
+          next = gsk_transform_scale (next, xy, -yx);
           next = gsk_transform_rotate (next, 270);
         }
       else
         {
-          if (has_rotated_scale)
-            next = gsk_transform_scale (next, -xy, yx);
+          next = gsk_transform_scale (next, -xy, yx);
           next = gsk_transform_rotate (next, 90);
         }
       return next;
