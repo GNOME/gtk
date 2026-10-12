@@ -982,6 +982,57 @@ gsk_gpu_node_processor_add_transform_node (GskGpuRenderPass *self,
     }
 }
 
+static GskGpuImage *
+gsk_gpu_get_transform_node_as_image (GskGpuFrame           *frame,
+                                     GskGpuAsImageFlags     flags,
+                                     GdkColorState         *ccs,
+                                     const graphene_rect_t *clip_bounds,
+                                     const graphene_size_t *scale,
+                                     GskRenderNode         *node,
+                                     graphene_rect_t       *out_bounds,
+                                     GskGpuSampler         *out_sampler)
+{
+  GskTransform *transform;
+  float scale_x, scale_y, dx, dy;
+  graphene_rect_t child_clip, child_bounds;
+  graphene_size_t child_scale;
+  GskGpuImage *result;
+
+  transform = gsk_transform_node_get_transform (node);
+  if (gsk_transform_get_fine_category (transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE)
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+
+  gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+  child_scale = GRAPHENE_SIZE_INIT (scale->width * scale_x, scale->height * scale_y);
+  if (child_scale.width < GSK_GPU_MIN_SCALE || child_scale.height < GSK_GPU_MIN_SCALE)
+    return NULL;
+
+  gsk_rect_init (&child_clip,
+                 (clip_bounds->origin.x - dx) / scale_x,
+                 (clip_bounds->origin.y - dy) / scale_y,
+                 clip_bounds->size.width / scale_x,
+                 clip_bounds->size.height / scale_y);
+
+  result = gsk_gpu_get_child_as_image (frame,
+                                       flags,
+                                       ccs,
+                                       &child_clip,
+                                       &child_scale,
+                                       gsk_transform_node_get_child (node),
+                                       0,
+                                       &child_bounds,
+                                       out_sampler);
+  if (result == NULL)
+    return NULL;
+
+  *out_bounds = GRAPHENE_RECT_INIT (child_bounds.origin.x * scale_x + dx,
+                                    child_bounds.origin.y * scale_y + dy,
+                                    child_bounds.size.width * scale_x,
+                                    child_bounds.size.height * scale_y);
+
+  return result;
+}
+
 static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
                                          GskRenderNode       *node)
@@ -4107,7 +4158,7 @@ static const struct
   },
   [GSK_TRANSFORM_NODE] = {
     gsk_gpu_node_processor_add_transform_node,
-    NULL,
+    gsk_gpu_get_transform_node_as_image,
   },
   [GSK_OPACITY_NODE] = {
     gsk_gpu_node_processor_add_opacity_node,

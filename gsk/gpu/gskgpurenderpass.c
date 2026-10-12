@@ -26,15 +26,6 @@
  */
 #define EPSILON 0.001
 
-/* the minimum scale required. If it's smaller than this, we treat it like 0 and
- * skip it.
- *
- * We set this to 1/100,000 because then 100,000 units would make up 1 pixel. And
- * it's unlikely that something useful results from scaling this far, considering
- * max texture size is usually 16,384 and FLOAT16 can't represent numbers this big.
- */
-#define GSK_GPU_MIN_SCALE 0.00001
-
 gboolean
 gsk_gpu_render_pass_device_to_user (GskGpuRenderPass            *self,
                                     const cairo_rectangle_int_t *device,
