@@ -676,6 +676,8 @@ gdk_draw_context_empty_frame (GdkDrawContext *self)
     }
   else
     {
+      gdk_frame_clock_add_frame (gdk_surface_get_frame_clock (priv->surface),
+                                 frame);
       frame->cpu_complete = TRUE;
       if (gdk_draw_context_frame_is_complete (frame))
         gdk_draw_context_frame_free (frame);
