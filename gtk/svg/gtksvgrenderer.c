@@ -4220,6 +4220,24 @@ clear_layouts (SvgElement *self)
     }
 }
 
+void
+ensure_valid_text_bounds (SvgElement            *shape,
+                          GtkSvg                *self,
+                          const graphene_rect_t *viewport)
+{
+  if (!shape->valid_bounds)
+    {
+      graphene_rect_t bounds;
+      graphene_point_t offset;
+
+      if (generate_layouts (shape, get_fontmap (self), viewport, &bounds, &offset))
+        {
+          /* TODO: keep the layouts */
+          clear_layouts (shape);
+        }
+    }
+}
+
 static PangoRenderComponent
 decoration_to_component (TextDecoration decoration)
 {
