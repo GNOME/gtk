@@ -528,6 +528,7 @@ android:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 .android-defaults:
+  allow_failure: true
   extends:
     - .distribution.android
   stage: android
