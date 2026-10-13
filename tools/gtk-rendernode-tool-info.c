@@ -120,24 +120,24 @@ file_info (const char *filename)
         namelen = MAX (namelen, strlen (get_node_name (i)));
     }
 
-  namelen = MAX (namelen, strlen (_("Number of nodes:")));
+  namelen = MAX (namelen, strlen (_("Number of nodes:")) - 1);
   namelen = MAX (namelen, strlen (_("leaf nodes")));
 
   if (total == total_unique)
     g_print ("%*s %llu\n", namelen, _("Number of nodes:"), total);
   else
-    g_print ("%*s %llu (%s %llu)\n", namelen, _("Number of nodes:"), total, _("unique:"), total_unique);
+    g_print ("%*s %llu (%s %llu)\n", namelen + 1, _("Number of nodes:"), total, _("unique:"), total_unique);
 
   while (pow (10, digits) < total)
     digits++;
 
-  g_print ("%*s: %*llu\n", namelen - 1, _("leaf nodes"), digits, count.n_leafs);
+  g_print ("%*s: %*llu\n", namelen, _("leaf nodes"), digits, count.n_leafs);
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       if (count.counts[i] != count.unique[i])
-        g_print ("%*s: %*llu (%s %llu)\n", namelen - 1, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
+        g_print ("%*s: %*llu (%s %llu)\n", namelen, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
       else if (count.counts[i] > 0)
-        g_print ("%*s: %*llu\n", namelen - 1, get_node_name (i), digits, count.counts[i]);
+        g_print ("%*s: %*llu\n", namelen, get_node_name (i), digits, count.counts[i]);
     }
 
   g_print ("%s %llu\n", _("Depth:"), count.depth);
