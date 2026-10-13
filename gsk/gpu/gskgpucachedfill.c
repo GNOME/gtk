@@ -31,6 +31,7 @@ struct _GskGpuCachedFill
   /* Subpixel position of the path bounds wrt to device grid */
   guint fx, fy;
 
+  GdkColor color;
   GskGpuImage *image;
   graphene_point_t image_offset;
 };
@@ -43,6 +44,7 @@ gsk_gpu_cached_fill_finalize (GskGpuCached *cached)
 
   g_hash_table_remove (priv->fill_cache, self);
 
+  gdk_color_finish (&self->color);
   gsk_path_unref (self->path);
   g_object_unref (self->image);
 }
@@ -107,6 +109,7 @@ struct _FillData
 {
   GskPath *path;
   GskFillRule fill_rule;
+  GdkColor color;
 };
 
 static void
@@ -115,6 +118,7 @@ fill_data_free (gpointer data)
   FillData *fill = data;
 
   gsk_path_unref (fill->path);
+  gdk_color_finish (&fill->color);
   g_free (fill);
 }
 
@@ -124,7 +128,7 @@ fill_path (gpointer  data,
 {
   FillData *fill = data;
 
-  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+  gdk_cairo_set_source_color (cr, fill->color.color_state, &fill->color);
 
   gsk_cairo_set_fill_rule (cr, fill->fill_rule);
   gsk_path_to_cairo (fill->path, cr);
@@ -189,8 +193,11 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                             GskTransform          *modelview,
                             GskPath               *path,
                             GskFillRule            fill_rule,
-                            graphene_rect_t       *out_rect)
+                            const GdkColor        *color_hint,
+                            graphene_rect_t       *out_rect,
+                            GdkColor              *out_color)
 {
+  const GdkColor white = GDK_COLOR_SRGB (1, 1, 1, 1);
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
   float sx, sy, dx, dy;
   GskGpuCachedFill *cached;
@@ -202,6 +209,10 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
 
   if (!gsk_path_get_bounds (path, &path_bounds))
     return NULL;
+
+  if (color_hint == NULL)
+    color_hint = &white;
+  g_assert (gdk_color_is_opaque (color_hint));
 
   determine_scale_and_subpixel_grid (scale, modelview, &sx, &sy, &subpixel_scale);
 
@@ -226,6 +237,7 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                           cached->image_offset.y + path_bounds.origin.y - dy,
                           gsk_gpu_image_get_width (cached->image) / sx,
                           gsk_gpu_image_get_height (cached->image) / sy);
+      gdk_color_init_copy (out_color, &cached->color);
 
       return g_object_ref (cached->image);
     }
@@ -257,6 +269,7 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
       cached->sy = sy;
       cached->fx = fx;
       cached->fy = fy;
+      gdk_color_init_copy (&cached->color, color_hint);
       cached->image = g_object_ref (image);
       graphene_rect_inset (&viewport, padding / -sx, padding / -sy);
       cached->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - area.x / sx,
@@ -301,6 +314,7 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                                 g_memdup2 (&(FillData) {
                                   .path = gsk_path_ref (path),
                                   .fill_rule = fill_rule,
+                                  .color = GDK_COLOR_INIT_COPY (color_hint),
                                 }, sizeof (FillData)),
                                 (GDestroyNotify) fill_data_free);
 
@@ -309,6 +323,7 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
                       viewport.origin.y - area.y / sy - dy,
                       gsk_gpu_image_get_width (image) / sx,
                       gsk_gpu_image_get_height (image) / sy);
+  gdk_color_init_copy (out_color, color_hint);
 
   return image;
 }

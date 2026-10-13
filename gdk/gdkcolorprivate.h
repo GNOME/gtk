@@ -70,6 +70,14 @@ G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, a) == G_STRUCT_OFFSET (GdkColor, val
   .values = { (r), (g), (b), (a) } \
 }
 
+#define GDK_COLOR_INIT_COPY(color) (GdkColor) { \
+  .color_state = gdk_color_state_ref ((color)->color_state), \
+  .red = (color)->red, \
+  .green = (color)->green, \
+  .blue = (color)->blue, \
+  .alpha = (color)->alpha, \
+}
+
 void              gdk_color_init                (GdkColor               *self,
                                                  GdkColorState          *color_state,
                                                  const float             values[4]);
