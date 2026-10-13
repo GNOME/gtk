@@ -250,7 +250,6 @@ static void settings_update_provider             (GdkDisplay            *display
                                                   GtkCssProvider        *new);
 
 /* --- variables --- */
-static GQuark            quark_gtk_settings = 0;
 
 static GPtrArray *display_settings;
 
@@ -321,8 +320,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->get_property = gtk_settings_get_property;
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
-
-  quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
 
   /**
    * GtkSettings:gtk-double-click-time:
