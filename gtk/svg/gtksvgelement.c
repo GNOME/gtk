@@ -1134,8 +1134,7 @@ svg_element_get_current_bounds (SvgElement            *element,
         SvgElement *elt = element;
         while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
           elt = svg_element_get_parent (elt);
-        if (!elt->valid_bounds)
-          g_critical ("No valid bounds for text");
+        ensure_valid_text_bounds (elt, svg, viewport);
         graphene_rect_init_from_rect (&b, &elt->bounds);
         ret = TRUE;
       }
