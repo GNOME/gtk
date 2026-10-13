@@ -564,6 +564,34 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
   return copy;
 }
 
+static inline GskGpuImage *
+gsk_gpu_get_child_as_image (GskGpuFrame           *frame,
+                            GskGpuAsImageFlags     flags,
+                            GdkColorState         *ccs,
+                            const graphene_rect_t *clip_bounds,
+                            const graphene_size_t *scale,
+                            GskRenderNode         *child,
+                            gsize                  pos,
+                            graphene_rect_t       *out_bounds,
+                            GskGpuSampler         *out_sampler)
+{
+  GskGpuImage *result;
+
+  gsk_gpu_frame_start_node (frame, child, pos);
+
+  result = gsk_gpu_get_node_as_image (frame,
+                                      flags,
+                                      ccs,
+                                      clip_bounds,
+                                      scale,
+                                      child,
+                                      out_bounds,
+                                      out_sampler);
+  gsk_gpu_frame_end_node (frame);
+
+  return result;
+}
+
 static GskGpuImage *
 gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuRenderPass   *self,
                                                     GskGpuAsImageFlags     flags,
@@ -3637,18 +3665,15 @@ gsk_gpu_get_subsurface_node_as_image (GskGpuFrame           *frame,
 
   child = gsk_subsurface_node_get_child (node);
 
-  gsk_gpu_frame_start_node (frame, child, 0);
-
-  result = gsk_gpu_get_node_as_image (frame,
-                                      flags,
-                                      ccs,
-                                      clip_bounds,
-                                      scale,
-                                      child,
-                                      out_bounds,
-                                      out_sampler);
-
-  gsk_gpu_frame_end_node (frame);
+  result = gsk_gpu_get_child_as_image (frame,
+                                       flags,
+                                       ccs,
+                                       clip_bounds,
+                                       scale,
+                                       child,
+                                       0,
+                                       out_bounds,
+                                       out_sampler);
 
   return result;
 }
@@ -3949,25 +3974,15 @@ gsk_gpu_get_debug_node_as_image (GskGpuFrame           *frame,
                                  graphene_rect_t       *out_bounds,
                                  GskGpuSampler         *out_sampler)
 {
-  GskGpuImage *result;
-  GskRenderNode *child;
-
-  child = gsk_debug_node_get_child (node);
-
-  gsk_gpu_frame_start_node (frame, child, 0);
-
-  result = gsk_gpu_get_node_as_image (frame,
-                                      flags,
-                                      ccs,
-                                      clip_bounds,
-                                      scale,
-                                      child,
-                                      out_bounds,
-                                      out_sampler);
-
-  gsk_gpu_frame_end_node (frame);
-
-  return result;
+  return gsk_gpu_get_child_as_image (frame,
+                                     flags,
+                                     ccs,
+                                     clip_bounds,
+                                     scale,
+                                     gsk_debug_node_get_child (node),
+                                     0,
+                                     out_bounds,
+                                     out_sampler);
 }
 
 static void
