@@ -182,7 +182,7 @@ vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
  * The result is heap-allocated and should be freed with g_free().
  */
 static char*
-get_keyboard_layout_substituted_name (const char *layout_name)
+get_keyboard_layout_substituted_name (const char *klid)
 {
   HKEY     hkey     = 0;
   DWORD    var_type = REG_SZ;
@@ -203,11 +203,11 @@ get_keyboard_layout_substituted_name (const char *layout_name)
       goto fail1;
     }
 
-  status = RegQueryValueExA (hkey, layout_name, 0, &var_type, 0, &buf_len);
+  status = RegQueryValueExA (hkey, klid, 0, &var_type, 0, &buf_len);
   if (status != ERROR_SUCCESS)
     {
       g_debug("Could not query registry key '%s\\%s'. Error code: %d",
-              substitute_path, layout_name, (int)status);
+              substitute_path, klid, (int)status);
       goto fail2;
     }
 
@@ -215,13 +215,13 @@ get_keyboard_layout_substituted_name (const char *layout_name)
   result = (char*) g_malloc (buf_len);
 
   /* Retrieve substitute name */
-  status = RegQueryValueExA (hkey, layout_name, 0, &var_type,
+  status = RegQueryValueExA (hkey, klid, 0, &var_type,
                              (LPBYTE) result, &buf_len);
   if (status != ERROR_SUCCESS)
     {
       g_warning("Could not obtain registry value at key '%s\\%s'. "
                 "Error code: %d",
-                substitute_path, layout_name, (int)status);
+                substitute_path, klid, (int)status);
       goto fail3;
     }
 
@@ -237,7 +237,7 @@ fail1:
 }
 
 static char*
-_get_keyboard_layout_file (const char *layout_name)
+_get_keyboard_layout_file (const char *klid)
 {
   HKEY     hkey              = 0;
   DWORD    var_type          = REG_SZ;
@@ -252,7 +252,7 @@ _get_keyboard_layout_file (const char *layout_name)
   char kbdKeyPath[sizeof (prefix) + KL_NAMELENGTH];
 
   g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
-              prefix, layout_name);
+              prefix, klid);
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
@@ -318,16 +318,16 @@ fail_close_key:
  * The result is heap-allocated and should be freed with g_free().
  */
 static char*
-get_keyboard_layout_file (const char *layout_name)
+get_keyboard_layout_file (const char *klid)
 {
-  char *result = _get_keyboard_layout_file (layout_name);
+  char *result = _get_keyboard_layout_file (klid);
 
   /* If we could not retrieve a path, it may be that we need to perform layout
    * substitution
    */
   if (result == NULL)
     {
-      char *substituted = get_keyboard_layout_substituted_name (layout_name);
+      char *substituted = get_keyboard_layout_substituted_name (klid);
       result = _get_keyboard_layout_file (substituted);
       g_free (substituted);
     }
@@ -626,9 +626,9 @@ update_keymap (GdkWin32Keymap *keymap)
           /* Load new data */
           info->handle = hkl;
           ActivateKeyboardLayout (hkl, 0);
-          GetKeyboardLayoutNameA (info->name);
+          GetKeyboardLayoutNameA (info->klid);
 
-          info->file = get_keyboard_layout_file (info->name);
+          info->file = get_keyboard_layout_file (info->klid);
 
           if (info->file != NULL && load_layout_dll (keymap, info->file, info))
             {
@@ -642,7 +642,7 @@ update_keymap (GdkWin32Keymap *keymap)
           else
             {
               g_warning("Failed to load keyboard layout DLL for layout %s: %s",
-                        info->name, info->file);
+                        info->klid, info->file);
             }
         }
 
@@ -1079,7 +1079,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (tmp_keyval == GDK_KEY_VoidSymbol && layout_info->tables == NULL)
     g_warning("Failed to translate keypress (keycode: %u) for group %d (%s) because "
               "we could not load the layout.",
-              hardware_keycode, group, layout_info->name);
+              hardware_keycode, group, layout_info->klid);
 
   return tmp_keyval != GDK_KEY_VoidSymbol;
 }
@@ -1106,9 +1106,9 @@ gdk_win32_keymap_get_layout_names (GdkKeymap *gdk_keymap)
           GdkWin32KeymapLayoutInfo *info;
 
           info = &g_array_index (keymap->layout_infos, GdkWin32KeymapLayoutInfo, i);
-          lcid = strtoul (info->name, &endptr, 16);
+          lcid = strtoul (info->klid, &endptr, 16);
 
-          if (info->name != endptr)
+          if (info->klid != endptr)
             {
               wchar_t *locale_name_w;
               int locale_size = GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);

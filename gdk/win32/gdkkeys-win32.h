@@ -46,7 +46,7 @@ typedef struct
   HKL            handle;
 
   /* Keyboard layout identifier */
-  char           name[KL_NAMELENGTH];
+  char           klid[KL_NAMELENGTH];
 
   /* Path of the layout DLL */
   char          *file;
