@@ -174,7 +174,7 @@ gtk_fixed_layout_child_init (GtkFixedLayoutChild *self)
 /**
  * gtk_fixed_layout_child_set_transform:
  * @child: a `GtkFixedLayoutChild`
- * @transform: a `GskTransform`
+ * @transform: (nullable): a `GskTransform`
  *
  * Sets the transformation of the child of a `GtkFixedLayout`.
  */
