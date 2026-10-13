@@ -1025,10 +1025,13 @@ gsk_gpu_get_transform_node_as_image (GskGpuFrame           *frame,
   if (result == NULL)
     return NULL;
 
-  *out_bounds = GRAPHENE_RECT_INIT (child_bounds.origin.x * scale_x + dx,
-                                    child_bounds.origin.y * scale_y + dy,
-                                    child_bounds.size.width * scale_x,
-                                    child_bounds.size.height * scale_y);
+  if (flags & GSK_GPU_AS_IMAGE_EXACT_SIZE)
+    *out_bounds = *clip_bounds;
+  else
+    *out_bounds = GRAPHENE_RECT_INIT (child_bounds.origin.x * scale_x + dx,
+                                      child_bounds.origin.y * scale_y + dy,
+                                      child_bounds.size.width * scale_x,
+                                      child_bounds.size.height * scale_y);
 
   return result;
 }
