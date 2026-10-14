@@ -230,7 +230,7 @@ gsk_displacement_node_draw (GskRenderNode *node,
   gsk_render_node_draw_full (self->displacement, cr, data);
   displacement = cairo_pop_group (cr);
 
-  child_surface = gdk_cairo_create_similar_surface (cr, CAIRO_CONTENT_COLOR_ALPHA, &child_bounds);
+  child_surface = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &child_bounds);
   child_cr = cairo_create (child_surface);
   gsk_render_node_draw_full (self->child, child_cr, data);
   cairo_destroy (child_cr);
