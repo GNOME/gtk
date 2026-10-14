@@ -289,8 +289,8 @@ gdk_cairo_create_similar_surface (cairo_t               *cr,
       g_return_val_if_reached (NULL);
     }
 
-  width = ABS (ceil (width * bounds->size.width));
-  height = ABS (ceil (height * bounds->size.height));
+  width = ceil (ABS (width * bounds->size.width));
+  height = ceil (ABS (height * bounds->size.height));
 
   surface = cairo_surface_create_similar (cairo_get_group_target (cr), 
                                           content,
@@ -357,8 +357,8 @@ gdk_cairo_create_similar_image (cairo_t               *cr,
       g_return_val_if_reached (NULL);
     }
 
-  width = ABS (ceil (width * bounds->size.width * xscale));
-  height = ABS (ceil (height * bounds->size.height * yscale));
+  width = ceil (ABS (width * bounds->size.width * xscale));
+  height = ceil (ABS (height * bounds->size.height * yscale));
 
   surface = cairo_surface_create_similar_image (cairo_get_group_target (cr), 
                                                 content,
