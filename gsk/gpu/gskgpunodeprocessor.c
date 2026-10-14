@@ -437,6 +437,16 @@ gsk_gpu_node_processor_add_node (GskGpuRenderPass *self,
 }
 
 static GskGpuImage *
+gsk_gpu_get_cairo_node_as_image (GskGpuFrame           *frame,
+                                 GskGpuAsImageFlags     flags,
+                                 GdkColorState         *ccs,
+                                 const graphene_rect_t *clip_bounds,
+                                 const graphene_size_t *scale,
+                                 GskRenderNode         *node,
+                                 graphene_rect_t       *out_bounds,
+                                 GskGpuSampler         *out_sampler);
+
+static GskGpuImage *
 gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
                                          GskGpuAsImageFlags     flags,
                                          GdkColorState         *ccs,
@@ -449,6 +459,10 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
   GskGpuImage *result;
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
+
+  if (scale->width * scale->height * clip_bounds->size.width * clip_bounds->size.height < 100 &&
+      gdk_color_state_equal (ccs, GDK_COLOR_STATE_SRGB))
+    return gsk_gpu_get_cairo_node_as_image (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
 
   if (!(flags & GSK_GPU_AS_IMAGE_EXACT_SIZE))
     {
