@@ -41,6 +41,7 @@ pkg_config = import('pkgconfig')
 
 add_project_arguments([
     '-DG_LOG_USE_STRUCTURED=1',
+    '-DG_DISABLE_CLEANUP=1',
     '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req),
     '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req),
     '-DPANGO_VERSION_MIN_REQUIRED=G_ENCODE_VERSION(@0@,@1@)'.format(pango_major_req, pango_minor_req),
