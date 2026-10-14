@@ -811,6 +811,7 @@ point_is_between (const graphene_point_t *q,
          fabsf (graphene_point_distance (p0, q, NULL, NULL) + graphene_point_distance (p1, q, NULL, NULL) - graphene_point_distance (p0, p1, NULL, NULL)) < 0.001;
 }
 
+G_GNUC_WARN_UNUSED_RESULT
 static gboolean
 bounding_box_corner_between (const GskBoundingBox   *bb,
                              const graphene_point_t *p0,
@@ -917,14 +918,14 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
               /* Find the intersection of bb with p0 - p1.
                * It must be a corner
                */
-              bounding_box_corner_between (&bb, &p0, &p1, &p);
-              gsk_path_builder_line_to (self, p.x, p.y);
+              if (bounding_box_corner_between (&bb, &p0, &p1, &p))
+                gsk_path_builder_line_to (self, p.x, p.y);
             }
           if (!p2in)
             {
               /* Find the intersection of bb with p2 - p3. */
-              bounding_box_corner_between (&bb, &p3, &p2, &p);
-              gsk_path_builder_line_to (self, p.x, p.y);
+              if (bounding_box_corner_between (&bb, &p3, &p2, &p))
+                gsk_path_builder_line_to (self, p.x, p.y);
             }
           gsk_path_builder_line_to (self, x3, y3);
         }
