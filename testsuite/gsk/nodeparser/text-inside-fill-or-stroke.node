@@ -1,0 +1,18 @@
+fill {
+  child: text {
+    font: "Cantarell 15px";
+    glyphs: "Hello";
+  }
+  path: "M 0 0 L 10 0 L 10 10 Z";
+  fill-rule: winding;
+}
+stroke {
+  child: text {
+    font: "Cantarell 15px";
+    glyphs: "Hello";
+  }
+  path: "M 0 0 L 10 0 Z";
+  line-width: 1;
+  line-cap: butt;
+  line-join: miter;
+}
