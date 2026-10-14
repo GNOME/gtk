@@ -726,6 +726,32 @@ physical_device_check_features (VkPhysicalDevice device)
   return features;
 }
 
+#ifdef G_OS_WIN32
+# if GLIB_SIZEOF_VOID_P == 8
+#  define _completion_fd_type __int64
+# else
+#  define _completion_fd_type int
+# endif
+static void
+clear_completion_fd (_completion_fd_type *fd) /* fd is actually a HANDLE */
+{
+  g_return_if_fail (fd != NULL);
+
+  if ((HANDLE)*fd != INVALID_HANDLE_VALUE)
+    {
+      CloseHandle ((HANDLE)*fd);
+      (HANDLE)*fd = INVALID_HANDLE_VALUE;
+    }
+}
+#undef _completion_fd_type
+#else
+static void
+clear_completion_fd (int *fd)
+{
+  g_clear_fd (fd, NULL);
+}
+#endif
+
 static void
 gdk_vulkan_present_reset (GdkVulkanContext *self,
                           GdkVulkanPresent *present)
@@ -747,7 +773,7 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
 
   vframe->present = NULL;
   g_clear_pointer (&vframe->completion_source, g_source_destroy);
-  g_clear_fd (&vframe->completion_fd, NULL);
+  clear_completion_fd (&vframe->completion_fd);
 }
 
 #define COMPLETION_FD_EVENTS (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_PRI | G_IO_HUP)

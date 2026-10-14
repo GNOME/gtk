@@ -43,7 +43,11 @@ struct _GdkVulkanContextFrame
 
   GdkVulkanPresent *present;
   GSource *completion_source;
+#if defined (G_OS_WIN32) && GLIB_SIZEOF_VOID_P == 8
+  __int64 completion_fd;
+#else
   int completion_fd;
+#endif
 };
 
 struct _GdkVulkanContext
