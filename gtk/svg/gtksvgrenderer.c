@@ -4809,7 +4809,7 @@ recompute_current_values (SvgElement   *shape,
                           SvgElement   *parent,
                           PaintContext *context)
 {
-  SvgComputeContext ctx;
+  SvgComputeContext ctx = { 0, };
 
   ctx.svg = context->svg;
   ctx.viewport = context->viewport;
@@ -5248,7 +5248,7 @@ gtk_svg_apply_filter (GtkSvg                *svg,
 {
   SvgElement *filter;
   SvgElement *shape;
-  PaintContext paint_context;
+  PaintContext paint_context = { 0, };
   GskRenderNode *result;
   G_GNUC_UNUSED GskRenderNode *node;
 
@@ -5306,8 +5306,8 @@ SvgElement *
 gtk_svg_pick_element (GtkSvg                 *self,
                       const graphene_point_t *p)
 {
-  SvgComputeContext compute_context;
-  PaintContext paint_context;
+  SvgComputeContext compute_context = { 0, };
+  PaintContext paint_context = { 0, };
   graphene_rect_t viewport;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
@@ -5355,6 +5355,7 @@ gtk_svg_pick_element (GtkSvg                 *self,
   paint_context.picking.points = NULL;
   paint_context.picking.done = FALSE;
   paint_context.picking.picked = NULL;
+  paint_context.picking.clipped = NULL;
 
   if (self->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_push_clip (snapshot, &viewport);
@@ -5533,8 +5534,8 @@ gtk_svg_snapshot_full (GtkSvg        *self,
 
   if (!can_reuse_node (self, width, height, colors, n_colors, weight))
     {
-      SvgComputeContext compute_context;
-      PaintContext paint_context;
+      SvgComputeContext compute_context = { 0, };
+      PaintContext paint_context = { 0, };
       SvgRendering rendering;
 
       /* If time is the only input that changed, static current values are
