@@ -248,8 +248,8 @@ gdk_cairo_rectangle_snap_to_grid (cairo_t               *cr,
  * confined by Cairo's clipping behavior. So this is
  * useful as an alternative to cairo_push_group() if
  * you want a guarantee that the whole area will be
- * created, for example when blurring and needing a larger
- * input area.
+ * created, for example when trying to repeat a region
+ * across a larger area.
  *
  * This function will set the surface's device scale and offset.
  *
@@ -273,7 +273,6 @@ gdk_cairo_create_similar_surface (cairo_t               *cr,
   cairo_surface_t *surface;
 
   cairo_get_matrix (cr, &matrix);
-  cairo_surface_get_device_scale (cairo_get_target (cr), &xscale, &yscale);
   det = matrix.xx * matrix.yy - matrix.xy * matrix.yx;
   if (matrix.xx != 0 || matrix.yx != 0)
     {
@@ -290,8 +289,8 @@ gdk_cairo_create_similar_surface (cairo_t               *cr,
       g_return_val_if_reached (NULL);
     }
 
-  width = ABS (ceil (width * bounds->size.width * xscale));
-  height = ABS (ceil (height * bounds->size.height * yscale));
+  width = ABS (ceil (width * bounds->size.width));
+  height = ABS (ceil (height * bounds->size.height));
 
   surface = cairo_surface_create_similar (cairo_get_group_target (cr), 
                                           content,
