@@ -13,7 +13,9 @@ clip {
                 bounds: 0 0 7 7;
                 color: rgb(221,160,221);
               }
-              path: "M 0 0 L 7 0 L 3.5 7 Z";
+              path: "path1" {
+                "M 0 0 L 7 0 L 3.5 7 Z";
+              }
               fill-rule: winding;
             }
             stroke {
@@ -21,7 +23,7 @@ clip {
                 bounds: -2 -2 11 11;
                 color: rgb(0,0,255);
               }
-              path: "M 0 0 L 7 0 L 3.5 7 Z";
+              path: "path1";
               line-width: 1;
               line-cap: butt;
               line-join: miter;
@@ -29,7 +31,7 @@ clip {
           }
         }
       }
-      path: "path1" {
+      path: "path2" {
         "M 275 100 O 275 175, 150 175, 0.70710676908493042\
          O 25 175, 25 100, 0.70710676908493042 O 25 25, 150 25, 0.70710676908493042\
          O 275 25, 275 100, 0.70710676908493042 Z";
@@ -41,7 +43,7 @@ clip {
         bounds: -3.29289 -4 282.293 183;
         color: rgb(0,0,0);
       }
-      path: "path1";
+      path: "path2";
       line-width: 2;
       line-cap: butt;
       line-join: miter;
