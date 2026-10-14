@@ -63,6 +63,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
   { "win32-semaphore", GDK_VULKAN_FEATURE_WIN32_SEMAPHORE, "Disable Windows sync support" },
   { "fence-fd", GDK_VULKAN_FEATURE_FENCE_FD, "File descriptors for fences" },
+  { "fence-handle", GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE, "Win32 HANDLEs for fences" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
   { "swapchain-maintenance", GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE, "Do not use advanced swapchain features" },
   { "portability-subset", GDK_VULKAN_FEATURE_PORTABILITY_SUBSET, "Vulkan implementation is non-conformant" },
@@ -683,6 +684,23 @@ physical_device_check_features (VkPhysicalDevice device)
   if ((features & GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE) &&
       physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_WIN32_SEMAPHORE;
+
+  if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME))
+    {
+      VkExternalFenceProperties fence_props = {
+        .sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES,
+      };
+
+      vkGetPhysicalDeviceExternalFenceProperties (device,
+                                                  &(VkPhysicalDeviceExternalFenceInfo) {
+                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO,
+                                                      .handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT,
+                                                  },
+                                                  &fence_props);
+
+      if (fence_props.externalFenceFeatures & VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT)
+        features |= GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE;
+    }
 #endif
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME))
@@ -2080,6 +2098,11 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               if (features & GDK_VULKAN_FEATURE_WIN32_SEMAPHORE)
                 {
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
+                }
+              if (features & GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_FENCE_WIN32_EXTENSION_NAME);
                 }
 #endif
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
