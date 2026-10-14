@@ -5135,6 +5135,8 @@ static void
 printer_init_duplicates_for_node (Printer       *printer,
                                   GskRenderNode *node)
 {
+  GskRenderNode **children;
+  gsize i, n_children;
   gpointer name;
 
   if (g_hash_table_lookup_extended (printer->named_nodes, node, NULL, &name))
@@ -5203,23 +5205,18 @@ printer_init_duplicates_for_node (Printer       *printer,
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
     case GSK_TURBULENCE_NODE:
-      {
-        GskRenderNode **children;
-        gsize i, n_children;
-
-        children = gsk_render_node_get_children (node, &n_children);
-        for (i = 0; i < n_children; i++)
-          {
-            printer_init_duplicates_for_node (printer, children[i]);
-          }
-      }
       break;
 
     default:
     case GSK_NOT_A_RENDER_NODE:
       g_assert_not_reached ();
       break;
+    }
 
+  children = gsk_render_node_get_children (node, &n_children);
+  for (i = 0; i < n_children; i++)
+    {
+      printer_init_duplicates_for_node (printer, children[i]);
     }
 }
 
