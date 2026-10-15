@@ -2253,10 +2253,12 @@ push_group (SvgElement   *shape,
             }
           else if (gsk_render_node_get_node_type (mask_child) == GSK_TRANSFORM_NODE)
             {
+              GskRenderNode *child = gsk_transform_node_get_child (mask_child);
               GskTransform *transform = gsk_transform_node_get_transform (mask_child);
 
-              if (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
-                color_node = gsk_transform_node_get_child (mask_child);
+              if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
+                  gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+                color_node = child;
             }
         }
 
