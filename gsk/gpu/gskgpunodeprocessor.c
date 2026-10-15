@@ -3732,6 +3732,74 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
   gdk_color_finish (&cache_color);
 }
 
+static GskGpuImage *
+gsk_gpu_get_stroke_node_as_image (GskGpuFrame           *frame,
+                                  GskGpuAsImageFlags     flags,
+                                  GdkColorState         *ccs,
+                                  const graphene_rect_t *clip_bounds,
+                                  const graphene_size_t *scale,
+                                  GskRenderNode         *node,
+                                  graphene_rect_t       *out_bounds,
+                                  GskGpuSampler         *out_sampler)
+{
+  GskGpuImage *image;
+  GskRenderNode *child;
+  GskGpuCache *cache;
+  GdkColor cache_color;
+  graphene_rect_t tex_rect;
+  const GdkColor *color;
+
+  child = gsk_stroke_node_get_child (node);
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
+      gdk_color_is_opaque (color = gsk_color_node_get_gdk_color (child)))
+    {
+      /* assignment happened in if branch for 2nd check */
+    }
+  else if ((flags & GSK_GPU_AS_IMAGE_MASK) && gsk_render_node_is_fully_opaque (child))
+    {
+      color = NULL;
+    }
+  else
+    {
+      return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+    }
+
+  if (color != NULL && !gdk_color_state_equal (color->color_state, ccs))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame));
+  image = gsk_gpu_cached_stroke_lookup (cache,
+                                        frame,
+                                        scale,
+                                        clip_bounds,
+                                        NULL,
+                                        gsk_stroke_node_get_path (node),
+                                        gsk_stroke_node_get_stroke (node),
+                                        color,
+                                        &tex_rect,
+                                        &cache_color);
+  if (image == NULL)
+    return NULL;
+
+  if ((color != NULL && !gdk_color_equal (&cache_color, color)) ||
+      ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
+       !gsk_rect_equal (clip_bounds, &tex_rect)))
+    {
+      g_object_unref (image);
+      gdk_color_finish (&cache_color);
+      return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+    }
+
+  gdk_color_finish (&cache_color);
+  *out_bounds = tex_rect;
+  if (gsk_rect_contains_rect (&tex_rect, clip_bounds))
+    *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+  else
+    *out_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
+
+  return image;
+}
+
 static void
 gsk_gpu_node_processor_add_subsurface_node (GskGpuRenderPass *self,
                                             GskRenderNode       *node)
@@ -4313,7 +4381,7 @@ static const struct
   },
   [GSK_STROKE_NODE] = {
     gsk_gpu_node_processor_add_stroke_node,
-    NULL,
+    gsk_gpu_get_stroke_node_as_image,
   },
   [GSK_SUBSURFACE_NODE] = {
     gsk_gpu_node_processor_add_subsurface_node,
