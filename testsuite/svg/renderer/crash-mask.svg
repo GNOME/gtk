@@ -1,0 +1,17 @@
+<svg viewBox='0 0 100 100'>
+  <defs>
+    <linearGradient id="gradient" spreadMethod='pad'
+      gradientUnits='userSpaceOnUse'
+      x1='50' y1='50' x2='250' y2='150'>
+      <stop offset="0" stop-color="red" />
+      <stop offset="0.5" stop-color="red" />
+      <stop offset="0.5" stop-color="yellow" />
+      <stop offset="1" stop-color="yellow" />
+    </linearGradient>
+    <mask id='mask'>
+      <path transform='translate(10,10)' fill='url(#gradient)'
+         d='M10,10L20,20L20,10Z'/>
+    </mask>
+  </defs>
+  <circle cx='60' cy='60' r='40' mask='url(#mask)'/>
+</svg>

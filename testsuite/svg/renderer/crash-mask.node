@@ -1,0 +1,24 @@
+mask {
+  mode: luminance;
+  source: rounded-clip {
+    clip: 20 20 80 80 / 40;
+    child: color {
+      bounds: 20 20 80 80;
+      color: rgb(0,0,0);
+    }
+  }
+  mask: transform {
+    transform: translate(10, 10);
+    child: fill {
+      child: linear-gradient {
+        bounds: 10 10 10 10;
+        start: 50 50;
+        end: 250 150;
+        stops: 0 rgb(255,0,0), 0.5 rgb(255,0,0), 0.5 rgb(255,255,0), 1 rgb(255,255,0);
+        premultiplied: false;
+      }
+      path: "M 10 10 L 20 20 L 20 10 Z";
+      fill-rule: winding;
+    }
+  }
+}
