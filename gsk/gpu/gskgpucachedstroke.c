@@ -34,6 +34,7 @@ struct _GskGpuCachedStroke
   /* Subpixel position of the stroke bounds wrt to device grid */
   guint fx, fy;
 
+  GdkColor color;
   GskGpuImage *image;
   graphene_point_t image_offset;
 };
@@ -46,6 +47,7 @@ gsk_gpu_cached_stroke_finalize (GskGpuCached *cached)
 
   g_hash_table_remove (priv->stroke_cache, self);
 
+  gdk_color_finish (&self->color);
   gsk_path_unref (self->path);
   gsk_stroke_clear (&self->stroke);
   g_object_unref (self->image);
@@ -115,6 +117,7 @@ struct _StrokeData
 {
   GskPath *path;
   GskStroke stroke;
+  GdkColor color;
 };
 
 static void
@@ -124,6 +127,7 @@ stroke_data_free (gpointer data)
 
   gsk_path_unref (stroke->path);
   gsk_stroke_clear (&stroke->stroke);
+  gdk_color_finish (&stroke->color);
   g_free (stroke);
 }
 
@@ -133,7 +137,7 @@ stroke_path (gpointer  data,
 {
   StrokeData *stroke = data;
 
-  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+  gdk_cairo_set_source_color (cr, stroke->color.color_state, &stroke->color);
   gsk_cairo_stroke_path (cr, stroke->path, &stroke->stroke);
 }
 
@@ -200,9 +204,12 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                               GskTransform          *modelview,
                               GskPath               *path,
                               const GskStroke       *stroke,
-                              graphene_rect_t       *out_rect)
+                              const GdkColor        *color_hint,
+                              graphene_rect_t       *out_rect,
+                              GdkColor              *out_color)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
+  const GdkColor white = GDK_COLOR_SRGB (1, 1, 1, 1);
   float sx, sy, dx, dy;
   GskGpuCachedStroke *cached;
   gsize fx, fy, padding;
@@ -213,6 +220,10 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
 
   if (!gsk_path_get_stroke_bounds (path, stroke, &path_bounds))
     return NULL;
+
+  if (color_hint == NULL)
+    color_hint = &white;
+  g_assert (gdk_color_is_opaque (color_hint));
 
   determine_scale_and_subpixel_grid (scale, modelview, &sx, &sy, &subpixel_scale);
 
@@ -237,6 +248,7 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                           cached->image_offset.y + path_bounds.origin.y - dy,
                           gsk_gpu_image_get_width (cached->image) / sx,
                           gsk_gpu_image_get_height (cached->image) / sy);
+      gdk_color_init_copy (out_color, &cached->color);
 
       return g_object_ref (cached->image);
     }
@@ -268,6 +280,7 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
       cached->sy = sy;
       cached->fx = fx;
       cached->fy = fy;
+      gdk_color_init_copy (&cached->color, color_hint);
       cached->image = g_object_ref (image);
       graphene_rect_inset (&viewport, padding / -sx, padding / -sy);
       cached->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - area.x / sx,
@@ -313,6 +326,7 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                                 g_memdup2 (&(StrokeData) {
                                   .path = gsk_path_ref (path),
                                   .stroke = GSK_STROKE_INIT_COPY (stroke),
+                                  .color = GDK_COLOR_INIT_COPY (color_hint),
                                 }, sizeof (StrokeData)),
                                 (GDestroyNotify) stroke_data_free);
 
@@ -321,6 +335,7 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                       viewport.origin.y - area.y / sy - dy,
                       gsk_gpu_image_get_width (image) / sx,
                       gsk_gpu_image_get_height (image) / sy);
+  gdk_color_init_copy (out_color, color_hint);
 
   return image;
 }

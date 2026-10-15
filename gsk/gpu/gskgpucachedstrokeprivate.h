@@ -8,6 +8,8 @@
 
 #include <graphene.h>
 
+#include "gdk/gdkcolorprivate.h"
+
 G_BEGIN_DECLS
 
 void                    gsk_gpu_cached_stroke_init_cache                (GskGpuCache            *cache);
@@ -20,7 +22,9 @@ GskGpuImage *           gsk_gpu_cached_stroke_lookup                    (GskGpuC
                                                                          GskTransform           *modelview,
                                                                          GskPath                *path,
                                                                          const GskStroke        *stroke,
-                                                                         graphene_rect_t        *rect);
+                                                                         const GdkColor         *color_hint,
+                                                                         graphene_rect_t        *out_rect,
+                                                                         GdkColor               *out_color);
 
 
 G_END_DECLS

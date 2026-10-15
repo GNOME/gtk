@@ -3675,11 +3675,17 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
   GskRenderNode *child;
   graphene_rect_t mask_rect;
   GskGpuCache *cache;
+  GdkColor cache_color;
+  const GdkColor *color;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
 
   child = gsk_stroke_node_get_child (node);
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    color = gsk_color_node_get_gdk_color (child);
+  else
+    color = NULL;
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
@@ -3690,14 +3696,14 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
                                              self->modelview,
                                              gsk_stroke_node_get_path (node),
                                              gsk_stroke_node_get_stroke (node),
-                                             &mask_rect);
+                                             color && gdk_color_is_opaque (color) ? color : NULL,
+                                             &mask_rect,
+                                             &cache_color);
   if (mask_image == NULL)
     return;
 
-  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+  if (color)
     {
-      const GdkColor *color = gsk_color_node_get_gdk_color (child);
-
       gsk_gpu_colorize_op (self,
                            self->ccs,
                            gsk_gpu_color_states_find (self->ccs, color),
@@ -3723,6 +3729,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuRenderPass *self,
     }
 
   g_object_unref (mask_image);
+  gdk_color_finish (&cache_color);
 }
 
 static void
