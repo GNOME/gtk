@@ -34,6 +34,7 @@ test_data = [
   'crash1.svg',
   'crash2.svg',
   'crash3.svg',
+  'crash-mask.svg',
   'css-filters.svg',
   'currentcolor.svg',
   'dashes.svg',

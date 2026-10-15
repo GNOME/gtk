@@ -276,6 +276,9 @@ test_rsvg_parse (void)
     // conic weights must be > 0
     { "M 0 0 O 5 0 5 5 0", NULL },
     { "M 0 0 O 5 0 5 5 -1", NULL },
+    // test for special-case handling of conics that live on a line
+    { "M 39.7792969 34.3984222 C 40.5384178 34.3185539 40.5390625 34.3184853 40.5390625 35.0937347",
+      "M 39.779296875 34.398422241210938 L 40.5390625 34.364315032958984 L 40.5390625 35.093734741210938" },
   };
   int i;
 
