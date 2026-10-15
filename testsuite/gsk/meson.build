@@ -294,6 +294,7 @@ compare_render_tests = [
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'transform-scale-too-small-nocairo',
+  'transform-to-image-nocairo',
   'yuv-matrix-d3d12',
   'yuv-matrix-dmabuf-nv12',
   'yuv-matrix-dmabuf-rgba',

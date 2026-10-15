@@ -7,6 +7,8 @@
 
 #include <graphene.h>
 
+#include "gdk/gdkcolorprivate.h"
+
 G_BEGIN_DECLS
 
 void                    gsk_gpu_cached_fill_init_cache                  (GskGpuCache            *cache);
@@ -19,7 +21,9 @@ GskGpuImage *           gsk_gpu_cached_fill_lookup                      (GskGpuC
                                                                          GskTransform           *modelview,
                                                                          GskPath                *path,
                                                                          GskFillRule             fill_rule,
-                                                                         graphene_rect_t        *rect);
+                                                                         const GdkColor         *color_hint,
+                                                                         graphene_rect_t        *out_rect,
+                                                                         GdkColor               *out_color);
 
 
 G_END_DECLS
