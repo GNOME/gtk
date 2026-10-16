@@ -33,6 +33,7 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedclipnodeprivate.h"
 #include "gsk/gskstrokenode.h"
+#include "gsk/gsksubsurfacenode.h"
 #include "gsk/gsktransform.h"
 #include "gsk/gsktransformnode.h"
 
@@ -304,6 +305,14 @@ gsk_debug_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_subsurface_node_as_mask (GskRenderNode *self,
+                             GskRenderNode *source,
+                             GskMaskMode    mask_mode)
+{
+  return gsk_render_node_as_mask (gsk_subsurface_node_get_child (self), source, mask_mode);
+}
+
+static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
                          GskRenderNode *source,
                          GskMaskMode    mask_mode)
@@ -348,6 +357,9 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_DEBUG_NODE:
       return gsk_debug_node_as_mask (mask, source, mask_mode);
 
+    case GSK_SUBSURFACE_NODE:
+      return gsk_subsurface_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
@@ -367,7 +379,6 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_GL_SHADER_NODE:
-    case GSK_SUBSURFACE_NODE:
     case GSK_COMPOSITE_NODE:
     case GSK_DISPLACEMENT_NODE:
     case GSK_ARITHMETIC_NODE:
