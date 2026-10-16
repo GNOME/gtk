@@ -21,6 +21,8 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
+#include "gsk/gskmaskutilsprivate.h"
+
 static void
 merge_containers_add_children (GPtrArray     *array,
                                GskRenderNode *node)
@@ -109,6 +111,20 @@ remove_transforms (GskRenderNode *node)
     return gsk_render_node_ref (node);
 }
 
+static GskRenderNode *
+optimize_masks (GskRenderNode *node)
+{
+  GskRenderNode *result;
+
+  result = gsk_mask_node_try_new_optimized (gsk_mask_node_get_source (node),
+                                            gsk_mask_node_get_mask (node),
+                                            gsk_mask_node_get_mask_mode (node));
+  if (result)
+    return result;
+  else
+    return gsk_render_node_ref (node);
+}
+
 static const struct 
 {
   const char *name;
@@ -134,6 +150,11 @@ static const struct
     .name = "remove-transforms",
     .type = GSK_TRANSFORM_NODE,
     .func = remove_transforms,
+  },
+  {
+    .name = "optimize-masks",
+    .type = GSK_MASK_NODE,
+    .func = optimize_masks,
   },
 };
 

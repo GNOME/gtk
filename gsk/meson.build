@@ -28,6 +28,7 @@ gsk_public_sources = files([
   'gskisolationnode.c',
   'gsklineargradientnode.c',
   'gskmasknode.c',
+  'gskmaskutils.c',
   'gskoffload.c',
   'gskopacitynode.c',
   'gskoutsetshadownode.c',
