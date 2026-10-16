@@ -88,6 +88,7 @@
 #include "gtksvggpaprivate.h"
 #include "gtksvgmediaqueryprivate.h"
 #include "gtksvggpaprivate.h"
+#include "gtkdebug.h"
 
 #include <glib/gstdio.h>
 
@@ -251,6 +252,32 @@ void
 gtk_svg_emit_error (GtkSvg       *svg,
                     const GError *error)
 {
+  if (GTK_DEBUG_CHECK (SVG_ERRORS) &&
+      error->domain == GTK_SVG_ERROR)
+    {
+      const GtkSvgLocation *start = gtk_svg_error_get_start (error);
+      const GtkSvgLocation *end = gtk_svg_error_get_end (error);
+      const char *element = gtk_svg_error_get_element (error);
+      const char *attribute = gtk_svg_error_get_attribute (error);
+
+      if (start)
+        {
+          if (end->lines != start->lines || end->line_chars != start->line_chars)
+            g_print ("%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT " - %" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ",
+                     start->lines, start->line_chars,
+                     end->lines, end->line_chars);
+          else
+            g_print ("%" G_GSIZE_FORMAT ".%" G_GSIZE_FORMAT ": ", start->lines, start->line_chars);
+        }
+
+      if (element && attribute)
+        g_print ("(%s / %s) ", element, attribute);
+      else if (element)
+        g_print ("(%s) ", element);
+
+      g_print ("%s\n", error->message);
+    }
+
   g_signal_emit (svg, error_signal, 0, error);
 }
 
@@ -763,10 +790,8 @@ collect_next_update (GtkSvg *self)
 
   collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
 
-#ifdef DEBUG
-  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
+  if (GTK_DEBUG_CHECK (SVG_CONTINUOUS))
     run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-#endif
 
   self->run_mode = run_mode;
   self->next_update = next_update;
