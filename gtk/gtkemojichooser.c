@@ -653,7 +653,6 @@ create_grid_cell (void)
   PangoAttrList *attrs = pango_attr_list_new ();
   GtkWidget *label = gtk_inscription_new (NULL);
 
-  gtk_widget_set_size_request (label, 44, 44);
   gtk_widget_add_css_class (label, "emoji");
   gtk_inscription_set_min_chars (GTK_INSCRIPTION (label), 0);
   gtk_inscription_set_nat_chars (GTK_INSCRIPTION (label), 0);
