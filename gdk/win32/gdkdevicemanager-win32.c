@@ -45,6 +45,8 @@
 
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
 #define TWOPI (2 * G_PI)
+/* Wintab's FIX32 is a 16.16 fixed-point number */
+#define FIX_DOUBLE(x) ((double) INT (x) + (double) FRAC (x) / 65536)
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
 typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
@@ -464,7 +466,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                             GDK_AXIS_X,
                             axis_x.axMin,
                             axis_x.axMax,
-                            axis_x.axResolution / 65535);
+                            FIX_DOUBLE (axis_x.axResolution));
       num_axes++;
     }
 
@@ -474,7 +476,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                             GDK_AXIS_Y,
                             axis_y.axMin,
                             axis_y.axMax,
-                            axis_y.axResolution / 65535);
+                            FIX_DOUBLE (axis_y.axResolution));
       num_axes++;
     }
 
@@ -484,7 +486,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                             GDK_AXIS_PRESSURE,
                             axis_npressure.axMin,
                             axis_npressure.axMax,
-                            axis_npressure.axResolution / 65535);
+                            FIX_DOUBLE (axis_npressure.axResolution));
       num_axes++;
     }
 
@@ -523,7 +525,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                                 GDK_AXIS_ROTATION,
                                 axis_or[2].axMin,
                                 axis_or[2].axMax,
-                                axis_or[2].axResolution / 65535);
+                                FIX_DOUBLE (axis_or[2].axResolution));
           num_axes++;
         }
     }
@@ -535,7 +537,7 @@ wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
                             GDK_AXIS_WHEEL,
                             axis_tpressure.axMin,
                             axis_tpressure.axMax,
-                            axis_tpressure.axResolution / 65535);
+                            FIX_DOUBLE (axis_tpressure.axResolution));
       num_axes++;
     }
 
@@ -1005,10 +1007,10 @@ decode_tilt (int    *axis_data,
    * Wintab's reference angle leads gdk's by 90 degrees.
    */
   az = TWOPI * packet->pkOrientation.orAzimuth /
-    (axes[0].axResolution / 65536.);
+    FIX_DOUBLE (axes[0].axResolution);
   az -= G_PI / 2;
   el = TWOPI * packet->pkOrientation.orAltitude /
-    (axes[1].axResolution / 65536.);
+    FIX_DOUBLE (axes[1].axResolution);
 
   /* X tilt */
   axis_data[0] = cos (az) * cos (el) * 1000;
