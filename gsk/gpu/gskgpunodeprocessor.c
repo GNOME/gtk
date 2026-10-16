@@ -2681,11 +2681,13 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
 
       first_image = g_object_ref (second_image);
       first_rect = *graphene_rect_zero ();
+      first_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
   else if (second_image == NULL)
     {
       second_image = g_object_ref (first_image);
       second_rect = *graphene_rect_zero ();
+      second_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
 
   gsk_gpu_arithmetic_op (self,
