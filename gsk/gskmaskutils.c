@@ -22,8 +22,11 @@
 
 #include "gsk/gskclipnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskfillnode.h"
+#include "gsk/gsklineargradientnodeprivate.h"
 #include "gsk/gskopacitynode.h"
+#include "gsk/gskradialgradientnodeprivate.h"
 #include "gsk/gskrectprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedclipnodeprivate.h"
@@ -196,6 +199,48 @@ gsk_transform_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_linear_gradient_node_as_mask (GskRenderNode *self,
+                                  GskRenderNode *source,
+                                  GskMaskMode    mask_mode)
+{
+  if (mask_mode != GSK_MASK_MODE_ALPHA ||
+      !gsk_render_node_is_fully_opaque (self))
+    return NULL;
+
+  return gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_linear_gradient_node_get_snap (self));
+}
+
+static GskRenderNode *
+gsk_radial_gradient_node_as_mask (GskRenderNode *self,
+                                  GskRenderNode *source,
+                                  GskMaskMode    mask_mode)
+{
+  if (mask_mode != GSK_MASK_MODE_ALPHA ||
+      !gsk_render_node_is_fully_opaque (self))
+    return NULL;
+
+  return gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_radial_gradient_node_get_snap (self));
+}
+
+static GskRenderNode *
+gsk_conic_gradient_node_as_mask (GskRenderNode *self,
+                                 GskRenderNode *source,
+                                 GskMaskMode    mask_mode)
+{
+  if (mask_mode != GSK_MASK_MODE_ALPHA ||
+      !gsk_render_node_is_fully_opaque (self))
+    return NULL;
+
+  return gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_conic_gradient_node_get_snap (self));
+}
+
+static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
                          GskRenderNode *source,
                          GskMaskMode    mask_mode)
@@ -220,17 +265,23 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_TRANSFORM_NODE:
       return gsk_transform_node_as_mask (mask, source, mask_mode);
 
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+      return gsk_linear_gradient_node_as_mask (mask, source, mask_mode);
+
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+      return gsk_radial_gradient_node_as_mask (mask, source, mask_mode);
+
+    case GSK_CONIC_GRADIENT_NODE:
+      return gsk_conic_gradient_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
     case GSK_BLUR_NODE:
     case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
-    case GSK_LINEAR_GRADIENT_NODE:
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_RADIAL_GRADIENT_NODE:
-    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-    case GSK_CONIC_GRADIENT_NODE:
     case GSK_BORDER_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_INSET_SHADOW_NODE:
