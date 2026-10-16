@@ -88,7 +88,6 @@ struct _Filter
 {
   const char *name;
   const char *description;
-  gboolean suppress_printing;
   GskRenderNode * (* run) (GskRenderNode *node,
                            int            argc,
                            const char   **argv);
@@ -118,7 +117,6 @@ static const Filter filters[] = {
   {
     .name = "info",
     .description = "Provide information about the render node.",
-    .suppress_printing = TRUE,
     .run = filter_info,
   },
   {
@@ -129,19 +127,16 @@ static const Filter filters[] = {
   {
     .name = "print",
     .description = "Print the node",
-    .suppress_printing = TRUE,
     .run = filter_print,
   },
   {
     .name = "save",
     .description = "Save current node to file",
-    .suppress_printing = TRUE,
     .run = filter_save,
   },
   {
     .name = "show",
     .description = "Show the render node",
-    .suppress_printing = TRUE,
     .run = filter_show,
   },
   {
@@ -282,15 +277,7 @@ do_filter (int          *argc_,
       argc -= argc_part;
 
       if (argc == 0)
-        {
-          if (filter == NULL || !filter->suppress_printing)
-            {
-              GBytes *bytes = gsk_render_node_serialize (node);
-              g_print ("%s", (char *) g_bytes_get_data (bytes, NULL));
-              g_bytes_unref (bytes);
-            }
-          break;
-        }
+        break;
 
       filter = filter_find (argv[0]);
       if (filter == NULL)
