@@ -22,10 +22,12 @@
 
 #include "gsk/gskclipnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskfillnode.h"
 #include "gsk/gskopacitynode.h"
 #include "gsk/gskrectprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedclipnodeprivate.h"
+#include "gsk/gskstrokenode.h"
 
 #include "gdk/gdkcolorprivate.h"
 
@@ -122,6 +124,50 @@ gsk_rounded_clip_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_fill_node_as_mask (GskRenderNode *self,
+                       GskRenderNode *source,
+                       GskMaskMode    mask_mode)
+{
+  GskRenderNode *child, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_fill_node_get_child (self), source, mask_mode);
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_fill_node_new (child,
+                              gsk_fill_node_get_path (self),
+                              gsk_fill_node_get_fill_rule (self));
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
+gsk_stroke_node_as_mask (GskRenderNode *self,
+                         GskRenderNode *source,
+                         GskMaskMode    mask_mode)
+{
+  GskRenderNode *child, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_stroke_node_get_child (self), source, mask_mode);
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_stroke_node_new (child,
+                                gsk_stroke_node_get_path (self),
+                                gsk_stroke_node_get_stroke (self));
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
                          GskRenderNode *source,
                          GskMaskMode    mask_mode)
@@ -138,7 +184,11 @@ gsk_render_node_as_mask (GskRenderNode *mask,
       return gsk_rounded_clip_node_as_mask (mask, source, mask_mode);
 
     case GSK_FILL_NODE:
+      return gsk_fill_node_as_mask (mask, source, mask_mode);
+
     case GSK_STROKE_NODE:
+      return gsk_stroke_node_as_mask (mask, source, mask_mode);
+
     case GSK_TRANSFORM_NODE:
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
