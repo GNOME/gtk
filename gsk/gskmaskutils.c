@@ -20,11 +20,61 @@
 
 #include "gskmaskutilsprivate.h"
 
+#include "gsk/gskclipnodeprivate.h"
+#include "gsk/gskcolornodeprivate.h"
+#include "gsk/gskopacitynode.h"
+#include "gsk/gskrectprivate.h"
 #include "gsk/gskrendernodeprivate.h"
+
+#include "gdk/gdkcolorprivate.h"
 
 static GskRenderNode *  gsk_render_node_as_mask                  (GskRenderNode  *mask,
                                                                  GskRenderNode  *source,
                                                                  GskMaskMode     mask_mode);
+
+static GskRenderNode *
+gsk_color_node_as_mask (GskRenderNode *self,
+                        GskRenderNode *source,
+                        GskMaskMode    mask_mode)
+{
+  GskRenderNode *result;
+  const GdkColor *color;
+  GskRenderNode *clip;
+  float alpha;
+
+  color = gsk_color_node_get_gdk_color (self);
+
+  switch (mask_mode)
+  {
+    case GSK_MASK_MODE_ALPHA:
+      alpha = color->alpha;
+      break;
+
+    case GSK_MASK_MODE_LUMINANCE:
+      alpha = CLAMP (gdk_color_get_luminance (color), 0, 1) * color->alpha;
+      break;
+
+    case GSK_MASK_MODE_INVERTED_LUMINANCE:
+      alpha = (1.0 - CLAMP (gdk_color_get_luminance (color), 0, 1)) * color->alpha;
+      break;
+
+    case GSK_MASK_MODE_INVERTED_ALPHA:
+      return NULL;
+
+    default:
+      g_assert_not_reached ();
+      return NULL;
+  }
+
+  clip = gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_color_node_get_snap (self));
+  /* FIXME: background isolation? */
+  result = gsk_opacity_node_new (clip, alpha);
+  gsk_render_node_unref (clip);
+
+  return result;
+}
 
 static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
@@ -34,6 +84,8 @@ gsk_render_node_as_mask (GskRenderNode *mask,
   switch (gsk_render_node_get_node_type (mask))
   {
     case GSK_COLOR_NODE:
+      return gsk_color_node_as_mask (mask, source, mask_mode);
+
     case GSK_CLIP_NODE:
     case GSK_ROUNDED_CLIP_NODE:
     case GSK_FILL_NODE:
