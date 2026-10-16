@@ -5812,6 +5812,10 @@ gtk_text_set_text (GtkText    *self,
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
                                        tmp_pos, tmp_pos + g_utf8_strlen (text, -1));
+
+  gtk_text_schedule_im_reset (self);
+  gtk_text_reset_im_context (self);
+
   end_change (self);
 
   gtk_text_history_end_irreversible_action (priv->history);
