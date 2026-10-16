@@ -101,6 +101,8 @@ void              gdk_color_to_float            (const GdkColor         *self,
                                                  GdkColorState          *target,
                                                  float                   values[4]);
 
+float             gdk_color_get_luminance       (const GdkColor         *self);
+
 void              gdk_color_from_rgba           (GdkColor               *self,
                                                  GdkColorState          *color_state,
                                                  const GdkRGBA          *rgba);
