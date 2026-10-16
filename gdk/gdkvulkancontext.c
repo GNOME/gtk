@@ -1428,13 +1428,20 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
 
           if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
             {
+#ifdef G_OS_UNIX
+              const VkExternalFenceHandleTypeFlagBits fence_handle_type = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
+#endif
+#ifdef G_OS_WIN32
+              const VkExternalFenceHandleTypeFlagBits fence_handle_type = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT;;
+#endif
               VkExportFenceCreateInfo export_info = {
                   .sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO,
-                  .handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT,
+                  .handleTypes = fence_handle_type,
               };
               const void *next;
 
-              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
+              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD) ||
+                  gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
                 next = &export_info;
               else
                 next = NULL;
