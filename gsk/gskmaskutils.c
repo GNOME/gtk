@@ -28,6 +28,8 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedclipnodeprivate.h"
 #include "gsk/gskstrokenode.h"
+#include "gsk/gsktransform.h"
+#include "gsk/gsktransformnode.h"
 
 #include "gdk/gdkcolorprivate.h"
 
@@ -168,6 +170,32 @@ gsk_stroke_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_transform_node_as_mask (GskRenderNode *self,
+                            GskRenderNode *source,
+                            GskMaskMode    mask_mode)
+{
+  GskRenderNode *transformed_source, *transformed_result, *result;
+  GskTransform *inverse, *transform;
+
+  transform = gsk_transform_node_get_transform (self);
+  inverse = gsk_transform_invert (gsk_transform_ref (transform));
+  if (inverse == NULL && transform != NULL)
+    return NULL;
+
+  transformed_source = gsk_transform_node_new (source, inverse);
+  gsk_transform_unref (inverse);
+  transformed_result = gsk_render_node_as_mask (gsk_transform_node_get_child (self), transformed_source, mask_mode);
+  gsk_render_node_unref (transformed_source);
+  if (transformed_result == NULL)
+    return NULL;
+
+  result = gsk_transform_node_new (transformed_result, transform);
+  gsk_render_node_unref (transformed_result);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
                          GskRenderNode *source,
                          GskMaskMode    mask_mode)
@@ -190,6 +218,8 @@ gsk_render_node_as_mask (GskRenderNode *mask,
       return gsk_stroke_node_as_mask (mask, source, mask_mode);
 
     case GSK_TRANSFORM_NODE:
+      return gsk_transform_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
