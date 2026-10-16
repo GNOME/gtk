@@ -138,6 +138,7 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcssfiltervalueprivate.h"
 #include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkshortcutmanager.h"
@@ -1423,9 +1424,8 @@ get_border (GtkCssNode *node,
   border->left = gtk_css_number_value_get (style->border->border_left_width, 100);
 }
 
-static void
-gtk_popover_apply_tail_path (GtkPopover *popover,
-                             cairo_t    *cr)
+static GskPath *
+gtk_popover_create_arrow_path (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   int initial_x, initial_y;
@@ -1433,23 +1433,27 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
   int final_x, final_y;
   GtkBorder border;
   GtkWidget *parent;
+  GskPathBuilder *builder;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
 
   if (!parent)
-    return;
+    return NULL;
 
   get_border (priv->arrow_node, &border);
 
-  cairo_set_line_width (cr, 1);
   gtk_popover_get_gap_coords (popover,
                               &initial_x, &initial_y,
                               &tip_x, &tip_y,
                               &final_x, &final_y);
 
-  cairo_move_to (cr, initial_x, initial_y);
-  cairo_line_to (cr, tip_x, tip_y);
-  cairo_line_to (cr, final_x, final_y);
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_move_to (builder, initial_x, initial_y);
+  gsk_path_builder_line_to (builder, tip_x, tip_y);
+  gsk_path_builder_line_to (builder, final_x, final_y);
+
+  return gsk_path_builder_free_to_path (builder);
 }
 
 static void
@@ -1467,6 +1471,7 @@ gtk_popover_update_shape (GtkPopover *popover)
       graphene_point_t p;
       double native_x, native_y;
       int width, height, scale;
+      GskPath *path;
 
       gtk_native_get_surface_transform (GTK_NATIVE (popover), &native_x, &native_y);
       gtk_css_boxes_init (&content_css_boxes, priv->contents_widget);
@@ -1474,6 +1479,7 @@ gtk_popover_update_shape (GtkPopover *popover)
       width = gdk_surface_get_width (priv->surface);
       height = gdk_surface_get_height (priv->surface);
       scale = gdk_surface_get_scale_factor (priv->surface);
+      path = gtk_popover_create_arrow_path (popover);
 
       cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
       cairo_surface_set_device_scale (cairo_surface, scale, scale);
@@ -1483,9 +1489,15 @@ gtk_popover_update_shape (GtkPopover *popover)
       cairo_translate (cr, native_x, native_y);
 
       cairo_set_source_rgba (cr, 0, 0, 0, 1);
-      gtk_popover_apply_tail_path (popover, cr);
-      cairo_close_path (cr);
-      cairo_fill (cr);
+
+      if (path)
+        {
+          cairo_set_line_width (cr, 1);
+          gsk_path_to_cairo (path, cr);
+          gsk_path_unref (path);
+          cairo_close_path (cr);
+          cairo_fill (cr);
+        }
 
       box = gtk_css_boxes_get_border_box (&content_css_boxes);
       if (!gtk_widget_compute_point (priv->contents_widget, GTK_WIDGET (popover),
@@ -1678,63 +1690,78 @@ create_arrow_render_node (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkBorder border;
-  cairo_t *cr;
   GtkSnapshot *snapshot;
-  GtkSnapshot *bg_snapshot;
-  GskRenderNode *node;
   GtkCssBoxes boxes;
   GtkCssStyle *style;
+  GskPath *path;
+  GtkCssValue *backdrop_filter_value;
+  gboolean has_backdrop_filter;
 
   snapshot = gtk_snapshot_new ();
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (
-                                    0, 0,
-                                    gtk_widget_get_width (widget),
-                                    gtk_widget_get_height (widget)
-                                  ));
-
-  /* Clip to the arrow shape */
-  cairo_save (cr);
-  gtk_popover_apply_tail_path (popover, cr);
-  cairo_clip (cr);
+  path = gtk_popover_create_arrow_path (popover);
+  if (!path)
+    return;
 
   get_border (priv->arrow_node, &border);
 
   style = gtk_css_node_get_style (priv->arrow_node);
 
-  /* Render the arrow background */
-  bg_snapshot = gtk_snapshot_new ();
+  backdrop_filter_value = style->other->backdrop_filter;
+  has_backdrop_filter = !gtk_css_filter_value_is_none (backdrop_filter_value);
+
+  if (has_backdrop_filter)
+    gtk_snapshot_push_copy (snapshot);
+
   gtk_css_boxes_init_border_box (&boxes, style,
                                  0, 0,
                                  gtk_widget_get_width (widget),
                                  gtk_widget_get_height (widget));
-  gtk_css_style_snapshot_background (&boxes, bg_snapshot);
-  node = gtk_snapshot_free_to_node (bg_snapshot);
-  if (node)
+
+  gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+
+  if (has_backdrop_filter)
     {
-      gsk_render_node_draw (node, cr);
-      gsk_render_node_unref (node);
+      graphene_rect_t path_bounds;
+
+      if (gsk_path_get_bounds (path, &path_bounds))
+        {
+          GskRoundedRect border_box;
+
+          gsk_rounded_rect_init_from_rect (&border_box, &path_bounds, 0);
+
+          gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
+          gtk_snapshot_append_paste (snapshot, &path_bounds, 0);
+          gtk_css_filter_value_pop_snapshot (backdrop_filter_value, &path_bounds, snapshot);
+        }
     }
+
+  /* Render the arrow background */
+  gtk_css_style_snapshot_background (&boxes, snapshot);
 
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
     {
       const GdkRGBA *border_color;
+      GskStroke *stroke;
 
       border_color = gtk_css_color_value_get_rgba (style->used->border_left_color);
 
-      gtk_popover_apply_tail_path (popover, cr);
-      gdk_cairo_set_source_rgba (cr, border_color);
+      stroke = gsk_stroke_new (1);
 
-      cairo_set_line_width (cr, border.bottom + 1);
-      cairo_stroke (cr);
+      gtk_snapshot_append_stroke (snapshot, path, stroke, border_color);
+
+      gsk_stroke_free (stroke);
     }
 
-  cairo_restore (cr);
-  cairo_destroy (cr);
+  if (has_backdrop_filter)
+    gtk_snapshot_pop (snapshot);
+
+  gtk_snapshot_pop (snapshot);
 
   priv->arrow_render_node = gtk_snapshot_free_to_node (snapshot);
+
+  gsk_path_unref (path);
 }
 
 static void
