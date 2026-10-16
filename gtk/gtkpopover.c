@@ -138,6 +138,7 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcssfiltervalueprivate.h"
 #include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkshortcutmanager.h"
@@ -1693,6 +1694,8 @@ create_arrow_render_node (GtkPopover *popover)
   GtkCssBoxes boxes;
   GtkCssStyle *style;
   GskPath *path;
+  GtkCssValue *backdrop_filter_value;
+  gboolean has_backdrop_filter;
 
   snapshot = gtk_snapshot_new ();
 
@@ -1704,13 +1707,36 @@ create_arrow_render_node (GtkPopover *popover)
 
   style = gtk_css_node_get_style (priv->arrow_node);
 
-  gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+  backdrop_filter_value = style->other->backdrop_filter;
+  has_backdrop_filter = !gtk_css_filter_value_is_none (backdrop_filter_value);
 
-  /* Render the arrow background */
+  if (has_backdrop_filter)
+    gtk_snapshot_push_copy (snapshot);
+
   gtk_css_boxes_init_border_box (&boxes, style,
                                  0, 0,
                                  gtk_widget_get_width (widget),
                                  gtk_widget_get_height (widget));
+
+  gtk_snapshot_push_fill (snapshot, path, GSK_FILL_RULE_WINDING);
+
+  if (has_backdrop_filter)
+    {
+      graphene_rect_t path_bounds;
+
+      if (gsk_path_get_bounds (path, &path_bounds))
+        {
+          GskRoundedRect border_box;
+
+          gsk_rounded_rect_init_from_rect (&border_box, &path_bounds, 0);
+
+          gtk_css_filter_value_push_snapshot (backdrop_filter_value, snapshot);
+          gtk_snapshot_append_paste (snapshot, &path_bounds, 0);
+          gtk_css_filter_value_pop_snapshot (backdrop_filter_value, &path_bounds, snapshot);
+        }
+    }
+
+  /* Render the arrow background */
   gtk_css_style_snapshot_background (&boxes, snapshot);
 
   /* Render the border of the arrow tip */
@@ -1727,6 +1753,9 @@ create_arrow_render_node (GtkPopover *popover)
 
       gsk_stroke_free (stroke);
     }
+
+  if (has_backdrop_filter)
+    gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_pop (snapshot);
 
