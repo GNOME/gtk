@@ -35,6 +35,8 @@
 #include "gsk/gskroundedclipnodeprivate.h"
 #include "gsk/gskstrokenode.h"
 #include "gsk/gsksubsurfacenode.h"
+#include "gsk/gsktexturenode.h"
+#include "gsk/gsktexturescalenode.h"
 #include "gsk/gsktransform.h"
 #include "gsk/gsktransformnode.h"
 
@@ -288,6 +290,34 @@ gsk_conic_gradient_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_texture_node_as_mask (GskRenderNode *self,
+                          GskRenderNode *source,
+                          GskMaskMode    mask_mode)
+{
+  if (mask_mode != GSK_MASK_MODE_ALPHA ||
+      !gsk_render_node_is_fully_opaque (self))
+    return NULL;
+
+  return gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_texture_node_get_snap (self));
+}
+
+static GskRenderNode *
+gsk_texture_scale_node_as_mask (GskRenderNode *self,
+                                GskRenderNode *source,
+                                GskMaskMode    mask_mode)
+{
+  if (mask_mode != GSK_MASK_MODE_ALPHA ||
+      !gsk_render_node_is_fully_opaque (self))
+    return NULL;
+
+  return gsk_clip_node_new2 (source,
+                             &self->bounds,
+                             gsk_texture_scale_node_get_snap (self));
+}
+
+static GskRenderNode *
 gsk_color_matrix_node_as_mask (GskRenderNode *self,
                                GskRenderNode *source,
                                GskMaskMode    mask_mode)
@@ -437,6 +467,12 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_CONIC_GRADIENT_NODE:
       return gsk_conic_gradient_node_as_mask (mask, source, mask_mode);
 
+    case GSK_TEXTURE_NODE:
+      return gsk_texture_node_as_mask (mask, source, mask_mode);
+
+    case GSK_TEXTURE_SCALE_NODE:
+      return gsk_texture_scale_node_as_mask (mask, source, mask_mode);
+
     case GSK_OPACITY_NODE:
       return gsk_opacity_node_as_mask (mask, source, mask_mode);
 
@@ -459,12 +495,10 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_CONTAINER_NODE:
     case GSK_CAIRO_NODE:
     case GSK_BORDER_NODE:
-    case GSK_TEXTURE_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
     case GSK_COMPONENT_TRANSFER_NODE:
     case GSK_TEXT_NODE:
-    case GSK_TEXTURE_SCALE_NODE:
     case GSK_REPEAT_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BLEND_NODE:
