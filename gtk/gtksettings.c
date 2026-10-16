@@ -1478,14 +1478,16 @@ apply_queued_setting (GtkSettings      *settings,
   GValue tmp_value = G_VALUE_INIT;
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (_gtk_settings_parse_convert (&qvalue->value,
-                                   pspec, &tmp_value))
+  if (_gtk_settings_parse_convert (&qvalue->value, pspec, &tmp_value))
     {
       if (settings->property_values[pspec->param_id - 1].source <= qvalue->source)
         {
-          g_value_copy (&tmp_value, &settings->property_values[pspec->param_id - 1].value);
           settings->property_values[pspec->param_id - 1].source = qvalue->source;
-          g_object_notify_by_pspec (G_OBJECT (settings), pspec);
+          if (g_param_values_cmp (pspec, &tmp_value, &settings->property_values[pspec->param_id - 1].value) != 0)
+            {
+              g_value_copy (&tmp_value, &settings->property_values[pspec->param_id - 1].value);
+              g_object_notify_by_pspec (G_OBJECT (settings), pspec);
+            }
         }
 
     }
