@@ -4271,6 +4271,16 @@ window {
   &.maximized,
   &.fullscreen { border-radius: 0; box-shadow: none; }
 
+  &.solid-csd {
+    &.maximized,
+    &.fullscreen {
+      margin: 0;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
   &.tiled,
   &.tiled-top,
   &.tiled-left,
