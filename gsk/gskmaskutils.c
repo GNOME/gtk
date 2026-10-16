@@ -21,6 +21,7 @@
 #include "gskmaskutilsprivate.h"
 
 #include "gsk/gskclipnodeprivate.h"
+#include "gsk/gskcolormatrixnodeprivate.h"
 #include "gsk/gskcolornodeprivate.h"
 #include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskdebugnode.h"
@@ -287,6 +288,94 @@ gsk_conic_gradient_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_color_matrix_node_as_mask (GskRenderNode *self,
+                               GskRenderNode *source,
+                               GskMaskMode    mask_mode)
+{
+  float matrix[16], offset[4], alpha;
+  GskRenderNode *child, *clip, *result;
+  GdkColor color;
+  gsize i;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  graphene_matrix_to_float (gsk_color_matrix_node_get_color_matrix (self), matrix);
+  graphene_vec4_to_float (gsk_color_matrix_node_get_color_offset (self), offset);
+
+  if (matrix[0] == 0)
+    {
+      /* nothing to do here */
+    }
+  else if (matrix[0] == 1)
+    {
+      if (mask_mode != GSK_MASK_MODE_ALPHA)
+        return NULL;
+
+      if (offset[0] != 0 || offset[1] != 0 || offset[2] != 0)
+        return NULL;
+    }
+  else
+    return NULL;
+
+  for (i = 1; i < 15; i++)
+    {
+      if ((i % 5 == 0 && matrix[i] != matrix[0]) ||
+          (i % 5 != 0 && matrix[i] != 0))
+        {
+          return NULL;
+        }
+    }
+  if (matrix[15] != CLAMP (matrix[15], 0, 1))
+    return NULL;
+  if (offset[3] != 0)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_color_matrix_node_get_child (self), source, GSK_MASK_MODE_ALPHA);
+  if (child == NULL)
+    return NULL;
+
+  switch (mask_mode)
+  {
+    case GSK_MASK_MODE_ALPHA:
+      alpha = matrix[15];
+      break;
+
+    case GSK_MASK_MODE_LUMINANCE:
+      offset[0] = 1.0;
+      gdk_color_init (&color,
+                      gsk_color_matrix_node_get_color_state (self),
+                      offset);
+      alpha = CLAMP (gdk_color_get_luminance (&color), 0, 1) * matrix[15];
+      gdk_color_finish (&color);
+      break;
+
+    case GSK_MASK_MODE_INVERTED_LUMINANCE:
+      offset[0] = 1.0;
+      gdk_color_init (&color,
+                      gsk_color_matrix_node_get_color_state (self),
+                      offset);
+      alpha = (1.0 - CLAMP (gdk_color_get_luminance (&color), 0, 1)) * matrix[15];
+      gdk_color_finish (&color);
+      break;
+
+    case GSK_MASK_MODE_INVERTED_ALPHA:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+  }
+
+  clip = gsk_clip_node_new2 (child,
+                             &self->bounds,
+                             gsk_color_matrix_node_get_snap (self));
+  gsk_render_node_unref (child);
+  result = gsk_opacity_node_new (clip, alpha);
+  gsk_render_node_unref (clip);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_debug_node_as_mask (GskRenderNode *self,
                         GskRenderNode *source,
                         GskMaskMode    mask_mode)
@@ -360,6 +449,9 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_SUBSURFACE_NODE:
       return gsk_subsurface_node_as_mask (mask, source, mask_mode);
 
+    case GSK_COLOR_MATRIX_NODE:
+      return gsk_color_matrix_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
@@ -373,7 +465,6 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_COMPONENT_TRANSFER_NODE:
     case GSK_TEXT_NODE:
     case GSK_TEXTURE_SCALE_NODE:
-    case GSK_COLOR_MATRIX_NODE:
     case GSK_REPEAT_NODE:
     case GSK_SHADOW_NODE:
     case GSK_BLEND_NODE:
