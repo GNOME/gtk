@@ -213,6 +213,27 @@ gsk_linear_gradient_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_opacity_node_as_mask (GskRenderNode *self,
+                          GskRenderNode *source,
+                          GskMaskMode    mask_mode)
+{
+  GskRenderNode *child, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_opacity_node_get_child (self), source, mask_mode);
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_opacity_node_new (child,
+                                 gsk_opacity_node_get_opacity (self));
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_radial_gradient_node_as_mask (GskRenderNode *self,
                                   GskRenderNode *source,
                                   GskMaskMode    mask_mode)
@@ -276,6 +297,9 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_CONIC_GRADIENT_NODE:
       return gsk_conic_gradient_node_as_mask (mask, source, mask_mode);
 
+    case GSK_OPACITY_NODE:
+      return gsk_opacity_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
@@ -289,7 +313,6 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_COMPONENT_TRANSFER_NODE:
     case GSK_TEXT_NODE:
     case GSK_TEXTURE_SCALE_NODE:
-    case GSK_OPACITY_NODE:
     case GSK_COLOR_MATRIX_NODE:
     case GSK_REPEAT_NODE:
     case GSK_SHADOW_NODE:
