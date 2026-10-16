@@ -146,6 +146,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "session-mgmt", GTK_DEBUG_SESSION, "Information about session saving" },
   { "general-info", GTK_DEBUG_GENERAL_INFO, "General information (in markdown)" },
   { "svg-errors", GTK_DEBUG_SVG_ERRORS, "Print SVG errors" },
+  { "svg-continuous", GTK_DEBUG_SVG_CONTINUOUS, "Run SVG animations in continuous mode" },
 };
 
 void

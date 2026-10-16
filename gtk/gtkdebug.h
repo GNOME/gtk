@@ -125,6 +125,14 @@ G_BEGIN_DECLS
  * Since: 4.26
  */
 
+/**
+ * GTK_DEBUG_SVG_CONTINUOUS:
+ *
+ * Make GtkSvg run animations in continuous mode.
+ *
+ * Since: 4.26
+ */
+
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,
   GTK_DEBUG_TREE            = 1 <<  1,
@@ -151,6 +159,7 @@ typedef enum {
   GTK_DEBUG_SESSION         = 1 << 22,
   GTK_DEBUG_GENERAL_INFO    = 1 << 23,
   GTK_DEBUG_SVG_ERRORS      = 1 << 24,
+  GTK_DEBUG_SVG_CONTINUOUS  = 1 << 25,
 } GtkDebugFlags;
 
 /**

@@ -790,10 +790,8 @@ collect_next_update (GtkSvg *self)
 
   collect_next_update_for_shape (self->content, self->current_time, &run_mode, &next_update);
 
-#ifdef DEBUG
-  if (strstr (g_getenv ("SVG_DEBUG") ?: "", "continuous"))
+  if (GTK_DEBUG_CHECK (SVG_CONTINUOUS))
     run_mode = GTK_SVG_RUN_MODE_CONTINUOUS;
-#endif
 
   self->run_mode = run_mode;
   self->next_update = next_update;
