@@ -116,6 +116,12 @@ static const Filter filters[] = {
     .run = filter_diff,
   },
   {
+    .name = "info",
+    .description = "Provide information about the render node.",
+    .suppress_printing = TRUE,
+    .run = filter_info,
+  },
+  {
     .name = "opaque",
     .description = "Show the opaque part",
     .run = filter_opaque,
