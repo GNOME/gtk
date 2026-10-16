@@ -142,6 +142,8 @@ simplify_node (GskRenderReplay *replay,
                GskRenderNode   *node,
                gpointer         user_data)
 {
+  gboolean *enabled = user_data;
+
   node = gsk_render_replay_default (replay, node);
 
   while (node != NULL)
@@ -154,6 +156,9 @@ simplify_node (GskRenderReplay *replay,
 
       for (i = 0; i < G_N_ELEMENTS (simplifications); i++)
         {
+          if (!enabled[i])
+            continue;
+
           if (simplifications[i].type != 0 &&
               simplifications[i].type != node_type)
             continue;
@@ -183,14 +188,24 @@ filter_simplify (GskRenderNode  *node,
                  int             argc,
                  const char    **argv)
 {
-  const GOptionEntry entries[] = {
+  GOptionEntry entries[G_N_ELEMENTS (simplifications) + 1] = {
     { NULL, }
   };
+  gboolean enabled[G_N_ELEMENTS (simplifications)];
   GOptionContext *context;
   GskRenderReplay *replay;
   GskRenderNode *result;
   GError *error = NULL;
+  gsize i;
 
+  for (i = 0; i < G_N_ELEMENTS (simplifications); i++)
+    {
+      entries[i].long_name = simplifications[i].name;
+      entries[i].arg = G_OPTION_ARG_NONE;
+      entries[i].arg_data = &enabled[i];
+
+      enabled[i] = argc == 1;
+    }
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
@@ -212,7 +227,7 @@ filter_simplify (GskRenderNode  *node,
   replay = gsk_render_replay_new ();
   gsk_render_replay_set_node_filter (replay,
                                      simplify_node,
-                                     NULL,
+                                     enabled,
                                      NULL);
   result = gsk_render_replay_filter_node (replay, node);
   gsk_render_replay_free (replay);
