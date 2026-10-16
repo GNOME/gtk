@@ -25,6 +25,7 @@
 #include "gsk/gskopacitynode.h"
 #include "gsk/gskrectprivate.h"
 #include "gsk/gskrendernodeprivate.h"
+#include "gsk/gskroundedclipnodeprivate.h"
 
 #include "gdk/gdkcolorprivate.h"
 
@@ -77,6 +78,50 @@ gsk_color_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_clip_node_as_mask (GskRenderNode *self,
+                       GskRenderNode *source,
+                       GskMaskMode    mask_mode)
+{
+  GskRenderNode *child, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_clip_node_get_child (self), source, mask_mode);
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_clip_node_new2 (child,
+                               gsk_clip_node_get_clip (self),
+                               gsk_clip_node_get_snap (self));
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
+gsk_rounded_clip_node_as_mask (GskRenderNode *self,
+                               GskRenderNode *source,
+                               GskMaskMode    mask_mode)
+{
+  GskRenderNode *child, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  child = gsk_render_node_as_mask (gsk_rounded_clip_node_get_child (self), source, mask_mode);
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_rounded_clip_node_new2 (child,
+                                       gsk_rounded_clip_node_get_clip (self),
+                                       gsk_rounded_clip_node_get_snap (self));
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_render_node_as_mask (GskRenderNode *mask,
                          GskRenderNode *source,
                          GskMaskMode    mask_mode)
@@ -87,7 +132,11 @@ gsk_render_node_as_mask (GskRenderNode *mask,
       return gsk_color_node_as_mask (mask, source, mask_mode);
 
     case GSK_CLIP_NODE:
+      return gsk_clip_node_as_mask (mask, source, mask_mode);
+
     case GSK_ROUNDED_CLIP_NODE:
+      return gsk_rounded_clip_node_as_mask (mask, source, mask_mode);
+
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_TRANSFORM_NODE:
