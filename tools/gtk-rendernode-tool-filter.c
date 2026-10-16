@@ -59,7 +59,7 @@ filter_save (GskRenderNode *node,
       exit (1);
     }
 
-  return NULL;
+  return node;
 }
 
 static GskRenderNode *
