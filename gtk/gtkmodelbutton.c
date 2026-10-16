@@ -1543,7 +1543,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
   self->role = GTK_BUTTON_ROLE_NORMAL;
-  self->label = g_object_new (GTK_TYPE_LABEL, "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION, NULL);
+  self->label = gtk_label_new (NULL);
   gtk_widget_set_halign (self->label, GTK_ALIGN_START);
   gtk_widget_set_parent (self->label, GTK_WIDGET (self));
 
