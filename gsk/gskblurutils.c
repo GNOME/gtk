@@ -28,7 +28,7 @@
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
 
-#define BACKGROUND_BLUR_THRESHOLD 20.0
+#define BACKGROUND_BLUR_THRESHOLD 10.0
 
 typedef struct {
   GskGpuTransform transform;
