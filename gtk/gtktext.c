@@ -2958,7 +2958,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       extend_selection = (state & GDK_SHIFT_MASK) != 0;
 
       /* Always emit reset when preedit is shown */
-      priv->need_im_reset = TRUE;
+      gtk_text_schedule_im_reset (self);
       gtk_text_reset_im_context (self);
 
       switch (n_press)
@@ -4142,7 +4142,7 @@ gtk_text_move_cursor (GtkText         *self,
 
   gtk_text_pend_cursor_blink (self);
 
-  priv->need_im_reset = TRUE;
+  gtk_text_schedule_im_reset (self);
   gtk_text_reset_im_context (self);
 }
 
