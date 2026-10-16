@@ -25,6 +25,7 @@
 #include "gsk/gskconicgradientnodeprivate.h"
 #include "gsk/gskfillnode.h"
 #include "gsk/gsklineargradientnodeprivate.h"
+#include "gsk/gskmasknode.h"
 #include "gsk/gskopacitynode.h"
 #include "gsk/gskradialgradientnodeprivate.h"
 #include "gsk/gskrectprivate.h"
@@ -234,6 +235,28 @@ gsk_opacity_node_as_mask (GskRenderNode *self,
 }
 
 static GskRenderNode *
+gsk_mask_node_as_mask (GskRenderNode *self,
+                       GskRenderNode *source,
+                       GskMaskMode    mask_mode)
+{
+  GskRenderNode *intermediate, *result;
+
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    return NULL;
+
+  intermediate = gsk_mask_node_try_new_optimized (gsk_mask_node_get_source (self),
+                                                  gsk_mask_node_get_mask (self),
+                                                  gsk_mask_node_get_mask_mode (self));
+  if (intermediate == NULL)
+    return NULL;
+
+  result = gsk_render_node_as_mask (intermediate, source, mask_mode);
+  gsk_render_node_unref (intermediate);
+
+  return result;
+}
+
+static GskRenderNode *
 gsk_radial_gradient_node_as_mask (GskRenderNode *self,
                                   GskRenderNode *source,
                                   GskMaskMode    mask_mode)
@@ -300,6 +323,9 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_OPACITY_NODE:
       return gsk_opacity_node_as_mask (mask, source, mask_mode);
 
+    case GSK_MASK_NODE:
+      return gsk_mask_node_as_mask (mask, source, mask_mode);
+
     case GSK_ISOLATION_NODE:
     case GSK_COPY_NODE:
     case GSK_PASTE_NODE:
@@ -319,7 +345,6 @@ gsk_render_node_as_mask (GskRenderNode *mask,
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_GL_SHADER_NODE:
-    case GSK_MASK_NODE:
     case GSK_DEBUG_NODE:
     case GSK_SUBSURFACE_NODE:
     case GSK_COMPOSITE_NODE:
