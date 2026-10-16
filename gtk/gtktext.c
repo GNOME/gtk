@@ -1684,8 +1684,7 @@ editable_get_complete_text (GtkEditable *editable)
       GString *ret = g_string_new (gtk_entry_buffer_get_text (get_buffer (self)));
       char *preedit_string = NULL;
       int pos;
-      gtk_im_context_get_preedit_string (priv->im_context,
-                                     &preedit_string, NULL, NULL);
+      gtk_im_context_get_preedit_string (priv->im_context, &preedit_string, NULL, NULL);
       pos = g_utf8_offset_to_pointer (ret->str, priv->current_pos) - ret->str;
       g_string_insert (ret, pos, preedit_string);
       g_free (preedit_string);
@@ -5786,7 +5785,7 @@ gtk_text_set_editable (GtkText  *self,
 }
 
 static void
-gtk_text_set_text (GtkText     *self,
+gtk_text_set_text (GtkText    *self,
                    const char *text)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
