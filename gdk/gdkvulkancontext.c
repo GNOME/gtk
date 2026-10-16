@@ -1430,14 +1430,19 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
             {
               VkExportFenceCreateInfo export_info = {
                   .sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO,
-                  .handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT,
               };
               const void *next;
 
               if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
-                next = &export_info;
-              else
-                next = NULL;
+                {
+                  export_info.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
+                  next = &export_info;
+                }
+              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
+                {
+                  export_info.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT;
+                  next = &export_info;
+                }
 
               GDK_VK_CHECK (vkCreateFence, vk_device,
                                            &(VkFenceCreateInfo) {
