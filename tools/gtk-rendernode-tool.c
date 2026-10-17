@@ -110,12 +110,8 @@ main (int argc, const char *argv[])
   argv++;
   argc--;
 
-  if (strcmp (argv[0], "show") == 0)
-    do_show (&argc, &argv);
-  else if (strcmp (argv[0], "render") == 0)
+  if (strcmp (argv[0], "render") == 0)
     do_render (&argc, &argv);
-  else if (strcmp (argv[0], "info") == 0)
-    do_info (&argc, &argv);
   else if (strcmp (argv[0], "benchmark") == 0)
     do_benchmark (&argc, &argv);
   else if (strcmp (argv[0], "compare") == 0)

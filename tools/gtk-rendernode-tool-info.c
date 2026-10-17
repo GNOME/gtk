@@ -157,53 +157,6 @@ node_info (GskRenderNode *node)
   g_hash_table_unref (cache);
 }
 
-void
-do_info (int          *argc,
-         const char ***argv)
-{
-  GOptionContext *context;
-  char **filenames = NULL;
-  const GOptionEntry entries[] = {
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
-    { NULL, }
-  };
-  GError *error = NULL;
-  GskRenderNode *node;
-
-  g_set_prgname ("gtk4-rendernode-tool info");
-  context = g_option_context_new (NULL);
-  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
-  g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Provide information about the render node."));
-
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      g_error_free (error);
-      exit (1);
-    }
-
-  g_option_context_free (context);
-
-  if (filenames == NULL)
-    {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
-
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr (_("Can only accept a single .node file\n"));
-      exit (1);
-    }
-
-  node = load_node_file (filenames[0]);
-  node_info (node);
-  gsk_render_node_unref (node);
-
-  g_strfreev (filenames);
-}
-
 GskRenderNode *
 filter_info (GskRenderNode  *node,
              RntContext     *ctx,
