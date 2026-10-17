@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+#include "rntcontext.h"
 
 static GskRenderNode *
 filter_save (GskRenderNode *node,
@@ -232,6 +233,7 @@ do_filter (int          *argc_,
   GskRenderNode *node;
   GError *error = NULL;
   const Filter *filter = NULL;
+  RntContext *ctx;
 
   g_set_prgname ("gtk4-rendernode-tool filter");
   context = g_option_context_new (NULL);
@@ -265,10 +267,17 @@ do_filter (int          *argc_,
       exit (1);
     }
 
-  if (g_strv_length (filenames) != 1)
+  ctx = rnt_context_new ();
+
+  if (g_strv_length (filenames) > 1)
     {
-      g_printerr (_("Need a single .node file\n"));
-      exit (1);
+      gsize i;
+
+      for (i = g_strv_length (filenames) - 1; i > 0; i--)
+        {
+          node = load_node_file (filenames[i]);
+          rnt_context_push_node (ctx, node);
+        }
     }
 
   node = load_node_file (filenames[0]);
@@ -292,11 +301,12 @@ do_filter (int          *argc_,
       argv_part = filter_argv (argv, argc);
       argc_part = g_strv_length (argv_part);
 
-      node = filter->run (node, NULL, argc_part, (const char **) argv_part);
+      node = filter->run (node, ctx, argc_part, (const char **) argv_part);
   }
 
   gtk_tool_run ();
 
+  rnt_context_free (ctx);
   g_strfreev (filenames);
   g_clear_pointer (&node, gsk_render_node_unref);
 }
