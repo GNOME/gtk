@@ -22,6 +22,7 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 #include "overlayconfig.h"
+#include "rntcontext.h"
 
 #include "gsk/gskrendernodeprivate.h"
 
@@ -57,15 +58,27 @@ filter_diff (GskRenderNode  *node,
       exit (1);
     }
 
-  if (filenames == NULL || g_strv_length (filenames) != 1)
+  if (filenames == NULL || g_strv_length (filenames) == 0)
+    {
+      reference = rnt_context_get_node (ctx, 0);
+      if (reference == NULL)
+        {
+          g_printerr ("diff: Need a single filename\n");
+          exit (1);
+        }
+      gsk_render_node_ref (reference);
+    }
+  else if (g_strv_length (filenames) == 1)
+    {
+      reference = load_node_file (filenames[0]);
+    }
+  else
     {
       g_printerr ("diff: Need a single filename\n");
       exit (1);
     }
 
-  reference = load_node_file (filenames[0]);
   region = cairo_region_create ();
-
   gsk_render_node_diff (node, reference, &(GskDiffData) { region, NULL, NULL });
 
   result = overlay_config_render_region (&config, node, region);
