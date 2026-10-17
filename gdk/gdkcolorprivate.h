@@ -22,6 +22,8 @@
 #include <gdk/gdkcolorstate.h>
 #include <gdk/gdkrgba.h>
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GdkColor GdkColor;
@@ -111,6 +113,12 @@ void              gdk_color_print               (const GdkColor         *self,
                                                  GString                *string);
 
 char *            gdk_color_to_string           (const GdkColor         *self);
+
+void              gdk_color_apply_color_matrix  (GdkColor                *self,
+                                                 GdkColorState           *color_state,
+                                                 const graphene_matrix_t *color_matrix,
+                                                 const graphene_vec4_t   *color_offset,
+                                                 const GdkColor          *other);
 
 #include "gdkcolorimpl.h"
 
