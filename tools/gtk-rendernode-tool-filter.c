@@ -295,26 +295,27 @@ do_filter (int          *argc_,
       exit (0);
     }
 
-  if (filenames == NULL)
-    {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
-
   ctx = rnt_context_new ();
 
-  if (g_strv_length (filenames) > 1)
+  if (filenames == NULL || filenames[0] == NULL)
     {
-      gsize i;
-
-      for (i = g_strv_length (filenames) - 1; i > 0; i--)
-        {
-          node = load_node_file (filenames[i]);
-          rnt_context_push_node (ctx, node);
-        }
+      node = gsk_container_node_new (NULL, 0);
     }
+  else
+    {
+      if (g_strv_length (filenames) > 1)
+        {
+          gsize i;
 
-  node = load_node_file (filenames[0]);
+          for (i = g_strv_length (filenames) - 1; i > 0; i--)
+            {
+              node = load_node_file (filenames[i]);
+              rnt_context_push_node (ctx, node);
+            }
+        }
+
+      node = load_node_file (filenames[0]);
+    }
 
   run_filters (node, ctx, argc, argv);
 
