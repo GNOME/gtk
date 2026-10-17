@@ -9,9 +9,7 @@ void do_compare     (int *argc, const char ***argv);
 void do_convert     (int *argc, const char ***argv);
 void do_extract     (int *argc, const char ***argv);
 void do_filter      (int *argc, const char ***argv);
-void do_info        (int *argc, const char ***argv);
 void do_match       (int *argc, const char ***argv);
-void do_show        (int *argc, const char ***argv);
 void do_render      (int *argc, const char ***argv);
 
 GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
