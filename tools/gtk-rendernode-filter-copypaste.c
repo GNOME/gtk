@@ -26,6 +26,7 @@
 
 GskRenderNode *
 filter_copypaste (GskRenderNode  *node,
+                  RntContext     *ctx,
                   int             argc,
                   const char    **argv)
 {

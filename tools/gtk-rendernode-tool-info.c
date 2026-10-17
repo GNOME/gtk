@@ -206,6 +206,7 @@ do_info (int          *argc,
 
 GskRenderNode *
 filter_info (GskRenderNode  *node,
+             RntContext     *ctx,
              int             argc,
              const char    **argv)
 {

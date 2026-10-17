@@ -27,6 +27,7 @@
 
 GskRenderNode *
 filter_diff (GskRenderNode  *node,
+             RntContext     *ctx,
              int             argc,
              const char    **argv)
 {

@@ -24,6 +24,7 @@
 
 static GskRenderNode *
 filter_save (GskRenderNode *node,
+             RntContext    *ctx,
              int            argc,
              const char   **argv)
 {
@@ -64,6 +65,7 @@ filter_save (GskRenderNode *node,
 
 static GskRenderNode *
 filter_print (GskRenderNode *node,
+              RntContext    *ctx,
               int            argc,
               const char   **argv)
 {
@@ -89,6 +91,7 @@ struct _Filter
   const char *name;
   const char *description;
   GskRenderNode * (* run) (GskRenderNode *node,
+                           RntContext    *ctx,
                            int            argc,
                            const char   **argv);
 };
@@ -289,7 +292,7 @@ do_filter (int          *argc_,
       argv_part = filter_argv (argv, argc);
       argc_part = g_strv_length (argv_part);
 
-      node = filter->run (node, argc_part, (const char **) argv_part);
+      node = filter->run (node, NULL, argc_part, (const char **) argv_part);
   }
 
   gtk_tool_run ();
