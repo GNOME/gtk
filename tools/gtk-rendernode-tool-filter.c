@@ -215,6 +215,38 @@ list_filters (void)
     }
 }
 
+static GskRenderNode *
+run_filters (GskRenderNode  *node,
+             RntContext     *ctx,
+             int             argc,
+             const char    **argv)
+{
+  while (argc > 0)
+    {
+      const Filter *filter;
+      char **argv_part;
+      gsize argc_part;
+
+      filter = filter_find (argv[0]);
+      if (filter == NULL)
+        {
+          g_printerr (_("Argument \"%s\" is not a known filter\n"), argv[0]);
+          exit (1);
+        }
+
+      argv_part = filter_argv (argv, argc);
+      argc_part = g_strv_length (argv_part);
+
+      node = filter->run (node, ctx, argc_part, (const char **) argv_part);
+
+      g_strfreev (argv_part);
+      argv += argc_part;
+      argc -= argc_part;
+    }
+
+  return node;
+}
+
 void
 do_filter (int          *argc_,
            const char ***argv_)
@@ -232,7 +264,6 @@ do_filter (int          *argc_,
   gsize argc, argc_part;
   GskRenderNode *node;
   GError *error = NULL;
-  const Filter *filter = NULL;
   RntContext *ctx;
 
   g_set_prgname ("gtk4-rendernode-tool filter");
@@ -252,6 +283,9 @@ do_filter (int          *argc_,
       g_error_free (error);
       exit (1);
     }
+  g_strfreev (argv_part);
+  argv += argc_part;
+  argc -= argc_part;
 
   g_option_context_free (context);
 
@@ -282,27 +316,7 @@ do_filter (int          *argc_,
 
   node = load_node_file (filenames[0]);
 
-  while (TRUE)
-    {
-      g_strfreev (argv_part);
-      argv += argc_part;
-      argc -= argc_part;
-
-      if (argc == 0)
-        break;
-
-      filter = filter_find (argv[0]);
-      if (filter == NULL)
-        {
-          g_printerr (_("Argument \"%s\" is not a known filter\n"), argv[0]);
-          exit (1);
-        }
-
-      argv_part = filter_argv (argv, argc);
-      argc_part = g_strv_length (argv_part);
-
-      node = filter->run (node, ctx, argc_part, (const char **) argv_part);
-  }
+  node = run_filters (node, ctx, argc, argv);
 
   gtk_tool_run ();
 
