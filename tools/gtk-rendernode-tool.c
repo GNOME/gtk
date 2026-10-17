@@ -129,7 +129,11 @@ main (int argc, const char *argv[])
   else if (strcmp (argv[0], "match") == 0)
     do_match (&argc, &argv);
   else
-    usage ();
+    {
+      argv--;
+      argc++;
+      do_filter (&argc, &argv);
+    }
 
   return 0;
 }
