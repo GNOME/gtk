@@ -182,7 +182,10 @@ gtk_im_multicontext_set_delegate (GtkIMMulticontext *multicontext,
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
   gboolean need_preedit_changed = FALSE;
-  
+
+  if (!finalizing && delegate == priv->delegate)
+    return;
+
   if (priv->delegate)
     {
       if (!finalizing)
@@ -214,8 +217,8 @@ gtk_im_multicontext_set_delegate (GtkIMMulticontext *multicontext,
 
       g_clear_object (&priv->delegate);
 
-      if (!finalizing)
-	need_preedit_changed = TRUE;
+      if (!finalizing && priv->focus_in)
+        need_preedit_changed = TRUE;
     }
 
   priv->delegate = delegate;
