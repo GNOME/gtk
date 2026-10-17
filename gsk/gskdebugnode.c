@@ -158,7 +158,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDebugNode, gsk_debug_node)
 GskRenderNode *
 gsk_debug_node_new_profile (GskRenderNode             *child,
                                 const GskDebugProfile *perf,
-                                char *                     message)
+                                char *                 message)
 {
   GskDebugNode *self;
   GskRenderNode *node;
