@@ -62,6 +62,7 @@ cut_node (GskRenderReplay *replay,
 
 GskRenderNode *
 filter_cut (GskRenderNode  *node,
+            RntContext     *ctx,
             int             argc,
             const char    **argv)
 {

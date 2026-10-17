@@ -38,6 +38,7 @@ strip_node (GskRenderReplay *replay,
 
 GskRenderNode *
 filter_strip (GskRenderNode  *node,
+              RntContext     *ctx,
               int             argc,
               const char    **argv)
 {

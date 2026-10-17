@@ -185,6 +185,7 @@ simplify_node (GskRenderReplay *replay,
 
 GskRenderNode *
 filter_simplify (GskRenderNode  *node,
+                 RntContext     *ctx,
                  int             argc,
                  const char    **argv)
 {

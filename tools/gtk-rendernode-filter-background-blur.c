@@ -28,6 +28,7 @@
 
 GskRenderNode *
 filter_background_blur (GskRenderNode  *node,
+                        RntContext     *ctx,
                         int             argc,
                         const char    **argv)
 {

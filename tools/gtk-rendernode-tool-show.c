@@ -157,6 +157,7 @@ do_show (int          *argc,
 
 GskRenderNode *
 filter_show (GskRenderNode  *node,
+             RntContext     *ctx,
              int             argc,
              const char    **argv)
 {
