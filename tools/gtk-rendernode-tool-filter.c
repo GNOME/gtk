@@ -155,6 +155,11 @@ static const Filter filters[] = {
     .run = filter_load_icon,
   },
   {
+    .name = "merge",
+    .description = "Merge the stack of nodes into one",
+    .run = filter_merge,
+  },
+  {
     .name = "opaque",
     .description = "Show the opaque part",
     .run = filter_opaque,

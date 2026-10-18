@@ -17,6 +17,7 @@ GskRenderNode *filter_cut               (GskRenderNode *node, RntContext *ctx, i
 GskRenderNode *filter_diff              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_info              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_load_icon         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_merge             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_opaque            (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_show              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_simplify          (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);

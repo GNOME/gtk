@@ -49,6 +49,7 @@ gtk_tools = [
                         'filters/diff.c',
                         'filters/info.c',
                         'filters/load-icon.c',
+                        'filters/merge.c',
                         'filters/opaque.c',
                         'filters/show.c',
                         'filters/simplify.c',

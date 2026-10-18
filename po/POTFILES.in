@@ -461,6 +461,7 @@ tools/filters/cut.c
 tools/filters/diff.c
 tools/filters/info.c
 tools/filters/load-icon.c
+tools/filters/merge.c
 tools/filters/opaque.c
 tools/filters/show.c
 tools/filters/simplify.c
