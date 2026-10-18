@@ -63,7 +63,7 @@ benchmark_renderer (const char    *renderer_name,
 
           texture = gsk_renderer_render_texture (renderer, n, NULL);
 
-          if (download)
+          if (texture && download)
             {
               GdkTextureDownloader *downloader;
               GBytes *bytes;
@@ -77,7 +77,8 @@ benchmark_renderer (const char    *renderer_name,
               gdk_texture_downloader_free (downloader);
             }
 
-          g_object_unref (texture);
+          g_clear_object (&texture);
+
           n = rnt_context_get_node (ctx, j);
         }
 
