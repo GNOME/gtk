@@ -331,7 +331,7 @@ do_filter (int          *argc_,
 
   if (filenames == NULL || filenames[0] == NULL)
     {
-      node = gsk_container_node_new (NULL, 0);
+      node = gsk_render_node_ref (rnt_context_get_null_node (ctx));
     }
   else
     {

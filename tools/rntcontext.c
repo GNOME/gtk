@@ -22,6 +22,7 @@
 struct _RntContext
 {
   GPtrArray *nodes;
+  GskRenderNode *null_node;
 
   gboolean failed;
 };
@@ -36,6 +37,8 @@ rnt_context_new (void)
   self->nodes = g_ptr_array_new ();
   g_ptr_array_set_free_func (self->nodes, (GDestroyNotify) gsk_render_node_unref);
 
+  self->null_node = gsk_container_node_new (NULL, 0);
+
   return self;
 }
 
@@ -43,6 +46,7 @@ void
 rnt_context_free (RntContext *self)
 {
   g_ptr_array_free (self->nodes, TRUE);
+  g_clear_pointer (&self->null_node, gsk_render_node_unref);
 
   g_free (self);
 }
@@ -80,6 +84,8 @@ void
 rnt_context_push_node (RntContext    *self,
                        GskRenderNode *node)
 {
+  g_return_if_fail (node != NULL);
+
   g_ptr_array_add (self->nodes, node);
 }
 
@@ -101,6 +107,27 @@ rnt_context_pop_node (RntContext *self)
     return NULL;
 
   return g_ptr_array_steal_index (self->nodes,  self->nodes->len - 1);
+}
+
+/**
+ * rnt_context_get_null_node:
+ * @ctx: the context
+ *
+ * Get the special null node.
+ *
+ * The null node is used in places where NULL is not a valid value,
+ * for example when a filter produces no output or when rendernode-tool
+ * is invoked without files.
+ *
+ * Some filters may want to ignore the null node, in such cases they
+ * shuld check for equality with this node.
+ *
+ * Returns: (transfer none): the null node
+ **/
+GskRenderNode *
+rnt_context_get_null_node (RntContext *ctx)
+{
+  return ctx->null_node;
 }
 
 /**

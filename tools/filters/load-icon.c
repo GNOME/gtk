@@ -189,7 +189,8 @@ filter_load_icon (GskRenderNode  *node,
 
   for (i = g_strv_length (filenames); i-- > 0;)
     {
-      rnt_context_push_node (ctx, node);
+      if (node != rnt_context_get_null_node (ctx))
+        rnt_context_push_node (ctx, node);
       node = icon_load (filenames[i], size, scale, width, height, colors, 4);
     }
 
