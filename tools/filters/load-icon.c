@@ -32,6 +32,8 @@
 
 static GskRenderNode *
 icon_load (const char    *filename,
+           int            size,
+           int            scale,
            int            width,
            int            height,
            const GdkRGBA *colors,
@@ -43,7 +45,7 @@ icon_load (const char    *filename,
   GskRenderNode *node;
 
   file = g_file_new_for_commandline_arg (filename);
-  paintable = gtk_icon_paintable_new_for_file (file, 16, 1);
+  paintable = gtk_icon_paintable_new_for_file (file, size, scale);
 
   snapshot = gtk_snapshot_new ();
 
@@ -83,16 +85,20 @@ filter_load_icon (GskRenderNode  *node,
   char *sc = NULL;
   char *wc = NULL;
   char *ec = NULL;
-  char *size = NULL;
-  guint64 width = 16;
-  guint64 height = 16;
+  char *resize = NULL;
+  guint64 width = 0;
+  guint64 height = 0;
+  int size = 16;
+  int scale = 1;
   const GOptionEntry entries[] = {
     { "recolor", 0, 0, G_OPTION_ARG_NONE, &recolor, N_("Recolor the node"), NULL },
     { "fg", 0, 0, G_OPTION_ARG_STRING, &fc, N_("Foreground color"), N_("COLOR") },
     { "success", 0, 0, G_OPTION_ARG_STRING, &sc, N_("Success color"), N_("COLOR") },
     { "warning", 0, 0, G_OPTION_ARG_STRING, &wc, N_("Warning color"), N_("COLOR") },
     { "error", 0, 0, G_OPTION_ARG_STRING, &ec, N_("Error color"), N_("COLOR") },
-    { "size", 0, 0, G_OPTION_ARG_STRING, &size, N_("Size"), N_("SIZE") },
+    { "resize", 0, 0, G_OPTION_ARG_STRING, &resize, N_("Resize"), N_("SIZE") },
+    { "scale", 0, 0, G_OPTION_ARG_INT, &scale, N_("Resize"), N_("NUM") },
+    { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("Size"), N_("NUM") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
@@ -141,15 +147,15 @@ filter_load_icon (GskRenderNode  *node,
         }
     }
 
-  if (size)
+  if (resize)
     {
-      char *p = strchr (size, 'x');
+      char *p = strchr (resize, 'x');
       if (p)
         {
           *p = '\0';
           p++;
 
-          if (!g_ascii_string_to_unsigned (size, 10, 1, 1024, &width, &error) ||
+          if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error) ||
               !g_ascii_string_to_unsigned (p, 10, 1, 1024, &height, &error))
             {
               g_printerr ("%s\n", error->message);
@@ -159,7 +165,7 @@ filter_load_icon (GskRenderNode  *node,
         }
       else
         {
-          if (!g_ascii_string_to_unsigned (size, 10, 1, 1024, &width, &error))
+          if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error))
             {
               g_printerr ("%s\n", error->message);
               g_error_free (error);
@@ -169,17 +175,22 @@ filter_load_icon (GskRenderNode  *node,
           height = width;
         }
     }
+  else
+    {
+      width = size;
+      height = size;
+    }
 
   if (filenames == NULL)
     {
-      g_printerr (_("No .svg file specified\n"));
+      g_printerr (_("No filename specified\n"));
       exit (1);
     }
 
   for (i = g_strv_length (filenames); i-- > 0;)
     {
       rnt_context_push_node (ctx, node);
-      node = icon_load (filenames[i], width, height, colors, 4);
+      node = icon_load (filenames[i], size, scale, width, height, colors, 4);
     }
 
   g_strfreev (filenames);
