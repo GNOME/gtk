@@ -961,7 +961,9 @@ gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 
   if (gdk_frame_timings_get_presentation_time (timings) != 0)
     {
-      gdk_profiler_add_mark (1000 * gdk_frame_timings_get_presentation_time (timings), 0, "Presented window", NULL);
+      gdk_profiler_add_markf (1000 * gdk_frame_timings_get_presentation_time (timings), 0,
+                              "Presented window", "clock=%p frame=%" G_GINT64_FORMAT,
+                              clock, gdk_frame_timings_get_frame_counter (timings));
     }
 
   gdk_profiler_set_counter (fps_counter, gdk_frame_clock_get_fps (clock));
@@ -1295,7 +1297,9 @@ gdk_frame_clock_run_update (GdkFrameClock *self)
 
       g_signal_emit (self, signals[UPDATE], 0);
 
-      gdk_profiler_end_mark (before, "Frameclock update", NULL);
+      gdk_profiler_end_markf (before, "Frameclock update",
+                              "clock=%p frame=%" G_GINT64_FORMAT,
+                              self, gdk_frame_clock_get_frame_counter (self));
     }
 
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_LAYOUT);
@@ -1325,7 +1329,9 @@ gdk_frame_clock_run_layout (GdkFrameClock *self)
 
       g_signal_emit (self, signals[LAYOUT], 0);
 
-      gdk_profiler_end_mark (before, "Frameclock layout", NULL);
+      gdk_profiler_end_markf (before, "Frameclock layout",
+                              "clock=%p frame=%" G_GINT64_FORMAT,
+                              self, gdk_frame_clock_get_frame_counter (self));
     }
   if (iter == 5)
     g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
@@ -1349,7 +1355,9 @@ gdk_frame_clock_run_paint (GdkFrameClock *self)
 
       g_signal_emit (self, signals[PAINT], 0);
 
-      gdk_profiler_end_mark (before, "Frameclock paint", NULL);
+      gdk_profiler_end_markf (before, "Frameclock paint",
+                              "clock=%p frame=%" G_GINT64_FORMAT,
+                              self, gdk_frame_clock_get_frame_counter (self));
     }
 
   gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_AFTER_PAINT);
@@ -1463,7 +1471,9 @@ gdk_frame_clock_frame (GdkFrameClock *self)
   gdk_frame_clock_run_after_paint (self);
   gdk_frame_clock_run_resume_events (self);
 
-  gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
+  gdk_profiler_end_markf (before, "Frameclock cycle",
+                          "clock=%p frame=%" G_GINT64_FORMAT,
+                          self, gdk_frame_clock_get_frame_counter (self));
 }
 
 void
