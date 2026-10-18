@@ -110,6 +110,21 @@ rnt_context_pop_node (RntContext *self)
 }
 
 /**
+ * rnt_context_clear_nodes:
+ * @self: the context
+ *
+ * Clears the node stack.
+ *
+ * Some filters consume all nodes, for example the merge filter
+ * combines them all into one node.
+ **/
+void
+rnt_context_clear_nodes (RntContext *self)
+{
+  g_ptr_array_set_size (self->nodes, 0);
+}
+
+/**
  * rnt_context_get_null_node:
  * @ctx: the context
  *

@@ -10,6 +10,7 @@ void                    rnt_context_free                        (RntContext     
 void                    rnt_context_push_node                   (RntContext             *self,
                                                                  GskRenderNode          *node);
 GskRenderNode *         rnt_context_pop_node                    (RntContext             *self);
+void                    rnt_context_clear_nodes                 (RntContext             *self);
 GskRenderNode *         rnt_context_get_node                    (RntContext             *self,
                                                                  gsize                   id);
 

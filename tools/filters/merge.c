@@ -84,8 +84,10 @@ filter_merge (GskRenderNode  *node,
 {
   GOptionContext *context;
   gboolean accurate = FALSE;
+  gboolean keep = FALSE;
   const GOptionEntry entries[] = {
     { "accurate", 0, 0, G_OPTION_ARG_NONE, &accurate, N_("Use float bounds, not integers"), NULL },
+    { "keep", 0, 0, G_OPTION_ARG_NONE, &keep, N_("Keep nodes in stack"), NULL },
     { NULL, }
   };
   GError *error = NULL;
@@ -107,7 +109,15 @@ filter_merge (GskRenderNode  *node,
 
   result = merge_horizontal (node, ctx, accurate);
 
-  gsk_render_node_unref (node);
+  if (keep)
+    {
+      rnt_context_push_node (ctx, node);
+    }
+  else
+    {
+      gsk_render_node_unref (node);
+      rnt_context_clear_nodes (ctx);
+    }
 
   return result;
 }
