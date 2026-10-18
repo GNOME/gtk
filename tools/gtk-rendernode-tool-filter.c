@@ -120,6 +120,11 @@ static const Filter filters[] = {
     .run = filter_background_blur,
   },
   {
+    .name = "compare",
+    .description = "Compare rendering to .node or .png files.",
+    .run = filter_compare,
+  },
+  {
     .name = "copypaste",
     .description = "Replace copy/paste nodes with copies of nodes",
     .run = filter_copypaste,

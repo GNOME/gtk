@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+#include "rntcontext.h"
 
 #include "testsuite/reftests/reftest-compare.h"
 
@@ -53,9 +54,11 @@ texture_from_file (const char   *filename,
   return texture;
 }
 
-void
-do_compare (int          *argc,
-            const char ***argv)
+GskRenderNode *
+filter_compare (GskRenderNode  *node,
+                RntContext     *ctx,
+                int             argc,
+                const char    **argv)
 {
   GOptionContext *context;
   char *opt_filename = NULL;
@@ -76,13 +79,12 @@ do_compare (int          *argc,
   GdkTexture *diff;
   GError *error = NULL;
 
-  g_set_prgname ("gtk4-rendernode-tool compare");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Compare .node or .png files."));
+  g_option_context_set_summary (context, _("Compare rendering to .node or .png files."));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -91,9 +93,9 @@ do_compare (int          *argc,
 
   g_option_context_free (context);
 
-  if (filenames == NULL || g_strv_length (filenames) != 2)
+  if (filenames == NULL || g_strv_length (filenames) != 1)
     {
-      g_printerr (_("Must specify two files\n"));
+      g_printerr (_("Must specify a filename\n"));
       exit (1);
     }
 
@@ -104,14 +106,12 @@ do_compare (int          *argc,
       exit (1);
     }
 
-  for (int i = 0; i < 2; i++)
+  texture[0] = gsk_renderer_render_texture (renderer, node, NULL);
+  texture[1] = texture_from_file (filenames[0], renderer, &error);
+  if (texture[1] == NULL)
     {
-      texture[i] = texture_from_file (filenames[i], renderer, &error);
-      if (texture[i] == NULL)
-        {
-          g_printerr (_("Failed to load %s: %s\n"), filenames[i], error->message);
-          exit (1);
-        }
+      g_printerr (_("Failed to load %s: %s\n"), filenames[0], error->message);
+      exit (1);
     }
 
   diff = reftest_compare_textures (texture[0], texture[1]);
@@ -139,12 +139,15 @@ do_compare (int          *argc,
     }
 
   if (diff)
-    exit (1);
+    rnt_context_set_failed (ctx, TRUE);
 
   g_strfreev (filenames);
+  g_object_unref (diff);
   g_object_unref (texture[0]);
   g_object_unref (texture[1]);
 
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
+
+  return node;
 }
