@@ -76,6 +76,45 @@ merge_horizontal (GskRenderNode *node,
   return result;
 }
 
+static GskRenderNode *
+merge_vertical (GskRenderNode *node,
+                RntContext    *ctx,
+                gboolean       accurate)
+{
+  float offset = 0;
+  GPtrArray *array;
+  GskRenderNode *result;
+  gsize i;
+
+  array = g_ptr_array_new ();
+  g_ptr_array_set_free_func (array, (GDestroyNotify) gsk_render_node_unref);
+  for (i = 0; node != NULL; i++)
+    {
+      graphene_rect_t bounds;
+      gsk_render_node_get_bounds (node, &bounds);
+      if (!accurate)
+        rect_snap_grow (&bounds);
+      if (bounds.origin.x != 0 || bounds.origin.y != offset)
+        {
+          GskTransform *transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (- bounds.origin.x, offset - bounds.origin.y));
+          g_ptr_array_add (array, gsk_transform_node_new (node, transform));
+          gsk_transform_unref (transform);
+        }
+      else
+        {
+          g_ptr_array_add (array, gsk_render_node_ref (node));
+        }
+
+      offset += bounds.size.height;
+      node = rnt_context_get_node (ctx, i);
+    }
+
+  result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+  g_ptr_array_free (array, TRUE);
+
+  return result;
+}
+
 GskRenderNode *
 filter_merge (GskRenderNode  *node,
               RntContext     *ctx,
@@ -84,10 +123,14 @@ filter_merge (GskRenderNode  *node,
 {
   GOptionContext *context;
   gboolean accurate = FALSE;
+  gboolean horizontal = FALSE;
   gboolean keep = FALSE;
+  gboolean vertical = FALSE;
   const GOptionEntry entries[] = {
     { "accurate", 0, 0, G_OPTION_ARG_NONE, &accurate, N_("Use float bounds, not integers"), NULL },
+    { "horizontal", 0, 0, G_OPTION_ARG_NONE, &horizontal, N_("Merge nodes horizontally"), NULL },
     { "keep", 0, 0, G_OPTION_ARG_NONE, &keep, N_("Keep nodes in stack"), NULL },
+    { "vertical", 0, 0, G_OPTION_ARG_NONE, &vertical, N_("Merge nodes vertically"), NULL },
     { NULL, }
   };
   GError *error = NULL;
@@ -107,7 +150,12 @@ filter_merge (GskRenderNode  *node,
 
   g_option_context_free (context);
 
-  result = merge_horizontal (node, ctx, accurate);
+  if (horizontal)
+    result = merge_horizontal (node, ctx, accurate);
+  else if (vertical)
+    result = merge_vertical (node, ctx, accurate);
+  else
+    result = merge_horizontal (node, ctx, accurate);
 
   if (keep)
     {
