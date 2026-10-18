@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+#include "rntcontext.h"
 
 #define N_NODE_TYPES (GSK_ARITHMETIC_NODE + 1)
 
@@ -230,28 +231,28 @@ node_pattern_matches (NodePattern   *pattern,
 }
 
 static void
-node_pattern_count_matches (NodePattern   *pattern,
-                            GskRenderNode *node,
-                            size_t        *count)
+node_pattern_find_matches (NodePattern   *pattern,
+                           GskRenderNode *node,
+                           GPtrArray     *matches)
 {
   GskRenderNode **children;
   size_t n_children;
 
   if (node_pattern_matches (pattern, node))
-    (*count)++;
+    g_ptr_array_add (matches, gsk_render_node_ref (node));
 
   children = gsk_render_node_get_children (node, &n_children);
 
   for (size_t i = 0; i < n_children; i++)
-    node_pattern_count_matches (pattern, children[i], count);
+    node_pattern_find_matches (pattern, children[i], matches);
 }
 
-static void
+static GPtrArray *
 find_matches (GskRenderNode *node,
               const char    *string)
 {
   NodePattern *pattern;
-  size_t count = 0;
+  GPtrArray *matches;
 
   pattern = node_pattern_parse (&string);
   if (pattern == NULL)
@@ -260,11 +261,14 @@ find_matches (GskRenderNode *node,
       exit (1);
     }
 
-  node_pattern_count_matches (pattern, node, &count);
+  matches = g_ptr_array_new ();
+  g_ptr_array_set_free_func (matches, (GDestroyNotify) gsk_render_node_unref);
 
-  g_print ("found %zu matches\n", count);
+  node_pattern_find_matches (pattern, node, matches);
 
   node_pattern_free (pattern);
+
+  return matches;
 }
 
 GskRenderNode *
@@ -275,11 +279,16 @@ filter_match (GskRenderNode  *node,
 {
   GOptionContext *context;
   char **patterns = NULL;
+  gboolean count = FALSE;
+  gboolean keep = FALSE;
   const GOptionEntry entries[] = {
+    { "count", 0, 0, G_OPTION_ARG_NONE, &count, N_("Count the matches instead"), NULL },
+    { "keep", 0, 0, G_OPTION_ARG_NONE, &keep, N_("Keep existing nodes in stack"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &patterns, NULL, N_("PATTERN") },
     { NULL, }
   };
   GError *error = NULL;
+  GPtrArray *matches;
 
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
@@ -301,7 +310,44 @@ filter_match (GskRenderNode  *node,
       exit (1);
     }
 
-  find_matches (node, patterns[0]);
+  matches = find_matches (node, patterns[0]);
+      
+  if (count)
+    {
+      g_print ("found %u matches\n", matches->len);
+    }
+  else 
+    {
+      if (keep)
+        {
+          rnt_context_push_node (ctx, node);
+        }
+      else
+        {
+          rnt_context_clear_nodes (ctx);
+          gsk_render_node_unref (node);
+        }
+
+      while (matches->len > 1)
+        {
+          rnt_context_push_node (ctx, g_ptr_array_steal_index (matches, matches->len - 1));
+        }
+
+      if (matches->len > 0)
+        {
+          node = g_ptr_array_steal_index (matches, 0);
+        }
+      else
+        {
+          rnt_context_set_failed (ctx, TRUE);
+          if (keep)
+            node = rnt_context_pop_node (ctx);
+          else
+            node = gsk_render_node_ref (rnt_context_get_null_node (ctx));
+        }
+    }
+
+  g_ptr_array_free (matches, TRUE);
 
   g_strfreev (patterns);
 
