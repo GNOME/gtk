@@ -35,25 +35,7 @@
 #ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
 #endif
-
-static char *
-get_save_filename (const char *filename)
-{
-  int length = strlen (filename);
-  const char *extension = ".png";
-  char *result;
-
-  if (strcmp (filename + (length - strlen (".node")), ".node") == 0)
-    {
-      char *basename = g_strndup (filename, length - strlen (".node"));
-      result = g_strconcat (basename, extension, NULL);
-      g_free (basename);
-    }
-  else
-    result = g_strconcat (filename, extension, NULL);
-
-  return result;
-}
+#include "rntcontext.h"
 
 #if defined(CAIRO_HAS_SVG_SURFACE) || defined(CAIRO_HAS_PDF_SURFACE)
 static cairo_status_t
@@ -152,34 +134,17 @@ create_pdf (GskRenderNode  *node,
 #endif
 
 static void
-render_file (const char            *filename,
+render_node (GskRenderNode         *node,
              const char            *renderer_name,
              const graphene_rect_t *bounds,
              gboolean               snap,
              const char            *save_file)
 {
-  GskRenderNode *node;
   GBytes *bytes;
-  char *save_to;
   GError *error = NULL;
 
-  save_to = (char *) save_file;
-
-  if (save_to == NULL)
-    {
-      save_to = get_save_filename (filename);
-      if (g_file_test (save_to, G_FILE_TEST_EXISTS))
-        {
-          g_printerr (_("File %s exists.\n"
-                        "If you want to overwrite, specify the filename.\n"), save_to);
-          exit (1);
-        }
-    }
-
-  node = load_node_file (filename);
-
 #ifdef CAIRO_HAS_SVG_SURFACE
-  if (g_str_has_suffix (save_to, ".svg"))
+  if (g_str_has_suffix (save_file, ".svg"))
     {
       bytes = create_svg (node, &error);
       if (bytes == NULL)
@@ -191,7 +156,7 @@ render_file (const char            *filename,
   else
 #endif
 #ifdef CAIRO_HAS_PDF_SURFACE
-  if (g_str_has_suffix (save_to, ".pdf"))
+  if (g_str_has_suffix (save_file, ".pdf"))
     {
       bytes = create_pdf (node, &error);
       if (bytes == NULL)
@@ -233,8 +198,8 @@ render_file (const char            *filename,
 
       texture = gsk_renderer_render_texture (renderer, node, bounds);
 
-      if (g_str_has_suffix (save_to, ".tif") ||
-          g_str_has_suffix (save_to, ".tiff"))
+      if (g_str_has_suffix (save_file, ".tif") ||
+          g_str_has_suffix (save_file, ".tiff"))
         bytes = gdk_texture_save_to_tiff_bytes (texture);
       else
         bytes = gdk_texture_save_to_png_bytes (texture);
@@ -242,26 +207,20 @@ render_file (const char            *filename,
       g_object_unref (texture);
     }
 
-  if (g_file_set_contents (save_to,
+  if (g_file_set_contents (save_file,
                            g_bytes_get_data (bytes, NULL),
                            g_bytes_get_size (bytes),
                            &error))
     {
-      if (save_file == NULL)
-        g_print (_("Output written to %s.\n"), save_to);
+      g_print (_("Output written to %s.\n"), save_file);
     }
   else
     {
-      g_printerr (_("Failed to save %s: %s\n"), save_to, error->message);
+      g_printerr (_("Failed to save %s: %s\n"), save_file, error->message);
       exit (1);
     }
 
   g_bytes_unref (bytes);
-
-  if (save_to != save_file)
-    g_free (save_to);
-
-  gsk_render_node_unref (node);
 }
 
 static gboolean
@@ -294,9 +253,11 @@ rect_init_from_arg (graphene_rect_t *rect,
   return result;
 }
 
-void
-do_render (int          *argc,
-           const char ***argv)
+GskRenderNode *
+filter_render (GskRenderNode  *node,
+               RntContext     *ctx,
+               int             argc,
+               const char    **argv)
 {
   GOptionContext *context;
   char **filenames = NULL;
@@ -311,21 +272,16 @@ do_render (int          *argc,
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
+  GskRenderNode *n;
   GError *error = NULL;
+  gsize i;
 
-  if (gdk_display_get_default () == NULL)
-    {
-      g_printerr (_("Could not initialize windowing system\n"));
-      exit (1);
-    }
-
-  g_set_prgname ("gtk4-rendernode-tool render");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Render a .node file to an image."));
+  g_option_context_set_summary (context, _("Render to an image."));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -336,13 +292,7 @@ do_render (int          *argc,
 
   if (filenames == NULL)
     {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
-
-  if (g_strv_length (filenames) > 2)
-    {
-      g_printerr (_("Can only render a single .node file to a single output file\n"));
+      g_printerr (_("No filename specified\n"));
       exit (1);
     }
 
@@ -355,11 +305,25 @@ do_render (int          *argc,
         }
     }
 
-  render_file (filenames[0],
-               renderer,
-               bounds_str ? &bounds : NULL,
-               snap,
-               filenames[1]);
+  for (i = 0, n = node; filenames[i]; i++)
+    {
+      if (n == NULL)
+        {
+          g_printerr (_("%u filenames given but only %zu nodes available\n"),
+                      g_strv_length (filenames), i);
+          exit (1);
+        }
+
+      render_node (n,
+                   renderer,
+                   bounds_str ? &bounds : NULL,
+                   snap,
+                   filenames[i]);
+
+      n = rnt_context_get_node (ctx, i);
+    }
 
   g_strfreev (filenames);
+
+  return node;
 }

@@ -170,6 +170,11 @@ static const Filter filters[] = {
     .run = filter_print,
   },
   {
+    .name = "render",
+    .description = "Render to an image.",
+    .run = filter_render,
+  },
+  {
     .name = "save",
     .description = "Save current node to file",
     .run = filter_save,
