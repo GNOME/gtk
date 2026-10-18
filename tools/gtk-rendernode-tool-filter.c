@@ -263,7 +263,7 @@ run_filters (GskRenderNode  *node,
   return node;
 }
 
-void
+int
 do_filter (int          *argc_,
            const char ***argv_)
 {
@@ -281,6 +281,7 @@ do_filter (int          *argc_,
   GskRenderNode *node;
   GError *error = NULL;
   RntContext *ctx;
+  int result;
 
   g_set_prgname ("gtk4-rendernode-tool filter");
   context = g_option_context_new (NULL);
@@ -337,7 +338,11 @@ do_filter (int          *argc_,
 
   gtk_tool_run ();
 
+  result = rnt_context_get_failed (ctx) ? EXIT_FAILURE : EXIT_SUCCESS;
+
   rnt_context_free (ctx);
   g_strfreev (filenames);
   g_clear_pointer (&node, gsk_render_node_unref);
+
+  return result;
 }

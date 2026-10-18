@@ -12,3 +12,7 @@ void                    rnt_context_push_node                   (RntContext     
 GskRenderNode *         rnt_context_pop_node                    (RntContext             *self);
 GskRenderNode *         rnt_context_get_node                    (RntContext             *self,
                                                                  gsize                   id);
+
+gboolean                rnt_context_get_failed                  (RntContext             *ctx);
+void                    rnt_context_set_failed                  (RntContext             *ctx,
+                                                                 gboolean                failed);

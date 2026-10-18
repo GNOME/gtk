@@ -8,7 +8,7 @@ void do_benchmark   (int *argc, const char ***argv);
 void do_compare     (int *argc, const char ***argv);
 void do_convert     (int *argc, const char ***argv);
 void do_extract     (int *argc, const char ***argv);
-void do_filter      (int *argc, const char ***argv);
+int  do_filter      (int *argc, const char ***argv);
 void do_match       (int *argc, const char ***argv);
 void do_render      (int *argc, const char ***argv);
 

@@ -22,6 +22,8 @@
 struct _RntContext
 {
   GPtrArray *nodes;
+
+  gboolean failed;
 };
 
 RntContext *
@@ -99,4 +101,38 @@ rnt_context_pop_node (RntContext *self)
     return NULL;
 
   return g_ptr_array_steal_index (self->nodes,  self->nodes->len - 1);
+}
+
+/**
+ * rnt_context_get_failed:
+ * @ctx: the context
+ *
+ * Checks for reported failure. See rnt_context_set_failed() for
+ * details.
+ *
+ * Returns: true if the context has failed
+ **/
+gboolean
+rnt_context_get_failed (RntContext *ctx)
+{
+  return ctx->failed;
+}
+
+/**
+ * rnt_context_set_failed:
+ * @ctx: the context
+ * @failed: true if failure occured, false to reset any previous
+ *   failure
+ *
+ * Sets if this context is in a failure state.
+ *
+ * A failure state indicates to `gtk-rendernode-tool` that it should
+ * exit with a non-zero exit status. It does not abort processing any
+ * ongoing filter chain.
+ **/
+void
+rnt_context_set_failed (RntContext *ctx,
+                        gboolean    failed)
+{
+  ctx->failed = failed;
 }

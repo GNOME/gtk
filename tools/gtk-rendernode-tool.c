@@ -128,7 +128,7 @@ main (int argc, const char *argv[])
     {
       argv--;
       argc++;
-      do_filter (&argc, &argv);
+      return do_filter (&argc, &argv);
     }
 
   return 0;
