@@ -38,6 +38,55 @@ rect_snap_grow (graphene_rect_t *rect)
 }
 
 static GskRenderNode *
+merge_flow (GskRenderNode *node,
+            RntContext    *ctx,
+            gsize          width,
+            gboolean       accurate)
+{
+  graphene_size_t offset = GRAPHENE_SIZE_INIT (0, 0);
+  float row_height = 0;
+  GPtrArray *array;
+  GskRenderNode *result;
+  gsize i;
+
+  array = g_ptr_array_new ();
+  g_ptr_array_set_free_func (array, (GDestroyNotify) gsk_render_node_unref);
+  for (i = 0; node != NULL; i++)
+    {
+      graphene_rect_t bounds;
+      gsk_render_node_get_bounds (node, &bounds);
+      if (!accurate)
+        rect_snap_grow (&bounds);
+      if (offset.width + bounds.size.width > width)
+        {
+          offset.width = 0;
+          offset.height += row_height;
+          row_height = 0;
+        }
+      if (bounds.origin.x != offset.width || bounds.origin.y != offset.height)
+        {
+          GskTransform *transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (offset.width - bounds.origin.x,
+                                                                                         offset.height - bounds.origin.y));
+          g_ptr_array_add (array, gsk_transform_node_new (node, transform));
+          gsk_transform_unref (transform);
+        }
+      else
+        {
+          g_ptr_array_add (array, gsk_render_node_ref (node));
+        }
+
+      offset.width += bounds.size.width;
+      row_height = MAX (row_height, bounds.size.height);
+      node = rnt_context_get_node (ctx, i);
+    }
+
+  result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+  g_ptr_array_free (array, TRUE);
+
+  return result;
+}
+
+static GskRenderNode *
 merge_horizontal (GskRenderNode *node,
                   RntContext    *ctx,
                   gboolean       accurate)
@@ -123,11 +172,13 @@ filter_merge (GskRenderNode  *node,
 {
   GOptionContext *context;
   gboolean accurate = FALSE;
+  int flow = 0;
   gboolean horizontal = FALSE;
   gboolean keep = FALSE;
   gboolean vertical = FALSE;
   const GOptionEntry entries[] = {
     { "accurate", 0, 0, G_OPTION_ARG_NONE, &accurate, N_("Use float bounds, not integers"), NULL },
+    { "flow", 0, 0, G_OPTION_ARG_INT, &flow, N_("Merge nodes using a flow layout"), "WIDTH" },
     { "horizontal", 0, 0, G_OPTION_ARG_NONE, &horizontal, N_("Merge nodes horizontally"), NULL },
     { "keep", 0, 0, G_OPTION_ARG_NONE, &keep, N_("Keep nodes in stack"), NULL },
     { "vertical", 0, 0, G_OPTION_ARG_NONE, &vertical, N_("Merge nodes vertically"), NULL },
@@ -150,12 +201,14 @@ filter_merge (GskRenderNode  *node,
 
   g_option_context_free (context);
 
-  if (horizontal)
+  if (flow > 0)
+    result = merge_flow (node, ctx, flow, accurate);
+  else if (horizontal)
     result = merge_horizontal (node, ctx, accurate);
   else if (vertical)
     result = merge_vertical (node, ctx, accurate);
   else
-    result = merge_horizontal (node, ctx, accurate);
+    result = merge_flow (node, ctx, 720, accurate);
 
   if (keep)
     {
