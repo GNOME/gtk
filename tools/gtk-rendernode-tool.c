@@ -114,8 +114,6 @@ main (int argc, const char *argv[])
     do_render (&argc, &argv);
   else if (strcmp (argv[0], "extract") == 0)
     do_extract (&argc, &argv);
-  else if (strcmp (argv[0], "convert") == 0)
-    do_convert (&argc, &argv);
   else if (strcmp (argv[0], "filter") == 0)
     do_filter (&argc, &argv);
   else if (strcmp (argv[0], "match") == 0)

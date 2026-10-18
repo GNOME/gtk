@@ -150,6 +150,11 @@ static const Filter filters[] = {
     .run = filter_info,
   },
   {
+    .name = "load-icon",
+    .description = "Load icons from filenames",
+    .run = filter_load_icon,
+  },
+  {
     .name = "opaque",
     .description = "Show the opaque part",
     .run = filter_opaque,
