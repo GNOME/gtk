@@ -120,6 +120,11 @@ static const Filter filters[] = {
     .run = filter_background_blur,
   },
   {
+    .name = "benchmark",
+    .description = "Show where background blur would take effect",
+    .run = filter_benchmark,
+  },
+  {
     .name = "compare",
     .description = "Compare rendering to .node or .png files.",
     .run = filter_compare,

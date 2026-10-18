@@ -112,8 +112,6 @@ main (int argc, const char *argv[])
 
   if (strcmp (argv[0], "render") == 0)
     do_render (&argc, &argv);
-  else if (strcmp (argv[0], "benchmark") == 0)
-    do_benchmark (&argc, &argv);
   else if (strcmp (argv[0], "extract") == 0)
     do_extract (&argc, &argv);
   else if (strcmp (argv[0], "convert") == 0)
