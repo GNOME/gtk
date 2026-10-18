@@ -36,6 +36,7 @@ filter_save (GskRenderNode *node,
   };
   GOptionContext *context;
   GError *error = NULL;
+  gsize i;
 
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
@@ -49,7 +50,7 @@ filter_save (GskRenderNode *node,
       exit (1);
     }
 
-  if (filenames == NULL || g_strv_length (filenames) != 1)
+  if (filenames == NULL)
     {
       g_printerr ("Expected a filename\n");
       exit (1);
@@ -59,6 +60,21 @@ filter_save (GskRenderNode *node,
     {
       g_printerr (_("Failed to save file: %s\n"), error->message);
       exit (1);
+    }
+  for (i = 1; i < g_strv_length (filenames); i++)
+    {
+      GskRenderNode *tmp = rnt_context_get_node (ctx, i - 1);
+      if (tmp == NULL)
+        {
+          g_printerr (_("%u filenames given but only %zu nodes available\n"),
+                      g_strv_length (filenames), i);
+          break;
+        }
+      if (!gsk_render_node_write_to_file (tmp, filenames[i], &error))
+        {
+          g_printerr (_("Failed to save file: %s\n"), error->message);
+          exit (1);
+        }
     }
 
   return node;
