@@ -247,14 +247,12 @@ node_pattern_count_matches (NodePattern   *pattern,
 }
 
 static void
-find_matches (const char *string,
-              const char *filename)
+find_matches (GskRenderNode *node,
+              const char    *string)
 {
-  GskRenderNode *node;
   NodePattern *pattern;
   size_t count = 0;
 
-  node = load_node_file (filename);
   pattern = node_pattern_parse (&string);
   if (pattern == NULL)
     {
@@ -267,28 +265,28 @@ find_matches (const char *string,
   g_print ("found %zu matches\n", count);
 
   node_pattern_free (pattern);
-  gsk_render_node_unref (node);
 }
 
-void
-do_match (int          *argc,
-          const char ***argv)
+GskRenderNode *
+filter_match (GskRenderNode  *node,
+              RntContext     *ctx,
+              int             argc,
+              const char    **argv)
 {
   GOptionContext *context;
-  char **filenames = NULL;
+  char **patterns = NULL;
   const GOptionEntry entries[] = {
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("PATTERN FILE") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &patterns, NULL, N_("PATTERN") },
     { NULL, }
   };
   GError *error = NULL;
 
-  g_set_prgname ("gtk4-rendernode-tool match");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
   g_option_context_set_summary (context, _("Match patterns in the render node."));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -297,19 +295,15 @@ do_match (int          *argc,
 
   g_option_context_free (context);
 
-  if (filenames == NULL)
+  if (patterns == NULL || g_strv_length (patterns) != 1)
     {
-      g_printerr (_("No .node file specified\n"));
+      g_printerr (_("Can only accept a pattern\n"));
       exit (1);
     }
 
-  if (g_strv_length (filenames) != 2)
-    {
-      g_printerr (_("Can only accept a pattern and a single .node file\n"));
-      exit (1);
-    }
+  find_matches (node, patterns[0]);
 
-  find_matches (filenames[0], filenames[1]);
+  g_strfreev (patterns);
 
-  g_strfreev (filenames);
+  return node;
 }

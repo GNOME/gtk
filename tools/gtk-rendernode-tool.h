@@ -6,7 +6,6 @@ typedef struct _RntContext RntContext;
 
 void do_extract     (int *argc, const char ***argv);
 int  do_filter      (int *argc, const char ***argv);
-void do_match       (int *argc, const char ***argv);
 
 GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
@@ -16,6 +15,7 @@ GskRenderNode *filter_cut               (GskRenderNode *node, RntContext *ctx, i
 GskRenderNode *filter_diff              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_info              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_load_icon         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_match             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_merge             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_opaque            (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_render            (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);

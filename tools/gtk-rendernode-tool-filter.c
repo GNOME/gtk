@@ -155,6 +155,11 @@ static const Filter filters[] = {
     .run = filter_load_icon,
   },
   {
+    .name = "match",
+    .description = "Match patterns in the render node.",
+    .run = filter_match,
+  },
+  {
     .name = "merge",
     .description = "Merge the stack of nodes into one",
     .run = filter_merge,

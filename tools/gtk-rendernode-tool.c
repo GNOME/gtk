@@ -114,8 +114,6 @@ main (int argc, const char *argv[])
     do_extract (&argc, &argv);
   else if (strcmp (argv[0], "filter") == 0)
     do_filter (&argc, &argv);
-  else if (strcmp (argv[0], "match") == 0)
-    do_match (&argc, &argv);
   else
     {
       argv--;
