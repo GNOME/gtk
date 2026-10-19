@@ -138,7 +138,7 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap *keymap,
 
   min_keycode = xkb_keymap_min_keycode (xkb_keymap);
   max_keycode = xkb_keymap_max_keycode (xkb_keymap);
-  for (keycode = min_keycode; keycode < max_keycode; keycode++)
+  for (keycode = min_keycode; keycode <= max_keycode; keycode++)
     {
       xkb_layout_index_t num_layouts, layout;
       num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, keycode);
@@ -454,7 +454,7 @@ update_direction (GdkWaylandKeymap *keymap)
 
   min_keycode = xkb_keymap_min_keycode (keymap->xkb_keymap);
   max_keycode = xkb_keymap_max_keycode (keymap->xkb_keymap);
-  for (key = min_keycode; key < max_keycode; key++)
+  for (key = min_keycode; key <= max_keycode; key++)
     {
        int layouts, layout;
 
