@@ -2,22 +2,22 @@
 
 #include <gsk/gsk.h>
 
-void do_benchmark   (int *argc, const char ***argv);
-void do_compare     (int *argc, const char ***argv);
-void do_convert     (int *argc, const char ***argv);
-void do_extract     (int *argc, const char ***argv);
-void do_filter      (int *argc, const char ***argv);
-void do_info        (int *argc, const char ***argv);
-void do_match       (int *argc, const char ***argv);
-void do_show        (int *argc, const char ***argv);
-void do_render      (int *argc, const char ***argv);
+typedef struct _RntContext RntContext;
 
-GskRenderNode *filter_background_blur   (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_copypaste         (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_cut               (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_diff              (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_opaque            (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_show              (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_simplify          (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_strip             (GskRenderNode *node, int argc, const char **argv);
-GskRenderNode *filter_texture           (GskRenderNode *node, int argc, const char **argv);
+GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_compare           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_copypaste         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_cut               (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_diff              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_extract           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_info              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_load_icon         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_match             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_merge             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_opaque            (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_render            (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_show              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_simplify          (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_strip             (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_texture           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);

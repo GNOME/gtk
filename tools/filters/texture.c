@@ -79,6 +79,7 @@ convert_texture (GskRenderReplay *replay,
 
 GskRenderNode *
 filter_texture (GskRenderNode  *node,
+                RntContext     *ctx,
                 int             argc,
                 const char    **argv)
 {

@@ -25,6 +25,7 @@ void
 overlay_config_init (OverlayConfig *self)
 {
   self->include_original = TRUE;
+  self->mask = FALSE;
   self->color = (GdkRGBA) { 1, 0, 0, 0.5 };
 }
 
@@ -49,8 +50,9 @@ GOptionGroup *
 overlay_config_create_option_group (OverlayConfig *self)
 {
   const GOptionEntry entries[] = {
-    { "only", 'o', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &self->include_original, N_("Only draw the opaque region, don't include the original image"), NULL },
-    { "color", 'c', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, overlay_config_parse_color, N_("Color for the opaque region"), "COLOR" },
+    { "only", 'o', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &self->include_original, N_("Draw only the overlay, don't include the original image"), NULL },
+    { "color", 'c', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, overlay_config_parse_color, N_("Color for the overlay"), "COLOR" },
+    { "mask", 'm', G_OPTION_FLAG_NONE, G_OPTION_ARG_CALLBACK, &self->mask, N_("Mask the original content with the overlay"), NULL },
     { NULL, }
   };
   GOptionGroup *group;
@@ -74,11 +76,20 @@ overlay_config_render_rect (const OverlayConfig   *self,
   GtkSnapshot *snapshot;
 
   snapshot = gtk_snapshot_new ();
-  if (self->include_original)
-    gtk_snapshot_append_node (snapshot, node);
-  gtk_snapshot_append_color (snapshot,
-                             &self->color,
-                             rect);
+  if (self->mask)
+    {
+      gtk_snapshot_push_clip (snapshot, rect);
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_pop (snapshot);
+    }
+  else
+    {
+      if (self->include_original)
+        gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_append_color (snapshot,
+                                 &self->color,
+                                 rect);
+    }
 
   return gtk_snapshot_free_to_node (snapshot);
 }
@@ -91,12 +102,23 @@ overlay_config_render_path (const OverlayConfig *self,
   GtkSnapshot *snapshot;
 
   snapshot = gtk_snapshot_new ();
-  if (self->include_original)
-    gtk_snapshot_append_node (snapshot, node);
-  gtk_snapshot_append_fill (snapshot,
-                            path,
-                            GSK_FILL_RULE_EVEN_ODD,
-                            &self->color);
+  if (self->mask)
+    {
+      gtk_snapshot_push_fill (snapshot,
+                              path,
+                              GSK_FILL_RULE_EVEN_ODD);
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_pop (snapshot);
+    }
+  else
+    {
+      if (self->include_original)
+        gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_append_fill (snapshot,
+                                path,
+                                GSK_FILL_RULE_EVEN_ODD,
+                                &self->color);
+    }
 
   return gtk_snapshot_free_to_node (snapshot);
 }

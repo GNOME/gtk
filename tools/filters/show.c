@@ -95,68 +95,9 @@ show_node (GskRenderNode *node,
   g_clear_object (&paintable);
 }
 
-void
-do_show (int          *argc,
-         const char ***argv)
-{
-  GOptionContext *context;
-  char **filenames = NULL;
-  gboolean decorate = FALSE;
-  gboolean offload = FALSE;
-  const GOptionEntry entries[] = {
-    { "offload", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &offload, N_("Put node into offload container"), NULL },
-    { "decorate", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &decorate, N_("Add a titlebar"), NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
-    { NULL, }
-  };
-  GskRenderNode *node;
-  GError *error = NULL;
-
-  if (gdk_display_get_default () == NULL)
-    {
-      g_printerr (_("Could not initialize windowing system\n"));
-      exit (1);
-    }
-
-  g_set_prgname ("gtk4-rendernode-tool show");
-  context = g_option_context_new (NULL);
-  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
-  g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Show the render node."));
-
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
-    {
-      g_printerr ("%s\n", error->message);
-      g_error_free (error);
-      exit (1);
-    }
-
-  g_option_context_free (context);
-
-  if (filenames == NULL)
-    {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
-
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr (_("Can only preview a single .node file\n"));
-      exit (1);
-    }
-
-  node = load_node_file (filenames[0]);
-
-  show_node (node, filenames[0], decorate, offload);
-
-  gtk_tool_run ();
-
-  g_strfreev (filenames);
-  g_clear_pointer (&node, gsk_render_node_unref);
-}
-
 GskRenderNode *
 filter_show (GskRenderNode  *node,
+             RntContext     *ctx,
              int             argc,
              const char    **argv)
 {

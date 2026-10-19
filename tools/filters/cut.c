@@ -21,26 +21,54 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
-static GskRenderNode *
-strip_node (GskRenderReplay *replay,
-            GskRenderNode   *node,
-            gpointer         user_data)
+typedef struct
 {
-  switch ((guint) gsk_render_node_get_node_type (node))
-  {
-    case GSK_DEBUG_NODE:
-      return gsk_render_replay_filter_node (replay, gsk_debug_node_get_child (node));
+  gsize start;
+  gsize end;
 
-    default:
-      return gsk_render_replay_default (replay, node);
-  }
+  gsize cur;
+} CutData;
+
+static gboolean
+node_is_leaf (GskRenderNode *node)
+{
+  gsize n_children;
+
+  gsk_render_node_get_children (node, &n_children);
+
+  return n_children == 0;
+}
+
+static GskRenderNode *
+cut_node (GskRenderReplay *replay,
+          GskRenderNode   *node,
+          gpointer         user_data)
+{
+  CutData *data = user_data;
+  gboolean skip;
+
+  if (!node_is_leaf (node))
+    return gsk_render_replay_default (replay, node);
+
+  skip = data->cur < data->start ||
+         data->cur >= data->end;
+  data->cur++;
+
+  if (skip)
+    return NULL;
+  else
+    return gsk_render_replay_default (replay, node);
 }
 
 GskRenderNode *
-filter_strip (GskRenderNode  *node,
-              int             argc,
-              const char    **argv)
+filter_cut (GskRenderNode  *node,
+            RntContext     *ctx,
+            int             argc,
+            const char    **argv)
 {
+  CutData data = {
+    .end = G_MAXSIZE,
+  };
   const GOptionEntry entries[] = {
     { NULL, }
   };
@@ -48,29 +76,49 @@ filter_strip (GskRenderNode  *node,
   GskRenderReplay *replay;
   GskRenderNode *result;
   GError *error = NULL;
+  char *s;
 
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Strip debug nodes"));
+  g_option_context_set_summary (context, _("Cut out a part of the node"));
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("strip: %s\n", error->message);
+      g_printerr ("cut: %s\n", error->message);
       g_error_free (error);
       exit (1);
     }
 
-  if (argc != 1)
-    {
-      g_printerr ("strip: Unexpected arguments\n");
+  switch (argc)
+  {
+    case 3:
+      data.end = strtoul (argv[2], &s, 0);
+      if (s == argv[2] || *s != 0)
+        {
+          g_printerr ("cut: Invalid value for end: %s\n", argv[2]);
+          exit (1);
+        }
+      G_GNUC_FALLTHROUGH;
+
+    case 2:
+      data.start = strtoul (argv[1], &s, 0);
+      if (s == argv[1] || *s != 0)
+        {
+          g_printerr ("cut: Invalid value for end: %s\n", argv[2]);
+          exit (1);
+        }
+      break;
+
+    default:
+      g_printerr ("Usage: cut START [END]\n");
       exit (1);
     }
 
   replay = gsk_render_replay_new ();
   gsk_render_replay_set_node_filter (replay,
-                                     strip_node,
-                                     NULL,
+                                     cut_node,
+                                     &data,
                                      NULL);
   result = gsk_render_replay_filter_node (replay, node);
   gsk_render_replay_free (replay);

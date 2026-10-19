@@ -28,22 +28,24 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
+#include "rntcontext.h"
 
-static void
-file_convert (const char    *filename,
-              int            width,
-              int            height,
-              const GdkRGBA *colors,
-              gsize          n_colors)
+static GskRenderNode *
+icon_load (const char    *filename,
+           int            size,
+           int            scale,
+           int            width,
+           int            height,
+           const GdkRGBA *colors,
+           gsize          n_colors)
 {
   GFile *file;
   GtkIconPaintable *paintable;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
-  GBytes *bytes;
 
   file = g_file_new_for_commandline_arg (filename);
-  paintable = gtk_icon_paintable_new_for_file (file, 16, 1);
+  paintable = gtk_icon_paintable_new_for_file (file, size, scale);
 
   snapshot = gtk_snapshot_new ();
 
@@ -54,19 +56,17 @@ file_convert (const char    *filename,
 
   node = gtk_snapshot_free_to_node (snapshot);
 
-  bytes = gsk_render_node_serialize (node);
-
-  g_print ("%s\n", (char *) g_bytes_get_data (bytes, NULL));
-
-  g_bytes_unref (bytes);
-  gsk_render_node_unref (node);
   g_object_unref (paintable);
   g_object_unref (file);
+
+  return node;
 }
 
-void
-do_convert (int          *argc,
-            const char ***argv)
+GskRenderNode *
+filter_load_icon (GskRenderNode  *node,
+                  RntContext     *ctx,
+                  int             argc,
+                  const char    **argv)
 {
   GOptionContext *context;
   char **filenames = NULL;
@@ -85,28 +85,32 @@ do_convert (int          *argc,
   char *sc = NULL;
   char *wc = NULL;
   char *ec = NULL;
-  char *size = NULL;
-  guint64 width = 16;
-  guint64 height = 16;
+  char *resize = NULL;
+  guint64 width = 0;
+  guint64 height = 0;
+  int size = 16;
+  int scale = 1;
   const GOptionEntry entries[] = {
     { "recolor", 0, 0, G_OPTION_ARG_NONE, &recolor, N_("Recolor the node"), NULL },
     { "fg", 0, 0, G_OPTION_ARG_STRING, &fc, N_("Foreground color"), N_("COLOR") },
     { "success", 0, 0, G_OPTION_ARG_STRING, &sc, N_("Success color"), N_("COLOR") },
     { "warning", 0, 0, G_OPTION_ARG_STRING, &wc, N_("Warning color"), N_("COLOR") },
     { "error", 0, 0, G_OPTION_ARG_STRING, &ec, N_("Error color"), N_("COLOR") },
-    { "size", 0, 0, G_OPTION_ARG_STRING, &size, N_("Size"), N_("SIZE") },
+    { "resize", 0, 0, G_OPTION_ARG_STRING, &resize, N_("Resize"), N_("SIZE") },
+    { "scale", 0, 0, G_OPTION_ARG_INT, &scale, N_("Resize"), N_("NUM") },
+    { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("Size"), N_("NUM") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
   GError *error = NULL;
+  gsize i;
 
-  g_set_prgname ("gtk4-rendernode-tool convert");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Convert from symbolic svg to node."));
+  g_option_context_set_summary (context, _("Load icons from filenames"));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -143,15 +147,15 @@ do_convert (int          *argc,
         }
     }
 
-  if (size)
+  if (resize)
     {
-      char *p = strchr (size, 'x');
+      char *p = strchr (resize, 'x');
       if (p)
         {
           *p = '\0';
           p++;
 
-          if (!g_ascii_string_to_unsigned (size, 10, 1, 1024, &width, &error) ||
+          if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error) ||
               !g_ascii_string_to_unsigned (p, 10, 1, 1024, &height, &error))
             {
               g_printerr ("%s\n", error->message);
@@ -161,7 +165,7 @@ do_convert (int          *argc,
         }
       else
         {
-          if (!g_ascii_string_to_unsigned (size, 10, 1, 1024, &width, &error))
+          if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error))
             {
               g_printerr ("%s\n", error->message);
               g_error_free (error);
@@ -171,20 +175,26 @@ do_convert (int          *argc,
           height = width;
         }
     }
+  else
+    {
+      width = size;
+      height = size;
+    }
 
   if (filenames == NULL)
     {
-      g_printerr (_("No .svg file specified\n"));
+      g_printerr (_("No filename specified\n"));
       exit (1);
     }
 
-  if (g_strv_length (filenames) > 1)
+  for (i = g_strv_length (filenames); i-- > 0;)
     {
-      g_printerr (_("Can only accept a single .svg file\n"));
-      exit (1);
+      if (node != rnt_context_get_null_node (ctx))
+        rnt_context_push_node (ctx, node);
+      node = icon_load (filenames[i], size, scale, width, height, colors, 4);
     }
-
-  file_convert (filenames[0], width, height, colors, 4);
 
   g_strfreev (filenames);
+
+  return node;
 }

@@ -22,20 +22,26 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 #include "overlayconfig.h"
+#include "rntcontext.h"
+
+#include "gsk/gskrendernodeprivate.h"
 
 GskRenderNode *
-filter_opaque (GskRenderNode  *node,
-               int             argc,
-               const char    **argv)
+filter_diff (GskRenderNode  *node,
+             RntContext     *ctx,
+             int             argc,
+             const char    **argv)
 {
+  char **filenames = NULL;
   const GOptionEntry entries[] = {
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
-  OverlayConfig config;
   GOptionContext *context;
+  OverlayConfig config;
   GError *error = NULL;
-  GskRenderNode *result;
-  graphene_rect_t opaque;
+  cairo_region_t *region;
+  GskRenderNode *reference, *result;
 
   overlay_config_init (&config);
 
@@ -43,28 +49,42 @@ filter_opaque (GskRenderNode  *node,
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_set_main_group (context, overlay_config_create_option_group (&config));
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Show the opaque part"));
+  g_option_context_set_summary (context, _("Show where two nodes differ"));
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("opaque: %s\n", error->message);
+      g_printerr ("diff: %s\n", error->message);
       g_error_free (error);
       exit (1);
     }
 
-  if (argc != 1)
+  if (filenames == NULL || g_strv_length (filenames) == 0)
     {
-      g_printerr ("opaque: Unexpected arguments\n");
-      exit (1);
+      reference = rnt_context_get_node (ctx, 0);
+      if (reference == NULL)
+        {
+          g_printerr ("diff: Need a single filename\n");
+          exit (1);
+        }
+      gsk_render_node_ref (reference);
     }
-  
-  if (gsk_render_node_get_opaque_rect (node, &opaque))
+  else if (g_strv_length (filenames) == 1)
     {
-      result = overlay_config_render_rect (&config, node, &opaque);
-      gsk_render_node_unref (node);
+      reference = load_node_file (filenames[0]);
     }
   else
-    result = g_steal_pointer (&node);
+    {
+      g_printerr ("diff: Need a single filename\n");
+      exit (1);
+    }
+
+  region = cairo_region_create ();
+  gsk_render_node_diff (node, reference, &(GskDiffData) { region, NULL, NULL });
+
+  result = overlay_config_render_region (&config, node, region);
+  gsk_render_node_unref (reference);
+  gsk_render_node_unref (node);
+  cairo_region_destroy (region);
 
   return result;
 }

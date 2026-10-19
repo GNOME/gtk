@@ -29,16 +29,18 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+#include "rntcontext.h"
 
 static void
-benchmark_node (GskRenderNode *node,
-                const char    *renderer_name,
-                guint          runs,
-                gboolean       download)
+benchmark_renderer (const char    *renderer_name,
+                    GskRenderNode *node,
+                    RntContext    *ctx,
+                    guint          runs,
+                    gboolean       download)
 {
   GError *error = NULL;
   GskRenderer *renderer;
-  guint i;
+  guint i, j;
 
   renderer = create_renderer (renderer_name, &error);
   if (renderer == NULL)
@@ -50,24 +52,34 @@ benchmark_node (GskRenderNode *node,
 
   for (i = 0; i < runs; i++)
     {
-      GdkTexture *texture;
       gint64 start_time, end_time, duration;
+      GskRenderNode *n;
 
       start_time = g_get_monotonic_time ();
 
-      texture = gsk_renderer_render_texture (renderer, node, NULL);
-      if (download)
+      for (j = 0, n = node; n != NULL; j++)
         {
-          GdkTextureDownloader *downloader;
-          GBytes *bytes;
-          gsize stride;
+          GdkTexture *texture;
 
-          downloader = gdk_texture_downloader_new (texture);
-          gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (texture));
-          gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
-          bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
-          g_bytes_unref (bytes);
-          gdk_texture_downloader_free (downloader);
+          texture = gsk_renderer_render_texture (renderer, n, NULL);
+
+          if (texture && download)
+            {
+              GdkTextureDownloader *downloader;
+              GBytes *bytes;
+              gsize stride;
+
+              downloader = gdk_texture_downloader_new (texture);
+              gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (texture));
+              gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
+              bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+              g_bytes_unref (bytes);
+              gdk_texture_downloader_free (downloader);
+            }
+
+          g_clear_object (&texture);
+
+          n = rnt_context_get_node (ctx, j);
         }
 
       end_time = g_get_monotonic_time ();
@@ -77,16 +89,17 @@ benchmark_node (GskRenderNode *node,
                renderer_name,
                (long long) duration / G_USEC_PER_SEC,
                (int) ((duration * 1000 / G_USEC_PER_SEC) % 1000)); 
-      g_object_unref (texture);
     }
 
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
 }
 
-void
-do_benchmark (int          *argc,
-              const char ***argv)
+GskRenderNode *
+filter_benchmark (GskRenderNode  *node,
+                  RntContext     *ctx,
+                  int             argc,
+                  const char    **argv)
 {
   GOptionContext *context;
   char **filenames = NULL;
@@ -97,26 +110,17 @@ do_benchmark (int          *argc,
     { "renderer", 0, 0, G_OPTION_ARG_STRING_ARRAY, &renderers, N_("Add renderer to benchmark"), N_("RENDERER") },
     { "runs", 0, 0, G_OPTION_ARG_INT, &runs, N_("Number of runs with each renderer"), N_("RUNS") },
     { "no-download", 0, 0, G_OPTION_ARG_NONE, &nodownload, N_("Don’t download result/wait for GPU to finish"), NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
-  GskRenderNode *node;
   GError *error = NULL;
   gsize i;
 
-  if (gdk_display_get_default () == NULL)
-    {
-      g_printerr (_("Could not initialize windowing system\n"));
-      exit (1);
-    }
-
-  g_set_prgname ("gtk4-rendernode-tool benchmark");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
   g_option_context_set_summary (context, _("Benchmark rendering of a .node file."));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -125,30 +129,16 @@ do_benchmark (int          *argc,
 
   g_option_context_free (context);
 
-  if (filenames == NULL)
-    {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
-
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr (_("Can only benchmark a single .node file\n"));
-      exit (1);
-    }
-
   if (renderers == NULL || renderers[0] == NULL)
     renderers = g_strdupv ((char **) (const char *[]) { "gl", "vulkan", "cairo", NULL });
   
-  node = load_node_file (filenames[0]);
-
   for (i = 0; renderers[i] != NULL; i++)
     {
-      benchmark_node (node, renderers[i], runs, !nodownload);
+      benchmark_renderer (renderers[i], node, ctx, runs, !nodownload);
     }
-
-  gsk_render_node_unref (node);
 
   g_strfreev (filenames);
   g_strfreev (renderers);
+
+  return node;
 }

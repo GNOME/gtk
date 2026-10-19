@@ -30,36 +30,41 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 
-static gboolean verbose;
-static char *directory = NULL;
+typedef struct _Extraction Extraction;
 
-static guint texture_count;
-static guint font_count;
+struct _Extraction
+{
+  gboolean verbose;
+  char *directory;
+  char *basename;
 
-static GHashTable *fonts;
+  guint texture_count;
+  guint font_count;
+  GHashTable *fonts;
+};
 
 static GdkTexture *
 extract_texture (GskRenderReplay *replay,
                  GdkTexture      *texture,
                  gpointer         user_data)
 {
-  const char *basename = user_data;
+  Extraction *e = user_data;
   char *filename;
   char *path;
 
   do {
-    filename = g_strdup_printf ("%s-texture-%u.png", basename, texture_count);
-    path = g_build_path ("/", directory, filename, NULL);
+    filename = g_strdup_printf ("%s-texture-%u.png", e->basename, e->texture_count);
+    path = g_build_path ("/", e->directory, filename, NULL);
 
     if (!g_file_test (path, G_FILE_TEST_EXISTS))
       break;
 
     g_free (path);
     g_free (filename);
-    texture_count++;
+    e->texture_count++;
   } while (TRUE);
 
-  if (verbose)
+  if (e->verbose)
     g_print ("Writing %dx%d texture to %s\n",
              gdk_texture_get_width (texture),
              gdk_texture_get_height (texture),
@@ -73,7 +78,7 @@ extract_texture (GskRenderReplay *replay,
   g_free (path);
   g_free (filename);
 
-  texture_count++;
+  e->texture_count++;
 
   return g_object_ref (texture);
 }
@@ -83,7 +88,7 @@ extract_font (GskRenderReplay *replay,
               PangoFont       *font,
               gpointer         user_data)
 {
-  const char *basename = user_data;
+  Extraction *e = user_data;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
   hb_blob_t *hb_blob;
@@ -108,31 +113,28 @@ extract_font (GskRenderReplay *replay,
 
   sum = g_compute_checksum_for_data (G_CHECKSUM_SHA256, (const guchar *)data, length);
 
-  if (!fonts)
-    fonts = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-  if (g_hash_table_contains (fonts, sum))
+  if (g_hash_table_contains (e->fonts, sum))
     {
       g_free (sum);
       hb_blob_destroy (hb_blob);
       return g_object_ref (font);
     }
 
-  g_hash_table_add (fonts, sum);
+  g_hash_table_add (e->fonts, sum);
 
   do {
-    filename = g_strdup_printf ("%s-font-%u.ttf", basename, font_count);
-    path = g_build_path ("/", directory, filename, NULL);
+    filename = g_strdup_printf ("%s-font-%u.ttf", e->basename, e->font_count);
+    path = g_build_path ("/", e->directory, filename, NULL);
 
     if (!g_file_test (path, G_FILE_TEST_EXISTS))
       break;
 
     g_free (path);
     g_free (filename);
-    font_count++;
+    e->font_count++;
   } while (TRUE);
 
-  if (verbose)
+  if (e->verbose)
     {
       PangoFontDescription *desc;
 
@@ -153,62 +155,63 @@ extract_font (GskRenderReplay *replay,
   g_free (path);
   g_free (filename);
 
-  font_count++;
+  e->font_count++;
 
   return g_object_ref (font);
 }
 
 static void
-file_extract (const char *filename)
+node_extract (Extraction    *e,
+              GskRenderNode *node)
 {
-  GskRenderNode *node, *result;
+  GskRenderNode *result;
   GskRenderReplay *replay;
-  char *basename, *dot;
-
-  node = load_node_file (filename);
-  basename = g_path_get_basename (filename);
-  dot = strrchr (basename, '.');
-  if (dot)
-    *dot = 0;
 
   replay = gsk_render_replay_new ();
   gsk_render_replay_set_texture_filter (replay,
                                         extract_texture,
-                                        basename,
-                                        g_free);
+                                        e,
+                                        NULL);
   gsk_render_replay_set_font_filter (replay,
                                      extract_font,
-                                     g_strdup (basename),
-                                     g_free);
+                                     e,
+                                     NULL);
 
   result = gsk_render_replay_filter_node (replay, node);
 
   gsk_render_node_unref (result);
   gsk_render_replay_free (replay);
-  gsk_render_node_unref (node);
 }
 
-void
-do_extract (int          *argc,
-            const char ***argv)
+GskRenderNode *
+filter_extract (GskRenderNode  *node,
+                RntContext     *ctx,
+                int             argc,
+                const char    **argv)
 {
   GOptionContext *context;
-  char **filenames = NULL;
+  Extraction e = {
+    .verbose = FALSE,
+    .directory = NULL,
+    .basename = NULL,
+    .texture_count = 0,
+    .font_count = 0,
+    .fonts = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL),
+  };
   const GOptionEntry entries[] = {
-    { "dir", 0, 0, G_OPTION_ARG_FILENAME, &directory, N_("Directory to use"), N_("DIRECTORY") },
-    { "verbose", 0, 0, G_OPTION_ARG_NONE, &verbose, N_("Be verbose"), NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { "dir", 0, 0, G_OPTION_ARG_FILENAME, &e.directory, N_("Directory to use"), N_("DIRECTORY") },
+    { "basename", 0, 0, G_OPTION_ARG_FILENAME, &e.basename, N_("Basename for extracted files"), N_("NAME") },
+    { "verbose", 0, 0, G_OPTION_ARG_NONE, &e.verbose, N_("Be verbose"), NULL },
     { NULL, }
   };
   GError *error = NULL;
 
-  g_set_prgname ("gtk4-rendernode-tool extract");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Extract data urls from the render node."));
+  g_option_context_set_summary (context, _("Extract textures and glyphs"));
 
-  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
@@ -217,23 +220,16 @@ do_extract (int          *argc,
 
   g_option_context_free (context);
 
-  if (filenames == NULL)
-    {
-      g_printerr (_("No .node file specified\n"));
-      exit (1);
-    }
+  if (e.directory == NULL)
+    e.directory = g_strdup (".");
+  if (e.basename == NULL)
+    e.basename = g_strdup ("extract");
 
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr (_("Can only accept a single .node file\n"));
-      exit (1);
-    }
+  node_extract (&e, node);
 
-  if (directory == NULL)
-    directory = g_strdup (".");
+  g_free (e.directory);
+  g_free (e.basename);
+  g_hash_table_unref (e.fonts);
 
-  file_extract (filenames[0]);
-
-  g_strfreev (filenames);
-  g_free (directory);
+  return node;
 }

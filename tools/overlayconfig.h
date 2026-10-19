@@ -6,6 +6,7 @@ typedef struct _OverlayConfig OverlayConfig;
 
 struct _OverlayConfig
 {
+  gboolean mask;
   gboolean include_original;
   GdkRGBA color;
 };

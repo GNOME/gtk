@@ -299,4 +299,18 @@ gdk_color_to_string (const GdkColor *self)
   return g_string_free (string, FALSE);
 }
 
+/**
+ * gdk_color_get_luminance:
+ * @self: the color
+ *
+ * Computes the luminance of the color and returns it.
+ *
+ * Returns: the luminance
+ **/
+float
+gdk_color_get_luminance (const GdkColor *self)
+{
+  /* FIXME: non-srgb? */
+  return 0.2126 * self->red + 0.7152 * self->green + 0.0722 * self->blue;
+}
 
