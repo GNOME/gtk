@@ -283,6 +283,8 @@ void       gdk_win32_display_lang_notification_exit  (GdkWin32Display *display);
 void       gdk_win32_display_set_input_locale        (GdkWin32Display *display,
                                                       HKL              input_locale);
 gboolean   gdk_win32_display_input_locale_is_ime     (GdkWin32Display *display);
+char      *gdk_win32_display_get_tsf_profile_name    (GdkWin32Display *display,
+                                                      HKL              hkl);
 GdkKeymap *gdk_win32_display_get_default_keymap      (GdkWin32Display *display);
 void       gdk_win32_display_increment_keymap_serial (GdkWin32Display *display);
 guint      gdk_win32_display_get_keymap_serial       (GdkWin32Display *display);

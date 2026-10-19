@@ -87,6 +87,10 @@ typedef struct
   /* Maximum possible value of a modbits bitset. */
   BYTE           max_modbit_value;
 
+  /* Cached per-layout metadata; may be NULL if the lookup failed. */
+  char          *language_name;
+  char          *layout_name;
+
 } GdkWin32KeymapLayoutInfo;
 
 /* Some keyboard driver constants

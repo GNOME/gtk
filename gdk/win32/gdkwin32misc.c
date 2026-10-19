@@ -50,6 +50,8 @@ struct _GdkWin32InputLocaleItems
   ITfSource *itf_source;
   DWORD actlangchangenotify_id;
 
+  ITfInputProcessorProfiles *itf_ipp;
+
   /* keymap items */
   GdkKeymap *default_keymap;
   guint keymap_serial;
@@ -207,6 +209,12 @@ gdk_win32_display_lang_notification_init (GdkWin32Display *display)
       display->input_locale_items->notification_sink = NULL;
       gdk_win32_com_clear (&display->input_locale_items->itf_source);
     }
+
+  CoCreateInstance (&CLSID_TF_InputProcessorProfiles,
+                    NULL,
+                    CLSCTX_INPROC_SERVER,
+                    &IID_ITfInputProcessorProfiles,
+                    (LPVOID *) &display->input_locale_items->itf_ipp);
 }
 
 void
@@ -218,6 +226,8 @@ gdk_win32_display_lang_notification_exit (GdkWin32Display *display)
       ITfSource_Release (display->input_locale_items->itf_source);
       ITfActiveLanguageProfileNotifySink_Release (&display->input_locale_items->notification_sink->itf_alpn_sink);
     }
+
+  gdk_win32_com_clear (&display->input_locale_items->itf_ipp);
 
   CoUninitialize ();
 
@@ -240,6 +250,46 @@ gdk_win32_display_input_locale_is_ime (GdkWin32Display *display)
   g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), FALSE);
 
   return display->input_locale_items->notification_sink->input_locale_is_ime;
+}
+
+/* Looked up by hkl's language id, not hkl itself: TF_INPUTPROCESSORPROFILE's
+ * own `hkl` field is only ever populated for plain keyboard-layout
+ * profiles, never for actual text services. */
+char *
+gdk_win32_display_get_tsf_profile_name (GdkWin32Display *display,
+                                        HKL              hkl)
+{
+  ITfInputProcessorProfiles *itf_ipp;
+  CLSID    clsid;
+  GUID     guid_profile;
+  LANGID   langid;
+  BSTR     bstr = NULL;
+  char    *result = NULL;
+  HRESULT  hr;
+
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+  itf_ipp = display->input_locale_items->itf_ipp;
+  if (itf_ipp == NULL)
+    return NULL;
+
+  langid = LOWORD ((DWORD) (gintptr) hkl);
+
+  hr = ITfInputProcessorProfiles_GetDefaultLanguageProfile (itf_ipp, langid,
+                                                            &GUID_TFCAT_TIP_KEYBOARD,
+                                                            &clsid, &guid_profile);
+  if (!SUCCEEDED (hr))
+    return NULL;
+
+  hr = ITfInputProcessorProfiles_GetLanguageProfileDescription (itf_ipp, &clsid, langid,
+                                                                 &guid_profile, &bstr);
+  if (SUCCEEDED (hr) && bstr != NULL)
+    result = g_utf16_to_utf8 ((gunichar2 *) bstr, -1, NULL, NULL, NULL);
+
+  if (bstr != NULL)
+    SysFreeString (bstr);
+
+  return result;
 }
 
 GdkKeymap *

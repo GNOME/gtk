@@ -179,6 +179,12 @@ vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
  * Return the keyboard layout according to the user's keyboard layout
  * substitution preferences.
  *
+ * HKCU\Keyboard Layout\Substitutes maps a "standard" KLID to the user's
+ * preferred alternative (classic example: 00000409 (US) -> 00010409 (US
+ * Dvorak)) and is consulted by the system when it loads a keyboard layout.
+ * https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc978688(v=technet.10)
+ * https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc938294(v=technet.10)
+ *
  * The result is heap-allocated and should be freed with g_free().
  */
 static char*
@@ -236,6 +242,9 @@ fail1:
   return NULL;
 }
 
+static const char kbd_layouts_registry_prefix[] =
+  "SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\";
+
 static char*
 _get_keyboard_layout_file (const char *klid)
 {
@@ -247,12 +256,10 @@ _get_keyboard_layout_file (const char *klid)
   int      buf_len           = 0;
   LSTATUS  status;
 
-  static const char prefix[] = "SYSTEM\\CurrentControlSet\\Control\\"
-                               "Keyboard Layouts\\";
-  char kbdKeyPath[sizeof (prefix) + KL_NAMELENGTH];
+  char kbdKeyPath[sizeof (kbd_layouts_registry_prefix) + KL_NAMELENGTH];
 
-  g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
-              prefix, klid);
+  g_snprintf (kbdKeyPath, sizeof (kbdKeyPath), "%s%s",
+              kbd_layouts_registry_prefix, klid);
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
@@ -335,12 +342,113 @@ get_keyboard_layout_file (const char *klid)
   return result;
 }
 
+/* Reads the layout's display name from HKLM\...\Keyboard Layouts\<KLID>,
+ * preferring the MUI "Layout Display Name" over "Layout Text".
+ * https://learn.microsoft.com/windows/win32/intl/locating-redirected-strings#load-a-language-neutral-registry-value
+ */
+static char *
+get_layout_name_for_klid (const char *klid)
+{
+  char    kbd_key_path[sizeof (kbd_layouts_registry_prefix) + KL_NAMELENGTH];
+  HKEY    hkey = 0;
+  DWORD   data_bytes = 0;
+  LSTATUS status;
+  char   *result = NULL;
+
+  g_snprintf (kbd_key_path, sizeof (kbd_key_path), "%s%s",
+              kbd_layouts_registry_prefix, klid);
+
+  status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, kbd_key_path, 0,
+                          KEY_QUERY_VALUE, &hkey);
+  if (status != ERROR_SUCCESS)
+    return NULL;
+
+  if (RegLoadMUIStringW (hkey, L"Layout Display Name", NULL, 0,
+                         &data_bytes, 0, NULL) == ERROR_MORE_DATA &&
+      data_bytes > 0)
+    {
+      WCHAR *name = g_malloc (data_bytes);
+
+      if (RegLoadMUIStringW (hkey, L"Layout Display Name", name, data_bytes,
+                             &data_bytes, 0, NULL) == ERROR_SUCCESS)
+        result = g_utf16_to_utf8 (name, -1, NULL, NULL, NULL);
+
+      g_free (name);
+    }
+
+  if (result == NULL &&
+      RegGetValueW (hkey, NULL, L"Layout Text", RRF_RT_REG_SZ, NULL,
+                    NULL, &data_bytes) == ERROR_SUCCESS &&
+      data_bytes > 0)
+    {
+      WCHAR *text = g_malloc (data_bytes);
+
+      if (RegGetValueW (hkey, NULL, L"Layout Text", RRF_RT_REG_SZ, NULL,
+                        text, &data_bytes) == ERROR_SUCCESS)
+        result = g_utf16_to_utf8 (text, -1, NULL, NULL, NULL);
+
+      g_free (text);
+    }
+
+  RegCloseKey (hkey);
+
+  return result;
+}
+
+static char *
+get_layout_name (GdkWin32Display *display,
+                 HKL               hkl,
+                 const char       *klid)
+{
+  char *result = gdk_win32_display_get_tsf_profile_name (display, hkl);
+
+  if (result == NULL)
+    result = get_layout_name_for_klid (klid);
+
+  if (result == NULL)
+    {
+      char *substituted = get_keyboard_layout_substituted_name (klid);
+
+      if (substituted != NULL)
+        {
+          result = get_layout_name_for_klid (substituted);
+          g_free (substituted);
+        }
+    }
+
+  return result;
+}
+
+/* Returns the input language associated with the HKL. Use LOWORD(hkl),
+ * which identifies the language, rather than the KLID, which identifies
+ * the keyboard layout. */
+static char *
+get_language_name (HKL hkl)
+{
+  LCID     lcid = LOWORD ((DWORD) (gintptr) hkl);
+  char    *result = NULL;
+  wchar_t *locale_name_w;
+  int      locale_size = GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+
+  locale_name_w = g_new0 (wchar_t, locale_size);
+
+  if (GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, locale_name_w, locale_size))
+    result = g_utf16_to_utf8 (locale_name_w, -1, NULL, NULL, NULL);
+
+  g_free (locale_name_w);
+
+  return result;
+}
+
 static void
 clear_keyboard_layout_info (gpointer data)
 {
   GdkWin32KeymapLayoutInfo *layout_info = (GdkWin32KeymapLayoutInfo*) data;
 
   g_free (layout_info->file);
+
+  g_free (layout_info->language_name);
+  g_free (layout_info->layout_name);
 
   if (layout_info->key_entries != NULL)
     g_array_unref (layout_info->key_entries);
@@ -644,6 +752,9 @@ update_keymap (GdkWin32Keymap *keymap)
               g_warning("Failed to load keyboard layout DLL for layout %s: %s",
                         info->klid, info->file);
             }
+
+          info->language_name = get_language_name (hkl);
+          info->layout_name = get_layout_name (display, hkl, info->klid);
         }
 
       if (info->handle == current_layout)
@@ -1101,28 +1212,15 @@ gdk_win32_keymap_get_layout_names (GdkKeymap *gdk_keymap)
 
       for (i = 0; i < keymap->layout_infos->len; ++i)
         {
-          LCID lcid;
-          char *endptr;
           GdkWin32KeymapLayoutInfo *info;
+          const char *name;
 
           info = &g_array_index (keymap->layout_infos, GdkWin32KeymapLayoutInfo, i);
-          lcid = strtoul (info->klid, &endptr, 16);
 
-          if (info->klid != endptr)
-            {
-              wchar_t *locale_name_w;
-              int locale_size = GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+          name = info->layout_name ? info->layout_name : info->language_name;
 
-              locale_name_w = g_new0 (wchar_t, locale_size);
-
-              if (GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, locale_name_w, locale_size))
-                {
-                  gchar *locale_name = g_utf16_to_utf8 (locale_name_w, -1, NULL, NULL, NULL);
-                  g_strv_builder_add (names_builder, locale_name);
-                }
-
-              g_free (locale_name_w);
-            }
+          if (name != NULL)
+            g_strv_builder_add (names_builder, name);
         }
 
       layout_names = g_strv_builder_end (names_builder);
