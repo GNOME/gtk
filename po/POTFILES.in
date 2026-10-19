@@ -449,7 +449,6 @@ tools/gtk-path-tool-reverse.c
 tools/gtk-path-tool-show.c
 tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
-tools/gtk-rendernode-tool-extract.c
 tools/gtk-tool-utils.c
 tools/updateiconcache.c
 tools/filters/background-blur.c
@@ -458,6 +457,7 @@ tools/filters/copypaste.c
 tools/filters/compare.c
 tools/filters/cut.c
 tools/filters/diff.c
+tools/filters/extract.c
 tools/filters/info.c
 tools/filters/load-icon.c
 tools/filters/match.c

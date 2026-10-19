@@ -110,9 +110,7 @@ main (int argc, const char *argv[])
   argv++;
   argc--;
 
-  if (strcmp (argv[0], "extract") == 0)
-    do_extract (&argc, &argv);
-  else if (strcmp (argv[0], "filter") == 0)
+  if (strcmp (argv[0], "filter") == 0)
     do_filter (&argc, &argv);
   else
     {

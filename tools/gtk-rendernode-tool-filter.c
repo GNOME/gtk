@@ -145,6 +145,11 @@ static const Filter filters[] = {
     .run = filter_diff,
   },
   {
+    .name = "extract",
+    .description = "Extract textures and glyphs",
+    .run = filter_extract,
+  },
+  {
     .name = "info",
     .description = "Provide information about the render node.",
     .run = filter_info,
