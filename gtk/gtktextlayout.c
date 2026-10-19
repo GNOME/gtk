@@ -522,6 +522,9 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
 
       layout->cursor_visible = cursor_visible;
 
+      if (layout->buffer == NULL)
+        return;
+
       /* Now queue a redraw on the paragraph containing the cursor
        */
       gtk_text_buffer_get_iter_at_mark (layout->buffer, &iter,
