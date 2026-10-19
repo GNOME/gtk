@@ -4877,7 +4877,9 @@ static void
 gtk_text_view_get_first_para_iter (GtkTextView *text_view,
                                    GtkTextIter *iter)
 {
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), iter,
+  GtkTextBuffer *buffer = get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, iter,
                                     text_view->priv->first_para_mark);
 }
 
