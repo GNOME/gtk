@@ -88,8 +88,10 @@ typedef struct
   BYTE           max_modbit_value;
 
   /* Cached per-layout metadata; may be NULL if the lookup failed. */
+  char          *language_tag;
   char          *language_name;
   char          *layout_name;
+  char          *profile_id;
 
 } GdkWin32KeymapLayoutInfo;
 

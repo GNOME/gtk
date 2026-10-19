@@ -292,6 +292,52 @@ gdk_win32_display_get_tsf_profile_name (GdkWin32Display *display,
   return result;
 }
 
+char *
+gdk_win32_display_get_tsf_profile_id (GdkWin32Display *display,
+                                      HKL              hkl)
+{
+  static const CLSID clsid_zero = { 0 };
+  ITfInputProcessorProfiles *itf_ipp;
+  CLSID    clsid;
+  GUID     guid_profile;
+  LANGID   langid;
+  wchar_t  clsid_str[64];
+  wchar_t  profile_str[64];
+  char    *clsid_utf8 = NULL;
+  char    *profile_utf8 = NULL;
+  char    *result = NULL;
+  HRESULT  hr;
+
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+  itf_ipp = display->input_locale_items->itf_ipp;
+  if (itf_ipp == NULL)
+    return NULL;
+
+  langid = LOWORD ((DWORD) (gintptr) hkl);
+
+  hr = ITfInputProcessorProfiles_GetDefaultLanguageProfile (itf_ipp, langid,
+                                                            &GUID_TFCAT_TIP_KEYBOARD,
+                                                            &clsid, &guid_profile);
+  if (!SUCCEEDED (hr) || memcmp (&clsid, &clsid_zero, sizeof (clsid)) == 0)
+    return NULL;
+
+  if (StringFromGUID2 (&clsid, clsid_str, G_N_ELEMENTS (clsid_str)) == 0 ||
+      StringFromGUID2 (&guid_profile, profile_str, G_N_ELEMENTS (profile_str)) == 0)
+    return NULL;
+
+  clsid_utf8 = g_utf16_to_utf8 ((gunichar2 *) clsid_str, -1, NULL, NULL, NULL);
+  profile_utf8 = g_utf16_to_utf8 ((gunichar2 *) profile_str, -1, NULL, NULL, NULL);
+
+  if (clsid_utf8 != NULL && profile_utf8 != NULL)
+    result = g_strdup_printf ("%04X:%s%s", langid, clsid_utf8, profile_utf8);
+
+  g_free (clsid_utf8);
+  g_free (profile_utf8);
+
+  return result;
+}
+
 GdkKeymap *
 gdk_win32_display_get_default_keymap (GdkWin32Display *display)
 {

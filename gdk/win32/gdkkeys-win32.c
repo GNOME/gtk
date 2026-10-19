@@ -245,6 +245,9 @@ fail1:
 static const char kbd_layouts_registry_prefix[] =
   "SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\";
 
+static const char user_profile_registry_path[] =
+  "Control Panel\\International\\User Profile";
+
 static char*
 _get_keyboard_layout_file (const char *klid)
 {
@@ -419,23 +422,143 @@ get_layout_name (GdkWin32Display *display,
   return result;
 }
 
-/* Returns the input language associated with the HKL. Use LOWORD(hkl),
- * which identifies the language, rather than the KLID, which identifies
- * the keyboard layout. */
+/* LCIDToLocaleName() off the HKL's raw langid only derives the classic
+ * "specific" locale tied to that LCID constant (e.g. "ru-RU" instead of
+ * "ru", or "nqo-GN" instead of "nqo" for a transient keyboard), which can
+ * disagree with the tag Windows actually assigned. Every installed tag
+ * has a subkey under user_profile_registry_path carrying a value named
+ * after its profile tip; matching on that is exact instead.
+ */
 static char *
-get_language_name (HKL hkl)
+get_language_tag (HKL         hkl,
+                  const char  *tip)
 {
-  LCID     lcid = LOWORD ((DWORD) (gintptr) hkl);
-  char    *result = NULL;
-  wchar_t *locale_name_w;
-  int      locale_size = GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+  HKEY  key;
+  char *result = NULL;
 
-  locale_name_w = g_new0 (wchar_t, locale_size);
+  if (RegOpenKeyExA (HKEY_CURRENT_USER, user_profile_registry_path, 0,
+                      KEY_READ, &key) == ERROR_SUCCESS)
+    {
+      DWORD size = 0;
 
-  if (GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, locale_name_w, locale_size))
-    result = g_utf16_to_utf8 (locale_name_w, -1, NULL, NULL, NULL);
+      if (RegGetValueA (key, NULL, "Languages", RRF_RT_REG_MULTI_SZ,
+                         NULL, NULL, &size) == ERROR_SUCCESS && size > 0)
+        {
+          char *languages = g_malloc (size);
 
-  g_free (locale_name_w);
+          if (RegGetValueA (key, NULL, "Languages", RRF_RT_REG_MULTI_SZ,
+                             NULL, languages, &size) == ERROR_SUCCESS)
+            {
+              char *tag;
+
+              for (tag = languages; result == NULL && *tag != '\0'; tag += strlen (tag) + 1)
+                if (RegGetValueA (key, tag, tip, RRF_RT_ANY,
+                                   NULL, NULL, NULL) == ERROR_SUCCESS)
+                  result = g_strdup (tag);
+            }
+
+          g_free (languages);
+        }
+
+      RegCloseKey (key);
+    }
+
+  if (result == NULL)
+    {
+      /* No installed language carries this tip (shouldn't normally
+       * happen for a layout Windows actually loaded) -- fall back to
+       * the LCID-derived guess. */
+      LANGID  langid = LOWORD ((DWORD) (gintptr) hkl);
+      wchar_t locale_name_w[LOCALE_NAME_MAX_LENGTH];
+
+      if (LCIDToLocaleName (MAKELCID (langid, SORT_DEFAULT), locale_name_w,
+                             LOCALE_NAME_MAX_LENGTH, 0) > 0)
+        result = g_utf16_to_utf8 ((gunichar2 *) locale_name_w, -1, NULL, NULL, NULL);
+    }
+
+  return result;
+}
+
+/* GetLocaleInfoW(LOCALE_SLOCALIZEDDISPLAYNAME) off the HKL's raw langid
+ * names the *locale*, not the installed language (e.g. "Russian (Russia)"
+ * instead of "Russian"), and can't resolve a transient-keyboard langid at
+ * all ("Unknown Locale"). Prefer the tag's own cached MUI name instead
+ * (user_profile_registry_path\<tag>\CachedLanguageName) -- a bare
+ * "@dllname,-id" reference with no path, so RegLoadMUIStringW needs an
+ * explicit base directory to find the DLL; confirmed empirically it fails
+ * with ERROR_FILE_NOT_FOUND without one.
+ */
+static char *
+get_language_name (HKL         hkl,
+                   const char  *tag)
+{
+  char *result = NULL;
+
+  if (tag != NULL)
+    {
+      char  key_path[sizeof (user_profile_registry_path) + 1 + LOCALE_NAME_MAX_LENGTH];
+      HKEY  hkey = 0;
+      DWORD data_bytes = 0;
+      WCHAR system_dir[MAX_PATH];
+
+      g_snprintf (key_path, sizeof (key_path), "%s\\%s",
+                  user_profile_registry_path, tag);
+
+      if (GetSystemDirectoryW (system_dir, G_N_ELEMENTS (system_dir)) == 0)
+        system_dir[0] = L'\0';
+
+      if (RegOpenKeyExA (HKEY_CURRENT_USER, key_path, 0,
+                         KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
+        {
+          if (RegLoadMUIStringW (hkey, L"CachedLanguageName", NULL, 0,
+                                 &data_bytes, 0, system_dir) == ERROR_MORE_DATA &&
+              data_bytes > 0)
+            {
+              WCHAR *name = g_malloc (data_bytes);
+
+              if (RegLoadMUIStringW (hkey, L"CachedLanguageName", name, data_bytes,
+                                     &data_bytes, 0, system_dir) == ERROR_SUCCESS)
+                result = g_utf16_to_utf8 (name, -1, NULL, NULL, NULL);
+
+              g_free (name);
+            }
+
+          RegCloseKey (hkey);
+        }
+    }
+
+  if (result == NULL)
+    {
+      /* No tag, or no usable CachedLanguageName -- fall back to the
+       * locale name for the HKL's raw langid. */
+      LCID     lcid = LOWORD ((DWORD) (gintptr) hkl);
+      wchar_t *locale_name_w;
+      int      locale_size = GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+
+      locale_name_w = g_new0 (wchar_t, locale_size);
+
+      if (GetLocaleInfoW (lcid, LOCALE_SLOCALIZEDDISPLAYNAME, locale_name_w, locale_size))
+        result = g_utf16_to_utf8 (locale_name_w, -1, NULL, NULL, NULL);
+
+      g_free (locale_name_w);
+    }
+
+  return result;
+}
+
+static char *
+get_profile_id (GdkWin32Display *display,
+                HKL               hkl,
+                const char       *klid)
+{
+  char *result = gdk_win32_display_get_tsf_profile_id (display, hkl);
+
+  if (result == NULL)
+    {
+      LANGID langid = LOWORD ((DWORD) (gintptr) hkl);
+
+      result = g_strdup_printf ("%04X:%s", langid, klid);
+    }
 
   return result;
 }
@@ -447,8 +570,10 @@ clear_keyboard_layout_info (gpointer data)
 
   g_free (layout_info->file);
 
+  g_free (layout_info->language_tag);
   g_free (layout_info->language_name);
   g_free (layout_info->layout_name);
+  g_free (layout_info->profile_id);
 
   if (layout_info->key_entries != NULL)
     g_array_unref (layout_info->key_entries);
@@ -753,8 +878,10 @@ update_keymap (GdkWin32Keymap *keymap)
                         info->klid, info->file);
             }
 
-          info->language_name = get_language_name (hkl);
           info->layout_name = get_layout_name (display, hkl, info->klid);
+          info->profile_id = get_profile_id (display, hkl, info->klid);
+          info->language_tag = get_language_tag (hkl, info->profile_id);
+          info->language_name = get_language_name (hkl, info->language_tag);
         }
 
       if (info->handle == current_layout)
@@ -772,6 +899,21 @@ update_keymap (GdkWin32Keymap *keymap)
       device = gdk_seat_get_keyboard (seat);
       g_object_notify (G_OBJECT (device), "active-layout-index");
       g_object_notify (G_OBJECT (device), "layout-names");
+
+      if (GDK_DEBUG_CHECK (INPUT))
+        for (i = 0; i < keymap->layout_infos->len; ++i)
+          {
+            GdkWin32KeymapLayoutInfo *info = &g_array_index (keymap->layout_infos,
+                                                              GdkWin32KeymapLayoutInfo, i);
+
+            GDK_DEBUG (INPUT,
+                       "keyboard layout[%d]%s hkl=%p klid=%s name=\"%s\" tag=%s language_name=\"%s\" tip=%s",
+                       i, i == keymap->active_layout ? " *" : "", (void *) info->handle, info->klid,
+                       info->layout_name ? info->layout_name : "",
+                       info->language_tag ? info->language_tag : "",
+                       info->language_name ? info->language_name : "",
+                       info->profile_id   ? info->profile_id   : "");
+          }
     }
 
   keymap->current_serial = gdk_win32_display_get_keymap_serial (display);
