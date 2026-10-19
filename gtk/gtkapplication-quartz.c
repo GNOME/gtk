@@ -127,6 +127,14 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 {
   return YES;
 }
+
+-(BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)hasVisibleWindows
+{
+  if (!hasVisibleWindows)
+    g_application_activate (G_APPLICATION (quartz->impl.application));
+
+  return YES;
+}
 @end
 
 @interface GtkMacosContentView : GdkMacosView<NSMenuItemValidation>
