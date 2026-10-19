@@ -242,8 +242,8 @@ fail1:
   return NULL;
 }
 
-static const char kbd_layouts_registry_prefix[] =
-  "SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\";
+static const char kbd_layouts_registry_path[] =
+  "SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts";
 
 static const char user_profile_registry_path[] =
   "Control Panel\\International\\User Profile";
@@ -259,10 +259,10 @@ _get_keyboard_layout_file (const char *klid)
   int      buf_len           = 0;
   LSTATUS  status;
 
-  char kbdKeyPath[sizeof (kbd_layouts_registry_prefix) + KL_NAMELENGTH];
+  char kbdKeyPath[sizeof (kbd_layouts_registry_path) + 1 + KL_NAMELENGTH];
 
-  g_snprintf (kbdKeyPath, sizeof (kbdKeyPath), "%s%s",
-              kbd_layouts_registry_prefix, klid);
+  g_snprintf (kbdKeyPath, sizeof (kbdKeyPath), "%s\\%s",
+              kbd_layouts_registry_path, klid);
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
@@ -345,6 +345,77 @@ get_keyboard_layout_file (const char *klid)
   return result;
 }
 
+/* Decodes the KLID from an HKL without changing the active layout and
+ * triggering WM_INPUTLANGCHANGE notifications.
+ *
+ * Uses the high-word layout_id; matching by language ID alone is ambiguous.
+ *
+ * klid_out must hold at least KL_NAMELENGTH characters.
+ */
+static void
+get_klid (HKL   hkl,
+          char *klid_out)
+{
+  DWORD    value  = (DWORD) (gintptr) hkl;
+  WORD     device = HIWORD (value);
+  WORD     langid = LOWORD (value);
+  gboolean found  = FALSE;
+
+  if ((device & 0xF000) == 0xF000)
+    {
+      DWORD layout_id = device & 0x0FFF;
+      HKEY  hkey = 0;
+
+      if (RegOpenKeyExA (HKEY_LOCAL_MACHINE, kbd_layouts_registry_path, 0,
+                         KEY_READ, &hkey) == ERROR_SUCCESS)
+        {
+          DWORD index;
+
+          for (index = 0; !found; index++)
+            {
+              char          subkey_name[MAX_PATH];
+              DWORD         subkey_name_len = sizeof (subkey_name);
+              char          reg_layout_id[16];
+              DWORD         reg_layout_id_bytes = sizeof (reg_layout_id);
+              char         *end = NULL;
+              unsigned long reg_id;
+              LSTATUS       status;
+
+              status = RegEnumKeyExA (hkey, index, subkey_name, &subkey_name_len,
+                                      NULL, NULL, NULL, NULL);
+              if (status == ERROR_NO_MORE_ITEMS)
+                break;
+              if (status != ERROR_SUCCESS)
+                continue;
+
+              if (RegGetValueA (hkey, subkey_name, "Layout Id", RRF_RT_REG_SZ, NULL,
+                                reg_layout_id, &reg_layout_id_bytes) != ERROR_SUCCESS)
+                continue;
+
+              reg_layout_id[sizeof (reg_layout_id) - 1] = '\0';
+              reg_id = strtoul (reg_layout_id, &end, 16);
+
+              if (end != reg_layout_id && reg_id == layout_id)
+                {
+                  char *p;
+
+                  g_strlcpy (klid_out, subkey_name, KL_NAMELENGTH);
+
+                  for (p = klid_out; *p != '\0'; p++)
+                    *p = g_ascii_toupper (*p);
+
+                  found = TRUE;
+                }
+            }
+
+          RegCloseKey (hkey);
+        }
+    }
+
+  if (!found)
+    g_snprintf (klid_out, KL_NAMELENGTH, "%08X", (unsigned) (device ? device : langid));
+}
+
 /* Reads the layout's display name from HKLM\...\Keyboard Layouts\<KLID>,
  * preferring the MUI "Layout Display Name" over "Layout Text".
  * https://learn.microsoft.com/windows/win32/intl/locating-redirected-strings#load-a-language-neutral-registry-value
@@ -352,14 +423,14 @@ get_keyboard_layout_file (const char *klid)
 static char *
 get_layout_name_for_klid (const char *klid)
 {
-  char    kbd_key_path[sizeof (kbd_layouts_registry_prefix) + KL_NAMELENGTH];
+  char    kbd_key_path[sizeof (kbd_layouts_registry_path) + 1 + KL_NAMELENGTH];
   HKEY    hkey = 0;
   DWORD   data_bytes = 0;
   LSTATUS status;
   char   *result = NULL;
 
-  g_snprintf (kbd_key_path, sizeof (kbd_key_path), "%s%s",
-              kbd_layouts_registry_prefix, klid);
+  g_snprintf (kbd_key_path, sizeof (kbd_key_path), "%s\\%s",
+              kbd_layouts_registry_path, klid);
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, kbd_key_path, 0,
                           KEY_QUERY_VALUE, &hkey);
@@ -858,8 +929,7 @@ update_keymap (GdkWin32Keymap *keymap)
 
           /* Load new data */
           info->handle = hkl;
-          ActivateKeyboardLayout (hkl, 0);
-          GetKeyboardLayoutNameA (info->klid);
+          get_klid (hkl, info->klid);
 
           info->file = get_keyboard_layout_file (info->klid);
 
@@ -892,8 +962,6 @@ update_keymap (GdkWin32Keymap *keymap)
     {
       GdkSeat *seat;
       GdkDevice *device;
-
-      ActivateKeyboardLayout (current_layout, 0);
 
       seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
       device = gdk_seat_get_keyboard (seat);
