@@ -522,16 +522,17 @@ static void render_shape (SvgElement   *shape,
 static GskRenderNode *
 apply_alpha_only (GskRenderNode *child)
 {
-  GskComponentTransfer *zero;
-  GskComponentTransfer *identity;
+  graphene_matrix_t m;
   GskRenderNode *node;
 
-  zero = gsk_component_transfer_new_linear (0, 0);
-  identity = gsk_component_transfer_new_identity ();
-  node = gsk_component_transfer_node_new (child, zero, zero, zero, identity);
-  gsk_component_transfer_free (identity);
-  gsk_component_transfer_free (zero);
+  graphene_matrix_init_from_float (&m, (const float []) {
+                                     0, 0, 0, 0,
+                                     0, 0, 0, 0,
+                                     0, 0, 0, 0,
+                                     0, 0, 0, 1
+                                   });
 
+  node = gsk_color_matrix_node_new (child, &m, graphene_vec4_zero ());
   gsk_render_node_unref (child);
 
   return node;

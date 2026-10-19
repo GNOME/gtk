@@ -35,7 +35,7 @@
  * [CSS filter effects](https://www.w3.org/TR/filter-effects-1/)
  * spec,
  *
- *     result = k1 * i1 * i1 + k2 * i1 + k3 * i3 + k4
+ *     result = k1 * i1 * i2 + k2 * i1 + k3 * i2 + k4
  */
 struct _GskArithmeticNode
 {
