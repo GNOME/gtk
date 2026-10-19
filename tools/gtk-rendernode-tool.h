@@ -4,8 +4,6 @@
 
 typedef struct _RntContext RntContext;
 
-int  do_filter      (int *argc, const char ***argv);
-
 GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_compare           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
