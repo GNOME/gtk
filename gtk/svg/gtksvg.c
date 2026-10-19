@@ -73,7 +73,6 @@
 #include "gtksvghrefprivate.h"
 #include "gtksvgtextdecorationprivate.h"
 #include "gtksvgpathutilsprivate.h"
-#include "gtksvgcolorutilsprivate.h"
 #include "gtksvgpangoutilsprivate.h"
 #include "gtksvglocationprivate.h"
 #include "gtksvgerrorprivate.h"
