@@ -31,6 +31,7 @@
 
 #include <gsk/gsk.h>
 
+#include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
@@ -145,6 +146,9 @@ void            gtk_snapshot_restore                    (GtkSnapshot            
 GDK_AVAILABLE_IN_4_24
 void            gtk_snapshot_set_snap                   (GtkSnapshot            *self,
                                                          GskRectSnap             snap);
+GDK_AVAILABLE_IN_4_26
+void            gtk_snapshot_set_optimization           (GtkSnapshot            *self,
+                                                         GtkSnapshotOptimization level);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
                                                          GskTransform           *transform);

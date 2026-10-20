@@ -81,7 +81,8 @@
  * Note that `GtkSnapshot` applies some optimizations, so the node
  * it produces may not match the API calls 1:1. For example, it will
  * omit clip nodes if the child node is entirely contained within the
- * clip rectangle.
+ * clip rectangle. Since GTK 4.26, you can control the level of optimizations
+ * with [method@Gtk.Snapshot.set_optimization].
  */
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
@@ -94,7 +95,8 @@ typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
 typedef void            (* GtkSnapshotClearFunc)   (GtkSnapshotState *state);
 
 struct _GtkSnapshotProperties {
-  GskRectSnap            snap;
+  GtkSnapshotOptimization optimization;
+  GskRectSnap             snap;
 };
 
 struct _GtkSnapshotState {
@@ -310,6 +312,7 @@ gtk_snapshot_push_state (GtkSnapshot                 *snapshot,
   else
     {
       state->props = (GtkSnapshotProperties) {
+          .optimization = GTK_SNAPSHOT_OPTIMIZATION_DEFAULT,
           .snap = GSK_RECT_SNAP_NONE,
       };
     }
@@ -2459,6 +2462,7 @@ gtk_snapshot_push_collect (GtkSnapshot *snapshot)
 
   state = gtk_snapshot_get_current_state (snapshot);
   state->props = (GtkSnapshotProperties) {
+      .optimization = GTK_SNAPSHOT_OPTIMIZATION_DEFAULT,
       .snap = GSK_RECT_SNAP_NONE,
   };
 }
@@ -2688,6 +2692,33 @@ gtk_snapshot_set_snap (GtkSnapshot *self,
 
   state = gtk_snapshot_get_current_state (self);
   state->props.snap = snap;
+}
+
+/**
+ * gtk_snapshot_set_optimization:
+ * @self: a `GtkSnapshot`
+ * @level: the optimization level to use
+ *
+ * Sets the optimization level to use while using this snapshot.
+ *
+ * This is a hint to GTK about what kind of optimizations to
+ * attempt, you should not rely on any specific optimizations. 
+ *
+ * The optimization level is part of the current state, so it will
+ * be reset with [method@Snapshot.pop] or [method@Snapshot.restore].
+ *
+ * Since: 4.26
+ **/
+void
+gtk_snapshot_set_optimization (GtkSnapshot             *self,
+                               GtkSnapshotOptimization  level)
+{
+  GtkSnapshotState *state;
+
+  g_return_if_fail (GTK_IS_SNAPSHOT (self));
+
+  state = gtk_snapshot_get_current_state (self);
+  state->props.optimization = level;
 }
 
 /**

@@ -2066,4 +2066,61 @@ typedef enum {
   GTK_REDUCED_MOTION_REDUCE,
 } GtkReducedMotion;
 
+/**
+ * GtkSnapshotOptimization:
+ *
+ * Describes the optimization level for snpashot recording.
+ *
+ * Higher optimization levels will cause GTK to attempt to produce render nodes that
+ * are faster to render. However, those optimizations may take time, potentially more
+ * time than just rendering the unoptimized output.
+ *
+ * The optimization levels are modeled after C compiler `-O` arguments.
+ *
+ * Since: 4.26
+ */
+/**
+ * GTK_SNAPSHOT_OPTIMIZATION_DISABLE:
+ *
+ * Disables all optimizations, even free ones, and tries to emit rendernodes that match
+ * the snapshot invocations exactly.
+ *
+ * Since: 4.26
+ */
+/**
+ * GTK_SNAPSHOT_OPTIMIZATION_DEFAULT:
+ *
+ * This is the default optimization level, where all free optimizations are performed.
+ * This is what GTK uses for its widgets and what you should likely use.
+ *
+ * Since: 4.26
+ */
+/**
+ * GTK_SNAPSHOT_OPTIMIZATION_OPTIMIZE:
+ *
+ * This optimization level does more complex optimizations that involve reordering
+ * operations or swapping operations for cheaper ones.
+ *
+ * It is recommended when interpreting other drawing instructions, like when rendering
+ * SVG or PDF content.
+ *
+ * Since: 4.26
+ */
+/**
+ * GTK_SNAPSHOT_OPTIMIZATION_EXPENSIVE:
+ *
+ * This optimization level is intended for cases where the rendering is complex and
+ * the content is redrawn a lot.
+ *
+ * You should only use it when storing the snapshot's result and reusing it.
+ *
+ * Since: 4.26
+ */
+typedef enum {
+  GTK_SNAPSHOT_OPTIMIZATION_DISABLE GDK_AVAILABLE_ENUMERATOR_IN_4_26,
+  GTK_SNAPSHOT_OPTIMIZATION_DEFAULT GDK_AVAILABLE_ENUMERATOR_IN_4_26,
+  GTK_SNAPSHOT_OPTIMIZATION_OPTIMIZE GDK_AVAILABLE_ENUMERATOR_IN_4_26,
+  GTK_SNAPSHOT_OPTIMIZATION_EXPENSIVE GDK_AVAILABLE_ENUMERATOR_IN_4_26,
+} GtkSnapshotOptimization;
+
 G_END_DECLS
