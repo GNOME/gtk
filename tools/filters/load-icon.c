@@ -75,16 +75,20 @@ filter_load_icon (GskRenderNode  *node,
   const GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
   const GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
   const GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
-  GdkRGBA colors[4] = {
+  const GdkRGBA accent_default = { 0.208, 0.518, 0.894, 1.0 };
+
+  GdkRGBA colors[5] = {
     [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0, 0, 0, 1 },
     [GTK_SYMBOLIC_COLOR_ERROR] =      { 0, 0, 1, 1 },
     [GTK_SYMBOLIC_COLOR_WARNING] =    { 0, 1, 0, 1 },
     [GTK_SYMBOLIC_COLOR_SUCCESS] =    { 1, 0, 0, 1 },
+    [GTK_SYMBOLIC_COLOR_ACCENT] =     { 1, 0, 1, 1 },
   };
   char *fc = NULL;
   char *sc = NULL;
   char *wc = NULL;
   char *ec = NULL;
+  char *ac = NULL;
   char *resize = NULL;
   guint64 width = 0;
   guint64 height = 0;
@@ -96,6 +100,7 @@ filter_load_icon (GskRenderNode  *node,
     { "success", 0, 0, G_OPTION_ARG_STRING, &sc, N_("Success color"), N_("COLOR") },
     { "warning", 0, 0, G_OPTION_ARG_STRING, &wc, N_("Warning color"), N_("COLOR") },
     { "error", 0, 0, G_OPTION_ARG_STRING, &ec, N_("Error color"), N_("COLOR") },
+    { "accent", 0, 0, G_OPTION_ARG_STRING, &ac, N_("Accent color"), N_("COLOR") },
     { "resize", 0, 0, G_OPTION_ARG_STRING, &resize, N_("Resize"), N_("SIZE") },
     { "scale", 0, 0, G_OPTION_ARG_INT, &scale, N_("Resize"), N_("NUM") },
     { "size", 0, 0, G_OPTION_ARG_INT, &size, N_("Size"), N_("NUM") },
@@ -125,6 +130,7 @@ filter_load_icon (GskRenderNode  *node,
       colors[GTK_SYMBOLIC_COLOR_SUCCESS] = success_default;
       colors[GTK_SYMBOLIC_COLOR_WARNING] = warning_default;
       colors[GTK_SYMBOLIC_COLOR_ERROR] = error_default;
+      colors[GTK_SYMBOLIC_COLOR_ACCENT] = accent_default;
       if (fc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND], fc))
         {
           g_printerr ("Failed to parse as color: %s\n", fc);
@@ -132,17 +138,22 @@ filter_load_icon (GskRenderNode  *node,
         }
       if (sc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_SUCCESS], sc))
         {
-          g_printerr ("Failed to parse as color: %s\n", fc);
+          g_printerr ("Failed to parse as color: %s\n", sc);
           exit (1);
         }
       if (wc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_WARNING], wc))
         {
-          g_printerr ("Failed to parse as color: %s\n", fc);
+          g_printerr ("Failed to parse as color: %s\n", wc);
           exit (1);
         }
       if (ec && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_ERROR], ec))
         {
-          g_printerr ("Failed to parse as color: %s\n", fc);
+          g_printerr ("Failed to parse as color: %s\n", ec);
+          exit (1);
+        }
+      if (ac && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_ACCENT], ac))
+        {
+          g_printerr ("Failed to parse as color: %s\n", ac);
           exit (1);
         }
     }
@@ -191,7 +202,7 @@ filter_load_icon (GskRenderNode  *node,
     {
       if (node != rnt_context_get_null_node (ctx))
         rnt_context_push_node (ctx, node);
-      node = icon_load (filenames[i], size, scale, width, height, colors, 4);
+      node = icon_load (filenames[i], size, scale, width, height, colors, G_N_ELEMENTS (colors));
     }
 
   g_strfreev (filenames);
