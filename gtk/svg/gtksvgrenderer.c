@@ -1307,7 +1307,11 @@ apply_filter_tree (SvgElement    *shape,
                   }
               }
 
-            result = gsk_component_transfer_node_new2 (in->node, color_state, r, g, b, a);
+            result = gsk_component_transfer_node_new2 (&in->node->bounds,
+                                                       GSK_RECT_SNAP_NONE,
+                                                       in->node,
+                                                       color_state,
+                                                       r, g, b, a);
 
             gsk_component_transfer_free (r);
             gsk_component_transfer_free (g);

@@ -42,6 +42,7 @@ struct _GskComponentTransferNode
   GskRenderNode *child;
   GdkColorState *color_state;
   GskComponentTransfer transfer[4];
+  GskRectSnap snap;
 };
 
 static void
@@ -77,9 +78,18 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   gboolean cs_equal;
   GdkColor c, l;
+  graphene_rect_t bounds;
 
-  width = ceil (node->bounds.size.width);
-  height = ceil (node->bounds.size.height);
+  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+    return;
+
+  width = ceil (bounds.size.width);
+  height = ceil (bounds.size.height);
+
+  if (width <= 0 || height <= 0)
+    return;
+
+  cs_equal = gdk_color_state_equal (data->ccs, self->color_state);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
@@ -89,8 +99,6 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
 
   pixels = cairo_image_surface_get_data (surface);
   stride = cairo_image_surface_get_stride (surface);
-
-  cs_equal = gdk_color_state_equal (data->ccs, self->color_state);
 
   for (guint y = 0; y < height; y++)
     {
@@ -214,7 +222,9 @@ gsk_component_transfer_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_component_transfer_node_new2 (child,
+    result = gsk_component_transfer_node_new2 (&node->bounds,
+                                               self->snap,
+                                               child,
                                                self->color_state,
                                                &self->transfer[GDK_COLOR_CHANNEL_RED],
                                                &self->transfer[GDK_COLOR_CHANNEL_GREEN],
@@ -246,6 +256,8 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_no
 
 /*< private >
  * gsk_component_transfer_node_new2:
+ * @bounds: The rectangle to operate in
+ * @snap: how to snap the clip rectangle to the pixel grid
  * @child: The child to apply component transfers to
  * @color_state: the color state to operate in
  * @r: transfer for the red component
@@ -257,11 +269,11 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_no
  * transfers to a child node.
  *
  * Returns: (transfer full) (type GskComponentTransferNode): A new `GskRenderNode`
- *
- * Since: 4.22
  */
 GskRenderNode *
-gsk_component_transfer_node_new2 (GskRenderNode              *child,
+gsk_component_transfer_node_new2 (const graphene_rect_t      *bounds,
+                                  GskRectSnap                 snap,
+                                  GskRenderNode              *child,
                                   GdkColorState              *color_state,
                                   const GskComponentTransfer *r,
                                   const GskComponentTransfer *g,
@@ -276,7 +288,10 @@ gsk_component_transfer_node_new2 (GskRenderNode              *child,
 
   self = gsk_render_node_alloc (GSK_TYPE_COMPONENT_TRANSFER_NODE);
   node = (GskRenderNode *) self;
-  node->fully_opaque = FALSE;
+
+  node->bounds = *bounds;
+
+  self->snap = snap;
 
   self->child = gsk_render_node_ref (child);
 
@@ -286,8 +301,6 @@ gsk_component_transfer_node_new2 (GskRenderNode              *child,
   gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_GREEN], g);
   gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_BLUE], b);
   gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_ALPHA], a);
-
-  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
@@ -322,7 +335,11 @@ gsk_component_transfer_node_new (GskRenderNode              *child,
                                  const GskComponentTransfer *b,
                                  const GskComponentTransfer *a)
 {
-  return gsk_component_transfer_node_new2 (child, GDK_COLOR_STATE_SRGB, r, g, b, a);
+  return gsk_component_transfer_node_new2 (&child->bounds,
+                                           GSK_RECT_SNAP_NONE,
+                                           child,
+                                           GDK_COLOR_STATE_SRGB,
+                                           r, g, b, a);
 }
 
 /**
@@ -379,4 +396,22 @@ gsk_component_transfer_node_get_color_state (const GskRenderNode *node)
   const GskComponentTransferNode *self = (const GskComponentTransferNode *) node;
 
   return self->color_state;
+}
+
+/**
+ * gsk_component_transfer_node_get_snap:
+ * @node: (type GskColorMatrixNode): a `GskColorMatrixNode`
+ *
+ * Retrieves the snap value for this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.26
+ **/
+GskRectSnap
+gsk_component_transfer_node_get_snap (const GskRenderNode *node)
+{
+  const GskComponentTransferNode *self = (const GskComponentTransferNode *) node;
+
+  return self->snap;
 }

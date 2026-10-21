@@ -218,7 +218,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COMPONENT_TRANSFER_NODE:
       child = node_attach (gsk_component_transfer_node_get_child (node), surface, idx);
-      res = gsk_component_transfer_node_new2 (child,
+      res = gsk_component_transfer_node_new2 (&node->bounds,
+                                              gsk_component_transfer_node_get_snap (node),
+                                              child,
                                               gsk_component_transfer_node_get_color_state (node),
                                               gsk_component_transfer_node_get_transfer (node, 0),
                                               gsk_component_transfer_node_get_transfer (node, 1),
