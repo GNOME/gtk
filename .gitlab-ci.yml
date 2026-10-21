@@ -569,6 +569,7 @@ android-signer:
   extends:
     - .distribution.android
   stage: android
+  allow_failure: true
   artifacts:
     paths:
       - apks
