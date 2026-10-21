@@ -72,7 +72,13 @@ void                    gtk_snapshot_push_color_matrix2         (GtkSnapshot    
                                                                  GdkColorState           *color_state,
                                                                  const graphene_matrix_t *color_matrix,
                                                                  const graphene_vec4_t   *color_offset);
-
+void                    gtk_snapshot_push_component_transfer2   (GtkSnapshot                *snapshot,
+                                                                 const graphene_rect_t      *bounds,
+                                                                 GdkColorState              *color_state,
+                                                                 const GskComponentTransfer *red,
+                                                                 const GskComponentTransfer *green,
+                                                                 const GskComponentTransfer *blue,
+                                                                 const GskComponentTransfer *alpha);
 
 void                    gtk_snapshot_add_color                  (GtkSnapshot            *snapshot,
                                                                  const GdkColor         *color,

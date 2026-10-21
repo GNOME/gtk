@@ -4,7 +4,9 @@
 
 G_BEGIN_DECLS
 
-GskRenderNode * gsk_component_transfer_node_new2            (GskRenderNode              *child,
+GskRenderNode * gsk_component_transfer_node_new2            (const graphene_rect_t      *bounds,
+                                                             GskRectSnap                 snap,
+                                                             GskRenderNode              *child,
                                                              GdkColorState              *color_state,
                                                              const GskComponentTransfer *r,
                                                              const GskComponentTransfer *g,

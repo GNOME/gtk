@@ -4407,7 +4407,11 @@ parse_component_transfer_node (GtkCssParser *parser,
   GskComponentTransfer *blue = NULL;
   GskComponentTransfer *alpha = NULL;
   GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "snap", parse_rect_snap, NULL, &snap },
     { "child", parse_node, clear_node, &child },
     { "red", parse_component_transfer, clear_component_transfer, &red },
     { "green", parse_component_transfer, clear_component_transfer, &green },
@@ -4416,8 +4420,9 @@ parse_component_transfer_node (GtkCssParser *parser,
     { "color-state", parse_default_color_state, clear_color_state, &color_state },
   };
   GskRenderNode *result;
+  unsigned int parse_result;
 
-  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (child == NULL)
     child = create_default_render_node ();
   if (red == NULL)
@@ -4429,7 +4434,10 @@ parse_component_transfer_node (GtkCssParser *parser,
   if (alpha == NULL)
     alpha = gsk_component_transfer_new_identity ();
 
-  result = gsk_component_transfer_node_new2 (child, color_state, red, green, blue, alpha);
+  if ((parse_result & (1 << 0)) == 0)
+    bounds = child->bounds;
+
+  result = gsk_component_transfer_node_new2 (&bounds, snap, child, color_state, red, green, blue, alpha);
 
   gsk_component_transfer_free (red);
   gsk_component_transfer_free (green);
