@@ -50,6 +50,7 @@ gtk_tools = [
                         'filters/extract.c',
                         'filters/info.c',
                         'filters/load-icon.c',
+                        'filters/load-svg.c',
                         'filters/match.c',
                         'filters/merge.c',
                         'filters/opaque.c',
