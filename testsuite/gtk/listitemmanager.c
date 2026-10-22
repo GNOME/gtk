@@ -414,6 +414,164 @@ test_tracker_changes (void)
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
+static void
+test_unmapped_changes (gconstpointer data)
+{
+  guint flags = GPOINTER_TO_UINT (data);
+  GtkListItemTracker *tracker = NULL;
+  GtkStringList *source;
+  GtkNoSelection *selection;
+  GtkListItemManager *items;
+  GtkWidget *widget;
+  guint i;
+
+  widget = gtk_window_new ();
+  items = gtk_list_item_manager_new (widget,
+                                     split_simple,
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
+  g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
+
+  source = gtk_string_list_new (NULL);
+  for (i = 0; i < 64; i++)
+    gtk_string_list_append (source, "A");
+  selection = gtk_no_selection_new (G_LIST_MODEL (source));
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  gtk_list_item_manager_set_has_sections (items, (flags & 2) != 0);
+  if (flags & 1)
+    {
+      tracker = gtk_list_item_tracker_new (items);
+      gtk_list_item_tracker_set_position (items, tracker, 32, 2, 2);
+    }
+
+  g_assert_false (gtk_widget_get_mapped (widget));
+
+  for (i = 0; i < 1000; i++)
+    {
+      const char *replacement[] = { "B", NULL };
+      GtkListTile *tile;
+      guint n_tiles = 0;
+
+      if (i % 3 == 0)
+        gtk_string_list_splice (source, i % 63, 1, NULL);
+      else if (i % 3 == 1)
+        gtk_string_list_splice (source, i % 63, 0, replacement);
+      else
+        gtk_string_list_splice (source, i % 63, 1, replacement);
+
+      /* Check before check_list_item_manager(), which collects tiles itself.
+       * The model stays bounded while items churn.
+       */
+      for (tile = gtk_list_item_manager_get_first (items);
+           tile != NULL;
+           tile = gtk_rb_tree_node_get_next (tile))
+        {
+          g_assert_cmpint (tile->type, !=, GTK_LIST_TILE_REMOVED);
+          n_tiles++;
+        }
+      /* Up to five tracked items, two untracked spans, and two boundaries. */
+      g_assert_cmpuint (n_tiles, <=, tracker ? 9 : 3);
+      check_list_item_manager (items, widget, tracker ? &tracker : NULL, tracker ? 1 : 0);
+    }
+
+  if (tracker)
+    gtk_list_item_tracker_free (items, tracker);
+  g_object_unref (selection);
+  gtk_window_destroy (GTK_WINDOW (widget));
+}
+
+static GtkOrdering
+compare_groups (gconstpointer a,
+                gconstpointer b,
+                gpointer      data)
+{
+  guint divisor = GPOINTER_TO_UINT (data);
+  guint x = g_ascii_strtoull (gtk_string_object_get_string (GTK_STRING_OBJECT ((gpointer) a)), NULL, 10) / divisor;
+  guint y = g_ascii_strtoull (gtk_string_object_get_string (GTK_STRING_OBJECT ((gpointer) b)), NULL, 10) / divisor;
+
+  return gtk_ordering_from_cmpfunc ((int) x - (int) y);
+}
+
+static void
+count_items_changes (GListModel *model,
+                     guint       position,
+                     guint       removed,
+                     guint       added,
+                     gpointer    data)
+{
+  (*(guint *) data)++;
+}
+
+static void
+test_unmapped_sections (void)
+{
+  GtkListItemTracker *tracker;
+  GtkListItemManager *items;
+  GtkStringList *source;
+  GtkSortListModel *sorted;
+  GtkNoSelection *selection;
+  GtkSorter *groups[2];
+  GtkWidget *widget;
+  guint i, items_changes = 0;
+
+  widget = gtk_window_new ();
+  items = gtk_list_item_manager_new (widget,
+                                     split_simple,
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
+  g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
+
+  source = gtk_string_list_new (NULL);
+  for (i = 0; i < 64; i++)
+    {
+      char *text = g_strdup_printf ("%02u", i);
+      gtk_string_list_append (source, text);
+      g_free (text);
+    }
+  sorted = gtk_sort_list_model_new (G_LIST_MODEL (source),
+                                    GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string"))));
+  groups[0] = GTK_SORTER (gtk_custom_sorter_new (compare_groups, GUINT_TO_POINTER (2), NULL));
+  groups[1] = GTK_SORTER (gtk_custom_sorter_new (compare_groups, GUINT_TO_POINTER (4), NULL));
+  gtk_sort_list_model_set_section_sorter (sorted, groups[0]);
+  selection = gtk_no_selection_new (G_LIST_MODEL (sorted));
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  gtk_list_item_manager_set_has_sections (items, TRUE);
+  tracker = gtk_list_item_tracker_new (items);
+  gtk_list_item_tracker_set_position (items, tracker, 32, 64, 64);
+
+  g_assert_false (gtk_widget_get_mapped (widget));
+  g_signal_connect (sorted, "items-changed", G_CALLBACK (count_items_changes), &items_changes);
+
+  for (i = 0; i < 1000; i++)
+    {
+      GtkListTile *tile;
+      guint n_tiles = 0;
+
+      /* Changing group sizes preserves item order, emitting only sections-changed. */
+      gtk_sort_list_model_set_section_sorter (sorted, groups[(i + 1) % 2]);
+      g_assert_cmpuint (items_changes, ==, 0);
+
+      for (tile = gtk_list_item_manager_get_first (items);
+           tile != NULL;
+           tile = gtk_rb_tree_node_get_next (tile))
+        {
+          g_assert_cmpint (tile->type, !=, GTK_LIST_TILE_REMOVED);
+          n_tiles++;
+        }
+      /* 64 tracked items and at most 32 pairs of section boundaries. */
+      g_assert_cmpuint (n_tiles, <=, 128);
+      check_list_item_manager (items, widget, &tracker, 1);
+    }
+
+  gtk_list_item_tracker_free (items, tracker);
+  g_object_unref (selection);
+  g_object_unref (groups[0]);
+  g_object_unref (groups[1]);
+  gtk_window_destroy (GTK_WINDOW (widget));
+}
+
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
@@ -596,6 +754,11 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/listitemmanager/create", test_create);
   g_test_add_func ("/listitemmanager/create_with_items", test_create_with_items);
+  g_test_add_data_func ("/listitemmanager/unmapped", GUINT_TO_POINTER (0), test_unmapped_changes);
+  g_test_add_data_func ("/listitemmanager/unmapped/tracker", GUINT_TO_POINTER (1), test_unmapped_changes);
+  g_test_add_data_func ("/listitemmanager/unmapped/sections", GUINT_TO_POINTER (2), test_unmapped_changes);
+  g_test_add_data_func ("/listitemmanager/unmapped/sections-tracker", GUINT_TO_POINTER (3), test_unmapped_changes);
+  g_test_add_func ("/listitemmanager/unmapped/section-changes", test_unmapped_sections);
   g_test_add_func ("/listitemmanager/tracker/changes", test_tracker_changes);
   g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
 
