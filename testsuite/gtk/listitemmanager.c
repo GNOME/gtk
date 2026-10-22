@@ -481,7 +481,7 @@ test_unmapped_changes (gconstpointer data)
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
-static GtkOrdering
+static int
 compare_groups (gconstpointer a,
                 gconstpointer b,
                 gpointer      data)
@@ -490,7 +490,7 @@ compare_groups (gconstpointer a,
   guint x = g_ascii_strtoull (gtk_string_object_get_string (GTK_STRING_OBJECT ((gpointer) a)), NULL, 10) / divisor;
   guint y = g_ascii_strtoull (gtk_string_object_get_string (GTK_STRING_OBJECT ((gpointer) b)), NULL, 10) / divisor;
 
-  return gtk_ordering_from_cmpfunc ((int) x - (int) y);
+  return (int) x - (int) y;
 }
 
 static void
