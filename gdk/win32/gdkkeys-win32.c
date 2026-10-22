@@ -849,6 +849,11 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
   /* Try converting to Unicode and back */
   c = gdk_keyval_to_unicode (sym);
 
+  /* Keyvals without a Unicode value would otherwise match the layout's
+   * NUL entry (Ctrl+Shift+2 and the like). */
+  if (c == 0)
+    return -1;
+
   index = -1;
   if (g_hash_table_lookup_extended (info->reverse_lookup_table,
                                     GINT_TO_POINTER (c),
