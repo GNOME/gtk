@@ -777,6 +777,10 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
       return (mod_bits & KBDSHIFT) ? GDK_KEY_ISO_Left_Tab : GDK_KEY_Tab;
     }
 
+  /* The right Alt key of a layout with an AltGr key is not an Alt key */
+  if (vk == VK_RMENU && (info->locale_flags & KLLF_ALTGR))
+    return GDK_KEY_ISO_Level3_Shift;
+
   /* Handle other special keys */
   switch (vk)
     {

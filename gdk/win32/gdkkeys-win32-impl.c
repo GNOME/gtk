@@ -416,6 +416,7 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
     }
 
   info->max_modbit_value = modifiers->wMaxModBits;
+  info->locale_flags = tables->fLocaleFlags;
 
   /* For convenience, we add 256 identity-mapped entries corresponding to the VKs.
    * This allows us to return a pointer to them from the `gdk_keysym_to_key_entry`
