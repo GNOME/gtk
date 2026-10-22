@@ -1823,6 +1823,26 @@ gdk_event_translate (MSG *msg,
         no_lock.layout = effective_group;
         no_lock.level = level;
 
+        /* Windows runs no accelerator and generates no character for AltGr plus
+         * a key that has nothing on the AltGr level, but GDK sees Ctrl+Alt
+         * here. Make sure such a key doesn't match <Ctrl><Alt>x shortcuts: no
+         * keyval, and no level either, or gdk_key_event_matches() still finds
+         * the key by keycode and level. */
+        if ((key_state[VK_RMENU] & 0x80) && keycode != VK_RMENU &&
+            gdk_keyval_to_unicode (translated.keyval) != 0 &&
+            (translated.consumed & (GDK_CONTROL_MASK | GDK_ALT_MASK)) != (GDK_CONTROL_MASK | GDK_ALT_MASK))
+          {
+            guint rmenu_keyval = 0;
+
+            gdk_keymap_translate_keyboard_state ((GdkKeymap *) win32_keymap, VK_RMENU, 0, group,
+                                                 &rmenu_keyval, NULL, NULL, NULL);
+            if (rmenu_keyval == GDK_KEY_ISO_Level3_Shift)
+              {
+                translated.keyval = no_lock.keyval = GDK_KEY_VoidSymbol;
+                translated.level = no_lock.level = G_MAXUINT;
+              }
+          }
+
         /* Only one release key event is fired when both shift keys are pressed together
            and then released. In order to send the missing event, press events for shift
            keys are recorded and sent together when the release event occurs.
