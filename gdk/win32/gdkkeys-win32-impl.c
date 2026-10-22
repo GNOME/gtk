@@ -312,7 +312,7 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
 
       /* Key supporting combination of capslock + altgr */
       if ((entry->Attributes & CAPLOKALTGR) &&
-          (mod_bits & KBDALTGR) &&
+          (mod_bits & KBDALTGR) == KBDALTGR &&
           (lock_bits & CAPLOK))
         mod_bits ^= KBDSHIFT;
 
