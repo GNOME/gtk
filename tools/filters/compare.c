@@ -142,7 +142,7 @@ filter_compare (GskRenderNode  *node,
     rnt_context_set_failed (ctx, TRUE);
 
   g_strfreev (filenames);
-  g_object_unref (diff);
+  g_clear_object (&diff);
   g_object_unref (texture[0]);
   g_object_unref (texture[1]);
 
