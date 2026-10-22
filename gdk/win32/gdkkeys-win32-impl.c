@@ -306,7 +306,7 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           /* Ignore capslock if any modifiers other than shift are pressed.
            * E.g. on the German layout, CapsLock + AltGr + q is the same as
            * AltGr + q ('@'), but NOT the same as Shift + AltGr + q (not mapped). */
-          !(mod_bits & ~KBDSHIFT) &&
+          !(mod_bits & ~(KBDSHIFT | KBDALT)) &&
           (lock_bits & CAPLOK))
         mod_bits ^= KBDSHIFT;
 
