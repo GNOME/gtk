@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-10-19 19:31+0000\n"
-"PO-Revision-Date: 2026-10-20 12:07+0200\n"
+"POT-Creation-Date: 2026-10-21 22:01+0000\n"
+"PO-Revision-Date: 2026-10-22 08:48+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2667,7 +2667,7 @@ msgstr "Ime"
 
 #: gtk/gtkfilechooserwidget.c:7458 gtk/inspector/resource-list.ui:98
 #: gtk/ui/gtkfontchooserwidget.ui:228 gtk/ui/gtkfontchooserwidget.ui:394
-#: tools/filters/load-icon.c:101
+#: tools/filters/load-icon.c:106
 msgid "Size"
 msgstr "Velikost"
 
@@ -5156,16 +5156,16 @@ msgstr "(ni zapisljivo)"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2257
+#: gtk/inspector/recorder.c:2258
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
 
-#: gtk/inspector/recorder.c:2447
+#: gtk/inspector/recorder.c:2448
 msgid "Frame"
 msgstr "Sličica"
 
-#: gtk/inspector/recorder.c:2470
+#: gtk/inspector/recorder.c:2471
 msgid "<b>Start of Recording</b>"
 msgstr "<b>Začetek snemanja</b>"
 
@@ -7736,7 +7736,7 @@ msgstr ""
 #: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
 #: tools/gtk-image-tool-play.c:338 tools/gtk-path-tool-render.c:63
 #: tools/gtk-rendernode-tool.c:34 tools/filters/compare.c:71
-#: tools/filters/diff.c:37 tools/filters/load-icon.c:102
+#: tools/filters/diff.c:37 tools/filters/load-icon.c:107
 msgid "FILE"
 msgstr "DATOTEKA"
 
@@ -7837,7 +7837,7 @@ msgstr "Prepiši obstoječo datoteko"
 #: tools/gtk-builder-tool-screenshot.c:361 tools/gtk-image-tool-compare.c:47
 #: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:339
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
-#: tools/gtk-rendernode-tool.c:352 tools/filters/render.c:272
+#: tools/gtk-rendernode-tool.c:357 tools/filters/render.c:272
 msgid "FILE…"
 msgstr "DATOTEKA …"
 
@@ -8117,7 +8117,7 @@ msgstr "Lahko sprejme samo eno slikovno datoteko\n"
 msgid "Don't add a titlebar"
 msgstr "Ne dodaj vrstice naziva"
 
-#: tools/gtk-image-tool-play.c:332 tools/filters/load-icon.c:99
+#: tools/gtk-image-tool-play.c:332 tools/filters/load-icon.c:104
 msgid "SIZE"
 msgstr "VELIKOST"
 
@@ -8362,7 +8362,7 @@ msgid "The output file"
 msgstr "Odvodna datoteka"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:116
-#: tools/filters/load-icon.c:95
+#: tools/filters/load-icon.c:99
 msgid "Foreground color"
 msgstr "Barva pisave"
 
@@ -8370,8 +8370,9 @@ msgstr "Barva pisave"
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
 #: tools/gtk-path-tool-show.c:116 tools/gtk-path-tool-show.c:117
 #: tools/gtk-path-tool-show.c:118 tools/gtk-path-tool-show.c:119
-#: tools/filters/load-icon.c:95 tools/filters/load-icon.c:96
-#: tools/filters/load-icon.c:97 tools/filters/load-icon.c:98
+#: tools/filters/load-icon.c:99 tools/filters/load-icon.c:100
+#: tools/filters/load-icon.c:101 tools/filters/load-icon.c:102
+#: tools/filters/load-icon.c:103
 msgid "COLOR"
 msgstr "BARVA"
 
@@ -8574,16 +8575,16 @@ msgstr "Datoteke ni mogoče shraniti: %s\n"
 msgid "%u filenames given but only %zu nodes available\n"
 msgstr "Podanih %u imen datotek, vendar so na voljo le %zu vozlišča\n"
 
-#: tools/gtk-rendernode-tool.c:284
+#: tools/gtk-rendernode-tool.c:289
 #, c-format
 msgid "Argument \"%s\" is not a known filter\n"
 msgstr "Argument »%s« ni znana vrsta datotek\n"
 
-#: tools/gtk-rendernode-tool.c:351
+#: tools/gtk-rendernode-tool.c:356
 msgid "list all filters and exit"
 msgstr "Izpiši vse vrste datotek / filtre in končaj"
 
-#: tools/gtk-rendernode-tool.c:369
+#: tools/gtk-rendernode-tool.c:374
 msgid "Filter a node file and print the result."
 msgstr "Filtriraj datoteko vozlišča in natisni rezultat."
 
@@ -8856,35 +8857,39 @@ msgstr "Neprosojni del:"
 msgid "Provide information about the render node."
 msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 
-#: tools/filters/load-icon.c:94
+#: tools/filters/load-icon.c:98
 msgid "Recolor the node"
 msgstr "Prebarvaj vozlišče"
 
-#: tools/filters/load-icon.c:96
+#: tools/filters/load-icon.c:100
 msgid "Success color"
 msgstr "Barva uspeha"
 
-#: tools/filters/load-icon.c:97
+#: tools/filters/load-icon.c:101
 msgid "Warning color"
 msgstr "Opozorilna barva"
 
-#: tools/filters/load-icon.c:98
+#: tools/filters/load-icon.c:102
 msgid "Error color"
 msgstr "Barva napake"
 
-#: tools/filters/load-icon.c:99 tools/filters/load-icon.c:100
+#: tools/filters/load-icon.c:103
+msgid "Accent color"
+msgstr "Barva poudarka"
+
+#: tools/filters/load-icon.c:104 tools/filters/load-icon.c:105
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: tools/filters/load-icon.c:100 tools/filters/load-icon.c:101
+#: tools/filters/load-icon.c:105 tools/filters/load-icon.c:106
 msgid "NUM"
 msgstr "ŠTE"
 
-#: tools/filters/load-icon.c:111
+#: tools/filters/load-icon.c:116
 msgid "Load icons from filenames"
 msgstr "Naloži ikone iz imen datotek"
 
-#: tools/filters/load-icon.c:186 tools/filters/render.c:295
+#: tools/filters/load-icon.c:197 tools/filters/render.c:295
 #, c-format
 msgid "No filename specified\n"
 msgstr "Ni določene ime datoteke\n"
