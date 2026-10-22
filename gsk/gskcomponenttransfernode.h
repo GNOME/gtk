@@ -40,13 +40,13 @@ GskRenderNode *         gsk_component_transfer_node_new         (GskRenderNode  
                                                                  const GskComponentTransfer *b,
                                                                  const GskComponentTransfer *a);
 GDK_AVAILABLE_IN_4_20
-GskRenderNode *         gsk_component_transfer_node_get_child   (const GskRenderNode      *node) G_GNUC_PURE;
+GskRenderNode *         gsk_component_transfer_node_get_child   (const GskRenderNode        *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_20
 const GskComponentTransfer *
-                        gsk_component_transfer_node_get_transfer (const GskRenderNode     *node,
-                                                                  GdkColorChannel          component) G_GNUC_PURE;
+                        gsk_component_transfer_node_get_transfer (const GskRenderNode       *node,
+                                                                  GdkColorChannel            component) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_26
-GskRectSnap             gsk_component_transfer_node_get_snap     (const GskRenderNode      *node) G_GNUC_PURE;
+GskRectSnap             gsk_component_transfer_node_get_snap    (const GskRenderNode        *node) G_GNUC_PURE;
 
 
 G_END_DECLS
