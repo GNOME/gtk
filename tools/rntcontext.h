@@ -4,7 +4,11 @@
 
 typedef struct _RntContext RntContext;
 
-RntContext *            rnt_context_new                         (void);
+typedef void (* RntContextPrintFunc) (const char *message, void *user_data);
+
+RntContext *            rnt_context_new                         (RntContextPrintFunc     print_func,
+                                                                 gpointer                user_data,
+                                                                 GDestroyNotify          user_destroy);
 void                    rnt_context_free                        (RntContext             *self);
 
 GOptionGroup *          rnt_context_create_option_group         (RntContext             *self);

@@ -23,6 +23,10 @@
 
 struct _RntContext
 {
+  RntContextPrintFunc print_func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
+
   gboolean verbose;
 
   GPtrArray *nodes;
@@ -31,12 +35,28 @@ struct _RntContext
   gboolean failed;
 };
 
+static void
+default_print (const char *string,
+               gpointer    unused)
+{
+  g_print ("%s", string);
+}
+
 RntContext *
-rnt_context_new (void)
+rnt_context_new (RntContextPrintFunc print_func,
+                 gpointer            user_data,
+                 GDestroyNotify      user_destroy)
 {
   RntContext *self;
 
   self = g_new0 (RntContext, 1);
+
+  if (print_func)
+    self->print_func = print_func;
+  else
+    self->print_func = default_print;
+  self->user_data = user_data;
+  self->user_destroy = user_destroy;
 
   self->nodes = g_ptr_array_new ();
   g_ptr_array_set_free_func (self->nodes, (GDestroyNotify) gsk_render_node_unref);
@@ -49,6 +69,9 @@ rnt_context_new (void)
 void
 rnt_context_free (RntContext *self)
 {
+  if (self->user_destroy)
+    self->user_destroy (self->user_data);
+
   g_ptr_array_free (self->nodes, TRUE);
   g_clear_pointer (&self->null_node, gsk_render_node_unref);
 
@@ -282,7 +305,7 @@ rnt_context_verbose (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  g_print ("%s", s);
+  self->print_func (s, self->user_data);
   va_end (args);
   g_free (s);
 }
@@ -310,7 +333,7 @@ rnt_context_print (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  g_print ("%s", s);
+  self->print_func (s, self->user_data);
   va_end (args);
   g_free (s);
 }
