@@ -19,8 +19,12 @@
 
 #include "rntcontext.h"
 
+#include <glib/gi18n-lib.h>
+
 struct _RntContext
 {
+  gboolean verbose;
+
   GPtrArray *nodes;
   GskRenderNode *null_node;
 
@@ -192,3 +196,122 @@ rnt_context_set_failed (RntContext *ctx,
 {
   ctx->failed = failed;
 }
+
+/**
+ * rnt_context_create_option_group:
+ * @self: a context
+ *
+ * Creates an option group to allow users to set properties for the context.
+ *
+ * Returns: an option group to configure the context
+ **/
+GOptionGroup *
+rnt_context_create_option_group (RntContext *self)
+{
+  const GOptionEntry entries[] = {
+    { "verbose", 'v', 0, G_OPTION_ARG_NONE, &self->verbose, N_("Be verbose"), NULL },
+    { NULL, }
+  };
+  GOptionGroup *group;
+
+  group = g_option_group_new ("general",
+                              _("General options"),
+                              _("Options that apply to all filters"),
+                              self,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, entries);
+
+  return group;
+}
+
+/**
+ * rnt_context_set_verbose:
+ * @self: the context
+ * @verbose: if verbose output is desired
+ *
+ * If set to true, [method@Rnt.Context.verbose] is going
+ * to print its output, too.
+ *
+ * This is usually configured using the --verbose command line
+ * argument.
+ **/
+void
+rnt_context_set_verbose (RntContext *self,
+                         gboolean    verbose)
+{
+  self->verbose = verbose;
+}
+
+/**
+ * rnt_context_get_verbose:
+ * @self: the context
+ *
+ * Checks if verbose mode is enabled.
+ *
+ * This is usually done via the --verbose command
+ * line switch.
+ *
+ * Returns: true if verbose mode is on
+ **/
+gboolean
+rnt_context_get_verbose (RntContext *self)
+{
+  return self->verbose;
+}
+
+/**
+ * rnt_context_verbose:
+ * @self: the context
+ * @format: the printf-format message
+ * @...: arguments
+ *
+ * Prints a message if verbose mode is on, otherwise
+ * discards it.
+ **/
+void
+rnt_context_verbose (RntContext *self,
+                     const char *format,
+                     ...)
+{
+  va_list args;
+  char *s;
+
+  if (!self->verbose)
+    return;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  g_print ("%s", s);
+  va_end (args);
+  g_free (s);
+}
+
+/**
+ * rnt_context_print:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints a message. 
+ *
+ * This should only be used for requested messages from filters
+ * designed to print output.
+ *
+ * For status messages, use [method@Rnt.Context.verbose].
+ **/
+void
+rnt_context_print (RntContext *self,
+                   const char *format,
+                   ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  g_print ("%s", s);
+  va_end (args);
+  g_free (s);
+}
+

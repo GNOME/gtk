@@ -135,6 +135,7 @@ create_pdf (GskRenderNode  *node,
 
 static void
 render_node (GskRenderNode         *node,
+             RntContext            *ctx,
              const char            *renderer_name,
              const graphene_rect_t *bounds,
              gboolean               snap,
@@ -212,7 +213,7 @@ render_node (GskRenderNode         *node,
                            g_bytes_get_size (bytes),
                            &error))
     {
-      g_print (_("Output written to %s.\n"), save_file);
+      rnt_context_verbose (ctx, _("Output written to %s.\n"), save_file);
     }
   else
     {
@@ -315,6 +316,7 @@ filter_render (GskRenderNode  *node,
         }
 
       render_node (n,
+                   ctx,
                    renderer,
                    bounds_str ? &bounds : NULL,
                    snap,
