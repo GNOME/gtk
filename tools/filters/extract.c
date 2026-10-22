@@ -30,11 +30,14 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 
+#include "rntcontext.h"
+
 typedef struct _Extraction Extraction;
 
 struct _Extraction
 {
-  gboolean verbose;
+  RntContext *ctx;
+
   char *directory;
   char *basename;
 
@@ -64,11 +67,10 @@ extract_texture (GskRenderReplay *replay,
     e->texture_count++;
   } while (TRUE);
 
-  if (e->verbose)
-    g_print ("Writing %dx%d texture to %s\n",
-             gdk_texture_get_width (texture),
-             gdk_texture_get_height (texture),
-             filename);
+  rnt_context_verbose (e->ctx, "Writing %dx%d texture to %s\n",
+                       gdk_texture_get_width (texture),
+                       gdk_texture_get_height (texture),
+                       filename);
 
   if (!gdk_texture_save_to_png (texture, path))
     {
@@ -134,14 +136,14 @@ extract_font (GskRenderReplay *replay,
     e->font_count++;
   } while (TRUE);
 
-  if (e->verbose)
+  if (rnt_context_get_verbose (e->ctx))
     {
       PangoFontDescription *desc;
 
       desc = pango_font_describe (font);
-      g_print ("Writing font %s to %s\n",
-               pango_font_description_get_family (desc),
-               filename);
+      rnt_context_verbose (e->ctx, "Writing font %s to %s\n",
+                           pango_font_description_get_family (desc),
+                           filename);
       pango_font_description_free (desc);
     }
 
@@ -191,7 +193,7 @@ filter_extract (GskRenderNode  *node,
 {
   GOptionContext *context;
   Extraction e = {
-    .verbose = FALSE,
+    .ctx = ctx,
     .directory = NULL,
     .basename = NULL,
     .texture_count = 0,
@@ -201,7 +203,6 @@ filter_extract (GskRenderNode  *node,
   const GOptionEntry entries[] = {
     { "dir", 0, 0, G_OPTION_ARG_FILENAME, &e.directory, N_("Directory to use"), N_("DIRECTORY") },
     { "basename", 0, 0, G_OPTION_ARG_FILENAME, &e.basename, N_("Basename for extracted files"), N_("NAME") },
-    { "verbose", 0, 0, G_OPTION_ARG_NONE, &e.verbose, N_("Be verbose"), NULL },
     { NULL, }
   };
   GError *error = NULL;

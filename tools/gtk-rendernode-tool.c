@@ -95,7 +95,7 @@ filter_print (GskRenderNode *node,
     }
 
   bytes = gsk_render_node_serialize (node);
-  g_print ("%s", (const char *) g_bytes_get_data (bytes, NULL));
+  rnt_context_print (ctx, "%s", (const char *) g_bytes_get_data (bytes, NULL));
   g_bytes_unref (bytes);
 
   return node;
@@ -368,8 +368,11 @@ main (int argc, const char *argv[])
 
   g_log_set_writer_func (log_writer_func, NULL, NULL);
 
+  ctx = rnt_context_new ();
+
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_set_main_group (context, rnt_context_create_option_group (ctx));
   g_option_context_add_main_entries (context, entries, NULL);
   g_option_context_set_summary (context, _("Filter a node file and print the result."));
 
@@ -395,8 +398,6 @@ main (int argc, const char *argv[])
       list_filters ();
       exit (0);
     }
-
-  ctx = rnt_context_new ();
 
   if (filenames == NULL || filenames[0] == NULL)
     {

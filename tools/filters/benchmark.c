@@ -85,10 +85,10 @@ benchmark_renderer (const char    *renderer_name,
       end_time = g_get_monotonic_time ();
 
       duration = end_time - start_time;
-      g_print ("%s\t%lld.%03ds\n",
-               renderer_name,
-               (long long) duration / G_USEC_PER_SEC,
-               (int) ((duration * 1000 / G_USEC_PER_SEC) % 1000)); 
+      rnt_context_print (ctx, "%s\t%lld.%03ds\n",
+                         renderer_name,
+                         (long long) duration / G_USEC_PER_SEC,
+                         (int) ((duration * 1000 / G_USEC_PER_SEC) % 1000)); 
     }
 
   gsk_renderer_unrealize (renderer);

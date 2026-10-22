@@ -314,7 +314,7 @@ filter_match (GskRenderNode  *node,
       
   if (count)
     {
-      g_print ("found %u matches\n", matches->len);
+      rnt_context_print (ctx, "found %u matches\n", matches->len);
     }
   else 
     {

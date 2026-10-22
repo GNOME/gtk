@@ -130,12 +130,12 @@ filter_compare (GskRenderNode  *node,
       if (diff)
         {
           if (opt_filename)
-            g_print (_("Differences written to %s.\n"), opt_filename);
+            rnt_context_verbose (ctx, _("Differences written to %s.\n"), opt_filename);
           else
-            g_print (_("The images are different.\n"));
+            rnt_context_verbose (ctx, _("The images are different.\n"));
         }
       else
-        g_print (_("No differences.\n"));
+        rnt_context_verbose (ctx, _("No differences.\n"));
     }
 
   if (diff)
