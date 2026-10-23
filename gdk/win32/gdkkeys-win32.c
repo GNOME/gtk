@@ -739,7 +739,9 @@ clear_keyboard_layout_info (gpointer data)
   map (GDK_KEY_asciicircum,          /* 0x05e */ GDK_KEY_dead_circumflex)     \
   map (GDK_KEY_grave,                /* 0x060 */ GDK_KEY_dead_grave)          \
   map (GDK_KEY_asciitilde,           /* 0x07e */ GDK_KEY_dead_tilde)          \
+  map (GDK_KEY_currency,             /* 0x0a4 */ GDK_KEY_dead_currency)       \
   map (GDK_KEY_diaeresis,            /* 0x0a8 */ GDK_KEY_dead_diaeresis)      \
+  map (GDK_KEY_macron,               /* 0x0af */ GDK_KEY_dead_macron)         \
   map (GDK_KEY_degree,               /* 0x0b0 */ GDK_KEY_dead_abovering)      \
   map (GDK_KEY_acute,                /* 0x0b4 */ GDK_KEY_dead_acute)          \
   map (GDK_KEY_periodcentered,       /* 0x0b7 */ GDK_KEY_dead_abovedot)       \
@@ -749,7 +751,13 @@ clear_keyboard_layout_info (gpointer data)
   map (GDK_KEY_caron,                /* 0x1b7 */ GDK_KEY_dead_caron)          \
   map (GDK_KEY_doubleacute,          /* 0x1bd */ GDK_KEY_dead_doubleacute)    \
   map (GDK_KEY_abovedot,             /* 0x1ff */ GDK_KEY_dead_abovedot)       \
-  map (0x1000384,              /* Greek tonos */ GDK_KEY_dead_acute)          \
+  map (0x10002c6, /* U+02C6 modifier circumflex */ GDK_KEY_dead_circumflex)   \
+  map (0x10002cd, /* U+02CD modifier low macron */ GDK_KEY_dead_belowmacron)  \
+  map (0x10002da, /* U+02DA ring above */          GDK_KEY_dead_abovering)    \
+  map (0x10002dc, /* U+02DC small tilde */         GDK_KEY_dead_tilde)        \
+  map (0x1000384, /* U+0384 Greek tonos */         GDK_KEY_dead_acute)        \
+  map (0x1001fbf, /* U+1FBF Greek psili */         GDK_KEY_dead_psili)        \
+  map (0x1001ffe, /* U+1FFE Greek dasia */         GDK_KEY_dead_dasia)        \
   map (GDK_KEY_Greek_accentdieresis, /* 0x7ae */ GDK_KEY_Greek_accentdieresis)
 
 
