@@ -3096,24 +3096,22 @@ static void
 gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
                                               GskRenderNode       *node)
 {
-  GskGpuImage *image;
   GskRenderNode *child;
-  const graphene_matrix_t *color_matrix;
-  graphene_rect_t tex_rect, bounds;
+  GskGpuImage *image;
+  graphene_rect_t tex_rect, clip_bounds;
   GskGpuSampler tex_sampler;
 
-  child = gsk_color_matrix_node_get_child (node);
-  color_matrix = gsk_color_matrix_node_get_color_matrix (node);
-
   if (!gsk_gpu_node_processor_clip_bounds (self,
-                                           &node->bounds,
+                                           gsk_color_matrix_node_get_clip (node),
                                            gsk_color_matrix_node_get_snap (node),
-                                           &bounds))
+                                           &clip_bounds))
     return;
+
+  child = gsk_color_matrix_node_get_child (node);
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    &bounds,
+                                                    &clip_bounds,
                                                     child,
                                                     0,
                                                     &tex_rect,
@@ -3132,7 +3130,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
       gsk_gpu_color_op (self,
                         self->ccs,
                         gsk_gpu_color_states_find (self->ccs, &color),
-                        &bounds,
+                        &clip_bounds,
                         &color);
       gdk_color_finish (&color);
 
@@ -3142,10 +3140,10 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
   gsk_gpu_color_matrix_op (self,
                            self->ccs,
                            gsk_color_matrix_node_get_color_state (node),
-                           &bounds,
+                           &clip_bounds,
                            image,
                            tex_sampler,
-                           color_matrix,
+                           gsk_color_matrix_node_get_color_matrix (node),
                            gsk_color_matrix_node_get_color_offset (node),
                            &tex_rect);
 
