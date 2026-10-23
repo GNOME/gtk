@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-#include "../testutils.h"
+#include "testutils/testutils.h"
 
 static char *
 test_get_reference_file (const char *node_file)

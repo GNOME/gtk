@@ -56,6 +56,7 @@ ignore = [
   "demos/**",
   "examples/**",
   "tests/**",
+  "testutils/**",
   "testsuite/**",
 ]
 
@@ -87,13 +88,14 @@ ignore = [
   "demos/**",
   "examples/**",
   "tests/**",
+  "testutils/**",
   "testsuite/**",
 ]
 
 [rules.use_g_ascii_functions]
 ignore = [
   # external sources should stay unmodified
-  "testsuite/diff/diffreg.c",
+  "testutils/diff/diffreg.c",
 ]
 
 [rules.use_g_object_notify_by_pspec]

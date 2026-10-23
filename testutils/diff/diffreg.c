@@ -90,7 +90,7 @@
 
 #include <glib/gstdio.h>
 
-#include "testsuite/diff/diff.h"
+#include "diff/diff.h"
 
 #define MINIMUM(a, b)	(((a) < (b)) ? (a) : (b))
 #define MAXIMUM(a, b)	(((a) > (b)) ? (a) : (b))

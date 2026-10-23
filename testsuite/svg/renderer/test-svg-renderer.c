@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 #include "gtk/svg/gtksvgprivate.h"
 #include "gtk/svg/gtksvgenumtypes.h"
-#include "testsuite/testutils.h"
+#include "testutils/testutils.h"
 
 typedef struct
 {

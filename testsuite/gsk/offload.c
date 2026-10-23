@@ -35,7 +35,7 @@
 
 #include <fcntl.h>
 
-#include "../testutils.h"
+#include "testutils/testutils.h"
 
 static char *
 test_get_sibling_file (const char *node_file,

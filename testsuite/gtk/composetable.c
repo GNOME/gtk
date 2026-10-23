@@ -5,7 +5,7 @@
 
 #include "../gtk/gtkcomposetable.h"
 #include "../gtk/gtkimcontextsimpleseqs.h"
-#include "testsuite/testutils.h"
+#include "testutils/testutils.h"
 
 static void
 append_escaped (GString    *str,

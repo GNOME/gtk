@@ -27,8 +27,8 @@
 #include <unistd.h>
 #endif
 
-#include "testsuite/testutils.h"
-#include "testsuite/diff/diff.h"
+#include "testutils.h"
+#include "diff/diff.h"
 
 char *
 diff_bytes (const char *file,

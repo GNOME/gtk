@@ -916,6 +916,7 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 
+subdir('testutils')
 subdir('tools')
 subdir('po')
 subdir('docs/reference')

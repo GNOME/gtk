@@ -27,7 +27,7 @@
 #include "gtk/svg/gtksvgserializeprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gdk/gdkeventsprivate.h"
-#include "testsuite/testutils.h"
+#include "testutils/testutils.h"
 
 static char *
 file_replace_extension (const char *old_file,
