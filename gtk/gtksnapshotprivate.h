@@ -68,7 +68,7 @@ void                    gtk_snapshot_push_arithmetic            (GtkSnapshot    
 void                    gtk_snapshot_push_blur2                 (GtkSnapshot            *snapshot,
                                                                  const graphene_size_t  *sigma);
 void                    gtk_snapshot_push_color_matrix2         (GtkSnapshot             *snapshot,
-                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_rect_t   *clip,
                                                                  GdkColorState           *color_state,
                                                                  const graphene_matrix_t *color_matrix,
                                                                  const graphene_vec4_t   *color_offset);
