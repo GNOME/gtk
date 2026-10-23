@@ -1482,6 +1482,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         const graphene_matrix_t *matrix = gsk_color_matrix_node_get_color_matrix (node);
         const graphene_vec4_t *offset = gsk_color_matrix_node_get_color_offset (node);
 
+        add_rect_row (store, "Clip", gsk_color_matrix_node_get_clip (node));
         add_snap_row (store, "Snap", gsk_color_matrix_node_get_snap (node));
         add_text_row (store, "Matrix",
                              "% .2f % .2f % .2f % .2f\n"
