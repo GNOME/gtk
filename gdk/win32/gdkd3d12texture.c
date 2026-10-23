@@ -546,7 +546,7 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
                         mem_id,
                         0);
 
-  fence_handle = gdk_d3d12_texture_get_resource_handle (self);
+  fence_handle = gdk_d3d12_texture_get_fence_handle (self);
   if (fence_handle)
     {
       glGenSemaphoresEXT (1, &sema_id);
