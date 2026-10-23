@@ -291,7 +291,6 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
 
   if (entry->VirtualKey == vk)
     {
-      gboolean have_sgcaps    = FALSE;
       WCHAR    best_char      = WCH_NONE;
       BYTE     best_modifiers = 0;
       int      best_score     = -1;
@@ -316,18 +315,23 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           (lock_bits & CAPLOK))
         mod_bits ^= KBDSHIFT;
 
-      /* In the Swiss German layout, CapsLock + key is different from Shift + key
-       * for some keys. For such keys, the characters for active capslock are
-       * in the next entry. */
-      if ((entry->Attributes & SGCAPS) &&
-          (lock_bits & CAPLOK))
-        have_sgcaps = TRUE;
-
       /* I'm not totally sure how kanalok behaves, for now I assume that there
        * aren't any special cases. */
       if ((entry->Attributes & KANALOK) &&
           (lock_bits & KANALOK))
         mod_bits ^= KBDKANA;
+
+      /* In the Swiss German layout, CapsLock + key is different from Shift + key
+       * for some keys. For such keys, the whole next entry is used while
+       * capslock is active, but not when Ctrl is down (like CAPLOK, Alt is
+       * ignored). */
+      if ((entry->Attributes & SGCAPS) &&
+          !(mod_bits & ~(KBDSHIFT | KBDALT)) &&
+          (lock_bits & CAPLOK))
+        {
+          entry = (PVK_TO_WCHARS) ((PBYTE) entry + entry_size);
+          entry_index++;
+        }
 
       /* We try to find the entry with the most matching modifiers */
       for (level = 0; level < n_levels; ++level)
@@ -349,9 +353,9 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
             continue;
 
           c = entry->wch[level];
-          if (c == WCH_DEAD || have_sgcaps)
+          if (c == WCH_DEAD)
             {
-              /* Next entry contains the undead/capslocked keys */
+              /* Next entry contains the undead keys */
               PVK_TO_WCHARS next_entry;
               next_entry = (PVK_TO_WCHARS) ((PBYTE) wch_table->pVkToWchars.ptr
                                             + entry_size * (entry_index + 1));
