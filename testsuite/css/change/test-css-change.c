@@ -21,7 +21,7 @@
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "testsuite/testutils.h"
+#include "testutils/testutils.h"
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 

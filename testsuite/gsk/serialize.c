@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "../testutils.h"
+#include "testutils/testutils.h"
 
 static const char *file;
 

@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 #include "gtk/svg/gtksvgprivate.h"
 #include "gtk/svg/gtksvgpaintprivate.h"
-#include "testsuite/testutils.h"
+#include "testutils/testutils.h"
 
 typedef enum {
   TEST_FLAG_NONE              = 0,

@@ -73,6 +73,20 @@ rnt_context_get_node (RntContext *self,
 }
 
 /**
+ * rnt_context_get_n_nodes:
+ * @self: the context
+ *
+ * Gets the number of nodes on the node stack.
+ *
+ * Returns: the size of the node stack
+ */
+size_t
+rnt_context_get_n_nodes (RntContext *self)
+{
+  return self->nodes->len;
+}
+
+/**
  * rnt_context_push_node:
  * @self: the context
  * @node: (transfer full) the rendernode to push
