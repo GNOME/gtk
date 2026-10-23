@@ -532,3 +532,110 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return FALSE;
 }
 
+/* Create a GSource from a win32 HANDLE, adapted from libwing */
+typedef gboolean (* _GdkWin32HandleSourceFunc) (HANDLE        handle,
+                                                gpointer      user_data);
+
+typedef struct {
+  GSource source;
+  GPollFD pollfd;
+} _GdkWin32HandleSource;
+
+static gboolean
+_gdk_win32_handle_source_prepare (GSource *source,
+                     gint    *timeout)
+{
+  *timeout = -1;
+  return FALSE;
+}
+
+static gboolean
+_gdk_win32_handle_source_check (GSource *source)
+{
+  _GdkWin32HandleSource *hsource = (_GdkWin32HandleSource *)source;
+
+  return hsource->pollfd.revents;
+}
+
+static gboolean
+_gdk_win32_handle_source_dispatch (GSource     *source,
+                      GSourceFunc  callback,
+                      gpointer     user_data)
+{
+  _GdkWin32HandleSourceFunc func = (_GdkWin32HandleSourceFunc)callback;
+  _GdkWin32HandleSource *hsource = (_GdkWin32HandleSource *)source;
+
+  return func ((HANDLE)hsource->pollfd.fd, user_data);
+}
+
+static void
+_gdk_win32_handle_source_finalize (GSource *source)
+{
+}
+
+static gboolean
+_gdk_win32_handle_source_closure_callback (HANDLE   handle,
+                              gpointer data)
+{
+  GClosure *closure = data;
+
+  GValue param = G_VALUE_INIT;
+  GValue result_value = G_VALUE_INIT;
+  gboolean result;
+
+  g_value_init (&result_value, G_TYPE_BOOLEAN);
+
+  g_value_init (&param, G_TYPE_POINTER);
+  g_value_set_pointer (&param, handle);
+
+  g_closure_invoke (closure, &result_value, 1, &param, NULL);
+
+  result = g_value_get_boolean (&result_value);
+  g_value_unset (&result_value);
+  g_value_unset (&param);
+
+  return result;
+}
+
+GSourceFuncs _gdk_win32_handle_source_funcs = {
+  _gdk_win32_handle_source_prepare,
+  _gdk_win32_handle_source_check,
+  _gdk_win32_handle_source_dispatch,
+  _gdk_win32_handle_source_finalize,
+  (GSourceFunc)_gdk_win32_handle_source_closure_callback,
+};
+
+/**
+ * _gdk_win32_handle_source_new:
+ * @handle: a windows HANDLE
+ * @condition: a #GIOCondition mask to monitor
+ *
+ * Creates a #GSource that can be attached to a %GMainContext to monitor
+ * for the availability of the specified @condition on the handle.
+ *
+ * The callback on the source is of the #_GdkWin32HandleSourceFunc type.
+ *
+ * Returns: (transfer full): a newly allocated %GSource, free with g_source_unref().
+ */
+GSource *
+_gdk_win32_handle_source_new (HANDLE        handle,
+                              GIOCondition  condition)
+{
+  _GdkWin32HandleSource *hsource;
+  GSource *source;
+
+  source = g_source_new (&_gdk_win32_handle_source_funcs, sizeof (_GdkWin32HandleSource));
+  hsource = (_GdkWin32HandleSource *)source;
+  g_source_set_name (source, "_GdkWin32HandleSource");
+
+#if GLIB_SIZEOF_VOID_P == 8
+  hsource->pollfd.fd = (gint64)handle;
+#else
+  hsource->pollfd.fd = (gint)handle;
+#endif
+  hsource->pollfd.events = condition;
+  hsource->pollfd.revents = 0;
+  g_source_add_poll (source, &hsource->pollfd);
+
+  return source;
+}
