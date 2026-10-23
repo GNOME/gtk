@@ -171,7 +171,7 @@ typedef struct
                                      const BYTE                keystate[256]);
   BYTE      (*modbits_to_level)     (GdkWin32KeymapLayoutInfo *info,
                                      BYTE                      modbits);
-  WCHAR     (*vk_to_char_fuzzy)     (GdkWin32KeymapLayoutInfo *info,
+  gunichar  (*vk_to_char_fuzzy)     (GdkWin32KeymapLayoutInfo *info,
                                      BYTE                      mod_bits,
                                      BYTE                      lock_bits,
                                      BYTE                     *consumed_mod_bits,

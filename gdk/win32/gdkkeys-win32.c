@@ -162,7 +162,7 @@ modbits_to_level (GdkWin32Keymap           *keymap,
   return keymap->gdkwin32_keymap_impl->modbits_to_level (info, modbits);
 }
 
-static WCHAR
+static gunichar
 vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
                   GdkWin32KeymapLayoutInfo *info,
                   BYTE                      mod_bits,
@@ -809,7 +809,8 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
   c = vk_to_char_fuzzy (keymap, info, mod_bits, lock_bits,
                         consumed_mod_bits, &is_dead, vk);
 
-  if (c == WCH_NONE)
+  /* A ligature of several code points has no keyval, but it did use the level */
+  if (c == WCH_NONE || c == WCH_LGTR)
     return GDK_KEY_VoidSymbol;
 
   sym = gdk_unicode_to_keyval (c);
