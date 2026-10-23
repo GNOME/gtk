@@ -700,6 +700,7 @@ gdk_frame_clock_begin_frame (GdkFrameClock *self,
             .timings = _gdk_frame_timings_new (priv->frame_counter),
           };
           frames_splice (&priv->frames, next, 0, FALSE, &new_frame, 1);
+          frame = frames_get (&priv->frames, next);
         }
       else
         {
