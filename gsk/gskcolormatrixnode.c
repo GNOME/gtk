@@ -448,7 +448,7 @@ gsk_color_matrix_node_get_snap (const GskRenderNode *node)
 
 /*< private >
  * gsk_color_matrix_node_get_clip:
- * @node: (type GskClipNode): a `GskClipNode`
+ * @node: (type GskColorMatrixNode): a `GskClipNode`
  *
  * Retrieves the clip rectangle for @node.
  *
