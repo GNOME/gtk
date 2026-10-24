@@ -42,6 +42,7 @@ struct _GskComponentTransferNode
   GskRenderNode *child;
   GdkColorState *color_state;
   GskComponentTransfer transfer[4];
+  graphene_rect_t clip;
   GskRectSnap snap;
 };
 
@@ -176,6 +177,7 @@ gsk_component_transfer_node_can_diff (const GskRenderNode *node1,
   GskComponentTransferNode *self2 = (GskComponentTransferNode *) node2;
 
   return gdk_color_state_equal (self1->color_state, self2->color_state) &&
+         gsk_rect_equal (&self1->clip, &self2->clip) &&
          gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_RED], &self2->transfer[GDK_COLOR_CHANNEL_RED]) &&
          gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_GREEN], &self2->transfer[GDK_COLOR_CHANNEL_GREEN]) &&
          gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_BLUE], &self2->transfer[GDK_COLOR_CHANNEL_BLUE]) &&
@@ -222,7 +224,7 @@ gsk_component_transfer_node_replay (GskRenderNode   *node,
   if (child == self->child)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_component_transfer_node_new2 (&node->bounds,
+    result = gsk_component_transfer_node_new2 (&self->clip,
                                                self->snap,
                                                child,
                                                self->color_state,
@@ -256,7 +258,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_no
 
 /*< private >
  * gsk_component_transfer_node_new2:
- * @bounds: The rectangle to operate in
+ * @clip: The rectangle to operate in
  * @snap: how to snap the clip rectangle to the pixel grid
  * @child: The child to apply component transfers to
  * @color_state: the color state to operate in
@@ -271,7 +273,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskComponentTransferNode, gsk_component_transfer_no
  * Returns: (transfer full) (type GskComponentTransferNode): A new `GskRenderNode`
  */
 GskRenderNode *
-gsk_component_transfer_node_new2 (const graphene_rect_t      *bounds,
+gsk_component_transfer_node_new2 (const graphene_rect_t      *clip,
                                   GskRectSnap                 snap,
                                   GskRenderNode              *child,
                                   GdkColorState              *color_state,
@@ -289,12 +291,15 @@ gsk_component_transfer_node_new2 (const graphene_rect_t      *bounds,
   self = gsk_render_node_alloc (GSK_TYPE_COMPONENT_TRANSFER_NODE);
   node = (GskRenderNode *) self;
 
-  node->bounds = *bounds;
+  self->clip = *clip;
+
+  if (!gsk_rect_intersection (clip, &child->bounds, &node->bounds))
+    {
+      /* keep the line/point, it's not worse than 0 0 0 0 */
+    }
 
   self->snap = snap;
-
   self->child = gsk_render_node_ref (child);
-
   self->color_state = gdk_color_state_ref (color_state);
 
   gsk_component_transfer_init_copy (&self->transfer[GDK_COLOR_CHANNEL_RED], r);
@@ -384,7 +389,7 @@ gsk_component_transfer_node_get_transfer (const GskRenderNode *node,
 
 /*< private >
  * gsk_component_transfer_node_get_color_state:
- * @node: (type GskArithmeticNode): a `GskRenderNode`
+ * @node: (type GskComponentTransferNode): a `GskRenderNode`
  *
  * Retrieves the color state of the @node.
  *
@@ -400,7 +405,7 @@ gsk_component_transfer_node_get_color_state (const GskRenderNode *node)
 
 /**
  * gsk_component_transfer_node_get_snap:
- * @node: (type GskColorMatrixNode): a `GskColorMatrixNode`
+ * @node: (type GskComponentTransferNode): a `GskColorMatrixNode`
  *
  * Retrieves the snap value for this node.
  *
@@ -414,4 +419,20 @@ gsk_component_transfer_node_get_snap (const GskRenderNode *node)
   const GskComponentTransferNode *self = (const GskComponentTransferNode *) node;
 
   return self->snap;
+}
+
+/*< private >
+ * gsk_component_transfer_node_get_clip:
+ * @node: (type GskComponentTransferNode): a `GskClipNode`
+ *
+ * Retrieves the clip rectangle for @node.
+ *
+ * Returns: a clip rectangle
+ */
+const graphene_rect_t *
+gsk_component_transfer_node_get_clip (const GskRenderNode *node)
+{
+  const GskComponentTransferNode *self = (const GskComponentTransferNode *) node;
+
+  return &self->clip;
 }
