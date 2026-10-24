@@ -21,8 +21,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static void
 rect_snap_grow (graphene_rect_t *rect)

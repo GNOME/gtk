@@ -19,138 +19,10 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "rntcontext.h"
-
-typedef struct _Filter Filter;
-
-struct _Filter
-{
-  const char *name;
-  const char *description;
-  GskRenderNode * (* run) (GskRenderNode *node,
-                           RntContext    *ctx,
-                           int            argc,
-                           const char   **argv);
-};
-
-static const Filter filters[] = {
-  {
-    .name = "background-blur",
-    .description = "Show where background blur would take effect",
-    .run = filter_background_blur,
-  },
-  {
-    .name = "benchmark",
-    .description = "Show where background blur would take effect",
-    .run = filter_benchmark,
-  },
-  {
-    .name = "compare",
-    .description = "Compare rendering to .node or .png files.",
-    .run = filter_compare,
-  },
-  {
-    .name = "copypaste",
-    .description = "Replace copy/paste nodes with copies of nodes",
-    .run = filter_copypaste,
-  },
-  {
-    .name = "cut",
-    .description = "Cut out a part of the rendernode",
-    .run = filter_cut,
-  },
-  {
-    .name = "diff",
-    .description = "Show where two nodes differ",
-    .run = filter_diff,
-  },
-  {
-    .name = "extract",
-    .description = "Extract textures and glyphs",
-    .run = filter_extract,
-  },
-  {
-    .name = "info",
-    .description = "Provide information about the render node.",
-    .run = filter_info,
-  },
-  {
-    .name = "load-icon",
-    .description = "Load icons from filenames",
-    .run = filter_load_icon,
-  },
-  {
-    .name = "load-svg",
-    .description = "Load from SVGs",
-    .run = filter_load_icon,
-  },
-  {
-    .name = "match",
-    .description = "Match patterns in the render node.",
-    .run = filter_match,
-  },
-  {
-    .name = "merge",
-    .description = "Merge the stack of nodes into one",
-    .run = filter_merge,
-  },
-  {
-    .name = "opaque",
-    .description = "Show the opaque part",
-    .run = filter_opaque,
-  },
-  {
-    .name = "print",
-    .description = "Print the node",
-    .run = filter_print,
-  },
-  {
-    .name = "render",
-    .description = "Render to an image.",
-    .run = filter_render,
-  },
-  {
-    .name = "save",
-    .description = "Save current node to file",
-    .run = filter_save,
-  },
-  {
-    .name = "show",
-    .description = "Show the render node",
-    .run = filter_show,
-  },
-  {
-    .name = "simplify",
-    .description = "Simplify the node by keeping it functionally identical",
-    .run = filter_simplify,
-  },
-  {
-    .name = "strip",
-    .description = "Strip debug nodes (and others)",
-    .run = filter_strip,
-  },
-  {
-    .name = "texture",
-    .description = "Convert textures",
-    .run = filter_texture,
-  },
-};
-
-static const Filter *
-filter_find (const char *name)
-{
-  gsize i;
-
-  for (i = 0; i < G_N_ELEMENTS (filters); i++)
-    {
-      if (g_str_equal (name, filters[i].name))
-        return &filters[i];
-    }
-
-  return NULL;
-}
+#include "rntfilter.h"
 
 static char **
 filter_argv (const char **argv,
@@ -166,7 +38,7 @@ filter_argv (const char **argv,
 
   for (i = 1; i < argc; i++)
     {
-      if (filter_find (argv[i]))
+      if (rnt_filter_find (argv[i]))
         break;
 
       g_strv_builder_add (builder, argv[i]);
@@ -182,14 +54,21 @@ list_filters (void)
   int name_len;
 
   name_len = 0;
-  for (i = 0; i < G_N_ELEMENTS (filters); i++)
+  for (i = 0; i < rnt_filter_n_filters (); i++)
     {
-      name_len = MAX (name_len, strlen (filters[i].name));
+      const RntFilter *filter = rnt_filter_get (i);
+
+      name_len = MAX (name_len, strlen (rnt_filter_get_name (filter)));
     }
 
-  for (i = 0; i < G_N_ELEMENTS (filters); i++)
+  for (i = 0; i < rnt_filter_n_filters (); i++)
     {
-      g_print ("%*s\t%s\n", name_len, filters[i].name, filters[i].description);
+      const RntFilter *filter = rnt_filter_get (i);
+
+      g_print ("%*s\t%s\n",
+               name_len,
+               rnt_filter_get_name (filter),
+               rnt_filter_get_description (filter));
     }
 }
 
@@ -201,12 +80,12 @@ run_filters (GskRenderNode  *node,
 {
   while (argc > 0)
     {
-      const Filter *filter;
+      const RntFilter *filter;
       char **argv_part;
       gsize argc_part;
       GskRenderNode *result;
 
-      filter = filter_find (argv[0]);
+      filter = rnt_filter_find (argv[0]);
       if (filter == NULL)
         {
           g_printerr (_("Argument \"%s\" is not a known filter\n"), argv[0]);
@@ -216,7 +95,7 @@ run_filters (GskRenderNode  *node,
       argv_part = filter_argv (argv, argc);
       argc_part = g_strv_length (argv_part);
 
-      result = filter->run (node, ctx, argc_part, (const char **) argv_part);
+      result = rnt_filter_run (filter, node, ctx, argc_part, (const char **) argv_part);
       if (result == NULL)
         exit (1);
       gsk_render_node_unref (node);

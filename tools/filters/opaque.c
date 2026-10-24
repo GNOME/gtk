@@ -19,10 +19,11 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "overlayconfig.h"
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 GskRenderNode *
 filter_opaque (GskRenderNode  *node,

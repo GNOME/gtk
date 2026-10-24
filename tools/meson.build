@@ -64,6 +64,7 @@ gtk_tools = [
                         'gtk-tool-utils.c',
                         'overlayconfig.c',
                         'rntcontext.c',
+                        'rntfilter.c',
                         '../testsuite/reftests/reftest-compare.c'], [libgtk_private_dep] ],
   ['gtk4-image-tool', ['gtk-image-tool.c',
                        'gtk-image-tool-info.c',

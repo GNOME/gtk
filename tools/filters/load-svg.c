@@ -27,8 +27,9 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static GskRenderNode *
 svg_load (const char *filename,

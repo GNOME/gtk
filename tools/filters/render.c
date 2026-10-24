@@ -27,7 +27,7 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "gtk-tool-utils.h"
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
@@ -35,7 +35,9 @@
 #ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
 #endif
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 #if defined(CAIRO_HAS_SVG_SURFACE) || defined(CAIRO_HAS_PDF_SURFACE)
 static cairo_status_t

@@ -19,8 +19,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static void
 merge_containers_add_children (GPtrArray     *array,

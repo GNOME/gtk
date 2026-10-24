@@ -3,6 +3,7 @@
 #include <gtk/gtk.h>
 
 typedef struct _RntContext RntContext;
+typedef struct _RntFilter RntFilter;
 
 typedef void (* RntContextPrintFunc) (const char *message, void *user_data);
 
