@@ -41,5 +41,5 @@ filter_print (GskRenderNode *node,
   rnt_context_print (ctx, "%s", (const char *) g_bytes_get_data (bytes, NULL));
   g_bytes_unref (bytes);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

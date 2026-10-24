@@ -77,5 +77,5 @@ filter_save (GskRenderNode *node,
         }
     }
 
-  return node;
+  return gsk_render_node_ref (node);
 }

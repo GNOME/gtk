@@ -212,11 +212,11 @@ filter_merge (GskRenderNode  *node,
 
   if (keep)
     {
+      gsk_render_node_ref (node);
       rnt_context_push_node (ctx, node);
     }
   else
     {
-      gsk_render_node_unref (node);
       rnt_context_clear_nodes (ctx);
     }
 

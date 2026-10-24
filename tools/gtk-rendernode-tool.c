@@ -204,6 +204,7 @@ run_filters (GskRenderNode  *node,
       const Filter *filter;
       char **argv_part;
       gsize argc_part;
+      GskRenderNode *result;
 
       filter = filter_find (argv[0]);
       if (filter == NULL)
@@ -215,7 +216,9 @@ run_filters (GskRenderNode  *node,
       argv_part = filter_argv (argv, argc);
       argc_part = g_strv_length (argv_part);
 
-      node = filter->run (node, ctx, argc_part, (const char **) argv_part);
+      result = filter->run (node, ctx, argc_part, (const char **) argv_part);
+      gsk_render_node_unref (node);
+      node = result;
 
       g_strfreev (argv_part);
       argv += argc_part;

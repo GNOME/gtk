@@ -327,5 +327,5 @@ filter_render (GskRenderNode  *node,
 
   g_strfreev (filenames);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

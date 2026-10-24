@@ -127,5 +127,5 @@ filter_show (GskRenderNode  *node,
 
   show_node (node, NULL, decorate, offload);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

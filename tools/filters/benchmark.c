@@ -140,5 +140,5 @@ filter_benchmark (GskRenderNode  *node,
   g_strfreev (filenames);
   g_strfreev (renderers);
 
-  return node;
+  return gsk_render_node_ref (node);
 }
