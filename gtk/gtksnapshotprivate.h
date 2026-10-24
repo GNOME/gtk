@@ -62,7 +62,7 @@ void                    gtk_snapshot_push_displacement          (GtkSnapshot    
                                                                  const graphene_size_t  *scale,
                                                                  const graphene_point_t *offset);
 void                    gtk_snapshot_push_arithmetic            (GtkSnapshot            *snapshot,
-                                                                 const graphene_rect_t  *bounds,
+                                                                 const graphene_rect_t  *clip,
                                                                  GdkColorState          *color_state,
                                                                  const float             factors[4]);
 void                    gtk_snapshot_push_blur2                 (GtkSnapshot            *snapshot,

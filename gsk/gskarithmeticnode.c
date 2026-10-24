@@ -50,6 +50,7 @@ struct _GskArithmeticNode
   };
   GdkColorState *color_state;
   float factors[4];
+  graphene_rect_t clip;
   GskRectSnap snap;
 };
 
@@ -232,6 +233,7 @@ gsk_arithmetic_node_diff (GskRenderNode *node1,
       self1->factors[2] == self2->factors[2] &&
       self1->factors[3] == self2->factors[3] &&
       self1->snap == self2->snap &&
+      gsk_rect_equal (&self1->clip, &self2->clip) &&
       gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsk_render_node_diff (self1->first, self2->first, data);
@@ -279,7 +281,7 @@ gsk_arithmetic_node_replay (GskRenderNode   *node,
   if (first == self->first && second == self->second)
     result = gsk_render_node_ref (node);
   else
-    result = gsk_arithmetic_node_new (&node->bounds,
+    result = gsk_arithmetic_node_new (&self->clip,
                                       self->snap,
                                       first, second,
                                       self->color_state,
@@ -310,7 +312,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskArithmeticNode, gsk_arithmetic_node)
 
 /*< private >
  * gsk_arithmetic_node_new:
- * @bounds: The bounds for the node
+ * @clip: The rectangle to operate in
  * @snap: how to snap the rectangle to the pixel grid
  * @first: The first node to be composited
  * @second: The second node to be composited
@@ -323,7 +325,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskArithmeticNode, gsk_arithmetic_node)
  * Returns: (transfer full) (type GskArithmeticNode): A new `GskRenderNode`
  */
 GskRenderNode *
-gsk_arithmetic_node_new (const graphene_rect_t *bounds,
+gsk_arithmetic_node_new (const graphene_rect_t *clip,
                          GskRectSnap            snap,
                          GskRenderNode         *first,
                          GskRenderNode         *second,
@@ -345,6 +347,7 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
       return NULL;
     }
 
+  self->clip = *clip;
   self->snap = snap;
   self->first = gsk_render_node_ref (first);
   self->second = gsk_render_node_ref (second);
@@ -356,13 +359,13 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
 
   if (factors[3] > 0.0)
     {
-      node->bounds = *bounds;
+      node->bounds = *clip;
     }
   else
     {
       graphene_rect_t child_bounds;
       graphene_rect_union (&first->bounds, &second->bounds, &child_bounds);
-      graphene_rect_intersection (bounds, &child_bounds, &node->bounds);
+      graphene_rect_intersection (clip, &child_bounds, &node->bounds);
     }
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (first),
@@ -372,8 +375,8 @@ gsk_arithmetic_node_new (const graphene_rect_t *bounds,
   node->fully_opaque = !gsk_rect_snap_can_shrink (snap) &&
                        gsk_render_node_is_fully_opaque (first) &&
                        gsk_render_node_is_fully_opaque (second) &&
-                       gsk_rect_contains_rect (&first->bounds, bounds) &&
-                       gsk_rect_contains_rect (&second->bounds, bounds) &&
+                       gsk_rect_contains_rect (&first->bounds, clip) &&
+                       gsk_rect_contains_rect (&second->bounds, clip) &&
                        factors[0] + factors[1] + factors[2] + factors[3] >= 1;
   node->bilevel_opacity = node->fully_opaque;
   node->isolates_background = TRUE;
@@ -463,4 +466,20 @@ gsk_arithmetic_node_get_snap (const GskRenderNode *node)
   const GskArithmeticNode *self = (const GskArithmeticNode *) node;
 
   return self->snap;
+}
+
+/*< private >
+ * gsk_arithmetic_node_get_clip:
+ * @node: (type GskArithmeticNode): a `GskClipNode`
+ *
+ * Retrieves the clip rectangle for @node.
+ *
+ * Returns: a clip rectangle
+ */
+const graphene_rect_t *
+gsk_arithmetic_node_get_clip (const GskRenderNode *node)
+{
+  const GskArithmeticNode *self = (const GskArithmeticNode *) node;
+
+  return &self->clip;
 }

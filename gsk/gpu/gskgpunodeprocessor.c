@@ -2657,9 +2657,9 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
 
   k = gsk_arithmetic_node_get_factors (node);
   if (!gsk_gpu_node_processor_clip_bounds (self,
-                                           &node->bounds,
+                                           gsk_arithmetic_node_get_clip (node),
                                            gsk_arithmetic_node_get_snap (node),
-                                           &bounds) || 
+                                           &bounds) ||
       !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &clip_bounds))
     return;
 

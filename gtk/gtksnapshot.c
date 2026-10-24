@@ -207,7 +207,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       graphene_point_t offset;
     } displacement;
     struct {
-      graphene_rect_t bounds;
+      graphene_rect_t clip;
       GskRectSnap snap;
       GskRenderNode *first_node;
       GdkColorState *color_state;
@@ -2313,7 +2313,7 @@ gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
   if (second_node == NULL)
     second_node = gsk_container_node_new (NULL, 0);
 
-  node = gsk_arithmetic_node_new (&state->data.arithmetic.bounds,
+  node = gsk_arithmetic_node_new (&state->data.arithmetic.clip,
                                   state->data.arithmetic.snap,
                                   state->data.arithmetic.first_node,
                                   second_node,
@@ -2350,15 +2350,15 @@ gtk_snapshot_collect_arithmetic_first (GtkSnapshot      *snapshot,
 /*<private>
  * gtk_snapshot_push_arithmetic:
  * @snapshot: a `GtkSnapshot`
- * @bounds: The rectangle to apply to
+ * @clip: The rectangle to apply to
  * @color_state: The color state to composite the 2 nodes in
  * @factors: the 4 factors, often named "k1" to "k4"
  *
  * Snapshots 2 children and composites them algorithmically with the given
- * factors. This 
- * Snapshots a displacement operation that will use a displacement
- * mask to displace a given image. This is modeled after [SVG's feComposite
- * filter with using operator=arithmetic](https://drafts.csswg.org/filter-effects/#elementdef-fecomposite)
+ * factors.
+ *
+ * This is modeled after [SVG's feComposite filter with using
+ * operator=arithmetic](https://drafts.csswg.org/filter-effects/#elementdef-fecomposite)
  *
  * Until the first call to [method@Gtk.Snapshot.pop], the first child will
  * be snapshot. After that call, the second child will be recorded until
@@ -2369,7 +2369,7 @@ gtk_snapshot_collect_arithmetic_first (GtkSnapshot      *snapshot,
  */
 void
 gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
-                              const graphene_rect_t *bounds,
+                              const graphene_rect_t *clip,
                               GdkColorState         *color_state,
                               const float            factors[4])
 {
@@ -2378,7 +2378,7 @@ gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
   float dx, dy, scale_x, scale_y;
 
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (bounds != NULL);
+  g_return_if_fail (clip != NULL);
   g_return_if_fail (color_state != NULL);
   g_return_if_fail (factors != NULL);
 
@@ -2388,7 +2388,7 @@ gtk_snapshot_push_arithmetic (GtkSnapshot           *snapshot,
                                    current_state->transform,
                                    gtk_snapshot_collect_arithmetic,
                                    gtk_snapshot_clear_arithmetic);
-  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.arithmetic.bounds);
+  gtk_graphene_rect_scale_affine (clip, scale_x, scale_y, dx, dy, &state->data.arithmetic.clip);
   state->data.arithmetic.color_state = gdk_color_state_ref (color_state);
   state->data.arithmetic.factors[0] = factors[0];
   state->data.arithmetic.factors[1] = factors[1];
