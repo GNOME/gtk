@@ -244,6 +244,7 @@ gnomeos-x86_64:
   extends:
     - .test-runner
   needs: []
+  allow_failure: true
   stage: build
   image: "quay.io/gnome_infrastructure/gnome-build-meta:gnomeos-devel-nightly"
   variables:
@@ -528,7 +529,6 @@ android:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 .android-defaults:
-  allow_failure: true
   extends:
     - .distribution.android
   stage: android
@@ -569,7 +569,6 @@ android-signer:
   extends:
     - .distribution.android
   stage: android
-  allow_failure: true
   artifacts:
     paths:
       - apks
