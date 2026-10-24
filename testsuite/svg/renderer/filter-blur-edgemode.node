@@ -14,7 +14,7 @@ transform {
   child: clip {
     clip: 10 10 120 120;
     child: blur {
-      blur: 20;
+      radius: 10;
       child: repeat {
         bounds: 10 10 120 120;
         child-bounds: 20 20 100 100;
@@ -38,7 +38,7 @@ transform {
   child: clip {
     clip: 10 10 120 120;
     child: blur {
-      blur: 20;
+      radius: 10;
       child: repeat {
         bounds: 10 10 120 120;
         child-bounds: 20 20 100 100;
@@ -61,7 +61,7 @@ transform {
   child: clip {
     clip: 10 10 120 120;
     child: blur {
-      blur: 20;
+      radius: 10;
       child: container {
         color {
           bounds: 20 20 100 100;

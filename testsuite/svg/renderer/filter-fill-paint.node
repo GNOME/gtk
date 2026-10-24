@@ -4,7 +4,7 @@ clip {
     clip {
       clip: -5 -5 60 60;
       child: blur {
-        blur: 20;
+        radius: 10;
         child: color {
           bounds: -5 -5 60 60;
           color: rgb(0,0,255);
@@ -18,7 +18,7 @@ clip {
     clip {
       clip: 25 25 60 60;
       child: blur {
-        blur: 20;
+        radius: 10;
         child: color {
           bounds: 25 25 60 60;
           color: rgb(255,0,0);
@@ -32,7 +32,7 @@ clip {
     clip {
       clip: 55 55 60 60;
       child: blur {
-        blur: 20;
+        radius: 10;
         child: linear-gradient {
           bounds: 55 55 60 60;
           start: 55 55;

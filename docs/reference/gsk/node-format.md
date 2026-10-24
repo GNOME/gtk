@@ -311,14 +311,14 @@ people to change it.
 | property | syntax           | default                | printed     |
 | -------- | ---------------- | ---------------------- | ----------- |
 | child    | `<node>`         | color { }              | always      |
-| bounds   | `<rect>`         | *see below*            | always      |
+| clip     | `<rect>`         | *see below*            | always      |
 | snap     | `<snap>`         | none                   | non-default |
 | matrix   | `<transform>`    | none                   | non-default |
 | offset   | `<number>{4}`    | 0 0 0 0                | non-default |
 
 Creates a node like `gsk_color_matrix_node_new()` with the given properties.
 
-The bounds will be set to the child's bounds if unspecified for backwards
+The clip will be set to the child's bounds if unspecified for backwards
 compatibility reasons.
 
 The matrix property accepts a <transform> for compatibility purposes, but you
