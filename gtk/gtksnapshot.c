@@ -122,7 +122,7 @@ struct _GtkSnapshotState {
       GdkColorState *color_state;
     } color_matrix;
     struct {
-      graphene_rect_t bounds;
+      graphene_rect_t clip;
       GdkColorState *color_state;
       GskComponentTransfer *red;
       GskComponentTransfer *green;
@@ -872,10 +872,10 @@ gtk_snapshot_collect_component_transfer (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
- if (graphene_size_equal (&state->data.component_transfer.bounds.size, graphene_size_zero ()))
-    state->data.component_transfer.bounds = node->bounds;
+ if (graphene_size_equal (&state->data.component_transfer.clip.size, graphene_size_zero ()))
+    state->data.component_transfer.clip = node->bounds;
 
-  result = gsk_component_transfer_node_new2 (&state->data.component_transfer.bounds,
+  result = gsk_component_transfer_node_new2 (&state->data.component_transfer.clip,
                                              state->data.component_transfer.snap,
                                              node,
                                              state->data.component_transfer.color_state,
@@ -933,7 +933,7 @@ gtk_snapshot_push_component_transfer (GtkSnapshot                *snapshot,
 
 void
 gtk_snapshot_push_component_transfer2 (GtkSnapshot                *snapshot,
-                                       const graphene_rect_t      *bounds,
+                                       const graphene_rect_t      *clip,
                                        GdkColorState              *color_state,
                                        const GskComponentTransfer *red,
                                        const GskComponentTransfer *green,
@@ -951,7 +951,7 @@ gtk_snapshot_push_component_transfer2 (GtkSnapshot                *snapshot,
                                    gtk_snapshot_collect_component_transfer,
                                    gtk_snapshot_clear_component_transfer);
 
-  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.component_transfer.bounds);
+  gtk_graphene_rect_scale_affine (clip, scale_x, scale_y, dx, dy, &state->data.component_transfer.clip);
   state->data.component_transfer.color_state = gdk_color_state_ref (color_state);
   state->data.component_transfer.red = gsk_component_transfer_copy (red);
   state->data.component_transfer.green = gsk_component_transfer_copy (green);
