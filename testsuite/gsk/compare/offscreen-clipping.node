@@ -1,0 +1,17 @@
+color {
+  bounds: 0 0 2 1;
+  color: black;
+}
+
+color-matrix {
+  bounds: 0 0 0.5 1;
+  matrix: matrix3d(0, 1, 0, 0,
+                   1, 0, 0, 0,
+                   0, 0, 1, 0,
+                   0, 0, 0, 1);
+  child: color {
+    bounds: 0.75 0 1 1;
+    snap: grow;
+    color: #800;
+  }
+}

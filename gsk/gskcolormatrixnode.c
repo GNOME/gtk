@@ -171,6 +171,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
     return;
 
   cairo_push_group (cr);
+  cairo_reset_clip (cr);
 
   gsk_render_node_draw_full (self->child, cr, data);
 

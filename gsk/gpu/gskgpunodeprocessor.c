@@ -456,7 +456,14 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
 
   if (!(flags & GSK_GPU_AS_IMAGE_EXACT_SIZE))
     {
-      if (!gsk_rect_intersection (clip_bounds, &node->bounds, out_bounds))
+      if (!gsk_rect_snap_to_grid_grow (clip_bounds,
+                                       scale,
+                                       &GRAPHENE_POINT_INIT (- clip_bounds->origin.x,
+                                                             - clip_bounds->origin.y),
+                                       out_bounds))
+        return NULL;
+
+      if (!gsk_rect_intersection (out_bounds, &node->bounds, out_bounds))
         return NULL;
 
       if (!gsk_rect_snap_to_grid_grow (out_bounds,
