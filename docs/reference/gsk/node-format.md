@@ -331,6 +331,7 @@ matrix3d() production to specify all 16 values individually.
 | property    | syntax           | default                | printed     |
 | ----------- | ---------------- | ---------------------- | ----------- |
 | child       | `<node>`         | color { }              | always      |
+| clip        | `<rect>`         | *see below*            | always      |
 | red         | `<transfer>`     | none                   | non-default |
 | green       | `<transfer>`     | none                   | non-default |
 | blue        | `<transfer>`     | none                   | non-default |
@@ -338,6 +339,9 @@ matrix3d() production to specify all 16 values individually.
 | color-state | `<color-state>`  | srgb                   | non-default |
 
 Creates a node like `gsk_component_transfer_node_new()` with the given properties.
+
+The clip will be set to the child's bounds if unspecified for backwards
+compatibility reasons.
 
 Possible values for the transfer properties are:
 

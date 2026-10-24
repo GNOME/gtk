@@ -4407,10 +4407,10 @@ parse_component_transfer_node (GtkCssParser *parser,
   GskComponentTransfer *blue = NULL;
   GskComponentTransfer *alpha = NULL;
   GdkColorState *color_state = GDK_COLOR_STATE_SRGB;
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
-    { "bounds", parse_rect, NULL, &bounds },
+    { "clip", parse_rect, NULL, &clip },
     { "snap", parse_rect_snap, NULL, &snap },
     { "child", parse_node, clear_node, &child },
     { "red", parse_component_transfer, clear_component_transfer, &red },
@@ -4435,9 +4435,9 @@ parse_component_transfer_node (GtkCssParser *parser,
     alpha = gsk_component_transfer_new_identity ();
 
   if ((parse_result & (1 << 0)) == 0)
-    bounds = child->bounds;
+    clip = child->bounds;
 
-  result = gsk_component_transfer_node_new2 (&bounds, snap, child, color_state, red, green, blue, alpha);
+  result = gsk_component_transfer_node_new2 (&clip, snap, child, color_state, red, green, blue, alpha);
 
   gsk_component_transfer_free (red);
   gsk_component_transfer_free (green);
@@ -7403,6 +7403,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         start_node (p, "component-transfer", node_name);
 
         append_node_param (p, "child", gsk_component_transfer_node_get_child (node));
+        append_rect_param (p, "clip", gsk_component_transfer_node_get_clip (node));
         append_component_transfer_param (p, "red", gsk_component_transfer_node_get_transfer (node, 0));
         append_component_transfer_param (p, "green", gsk_component_transfer_node_get_transfer (node, 1));
         append_component_transfer_param (p, "blue", gsk_component_transfer_node_get_transfer (node, 2));
