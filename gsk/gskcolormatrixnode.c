@@ -197,6 +197,7 @@ gsk_color_matrix_node_diff (GskRenderNode *node1,
       self1->snap == self2->snap &&
       gdk_color_state_equal (self1->color_state, self2->color_state) &&
       graphene_vec4_equal (&self1->color_offset, &self2->color_offset) &&
+      graphene_rect_equal (&self1->clip, &self2->clip) &&
       graphene_matrix_equal_fast (&self1->color_matrix, &self2->color_matrix))
     {
       cairo_region_t *save;
@@ -447,7 +448,7 @@ gsk_color_matrix_node_get_snap (const GskRenderNode *node)
 
 /*< private >
  * gsk_color_matrix_node_get_clip:
- * @node: (type GskClipNode): a `GskClipNode`
+ * @node: (type GskColorMatrixNode): a `GskClipNode`
  *
  * Retrieves the clip rectangle for @node.
  *

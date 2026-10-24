@@ -1637,6 +1637,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         const char *component[] = { "Red", "Green", "Blue", "Alpha" };
         GString *s = g_string_new ("");
 
+        add_rect_row (store, "Clip", gsk_component_transfer_node_get_clip (node));
         add_snap_row (store, "Snap", gsk_component_transfer_node_get_snap (node));
         for (guint i = 0; i < 4; i++)
           {
