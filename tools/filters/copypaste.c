@@ -54,5 +54,5 @@ filter_copypaste (GskRenderNode  *node,
       exit (1);
     }
 
-  return gsk_render_node_replace_copy_paste (node);
+  return gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
 }

@@ -142,6 +142,8 @@ filter_load_svg (GskRenderNode  *node,
       exit (1);
     }
 
+  gsk_render_node_ref (node);
+
   for (i = g_strv_length (filenames); i-- > 0;)
     {
       if (node != rnt_context_get_null_node (ctx))

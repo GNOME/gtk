@@ -310,6 +310,8 @@ filter_match (GskRenderNode  *node,
       exit (1);
     }
 
+  gsk_render_node_ref (node);
+
   matches = find_matches (node, patterns[0]);
       
   if (count)

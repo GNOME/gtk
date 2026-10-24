@@ -66,10 +66,9 @@ filter_background_blur (GskRenderNode  *node,
   if (region)
     {
       result = overlay_config_render_region (&config, node, region);
-      gsk_render_node_unref (node);
     }
   else
-    result = node;
+    result = gsk_render_node_ref (node);
   g_clear_pointer (&region, cairo_region_destroy);
 
   return result;

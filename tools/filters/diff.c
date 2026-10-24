@@ -83,7 +83,6 @@ filter_diff (GskRenderNode  *node,
 
   result = overlay_config_render_region (&config, node, region);
   gsk_render_node_unref (reference);
-  gsk_render_node_unref (node);
   cairo_region_destroy (region);
 
   return result;

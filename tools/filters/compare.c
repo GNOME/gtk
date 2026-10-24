@@ -149,5 +149,5 @@ filter_compare (GskRenderNode  *node,
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

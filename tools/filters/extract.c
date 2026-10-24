@@ -232,5 +232,5 @@ filter_extract (GskRenderNode  *node,
   g_free (e.basename);
   g_hash_table_unref (e.fonts);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

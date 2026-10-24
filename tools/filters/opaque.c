@@ -62,10 +62,9 @@ filter_opaque (GskRenderNode  *node,
   if (gsk_render_node_get_opaque_rect (node, &opaque))
     {
       result = overlay_config_render_rect (&config, node, &opaque);
-      gsk_render_node_unref (node);
     }
   else
-    result = g_steal_pointer (&node);
+    result = gsk_render_node_ref (node);
 
   return result;
 }

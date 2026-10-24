@@ -76,7 +76,5 @@ filter_strip (GskRenderNode  *node,
   result = gsk_render_replay_filter_node (replay, node);
   gsk_render_replay_free (replay);
 
-  gsk_render_node_unref (node);
-
   return result;
 }
