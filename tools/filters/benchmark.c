@@ -45,7 +45,7 @@ benchmark_renderer (const char    *renderer_name,
   renderer = create_renderer (renderer_name, &error);
   if (renderer == NULL)
     {
-      g_printerr ("Could not benchmark renderer \"%s\": %s\n", renderer_name, error->message);
+      rnt_context_warn (ctx, "Could not benchmark renderer \"%s\": %s\n", renderer_name, error->message);
       g_clear_error (&error);
       return;
     }
@@ -122,9 +122,9 @@ filter_benchmark (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);

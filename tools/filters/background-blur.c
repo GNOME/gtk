@@ -22,6 +22,7 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 #include "overlayconfig.h"
+#include "rntcontext.h"
 
 /* nothing here is evil, so you can just skip to the comment that starts the evil */
 #include "gsk/gskblurutilsprivate.h"
@@ -51,15 +52,15 @@ filter_background_blur (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("background-blur: %s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("background-blur: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "Unexpected arguments\n");
+      return NULL;
     }
   
   region = gsk_render_node_compute_background_blur (node);

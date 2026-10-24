@@ -53,9 +53,9 @@ filter_diff (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("diff: %s\n", error->message);
+      rnt_context_error (ctx, "diff: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (filenames == NULL || g_strv_length (filenames) == 0)
@@ -63,8 +63,8 @@ filter_diff (GskRenderNode  *node,
       reference = rnt_context_get_node (ctx, 0);
       if (reference == NULL)
         {
-          g_printerr ("diff: Need a single filename\n");
-          exit (1);
+          rnt_context_error (ctx, "diff: Need a single filename\n");
+          return NULL;
         }
       gsk_render_node_ref (reference);
     }
@@ -74,8 +74,8 @@ filter_diff (GskRenderNode  *node,
     }
   else
     {
-      g_printerr ("diff: Need a single filename\n");
-      exit (1);
+      rnt_context_error (ctx, "diff: Need a single filename\n");
+      return NULL;
     }
 
   region = cairo_region_create ();

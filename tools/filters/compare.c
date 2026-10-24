@@ -86,32 +86,32 @@ filter_compare (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
 
   if (filenames == NULL || g_strv_length (filenames) != 1)
     {
-      g_printerr (_("Must specify a filename\n"));
-      exit (1);
+      rnt_context_error (ctx, _("Must specify a filename\n"));
+      return NULL;
     }
 
   renderer = create_renderer (renderer_name, &error);
   if (renderer == NULL)
     {
-      g_printerr (_("Failed to create renderer: %s\n"), error->message);
-      exit (1);
+      rnt_context_error (ctx, _("Failed to create renderer: %s\n"), error->message);
+      return NULL;
     }
 
   texture[0] = gsk_renderer_render_texture (renderer, node, NULL);
   texture[1] = texture_from_file (filenames[0], renderer, &error);
   if (texture[1] == NULL)
     {
-      g_printerr (_("Failed to load %s: %s\n"), filenames[0], error->message);
-      exit (1);
+      rnt_context_error (ctx, _("Failed to load %s: %s\n"), filenames[0], error->message);
+      return NULL;
     }
 
   diff = reftest_compare_textures (texture[0], texture[1]);
@@ -120,8 +120,8 @@ filter_compare (GskRenderNode  *node,
     {
       if (!gdk_texture_save_to_png (diff, opt_filename))
         {
-          g_printerr (_("Could not save diff image to %s\n"), opt_filename);
-          exit (1);
+          rnt_context_error (ctx, _("Could not save diff image to %s\n"), opt_filename);
+          return NULL;
         }
     }
 

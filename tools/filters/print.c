@@ -33,8 +33,8 @@ filter_print (GskRenderNode *node,
 
   if (argc != 1)
     {
-      g_printerr ("print: Unexpected arguments.\n");
-      exit (1);
+      rnt_context_error (ctx, "print: Unexpected arguments.\n");
+      return NULL;
     }
 
   bytes = gsk_render_node_serialize (node);

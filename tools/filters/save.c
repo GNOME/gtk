@@ -45,35 +45,35 @@ filter_save (GskRenderNode *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (filenames == NULL)
     {
-      g_printerr ("Expected a filename\n");
-      exit (1);
+      rnt_context_error (ctx, "Expected a filename\n");
+      return NULL;
     }
 
   if (!gsk_render_node_write_to_file (node, filenames[0], &error))
     {
-      g_printerr (_("Failed to save file: %s\n"), error->message);
-      exit (1);
+      rnt_context_error (ctx, _("Failed to save file: %s\n"), error->message);
+      return NULL;
     }
   for (i = 1; i < g_strv_length (filenames); i++)
     {
       GskRenderNode *tmp = rnt_context_get_node (ctx, i - 1);
       if (tmp == NULL)
         {
-          g_printerr (_("%u filenames given but only %zu nodes available\n"),
-                      g_strv_length (filenames), i);
-          break;
+          rnt_context_error (ctx, _("%u filenames given but only %zu nodes available\n"),
+                             g_strv_length (filenames), i);
+          return NULL;
         }
       if (!gsk_render_node_write_to_file (tmp, filenames[i], &error))
         {
-          g_printerr (_("Failed to save file: %s\n"), error->message);
-          exit (1);
+          rnt_context_error (ctx, _("Failed to save file: %s\n"), error->message);
+          return NULL;
         }
     }
 

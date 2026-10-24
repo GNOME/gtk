@@ -7,6 +7,7 @@ typedef struct _RntContext RntContext;
 typedef void (* RntContextPrintFunc) (const char *message, void *user_data);
 
 RntContext *            rnt_context_new                         (RntContextPrintFunc     print_func,
+                                                                 RntContextPrintFunc     printerr_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 void                    rnt_context_free                        (RntContext             *self);
@@ -36,4 +37,10 @@ void                    rnt_context_print                       (RntContext     
 void                    rnt_context_verbose                     (RntContext             *self,
                                                                  const char             *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+void                    rnt_context_warn                        (RntContext             *self,
+                                                                 const char             *format,
+                                                                 ...) G_GNUC_PRINTF(2, 3);
+void                    rnt_context_error                       (RntContext             *self,
+                                                                 const char             *format,
+                                                                 ...) G_GNUC_PRINTF(2, 3) G_GNUC_NORETURN;
 

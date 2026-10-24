@@ -74,7 +74,7 @@ extract_texture (GskRenderReplay *replay,
 
   if (!gdk_texture_save_to_png (texture, path))
     {
-      g_printerr (_("Failed to write %s\n"), filename);
+      rnt_context_warn (e->ctx, _("Failed to write %s\n"), filename);
     }
 
   g_free (path);
@@ -99,6 +99,7 @@ extract_font (GskRenderReplay *replay,
   char *filename;
   char *path;
   char *sum;
+  GError *error = NULL;
 
   hb_font = pango_font_get_hb_font (font);
   hb_face = hb_font_get_face (hb_font);
@@ -147,9 +148,10 @@ extract_font (GskRenderReplay *replay,
       pango_font_description_free (desc);
     }
 
-  if (!g_file_set_contents (path, data, length, NULL))
+  if (!g_file_set_contents (path, data, length, &error))
     {
-      g_printerr (_("Failed to write %s\n"), filename);
+      rnt_context_warn (e->ctx, _("Failed to write %s: %s\n"), filename, error->message);
+      g_clear_error (&error);
     }
 
   hb_blob_destroy (hb_blob);
@@ -214,9 +216,9 @@ filter_extract (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
