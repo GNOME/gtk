@@ -27,7 +27,7 @@ typedef struct _GskArithmeticNode                    GskArithmeticNode;
 #define GSK_TYPE_ARITHMETIC_NODE (gsk_arithmetic_node_get_type())
 
 GType                   gsk_arithmetic_node_get_type            (void);
-GskRenderNode *         gsk_arithmetic_node_new                 (const graphene_rect_t  *bounds,
+GskRenderNode *         gsk_arithmetic_node_new                 (const graphene_rect_t  *clip,
                                                                  GskRectSnap             snap,
                                                                  GskRenderNode          *first,
                                                                  GskRenderNode          *second,
@@ -39,6 +39,7 @@ GskRenderNode *         gsk_arithmetic_node_get_second_child    (const GskRender
 const float *           gsk_arithmetic_node_get_factors         (const GskRenderNode    *node) G_GNUC_PURE;
 GdkColorState *         gsk_arithmetic_node_get_color_state     (const GskRenderNode    *node) G_GNUC_PURE;
 GskRectSnap             gsk_arithmetic_node_get_snap            (const GskRenderNode    *node) G_GNUC_PURE;
+const graphene_rect_t * gsk_arithmetic_node_get_clip            (const GskRenderNode    *node) G_GNUC_PURE;
 
 G_END_DECLS
 
