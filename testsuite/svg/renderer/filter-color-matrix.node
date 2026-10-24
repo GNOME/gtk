@@ -13,7 +13,7 @@ clip {
           color: rgb(255,0,0);
         }
       }
-      bounds: 6 6 48 48;
+      clip: 6 6 48 48;
       color-state: srgb-linear;
     }
     color-matrix {
@@ -28,7 +28,7 @@ clip {
           color: rgb(255,0,0);
         }
       }
-      bounds: 56 6 48 48;
+      clip: 56 6 48 48;
       color-state: srgb-linear;
     }
     color-matrix {
@@ -43,7 +43,7 @@ clip {
           color: rgb(255,0,0);
         }
       }
-      bounds: 106 6 48 48;
+      clip: 106 6 48 48;
       color-state: srgb-linear;
     }
     color-matrix {
@@ -58,7 +58,7 @@ clip {
           color: rgb(255,0,0);
         }
       }
-      bounds: 6 56 48 48;
+      clip: 6 56 48 48;
       color-state: srgb-linear;
     }
   }

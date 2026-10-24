@@ -1,5 +1,5 @@
 blur {
-  blur: 4;
+  radius: 2;
   child: container {
     rounded-clip {
       clip: 30 30 40 40 / 20;

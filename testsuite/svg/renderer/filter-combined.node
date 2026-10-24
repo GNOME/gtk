@@ -10,7 +10,7 @@ mask {
       child: clip {
         clip: 26 26 48 48;
         child: blur {
-          blur: 4;
+          radius: 2;
           child: container {
             color {
               bounds: 26 26 48 48;

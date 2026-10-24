@@ -10,7 +10,7 @@ color-matrix {
       color: rgb(255,0,0);
     }
   }
-  bounds: 0 2 120 96;
+  clip: 0 2 120 96;
   color-state: srgb-linear;
 }
 color-matrix {
@@ -25,7 +25,7 @@ color-matrix {
       color: rgb(0,128,0);
     }
   }
-  bounds: 120 2 120 96;
+  clip: 120 2 120 96;
   color-state: srgb-linear;
 }
 color-matrix {
@@ -40,7 +40,7 @@ color-matrix {
       color: rgb(0,0,255);
     }
   }
-  bounds: 240 2 120 96;
+  clip: 240 2 120 96;
   color-state: srgb-linear;
 }
 color-matrix {
@@ -57,9 +57,9 @@ color-matrix {
         color: rgb(128,0,128);
       }
     }
-    bounds: 0 102 120 96;
+    clip: 0 102 120 96;
     color-state: srgb-linear;
   }
-  bounds: 0 102 120 96;
+  clip: 0 102 120 96;
   color-state: srgb-linear;
 }

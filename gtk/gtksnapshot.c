@@ -115,7 +115,7 @@ struct _GtkSnapshotState {
       graphene_size_t    sigma;
     } blur;
     struct {
-      graphene_rect_t bounds;
+      graphene_rect_t clip;
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
       GskRectSnap snap;
@@ -763,10 +763,10 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  if (graphene_size_equal (&state->data.color_matrix.bounds.size, graphene_size_zero ()))
-    state->data.color_matrix.bounds = node->bounds;
+  if (graphene_size_equal (&state->data.color_matrix.clip.size, graphene_size_zero ()))
+    state->data.color_matrix.clip = node->bounds;
 
-  result = gsk_color_matrix_node_new2 (&state->data.color_matrix.bounds,
+  result = gsk_color_matrix_node_new2 (&state->data.color_matrix.clip,
                                        state->data.color_matrix.snap,
                                        node,
                                        state->data.color_matrix.color_state,
@@ -816,7 +816,7 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
 /*< private >
  * gtk_snapshot_push_color_matrix2:
  * @snapshot: a `GtkSnapshot`
- * @bounds: The rectangle to operate in, or (0, 0, 0, 0) to use the child bounds
+ * @clip: The rectangle to operate in, or (0, 0, 0, 0) to use the child bounds
  * @color_state: the color state to operate in
  * @color_matrix: the color matrix to use
  * @color_offset: the color offset to use
@@ -835,7 +835,7 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
  */
 void
 gtk_snapshot_push_color_matrix2 (GtkSnapshot             *snapshot,
-                                 const graphene_rect_t   *bounds,
+                                 const graphene_rect_t   *clip,
                                  GdkColorState           *color_state,
                                  const graphene_matrix_t *color_matrix,
                                  const graphene_vec4_t   *color_offset)
@@ -853,7 +853,7 @@ gtk_snapshot_push_color_matrix2 (GtkSnapshot             *snapshot,
                                    gtk_snapshot_collect_color_matrix,
                                    gtk_snapshot_clear_color_matrix);
 
-  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.color_matrix.bounds);
+  gtk_graphene_rect_scale_affine (clip, scale_x, scale_y, dx, dy, &state->data.color_matrix.clip);
   graphene_matrix_init_from_matrix (&state->data.color_matrix.matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&state->data.color_matrix.offset, color_offset);
   state->data.color_matrix.color_state = gdk_color_state_ref (color_state);
