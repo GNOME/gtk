@@ -125,7 +125,7 @@ node_info (GskRenderNode *node,
   namelen = MAX (namelen, strlen (_("leaf nodes")));
 
   if (total == total_unique)
-    rnt_context_print (ctx, "%*s %llu\n", namelen, _("Number of nodes:"), total);
+    rnt_context_print (ctx, "%*s %llu\n", namelen + 1, _("Number of nodes:"), total);
   else
     rnt_context_print (ctx, "%*s %llu (%s %llu)\n", namelen + 1, _("Number of nodes:"), total, _("unique:"), total_unique);
 
