@@ -217,6 +217,8 @@ run_filters (GskRenderNode  *node,
       argc_part = g_strv_length (argv_part);
 
       result = filter->run (node, ctx, argc_part, (const char **) argv_part);
+      if (result == NULL)
+        exit (1);
       gsk_render_node_unref (node);
       node = result;
 
@@ -293,7 +295,7 @@ main (int argc, const char *argv[])
 
   g_log_set_writer_func (log_writer_func, NULL, NULL);
 
-  ctx = rnt_context_new (NULL, NULL, NULL);
+  ctx = rnt_context_new (NULL, NULL, NULL, NULL);
 
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);

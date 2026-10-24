@@ -24,6 +24,7 @@
 struct _RntContext
 {
   RntContextPrintFunc print_func;
+  RntContextPrintFunc printerr_func;
   gpointer user_data;
   GDestroyNotify user_destroy;
 
@@ -42,8 +43,16 @@ default_print (const char *string,
   g_print ("%s", string);
 }
 
+static void
+default_printerr (const char *string,
+                  gpointer    unused)
+{
+  g_printerr ("%s", string);
+}
+
 RntContext *
 rnt_context_new (RntContextPrintFunc print_func,
+                 RntContextPrintFunc printerr_func,
                  gpointer            user_data,
                  GDestroyNotify      user_destroy)
 {
@@ -55,6 +64,10 @@ rnt_context_new (RntContextPrintFunc print_func,
     self->print_func = print_func;
   else
     self->print_func = default_print;
+  if (printerr_func)
+    self->printerr_func = printerr_func;
+  else
+    self->printerr_func = default_printerr;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
 
@@ -336,5 +349,54 @@ rnt_context_print (RntContext *self,
   self->print_func (s, self->user_data);
   va_end (args);
   g_free (s);
+}
+
+/**
+ * rnt_context_warn:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints a warning message using the error function.
+ **/
+void
+rnt_context_warn (RntContext *self,
+                  const char *format,
+                  ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->printerr_func (s, self->user_data);
+  va_end (args);
+  g_free (s);
+}
+
+/**
+ * rnt_context_error:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints an error message using the error function
+ * and aborts the program.
+ **/
+void
+rnt_context_error (RntContext *self,
+                   const char *format,
+                   ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->printerr_func (s, self->user_data);
+  va_end (args);
+  g_free (s);
+
+  exit (1);
 }
 

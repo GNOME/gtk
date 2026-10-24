@@ -249,6 +249,7 @@ node_pattern_find_matches (NodePattern   *pattern,
 
 static GPtrArray *
 find_matches (GskRenderNode *node,
+              RntContext    *ctx,
               const char    *string)
 {
   NodePattern *pattern;
@@ -257,8 +258,8 @@ find_matches (GskRenderNode *node,
   pattern = node_pattern_parse (&string);
   if (pattern == NULL)
     {
-      g_printerr (_("Failed to parse node pattern\n"));
-      exit (1);
+      rnt_context_error (ctx, _("Failed to parse node pattern\n"));
+      return NULL;
     }
 
   matches = g_ptr_array_new ();
@@ -297,22 +298,24 @@ filter_match (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
 
   if (patterns == NULL || g_strv_length (patterns) != 1)
     {
-      g_printerr (_("Can only accept a pattern\n"));
-      exit (1);
+      rnt_context_error (ctx, _("Can only accept a pattern\n"));
+      return NULL;
     }
 
   gsk_render_node_ref (node);
 
-  matches = find_matches (node, patterns[0]);
+  matches = find_matches (node, ctx, patterns[0]);
+  if (matches == NULL)
+    return NULL;
       
   if (count)
     {

@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+#include "rntcontext.h"
 
 typedef struct
 {
@@ -107,15 +108,15 @@ filter_texture (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("texture: %s\n", error->message);
+      rnt_context_error (ctx, "texture: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("texture: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "texture: Unexpected arguments\n");
+      return NULL;
     }
 
   if (format_name)
@@ -128,9 +129,11 @@ filter_texture (GskRenderNode  *node,
           names = get_format_names ();
           suggestion = g_strjoinv ("\n  ", names);
 
-          g_printerr (_("Not a memory format: %s\nPossible values:\n  %s\n"),
-                      format_name, suggestion);
-          exit (1);
+          rnt_context_error (ctx, _("Not a memory format: %s\nPossible values:\n  %s\n"),
+                             format_name, suggestion);
+          g_free (suggestion);
+          g_strfreev (names);
+          return NULL;
         }
     }
 
@@ -145,9 +148,11 @@ filter_texture (GskRenderNode  *node,
           names = get_color_state_names ();
           suggestion = g_strjoinv ("\n  ", names);
 
-          g_printerr (_("Not a color state: %s\nPossible values:\n  %s\n"),
-                      colorstate_name, suggestion);
-          exit (1);
+          rnt_context_error (ctx, _("Not a color state: %s\nPossible values:\n  %s\n"),
+                             colorstate_name, suggestion);
+          g_free (suggestion);
+          g_strfreev (names);
+          return NULL;
         }
     }
 
@@ -155,16 +160,16 @@ filter_texture (GskRenderNode  *node,
     {
       if (data.color_state)
         {
-          g_printerr (_("Can't specify both --color-state and --cicp\n"));
-          exit (1);
+          rnt_context_error (ctx, _("Can't specify both --color-state and --cicp\n"));
+          return NULL;
         }
 
       data.color_state = parse_cicp_tuple (cicp_tuple, &error);
 
       if (!data.color_state)
         {
-          g_printerr (_("Not a supported cicp tuple: %s\n"), error->message);
-          exit (1);
+          rnt_context_error (ctx, _("Not a supported cicp tuple: %s\n"), error->message);
+          return NULL;
         }
     }
 

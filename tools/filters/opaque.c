@@ -22,6 +22,7 @@
 #include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 #include "overlayconfig.h"
+#include "rntcontext.h"
 
 GskRenderNode *
 filter_opaque (GskRenderNode  *node,
@@ -48,15 +49,15 @@ filter_opaque (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("opaque: %s\n", error->message);
+      rnt_context_error (ctx, "opaque: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("opaque: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "opaque: Unexpected arguments\n");
+      return NULL;
     }
   
   if (gsk_render_node_get_opaque_rect (node, &opaque))

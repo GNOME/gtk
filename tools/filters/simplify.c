@@ -20,6 +20,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
+#include "rntcontext.h"
 
 static void
 merge_containers_add_children (GPtrArray     *array,
@@ -214,15 +215,15 @@ filter_simplify (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("simplify: %s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("simplify: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "Unexpected arguments\n");
+      return NULL;
     }
 
   replay = gsk_render_replay_new ();
