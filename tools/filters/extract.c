@@ -27,10 +27,10 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 typedef struct _Extraction Extraction;
 

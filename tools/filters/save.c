@@ -20,8 +20,8 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include "gtk-rendernode-tool.h"
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 GskRenderNode *
 filter_save (GskRenderNode *node,

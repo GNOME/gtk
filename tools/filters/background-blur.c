@@ -19,10 +19,11 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "overlayconfig.h"
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 /* nothing here is evil, so you can just skip to the comment that starts the evil */
 #include "gsk/gskblurutilsprivate.h"

@@ -19,9 +19,10 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 typedef struct
 {

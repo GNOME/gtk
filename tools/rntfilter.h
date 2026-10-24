@@ -1,8 +1,23 @@
 #pragma once
 
-#include <gsk/gsk.h>
+#include <gtk/gtk.h>
 
-typedef struct _RntContext RntContext;
+#include "rntcontext.h"
+
+gsize                   rnt_filter_n_filters                    (void) G_GNUC_CONST;
+
+const RntFilter *       rnt_filter_get                          (gsize                   i) G_GNUC_CONST;
+const RntFilter *       rnt_filter_find                         (const char             *name) G_GNUC_CONST;
+
+const char *            rnt_filter_get_name                     (const RntFilter        *filter);
+const char *            rnt_filter_get_description              (const RntFilter        *filter);
+
+GskRenderNode *         rnt_filter_run                          (const RntFilter        *filter,
+                                                                 GskRenderNode          *node,
+                                                                 RntContext             *ctx,
+                                                                 int                     argc,
+                                                                 const char            **argv);
+
 
 GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
