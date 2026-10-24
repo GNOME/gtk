@@ -3190,7 +3190,7 @@ copy_component_transfer (const GskComponentTransfer *transfer,
 
 static void
 gsk_gpu_node_processor_add_component_transfer_node (GskGpuRenderPass *self,
-                                                    GskRenderNode       *node)
+                                                    GskRenderNode    *node)
 {
   GskGpuImage *image;
   GskRenderNode *child;
@@ -3202,10 +3202,14 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuRenderPass *self,
   graphene_vec4_t table_vec[8];
   guint i, n;
 
+  if (!gsk_gpu_node_processor_clip_bounds (self,
+                                           gsk_component_transfer_node_get_clip (node),
+                                           gsk_component_transfer_node_get_snap (node),
+                                           &clip_bounds))
+    return;
+
   child = gsk_component_transfer_node_get_child (node);
 
-  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
-    return;
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
                                                     &clip_bounds,
@@ -3233,7 +3237,7 @@ gsk_gpu_node_processor_add_component_transfer_node (GskGpuRenderPass *self,
   gsk_gpu_component_transfer_op (self,
                                  self->ccs,
                                  gsk_component_transfer_node_get_color_state (node),
-                                 &node->bounds,
+                                 &clip_bounds,
                                  image,
                                  tex_sampler,
                                  &params_vec[0],
