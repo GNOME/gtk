@@ -5,7 +5,7 @@
 typedef struct _RntContext RntContext;
 typedef struct _RntFilter RntFilter;
 
-typedef void (* RntContextPrintFunc) (const char *message, void *user_data);
+typedef void (* RntContextPrintFunc) (RntContext *ctx, const char *message, void *user_data);
 
 RntContext *            rnt_context_new                         (RntContextPrintFunc     print_func,
                                                                  RntContextPrintFunc     printerr_func,
@@ -29,6 +29,7 @@ GskRenderNode *         rnt_context_get_node                    (RntContext     
 size_t                  rnt_context_get_n_nodes                 (RntContext             *self);
 
 GskRenderNode *         rnt_context_get_null_node               (RntContext             *ctx);
+const RntFilter *       rnt_context_get_current_filter          (RntContext             *self);
 
 gboolean                rnt_context_get_failed                  (RntContext             *ctx);
 void                    rnt_context_set_failed                  (RntContext             *ctx,
