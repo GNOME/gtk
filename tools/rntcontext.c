@@ -19,6 +19,8 @@
 
 #include "rntcontext.h"
 
+#include "rntfilter.h"
+
 #include <glib/gi18n-lib.h>
 
 struct _RntContext
@@ -398,5 +400,57 @@ rnt_context_error (RntContext *self,
   g_free (s);
 
   exit (1);
+}
+
+/**
+ * rnt_context_run:
+ * @self: the context
+ * @node: te input rendernode
+ * @argc: number of arguments
+ * @argv: (array length=argc): the arguments
+ *
+ * Runs a filter chain as specified by the given arguments.
+ *
+ * The arguments are specified like command line arguments,
+ * but do not include the typical program name `argv[0]`.
+ *
+ * Returns: (nullable): The result of the chain or NULL for a
+ *   fatal error
+ **/
+GskRenderNode *
+rnt_context_run (RntContext     *self,
+                 GskRenderNode  *node,
+                 int             argc,
+                 const char    **argv)
+{
+  while (argc > 0)
+    {
+      const RntFilter *filter;
+      char **argv_part;
+      gsize argc_part;
+      GskRenderNode *result;
+
+      filter = rnt_filter_find (argv[0]);
+      if (filter == NULL)
+        {
+          rnt_context_error (self, _("Argument \"%s\" is not a known filter\n"), argv[0]);
+          return NULL;
+        }
+
+      argv_part = rnt_filter_argv (argc, argv);
+      argc_part = g_strv_length (argv_part);
+
+      result = rnt_filter_run (filter, node, self, argc_part, (const char **) argv_part);
+      gsk_render_node_unref (node);
+      if (result == NULL)
+        return NULL;
+      node = result;
+
+      g_strfreev (argv_part);
+      argv += argc_part;
+      argc -= argc_part;
+    }
+
+  return node;
 }
 

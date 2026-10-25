@@ -15,6 +15,11 @@ void                    rnt_context_free                        (RntContext     
 
 GOptionGroup *          rnt_context_create_option_group         (RntContext             *self);
 
+GskRenderNode *         rnt_context_run                         (RntContext             *self,
+                                                                 GskRenderNode          *node,
+                                                                 int                     argc,
+                                                                 const char            **argv);
+
 void                    rnt_context_push_node                   (RntContext             *self,
                                                                  GskRenderNode          *node);
 GskRenderNode *         rnt_context_pop_node                    (RntContext             *self);
