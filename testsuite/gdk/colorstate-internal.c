@@ -233,9 +233,9 @@ test_color_mislabel (void)
   GdkColor color2;
   guint red1, red2;
 
-  gdk_color_init (&color, gdk_color_state_get_srgb_linear (), (float[]) { 0.604, 0, 0, 1 });
-  gdk_color_convert (&color1, gdk_color_state_get_srgb (), &color);
-  gdk_color_init (&color2, gdk_color_state_get_srgb (), (float[]) { 0.604, 0, 0, 1 });
+  gdk_color_init (&color, GDK_COLOR_STATE_SRGB_LINEAR, (float[]) { 0.604, 0, 0, 1 });
+  gdk_color_convert (&color1, GDK_COLOR_STATE_SRGB, &color);
+  gdk_color_init (&color2, GDK_COLOR_STATE_SRGB, (float[]) { 0.604, 0, 0, 1 });
 
   g_assert_true (!gdk_color_equal (&color1, &color2));
 
@@ -243,6 +243,37 @@ test_color_mislabel (void)
   red2 = round (color2.red * 255.0);
 
   g_assert_true (red1 != red2);
+}
+
+static void
+test_color_color_matrix (void)
+{
+  GdkColor black;
+  GdkColor color;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+
+  gdk_color_init (&black, GDK_COLOR_STATE_SRGB, (float[4]) { 0, 0, 0, 1 });
+  graphene_matrix_init_from_float (&matrix, (float[16]) {
+                                   0, 1, 0, 0,
+                                   1, 0, 0, 0,
+                                   0, 0, 1, 0,
+                                   0, 0, 0, 0.25
+                                   });
+  graphene_vec4_init_from_float (&offset, (float[4]) { 0, 0, 0, 0.1 });
+
+  gdk_color_apply_color_matrix (&color,
+                                GDK_COLOR_STATE_SRGB,
+                                &matrix, &offset,
+                                &black);
+
+  g_assert_cmpfloat_with_epsilon (color.r, 0, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.g, 0, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.b, 0, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.a, 0.35, 0.001);
+
+  gdk_color_finish (&color);
+  gdk_color_finish (&black);
 }
 
 int
@@ -277,6 +308,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
   g_test_add_func ("/color/mislabel", test_color_mislabel);
+  g_test_add_func ("/color/color-matrix", test_color_color_matrix);
 
   return g_test_run ();
 }

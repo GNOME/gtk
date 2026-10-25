@@ -69,7 +69,6 @@
 #include "gtksvghrefprivate.h"
 #include "gtksvgtextdecorationprivate.h"
 #include "gtksvgpathutilsprivate.h"
-#include "gtksvgcolorutilsprivate.h"
 #include "gtksvgpangoutilsprivate.h"
 #include "gtksvglocationprivate.h"
 #include "gtksvgerrorprivate.h"
@@ -1342,12 +1341,13 @@ apply_filter_tree (SvgElement    *shape,
             node = skip_debug_node (in->node);
             if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
               {
-                const GdkColor *color = gsk_color_node_get_gdk_color (node);
-                GdkColor new_color;
+                GdkColor color;
 
-                color_apply_color_matrix (color, color_state, &matrix, &offset,  &new_color);
-                result = gsk_color_node_new2 (&new_color, &node->bounds, GSK_RECT_SNAP_NONE);
-                gdk_color_finish (&new_color);
+                gdk_color_apply_color_matrix (&color,
+                                              color_state, &matrix, &offset,
+                                              gsk_color_node_get_gdk_color (node));
+                result = gsk_color_node_new2 (&color, &node->bounds, GSK_RECT_SNAP_NONE);
+                gdk_color_finish (&color);
               }
             else
               result = gsk_color_matrix_node_new2 (&in->node->bounds, GSK_RECT_SNAP_NONE, in->node, color_state, &matrix, &offset);

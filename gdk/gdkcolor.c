@@ -314,3 +314,40 @@ gdk_color_get_luminance (const GdkColor *self)
   return 0.2126 * self->red + 0.7152 * self->green + 0.0722 * self->blue;
 }
 
+/*< private >
+ * gdk_color_apply_color_matrix:
+ * @self: the color struct that results get returned in
+ * @color_state: the color state to operate in
+ * @color_matrix: a 4x4 matrix
+ * @color_offset: a 4 vector
+ * @other: the color to apply the color matrix to
+ *
+ * Applies a color matrix to a color.
+ *
+ * The operation is performed in the given color state,
+ * and the result will be in that color state as well.
+ */
+void
+gdk_color_apply_color_matrix (GdkColor                *self,
+                              GdkColorState           *color_state,
+                              const graphene_matrix_t *color_matrix,
+                              const graphene_vec4_t   *color_offset,
+                              const GdkColor          *other)
+{
+  GdkColor c;
+  graphene_vec4_t p, q;
+  float v[4];
+
+  gdk_color_convert (&c, color_state, other);
+  graphene_vec4_init (&p, c.r, c.g, c.b, c.a);
+
+  graphene_matrix_transform_vec4 (color_matrix, &p, &q);
+  graphene_vec4_add (&q, color_offset, &p);
+
+  graphene_vec4_min (&p, graphene_vec4_one (), &q);
+  graphene_vec4_max (&q, graphene_vec4_zero (), &p);
+
+  graphene_vec4_to_float (&p, v);
+  gdk_color_init (self, color_state, v);
+  gdk_color_finish (&c);
+}
