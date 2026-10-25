@@ -24,29 +24,6 @@
 #include "rntcontext.h"
 #include "rntfilter.h"
 
-static char **
-filter_argv (const char **argv,
-             gsize        argc)
-{
-  GStrvBuilder *builder;
-  gsize i;
-
-  g_assert (argc > 0);
-
-  builder = g_strv_builder_new ();
-  g_strv_builder_add (builder, argv[0]);
-
-  for (i = 1; i < argc; i++)
-    {
-      if (rnt_filter_find (argv[i]))
-        break;
-
-      g_strv_builder_add (builder, argv[i]);
-    }
-
-  return g_strv_builder_end (builder);
-}
-
 static void
 list_filters (void)
 {
@@ -70,43 +47,6 @@ list_filters (void)
                rnt_filter_get_name (filter),
                rnt_filter_get_description (filter));
     }
-}
-
-static GskRenderNode *
-run_filters (GskRenderNode  *node,
-             RntContext     *ctx,
-             int             argc,
-             const char    **argv)
-{
-  while (argc > 0)
-    {
-      const RntFilter *filter;
-      char **argv_part;
-      gsize argc_part;
-      GskRenderNode *result;
-
-      filter = rnt_filter_find (argv[0]);
-      if (filter == NULL)
-        {
-          g_printerr (_("Argument \"%s\" is not a known filter\n"), argv[0]);
-          exit (1);
-        }
-
-      argv_part = filter_argv (argv, argc);
-      argc_part = g_strv_length (argv_part);
-
-      result = rnt_filter_run (filter, node, ctx, argc_part, (const char **) argv_part);
-      if (result == NULL)
-        exit (1);
-      gsk_render_node_unref (node);
-      node = result;
-
-      g_strfreev (argv_part);
-      argv += argc_part;
-      argc -= argc_part;
-    }
-
-  return node;
 }
 
 static GLogWriterOutput
@@ -184,7 +124,7 @@ main (int argc, const char *argv[])
 
   gtk_init_check ();
 
-  argv_part = filter_argv (argv, argc);
+  argv_part = rnt_filter_argv (argc, argv);
   argc_part = g_strv_length (argv_part);
 
   if (!g_option_context_parse (context, (int[1]) { argc_part }, &argv_part, &error))
@@ -225,7 +165,7 @@ main (int argc, const char *argv[])
       node = load_node_file (filenames[0]);
     }
 
-  node = run_filters (node, ctx, argc, argv);
+  node = rnt_context_run (ctx, node, argc, argv);
 
   gtk_tool_run ();
 

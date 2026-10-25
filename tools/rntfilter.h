@@ -18,6 +18,9 @@ GskRenderNode *         rnt_filter_run                          (const RntFilter
                                                                  int                     argc,
                                                                  const char            **argv);
 
+char **                 rnt_filter_argv                         (int                     argc,
+                                                                 const char            **argv);
+
 
 GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
