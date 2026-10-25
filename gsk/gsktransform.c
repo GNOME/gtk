@@ -2028,6 +2028,7 @@ gsk_transform_to_2d_components (GskTransform *self,
                                 float        *out_dy)
 {
   float a, b, c, d, e, f;
+  float det, r2, r, sx, sy, angle, skew;
 
   gsk_transform_to_2d (self, &a, &b, &c, &d, &e, &f);
 
@@ -2036,36 +2037,50 @@ gsk_transform_to_2d_components (GskTransform *self,
 
 #define sign(f) ((f) < 0 ? -1 : 1)
 
-  if (a != 0 || b != 0)
-    {
-      float det = a * d - b * c;
-      float r = sqrtf (a*a + b*b);
+  det = a * d - b * c;
 
-      *out_angle = RAD_TO_DEG (sign (b) * acosf (a / r));
-      *out_scale_x = r;
-      *out_scale_y = det / r;
-      *out_skew_x = RAD_TO_DEG (atanf ((a*c + b*d) / (r*r)));
-      *out_skew_y = 0;
-    }
-  else if (c != 0 || d != 0)
-    {
-      float det = a * d - b * c;
-      float s = sqrtf (c*c + d*d);
+  r2 = a * a + b * b;
+  r = sqrtf (r2);
 
-      *out_angle = RAD_TO_DEG (G_PI/2 - sign (d) * acosf (-c / s));
-      *out_scale_x = det / s;
-      *out_scale_y = s;
-      *out_skew_x = 0;
-      *out_skew_y = RAD_TO_DEG (atanf ((a*c + b*d) / (s*s)));
-    }
-  else
+  sx = r;
+  sy = det / r;
+
+  angle = sign (b) * acosf (a / r);
+  skew = atanf ((a * c + b * d) / r2);
+
+  if (isfinite (angle) && isfinite (sy) && isfinite (skew))
     {
-      *out_angle = 0;
-      *out_scale_x = 0;
-      *out_scale_y = 0;
-      *out_skew_x = 0;
+      *out_angle = RAD_TO_DEG (angle);
+      *out_scale_x = sx;
+      *out_scale_y = sy;
+      *out_skew_x = RAD_TO_DEG (skew);
       *out_skew_y = 0;
+      return;
     }
+
+  r2 = c * c + d * d;
+  r = sqrtf (r2);
+  sx = det / r;
+  sy = r;
+
+  angle = M_PI / 2 - sign (d) * acosf (-c / r);
+  skew = atanf ((a * c + b * d) / r2);
+
+  if (isfinite (angle) && isfinite (sx) && isfinite (skew))
+    {
+      *out_angle = RAD_TO_DEG (angle);
+      *out_scale_x = sx;
+      *out_scale_y = sy;
+      *out_skew_x = 0;
+      *out_skew_y = RAD_TO_DEG (skew);
+      return;
+    }
+
+  *out_angle = 0;
+  *out_scale_x = 0;
+  *out_scale_y = 0;
+  *out_skew_x = 0;
+  *out_skew_y = 0;
 }
 
 /**

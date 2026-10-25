@@ -729,6 +729,52 @@ test_to_2d_components (void)
 }
 
 static void
+test_to_2d_components_with_nan (void)
+{
+  GskTransform *transform;
+  float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
+
+  transform = gsk_transform_matrix_2d (NULL, 0, FLT_MIN,
+                                             FLT_MIN, 0,
+                                             1, 2);
+
+  gsk_transform_to_2d_components (transform,
+                                  &skew_x, &skew_y,
+                                  &scale_x, &scale_y,
+                                  &angle,
+                                  &dx, &dy);
+  g_assert_true (isfinite (skew_x));
+  g_assert_true (isfinite (skew_y));
+  g_assert_true (isfinite (scale_x));
+  g_assert_true (isfinite (scale_y));
+  g_assert_true (isfinite (angle));
+  g_assert_true (dx == 1.f);
+  g_assert_true (dy == 2.f);
+
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_matrix_2d (NULL, FLT_MIN, 1,
+                                             -1, FLT_MIN,
+                                             0, 0);
+
+  gsk_transform_to_2d_components (transform,
+                                  &skew_x, &skew_y,
+                                  &scale_x, &scale_y,
+                                  &angle,
+                                  &dx, &dy);
+  g_assert_true (isfinite (skew_x));
+  g_assert_true (isfinite (skew_y));
+  g_assert_true (isfinite (scale_x));
+  g_assert_true (isfinite (scale_y));
+  g_assert_true (isfinite (angle));
+  g_assert_true (dx == 0.f);
+  g_assert_true (dy == 0.f);
+
+  gsk_transform_unref (transform);
+
+}
+
+static void
 test_from_2d (void)
 {
   GskTransform *transform;
@@ -1234,6 +1280,7 @@ main (int   argc,
   g_test_add_func ("/transform/point", test_transform_point);
   g_test_add_func ("/transform/to-2d", test_to_2d);
   g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
+  g_test_add_func ("/transform/to-2d-components-with-nan", test_to_2d_components_with_nan);
   g_test_add_func ("/transform/from-2d", test_from_2d);
   g_test_add_func ("/transform/scale", test_scale_transform);
   g_test_add_func ("/transform/skew", test_skew_transform);
