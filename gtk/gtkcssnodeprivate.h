@@ -63,6 +63,7 @@ struct _GtkCssNode
    * So if a valid style is computed, one has to previously ensure that the parent's and the previous sibling's style
    * are valid. This allows both validation and invalidation to run in O(nodes-in-tree) */
   guint                  style_is_invalid :1;   /* the style needs to be recomputed */
+  guint                  style_is_hovered :1;
 };
 
 struct _GtkCssNodeClass
