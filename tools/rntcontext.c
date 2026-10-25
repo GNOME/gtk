@@ -34,22 +34,28 @@ struct _RntContext
 
   GPtrArray *nodes;
   GskRenderNode *null_node;
+  const RntFilter *current_filter;
 
   gboolean failed;
 };
 
 static void
-default_print (const char *string,
+default_print (RntContext *self,
+               const char *string,
                gpointer    unused)
 {
   g_print ("%s", string);
 }
 
 static void
-default_printerr (const char *string,
+default_printerr (RntContext *self,
+                  const char *string,
                   gpointer    unused)
 {
-  g_printerr ("%s", string);
+  if (self->current_filter)
+    g_printerr ("%s: %s", rnt_filter_get_name (self->current_filter), string);
+  else
+    g_printerr ("%s", string);
 }
 
 RntContext *
@@ -320,7 +326,7 @@ rnt_context_verbose (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  self->print_func (s, self->user_data);
+  self->print_func (self, s, self->user_data);
   va_end (args);
   g_free (s);
 }
@@ -348,7 +354,7 @@ rnt_context_print (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  self->print_func (s, self->user_data);
+  self->print_func (self, s, self->user_data);
   va_end (args);
   g_free (s);
 }
@@ -371,7 +377,7 @@ rnt_context_warn (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  self->printerr_func (s, self->user_data);
+  self->printerr_func (self, s, self->user_data);
   va_end (args);
   g_free (s);
 }
@@ -395,11 +401,28 @@ rnt_context_error (RntContext *self,
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);
-  self->printerr_func (s, self->user_data);
+  self->printerr_func (self, s, self->user_data);
   va_end (args);
   g_free (s);
 
   exit (1);
+}
+
+/**
+ * rnt_context_get_current_filter:
+ * @self: the context
+ *
+ * Gets the currently running filter.
+ *
+ * This is useful to call during print functions.
+ * Filters themselves probably know what filter they are.
+ *
+ * Returns: (nullable): the current filter
+ **/
+const RntFilter *
+rnt_context_get_current_filter (RntContext *self)
+{
+  return self->current_filter;
 }
 
 /**
@@ -425,13 +448,12 @@ rnt_context_run (RntContext     *self,
 {
   while (argc > 0)
     {
-      const RntFilter *filter;
       char **argv_part;
       gsize argc_part;
       GskRenderNode *result;
 
-      filter = rnt_filter_find (argv[0]);
-      if (filter == NULL)
+      self->current_filter = rnt_filter_find (argv[0]);
+      if (self->current_filter == NULL)
         {
           rnt_context_error (self, _("Argument \"%s\" is not a known filter\n"), argv[0]);
           return NULL;
@@ -440,8 +462,9 @@ rnt_context_run (RntContext     *self,
       argv_part = rnt_filter_argv (argc, argv);
       argc_part = g_strv_length (argv_part);
 
-      result = rnt_filter_run (filter, node, self, argc_part, (const char **) argv_part);
+      result = rnt_filter_run (self->current_filter, node, self, argc_part, (const char **) argv_part);
       gsk_render_node_unref (node);
+      self->current_filter = NULL;
       if (result == NULL)
         return NULL;
       node = result;
