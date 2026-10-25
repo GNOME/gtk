@@ -572,6 +572,138 @@ test_unmapped_sections (void)
   gtk_window_destroy (GTK_WINDOW (widget));
 }
 
+enum {
+  LIFECYCLE_SETUP = 1,
+  LIFECYCLE_BOUND,
+};
+
+static void
+lifecycle_setup (GtkSignalListItemFactory *factory,
+                 GObject                  *object,
+                 GHashTable               *states)
+{
+  g_assert_false (g_hash_table_contains (states, object));
+  g_hash_table_insert (states, object, GINT_TO_POINTER (LIFECYCLE_SETUP));
+}
+
+static void
+lifecycle_bind (GtkSignalListItemFactory *factory,
+                GObject                  *object,
+                GHashTable               *states)
+{
+  g_assert_cmpint (GPOINTER_TO_INT (g_hash_table_lookup (states, object)), ==, LIFECYCLE_SETUP);
+  g_hash_table_insert (states, object, GINT_TO_POINTER (LIFECYCLE_BOUND));
+}
+
+static void
+lifecycle_unbind (GtkSignalListItemFactory *factory,
+                  GObject                  *object,
+                  GHashTable               *states)
+{
+  g_assert_cmpint (GPOINTER_TO_INT (g_hash_table_lookup (states, object)), ==, LIFECYCLE_BOUND);
+  g_hash_table_insert (states, object, GINT_TO_POINTER (LIFECYCLE_SETUP));
+}
+
+static void
+lifecycle_teardown (GtkSignalListItemFactory *factory,
+                    GObject                  *object,
+                    GHashTable               *states)
+{
+  g_assert_cmpint (GPOINTER_TO_INT (g_hash_table_lookup (states, object)), ==, LIFECYCLE_SETUP);
+  g_hash_table_remove (states, object);
+}
+
+static GtkListItemFactory *
+lifecycle_factory_new (GHashTable *states)
+{
+  GtkListItemFactory *factory;
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (lifecycle_setup), states);
+  g_signal_connect (factory, "bind", G_CALLBACK (lifecycle_bind), states);
+  g_signal_connect (factory, "unbind", G_CALLBACK (lifecycle_unbind), states);
+  g_signal_connect (factory, "teardown", G_CALLBACK (lifecycle_teardown), states);
+
+  return factory;
+}
+
+static guint
+count_bound (GHashTable *states)
+{
+  GHashTableIter iter;
+  gpointer state;
+  guint n_bound = 0;
+
+  g_hash_table_iter_init (&iter, states);
+  while (g_hash_table_iter_next (&iter, NULL, &state))
+    {
+      if (GPOINTER_TO_INT (state) == LIFECYCLE_BOUND)
+        n_bound++;
+    }
+
+  return n_bound;
+}
+
+static GtkWidget *
+find_child (GtkWidget  *widget,
+            const char *css_name)
+{
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (g_str_equal (gtk_widget_get_css_name (child), css_name))
+        return child;
+    }
+
+  return NULL;
+}
+
+static void
+test_lifecycle (void)
+{
+  const char *strings[] = { "a", "a", "b", "c", "c", NULL };
+  const char *replacement[] = { "b", "d", NULL };
+  GtkListItemFactory *header_factory;
+  GtkStringList *source;
+  GtkSortListModel *sorted;
+  GtkSorter *sections;
+  GtkWidget *window, *view, *row, *header;
+  GHashTable *states;
+
+  states = g_hash_table_new (NULL, NULL);
+  source = gtk_string_list_new (strings);
+  sorted = gtk_sort_list_model_new (G_LIST_MODEL (source), NULL);
+  sections = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
+  gtk_sort_list_model_set_section_sorter (sorted, sections);
+  view = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted))),
+                            lifecycle_factory_new (states));
+  header_factory = lifecycle_factory_new (states);
+  gtk_list_view_set_header_factory (GTK_LIST_VIEW (view), header_factory);
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), view);
+  g_assert_cmpuint (count_bound (states), >, 0);
+
+  gtk_string_list_splice (source, 1, 2, replacement);
+
+  /* Something else holding a released row or header must not keep it bound. */
+  row = g_object_ref (find_child (view, "row"));
+  header = g_object_ref (find_child (view, "header"));
+  gtk_list_view_set_model (GTK_LIST_VIEW (view), NULL);
+  g_assert_cmpuint (count_bound (states), ==, 0);
+
+  g_object_unref (row);
+  g_object_unref (header);
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_assert_cmpuint (g_hash_table_size (states), ==, 0);
+
+  g_object_unref (header_factory);
+  g_object_unref (sections);
+  g_hash_table_unref (states);
+}
+
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
@@ -760,6 +892,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/listitemmanager/unmapped/sections-tracker", GUINT_TO_POINTER (3), test_unmapped_changes);
   g_test_add_func ("/listitemmanager/unmapped/section-changes", test_unmapped_sections);
   g_test_add_func ("/listitemmanager/tracker/changes", test_tracker_changes);
+  g_test_add_func ("/listitemmanager/lifecycle", test_lifecycle);
   g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
 
   return g_test_run ();
