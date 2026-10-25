@@ -244,7 +244,6 @@ gnomeos-x86_64:
   extends:
     - .test-runner
   needs: []
-  allow_failure: true
   stage: build
   image: "quay.io/gnome_infrastructure/gnome-build-meta:gnomeos-devel-nightly"
   variables:
