@@ -439,9 +439,8 @@ gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
                                               gtk_css_node_get_style_provider (cssnode),
                                               should_create_transitions (change) ? style : NULL);
 
-      /* Clear the cache again, the static style we looked up above
-       * may have populated it. */
-      g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
+      if (new_style != new_static_style)
+        g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
     }
   else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
@@ -945,7 +944,7 @@ gtk_css_node_do_ensure_style (GtkCssNode                   *cssnode,
 {
   gboolean style_changed;
 
-  if (cssnode->style_is_invalid)
+  if (cssnode->style_is_invalid && cssnode->pending_changes != 0)
     {
       GtkCssStyle *new_style;
 
@@ -967,6 +966,7 @@ gtk_css_node_do_ensure_style (GtkCssNode                   *cssnode,
 
   gtk_css_node_propagate_pending_changes (cssnode, style_changed);
 
+  cssnode->style_is_hovered = !!(gtk_css_node_get_state (cssnode) & GTK_STATE_FLAG_PRELIGHT);
   cssnode->pending_changes = 0;
   cssnode->style_is_invalid = FALSE;
 }
@@ -1129,7 +1129,12 @@ gtk_css_node_set_state (GtkCssNode    *cssnode,
       GtkCssChange change = 0;
 
       if (states & GTK_STATE_FLAG_PRELIGHT)
-        change |= GTK_CSS_CHANGE_HOVER;
+        {
+          if (!!(state_flags & GTK_STATE_FLAG_PRELIGHT) != cssnode->style_is_hovered)
+            change |= GTK_CSS_CHANGE_HOVER;
+          else
+            cssnode->pending_changes &= ~GTK_CSS_CHANGE_HOVER;
+        }
       if (states & GTK_STATE_FLAG_INSENSITIVE)
         change |= GTK_CSS_CHANGE_DISABLED;
       if (states & GTK_STATE_FLAG_BACKDROP)
