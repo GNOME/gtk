@@ -1863,7 +1863,7 @@ key_event_string (GdkEvent *event)
 
   keyval = gdk_key_event_get_keyval (event);
   c = gdk_keyval_to_unicode (keyval);
-  if (c)
+  if (c && g_unichar_isgraph (c))
     {
       g_unichar_to_utf8 (c, buf);
       return g_strdup (buf);
@@ -2388,7 +2388,7 @@ get_event_summary (GdkEvent *event)
       {
         char *tmp, *ret;
         tmp = key_event_string (event);
-        ret = g_strdup_printf ("%s %s\n", name, tmp);
+        ret = g_strdup_printf ("%s %s", name, tmp);
         g_free (tmp);
         return ret;
       }
