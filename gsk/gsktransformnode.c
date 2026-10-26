@@ -138,9 +138,6 @@ gsk_transform_node_diff (GskRenderNode *node1,
       return;
     }
 
-  if (self1->child == self2->child)
-    return;
-
   switch (gsk_transform_get_category (self1->transform))
     {
     case GSK_TRANSFORM_CATEGORY_IDENTITY:

@@ -95,6 +95,63 @@ test_can_diff_transform (void)
   gsk_transform_unref (t2);
 }
 
+/* Like backdrop-filter: blur(): the same copy/paste node is reused
+ * (in a new transform node, like GtkWidget does), but what is below
+ * it changes, so the blurred paste needs to be redrawn.
+ */
+static void
+test_diff_reused_paste (void)
+{
+  GskRenderNode *bg1, *bg2, *paste, *blur, *copy, *transform1, *transform2;
+  GskRenderNode *nodes[2], *root1, *root2, *root3;
+  GskTransform *t;
+  cairo_region_t *region;
+
+  bg1 = gsk_color_node_new (&(GdkRGBA){1, 0, 0, 1 }, &GRAPHENE_RECT_INIT (0, 0, 60, 50));
+  bg2 = gsk_color_node_new (&(GdkRGBA){0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (0, 0, 60, 50));
+
+  paste = gsk_paste_node_new (&GRAPHENE_RECT_INIT (0, 0, 50, 50), 0);
+  blur = gsk_blur_node_new (paste, 10);
+  copy = gsk_copy_node_new (blur);
+
+  t = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (50, 0));
+  transform1 = gsk_transform_node_new (copy, t);
+  transform2 = gsk_transform_node_new (copy, t);
+
+  nodes[0] = bg1;
+  nodes[1] = transform1;
+  root1 = gsk_container_node_new (nodes, 2);
+  nodes[0] = bg2;
+  nodes[1] = transform2;
+  root2 = gsk_container_node_new (nodes, 2);
+  nodes[0] = bg1;
+  root3 = gsk_container_node_new (nodes, 2);
+
+  /* The blur spreads the background change at x < 60 further right */
+  region = cairo_region_create ();
+  gsk_render_node_diff (root1, root2, &(GskDiffData) { region, NULL, NULL });
+  g_assert_true (cairo_region_contains_point (region, 65, 25));
+  cairo_region_destroy (region);
+
+  /* Nothing changed, nothing to redraw */
+  region = cairo_region_create ();
+  gsk_render_node_diff (root1, root3, &(GskDiffData) { region, NULL, NULL });
+  g_assert_true (cairo_region_is_empty (region));
+  cairo_region_destroy (region);
+
+  gsk_render_node_unref (root1);
+  gsk_render_node_unref (root2);
+  gsk_render_node_unref (root3);
+  gsk_render_node_unref (transform1);
+  gsk_render_node_unref (transform2);
+  gsk_render_node_unref (copy);
+  gsk_render_node_unref (blur);
+  gsk_render_node_unref (paste);
+  gsk_render_node_unref (bg1);
+  gsk_render_node_unref (bg2);
+  gsk_transform_unref (t);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -103,6 +160,7 @@ main (int   argc,
 
   g_test_add_func ("/node/can-diff/basic", test_can_diff_basic);
   g_test_add_func ("/node/can-diff/transform", test_can_diff_transform);
+  g_test_add_func ("/node/diff/reused-paste", test_diff_reused_paste);
 
   return g_test_run ();
 }

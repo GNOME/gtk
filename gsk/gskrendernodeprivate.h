@@ -151,6 +151,7 @@ gboolean        gsk_render_node_clears_background       (const GskRenderNode    
 GskCopyMode     gsk_render_node_get_copy_mode           (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_contains_subsurface_node(const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_contains_paste_node     (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_needs_diff_with_self    (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_needs_blending          (const GskRenderNode         *node) G_GNUC_PURE;
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
