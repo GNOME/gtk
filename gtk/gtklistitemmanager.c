@@ -1133,6 +1133,13 @@ gtk_list_item_manager_gc_tiles (GtkListItemManager *self)
 }
 
 static void
+gtk_list_item_manager_gc_unmapped (GtkListItemManager *self)
+{
+  if (!gtk_widget_get_mapped (self->widget))
+    gtk_list_item_manager_gc_tiles (self);
+}
+
+static void
 gtk_list_item_manager_release_items (GtkListItemManager *self,
                                      GtkListItemChange  *change)
 {
@@ -1613,6 +1620,8 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
 
   gtk_list_item_change_finish (&change);
 
+  gtk_list_item_manager_gc_unmapped (self);
+
   gtk_widget_queue_resize (self->widget);
 }
 
@@ -1692,6 +1701,8 @@ gtk_list_item_manager_model_sections_changed_cb (GListModel         *model,
   gtk_list_item_manager_ensure_items (self, &change, G_MAXUINT, 0);
 
   gtk_list_item_change_finish (&change);
+
+  gtk_list_item_manager_gc_unmapped (self);
 
   gtk_widget_queue_resize (GTK_WIDGET (self->widget));
 }
