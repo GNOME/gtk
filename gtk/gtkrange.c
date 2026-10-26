@@ -140,6 +140,7 @@ enum {
   PROP_RESTRICT_TO_FILL_LEVEL,
   PROP_FILL_LEVEL,
   PROP_ROUND_DIGITS,
+  PROP_DRAGGING,
   /* GtkOrientable */
   PROP_ORIENTATION,
   LAST_PROP
@@ -455,6 +456,16 @@ gtk_range_class_init (GtkRangeClass *class)
                         -1,
                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkRange:dragging:
+   *
+   * Indicates if the slider is currently being dragged.
+   */
+  properties[PROP_DRAGGING] =
+      g_param_spec_boolean ("dragging", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_STATIC_NAME);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("range"));
@@ -544,6 +555,9 @@ gtk_range_get_property (GObject      *object,
       break;
     case PROP_ROUND_DIGITS:
       g_value_set_int (value, gtk_range_get_round_digits (range));
+      break;
+    case PROP_DRAGGING:
+      g_value_set_boolean (value, gtk_range_get_dragging (range));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1787,6 +1801,7 @@ range_grab_add (GtkRange  *range,
   priv->grab_location = location;
 
   gtk_widget_add_css_class (GTK_WIDGET (range), "dragging");
+  g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_DRAGGING]);
 }
 
 static void
@@ -1816,6 +1831,7 @@ range_grab_remove (GtkRange *range)
   update_zoom_state (range, FALSE);
 
   gtk_widget_remove_css_class (GTK_WIDGET (range), "dragging");
+  g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_DRAGGING]);
 }
 
 static GtkScrollType
@@ -3065,6 +3081,26 @@ gtk_range_get_round_digits (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), -1);
 
   return priv->round_digits;
+}
+
+/**
+ * gtk_range_get_dragging:
+ * @range: a `GtkRange`
+ *
+ * Returns whether the slider is currently being dragged.
+ *
+ * Returns: %TRUE if the slider is currently being dragged
+ *
+ * Since: 4.26
+ */
+gboolean
+gtk_range_get_dragging (GtkRange *range)
+{
+  GtkRangePrivate *priv = gtk_range_get_instance_private (range);
+
+  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+
+  return priv->grab_location != NULL;
 }
 
 GtkWidget *
