@@ -2469,6 +2469,23 @@ gtk_list_base_get_tab_behavior (GtkListBase *self)
   return priv->tab_behavior;
 }
 
+static gboolean
+gtk_list_base_root_focus_is_inside (GtkListBase *self)
+{
+  GtkRoot *root;
+  GtkWidget *focus;
+
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  if (root == NULL)
+    return FALSE;
+
+  focus = gtk_root_get_focus (root);
+  if (focus == NULL)
+    return FALSE;
+
+  return gtk_widget_is_ancestor (focus, GTK_WIDGET (self));
+}
+
 void
 gtk_list_base_scroll_to (GtkListBase        *self,
                          guint               pos,
@@ -2491,8 +2508,7 @@ gtk_list_base_scroll_to (GtkListBase        *self,
 
       gtk_list_item_tracker_set_position (priv->item_manager, priv->focus, pos, 0, 0);
 
-      /* XXX: Is this the proper check? */
-      if (gtk_widget_get_state_flags (GTK_WIDGET (self)) & GTK_STATE_FLAG_FOCUS_WITHIN)
+      if (gtk_list_base_root_focus_is_inside (self))
         {
           GtkListTile *tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
 
