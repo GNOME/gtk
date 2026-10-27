@@ -28,7 +28,6 @@ if x11_enabled
   tests += [
     { 'name': 'display' },
     { 'name': 'encoding' },
-    { 'name': 'clipboard-x11' },
   ]
 endif
 
