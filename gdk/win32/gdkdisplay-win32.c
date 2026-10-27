@@ -737,6 +737,41 @@ register_display_change_notification (GdkDisplay *display)
     }
 }
 
+/* Check if DWM can composite per-pixel alpha, and set the display's
+ * composited and shadow-width properties accordingly
+ */
+void
+_gdk_win32_display_update_composited (GdkWin32Display *display_win32)
+{
+  DWM_BLURBEHIND blur_behind;
+  HRGN empty_region;
+  BOOL dwm_enabled = FALSE;
+  gboolean composited = FALSE;
+
+  if (display_win32->hwnd != NULL &&
+      SUCCEEDED (DwmIsCompositionEnabled (&dwm_enabled)) &&
+      dwm_enabled)
+    {
+      empty_region = CreateRectRgn (0, 0, -1, -1);
+
+      if (empty_region != NULL)
+        {
+          memset (&blur_behind, 0, sizeof (blur_behind));
+          blur_behind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+          blur_behind.hRgnBlur = empty_region;
+          blur_behind.fEnable = TRUE;
+
+          composited = SUCCEEDED (DwmEnableBlurBehindWindow (display_win32->hwnd,
+                                                             &blur_behind));
+
+          DeleteObject (empty_region);
+        }
+    }
+
+  gdk_display_set_composited (GDK_DISPLAY (display_win32), composited);
+  gdk_display_set_shadow_width (GDK_DISPLAY (display_win32), composited);
+}
+
 GdkDisplay *
 _gdk_win32_display_open (const char *display_name)
 {
@@ -791,6 +826,8 @@ _gdk_win32_display_open (const char *display_name)
       gdk_display_get_name (display);
 
       register_display_change_notification (display);
+
+      _gdk_win32_display_update_composited (win32_display);
 
       g_signal_emit_by_name (display, "opened");
 
@@ -1222,8 +1259,6 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   display_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
-  gdk_display_set_composited (GDK_DISPLAY (display_win32), TRUE);
-  gdk_display_set_shadow_width (GDK_DISPLAY (display_win32), TRUE);
 }
 
 static void

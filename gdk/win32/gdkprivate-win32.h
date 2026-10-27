@@ -76,6 +76,8 @@ BOOL _gdk_win32_get_cursor_pos (GdkDisplay *display,
 
 void gdk_win32_surface_enable_transparency (GdkSurface *surface);
 
+void _gdk_win32_display_update_composited (GdkWin32Display *display);
+
 void _gdk_win32_dnd_exit (void);
 
 void     gdk_win32_display_handle_table_insert  (GdkDisplay *display,

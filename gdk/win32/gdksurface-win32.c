@@ -182,6 +182,10 @@ gdk_win32_surface_enable_transparency (GdkSurface *surface)
   if (surface == NULL || GDK_SURFACE_HWND (surface) == NULL)
     return;
 
+  /* Nothing to make transparent when the display is not composited */
+  if (!gdk_display_is_composited (gdk_surface_get_display (surface)))
+    return;
+
   /* happens while dwm.exe is restarting */
   if (FAILED (DwmIsCompositionEnabled (&dummy)))
     return;
@@ -200,8 +204,8 @@ gdk_win32_surface_enable_transparency (GdkSurface *surface)
   call_result = DwmEnableBlurBehindWindow (this_hwnd, &blur_behind);
 
   if (!SUCCEEDED (call_result))
-    g_warning ("%s: %s (%p) failed: %" G_GINT32_MODIFIER "x",
-        G_STRLOC, "DwmEnableBlurBehindWindow", this_hwnd, (guint32) call_result);
+    GDK_DEBUG (MISC, "DwmEnableBlurBehindWindow (%p) failed: %x",
+               this_hwnd, (guint32) call_result);
 
   DeleteObject (empty_region);
 }

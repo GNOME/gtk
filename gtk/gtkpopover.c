@@ -501,6 +501,27 @@ compute_surface_pointing_to (GtkPopover   *popover,
   rect->height = (int) ceilf (bounds.size.height);
 }
 
+/* Shadows only work when the display composites alpha */
+static void
+get_shadow_width (GtkPopover *popover,
+                  GtkBorder  *shadow_width)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkCssStyle *style;
+  GdkDisplay *display;
+
+  display = gtk_widget_get_display (GTK_WIDGET (popover));
+  if (!gdk_display_is_rgba (display) ||
+      !gdk_display_is_composited (display))
+    {
+      *shadow_width = (GtkBorder) { 0, 0, 0, 0 };
+      return;
+    }
+
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, shadow_width);
+}
+
 static GdkPopupLayout *
 create_popup_layout (GtkPopover    *popover,
                      GdkAnchorHints resize_hints)
@@ -511,14 +532,12 @@ create_popup_layout (GtkPopover    *popover,
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
   GdkPopupLayout *layout;
-  GtkCssStyle *style;
   GtkBorder shadow_width;
   gboolean ltr = gtk_widget_get_direction (GTK_WIDGET (popover)) != GTK_TEXT_DIR_RTL;
 
   compute_surface_pointing_to (popover, &rect);
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
+  get_shadow_width (popover, &shadow_width);
 
   switch (priv->position)
     {
@@ -1341,7 +1360,7 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   border_right = gtk_css_number_value_get (style->border->border_right_width, 100);
   border_bottom = gtk_css_number_value_get (style->border->border_bottom_width, 100);
 
-  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
+  get_shadow_width (popover, &shadow_width);
 
   if (pos == GTK_POS_BOTTOM)
     {
@@ -1517,16 +1536,11 @@ gtk_popover_update_shape (GtkPopover *popover)
     }
   else
     {
-      GtkCssNode *content_css_node;
-      GtkCssStyle *style;
       GtkBorder shadow_width;
       cairo_rectangle_int_t input_rect;
       cairo_region_t *region;
 
-      content_css_node =
-        gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget));
-      style = gtk_css_node_get_style (content_css_node);
-      gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
+      get_shadow_width (popover, &shadow_width);
 
       input_rect.x = shadow_width.left;
       input_rect.y = shadow_width.top;
@@ -1583,11 +1597,9 @@ gtk_popover_measure (GtkWidget      *widget,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   int minimal_size;
   int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
-  GtkCssStyle *style;
   GtkBorder shadow_width;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
+  get_shadow_width (popover, &shadow_width);
 
   if (for_size >= 0)
     {
@@ -1637,11 +1649,9 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkAllocation child_alloc;
   int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
-  GtkCssStyle *style;
   GtkBorder shadow_width;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
+  get_shadow_width (popover, &shadow_width);
 
   switch (priv->final_position)
     {
