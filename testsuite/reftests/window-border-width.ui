@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window_information_collection">
     <property name="decorated">0</property>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkImage" id="just-creating-a-texture">
     <property name="paintable">resource:///org/gtk/libgtk/icons/16x16/status/image-missing.png</property>

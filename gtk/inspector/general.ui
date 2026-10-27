@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkInspectorGeneral" parent="GtkWidget">
     <child>
@@ -432,7 +431,6 @@
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
                                         <property name="bytes"><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
     <interface>
       <template class='GtkListItem'>
         <property name='activatable'>0</property>
@@ -912,7 +910,6 @@
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
                                         <property name="bytes"><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
     <interface>
       <template class='GtkListItem'>
         <property name='activatable'>0</property>
@@ -1000,7 +997,6 @@
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
                                         <property name="bytes"><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
     <interface>
       <template class='GtkListItem'>
         <property name='activatable'>0</property>
@@ -1207,7 +1203,6 @@
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
                                         <property name="bytes"><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
     <interface>
       <template class='GtkListItem'>
         <property name='activatable'>0</property>
@@ -1295,7 +1290,6 @@
                                     <property name="factory">
                                       <object class="GtkBuilderListItemFactory">
                                         <property name="bytes"><![CDATA[
-    <?xml version="1.0" encoding="UTF-8"?>
     <interface>
       <template class='GtkListItem'>
         <property name='activatable'>0</property>
