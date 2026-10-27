@@ -400,19 +400,24 @@ get_index_in (GtkAccessible *parent,
 
   guint res = 0;
   GtkAccessible *candidate;
-  for (candidate = gtk_accessible_get_first_accessible_child (parent);
-       candidate != NULL;
-       candidate = gtk_accessible_get_next_accessible_sibling (candidate))
+
+  candidate = gtk_accessible_get_first_accessible_child (parent);
+  while (candidate != NULL)
     {
-      g_object_unref (candidate);
+      GtkAccessible *next;
 
       if (candidate == child)
-        return res;
+        {
+          g_object_unref (candidate);
+          return res;
+        }
 
-      if (!gtk_accessible_should_present (candidate))
-        continue;
+      if (gtk_accessible_should_present (candidate))
+        res++;
 
-      res++;
+      next = gtk_accessible_get_next_accessible_sibling (candidate);
+      g_object_unref (candidate);
+      candidate = next;
     }
 
   return -1;
@@ -679,19 +684,22 @@ handle_accessible_method (GDBusConnection       *connection,
 
       presentable_idx = 0;
 
-      for (child = gtk_accessible_get_first_accessible_child (accessible);
-           child != NULL;
-           child = gtk_accessible_get_next_accessible_sibling (child))
+      child = gtk_accessible_get_first_accessible_child (accessible);
+      while (child != NULL)
         {
+          GtkAccessible *next_child;
+
+          if (gtk_accessible_should_present (child))
+            {
+              if (presentable_idx == idx)
+                break;
+
+              presentable_idx += 1;
+            }
+
+          next_child = gtk_accessible_get_next_accessible_sibling (child);
           g_object_unref (child);
-
-          if (!gtk_accessible_should_present (child))
-            continue;
-
-          if (presentable_idx == idx)
-            break;
-
-          presentable_idx += 1;
+          child = next_child;
         }
 
       if (child != NULL)
@@ -699,6 +707,8 @@ handle_accessible_method (GDBusConnection       *connection,
 
       if (context == NULL)
         {
+          if (child != NULL)
+            g_object_unref (child);
           g_dbus_method_invocation_return_error (invocation,
                                                  G_IO_ERROR,
                                                  G_IO_ERROR_INVALID_ARGUMENT,
@@ -713,6 +723,7 @@ handle_accessible_method (GDBusConnection       *connection,
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", ref));
 
       g_object_unref (context);
+      g_object_unref (child);
     }
   else if (g_strcmp0 (method_name, "GetChildren") == 0)
     {
@@ -728,26 +739,29 @@ handle_accessible_method (GDBusConnection       *connection,
           g_variant_builder_add (&builder, "@(so)", ref);
         }
 
-      for (child = gtk_accessible_get_first_accessible_child (accessible);
-           child != NULL;
-           child = gtk_accessible_get_next_accessible_sibling (child))
+      child = gtk_accessible_get_first_accessible_child (accessible);
+      while (child != NULL)
         {
+          GtkAccessible *next_child;
+
+          if (gtk_accessible_should_present (child))
+            {
+              GtkATContext *context = gtk_accessible_get_at_context (child);
+
+              /* Realize the child ATContext in order to get its ref */
+              gtk_at_context_realize (context);
+
+              GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+
+              if (ref != NULL)
+                g_variant_builder_add (&builder, "@(so)", ref);
+
+              g_object_unref (context);
+            }
+
+          next_child = gtk_accessible_get_next_accessible_sibling (child);
           g_object_unref (child);
-
-          if (!gtk_accessible_should_present (child))
-            continue;
-
-          GtkATContext *context = gtk_accessible_get_at_context (child);
-
-          /* Realize the child ATContext in order to get its ref */
-          gtk_at_context_realize (context);
-
-          GVariant *ref = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
-
-          if (ref != NULL)
-            g_variant_builder_add (&builder, "@(so)", ref);
-
-          g_object_unref (context);
+          child = next_child;
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
@@ -2148,17 +2162,17 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
   if (GTK_IS_AT_SPI_SOCKET (accessible))
     return 1;
 
-  GtkAccessible *child = NULL;
-  for (child = gtk_accessible_get_first_accessible_child (accessible);
-       child != NULL;
-       child = gtk_accessible_get_next_accessible_sibling (child))
+  GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
+  while (child != NULL)
     {
+      GtkAccessible *next_child;
+
+      if (gtk_accessible_should_present (child))
+        n_children++;
+
+      next_child = gtk_accessible_get_next_accessible_sibling (child);
       g_object_unref (child);
-
-      if (!gtk_accessible_should_present (child))
-        continue;
-
-      n_children += 1;
+      child = next_child;
     }
 
   return n_children;
