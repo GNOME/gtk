@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0</property>

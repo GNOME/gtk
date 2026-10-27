@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkGrid" id="grid">
     <property name="row-spacing">10</property>

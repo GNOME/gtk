@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkAdjustment" id="basic_adjustment">
     <property name="lower">-10000</property>

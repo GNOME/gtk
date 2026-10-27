@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!-- this is a copy of widget-factory.ui with all custom widget classes
      and callbacks removed, so it can be loaded by GtkBuilder
   -->

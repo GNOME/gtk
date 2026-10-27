@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkCellRendererPixbuf" id="just-creating-a-pixbuf">
     <property name="pixbuf-expander-open">resource:///org/gtk/libgtk/icons/16x16/status/image-missing.png</property>
