@@ -478,6 +478,7 @@ compare (gconstpointer             *elem1,
          gpointer                   data)
 {
   GskDiffResult res;
+  gssize end1 = lim1;
 
   /*
    * Shrink the box by walking through each diagonal snake (SW and NE).
@@ -494,16 +495,13 @@ compare (gconstpointer             *elem1,
         return res;
     }
 
+  /* Find the NE snake, but emit it after the middle, so that operations
+   * happen in order. Container nodes need that for copy nodes.
+   */
   for (; off1 < lim1 && off2 < lim2; lim1--, lim2--)
     {
       if (!diff_elements_equal (elem1[lim1 - 1], elem2[lim2 - 1], settings, data))
         break;
-
-      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
-                                 elem1, lim1 - 1, elem2, lim2 - 1,
-                                 settings, data);
-      if (res != GSK_DIFF_OK)
-        return res;
     }
 
   /*
@@ -562,6 +560,15 @@ compare (gconstpointer             *elem1,
                      script,
                      spl.min_hi,
                      settings, data);
+      if (res != GSK_DIFF_OK)
+        return res;
+    }
+
+  for (; lim1 < end1; lim1++, lim2++)
+    {
+      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
+                                 elem1, lim1, elem2, lim2,
+                                 settings, data);
       if (res != GSK_DIFF_OK)
         return res;
     }

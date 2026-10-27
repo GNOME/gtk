@@ -268,7 +268,8 @@ test_deferred_structural_abort (void)
                           compare_int_element,
                           FALSE, &direct);
   g_assert_cmpint (result, ==, GSK_DIFF_ABORTED);
-  g_assert_cmpuint (direct.n_callbacks, ==, 200);
+  /* the equal elements come after the aborting middle */
+  g_assert_cmpuint (direct.n_callbacks, ==, 0);
 
   result = run_diff_full (elem1, G_N_ELEMENTS (elem1),
                           elem2, G_N_ELEMENTS (elem2),
@@ -437,6 +438,36 @@ test_recursive_identical_keeps (void)
   g_string_free (data.trace, TRUE);
 }
 
+/* Keeps must be reported in order, also for matches inside the search */
+static void
+test_keep_order (void)
+{
+  gconstpointer elem1[] = {
+    GINT_TO_POINTER (1),
+  };
+  gconstpointer elem2[] = {
+    GINT_TO_POINTER (2), GINT_TO_POINTER (1), GINT_TO_POINTER (1), GINT_TO_POINTER (2),
+  };
+  gboolean defer;
+
+  for (defer = FALSE; defer <= TRUE; defer++)
+    {
+      TestData data = {
+        .trace = g_string_new (NULL),
+        .reject_identical_compare = TRUE,
+      };
+      GskDiffResult result;
+
+      result = run_diff (elem1, G_N_ELEMENTS (elem1),
+                         elem2, G_N_ELEMENTS (elem2),
+                         defer, &data);
+      g_assert_cmpint (result, ==, GSK_DIFF_OK);
+      g_assert_cmpstr (data.trace->str, ==, "I2@0;I1@1;K1:1;I2@3;");
+
+      g_string_free (data.trace, TRUE);
+    }
+}
+
 static void
 test_boundary_snakes (void)
 {
@@ -580,6 +611,7 @@ main (int   argc,
   g_test_add_func ("/gsk/diff/pointer-distinct-equal", test_pointer_distinct_equal);
   g_test_add_func ("/gsk/diff/trimmed-callback-indexes", test_trimmed_callback_indexes);
   g_test_add_func ("/gsk/diff/recursive-identical-keeps", test_recursive_identical_keeps);
+  g_test_add_func ("/gsk/diff/keep-order", test_keep_order);
   g_test_add_func ("/gsk/diff/boundary-snakes", test_boundary_snakes);
   g_test_add_func ("/gsk/diff/bounded-workspace-large-offset", test_bounded_workspace_large_offset);
   g_test_add_func ("/gsk/diff/bounded-workspace-budget-boundary",
