@@ -1940,6 +1940,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
       GSList *tmp_list;
       PangoLanguage *language;
       int start, end;
+      int fg_alpha = -1, bg_alpha = -1;
 
       pango_attr_iterator_range (iter, &start, &end);
 
@@ -2013,6 +2014,12 @@ add_preedit_attrs (GtkTextLayout     *layout,
             case PANGO_ATTR_RISE:
               appearance.rise = ((PangoAttrInt *)attr)->value;
               break;
+            case PANGO_ATTR_FOREGROUND_ALPHA:
+              fg_alpha = ((PangoAttrInt *)attr)->value;
+              break;
+            case PANGO_ATTR_BACKGROUND_ALPHA:
+              bg_alpha = ((PangoAttrInt *)attr)->value;
+              break;
 	    default:
 	      break;
 	    }
@@ -2022,6 +2029,14 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	}
 
       g_slist_free (extra_attrs);
+
+      /* The alpha attributes may come before or after their color one:
+       * apply them once the color is known.
+       */
+      if (fg_alpha >= 0 && appearance.fg_rgba)
+        appearance.fg_rgba->alpha = fg_alpha / 65535.;
+      if (bg_alpha >= 0 && appearance.bg_rgba)
+        appearance.bg_rgba->alpha = bg_alpha / 65535.;
 
       insert_attr = pango_attr_font_desc_new (font_desc);
       insert_attr->start_index = start + offset;
