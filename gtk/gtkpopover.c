@@ -1086,7 +1086,6 @@ gtk_popover_init (GtkPopover *popover)
 
   priv->contents_widget = gtk_popover_content_new ();
 
-  gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
   gtk_widget_set_overflow (priv->contents_widget, GTK_OVERFLOW_HIDDEN);
 

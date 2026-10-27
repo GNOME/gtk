@@ -6328,22 +6328,6 @@ add_normal_and_shifted_binding (GtkWidgetClass  *widget_class,
 }
 
 static void
-gtk_file_chooser_widget_size_allocate (GtkWidget *widget,
-                                       int        width,
-                                       int        height,
-                                       int        baseline)
-{
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (widget);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget, width, height, baseline);
-
-  if (impl->browse_files_popover)
-    gtk_popover_present (GTK_POPOVER (impl->browse_files_popover));
-  if (impl->rename_file_popover)
-    gtk_popover_present (GTK_POPOVER (impl->rename_file_popover));
-}
-
-static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
@@ -6363,7 +6347,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unmap = gtk_file_chooser_widget_unmap;
   widget_class->root = gtk_file_chooser_widget_root;
   widget_class->unroot = gtk_file_chooser_widget_unroot;
-  widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
 

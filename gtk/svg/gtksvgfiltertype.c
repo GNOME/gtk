@@ -92,6 +92,7 @@ static SvgProperty merge_attrs[] = {
 
 static SvgProperty merge_node_attrs[] = {
   SVG_PROPERTY_FE_IN,
+  SVG_PROPERTY_FE_COLOR_INTERPOLATION,
 };
 
 static SvgProperty component_transfer_attrs[] = {

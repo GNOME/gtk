@@ -415,7 +415,7 @@ svg_filter_get_inline_style (SvgFilter *filter)
 
 void
 svg_filter_parse_classes (SvgFilter  *filter,
-                        const char *classes)
+                          const char *classes)
 {
   svg_filter_take_classes (filter, parse_strv (classes));
 }
