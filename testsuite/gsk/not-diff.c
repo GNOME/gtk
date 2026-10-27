@@ -152,6 +152,68 @@ test_diff_reused_paste (void)
   gsk_transform_unref (t);
 }
 
+static GskRenderNode *
+backdrop_blur_new (const graphene_rect_t *bounds)
+{
+  GskRenderNode *paste, *blur, *copy;
+
+  paste = gsk_paste_node_new (bounds, 0);
+  blur = gsk_blur_node_new (paste, 10);
+  copy = gsk_copy_node_new (blur);
+
+  gsk_render_node_unref (blur);
+  gsk_render_node_unref (paste);
+
+  return copy;
+}
+
+static cairo_region_t *
+diff_containers (GskRenderNode **nodes1,
+                 gsize           n_nodes1,
+                 GskRenderNode **nodes2,
+                 gsize           n_nodes2)
+{
+  GskRenderNode *root1, *root2;
+  cairo_region_t *region;
+
+  root1 = gsk_container_node_new (nodes1, n_nodes1);
+  root2 = gsk_container_node_new (nodes2, n_nodes2);
+  region = cairo_region_create ();
+
+  gsk_render_node_diff (root1, root2, &(GskDiffData) { region, NULL, NULL });
+
+  gsk_render_node_unref (root1);
+  gsk_render_node_unref (root2);
+
+  return region;
+}
+
+/* Same, but without a transform node, like a widget at its parent's origin */
+static void
+test_diff_reused_paste_no_transform (void)
+{
+  GskRenderNode *bg1, *bg2, *glass;
+  cairo_region_t *region;
+
+  bg1 = gsk_color_node_new (&(GdkRGBA){1, 0, 0, 1 }, &GRAPHENE_RECT_INIT (0, 0, 60, 50));
+  bg2 = gsk_color_node_new (&(GdkRGBA){0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (0, 0, 60, 50));
+  glass = backdrop_blur_new (&GRAPHENE_RECT_INIT (50, 0, 50, 50));
+
+  region = diff_containers ((GskRenderNode *[]) { bg1, glass }, 2,
+                            (GskRenderNode *[]) { bg2, glass }, 2);
+  g_assert_true (cairo_region_contains_point (region, 65, 25));
+  cairo_region_destroy (region);
+
+  region = diff_containers ((GskRenderNode *[]) { bg1, glass }, 2,
+                            (GskRenderNode *[]) { bg1, glass }, 2);
+  g_assert_true (cairo_region_is_empty (region));
+  cairo_region_destroy (region);
+
+  gsk_render_node_unref (glass);
+  gsk_render_node_unref (bg1);
+  gsk_render_node_unref (bg2);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -161,6 +223,7 @@ main (int   argc,
   g_test_add_func ("/node/can-diff/basic", test_can_diff_basic);
   g_test_add_func ("/node/can-diff/transform", test_can_diff_transform);
   g_test_add_func ("/node/diff/reused-paste", test_diff_reused_paste);
+  g_test_add_func ("/node/diff/reused-paste-no-transform", test_diff_reused_paste_no_transform);
 
   return g_test_run ();
 }
