@@ -187,7 +187,8 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
                                                const GError     *error);
-static void gtk_css_provider_reset            (GtkCssProvider        *css_provider);
+static void gtk_css_provider_reset            (GtkCssProvider   *provider);
+static void gtk_css_provider_unload           (GtkCssProvider   *provider);
 
 
 static void gtk_css_provider_load_internal (GtkCssProvider *css_provider,
@@ -911,18 +912,8 @@ maybe_rerender_style_sheet (GtkCssProvider *css_provider)
 
   if (priv->needs_rerender && priv->source != NULL)
     {
-      GBytes *source = g_bytes_ref (priv->source);
-      GFile *source_file = NULL;
-
-      if (priv->source_file != NULL)
-        source_file = g_object_ref (priv->source_file);
-
-      gtk_css_provider_reset (css_provider);
-      gtk_css_provider_load_internal (css_provider, NULL, source_file, source);
-
-      priv->source = source;
-      priv->source_file = source_file;
-
+      gtk_css_provider_unload (css_provider);
+      gtk_css_provider_load_internal (css_provider, NULL, priv->source_file, priv->source);
       gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
     }
 
@@ -987,10 +978,25 @@ css_provider_commit (GtkCssProvider  *css_provider,
 }
 
 static void
-gtk_css_provider_reset (GtkCssProvider *css_provider)
+gtk_css_provider_unload (GtkCssProvider *provider)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
-  guint i;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+
+  g_hash_table_remove_all (priv->symbolic_colors);
+  g_hash_table_remove_all (priv->keyframes);
+
+  for (unsigned int i = 0; i < priv->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
+  g_array_set_size (priv->rulesets, 0);
+  g_clear_pointer (&priv->tree, _gtk_css_selector_tree_free);
+}
+
+static void
+gtk_css_provider_reset (GtkCssProvider *provider)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+
+  gtk_css_provider_unload (provider);
 
   g_clear_pointer (&priv->source, g_bytes_unref);
   g_clear_object (&priv->source_file);
@@ -1002,14 +1008,6 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
     }
 
   g_clear_pointer (&priv->path, g_free);
-
-  g_hash_table_remove_all (priv->symbolic_colors);
-  g_hash_table_remove_all (priv->keyframes);
-
-  for (i = 0; i < priv->rulesets->len; i++)
-    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
-  g_array_set_size (priv->rulesets, 0);
-  g_clear_pointer (&priv->tree, _gtk_css_selector_tree_free);
 }
 
 static gboolean
