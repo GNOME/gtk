@@ -318,6 +318,7 @@ tests_with_rounding_issues = [
 ]
 
 tests_with_blur = [
+  'fill-get-image-out-of-bounds',
   'shadow-huge-offset-multiple-blurred',
 ]
 
