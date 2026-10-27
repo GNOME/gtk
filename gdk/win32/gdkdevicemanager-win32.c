@@ -29,6 +29,7 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkdevicetoolprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
@@ -37,13 +38,15 @@
 
 #define WINTAB32_DLL "Wintab32.dll"
 
-#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
+#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION | PK_TANGENT_PRESSURE)
 /* We want everything in absolute mode */
 #define PACKETMODE (0)
 #include <pktdef.h>
 
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
 #define TWOPI (2 * G_PI)
+/* Wintab's FIX32 is a 16.16 fixed-point number */
+#define FIX_DOUBLE(x) ((double) INT (x) + (double) FRAC (x) / 65536)
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
 typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
@@ -246,7 +249,7 @@ print_lc(LOGCONTEXTA *lc)
 }
 
 #define WINTAB_API_CHECK(device_manager,f)\
-  ((device_manager->wintab_items->p_##f = (t_##f) GetProcAddress (device_manager->wintab_items->wintab32, "##f##")) != NULL)
+  ((device_manager->wintab_items->p_##f = (t_##f) GetProcAddress (device_manager->wintab_items->wintab32, #f)) != NULL)
 #define WINTAB_API_CALL(device_manager,f) device_manager->wintab_items->p_##f
 
 static void
@@ -381,22 +384,210 @@ print_cursor (GdkDeviceManagerWin32 *device_manager,
 }
 #endif
 
+static GdkDeviceWintab *gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
+                                                               HCTX                   hctx,
+                                                               UINT                   cursor);
+
+static void
+wintab_add_cursor (GdkDeviceManagerWin32 *device_manager,
+                   HCTX                   hctx,
+                   UINT                   devix,
+                   UINT                   cursorix)
+{
+  GdkDisplay *display = device_manager->display;
+  GdkDeviceWintab *device;
+  LOGCONTEXTA lc;
+  BOOL active;
+  DWORD physid;
+  AXIS axis_x, axis_y, axis_npressure, axis_or[3], axis_tpressure;
+  int num_axes = 0;
+  wchar_t devname[100], csrname[100];
+  char *devname_utf8, *csrname_utf8, *device_name;
+
+#ifdef DEBUG_WINTAB
+  GDK_NOTE (INPUT, (g_print("Cursor %u:\n", cursorix), print_cursor (device_manager, cursorix)));
+#endif
+  active = FALSE;
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
+  if (!active)
+    return;
+
+  /* Wacom tablets report every cursor type they support, including
+   * those for pens and pucks that have not been seen yet. These report
+   * physid zero until the hardware is used, at which point Wintab sends
+   * WT_CSRCHANGE and we get here again. So at least for Wacom, skip
+   * cursors with physid zero.
+   */
+  WINTAB_API_CALL (device_manager, WTInfoW) (WTI_DEVICES + devix, DVC_NAME, devname);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_PHYSID, &physid);
+  if (wcscmp (devname, L"WACOM Tablet") == 0 && physid == 0)
+    return;
+
+  if (!WINTAB_API_CALL (device_manager, WTGetA) (hctx, &lc))
+    {
+      g_warning ("Wintab: could not get the context of device %u", devix);
+      return;
+    }
+
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_X, &axis_x);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_Y, &axis_y);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_TPRESSURE, &axis_tpressure);
+
+  WINTAB_API_CALL (device_manager, WTInfoW) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
+  devname_utf8 = g_utf16_to_utf8 (devname, -1, NULL, NULL, NULL);
+  csrname_utf8 = g_utf16_to_utf8 (csrname, -1, NULL, NULL, NULL);
+  device_name = g_strconcat (devname_utf8, " ", csrname_utf8, NULL);
+  g_free (devname_utf8);
+  g_free (csrname_utf8);
+
+  device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
+                         "name", device_name,
+                         "source", GDK_SOURCE_PEN,
+                         "has-cursor", lc.lcOptions & CXO_SYSTEM,
+                         "display", display,
+                         NULL);
+
+  device->sends_core = lc.lcOptions & CXO_SYSTEM;
+  if (device->sends_core)
+    {
+      _gdk_device_set_associated_device (GDK_DEVICE (device), device_manager->core_pointer);
+      _gdk_device_add_physical_device (device_manager->core_pointer, GDK_DEVICE (device));
+    }
+
+  device->hctx = hctx;
+  device->cursor = cursorix;
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_PKTDATA, &device->pktdata);
+
+  if (device->pktdata & PK_X)
+    {
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_X,
+                            axis_x.axMin,
+                            axis_x.axMax,
+                            FIX_DOUBLE (axis_x.axResolution));
+      num_axes++;
+    }
+
+  if (device->pktdata & PK_Y)
+    {
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_Y,
+                            axis_y.axMin,
+                            axis_y.axMax,
+                            FIX_DOUBLE (axis_y.axResolution));
+      num_axes++;
+    }
+
+  if (device->pktdata & PK_NORMAL_PRESSURE)
+    {
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_PRESSURE,
+                            axis_npressure.axMin,
+                            axis_npressure.axMax,
+                            FIX_DOUBLE (axis_npressure.axResolution));
+      num_axes++;
+    }
+
+  if (device->pktdata & PK_ORIENTATION)
+    {
+      /* Wacom's driver reports the twist of every pen, but only the Art
+       * Pen turns; on an airbrush it would hide that the wheel is used.
+       */
+      if (device->pktdata & PK_TANGENT_PRESSURE)
+        axis_or[2].axResolution = 0;
+
+      device->orientation_axes[0] = axis_or[0];
+      device->orientation_axes[1] = axis_or[1];
+      device->orientation_axes[2] = axis_or[2];
+
+      /* Wintab gives us azimuth and altitude, which
+       * we convert to x and y tilt in the -1000..1000 range
+       */
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_XTILT,
+                            -1000,
+                            1000,
+                            1000);
+
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_YTILT,
+                            -1000,
+                            1000,
+                            1000);
+      num_axes += 2;
+
+      /* The barrel rotation of an Art Pen */
+      if (axis_or[2].axResolution != 0)
+        {
+          _gdk_device_add_axis (GDK_DEVICE (device),
+                                GDK_AXIS_ROTATION,
+                                axis_or[2].axMin,
+                                axis_or[2].axMax,
+                                FIX_DOUBLE (axis_or[2].axResolution));
+          num_axes++;
+        }
+    }
+
+  /* The finger wheel of an airbrush */
+  if (device->pktdata & PK_TANGENT_PRESSURE)
+    {
+      _gdk_device_add_axis (GDK_DEVICE (device),
+                            GDK_AXIS_WHEEL,
+                            axis_tpressure.axMin,
+                            axis_tpressure.axMax,
+                            FIX_DOUBLE (axis_tpressure.axResolution));
+      num_axes++;
+    }
+
+  device->last_axis_data = g_new (int, num_axes);
+
+  GDK_NOTE (INPUT, g_print ("device: (%u) %s axes: %d\n",
+                            cursorix,
+                            device_name,
+                            num_axes));
+
+  device_manager->wintab_devices = g_list_append (device_manager->wintab_devices,
+                                                  device);
+
+  gdk_win32_seat_add_physical_device (GDK_WIN32_SEAT (gdk_display_get_default_seat (display)),
+                                      GDK_DEVICE (device));
+
+  g_free (device_name);
+}
+
+/* Creates devices for the cursors of a tablet that we don't know yet */
+static void
+wintab_recognize_new_cursors (GdkDeviceManagerWin32 *device_manager,
+                              HCTX                   hctx,
+                              UINT                   devix)
+{
+  UINT ncsrtypes, firstcsr, cursorix;
+
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_NCSRTYPES, &ncsrtypes);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_FIRSTCSR, &firstcsr);
+
+  for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
+    {
+      if (gdk_device_manager_find_wintab_device (device_manager, hctx, cursorix) == NULL)
+        wintab_add_cursor (device_manager, hctx, devix, cursorix);
+    }
+}
+
 static void
 wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
   GdkDisplay *display = device_manager->display;
   static gboolean wintab_initialized = FALSE;
-  GdkDeviceWintab *device;
   WORD specversion;
   HCTX *hctx;
-  UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
-  BOOL active;
-  DWORD physid;
-  AXIS axis_x, axis_y, axis_npressure, axis_or[3];
-  UINT devix, cursorix;
-  int i, num_axes = 0;
-  wchar_t devname[100], csrname[100];
-  char *devname_utf8, *csrname_utf8, *device_name;
+  UINT ndevices, ncursors;
+  AXIS axis_x, axis_y;
+  UINT devix;
+  int i;
+  wchar_t devname[100];
+  char *devname_utf8;
   BOOL defcontext_done;
   HMODULE wintab32;
   char *wintab32_dll_path;
@@ -480,13 +671,8 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 #ifdef DEBUG_WINTAB
       GDK_NOTE (INPUT, (g_print("Device %u: %s\n", devix, devname_utf8)));
 #endif
-      WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_NCSRTYPES, &ncsrtypes);
-      WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_FIRSTCSR, &firstcsr);
-      WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_HARDWARE, &hardware);
       WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_X, &axis_x);
       WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_Y, &axis_y);
-      WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
-      WINTAB_API_CALL (device_manager, WTInfoA) (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
 
       defcontext_done = FALSE;
       if (HIBYTE (specversion) > 1 || LOBYTE (specversion) >= 1)
@@ -563,126 +749,11 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
         }
       if (!i)
         GDK_NOTE (INPUT, g_print("Whoops, no queue size could be set\n"));
-      for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
-        {
-#ifdef DEBUG_WINTAB
-          GDK_NOTE (INPUT, (g_print("Cursor %u:\n", cursorix), print_cursor (device_manager, cursorix)));
-#endif
-          active = FALSE;
-          WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
-          if (!active)
-            continue;
 
-          /* Wacom tablets seem to report cursors corresponding to
-           * nonexistent pens or pucks. At least my ArtPad II reports
-           * six cursors: a puck, pressure stylus and eraser stylus,
-           * and then the same three again. I only have a
-           * pressure-sensitive pen. The puck instances, and the
-           * second instances of the styluses report physid zero. So
-           * at least for Wacom, skip cursors with physid zero.
-           */
-          WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_PHYSID, &physid);
-          if (wcscmp (devname, L"WACOM Tablet") == 0 && physid == 0)
-            continue;
-
-          WINTAB_API_CALL (device_manager, WTInfoW) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
-          csrname_utf8 = g_utf16_to_utf8 (csrname, -1, NULL, NULL, NULL);
-          device_name = g_strconcat (devname_utf8, " ", csrname_utf8, NULL);
-
-          device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
-                                 "name", device_name,
-                                 "source", GDK_SOURCE_PEN,
-                                 "has-cursor", lc.lcOptions & CXO_SYSTEM,
-                                 "display", display,
-                                 NULL);
-
-	  device->sends_core = lc.lcOptions & CXO_SYSTEM;
-	  if (device->sends_core)
-	    {
-	      _gdk_device_set_associated_device (device_manager->system_pointer, GDK_DEVICE (device));
-	      _gdk_device_add_physical_device (device_manager->core_pointer, GDK_DEVICE (device));
-	    }
-
-          g_free (csrname_utf8);
-
-          device->hctx = *hctx;
-          device->cursor = cursorix;
-          WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + cursorix, CSR_PKTDATA, &device->pktdata);
-
-          if (device->pktdata & PK_X)
-            {
-              _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_AXIS_X,
-                                    axis_x.axMin,
-                                    axis_x.axMax,
-                                    axis_x.axResolution / 65535);
-              num_axes++;
-            }
-
-          if (device->pktdata & PK_Y)
-            {
-              _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_AXIS_Y,
-                                    axis_y.axMin,
-                                    axis_y.axMax,
-                                    axis_y.axResolution / 65535);
-              num_axes++;
-            }
-
-
-          if (device->pktdata & PK_NORMAL_PRESSURE)
-            {
-              _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_AXIS_PRESSURE,
-                                    axis_npressure.axMin,
-                                    axis_npressure.axMax,
-                                    axis_npressure.axResolution / 65535);
-              num_axes++;
-            }
-
-          if (device->pktdata & PK_ORIENTATION)
-            {
-              device->orientation_axes[0] = axis_or[0];
-              device->orientation_axes[1] = axis_or[1];
-
-              /* Wintab gives us azimuth and altitude, which
-               * we convert to x and y tilt in the -1000..1000 range
-               */
-              _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_AXIS_XTILT,
-                                    -1000,
-                                    1000,
-                                    1000);
-
-              _gdk_device_add_axis (GDK_DEVICE (device),
-                                    GDK_AXIS_YTILT,
-                                    -1000,
-                                    1000,
-                                    1000);
-              num_axes += 2;
-            }
-
-          device->last_axis_data = g_new (int, num_axes);
-
-          GDK_NOTE (INPUT, g_print ("device: (%u) %s axes: %d\n",
-                                    cursorix,
-                                    device_name,
-                                    num_axes));
-
-#if 0
-          for (i = 0; i < gdkdev->info.num_axes; i++)
-            GDK_NOTE (INPUT, g_print ("... axis %d: %d--%d@%d\n",
-                                      i,
-                                      gdkdev->axes[i].min_value,
-                                      gdkdev->axes[i].max_value,
-                                      gdkdev->axes[i].resolution));
-#endif
-
-          device_manager->wintab_devices = g_list_append (device_manager->wintab_devices,
-                                                          device);
-
-          g_free (device_name);
-        }
+      /* Create devices for the cursors that Wintab knows about now. Cursors
+       * that it recognizes later are picked up on WT_CSRCHANGE.
+       */
+      wintab_recognize_new_cursors (device_manager, *hctx, devix);
 
       g_free (devname_utf8);
     }
@@ -936,10 +1007,10 @@ decode_tilt (int    *axis_data,
    * Wintab's reference angle leads gdk's by 90 degrees.
    */
   az = TWOPI * packet->pkOrientation.orAzimuth /
-    (axes[0].axResolution / 65536.);
+    FIX_DOUBLE (axes[0].axResolution);
   az -= G_PI / 2;
   el = TWOPI * packet->pkOrientation.orAltitude /
-    (axes[1].axResolution / 65536.);
+    FIX_DOUBLE (axes[1].axResolution);
 
   /* X tilt */
   axis_data[0] = cos (az) * cos (el) * 1000;
@@ -990,6 +1061,81 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
     }
 
   return NULL;
+}
+
+static GdkDeviceToolType
+wintab_get_tool_type (UINT cursor,
+                      UINT csr_type)
+{
+  /* Drivers that don't report CSR_TYPE follow Wacom's convention of
+   * repeating cursors in groups of puck, pressure stylus and eraser.
+   */
+  if (csr_type == 0)
+    return cursor % 3 == 2 ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_PEN;
+
+  /* The general type of the tool is in the bits 0x0F06, as documented
+   * by Wacom. Erasers, the other ends of pens and airbrushes, have bit
+   * 0x0008 set.
+   */
+  switch (csr_type & 0x0F06)
+    {
+    case 0x0802: /* stylus */
+    case 0x0804: /* stylus with barrel rotation (Art Pen) */
+      return (csr_type & 0x0008) ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_PEN;
+    case 0x0902:
+      return (csr_type & 0x0008) ? GDK_DEVICE_TOOL_TYPE_ERASER : GDK_DEVICE_TOOL_TYPE_AIRBRUSH;
+    case 0x0004:
+      return GDK_DEVICE_TOOL_TYPE_MOUSE;
+    case 0x0006:
+      return GDK_DEVICE_TOOL_TYPE_LENS;
+    default:
+      return (csr_type & 0x0006) == 0x0002 ? GDK_DEVICE_TOOL_TYPE_PEN : GDK_DEVICE_TOOL_TYPE_UNKNOWN;
+    }
+}
+
+/* Looks up the physical tool that is using a cursor, and creates it the
+ * first time it's seen. A cursor stands for a kind of tool, so with
+ * several pens of the same kind, each pen that comes into proximity is
+ * reported on the same cursor; CSR_PHYSID tells them apart.
+ */
+static void
+wintab_update_tool (GdkDeviceManagerWin32 *device_manager,
+                    GdkDeviceWintab       *device)
+{
+  GdkSeat *seat = gdk_display_get_default_seat (device_manager->display);
+  GdkDeviceToolType tool_type;
+  GdkAxisFlags axes = GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
+  GdkDeviceTool *tool;
+  DWORD physid = 0;
+  UINT csr_type = 0;
+
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + device->cursor, CSR_PHYSID, &physid);
+  WINTAB_API_CALL (device_manager, WTInfoA) (WTI_CURSORS + device->cursor, CSR_TYPE, &csr_type);
+  tool_type = wintab_get_tool_type (device->cursor, csr_type);
+
+  tool = gdk_seat_get_tool (seat, physid, csr_type, tool_type);
+  if (tool == NULL)
+    {
+      if (device->pktdata & PK_NORMAL_PRESSURE)
+        axes |= GDK_AXIS_FLAG_PRESSURE;
+      if (device->pktdata & PK_ORIENTATION)
+        axes |= GDK_AXIS_FLAG_XTILT | GDK_AXIS_FLAG_YTILT;
+      if (device->orientation_axes[2].axResolution != 0 &&
+          (csr_type == 0 || (csr_type & 0x0F06) == 0x0804))
+        axes |= GDK_AXIS_FLAG_ROTATION;
+      if (device->pktdata & PK_TANGENT_PRESSURE)
+        axes |= GDK_AXIS_FLAG_WHEEL;
+
+      tool = gdk_device_tool_new (physid, csr_type, tool_type, axes);
+      gdk_win32_seat_add_tool (GDK_WIN32_SEAT (seat), tool);
+      g_object_unref (tool);
+    }
+
+  if (tool != device->tool)
+    {
+      device->tool = tool;
+      gdk_device_update_tool (GDK_DEVICE (device), tool);
+    }
 }
 
 GdkEvent *
@@ -1056,6 +1202,9 @@ gdk_wintab_make_event (GdkDisplay *display,
 	   */
 	  device_manager->dev_entered_proximity -= 1;
 
+	  if (source_device != NULL)
+	    wintab_update_tool (device_manager, source_device);
+
 	  if (source_device != NULL &&
 	      source_device->sends_core)
 	    {
@@ -1087,6 +1236,9 @@ gdk_wintab_make_event (GdkDisplay *display,
 
       if (source_device == NULL)
 	return NULL;
+
+      if (source_device->tool == NULL)
+	wintab_update_tool (device_manager, source_device);
 
       /* Don't produce any button or motion events while a surface is being
        * moved or resized, see bug #151090.
@@ -1120,7 +1272,11 @@ gdk_wintab_make_event (GdkDisplay *display,
           decode_tilt (source_device->last_axis_data + num_axes,
                        source_device->orientation_axes, &packet);
           num_axes += 2;
+          if (source_device->orientation_axes[2].axResolution != 0)
+            source_device->last_axis_data[num_axes++] = packet.pkOrientation.orTwist;
         }
+      if (source_device->pktdata & PK_TANGENT_PRESSURE)
+        source_device->last_axis_data[num_axes++] = packet.pkTangentPressure;
 
       translated_buttons = button_map[packet.pkButtons & 0x07] | (packet.pkButtons & ~0x07);
 
@@ -1165,7 +1321,7 @@ gdk_wintab_make_event (GdkDisplay *display,
       if (event_type == GDK_BUTTON_PRESS ||
           event_type == GDK_BUTTON_RELEASE)
         {
-          axes = g_new (double, GDK_AXIS_LAST);
+          axes = g_new0 (double, GDK_AXIS_LAST);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              surface,
@@ -1182,7 +1338,7 @@ gdk_wintab_make_event (GdkDisplay *display,
           event = gdk_button_event_new (event_type,
                                         surface,
                                         device_manager->core_pointer,
-                                        NULL,
+                                        source_device->tool,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
                                         event_button,
@@ -1200,7 +1356,7 @@ gdk_wintab_make_event (GdkDisplay *display,
         }
       else
         {
-          axes = g_new (double, GDK_AXIS_LAST);
+          axes = g_new0 (double, GDK_AXIS_LAST);
           _gdk_device_wintab_translate_axes (source_device,
                                              surface,
                                              axes,
@@ -1215,7 +1371,7 @@ gdk_wintab_make_event (GdkDisplay *display,
 
           event = gdk_motion_event_new (surface,
                                         device_manager->core_pointer,
-                                        NULL,
+                                        source_device->tool,
                                         _gdk_win32_get_next_tick (msg->time),
                                         event_state,
                                         event_x,
@@ -1238,7 +1394,28 @@ gdk_wintab_make_event (GdkDisplay *display,
       if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
 								  (HCTX) msg->lParam,
 								  packet.pkCursor)) == NULL)
-	return NULL;
+	{
+	  /* A cursor that Wintab didn't know about when we were initialized,
+	   * for instance a pen that is used for the first time.
+	   */
+	  UINT devix;
+	  GList *l;
+
+	  for (l = device_manager->wintab_items->wintab_contexts, devix = 0; l; l = l->next, devix++)
+	    if (*(HCTX *) l->data == (HCTX) msg->lParam)
+	      break;
+
+	  if (l == NULL)
+	    return NULL;
+
+	  wintab_recognize_new_cursors (device_manager, (HCTX) msg->lParam, devix);
+	  if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
+								      (HCTX) msg->lParam,
+								      packet.pkCursor)) == NULL)
+	    return NULL;
+	}
+
+      wintab_update_tool (device_manager, source_device);
 
       if (source_device->sends_core)
 	{

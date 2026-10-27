@@ -81,31 +81,6 @@ get_spacing (GtkCenterLayout *self,
   return css_spacing;
 }
 
-static GtkSizeRequestMode
-gtk_center_layout_get_request_mode (GtkLayoutManager *layout_manager,
-                                    GtkWidget        *widget)
-{
-  GtkCenterLayout *self = GTK_CENTER_LAYOUT (layout_manager);
-  int count[3] = { 0, 0, 0 };
-
-  if (self->start_widget)
-    count[gtk_widget_get_request_mode (self->start_widget)]++;
-
-  if (self->center_widget)
-    count[gtk_widget_get_request_mode (self->center_widget)]++;
-
-  if (self->end_widget)
-    count[gtk_widget_get_request_mode (self->end_widget)]++;
-
-  if (!count[GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH] &&
-      !count[GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT])
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-  else
-    return count[GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT] > count[GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH]
-           ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
-           : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_center_layout_distribute (GtkCenterLayout  *self,
                               int               for_size,
@@ -126,7 +101,7 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
   /* Usable space is really less... */
   for (i = 0; i < 3; i++)
     {
-      if (self->children[i])
+      if (self->children[i] && _gtk_widget_get_visible (self->children[i]))
         needed_spacing += spacing;
     }
   needed_spacing -= spacing;
@@ -137,13 +112,13 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
 
   for (i = 0; i < 3; i ++)
     {
-      if (self->children[i])
+      if (self->children[i] && _gtk_widget_get_visible (self->children[i]))
         gtk_widget_measure (self->children[i], self->orientation, for_size,
                             &sizes[i].minimum_size, &sizes[i].natural_size,
                             NULL, NULL);
     }
 
-  if (self->center_widget)
+  if (self->center_widget && _gtk_widget_get_visible (self->center_widget))
     {
       int natural_size;
 
@@ -152,27 +127,28 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
       if (self->shrink_center_last)
         natural_size = sizes[1].natural_size;
       else
-        natural_size = CLAMP (size - needed_spacing - (sizes[0].natural_size + sizes[2].natural_size), sizes[1].minimum_size, sizes[1].natural_size);
+        natural_size = CLAMP (size - needed_spacing - (sizes[0].natural_size + sizes[2].natural_size),
+                              sizes[1].minimum_size, sizes[1].natural_size);
 
       center_size = CLAMP (avail, sizes[1].minimum_size, natural_size);
       center_expand = gtk_widget_compute_expand (self->center_widget, self->orientation);
     }
 
-  if (self->start_widget)
+  if (self->start_widget && _gtk_widget_get_visible (self->start_widget))
     {
       avail = size - needed_spacing - (center_size + sizes[2].minimum_size);
       start_size = CLAMP (avail, sizes[0].minimum_size, sizes[0].natural_size);
       start_expand = gtk_widget_compute_expand (self->start_widget, self->orientation);
     }
 
-   if (self->end_widget)
+   if (self->end_widget && _gtk_widget_get_visible (self->end_widget))
     {
       avail = size - needed_spacing - (center_size + sizes[0].minimum_size);
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
       end_expand = gtk_widget_compute_expand (self->end_widget, self->orientation);
     }
 
-  if (self->center_widget)
+  if (self->center_widget && _gtk_widget_get_visible (self->center_widget))
     {
       int center_pos;
 
@@ -185,8 +161,19 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
         center_pos = size - center_size - end_size - spacing;
       else if (center_expand)
         {
-          center_size = size - 2 * (MAX (start_size, end_size) + spacing);
-          center_pos = (size / 2) - (center_size / 2) + spacing;
+          /* If neither of side children is visible,
+           * avoid adding the spacing that shouldn't be there.
+           */
+          if (needed_spacing > 0)
+            {
+              center_size = size - 2 * (MAX (start_size, end_size) + spacing);
+              center_pos = (size / 2) - (center_size / 2) + spacing;
+            }
+          else
+            {
+              center_size = size - 2 * MAX (start_size, end_size);
+              center_pos = (size / 2) - (center_size / 2);
+            }
         }
 
       if (start_expand)
@@ -263,7 +250,14 @@ gtk_center_layout_measure_orientation (GtkCenterLayout *self,
   if (n_visible_children > 0)
     {
       *minimum += (n_visible_children - 1) * spacing;
-      *natural += (n_visible_children - 1) * spacing;
+      /* With the center child and exactly one of the side children
+       * visible, we'd still like two units of spacing for symmetry.
+       */
+      if (n_visible_children == 2 && self->center_widget &&
+          _gtk_widget_get_visible (self->center_widget))
+        *natural += 2 * spacing;
+      else
+        *natural += (n_visible_children - 1) * spacing;
     }
 }
 
@@ -602,7 +596,6 @@ gtk_center_layout_class_init (GtkCenterLayoutClass *klass)
   object_class->set_property = gtk_center_layout_set_property;
   object_class->dispose = gtk_center_layout_dispose;
 
-  layout_class->get_request_mode = gtk_center_layout_get_request_mode;
   layout_class->measure = gtk_center_layout_measure;
   layout_class->allocate = gtk_center_layout_allocate;
 

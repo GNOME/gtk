@@ -1897,7 +1897,7 @@ gdk_key_event_matches (GdkEvent        *event,
         }
 
       keymap = gdk_display_get_keymap (gdk_event_get_display (event));
-      gdk_keymap_get_cached_entries_for_keyval (keymap, keyval, &keys, &n_keys);
+      gdk_keymap_get_cached_entries_for_keyval (keymap, key, &keys, &n_keys);
 
       for (i = 0; i < n_keys; i++)
         {

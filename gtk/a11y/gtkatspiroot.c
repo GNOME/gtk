@@ -302,6 +302,7 @@ handle_accessible_method (GDBusConnection       *connection,
       g_variant_get (parameters, "(i)", &idx);
 
       GtkWidget *window = NULL;
+      GtkWidget *child = NULL;
       guint n_toplevels = g_list_model_get_n_items (self->toplevels);
       for (guint i = 0; i < n_toplevels; i++)
         {
@@ -313,15 +314,24 @@ handle_accessible_method (GDBusConnection       *connection,
             continue;
 
           if (real_idx == idx)
-            break;
+            {
+              child = window;
+              break;
+            }
 
           real_idx += 1;
         }
 
-      if (window == NULL)
-        return;
+      if (child == NULL)
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "No child with index %d", idx);
+          return;
+        }
 
-      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
+      GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
 
       const char *name = g_dbus_connection_get_unique_name (self->connection);
       const char *path = gtk_at_spi_context_get_context_path (GTK_AT_SPI_CONTEXT (context));

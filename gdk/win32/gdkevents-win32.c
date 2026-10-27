@@ -3118,10 +3118,7 @@ gdk_event_translate (MSG *msg,
         {
           event = gdk_wintab_make_event (display, msg, surface);
           if (event)
-            {
-              _gdk_win32_append_event (event);
-               gdk_event_unref (event);
-            }
+            _gdk_win32_append_event (event);
         }
 
       break;

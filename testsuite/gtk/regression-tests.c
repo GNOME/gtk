@@ -94,6 +94,60 @@ test_picture_dispose_twice (void)
   g_object_unref (texture);
 }
 
+static void
+test_text_view_reset_buffer (gconstpointer use_property)
+{
+  GtkWidget *window = gtk_window_new ();
+  GtkTextView *view = GTK_TEXT_VIEW (gtk_text_view_new ());
+  GtkTextBuffer *original = g_object_ref (gtk_text_view_get_buffer (view));
+  GtkTextBuffer *replacement;
+  GtkTextIter iter;
+  GdkRectangle rect;
+
+  gtk_widget_set_focusable (GTK_WIDGET (view), FALSE);
+  gtk_text_buffer_set_text (original, "First paragraph\nSecond paragraph", -1);
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (view));
+  gtk_window_present (GTK_WINDOW (window));
+  gtk_test_widget_wait_for_draw (GTK_WIDGET (view));
+
+  if (use_property)
+    g_object_set (view, "buffer", NULL, NULL);
+  else
+    gtk_text_view_set_buffer (view, NULL);
+
+  gtk_test_widget_wait_for_draw (GTK_WIDGET (view));
+  replacement = gtk_text_view_get_buffer (view);
+  g_assert_true (replacement != original);
+  g_assert_cmpint (gtk_text_buffer_get_char_count (replacement), ==, 0);
+
+  gtk_text_buffer_set_text (replacement, "Replacement", -1);
+  gtk_text_buffer_get_start_iter (replacement, &iter);
+  gtk_text_view_get_iter_location (view, &iter, &rect);
+  g_assert_cmpint (rect.height, >, 0);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+  g_object_unref (original);
+}
+
+static void
+test_text_view_detached_layout_cursor (void)
+{
+  GtkWidget *window = gtk_window_new ();
+  GtkTextView *view = GTK_TEXT_VIEW (gtk_text_view_new ());
+
+  gtk_window_set_child (GTK_WINDOW (window), GTK_WIDGET (view));
+  gtk_window_present (GTK_WINDOW (window));
+  gtk_test_widget_wait_for_draw (GTK_WIDGET (view));
+
+  gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (view));
+  g_assert_true (gtk_widget_is_focus (GTK_WIDGET (view)));
+
+  gtk_text_view_set_buffer (view, NULL);
+  gtk_window_set_focus (GTK_WINDOW (window), NULL);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -102,6 +156,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/regression/94f00eb04dd1433cf1cc9a3341f485124e38abd1", test_94f00eb04dd1433cf1cc9a3341f485124e38abd1);
   g_test_add_func ("/regression/9d6da33ff5c5e41e3521e1afd63d2d67bc915753", test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753);
   g_test_add_func ("/regression/picture-dispose-twice", test_picture_dispose_twice);
+  g_test_add_data_func ("/regression/textview/reset-buffer", NULL, test_text_view_reset_buffer);
+  g_test_add_data_func ("/regression/textview/reset-buffer-property", GINT_TO_POINTER (1), test_text_view_reset_buffer);
+  g_test_add_func ("/regression/textview/detached-layout-cursor", test_text_view_detached_layout_cursor);
 
   return g_test_run ();
 }

@@ -1684,8 +1684,7 @@ editable_get_complete_text (GtkEditable *editable)
       GString *ret = g_string_new (gtk_entry_buffer_get_text (get_buffer (self)));
       char *preedit_string = NULL;
       int pos;
-      gtk_im_context_get_preedit_string (priv->im_context,
-                                     &preedit_string, NULL, NULL);
+      gtk_im_context_get_preedit_string (priv->im_context, &preedit_string, NULL, NULL);
       pos = g_utf8_offset_to_pointer (ret->str, priv->current_pos) - ret->str;
       g_string_insert (ret, pos, preedit_string);
       g_free (preedit_string);
@@ -2959,7 +2958,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       extend_selection = (state & GDK_SHIFT_MASK) != 0;
 
       /* Always emit reset when preedit is shown */
-      priv->need_im_reset = TRUE;
+      gtk_text_schedule_im_reset (self);
       gtk_text_reset_im_context (self);
 
       switch (n_press)
@@ -4143,7 +4142,7 @@ gtk_text_move_cursor (GtkText         *self,
 
   gtk_text_pend_cursor_blink (self);
 
-  priv->need_im_reset = TRUE;
+  gtk_text_schedule_im_reset (self);
   gtk_text_reset_im_context (self);
 }
 
@@ -5786,7 +5785,7 @@ gtk_text_set_editable (GtkText  *self,
 }
 
 static void
-gtk_text_set_text (GtkText     *self,
+gtk_text_set_text (GtkText    *self,
                    const char *text)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
@@ -5813,6 +5812,10 @@ gtk_text_set_text (GtkText     *self,
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
                                        tmp_pos, tmp_pos + g_utf8_strlen (text, -1));
+
+  gtk_text_schedule_im_reset (self);
+  gtk_text_reset_im_context (self);
+
   end_change (self);
 
   gtk_text_history_end_irreversible_action (priv->history);

@@ -4013,7 +4013,8 @@ static gboolean
 generate_layouts (SvgElement            *self,
                   PangoFontMap          *fontmap,
                   const graphene_rect_t *viewport,
-                  graphene_rect_t       *bounds)
+                  graphene_rect_t       *bounds,
+                  graphene_point_t      *offset)
 {
   gboolean retval;
   TextChunk dummy;
@@ -4022,6 +4023,8 @@ generate_layouts (SvgElement            *self,
   double y = 0;
   XmlSpace space;
   WritingMode wmode;
+  TextAnchor anchor;
+  float dx, dy;
 
 #if 0
   print_chunks (self, TRUE);
@@ -4036,6 +4039,7 @@ generate_layouts (SvgElement            *self,
 
   space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
   wmode = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_WRITING_MODE));
+  anchor = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_TEXT_ANCHOR));
 
   retval = do_generate_layouts (self, fontmap, space, wmode, &x, &y, &chunk, NULL, viewport, bounds);
 
@@ -4053,6 +4057,34 @@ generate_layouts (SvgElement            *self,
 #if 0
   print_chunks (self, FALSE);
 #endif
+
+  dx = dy = 0;
+  switch (anchor)
+    {
+    case TEXT_ANCHOR_START:
+      break;
+    case TEXT_ANCHOR_MIDDLE:
+      if (svg_writing_mode_is_vertical (wmode))
+        dy = - bounds->size.height / 2;
+      else
+        dx = - bounds->size.width / 2;
+      break;
+    case TEXT_ANCHOR_END:
+      if (svg_writing_mode_is_vertical (wmode))
+        dy = - bounds->size.height;
+      else
+        dx = - bounds->size.width;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  graphene_rect_init (&self->bounds,
+                      bounds->origin.x + dx, bounds->origin.y + dy,
+                      bounds->size.width, bounds->size.height);
+  self->valid_bounds = TRUE;
+  offset->x = dx;
+  offset->y = dy;
 
   return retval;
 }
@@ -4073,6 +4105,24 @@ clear_layouts (SvgElement *self)
           break;
         default:
           g_assert_not_reached ();
+        }
+    }
+}
+
+void
+ensure_valid_text_bounds (SvgElement            *shape,
+                          GtkSvg                *self,
+                          const graphene_rect_t *viewport)
+{
+  if (!shape->valid_bounds)
+    {
+      graphene_rect_t bounds;
+      graphene_point_t offset;
+
+      if (generate_layouts (shape, get_fontmap (self), viewport, &bounds, &offset))
+        {
+          /* TODO: keep the layouts */
+          clear_layouts (shape);
         }
     }
 }
@@ -4686,10 +4736,8 @@ paint_shape (SvgElement   *shape,
 
   if (svg_element_get_element_type (shape) == SVG_ELEMENT_TEXT)
     {
-      TextAnchor anchor;
-      WritingMode wmode;
       graphene_rect_t bounds;
-      float dx, dy;
+      graphene_point_t offset;
       GskTransform *transform = NULL;
 
       if (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
@@ -4701,36 +4749,8 @@ paint_shape (SvgElement   *shape,
             return;
         }
 
-      anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
-      wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
-      if (!generate_layouts (shape, get_fontmap (context->svg), context->viewport, &bounds))
+      if (!generate_layouts (shape, get_fontmap (context->svg), context->viewport, &bounds, &offset))
         return;
-
-      dx = dy = 0;
-      switch (anchor)
-        {
-        case TEXT_ANCHOR_START:
-          break;
-        case TEXT_ANCHOR_MIDDLE:
-          if (svg_writing_mode_is_vertical (wmode))
-            dy = - bounds.size.height / 2;
-          else
-            dx = - bounds.size.width / 2;
-          break;
-        case TEXT_ANCHOR_END:
-          if (svg_writing_mode_is_vertical (wmode))
-            dy = - bounds.size.height;
-          else
-            dx = - bounds.size.width;
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-
-      graphene_rect_init (&shape->bounds,
-                          bounds.origin.x + dx, bounds.origin.y + dy,
-                          bounds.size.width, bounds.size.height);
-      shape->valid_bounds = TRUE;
 
       if (context->picking.picking &&
           svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_POINTER_EVENTS)) == POINTER_EVENTS_BOUNDING_BOX)
@@ -4744,7 +4764,7 @@ paint_shape (SvgElement   *shape,
         }
 
       gtk_snapshot_save (context->snapshot);
-      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (dx, dy));
+      transform = gsk_transform_translate (transform, &offset);
 
       gtk_snapshot_transform (context->snapshot, transform);
       push_transform (context, transform);

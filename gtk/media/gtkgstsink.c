@@ -888,9 +888,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (gl_handle)
         {
           struct wl_display *wayland_display;
+          gpointer display_ptr;
 
           wayland_display = gdk_wayland_display_get_wl_display (display);
           self->gst_display = GST_GL_DISPLAY (gst_gl_display_wayland_new_with_display (wayland_display));
+          display_ptr = gst_gl_display_egl_from_gl_display (self->gst_display);
+          g_assert (display_ptr);
+          gst_gl_display_egl_set_foreign (display_ptr, TRUE);
+          gst_object_unref (display_ptr);
           self->gst_gdk_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
         }
       else

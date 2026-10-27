@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "gtk/gtkatcontextprivate.h"
+#include "gtk/gtkmodelbuttonprivate.h"
 #include "gtk/gtkwidgetprivate.h"
 
 static void
@@ -207,6 +208,34 @@ test_name_range (void)
   gtk_window_destroy (GTK_WINDOW (window));
 }
 
+static void
+test_name_model_button (void)
+{
+  GtkWidget *window, *button, *label;
+  GtkATContext *context;
+  char *name;
+
+  button = gtk_model_button_new ();
+  g_object_set (button, "text", "Open", NULL);
+
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), button);
+  gtk_window_present (GTK_WINDOW (window));
+
+  label = gtk_widget_get_last_child (button);
+  g_assert_true (GTK_IS_LABEL (label));
+
+  gtk_test_accessible_assert_role (label, GTK_ACCESSIBLE_ROLE_LABEL);
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (button));
+  name = gtk_at_context_get_name (context);
+  g_assert_cmpstr (name, ==, "Open");
+  g_free (name);
+
+  g_object_unref (context);
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -218,6 +247,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/name/label", test_name_label);
   g_test_add_func ("/a11y/name/prohibited", test_name_prohibited);
   g_test_add_func ("/a11y/name/range", test_name_range);
+  g_test_add_func ("/a11y/name/model-button", test_name_model_button);
 
   return g_test_run ();
 }
