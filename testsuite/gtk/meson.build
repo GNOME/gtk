@@ -142,6 +142,8 @@ internal_tests = [
     ],
   },
   { 'name': 'bitmask' },
+  { 'name': 'action-values' },
+  { 'name': 'action-tree' },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
@@ -235,6 +237,18 @@ emoji_database = executable('emoji-database',
 )
 
 test('emoji-database', emoji_database, env: test_env, suite: ['gtk'])
+
+action_performance = executable('action-performance',
+  sources: 'action-performance.c',
+  c_args: test_cargs + ['-DGTK_COMPILATION'],
+  dependencies: libgtk_private_dep,
+)
+
+benchmark('action-performance', action_performance,
+  env: test_env,
+  suite: ['gtk', 'performance'],
+  timeout: 300,
+)
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
 if add_languages('cpp', required: false, native: false)

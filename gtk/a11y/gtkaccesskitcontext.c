@@ -25,7 +25,7 @@
 #include "gtkaccessibleprivate.h"
 #include "gtkaccesskitrootprivate.h"
 
-#include "gtkactionmuxerprivate.h"
+#include "gtkactiontreeprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtkeditable.h"
@@ -1482,21 +1482,27 @@ destroy_text_view_lines_value (gpointer data)
 /* TODO: this duplicates is_valid_action() in gtkatspiaction.c; consider
  * sharing this logic if a third consumer appears. */
 static gboolean
-is_valid_widget_action (GtkActionMuxer *muxer,
-                        const char     *action_name)
+is_valid_widget_action (GtkActionNode *node,
+                        const char    *action_name)
 {
+  GtkActionKey *key;
+  GtkActionResolution resolution = GTK_ACTION_RESOLUTION_INIT;
   const GVariantType *param_type = NULL;
   gboolean enabled = FALSE;
+  gboolean valid;
 
   /* Skip disabled or parameterized actions */
-  if (!gtk_action_muxer_query_action (muxer, action_name,
-                                      &enabled, &param_type, NULL, NULL, NULL))
-    return FALSE;
+  key = gtk_action_key_new (action_name);
+  valid = key != NULL &&
+          gtk_action_resolution_init (&resolution, node, key) &&
+          gtk_action_resolution_query (&resolution, &enabled, &param_type,
+                                       NULL, NULL, NULL) &&
+          enabled && param_type == NULL;
 
-  if (!enabled || param_type != NULL)
-    return FALSE;
+  gtk_action_resolution_clear (&resolution);
+  g_clear_pointer (&key, gtk_action_key_unref);
 
-  return TRUE;
+  return valid;
 }
 
 void
@@ -1521,7 +1527,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
   /* TODO: other actions */
 
   /* Generically expose any GAction the widget installs on its own action
-   * muxer (e.g. via gtk_widget_class_install_action()) as AccessKit custom
+   * node (e.g. via gtk_widget_class_install_action()) as AccessKit custom
    * actions. This mirrors the GTK_IS_WIDGET fallback in gtkatspiaction.c.
    *
    * The id assigned to each action is simply its position in the filtered
@@ -1534,17 +1540,11 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
   if (GTK_IS_WIDGET (accessible))
     {
       GtkWidget *widget = GTK_WIDGET (accessible);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-      GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-      GtkActionMuxer *parent_muxer =
-        parent ? _gtk_widget_get_action_muxer (parent, FALSE) : NULL;
+      GtkActionNode *action_node = _gtk_widget_get_action_node (widget, FALSE);
 
-      /* If the widget doesn't own a muxer of its own, _gtk_widget_get_action_muxer()
-       * returns the parent's muxer; skip in that case to avoid re-advertising
-       * the parent's actions as if they were the widget's own. */
-      if (muxer != NULL && muxer != parent_muxer)
+      if (action_node != NULL)
         {
-          char **actions = gtk_action_muxer_list_actions (muxer, TRUE);
+          char **actions = gtk_action_node_list_actions (action_node, TRUE);
           int n_actions = actions != NULL ? g_strv_length (actions) : 0;
           int32_t custom_id = 0;
 
@@ -1552,7 +1552,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
             {
               accesskit_custom_action *action;
 
-              if (!is_valid_widget_action (muxer, actions[i]))
+              if (!is_valid_widget_action (action_node, actions[i]))
                 continue;
 
               action = accesskit_custom_action_new (custom_id);
@@ -2103,7 +2103,7 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
 
   case ACCESSKIT_ACTION_CUSTOM_ACTION:
     {
-      GtkActionMuxer *muxer;
+      GtkActionNode *action_node;
       char **actions;
       int n_actions;
       int32_t target_id;
@@ -2122,19 +2122,19 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
 
       target_id = request->data.value.custom_action;
 
-      muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-      if (muxer == NULL)
+      action_node = _gtk_widget_get_action_node (widget, FALSE);
+      if (action_node == NULL)
         return;
 
       /* This must use the exact same filtering and ordering as the
        * advertisement of custom actions in gtk_accesskit_context_add_to_update()
        * for the ids to resolve back to the correct action name. */
-      actions = gtk_action_muxer_list_actions (muxer, TRUE);
+      actions = gtk_action_node_list_actions (action_node, TRUE);
       n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
       for (int i = 0; i < n_actions; i++)
         {
-          if (!is_valid_widget_action (muxer, actions[i]))
+          if (!is_valid_widget_action (action_node, actions[i]))
             continue;
 
           if (custom_id == target_id)
