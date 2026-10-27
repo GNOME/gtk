@@ -169,21 +169,6 @@ gsk_component_transfer_node_draw (GskRenderNode *node,
   cairo_fill (cr);
 }
 
-static gboolean
-gsk_component_transfer_node_can_diff (const GskRenderNode *node1,
-                                      const GskRenderNode *node2)
-{
-  GskComponentTransferNode *self1 = (GskComponentTransferNode *) node1;
-  GskComponentTransferNode *self2 = (GskComponentTransferNode *) node2;
-
-  return gdk_color_state_equal (self1->color_state, self2->color_state) &&
-         gsk_rect_equal (&self1->clip, &self2->clip) &&
-         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_RED], &self2->transfer[GDK_COLOR_CHANNEL_RED]) &&
-         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_GREEN], &self2->transfer[GDK_COLOR_CHANNEL_GREEN]) &&
-         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_BLUE], &self2->transfer[GDK_COLOR_CHANNEL_BLUE]) &&
-         gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_ALPHA], &self2->transfer[GDK_COLOR_CHANNEL_ALPHA]);
-}
-
 static void
 gsk_component_transfer_node_diff (GskRenderNode *node1,
                                   GskRenderNode *node2,
@@ -192,7 +177,12 @@ gsk_component_transfer_node_diff (GskRenderNode *node1,
   GskComponentTransferNode *self1 = (GskComponentTransferNode *) node1;
   GskComponentTransferNode *self2 = (GskComponentTransferNode *) node2;
 
-  if (gsk_component_transfer_node_can_diff (node1, node2))
+  if (gdk_color_state_equal (self1->color_state, self2->color_state) &&
+      gsk_rect_equal (&self1->clip, &self2->clip) &&
+      gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_RED], &self2->transfer[GDK_COLOR_CHANNEL_RED]) &&
+      gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_GREEN], &self2->transfer[GDK_COLOR_CHANNEL_GREEN]) &&
+      gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_BLUE], &self2->transfer[GDK_COLOR_CHANNEL_BLUE]) &&
+      gsk_component_transfer_equal (&self1->transfer[GDK_COLOR_CHANNEL_ALPHA], &self2->transfer[GDK_COLOR_CHANNEL_ALPHA]))
     gsk_render_node_diff (self1->child, self2->child, data);
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -248,7 +238,6 @@ gsk_component_transfer_node_class_init (gpointer g_class,
 
   node_class->finalize = gsk_component_transfer_node_finalize;
   node_class->draw = gsk_component_transfer_node_draw;
-  node_class->can_diff = gsk_component_transfer_node_can_diff;
   node_class->diff = gsk_component_transfer_node_diff;
   node_class->get_children = gsk_component_transfer_node_get_children;
   node_class->replay = gsk_component_transfer_node_replay;
