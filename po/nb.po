@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 4.x\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-09-01 11:51+0000\n"
-"PO-Revision-Date: 2026-09-04 14:48+0200\n"
+"POT-Creation-Date: 2026-10-01 12:32+0000\n"
+"PO-Revision-Date: 2026-10-07 16:56+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:251 gdk/wayland/gdkdrop-wayland.c:205
 #: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1017
-#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:802
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Ingen kompatible formater for overføring funnet"
@@ -46,7 +46,8 @@ msgstr "Kan ikke lese fra tom utklippstavle."
 
 #: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1123 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
-msgstr "Ingen kompatible formater for overføring av innhold på utklippstavlen."
+msgstr ""
+"Ingen kompatible formater for overføring av innhold på utklippstavlen."
 
 #: gdk/gdkcolorstate.c:1022
 #, c-format
@@ -167,7 +168,6 @@ msgstr "Appen støtter ikke %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#.
 #: gdk/gdkglcontext.c:2270
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
@@ -182,7 +182,6 @@ msgstr "Prøver å bruke %s, men er deaktivert via GDK_DISABLE"
 msgid "Unknown image format."
 msgstr "Ukjent bildeformat."
 
-#.
 #. * Translators, the strings in the 'keyboard label' context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
@@ -192,7 +191,6 @@ msgstr "Ukjent bildeformat."
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
-#.
 #: gdk/keynamesprivate.h:6861
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -569,8 +567,8 @@ msgstr "Feil ved tolking av JPEG-bildefil (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Ikke støttet JPEG fargeområde (%d)"
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467 gdk/loaders/gdktiff.c:398
-#: gdk/loaders/gdktiff.c:515
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:467
+#: gdk/loaders/gdktiff.c:398 gdk/loaders/gdktiff.c:515
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ikke nok minne for bildestørrelse %ux%u"
@@ -621,7 +619,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:694
 #, c-format
-msgid "Cannot claim clipboard ownership. Another process claimed it before us."
+msgid ""
+"Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Kan ikke ta eierskap til utklippstavlen. En annen prosess tok den før oss."
 
@@ -645,7 +644,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:770 gdk/win32/gdkclipdrop-win32.c:801
 #, c-format
-msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
+msgid ""
+"Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Kan ikke sette data på utklippstavlen. En annen prosess tok eierskap av "
 "utklippstavlen."
@@ -654,88 +654,97 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
+"Kunne ikke sette utdrag i utklippstavle. OpenClipboard() feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente utklippstavledata. GlobalLock(0x%p) feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:847
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente utklippstavledata. GlobalSize(0x%p) feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:860
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"Kunne ikke hente ut klippelistdata. Mislykket å tildele %s bytes for å lagre"
+" dataene."
 
 #: gdk/win32/gdkclipdrop-win32.c:892
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr ""
+msgstr "Kunne ikke hente utklippstavledata. OpenClipboard() tidsavbrøt."
 
 #: gdk/win32/gdkclipdrop-win32.c:902
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
+"Kunne ikke hente utklippstavledata. Eierskap til utklippstavle endret."
 
 #: gdk/win32/gdkclipdrop-win32.c:912
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
+"Kunne ikke hente utklippstavledata. Utklippstavledata ble endret før vi fikk"
+" hentet dem."
 
 #: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente utklippstavledata. OpenClipboard() feilet: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
+"Kunne ikke hente utklippstavledata. Ingen kompatibelt overføringsformat ble "
+"funnet."
 
 #: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente ut klippelistdata. GetClipboardData() feilet: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:948
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente DnD-data. GlobalLock(0x%p) mislyktes: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr ""
+msgstr "Kunne ikke hente DnD-data. GlobalSize(0x%p) feilet: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:968
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
+"Kunne ikke hente DnD-data. Mislykket å tildele %s bytes for å lagre dataene."
 
 #: gdk/win32/gdkdrop-win32.c:1038
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr ""
+msgstr "GDK-overflate 0x%p er ikke registrert som et dropp-mål"
 
 #: gdk/win32/gdkdrop-win32.c:1046
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr ""
+msgstr "Målkontekst-oppføring 0x%p har ingen dataobjekt"
 
 #: gdk/win32/gdkdrop-win32.c:1086
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-msgstr ""
+msgstr "IDataObject_GetData (0x%x) mislyktes, returnerer 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1125
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
-msgstr ""
+msgstr "Kunne ikke konvertere DnD-data W32-format 0x%x til %p (%s)"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:584
 msgid "No GL implementation is available"
@@ -754,7 +763,7 @@ msgstr "GL-implementasjon kan ikke dele GL-kontekster"
 #: gdk/win32/gdkglcontext-win32-wgl.c:846
 #, c-format
 msgid "Unsupported pixel format %d set on Window"
-msgstr ""
+msgstr "Ustøttet pikselformat %d satt på vindu"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:855
 msgid "No available configurations for the given pixel format"
@@ -775,16 +784,16 @@ msgstr "GlobalReAlloc() feilet: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr ""
+msgstr "Gikk tom for bufferplass (bufferstørrelsen er fast)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
-msgstr ""
+msgstr "Kan ikke endre et enkelt håndtak"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:217
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
-msgstr ""
+msgstr "Kunne ikke konvertere %zu bytes med data fra %s til %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:252
 msgid "GlobalLock() failed: "
@@ -837,11 +846,13 @@ msgstr "GLX er ikke støttet"
 msgid "Format %s not supported"
 msgstr "Format %s er ikke støttet"
 
-#: gdk/x11/gdktextlistconverter-x11.c:67 gdk/x11/gdktextlistconverter-x11.c:107
+#: gdk/x11/gdktextlistconverter-x11.c:67
+#: gdk/x11/gdktextlistconverter-x11.c:107
 msgid "Not enough space in destination"
 msgstr "Ikke nok plass i mål"
 
-#: gdk/x11/gdktextlistconverter-x11.c:93 gdk/x11/gdktextlistconverter-x11.c:197
+#: gdk/x11/gdktextlistconverter-x11.c:93
+#: gdk/x11/gdktextlistconverter-x11.c:197
 msgid "Need complete input to do conversion"
 msgstr "Trenger komplett inndata for å gjøre konvertering"
 
@@ -1030,7 +1041,8 @@ msgstr "Ingen apper funnet til «%s»-filer"
 msgid "Failed to start GNOME Software"
 msgstr "Åpning av Appsenter mislyktes"
 
-#. Translators: Label for a search button and entry, should be translated as a verb
+#. Translators: Label for a search button and entry, should be translated as a
+#. verb
 #: gtk/deprecated/gtkappchooserdialog.c:477 gtk/gtkfilechooserdialog.c:477
 #: gtk/ui/gtkfilechooserwidget.ui:123
 msgid "Search"
@@ -1059,7 +1071,6 @@ msgstr "Annet"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
-#.
 #: gtk/deprecated/gtkcellrendereraccel.c:291
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1068,7 +1079,6 @@ msgstr "Slått av"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
-#.
 #: gtk/deprecated/gtkcellrendereraccel.c:301
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1076,7 +1086,6 @@ msgstr "Ugyldig"
 
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the accelerator.
-#.
 #: gtk/deprecated/gtkcellrendereraccel.c:433
 #: gtk/deprecated/gtkcellrendereraccel.c:730
 msgid "New accelerator…"
@@ -1174,7 +1183,6 @@ msgstr "Full lyd"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#.
 #: gtk/deprecated/gtkvolumebutton.c:259
 #, c-format
 msgctxt "volume percentage"
@@ -1285,7 +1293,6 @@ msgstr "Designet av"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
-#.
 #: gtk/gtkaboutdialog.c:2348
 #, c-format
 msgid ""
@@ -1299,7 +1306,6 @@ msgstr ""
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:824 gtk/deprecated/gtkshortcutlabel.c:104
 #: gtk/deprecated/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
@@ -1310,7 +1316,6 @@ msgstr "Shift"
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:843 gtk/deprecated/gtkshortcutlabel.c:107
 #: gtk/deprecated/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
@@ -1321,7 +1326,6 @@ msgstr "Ctrl"
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:862 gtk/deprecated/gtkshortcutlabel.c:110
 #: gtk/deprecated/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
@@ -1332,7 +1336,6 @@ msgstr "Alt"
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:880 gtk/deprecated/gtkshortcutlabel.c:116
 #: gtk/deprecated/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
@@ -1343,7 +1346,6 @@ msgstr "Super"
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:894 gtk/deprecated/gtkshortcutlabel.c:119
 #: gtk/deprecated/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
@@ -1354,7 +1356,6 @@ msgstr "Hyper"
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#.
 #: gtk/gtkaccelgroup.c:909 gtk/deprecated/gtkshortcutlabel.c:113
 #: gtk/deprecated/gtkshortcutlabel.c:151
 msgctxt "keyboard label"
@@ -1364,7 +1365,6 @@ msgstr "Meta"
 #. Translators: "KP" means "numeric key pad". This string will
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
-#.
 #: gtk/gtkaccelgroup.c:929
 msgctxt "keyboard label"
 msgid "KP"
@@ -1808,7 +1808,6 @@ msgstr "_Lukk"
 #. Translators: This is the 'reason' given when inhibiting
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
-#.
 #: gtk/gtkapplication-dbus.c:580
 msgid "Reason not specified"
 msgstr "Årsak ikke oppgitt"
@@ -1861,7 +1860,6 @@ msgstr "Neste år"
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
-#.
 #: gtk/gtkcalendar.c:688
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
@@ -1875,10 +1873,9 @@ msgstr "calendar:week_start:1"
 #. * further influenced by BIDI ordering. Thus, if you have a default
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
-#.
 #: gtk/gtkcalendar.c:839
 msgid "calendar:MY"
-msgstr "calendar:MY"
+msgstr "kalender:MY"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1889,7 +1886,6 @@ msgstr "calendar:MY"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#.
 #: gtk/gtkcalendar.c:1020
 #, c-format
 msgctxt "calendar:day:digits"
@@ -1901,7 +1897,6 @@ msgstr "%d"
 #. * Use only ASCII in the translation.
 #. *
 #. * "%Y" is appropriate for most locales.
-#.
 #: gtk/gtkcalendar.c:1124
 msgctxt "calendar year format"
 msgid "%Y"
@@ -2174,7 +2169,6 @@ msgstr "Tilpass"
 #. * want inches, otherwise translate to default:mm.
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
-#.
 #: gtk/print/gtkcustompaperunixdialog.c:106
 msgid "default:mm"
 msgstr "default:mm"
@@ -2184,7 +2178,8 @@ msgid "Margins from Printer…"
 msgstr "Marger fra skriver …"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:374 gtk/print/gtkprintunixdialog.c:2927
+#: gtk/print/gtkcustompaperunixdialog.c:374
+#: gtk/print/gtkprintunixdialog.c:2927
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -2240,12 +2235,12 @@ msgid "_Edit"
 msgstr "R_ediger"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6387
-#: gtk/gtktextview.c:9265
+#: gtk/gtktextview.c:9264
 msgid "_Copy"
 msgstr "_Kopier"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2867
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9342
 msgid "Context menu"
 msgstr "Kontekstmeny"
 
@@ -2326,8 +2321,8 @@ msgid "_Cancel"
 msgstr "_Avbryt"
 
 #: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
-#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3150
-#: gtk/gtkplacessidebar.c:3235 gtk/gtkplacesview.c:1648
+#: gtk/gtkfiledialog.c:889 gtk/gtkplacessidebar.c:3151
+#: gtk/gtkplacessidebar.c:3236 gtk/gtkplacesview.c:1648
 msgid "_Open"
 msgstr "_Åpne"
 
@@ -2347,7 +2342,6 @@ msgstr "Velg filtyper"
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
-#.
 #: gtk/gtkfilechooserutils.c:364
 #, c-format
 msgid "%1$s on %2$s"
@@ -2384,7 +2378,8 @@ msgstr "Du kan kun velge mapper"
 
 #: gtk/gtkfilechooserwidget.c:792
 msgid "The item that you selected is not a folder try using a different item."
-msgstr "Elementet du valgte er ikke en mappe. Prøv å bruke en annen oppføring."
+msgstr ""
+"Elementet du valgte er ikke en mappe. Prøv å bruke en annen oppføring."
 
 #: gtk/gtkfilechooserwidget.c:800
 msgid "Invalid file name"
@@ -2412,7 +2407,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Hvis du sletter et element, vil dette bli borte permanent."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9273
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6395 gtk/gtktextview.c:9272
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -2448,8 +2443,8 @@ msgstr "Kopier _plassering"
 msgid "_Add to Bookmarks"
 msgstr "L_egg til bokmerke"
 
-#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2313
-#: gtk/gtkplacessidebar.c:3271 gtk/ui/gtkfilechooserwidget.ui:417
+#: gtk/gtkfilechooserwidget.c:1846 gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:3272 gtk/ui/gtkfilechooserwidget.ui:417
 msgid "_Rename"
 msgstr "End_re navn"
 
@@ -2470,7 +2465,7 @@ msgstr "Vis _mapper før filer"
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:2075 gtk/gtkplacessidebar.c:1028
 msgid "Home"
 msgstr "Hjem"
 
@@ -2623,7 +2618,7 @@ msgstr "T_ype"
 msgid "_Time"
 msgstr "_Tid"
 
-#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2307
+#: gtk/gtkfilechooserwidget.c:7441 gtk/gtkplacessidebar.c:2308
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:394 gtk/print/ui/gtkprintunixdialog.ui:80
@@ -2771,15 +2766,15 @@ msgstr "Lukk"
 msgid "Close the infobar"
 msgstr "Lukk informasjonslinjen"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9261
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6383 gtk/gtktextview.c:9260
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9269
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6391 gtk/gtktextview.c:9268
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9294
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6404 gtk/gtktextview.c:9293
 msgid "Select _All"
 msgstr "Velg _alt"
 
@@ -2804,48 +2799,44 @@ msgstr "Ugyldig URI"
 #. * hours, 5 minutes, and 2 seconds. You may change ":" to
 #. * the separator that your locale uses or use "%Id" instead
 #. * of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:103
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
-msgstr "%d:%02d:%02d"
+msgstr "%d.%02d.%02d"
 
 #. -hour:minutes:seconds
 #. Translators: This is a time format, like "-9:05:02" for 9
 #. * hours, 5 minutes, and 2 seconds playback remaining. You may
 #. * change ":" to the separator that your locale uses or use
 #. * "%Id" instead of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:111
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
-msgstr "-%d:%02d:%02d"
+msgstr "-%d.%02d.%02d"
 
 #. -minutes:seconds
 #. Translators: This is a time format, like "-5:02" for 5
 #. * minutes and 2 seconds playback remaining. You may change
 #. * ":" to the separator that your locale uses or use "%Id"
 #. * instead of "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:122
 #, c-format
 msgctxt "short time format"
 msgid "-%d:%02d"
-msgstr "-%d:%02d"
+msgstr "-%d.%02d"
 
 #. minutes:seconds
 #. Translators: This is a time format, like "5:02" for 5
 #. * minutes and 2 seconds. You may change ":" to the
 #. * separator that your locale uses or use "%Id" instead of
 #. * "%d" if your locale uses localized digits.
-#.
 #: gtk/gtkmediacontrols.c:131
 #, c-format
 msgctxt "short time format"
 msgid "%d:%02d"
-msgstr "%d:%02d"
+msgstr "%d.%02d"
 
 #: gtk/gtkmediacontrols.c:415
 msgctxt "media controls tooltip"
@@ -2860,7 +2851,7 @@ msgstr "Spill av"
 #: gtk/gtkmessagedialog.c:167 gtk/gtkmessagedialog.c:185
 #: gtk/print/gtkprintbackend.c:657 gtk/gtkwindow.c:6463
 msgid "_OK"
-msgstr "_OK"
+msgstr "_Ok"
 
 #: gtk/gtkmessagedialog.c:179
 msgid "_No"
@@ -2935,7 +2926,6 @@ msgstr "Ukjent program (PID %d)"
 #. * indeed be destroyed via the GMountOperation::abort signal... for example,
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
-#.
 #: gtk/gtkmountoperation.c:1400
 #, c-format
 msgid "Unable to end process"
@@ -2954,7 +2944,7 @@ msgstr ""
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:989
 msgid "Terminal Pager"
-msgstr "Terminal Pager"
+msgstr "Terminal-visning"
 
 #: gtk/gtkmountoperation-x11.c:990
 msgid "Top Command"
@@ -3054,203 +3044,202 @@ msgid "_Show Text"
 msgstr "Vi_s tekst"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:914
+#: gtk/gtkplacessidebar.c:915
 #, c-format
 msgid "Open %s"
 msgstr "Åpne %s"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent"
 msgstr "Nylig"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1008
 msgid "Recent files"
 msgstr "Nylig brukte filer"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred"
 msgstr "Favoritt"
 
-#: gtk/gtkplacessidebar.c:1018
+#: gtk/gtkplacessidebar.c:1019
 msgid "Starred files"
 msgstr "Filer med favorittmerking"
 
-#: gtk/gtkplacessidebar.c:1029
+#: gtk/gtkplacessidebar.c:1030
 msgid "Open your personal folder"
 msgstr "Åpne din personlige mappe"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: gtk/gtkplacessidebar.c:1044
+#: gtk/gtkplacessidebar.c:1045
 msgid "Open the contents of your desktop in a folder"
 msgstr "Åpne innholdet av skrivebordet i en mappe"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Enter Location"
 msgstr "Oppgi lokasjon"
 
-#: gtk/gtkplacessidebar.c:1060
+#: gtk/gtkplacessidebar.c:1061
 msgid "Manually enter a location"
 msgstr "Oppgi lokasjon manuelt"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Trash"
 msgstr "Papirkurv"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1073
 msgid "Open the trash"
 msgstr "Åpne papirkurv"
 
-#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
-#: gtk/gtkplacessidebar.c:1410
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Monter og åpne «%s»"
 
-#: gtk/gtkplacessidebar.c:1305
+#: gtk/gtkplacessidebar.c:1306
 msgid "Open the contents of the file system"
 msgstr "Åpne innholdet i filsystemet"
 
-#: gtk/gtkplacessidebar.c:1388
+#: gtk/gtkplacessidebar.c:1389
 msgid "New bookmark"
 msgstr "Nytt bokmerke"
 
-#: gtk/gtkplacessidebar.c:1390
+#: gtk/gtkplacessidebar.c:1391
 msgid "Add a new bookmark"
 msgstr "Legg til et nytt bokmerke"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Other Locations"
 msgstr "Andre lokasjoner"
 
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1457
 msgid "Show other locations"
 msgstr "Vis andre lokasjoner"
 
-#: gtk/gtkplacessidebar.c:1965 gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1966 gtk/gtkplacessidebar.c:2985
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Kan ikke starte «%s»"
 
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
-#.
-#: gtk/gtkplacessidebar.c:2001
+#: gtk/gtkplacessidebar.c:2002
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Feil under fjerning av lås for «%s»"
 
-#: gtk/gtkplacessidebar.c:2003
+#: gtk/gtkplacessidebar.c:2004
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Kan ikke aksessere «%s»"
 
-#: gtk/gtkplacessidebar.c:2234
+#: gtk/gtkplacessidebar.c:2235
 msgid "This name is already taken"
 msgstr "Dette navnet er allerede brukt"
 
-#: gtk/gtkplacessidebar.c:2525
+#: gtk/gtkplacessidebar.c:2526
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Kan ikke avmontere «%s»"
 
-#: gtk/gtkplacessidebar.c:2701
+#: gtk/gtkplacessidebar.c:2702
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Kan ikke stoppe «%s»"
 
-#: gtk/gtkplacessidebar.c:2730
+#: gtk/gtkplacessidebar.c:2731
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Kan ikke løse ut «%s»"
 
-#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2760 gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Kan ikke løse ut %s"
 
-#: gtk/gtkplacessidebar.c:2936
+#: gtk/gtkplacessidebar.c:2937
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Kan ikke spørre «%s» etter endringer i medie"
 
-#: gtk/gtkplacessidebar.c:3156 gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3157 gtk/gtkplacessidebar.c:3244
 #: gtk/gtkplacesview.c:1652
 msgid "Open in New _Tab"
 msgstr "Åpne i ny _fane"
 
-#: gtk/gtkplacessidebar.c:3162 gtk/gtkplacessidebar.c:3252
+#: gtk/gtkplacessidebar.c:3163 gtk/gtkplacessidebar.c:3253
 #: gtk/gtkplacesview.c:1657
 msgid "Open in New _Window"
 msgstr "Åpne i nytt _vindu"
 
-#: gtk/gtkplacessidebar.c:3263
+#: gtk/gtkplacessidebar.c:3264
 msgid "_Add Bookmark"
 msgstr "_Legg til bokmerke"
 
-#: gtk/gtkplacessidebar.c:3267
+#: gtk/gtkplacessidebar.c:3268
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: gtk/gtkplacessidebar.c:3283 gtk/gtkplacesview.c:1682
+#: gtk/gtkplacessidebar.c:3284 gtk/gtkplacesview.c:1682
 msgid "_Mount"
 msgstr "_Monter"
 
-#: gtk/gtkplacessidebar.c:3292 gtk/gtkplacesview.c:1671
+#: gtk/gtkplacessidebar.c:3293 gtk/gtkplacesview.c:1671
 msgid "_Unmount"
 msgstr "A_vmonter"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Eject"
 msgstr "_Løs ut"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Detect Media"
 msgstr "_Gjenkjenn medie"
 
-#: gtk/gtkplacessidebar.c:3318
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Start"
 msgstr "_Start"
 
-#: gtk/gtkplacessidebar.c:3320
+#: gtk/gtkplacessidebar.c:3321
 msgid "_Power On"
 msgstr "Slå _på"
 
-#: gtk/gtkplacessidebar.c:3321
+#: gtk/gtkplacessidebar.c:3322
 msgid "_Connect Drive"
 msgstr "_Koble til stasjon"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3323
 msgid "_Start Multi-disk Device"
 msgstr "_Start enhet med flere disker"
 
-#: gtk/gtkplacessidebar.c:3323
+#: gtk/gtkplacessidebar.c:3324
 msgid "_Unlock Device"
 msgstr "Lås _opp enhet"
 
-#: gtk/gtkplacessidebar.c:3333
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacessidebar.c:3336
 msgid "_Safely Remove Drive"
 msgstr "_Fjern stasjon på en trygg måte"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3337
 msgid "_Disconnect Drive"
 msgstr "Koble _fra stasjon"
 
-#: gtk/gtkplacessidebar.c:3337
+#: gtk/gtkplacessidebar.c:3338
 msgid "_Stop Multi-disk Device"
 msgstr "_Stopp enhet med flere disker"
 
-#: gtk/gtkplacessidebar.c:3338
+#: gtk/gtkplacessidebar.c:3339
 msgid "_Lock Device"
 msgstr "_Lås enhet"
 
-#: gtk/gtkplacessidebar.c:3829 gtk/gtkplacesview.c:1092
+#: gtk/gtkplacessidebar.c:3830 gtk/gtkplacesview.c:1092
 msgid "Computer"
 msgstr "Datamaskin"
 
@@ -3292,7 +3281,7 @@ msgstr "AppleTalk"
 
 #: gtk/gtkplacesview.c:1601
 msgid "File Transfer Protocol"
-msgstr "File Transfer Protocol"
+msgstr "Filoverføringsprotokoll"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1603
@@ -3301,7 +3290,7 @@ msgstr "ftp:// eller ftps://"
 
 #: gtk/gtkplacesview.c:1609
 msgid "Network File System"
-msgstr "Network File System"
+msgstr "Nettverksfilsystem"
 
 #: gtk/gtkplacesview.c:1615
 msgid "Samba"
@@ -3309,7 +3298,7 @@ msgstr "Samba"
 
 #: gtk/gtkplacesview.c:1621
 msgid "SSH File Transfer Protocol"
-msgstr "SSH File Transfer Protocol"
+msgstr "SSH filoverføringsprotokoll"
 
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1623
@@ -3345,10 +3334,10 @@ msgstr "Nettverk"
 msgid "On This Computer"
 msgstr "På denne datamaskinen"
 
-#. Translators: respectively, free and total space of the drive. The plural form
+#. Translators: respectively, free and total space of the drive. The plural
+#. form
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
-#.
 #: gtk/gtkplacesviewrow.c:135
 #, c-format
 msgid "%s / %s available"
@@ -3366,43 +3355,41 @@ msgid "Unmount"
 msgstr "Avmonter"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:496
-#: gtk/print/backends/gtkprintbackendcups.c:5695
+#: gtk/print/backends/gtkprintbackendcups.c:5692
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Haster"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:497
-#: gtk/print/backends/gtkprintbackendcups.c:5696
+#: gtk/print/backends/gtkprintbackendcups.c:5693
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Høy"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:498
-#: gtk/print/backends/gtkprintbackendcups.c:5697
+#: gtk/print/backends/gtkprintbackendcups.c:5694
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Middels"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:499
-#: gtk/print/backends/gtkprintbackendcups.c:5698
+#: gtk/print/backends/gtkprintbackendcups.c:5695
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Lav"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
-#.
 #: gtk/print/backends/gtkprintbackendcpdb.c:521
-#: gtk/print/backends/gtkprintbackendcups.c:5841
+#: gtk/print/backends/gtkprintbackendcups.c:5838
 msgctxt "printer option"
 msgid "Before"
 msgstr "Før"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
-#.
 #: gtk/print/backends/gtkprintbackendcpdb.c:528
-#: gtk/print/backends/gtkprintbackendcups.c:5856
+#: gtk/print/backends/gtkprintbackendcups.c:5853
 msgctxt "printer option"
 msgid "After"
 msgstr "Etter"
@@ -3422,35 +3409,35 @@ msgstr "Uten kant"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1481
-#: gtk/print/backends/gtkprintbackendcups.c:2633
+#: gtk/print/backends/gtkprintbackendcups.c:2630
 msgid "Paused; Rejecting Jobs"
 msgstr "Satt på pause. Avviser jobber"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1484
-#: gtk/print/backends/gtkprintbackendcups.c:2636
+#: gtk/print/backends/gtkprintbackendcups.c:2633
 #: gtk/print/gtkprintoperation-win32.c:624
 msgid "Paused"
 msgstr "Pause"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1487
-#: gtk/print/backends/gtkprintbackendcups.c:2639
+#: gtk/print/backends/gtkprintbackendcups.c:2636
 msgid "Rejecting Jobs"
 msgstr "Avviser jobber"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1145
-#: gtk/print/backends/gtkprintbackendcups.c:1449
+#: gtk/print/backends/gtkprintbackendcups.c:1446
 msgid "Username:"
 msgstr "Brukernavn:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1146
-#: gtk/print/backends/gtkprintbackendcups.c:1458
+#: gtk/print/backends/gtkprintbackendcups.c:1455
 msgid "Password:"
 msgstr "Passord:"
 
 #: gtk/print/backends/gtkprintbackendcups.c:1184
-#: gtk/print/backends/gtkprintbackendcups.c:1471
+#: gtk/print/backends/gtkprintbackendcups.c:1468
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Autentisering kreves for å skrive ut dokument «%s» på skriver %s"
@@ -3498,415 +3485,411 @@ msgstr "Autentisering kreves for å hente en fil fra %s"
 msgid "Authentication is required on %s"
 msgstr "Autentisering kreves på %s"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1443
+#: gtk/print/backends/gtkprintbackendcups.c:1440
 msgid "Domain:"
 msgstr "Domene:"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1473
+#: gtk/print/backends/gtkprintbackendcups.c:1470
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Autentisering kreves for å skrive ut dokument «%s»"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1478
+#: gtk/print/backends/gtkprintbackendcups.c:1475
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet på skriver %s"
 
-#: gtk/print/backends/gtkprintbackendcups.c:1480
+#: gtk/print/backends/gtkprintbackendcups.c:1477
 msgid "Authentication is required to print this document"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet"
 
-#: gtk/print/backends/gtkprintbackendcups.c:2565
+#: gtk/print/backends/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Skriver «%s» har lite toner."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2569
+#: gtk/print/backends/gtkprintbackendcups.c:2566
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Skriver «%s» er tom for toner."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2574
+#: gtk/print/backends/gtkprintbackendcups.c:2571
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Skriver «%s» har lite framkallingsmiddel."
 
 #. Translators: "Developer" like on photo development context
-#: gtk/print/backends/gtkprintbackendcups.c:2579
+#: gtk/print/backends/gtkprintbackendcups.c:2576
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Skriver «%s» er tom for framkallingsmiddel."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2584
+#: gtk/print/backends/gtkprintbackendcups.c:2581
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Skriver «%s» har minst en tonerkassett som snart er tom."
 
 #. Translators: "marker" is one color bin of the printer
-#: gtk/print/backends/gtkprintbackendcups.c:2589
+#: gtk/print/backends/gtkprintbackendcups.c:2586
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Skriver «%s» har minst en tom tonerkassett."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2593
+#: gtk/print/backends/gtkprintbackendcups.c:2590
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Lokket er åpent på skriver «%s»."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2597
+#: gtk/print/backends/gtkprintbackendcups.c:2594
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Døren er åpen på skriver «%s»."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2601
+#: gtk/print/backends/gtkprintbackendcups.c:2598
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Skriver «%s» har lite papir."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2605
+#: gtk/print/backends/gtkprintbackendcups.c:2602
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Skriver «%s» er tom for papir."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2609
+#: gtk/print/backends/gtkprintbackendcups.c:2606
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Skriver «%s» er frakoblet for tiden."
 
-#: gtk/print/backends/gtkprintbackendcups.c:2613
+#: gtk/print/backends/gtkprintbackendcups.c:2610
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Det er et problem med skriver «%s»."
 
 #. Translators: this string connects multiple printer states together.
-#: gtk/print/backends/gtkprintbackendcups.c:2680
+#: gtk/print/backends/gtkprintbackendcups.c:2677
 msgid "; "
-msgstr "; "
+msgstr ";"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4625
-#: gtk/print/backends/gtkprintbackendcups.c:4693
+#: gtk/print/backends/gtkprintbackendcups.c:4622
+#: gtk/print/backends/gtkprintbackendcups.c:4690
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Tosidig"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4626
+#: gtk/print/backends/gtkprintbackendcups.c:4623
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Papirtype"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4627
+#: gtk/print/backends/gtkprintbackendcups.c:4624
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Papirkilde"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4628
-#: gtk/print/backends/gtkprintbackendcups.c:4694
+#: gtk/print/backends/gtkprintbackendcups.c:4625
+#: gtk/print/backends/gtkprintbackendcups.c:4691
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Utskuff"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4629
+#: gtk/print/backends/gtkprintbackendcups.c:4626
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Oppløsning"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4630
+#: gtk/print/backends/gtkprintbackendcups.c:4627
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Forhåndsfiltrering med GhostScript"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4639
+#: gtk/print/backends/gtkprintbackendcups.c:4636
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Ensidig"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4641
+#: gtk/print/backends/gtkprintbackendcups.c:4638
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Lang kant (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4643
+#: gtk/print/backends/gtkprintbackendcups.c:4640
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (vend)"
 
 #. Translators: this is an option of "Paper Source"
-#: gtk/print/backends/gtkprintbackendcups.c:4645
-#: gtk/print/backends/gtkprintbackendcups.c:4647
-#: gtk/print/backends/gtkprintbackendcups.c:4655
+#: gtk/print/backends/gtkprintbackendcups.c:4642
+#: gtk/print/backends/gtkprintbackendcups.c:4644
+#: gtk/print/backends/gtkprintbackendcups.c:4652
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Velg automatisk"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: gtk/print/backends/gtkprintbackendcups.c:4649
-#: gtk/print/backends/gtkprintbackendcups.c:4651
-#: gtk/print/backends/gtkprintbackendcups.c:4653
-#: gtk/print/backends/gtkprintbackendcups.c:4657
+#: gtk/print/backends/gtkprintbackendcups.c:4646
+#: gtk/print/backends/gtkprintbackendcups.c:4648
+#: gtk/print/backends/gtkprintbackendcups.c:4650
+#: gtk/print/backends/gtkprintbackendcups.c:4654
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Forvalg for skriver"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4659
+#: gtk/print/backends/gtkprintbackendcups.c:4656
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Bygg kun inn GhostScript-skrifter"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4661
+#: gtk/print/backends/gtkprintbackendcups.c:4658
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Konverter til PS nivå 1"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4663
+#: gtk/print/backends/gtkprintbackendcups.c:4660
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Konverter til PS nivå 2"
 
 #. Translators: this is an option of "GhostScript"
-#: gtk/print/backends/gtkprintbackendcups.c:4665
+#: gtk/print/backends/gtkprintbackendcups.c:4662
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Ingen forhåndsfiltrering"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: gtk/print/backends/gtkprintbackendcups.c:4674
+#: gtk/print/backends/gtkprintbackendcups.c:4671
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Forskjellig"
 
-#: gtk/print/backends/gtkprintbackendcups.c:4702
+#: gtk/print/backends/gtkprintbackendcups.c:4699
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Ensidig"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4704
+#: gtk/print/backends/gtkprintbackendcups.c:4701
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Lang kant (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: gtk/print/backends/gtkprintbackendcups.c:4706
+#: gtk/print/backends/gtkprintbackendcups.c:4703
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (vend)"
 
 #. Translators: Top output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4709
+#: gtk/print/backends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Øverste kurv"
 
 #. Translators: Middle output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4711
+#: gtk/print/backends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Midterste kurv"
 
 #. Translators: Bottom output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4713
+#: gtk/print/backends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Nederste kurv"
 
 #. Translators: Side output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4715
+#: gtk/print/backends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Sidekurv"
 
 #. Translators: Left output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4717
+#: gtk/print/backends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Venstre kurv"
 
 #. Translators: Right output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4719
+#: gtk/print/backends/gtkprintbackendcups.c:4716
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Høyre kurv"
 
 #. Translators: Center output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4721
+#: gtk/print/backends/gtkprintbackendcups.c:4718
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Midtre kurv"
 
 #. Translators: Rear output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4723
+#: gtk/print/backends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Bakre kurv"
 
-#. Translators: Output bin where one sided output is oriented in the face-up position
-#: gtk/print/backends/gtkprintbackendcups.c:4725
+#. Translators: Output bin where one sided output is oriented in the face-up
+#. position
+#: gtk/print/backends/gtkprintbackendcups.c:4722
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Kurv med forsiden opp"
 
-#. Translators: Output bin where one sided output is oriented in the face-down position
-#: gtk/print/backends/gtkprintbackendcups.c:4727
+#. Translators: Output bin where one sided output is oriented in the face-down
+#. position
+#: gtk/print/backends/gtkprintbackendcups.c:4724
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Kurv med forsiden ned"
 
 #. Translators: Large capacity output bin
-#: gtk/print/backends/gtkprintbackendcups.c:4729
+#: gtk/print/backends/gtkprintbackendcups.c:4726
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Kurv med stor kapasitet"
 
 #. Translators: Output stacker number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4751
+#: gtk/print/backends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Stabler %d"
 
 #. Translators: Output mailbox number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4755
+#: gtk/print/backends/gtkprintbackendcups.c:4752
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Postboks %d"
 
 #. Translators: Private mailbox
-#: gtk/print/backends/gtkprintbackendcups.c:4759
+#: gtk/print/backends/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Min postboks"
 
 #. Translators: Output tray number %d
-#: gtk/print/backends/gtkprintbackendcups.c:4763
+#: gtk/print/backends/gtkprintbackendcups.c:4760
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Skuff %d"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5245
+#: gtk/print/backends/gtkprintbackendcups.c:5242
 msgid "Printer Default"
 msgstr "Forvalg for skriver"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
-#.
 #. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#. * multiple pages on a sheet when printing (same as in
+#. gtkprintbackendcups.c)
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5704
+#: gtk/print/backends/gtkprintbackendcups.c:5701
 #: gtk/print/gtkprintunixdialog.c:2712
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5705
+#: gtk/print/backends/gtkprintbackendcups.c:5702
 #: gtk/print/gtkprintunixdialog.c:2713
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5706
+#: gtk/print/backends/gtkprintbackendcups.c:5703
 #: gtk/print/gtkprintunixdialog.c:2714
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5707
+#: gtk/print/backends/gtkprintbackendcups.c:5704
 #: gtk/print/gtkprintunixdialog.c:2715
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5729
+#: gtk/print/backends/gtkprintbackendcups.c:5726
 msgid "Job Priority"
 msgstr "Prioritet for jobb"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5740
+#: gtk/print/backends/gtkprintbackendcups.c:5737
 msgid "Billing Info"
 msgstr "Faktureringsinformasjon"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5764
+#: gtk/print/backends/gtkprintbackendcups.c:5761
 msgctxt "cover page"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5765
+#: gtk/print/backends/gtkprintbackendcups.c:5762
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Klassifisert"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5766
+#: gtk/print/backends/gtkprintbackendcups.c:5763
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidensiell"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5767
+#: gtk/print/backends/gtkprintbackendcups.c:5764
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Hemmelig"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5768
+#: gtk/print/backends/gtkprintbackendcups.c:5765
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Vanlig"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5769
+#: gtk/print/backends/gtkprintbackendcups.c:5766
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Topphemmelig"
 
-#: gtk/print/backends/gtkprintbackendcups.c:5770
+#: gtk/print/backends/gtkprintbackendcups.c:5767
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Ikke klassifisert"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5782
+#: gtk/print/backends/gtkprintbackendcups.c:5779
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Sider per ark"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5799
+#: gtk/print/backends/gtkprintbackendcups.c:5796
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
@@ -3914,16 +3897,14 @@ msgstr "Siderekkefølge"
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5876
+#: gtk/print/backends/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Tidspunkt for utskrift"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5887
+#: gtk/print/backends/gtkprintbackendcups.c:5884
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Tidspunkt for utskrift"
@@ -3932,20 +3913,19 @@ msgstr "Tidspunkt for utskrift"
 #. * paper size. The two placeholders are replaced with
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
-#.
-#: gtk/print/backends/gtkprintbackendcups.c:5935
+#: gtk/print/backends/gtkprintbackendcups.c:5932
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Egendefinert %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: gtk/print/backends/gtkprintbackendcups.c:6047
+#: gtk/print/backends/gtkprintbackendcups.c:6044
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Skriverprofil"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: gtk/print/backends/gtkprintbackendcups.c:6054
+#: gtk/print/backends/gtkprintbackendcups.c:6051
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ikke tilgjengelig"
@@ -4017,7 +3997,6 @@ msgstr "Ikke tilgjengelig"
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
-#.
 #: gtk/print/gtkprintoperation.c:258
 #, c-format
 msgid "%s job #%d"
@@ -4090,14 +4069,16 @@ msgstr "Feil under oppretting av forhåndsvisning for utskrift"
 
 #: gtk/print/gtkprintoperation.c:2868
 #, c-format
-msgid "The most probable reason is that a temporary file could not be created."
+msgid ""
+"The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Den mest sannsynlige årsaken er at en midlertidig fil ikke kunne lages."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:287
 #: gtk/print/gtkprintoperation-portal.c:634
-#: gtk/print/gtkprintoperation-portal.c:703 gtk/print/gtkprintunixdialog.c:2967
+#: gtk/print/gtkprintoperation-portal.c:703
+#: gtk/print/gtkprintunixdialog.c:2967
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -4229,7 +4210,6 @@ msgstr "Tøm oppføring"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
-#.
 #: gtk/deprecated/gtkshortcutlabel.c:82
 msgctxt "keyboard side marker"
 msgid "L"
@@ -4239,7 +4219,6 @@ msgstr "V"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
-#.
 #: gtk/deprecated/gtkshortcutlabel.c:95
 msgctxt "keyboard side marker"
 msgid "R"
@@ -4281,19 +4260,22 @@ msgstr "Dra til venstre"
 msgid "Swipe right"
 msgstr "Dra til høyre"
 
-#. Translators: This is placeholder text for the search entry in the shortcuts window
+#. Translators: This is placeholder text for the search entry in the shortcuts
+#. window
 #: gtk/deprecated/gtkshortcutswindow.c:912
 #: gtk/deprecated/gtkshortcutswindow.c:979
 #: gtk/deprecated/gtkshortcutswindow.c:985
 msgid "Search Shortcuts"
 msgstr "Søk etter snarveier"
 
-#. Translators: This is the window title for the shortcuts window in normal mode
+#. Translators: This is the window title for the shortcuts window in normal
+#. mode
 #: gtk/deprecated/gtkshortcutswindow.c:944 gtk/inspector/window.ui:603
 msgid "Shortcuts"
 msgstr "Tastatursnarveier"
 
-#. Translators: This is the window title for the shortcuts window in search mode
+#. Translators: This is the window title for the shortcuts window in search
+#. mode
 #: gtk/deprecated/gtkshortcutswindow.c:949
 msgid "Search Results"
 msgstr "Søketreff"
@@ -4317,7 +4299,7 @@ msgstr "Sidelinje"
 msgid "Change di_rection"
 msgstr "Endre _retning"
 
-#: gtk/gtktext.c:6414 gtk/gtktextview.c:9299
+#: gtk/gtktext.c:6414 gtk/gtktextview.c:9298
 msgid "Insert _Emoji"
 msgstr "Sett inn _emoji"
 
@@ -4477,11 +4459,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS klassisk"
 
-#: gtk/gtktextview.c:9281
+#: gtk/gtktextview.c:9280
 msgid "_Undo"
 msgstr "_Angre"
 
-#: gtk/gtktextview.c:9285
+#: gtk/gtktextview.c:9284
 msgid "_Redo"
 msgstr "_Gjenopprett"
 
@@ -4961,7 +4943,7 @@ msgstr "Bildeklokke"
 
 #: gtk/inspector/misc-info.ui:451
 msgid "Tick Callback"
-msgstr ""
+msgstr "Tick Callback"
 
 #: gtk/inspector/misc-info.ui:481
 msgid "Frame Count"
@@ -4996,21 +4978,16 @@ msgid "Child Visible"
 msgstr "Barn synlig"
 
 #: gtk/inspector/misc-info.ui:685
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Optical Size"
 msgid "Intrinsic Size"
-msgstr "Optisk størrelse"
+msgstr "Innebygd størrelse"
 
 #: gtk/inspector/misc-info.ui:710
 msgid "Intrinsic Aspect Ratio"
-msgstr ""
+msgstr "Innebygd sideforhold"
 
 #: gtk/inspector/misc-info.ui:735
-#, fuzzy
-#| msgid "Paintable Size"
 msgid "GdkPaintable Flags"
-msgstr "Størrelse på tegneområde"
+msgstr "GdkPaintable-flagg"
 
 #: gtk/inspector/prop-editor.c:832
 #, c-format
@@ -5019,7 +4996,6 @@ msgstr "Peker: %p"
 
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
-#.
 #: gtk/inspector/prop-editor.c:957
 #, c-format
 msgid "%s with value \"%s\""
@@ -5027,7 +5003,6 @@ msgstr "%s med verdi «%s»"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
-#.
 #: gtk/inspector/prop-editor.c:968
 #, c-format
 msgid "%s with type %s"
@@ -5035,7 +5010,6 @@ msgstr "%s med type %s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
-#.
 #: gtk/inspector/prop-editor.c:981
 #, c-format
 msgid "%s for %s %p"
@@ -5043,7 +5017,6 @@ msgstr "%s for %s %p"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
-#.
 #: gtk/inspector/prop-editor.c:1011
 #, c-format
 msgid "%s with value type %s"
@@ -5073,7 +5046,6 @@ msgstr "Kolonne:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
-#.
 #: gtk/inspector/prop-editor.c:1723
 #, c-format
 msgid "Action from: %p (%s)"
@@ -5114,11 +5086,11 @@ msgstr "Kilde:"
 
 #: gtk/inspector/prop-editor.c:1827
 msgid "(construct-only)"
-msgstr ""
+msgstr "(construct-only)"
 
 #: gtk/inspector/prop-editor.c:1829
 msgid "(not writable)"
-msgstr ""
+msgstr "(ikke skrivbar)"
 
 #: gtk/inspector/prop-list.ui:46
 msgid "Defined At"
@@ -5131,11 +5103,11 @@ msgstr "Lagring av RenderNode feilet"
 
 #: gtk/inspector/recorder.c:2440
 msgid "Frame"
-msgstr ""
+msgstr "Ramme"
 
 #: gtk/inspector/recorder.c:2463
 msgid "<b>Start of Recording</b>"
-msgstr ""
+msgstr "<b>Start av opptak</b>"
 
 #: gtk/inspector/recorder.ui:28
 msgid "Recording Options"
@@ -5163,7 +5135,7 @@ msgstr "Tøm innspilte bilder"
 
 #: gtk/inspector/recorder.ui:82
 msgid "Profiling overlay (requires GSK_DEBUG=profile)"
-msgstr ""
+msgstr "Profileringsoverlegg (krever GSK_DEBUG=profile)"
 
 #: gtk/inspector/recorder.ui:108
 msgid "Use a dark background"
@@ -5175,7 +5147,7 @@ msgstr "Lagre valgt modus"
 
 #: gtk/inspector/recorder.ui:140
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopier til utklippstavlen"
 
 #: gtk/inspector/recorder.ui:220 gtk/inspector/recorder.ui:264
 msgid "Property"
@@ -5284,11 +5256,11 @@ msgstr "Implementerer"
 
 #: gtk/inspector/visual.c:741
 msgid "Set via GTK_THEME"
-msgstr ""
+msgstr "Angi via GTK_THEME"
 
 #: gtk/inspector/visual.c:927 gtk/inspector/visual.c:964
 msgid "Set by Compositor"
-msgstr ""
+msgstr "Angitt av Compositor"
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
@@ -5328,11 +5300,11 @@ msgstr "Mindre"
 
 #: gtk/inspector/visual.ui:126
 msgid "System Reduced Motion"
-msgstr ""
+msgstr "System Redusert Bevegelse"
 
 #: gtk/inspector/visual.ui:141
 msgid "Reduced"
-msgstr ""
+msgstr "Redusert"
 
 #: gtk/inspector/visual.ui:159
 msgid "Cursor Theme"
@@ -5386,10 +5358,8 @@ msgid "Show Framerate"
 msgstr "Vis bilderate"
 
 #: gtk/inspector/visual.ui:507
-#, fuzzy
-#| msgid "Show Framerate"
 msgid "Show Frame Times"
-msgstr "Vis bilderate"
+msgstr "Vis rammetider"
 
 #: gtk/inspector/visual.ui:539
 msgid "Show Graphic Updates"
@@ -5440,9 +5410,8 @@ msgid "Show Accessibility warnings"
 msgstr "Vis advarsler for tilgjengelighet"
 
 #: gtk/inspector/visual.ui:798
-#, fuzzy
 msgid "Show Graphics Offload"
-msgstr "Vis oppdatering av grafikk"
+msgstr "Vis grafikkavlastning"
 
 #: gtk/inspector/visual.ui:833
 msgid "Show Touch UI"
@@ -5485,10 +5454,8 @@ msgid "Refresh action state"
 msgstr "Oppdater tilstand for handling"
 
 #: gtk/inspector/window.ui:347
-#, fuzzy
-#| msgid "Information"
 msgid "Include debug information"
-msgstr "Informasjon"
+msgstr "Inkluder feilsøkingsinformasjon"
 
 #: gtk/inspector/window.ui:410
 msgid "Previous object"
@@ -5585,22 +5552,22 @@ msgstr "Opptaker"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr ""
+msgstr "Aksesser alle alternative"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Overliggende skjemaer"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Over-base-markering av posisjonering"
 
 #: gtk/open-type-layout.h:17
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Overliggende substitusjoner"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -5615,77 +5582,77 @@ msgstr "Akhands"
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Underliggende former"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Under-base-markering-posisjonering"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Underliggende substitusjoner"
 
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Kontekstuelle alternativer"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Case-Sensitive-skjemaer"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Glyf-sammensetning / dekomponering"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Conjunct Form After Ro"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Konjunktformer"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Kontekstuelle ligaturer"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Sentret CJK-tegnsetting"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Stor bokstav-avstand"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Kontekstuelle sløyfer"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Kursiv posisjonering"
 
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Petite Capitals Fra Capitals"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Små versaler fra versaler"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -5695,27 +5662,27 @@ msgstr "Avstander"
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Diskrete ligaturer"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Nevnere"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Dotless Forms"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Ekspertformer"
 
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Siste glyf på linje alternativer"
 
 #: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
@@ -5735,7 +5702,7 @@ msgstr "Terminal former"
 #: gtk/open-type-layout.h:44
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Flate aksentformer"
 
 #: gtk/open-type-layout.h:45
 msgctxt "OpenType layout"
@@ -5755,12 +5722,12 @@ msgstr "Halve former"
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Halantformer"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Alternativ halvbredde"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -5770,12 +5737,12 @@ msgstr "Historiske former"
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Horisontale Kana-alternativer"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "Historiske ligaturer"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -5810,7 +5777,7 @@ msgstr "Kursiv"
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Begrunnelse alternativer"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
@@ -5850,17 +5817,17 @@ msgstr "Vanlige ligaturer"
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Ledende Jamo-former"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Lining Figures"
 
 #: gtk/open-type-layout.h:69
 msgctxt "OpenType layout"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Lokaliserte former"
 
 #: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
@@ -5875,7 +5842,7 @@ msgstr "Venstre-til-høyre speilede former"
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Markering av posisjon"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
@@ -5885,7 +5852,7 @@ msgstr ""
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Medial Forms"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
@@ -5895,42 +5862,42 @@ msgstr "Matematisk gresk"
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Markering av posisjonering"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Markposisjonering via substitusjon"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Alternative annoteringsformer"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC Kanji-former"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Nukta-former"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Telleren"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Gamle tall-stil"
 
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Optiske grenser"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
@@ -5945,17 +5912,17 @@ msgstr "Ornamenter"
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Proposjonal alternativ bredde"
 
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Petite Capitals"
 
 #: gtk/open-type-layout.h:88
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Proporsjonell Kana"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
@@ -5965,22 +5932,22 @@ msgstr "Proporsjonale figurer"
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Pre-Base-former"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Pre-base-substitusjoner"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Post-base-skjemaer"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Post-base-substitusjoner"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
@@ -5990,7 +5957,7 @@ msgstr "Proporsjonelle bredder"
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Kvartbredder"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
@@ -6000,17 +5967,17 @@ msgstr "Tilfeldiggjør"
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Nødvendige kontekstuelle alternativer"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Rakar-former"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Nødvendige ligaturer"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
@@ -6035,22 +6002,22 @@ msgstr "Høyre-til-venstre speilede former"
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Ruby-notasjon-skjemaer"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Nødvendig variasjon alternativer"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Stilistiske alternativer"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Vitenskapelige underlegger"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
@@ -6060,22 +6027,22 @@ msgstr "Optisk størrelse"
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr ""
+msgstr "Små bokstaver i start av ord"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "Forenklede former"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Matematisk skriptstil-alternativer"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Stretching Glyph Decomposition"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
@@ -6090,47 +6057,47 @@ msgstr "Superskript"
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Sløyfe"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Tittel"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Trailing Jamo Forms"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Tradisjonelle navneformer"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Tabulære tall"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Tradisjonelle former"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Third Widths"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Unicase"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Alternative vertikale målinger"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
@@ -6145,17 +6112,17 @@ msgstr "Vertikal skriving"
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Alternativ vertikal halvmetrikk"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Vokal Jamo-former"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Vertikale Kana-alternativer"
 
 #: gtk/open-type-layout.h:129
 msgctxt "OpenType layout"
@@ -6165,22 +6132,22 @@ msgstr "Vertikal kniping"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Proposjonal alternativ vertikal metrikk"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Vertikale alternativer og rotasjon"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Vertikale alternativer for rotasjon"
 
 #: gtk/open-type-layout.h:133
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Slashed Zero"
 
 #: gtk/print/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -7421,7 +7388,8 @@ msgstr "Tjeneradresse"
 #: gtk/ui/gtkplacesview.ui:26
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Tjeneradresser består av en protokollprefiks og en adresse: Eksempler:"
+msgstr ""
+"Tjeneradresser består av en protokollprefiks og en adresse: Eksempler:"
 
 #: gtk/ui/gtkplacesview.ui:52
 msgid "Available Protocols"
@@ -7508,8 +7476,8 @@ msgstr "Forhåndsvisning av siderekkefølge"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:365
 msgid ""
-"A visualization of the effect of the collate and reverse options on the page "
-"ordering"
+"A visualization of the effect of the collate and reverse options on the page"
+" ordering"
 msgstr ""
 "Visualisering av effekten av alternativene for å slå sammen og reversering "
 "av siderekkefølgen"
@@ -7599,12 +7567,14 @@ msgstr "Skriv ut dokument"
 msgid "_Now"
 msgstr "_Nå"
 
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#. this is one of the choices for the print at option in the print dialog. It
+#. also serves as the label for an entry that allows the user to enter a time.
 #: gtk/print/ui/gtkprintunixdialog.ui:902
 msgid "A_t:"
 msgstr "_Tidspunkt:"
 
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#. Ability to parse the am/pm format depends on actual locale. You can remove
+#. the am/pm values below for your locale if they are not supported.
 #: gtk/print/ui/gtkprintunixdialog.ui:904
 #: gtk/print/ui/gtkprintunixdialog.ui:906
 #: gtk/print/ui/gtkprintunixdialog.ui:922
@@ -7616,7 +7586,9 @@ msgstr ""
 "Oppgi tid for utskrift,\n"
 "f.eks. 15.30, 02.35, 14.15.20, 11.46.30"
 
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#. this is one of the choices for the print at option in the print dialog. It
+#. means that the print job will not be printed until it explicitly gets
+#. 'released'.
 #: gtk/print/ui/gtkprintunixdialog.ui:936
 msgid "On _hold"
 msgstr "På _vent"
@@ -7630,12 +7602,14 @@ msgstr "Utsett jobben til den eksplisitt blir frigitt"
 msgid "Add Cover Page"
 msgstr "Legg til forside"
 
-#. this is the label used for the option in the print dialog that controls the front cover page.
+#. this is the label used for the option in the print dialog that controls the
+#. front cover page.
 #: gtk/print/ui/gtkprintunixdialog.ui:981
 msgid "Be_fore:"
 msgstr "_Før:"
 
-#. this is the label used for the option in the print dialog that controls the back cover page.
+#. this is the label used for the option in the print dialog that controls the
+#. back cover page.
 #: gtk/print/ui/gtkprintunixdialog.ui:1002
 msgid "_After:"
 msgstr "_Etter:"
@@ -7654,7 +7628,8 @@ msgstr "Bildekvalitet"
 msgid "Color"
 msgstr "Farge"
 
-#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
+#. This will appear as a tab label in the print dialog. It's a typographical
+#. term, as in "Binding and finishing"
 #: gtk/print/ui/gtkprintunixdialog.ui:1119
 msgid "Finishing"
 msgstr "Fullfører"
@@ -7672,26 +7647,7 @@ msgid "Play"
 msgstr "Spill av"
 
 #: tools/gtk-builder-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace    Replace the file\n"
-#| "  --3to4       Convert from GTK 3 to GTK 4\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID      Preview only the named object\n"
-#| "  --css=FILE   Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7708,33 +7664,28 @@ msgid ""
 "\n"
 msgstr ""
 "Bruk:\n"
-"  gtk-builder-tool [KOMMANDO] [ALTERNATIV …] FIL\n"
+"  gtk4-builder-tool [KOMMANDO] [ALTERNATIV …] FIL\n"
+"\n"
+"Utfører forskjellige oppgaver på GtkBuilder .ui-filer.\n"
 "\n"
 "Kommandoer:\n"
 "  validate        Sjekk filen\n"
 "  simplify        Forenkle filen\n"
 "  enumerate       Vis alle navngitte objekter\n"
 "  preview         Forhådsvis filen\n"
-"\n"
-"Alternativer for forenkling:\n"
-"  --replace       Erstatt filen\n"
-"  --3to4          Konverter fra GTK 3 til GTK 4\n"
-"  \n"
-"Alternativer for forhåndsvisning:\n"
-"  --id=ID         Forhåndsvis kun navngitt objekt\n"
-"  --css=FILE      Bruk stil fra CSS-fil\n"
-"  \n"
-"Utfør forskjellige oppgaver på GtkBuilder .ui-filer.\n"
+"  render          Ta et skjermbilde av filen\n"
+"  screenshot      Ta et skjermbilde av filen\n"
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
-#: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:358
-#: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
-#: tools/gtk-image-tool-play.c:338 tools/gtk-path-tool-render.c:63
-#: tools/gtk-rendernode-tool-compare.c:68
+#: tools/gtk-builder-tool-preview.c:180
+#: tools/gtk-builder-tool-screenshot.c:358
+#: tools/gtk-builder-tool-simplify.c:2709
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-image-tool-compare.c:44
+#: tools/gtk-image-tool-info.c:80 tools/gtk-image-tool-play.c:338
+#: tools/gtk-path-tool-render.c:63 tools/gtk-rendernode-tool-compare.c:68
 #: tools/gtk-rendernode-tool-convert.c:98
-#: tools/gtk-rendernode-tool-extract.c:200 tools/gtk-rendernode-tool-info.c:170
-#: tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-rendernode-tool-extract.c:200
+#: tools/gtk-rendernode-tool-info.c:170 tools/gtk-rendernode-tool-show.c:109
 msgid "FILE"
 msgstr "FIL"
 
@@ -7742,30 +7693,33 @@ msgstr "FIL"
 msgid "Print all named objects."
 msgstr "Skriv ut alle navngitte objekter."
 
-#: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:234
+#: tools/gtk-builder-tool-preview.c:128
+#: tools/gtk-builder-tool-screenshot.c:234
 #, c-format
 msgid "No object with ID '%s' found\n"
-msgstr ""
+msgstr "Ingen objekt med ID '%s' ble funnet\n"
 
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
 msgid "No previewable object found\n"
-msgstr ""
+msgstr "Fant ingen forhåndsvisbare objekter\n"
 
 #: tools/gtk-builder-tool-preview.c:136
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
-msgstr ""
+msgstr "Objekter av typen %s kan ikke forhåndsvises\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
-msgstr ""
+msgstr "Forhåndsvis kun det navngitte objektet"
 
-#: tools/gtk-builder-tool-preview.c:179 tools/gtk-builder-tool-screenshot.c:358
+#: tools/gtk-builder-tool-preview.c:179
+#: tools/gtk-builder-tool-screenshot.c:358
 msgid "Use style from CSS file"
-msgstr ""
+msgstr "Bruk stil fra CSS-filen"
 
-#: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:368
+#: tools/gtk-builder-tool-preview.c:187
+#: tools/gtk-builder-tool-screenshot.c:368
 #: tools/gtk-builder-tool-validate.c:275
 #: tools/gtk-rendernode-tool-benchmark.c:109
 #: tools/gtk-rendernode-tool-render.c:318 tools/gtk-rendernode-tool-show.c:117
@@ -7777,17 +7731,18 @@ msgstr "Kunne ikke initiere vindussystemet\n"
 msgid "Preview the file."
 msgstr "Forhåndsvis filen."
 
-#: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:389
-#: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:294
+#: tools/gtk-builder-tool-preview.c:208
+#: tools/gtk-builder-tool-screenshot.c:389
+#: tools/gtk-builder-tool-simplify.c:2733
+#: tools/gtk-builder-tool-validate.c:294
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ingen .ui fil oppgitt\n"
 
 #: tools/gtk-builder-tool-preview.c:214
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only preview a single .ui file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan kun forhåndsvise en enkelt .ui-fil\n"
 
 #: tools/gtk-builder-tool-screenshot.c:236
 #, c-format
@@ -7797,7 +7752,7 @@ msgstr "Ingen objekter funnet\n"
 #: tools/gtk-builder-tool-screenshot.c:242
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
-msgstr ""
+msgstr "Objekter av typen %s kan ikke tas skjermbilde av\n"
 
 #: tools/gtk-builder-tool-screenshot.c:296
 #, c-format
@@ -7810,27 +7765,28 @@ msgid ""
 "File %s exists.\n"
 "Use --force to overwrite.\n"
 msgstr ""
+"Fil %s eksisterer.\n"
+"Bruk --force for å skrive over.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:330
 #: tools/gtk-rendernode-tool-render.c:251
 #, c-format
 msgid "Output written to %s.\n"
-msgstr ""
+msgstr "Skrevet til %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:334
 #: tools/gtk-rendernode-tool-render.c:255
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to save %s: %s\n"
-msgstr "Klarte ikke å åpne fil %s: %s\n"
+msgstr "Klarte ikke å lagre %s: %s\n"
 
 #: tools/gtk-builder-tool-screenshot.c:357
 msgid "Screenshot only the named object"
-msgstr ""
+msgstr "Skjermbilde kun det navngitte objektet"
 
 #: tools/gtk-builder-tool-screenshot.c:359
 msgid "Save as node file instead of png"
-msgstr ""
+msgstr "Lagre som nodemappe i stedet for png"
 
 #: tools/gtk-builder-tool-screenshot.c:360
 msgid "Overwrite existing file"
@@ -7846,13 +7802,12 @@ msgstr "FIL …"
 
 #: tools/gtk-builder-tool-screenshot.c:376
 msgid "Render a .ui file to an image."
-msgstr ""
+msgstr "Render en .ui-fil til et bilde."
 
 #: tools/gtk-builder-tool-screenshot.c:395
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only render a single .ui file to a single output file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan kun gjengi en enkelt .ui fil til en enkelt utdatafil\n"
 
 #: tools/gtk-builder-tool-simplify.c:447
 #, c-format
@@ -7860,45 +7815,39 @@ msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Klarte ikke å tolke verdi for egenskap «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:666
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Property %s not found"
-msgstr "%s:%d %segenskap %s::%s ble ikke funnet\n"
+msgstr "Egenskap %s ble ikke funnet"
 
 #: tools/gtk-builder-tool-simplify.c:669
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Packing property %s not found"
-msgstr "%s:%d %segenskap %s::%s ble ikke funnet\n"
+msgstr "Egenskap %s for pakking ble ikke funnet"
 
 #: tools/gtk-builder-tool-simplify.c:672
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Cell property %s not found"
-msgstr "%s:%d %segenskap %s::%s ble ikke funnet\n"
+msgstr "Celle-egenskap %s ble ikke funnet"
 
 #: tools/gtk-builder-tool-simplify.c:675
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Layout property %s not found"
-msgstr "%s:%d %segenskap %s::%s ble ikke funnet\n"
+msgstr "Layout-egenskap %s ble ikke funnet"
 
 #: tools/gtk-builder-tool-simplify.c:1408
 #, c-format
 msgid "%s only accepts three children"
-msgstr ""
+msgstr "%s aksepterer bare tre barn"
 
 #: tools/gtk-builder-tool-simplify.c:1796
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "%s only accepts one center child"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "%s aksepterer bare ett sentralt barn"
 
 #: tools/gtk-builder-tool-simplify.c:2606
-#, fuzzy, c-format
-#| msgid "Failed to rewrite header\n"
+#, c-format
 msgid "Unable to create temporary file: %s\n"
-msgstr "Klarte ikke skrive om hode\n"
+msgstr "Kunne ikke opprette midlertidig fil: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2620
 #, c-format
@@ -7918,10 +7867,9 @@ msgid "Failed to read “%s”: %s\n"
 msgstr "Klarte ikke å lese «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2684
-#, fuzzy, c-format
-#| msgid "Failed to write %s: “%s”\n"
+#, c-format
 msgid "Failed to write “%s”: “%s”\n"
-msgstr "Klarte ikke å skrive %s: «%s»\n"
+msgstr "Klarte ikke å skrive «%s»: «%s»\n"
 
 #: tools/gtk-builder-tool-simplify.c:2707
 msgid "Replace the file"
@@ -7929,11 +7877,11 @@ msgstr "Erstatt filen"
 
 #: tools/gtk-builder-tool-simplify.c:2708
 msgid "Convert from GTK 3 to GTK 4"
-msgstr ""
+msgstr "Konverter fra GTK 3 til GTK 4"
 
 #: tools/gtk-builder-tool-simplify.c:2719
 msgid "Simplify the file."
-msgstr ""
+msgstr "Forenkle filen."
 
 #: tools/gtk-builder-tool-simplify.c:2739
 #, c-format
@@ -7941,19 +7889,18 @@ msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to lookup template parent type %s\n"
-msgstr "Klarte ikke å åpne fil %s: %s\n"
+msgstr "Kunne ikke slå opp foreldremaltype %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
-msgstr ""
+msgstr "Utgåtte typer:\n"
 
 #: tools/gtk-builder-tool-validate.c:170
 #, c-format
 msgid "Failed to create an instance of the template type %s\n"
-msgstr ""
+msgstr "Kunne ikke opprette en instans av maltypen %s\n"
 
 #: tools/gtk-builder-tool-validate.c:283
 msgid "Validate the file."
@@ -7993,26 +7940,24 @@ msgid "No image file specified\n"
 msgstr "Ingen bildefil oppgitt\n"
 
 #: tools/gtk-image-tool-compare.c:77
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept two image files\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare ta imot to bildefiler\n"
 
 #: tools/gtk-image-tool-compare.c:90 tools/gtk-rendernode-tool-compare.c:123
-#, fuzzy, c-format
-#| msgid "Could not rename %s back to %s: %s.\n"
+#, c-format
 msgid "Could not save diff image to %s\n"
-msgstr "Klarte ikke å endre navn på %s tilbake til %s: %s\n"
+msgstr "Kunne ikke lagre differanse-bildet til %s\n"
 
 #: tools/gtk-image-tool-compare.c:100 tools/gtk-rendernode-tool-compare.c:133
 #, c-format
-msgid "Differences witten to %s.\n"
-msgstr ""
+msgid "Differences written to %s.\n"
+msgstr "Forskjeller skrevet til %s.\n"
 
 #: tools/gtk-image-tool-compare.c:102 tools/gtk-rendernode-tool-compare.c:135
 #, c-format
 msgid "The images are different.\n"
-msgstr ""
+msgstr "Bildene er forskjellige.\n"
 
 #: tools/gtk-image-tool-compare.c:105 tools/gtk-rendernode-tool-compare.c:138
 #, c-format
@@ -8029,29 +7974,28 @@ msgstr "FORMAT"
 
 #: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use"
-msgstr ""
+msgstr "Farge tilstand som skal brukes"
 
 #: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
 msgid "COLORSTATE"
-msgstr ""
+msgstr "COLORSTATE"
 
 #: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "Color state to use, as cicp tuple"
-msgstr ""
+msgstr "Fargestatus som skal brukes, som cicp-tuple"
 
 #: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
 msgid "CICP"
-msgstr ""
+msgstr "CICP"
 
 #: tools/gtk-image-tool-convert.c:154
 msgid "Convert the image to a different format or color state."
-msgstr ""
+msgstr "Konverter bildet til et annet format eller fargetilstand."
 
 #: tools/gtk-image-tool-convert.c:173 tools/gtk-image-tool-relabel.c:116
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept a single image file and output file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare ta imot én enkelt bildefil og én utfil\n"
 
 #: tools/gtk-image-tool-convert.c:187
 #, c-format
@@ -8060,6 +8004,9 @@ msgid ""
 "Possible values:\n"
 "  %s\n"
 msgstr ""
+"Ikke et minneformat: %s\n"
+"Mulige verdier:\n"
+"  %s\n"
 
 #: tools/gtk-image-tool-convert.c:204
 #, c-format
@@ -8068,16 +8015,19 @@ msgid ""
 "Possible values:\n"
 "  %s\n"
 msgstr ""
+"Ikke en fargetilstand: %s\n"
+"Mulige verdier:\n"
+"  %s\n"
 
 #: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
-msgstr ""
+msgstr "Kan ikke angi både --color-state og --cicp\n"
 
 #: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
-msgstr ""
+msgstr "Ikke et støttet cicp-tupel: %s\n"
 
 #: tools/gtk-image-tool-info.c:58
 msgid "Format:"
@@ -8094,17 +8044,16 @@ msgstr "ukjent"
 
 #: tools/gtk-image-tool-info.c:89
 msgid "Provide information about the image."
-msgstr ""
+msgstr "Opplysninger om bildet."
 
 #: tools/gtk-image-tool-info.c:108
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept a single image file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare ta imot én enkelt bildefil\n"
 
 #: tools/gtk-image-tool-play.c:331 tools/gtk-image-tool-show.c:118
 msgid "Don't add a titlebar"
-msgstr ""
+msgstr "Ikke legg til en tittellinje"
 
 #: tools/gtk-image-tool-play.c:332 tools/gtk-rendernode-tool-convert.c:97
 msgid "SIZE"
@@ -8116,23 +8065,23 @@ msgstr "Ikke kjør animasjoner"
 
 #: tools/gtk-image-tool-play.c:334
 msgid "Don't use system resources"
-msgstr ""
+msgstr "Ikke bruk systemressurser"
 
 #: tools/gtk-image-tool-play.c:335
 msgid "Don't load external resources"
-msgstr ""
+msgstr "Ikke last eksterne ressurser"
 
 #: tools/gtk-image-tool-play.c:336
 msgid "Don't allow gpa extensions"
-msgstr ""
+msgstr "Ikke tillat gpa-utvidelser"
 
 #: tools/gtk-image-tool-play.c:337
 msgid "Traditional symbolic icon"
-msgstr ""
+msgstr "Tradisjonelt symbolikon"
 
 #: tools/gtk-image-tool-play.c:338
 msgid "Use FILE as user stylesheet"
-msgstr ""
+msgstr "Bruk FIL som brukerstilark"
 
 #: tools/gtk-image-tool-play.c:349
 msgid "Show one or more animations."
@@ -8145,7 +8094,7 @@ msgstr "Ingen animasjonsfil oppgitt\n"
 
 #: tools/gtk-image-tool-relabel.c:97
 msgid "Change the color state of the image without conversion."
-msgstr ""
+msgstr "Endre fargetilstanden til bildet uten konvertering."
 
 #: tools/gtk-image-tool-relabel.c:131
 #, c-format
@@ -8153,6 +8102,8 @@ msgid ""
 "Not a color state: %s\n"
 "Possible values: %s\n"
 msgstr ""
+"Ikke en fargetilstand: %s\n"
+"Mulige verdier: %s\n"
 
 #: tools/gtk-image-tool-show.c:129
 msgid "Show one or more images."
@@ -8199,7 +8150,8 @@ msgstr "%s: mangler navn på programmet"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Å lage en AppInfo fra en ID er ikke støtte på andre operativsystemer enn UNIX"
+"Å lage en AppInfo fra en ID er ikke støtte på andre operativsystemer enn "
+"UNIX"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -8235,50 +8187,50 @@ msgstr ""
 
 #: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
-msgstr ""
+msgstr "Tillat kvadratiske Bézier-kurver"
 
 #: tools/gtk-path-tool-decompose.c:85
 msgid "Allow cubic Bézier curves"
-msgstr ""
+msgstr "Tillat kubiske Bézier-kurver"
 
 #: tools/gtk-path-tool-decompose.c:86
 msgid "Allow conic Bézier curves"
-msgstr ""
+msgstr "Tillat koniske Bézier-kurver"
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-restrict.c:38 tools/gtk-path-tool-reverse.c:34
 msgid "PATH"
-msgstr ""
+msgstr "STI"
 
 #: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
-msgstr ""
+msgstr "Oppløs en sti."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
 msgid "No paths given."
-msgstr ""
+msgstr "Ingen stier oppgitt."
 
 #: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
 msgid "That didn't work out."
-msgstr ""
+msgstr "Det fungerte ikke."
 
 #: tools/gtk-path-tool-info.c:100
 msgid "Print information about a path."
-msgstr ""
+msgstr "Skriv ut informasjon om en sti."
 
 #: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
-msgstr ""
+msgstr "Stien er tom."
 
 #: tools/gtk-path-tool-info.c:127
 msgid "Path is closed"
-msgstr ""
+msgstr "Stien er lukket"
 
 #: tools/gtk-path-tool-info.c:129
 msgid "Path length"
-msgstr ""
+msgstr "Stilengde"
 
 #: tools/gtk-path-tool-info.c:138
 #, c-format
@@ -8298,52 +8250,46 @@ msgstr "%d linjer"
 #: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
-msgstr ""
+msgstr "%d andregradsligninger"
 
 #: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
-msgstr ""
+msgstr "%d kubikk"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
 msgid "%d conics"
-msgstr ""
+msgstr "%d koniske"
 
 #: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:111
 msgid "Fill the path (the default)"
-msgstr ""
+msgstr "Fyll inn stien (standard)"
 
 #: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:112
 msgid "Stroke the path"
-msgstr ""
+msgstr "Streken på stien"
 
 #: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:113
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show path points"
-msgstr "Vis andre lokasjoner"
+msgstr "Vis stien"
 
 #: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:114
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show control points"
-msgstr "Vis andre lokasjoner"
+msgstr "Vis kontrollpunkter"
 
 #: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:115
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show intersections"
-msgstr "Vis andre lokasjoner"
+msgstr "Vis krysningspunkter"
 
 #: tools/gtk-path-tool-render.c:63
 msgid "The output file"
-msgstr ""
+msgstr "Utdatafil"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:116
 #: tools/gtk-rendernode-tool-convert.c:93
 msgid "Foreground color"
-msgstr ""
+msgstr "Forgrunnsfarge"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-render.c:65
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
@@ -8361,15 +8307,12 @@ msgid "Background color"
 msgstr "Bakgrunnsfarge"
 
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:118
-#, fuzzy
 msgid "Point color"
-msgstr "Velg en farge"
+msgstr "Punktfarge"
 
 #: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:119
-#, fuzzy
-#| msgid "Enter location or URL"
 msgid "Intersection color"
-msgstr "Oppgi plassering eller adresse"
+msgstr "Skjæringspunktfarge"
 
 #: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:120
 msgid "Zoom level (number)"
@@ -8392,31 +8335,31 @@ msgstr "STI …"
 
 #: tools/gtk-path-tool-render.c:73 tools/gtk-path-tool-show.c:125
 msgid "Fill rule (winding, even-odd)"
-msgstr ""
+msgstr "Fyllregel (winding, even-odd)"
 
 #: tools/gtk-path-tool-render.c:77 tools/gtk-path-tool-show.c:129
 msgid "Line width (number)"
-msgstr ""
+msgstr "Linjebredde (antall)"
 
 #: tools/gtk-path-tool-render.c:78 tools/gtk-path-tool-show.c:130
 msgid "Line cap (butt, round, square)"
-msgstr ""
+msgstr "Linjeavslutning (butt, rund, firkant)"
 
 #: tools/gtk-path-tool-render.c:79
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr ""
+msgstr "Linjesammenføyning (miter, miter-clip, round, bevel, bue)"
 
 #: tools/gtk-path-tool-render.c:80 tools/gtk-path-tool-show.c:132
 msgid "Miter limit (number)"
-msgstr ""
+msgstr "Miter-grense (antall)"
 
 #: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:133
 msgid "Dash pattern (comma-separated numbers)"
-msgstr ""
+msgstr "Stiplet mønster (komma-separerte tall)"
 
 #: tools/gtk-path-tool-render.c:82 tools/gtk-path-tool-show.c:134
 msgid "Dash offset (number)"
-msgstr ""
+msgstr "Dash-forskyvning (antall)"
 
 #: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:147
 msgid "Could not initialize windowing system"
@@ -8424,64 +8367,57 @@ msgstr "Kunne ikke initiere vindussystem"
 
 #: tools/gtk-path-tool-render.c:117
 msgid "Render the path to a png image."
-msgstr ""
+msgstr "Vis stien til et png-bilde."
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:158
 msgid "Options related to filling"
-msgstr ""
+msgstr "Valg relatert til utfylling"
 
 #: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:159
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for fill options"
-msgstr "Vis andre lokasjoner"
+msgstr "Vis hjelp for fyllalternativer"
 
 #: tools/gtk-path-tool-render.c:130 tools/gtk-path-tool-show.c:166
 msgid "Options related to stroking"
-msgstr ""
+msgstr "Valg relatert til stroking"
 
 #: tools/gtk-path-tool-render.c:131 tools/gtk-path-tool-show.c:167
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
-msgstr "Vis andre lokasjoner"
+msgstr "Vis hjelp for stroke-alternativer"
 
 #: tools/gtk-path-tool-render.c:148 tools/gtk-path-tool-show.c:184
-#, fuzzy
-#| msgid "Reason not specified"
 msgid "No path specified"
-msgstr "Årsak ikke oppgitt"
+msgstr "Ingen sti angitt"
 
 #: tools/gtk-path-tool-render.c:154
 msgid "Can only render a single path"
-msgstr ""
+msgstr "Kan bare gjengi en enkelt sti"
 
 #: tools/gtk-path-tool-render.c:188 tools/gtk-path-tool-show.c:200
 msgid "fill rule"
-msgstr ""
+msgstr "fyllregel"
 
 #: tools/gtk-path-tool-render.c:194 tools/gtk-path-tool-show.c:206
 msgid "line cap"
-msgstr ""
+msgstr "linjeavslutning"
 
 #: tools/gtk-path-tool-render.c:195 tools/gtk-path-tool-show.c:207
 msgid "line join"
-msgstr ""
+msgstr "linjeskift"
 
 #: tools/gtk-path-tool-render.c:271
-#, fuzzy, c-format
-#| msgid "Saving CSS failed"
+#, c-format
 msgid "Saving png to '%s' failed"
-msgstr "Lagring av CSS feilet"
+msgstr "Kunne ikke lagre png til '%s'"
 
 #: tools/gtk-path-tool-render.c:278
 #, c-format
 msgid "Output written to '%s'."
-msgstr ""
+msgstr "Skrevet til '%s'."
 
 #: tools/gtk-path-tool-restrict.c:36
 msgid "Beginning of segment"
-msgstr ""
+msgstr "Begynnelsen av segmentet"
 
 #: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
 msgid "LENGTH"
@@ -8489,97 +8425,68 @@ msgstr "LENGDE"
 
 #: tools/gtk-path-tool-restrict.c:37
 msgid "End of segment"
-msgstr ""
+msgstr "Slutten av segmentet"
 
 #: tools/gtk-path-tool-restrict.c:51
 msgid "Restrict a path to a segment."
-msgstr ""
+msgstr "Begrens en sti til et segment."
 
 #: tools/gtk-path-tool-reverse.c:45
-#, fuzzy
-#| msgid "Reverse portrait"
 msgid "Reverse a path."
-msgstr "Omvendt portrett"
+msgstr "Vend en sti."
 
 #: tools/gtk-path-tool-show.c:53
-#, fuzzy
-#| msgid "Pre_view"
 msgid "Path Preview"
-msgstr "Forhånds_visning"
+msgstr "Stien forhåndsvisning"
 
 #: tools/gtk-path-tool-show.c:131
 msgid "Line join (miter, miter-clip, round, bevel)"
-msgstr ""
+msgstr "Linjesammenføyning (miter, miter-clip, round, bevel)"
 
 #: tools/gtk-path-tool-show.c:155
 msgid "Display the path."
-msgstr ""
+msgstr "Vis stien."
 
 #: tools/gtk-path-tool-show.c:190
 msgid "Can only show one or two paths"
-msgstr ""
+msgstr "Kan bare vise én eller to stier"
 
 #: tools/gtk-path-tool-utils.c:58
-#, fuzzy, c-format
-#| msgid "Failed to read “%s”: %s\n"
+#, c-format
 msgid "Failed to read from standard input: %s\n"
-msgstr "Klarte ikke å lese «%s»: %s\n"
+msgstr "Kunne ikke lese fra standard input: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
-#, fuzzy, c-format
-#| msgid "Error parsing commandline options: %s\n"
+#, c-format
 msgid "Error reading from standard input: %s\n"
-msgstr "Feil ved lesing av kommandolinjeflagg: %s\n"
+msgstr "Feil ved lesing fra standard input: %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
-#, fuzzy, c-format
-#| msgid "Failed to write hash table\n"
+#, c-format
 msgid "Failed to parse '%s' as path.\n"
-msgstr "Klarte ikke å skrive hash-tabell\n"
+msgstr "Kunne ikke tolke '%s' som sti.\n"
 
 #: tools/gtk-path-tool-utils.c:109
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to parse '%s' as %s."
-msgstr "Klarte ikke å åpne fil %s: %s\n"
+msgstr "Kunne ikke tolke '%s' som %s."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
-msgstr ""
+msgstr "Mulige verdier:"
 
 #: tools/gtk-path-tool-utils.c:135
-#, fuzzy, c-format
-#| msgid "Could not rename %s to %s: %s\n"
+#, c-format
 msgid "Could not parse '%s' as color"
-msgstr "Klarte ikke å endre navn på %s til %s: %s\n"
+msgstr "Kunne ikke tolke '%s' som farge"
 
 #: tools/gtk-path-tool-utils.c:163
-#, fuzzy, c-format
-#| msgid "Failed to write hash table\n"
+#, c-format
 msgid "Failed to parse '%s' as number"
-msgstr "Klarte ikke å skrive hash-tabell\n"
+msgstr "Kunne ikke tolke '%s' som tall"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace    Replace the file\n"
-#| "  --3to4       Convert from GTK 3 to GTK 4\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID      Preview only the named object\n"
-#| "  --css=FILE   Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8598,103 +8505,93 @@ msgid ""
 "\n"
 msgstr ""
 "Bruk:\n"
-"  gtk-builder-tool [KOMMANDO] [ALTERNATIV …] FIL\n"
+"  gtk4-rendernode-tool [KOMMANDO] [ALTERNATIV …] FIL\n"
 "\n"
 "Kommandoer:\n"
-"  validate        Sjekk filen\n"
-"  simplify        Forenkle filen\n"
-"  enumerate       Vis alle navngitte objekter\n"
-"  preview         Forhådsvis filen\n"
-"\n"
-"Alternativer for forenkling:\n"
-"  --replace       Erstatt filen\n"
-"  --3to4          Konverter fra GTK 3 til GTK 4\n"
-"  \n"
-"Alternativer for forhåndsvisning:\n"
-"  --id=ID         Forhåndsvis kun navngitt objekt\n"
-"  --css=FILE      Bruk stil fra CSS-fil\n"
-"  \n"
-"Utfør forskjellige oppgaver på GtkBuilder .ui-filer.\n"
+"  benchmark       Sjekk ytelse for gjengivelse av en node\n"
+"  compare         Sammenligne noder eller bilder\n"
+"  convert         Konverter til noder\n"
+"  extract         Hent ut data URLer\n"
+"  info            Gi informasjon om noden\n"
+"  match           Finn treff på mønster i noden\n"
+"  show            Vis noden\n"
+"  render          Ta et skjermbilde av noden\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Add renderer to benchmark"
-msgstr ""
+msgstr "Legg til renderer i benchmark"
 
 #: tools/gtk-rendernode-tool-benchmark.c:97
 #: tools/gtk-rendernode-tool-compare.c:66
 #: tools/gtk-rendernode-tool-render.c:308
 msgid "RENDERER"
-msgstr ""
+msgstr "RENDERER"
 
 #: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Number of runs with each renderer"
-msgstr ""
+msgstr "Antall kjøringer med hver renderer"
 
 #: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "RUNS"
-msgstr ""
+msgstr "KØRER"
 
 #: tools/gtk-rendernode-tool-benchmark.c:99
 msgid "Don’t download result/wait for GPU to finish"
-msgstr ""
+msgstr "Ikke last ned resultatet/vent på at GPU-en skal bli ferdig"
 
 #: tools/gtk-rendernode-tool-benchmark.c:117
 msgid "Benchmark rendering of a .node file."
-msgstr ""
+msgstr "Benchmark rendering av en .node-fil."
 
 #: tools/gtk-rendernode-tool-benchmark.c:130
-#: tools/gtk-rendernode-tool-extract.c:222 tools/gtk-rendernode-tool-info.c:192
-#: tools/gtk-rendernode-tool-render.c:339 tools/gtk-rendernode-tool-show.c:138
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#: tools/gtk-rendernode-tool-extract.c:222
+#: tools/gtk-rendernode-tool-info.c:192 tools/gtk-rendernode-tool-render.c:339
+#: tools/gtk-rendernode-tool-show.c:138
+#, c-format
 msgid "No .node file specified\n"
-msgstr "Ingen .ui fil oppgitt\n"
+msgstr "Ingen node .ui-fil oppgitt\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:136
 #, c-format
 msgid "Can only benchmark a single .node file\n"
-msgstr ""
+msgstr "Kan bare benchmarke én enkelt .node-fil\n"
 
 #: tools/gtk-rendernode-tool-compare.c:66
 #: tools/gtk-rendernode-tool-render.c:308
-#, fuzzy
-#| msgid "Renderer"
 msgid "Renderer to use"
-msgstr "Tegnemotor"
+msgstr "Renderer som skal brukes"
 
 #: tools/gtk-rendernode-tool-compare.c:71
 msgid "FILE1 FILE2"
-msgstr ""
+msgstr "FILE1 FILE2"
 
 #: tools/gtk-rendernode-tool-compare.c:83
 msgid "Compare .node or .png files."
-msgstr ""
+msgstr "Sammenlign .node- eller .png-filer."
 
 #: tools/gtk-rendernode-tool-compare.c:96
 #, c-format
 msgid "Must specify two files\n"
-msgstr ""
+msgstr "Må angi to filer\n"
 
 #: tools/gtk-rendernode-tool-compare.c:103
 #: tools/gtk-rendernode-tool-render.c:213
-#, fuzzy, c-format
-#| msgid "Failed to rewrite header\n"
+#, c-format
 msgid "Failed to create renderer: %s\n"
-msgstr "Klarte ikke skrive om hode\n"
+msgstr "Kunne ikke opprette renderer: %s\n"
 
 #: tools/gtk-rendernode-tool-compare.c:112
-#, fuzzy, c-format
-#| msgid "Failed to read “%s”: %s\n"
+#, c-format
 msgid "Failed to load %s: %s\n"
-msgstr "Klarte ikke å lese «%s»: %s\n"
+msgstr "Kunne ikke laste %s: %s\n"
 
 #: tools/gtk-rendernode-tool-convert.c:92
 msgid "Recolor the node"
-msgstr ""
+msgstr "Endre farge på noden"
 
 #: tools/gtk-rendernode-tool-convert.c:94
 msgid "Success color"
-msgstr ""
+msgstr "Suksessfarge"
 
 #: tools/gtk-rendernode-tool-convert.c:95
 msgid "Warning color"
@@ -8706,63 +8603,58 @@ msgstr "Farge for feil"
 
 #: tools/gtk-rendernode-tool-convert.c:107
 msgid "Convert from symbolic svg to node."
-msgstr ""
+msgstr "Konverter fra symbolsk svg til node."
 
 #: tools/gtk-rendernode-tool-convert.c:177
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No .svg file specified\n"
-msgstr "Ingen .ui fil oppgitt\n"
+msgstr "Ingen .svg-fil er angitt\n"
 
 #: tools/gtk-rendernode-tool-convert.c:183
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept a single .svg file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare ta imot én .svg-fil\n"
 
 #: tools/gtk-rendernode-tool-extract.c:70
 #: tools/gtk-rendernode-tool-extract.c:148
-#, fuzzy, c-format
-#| msgid "Failed to write header\n"
+#, c-format
 msgid "Failed to write %s\n"
-msgstr "Klarte ikke å skrive hode\n"
+msgstr "Kunne ikke skrive %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:198
-#, fuzzy
-#| msgid "Renderer"
 msgid "Directory to use"
-msgstr "Tegnemotor"
+msgstr "Mappe som skal brukes"
 
 #: tools/gtk-rendernode-tool-extract.c:198
 msgid "DIRECTORY"
-msgstr ""
+msgstr "MAPPE"
 
 #: tools/gtk-rendernode-tool-extract.c:199
 msgid "Be verbose"
-msgstr ""
+msgstr "Vis mer informasjon"
 
 #: tools/gtk-rendernode-tool-extract.c:209
 msgid "Extract data urls from the render node."
-msgstr ""
+msgstr "Hent ut data-url-er fra render-noden."
 
-#: tools/gtk-rendernode-tool-extract.c:228 tools/gtk-rendernode-tool-info.c:198
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#: tools/gtk-rendernode-tool-extract.c:228
+#: tools/gtk-rendernode-tool-info.c:198
+#, c-format
 msgid "Can only accept a single .node file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare akseptere én .node-fil\n"
 
 #: tools/gtk-rendernode-tool-info.c:123 tools/gtk-rendernode-tool-info.c:127
 #: tools/gtk-rendernode-tool-info.c:129
 msgid "Number of nodes:"
-msgstr ""
+msgstr "Antall noder:"
 
 #: tools/gtk-rendernode-tool-info.c:124 tools/gtk-rendernode-tool-info.c:134
 msgid "leaf nodes"
-msgstr ""
+msgstr "blad-noder"
 
 #: tools/gtk-rendernode-tool-info.c:129 tools/gtk-rendernode-tool-info.c:138
 msgid "unique:"
-msgstr ""
+msgstr "unik:"
 
 #: tools/gtk-rendernode-tool-info.c:143
 msgid "Depth:"
@@ -8778,11 +8670,11 @@ msgstr "Opprinnelse:"
 
 #: tools/gtk-rendernode-tool-info.c:151 tools/gtk-rendernode-tool-info.c:157
 msgid "Opaque part:"
-msgstr ""
+msgstr "Opaque del:"
 
 #: tools/gtk-rendernode-tool-info.c:179
 msgid "Provide information about the render node."
-msgstr ""
+msgstr "Opplysninger om render-noden."
 
 #: tools/gtk-rendernode-tool-render.c:173
 #, c-format
@@ -8790,59 +8682,57 @@ msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
+"Fil %s eksisterer.\n"
+"Hvis du vil skrive over, angi filnavnet.\n"
 
 #: tools/gtk-rendernode-tool-render.c:187
 #: tools/gtk-rendernode-tool-render.c:199
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to generate SVG: %s\n"
-msgstr "Klarte ikke å åpne fil %s: %s\n"
+msgstr "Kunne ikke generere SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:309
 msgid "Keep node position unchanged"
-msgstr ""
+msgstr "Behold node-posisjon uendret"
 
 #: tools/gtk-rendernode-tool-render.c:310
 msgid "Area to render"
-msgstr ""
+msgstr "Område som skal gjengis"
 
 #: tools/gtk-rendernode-tool-render.c:310
 msgid "X,Y,W,H"
-msgstr ""
+msgstr "X,Y,W,H"
 
 #: tools/gtk-rendernode-tool-render.c:326
 msgid "Render a .node file to an image."
-msgstr ""
+msgstr "Render en .node-fil til et bilde."
 
 #: tools/gtk-rendernode-tool-render.c:345
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
-msgstr ""
+msgstr "Kan bare rendre én .node-fil til én enkelt utdata-fil\n"
 
 #: tools/gtk-rendernode-tool-render.c:353
 #, c-format
 msgid "Invalid rectangle given for bounds\n"
-msgstr ""
+msgstr "Ugyldig rektangel oppgitt for grenser\n"
 
 #: tools/gtk-rendernode-tool-show.c:107 tools/gtk-rendernode-tool-show.c:167
 msgid "Put node into offload container"
-msgstr ""
+msgstr "Sett node inn i offload-containeren"
 
 #: tools/gtk-rendernode-tool-show.c:108 tools/gtk-rendernode-tool-show.c:168
-#, fuzzy
-#| msgid "Add a new bookmark"
 msgid "Add a titlebar"
-msgstr "Legg til et nytt bokmerke"
+msgstr "Legg til en tittellinje"
 
 #: tools/gtk-rendernode-tool-show.c:125 tools/gtk-rendernode-tool-show.c:176
 msgid "Show the render node."
-msgstr ""
+msgstr "Vis render-noden."
 
 #: tools/gtk-rendernode-tool-show.c:144
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only preview a single .node file\n"
-msgstr "Kan kun forenkle en enkelt .ui fil uten --replace\n"
+msgstr "Kan bare forhåndsvise én .node-fil\n"
 
 #. translators: invalid UTF8 in filename
 #: tools/gtk-tool-utils.c:47
