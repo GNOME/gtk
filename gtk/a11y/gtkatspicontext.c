@@ -196,7 +196,11 @@ collect_states (GtkAtSpiContext    *self,
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
       if (gtk_boolean_accessible_value_get (value))
         set_atspi_state (&states, ATSPI_STATE_MULTI_LINE);
+      else
+        set_atspi_state (&states, ATSPI_STATE_SINGLE_LINE);
     }
+  else
+    set_atspi_state (&states, ATSPI_STATE_SINGLE_LINE);
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_BUSY))
     {
