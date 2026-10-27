@@ -76,6 +76,20 @@ gtk_list_item_change_init (GtkListItemChange *change)
 }
 
 static void
+gtk_list_item_change_unparent_item (gpointer widget)
+{
+  gtk_list_item_base_update (GTK_LIST_ITEM_BASE (widget), GTK_INVALID_LIST_POSITION, NULL, FALSE);
+  gtk_widget_unparent (widget);
+}
+
+static void
+gtk_list_item_change_unparent_header (gpointer widget)
+{
+  gtk_list_header_base_update (GTK_LIST_HEADER_BASE (widget), NULL, GTK_INVALID_LIST_POSITION, GTK_INVALID_LIST_POSITION);
+  gtk_widget_unparent (widget);
+}
+
+static void
 gtk_list_item_change_finish (GtkListItemChange *change)
 {
   GtkWidget *widget;
@@ -83,9 +97,9 @@ gtk_list_item_change_finish (GtkListItemChange *change)
   g_clear_pointer (&change->deleted_items, g_hash_table_destroy);
 
   while ((widget = g_queue_pop_head (&change->recycled_items)))
-    gtk_widget_unparent (widget);
+    gtk_list_item_change_unparent_item (widget);
   while ((widget = g_queue_pop_head (&change->recycled_headers)))
-    gtk_widget_unparent (widget);
+    gtk_list_item_change_unparent_header (widget);
 }
 
 static void
@@ -112,7 +126,7 @@ gtk_list_item_change_release (GtkListItemChange *change,
                               GtkListItemBase   *widget)
 {
   if (change->deleted_items == NULL)
-    change->deleted_items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) gtk_widget_unparent);
+    change->deleted_items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, gtk_list_item_change_unparent_item);
 
   if (!g_hash_table_replace (change->deleted_items, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (widget)), widget))
     {
