@@ -45,6 +45,7 @@ tests = [
   ['treepath'],
   ['treeview'],
   ['typename'],
+  ['uimanager'],
   ['window'],
   ['displayclose'],
   ['revealer-size'],

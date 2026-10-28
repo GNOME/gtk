@@ -3116,9 +3116,13 @@ do_updates (GtkUIManager *manager)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
+  g_object_ref (manager);
+
   update_node (manager, manager->private_data->root_node, FALSE, FALSE);
 
   manager->private_data->update_tag = 0;
+
+  g_object_unref (manager);
 
   return FALSE;
 }
@@ -3378,9 +3382,13 @@ gtk_ui_manager_get_ui (GtkUIManager *manager)
 
   buffer = g_string_new (NULL);
 
+  g_object_ref (manager);
+
   gtk_ui_manager_ensure_update (manager); 
  
   print_node (manager, manager->private_data->root_node, 0, buffer);  
+
+  g_object_unref (manager);
 
   return g_string_free (buffer, FALSE);
 }
