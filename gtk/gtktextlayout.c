@@ -3780,6 +3780,8 @@ gtk_text_layout_after_buffer_delete_range (GtkTextBuffer *textbuffer,
 static void
 render_para (GskPangoRenderer   *crenderer,
              GtkTextLineDisplay *line_display,
+             float               clip_y0,
+             float               clip_y1,
              int                 selection_start_index,
              int                 selection_end_index,
              const GdkColor     *selection_color,
@@ -3801,10 +3803,11 @@ render_para (GskPangoRenderer   *crenderer,
       int selection_y, selection_height;
       int first_y, last_y;
       PangoRectangle line_rect;
+      PangoRectangle ink_rect;
       int baseline;
       gboolean at_last_line;
 
-      pango_layout_iter_get_line_extents (iter, NULL, &line_rect);
+      pango_layout_iter_get_line_extents (iter, &ink_rect, &line_rect);
       baseline = pango_layout_iter_get_baseline (iter);
       pango_layout_iter_get_line_yrange (iter, &first_y, &last_y);
 
@@ -3830,6 +3833,18 @@ render_para (GskPangoRenderer   *crenderer,
       at_last_line = pango_layout_iter_at_last_line (iter);
       if (at_last_line)
         selection_height += line_display->bottom_margin;
+
+      /* A paragraph can wrap into thousands of display lines. Skip lines
+       * outside the clip, allowing for ink that extends past the line box.
+       */
+      if (MAX (selection_y + selection_height,
+               PANGO_PIXELS_CEIL (ink_rect.y + ink_rect.height) + line_display->top_margin) < clip_y0 ||
+          MIN (selection_y,
+               PANGO_PIXELS_FLOOR (ink_rect.y) + line_display->top_margin) > clip_y1)
+        {
+          byte_offset += pango_layout_line_get_length (line);
+          continue;
+        }
 
       /* Don't draw the text underneath if the whole line is selected. We can
        * only do it if the selection is opaque.
@@ -4025,6 +4040,8 @@ gtk_text_layout_snapshot (GtkTextLayout         *layout,
   GtkTextLayoutPrivate *priv;
   GskPangoRenderer *crenderer;
   int offset_y;
+  float clip_y0;
+  float clip_y1;
   GtkTextIter selection_start, selection_end;
   int selection_start_line;
   int selection_end_line;
@@ -4062,6 +4079,8 @@ gtk_text_layout_snapshot (GtkTextLayout         *layout,
   style = gtk_css_node_get_style (node);
 
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, offset_y));
+  clip_y0 = clip->origin.y - offset_y;
+  clip_y1 = clip_y0 + clip->size.height;
   offset_y = 0;
 
   cursor_snapshot = NULL;
@@ -4156,7 +4175,13 @@ gtk_text_layout_snapshot (GtkTextLayout         *layout,
 
           if (line_display->node != NULL)
             {
-              if (line_display->has_block_cursor && gtk_widget_has_focus (widget))
+              if (line_display->node_y0 > MAX (0, clip_y0 - offset_y) ||
+                  line_display->node_y1 < MIN (line_display->height, clip_y1 - offset_y))
+                g_clear_pointer (&line_display->node, gsk_render_node_unref);
+
+              if (line_display->has_block_cursor &&
+                  (line_display->node_cursor_alpha != cursor_alpha ||
+                   line_display->node_has_focus != gtk_widget_has_focus (widget)))
                 g_clear_pointer (&line_display->node, gsk_render_node_unref);
 
               if (selection_style_changed &&
@@ -4171,13 +4196,22 @@ gtk_text_layout_snapshot (GtkTextLayout         *layout,
                selection_start_index != -1 || selection_end_index != -1 ||
                line_display->has_block_cursor))
             {
+              /* Keep an extra viewport on either side so nearby scrolls
+               * can reuse the node without keeping the whole paragraph.
+               */
+              line_display->node_y0 = MAX (0, clip_y0 - offset_y - clip->size.height);
+              line_display->node_y1 = MIN (line_display->height, clip_y1 - offset_y + clip->size.height);
+
               gtk_snapshot_push_collect (snapshot);
               render_para (crenderer, line_display,
+                           line_display->node_y0, line_display->node_y1,
                            selection_start_index, selection_end_index,
                            &selection_color,
                            draw_selection_text,
                            cursor_alpha);
               line_display->node = gtk_snapshot_pop_collect (snapshot);
+              line_display->node_cursor_alpha = cursor_alpha;
+              line_display->node_has_focus = gtk_widget_has_focus (widget);
             }
 
           if (line_display->node != NULL)

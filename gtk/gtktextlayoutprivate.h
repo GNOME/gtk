@@ -170,6 +170,10 @@ struct _GtkTextLineDisplay
   PangoLayout *layout;
 
   GskRenderNode *node;
+  float node_y0;
+  float node_y1;
+  float node_cursor_alpha;
+  gboolean node_has_focus;
 
   GArray *cursors;      /* indexes of cursors in the PangoLayout, and mark names */
 
