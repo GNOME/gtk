@@ -341,13 +341,13 @@ gtk_at_spi_cache_constructed (GObject *gobject)
   g_assert (self->connection);
   g_assert (self->cache_path);
 
-  g_dbus_connection_register_object (self->connection,
-                                     self->cache_path,
-                                     (GDBusInterfaceInfo *) &atspi_cache_interface,
-                                     &cache_vtable,
-                                     self,
-                                     NULL,
-                                     NULL);
+  gtk_at_spi_register_object (self->connection,
+                              self->cache_path,
+                              (GDBusInterfaceInfo *) &atspi_cache_interface,
+                              &cache_vtable,
+                              self,
+                              NULL,
+                              NULL);
 
   GTK_DEBUG (A11Y, "Cache registered at %s", self->cache_path);
 

@@ -22,8 +22,147 @@
 
 #include "gtkatspiutilsprivate.h"
 
+#include "gdk/gdkprofilerprivate.h"
 #include "gtkenums.h"
 #include "gtkscrolledwindow.h"
+
+typedef struct
+{
+  const GDBusInterfaceVTable *vtable;
+  gpointer user_data;
+  GDestroyNotify user_data_free_func;
+  const char *type_name;
+} ProfiledVTable;
+
+static void
+profiled_end_mark (gint64          before,
+                   const char     *name,
+                   const char     *operation,
+                   const char     *interface_name,
+                   const char     *object_path,
+                   ProfiledVTable *data)
+{
+  char *mark_name;
+
+  if (before == 0 || !GDK_PROFILER_IS_RUNNING)
+    return;
+
+  mark_name = g_strconcat ("AT-SPI ", operation, " ", name, NULL);
+  gdk_profiler_end_markf (before, mark_name, "%s on %s (%s)",
+                          interface_name, data->type_name, object_path);
+  g_free (mark_name);
+}
+
+static void
+profiled_method_call (GDBusConnection       *connection,
+                      const char            *sender,
+                      const char            *object_path,
+                      const char            *interface_name,
+                      const char            *method_name,
+                      GVariant              *parameters,
+                      GDBusMethodInvocation *invocation,
+                      gpointer               user_data)
+{
+  ProfiledVTable *data = user_data;
+  gint64 before = GDK_PROFILER_CURRENT_TIME;
+
+  data->vtable->method_call (connection, sender, object_path, interface_name,
+                             method_name, parameters, invocation, data->user_data);
+
+  profiled_end_mark (before, method_name, "call", interface_name, object_path, data);
+}
+
+static GVariant *
+profiled_get_property (GDBusConnection  *connection,
+                       const char       *sender,
+                       const char       *object_path,
+                       const char       *interface_name,
+                       const char       *property_name,
+                       GError          **error,
+                       gpointer          user_data)
+{
+  ProfiledVTable *data = user_data;
+  gint64 before = GDK_PROFILER_CURRENT_TIME;
+  GVariant *result;
+
+  result = data->vtable->get_property (connection, sender, object_path,
+                                       interface_name, property_name, error,
+                                       data->user_data);
+
+  profiled_end_mark (before, property_name, "get", interface_name, object_path, data);
+
+  return result;
+}
+
+static gboolean
+profiled_set_property (GDBusConnection  *connection,
+                       const char       *sender,
+                       const char       *object_path,
+                       const char       *interface_name,
+                       const char       *property_name,
+                       GVariant         *value,
+                       GError          **error,
+                       gpointer          user_data)
+{
+  ProfiledVTable *data = user_data;
+  gint64 before = GDK_PROFILER_CURRENT_TIME;
+  gboolean result;
+
+  result = data->vtable->set_property (connection, sender, object_path,
+                                       interface_name, property_name, value,
+                                       error, data->user_data);
+
+  profiled_end_mark (before, property_name, "set", interface_name, object_path, data);
+
+  return result;
+}
+
+static void
+profiled_vtable_free (gpointer user_data)
+{
+  ProfiledVTable *data = user_data;
+
+  if (data->user_data_free_func != NULL)
+    data->user_data_free_func (data->user_data);
+
+  g_free (data);
+}
+
+guint
+gtk_at_spi_register_object (GDBusConnection             *connection,
+                            const char                  *object_path,
+                            GDBusInterfaceInfo          *interface_info,
+                            const GDBusInterfaceVTable  *vtable,
+                            gpointer                     user_data,
+                            GDestroyNotify               user_data_free_func,
+                            GError                     **error)
+{
+  GDBusInterfaceVTable profiled_vtable = {
+    vtable->method_call != NULL ? profiled_method_call : NULL,
+    vtable->get_property != NULL ? profiled_get_property : NULL,
+    vtable->set_property != NULL ? profiled_set_property : NULL,
+  };
+  ProfiledVTable *data = g_new (ProfiledVTable, 1);
+
+  data->vtable = vtable;
+  data->user_data = user_data;
+  data->user_data_free_func = user_data_free_func;
+
+  if (GTK_IS_AT_CONTEXT (user_data))
+    {
+      GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (user_data));
+
+      data->type_name = G_OBJECT_TYPE_NAME (accessible);
+    }
+  else
+    {
+      data->type_name = G_OBJECT_TYPE_NAME (user_data);
+    }
+
+  return g_dbus_connection_register_object (connection, object_path,
+                                            interface_info, &profiled_vtable,
+                                            data, profiled_vtable_free, error);
+}
 
 /*< private >
  * gtk_accessible_role_to_atspi_role:

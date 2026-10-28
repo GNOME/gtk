@@ -51,6 +51,9 @@ void
                          const char *message)
 {
 #ifdef HAVE_SYSPROF
+  if (begin_time == 0)
+    return;
+
   sysprof_collector_mark (begin_time, duration, CATEGORY, name, message);
 #endif
 }
@@ -61,7 +64,16 @@ void
                          const char *message)
 {
 #ifdef HAVE_SYSPROF
-  sysprof_collector_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, CATEGORY, name, message);
+  gint64 end_time;
+
+  if (begin_time == 0)
+    return;
+
+  end_time = GDK_PROFILER_CURRENT_TIME;
+  if (end_time == 0)
+    return;
+
+  sysprof_collector_mark (begin_time, end_time - begin_time, CATEGORY, name, message);
 #endif
 }
 
@@ -74,6 +86,10 @@ void
 {
 #ifdef HAVE_SYSPROF
   va_list args;
+
+  if (begin_time == 0 || !GDK_PROFILER_IS_RUNNING)
+    return;
+
   va_start (args, message_format);
   sysprof_collector_mark_vprintf (begin_time, duration, CATEGORY, name, message_format, args);
   va_end (args);
@@ -88,8 +104,17 @@ void
 {
 #ifdef HAVE_SYSPROF
   va_list args;
+  gint64 end_time;
+
+  if (begin_time == 0)
+    return;
+
+  end_time = GDK_PROFILER_CURRENT_TIME;
+  if (end_time == 0)
+    return;
+
   va_start (args, message_format);
-  sysprof_collector_mark_vprintf (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, CATEGORY, name, message_format, args);
+  sysprof_collector_mark_vprintf (begin_time, end_time - begin_time, CATEGORY, name, message_format, args);
   va_end (args);
 #endif  /* HAVE_SYSPROF */
 }
