@@ -1,0 +1,1216 @@
+color {
+  color: black;
+  bounds: 0 0 5 5;
+}
+arithmetic {
+  bounds: 0.5 0.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 0.5 0.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 2.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 6 0 5 5;
+}
+arithmetic {
+  bounds: 6.5 0.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 6.5 0.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 8.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 12 0 5 5;
+}
+arithmetic {
+  bounds: 12.5 0.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 12.5 0.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 14.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 18 0 5 5;
+}
+arithmetic {
+  bounds: 18.5 0.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 18.5 0.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 20.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 0 6 5 5;
+}
+arithmetic {
+  bounds: 0.5 6.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 0.5 6.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 2.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 6 6 5 5;
+}
+arithmetic {
+  bounds: 6.5 6.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 6.5 6.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 8.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 12 6 5 5;
+}
+arithmetic {
+  bounds: 12.5 6.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 12.5 6.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 14.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 18 6 5 5;
+}
+arithmetic {
+  bounds: 18.5 6.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 18.5 6.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 20.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 0 12 5 5;
+}
+arithmetic {
+  bounds: 0.5 12.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 0.5 12.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 2.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 6 12 5 5;
+}
+arithmetic {
+  bounds: 6.5 12.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 6.5 12.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 8.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 12 12 5 5;
+}
+arithmetic {
+  bounds: 12.5 12.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 12.5 12.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 14.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 18 12 5 5;
+}
+arithmetic {
+  bounds: 18.5 12.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 18.5 12.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 20.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 0 18 5 5;
+}
+arithmetic {
+  bounds: 0.5 18.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 0.5 18.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 2.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 6 18 5 5;
+}
+arithmetic {
+  bounds: 6.5 18.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 6.5 18.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 8.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 12 18 5 5;
+}
+arithmetic {
+  bounds: 12.5 18.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 12.5 18.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 14.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 18 18 5 5;
+}
+arithmetic {
+  bounds: 18.5 18.5 4 4;
+  snap: none;
+  first: color {
+    bounds: 18.5 18.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 20.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 30 0 5 5;
+}
+arithmetic {
+  bounds: 30.5 0.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 30.5 0.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 32.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 36 0 5 5;
+}
+arithmetic {
+  bounds: 36.5 0.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 36.5 0.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 38.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 42 0 5 5;
+}
+arithmetic {
+  bounds: 42.5 0.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 42.5 0.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 44.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 48 0 5 5;
+}
+arithmetic {
+  bounds: 48.5 0.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 48.5 0.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 50.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 30 6 5 5;
+}
+arithmetic {
+  bounds: 30.5 6.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 30.5 6.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 32.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 36 6 5 5;
+}
+arithmetic {
+  bounds: 36.5 6.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 36.5 6.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 38.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 42 6 5 5;
+}
+arithmetic {
+  bounds: 42.5 6.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 42.5 6.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 44.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 48 6 5 5;
+}
+arithmetic {
+  bounds: 48.5 6.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 48.5 6.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 50.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 30 12 5 5;
+}
+arithmetic {
+  bounds: 30.5 12.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 30.5 12.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 32.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 36 12 5 5;
+}
+arithmetic {
+  bounds: 36.5 12.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 36.5 12.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 38.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 42 12 5 5;
+}
+arithmetic {
+  bounds: 42.5 12.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 42.5 12.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 44.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 48 12 5 5;
+}
+arithmetic {
+  bounds: 48.5 12.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 48.5 12.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 50.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 30 18 5 5;
+}
+arithmetic {
+  bounds: 30.5 18.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 30.5 18.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 32.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 36 18 5 5;
+}
+arithmetic {
+  bounds: 36.5 18.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 36.5 18.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 38.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 42 18 5 5;
+}
+arithmetic {
+  bounds: 42.5 18.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 42.5 18.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 44.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 48 18 5 5;
+}
+arithmetic {
+  bounds: 48.5 18.5 4 4;
+  snap: grow;
+  first: color {
+    bounds: 48.5 18.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 50.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 60 0 5 5;
+}
+arithmetic {
+  bounds: 60.5 0.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 60.5 0.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 62.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 66 0 5 5;
+}
+arithmetic {
+  bounds: 66.5 0.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 66.5 0.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 68.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 72 0 5 5;
+}
+arithmetic {
+  bounds: 72.5 0.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 72.5 0.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 74.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 78 0 5 5;
+}
+arithmetic {
+  bounds: 78.5 0.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 78.5 0.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 80.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 60 6 5 5;
+}
+arithmetic {
+  bounds: 60.5 6.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 60.5 6.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 62.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 66 6 5 5;
+}
+arithmetic {
+  bounds: 66.5 6.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 66.5 6.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 68.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 72 6 5 5;
+}
+arithmetic {
+  bounds: 72.5 6.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 72.5 6.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 74.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 78 6 5 5;
+}
+arithmetic {
+  bounds: 78.5 6.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 78.5 6.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 80.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 60 12 5 5;
+}
+arithmetic {
+  bounds: 60.5 12.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 60.5 12.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 62.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 66 12 5 5;
+}
+arithmetic {
+  bounds: 66.5 12.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 66.5 12.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 68.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 72 12 5 5;
+}
+arithmetic {
+  bounds: 72.5 12.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 72.5 12.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 74.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 78 12 5 5;
+}
+arithmetic {
+  bounds: 78.5 12.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 78.5 12.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 80.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 60 18 5 5;
+}
+arithmetic {
+  bounds: 60.5 18.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 60.5 18.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 62.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 66 18 5 5;
+}
+arithmetic {
+  bounds: 66.5 18.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 66.5 18.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 68.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 72 18 5 5;
+}
+arithmetic {
+  bounds: 72.5 18.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 72.5 18.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 74.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 78 18 5 5;
+}
+arithmetic {
+  bounds: 78.5 18.5 4 4;
+  snap: shrink;
+  first: color {
+    bounds: 78.5 18.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 80.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 90 0 5 5;
+}
+arithmetic {
+  bounds: 90.5 0.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 90.5 0.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 92.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 96 0 5 5;
+}
+arithmetic {
+  bounds: 96.5 0.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 96.5 0.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 98.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 102 0 5 5;
+}
+arithmetic {
+  bounds: 102.5 0.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 102.5 0.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 104.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 108 0 5 5;
+}
+arithmetic {
+  bounds: 108.5 0.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 108.5 0.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 110.5 2.5 2 2;
+    color: #0C0;
+    snap: none;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 90 6 5 5;
+}
+arithmetic {
+  bounds: 90.5 6.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 90.5 6.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 92.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 96 6 5 5;
+}
+arithmetic {
+  bounds: 96.5 6.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 96.5 6.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 98.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 102 6 5 5;
+}
+arithmetic {
+  bounds: 102.5 6.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 102.5 6.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 104.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 108 6 5 5;
+}
+arithmetic {
+  bounds: 108.5 6.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 108.5 6.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 110.5 8.5 2 2;
+    color: #0C0;
+    snap: grow;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 90 12 5 5;
+}
+arithmetic {
+  bounds: 90.5 12.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 90.5 12.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 92.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 96 12 5 5;
+}
+arithmetic {
+  bounds: 96.5 12.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 96.5 12.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 98.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 102 12 5 5;
+}
+arithmetic {
+  bounds: 102.5 12.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 102.5 12.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 104.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 108 12 5 5;
+}
+arithmetic {
+  bounds: 108.5 12.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 108.5 12.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 110.5 14.5 2 2;
+    color: #0C0;
+    snap: shrink;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 90 18 5 5;
+}
+arithmetic {
+  bounds: 90.5 18.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 90.5 18.5 2 2;
+    color: #C00;
+    snap: none;
+  }
+  second: color {
+    bounds: 92.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 96 18 5 5;
+}
+arithmetic {
+  bounds: 96.5 18.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 96.5 18.5 2 2;
+    color: #C00;
+    snap: grow;
+  }
+  second: color {
+    bounds: 98.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 102 18 5 5;
+}
+arithmetic {
+  bounds: 102.5 18.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 102.5 18.5 2 2;
+    color: #C00;
+    snap: shrink;
+  }
+  second: color {
+    bounds: 104.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
+color {
+  color: black;
+  bounds: 108 18 5 5;
+}
+arithmetic {
+  bounds: 108.5 18.5 4 4;
+  snap: round;
+  first: color {
+    bounds: 108.5 18.5 2 2;
+    color: #C00;
+    snap: round;
+  }
+  second: color {
+    bounds: 110.5 20.5 2 2;
+    color: #0C0;
+    snap: round;
+  }
+  k: 0 1 1 0;
+}
