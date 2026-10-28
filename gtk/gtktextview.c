@@ -2740,7 +2740,13 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   if (screen_dest.y != screen.y)
     {
-      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y  + priv->top_margin);
+      /* The destination can move as lines above it are validated. Jump
+       * there now so the first paragraph mark can keep it in view.
+       */
+      if (gtk_text_layout_is_valid (priv->layout))
+        gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y + priv->top_margin);
+      else
+        gtk_adjustment_set_value (priv->vadjustment, screen_dest.y + priv->top_margin);
 
       DV (g_print (" vert increment %d\n", screen_dest.y - screen.y));
     }
@@ -3024,12 +3030,18 @@ static void
 gtk_text_view_update_im_spot_location (GtkTextView *text_view)
 {
   GdkRectangle area;
+  int x_offset = 0;
+  int y_offset = 0;
 
   if (text_view->priv->layout == NULL)
     return;
 
-  int x_offset = 0;
-  int y_offset = 0;
+  /* There is no useful cursor location before allocation. At width zero,
+   * a long paragraph would wrap once per character, and we'd throw that
+   * work away as soon as we get the actual width.
+   */
+  if (gtk_widget_get_width (GTK_WIDGET (text_view)) == 0)
+    return;
 
   calculate_gutter_offsets (text_view, &x_offset, &y_offset);
 
@@ -5103,9 +5115,11 @@ changed_handler (GtkTextLayout     *layout,
 
       if (new_first_para_top != old_first_para_top)
         {
-          priv->yoffset += new_first_para_top - old_first_para_top + priv->top_margin;
-
-          gtk_adjustment_set_value (text_view->priv->vadjustment, priv->yoffset);
+          /* Configure the adjustment with the new height before changing
+           * its value. Otherwise the old upper bound clamps the value and
+           * moves first_para_mark away from the paragraph we want onscreen.
+           */
+          gtk_text_view_update_adjustments (text_view);
         }
 
       /* FIXME be smarter about which anchored widgets we update */

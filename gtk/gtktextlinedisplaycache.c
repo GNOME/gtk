@@ -334,6 +334,12 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
 
   cursor_line = cache->cursor_line;
 
+  /* We need the cursor position after sizing, even when the line is
+   * offscreen. Build the full display now so we don't shape it twice.
+   */
+  if (line == cursor_line)
+    size_only = FALSE;
+
   display = g_hash_table_lookup (cache->line_to_display, line);
 
   if (display != NULL)
@@ -789,12 +795,12 @@ gtk_text_line_display_cache_set_cursor_line (GtkTextLineDisplayCache *cache,
   if (display != NULL)
     gtk_text_line_display_cache_invalidate_display (cache, display, FALSE);
 
-  cache->cursor_line = cursor_line;
-
-  display = g_hash_table_lookup (cache->line_to_display, cache->cursor_line);
+  display = g_hash_table_lookup (cache->line_to_display, cursor_line);
 
   if (display != NULL)
     gtk_text_line_display_cache_invalidate_display (cache, display, FALSE);
+
+  cache->cursor_line = cursor_line;
 }
 
 void
