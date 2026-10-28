@@ -1,0 +1,32 @@
+color {
+  color: yellow;
+  bounds: -50 -50 220 150;
+}
+clip {
+  clip: -50 -50 220 150;
+  child: container {
+    stroke {
+      child: color {
+        bounds: 10 -15 30 80;
+        color: rgb(255,0,204);
+      }
+      path: "M 25 0 L 25 50";
+      line-width: 20;
+      line-cap: butt;
+      line-join: round;
+    }
+    shadow {
+      shadows: black 0 0 30;
+      child: stroke {
+        child: color {
+          bounds: 70 0 50 50;
+          color: rgb(255,0,0);
+        }
+        path: "M 70 25 L 120 25";
+        line-width: 20;
+        line-cap: butt;
+        line-join: round;
+      }
+    }
+  }
+}
