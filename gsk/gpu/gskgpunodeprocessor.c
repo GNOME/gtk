@@ -3659,6 +3659,7 @@ gsk_gpu_get_fill_node_as_image (GskGpuFrame           *frame,
     return NULL;
 
   if ((color != NULL && !gdk_color_equal (&cache_color, color)) ||
+      !gsk_rect_contains_rect (clip_bounds, &tex_rect) ||
       ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
        !gsk_rect_equal (clip_bounds, &tex_rect)))
     {
@@ -3793,6 +3794,7 @@ gsk_gpu_get_stroke_node_as_image (GskGpuFrame           *frame,
     return NULL;
 
   if ((color != NULL && !gdk_color_equal (&cache_color, color)) ||
+      !gsk_rect_contains_rect (clip_bounds, &tex_rect) ||
       ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
        !gsk_rect_equal (clip_bounds, &tex_rect)))
     {

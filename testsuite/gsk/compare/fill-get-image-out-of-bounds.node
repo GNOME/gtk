@@ -1,0 +1,22 @@
+fill {
+  child: color {
+    bounds: 10 0 30 50;
+    color: rgb(255,0,204);
+  }
+  path: "M 10 0 L 40 0 L 40 50 L 10 50";
+  fill-rule: winding;
+}
+clip {
+  clip: 0 0 120 50;
+  child: shadow {
+    shadows: rgb(0,0,0) 0 0 20;
+    child: fill {
+      child: color {
+        bounds: 70 0 50 50;
+        color: rgb(255,0,0);
+      }
+      path: "M 70 10 L 120 10 L 120 40 L 70 40";
+      fill-rule: winding;
+    }
+  }
+}

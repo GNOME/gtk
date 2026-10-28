@@ -318,7 +318,9 @@ tests_with_rounding_issues = [
 ]
 
 tests_with_blur = [
+  'fill-get-image-out-of-bounds',
   'shadow-huge-offset-multiple-blurred',
+  'stroke-get-image-out-of-bounds',
 ]
 
 # These tests use dmabufs and fail in testrunners that have
