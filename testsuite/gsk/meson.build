@@ -73,6 +73,7 @@ compare_render_tests = [
   'clipped_rounded_clip',
   'color-blur0',
   'color-dodge-nan',
+  'color-matrix-clip-align',
   'color-matrix-identity',
   'color-matrix-merge',
   'color-matrix-parsing',

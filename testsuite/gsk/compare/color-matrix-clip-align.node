@@ -1,0 +1,24 @@
+color {
+  bounds: 0 0 10 10;
+  color: rgb(128,0,0);
+}
+color-matrix {
+  matrix: matrix3d(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
+  child: container {
+    color {
+      bounds: 0 0 10 10;
+      color: rgb(0,128,0);
+    }
+    stroke {
+      child: color {
+        bounds: 0 0 10 10;
+        color: rgb(128,0,0);
+      }
+      path: 1.5 1.5 7 7;
+      line-width: 1;
+      line-cap: butt;
+      line-join: miter;
+    }
+  }
+  clip: 0.5 0.5 9 9;
+}

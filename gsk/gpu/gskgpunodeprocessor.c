@@ -3098,20 +3098,21 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
 {
   GskRenderNode *child;
   GskGpuImage *image;
-  graphene_rect_t tex_rect, clip_bounds;
+  graphene_rect_t tex_rect, clip, bounds;
   GskGpuSampler tex_sampler;
 
   if (!gsk_gpu_node_processor_clip_bounds (self,
                                            gsk_color_matrix_node_get_clip (node),
                                            gsk_color_matrix_node_get_snap (node),
-                                           &clip_bounds))
+                                           &clip) ||
+      !gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &bounds))
     return;
 
   child = gsk_color_matrix_node_get_child (node);
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
-                                                    &clip_bounds,
+                                                    &bounds,
                                                     child,
                                                     0,
                                                     &tex_rect,
@@ -3130,7 +3131,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
       gsk_gpu_color_op (self,
                         self->ccs,
                         gsk_gpu_color_states_find (self->ccs, &color),
-                        &clip_bounds,
+                        &clip,
                         &color);
       gdk_color_finish (&color);
 
@@ -3140,7 +3141,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuRenderPass *self,
   gsk_gpu_color_matrix_op (self,
                            self->ccs,
                            gsk_color_matrix_node_get_color_state (node),
-                           &clip_bounds,
+                           &clip,
                            image,
                            tex_sampler,
                            gsk_color_matrix_node_get_color_matrix (node),
