@@ -22,6 +22,7 @@
 
 #include "gtkatspicontextprivate.h"
 
+#include "gdk/gdkprofilerprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkaccessibletextprivate.h"
 
@@ -1031,9 +1032,12 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkAccessibleValue *value;
+  gint64 before;
 
   if (GTK_IS_WIDGET (accessible) && !gtk_widget_get_realized (GTK_WIDGET (accessible)))
     return;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (changed_states & GTK_ACCESSIBLE_STATE_CHANGE_HIDDEN)
     {
@@ -1261,6 +1265,9 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                              "accessible-help-text",
                              g_variant_new_string (gtk_string_accessible_value_get (value)));
     }
+
+  if (before != 0)
+    gdk_profiler_end_mark (before, "AT-SPI state change", NULL);
 }
 
 static void
@@ -1269,6 +1276,7 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  gint64 before;
 
   /* Do not emit state changes for unrealized widgets; this may happen during
    * construction, but since the widget is not realized, there's nothing to be
@@ -1276,6 +1284,8 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
    */
   if (GTK_IS_WIDGET (accessible) && !gtk_widget_get_realized (GTK_WIDGET (accessible)))
     return;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE)
     {
@@ -1308,6 +1318,9 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
             emit_window_event (self, "Deactivate");
         }
     }
+
+  if (before != 0)
+    gdk_profiler_end_mark (before, "AT-SPI platform change", NULL);
 }
 
 static void
@@ -1328,9 +1341,12 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkATContext *child_context = gtk_accessible_get_at_context (child);
+  gint64 before;
 
   if (child_context == NULL)
     return;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   GtkAccessible *parent = gtk_accessible_get_accessible_parent (child);
   int idx = 0;
@@ -1364,6 +1380,9 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
                            GTK_ACCESSIBLE_CHILD_STATE_REMOVED);
 
   g_object_unref (child_context);
+
+  if (before != 0)
+    gdk_profiler_end_mark (before, "AT-SPI child change", NULL);
 }
 /* }}} */
 /* {{{ D-Bus Registration */
@@ -1376,13 +1395,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 
   g_variant_builder_add (&interfaces, "s", atspi_accessible_interface.name);
   self->registration_ids[self->n_registered_objects] =
-      g_dbus_connection_register_object (self->connection,
-                                         self->context_path,
-                                         (GDBusInterfaceInfo *) &atspi_accessible_interface,
-                                         &accessible_vtable,
-                                         self,
-                                         NULL,
-                                         NULL);
+      gtk_at_spi_register_object (self->connection,
+                                  self->context_path,
+                                  (GDBusInterfaceInfo *) &atspi_accessible_interface,
+                                  &accessible_vtable,
+                                  self,
+                                  NULL,
+                                  NULL);
   self->n_registered_objects++;
 
   vtable = gtk_atspi_get_component_vtable (accessible);
@@ -1390,13 +1409,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_component_interface.name);
       self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_component_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
+          gtk_at_spi_register_object (self->connection,
+                                      self->context_path,
+                                      (GDBusInterfaceInfo *) &atspi_component_interface,
+                                      vtable,
+                                      self,
+                                      NULL,
+                                      NULL);
       self->n_registered_objects++;
     }
 
@@ -1405,13 +1424,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_text_interface.name);
       self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_text_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
+          gtk_at_spi_register_object (self->connection,
+                                      self->context_path,
+                                      (GDBusInterfaceInfo *) &atspi_text_interface,
+                                      vtable,
+                                      self,
+                                      NULL,
+                                      NULL);
       self->n_registered_objects++;
     }
 
@@ -1420,13 +1439,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_editable_text_interface.name);
       self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_editable_text_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
+          gtk_at_spi_register_object (self->connection,
+                                      self->context_path,
+                                      (GDBusInterfaceInfo *) &atspi_editable_text_interface,
+                                      vtable,
+                                      self,
+                                      NULL,
+                                      NULL);
       self->n_registered_objects++;
     }
   vtable = gtk_atspi_get_value_vtable (accessible);
@@ -1434,13 +1453,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_value_interface.name);
       self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_value_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
+          gtk_at_spi_register_object (self->connection,
+                                      self->context_path,
+                                      (GDBusInterfaceInfo *) &atspi_value_interface,
+                                      vtable,
+                                      self,
+                                      NULL,
+                                      NULL);
       self->n_registered_objects++;
     }
 
@@ -1453,13 +1472,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_selection_interface.name);
       self->registration_ids[self->n_registered_objects] =
-          g_dbus_connection_register_object (self->connection,
-                                             self->context_path,
-                                             (GDBusInterfaceInfo *) &atspi_selection_interface,
-                                             vtable,
-                                             self,
-                                             NULL,
-                                             NULL);
+          gtk_at_spi_register_object (self->connection,
+                                      self->context_path,
+                                      (GDBusInterfaceInfo *) &atspi_selection_interface,
+                                      vtable,
+                                      self,
+                                      NULL,
+                                      NULL);
       self->n_registered_objects++;
     }
 
@@ -1468,13 +1487,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_action_interface.name);
       self->registration_ids[self->n_registered_objects] =
-        g_dbus_connection_register_object (self->connection,
-                                           self->context_path,
-                                           (GDBusInterfaceInfo *) &atspi_action_interface,
-                                           vtable,
-                                           self,
-                                           NULL,
-                                           NULL);
+        gtk_at_spi_register_object (self->connection,
+                                    self->context_path,
+                                    (GDBusInterfaceInfo *) &atspi_action_interface,
+                                    vtable,
+                                    self,
+                                    NULL,
+                                    NULL);
       self->n_registered_objects++;
     }
 
@@ -1483,13 +1502,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_hypertext_interface.name);
       self->registration_ids[self->n_registered_objects] =
-        g_dbus_connection_register_object (self->connection,
-                                           self->context_path,
-                                           (GDBusInterfaceInfo *) &atspi_hypertext_interface,
-                                           vtable,
-                                           self,
-                                           NULL,
-                                           NULL);
+        gtk_at_spi_register_object (self->connection,
+                                    self->context_path,
+                                    (GDBusInterfaceInfo *) &atspi_hypertext_interface,
+                                    vtable,
+                                    self,
+                                    NULL,
+                                    NULL);
       self->n_registered_objects++;
     }
 
@@ -1498,13 +1517,13 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     {
       g_variant_builder_add (&interfaces, "s", atspi_hyperlink_interface.name);
       self->registration_ids[self->n_registered_objects] =
-        g_dbus_connection_register_object (self->connection,
-                                           self->context_path,
-                                           (GDBusInterfaceInfo *) &atspi_hyperlink_interface,
-                                           vtable,
-                                           self,
-                                           NULL,
-                                           NULL);
+        gtk_at_spi_register_object (self->connection,
+                                    self->context_path,
+                                    (GDBusInterfaceInfo *) &atspi_hyperlink_interface,
+                                    vtable,
+                                    self,
+                                    NULL,
+                                    NULL);
       self->n_registered_objects++;
     }
 
@@ -1749,6 +1768,7 @@ gtk_at_spi_context_update_text_contents (GtkATContext *context,
                                          unsigned int end)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  gint64 before;
 
   if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
@@ -1756,6 +1776,8 @@ gtk_at_spi_context_update_text_contents (GtkATContext *context,
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   if (!GTK_IS_ACCESSIBLE_TEXT (accessible))
     return;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   const char *kind = "";
 
@@ -1802,6 +1824,9 @@ gtk_at_spi_context_update_text_contents (GtkATContext *context,
 
 out:
   g_clear_pointer (&contents, g_bytes_unref);
+
+  if (before != 0)
+    gdk_profiler_end_mark (before, "AT-SPI text change", NULL);
 }
 
 static void

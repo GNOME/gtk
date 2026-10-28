@@ -868,20 +868,20 @@ root_register (gpointer user_data)
 
   unique_name = g_dbus_connection_get_unique_name (self->connection);
 
-  g_dbus_connection_register_object (self->connection,
-                                     self->root_path,
-                                     (GDBusInterfaceInfo *) &atspi_application_interface,
-                                     &root_application_vtable,
-                                     self,
-                                     NULL,
-                                     NULL);
-  g_dbus_connection_register_object (self->connection,
-                                     self->root_path,
-                                     (GDBusInterfaceInfo *) &atspi_accessible_interface,
-                                     &root_accessible_vtable,
-                                     self,
-                                     NULL,
-                                     NULL);
+  gtk_at_spi_register_object (self->connection,
+                              self->root_path,
+                              (GDBusInterfaceInfo *) &atspi_application_interface,
+                              &root_application_vtable,
+                              self,
+                              NULL,
+                              NULL);
+  gtk_at_spi_register_object (self->connection,
+                              self->root_path,
+                              (GDBusInterfaceInfo *) &atspi_accessible_interface,
+                              &root_accessible_vtable,
+                              self,
+                              NULL,
+                              NULL);
 
   GTK_DEBUG (A11Y, "Registering (%s, %s) on the a11y bus",
                    unique_name,

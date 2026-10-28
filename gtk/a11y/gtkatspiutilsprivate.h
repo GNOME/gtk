@@ -25,6 +25,15 @@
 
 G_BEGIN_DECLS
 
+guint
+gtk_at_spi_register_object (GDBusConnection             *connection,
+                            const char                  *object_path,
+                            GDBusInterfaceInfo          *interface_info,
+                            const GDBusInterfaceVTable  *vtable,
+                            gpointer                     user_data,
+                            GDestroyNotify               user_data_free_func,
+                            GError                     **error);
+
 AtspiRole
 gtk_atspi_role_for_context (GtkATContext *context);
 
