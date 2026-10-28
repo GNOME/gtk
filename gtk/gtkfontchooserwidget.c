@@ -1129,7 +1129,7 @@ add_to_fontlist (GtkWidget     *widget,
   guint i G_GNUC_UNUSED;
   guint n G_GNUC_UNUSED;
 
-  if (gtk_filter_list_model_get_model (self->filter_model) != G_LIST_MODEL (model))
+  if (gtk_single_selection_get_model (self->selection) != G_LIST_MODEL (model))
     return G_SOURCE_REMOVE;
 
   child_model = gtk_slice_list_model_get_model (model);
@@ -1139,9 +1139,8 @@ add_to_fontlist (GtkWidget     *widget,
   for (i = n; i < n + 10; i++)
     {
       if (gtk_filter_list_model_get_pending (GTK_FILTER_LIST_MODEL (self->filter_model)) != 0)
-        {
-          break;
-        }
+        break;
+
       gpointer item = g_list_model_get_item (child_model, i);
       if (!item)
         break;
@@ -1199,7 +1198,7 @@ update_fontlist (GtkFontChooserWidget *self)
   /* gobject-linter-ignore-next-line: g_source_id_not_stored */
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
 
-  gtk_filter_list_model_set_model (self->filter_model, model);
+  gtk_single_selection_set_model (self->selection, model);
   g_object_unref (model);
 }
 
