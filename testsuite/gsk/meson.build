@@ -805,7 +805,8 @@ tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
   [ 'shader' ],
   [ 'opaque' ],
-  [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
+  [ 'path-flaky', [ 'path-utils.c' ], [ 'flaky'] ],
+  [ 'path', [ 'path-utils.c' ] ],
   [ 'path-special-cases' ],
   ['path-intersect'],
 ]
