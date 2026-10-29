@@ -2097,6 +2097,8 @@ gsk_rect_contour_get_position (const GskContour   *contour,
 {
   GskCurve curve;
 
+  g_assert (point->idx > 0);
+
   contour_init_curve (contour, point->idx, &curve);
   gsk_curve_get_point (&curve, point->t, position);
 }
@@ -2503,6 +2505,8 @@ gsk_rounded_rect_contour_get_position (const GskContour   *contour,
                                        graphene_point_t   *position)
 {
   GskCurve curve;
+
+  g_assert (point->idx > 0);
 
   contour_init_curve (contour, point->idx, &curve);
   gsk_curve_get_point (&curve, point->t, position);
