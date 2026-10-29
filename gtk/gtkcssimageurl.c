@@ -202,7 +202,7 @@ gtk_css_image_url_parse (GtkCssImage  *image,
             {
               GdkPaintable *paintable = GDK_PAINTABLE (texture);
               self->loaded_image = gtk_css_image_paintable_new (paintable, paintable);
-			  g_object_unref (texture);
+              g_object_unref (texture);
             }
           else
             {
