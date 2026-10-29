@@ -806,7 +806,6 @@ tests = [
   [ 'shader' ],
   [ 'opaque' ],
   [ 'path-flaky', [ 'path-utils.c' ], [ 'flaky'] ],
-  [ 'path', [ 'path-utils.c' ] ],
   [ 'path-special-cases' ],
   ['path-intersect'],
 ]
@@ -846,6 +845,7 @@ internal_tests = [
   [ 'half-float' ],
   [ 'not-diff' ],
   [ 'misc'],
+  [ 'path', [ 'path-utils.c' ] ],
   [ 'path-private' ],
   [ 'rect'],
   [ 'rounded-rect'],

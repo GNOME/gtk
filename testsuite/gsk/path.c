@@ -20,6 +20,8 @@
 #include <gtk/gtk.h>
 
 #include "path-utils.h"
+#include "gsk/gskpathprivate.h"
+#include "gsk/gskboundingboxprivate.h"
 
 static GskPath *
 create_random_degenerate_path (guint max_contours)
@@ -38,7 +40,7 @@ create_random_degenerate_path (guint max_contours)
 
     case 1:
       /* a single point */
-      gsk_path_builder_move_to (builder, 
+      gsk_path_builder_move_to (builder,
                                 g_test_rand_double_range (-1000, 1000),
                                 g_test_rand_double_range (-1000, 1000));
       break;
@@ -798,17 +800,11 @@ test_general_bounds (void)
     {
       GskPath *path;
       GskPathPoint point;
-      graphene_rect_t bounds;
-      graphene_rect_t stroke_bounds;
+      GskBoundingBox bounds;
+      GskBoundingBox stroke_bounds;
       graphene_point_t pos, pos2;
-      gboolean ret;
 
       path = create_random_path (G_MAXUINT);
-
-      ret = gsk_path_get_bounds (path, &bounds);
-      g_assert_true (ret);
-      ret = gsk_path_get_stroke_bounds (path, stroke, &stroke_bounds);
-      g_assert_true (ret);
 
       if (!gsk_path_get_start_point (path, &point))
         {
@@ -816,17 +812,20 @@ test_general_bounds (void)
           continue;
         }
 
+      gsk_path_get_bounding_box (path, &bounds);
+      gsk_path_get_stroke_bounding_box (path, stroke, &stroke_bounds);
+
       do {
         gsk_path_point_get_position (&point, path, &pos);
-        g_assert_true (graphene_rect_contains_point (&bounds, &pos));
+        g_assert_true (gsk_bounding_box_contains_point (&bounds, &pos));
 
         for (unsigned int j = 0; j < 8; j++)
           {
             float angle = j * 2 * M_PI / 8;
-            get_offset_point (&pos, angle, line_width / 2, &pos2);
-            g_assert_true (graphene_rect_contains_point (&stroke_bounds, &pos2));
-          }
 
+            get_offset_point (&pos, angle, line_width / 2, &pos2);
+            g_assert_true (gsk_bounding_box_contains_point (&stroke_bounds, &pos2));
+          }
       } while (gsk_path_get_next (path, &point));
 
       gsk_path_unref (path);
