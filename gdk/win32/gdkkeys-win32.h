@@ -46,7 +46,7 @@ typedef struct
   HKL            handle;
 
   /* Keyboard layout identifier */
-  char           name[KL_NAMELENGTH];
+  char           klid[KL_NAMELENGTH];
 
   /* Path of the layout DLL */
   char          *file;
@@ -86,6 +86,12 @@ typedef struct
 
   /* Maximum possible value of a modbits bitset. */
   BYTE           max_modbit_value;
+
+  /* Cached per-layout metadata; may be NULL if the lookup failed. */
+  char          *language_tag;
+  char          *language_name;
+  char          *layout_name;
+  char          *profile_id;
 
 } GdkWin32KeymapLayoutInfo;
 
