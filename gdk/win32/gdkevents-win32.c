@@ -228,6 +228,23 @@ generate_focus_event (GdkDeviceManager *device_manager,
   _gdk_win32_append_event (event);
 }
 
+/* The source device of pointer events synthesized from mouse messages,
+ * like crossings and broken grabs. While a Wintab pen drives the system
+ * cursor (_gdk_input_ignore_core > 0), mouse messages are caused by that
+ * pen, so it stays the source, and the core pointer's active device. Making
+ * the system pointer active instead strips the pen's axes from the core
+ * pointer, and with them pressure, tilt etc. from the pen's own events,
+ * whose device is the core pointer.
+ */
+static GdkDevice *
+get_mouse_message_source_device (GdkDeviceManagerWin32 *device_manager)
+{
+  if (_gdk_input_ignore_core > 0)
+    return GDK_DEVICE_VIRTUAL (device_manager->core_pointer)->active_device;
+
+  return device_manager->system_pointer;
+}
+
 static void
 generate_grab_broken_event (GdkDeviceManager *device_manager,
                             GdkWindow        *window,
@@ -246,7 +263,7 @@ generate_grab_broken_event (GdkDeviceManager *device_manager,
   else
     {
       device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->core_pointer;
-      source_device = GDK_DEVICE_MANAGER_WIN32 (device_manager)->system_pointer;
+      source_device = get_mouse_message_source_device (GDK_DEVICE_MANAGER_WIN32 (device_manager));
       _gdk_device_virtual_set_active (device, source_device);
     }
 
@@ -2719,7 +2736,7 @@ gdk_event_translate (MSG  *msg,
             }
 
           synthesize_crossing_events (display,
-                                      device_manager_win32->system_pointer,
+                                      get_mouse_message_source_device (device_manager_win32),
                                       prev_window, new_window,
                                       GDK_CROSSING_UNGRAB,
                                       &msg->pt,
@@ -2754,7 +2771,7 @@ gdk_event_translate (MSG  *msg,
 				     mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL,
                                      window ? GDK_WINDOW_HWND (window) : NULL));
 	  synthesize_crossing_events (display,
-                                      device_manager_win32->system_pointer,
+                                      get_mouse_message_source_device (device_manager_win32),
                                       mouse_window, window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
@@ -2857,7 +2874,7 @@ gdk_event_translate (MSG  *msg,
 
       if (!ignore_leave)
 	synthesize_crossing_events (display,
-                                    device_manager_win32->system_pointer,
+                                    get_mouse_message_source_device (device_manager_win32),
 				    mouse_window, new_window,
 				    GDK_CROSSING_NORMAL,
 				    &msg->pt,
