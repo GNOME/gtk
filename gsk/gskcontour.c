@@ -858,7 +858,12 @@ gsk_standard_contour_get_position (const GskContour   *contour,
     }
 
   gsk_curve_init (&curve, self->ops[point->idx]);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -2100,7 +2105,12 @@ gsk_rect_contour_get_position (const GskContour   *contour,
   g_assert (point->idx > 0);
 
   contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -2509,7 +2519,12 @@ gsk_rounded_rect_contour_get_position (const GskContour   *contour,
   g_assert (point->idx > 0);
 
   contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
