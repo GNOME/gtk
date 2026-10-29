@@ -478,15 +478,13 @@ compare (gconstpointer             *elem1,
          gpointer                   data)
 {
   GskDiffResult res;
+  gssize end1 = lim1;
 
   /*
    * Shrink the box by walking through each diagonal snake (SW and NE).
    */
   for (; off1 < lim1 && off2 < lim2; off1++, off2++)
     {
-      if (elem1[off1] == elem2[off2])
-        continue;
-
       if (!diff_elements_equal (elem1[off1], elem2[off2], settings, data))
         break;
 
@@ -497,19 +495,13 @@ compare (gconstpointer             *elem1,
         return res;
     }
 
+  /* Find the NE snake, but emit it after the middle, so that operations
+   * happen in order. Container nodes need that for copy nodes.
+   */
   for (; off1 < lim1 && off2 < lim2; lim1--, lim2--)
     {
-      if (elem1[lim1 - 1] == elem2[lim2 - 1])
-        continue;
-
       if (!diff_elements_equal (elem1[lim1 - 1], elem2[lim2 - 1], settings, data))
         break;
-
-      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
-                                 elem1, lim1 - 1, elem2, lim2 - 1,
-                                 settings, data);
-      if (res != GSK_DIFF_OK)
-        return res;
     }
 
   /*
@@ -572,7 +564,69 @@ compare (gconstpointer             *elem1,
         return res;
     }
 
+  for (; lim1 < end1; lim1++, lim2++)
+    {
+      res = diff_emit_operation (script, DIFF_OPERATION_KEEP,
+                                 elem1, lim1, elem2, lim2,
+                                 settings, data);
+      if (res != GSK_DIFF_OK)
+        return res;
+    }
+
   return GSK_DIFF_OK;
+}
+
+/* Reports elements that gsk_diff() trimmed off the ends as kept. They are
+ * identical, so there is nothing to search and no need to script them.
+ */
+static GskDiffResult
+diff_keep_range (gconstpointer         *elem1,
+                 gssize                 off1,
+                 gconstpointer         *elem2,
+                 gssize                 off2,
+                 gssize                 n,
+                 const GskDiffSettings *settings,
+                 gpointer               data)
+{
+  GskDiffResult res;
+  gssize i;
+
+  for (i = 0; i < n; i++)
+    {
+      res = settings->keep_func (elem1[off1 + i], elem2[off2 + i], data);
+      if (res != GSK_DIFF_OK)
+        return res;
+    }
+
+  return GSK_DIFF_OK;
+}
+
+static GskDiffResult
+compare_non_deferred (gconstpointer         *elem1,
+                      gssize                 off1,
+                      gssize                 lim1,
+                      gssize                 end1,
+                      gconstpointer         *elem2,
+                      gssize                 off2,
+                      gssize                 lim2,
+                      const GskDiffSettings *settings,
+                      gpointer               data)
+{
+  GskDiffResult res;
+
+  res = diff_keep_range (elem1, 0, elem2, 0, off1, settings, data);
+  if (res != GSK_DIFF_OK)
+    return res;
+
+  res = compare (elem1, off1, lim1,
+                 elem2, off2, lim2,
+                 NULL,
+                 FALSE,
+                 settings, data);
+  if (res != GSK_DIFF_OK)
+    return res;
+
+  return diff_keep_range (elem1, lim1, elem2, lim2, end1 - lim1, settings, data);
 }
 
 /* Keep the operation buffer out of gsk_diff()'s stack frame when callbacks
@@ -583,6 +637,7 @@ static GskDiffResult
 compare_deferred (gconstpointer         *elem1,
                   gssize                 off1,
                   gssize                 lim1,
+                  gssize                 end1,
                   gconstpointer         *elem2,
                   gssize                 off2,
                   gssize                 lim2,
@@ -596,13 +651,20 @@ compare_deferred (gconstpointer         *elem1,
   script.n_operations = 0;
   script.n_allocated = G_N_ELEMENTS (script.operations);
 
+  /* Only the middle goes into the script. The trimmed ends are reported
+   * around it once the search succeeded, so an abort still reports nothing.
+   */
   result = compare (elem1, off1, lim1,
                     elem2, off2, lim2,
                     &script,
                     FALSE,
                     settings, data);
   if (result == GSK_DIFF_OK)
+    result = diff_keep_range (elem1, 0, elem2, 0, off1, settings, data);
+  if (result == GSK_DIFF_OK)
     result = diff_script_apply (&script, elem1, elem2, settings, data);
+  if (result == GSK_DIFF_OK)
+    result = diff_keep_range (elem1, lim1, elem2, lim2, end1 - lim1, settings, data);
 
   g_free (script.overflow);
 
@@ -622,6 +684,9 @@ gsk_diff (gconstpointer             *elem1,
   gssize lim1 = n1;
   gssize lim2 = n2;
 
+  /* Identical elements at the ends don't need searching, so they don't
+   * count towards the edit cost below. They are still reported as kept.
+   */
   while (off1 < lim1 && off2 < lim2 && elem1[off1] == elem2[off2])
     {
       off1++;
@@ -634,9 +699,6 @@ gsk_diff (gconstpointer             *elem1,
       lim2--;
     }
 
-  if (off1 == lim1 && off2 == lim2)
-    return GSK_DIFF_OK;
-
   /* The remaining lengths bound the edit cost. If their sum fits within
    * MAXCOST, the search cannot structurally abort and callbacks need not
    * be deferred.
@@ -645,13 +707,11 @@ gsk_diff (gconstpointer             *elem1,
       !settings->defer_callbacks ||
       (lim1 - off1 <= MAXCOST &&
        lim2 - off2 <= MAXCOST - (lim1 - off1)))
-    return compare (elem1, off1, lim1,
-                    elem2, off2, lim2,
-                    NULL,
-                    FALSE,
-                    settings, data);
+    return compare_non_deferred (elem1, off1, lim1, n1,
+                                 elem2, off2, lim2,
+                                 settings, data);
 
-  return compare_deferred (elem1, off1, lim1,
+  return compare_deferred (elem1, off1, lim1, n1,
                            elem2, off2, lim2,
                            settings, data);
 }

@@ -268,7 +268,8 @@ test_deferred_structural_abort (void)
                           compare_int_element,
                           FALSE, &direct);
   g_assert_cmpint (result, ==, GSK_DIFF_ABORTED);
-  g_assert_cmpuint (direct.n_callbacks, ==, 200);
+  /* the equal elements come after the aborting middle */
+  g_assert_cmpuint (direct.n_callbacks, ==, 0);
 
   result = run_diff_full (elem1, G_N_ELEMENTS (elem1),
                           elem2, G_N_ELEMENTS (elem2),
@@ -279,6 +280,38 @@ test_deferred_structural_abort (void)
 
   g_string_free (direct.trace, TRUE);
   g_string_free (deferred.trace, TRUE);
+}
+
+/* The identical ends are reported outside of the script, but only once
+ * the search succeeded
+ */
+static void
+test_deferred_abort_trimmed (void)
+{
+  int values1[60];
+  int values2[60];
+  gconstpointer elem1[60];
+  gconstpointer elem2[60];
+  TestData data = { .trace = g_string_new (NULL) };
+  GskDiffResult result;
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (elem1); i++)
+    {
+      values1[i] = i + 1000;
+      values2[i] = i + 2000;
+      elem1[i] = &values1[i];
+      elem2[i] = (i < 10 || i >= 50) ? elem1[i] : &values2[i];
+    }
+
+  result = run_diff_full (elem1, G_N_ELEMENTS (elem1),
+                          elem2, G_N_ELEMENTS (elem2),
+                          compare_int_element,
+                          TRUE, &data);
+  g_assert_cmpint (result, ==, GSK_DIFF_ABORTED);
+  g_assert_cmpuint (data.n_callbacks, ==, 0);
+
+  g_string_free (data.trace, TRUE);
 }
 
 static void
@@ -302,9 +335,10 @@ test_identical (void)
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
   g_assert_cmpuint (data.n_compares, ==, 0);
-  g_assert_cmpuint (data.n_callbacks, ==, 0);
+  g_assert_cmpuint (data.n_callbacks, ==, G_N_ELEMENTS (elements));
 
   data.n_compares = 0;
+  data.n_callbacks = 0;
   elem1[0] = GINT_TO_POINTER (1000);
   elem2[0] = GINT_TO_POINTER (2000);
   for (i = 1; i < G_N_ELEMENTS (elem1) - 1; i++)
@@ -316,7 +350,7 @@ test_identical (void)
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpuint (data.n_callbacks, ==, 4);
+  g_assert_cmpuint (data.n_callbacks, ==, 4 + G_N_ELEMENTS (elem1) - 2);
 
   g_string_free (data.trace, TRUE);
 }
@@ -370,7 +404,7 @@ test_trimmed_callback_indexes (void)
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpstr (data.trace->str, ==, "D3@2;I4@2;");
+  g_assert_cmpstr (data.trace->str, ==, "K1:1;K2:2;D3@2;I4@2;");
 
   g_string_free (data.trace, TRUE);
 }
@@ -396,10 +430,42 @@ test_recursive_identical_keeps (void)
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpuint (data.n_callbacks, ==, 4);
-  g_assert_null (strstr (data.trace->str, "K"));
+  g_assert_cmpuint (data.n_callbacks, ==, 7);
+  g_assert_nonnull (strstr (data.trace->str, "K1:1;"));
+  g_assert_nonnull (strstr (data.trace->str, "K2:2;"));
+  g_assert_nonnull (strstr (data.trace->str, "K3:3;"));
 
   g_string_free (data.trace, TRUE);
+}
+
+/* Keeps must be reported in order, also for matches inside the search */
+static void
+test_keep_order (void)
+{
+  gconstpointer elem1[] = {
+    GINT_TO_POINTER (1),
+  };
+  gconstpointer elem2[] = {
+    GINT_TO_POINTER (2), GINT_TO_POINTER (1), GINT_TO_POINTER (1), GINT_TO_POINTER (2),
+  };
+  gboolean defer;
+
+  for (defer = FALSE; defer <= TRUE; defer++)
+    {
+      TestData data = {
+        .trace = g_string_new (NULL),
+        .reject_identical_compare = TRUE,
+      };
+      GskDiffResult result;
+
+      result = run_diff (elem1, G_N_ELEMENTS (elem1),
+                         elem2, G_N_ELEMENTS (elem2),
+                         defer, &data);
+      g_assert_cmpint (result, ==, GSK_DIFF_OK);
+      g_assert_cmpstr (data.trace->str, ==, "I2@0;I1@1;K1:1;I2@3;");
+
+      g_string_free (data.trace, TRUE);
+    }
 }
 
 static void
@@ -411,18 +477,22 @@ test_boundary_snakes (void)
     .trace = g_string_new (NULL),
     .reject_identical_compare = TRUE,
   };
+  GString *keeps = g_string_new (NULL);
   GskDiffResult result;
   gsize i;
 
   for (i = 0; i < G_N_ELEMENTS (elem1); i++)
     elem1[i] = elem2[i] = GSIZE_TO_POINTER (i + 1);
   elem2[G_N_ELEMENTS (elem1)] = GSIZE_TO_POINTER (1000);
+  for (i = 0; i < G_N_ELEMENTS (elem1); i++)
+    g_string_append_printf (keeps, "K%" G_GSIZE_FORMAT ":%" G_GSIZE_FORMAT ";", i + 1, i + 1);
 
   result = run_diff (elem1, G_N_ELEMENTS (elem1),
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpstr (data.trace->str, ==, "I1000@64;");
+  g_assert_true (g_str_has_prefix (data.trace->str, keeps->str));
+  g_assert_cmpstr (data.trace->str + keeps->len, ==, "I1000@64;");
   g_assert_cmpuint (data.n_compares, ==, 0);
 
   g_string_truncate (data.trace, 0);
@@ -435,8 +505,11 @@ test_boundary_snakes (void)
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpstr (data.trace->str, ==, "I1000@0;");
+  g_assert_true (g_str_has_prefix (data.trace->str, "I1000@0;"));
+  g_assert_cmpstr (data.trace->str + strlen ("I1000@0;"), ==, keeps->str);
   g_assert_cmpuint (data.n_compares, ==, 0);
+
+  g_string_free (keeps, TRUE);
 
   g_string_free (data.trace, TRUE);
 }
@@ -492,7 +565,7 @@ test_bounded_workspace_budget_boundary (void)
                      elem2, G_N_ELEMENTS (elem2),
                      TRUE, &data);
   g_assert_cmpint (result, ==, GSK_DIFF_OK);
-  g_assert_cmpuint (data.n_callbacks, ==, 40);
+  g_assert_cmpuint (data.n_callbacks, ==, 40 + 21);
 
   g_string_free (data.trace, TRUE);
 }
@@ -533,10 +606,12 @@ main (int   argc,
   g_test_add_func ("/gsk/diff/deferred-callbacks", test_deferred_callbacks);
   g_test_add_func ("/gsk/diff/direct-below-abort-limit", test_direct_below_abort_limit);
   g_test_add_func ("/gsk/diff/deferred-structural-abort", test_deferred_structural_abort);
+  g_test_add_func ("/gsk/diff/deferred-abort-trimmed", test_deferred_abort_trimmed);
   g_test_add_func ("/gsk/diff/identical", test_identical);
   g_test_add_func ("/gsk/diff/pointer-distinct-equal", test_pointer_distinct_equal);
   g_test_add_func ("/gsk/diff/trimmed-callback-indexes", test_trimmed_callback_indexes);
   g_test_add_func ("/gsk/diff/recursive-identical-keeps", test_recursive_identical_keeps);
+  g_test_add_func ("/gsk/diff/keep-order", test_keep_order);
   g_test_add_func ("/gsk/diff/boundary-snakes", test_boundary_snakes);
   g_test_add_func ("/gsk/diff/bounded-workspace-large-offset", test_bounded_workspace_large_offset);
   g_test_add_func ("/gsk/diff/bounded-workspace-budget-boundary",
