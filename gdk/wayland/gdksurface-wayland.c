@@ -542,6 +542,11 @@ gdk_wayland_surface_request_frame (GdkSurface          *surface,
   for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
     {
       GdkWaylandSubsurface *subsurface = GDK_WAYLAND_SUBSURFACE (gdk_surface_get_subsurface (surface, i));
+
+      /* Unmapped, so the compositor would never answer */
+      if (subsurface->texture == NULL)
+        continue;
+
       gdk_wayland_surface_request_frame_for_surface (frame, subsurface->surface);
     }
 }
