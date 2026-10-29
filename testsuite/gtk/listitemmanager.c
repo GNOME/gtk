@@ -823,6 +823,130 @@ test_grid_fractional_adjustment (gconstpointer data)
   gtk_window_destroy (GTK_WINDOW (window));
 }
 
+static guint n_created_items;
+
+static GtkListItemBase *
+create_counted_item (GtkWidget *widget)
+{
+  n_created_items++;
+
+  return create_simple_item (widget);
+}
+
+static void
+test_reuse_widgets (void)
+{
+  const char *strings[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", NULL };
+  const char *replacements[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", NULL };
+  GtkListItemTracker *tracker;
+  GtkStringList *list;
+  GtkNoSelection *selection;
+  GtkListItemManager *items;
+  GtkWidget *widget;
+
+  widget = gtk_window_new ();
+  items = gtk_list_item_manager_new (widget,
+                                     split_simple,
+                                     create_counted_item,
+                                     prepare_simple,
+                                     create_simple_header);
+  g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
+  tracker = gtk_list_item_tracker_new (items);
+
+  list = gtk_string_list_new (strings);
+  selection = gtk_no_selection_new (G_LIST_MODEL (list));
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  gtk_list_item_tracker_set_position (items, tracker, 0, 0, 9);
+
+  n_created_items = 0;
+  gtk_string_list_splice (list, 0, 10, replacements);
+  check_list_item_manager (items, widget, &tracker, 1);
+  g_assert_cmpuint (n_created_items, ==, 0);
+
+  gtk_list_item_tracker_free (items, tracker);
+  g_object_unref (selection);
+  gtk_window_destroy (GTK_WINDOW (widget));
+}
+
+static void
+count_setup_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item,
+                guint                    *n_setup)
+{
+  gtk_list_item_set_child (list_item, gtk_label_new (NULL));
+  (*n_setup)++;
+}
+
+static void
+bind_label_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkStringObject *string = gtk_list_item_get_item (list_item);
+
+  gtk_label_set_label (GTK_LABEL (gtk_list_item_get_child (list_item)),
+                       gtk_string_object_get_string (string));
+}
+
+static void
+test_reuse_focused_widget (void)
+{
+  GtkListItemFactory *factory;
+  GListStore *store;
+  GtkWidget *window, *view, *focused;
+  gpointer old_items[10], new_items[10];
+  guint n_setup = 0;
+  guint i;
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (count_setup_cb), &n_setup);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_label_cb), NULL);
+
+  store = g_list_store_new (GTK_TYPE_STRING_OBJECT);
+  for (i = 0; i < 10; i++)
+    {
+      char *string = g_strdup_printf ("%u", i);
+
+      old_items[i] = gtk_string_object_new (string);
+      new_items[i] = gtk_string_object_new (string);
+      g_free (string);
+    }
+  g_list_store_splice (store, 0, 0, old_items, 10);
+
+  view = gtk_list_view_new (GTK_SELECTION_MODEL (gtk_no_selection_new (g_object_ref (G_LIST_MODEL (store)))), factory);
+
+  window = gtk_window_new ();
+  gtk_window_set_default_size (GTK_WINDOW (window), 200, 400);
+  gtk_window_set_child (GTK_WINDOW (window), view);
+  gtk_window_present (GTK_WINDOW (window));
+
+  while (n_setup < 10)
+    g_main_context_iteration (NULL, TRUE);
+
+  gtk_list_view_scroll_to (GTK_LIST_VIEW (view), 3, GTK_LIST_SCROLL_FOCUS, NULL);
+  focused = g_object_ref (gtk_widget_get_focus_child (view));
+  g_assert_true (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (focused)) == old_items[3]);
+
+  n_setup = 0;
+  g_list_store_splice (store, 0, 10, old_items, 10);
+  g_assert_cmpuint (n_setup, ==, 0);
+  g_assert_true (gtk_widget_get_focus_child (view) == focused);
+  g_assert_true (gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (focused)) == old_items[3]);
+
+  n_setup = 0;
+  g_list_store_splice (store, 0, 10, new_items, 10);
+  g_assert_cmpuint (n_setup, ==, 1);
+  g_assert_null (gtk_widget_get_parent (focused));
+
+  g_object_unref (focused);
+  gtk_window_destroy (GTK_WINDOW (window));
+  for (i = 0; i < 10; i++)
+    {
+      g_object_unref (old_items[i]);
+      g_object_unref (new_items[i]);
+    }
+  g_object_unref (store);
+}
+
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
@@ -1013,6 +1137,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/listitemmanager/unmapped/section-changes", test_unmapped_sections);
   g_test_add_func ("/listitemmanager/tracker/changes", test_tracker_changes);
   g_test_add_func ("/listitemmanager/lifecycle", test_lifecycle);
+  g_test_add_func ("/listitemmanager/reuse-widgets", test_reuse_widgets);
+  g_test_add_func ("/listitemmanager/reuse-focused-widget", test_reuse_focused_widget);
   g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
 
   g_test_add_data_func ("/listitemmanager/fractional/horizontal-ltr", GUINT_TO_POINTER (0), test_grid_fractional_adjustment);
