@@ -137,7 +137,7 @@ gtk_css_image_url_equal (GtkCssImage *image1,
 {
   GtkCssImageUrl *url1 = GTK_CSS_IMAGE_URL (image1);
   GtkCssImageUrl *url2 = GTK_CSS_IMAGE_URL (image2);
-  
+
   /* FIXME: We don't save data: urls, so we can't compare them here */
   if (url1->file == NULL || url2->file == NULL)
     return FALSE;
@@ -202,6 +202,7 @@ gtk_css_image_url_parse (GtkCssImage  *image,
             {
               GdkPaintable *paintable = GDK_PAINTABLE (texture);
               self->loaded_image = gtk_css_image_paintable_new (paintable, paintable);
+              g_object_unref (texture);
             }
           else
             {
