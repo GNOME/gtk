@@ -754,7 +754,17 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
           switch (stroke->line_join)
             {
             case GSK_LINE_JOIN_MITER:
-              extra = MAX (extra, stroke->miter_limit * stroke->line_width / 2);
+              if (self->flags & GSK_PATH_SMOOTH)
+                {
+                }
+              else if (self->flags & GSK_PATH_OBTUSE)
+                {
+                  extra = MAX (extra, MIN (M_SQRT2, stroke->miter_limit) * stroke->line_width / 2);
+                }
+              else
+                {
+                  extra = MAX (extra, stroke->miter_limit * stroke->line_width / 2);
+                }
               break;
             case GSK_LINE_JOIN_ROUND:
             case GSK_LINE_JOIN_BEVEL:
