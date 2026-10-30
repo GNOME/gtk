@@ -1,5 +1,5 @@
 rounded-clip {
-  clip: 10 10 50 50 / 10;
+  clip: 10 10 50 50 / 10 / 15;
   child: color {
     bounds: 10 10 50 50;
     color: rgb(0,0,0);
@@ -11,7 +11,7 @@ stroke {
     color: rgb(255,0,0);
   }
   path: rounded-rect {
-    outline: 10 10 50 50 / 10;
+    outline: 10 10 50 50 / 10 / 15;
   }
   line-width: 1;
   line-cap: butt;

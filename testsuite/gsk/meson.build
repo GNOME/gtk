@@ -642,6 +642,8 @@ node_parser_tests = [
   'repeating-radial-gradient.node',
   'repeating-radial-gradient.ref.node',
   'rounded-rect.node',
+  'rounded-rect2.node',
+  'rounded-rect2.ref.node',
   'shadow.node',
   'shadow-fail.node',
   'shadow-fail.ref.node',

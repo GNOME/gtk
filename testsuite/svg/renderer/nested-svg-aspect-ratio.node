@@ -13,7 +13,7 @@ color {
 clip {
   clip: 0 100 120 60;
   child: rounded-clip {
-    clip: 0 100 120 60 / 60;
+    clip: 0 100 120 60 / 60 / 30;
     child: color {
       bounds: 0 100 120 60;
       color: rgb(255,255,0);

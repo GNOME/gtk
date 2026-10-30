@@ -14,7 +14,7 @@ border {
   outline: 0 0 100 100 / 100 0 100 0;
 }
 border {
-  outline: 0 0 100 100 / 50;
+  outline: 0 0 100 100 / 50 / 25;
 }
 border {
   outline: 0 0 100 100 / 100 0 100 0 / 50 50 50 50;

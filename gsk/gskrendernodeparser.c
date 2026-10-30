@@ -5319,11 +5319,14 @@ append_rounded_rect (GString              *str,
 
   if (!gsk_rounded_rect_is_rectilinear (r))
     {
-      gboolean all_the_same = TRUE;
-      gboolean all_square = TRUE;
-      float w = r->corner[0].width;
-      float h = r->corner[0].height;
+      gboolean all_the_same, all_square;
+      float w, h;
       int i;
+
+      w = r->corner[0].width;
+      h = r->corner[0].height;
+      all_the_same = TRUE;
+      all_square = w == h;
 
       for (i = 1; i < 4; i ++)
         {
@@ -5333,7 +5336,6 @@ append_rounded_rect (GString              *str,
 
           if (r->corner[i].width != r->corner[i].height)
             all_square = FALSE;
-
         }
 
       g_string_append (str, " / ");
@@ -5341,6 +5343,11 @@ append_rounded_rect (GString              *str,
       if (all_the_same)
         {
           string_append_double (str, w);
+          if (!all_square)
+            {
+              g_string_append (str, " / ");
+              string_append_double (str, h);
+            }
         }
       else if (all_square)
         {
