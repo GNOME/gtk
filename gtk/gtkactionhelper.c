@@ -279,8 +279,7 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
     {
       helper->binding = gtk_action_node_bind (helper->action_node,
                                               key,
-                                              helper->target != NULL
-                                                ? g_variant_ref (helper->target) : NULL,
+                                              helper->target,
                                               (GTK_ACTION_INTEREST_PRESENT |
                                                GTK_ACTION_INTEREST_ENABLED |
                                                GTK_ACTION_INTEREST_ACTIVE |
@@ -339,9 +338,7 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
   if (helper->binding != NULL)
     {
       helper->changing = TRUE;
-      gtk_action_binding_set_target (helper->binding,
-                                     helper->target != NULL
-                                       ? g_variant_ref (helper->target) : NULL);
+      gtk_action_binding_set_target (helper->binding, helper->target);
       helper->changing = FALSE;
     }
 
