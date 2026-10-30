@@ -42,7 +42,7 @@ region_union_region_affine (cairo_region_t       *region,
 {
   cairo_rectangle_int_t rect;
   int i;
-  
+
   for (i = 0; i < cairo_region_num_rectangles (sub); i++)
     {
       cairo_region_get_rectangle (sub, i, &rect);
@@ -190,7 +190,7 @@ gsk_transform_node_get_children (GskRenderNode *node,
   GskTransformNode *self = (GskTransformNode *) node;
 
   *n_children = 1;
-  
+
   return &self->child;
 }
 
@@ -221,6 +221,7 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
                                    GskOpacityData *data)
 {
   GskTransformNode *self = (GskTransformNode *) node;
+  graphene_rect_t orig, orig_inverse;
 
   if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
     {
@@ -233,6 +234,8 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
       return;
     }
 
+  orig = orig_inverse = data->opaque;
+
   if (!gsk_rect_is_empty (&data->opaque))
     {
       GskTransform *inverse;
@@ -243,12 +246,15 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
 
       gsk_transform_transform_bounds (inverse, &data->opaque, &data->opaque);
       gsk_transform_unref (inverse);
+      orig_inverse = data->opaque;
     }
-
 
   gsk_render_node_render_opacity (self->child, data);
 
-  if (!gsk_rect_is_empty (&data->opaque))
+  /* If the child didn't change the opaque region, reset the original to avoid rounding errors. */
+  if (gsk_rect_equal (&orig_inverse, &data->opaque))
+    data->opaque = orig;
+  else if (!gsk_rect_is_empty (&data->opaque))
     gsk_transform_transform_bounds (self->transform, &data->opaque, &data->opaque);
 }
 
