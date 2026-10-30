@@ -3,11 +3,10 @@ stroke {
     bounds: 0 0 100 100;
     color: rgb(255,0,0);
   }
-  path: "\
-M 10 10\
-L 90 90\
-M 90 10\
-L 10 90";
+  path: {
+    "M 10 10 L 90 90";
+    "M 90 10 L 10 90";
+  }
   line-width: 2.5;
   line-cap: butt;
   line-join: miter;
