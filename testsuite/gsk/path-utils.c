@@ -238,3 +238,315 @@ assert_path_equal_func (const char *domain,
   g_array_free (ops1, TRUE);
   g_array_free (ops2, TRUE);
 }
+
+
+static GskPath *
+create_random_degenerate_path (unsigned int max_contours)
+{
+#define N_DEGENERATE_PATHS 15
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  switch (g_test_rand_int_range (0, N_DEGENERATE_PATHS))
+    {
+    case 0:
+      /* empty path */
+      break;
+
+    case 1:
+      /* a single point */
+      gsk_path_builder_move_to (builder,
+                                g_test_rand_double_range (-1000, 1000),
+                                g_test_rand_double_range (-1000, 1000));
+      break;
+
+    case 2:
+      /* N points */
+      for (unsigned i = 0; i < MIN (10, max_contours); i++)
+        gsk_path_builder_move_to (builder,
+                                  g_test_rand_double_range (-1000, 1000),
+                                  g_test_rand_double_range (-1000, 1000));
+      break;
+
+    case 3:
+      /* 1 closed point */
+      gsk_path_builder_move_to (builder,
+                                g_test_rand_double_range (-1000, 1000),
+                                g_test_rand_double_range (-1000, 1000));
+      gsk_path_builder_close (builder);
+      break;
+
+    case 4:
+      /* the same point closed N times */
+      gsk_path_builder_move_to (builder,
+                                g_test_rand_double_range (-1000, 1000),
+                                g_test_rand_double_range (-1000, 1000));
+      for (unsigned i = 0; i < MIN (10, max_contours); i++)
+        gsk_path_builder_close (builder);
+      break;
+
+    case 5:
+      /* a zero-width and zero-height rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      0, 0));
+      break;
+
+    case 6:
+      /* a zero-width rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      0,
+                                                      g_test_rand_double_range (-1000, 1000)));
+      break;
+
+    case 7:
+      /* a zero-height rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      0));
+      break;
+
+    case 8:
+      /* a negative-size rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 0),
+                                                      g_test_rand_double_range (-1000, 0)));
+      break;
+
+    case 9:
+      /* an absolutely random rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000)));
+      break;
+
+    case 10:
+      /* an absolutely random rect */
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000)));
+      break;
+
+    case 11:
+      /* an absolutely random circle */
+      gsk_path_builder_add_circle (builder,
+                                   &GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                         g_test_rand_double_range (-1000, 1000)),
+                                   g_test_rand_double_range (1, 1000));
+      break;
+
+    case 12:
+      /* circle with radius 0 */
+      gsk_path_builder_add_circle (builder,
+                                   &GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                         g_test_rand_double_range (-1000, 1000)),
+                                   0);
+      break;
+
+    case 13:
+      /* a zero-length line */
+      {
+        graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000));
+        gsk_path_builder_move_to (builder, point.x, point.y);
+        gsk_path_builder_line_to (builder, point.x, point.y);
+      }
+      break;
+
+    case 14:
+      /* a cubic with start == end */
+      {
+        graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000));
+        gsk_path_builder_move_to (builder, point.x, point.y);
+        gsk_path_builder_cubic_to (builder,
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   g_test_rand_double_range (-1000, 1000),
+                                   point.x, point.y);
+      }
+      break;
+
+    case N_DEGENERATE_PATHS:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
+static void
+add_shape_contour (GskPathBuilder *builder)
+{
+#define N_SHAPE_CONTOURS 3
+  switch (g_test_rand_int_range (0, N_SHAPE_CONTOURS))
+  {
+    case 0:
+      gsk_path_builder_add_rect (builder,
+                                 &GRAPHENE_RECT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (-1000, 1000),
+                                                      g_test_rand_double_range (1, 1000),
+                                                      g_test_rand_double_range (1, 1000)));
+      break;
+
+    case 1:
+      gsk_path_builder_add_circle (builder,
+                                   &GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                         g_test_rand_double_range (-1000, 1000)),
+                                   g_test_rand_double_range (1, 1000));
+      break;
+
+    case 2:
+      {
+        GskPath *path = create_random_path (1);
+        gsk_path_builder_add_path (builder, path);
+        gsk_path_unref (path);
+      }
+      break;
+
+    case N_SHAPE_CONTOURS:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
+static void
+add_standard_contour (GskPathBuilder *builder)
+{
+  unsigned int n;
+
+  if (g_test_rand_bit ())
+    {
+      if (g_test_rand_bit ())
+        gsk_path_builder_move_to (builder,
+                                  g_test_rand_double_range (-1000, 1000),
+                                  g_test_rand_double_range (-1000, 1000));
+      else
+        gsk_path_builder_rel_move_to (builder,
+                                      g_test_rand_double_range (-1000, 1000),
+                                      g_test_rand_double_range (-1000, 1000));
+    }
+
+  /* That 20 is random, but should be enough to get some
+   * crazy self-intersecting shapes
+   */
+  n = g_test_rand_int_range (1, 20);
+  for (unsigned int i = 0; i < n; i++)
+    {
+      switch (g_test_rand_int_range (0, 8))
+      {
+        case 0:
+          gsk_path_builder_line_to (builder,
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 1:
+          gsk_path_builder_rel_line_to (builder,
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 2:
+          gsk_path_builder_quad_to (builder,
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000),
+                                    g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 3:
+          gsk_path_builder_rel_quad_to (builder,
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000),
+                                        g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 4:
+          gsk_path_builder_cubic_to (builder,
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 5:
+          gsk_path_builder_rel_cubic_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000));
+          break;
+
+        case 6:
+          gsk_path_builder_conic_to (builder,
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (0.2, 20));
+          break;
+
+        case 7:
+          gsk_path_builder_rel_conic_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (0.2, 20));
+          break;
+
+        default:
+          g_assert_not_reached();
+          break;
+      }
+    }
+
+  if (g_test_rand_bit ())
+    gsk_path_builder_close (builder);
+}
+
+GskPath *
+create_random_path (unsigned int max_contours)
+{
+  GskPathBuilder *builder;
+  unsigned int n;
+
+  /* 5% chance for a weird shape */
+  if (!g_test_rand_int_range (0, 20))
+    return create_random_degenerate_path (max_contours);
+
+  builder = gsk_path_builder_new ();
+  n = g_test_rand_int_range (1, 10);
+  n = MIN (n, max_contours);
+
+  for (unsigned i = 0; i < n; i++)
+    {
+      /* 2/3 of shapes are standard contours */
+      if (g_test_rand_int_range (0, 3))
+        add_standard_contour (builder);
+      else
+        add_shape_contour (builder);
+    }
+
+  return gsk_path_builder_free_to_path (builder);
+}
