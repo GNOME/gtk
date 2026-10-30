@@ -236,7 +236,13 @@ classify_test_path (gconstpointer data)
   GskPathClassification result;
   GskRoundedRect rect;
   const char *kind[] = {
-    "empty", "rect", "rounded", "circle", "general"
+    [GSK_PATH_EMPTY] = "empty",
+    [GSK_PATH_RECT] = "rect",
+    [GSK_PATH_ROUNDED_RECT] = "rounded",
+    [GSK_PATH_CIRCLE] = "circle",
+    [GSK_PATH_APPROXIMATE_ROUNDED_RECT] = "approx rounded",
+    [GSK_PATH_APPROXIMATE_CIRCLE] = "approx circle",
+    [GSK_PATH_GENERAL] = "general"
   };
 
   if (g_test_verbose ())
