@@ -55,6 +55,4 @@ gsk_stroke_clear (GskStroke *stroke)
   stroke->n_dash = 0; /* better safe than sorry */
 }
 
-float gsk_stroke_get_join_width (const GskStroke *stroke);
-
 G_END_DECLS

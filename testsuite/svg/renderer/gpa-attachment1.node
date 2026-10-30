@@ -13,7 +13,7 @@ clip {
     }
     stroke {
       child: color {
-        bounds: 8 8 84 84;
+        bounds: 9.5 9.5 81 81;
         color: rgb(0,0,0);
       }
       path: "path1";

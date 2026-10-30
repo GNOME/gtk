@@ -33,3 +33,4 @@ void assert_path_equal_func (const char *domain,
 #define assert_path_equal_with_epsilon(p1,p2, epsilon) \
     assert_path_equal_func(G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, (p1),(p2), (epsilon))
 
+GskPath * create_random_path (unsigned int max_contours);

@@ -23,6 +23,7 @@
 #include "gskpath.h"
 
 #include "gskpathopprivate.h"
+#include "gskboundingboxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -129,5 +130,12 @@ typedef enum
 
 GskPathClassification gsk_path_classify (GskPath        *path,
                                          GskRoundedRect *rect);
+
+void gsk_path_get_bounding_box        (GskPath         *self,
+                                       GskBoundingBox  *box);
+void gsk_path_get_stroke_bounding_box (GskPath         *self,
+                                       const GskStroke *stroke,
+                                       GskBoundingBox  *box);
+
 
 G_END_DECLS

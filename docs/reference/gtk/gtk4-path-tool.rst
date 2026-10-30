@@ -122,9 +122,8 @@ key bindings: '+'/'-' change the zoom level, 'p' toggles display of points,
 ``--line-join=VALUE``
 
   The join style to use at line joins. The possible values are ``miter``,
-  ``miter-clip``, ``round``, ``bevel`` or ``arcs``. See the SVG specification
-  for details on these styles.
-  The default join style is ``miter``.
+  ``round``, ``bevel`` or ``arcs``. See the SVG specification for details
+  on these styles. The default join style is ``miter``.
 
 ``--miter-limit=VALUE``
 

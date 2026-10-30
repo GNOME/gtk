@@ -405,6 +405,13 @@ gsk_path_get_bounds (GskPath         *self,
   return self->n_contours > 0;
 }
 
+void
+gsk_path_get_bounding_box (GskPath        *self,
+                           GskBoundingBox *box)
+{
+  *box = self->bounds;
+}
+
 /**
  * gsk_path_get_tight_bounds:
  * @self: a path
@@ -450,6 +457,22 @@ gsk_path_get_tight_bounds (GskPath         *self,
   return TRUE;
 }
 
+void
+gsk_path_get_stroke_bounding_box (GskPath         *self,
+                                  const GskStroke *stroke,
+                                  GskBoundingBox  *bb)
+{
+  gsk_contour_get_stroke_bounds (self->contours[0], stroke, bb);
+
+  for (gsize i = 1; i < self->n_contours; i++)
+    {
+      GskBoundingBox tmp;
+
+      if (gsk_contour_get_stroke_bounds (self->contours[i], stroke, &tmp))
+        gsk_bounding_box_union (bb, &tmp, bb);
+    }
+}
+
 /**
  * gsk_path_get_stroke_bounds:
  * @self: a path
@@ -485,16 +508,7 @@ gsk_path_get_stroke_bounds (GskPath         *self,
       return FALSE;
     }
 
-  gsk_contour_get_stroke_bounds (self->contours[0], stroke, &b);
-
-  for (gsize i = 1; i < self->n_contours; i++)
-    {
-      GskBoundingBox tmp;
-
-      if (gsk_contour_get_stroke_bounds (self->contours[i], stroke, &tmp))
-        gsk_bounding_box_union (&b, &tmp, &b);
-    }
-
+  gsk_path_get_stroke_bounding_box (self, stroke, &b);
   gsk_bounding_box_to_rect (&b, bounds);
 
   return TRUE;
@@ -565,7 +579,6 @@ gsk_path_get_start_point (GskPath      *self,
    * point of the contour, so we use idx == 1 here.
    */
   result->contour = 0;
-  result->idx = 1;
   result->idx = MIN (1, gsk_contour_get_n_ops (self->contours[0]) - 1);
   result->t = 0;
 
@@ -638,7 +651,7 @@ gsk_path_get_next (GskPath      *self,
   else if (point->contour < self->n_contours - 1)
     {
       point->contour++;
-      point->idx = 0;
+      point->idx = MIN (1, gsk_contour_get_n_ops (self->contours[point->contour]) - 1);
       point->t = 0;
     }
   else
@@ -677,7 +690,7 @@ gsk_path_get_previous (GskPath      *self,
     {
       point->t = 0;
     }
-  else if (point->idx > 0)
+  else if (point->idx > 1)
     {
       point->idx--;
     }

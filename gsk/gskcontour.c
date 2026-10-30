@@ -732,7 +732,38 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
   if (self->n_points == 0)
     return FALSE;
 
-  extra = MAX (stroke->line_width / 2, gsk_stroke_get_join_width (stroke));
+  extra = stroke->line_width / 2;
+
+  if (!(self->flags & GSK_PATH_ZERO_LENGTH))
+    {
+      switch (stroke->line_cap)
+        {
+        case GSK_LINE_CAP_BUTT:
+        case GSK_LINE_CAP_ROUND:
+          break;
+        case GSK_LINE_CAP_SQUARE:
+          extra = M_SQRT2 * stroke->line_width / 2;
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      /* If n_ops <= 2, there is no join */
+      if (self->n_ops > 2)
+        {
+          switch (stroke->line_join)
+            {
+            case GSK_LINE_JOIN_MITER:
+              extra = MAX (extra, stroke->miter_limit * stroke->line_width / 2);
+              break;
+            case GSK_LINE_JOIN_ROUND:
+            case GSK_LINE_JOIN_BEVEL:
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+    }
 
   gsk_bounding_box_init (bounds, &GRAPHENE_POINT_INIT (self->bounds.min.x - extra,
                                                        self->bounds.min.y - extra),
@@ -858,7 +889,12 @@ gsk_standard_contour_get_position (const GskContour   *contour,
     }
 
   gsk_curve_init (&curve, self->ops[point->idx]);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -2097,8 +2133,15 @@ gsk_rect_contour_get_position (const GskContour   *contour,
 {
   GskCurve curve;
 
+  g_assert (point->idx > 0);
+
   contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -2504,8 +2547,15 @@ gsk_rounded_rect_contour_get_position (const GskContour   *contour,
 {
   GskCurve curve;
 
+  g_assert (point->idx > 0);
+
   contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_point (&curve, point->t, position);
+  if (point->t == 0)
+    *position = *gsk_curve_get_start_point (&curve);
+  else if (point->t == 1)
+    *position = *gsk_curve_get_end_point (&curve);
+  else
+    gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
