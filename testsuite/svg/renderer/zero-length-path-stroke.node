@@ -43,7 +43,7 @@ transform {
     }
     stroke {
       child: color {
-        bounds: 22.9289 2.92893 14.1421 14.1421;
+        bounds: 25 5 10 10;
         color: rgb(0,128,0);
       }
       path: "M 30 10 Z";
@@ -78,7 +78,7 @@ transform {
     }
     stroke {
       child: color {
-        bounds: 22.9289 2.92893 14.1421 14.1421;
+        bounds: 25 5 10 10;
         color: rgb(0,128,0);
       }
       path: "M 30 10 L 30 10";

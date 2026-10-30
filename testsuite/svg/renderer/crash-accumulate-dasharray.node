@@ -2,7 +2,7 @@ clip {
   clip: 0 0 200 200;
   child: stroke {
     child: color {
-      bounds: -8 42 216 16;
+      bounds: -2 48 204 4;
       color: rgb(0,0,0);
     }
     path: "M 0 50 L 200 50";
