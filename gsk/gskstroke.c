@@ -21,6 +21,8 @@
 
 #include "gskstrokeprivate.h"
 
+#include <tgmath.h>
+
 /**
  * GskStroke:
  *
@@ -490,50 +492,4 @@ gsk_stroke_get_dash_offset (const GskStroke *self)
   g_return_val_if_fail (self != NULL, 4.f);
 
   return self->dash_offset;
-}
-
-/*< private >
- * gsk_stroke_get_join_width:
- * @stroke: a stroke
- *
- * Returns a width that is sufficient to use
- * when calculating stroke bounds around joins
- * and caps.
- *
- * Returns: the join width
- */
-float
-gsk_stroke_get_join_width (const GskStroke *stroke)
-{
-  float width;
-
-  switch (stroke->line_cap)
-    {
-    case GSK_LINE_CAP_BUTT:
-      width = 0;
-      break;
-    case GSK_LINE_CAP_ROUND:
-      width = stroke->line_width / 2;
-      break;
-    case GSK_LINE_CAP_SQUARE:
-      width = G_SQRT2 * stroke->line_width / 2;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  switch (stroke->line_join)
-    {
-    case GSK_LINE_JOIN_MITER:
-      width = MAX (width, MAX (stroke->miter_limit / 2, 0.5f) * stroke->line_width);
-      break;
-    case GSK_LINE_JOIN_ROUND:
-    case GSK_LINE_JOIN_BEVEL:
-      width = MAX (width, stroke->line_width / 2);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-
-  return width;
 }
