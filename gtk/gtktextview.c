@@ -5902,8 +5902,7 @@ gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
   buffer = get_buffer (text_view);
   gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
 
-  if (gtk_event_treat_as_touch (event) &&
-      gtk_text_iter_compare (&start, &end) == 0 &&
+  if (gtk_text_iter_compare (&start, &end) == 0 &&
       gtk_text_iter_can_insert (&start, priv->editable) &&
       (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_INHIBIT_OSK) == 0)
     gtk_im_context_activate_osk (priv->im_context, event);
