@@ -27,14 +27,23 @@
 
 G_BEGIN_DECLS
 
+/*< private >
+ * GskPathFlags:
+ * @GSK_PATH_FLAT: Path has only lines
+ * @GSK_PATH_ZERO_LENGTH: All points of the path are identical
+ * @GSK_PATH_CLOSED: All contours are closed
+ * @GSK_PATH_OBTUSE: All joins have angles >= 90°
+ * @GSK_PATH_SMOOTH: All joins have angles of ~180°
+ *
+ * Flags to denotate noteworthy properties of a path.
+ */
 typedef enum
 {
-  /* path has only lines */
   GSK_PATH_FLAT          = 1 << 0,
-  /* all points of the path are identical */
   GSK_PATH_ZERO_LENGTH   = 1 << 1,
-  /* all contours are closed */
   GSK_PATH_CLOSED        = 1 << 2,
+  GSK_PATH_OBTUSE        = 1 << 3,
+  GSK_PATH_SMOOTH        = 1 << 4,
 } GskPathFlags;
 
 typedef struct _GskContour GskContour;
@@ -136,6 +145,5 @@ void gsk_path_get_bounding_box        (GskPath         *self,
 void gsk_path_get_stroke_bounding_box (GskPath         *self,
                                        const GskStroke *stroke,
                                        GskBoundingBox  *box);
-
 
 G_END_DECLS

@@ -26,7 +26,7 @@
 #include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
 
-#include <math.h>
+#include <tgmath.h>
 #include <pango/pangocairo.h>
 
 /**
@@ -184,10 +184,42 @@ gsk_path_builder_ensure_current (GskPathBuilder *self)
   if (gsk_path_ops_get_size (&self->ops) != 0)
     return;
 
-  self->flags = GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
+  self->flags = GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH;
 
   gsk_path_ops_append (&self->ops, (gskpathop[1]) { gsk_pathop_encode_index (GSK_PATH_MOVE, 0) });
   gsk_points_append (&self->points, &self->current_point);
+}
+
+static GskPathFlags
+update_angle_flags (GskPathFlags            flags,
+                    const graphene_point_t *a,
+                    const graphene_point_t *b,
+                    const graphene_point_t *c)
+{
+  float x1, y1, x2, y2, r;
+  const float epsilon = 0.0015;
+
+  if ((flags & (GSK_PATH_OBTUSE | GSK_PATH_SMOOTH)) == 0)
+    return flags;
+
+  x1 = a->x - b->x;
+  y1 = a->y - b->y;
+  x2 = c->x - b->x;
+  y2 = c->y - b->y;
+
+  r = x1 * x2 + y1 * y2;
+
+  if (r >= epsilon)
+    {
+      flags &= ~(GSK_PATH_OBTUSE|GSK_PATH_SMOOTH);
+    }
+  else if (flags & GSK_PATH_SMOOTH)
+    {
+      if (fabs (x1 * y2 - x2 * y1) >= epsilon)
+        flags &= ~GSK_PATH_SMOOTH;
+    }
+
+  return flags;
 }
 
 static void
@@ -197,6 +229,27 @@ gsk_path_builder_append_current (GskPathBuilder         *self,
                                  const GskAlignedPoint  *points)
 {
   gsk_path_builder_ensure_current (self);
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+    case GSK_PATH_LINE:
+    case GSK_PATH_CLOSE:
+      break;
+    case GSK_PATH_QUAD:
+    case GSK_PATH_CUBIC:
+    case GSK_PATH_CONIC:
+      self->flags &= ~GSK_PATH_FLAT;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (gsk_points_get_size (&self->points) > 1)
+    self->flags = update_angle_flags (self->flags,
+                                      &gsk_points_get (&self->points, gsk_points_get_size (&self->points) - 2)->pt,
+                                      &gsk_points_get (&self->points, gsk_points_get_size (&self->points) - 1)->pt,
+                                      &points[0].pt);
 
   gsk_path_ops_append (&self->ops, (gskpathop[1]) { gsk_pathop_encode_index (op, gsk_points_get_size (&self->points) - 1) } );
   gsk_points_splice (&self->points, gsk_points_get_size (&self->points), 0, FALSE, points, n_points);
@@ -230,7 +283,14 @@ gsk_path_builder_end_current (GskPathBuilder *self)
               break;
             }
         }
+
+      if (self->flags & GSK_PATH_CLOSED)
+        self->flags = update_angle_flags (self->flags,
+                                          &gsk_points_get (&self->points, gsk_points_get_size (&self->points) - 2)->pt,
+                                          &gsk_points_get (&self->points, 0)->pt,
+                                          &gsk_points_get (&self->points, 1)->pt);
     }
+
   contour = gsk_standard_contour_new (self->flags,
                                       gsk_points_get_data (&self->points),
                                       gsk_points_get_size (&self->points),

@@ -1537,7 +1537,9 @@ gsk_circle_contour_get_flags (const GskContour *contour)
   const GskCircleContour *self = (const GskCircleContour *) contour;
 
   return GSK_PATH_CLOSED |
-         (self->radius == 0 ? GSK_PATH_ZERO_LENGTH : 0);
+         (self->radius == 0 ? GSK_PATH_ZERO_LENGTH : 0) |
+         GSK_PATH_OBTUSE |
+         GSK_PATH_SMOOTH;
 }
 
 static void
@@ -2012,7 +2014,8 @@ gsk_rect_contour_get_flags (const GskContour *contour)
 
   return GSK_PATH_FLAT |
          GSK_PATH_CLOSED |
-         (self->width == 0 && self->height == 0 ? GSK_PATH_ZERO_LENGTH : 0);
+         (self->width == 0 && self->height == 0 ? GSK_PATH_ZERO_LENGTH : 0) |
+         GSK_PATH_OBTUSE;
 }
 
 static void
@@ -2384,7 +2387,19 @@ gsk_rounded_rect_contour_copy (const GskContour *contour,
 static GskPathFlags
 gsk_rounded_rect_contour_get_flags (const GskContour *contour)
 {
-  return GSK_PATH_CLOSED;
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  gboolean smooth = TRUE;
+
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      if (self->rect.corner[i].width == 0 || self->rect.corner[i].height == 0)
+        {
+          smooth = FALSE;
+          break;
+        }
+    }
+
+  return GSK_PATH_CLOSED | GSK_PATH_OBTUSE | (smooth ? GSK_PATH_SMOOTH : 0);
 }
 
 static gboolean

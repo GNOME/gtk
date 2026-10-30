@@ -82,7 +82,7 @@ gsk_path_new_from_contours (const GSList *contours)
   guint hash;
   GskBoundingBox b;
 
-  flags = GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH;
+  flags = GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_ZERO_LENGTH | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH;
   hash = 0; /* could use a startup-initialized constant here */
   size = 0;
   n_contours = 0;
