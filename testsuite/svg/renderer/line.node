@@ -1,19 +1,9 @@
-fill {
-  child: color {
-    bounds: 10 10 80 80;
-    color: rgb(0,0,0);
-  }
-  path: "path1" {
-    "M 10 10 L 90 90";
-  }
-  fill-rule: winding;
-}
 stroke {
   child: color {
     bounds: 8 8 84 84;
     color: rgb(255,0,0);
   }
-  path: "path1";
+  path: "M 10 10 L 90 90";
   line-width: 1;
   line-cap: butt;
   line-join: miter;

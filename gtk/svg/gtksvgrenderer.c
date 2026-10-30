@@ -3144,6 +3144,12 @@ fill_shape (SvgElement   *shape,
   graphene_rect_t bounds;
   GskFillRule fill_rule;
 
+  if (shape->type == SVG_ELEMENT_LINE)
+    return;
+
+  if (gsk_path_get_flags (path) & GSK_PATH_ZERO_LENGTH)
+    return;
+
   paint = get_context_paint (paint, context->ctx_shape_stack);
   if (svg_paint_get_kind (paint) == PAINT_NONE)
     return;
