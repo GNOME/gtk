@@ -2687,13 +2687,15 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
         return;
 
       first_image = g_object_ref (second_image);
-      first_rect = *graphene_rect_zero ();
+      first_rect = clip_bounds;
+      first_rect.origin.x -= 2 * first_rect.size.width;
       first_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
   else if (second_image == NULL)
     {
       second_image = g_object_ref (first_image);
-      second_rect = *graphene_rect_zero ();
+      second_rect = clip_bounds;
+      second_rect.origin.x -= 2 * second_rect.size.width;
       second_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
 
