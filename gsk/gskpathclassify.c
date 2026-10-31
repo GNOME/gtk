@@ -98,7 +98,7 @@ path_is_rect (GskPathOperation *ops,
 #define equal4(a, b, c, d) (a == b && b == c && c == d)
 
 static const double quarter_circle_d = (M_SQRT2 - 1) * 4 / 3;
-static const double quarter_circle_eps = 0.01;
+static const double quarter_circle_eps = 0.05;
 
 static inline gboolean
 is_quarter_ellipse (const graphene_point_t *p1,
