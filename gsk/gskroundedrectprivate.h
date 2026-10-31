@@ -83,17 +83,24 @@ static inline void
 gsk_rounded_rect_init_uniform (GskRoundedRect *rect,
                                float x, float y,
                                float w, float h,
-                               float r)
+                               float rx, float ry)
 {
   rect->bounds.origin.x = x;
   rect->bounds.origin.y = y;
   rect->bounds.size.width = w;
   rect->bounds.size.height = h;
-  rect->corner[0].width = rect->corner[0].height = r;
-  rect->corner[1].width = rect->corner[1].height = r;
-  rect->corner[2].width = rect->corner[2].height = r;
-  rect->corner[3].width = rect->corner[3].height = r;
+  rect->corner[0].width = rect->corner[1].width = rect->corner[2].width = rect->corner[3].width = rx;
+  rect->corner[0].height = rect->corner[1].height = rect->corner[2].height = rect->corner[3].height = ry;
+}
+
+static inline void
+gsk_rounded_rect_init_from_ellipse (GskRoundedRect *rect,
+                                    float           cx,
+                                    float           cy,
+                                    float           rx,
+                                    float           ry)
+{
+  gsk_rounded_rect_init_uniform (rect, cx - rx, cy - ry, 2 * rx, 2 * ry, rx, ry);
 }
 
 G_END_DECLS
-

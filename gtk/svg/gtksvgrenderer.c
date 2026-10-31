@@ -502,19 +502,18 @@ context_get_host_transform (PaintContext *context)
   return transform;
 }
 
-static void push_group   (SvgElement   *shape,
-                          PaintContext *context);
-static void pop_group    (SvgElement   *shape,
-                          PaintContext *context);
-static void paint_shape  (SvgElement   *shape,
-                          PaintContext *context);
-static void fill_shape   (SvgElement   *shape,
-                          GskPath      *path,
-                          SvgValue     *paint,
-                          double        opacity,
-                          PaintContext *context);
-static void render_shape (SvgElement   *shape,
-                          PaintContext *context);
+static void push_group   (SvgElement     *shape,
+                          PaintContext   *context);
+static void pop_group    (SvgElement     *shape,
+                          PaintContext   *context);
+static void paint_shape  (SvgElement     *shape,
+                          PaintContext   *context);
+static void fill_rect    (GskRoundedRect *rect,
+                          SvgValue       *paint,
+                          double          opacity,
+                          PaintContext   *context);
+static void render_shape (SvgElement     *shape,
+                          PaintContext   *context);
 
 /* {{{ Filters */
 
@@ -634,8 +633,7 @@ get_input_for_ref (SvgValue              *in,
     case FILTER_REF_FILL_PAINT:
     case FILTER_REF_STROKE_PAINT:
       {
-        GskPath *path;
-        GskPathBuilder *builder;
+        GskRoundedRect rect;
         SvgValue *paint;
         double opacity;
 
@@ -650,12 +648,10 @@ get_input_for_ref (SvgValue              *in,
             opacity = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_STROKE_OPACITY), 1);
           }
 
-        builder = gsk_path_builder_new ();
-        gsk_path_builder_add_rect (builder, subregion);
-        path = gsk_path_builder_free_to_path (builder);
+        gsk_rounded_rect_init_from_rect (&rect, subregion, 0);
 
         gtk_snapshot_push_collect (context->snapshot);
-        fill_shape (shape, path, paint, opacity, context);
+        fill_rect (&rect, paint, opacity, context);
         node = gtk_snapshot_pop_collect (context->snapshot);
 
         if (!node)
@@ -664,7 +660,6 @@ get_input_for_ref (SvgValue              *in,
         res = filter_result_new (node, subregion);
 
         gsk_render_node_unref (node);
-        gsk_path_unref (path);
         return res;
       }
     default:
@@ -2033,32 +2028,52 @@ push_group (SvgElement   *shape,
           if (svg_transform_is_none (ctf) &&
               svg_enum_get (svg_element_get_current_value (clip_shape, SVG_PROPERTY_CONTENT_UNITS)) == COORD_UNITS_USER_SPACE_ON_USE &&
               child != NULL && child->next_sibling == NULL &&
-              (child->type == SVG_ELEMENT_PATH || child->type == SVG_ELEMENT_RECT || child->type == SVG_ELEMENT_CIRCLE) &&
+              (child->type == SVG_ELEMENT_PATH || child->type == SVG_ELEMENT_RECT || child->type == SVG_ELEMENT_CIRCLE || child->type == SVG_ELEMENT_ELLIPSE) &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_VISIBILITY)) != VISIBILITY_HIDDEN &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_DISPLAY)) != DISPLAY_NONE &&
               svg_clip_get_kind (svg_element_get_current_value (child, SVG_PROPERTY_CLIP_PATH)) == CLIP_NONE &&
               svg_transform_is_none (svg_element_get_current_value (child, SVG_PROPERTY_TRANSFORM)))
             {
-              GskPath *path;
+              GskRoundedRect rect;
 
-              path = svg_element_get_current_path (child, context->viewport);
-
-              if (context->picking.picking)
+              if (svg_element_get_current_rect (child, context->viewport, &rect))
                 {
-                  if (!gsk_path_in_fill (path, &context->picking.p, GSK_FILL_RULE_WINDING))
+                  if (context->picking.picking)
                     {
-                      if (!context->picking.done)
-                        context->picking.clipped = shape;
+                      if (!gsk_rounded_rect_contains_point (&rect, &context->picking.p))
+                        {
+                          if (!context->picking.done)
+                            context->picking.clipped = shape;
+                        }
                     }
+    #ifdef DEBUG
+                  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+                    gtk_snapshot_push_debug (context->snapshot, "clip for clip");
+    #endif
+                  gtk_snapshot_push_rounded_clip (context->snapshot, &rect);
                 }
+              else
+                {
+                  GskPath *path;
 
-#ifdef DEBUG
-              if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
-                gtk_snapshot_push_debug (context->snapshot, "fill or clip for clip");
-#endif
-              svg_snapshot_push_fill (context->snapshot, path, GSK_FILL_RULE_WINDING);
+                  path = svg_element_get_current_path (child, context->viewport);
 
-              gsk_path_unref (path);
+                  if (context->picking.picking)
+                    {
+                      if (!gsk_path_in_fill (path, &context->picking.p, GSK_FILL_RULE_WINDING))
+                        {
+                          if (!context->picking.done)
+                            context->picking.clipped = shape;
+                        }
+                    }
+    #ifdef DEBUG
+                  if (strstr (g_getenv ("SVG_DEBUG") ?:"", "nodes"))
+                    gtk_snapshot_push_debug (context->snapshot, "fill for clip");
+    #endif
+                  svg_snapshot_push_fill (context->snapshot, path, GSK_FILL_RULE_WINDING);
+
+                  gsk_path_unref (path);
+                }
             }
           else
             {
@@ -3135,20 +3150,13 @@ get_context_paint (SvgValue *paint,
 }
 
 static void
-fill_shape (SvgElement   *shape,
-            GskPath      *path,
-            SvgValue     *paint,
-            double        opacity,
-            PaintContext *context)
+fill_path (GskPath      *path,
+           GskFillRule   fill_rule,
+           SvgValue     *paint,
+           double        opacity,
+           PaintContext *context)
 {
   graphene_rect_t bounds;
-  GskFillRule fill_rule;
-
-  if (shape->type == SVG_ELEMENT_LINE)
-    return;
-
-  if (gsk_path_get_flags (path) & GSK_PATH_ZERO_LENGTH)
-    return;
 
   paint = get_context_paint (paint, context->ctx_shape_stack);
   if (svg_paint_get_kind (paint) == PAINT_NONE)
@@ -3156,8 +3164,6 @@ fill_shape (SvgElement   *shape,
 
   if (!gsk_path_get_bounds (path, &bounds))
     return;
-
-  fill_rule = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_FILL_RULE));
 
   switch (svg_paint_get_kind (paint))
     {
@@ -3178,17 +3184,15 @@ fill_shape (SvgElement   *shape,
     case PAINT_SERVER:
     case PAINT_SERVER_WITH_FALLBACK:
     case PAINT_SERVER_WITH_CURRENT_COLOR:
-      {
-        if (opacity < 1)
-          gtk_snapshot_push_opacity (context->snapshot, opacity);
+      if (opacity < 1)
+        gtk_snapshot_push_opacity (context->snapshot, opacity);
 
-        svg_snapshot_push_fill (context->snapshot, path, fill_rule);
-        paint_server (paint, &bounds, &bounds, context);
+      svg_snapshot_push_fill (context->snapshot, path, fill_rule);
+      paint_server (paint, &bounds, &bounds, context);
+      gtk_snapshot_pop (context->snapshot);
+
+      if (opacity < 1)
         gtk_snapshot_pop (context->snapshot);
-
-        if (opacity < 1)
-          gtk_snapshot_pop (context->snapshot);
-      }
       break;
     case PAINT_CURRENT_COLOR:
     case PAINT_CONTEXT_FILL:
@@ -3196,6 +3200,82 @@ fill_shape (SvgElement   *shape,
     case PAINT_SYMBOLIC:
     default:
       g_assert_not_reached ();
+    }
+}
+
+static void
+fill_rect (GskRoundedRect *rect,
+           SvgValue       *paint,
+           double          opacity,
+           PaintContext   *context)
+{
+  paint = get_context_paint (paint, context->ctx_shape_stack);
+  if (svg_paint_get_kind (paint) == PAINT_NONE)
+    return;
+
+  switch (svg_paint_get_kind (paint))
+    {
+    case PAINT_NONE:
+      break;
+    case PAINT_COLOR:
+      {
+        GdkColor color;
+
+        gdk_color_init_copy (&color, svg_paint_get_color (paint));
+        color.alpha *= opacity;
+        gtk_snapshot_push_rounded_clip (context->snapshot, rect);
+        gtk_snapshot_add_color (context->snapshot, &color, &rect->bounds);
+        gtk_snapshot_pop (context->snapshot);
+        gdk_color_finish (&color);
+      }
+      break;
+    case PAINT_SERVER:
+    case PAINT_SERVER_WITH_FALLBACK:
+    case PAINT_SERVER_WITH_CURRENT_COLOR:
+      if (opacity < 1)
+        gtk_snapshot_push_opacity (context->snapshot, opacity);
+
+      gtk_snapshot_push_rounded_clip (context->snapshot, rect);
+      paint_server (paint, &rect->bounds, &rect->bounds, context);
+      gtk_snapshot_pop (context->snapshot);
+
+      if (opacity < 1)
+        gtk_snapshot_pop (context->snapshot);
+      break;
+    case PAINT_CURRENT_COLOR:
+    case PAINT_CONTEXT_FILL:
+    case PAINT_CONTEXT_STROKE:
+    case PAINT_SYMBOLIC:
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+fill_shape (SvgElement   *shape,
+            SvgValue     *paint,
+            double        opacity,
+            PaintContext *context)
+{
+  GskRoundedRect rect;
+
+  if (shape->type == SVG_ELEMENT_LINE)
+    return;
+
+  if (svg_element_get_current_rect (shape, context->viewport, &rect))
+    {
+      fill_rect (&rect, paint, opacity, context);
+    }
+  else
+    {
+      GskPath *path;
+      GskFillRule fill_rule;
+
+      path = svg_element_get_current_path (shape, context->viewport);
+      fill_rule = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_FILL_RULE));
+      fill_path (path, fill_rule, paint, opacity, context);
+
+      gsk_path_unref (path);
     }
 }
 
@@ -5009,84 +5089,82 @@ paint_shape (SvgElement   *shape,
    * Unless we are clipping, in which case we just fill to
    * create a 1-bit mask of the 'raw geometry'.
    */
-  path = svg_element_get_current_path (shape, context->viewport);
-
   if (context->op == CLIPPING)
     {
-      graphene_rect_t bounds;
+      GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
+      GskRoundedRect rect;
 
-      if (gsk_path_get_bounds (path, &bounds))
+      if (svg_element_get_current_rect (shape, context->viewport, &rect))
         {
-          GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
-          GskFillRule clip_rule;
-
-          clip_rule = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_CLIP_RULE));
-          gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
-          gtk_snapshot_add_color (context->snapshot, &color, &bounds);
+          gtk_snapshot_push_rounded_clip (context->snapshot, &rect);
+          gtk_snapshot_add_color (context->snapshot, &color, &rect.bounds);
           gtk_snapshot_pop (context->snapshot);
         }
+      else
+        {
+          graphene_rect_t bounds;
+
+          path = svg_element_get_current_path (shape, context->viewport);
+
+          if (gsk_path_get_bounds (path, &bounds))
+            {
+              GskFillRule clip_rule;
+
+              clip_rule = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_CLIP_RULE));
+              svg_snapshot_push_fill (context->snapshot, path, clip_rule);
+              gtk_snapshot_add_color (context->snapshot, &color, &bounds);
+              gtk_snapshot_pop (context->snapshot);
+            }
+
+          gsk_path_unref (path);
+        }
+
     }
   else
     {
       SvgValue *paint = svg_element_get_current_value (shape, SVG_PROPERTY_FILL);
       double opacity = svg_number_get (svg_element_get_current_value (shape, SVG_PROPERTY_FILL_OPACITY), 1);
 
+      path = svg_element_get_current_path (shape, context->viewport);
+
       switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_PAINT_ORDER)))
         {
         case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-          fill_shape (shape, path, paint, opacity, context);
+          fill_shape (shape, paint, opacity, context);
+          stroke_shape (shape, path, context);
+          paint_markers (shape, path, context);
           break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
+        case PAINT_ORDER_FILL_MARKERS_STROKE:
+          fill_shape (shape, paint, opacity, context);
+          paint_markers (shape, path, context);
           stroke_shape (shape, path, context);
           break;
+        case PAINT_ORDER_STROKE_FILL_MARKERS:
+          stroke_shape (shape, path, context);
+          fill_shape (shape, paint, opacity, context);
+          paint_markers (shape, path, context);
+          break;
+        case PAINT_ORDER_STROKE_MARKERS_FILL:
+          stroke_shape (shape, path, context);
+          paint_markers (shape, path, context);
+          fill_shape (shape, paint, opacity, context);
+          break;
         case PAINT_ORDER_MARKERS_FILL_STROKE:
+          paint_markers (shape, path, context);
+          fill_shape (shape, paint, opacity, context);
+          stroke_shape (shape, path, context);
+          break;
         case PAINT_ORDER_MARKERS_STROKE_FILL:
           paint_markers (shape, path, context);
+          stroke_shape (shape, path, context);
+          fill_shape (shape, paint, opacity, context);
           break;
         default:
           g_assert_not_reached ();
         }
 
-      switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_PAINT_ORDER)))
-        {
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-          fill_shape (shape, path, paint, opacity, context);
-          break;
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-          stroke_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-          paint_markers (shape, path, context);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-
-      switch (svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_PAINT_ORDER)))
-        {
-        case PAINT_ORDER_MARKERS_STROKE_FILL:
-        case PAINT_ORDER_STROKE_MARKERS_FILL:
-          fill_shape (shape, path, paint, opacity, context);
-          break;
-        case PAINT_ORDER_MARKERS_FILL_STROKE:
-        case PAINT_ORDER_FILL_MARKERS_STROKE:
-          stroke_shape (shape, path, context);
-          break;
-        case PAINT_ORDER_STROKE_FILL_MARKERS:
-        case PAINT_ORDER_FILL_STROKE_MARKERS:
-          paint_markers (shape, path, context);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+      gsk_path_unref (path);
     }
-
-  gsk_path_unref (path);
 }
 
 static gboolean

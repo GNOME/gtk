@@ -98,6 +98,37 @@ path_is_rect (GskPathOperation *ops,
 #define equal4(a, b, c, d) (a == b && b == c && c == d)
 
 static const double quarter_circle_d = (M_SQRT2 - 1) * 4 / 3;
+static const double quarter_circle_eps = 0.05;
+
+static inline gboolean
+is_quarter_ellipse (const graphene_point_t *p1,
+                    const graphene_point_t *p2,
+                    const graphene_point_t *p3,
+                    const graphene_point_t *p4)
+{
+  return G_APPROX_VALUE (p2->x - p1->x, quarter_circle_d * (p4->x - p1->x), quarter_circle_eps) &&
+         G_APPROX_VALUE (p4->y - p3->y, quarter_circle_d * (p4->y - p1->y), quarter_circle_eps);
+}
+
+static inline GskCorner
+quarter_ellipse_corner (const graphene_point_t *p1,
+                        const graphene_point_t *p4)
+{
+  if (p1->x < p4->x)
+    {
+      if (p1->y < p4->y)
+        return GSK_CORNER_TOP_RIGHT;
+      else
+        return GSK_CORNER_BOTTOM_RIGHT;
+    }
+  else
+    {
+      if (p1->y < p4->y)
+        return GSK_CORNER_TOP_LEFT;
+      else
+        return GSK_CORNER_BOTTOM_LEFT;
+    }
+}
 
 static gboolean
 path_is_circle (GskPathOperation *ops,
@@ -175,14 +206,13 @@ path_is_circle (GskPathOperation *ops,
   if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), fabs (points[2].x - points[3].x), 0.01))
     return FALSE;
 
-  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, 0.01))
+  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, quarter_circle_eps))
     return FALSE;
 
-  gsk_rounded_rect_init_uniform (rect,
-                                 MIN (points[6].x, points[0].x),
-                                 MIN (points[9].y, points[3].y),
-                                 2 * r, 2 * r,
-                                 r);
+  gsk_rounded_rect_init_from_ellipse (rect,
+                                      MIN (points[6].x, points[0].x) + r,
+                                      MIN (points[9].y, points[3].y) + r,
+                                      r, r);
 
   return TRUE;
 }
@@ -227,8 +257,6 @@ path_is_precise_circle (GskPathOperation *ops,
                         size_t            n_points,
                         GskRoundedRect   *rect)
 {
-  float radius;
-
   if (n_ops != 6)
     return FALSE;
 
@@ -249,7 +277,7 @@ path_is_precise_circle (GskPathOperation *ops,
   if (!(equal3 (points[10].x, points[12].x, points[1].x) &&
         equal3 (points[1].y, points[3].y, points[4].y) &&
         equal3 (points[4].x, points[6].x, points[7].x) &&
-        equal3 (points[7].y, points[8].y, points[10].y)))
+        equal3 (points[7].y, points[9].y, points[10].y)))
     return FALSE;
 
   if (points[3].x != points[9].x || points[0].y != points[6].y)
@@ -261,12 +289,10 @@ path_is_precise_circle (GskPathOperation *ops,
   if (points[2].x != (float) M_SQRT1_2)
     return FALSE;
 
-  radius = points[0].x - points[3].x;
-
-  gsk_rounded_rect_init_uniform (rect,
-                                 points[3].x, points[3].y,
-                                 2 * radius, 2 * radius,
-                                 radius);
+  gsk_rounded_rect_init_from_ellipse (rect,
+                                      points[3].x, points[3].y,
+                                      points[0].x - points[3].x,
+                                      points[0].x - points[3].x);
 
   return TRUE;
 }
@@ -302,93 +328,33 @@ rounded_rect_from_points2 (graphene_point_t *points,
                       fabs (points[13].x - points[4].x),
                       fabs (points[8].y - points[1].y));
 
-  if (!(G_APPROX_VALUE (points[2].x - points[1].x, quarter_circle_d * (points[4].x - points[1].x), 0.01) &&
-        G_APPROX_VALUE (points[4].y - points[3].y, quarter_circle_d * (points[4].y - points[1].y), 0.01)))
+  if (!is_quarter_ellipse (&points[1], &points[2], &points[3], &points[4]))
     return FALSE;
 
-  if (points[1].x < points[4].x)
-    {
-      if (points[1].y < points[4].y)
-        c = GSK_CORNER_TOP_RIGHT;
-      else
-        c = GSK_CORNER_BOTTOM_RIGHT;
-    }
-  else
-    {
-      if (points[1].y < points[4].y)
-        c = GSK_CORNER_TOP_LEFT;
-      else
-        c = GSK_CORNER_BOTTOM_LEFT;
-    }
-
+  c = quarter_ellipse_corner (&points[1], &points[4]);
   rect->corner[c].width = fabs (points[4].x - points[1].x);
   rect->corner[c].height = fabs (points[4].y - points[1].y);
 
-  if (!(G_APPROX_VALUE (points[7].x - points[8].x, quarter_circle_d * (points[5].x - points[8].x), 0.01) &&
-        G_APPROX_VALUE (points[6].y - points[5].y, quarter_circle_d * (points[8].y - points[5].y), 0.01)))
+  if (!is_quarter_ellipse (&points[8], &points[7], &points[6], &points[5]))
     return FALSE;
 
-  if (points[8].x < points[5].x)
-    {
-      if (points[5].y < points[8].y)
-        c = GSK_CORNER_BOTTOM_RIGHT;
-      else
-        c = GSK_CORNER_TOP_RIGHT;
-    }
-  else
-    {
-      if (points[5].y < points[8].y)
-        c = GSK_CORNER_BOTTOM_LEFT;
-      else
-        c = GSK_CORNER_TOP_LEFT;
-    }
-
-  rect->corner[c].width = fabs (points[5].x - points[8].x);
+  c = quarter_ellipse_corner (&points[8], &points[5]);
+  rect->corner[c].width = fabs (points[8].x - points[5].x);
   rect->corner[c].height = fabs (points[8].y - points[5].y);
 
-  if (!(G_APPROX_VALUE (points[9].x - points[10].x, quarter_circle_d * (points[9].x - points[12].x), 0.01) &&
-        G_APPROX_VALUE (points[11].y - points[12].y, quarter_circle_d * (points[9].y - points[12].y), 0.01)))
+  if (!is_quarter_ellipse (&points[9], &points[10], &points[11], &points[12]))
     return FALSE;
 
-  if (points[12].x < points[9].x)
-    {
-      if (points[12].y < points[9].y)
-        c = GSK_CORNER_BOTTOM_LEFT;
-      else
-        c = GSK_CORNER_TOP_LEFT;
-    }
-  else
-    {
-      if (points[12].y < points[9].y)
-        c = GSK_CORNER_BOTTOM_RIGHT;
-      else
-        c = GSK_CORNER_TOP_RIGHT;
-    }
-
+  c = quarter_ellipse_corner (&points[9], &points[12]);
   rect->corner[c].width = fabs (points[9].x - points[12].x);
   rect->corner[c].height = fabs (points[9].y - points[12].y);
 
-  if (!(G_APPROX_VALUE (points[16].x - points[15].x, quarter_circle_d * (points[16].x - points[13].x), 0.01) &&
-        G_APPROX_VALUE (points[13].y - points[14].y, quarter_circle_d * (points[13].y - points[16].y), 0.01)))
+  if (!is_quarter_ellipse (&points[16], &points[15], &points[14], &points[13]))
     return FALSE;
 
-  if (points[13].x < points[16].x)
-    {
-      if (points[16].y < points[13].y)
-        c = GSK_CORNER_TOP_LEFT;
-      else
-        c = GSK_CORNER_BOTTOM_LEFT;
-    }
-  else
-    {
-      if (points[16].y < points[13].y)
-        c = GSK_CORNER_TOP_RIGHT;
-      else
-        c = GSK_CORNER_BOTTOM_RIGHT;
-    }
-
+  c = quarter_ellipse_corner (&points[16], &points[13]);
   rect->corner[c].width = fabs (points[16].x - points[13].x);
-  rect->corner[c].height = fabs (points[13].y - points[16].y);
+  rect->corner[c].height = fabs (points[16].y - points[13].y);
 
   return TRUE;
 }
@@ -623,10 +589,19 @@ path_is_rounded_rect2 (GskPathOperation *ops,
       ops[9] != GSK_PATH_CLOSE)
     return FALSE;
 
-  /* rotate the points to go from mclclclclz to mlclclclclz */
+  /* rotate the points to go from mclclclclz to mlclclclcz */
   pts[0] = points[15];
   memcpy (pts + 1, points, sizeof (graphene_point_t) * 16);
   pts[17] = pts[0];
+
+  if (rounded_rect_from_points (pts, rect))
+    return TRUE;
+
+  /* flip point order of points to go from mclclclclz to mlclclclcz */
+  for (unsigned int i = 0; i <= 16; i++)
+    pts[i] = points[16 - i];
+
+  pts[17] = points[0];
 
   return rounded_rect_from_points (pts, rect);
 }
@@ -749,54 +724,70 @@ gsk_path_classify (GskPath        *path,
   gboolean ccw;
   GskPathOperation ops[10];
   graphene_point_t points[18];
+  size_t n_contours;
   size_t n_ops;
   size_t n_points;
 
-  if (gsk_path_is_empty (path))
+  n_contours = gsk_path_get_n_contours (path);
+
+  if (n_contours == 0)
     return GSK_PATH_EMPTY;
 
-  if (gsk_path_get_n_contours (path) > 2 ||
-      (gsk_path_get_n_contours (path) == 2 &&
+  if (n_contours > 2 ||
+      (n_contours == 2 &&
        gsk_contour_get_standard_ops (gsk_path_get_contour (path, 1), 0, NULL) > 1))
     return GSK_PATH_GENERAL;
 
   contour = gsk_path_get_contour (path, 0);
 
   if (gsk_contour_get_rect (contour, &rect->bounds))
-    return GSK_PATH_RECT;
+    {
+      memset (rect->corner, 0, sizeof (graphene_size_t) * 4);
+      return GSK_PATH_RECT;
+    }
   else if (gsk_contour_get_rounded_rect (contour, rect))
-    return GSK_PATH_ROUNDED_RECT;
+    {
+      return GSK_PATH_ROUNDED_RECT;
+    }
   else if (gsk_contour_get_circle (contour, &center, &radius, &ccw))
     {
-      graphene_rect_init (&rect->bounds,
-                          center.x - radius,
-                          center.y - radius,
-                          2 * radius,
-                          2 * radius);
-      rect->corner[0].width = rect->corner[0].height = radius;
-      rect->corner[1].width = rect->corner[1].height = radius;
-      rect->corner[2].width = rect->corner[2].height = radius;
-      rect->corner[3].width = rect->corner[3].height = radius;
+      gsk_rounded_rect_init_from_ellipse (rect,
+                                          center.x, center.y,
+                                          radius, radius);
       return GSK_PATH_CIRCLE;
     }
+
   n_ops = gsk_contour_get_standard_ops (contour, G_N_ELEMENTS (ops), ops);
   n_points = gsk_contour_get_standard_points (contour, G_N_ELEMENTS (points), points);
 
+  if (n_ops < 5 || n_ops > 10)
+    return GSK_PATH_GENERAL;
+
   if (path_is_rect (ops, n_ops, points, n_points, &rect->bounds))
-    return GSK_PATH_RECT;
-  else if (path_is_precise_circle (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_CIRCLE;
-  else if (path_is_precise_rounded_rect (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_ROUNDED_RECT;
-  else if (path_is_circle (ops, n_ops, points, n_points, rect) ||
-           path_is_circle2 (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_APPROXIMATE_CIRCLE;
+    {
+      return GSK_PATH_RECT;
+    }
   else if (path_is_rounded_rect (ops, n_ops, points, n_points, rect) ||
            path_is_rounded_rect2 (ops, n_ops, points, n_points, rect) ||
            path_is_pill (ops, n_ops, points, n_points, rect) ||
            path_is_pill2 (ops, n_ops, points, n_points, rect) ||
            path_is_pill3 (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_APPROXIMATE_ROUNDED_RECT;
+    {
+      return GSK_PATH_APPROXIMATE_ROUNDED_RECT;
+    }
+  else if (path_is_circle (ops, n_ops, points, n_points, rect) ||
+           path_is_circle2 (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_APPROXIMATE_CIRCLE;
+    }
+  else if (path_is_precise_circle (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_CIRCLE;
+    }
+  else if (path_is_precise_rounded_rect (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_ROUNDED_RECT;
+    }
 
   return GSK_PATH_GENERAL;
 }

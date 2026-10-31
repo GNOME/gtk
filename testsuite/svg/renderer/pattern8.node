@@ -1,9 +1,10 @@
 clip {
   clip: 0 0 300 200;
   child: container {
-    fill {
+    rounded-clip {
+      clip: 25 25 250 150 / 125 / 75;
       child: repeat {
-        bounds: 0.707107 0 274.293 175;
+        bounds: 25 25 250 150;
         child-bounds: 0 0 50 50;
         child: transform {
           transform: scale(5);
@@ -31,19 +32,15 @@ clip {
           }
         }
       }
-      path: "path2" {
-        "M 275 100 O 275 175, 150 175, 0.70710676908493042\
-         O 25 175, 25 100, 0.70710676908493042 O 25 25, 150 25, 0.70710676908493042\
-         O 275 25, 275 100, 0.70710676908493042 Z";
-      }
-      fill-rule: winding;
     }
     stroke {
       child: color {
         bounds: -3.29289 -4 282.293 183;
         color: rgb(0,0,0);
       }
-      path: "path2";
+      path: "M 275 100 O 275 175, 150 175, 0.70710676908493042\
+             O 25 175, 25 100, 0.70710676908493042 O 25 25, 150 25, 0.70710676908493042\
+             O 275 25, 275 100, 0.70710676908493042 Z";
       line-width: 2;
       line-cap: butt;
       line-join: miter;

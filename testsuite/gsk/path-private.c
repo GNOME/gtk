@@ -236,7 +236,13 @@ classify_test_path (gconstpointer data)
   GskPathClassification result;
   GskRoundedRect rect;
   const char *kind[] = {
-    "empty", "rect", "rounded", "circle", "general"
+    [GSK_PATH_EMPTY] = "empty",
+    [GSK_PATH_RECT] = "rect",
+    [GSK_PATH_ROUNDED_RECT] = "rounded",
+    [GSK_PATH_CIRCLE] = "circle",
+    [GSK_PATH_APPROXIMATE_ROUNDED_RECT] = "approx rounded",
+    [GSK_PATH_APPROXIMATE_CIRCLE] = "approx circle",
+    [GSK_PATH_GENERAL] = "general"
   };
 
   if (g_test_verbose ())
@@ -466,6 +472,36 @@ static ClassifyTestData tests[] = {
     "  20 12"
     "Z"
     "M 20 12", GSK_PATH_APPROXIMATE_ROUNDED_RECT },
+  { "M 20 12"
+    "C 15.5820312 12"
+    "  12 15.7304688"
+    "  12 20.3320312"
+    "L 12 103.667969"
+    "C 12 108.269531"
+    "  15.5820312 112"
+    "  20 112"
+    "L 108 112"
+    "C 112.417969 112"
+    "  116 108.269531"
+    "  116 103.667969"
+    "L 116 20.3320312"
+    "C 116 15.7304688"
+    "  112.417969 12"
+    "  108 12"
+    "L 20 12"
+    "Z", GSK_PATH_APPROXIMATE_ROUNDED_RECT },
+  { "M 12 -94.03125 C 7.0283670425415039 -94.03125, 2.96875 -89.971633911132812, 2.96875 -85 L 2.96875 -14 C 2.96875 -9.0283670425415039, 7.0283670425415039 -4.96875, 12 -4.96875 L 84 -4.96875 C 88.971633911132812 -4.96875, 93.03125 -9.0283670425415039, 93.03125 -14 L 93.03125 -85 C 93.03125 -89.971633911132812, 88.971633911132812 -94.03125, 84 -94.03125 L 12 -94.03125 Z",
+    GSK_PATH_APPROXIMATE_ROUNDED_RECT },
+  { "M 12 -95.03125\
+             C 6.4889097213745117 -95.03125, 1.96875 -90.511093139648438, 1.96875 -85\
+             L 1.96875 -14\
+             C 1.96875 -8.4889097213745117, 6.4889097213745117 -3.96875, 12 -3.96875\
+             L 84 -3.96875\
+             C 89.511093139648438 -3.96875, 94.03125 -8.4889097213745117, 94.03125 -14\
+             L 94.03125 -85\
+             C 94.03125 -90.511093139648438, 89.511093139648438 -95.03125, 84 -95.03125\
+             L 12 -95.03125 Z",
+    GSK_PATH_APPROXIMATE_ROUNDED_RECT },
 };
 
 static void
@@ -473,13 +509,14 @@ add_classify_tests (void)
 {
   GskRoundedRect r;
 
-  unsigned int i;
+  unsigned int i = 1;
 
   for (i = 1; i <= G_N_ELEMENTS (tests); i++)
     add_classify_test (i, tests[i - 1].path_str, tests[i - 1].expected);
 
   add_classify_rect_test (i++, &GRAPHENE_RECT_INIT (0, 0, 10, 10), GSK_PATH_RECT);
   add_classify_circle_test (i++, &GRAPHENE_RECT_INIT (0, 0, 10, 10), GSK_PATH_CIRCLE);
+  add_classify_circle_test (i++, &GRAPHENE_RECT_INIT (10, 20, 30, 30), GSK_PATH_CIRCLE);
   add_classify_rounded_rect_test (i++, &RR (0, 0, 10, 10, 1), GSK_PATH_ROUNDED_RECT);
   add_classify_rounded_rect_test (i++, &RR (0, 0, 10, 10, 0), GSK_PATH_GENERAL);
 

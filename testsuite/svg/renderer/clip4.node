@@ -5,16 +5,9 @@ mask {
   }
   mask: rounded-clip {
     clip: 10 10 80 80 / 40;
-    child: transform {
-      transform: translate(0, 25) scale(0.5);
-      child: fill {
-        child: color {
-          bounds: 0 0 200 100;
-          color: rgb(0,0,0);
-        }
-        path: 0 0 200 100;
-        fill-rule: winding;
-      }
+    child: color {
+      bounds: 0 25 100 50;
+      color: rgb(0,0,0);
     }
   }
 }

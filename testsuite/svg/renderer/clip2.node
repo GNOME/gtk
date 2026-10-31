@@ -7,21 +7,13 @@ mask {
     }
   }
   mask: container {
-    fill {
-      child: color {
-        bounds: 0 0 50 50;
-        color: rgb(0,0,0);
-      }
-      path: 0 0 50 50;
-      fill-rule: winding;
+    color {
+      bounds: 0 0 50 50;
+      color: rgb(0,0,0);
     }
-    fill {
-      child: color {
-        bounds: 50 50 50 50;
-        color: rgb(0,0,0);
-      }
-      path: 50 50 50 50;
-      fill-rule: winding;
+    color {
+      bounds: 50 50 50 50;
+      color: rgb(0,0,0);
     }
   }
 }
