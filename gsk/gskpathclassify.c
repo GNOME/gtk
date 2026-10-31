@@ -178,11 +178,10 @@ path_is_circle (GskPathOperation *ops,
   if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, 0.01))
     return FALSE;
 
-  gsk_rounded_rect_init_uniform (rect,
-                                 MIN (points[6].x, points[0].x),
-                                 MIN (points[9].y, points[3].y),
-                                 2 * r, 2 * r,
-                                 r);
+  gsk_rounded_rect_init_from_ellipse (rect,
+                                      MIN (points[6].x, points[0].x) + r,
+                                      MIN (points[9].y, points[3].y) + r,
+                                      r, r);
 
   return TRUE;
 }
@@ -227,8 +226,6 @@ path_is_precise_circle (GskPathOperation *ops,
                         size_t            n_points,
                         GskRoundedRect   *rect)
 {
-  float radius;
-
   if (n_ops != 6)
     return FALSE;
 
@@ -261,12 +258,10 @@ path_is_precise_circle (GskPathOperation *ops,
   if (points[2].x != (float) M_SQRT1_2)
     return FALSE;
 
-  radius = points[0].x - points[3].x;
-
-  gsk_rounded_rect_init_uniform (rect,
-                                 points[3].x, points[3].y,
-                                 2 * radius, 2 * radius,
-                                 radius);
+  gsk_rounded_rect_init_from_ellipse (rect,
+                                      points[3].x, points[3].y,
+                                      points[0].x - points[3].x,
+                                      points[0].x - points[3].x);
 
   return TRUE;
 }
@@ -763,22 +758,22 @@ gsk_path_classify (GskPath        *path,
   contour = gsk_path_get_contour (path, 0);
 
   if (gsk_contour_get_rect (contour, &rect->bounds))
-    return GSK_PATH_RECT;
+    {
+      memset (rect->corner, 0, sizeof (graphene_size_t) * 4);
+      return GSK_PATH_RECT;
+    }
   else if (gsk_contour_get_rounded_rect (contour, rect))
-    return GSK_PATH_ROUNDED_RECT;
+    {
+      return GSK_PATH_ROUNDED_RECT;
+    }
   else if (gsk_contour_get_circle (contour, &center, &radius, &ccw))
     {
-      graphene_rect_init (&rect->bounds,
-                          center.x - radius,
-                          center.y - radius,
-                          2 * radius,
-                          2 * radius);
-      rect->corner[0].width = rect->corner[0].height = radius;
-      rect->corner[1].width = rect->corner[1].height = radius;
-      rect->corner[2].width = rect->corner[2].height = radius;
-      rect->corner[3].width = rect->corner[3].height = radius;
+      gsk_rounded_rect_init_from_ellipse (rect,
+                                          center.x, center.y,
+                                          radius, radius);
       return GSK_PATH_CIRCLE;
     }
+
   n_ops = gsk_contour_get_standard_ops (contour, G_N_ELEMENTS (ops), ops);
   n_points = gsk_contour_get_standard_points (contour, G_N_ELEMENTS (points), points);
 
