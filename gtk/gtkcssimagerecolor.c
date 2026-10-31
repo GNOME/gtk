@@ -233,7 +233,7 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
 
   colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (recolor->color);
 
-  for (unsigned int i = GTK_SYMBOLIC_COLOR_SUCCESS; i <= GTK_SYMBOLIC_COLOR_ACCENT; i++)
+  for (unsigned int i = GTK_SYMBOLIC_COLOR_ERROR; i <= GTK_SYMBOLIC_COLOR_ACCENT; i++)
     {
       const GtkCssValue *color = gtk_css_palette_value_get_color (recolor->palette, symbolic[i]);
       if (color)
