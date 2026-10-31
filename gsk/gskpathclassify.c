@@ -589,10 +589,19 @@ path_is_rounded_rect2 (GskPathOperation *ops,
       ops[9] != GSK_PATH_CLOSE)
     return FALSE;
 
-  /* rotate the points to go from mclclclclz to mlclclclclz */
+  /* rotate the points to go from mclclclclz to mlclclclcz */
   pts[0] = points[15];
   memcpy (pts + 1, points, sizeof (graphene_point_t) * 16);
   pts[17] = pts[0];
+
+  if (rounded_rect_from_points (pts, rect))
+    return TRUE;
+
+  /* flip point order of points to go from mclclclclz to mlclclclcz */
+  for (unsigned int i = 0; i <= 16; i++)
+    pts[i] = points[16 - i];
+
+  pts[17] = points[0];
 
   return rounded_rect_from_points (pts, rect);
 }
