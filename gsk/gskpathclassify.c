@@ -98,6 +98,37 @@ path_is_rect (GskPathOperation *ops,
 #define equal4(a, b, c, d) (a == b && b == c && c == d)
 
 static const double quarter_circle_d = (M_SQRT2 - 1) * 4 / 3;
+static const double quarter_circle_eps = 0.01;
+
+static inline gboolean
+is_quarter_ellipse (const graphene_point_t *p1,
+                    const graphene_point_t *p2,
+                    const graphene_point_t *p3,
+                    const graphene_point_t *p4)
+{
+  return G_APPROX_VALUE (p2->x - p1->x, quarter_circle_d * (p4->x - p1->x), quarter_circle_eps) &&
+         G_APPROX_VALUE (p4->y - p3->y, quarter_circle_d * (p4->y - p1->y), quarter_circle_eps);
+}
+
+static inline GskCorner
+quarter_ellipse_corner (const graphene_point_t *p1,
+                        const graphene_point_t *p4)
+{
+  if (p1->x < p4->x)
+    {
+      if (p1->y < p4->y)
+        return GSK_CORNER_TOP_RIGHT;
+      else
+        return GSK_CORNER_BOTTOM_RIGHT;
+    }
+  else
+    {
+      if (p1->y < p4->y)
+        return GSK_CORNER_TOP_LEFT;
+      else
+        return GSK_CORNER_BOTTOM_LEFT;
+    }
+}
 
 static gboolean
 path_is_circle (GskPathOperation *ops,
@@ -175,7 +206,7 @@ path_is_circle (GskPathOperation *ops,
   if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), fabs (points[2].x - points[3].x), 0.01))
     return FALSE;
 
-  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, 0.01))
+  if (!G_APPROX_VALUE (fabs (points[0].y - points[1].y), quarter_circle_d * r, quarter_circle_eps))
     return FALSE;
 
   gsk_rounded_rect_init_from_ellipse (rect,
@@ -297,93 +328,33 @@ rounded_rect_from_points2 (graphene_point_t *points,
                       fabs (points[13].x - points[4].x),
                       fabs (points[8].y - points[1].y));
 
-  if (!(G_APPROX_VALUE (points[2].x - points[1].x, quarter_circle_d * (points[4].x - points[1].x), 0.01) &&
-        G_APPROX_VALUE (points[4].y - points[3].y, quarter_circle_d * (points[4].y - points[1].y), 0.01)))
+  if (!is_quarter_ellipse (&points[1], &points[2], &points[3], &points[4]))
     return FALSE;
 
-  if (points[1].x < points[4].x)
-    {
-      if (points[1].y < points[4].y)
-        c = GSK_CORNER_TOP_RIGHT;
-      else
-        c = GSK_CORNER_BOTTOM_RIGHT;
-    }
-  else
-    {
-      if (points[1].y < points[4].y)
-        c = GSK_CORNER_TOP_LEFT;
-      else
-        c = GSK_CORNER_BOTTOM_LEFT;
-    }
-
+  c = quarter_ellipse_corner (&points[1], &points[4]);
   rect->corner[c].width = fabs (points[4].x - points[1].x);
   rect->corner[c].height = fabs (points[4].y - points[1].y);
 
-  if (!(G_APPROX_VALUE (points[7].x - points[8].x, quarter_circle_d * (points[5].x - points[8].x), 0.01) &&
-        G_APPROX_VALUE (points[6].y - points[5].y, quarter_circle_d * (points[8].y - points[5].y), 0.01)))
+  if (!is_quarter_ellipse (&points[8], &points[7], &points[6], &points[5]))
     return FALSE;
 
-  if (points[8].x < points[5].x)
-    {
-      if (points[5].y < points[8].y)
-        c = GSK_CORNER_BOTTOM_RIGHT;
-      else
-        c = GSK_CORNER_TOP_RIGHT;
-    }
-  else
-    {
-      if (points[5].y < points[8].y)
-        c = GSK_CORNER_BOTTOM_LEFT;
-      else
-        c = GSK_CORNER_TOP_LEFT;
-    }
-
-  rect->corner[c].width = fabs (points[5].x - points[8].x);
+  c = quarter_ellipse_corner (&points[8], &points[5]);
+  rect->corner[c].width = fabs (points[8].x - points[5].x);
   rect->corner[c].height = fabs (points[8].y - points[5].y);
 
-  if (!(G_APPROX_VALUE (points[9].x - points[10].x, quarter_circle_d * (points[9].x - points[12].x), 0.01) &&
-        G_APPROX_VALUE (points[11].y - points[12].y, quarter_circle_d * (points[9].y - points[12].y), 0.01)))
+  if (!is_quarter_ellipse (&points[9], &points[10], &points[11], &points[12]))
     return FALSE;
 
-  if (points[12].x < points[9].x)
-    {
-      if (points[12].y < points[9].y)
-        c = GSK_CORNER_BOTTOM_LEFT;
-      else
-        c = GSK_CORNER_TOP_LEFT;
-    }
-  else
-    {
-      if (points[12].y < points[9].y)
-        c = GSK_CORNER_BOTTOM_RIGHT;
-      else
-        c = GSK_CORNER_TOP_RIGHT;
-    }
-
+  c = quarter_ellipse_corner (&points[9], &points[12]);
   rect->corner[c].width = fabs (points[9].x - points[12].x);
   rect->corner[c].height = fabs (points[9].y - points[12].y);
 
-  if (!(G_APPROX_VALUE (points[16].x - points[15].x, quarter_circle_d * (points[16].x - points[13].x), 0.01) &&
-        G_APPROX_VALUE (points[13].y - points[14].y, quarter_circle_d * (points[13].y - points[16].y), 0.01)))
+  if (!is_quarter_ellipse (&points[16], &points[15], &points[14], &points[13]))
     return FALSE;
 
-  if (points[13].x < points[16].x)
-    {
-      if (points[16].y < points[13].y)
-        c = GSK_CORNER_TOP_LEFT;
-      else
-        c = GSK_CORNER_BOTTOM_LEFT;
-    }
-  else
-    {
-      if (points[16].y < points[13].y)
-        c = GSK_CORNER_TOP_RIGHT;
-      else
-        c = GSK_CORNER_BOTTOM_RIGHT;
-    }
-
+  c = quarter_ellipse_corner (&points[16], &points[13]);
   rect->corner[c].width = fabs (points[16].x - points[13].x);
-  rect->corner[c].height = fabs (points[13].y - points[16].y);
+  rect->corner[c].height = fabs (points[16].y - points[13].y);
 
   return TRUE;
 }
