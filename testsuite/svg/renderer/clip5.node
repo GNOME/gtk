@@ -74,18 +74,11 @@ transform {
       mask: container {
         rounded-clip {
           clip: 70 120 100 100 / 50;
-          child: transform {
-            transform: translate(20, 70);
-            child: fill {
-              child: color {
-                bounds: 100 100 100 100;
-                color: rgb(0,0,0);
-              }
-              path: circle {
-                center: 150 150;
-                radius: 50;
-              }
-              fill-rule: winding;
+          child: rounded-clip {
+            clip: 120 170 100 100 / 50;
+            child: color {
+              bounds: 120 170 100 100;
+              color: rgb(0,0,0);
             }
           }
         }
@@ -184,18 +177,11 @@ transform {
       mask: rounded-clip {
         clip: 300 120 100 100 / 50;
         child: container {
-          transform {
-            transform: translate(250, 70);
-            child: fill {
-              child: color {
-                bounds: 100 100 100 100;
-                color: rgb(0,0,0);
-              }
-              path: circle {
-                center: 150 150;
-                radius: 50;
-              }
-              fill-rule: winding;
+          rounded-clip {
+            clip: 350 170 100 100 / 50;
+            child: color {
+              bounds: 350 170 100 100;
+              color: rgb(0,0,0);
             }
           }
           transform {

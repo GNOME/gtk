@@ -3,18 +3,11 @@ mask {
     bounds: 10 10 80 80;
     color: rgb(255,0,0);
   }
-  mask: transform {
-    transform: translate(10, 10) scale(80);
-    child: fill {
-      child: color {
-        bounds: 0 0 1 1;
-        color: rgb(0,0,0);
-      }
-      path: circle {
-        center: 0.5 0.5;
-        radius: 0.5;
-      }
-      fill-rule: winding;
+  mask: rounded-clip {
+    clip: 10 10 80 80 / 40;
+    child: color {
+      bounds: 10 10 80 80;
+      color: rgb(0,0,0);
     }
   }
 }
@@ -24,21 +17,13 @@ mask {
     color: rgb(0,128,0);
   }
   mask: container {
-    fill {
-      child: color {
-        bounds: 120 10 40 80;
-        color: rgb(0,0,0);
-      }
-      path: 120 10 40 80;
-      fill-rule: winding;
+    color {
+      bounds: 120 10 40 80;
+      color: rgb(0,0,0);
     }
-    fill {
-      child: color {
-        bounds: 170 10 40 80;
-        color: rgb(0,0,0);
-      }
-      path: 170 10 40 80;
-      fill-rule: winding;
+    color {
+      bounds: 170 10 40 80;
+      color: rgb(0,0,0);
     }
   }
 }
@@ -49,13 +34,9 @@ mask {
   }
   mask: transform {
     transform: rotate(15);
-    child: fill {
-      child: color {
-        bounds: 10 110 80 80;
-        color: rgb(0,0,0);
-      }
-      path: 10 110 80 80;
-      fill-rule: winding;
+    child: color {
+      bounds: 10 110 80 80;
+      color: rgb(0,0,0);
     }
   }
 }

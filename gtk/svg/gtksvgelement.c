@@ -1125,12 +1125,22 @@ svg_element_get_current_bounds (SvgElement            *element,
 
   switch (element->type)
     {
-    case SVG_ELEMENT_LINE:
-    case SVG_ELEMENT_POLYLINE:
-    case SVG_ELEMENT_POLYGON:
     case SVG_ELEMENT_RECT:
     case SVG_ELEMENT_CIRCLE:
     case SVG_ELEMENT_ELLIPSE:
+      if (!element->valid_bounds)
+        {
+          GskRoundedRect rect;
+          if (svg_element_get_current_rect (element, viewport, &rect))
+            {
+              element->bounds = rect.bounds;
+              element->valid_bounds = TRUE;
+            }
+        }
+      G_GNUC_FALLTHROUGH;
+    case SVG_ELEMENT_LINE:
+    case SVG_ELEMENT_POLYLINE:
+    case SVG_ELEMENT_POLYGON:
     case SVG_ELEMENT_PATH:
       if (!element->valid_bounds)
         {

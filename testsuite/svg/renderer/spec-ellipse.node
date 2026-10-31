@@ -13,18 +13,11 @@ clip {
         line-cap: butt;
         line-join: miter;
       }
-      transform {
-        transform: translate(300, 200);
-        child: fill {
-          child: color {
-            bounds: -250 -100 500 200;
-            color: rgb(255,0,0);
-          }
-          path: "M 250 0 O 250 100, 0 100, 0.70710676908493042\
-                 O -250 100, -250 0, 0.70710676908493042\
-                 O -250 -100, 0 -100, 0.70710676908493042\
-                 O 250 -100, 250 0, 0.70710676908493042 Z";
-          fill-rule: winding;
+      rounded-clip {
+        clip: 50 100 500 200 / 250 / 100;
+        child: color {
+          bounds: 50 100 500 200;
+          color: rgb(255,0,0);
         }
       }
       transform {

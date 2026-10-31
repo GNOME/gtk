@@ -6,16 +6,9 @@ mask {
       color: rgb(255,0,136);
     }
   }
-  mask: transform {
-    transform: translate(0, 12.5) scale(0.208333) translate(10, 10) scale(430, 80);
-    child: fill {
-      child: color {
-        bounds: 0.25 0.5 0.6 1;
-        color: rgb(0,0,0);
-      }
-      path: 0.25 0.5 0.6 1;
-      fill-rule: winding;
-    }
+  mask: color {
+    bounds: 24.4792 22.9167 53.75 16.6667;
+    color: rgb(0,0,0);
   }
 }
 transform {
