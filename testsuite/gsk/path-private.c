@@ -479,13 +479,14 @@ add_classify_tests (void)
 {
   GskRoundedRect r;
 
-  unsigned int i;
+  unsigned int i = 1;
 
   for (i = 1; i <= G_N_ELEMENTS (tests); i++)
     add_classify_test (i, tests[i - 1].path_str, tests[i - 1].expected);
 
   add_classify_rect_test (i++, &GRAPHENE_RECT_INIT (0, 0, 10, 10), GSK_PATH_RECT);
   add_classify_circle_test (i++, &GRAPHENE_RECT_INIT (0, 0, 10, 10), GSK_PATH_CIRCLE);
+  add_classify_circle_test (i++, &GRAPHENE_RECT_INIT (10, 20, 30, 30), GSK_PATH_CIRCLE);
   add_classify_rounded_rect_test (i++, &RR (0, 0, 10, 10, 1), GSK_PATH_ROUNDED_RECT);
   add_classify_rounded_rect_test (i++, &RR (0, 0, 10, 10, 0), GSK_PATH_GENERAL);
 

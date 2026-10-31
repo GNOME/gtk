@@ -277,7 +277,7 @@ path_is_precise_circle (GskPathOperation *ops,
   if (!(equal3 (points[10].x, points[12].x, points[1].x) &&
         equal3 (points[1].y, points[3].y, points[4].y) &&
         equal3 (points[4].x, points[6].x, points[7].x) &&
-        equal3 (points[7].y, points[8].y, points[10].y)))
+        equal3 (points[7].y, points[9].y, points[10].y)))
     return FALSE;
 
   if (points[3].x != points[9].x || points[0].y != points[6].y)
