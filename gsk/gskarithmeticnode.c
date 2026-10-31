@@ -209,8 +209,12 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
         }
     }
 
+  cairo_surface_mark_dirty (first_image);
+
   cairo_surface_unmap_image (first_surface, first_image);
   cairo_surface_unmap_image (second_surface, second_image);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (first_surface);
 
   cairo_set_source (cr, first_pattern);
 

@@ -2684,7 +2684,23 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
   if (first_image == NULL)
     {
       if (second_image == NULL)
-        return;
+        {
+          float k3 = CLAMP (k[3], 0, 1);
+          GdkColorState *acs = gsk_arithmetic_node_get_color_state (node);
+
+          if (k3 <= 0)
+            return;
+
+          gsk_gpu_color_op (self,
+                            self->ccs,
+                            GDK_IS_DEFAULT_COLOR_STATE (acs) ? acs : self->ccs,
+                            &clip_bounds,
+                            &(GdkColor) {
+                                .color_state = acs,
+                                .values = { k3, k3, k3, k3 }
+                            });
+          return;
+        }
 
       first_image = g_object_ref (second_image);
       first_rect = clip_bounds;

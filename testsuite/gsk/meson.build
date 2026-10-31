@@ -21,6 +21,7 @@ serialize = executable('serialize',
 compare_render_tests = [
   'arithmetic-bounds',
   'arithmetic-bounds-k3',
+  'arithmetic-only-k3',
   'big-box-glyph',
   'big-checkerboard',
   'big-checkerboard-scaled-down',
