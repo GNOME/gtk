@@ -1117,6 +1117,14 @@ test_model_button_action_teardown (void)
 }
 
 static void
+target_destroyed (gpointer data)
+{
+  guint *destroyed = data;
+
+  (*destroyed)++;
+}
+
+static void
 test_bindings (void)
 {
   GtkActionKey *key = gtk_action_key_new ("win.mode");
@@ -1509,6 +1517,31 @@ test_menu_tracker_node_context (void)
   g_clear_object (&group);
   g_clear_pointer (&open_key, gtk_action_key_unref);
   g_clear_pointer (&run_key, gtk_action_key_unref);
+}
+
+static void
+test_menu_tracker_target_ownership (void)
+{
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkActionNode *node = gtk_action_tree_add_synthetic (tree, tree);
+  GMenu *menu = g_menu_new ();
+  GMenuItem *item = g_menu_item_new ("Test", NULL);
+  GtkMenuTrackerItem *tracked;
+  guint destroyed = 0;
+
+  g_menu_item_set_action_and_target_value (item, "win.test",
+                                           g_variant_new_from_data (G_VARIANT_TYPE_STRING,
+                                                                    "a", 2, TRUE,
+                                                                    target_destroyed, &destroyed));
+  g_menu_append_item (menu, item);
+  tracked = _gtk_menu_tracker_item_new (node, G_MENU_MODEL (menu), 0, FALSE, NULL, FALSE);
+  g_object_unref (item);
+  g_object_unref (menu);
+  g_assert_cmpuint (destroyed, ==, 0);
+
+  g_object_unref (tracked);
+  g_assert_cmpuint (destroyed, ==, 1);
+  gtk_action_tree_free (tree);
 }
 
 static void
@@ -2114,6 +2147,7 @@ main (int   argc,
   g_test_add_func ("/action-tree/resolutions/reentrant-node-removal",
                    test_resolution_reentrant_node_removal);
   g_test_add_func ("/action-tree/consumers/menu-node-context", test_menu_tracker_node_context);
+  g_test_add_func ("/action-tree/consumers/menu-target-ownership", test_menu_tracker_target_ownership);
   g_test_add_func ("/action-tree/consumers/inspector-object-swap", test_inspector_object_swap);
   g_test_add_func ("/action-tree/consumers/inspector-inherited-actions",
                    test_inspector_inherited_actions);

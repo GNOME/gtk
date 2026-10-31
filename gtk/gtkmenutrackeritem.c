@@ -424,8 +424,7 @@ _gtk_menu_tracker_item_new (GtkActionNode       *action_node,
         {
           self->action_subscription = gtk_action_node_subscribe (self->action_node,
                                      self->action_key,
-                                     self->action_target != NULL
-                                       ? g_variant_ref (self->action_target) : NULL,
+                                     self->action_target,
                                      (GTK_ACTION_INTEREST_PRESENT |
                                       GTK_ACTION_INTEREST_ENABLED |
                                       GTK_ACTION_INTEREST_RAW_STATE |
