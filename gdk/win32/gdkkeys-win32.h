@@ -93,6 +93,9 @@ typedef struct
   char          *layout_name;
   char          *profile_id;
 
+  /* KBDTABLES.fLocaleFlags (LOWORD: KLLF_*, HIWORD: table version) */
+  DWORD          locale_flags;
+
 } GdkWin32KeymapLayoutInfo;
 
 /* Some keyboard driver constants
@@ -113,6 +116,9 @@ typedef struct
 
 /* */
 #define SHFT_INVALID 0x0F
+
+/* Layout attributes: KBDTABLES.fLocaleFlags (LOWORD) */
+#define KLLF_ALTGR     0x0001
 
 /* Char table constants */
 #define WCH_NONE 0xF000
@@ -165,7 +171,7 @@ typedef struct
                                      const BYTE                keystate[256]);
   BYTE      (*modbits_to_level)     (GdkWin32KeymapLayoutInfo *info,
                                      BYTE                      modbits);
-  WCHAR     (*vk_to_char_fuzzy)     (GdkWin32KeymapLayoutInfo *info,
+  gunichar  (*vk_to_char_fuzzy)     (GdkWin32KeymapLayoutInfo *info,
                                      BYTE                      mod_bits,
                                      BYTE                      lock_bits,
                                      BYTE                     *consumed_mod_bits,

@@ -162,7 +162,7 @@ modbits_to_level (GdkWin32Keymap           *keymap,
   return keymap->gdkwin32_keymap_impl->modbits_to_level (info, modbits);
 }
 
-static WCHAR
+static gunichar
 vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
                   GdkWin32KeymapLayoutInfo *info,
                   BYTE                      mod_bits,
@@ -739,7 +739,9 @@ clear_keyboard_layout_info (gpointer data)
   map (GDK_KEY_asciicircum,          /* 0x05e */ GDK_KEY_dead_circumflex)     \
   map (GDK_KEY_grave,                /* 0x060 */ GDK_KEY_dead_grave)          \
   map (GDK_KEY_asciitilde,           /* 0x07e */ GDK_KEY_dead_tilde)          \
+  map (GDK_KEY_currency,             /* 0x0a4 */ GDK_KEY_dead_currency)       \
   map (GDK_KEY_diaeresis,            /* 0x0a8 */ GDK_KEY_dead_diaeresis)      \
+  map (GDK_KEY_macron,               /* 0x0af */ GDK_KEY_dead_macron)         \
   map (GDK_KEY_degree,               /* 0x0b0 */ GDK_KEY_dead_abovering)      \
   map (GDK_KEY_acute,                /* 0x0b4 */ GDK_KEY_dead_acute)          \
   map (GDK_KEY_periodcentered,       /* 0x0b7 */ GDK_KEY_dead_abovedot)       \
@@ -749,7 +751,13 @@ clear_keyboard_layout_info (gpointer data)
   map (GDK_KEY_caron,                /* 0x1b7 */ GDK_KEY_dead_caron)          \
   map (GDK_KEY_doubleacute,          /* 0x1bd */ GDK_KEY_dead_doubleacute)    \
   map (GDK_KEY_abovedot,             /* 0x1ff */ GDK_KEY_dead_abovedot)       \
-  map (0x1000384,              /* Greek tonos */ GDK_KEY_dead_acute)          \
+  map (0x10002c6, /* U+02C6 modifier circumflex */ GDK_KEY_dead_circumflex)   \
+  map (0x10002cd, /* U+02CD modifier low macron */ GDK_KEY_dead_belowmacron)  \
+  map (0x10002da, /* U+02DA ring above */          GDK_KEY_dead_abovering)    \
+  map (0x10002dc, /* U+02DC small tilde */         GDK_KEY_dead_tilde)        \
+  map (0x1000384, /* U+0384 Greek tonos */         GDK_KEY_dead_acute)        \
+  map (0x1001fbf, /* U+1FBF Greek psili */         GDK_KEY_dead_psili)        \
+  map (0x1001ffe, /* U+1FFE Greek dasia */         GDK_KEY_dead_dasia)        \
   map (GDK_KEY_Greek_accentdieresis, /* 0x7ae */ GDK_KEY_Greek_accentdieresis)
 
 
@@ -777,6 +785,10 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
       return (mod_bits & KBDSHIFT) ? GDK_KEY_ISO_Left_Tab : GDK_KEY_Tab;
     }
 
+  /* The right Alt key of a layout with an AltGr key is not an Alt key */
+  if (vk == VK_RMENU && (info->locale_flags & KLLF_ALTGR))
+    return GDK_KEY_ISO_Level3_Shift;
+
   /* Handle other special keys */
   switch (vk)
     {
@@ -797,7 +809,8 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
   c = vk_to_char_fuzzy (keymap, info, mod_bits, lock_bits,
                         consumed_mod_bits, &is_dead, vk);
 
-  if (c == WCH_NONE)
+  /* A ligature of several code points has no keyval, but it did use the level */
+  if (c == WCH_NONE || c == WCH_LGTR)
     return GDK_KEY_VoidSymbol;
 
   sym = gdk_unicode_to_keyval (c);
@@ -848,6 +861,11 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
 
   /* Try converting to Unicode and back */
   c = gdk_keyval_to_unicode (sym);
+
+  /* Keyvals without a Unicode value would otherwise match the layout's
+   * NUL entry (Ctrl+Shift+2 and the like). */
+  if (c == 0)
+    return -1;
 
   index = -1;
   if (g_hash_table_lookup_extended (info->reverse_lookup_table,

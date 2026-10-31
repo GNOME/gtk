@@ -151,6 +151,15 @@ DEFINE_KBD_LONG_POINTER (DEADKEY);
 
 typedef struct
 {
+  BYTE                        VirtualKey;
+  WORD                        ModificationNumber;
+  WCHAR                       wch[1];
+} LIGATURE1, *PLIGATURE1;
+
+DEFINE_KBD_LONG_POINTER (LIGATURE1);
+
+typedef struct
+{
   KLPMODIFIERS                pCharModifiers;
   KLPVK_TO_WCHAR_TABLE        pVkToWcharTable;
   KLPDEADKEY                  pDeadKey;
@@ -164,7 +173,7 @@ typedef struct
   DWORD                       fLocaleFlags;
   BYTE                        nLgMaxd;
   BYTE                        cbLgEntry;
-  KLPVOID                     pLigature;
+  KLPLIGATURE1                pLigature;
 } KBDTABLES, *PKBDTABLES;
 
 DEFINE_KBD_LONG_POINTER (KBDTABLES);
@@ -209,6 +218,53 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
   return modifiers->ModNumber[modbits];
 }
 
+/*
+ * ligature_char:
+ *
+ * Look up the ligature of a key at a level in the layout's ligature table.
+ * Returns the character if the ligature is a single code point (possibly a
+ * surrogate pair), WCH_LGTR if it is several code points, and WCH_NONE if the
+ * layout has no such ligature.
+ */
+static gunichar
+ligature_char (GdkWin32KeymapLayoutInfo *info,
+               BYTE                      vk,
+               int                       level)
+{
+  PKBDTABLES tables = (PKBDTABLES) info->tables;
+  PLIGATURE1 lig;
+
+  if (tables == NULL)
+    return WCH_NONE;
+
+  lig = tables->pLigature.ptr;
+
+  /* The ligature table is only valid from table version 1 on */
+  if (HIWORD (tables->fLocaleFlags) == 0 || lig == NULL)
+    return WCH_NONE;
+
+  for (; lig->VirtualKey != 0; lig = (PLIGATURE1) ((PBYTE) lig + tables->cbLgEntry))
+    {
+      int len = 0;
+
+      if (lig->VirtualKey != vk || lig->ModificationNumber != level)
+        continue;
+
+      while (len < tables->nLgMaxd && lig->wch[len] != WCH_NONE)
+        len++;
+
+      if (len == 1)
+        return lig->wch[0];
+
+      if (len == 2 && IS_SURROGATE_PAIR (lig->wch[0], lig->wch[1]))
+        return 0x10000 + ((lig->wch[0] - 0xD800) << 10) + (lig->wch[1] - 0xDC00);
+
+      return WCH_LGTR;
+    }
+
+  return WCH_NONE;
+}
+
 #define POPCOUNT(b) (!!(b & 0x01) + !!(b & 0x02) + !!(b & 0x04) + !!(b & 0x08) + \
                      !!(b & 0x10) + !!(b & 0x20) + !!(b & 0x40) + !!(b & 0x80))
 
@@ -245,7 +301,7 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
  * If the key combination results in a dead key, `is_dead` will be set to TRUE,
  * otherwise it will be set to FALSE.
  */
-static WCHAR
+static gunichar
 vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
                   BYTE                      mod_bits,
                   BYTE                      lock_bits,
@@ -291,8 +347,7 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
 
   if (entry->VirtualKey == vk)
     {
-      gboolean have_sgcaps    = FALSE;
-      WCHAR    best_char      = WCH_NONE;
+      gunichar best_char      = WCH_NONE;
       BYTE     best_modifiers = 0;
       int      best_score     = -1;
       gboolean best_is_dead   = FALSE;
@@ -306,22 +361,15 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           /* Ignore capslock if any modifiers other than shift are pressed.
            * E.g. on the German layout, CapsLock + AltGr + q is the same as
            * AltGr + q ('@'), but NOT the same as Shift + AltGr + q (not mapped). */
-          !(mod_bits & ~KBDSHIFT) &&
+          !(mod_bits & ~(KBDSHIFT | KBDALT)) &&
           (lock_bits & CAPLOK))
         mod_bits ^= KBDSHIFT;
 
       /* Key supporting combination of capslock + altgr */
       if ((entry->Attributes & CAPLOKALTGR) &&
-          (mod_bits & KBDALTGR) &&
+          (mod_bits & KBDALTGR) == KBDALTGR &&
           (lock_bits & CAPLOK))
         mod_bits ^= KBDSHIFT;
-
-      /* In the Swiss German layout, CapsLock + key is different from Shift + key
-       * for some keys. For such keys, the characters for active capslock are
-       * in the next entry. */
-      if ((entry->Attributes & SGCAPS) &&
-          (lock_bits & CAPLOK))
-        have_sgcaps = TRUE;
 
       /* I'm not totally sure how kanalok behaves, for now I assume that there
        * aren't any special cases. */
@@ -329,12 +377,24 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           (lock_bits & KANALOK))
         mod_bits ^= KBDKANA;
 
+      /* In the Swiss German layout, CapsLock + key is different from Shift + key
+       * for some keys. For such keys, the whole next entry is used while
+       * capslock is active, but not when Ctrl is down (like CAPLOK, Alt is
+       * ignored). */
+      if ((entry->Attributes & SGCAPS) &&
+          !(mod_bits & ~(KBDSHIFT | KBDALT)) &&
+          (lock_bits & CAPLOK))
+        {
+          entry = (PVK_TO_WCHARS) ((PBYTE) entry + entry_size);
+          entry_index++;
+        }
+
       /* We try to find the entry with the most matching modifiers */
       for (level = 0; level < n_levels; ++level)
         {
           BYTE     candidate_modbits = info->level_to_modbits[level];
           gboolean candidate_is_dead = FALSE;
-          WCHAR    c;
+          gunichar c;
           int      score;
 
           if (candidate_modbits & ~mod_bits)
@@ -349,9 +409,9 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
             continue;
 
           c = entry->wch[level];
-          if (c == WCH_DEAD || have_sgcaps)
+          if (c == WCH_DEAD)
             {
-              /* Next entry contains the undead/capslocked keys */
+              /* Next entry contains the undead keys */
               PVK_TO_WCHARS next_entry;
               next_entry = (PVK_TO_WCHARS) ((PBYTE) wch_table->pVkToWchars.ptr
                                             + entry_size * (entry_index + 1));
@@ -359,7 +419,21 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
               candidate_is_dead = TRUE;
             }
 
-          if (c == WCH_DEAD || c == WCH_LGTR || c == WCH_NONE)
+          /* A ligature that is a single code point acts as a plain character
+           * (the code point itself). Several code
+           * points can't be expressed by one keyval, but the level still has
+           * a meaning (and consumes its modifiers), so keep WCH_LGTR.
+           * Not while Ctrl is held without Alt: Ctrl levels are ignored (see
+           * above), so a shortcut like <Ctrl><Shift>4 has to find the key by
+           * the lower level instead of getting no keyval at all. */
+          if (c == WCH_LGTR)
+            {
+              c = ligature_char (info, entry->VirtualKey, level);
+              if (c == WCH_LGTR && (mod_bits & KBDCTRL) && !(mod_bits & KBDALT))
+                continue;
+            }
+
+          if (c == WCH_DEAD || c == WCH_NONE)
             continue;
 
           score = POPCOUNT (candidate_modbits & mod_bits);
@@ -416,6 +490,7 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
     }
 
   info->max_modbit_value = modifiers->wMaxModBits;
+  info->locale_flags = tables->fLocaleFlags;
 
   /* For convenience, we add 256 identity-mapped entries corresponding to the VKs.
    * This allows us to return a pointer to them from the `gdk_keysym_to_key_entry`
@@ -481,12 +556,19 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
           for (level = 0; level < n_levels; ++level)
             {
               GdkWin32KeymapKeyEntry key_entry = {0};
-              WCHAR                  c         = entry->wch[level];
+              gunichar               c         = entry->wch[level];
               int                    inserted_idx;
               gintptr                next_idx;
 
               key_entry.vk       = entry->VirtualKey;
               key_entry.mod_bits = info->level_to_modbits[level];
+
+              if (c == WCH_LGTR)
+                {
+                  c = ligature_char (info, entry->VirtualKey, level);
+                  if (c == WCH_NONE)
+                    c = WCH_LGTR;
+                }
 
               /* There can be multiple combinations that produce the same character.
                * We store all of them in a linked list.
