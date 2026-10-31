@@ -120,6 +120,29 @@ test_invocation_key (void)
 }
 
 static void
+test_invocation_key_non_normal_target (void)
+{
+  const guint8 data[] = { 2 };
+  GtkActionKey *action = gtk_action_key_new ("app.open");
+  GtkActionInvocationKey *a;
+  GtkActionInvocationKey *b;
+  GVariant *target;
+
+  target = g_variant_new_from_data (G_VARIANT_TYPE ("(b)"), data, sizeof data,
+                                    FALSE, NULL, NULL);
+  g_assert_false (g_variant_is_normal_form (target));
+  a = gtk_action_invocation_key_new (action, target);
+  b = gtk_action_invocation_key_new (action, g_variant_new ("(b)", TRUE));
+
+  g_assert_true (gtk_action_invocation_key_equal (a, b));
+  g_assert_cmpuint (gtk_action_invocation_key_hash (a), ==, gtk_action_invocation_key_hash (b));
+
+  gtk_action_invocation_key_unref (a);
+  gtk_action_invocation_key_unref (b);
+  gtk_action_key_unref (action);
+}
+
+static void
 test_node_structured_accels (void)
 {
   GtkActionKey *key = gtk_action_key_new ("app.open");
@@ -216,6 +239,7 @@ main (int   argc,
   g_test_add_func ("/action-key/canonical", test_action_key);
   g_test_add_func ("/action-key/invalid", test_action_key_invalid);
   g_test_add_func ("/action-key/invocation", test_invocation_key);
+  g_test_add_func ("/action-key/invocation-non-normal-target", test_invocation_key_non_normal_target);
   g_test_add_func ("/action-key/node-structured-accels", test_node_structured_accels);
   g_test_add_func ("/action-snapshot/ownership-and-difference", test_snapshot);
 

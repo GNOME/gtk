@@ -1241,13 +1241,14 @@ target_binding_changed (GtkActionBinding            *binding,
 }
 
 static void
-test_target_indexes (void)
+test_target_indexes (gconstpointer data)
 {
+  const char *format = data;
   GtkActionKey *key = gtk_action_key_new ("win.mode");
   GSimpleActionGroup *group = g_simple_action_group_new ();
   GSimpleAction *action =
-    g_simple_action_new_stateful ("mode", G_VARIANT_TYPE_STRING,
-                                  g_variant_new_string ("target-0"));
+    g_simple_action_new_stateful ("mode", G_VARIANT_TYPE (format),
+                                  g_variant_new (format, "target-0"));
   GtkActionTree *tree = gtk_action_tree_new ();
   GtkActionNode *node = gtk_action_tree_add_synthetic (tree, tree);
   GtkActionProvider *provider;
@@ -1263,7 +1264,7 @@ test_target_indexes (void)
       char target[32];
 
       g_snprintf (target, sizeof target, "target-%u", i);
-      bindings[i] = gtk_action_node_bind (node, key, g_variant_new_string (target),
+      bindings[i] = gtk_action_node_bind (node, key, g_variant_new (format, target),
                                           GTK_ACTION_INTEREST_ACTIVE,
                                           target_binding_changed, &states[i], NULL);
     }
@@ -1272,31 +1273,35 @@ test_target_indexes (void)
   g_assert_nonnull (provider);
   g_assert_cmpuint (gtk_action_provider_get_target_count (provider), ==, 6);
   g_assert_true (gtk_action_provider_has_target_index (provider));
+  g_assert_true (gtk_action_tree_check_invariants (tree));
 
   gtk_action_provider_reset_touched_bindings (provider);
-  g_simple_action_set_state (action, g_variant_new_string ("target-1"));
+  g_simple_action_set_state (action, g_variant_new (format, "target-1"));
 #ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 2);
 #endif
   g_assert_cmpuint (states[0].deliveries, ==, 2);
   g_assert_cmpuint (states[1].deliveries, ==, 2);
   g_assert_cmpuint (states[2].deliveries, ==, 1);
+  g_assert_false (gtk_action_binding_get_state (bindings[0])->active);
+  g_assert_true (gtk_action_binding_get_state (bindings[1])->active);
 
-  gtk_action_binding_set_target (bindings[5], g_variant_new_string ("target-1"));
+  gtk_action_binding_set_target (bindings[5], g_variant_new (format, "target-1"));
   g_assert_cmpuint (gtk_action_provider_get_target_count (provider), ==, 5);
+  g_assert_true (gtk_action_binding_get_state (bindings[5])->active);
 
   bindings[6] = gtk_action_node_bind (node, key, g_variant_new_int32 (1),
                                       GTK_ACTION_INTEREST_ACTIVE,
                                       target_binding_changed, &states[6], NULL);
   gtk_action_provider_reset_touched_bindings (provider);
-  g_simple_action_set_state (action, g_variant_new_string ("target-2"));
+  g_simple_action_set_state (action, g_variant_new (format, "target-2"));
 #ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 3);
 #endif
   g_assert_cmpuint (states[6].deliveries, ==, 1);
 
   gtk_action_provider_reset_touched_bindings (provider);
-  g_simple_action_set_state (action, g_variant_new_string ("target-2"));
+  g_simple_action_set_state (action, g_variant_new (format, "target-2"));
 #ifdef G_ENABLE_DEBUG
   g_assert_cmpuint (gtk_action_provider_get_touched_bindings (provider), ==, 0);
 #endif
@@ -1304,7 +1309,7 @@ test_target_indexes (void)
   states[2].cancel = bindings[3];
   states[2].cancel_on_change = TRUE;
   bindings[3] = NULL;
-  g_simple_action_set_state (action, g_variant_new_string ("target-3"));
+  g_simple_action_set_state (action, g_variant_new (format, "target-3"));
   g_assert_null (states[2].cancel);
 
   for (i = 0; i < G_N_ELEMENTS (bindings); i++)
@@ -2103,7 +2108,8 @@ main (int   argc,
   g_test_add_func ("/action-tree/consumers/model-button-action-teardown",
                    test_model_button_action_teardown);
   g_test_add_func ("/action-tree/bindings/derived-state-target-activation", test_bindings);
-  g_test_add_func ("/action-tree/bindings/target-indexes", test_target_indexes);
+  g_test_add_data_func ("/action-tree/bindings/target-indexes", "s", test_target_indexes);
+  g_test_add_data_func ("/action-tree/bindings/container-target-indexes", "(s)", test_target_indexes);
   g_test_add_func ("/action-tree/resolutions/transfer-and-lifetime", test_resolution_lifetime);
   g_test_add_func ("/action-tree/resolutions/reentrant-node-removal",
                    test_resolution_reentrant_node_removal);
