@@ -157,12 +157,12 @@ main (int argc, const char *argv[])
 
           for (i = g_strv_length (filenames) - 1; i > 0; i--)
             {
-              node = load_node_file (filenames[i]);
+              node = rnt_context_load_node_for_cmdline_arg (ctx, filenames[i]);
               rnt_context_push_node (ctx, node);
             }
         }
 
-      node = load_node_file (filenames[0]);
+      node = rnt_context_load_node_for_cmdline_arg (ctx, filenames[0]);
     }
 
   node = rnt_context_run (ctx, node, argc, argv);

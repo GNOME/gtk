@@ -35,7 +35,8 @@
 #include "testsuite/reftests/reftest-compare.h"
 
 static GdkTexture *
-texture_from_file (const char   *filename,
+texture_from_file (RntContext   *ctx,
+                   const char   *filename,
                    GskRenderer  *renderer,
                    GError      **error)
 {
@@ -43,7 +44,7 @@ texture_from_file (const char   *filename,
 
   if (g_str_has_suffix (filename, ".node"))
     {
-      GskRenderNode *node = load_node_file (filename);
+      GskRenderNode *node = rnt_context_load_node_for_cmdline_arg (ctx, filename);
       texture = gsk_renderer_render_texture (renderer, node, NULL);
       gsk_render_node_unref (node);
     }
@@ -108,7 +109,7 @@ filter_compare (GskRenderNode  *node,
     }
 
   texture[0] = gsk_renderer_render_texture (renderer, node, NULL);
-  texture[1] = texture_from_file (filenames[0], renderer, &error);
+  texture[1] = texture_from_file (ctx, filenames[0], renderer, &error);
   if (texture[1] == NULL)
     {
       rnt_context_error (ctx, _("Failed to load %s: %s\n"), filenames[0], error->message);

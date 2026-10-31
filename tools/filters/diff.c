@@ -71,7 +71,7 @@ filter_diff (GskRenderNode  *node,
     }
   else if (g_strv_length (filenames) == 1)
     {
-      reference = load_node_file (filenames[0]);
+      reference = rnt_context_load_node_for_cmdline_arg (ctx, filenames[0]);
     }
   else
     {

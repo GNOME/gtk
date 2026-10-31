@@ -38,6 +38,11 @@ gboolean                rnt_context_get_verbose                 (RntContext     
 void                    rnt_context_set_verbose                 (RntContext             *ctx,
                                                                  gboolean                verbose);
 
+GskRenderNode *         rnt_context_load_node                   (RntContext             *self,
+                                                                 GFile                  *file);
+GskRenderNode *         rnt_context_load_node_for_cmdline_arg   (RntContext             *self,
+                                                                 const char             *filename);
+
 void                    rnt_context_print                       (RntContext             *self,
                                                                  const char             *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);

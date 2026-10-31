@@ -477,3 +477,89 @@ rnt_context_run (RntContext     *self,
   return node;
 }
 
+typedef struct {
+  RntContext *ctx;
+  GFile      *file;
+} DeserializeData;
+
+static void
+rnt_context_deserialize_error (const GskParseLocation *start,
+                               const GskParseLocation *end,
+                               const GError           *error,
+                               gpointer                user_data)
+{
+  DeserializeData *data = user_data;
+  GString *string;
+  char *filename;
+
+  string = g_string_new (NULL);
+
+  filename = g_file_get_basename (data->file);
+  if (g_utf8_validate (filename, -1, NULL))
+    g_string_append (string, filename);
+  else
+    /* translators: invalid UTF8 in filename */
+    g_string_append (string, _("<invalid>"));
+
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
+
+  if (error->domain == GTK_CSS_PARSER_WARNING && !rnt_context_get_verbose (data->ctx))
+    {
+      /* only print warnings in verbose mode */
+    }
+  else
+    {
+      rnt_context_warn (data->ctx, _("%s: %s\n"), string->str, error->message);
+    }
+
+  g_string_free (string, TRUE);
+}
+
+GskRenderNode *
+rnt_context_load_node (RntContext *self,
+                       GFile      *file)
+{
+  GBytes *bytes;
+  GError *error = NULL;
+  GskRenderNode *result;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
+
+  if (bytes == NULL)
+    {
+      rnt_context_error (self, _("Failed to load node file: %s\n"), error->message);
+      g_clear_error (&error);
+      return gsk_render_node_ref (self->null_node);
+    }
+
+  result = gsk_render_node_deserialize (bytes,
+                                        rnt_context_deserialize_error,
+                                        &(DeserializeData) {
+                                          .ctx = self,
+                                          .file = file,
+                                        });
+
+  return result;
+}
+
+GskRenderNode *
+rnt_context_load_node_for_cmdline_arg (RntContext *self,
+                                       const char *filename)
+{
+  GFile *file;
+  GskRenderNode *result;
+
+  file = g_file_new_for_commandline_arg (filename);
+  result = rnt_context_load_node (self, file);
+  g_object_unref (file);
+
+  return result;
+}
