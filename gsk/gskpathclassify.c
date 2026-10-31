@@ -724,14 +724,17 @@ gsk_path_classify (GskPath        *path,
   gboolean ccw;
   GskPathOperation ops[10];
   graphene_point_t points[18];
+  size_t n_contours;
   size_t n_ops;
   size_t n_points;
 
-  if (gsk_path_is_empty (path))
+  n_contours = gsk_path_get_n_contours (path);
+
+  if (n_contours == 0)
     return GSK_PATH_EMPTY;
 
-  if (gsk_path_get_n_contours (path) > 2 ||
-      (gsk_path_get_n_contours (path) == 2 &&
+  if (n_contours > 2 ||
+      (n_contours == 2 &&
        gsk_contour_get_standard_ops (gsk_path_get_contour (path, 1), 0, NULL) > 1))
     return GSK_PATH_GENERAL;
 
@@ -757,21 +760,34 @@ gsk_path_classify (GskPath        *path,
   n_ops = gsk_contour_get_standard_ops (contour, G_N_ELEMENTS (ops), ops);
   n_points = gsk_contour_get_standard_points (contour, G_N_ELEMENTS (points), points);
 
+  if (n_ops < 5 || n_ops > 10)
+    return GSK_PATH_GENERAL;
+
   if (path_is_rect (ops, n_ops, points, n_points, &rect->bounds))
-    return GSK_PATH_RECT;
-  else if (path_is_precise_circle (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_CIRCLE;
-  else if (path_is_precise_rounded_rect (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_ROUNDED_RECT;
-  else if (path_is_circle (ops, n_ops, points, n_points, rect) ||
-           path_is_circle2 (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_APPROXIMATE_CIRCLE;
+    {
+      return GSK_PATH_RECT;
+    }
   else if (path_is_rounded_rect (ops, n_ops, points, n_points, rect) ||
            path_is_rounded_rect2 (ops, n_ops, points, n_points, rect) ||
            path_is_pill (ops, n_ops, points, n_points, rect) ||
            path_is_pill2 (ops, n_ops, points, n_points, rect) ||
            path_is_pill3 (ops, n_ops, points, n_points, rect))
-    return GSK_PATH_APPROXIMATE_ROUNDED_RECT;
+    {
+      return GSK_PATH_APPROXIMATE_ROUNDED_RECT;
+    }
+  else if (path_is_circle (ops, n_ops, points, n_points, rect) ||
+           path_is_circle2 (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_APPROXIMATE_CIRCLE;
+    }
+  else if (path_is_precise_circle (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_CIRCLE;
+    }
+  else if (path_is_precise_rounded_rect (ops, n_ops, points, n_points, rect))
+    {
+      return GSK_PATH_ROUNDED_RECT;
+    }
 
   return GSK_PATH_GENERAL;
 }
