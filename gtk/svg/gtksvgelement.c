@@ -422,6 +422,8 @@ resolve_rx (SvgElement            *element,
   else
     values = element->base;
 
+  *rx = *ry = 0;
+
   if (element->type == SVG_ELEMENT_ELLIPSE)
     {
       if (auto_or_unset (values[SVG_PROPERTY_RX]))
@@ -788,6 +790,7 @@ svg_element_get_path (SvgElement            *element,
           double width = svg_value_is_auto (values[SVG_PROPERTY_WIDTH]) ? 0 : svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
           double height = svg_value_is_auto (values[SVG_PROPERTY_HEIGHT]) ? 0 : svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
           double rx, ry;
+
           resolve_rx (element, viewport, current, &rx, &ry);
           if (rx == 0 || ry == 0)
             gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x, y, width, height));
