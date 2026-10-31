@@ -2033,7 +2033,7 @@ push_group (SvgElement   *shape,
           if (svg_transform_is_none (ctf) &&
               svg_enum_get (svg_element_get_current_value (clip_shape, SVG_PROPERTY_CONTENT_UNITS)) == COORD_UNITS_USER_SPACE_ON_USE &&
               child != NULL && child->next_sibling == NULL &&
-              (child->type == SVG_ELEMENT_PATH || child->type == SVG_ELEMENT_RECT || child->type == SVG_ELEMENT_CIRCLE) &&
+              (child->type == SVG_ELEMENT_PATH || child->type == SVG_ELEMENT_RECT || child->type == SVG_ELEMENT_CIRCLE || child->type == SVG_ELEMENT_ELLIPSE) &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_VISIBILITY)) != VISIBILITY_HIDDEN &&
               svg_enum_get (svg_element_get_current_value (child, SVG_PROPERTY_DISPLAY)) != DISPLAY_NONE &&
               svg_clip_get_kind (svg_element_get_current_value (child, SVG_PROPERTY_CLIP_PATH)) == CLIP_NONE &&
