@@ -2304,7 +2304,8 @@ gtk_snapshot_collect_arithmetic (GtkSnapshot      *snapshot,
 
   second_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
 
-  if (state->data.arithmetic.first_node == NULL && second_node == NULL)
+  if (state->data.arithmetic.first_node == NULL && second_node == NULL &&
+      state->data.arithmetic.factors[3] <= 0)
     return NULL;
 
   if (state->data.arithmetic.first_node == NULL)
