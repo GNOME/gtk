@@ -26,6 +26,7 @@ GskRenderNode *filter_background_blur   (GskRenderNode *node, RntContext *ctx, i
 GskRenderNode *filter_benchmark         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_compare           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_copypaste         (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
+GskRenderNode *filter_cull              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_cut               (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_diff              (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);
 GskRenderNode *filter_extract           (GskRenderNode *node, RntContext *ctx, int argc, const char **argv);

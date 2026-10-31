@@ -53,6 +53,11 @@ static const RntFilter filters[] = {
     .run = filter_copypaste,
   },
   {
+    .name = "cull",
+    .description = "Cull nodes that are provably clipped",
+    .run = filter_cull,
+  },
+  {
     .name = "cut",
     .description = "Cut out a part of the rendernode",
     .run = filter_cut,

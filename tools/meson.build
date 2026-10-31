@@ -45,6 +45,7 @@ gtk_tools = [
                         'filters/benchmark.c',
                         'filters/compare.c',
                         'filters/copypaste.c',
+                        'filters/cull.c',
                         'filters/cut.c',
                         'filters/diff.c',
                         'filters/extract.c',
