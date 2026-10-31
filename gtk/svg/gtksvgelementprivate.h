@@ -161,6 +161,10 @@ void         svg_element_get_line            (SvgElement            *element,
                                               const graphene_rect_t *viewport,
                                               gboolean               current);
 
+gboolean     svg_element_get_current_rect    (SvgElement            *element,
+                                              const graphene_rect_t *viewport,
+                                              GskRoundedRect        *rect);
+
 GskPath *    svg_element_get_path            (SvgElement            *element,
                                               const graphene_rect_t *viewport,
                                               gboolean               current);

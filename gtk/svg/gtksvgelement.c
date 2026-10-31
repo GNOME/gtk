@@ -1049,6 +1049,69 @@ svg_element_get_current_measure (SvgElement            *element,
 }
 
 gboolean
+svg_element_get_current_rect (SvgElement            *element,
+                              const graphene_rect_t *viewport,
+                              GskRoundedRect        *rect)
+{
+  SvgValue **values;
+
+  values = element->current;
+
+  if (element->type == SVG_ELEMENT_RECT)
+    {
+      if (svg_value_is_set (values[SVG_PROPERTY_X]) &&
+          svg_value_is_set (values[SVG_PROPERTY_Y]) &&
+          svg_value_is_set (values[SVG_PROPERTY_WIDTH]) &&
+          svg_value_is_set (values[SVG_PROPERTY_HEIGHT]) &&
+          svg_value_is_set (values[SVG_PROPERTY_RX]) &&
+          svg_value_is_set (values[SVG_PROPERTY_RY]))
+        {
+          double x = svg_number_get (values[SVG_PROPERTY_X], viewport->size.width);
+          double y = svg_number_get (values[SVG_PROPERTY_Y], viewport->size.height);
+          double width = svg_value_is_auto (values[SVG_PROPERTY_WIDTH]) ? 0 : svg_number_get (values[SVG_PROPERTY_WIDTH], viewport->size.width);
+          double height = svg_value_is_auto (values[SVG_PROPERTY_HEIGHT]) ? 0 : svg_number_get (values[SVG_PROPERTY_HEIGHT],viewport->size.height);
+          double rx, ry;
+
+          resolve_rx (element, viewport, TRUE, &rx, &ry);
+          gsk_rounded_rect_init_uniform (rect, x, y, width, height, rx, ry);
+          return TRUE;
+        }
+    }
+  else if (element->type == SVG_ELEMENT_CIRCLE)
+    {
+      if (svg_value_is_set (values[SVG_PROPERTY_CX]) &&
+          svg_value_is_set (values[SVG_PROPERTY_CY]) &&
+          svg_value_is_set (values[SVG_PROPERTY_R]))
+        {
+          double cx = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
+          double cy = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
+          double r = svg_number_get (values[SVG_PROPERTY_R], normalized_diagonal (viewport));
+
+          gsk_rounded_rect_init_from_ellipse (rect, cx, cy, r, r);
+          return TRUE;
+        }
+    }
+  else if (element->type == SVG_ELEMENT_ELLIPSE)
+    {
+      if (svg_value_is_set (values[SVG_PROPERTY_CX]) &&
+          svg_value_is_set (values[SVG_PROPERTY_CY]) &&
+          svg_value_is_set (values[SVG_PROPERTY_RX]) &&
+          svg_value_is_set (values[SVG_PROPERTY_RY]))
+        {
+          double cx = svg_number_get (values[SVG_PROPERTY_CX], viewport->size.width);
+          double cy = svg_number_get (values[SVG_PROPERTY_CY], viewport->size.height);
+          double rx, ry;
+
+          resolve_rx (element, viewport, TRUE, &rx, &ry);
+          gsk_rounded_rect_init_from_ellipse (rect, cx, cy, rx, ry);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+gboolean
 svg_element_get_current_bounds (SvgElement            *element,
                                 const graphene_rect_t *viewport,
                                 GtkSvg                *svg,
