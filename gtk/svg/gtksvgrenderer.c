@@ -5021,7 +5021,7 @@ paint_shape (SvgElement   *shape,
           GskFillRule clip_rule;
 
           clip_rule = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_CLIP_RULE));
-          gtk_snapshot_push_fill (context->snapshot, path, clip_rule);
+          svg_snapshot_push_fill (context->snapshot, path, clip_rule);
           gtk_snapshot_add_color (context->snapshot, &color, &bounds);
           gtk_snapshot_pop (context->snapshot);
         }
