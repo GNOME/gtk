@@ -31,6 +31,7 @@ struct _RntContext
   GDestroyNotify user_destroy;
 
   gboolean verbose;
+  gboolean quiet;
 
   GPtrArray *nodes;
   GskRenderNode *null_node;
@@ -253,6 +254,7 @@ GOptionGroup *
 rnt_context_create_option_group (RntContext *self)
 {
   const GOptionEntry entries[] = {
+    { "quiet", 'q', 0, G_OPTION_ARG_NONE, &self->quiet, N_("Don't print warnings"), NULL },
     { "verbose", 'v', 0, G_OPTION_ARG_NONE, &self->verbose, N_("Be verbose"), NULL },
     { NULL, }
   };
@@ -267,6 +269,41 @@ rnt_context_create_option_group (RntContext *self)
   g_option_group_add_entries (group, entries);
 
   return group;
+}
+
+/**
+ * rnt_context_set_quiet:
+ * @self: the context
+ * @quiet: if quiet output is desired
+ *
+ * If set to true, [method@Rnt.Context.warn] is not going
+ * to print its output.
+ *
+ * This is usually configured using the --quiet command line
+ * argument.
+ **/
+void
+rnt_context_set_quiet (RntContext *self,
+                       gboolean    quiet)
+{
+  self->quiet = quiet;
+}
+
+/**
+ * rnt_context_get_quiet:
+ * @self: the context
+ *
+ * Checks if quiet mode is enabled.
+ *
+ * This is usually done via the --quiet command
+ * line switch.
+ *
+ * Returns: true if quiet mode is on
+ **/
+gboolean
+rnt_context_get_quiet (RntContext *self)
+{
+  return self->quiet;
 }
 
 /**
@@ -374,6 +411,9 @@ rnt_context_warn (RntContext *self,
 {
   va_list args;
   char *s;
+
+  if (self->quiet)
+    return;
 
   va_start (args, format);
   s = g_strdup_vprintf (format, args);

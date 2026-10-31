@@ -37,6 +37,9 @@ void                    rnt_context_set_failed                  (RntContext     
 gboolean                rnt_context_get_verbose                 (RntContext             *self);
 void                    rnt_context_set_verbose                 (RntContext             *ctx,
                                                                  gboolean                verbose);
+gboolean                rnt_context_get_quiet                   (RntContext             *self);
+void                    rnt_context_set_quiet                   (RntContext             *ctx,
+                                                                 gboolean                quiet);
 
 GskRenderNode *         rnt_context_load_node                   (RntContext             *self,
                                                                  GFile                  *file);
