@@ -44,18 +44,25 @@ struct _GtkActionInvocationKey
 G_LOCK_DEFINE_STATIC (action_keys);
 static GHashTable *action_keys;
 
-static guint
-variant_hash (GVariant *value)
+guint
+gtk_action_target_hash (gconstpointer data)
 {
+  GVariant *value = (GVariant *) data;
+  GVariant *normal;
   GBytes *bytes = NULL;
   guint hash;
 
-  g_assert (value != NULL);
+  g_return_val_if_fail (value != NULL, 0);
 
-  bytes = g_variant_get_data_as_bytes (value);
+  if (!g_variant_is_container (value))
+    return g_variant_hash (value);
+
+  normal = g_variant_get_normal_form (value);
+  bytes = g_variant_get_data_as_bytes (normal);
   hash = g_bytes_hash (bytes);
 
   g_bytes_unref (bytes);
+  g_variant_unref (normal);
 
   return (hash * 33) ^ g_str_hash (g_variant_get_type_string (value));
 }
@@ -209,7 +216,7 @@ gtk_action_invocation_key_new (GtkActionKey *action_key,
   self->ref_count = 1;
 
   if (self->target != NULL)
-    self->hash = (self->hash * 33) ^ variant_hash (self->target);
+    self->hash = (self->hash * 33) ^ gtk_action_target_hash (self->target);
 
   return self;
 }

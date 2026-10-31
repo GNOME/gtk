@@ -428,7 +428,7 @@ provider_lookup_target_bucket (GtkActionProvider *provider,
   if (provider->target_buckets == NULL)
     return NULL;
 
-  hash = g_variant_hash (target);
+  hash = gtk_action_target_hash (target);
   for (guint i = 0; i < provider->target_buckets->len; i++)
     {
       GtkActionTargetBucket *bucket = g_ptr_array_index (provider->target_buckets, i);
@@ -458,13 +458,13 @@ provider_ensure_target_bucket (GtkActionProvider *provider,
 
   bucket = g_new0 (GtkActionTargetBucket, 1);
   bucket->target = g_variant_ref (target);
-  bucket->hash = g_variant_hash (target);
+  bucket->hash = gtk_action_target_hash (target);
   g_ptr_array_add (provider->target_buckets, bucket);
 
   if (provider->target_buckets->len > TARGET_INDEX_LINEAR_LIMIT &&
       provider->target_index == NULL)
     {
-      provider->target_index = g_hash_table_new (g_variant_hash, g_variant_equal);
+      provider->target_index = g_hash_table_new (gtk_action_target_hash, g_variant_equal);
 
       for (guint i = 0; i < provider->target_buckets->len; i++)
         {
@@ -2192,7 +2192,7 @@ gtk_action_tree_check_invariants (GtkActionTree *tree)
                           GtkActionBinding *target_previous = NULL;
 
                           if (bucket->first_binding == NULL ||
-                              bucket->hash != g_variant_hash (bucket->target) ||
+                              bucket->hash != gtk_action_target_hash (bucket->target) ||
                               (provider->target_index != NULL &&
                                g_hash_table_lookup (provider->target_index, bucket->target) != bucket))
                             return FALSE;

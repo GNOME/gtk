@@ -46,6 +46,7 @@ GVariant               *gtk_action_invocation_key_get_target (GtkActionInvocatio
 guint                   gtk_action_invocation_key_hash       (gconstpointer           data);
 gboolean                gtk_action_invocation_key_equal      (gconstpointer           a,
                                                               gconstpointer           b);
+guint                   gtk_action_target_hash               (gconstpointer           data);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkActionKey, gtk_action_key_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkActionInvocationKey, gtk_action_invocation_key_unref)
