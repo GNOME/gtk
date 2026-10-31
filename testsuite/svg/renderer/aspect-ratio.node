@@ -68,7 +68,7 @@ color {
   color: rgb(255,0,0);
 }
 rounded-clip {
-  clip: 218 114 64 32 / 32;
+  clip: 218 114 64 32 / 32 / 16;
   child: color {
     bounds: 218 114 64 32;
     color: rgb(255,255,255);

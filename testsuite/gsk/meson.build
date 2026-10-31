@@ -642,6 +642,8 @@ node_parser_tests = [
   'repeating-radial-gradient.node',
   'repeating-radial-gradient.ref.node',
   'rounded-rect.node',
+  'rounded-rect2.node',
+  'rounded-rect2.ref.node',
   'shadow.node',
   'shadow-fail.node',
   'shadow-fail.ref.node',
@@ -690,7 +692,7 @@ node_parser_tests = [
 ]
 
 foreach test : node_parser_tests
-  if test.endswith('.node') and not test.endswith('.ref.node')
+  if test.endswith('.node')
     test('parser ' + test, node_parser,
       args: [
         join_paths(meson.current_source_dir(), 'nodeparser', test)
