@@ -2684,16 +2684,34 @@ gsk_gpu_node_processor_add_arithmetic_node (GskGpuRenderPass *self,
   if (first_image == NULL)
     {
       if (second_image == NULL)
-        return;
+        {
+          float k3 = CLAMP (k[3], 0, 1);
+          GdkColorState *acs = gsk_arithmetic_node_get_color_state (node);
+
+          if (k3 <= 0)
+            return;
+
+          gsk_gpu_color_op (self,
+                            self->ccs,
+                            GDK_IS_DEFAULT_COLOR_STATE (acs) ? acs : self->ccs,
+                            &clip_bounds,
+                            &(GdkColor) {
+                                .color_state = acs,
+                                .values = { k3, k3, k3, k3 }
+                            });
+          return;
+        }
 
       first_image = g_object_ref (second_image);
-      first_rect = *graphene_rect_zero ();
+      first_rect = clip_bounds;
+      first_rect.origin.x -= 2 * first_rect.size.width;
       first_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
   else if (second_image == NULL)
     {
       second_image = g_object_ref (first_image);
-      second_rect = *graphene_rect_zero ();
+      second_rect = clip_bounds;
+      second_rect.origin.x -= 2 * second_rect.size.width;
       second_sampler = GSK_GPU_SAMPLER_TRANSPARENT;
     }
 

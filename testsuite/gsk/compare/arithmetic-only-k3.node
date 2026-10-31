@@ -1,0 +1,12 @@
+arithmetic {
+  bounds: 10 10 10 10;
+  first: color {
+    bounds: 0 0 10 10;
+    color: red;
+  }
+  second: color {
+    bounds: 0 0 10 10;
+    color: blue;
+  }
+  k: 0 1 1 1;
+}

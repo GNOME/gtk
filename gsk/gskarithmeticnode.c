@@ -101,6 +101,7 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   k4 = self->factors[3];
 
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+  cairo_reset_clip (cr);
   gsk_render_node_draw_full (self->first, cr, data);
   first_pattern = cairo_pop_group (cr);
   cairo_pattern_get_surface (first_pattern, &first_surface);
@@ -111,6 +112,7 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
   first_stride = cairo_image_surface_get_stride (first_image);
 
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+  cairo_reset_clip (cr);
   gsk_render_node_draw_full (self->second, cr, data);
   second_pattern = cairo_pop_group (cr);
   cairo_pattern_get_surface (second_pattern, &second_surface);
@@ -209,8 +211,12 @@ gsk_arithmetic_node_draw (GskRenderNode *node,
         }
     }
 
+  cairo_surface_mark_dirty (first_image);
+
   cairo_surface_unmap_image (first_surface, first_image);
   cairo_surface_unmap_image (second_surface, second_image);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (first_surface);
 
   cairo_set_source (cr, first_pattern);
 
