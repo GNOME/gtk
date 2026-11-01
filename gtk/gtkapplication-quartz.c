@@ -94,7 +94,7 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
   return NSTerminateNow;
 }
 
--(void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames
+-(void)application:(NSApplication *)theApplication openURLs:(NSArray<NSURL *> *)urls
 {
   GFile **files;
   int i;
@@ -103,24 +103,19 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
   flags = g_application_get_flags (G_APPLICATION (quartz->impl.application));
 
   if (~flags & G_APPLICATION_HANDLES_OPEN)
-    {
-      [theApplication replyToOpenOrPrint:NSApplicationDelegateReplyFailure];
-      return;
-    }
+    return;
 
-  files = g_new (GFile *, [filenames count]);
+  files = g_new (GFile *, [urls count]);
 
-  for (i = 0; i < [filenames count]; i++)
-    files[i] = g_file_new_for_path ([(NSString *)[filenames objectAtIndex:i] UTF8String]);
+  for (i = 0; i < [urls count]; i++)
+    files[i] = g_file_new_for_uri ([[[urls objectAtIndex:i] absoluteString] UTF8String]);
 
-  g_application_open (G_APPLICATION (quartz->impl.application), files, [filenames count], "");
+  g_application_open (G_APPLICATION (quartz->impl.application), files, [urls count], "");
 
-  for (i = 0; i < [filenames count]; i++)
+  for (i = 0; i < [urls count]; i++)
     g_object_unref (files[i]);
 
   g_free (files);
-
-  [theApplication replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
