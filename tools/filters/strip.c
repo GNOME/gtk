@@ -19,7 +19,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 static GskRenderNode *
 strip_node (GskRenderReplay *replay,
@@ -57,15 +59,15 @@ filter_strip (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("strip: %s\n", error->message);
+      rnt_context_error (ctx, "strip: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("strip: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "Unexpected arguments\n");
+      return NULL;
     }
 
   replay = gsk_render_replay_new ();
@@ -75,8 +77,6 @@ filter_strip (GskRenderNode  *node,
                                      NULL);
   result = gsk_render_replay_filter_node (replay, node);
   gsk_render_replay_free (replay);
-
-  gsk_render_node_unref (node);
 
   return result;
 }

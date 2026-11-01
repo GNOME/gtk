@@ -27,8 +27,10 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 #define N_NODE_TYPES (GSK_TURBULENCE_NODE + 1)
 
@@ -96,7 +98,8 @@ count_nodes (GskRenderNode *node,
 }
 
 static void
-node_info (GskRenderNode *node)
+node_info (GskRenderNode *node,
+           RntContext    *ctx)
 {
   GHashTable *cache;
   NodeCount count = { { 0, } };
@@ -122,37 +125,37 @@ node_info (GskRenderNode *node)
   namelen = MAX (namelen, strlen (_("leaf nodes")));
 
   if (total == total_unique)
-    g_print ("%*s %llu\n", namelen, _("Number of nodes:"), total);
+    rnt_context_print (ctx, "%*s %llu\n", namelen + 1, _("Number of nodes:"), total);
   else
-    g_print ("%*s %llu (%s %llu)\n", namelen + 1, _("Number of nodes:"), total, _("unique:"), total_unique);
+    rnt_context_print (ctx, "%*s %llu (%s %llu)\n", namelen + 1, _("Number of nodes:"), total, _("unique:"), total_unique);
 
   while (pow (10, digits) < total)
     digits++;
 
-  g_print ("%*s: %*llu\n", namelen, _("leaf nodes"), digits, count.n_leafs);
+  rnt_context_print (ctx, "%*s: %*llu\n", namelen, _("leaf nodes"), digits, count.n_leafs);
   for (unsigned int i = 0; i < G_N_ELEMENTS (count.counts); i++)
     {
       if (count.counts[i] != count.unique[i])
-        g_print ("%*s: %*llu (%s %llu)\n", namelen, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
+        rnt_context_print (ctx, "%*s: %*llu (%s %llu)\n", namelen, get_node_name (i), digits, count.counts[i], _("unique:"), count.unique[i]);
       else if (count.counts[i] > 0)
-        g_print ("%*s: %*llu\n", namelen, get_node_name (i), digits, count.counts[i]);
+        rnt_context_print (ctx, "%*s: %*llu\n", namelen, get_node_name (i), digits, count.counts[i]);
     }
 
-  g_print ("%s %llu\n", _("Depth:"), count.depth);
+  rnt_context_print (ctx, "%s %llu\n", _("Depth:"), count.depth);
 
   gsk_render_node_get_bounds (node, &bounds);
-  g_print ("%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
-  g_print ("%s %g %g\n", _("Origin:"), bounds.origin.x, bounds.origin.y);
+  rnt_context_print (ctx, "%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
+  rnt_context_print (ctx, "%s %g %g\n", _("Origin:"), bounds.origin.x, bounds.origin.y);
   if (gsk_render_node_get_opaque_rect (node, &opaque))
     {
-      g_print ("%s %g %g, %g x %g (%.0f%%)\n",
-               _("Opaque part:"),
-               opaque.origin.x, opaque.origin.y,
-               opaque.size.width, opaque.size.height,
-               100 * (opaque.size.width * opaque.size.height) / (bounds.size.width * bounds.size.height));
+      rnt_context_print (ctx, "%s %g %g, %g x %g (%.0f%%)\n",
+                         _("Opaque part:"),
+                         opaque.origin.x, opaque.origin.y,
+                         opaque.size.width, opaque.size.height,
+                         100 * (opaque.size.width * opaque.size.height) / (bounds.size.width * bounds.size.height));
     }
   else
-    g_print ("%s none\n", _("Opaque part:"));
+    rnt_context_print (ctx, "%s none\n", _("Opaque part:"));
 
   g_hash_table_unref (cache);
 }
@@ -176,14 +179,14 @@ filter_info (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
 
-  node_info (node);
+  node_info (node, ctx);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

@@ -21,8 +21,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static void
 rect_snap_grow (graphene_rect_t *rect)
@@ -194,9 +195,9 @@ filter_merge (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
@@ -212,11 +213,11 @@ filter_merge (GskRenderNode  *node,
 
   if (keep)
     {
+      gsk_render_node_ref (node);
       rnt_context_push_node (ctx, node);
     }
   else
     {
-      gsk_render_node_unref (node);
       rnt_context_clear_nodes (ctx);
     }
 

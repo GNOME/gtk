@@ -27,9 +27,10 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
 
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 static void
 set_window_title (GtkWindow  *window,
@@ -118,14 +119,14 @@ filter_show (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("show: %s\n", error->message);
+      rnt_context_error (ctx, "show: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
 
   show_node (node, NULL, decorate, offload);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

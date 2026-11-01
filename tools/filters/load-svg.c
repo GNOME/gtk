@@ -27,8 +27,9 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static GskRenderNode *
 svg_load (const char *filename,
@@ -95,9 +96,9 @@ filter_load_svg (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
@@ -113,18 +114,18 @@ filter_load_svg (GskRenderNode  *node,
           if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error) ||
               !g_ascii_string_to_unsigned (p, 10, 1, 1024, &height, &error))
             {
-              g_printerr ("%s\n", error->message);
+              rnt_context_error (ctx, "%s\n", error->message);
               g_error_free (error);
-              exit (1);
+              return NULL;
             }
         }
       else
         {
           if (!g_ascii_string_to_unsigned (resize, 10, 1, 1024, &width, &error))
             {
-              g_printerr ("%s\n", error->message);
+              rnt_context_error (ctx, "%s\n", error->message);
               g_error_free (error);
-              exit (1);
+              return NULL;
             }
 
           height = width;
@@ -138,9 +139,11 @@ filter_load_svg (GskRenderNode  *node,
 
   if (filenames == NULL)
     {
-      g_printerr (_("No filename specified\n"));
-      exit (1);
+      rnt_context_error (ctx, _("No filename specified\n"));
+      return NULL;
     }
+
+  gsk_render_node_ref (node);
 
   for (i = g_strv_length (filenames); i-- > 0;)
     {

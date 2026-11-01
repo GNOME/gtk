@@ -19,20 +19,66 @@
 
 #include "rntcontext.h"
 
+#include "rntfilter.h"
+
+#include <glib/gi18n-lib.h>
+
 struct _RntContext
 {
+  RntContextPrintFunc print_func;
+  RntContextPrintFunc printerr_func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
+
+  gboolean verbose;
+  gboolean quiet;
+
   GPtrArray *nodes;
   GskRenderNode *null_node;
+  const RntFilter *current_filter;
 
   gboolean failed;
 };
 
+static void
+default_print (RntContext *self,
+               const char *string,
+               gpointer    unused)
+{
+  g_print ("%s", string);
+}
+
+static void
+default_printerr (RntContext *self,
+                  const char *string,
+                  gpointer    unused)
+{
+  if (self->current_filter)
+    g_printerr ("%s: %s", rnt_filter_get_name (self->current_filter), string);
+  else
+    g_printerr ("%s", string);
+}
+
 RntContext *
-rnt_context_new (void)
+rnt_context_new (RntContextPrintFunc print_func,
+                 RntContextPrintFunc printerr_func,
+                 gpointer            user_data,
+                 GDestroyNotify      user_destroy)
 {
   RntContext *self;
 
   self = g_new0 (RntContext, 1);
+
+  if (print_func)
+    self->print_func = print_func;
+  else
+    self->print_func = default_print;
+  if (printerr_func)
+    self->printerr_func = printerr_func;
+  else
+    self->printerr_func = default_printerr;
+  self->user_data = user_data;
+  self->user_destroy = user_destroy;
 
   self->nodes = g_ptr_array_new ();
   g_ptr_array_set_free_func (self->nodes, (GDestroyNotify) gsk_render_node_unref);
@@ -45,6 +91,9 @@ rnt_context_new (void)
 void
 rnt_context_free (RntContext *self)
 {
+  if (self->user_destroy)
+    self->user_destroy (self->user_data);
+
   g_ptr_array_free (self->nodes, TRUE);
   g_clear_pointer (&self->null_node, gsk_render_node_unref);
 
@@ -191,4 +240,366 @@ rnt_context_set_failed (RntContext *ctx,
                         gboolean    failed)
 {
   ctx->failed = failed;
+}
+
+/**
+ * rnt_context_create_option_group:
+ * @self: a context
+ *
+ * Creates an option group to allow users to set properties for the context.
+ *
+ * Returns: an option group to configure the context
+ **/
+GOptionGroup *
+rnt_context_create_option_group (RntContext *self)
+{
+  const GOptionEntry entries[] = {
+    { "quiet", 'q', 0, G_OPTION_ARG_NONE, &self->quiet, N_("Don't print warnings"), NULL },
+    { "verbose", 'v', 0, G_OPTION_ARG_NONE, &self->verbose, N_("Be verbose"), NULL },
+    { NULL, }
+  };
+  GOptionGroup *group;
+
+  group = g_option_group_new ("general",
+                              _("General options"),
+                              _("Options that apply to all filters"),
+                              self,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, entries);
+
+  return group;
+}
+
+/**
+ * rnt_context_set_quiet:
+ * @self: the context
+ * @quiet: if quiet output is desired
+ *
+ * If set to true, [method@Rnt.Context.warn] is not going
+ * to print its output.
+ *
+ * This is usually configured using the --quiet command line
+ * argument.
+ **/
+void
+rnt_context_set_quiet (RntContext *self,
+                       gboolean    quiet)
+{
+  self->quiet = quiet;
+}
+
+/**
+ * rnt_context_get_quiet:
+ * @self: the context
+ *
+ * Checks if quiet mode is enabled.
+ *
+ * This is usually done via the --quiet command
+ * line switch.
+ *
+ * Returns: true if quiet mode is on
+ **/
+gboolean
+rnt_context_get_quiet (RntContext *self)
+{
+  return self->quiet;
+}
+
+/**
+ * rnt_context_set_verbose:
+ * @self: the context
+ * @verbose: if verbose output is desired
+ *
+ * If set to true, [method@Rnt.Context.verbose] is going
+ * to print its output, too.
+ *
+ * This is usually configured using the --verbose command line
+ * argument.
+ **/
+void
+rnt_context_set_verbose (RntContext *self,
+                         gboolean    verbose)
+{
+  self->verbose = verbose;
+}
+
+/**
+ * rnt_context_get_verbose:
+ * @self: the context
+ *
+ * Checks if verbose mode is enabled.
+ *
+ * This is usually done via the --verbose command
+ * line switch.
+ *
+ * Returns: true if verbose mode is on
+ **/
+gboolean
+rnt_context_get_verbose (RntContext *self)
+{
+  return self->verbose;
+}
+
+/**
+ * rnt_context_verbose:
+ * @self: the context
+ * @format: the printf-format message
+ * @...: arguments
+ *
+ * Prints a message if verbose mode is on, otherwise
+ * discards it.
+ **/
+void
+rnt_context_verbose (RntContext *self,
+                     const char *format,
+                     ...)
+{
+  va_list args;
+  char *s;
+
+  if (!self->verbose)
+    return;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->print_func (self, s, self->user_data);
+  va_end (args);
+  g_free (s);
+}
+
+/**
+ * rnt_context_print:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints a message. 
+ *
+ * This should only be used for requested messages from filters
+ * designed to print output.
+ *
+ * For status messages, use [method@Rnt.Context.verbose].
+ **/
+void
+rnt_context_print (RntContext *self,
+                   const char *format,
+                   ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->print_func (self, s, self->user_data);
+  va_end (args);
+  g_free (s);
+}
+
+/**
+ * rnt_context_warn:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints a warning message using the error function.
+ **/
+void
+rnt_context_warn (RntContext *self,
+                  const char *format,
+                  ...)
+{
+  va_list args;
+  char *s;
+
+  if (self->quiet)
+    return;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->printerr_func (self, s, self->user_data);
+  va_end (args);
+  g_free (s);
+}
+
+/**
+ * rnt_context_error:
+ * @self: the context
+ * @format: printf-format string for the message
+ * @...: message arguments
+ *
+ * Prints an error message using the error function
+ * and aborts the program.
+ **/
+void
+rnt_context_error (RntContext *self,
+                   const char *format,
+                   ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  self->printerr_func (self, s, self->user_data);
+  va_end (args);
+  g_free (s);
+
+  exit (1);
+}
+
+/**
+ * rnt_context_get_current_filter:
+ * @self: the context
+ *
+ * Gets the currently running filter.
+ *
+ * This is useful to call during print functions.
+ * Filters themselves probably know what filter they are.
+ *
+ * Returns: (nullable): the current filter
+ **/
+const RntFilter *
+rnt_context_get_current_filter (RntContext *self)
+{
+  return self->current_filter;
+}
+
+/**
+ * rnt_context_run:
+ * @self: the context
+ * @node: te input rendernode
+ * @argc: number of arguments
+ * @argv: (array length=argc): the arguments
+ *
+ * Runs a filter chain as specified by the given arguments.
+ *
+ * The arguments are specified like command line arguments,
+ * but do not include the typical program name `argv[0]`.
+ *
+ * Returns: (nullable): The result of the chain or NULL for a
+ *   fatal error
+ **/
+GskRenderNode *
+rnt_context_run (RntContext     *self,
+                 GskRenderNode  *node,
+                 int             argc,
+                 const char    **argv)
+{
+  while (argc > 0)
+    {
+      char **argv_part;
+      gsize argc_part;
+      GskRenderNode *result;
+
+      self->current_filter = rnt_filter_find (argv[0]);
+      if (self->current_filter == NULL)
+        {
+          rnt_context_error (self, _("Argument \"%s\" is not a known filter\n"), argv[0]);
+          return NULL;
+        }
+
+      argv_part = rnt_filter_argv (argc, argv);
+      argc_part = g_strv_length (argv_part);
+
+      result = rnt_filter_run (self->current_filter, node, self, argc_part, (const char **) argv_part);
+      gsk_render_node_unref (node);
+      self->current_filter = NULL;
+      if (result == NULL)
+        return NULL;
+      node = result;
+
+      g_strfreev (argv_part);
+      argv += argc_part;
+      argc -= argc_part;
+    }
+
+  return node;
+}
+
+typedef struct {
+  RntContext *ctx;
+  GFile      *file;
+} DeserializeData;
+
+static void
+rnt_context_deserialize_error (const GskParseLocation *start,
+                               const GskParseLocation *end,
+                               const GError           *error,
+                               gpointer                user_data)
+{
+  DeserializeData *data = user_data;
+  GString *string;
+  char *filename;
+
+  string = g_string_new (NULL);
+
+  filename = g_file_get_basename (data->file);
+  if (g_utf8_validate (filename, -1, NULL))
+    g_string_append (string, filename);
+  else
+    /* translators: invalid UTF8 in filename */
+    g_string_append (string, _("<invalid>"));
+
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
+
+  if (error->domain == GTK_CSS_PARSER_WARNING && !rnt_context_get_verbose (data->ctx))
+    {
+      /* only print warnings in verbose mode */
+    }
+  else
+    {
+      rnt_context_warn (data->ctx, _("%s: %s\n"), string->str, error->message);
+    }
+
+  g_string_free (string, TRUE);
+}
+
+GskRenderNode *
+rnt_context_load_node (RntContext *self,
+                       GFile      *file)
+{
+  GBytes *bytes;
+  GError *error = NULL;
+  GskRenderNode *result;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
+
+  if (bytes == NULL)
+    {
+      rnt_context_error (self, _("Failed to load node file: %s\n"), error->message);
+      g_clear_error (&error);
+      return gsk_render_node_ref (self->null_node);
+    }
+
+  result = gsk_render_node_deserialize (bytes,
+                                        rnt_context_deserialize_error,
+                                        &(DeserializeData) {
+                                          .ctx = self,
+                                          .file = file,
+                                        });
+
+  return result;
+}
+
+GskRenderNode *
+rnt_context_load_node_for_cmdline_arg (RntContext *self,
+                                       const char *filename)
+{
+  GFile *file;
+  GskRenderNode *result;
+
+  file = g_file_new_for_commandline_arg (filename);
+  result = rnt_context_load_node (self, file);
+  g_object_unref (file);
+
+  return result;
 }

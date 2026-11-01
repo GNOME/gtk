@@ -19,10 +19,11 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "overlayconfig.h"
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 #include "gsk/gskrendernodeprivate.h"
 
@@ -53,9 +54,9 @@ filter_diff (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("diff: %s\n", error->message);
+      rnt_context_error (ctx, "diff: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (filenames == NULL || g_strv_length (filenames) == 0)
@@ -63,19 +64,19 @@ filter_diff (GskRenderNode  *node,
       reference = rnt_context_get_node (ctx, 0);
       if (reference == NULL)
         {
-          g_printerr ("diff: Need a single filename\n");
-          exit (1);
+          rnt_context_error (ctx, "diff: Need a single filename\n");
+          return NULL;
         }
       gsk_render_node_ref (reference);
     }
   else if (g_strv_length (filenames) == 1)
     {
-      reference = load_node_file (filenames[0]);
+      reference = rnt_context_load_node_for_cmdline_arg (ctx, filenames[0]);
     }
   else
     {
-      g_printerr ("diff: Need a single filename\n");
-      exit (1);
+      rnt_context_error (ctx, "diff: Need a single filename\n");
+      return NULL;
     }
 
   region = cairo_region_create ();
@@ -83,7 +84,6 @@ filter_diff (GskRenderNode  *node,
 
   result = overlay_config_render_region (&config, node, region);
   gsk_render_node_unref (reference);
-  gsk_render_node_unref (node);
   cairo_region_destroy (region);
 
   return result;

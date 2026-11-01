@@ -27,9 +27,10 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 static void
 benchmark_renderer (const char    *renderer_name,
@@ -45,7 +46,7 @@ benchmark_renderer (const char    *renderer_name,
   renderer = create_renderer (renderer_name, &error);
   if (renderer == NULL)
     {
-      g_printerr ("Could not benchmark renderer \"%s\": %s\n", renderer_name, error->message);
+      rnt_context_warn (ctx, "Could not benchmark renderer \"%s\": %s\n", renderer_name, error->message);
       g_clear_error (&error);
       return;
     }
@@ -85,10 +86,10 @@ benchmark_renderer (const char    *renderer_name,
       end_time = g_get_monotonic_time ();
 
       duration = end_time - start_time;
-      g_print ("%s\t%lld.%03ds\n",
-               renderer_name,
-               (long long) duration / G_USEC_PER_SEC,
-               (int) ((duration * 1000 / G_USEC_PER_SEC) % 1000)); 
+      rnt_context_print (ctx, "%s\t%lld.%03ds\n",
+                         renderer_name,
+                         (long long) duration / G_USEC_PER_SEC,
+                         (int) ((duration * 1000 / G_USEC_PER_SEC) % 1000)); 
     }
 
   gsk_renderer_unrealize (renderer);
@@ -122,9 +123,9 @@ filter_benchmark (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
@@ -140,5 +141,5 @@ filter_benchmark (GskRenderNode  *node,
   g_strfreev (filenames);
   g_strfreev (renderers);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

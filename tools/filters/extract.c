@@ -27,14 +27,17 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
 #include "gtk-tool-utils.h"
+
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 typedef struct _Extraction Extraction;
 
 struct _Extraction
 {
-  gboolean verbose;
+  RntContext *ctx;
+
   char *directory;
   char *basename;
 
@@ -64,15 +67,14 @@ extract_texture (GskRenderReplay *replay,
     e->texture_count++;
   } while (TRUE);
 
-  if (e->verbose)
-    g_print ("Writing %dx%d texture to %s\n",
-             gdk_texture_get_width (texture),
-             gdk_texture_get_height (texture),
-             filename);
+  rnt_context_verbose (e->ctx, "Writing %dx%d texture to %s\n",
+                       gdk_texture_get_width (texture),
+                       gdk_texture_get_height (texture),
+                       filename);
 
   if (!gdk_texture_save_to_png (texture, path))
     {
-      g_printerr (_("Failed to write %s\n"), filename);
+      rnt_context_warn (e->ctx, _("Failed to write %s\n"), filename);
     }
 
   g_free (path);
@@ -97,6 +99,7 @@ extract_font (GskRenderReplay *replay,
   char *filename;
   char *path;
   char *sum;
+  GError *error = NULL;
 
   hb_font = pango_font_get_hb_font (font);
   hb_face = hb_font_get_face (hb_font);
@@ -134,20 +137,21 @@ extract_font (GskRenderReplay *replay,
     e->font_count++;
   } while (TRUE);
 
-  if (e->verbose)
+  if (rnt_context_get_verbose (e->ctx))
     {
       PangoFontDescription *desc;
 
       desc = pango_font_describe (font);
-      g_print ("Writing font %s to %s\n",
-               pango_font_description_get_family (desc),
-               filename);
+      rnt_context_verbose (e->ctx, "Writing font %s to %s\n",
+                           pango_font_description_get_family (desc),
+                           filename);
       pango_font_description_free (desc);
     }
 
-  if (!g_file_set_contents (path, data, length, NULL))
+  if (!g_file_set_contents (path, data, length, &error))
     {
-      g_printerr (_("Failed to write %s\n"), filename);
+      rnt_context_warn (e->ctx, _("Failed to write %s: %s\n"), filename, error->message);
+      g_clear_error (&error);
     }
 
   hb_blob_destroy (hb_blob);
@@ -191,7 +195,7 @@ filter_extract (GskRenderNode  *node,
 {
   GOptionContext *context;
   Extraction e = {
-    .verbose = FALSE,
+    .ctx = ctx,
     .directory = NULL,
     .basename = NULL,
     .texture_count = 0,
@@ -201,7 +205,6 @@ filter_extract (GskRenderNode  *node,
   const GOptionEntry entries[] = {
     { "dir", 0, 0, G_OPTION_ARG_FILENAME, &e.directory, N_("Directory to use"), N_("DIRECTORY") },
     { "basename", 0, 0, G_OPTION_ARG_FILENAME, &e.basename, N_("Basename for extracted files"), N_("NAME") },
-    { "verbose", 0, 0, G_OPTION_ARG_NONE, &e.verbose, N_("Be verbose"), NULL },
     { NULL, }
   };
   GError *error = NULL;
@@ -213,9 +216,9 @@ filter_extract (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
@@ -231,5 +234,5 @@ filter_extract (GskRenderNode  *node,
   g_free (e.basename);
   g_hash_table_unref (e.fonts);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

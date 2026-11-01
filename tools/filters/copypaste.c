@@ -19,7 +19,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 /* nothing here is evil, so you can just skip to the comment that starts the evil */
 #include "gsk/gskcopypasteutilsprivate.h"
@@ -43,16 +45,16 @@ filter_copypaste (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("copypaste: %s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   if (argc != 1)
     {
-      g_printerr ("copypaste: Unexpected arguments\n");
-      exit (1);
+      rnt_context_error (ctx, "Unexpected arguments\n");
+      return NULL;
     }
 
-  return gsk_render_node_replace_copy_paste (node);
+  return gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
 }

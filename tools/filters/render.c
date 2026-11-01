@@ -27,7 +27,7 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
 #include "gtk-tool-utils.h"
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
@@ -35,7 +35,9 @@
 #ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
 #endif
+
 #include "rntcontext.h"
+#include "rntfilter.h"
 
 #if defined(CAIRO_HAS_SVG_SURFACE) || defined(CAIRO_HAS_PDF_SURFACE)
 static cairo_status_t
@@ -133,8 +135,9 @@ create_pdf (GskRenderNode  *node,
 }
 #endif
 
-static void
+static gboolean
 render_node (GskRenderNode         *node,
+             RntContext            *ctx,
              const char            *renderer_name,
              const graphene_rect_t *bounds,
              gboolean               snap,
@@ -149,8 +152,9 @@ render_node (GskRenderNode         *node,
       bytes = create_svg (node, &error);
       if (bytes == NULL)
         {
-          g_printerr (_("Failed to generate SVG: %s\n"), error->message);
-          exit (1);
+          rnt_context_error (ctx, _("Failed to generate SVG: %s\n"), error->message);
+          g_clear_error (&error);
+          return FALSE;
         }
     }
   else
@@ -161,8 +165,9 @@ render_node (GskRenderNode         *node,
       bytes = create_pdf (node, &error);
       if (bytes == NULL)
         {
-          g_printerr (_("Failed to generate SVG: %s\n"), error->message);
-          exit (1);
+          rnt_context_error (ctx, _("Failed to generate SVG: %s\n"), error->message);
+          g_clear_error (&error);
+          return FALSE;
         }
     }
   else
@@ -175,8 +180,9 @@ render_node (GskRenderNode         *node,
       renderer = create_renderer (renderer_name, &error);
       if (renderer == NULL)
         {
-          g_printerr (_("Failed to create renderer: %s\n"), error->message);
-          exit (1);
+          rnt_context_error (ctx, _("Failed to create renderer: %s\n"), error->message);
+          g_clear_error (&error);
+          return FALSE;
         }
 
       if (bounds == NULL)
@@ -212,15 +218,18 @@ render_node (GskRenderNode         *node,
                            g_bytes_get_size (bytes),
                            &error))
     {
-      g_print (_("Output written to %s.\n"), save_file);
+      rnt_context_verbose (ctx, _("Output written to %s.\n"), save_file);
     }
   else
     {
-      g_printerr (_("Failed to save %s: %s\n"), save_file, error->message);
-      exit (1);
+      rnt_context_error (ctx, _("Failed to save %s: %s\n"), save_file, error->message);
+      g_clear_error (&error);
+      return FALSE;
     }
 
   g_bytes_unref (bytes);
+
+  return TRUE;
 }
 
 static gboolean
@@ -283,25 +292,25 @@ filter_render (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("%s\n", error->message);
+      rnt_context_error (ctx, "%s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   g_option_context_free (context);
 
   if (filenames == NULL)
     {
-      g_printerr (_("No filename specified\n"));
-      exit (1);
+      rnt_context_error (ctx, _("No filename specified\n"));
+      return NULL;
     }
 
   if (bounds_str)
     {
       if (!rect_init_from_arg (&bounds, bounds_str))
         {
-          g_printerr (_("Invalid rectangle given for bounds\n"));
-          exit (1);
+          rnt_context_error (ctx, _("Invalid rectangle given for bounds\n"));
+          return NULL;
         }
     }
 
@@ -309,21 +318,23 @@ filter_render (GskRenderNode  *node,
     {
       if (n == NULL)
         {
-          g_printerr (_("%u filenames given but only %zu nodes available\n"),
-                      g_strv_length (filenames), i);
-          exit (1);
+          rnt_context_error (ctx, _("%u filenames given but only %zu nodes available\n"),
+                             g_strv_length (filenames), i);
+          return NULL;
         }
 
-      render_node (n,
-                   renderer,
-                   bounds_str ? &bounds : NULL,
-                   snap,
-                   filenames[i]);
+      if (!render_node (n,
+                        ctx,
+                        renderer,
+                        bounds_str ? &bounds : NULL,
+                        snap,
+                        filenames[i]))
+        return NULL;
 
       n = rnt_context_get_node (ctx, i);
     }
 
   g_strfreev (filenames);
 
-  return node;
+  return gsk_render_node_ref (node);
 }

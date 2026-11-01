@@ -19,7 +19,9 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtk-rendernode-tool.h"
+
+#include "rntcontext.h"
+#include "rntfilter.h"
 
 typedef struct
 {
@@ -85,9 +87,9 @@ filter_cut (GskRenderNode  *node,
 
   if (!g_option_context_parse (context, &argc, (char ***) &argv, &error))
     {
-      g_printerr ("cut: %s\n", error->message);
+      rnt_context_error (ctx, "cut: %s\n", error->message);
       g_error_free (error);
-      exit (1);
+      return NULL;
     }
 
   switch (argc)
@@ -96,8 +98,8 @@ filter_cut (GskRenderNode  *node,
       data.end = strtoul (argv[2], &s, 0);
       if (s == argv[2] || *s != 0)
         {
-          g_printerr ("cut: Invalid value for end: %s\n", argv[2]);
-          exit (1);
+          rnt_context_error (ctx, "cut: Invalid value for end: %s\n", argv[2]);
+          return NULL;
         }
       G_GNUC_FALLTHROUGH;
 
@@ -105,14 +107,14 @@ filter_cut (GskRenderNode  *node,
       data.start = strtoul (argv[1], &s, 0);
       if (s == argv[1] || *s != 0)
         {
-          g_printerr ("cut: Invalid value for end: %s\n", argv[2]);
-          exit (1);
+          rnt_context_error (ctx, "cut: Invalid value for end: %s\n", argv[2]);
+          return NULL;
         }
       break;
 
     default:
-      g_printerr ("Usage: cut START [END]\n");
-      exit (1);
+      rnt_context_error (ctx, "Usage: cut START [END]\n");
+      return NULL;
     }
 
   replay = gsk_render_replay_new ();
@@ -122,8 +124,6 @@ filter_cut (GskRenderNode  *node,
                                      NULL);
   result = gsk_render_replay_filter_node (replay, node);
   gsk_render_replay_free (replay);
-
-  gsk_render_node_unref (node);
 
   return result;
 }
