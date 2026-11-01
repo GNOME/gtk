@@ -53,6 +53,7 @@ struct _GdkMacosSeat
 
   GdkDevice *logical_pointer;
   GdkDevice *logical_keyboard;
+  GdkDevice *touchpad;
 
   GdkMacosTabletData *current_tablet;
   GPtrArray *tablets;
@@ -99,6 +100,12 @@ gdk_macos_seat_dispose (GObject *object)
     {
       gdk_seat_device_removed (GDK_SEAT (self), self->logical_keyboard);
       g_clear_object (&self->logical_pointer);
+    }
+
+  if (self->touchpad)
+    {
+      gdk_seat_device_removed (GDK_SEAT (self), self->touchpad);
+      g_clear_object (&self->touchpad);
     }
 
   g_clear_pointer (&self->tablets, g_ptr_array_unref);
@@ -165,6 +172,9 @@ gdk_macos_seat_get_devices (GdkSeat             *seat,
 
   if (self->logical_pointer && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
     physical_devices = g_list_prepend (physical_devices, self->logical_pointer);
+
+  if (self->touchpad && (capabilities & GDK_SEAT_CAPABILITY_POINTER))
+    physical_devices = g_list_prepend (physical_devices, self->touchpad);
 
   if (self->logical_keyboard && (capabilities & GDK_SEAT_CAPABILITY_KEYBOARD))
     physical_devices = g_list_prepend (physical_devices, self->logical_keyboard);
@@ -242,12 +252,22 @@ init_devices (GdkMacosSeat *self)
                                          "seat", self,
                                          NULL);
 
+  /* touchpad */
+  self->touchpad = g_object_new (GDK_TYPE_MACOS_DEVICE,
+                                 "name", "Touchpad",
+                                 "source", GDK_SOURCE_TOUCHPAD,
+                                 "has-cursor", TRUE,
+                                 "display", self->display,
+                                 "seat", self,
+                                 NULL);
+
   /* link both */
   _gdk_device_set_associated_device (self->logical_pointer, self->logical_keyboard);
   _gdk_device_set_associated_device (self->logical_keyboard, self->logical_pointer);
 
   gdk_seat_device_added (GDK_SEAT (self), self->logical_pointer);
   gdk_seat_device_added (GDK_SEAT (self), self->logical_keyboard);
+  gdk_seat_device_added (GDK_SEAT (self), self->touchpad);
 }
 
 GdkSeat *
@@ -266,6 +286,14 @@ _gdk_macos_seat_new (GdkMacosDisplay *display)
   init_devices (self);
 
   return GDK_SEAT (g_steal_pointer (&self));
+}
+
+GdkDevice *
+_gdk_macos_seat_get_touchpad (GdkMacosSeat *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SEAT (self), NULL);
+
+  return self->touchpad;
 }
 
 static GdkDeviceToolType

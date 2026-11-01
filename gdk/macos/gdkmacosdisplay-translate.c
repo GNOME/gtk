@@ -648,7 +648,13 @@ fill_scroll_event (GdkMacosDisplay *self,
     return GDK_MACOS_EVENT_DROP;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
-  pointer = gdk_seat_get_pointer (seat);
+
+  /* Traditional scroll wheels don't report a a phase */
+  if (phase != NSEventPhaseNone)
+    pointer = _gdk_macos_seat_get_touchpad (GDK_MACOS_SEAT (seat));
+  else
+    pointer = gdk_seat_get_pointer (seat);
+
   state = _gdk_macos_display_get_current_mouse_modifiers (self) |
           _gdk_macos_display_get_current_keyboard_modifiers (self);
 
