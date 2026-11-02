@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-10-30 12:57+0000\n"
-"PO-Revision-Date: 2026-10-31 12:49+0100\n"
+"POT-Creation-Date: 2026-11-01 19:19+0000\n"
+"PO-Revision-Date: 2026-11-02 01:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2667,7 +2667,7 @@ msgstr "Ime"
 
 #: gtk/gtkfilechooserwidget.c:7441 gtk/inspector/resource-list.ui:97
 #: gtk/ui/gtkfontchooserwidget.ui:226 gtk/ui/gtkfontchooserwidget.ui:392
-#: tools/filters/load-icon.c:106
+#: tools/filters/load-icon.c:107
 msgid "Size"
 msgstr "Velikost"
 
@@ -7735,8 +7735,8 @@ msgstr ""
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
 #: tools/gtk-image-tool-play.c:338 tools/gtk-path-tool-render.c:63
-#: tools/gtk-rendernode-tool.c:34 tools/filters/compare.c:71
-#: tools/filters/diff.c:37 tools/filters/load-icon.c:107
+#: tools/filters/compare.c:73 tools/filters/diff.c:38
+#: tools/filters/load-icon.c:108
 msgid "FILE"
 msgstr "DATOTEKA"
 
@@ -7812,12 +7812,12 @@ msgstr ""
 "Datoteka %s obstaja.\n"
 "Za prepisovanje je na voljo zastavica --force.\n"
 
-#: tools/gtk-builder-tool-screenshot.c:330 tools/filters/render.c:215
+#: tools/gtk-builder-tool-screenshot.c:330 tools/filters/render.c:221
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Odvod je zapisan v %s.\n"
 
-#: tools/gtk-builder-tool-screenshot.c:334 tools/filters/render.c:219
+#: tools/gtk-builder-tool-screenshot.c:334 tools/filters/render.c:225
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Datoteke %s ni mogoče shraniti: %s\n"
@@ -7837,7 +7837,7 @@ msgstr "Prepiši obstoječo datoteko"
 #: tools/gtk-builder-tool-screenshot.c:361 tools/gtk-image-tool-compare.c:47
 #: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:339
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
-#: tools/gtk-rendernode-tool.c:357 tools/filters/render.c:272
+#: tools/gtk-rendernode-tool.c:103 tools/filters/render.c:281
 msgid "FILE…"
 msgstr "DATOTEKA …"
 
@@ -7980,7 +7980,7 @@ msgstr ""
 "  play         Predvaja animacijo\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:44 tools/filters/compare.c:71
+#: tools/gtk-image-tool-compare.c:44 tools/filters/compare.c:73
 msgid "Output file"
 msgstr "Izhodna datoteka"
 
@@ -8000,51 +8000,51 @@ msgstr "Slikovna datoteka ni določena\n"
 msgid "Can only accept two image files\n"
 msgstr "Lahko sprejme samo dve slikovni datoteki\n"
 
-#: tools/gtk-image-tool-compare.c:90 tools/filters/compare.c:123
+#: tools/gtk-image-tool-compare.c:90 tools/filters/compare.c:125
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "Slike diff ni možno shraniti v %s\n"
 
-#: tools/gtk-image-tool-compare.c:100 tools/filters/compare.c:133
+#: tools/gtk-image-tool-compare.c:100 tools/filters/compare.c:135
 #, c-format
 msgid "Differences written to %s.\n"
 msgstr "Razlike so zapisane v %s.\n"
 
-#: tools/gtk-image-tool-compare.c:102 tools/filters/compare.c:135
+#: tools/gtk-image-tool-compare.c:102 tools/filters/compare.c:137
 #, c-format
 msgid "The images are different.\n"
 msgstr "Sliki se razlikujeta.\n"
 
-#: tools/gtk-image-tool-compare.c:105 tools/filters/compare.c:138
+#: tools/gtk-image-tool-compare.c:105 tools/filters/compare.c:140
 #, c-format
 msgid "No differences.\n"
 msgstr "Brez razlik.\n"
 
-#: tools/gtk-image-tool-convert.c:140 tools/filters/texture.c:93
+#: tools/gtk-image-tool-convert.c:140 tools/filters/texture.c:95
 msgid "Format to use"
 msgstr "Oblika, ki jo želite uporabiti"
 
-#: tools/gtk-image-tool-convert.c:140 tools/filters/texture.c:93
+#: tools/gtk-image-tool-convert.c:140 tools/filters/texture.c:95
 msgid "FORMAT"
 msgstr "OBLIKAZAPISA"
 
 #: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
-#: tools/filters/texture.c:94
+#: tools/filters/texture.c:96
 msgid "Color state to use"
 msgstr "Barvno stanje, ki ga želite uporabiti"
 
 #: tools/gtk-image-tool-convert.c:141 tools/gtk-image-tool-relabel.c:85
-#: tools/filters/texture.c:94
+#: tools/filters/texture.c:96
 msgid "COLORSTATE"
 msgstr "BARVNOSTANJE"
 
 #: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
-#: tools/filters/texture.c:95
+#: tools/filters/texture.c:97
 msgid "Color state to use, as cicp tuple"
 msgstr "Barvno stanje, ki ga je treba uporabiti, kot npr. dvojec cicp"
 
 #: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:86
-#: tools/filters/texture.c:95
+#: tools/filters/texture.c:97
 msgid "CICP"
 msgstr "CICP"
 
@@ -8057,7 +8057,7 @@ msgstr "Pretvorite sliko v drugo obliko ali barvno stanje."
 msgid "Can only accept a single image file and output file\n"
 msgstr "Lahko sprejme samo eno slikovno datoteko in izhodno datoteko\n"
 
-#: tools/gtk-image-tool-convert.c:187 tools/filters/texture.c:131
+#: tools/gtk-image-tool-convert.c:187 tools/filters/texture.c:133
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -8068,7 +8068,7 @@ msgstr ""
 "Možne vrednosti:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:204 tools/filters/texture.c:148
+#: tools/gtk-image-tool-convert.c:204 tools/filters/texture.c:152
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -8080,13 +8080,13 @@ msgstr ""
 "   %s\n"
 
 #: tools/gtk-image-tool-convert.c:214 tools/gtk-image-tool-relabel.c:141
-#: tools/filters/texture.c:158
+#: tools/filters/texture.c:164
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Ni mogoče hkrati določiti --color-state in --cicp\n"
 
 #: tools/gtk-image-tool-convert.c:222 tools/gtk-image-tool-relabel.c:149
-#: tools/filters/texture.c:166
+#: tools/filters/texture.c:172
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Ni podprti n-terec cicp: %s\n"
@@ -8117,7 +8117,7 @@ msgstr "Lahko sprejme samo eno slikovno datoteko\n"
 msgid "Don't add a titlebar"
 msgstr "Ne dodaj vrstice naziva"
 
-#: tools/gtk-image-tool-play.c:332 tools/filters/load-icon.c:104
+#: tools/gtk-image-tool-play.c:332 tools/filters/load-icon.c:105
 msgid "SIZE"
 msgstr "VELIKOST"
 
@@ -8362,7 +8362,7 @@ msgid "The output file"
 msgstr "Odvodna datoteka"
 
 #: tools/gtk-path-tool-render.c:64 tools/gtk-path-tool-show.c:116
-#: tools/filters/load-icon.c:99
+#: tools/filters/load-icon.c:100
 msgid "Foreground color"
 msgstr "Barva pisave"
 
@@ -8370,9 +8370,9 @@ msgstr "Barva pisave"
 #: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-render.c:67
 #: tools/gtk-path-tool-show.c:116 tools/gtk-path-tool-show.c:117
 #: tools/gtk-path-tool-show.c:118 tools/gtk-path-tool-show.c:119
-#: tools/filters/load-icon.c:99 tools/filters/load-icon.c:100
-#: tools/filters/load-icon.c:101 tools/filters/load-icon.c:102
-#: tools/filters/load-icon.c:103
+#: tools/filters/load-icon.c:100 tools/filters/load-icon.c:101
+#: tools/filters/load-icon.c:102 tools/filters/load-icon.c:103
+#: tools/filters/load-icon.c:104
 msgid "COLOR"
 msgstr "BARVA"
 
@@ -8561,30 +8561,11 @@ msgstr "Vrednosti »%s« ni mogoče razčleniti kot barvo"
 msgid "Failed to parse '%s' as number"
 msgstr "Razčlenjevanje »%s« kot število je spodletelo"
 
-#: tools/gtk-rendernode-tool.c:44
-msgid "Save the node to a file"
-msgstr "Shrani vozlišče v datoteko"
-
-#: tools/gtk-rendernode-tool.c:61 tools/gtk-rendernode-tool.c:75
-#, c-format
-msgid "Failed to save file: %s\n"
-msgstr "Datoteke ni mogoče shraniti: %s\n"
-
-#: tools/gtk-rendernode-tool.c:69 tools/filters/render.c:312
-#, c-format
-msgid "%u filenames given but only %zu nodes available\n"
-msgstr "Podanih %u imen datotek, vendar so na voljo le %zu vozlišča\n"
-
-#: tools/gtk-rendernode-tool.c:289
-#, c-format
-msgid "Argument \"%s\" is not a known filter\n"
-msgstr "Argument »%s« ni znana vrsta datotek\n"
-
-#: tools/gtk-rendernode-tool.c:356
+#: tools/gtk-rendernode-tool.c:102
 msgid "list all filters and exit"
 msgstr "Izpiši vse vrste datotek / filtre in končaj"
 
-#: tools/gtk-rendernode-tool.c:374
+#: tools/gtk-rendernode-tool.c:123
 msgid "Filter a node file and print the result."
 msgstr "Filtriraj datoteko vozlišča in natisni rezultat."
 
@@ -8726,274 +8707,275 @@ msgstr ""
 "Če res želite ustvariti predpomnilnik ikon, uporabite možnost --ignore-theme-"
 "index.\n"
 
-#: tools/filters/background-blur.c:50
+#: tools/filters/background-blur.c:52
 msgid "Show where background blur would take effect"
 msgstr "Pokaži, kje bi učinkovala zabrisanost ozadja"
 
-#: tools/filters/benchmark.c:110
+#: tools/filters/benchmark.c:111
 msgid "Add renderer to benchmark"
 msgstr "Dodaj izrisovalnik v preizkušanje"
 
-#: tools/filters/benchmark.c:110 tools/filters/compare.c:69
-#: tools/filters/render.c:269
+#: tools/filters/benchmark.c:111 tools/filters/compare.c:71
+#: tools/filters/render.c:278
 msgid "RENDERER"
 msgstr "IZRISOVALNIK"
 
-#: tools/filters/benchmark.c:111
+#: tools/filters/benchmark.c:112
 msgid "Number of runs with each renderer"
 msgstr "Število ponovitev z vsakim izrisovalnikom"
 
-#: tools/filters/benchmark.c:111
+#: tools/filters/benchmark.c:112
 msgid "RUNS"
 msgstr "PONOVITVE"
 
-#: tools/filters/benchmark.c:112
+#: tools/filters/benchmark.c:113
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Ne prenašaj rezultatov/čakaj na zaključek dela GPE"
 
-#: tools/filters/benchmark.c:121
+#: tools/filters/benchmark.c:122
 msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
-#: tools/filters/copypaste.c:42
+#: tools/filters/copypaste.c:44
 msgid "Replace copy/paste nodes with copies of nodes"
 msgstr "Zamenjaj vozlišča kopiraj/prilepi s kopijami vozlišč"
 
-#: tools/filters/compare.c:69 tools/filters/render.c:269
+#: tools/filters/compare.c:71 tools/filters/render.c:278
 msgid "Renderer to use"
 msgstr "Izrisovalnik za uporabo"
 
-#: tools/filters/compare.c:74
+#: tools/filters/compare.c:76
 msgid "FILE1 FILE2"
 msgstr "DATOTEKA1 DATOTEKA2"
 
-#: tools/filters/compare.c:85
+#: tools/filters/compare.c:87
 msgid "Compare rendering to .node or .png files."
 msgstr "Primerjaj z izrisovanjem v datoteke .node ali .png."
 
-#: tools/filters/compare.c:98
-#, c-format
+#: tools/filters/compare.c:100
 msgid "Must specify a filename\n"
 msgstr "Določiti morate ime datoteke\n"
 
-#: tools/filters/compare.c:105 tools/filters/render.c:178
+#: tools/filters/compare.c:107 tools/filters/render.c:183
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr ""
 "Ustvarjanje izrisovalnika je spodletelo: %s\n"
 "\n"
 
-#: tools/filters/compare.c:113
+#: tools/filters/compare.c:115
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "Datoteke %s ni mogoče naložiti: %s\n"
 
-#: tools/filters/cut.c:84
+#: tools/filters/cut.c:86
 msgid "Cut out a part of the node"
 msgstr "Izreži del vozlišča"
 
-#: tools/filters/diff.c:52
+#: tools/filters/diff.c:53
 msgid "Show where two nodes differ"
 msgstr "Pokaži, kje se vozlišči razlikujeta"
 
-#: tools/filters/extract.c:75 tools/filters/extract.c:150
+#: tools/filters/extract.c:77
 #, c-format
 msgid "Failed to write %s\n"
 msgstr "Zapisovanje %s ni uspelo\n"
 
-#: tools/filters/extract.c:202
+#: tools/filters/extract.c:153
+#, c-format
+msgid "Failed to write %s: %s\n"
+msgstr "Zapisovanje %s ni uspelo: %s\n"
+
+#: tools/filters/extract.c:206
 msgid "Directory to use"
 msgstr "Mapa za uporabo"
 
-#: tools/filters/extract.c:202
+#: tools/filters/extract.c:206
 msgid "DIRECTORY"
 msgstr "MAPA"
 
-#: tools/filters/extract.c:203
+#: tools/filters/extract.c:207
 msgid "Basename for extracted files"
 msgstr "Osnova imena za izvlečene datoteke"
 
-#: tools/filters/extract.c:203
+#: tools/filters/extract.c:207
 msgid "NAME"
 msgstr "IME"
 
-#: tools/filters/extract.c:204
-msgid "Be verbose"
-msgstr "Podrobni izpis"
-
-#: tools/filters/extract.c:212
+#: tools/filters/extract.c:215
 msgid "Extract textures and glyphs"
 msgstr "Izvleci teksture in reliefne brazde"
 
-#: tools/filters/info.c:121 tools/filters/info.c:125 tools/filters/info.c:127
+#: tools/filters/info.c:124 tools/filters/info.c:128 tools/filters/info.c:130
 msgid "Number of nodes:"
 msgstr "Število vozlišč:"
 
-#: tools/filters/info.c:122 tools/filters/info.c:132
+#: tools/filters/info.c:125 tools/filters/info.c:135
 msgid "leaf nodes"
 msgstr "listna vozlišča"
 
-#: tools/filters/info.c:127 tools/filters/info.c:136
+#: tools/filters/info.c:130 tools/filters/info.c:139
 msgid "unique:"
 msgstr "edinstveno:"
 
-#: tools/filters/info.c:141
+#: tools/filters/info.c:144
 msgid "Depth:"
 msgstr "Globina:"
 
-#: tools/filters/info.c:144
+#: tools/filters/info.c:147
 msgid "Bounds:"
 msgstr "Meje:"
 
-#: tools/filters/info.c:145
+#: tools/filters/info.c:148
 msgid "Origin:"
 msgstr "Izvor:"
 
-#: tools/filters/info.c:149 tools/filters/info.c:155
+#: tools/filters/info.c:152 tools/filters/info.c:158
 msgid "Opaque part:"
 msgstr "Neprosojni del:"
 
-#: tools/filters/info.c:175
+#: tools/filters/info.c:178
 msgid "Provide information about the render node."
 msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 
-#: tools/filters/load-icon.c:98
+#: tools/filters/load-icon.c:99
 msgid "Recolor the node"
 msgstr "Prebarvaj vozlišče"
 
-#: tools/filters/load-icon.c:100
+#: tools/filters/load-icon.c:101
 msgid "Success color"
 msgstr "Barva uspeha"
 
-#: tools/filters/load-icon.c:101
+#: tools/filters/load-icon.c:102
 msgid "Warning color"
 msgstr "Opozorilna barva"
 
-#: tools/filters/load-icon.c:102
+#: tools/filters/load-icon.c:103
 msgid "Error color"
 msgstr "Barva napake"
 
-#: tools/filters/load-icon.c:103
+#: tools/filters/load-icon.c:104
 msgid "Accent color"
 msgstr "Barva poudarka"
 
-#: tools/filters/load-icon.c:104 tools/filters/load-icon.c:105
+#: tools/filters/load-icon.c:105 tools/filters/load-icon.c:106
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: tools/filters/load-icon.c:105 tools/filters/load-icon.c:106
+#: tools/filters/load-icon.c:106 tools/filters/load-icon.c:107
 msgid "NUM"
 msgstr "ŠTE"
 
-#: tools/filters/load-icon.c:116
+#: tools/filters/load-icon.c:117
 msgid "Load icons from filenames"
 msgstr "Naloži ikone iz imen datotek"
 
-#: tools/filters/load-icon.c:197 tools/filters/render.c:295
-#, c-format
+#: tools/filters/load-icon.c:198 tools/filters/render.c:304
 msgid "No filename specified\n"
 msgstr "Ni določene ime datoteke\n"
 
-#: tools/filters/match.c:260
-#, c-format
+#: tools/filters/match.c:262
 msgid "Failed to parse node pattern\n"
 msgstr "Razčlenjevanje vzorca vozlišč je spodletelo\n"
 
-#: tools/filters/match.c:285
+#: tools/filters/match.c:287
 msgid "Count the matches instead"
 msgstr "Namesto tega preštej zadetke"
 
-#: tools/filters/match.c:286
+#: tools/filters/match.c:288
 msgid "Keep existing nodes in stack"
 msgstr "Ohrani obstoječa vozlišča v skladu"
 
-#: tools/filters/match.c:287
+#: tools/filters/match.c:289
 msgid "PATTERN"
 msgstr "VZOREC"
 
-#: tools/filters/match.c:296
+#: tools/filters/match.c:298
 msgid "Match patterns in the render node."
 msgstr "Najdi ujemajoča vozlišča v vozlišču za izrisovanje."
 
-#: tools/filters/match.c:309
-#, c-format
+#: tools/filters/match.c:311
 msgid "Can only accept a pattern\n"
 msgstr "Lahko sprejme samo vzorec\n"
 
-#: tools/filters/merge.c:180
+#: tools/filters/merge.c:181
 msgid "Use float bounds, not integers"
 msgstr "Uporabi meje s plavajočo vejico, ne s celimi števili"
 
-#: tools/filters/merge.c:181
+#: tools/filters/merge.c:182
 msgid "Merge nodes using a flow layout"
 msgstr "Spoji vozlišča s postavitvijo poteka"
 
-#: tools/filters/merge.c:182
+#: tools/filters/merge.c:183
 msgid "Merge nodes horizontally"
 msgstr "Spoji vozlišča vodoravno"
 
-#: tools/filters/merge.c:183
+#: tools/filters/merge.c:184
 msgid "Keep nodes in stack"
 msgstr "Ohrani vozlišča na skladu"
 
-#: tools/filters/merge.c:184
+#: tools/filters/merge.c:185
 msgid "Merge nodes vertically"
 msgstr "Spoji vozlišča navpično"
 
-#: tools/filters/merge.c:193
+#: tools/filters/merge.c:194
 msgid "Merge the stack of nodes into one"
 msgstr "Spoji sklad vozlišč v enega"
 
-#: tools/filters/opaque.c:47
+#: tools/filters/opaque.c:49
 msgid "Show the opaque part"
 msgstr "Pokaži neprosojni del"
 
-#: tools/filters/render.c:152 tools/filters/render.c:164
+#: tools/filters/render.c:155 tools/filters/render.c:168
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Ni mogoče ustvariti zapisa SVG: %s\n"
 
-#: tools/filters/render.c:270
+#: tools/filters/render.c:279
 msgid "Keep node position unchanged"
 msgstr "Položaj vozlišča naj ostane nespremenjen"
 
-#: tools/filters/render.c:271
+#: tools/filters/render.c:280
 msgid "Area to render"
 msgstr "Območje za izrisovanje"
 
-#: tools/filters/render.c:271
+#: tools/filters/render.c:280
 msgid "X,Y,W,H"
 msgstr "X,Y,Š,V"
 
-#: tools/filters/render.c:282
+#: tools/filters/render.c:291
 msgid "Render to an image."
 msgstr "Izriši v sliko."
 
-#: tools/filters/render.c:303
-#, c-format
+#: tools/filters/render.c:312
 msgid "Invalid rectangle given for bounds\n"
 msgstr "Neveljaven pravokotnik za meje\n"
 
-#: tools/filters/show.c:108
+#: tools/filters/render.c:321
+#, c-format
+msgid "%u filenames given but only %zu nodes available\n"
+msgstr "Podanih %u imen datotek, vendar so na voljo le %zu vozlišča\n"
+
+#: tools/filters/show.c:109
 msgid "Put node into offload container"
 msgstr "Postavi vozlišče v vsebnik za razbremenitev"
 
-#: tools/filters/show.c:109
+#: tools/filters/show.c:110
 msgid "Add a titlebar"
 msgstr "Dodaj vrstico naziva"
 
-#: tools/filters/show.c:117
+#: tools/filters/show.c:118
 msgid "Show the render node."
 msgstr "Prikaži vozlišče za izrisovanje."
 
-#: tools/filters/simplify.c:213
+#: tools/filters/simplify.c:215
 msgid "Simplify node tree"
 msgstr "Poenostavi drevo vozlišč"
 
-#: tools/filters/strip.c:56
+#: tools/filters/strip.c:58
 msgid "Strip debug nodes"
 msgstr "Odvzemi razhroščevalna vozlišča"
 
-#: tools/filters/texture.c:106
+#: tools/filters/texture.c:108
 msgid "Convert textures"
 msgstr "Pretvori teksture"
