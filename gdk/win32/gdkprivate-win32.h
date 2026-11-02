@@ -21,6 +21,7 @@
 
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/gdkdebugprivate.h>
+#include <gdk/win32/gdkwin32dpi-private.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32keys.h>
@@ -88,11 +89,23 @@ void     gdk_win32_display_handle_table_remove  (GdkDisplay *display,
 gpointer      gdk_win32_display_handle_table_lookup_ (GdkDisplay *display,
                                                       HWND        handle);
 
-cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
-                                              guint scale);
+cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN                  hrgn,
+                                              GdkWin32Surface       *surface);
 
 void    _gdk_win32_adjust_client_rect   (GdkSurface *surface,
                                          RECT      *RECT);
+void    _gdk_win32_adjust_client_rect_for_dpi (GdkSurface        *surface,
+                                               RECT              *rect,
+                                               const GdkWin32Dpi *dpi);
+void    _gdk_win32_get_outer_rect_for_dpi (GdkSurface        *surface,
+                                           int                width,
+                                           int                height,
+                                           const GdkWin32Dpi *dpi,
+                                           RECT              *rect);
+void    _gdk_win32_surface_move_for_dpi (GdkSurface        *surface,
+                                         int                x,
+                                         int                y,
+                                         const GdkWin32Dpi *dpi);
 
 GdkSurface *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkSurface *surface);
@@ -246,9 +259,9 @@ Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
 void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
 Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
-GdkWin32HCursor *_gdk_win32_display_get_win32hcursor_with_scale (GdkWin32Display *display,
-                                                                 GdkCursor       *cursor,
-                                                                 int              scale);
+GdkWin32HCursor *_gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
+                                                              GdkCursor         *cursor,
+                                                              const GdkWin32Dpi *dpi);
 
 HICON _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
                                            gboolean    is_icon,
@@ -312,6 +325,11 @@ void gdk_win32_surface_raise (GdkSurface *surface);
 void gdk_win32_surface_resize (GdkSurface *surface,
                                int         width,
                                int         height);
+void gdk_win32_surface_dpi_changed (GdkSurface *surface,
+                                    int         x,
+                                    int         y,
+                                    int         width,
+                                    int         height);
 
 BOOL WINAPI GtkShowSurfaceHWND (GdkSurface *surface,
                                 int        cmd_show);

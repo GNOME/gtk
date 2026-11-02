@@ -91,7 +91,7 @@ gdk_win32_surface_init (GdkWin32Surface *impl)
   impl->transient_children = NULL;
   impl->num_transients = 0;
   impl->changing_state = FALSE;
-  impl->surface_scale = 1;
+  impl->surface_dpi = GDK_WIN32_DPI_INIT (GDK_WIN32_DEFAULT_DPI);
   impl->inhibit_logout = 0;
   impl->cb_session_query_end = NULL;
   impl->cb_session_end = NULL;
@@ -160,14 +160,28 @@ gdk_win32_surface_submit_frame (GdkSurface          *surface,
 }
 
 void
-_gdk_win32_adjust_client_rect (GdkSurface *surface,
-                               RECT       *rect)
+_gdk_win32_adjust_client_rect_for_dpi (GdkSurface        *surface,
+                                       RECT              *rect,
+                                       const GdkWin32Dpi *dpi)
 {
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
   LONG style, exstyle;
 
   style = GetWindowLong (GDK_SURFACE_HWND (surface), GWL_STYLE);
   exstyle = GetWindowLong (GDK_SURFACE_HWND (surface), GWL_EXSTYLE);
-  API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
+
+  /* Always callable: falls back to plain AdjustWindowRectEx() if unavailable. */
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (rect, style, FALSE, exstyle, dpi->dpi));
+}
+
+void
+_gdk_win32_adjust_client_rect (GdkSurface *surface,
+                               RECT       *rect)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+  _gdk_win32_adjust_client_rect_for_dpi (surface, rect, &impl->surface_dpi);
 }
 
 void
@@ -349,8 +363,6 @@ gdk_win32_surface_constructed (GObject *object)
   int pos;
   int size;
 
-  impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
-
   dwStyle = 0;
   dwExStyle = 0;
   owner = NULL;
@@ -409,6 +421,10 @@ gdk_win32_surface_constructed (GObject *object)
       WIN32_API_FAILED ("CreateWindowExW");
       g_error ("Fatal error: CreateWindowExW failed.");
     }
+
+  /* Query with the surface now that it has an HWND, so a per-monitor-aware
+   * process gets its actual monitor's DPI instead of the system DPI. */
+  impl->surface_dpi = gdk_win32_display_get_monitor_dpi (display_win32, surface, NULL);
 
   GetWindowRect (impl->handle, &rect);
   impl->initial_x = rect.left;
@@ -517,6 +533,20 @@ gdk_win32_surface_destroy_notify (GdkSurface *surface)
   g_object_unref (surface);
 }
 
+void
+_gdk_win32_get_outer_rect_for_dpi (GdkSurface        *surface,
+                                   int                width,
+                                   int                height,
+                                   const GdkWin32Dpi *dpi,
+                                   RECT              *rect)
+{
+  rect->left = rect->top = 0;
+  rect->right = gdk_win32_dpi_to_device (dpi, width);
+  rect->bottom = gdk_win32_dpi_to_device (dpi, height);
+
+  _gdk_win32_adjust_client_rect_for_dpi (surface, rect, dpi);
+}
+
 static void
 get_outer_rect (GdkSurface *surface,
                 int         width,
@@ -525,11 +555,7 @@ get_outer_rect (GdkSurface *surface,
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
-  rect->left = rect->top = 0;
-  rect->right = width * impl->surface_scale;
-  rect->bottom = height * impl->surface_scale;
-
-  _gdk_win32_adjust_client_rect (surface, rect);
+  _gdk_win32_get_outer_rect_for_dpi (surface, width, height, &impl->surface_dpi, rect);
 }
 
 static void
@@ -621,10 +647,10 @@ show_surface_internal (GdkSurface *surface,
 	{
 	  GdkSurface *owner = impl->transient_owner;
 	  /* Center on transient parent */
-          center_on_rect.left = owner->x * impl->surface_scale;
-          center_on_rect.top = owner->y * impl->surface_scale;
-	  center_on_rect.right = center_on_rect.left + owner->width * impl->surface_scale;
-	  center_on_rect.bottom = center_on_rect.top + owner->height * impl->surface_scale;
+	  center_on_rect.left = gdk_win32_surface_to_device (impl, owner->x);
+	  center_on_rect.top = gdk_win32_surface_to_device (impl, owner->y);
+	  center_on_rect.right = center_on_rect.left + gdk_win32_surface_to_device (impl, owner->width);
+	  center_on_rect.bottom = center_on_rect.top + gdk_win32_surface_to_device (impl, owner->height);
 
 	  _gdk_win32_adjust_client_rect (GDK_SURFACE (owner), &center_on_rect);
 	  center = TRUE;
@@ -773,40 +799,48 @@ gdk_win32_surface_hide (GdkSurface *surface)
   GtkShowSurfaceHWND (surface, SW_HIDE);
 }
 
-static void
-gdk_win32_surface_do_move (GdkSurface *surface,
-                           int         x,
-                           int         y)
+void
+_gdk_win32_surface_move_for_dpi (GdkSurface        *surface,
+                                 int                x,
+                                 int                y,
+                                 const GdkWin32Dpi *dpi)
 {
-  RECT outer_rect;
-  GdkWin32Surface *impl;
+  int scaled_x, scaled_y;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_surface_move: %p: %+d%+d\n",
-                           GDK_SURFACE_HWND (surface), x, y));
+  GDK_NOTE (MISC, g_print ("_gdk_win32_surface_move_for_dpi: %p: %+d%+d @%u dpi\n",
+                           GDK_SURFACE_HWND (surface), x, y, dpi->dpi));
 
   if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
     return;
 
-  impl = GDK_WIN32_SURFACE (surface);
-  get_outer_rect (surface, surface->width, surface->height, &outer_rect);
+  scaled_x = gdk_win32_dpi_to_device (dpi, x);
+  scaled_y = gdk_win32_dpi_to_device (dpi, y);
 
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
                            "NOACTIVATE|NOSIZE|NOZORDER)\n",
                            GDK_SURFACE_HWND (surface),
-                           x * impl->surface_scale,
-                           y * impl->surface_scale));
+                           scaled_x, scaled_y));
 
   API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
                            SWP_NOZORDER_SPECIFIED,
-                           x * impl->surface_scale,
-                           y * impl->surface_scale,
+                           scaled_x,
+                           scaled_y,
                            0, 0,
                            SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+}
+
+static void
+gdk_win32_surface_do_move (GdkSurface *surface,
+                           int         x,
+                           int         y)
+{
+  _gdk_win32_surface_move_for_dpi (surface, x, y,
+                                   &GDK_WIN32_SURFACE (surface)->surface_dpi);
 }
 
 void
@@ -882,21 +916,112 @@ gdk_win32_surface_do_move_resize (GdkSurface *surface,
 
   get_outer_rect (surface, width, height, &outer_rect);
 
-  GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
-                           "NOACTIVATE|NOZORDER)\n",
-                           GDK_SURFACE_HWND (surface),
-                           x * impl->surface_scale,
-                           y * impl->surface_scale,
-                           outer_rect.right - outer_rect.left,
-                           outer_rect.bottom - outer_rect.top));
+  {
+    int scaled_x = gdk_win32_surface_to_device (impl, x);
+    int scaled_y = gdk_win32_surface_to_device (impl, y);
 
-  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
-                           SWP_NOZORDER_SPECIFIED,
-                           x * impl->surface_scale,
-                           y * impl->surface_scale,
-                           outer_rect.right - outer_rect.left,
-                           outer_rect.bottom - outer_rect.top,
-                           SWP_NOACTIVATE | SWP_NOZORDER));
+    GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
+                             "NOACTIVATE|NOZORDER)\n",
+                             GDK_SURFACE_HWND (surface),
+                             scaled_x, scaled_y,
+                             outer_rect.right - outer_rect.left,
+                             outer_rect.bottom - outer_rect.top));
+
+    API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
+                             SWP_NOZORDER_SPECIFIED,
+                             scaled_x, scaled_y,
+                             outer_rect.right - outer_rect.left,
+                             outer_rect.bottom - outer_rect.top,
+                             SWP_NOACTIVATE | SWP_NOZORDER));
+  }
+}
+
+void
+gdk_win32_surface_dpi_changed (GdkSurface *surface,
+                               int         x,
+                               int         y,
+                               int         width,
+                               int         height)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  /* Iconic: skip, but flag it for replay once the surface is shown again. */
+  if (IsIconic (GDK_SURFACE_HWND (surface)))
+    {
+      impl->dpi_changed_while_minimized = TRUE;
+      return;
+    }
+
+  if (GDK_IS_DRAG_SURFACE (surface))
+    {
+      /* Moving a drag icon re-enters WM_DPICHANGED (gtk#7175); just resize + repaint. */
+      gdk_win32_surface_resize (surface, surface->width, surface->height);
+      _gdk_surface_update_size (surface);
+      gdk_surface_invalidate_rect (surface, NULL);
+      return;
+    }
+
+  {
+    /* Nullable: geometry may not have settled yet (e.g. just after restore). */
+    GdkMonitor *monitor = gdk_display_get_monitor_at_surface (display, surface);
+
+    if (monitor != NULL)
+      gdk_monitor_set_scale (monitor, gdk_surface_get_scale (surface));
+  }
+
+  /* Application size is invariant across a DPI change; recomputing it at the
+   * new scale reproduces Windows' suggested size without needing the rect verbatim. */
+  gdk_win32_surface_do_move_resize (surface,
+                                    gdk_win32_surface_to_application (impl, x),
+                                    gdk_win32_surface_to_application (impl, y),
+                                    surface->width, surface->height);
+
+  /* Re-base an in-flight CSD drag, or the next motion lurches off the pointer. */
+  {
+    GdkW32DragMoveResizeContext *drag = &impl->drag_move_resize_context;
+
+    if (drag->op != GDK_WIN32_DRAGOP_NONE)
+      {
+        POINT pt;
+
+        drag->start_rect.left = x;
+        drag->start_rect.top = y;
+        drag->start_rect.right = x + width;
+        drag->start_rect.bottom = y + height;
+
+        if (_gdk_win32_get_cursor_pos (display, &pt))
+          {
+            drag->start_root_x = gdk_win32_surface_to_application (impl, pt.x);
+            drag->start_root_y = gdk_win32_surface_to_application (impl, pt.y);
+          }
+      }
+  }
+
+  /* A pure DPI change keeps the application size; force the framebuffer resize + repaint. */
+  _gdk_surface_update_size (surface);
+  gdk_surface_invalidate_rect (surface, NULL);
+
+  gdk_surface_request_layout (surface);
+
+  /* update_cursor() never runs on a DPI change; re-apply for the new scale. */
+  {
+    GdkSeat *seat = gdk_display_get_default_seat (display);
+    GdkDevice *pointer = seat != NULL ? gdk_seat_get_pointer (seat) : NULL;
+    GdkCursor *cursor = NULL;
+
+    if (pointer != NULL)
+      cursor = gdk_surface_get_device_cursor (surface, pointer);
+    if (cursor == NULL)
+      cursor = gdk_surface_get_cursor (surface);
+
+    /* NULL would hit the default-cursor leak in the virtual device. */
+    if (pointer != NULL && cursor != NULL)
+      GDK_DEVICE_GET_CLASS (pointer)->set_surface_cursor (pointer, surface, cursor);
+  }
 }
 
 static void
@@ -1415,18 +1540,18 @@ gdk_win32_surface_get_geometry (GdkSurface *surface,
       rect.bottom = pt.y;
 
       if (x)
-        *x = rect.left / impl->surface_scale;
+        *x = gdk_win32_surface_to_application (impl, rect.left);
       if (y)
-        *y = rect.top / impl->surface_scale;
+        *y = gdk_win32_surface_to_application (impl, rect.top);
       if (width)
-        *width = (rect.right - rect.left) / impl->surface_scale;
+        *width = gdk_win32_surface_to_application (impl, rect.right - rect.left);
       if (height)
-        *height = (rect.bottom - rect.top) / impl->surface_scale;
+        *height = gdk_win32_surface_to_application (impl, rect.bottom - rect.top);
 
       GDK_DEBUG (MISC, "gdk_win32_surface_get_geometry: %p: %ldx%ld@%+ld%+ld\n",
                  GDK_SURFACE_HWND (surface),
-                 (rect.right - rect.left) / impl->surface_scale,
-                 (rect.bottom - rect.top) / impl->surface_scale,
+                 (long) gdk_win32_surface_to_application (impl, rect.right - rect.left),
+                 (long) gdk_win32_surface_to_application (impl, rect.bottom - rect.top),
                  rect.left, rect.top);
     }
 }
@@ -1438,28 +1563,23 @@ gdk_win32_surface_get_root_coords (GdkSurface *surface,
                                    int        *root_x,
                                    int        *root_y)
 {
-  int tx;
-  int ty;
   POINT pt;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
-  pt.x = x * impl->surface_scale;
-  pt.y = y * impl->surface_scale;
+  pt.x = gdk_win32_surface_to_device (impl, x);
+  pt.y = gdk_win32_surface_to_device (impl, y);
   ClientToScreen (GDK_SURFACE_HWND (surface), &pt);
-  tx = pt.x;
-  ty = pt.y;
 
   if (root_x)
-    *root_x = tx / impl->surface_scale;
+    *root_x = gdk_win32_surface_to_application (impl, pt.x);
   if (root_y)
-    *root_y = ty / impl->surface_scale;
+    *root_y = gdk_win32_surface_to_application (impl, pt.y);
 
   GDK_NOTE (MISC, g_print ("gdk_win32_surface_get_root_coords: %p: %+d%+d %+d%+d\n",
-			   GDK_SURFACE_HWND (surface),
-			   x * impl->surface_scale,
-			   y * impl->surface_scale,
-			   tx / impl->surface_scale,
-			   ty / impl->surface_scale));
+                           GDK_SURFACE_HWND (surface),
+                           (int) pt.x, (int) pt.y,
+                           gdk_win32_surface_to_application (impl, pt.x),
+                           gdk_win32_surface_to_application (impl, pt.y)));
 }
 
 static gboolean
@@ -1550,6 +1670,9 @@ _gdk_win32_surface_lacks_wm_decorations (GdkSurface *surface)
 void
 _gdk_win32_surface_update_style_bits (GdkSurface *surface)
 {
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  UINT dpi = impl->surface_dpi.dpi;
   GdkWMDecoration decorations;
   LONG old_style, new_style, old_exstyle, new_exstyle;
   gboolean all;
@@ -1569,7 +1692,9 @@ _gdk_win32_surface_update_style_bits (GdkSurface *surface)
 
   GetClientRect (GDK_SURFACE_HWND (surface), &before);
   after = before;
-  AdjustWindowRectEx (&before, old_style, FALSE, old_exstyle);
+  /* Same dpi for the before/after rects, so their delta (below) stays correct. */
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (&before, old_style, FALSE, old_exstyle, dpi));
 
   was_topmost = (old_exstyle & WS_EX_TOPMOST) ? TRUE : FALSE;
   was_layered = (old_exstyle & WS_EX_LAYERED) ? TRUE : FALSE;
@@ -1645,7 +1770,8 @@ _gdk_win32_surface_update_style_bits (GdkSurface *surface)
         }
     }
 
-  AdjustWindowRectEx (&after, new_style, FALSE, new_exstyle);
+  API_CALL (display->user32_dpi_funcs.adjustWinRectExForDpi,
+            (&after, new_style, FALSE, new_exstyle, dpi));
 
   GetWindowRect (GDK_SURFACE_HWND (surface), &rect);
   rect.left += after.left - before.left;
@@ -1724,9 +1850,9 @@ update_cursor_for_drag_move_resize (GdkSurface *surface,
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
 
   if (cursor != NULL)
-    win32_hcursor = _gdk_win32_display_get_win32hcursor_with_scale (display,
-                                                                    cursor,
-                                                                    gdk_surface_get_scale (surface));
+    win32_hcursor = _gdk_win32_display_get_win32hcursor_for_dpi (display,
+                                                                 cursor,
+                                                                 &GDK_WIN32_SURFACE (surface)->surface_dpi);
 
   g_set_object (&display->grab_cursor, win32_hcursor);
 
@@ -1834,34 +1960,34 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
           unmax_width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
           unmax_height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
 
-          shadow_unmax_width = unmax_width - (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
-          shadow_unmax_height = unmax_height - (impl->shadow.top + impl->shadow.bottom) * impl->surface_scale;
+          shadow_unmax_width = unmax_width - gdk_win32_surface_to_device (impl, impl->shadow.left + impl->shadow.right);
+          shadow_unmax_height = unmax_height - gdk_win32_surface_to_device (impl, impl->shadow.top + impl->shadow.bottom);
 
-          if (offsetx * impl->surface_scale < (shadow_unmax_width / 2) &&
-              offsety * impl->surface_scale < (shadow_unmax_height / 2))
+          if (gdk_win32_surface_to_device (impl, offsetx) < (shadow_unmax_width / 2) &&
+              gdk_win32_surface_to_device (impl, offsety) < (shadow_unmax_height / 2))
             {
-              placement.rcNormalPosition.top = (root_y - offsety + impl->shadow.top) * impl->surface_scale;
+              placement.rcNormalPosition.top = gdk_win32_surface_to_device (impl, root_y - offsety + impl->shadow.top);
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
 
               if (left_half)
                 {
-                  placement.rcNormalPosition.left = (root_x - offsetx + impl->shadow.left) * impl->surface_scale;
+                  placement.rcNormalPosition.left = gdk_win32_surface_to_device (impl, root_x - offsetx + impl->shadow.left);
                   placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
                 }
               else
                 {
-                  placement.rcNormalPosition.right = (root_x + offsetx + impl->shadow.right) * impl->surface_scale;
+                  placement.rcNormalPosition.right = gdk_win32_surface_to_device (impl, root_x + offsetx + impl->shadow.right);
                   placement.rcNormalPosition.left = placement.rcNormalPosition.right - unmax_width;
                 }
             }
           else
             {
-              placement.rcNormalPosition.left = root_x * impl->surface_scale - unmax_width / 2;
+              placement.rcNormalPosition.left = gdk_win32_surface_to_device (impl, root_x) - unmax_width / 2;
 
-              if (offsety * impl->surface_scale < shadow_unmax_height / 2)
-                placement.rcNormalPosition.top = (root_y - offsety + impl->shadow.top) * impl->surface_scale;
+              if (gdk_win32_surface_to_device (impl, offsety) < shadow_unmax_height / 2)
+                placement.rcNormalPosition.top = gdk_win32_surface_to_device (impl, root_y - offsety + impl->shadow.top);
               else
-                placement.rcNormalPosition.top = root_y * impl->surface_scale - unmax_height / 2;
+                placement.rcNormalPosition.top = gdk_win32_surface_to_device (impl, root_y) - unmax_height / 2;
 
               placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
@@ -1994,8 +2120,8 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *surface,
   if (!gdk_win32_get_surface_hwnd_rect (surface, &rect))
     return;
 
-  x /= impl->surface_scale;
-  y /= impl->surface_scale;
+  x = gdk_win32_surface_to_application (impl, x);
+  y = gdk_win32_surface_to_application (impl, y);
 
   if (context->current_root_x == x &&
       context->current_root_y == y)
@@ -2005,8 +2131,8 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *surface,
   context->current_root_y = y;
 
   new_rect = context->start_rect;
-  diffx = (x - context->start_root_x) * impl->surface_scale;
-  diffy = (y - context->start_root_y) * impl->surface_scale;
+  diffx = gdk_win32_surface_to_device (impl, x - context->start_root_x);
+  diffy = gdk_win32_surface_to_device (impl, y - context->start_root_y);
 
   switch (context->op)
     {
@@ -2158,11 +2284,11 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *surface,
 
       if (GDK_IS_TOPLEVEL (surface))
         {
-          int scale = impl->surface_scale;
-
           impl->next_layout.configured_rect = new_rect;
-          impl->next_layout.configured_width = (new_rect.right - new_rect.left + scale - 1) / scale;
-          impl->next_layout.configured_height = (new_rect.bottom - new_rect.top + scale - 1) / scale;
+          impl->next_layout.configured_width =
+            gdk_win32_surface_to_application_ceil (impl, new_rect.right - new_rect.left);
+          impl->next_layout.configured_height =
+            gdk_win32_surface_to_application_ceil (impl, new_rect.bottom - new_rect.top);
         }
       gdk_win32_get_window_size_and_position_from_client_rect (surface,
                                                               &new_rect,
@@ -2533,7 +2659,8 @@ gdk_win32_surface_show_window_menu (GdkSurface *surface,
   SendMessage (GDK_SURFACE_HWND (surface),
                WM_SYSMENU,
                0,
-               MAKELPARAM (x * impl->surface_scale, y * impl->surface_scale));
+               MAKELPARAM (gdk_win32_surface_to_device (impl, x),
+                           gdk_win32_surface_to_device (impl, y)));
 
   return TRUE;
 }
@@ -2669,30 +2796,11 @@ gdk_win32_surface_set_icon_list (GdkSurface *surface,
 double
 _gdk_win32_surface_get_scale (GdkSurface *surface)
 {
-  GdkDisplay *display;
-  GdkWin32Surface *impl;
-  GdkWin32Display *win32_display;
-
   g_return_val_if_fail (surface != NULL, 1);
 
-  display = gdk_surface_get_display (surface);
-  impl = GDK_WIN32_SURFACE (surface);
-
-  win32_display = GDK_WIN32_DISPLAY (display);
-
-  if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
-    {
-      impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                        surface,
-                                                                        NULL);
-
-      return impl->surface_scale;
-    }
-  else
-    {
-      /* Application is not DPI aware, don't bother */
-      return 1;
-    }
+  /* surface_dpi is this surface's source of truth (seeded at construction, kept
+   * current by WM_DPICHANGED), so just report it -- no monitor re-query. */
+  return gdk_win32_dpi_to_scale (&GDK_WIN32_SURFACE (surface)->surface_dpi);
 }
 
 static void
@@ -2802,7 +2910,6 @@ static void
 _gdk_win32_surface_request_layout (GdkSurface *surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-  int scale = impl->surface_scale;
   RECT rect;
 
   gdk_win32_get_surface_hwnd_rect (surface, &rect);
@@ -2811,13 +2918,15 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
   if (rect.right == rect.left || rect.bottom == rect.top)
     return;
 
-  impl->next_layout.configured_width = (rect.right - rect.left + scale - 1) / scale;
-  impl->next_layout.configured_height = (rect.bottom - rect.top + scale - 1) / scale;
+  impl->next_layout.configured_width =
+    gdk_win32_surface_to_application_ceil (impl, rect.right - rect.left);
+  impl->next_layout.configured_height =
+    gdk_win32_surface_to_application_ceil (impl, rect.bottom - rect.top);
 
   if (GDK_IS_TOPLEVEL (surface))
     {
-      surface->x = rect.left / scale;
-      surface->y = rect.top / scale;
+      surface->x = gdk_win32_surface_to_application (impl, rect.left);
+      surface->y = gdk_win32_surface_to_application (impl, rect.top);
     }
   else if (GDK_IS_POPUP (surface))
     {

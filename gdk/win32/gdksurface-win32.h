@@ -20,6 +20,7 @@
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/win32/gdkwin32cursorprivate.h"
+#include "gdk/win32/gdkwin32dpi-private.h"
 #include "gdk/win32/gdkwin32surface.h"
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"
@@ -176,6 +177,9 @@ struct _GdkWin32Surface
 
   guint popup_grab : 1;
 
+  /* Set when WM_DPICHANGED arrives while minimized; consumed on restore. */
+  guint dpi_changed_while_minimized : 1;
+
   GdkW32DragMoveResizeContext drag_move_resize_context;
 
   /* Enable all decorations? */
@@ -188,7 +192,7 @@ struct _GdkWin32Surface
   LONG_PTR temp_styles;
 
   /* scale of surface on HiDPI */
-  int surface_scale;
+  GdkWin32Dpi surface_dpi;
 
   GdkToplevelLayout *toplevel_layout;
   struct {
@@ -210,6 +214,38 @@ struct _GdkWin32SurfaceClass
 {
   GdkSurfaceClass parent_class;
 };
+
+/* device -> application (sub-pixel double) */
+static inline double
+gdk_win32_surface_to_application_double (GdkWin32Surface *self,
+                                         double           value)
+{
+  return gdk_win32_dpi_to_application_double (&self->surface_dpi, value);
+}
+
+/* device -> application (round-half int) */
+static inline int
+gdk_win32_surface_to_application (GdkWin32Surface *self,
+                                  int              value)
+{
+  return gdk_win32_dpi_to_application (&self->surface_dpi, value);
+}
+
+/* application -> device (round-half int) */
+static inline int
+gdk_win32_surface_to_device (GdkWin32Surface *self,
+                             int              value)
+{
+  return gdk_win32_dpi_to_device (&self->surface_dpi, value);
+}
+
+/* device -> application (round-up int) */
+static inline int
+gdk_win32_surface_to_application_ceil (GdkWin32Surface *self,
+                                       int              value)
+{
+  return gdk_win32_dpi_to_application_ceil (&self->surface_dpi, value);
+}
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 

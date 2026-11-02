@@ -23,7 +23,8 @@
 
 #include "gdkwin32cursorprivate.h"
 #include "gdkprivate-win32.h"
- 
+#include "gdkwin32dpi-private.h"
+
 #include "gdkglversionprivate.h"
 
 /* Used for active language or text service change notifications */
@@ -77,26 +78,36 @@ typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
 /*
  * DPI awareness APIs from user32.dll, on later releases of Windows 10
  *
+ * funcGDFS is GetDpiForSystem() and funcGDFW is GetDpiForWindow(), both
+ * provided by user32.dll on Windows 10 Anniversary Update and later.
  * funcSPDAC is SetProcessDpiAwarenessContext() and
  * funcGTDAC is GetThreadDpiAwarenessContext() and
  * funcADACE is AreDpiAwarenessContextsEqual() provided by user32.dll, on
  * Windows 10 Creator Edition and later.
  * funcGSMFD is GetSystemMetricsForDpi(), provided by user32.dll on
  * Windows 10 Anniversary Update and later.
+ * funcAWREFD is AdjustWindowRectExForDpi(), provided by user32.dll on
+ * Windows 10 Anniversary Update and later.
  * Treat HANDLE as void*, for convenience, since DPI_AWARENESS_CONTEXT is
  * declared using DEFINE_HANDLE.
  */
+typedef UINT (WINAPI *funcGDFS) (void);
+typedef UINT (WINAPI *funcGDFW) (HWND);
 typedef BOOL (WINAPI *funcSPDAC)  (void *);
 typedef HANDLE (WINAPI *funcGTDAC)  (void);
 typedef BOOL (WINAPI *funcADACE) (void *, void *);
 typedef int (WINAPI *funcGSMFD) (int, UINT);
+typedef BOOL (WINAPI *funcAWREFD) (LPRECT, DWORD, BOOL, DWORD, UINT);
 
 typedef struct _GdkWin32User32DPIFuncs
 {
+  funcGDFS getDpiForSystem;
+  funcGDFW getDpiForWindow;
   funcSPDAC setPDAC;
   funcGTDAC getTDAC;
   funcADACE areDACEqual;
   funcGSMFD getSysMetrics;
+  funcAWREFD adjustWinRectExForDpi;
 } GdkWin32User32DPIFuncs;
 
 typedef enum {
@@ -190,7 +201,7 @@ struct _GdkWin32Display
 
   /* HiDPI Items */
   PROCESS_DPI_AWARENESS dpi_aware_type;
-  guint surface_scale;
+  GdkWin32Dpi surface_dpi;
 
   GdkWin32User32DPIFuncs user32_dpi_funcs;
 
@@ -227,9 +238,18 @@ IDXGIFactory4 *         gdk_win32_display_get_dxgi_factory              (GdkWin3
 ID3D11Device *          gdk_win32_display_get_d3d11_device              (GdkWin32Display        *self);
 ID3D12Device *          gdk_win32_display_get_d3d12_device              (GdkWin32Display        *self);
 
-guint                   gdk_win32_display_get_monitor_scale_factor      (GdkWin32Display        *display_win32,
+GdkWin32Dpi             gdk_win32_display_get_monitor_dpi               (GdkWin32Display        *display_win32,
                                                                          GdkSurface             *surface,
                                                                          HMONITOR                hmonitor);
+
+/* device -> application (sub-pixel double), on this display's current DPI.
+ * See gdksurface-win32.h's gdk_win32_surface_to_application_double() sibling. */
+static inline double
+gdk_win32_display_to_application_double (GdkWin32Display *self,
+                                         double           value)
+{
+  return gdk_win32_dpi_to_application_double (&self->surface_dpi, value);
+}
 
 GdkWin32Clipdrop *      gdk_win32_display_get_clipdrop                  (GdkDisplay             *display);
 

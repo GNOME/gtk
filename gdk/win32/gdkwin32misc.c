@@ -553,26 +553,12 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
     }
   else if (strcmp ("gtk-xft-dpi", name) == 0)
     {
-      GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+      /* Report the 96-dpi application base; the surface scale applies the monitor DPI. */
+      int xft_dpi = 1024 * GDK_WIN32_DEFAULT_DPI;
 
-      if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE)
-        {
-          HDC hdc = GetDC (NULL);
-
-          if (hdc != NULL)
-            {
-              int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
-              ReleaseDC (NULL, hdc);
-
-              if (dpi >= 96)
-                {
-                  int xft_dpi = 1024 * dpi / display_win32->surface_scale;
-                  GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
-                  g_value_set_int (value, xft_dpi);
-                  return TRUE;
-                }
-            }
-        }
+      GDK_NOTE (MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
+      g_value_set_int (value, xft_dpi);
+      return TRUE;
     }
   else if (strcmp ("gtk-xft-hinting", name) == 0)
     {

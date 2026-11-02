@@ -74,7 +74,6 @@ struct _GdkWin32Drag
 
   GdkWin32DragUtilityData util_data;
 
-  guint scale;             /* Temporarily caches the HiDPI scale */
   int   hot_x;             /* Hotspot offset from the top-left of the drag-window, scaled (can be added to GDK space coordinates) */
   int   hot_y;
   int   start_x;           /* Coordinates of the drag start, in GDK space */

@@ -268,10 +268,7 @@ gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
           gdk_monitor_set_refresh_rate (ex_monitor, gdk_monitor_get_refresh_rate (m));
         }
 
-      if (gdk_monitor_get_scale_factor (m) != gdk_monitor_get_scale_factor (ex_monitor))
-        {
-          gdk_monitor_set_scale_factor (ex_monitor, gdk_monitor_get_scale_factor (m));
-        }
+      gdk_monitor_set_scale (ex_monitor, gdk_monitor_get_scale (m));
 
       if (gdk_monitor_get_subpixel_layout (m) != gdk_monitor_get_subpixel_layout (ex_monitor))
         {
@@ -974,19 +971,63 @@ gdk_win32_display_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->finalize (object);
 }
 
-/* Polyfill for GetSystemMetricsForDPI */
-static int WINAPI
-get_system_metrics_for_dpi_fallback (int index, UINT dpi)
+/* Polyfill for GetDpiForSystem (), for pre-1607 Windows 10. */
+static UINT WINAPI
+get_dpi_for_system_fallback (void)
 {
   HDC hdc;
-  int system_dpi;
+  guint system_dpi;
 
-  /* Polyfill GetDpiForSystem () */
   hdc = GetDC (NULL);
   system_dpi = GetDeviceCaps (hdc, LOGPIXELSX);
   ReleaseDC (NULL, hdc);
 
-  return MulDiv (GetSystemMetrics (index), dpi, system_dpi);
+  return system_dpi;
+}
+
+/* Polyfill for GetDpiForWindow (), for pre-1607 Windows 10. */
+static UINT WINAPI
+get_dpi_for_window_fallback (HWND hwnd)
+{
+  HMONITOR hmonitor;
+  guint dpix, dpiy;
+
+  hmonitor = MonitorFromWindow (hwnd, MONITOR_DEFAULTTONEAREST);
+
+  if (GetDpiForMonitor (hmonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy) != S_OK)
+    return 0;
+
+  return dpix;
+}
+
+/* Polyfill for GetSystemMetricsForDPI */
+static int WINAPI
+get_system_metrics_for_dpi_fallback (int index, UINT dpi)
+{
+  return MulDiv (GetSystemMetrics (index), dpi, get_dpi_for_system_fallback ());
+}
+
+/* Polyfill for AdjustWindowRectExForDpi(): measures the margins at the
+ * system DPI, then scales them to the requested one. */
+static BOOL WINAPI
+adjust_window_rect_ex_for_dpi_fallback (LPRECT rect,
+                                        DWORD  style,
+                                        BOOL   menu,
+                                        DWORD  exstyle,
+                                        UINT   dpi)
+{
+  RECT margins = { 0, 0, 0, 0 };
+  guint system_dpi = get_dpi_for_system_fallback ();
+
+  if (!AdjustWindowRectEx (&margins, style, menu, exstyle))
+    return FALSE;
+
+  rect->left += MulDiv (margins.left, dpi, system_dpi);
+  rect->top += MulDiv (margins.top, dpi, system_dpi);
+  rect->right += MulDiv (margins.right, dpi, system_dpi);
+  rect->bottom += MulDiv (margins.bottom, dpi, system_dpi);
+
+  return TRUE;
 }
 
 static void
@@ -1007,6 +1048,10 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
 
   if (user32 != NULL)
     {
+      display->user32_dpi_funcs.getDpiForSystem =
+        (funcGDFS) GetProcAddress (user32, "GetDpiForSystem");
+      display->user32_dpi_funcs.getDpiForWindow =
+        (funcGDFW) GetProcAddress (user32, "GetDpiForWindow");
       display->user32_dpi_funcs.setPDAC =
         (funcSPDAC) GetProcAddress (user32, "SetProcessDpiAwarenessContext");
       display->user32_dpi_funcs.getTDAC =
@@ -1015,9 +1060,17 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
         (funcADACE) GetProcAddress (user32, "AreDpiAwarenessContextsEqual");
       display->user32_dpi_funcs.getSysMetrics =
         (funcGSMFD) GetProcAddress (user32, "GetSystemMetricsForDpi");
+      display->user32_dpi_funcs.adjustWinRectExForDpi =
+        (funcAWREFD) GetProcAddress (user32, "AdjustWindowRectExForDpi");
     }
+  if (!display->user32_dpi_funcs.getDpiForSystem)
+    display->user32_dpi_funcs.getDpiForSystem = get_dpi_for_system_fallback;
+  if (!display->user32_dpi_funcs.getDpiForWindow)
+    display->user32_dpi_funcs.getDpiForWindow = get_dpi_for_window_fallback;
   if (!display->user32_dpi_funcs.getSysMetrics)
     display->user32_dpi_funcs.getSysMetrics = get_system_metrics_for_dpi_fallback;
+  if (!display->user32_dpi_funcs.adjustWinRectExForDpi)
+    display->user32_dpi_funcs.adjustWinRectExForDpi = adjust_window_rect_ex_for_dpi_fallback;
 
   if (g_getenv ("GDK_WIN32_DISABLE_HIDPI") == NULL)
     {
@@ -1256,7 +1309,7 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
 
-  display_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
+  display_win32->surface_dpi = gdk_win32_display_get_monitor_dpi (display_win32, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
 }
@@ -1289,53 +1342,43 @@ gdk_win32_display_get_monitors (GdkDisplay *display)
   return self->monitors;
 }
 
-guint
-gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
-                                            GdkSurface      *surface,
-                                            HMONITOR         hmonitor)
+GdkWin32Dpi
+gdk_win32_display_get_monitor_dpi (GdkWin32Display *display_win32,
+                                   GdkSurface      *surface,
+                                   HMONITOR         hmonitor)
 {
-  gboolean is_scale_acquired = FALSE;
   guint dpix, dpiy;
 
-  if (surface != NULL && hmonitor == NULL)
-    hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (surface),
-                                  MONITOR_DEFAULTTONEAREST);
+  /* Windows virtualizes a DPI-unaware process to 96 DPI everywhere; guard
+   * here, at the single DPI source, so every value handed out is already
+   * the *effective* DPI and downstream readers need no guard of their own. */
+  if (display_win32->dpi_aware_type == PROCESS_DPI_UNAWARE)
+    return GDK_WIN32_DPI_INIT (GDK_WIN32_DEFAULT_DPI);
+
+  /* System-aware: surfaces stay at the system DPI, so monitors must report it too. */
+  if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE)
+    {
+      surface  = NULL;
+      hmonitor = NULL;
+    }
 
   if (hmonitor != NULL)
     {
       /* Use GetDpiForMonitor() when we have a HMONITOR */
-      if (GetDpiForMonitor (hmonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy) == S_OK)
-        is_scale_acquired = TRUE;
+      if (GetDpiForMonitor (hmonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy) != S_OK)
+        dpix = 0;
+    }
+  else if (surface != NULL)
+    {
+      dpix = display_win32->user32_dpi_funcs.getDpiForWindow (GDK_SURFACE_HWND (surface));
     }
   else
     {
-      /* Go back to GetDeviceCaps() when we don't have a HMONITOR nor a HWND */
-      HDC hdc;
-
-      if (surface != NULL)
-        hdc = GetDC (GDK_SURFACE_HWND (surface));
-      else
-        hdc = GetDC (NULL);
-
-      /* in case we can't get the DC for the HWND, return 1 for the scale */
-      if (hdc == NULL)
-        return 1;
-
-      dpix = GetDeviceCaps (hdc, LOGPIXELSX);
-      dpiy = GetDeviceCaps (hdc, LOGPIXELSY);
-
-      if (surface != NULL)
-        ReleaseDC (GDK_SURFACE_HWND (surface), hdc);
-      else
-        ReleaseDC (NULL, hdc);
-
-      is_scale_acquired = TRUE;
+      dpix = display_win32->user32_dpi_funcs.getDpiForSystem ();
     }
 
-  if (is_scale_acquired)
-    return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
-  else
-    return 1;
+  /* in case the DPI couldn't be determined, fall back to 100% */
+  return GDK_WIN32_DPI_INIT (MAX (dpix, (guint) GDK_WIN32_DEFAULT_DPI));
 }
 
 #ifndef EGL_PLATFORM_ANGLE_ANGLE
