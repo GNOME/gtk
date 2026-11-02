@@ -1030,6 +1030,16 @@ adjust_window_rect_ex_for_dpi_fallback (LPRECT rect,
   return TRUE;
 }
 
+/* Per Monitor v2 is the default; GDK_WIN32_PER_MONITOR_HIDPI=0 opts out.
+ * Per Monitor v1 is not offered: Windows doesn't scale non-client areas there. */
+static gboolean
+use_per_monitor_hidpi (void)
+{
+  const char *value = g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI");
+
+  return value == NULL || g_strcmp0 (value, "0") != 0;
+}
+
 static void
 _gdk_win32_enable_hidpi (GdkWin32Display *display)
 {
@@ -1077,48 +1087,44 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
       /* then make the GDK-using app DPI-aware */
       if (display->user32_dpi_funcs.setPDAC != NULL)
         {
-          HANDLE hidpi_mode_ctx;
-          PROCESS_DPI_AWARENESS hidpi_mode;
+          PROCESS_DPI_AWARENESS hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
+          gboolean ok = FALSE;
+          /* Pretend v2 was rejected when opted out */
+          DWORD err = ERROR_INVALID_PARAMETER;
 
-          /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
-          if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
+          if (use_per_monitor_hidpi ())
             {
-              hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
-              hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
+              ok = display->user32_dpi_funcs.setPDAC (DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+              if (!ok)
+                err = GetLastError ();
             }
-          else
+
+          /* v2 needs Windows 10 1703; older builds reject it */
+          if (!ok && err == ERROR_INVALID_PARAMETER)
             {
-              hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
               hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
+              ok = display->user32_dpi_funcs.setPDAC (DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+              if (!ok)
+                err = GetLastError ();
             }
 
-          if (display->user32_dpi_funcs.setPDAC (hidpi_mode_ctx))
+          if (ok)
             {
               display->dpi_aware_type = hidpi_mode;
               status = DPI_STATUS_SUCCESS;
             }
+          else if (err == ERROR_ACCESS_DENIED)
+            check_for_dpi_awareness = TRUE;
           else
             {
-              DWORD err = GetLastError ();
-
-              if (err == ERROR_ACCESS_DENIED)
-                check_for_dpi_awareness = TRUE;
-              else
-                {
-                  display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-                  status = DPI_STATUS_FAILED;
-                }
+              display->dpi_aware_type = PROCESS_DPI_UNAWARE;
+              status = DPI_STATUS_FAILED;
             }
         }
       else
         {
-          PROCESS_DPI_AWARENESS hidpi_mode;
-
-          /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
-          if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
-            hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
-          else
-            hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
+          /* No SetProcessDpiAwarenessContext(), so no Per Monitor v2 either. */
+          PROCESS_DPI_AWARENESS hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
 
           switch (SetProcessDpiAwareness (hidpi_mode))
             {
