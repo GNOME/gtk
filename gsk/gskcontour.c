@@ -754,7 +754,17 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
           switch (stroke->line_join)
             {
             case GSK_LINE_JOIN_MITER:
-              extra = MAX (extra, stroke->miter_limit * stroke->line_width / 2);
+              if (self->flags & GSK_PATH_SMOOTH)
+                {
+                }
+              else if (self->flags & GSK_PATH_OBTUSE)
+                {
+                  extra = MAX (extra, MIN (M_SQRT2, stroke->miter_limit) * stroke->line_width / 2);
+                }
+              else
+                {
+                  extra = MAX (extra, stroke->miter_limit * stroke->line_width / 2);
+                }
               break;
             case GSK_LINE_JOIN_ROUND:
             case GSK_LINE_JOIN_BEVEL:
@@ -1537,7 +1547,9 @@ gsk_circle_contour_get_flags (const GskContour *contour)
   const GskCircleContour *self = (const GskCircleContour *) contour;
 
   return GSK_PATH_CLOSED |
-         (self->radius == 0 ? GSK_PATH_ZERO_LENGTH : 0);
+         (self->radius == 0 ? GSK_PATH_ZERO_LENGTH : 0) |
+         GSK_PATH_OBTUSE |
+         GSK_PATH_SMOOTH;
 }
 
 static void
@@ -2012,7 +2024,8 @@ gsk_rect_contour_get_flags (const GskContour *contour)
 
   return GSK_PATH_FLAT |
          GSK_PATH_CLOSED |
-         (self->width == 0 && self->height == 0 ? GSK_PATH_ZERO_LENGTH : 0);
+         (self->width == 0 && self->height == 0 ? GSK_PATH_ZERO_LENGTH : 0) |
+         GSK_PATH_OBTUSE;
 }
 
 static void
@@ -2384,7 +2397,19 @@ gsk_rounded_rect_contour_copy (const GskContour *contour,
 static GskPathFlags
 gsk_rounded_rect_contour_get_flags (const GskContour *contour)
 {
-  return GSK_PATH_CLOSED;
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  gboolean smooth = TRUE;
+
+  for (unsigned int i = 0; i < 4; i++)
+    {
+      if (self->rect.corner[i].width == 0 || self->rect.corner[i].height == 0)
+        {
+          smooth = FALSE;
+          break;
+        }
+    }
+
+  return GSK_PATH_CLOSED | GSK_PATH_OBTUSE | (smooth ? GSK_PATH_SMOOTH : 0);
 }
 
 static gboolean

@@ -526,6 +526,124 @@ add_classify_tests (void)
   add_classify_rounded_rect_test (i++, &r, GSK_PATH_GENERAL);
 }
 
+static void
+test_angles (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskRoundedRect rect;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (5, 5), 5);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (5, 5), 0);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_ZERO_LENGTH | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 10, 10));
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_FLAT | GSK_PATH_OBTUSE));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rounded_rect (builder, &GSK_ROUNDED_RECT_INIT (0, 0, 10, 10));
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_OBTUSE));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_rounded_rect_init_from_rect (&rect, &GRAPHENE_RECT_INIT (0, 0, 10, 10), 5);
+  gsk_path_builder_add_rounded_rect (builder, &rect);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_rounded_rect_init (&rect, &GRAPHENE_RECT_INIT (0, 0, 10, 10),
+                                &GRAPHENE_SIZE_INIT (5, 5),
+                                &GRAPHENE_SIZE_INIT (0, 0),
+                                &GRAPHENE_SIZE_INIT (5, 5),
+                                &GRAPHENE_SIZE_INIT (5, 5));
+  gsk_path_builder_add_rounded_rect (builder, &rect);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_CLOSED | GSK_PATH_OBTUSE));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 5, 5);
+  gsk_path_builder_line_to (builder, 10, 10);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_FLAT | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 5, 5);
+  gsk_path_builder_line_to (builder, 10, 10);
+  gsk_path_builder_line_to (builder, 20, 20);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_FLAT | GSK_PATH_OBTUSE | GSK_PATH_SMOOTH));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 5, 5);
+  gsk_path_builder_line_to (builder, 10, 5);
+  gsk_path_builder_line_to (builder, 20, 20);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_FLAT | GSK_PATH_OBTUSE));
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 5, 5);
+  gsk_path_builder_line_to (builder, 10, 5);
+  gsk_path_builder_line_to (builder, 5, 10);
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == GSK_PATH_FLAT);
+  gsk_path_unref (path);
+
+  /* obtuse until we close */
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_move_to (builder, 0, 0);
+  gsk_path_builder_line_to (builder, 10, 0);
+  gsk_path_builder_line_to (builder, 0, 10);
+  gsk_path_builder_line_to (builder, 5, 10);
+  gsk_path_builder_line_to (builder, 5, 1);
+  gsk_path_builder_close (builder);
+
+  path = gsk_path_builder_free_to_path (builder);
+  g_assert_true (gsk_path_get_flags (path) == (GSK_PATH_FLAT | GSK_PATH_CLOSED));
+  gsk_path_unref (path);
+
+  for (unsigned int i = 0; i < 360; i++)
+    {
+      GskTransform *t = gsk_transform_rotate (NULL, i);
+      graphene_point_t p;
+
+      builder = gsk_path_builder_new ();
+
+      gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (0, 0), &p);
+      gsk_path_builder_move_to (builder, p.x, p.y);
+      gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (10, 0), &p);
+      gsk_path_builder_line_to (builder, p.x, p.y);
+      gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (10, 10), &p);
+      gsk_path_builder_line_to (builder, p.x, p.y);
+      gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (0, 10), &p);
+      gsk_path_builder_line_to (builder, p.x, p.y);
+      gsk_path_builder_close (builder);
+
+      path = gsk_path_builder_free_to_path (builder);
+      g_assert_true ((gsk_path_get_flags (path) & GSK_PATH_OBTUSE) != 0);
+      gsk_path_unref (path);
+
+      gsk_transform_unref (t);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -535,6 +653,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rounded-rect/winding", test_rounded_rect_winding);
   g_test_add_func ("/path/rect/winding", test_rect_winding);
   g_test_add_func ("/path/zero-length", test_zero_length);
+  g_test_add_func ("/path/angles", test_angles);
+
   add_classify_tests ();
 
   return g_test_run ();
