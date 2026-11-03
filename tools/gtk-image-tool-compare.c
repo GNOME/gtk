@@ -40,9 +40,11 @@ do_compare (int          *argc,
   gboolean opt_quiet = FALSE;
   char **filenames = NULL;
   char *opt_filename = NULL;
+  int tolerance = 0;
   const GOptionEntry entries[] = {
     { "output", 'o', 0, G_OPTION_ARG_FILENAME, &opt_filename, N_("Output file"), N_("FILE") },
-    { "quiet", 'q', 0, G_OPTION_ARG_NONE, &opt_quiet, "Don't talk", NULL },
+    { "quiet", 'q', 0, G_OPTION_ARG_NONE, &opt_quiet, N_("Don't talk"), NULL },
+    { "tolerance", 't', 0, G_OPTION_ARG_INT, &tolerance, N_("Tolerance to allow in comparisons"), N_("NUMBER") },
 
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
@@ -81,7 +83,7 @@ do_compare (int          *argc,
   for (int i = 0; i < 2; i++)
     texture[i] = load_image_file (filenames[i]);
 
-  diff = reftest_compare_textures (texture[0], texture[1]);
+  diff = reftest_compare_textures_with_tolerance (texture[0], texture[1], tolerance);
 
   if (opt_filename && diff)
     {
