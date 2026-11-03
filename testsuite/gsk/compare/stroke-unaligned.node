@@ -1,0 +1,36 @@
+color {
+  color: black;
+  bounds: 0 0 50 70;
+}
+
+stroke {
+  path: "M30.015625 10 h10 v10 h-10z";
+  line-width: 2;
+}
+stroke {
+  path: "M10 10 h10 v10 h-10z";
+  line-width: 2;
+}
+
+stroke {
+  path: "M40 30.015625 v10 h-10 v-10z";
+  line-width: 2;
+}
+stroke {
+  path: "M20 30 v10 h-10 v-10z";
+  line-width: 2;
+}
+
+stroke {
+  path: "M40.015625 60.015625 h-10 v-10 h10 z";
+  line-width: 2;
+}
+stroke {
+  path: "M20 60 h-10 v-10 h10 z";
+  line-width: 2;
+}
+
+color {
+  color: white;
+  bounds: 25 0 25 70;
+}
