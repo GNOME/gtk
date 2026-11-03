@@ -1315,7 +1315,7 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
 
-  display_win32->surface_dpi = gdk_win32_display_get_monitor_dpi (display_win32, NULL, NULL);
+  display_win32->surface_dpi = gdk_win32_display_get_dpi_for_hmonitor (display_win32, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
 }
@@ -1349,34 +1349,38 @@ gdk_win32_display_get_monitors (GdkDisplay *display)
 }
 
 GdkWin32Dpi
-gdk_win32_display_get_monitor_dpi (GdkWin32Display *display_win32,
-                                   GdkSurface      *surface,
-                                   HMONITOR         hmonitor)
+gdk_win32_display_get_dpi_for_surface (GdkWin32Display *display_win32,
+                                       GdkSurface      *surface)
 {
-  guint dpix, dpiy;
+  guint dpix;
 
-  /* Windows virtualizes a DPI-unaware process to 96 DPI everywhere; guard
-   * here, at the single DPI source, so every value handed out is already
-   * the *effective* DPI and downstream readers need no guard of their own. */
   if (display_win32->dpi_aware_type == PROCESS_DPI_UNAWARE)
     return GDK_WIN32_DPI_INIT (GDK_WIN32_DEFAULT_DPI);
 
-  /* System-aware: surfaces stay at the system DPI, so monitors must report it too. */
-  if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE)
-    {
-      surface  = NULL;
-      hmonitor = NULL;
-    }
+  /* System-aware: surfaces stay at the system DPI. */
+  if (display_win32->dpi_aware_type == PROCESS_PER_MONITOR_DPI_AWARE)
+    dpix = display_win32->user32_dpi_funcs.getDpiForWindow (GDK_SURFACE_HWND (surface));
+  else
+    dpix = display_win32->user32_dpi_funcs.getDpiForSystem ();
 
-  if (hmonitor != NULL)
+  /* in case the DPI couldn't be determined, fall back to 100% */
+  return GDK_WIN32_DPI_INIT (MAX (dpix, GDK_WIN32_DEFAULT_DPI));
+}
+
+GdkWin32Dpi
+gdk_win32_display_get_dpi_for_hmonitor (GdkWin32Display *display_win32,
+                                        HMONITOR         hmonitor)
+{
+  guint dpix, dpiy;
+
+  if (display_win32->dpi_aware_type == PROCESS_DPI_UNAWARE)
+    return GDK_WIN32_DPI_INIT (GDK_WIN32_DEFAULT_DPI);
+
+  /* System-aware: monitors stay at the system DPI too. */
+  if (display_win32->dpi_aware_type == PROCESS_PER_MONITOR_DPI_AWARE)
     {
-      /* Use GetDpiForMonitor() when we have a HMONITOR */
       if (GetDpiForMonitor (hmonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy) != S_OK)
         dpix = 0;
-    }
-  else if (surface != NULL)
-    {
-      dpix = display_win32->user32_dpi_funcs.getDpiForWindow (GDK_SURFACE_HWND (surface));
     }
   else
     {
@@ -1384,7 +1388,7 @@ gdk_win32_display_get_monitor_dpi (GdkWin32Display *display_win32,
     }
 
   /* in case the DPI couldn't be determined, fall back to 100% */
-  return GDK_WIN32_DPI_INIT (MAX (dpix, (guint) GDK_WIN32_DEFAULT_DPI));
+  return GDK_WIN32_DPI_INIT (MAX (dpix, GDK_WIN32_DEFAULT_DPI));
 }
 
 #ifndef EGL_PLATFORM_ANGLE_ANGLE

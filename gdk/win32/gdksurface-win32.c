@@ -424,7 +424,7 @@ gdk_win32_surface_constructed (GObject *object)
 
   /* Query with the surface now that it has an HWND, so a per-monitor-aware
    * process gets its actual monitor's DPI instead of the system DPI. */
-  impl->surface_dpi = gdk_win32_display_get_monitor_dpi (display_win32, surface, NULL);
+  impl->surface_dpi = gdk_win32_display_get_dpi_for_surface (display_win32, surface);
 
   GetWindowRect (impl->handle, &rect);
   impl->initial_x = rect.left;

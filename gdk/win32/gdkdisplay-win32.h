@@ -238,8 +238,9 @@ IDXGIFactory4 *         gdk_win32_display_get_dxgi_factory              (GdkWin3
 ID3D11Device *          gdk_win32_display_get_d3d11_device              (GdkWin32Display        *self);
 ID3D12Device *          gdk_win32_display_get_d3d12_device              (GdkWin32Display        *self);
 
-GdkWin32Dpi             gdk_win32_display_get_monitor_dpi               (GdkWin32Display        *display_win32,
-                                                                         GdkSurface             *surface,
+GdkWin32Dpi             gdk_win32_display_get_dpi_for_surface           (GdkWin32Display        *display_win32,
+                                                                         GdkSurface             *surface);
+GdkWin32Dpi             gdk_win32_display_get_dpi_for_hmonitor          (GdkWin32Display        *display_win32,
                                                                          HMONITOR                hmonitor);
 
 /* device -> application (sub-pixel double), on this display's current DPI.

@@ -667,7 +667,7 @@ enum_monitor (HMONITOR hmonitor,
           pt.x = w32mon->work_rect.x + w32mon->work_rect.width / 2;
           pt.y = w32mon->work_rect.y + w32mon->work_rect.height / 2;
           dpi_hmonitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
-          dpi = gdk_win32_display_get_monitor_dpi (data->display, NULL, dpi_hmonitor);
+          dpi = gdk_win32_display_get_dpi_for_hmonitor (data->display, dpi_hmonitor);
 
           gdk_monitor_set_scale (mon, gdk_win32_dpi_to_scale (&dpi));
           /* Now apply the scale to the work rectangle */
