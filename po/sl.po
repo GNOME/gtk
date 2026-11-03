@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2026-11-01 19:19+0000\n"
-"PO-Revision-Date: 2026-11-02 01:08+0100\n"
+"POT-Creation-Date: 2026-11-03 20:08+0000\n"
+"PO-Revision-Date: 2026-11-03 22:58+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -30,8 +30,8 @@ msgstr "Ni združljivih zapisov za prenos vsebine ponudnika vsebine."
 
 #: gdk/android/gdkandroidclipboard.c:624 gdk/macos/gdkmacospasteboard.c:161
 #: gdk/wayland/gdkclipboard-wayland.c:251 gdk/wayland/gdkdrop-wayland.c:205
-#: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1017
-#: gdk/win32/gdkdrop-win32.c:1066 gdk/x11/gdkclipboard-x11.c:802
+#: gdk/wayland/gdkprimary-wayland.c:352 gdk/win32/gdkdrop-win32.c:1018
+#: gdk/win32/gdkdrop-win32.c:1067 gdk/x11/gdkclipboard-x11.c:802
 #: gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "Ni najdenega skladnega zapisa za prenos."
@@ -733,42 +733,42 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GetClipboardData() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:948
+#: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalLock(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:957
+#: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalSize(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:968
+#: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkdrop-win32.c:1038
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Površina GDK 0x%p ni vpisana kot ciljno mesto"
 
-#: gdk/win32/gdkdrop-win32.c:1046
+#: gdk/win32/gdkdrop-win32.c:1047
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Ciljni zapis vsebine 0x%p je brez podatkov predmeta"
 
-#: gdk/win32/gdkdrop-win32.c:1086
+#: gdk/win32/gdkdrop-win32.c:1087
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 "Ukaz IDataObject_GetData (0x%x) je spodletel; opravilo bo vrnjeno na 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:1126
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
@@ -2277,12 +2277,12 @@ msgid "_Edit"
 msgstr "Ur_edi"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5896 gtk/gtktext.c:6389
-#: gtk/gtktextview.c:9278
+#: gtk/gtktextview.c:9280
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 #: gtk/gtkeditablelabel.c:342 gtk/gtklabel.c:5956 gtk/gtktext.c:2866
-#: gtk/gtktextview.c:9356
+#: gtk/gtktextview.c:9358
 msgid "Context menu"
 msgstr "Vsebinski meni"
 
@@ -2449,7 +2449,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1251 gtk/gtkfilechooserwidget.c:1850
-#: gtk/gtklabel.c:5898 gtk/gtktext.c:6397 gtk/gtktextview.c:9286
+#: gtk/gtklabel.c:5898 gtk/gtktext.c:6397 gtk/gtktextview.c:9288
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -2806,15 +2806,15 @@ msgstr "Zapri"
 msgid "Close the infobar"
 msgstr "Zapri vrstico podrobnosti"
 
-#: gtk/gtklabel.c:5895 gtk/gtktext.c:6385 gtk/gtktextview.c:9274
+#: gtk/gtklabel.c:5895 gtk/gtktext.c:6385 gtk/gtktextview.c:9276
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6393 gtk/gtktextview.c:9282
+#: gtk/gtklabel.c:5897 gtk/gtktext.c:6393 gtk/gtktextview.c:9284
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6406 gtk/gtktextview.c:9307
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6406 gtk/gtktextview.c:9309
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -4354,7 +4354,7 @@ msgstr "Stranska vrstica"
 msgid "Change di_rection"
 msgstr "Spremeni _usmerjenost"
 
-#: gtk/gtktext.c:6416 gtk/gtktextview.c:9312
+#: gtk/gtktext.c:6416 gtk/gtktextview.c:9314
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
@@ -4514,11 +4514,11 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9294
+#: gtk/gtktextview.c:9296
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: gtk/gtktextview.c:9298
+#: gtk/gtktextview.c:9300
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
@@ -7733,7 +7733,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:358
 #: tools/gtk-builder-tool-simplify.c:2709 tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-image-tool-compare.c:44 tools/gtk-image-tool-info.c:80
+#: tools/gtk-image-tool-compare.c:45 tools/gtk-image-tool-info.c:80
 #: tools/gtk-image-tool-play.c:338 tools/gtk-path-tool-render.c:63
 #: tools/filters/compare.c:73 tools/filters/diff.c:38
 #: tools/filters/load-icon.c:108
@@ -7834,7 +7834,7 @@ msgstr "Shrani kot datoteko vozlišča namesto zapisa PNG"
 msgid "Overwrite existing file"
 msgstr "Prepiši obstoječo datoteko"
 
-#: tools/gtk-builder-tool-screenshot.c:361 tools/gtk-image-tool-compare.c:47
+#: tools/gtk-builder-tool-screenshot.c:361 tools/gtk-image-tool-compare.c:49
 #: tools/gtk-image-tool-convert.c:143 tools/gtk-image-tool-play.c:339
 #: tools/gtk-image-tool-relabel.c:87 tools/gtk-image-tool-show.c:120
 #: tools/gtk-rendernode-tool.c:103 tools/filters/render.c:281
@@ -7980,42 +7980,54 @@ msgstr ""
 "  play         Predvaja animacijo\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:44 tools/filters/compare.c:73
+#: tools/gtk-image-tool-compare.c:45 tools/filters/compare.c:73
 msgid "Output file"
 msgstr "Izhodna datoteka"
 
-#: tools/gtk-image-tool-compare.c:58
+#: tools/gtk-image-tool-compare.c:46
+msgid "Don't talk"
+msgstr "Ne govori"
+
+#: tools/gtk-image-tool-compare.c:47
+msgid "Tolerance to allow in comparisons"
+msgstr "Dovoljena toleranca pri primerjavah"
+
+#: tools/gtk-image-tool-compare.c:47
+msgid "NUMBER"
+msgstr "ŠTEVILKA"
+
+#: tools/gtk-image-tool-compare.c:60
 msgid "Compare two images"
 msgstr "Primerjaj sliki"
 
-#: tools/gtk-image-tool-compare.c:71 tools/gtk-image-tool-convert.c:167
+#: tools/gtk-image-tool-compare.c:73 tools/gtk-image-tool-convert.c:167
 #: tools/gtk-image-tool-info.c:102 tools/gtk-image-tool-relabel.c:110
 #: tools/gtk-image-tool-show.c:142
 #, c-format
 msgid "No image file specified\n"
 msgstr "Slikovna datoteka ni določena\n"
 
-#: tools/gtk-image-tool-compare.c:77
+#: tools/gtk-image-tool-compare.c:79
 #, c-format
 msgid "Can only accept two image files\n"
 msgstr "Lahko sprejme samo dve slikovni datoteki\n"
 
-#: tools/gtk-image-tool-compare.c:90 tools/filters/compare.c:125
+#: tools/gtk-image-tool-compare.c:92 tools/filters/compare.c:125
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "Slike diff ni možno shraniti v %s\n"
 
-#: tools/gtk-image-tool-compare.c:100 tools/filters/compare.c:135
+#: tools/gtk-image-tool-compare.c:102 tools/filters/compare.c:135
 #, c-format
 msgid "Differences written to %s.\n"
 msgstr "Razlike so zapisane v %s.\n"
 
-#: tools/gtk-image-tool-compare.c:102 tools/filters/compare.c:137
+#: tools/gtk-image-tool-compare.c:104 tools/filters/compare.c:137
 #, c-format
 msgid "The images are different.\n"
 msgstr "Sliki se razlikujeta.\n"
 
-#: tools/gtk-image-tool-compare.c:105 tools/filters/compare.c:140
+#: tools/gtk-image-tool-compare.c:107 tools/filters/compare.c:140
 #, c-format
 msgid "No differences.\n"
 msgstr "Brez razlik.\n"
