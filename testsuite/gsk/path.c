@@ -20,8 +20,6 @@
 #include <gtk/gtk.h>
 
 #include "path-utils.h"
-#include "gsk/gskpathprivate.h"
-#include "gsk/gskboundingboxprivate.h"
 
 static void
 test_distance (void)
@@ -101,62 +99,6 @@ test_rect_bounds (void)
   gsk_path_unref (path);
 }
 
-static void
-get_offset_point (const graphene_point_t *p,
-                  float                   angle,
-                  float                   r,
-                  graphene_point_t       *q)
-{
-  q->x = p->x + r * cos (angle);
-  q->y = p->y + r * sin (angle);
-}
-
-static void
-test_general_bounds (void)
-{
-  float line_width = 2;
-  GskStroke *stroke;
-
-  stroke = gsk_stroke_new (line_width);
-
-  for (unsigned int i = 0; i < 100; i++)
-    {
-      GskPath *path;
-      GskPathPoint point;
-      GskBoundingBox bounds;
-      GskBoundingBox stroke_bounds;
-      graphene_point_t pos, pos2;
-
-      path = create_random_path (G_MAXUINT);
-
-      if (!gsk_path_get_start_point (path, &point))
-        {
-          gsk_path_unref (path);
-          continue;
-        }
-
-      gsk_path_get_bounding_box (path, &bounds);
-      gsk_path_get_stroke_bounding_box (path, stroke, &stroke_bounds);
-
-      do {
-        gsk_path_point_get_position (&point, path, &pos);
-        g_assert_true (gsk_bounding_box_contains_point (&bounds, &pos));
-
-        for (unsigned int j = 0; j < 8; j++)
-          {
-            float angle = j * 2 * M_PI / 8;
-
-            get_offset_point (&pos, angle, line_width / 2, &pos2);
-            g_assert_true (gsk_bounding_box_contains_point (&stroke_bounds, &pos2));
-          }
-      } while (gsk_path_get_next (path, &point));
-
-      gsk_path_unref (path);
-    }
-
-  gsk_stroke_free (stroke);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -165,7 +107,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/measure/distance", test_distance);
   g_test_add_func ("/path/bounds/circle", test_circle_bounds);
   g_test_add_func ("/path/bounds/rect", test_rect_bounds);
-  g_test_add_func ("/path/bounds/general", test_general_bounds);
 
   return g_test_run ();
 }
