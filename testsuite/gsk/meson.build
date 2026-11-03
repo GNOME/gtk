@@ -814,7 +814,7 @@ tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
   [ 'shader' ],
   [ 'opaque' ],
-  [ 'path-flaky', [ 'path-utils.c' ], [ 'flaky'] ],
+  [ 'path', [ 'path-utils.c' ] ],
   [ 'path-special-cases' ],
   ['path-intersect'],
 ]
@@ -854,8 +854,8 @@ internal_tests = [
   [ 'half-float' ],
   [ 'not-diff' ],
   [ 'misc'],
-  [ 'path', [ 'path-utils.c' ] ],
   [ 'path-private' ],
+  [ 'path-flaky', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'rect'],
   [ 'rounded-rect'],
   [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
