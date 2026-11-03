@@ -1183,8 +1183,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   return pixbuf;
 }
 
-/* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
- * Windows XP, thresholds alpha otherwise.  Also used from
+/* Convert a pixbuf to an HICON (or HCURSOR).  Also used from
  * gdksurface-win32.c for creating application icons.
  */
 
@@ -1268,9 +1267,9 @@ create_color_bitmap (int       size,
 }
 
 static gboolean
-pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
-				HBITMAP   *color,
-				HBITMAP   *mask)
+pixbuf_to_hbitmaps (GdkPixbuf *pixbuf,
+                    HBITMAP   *color,
+                    HBITMAP   *mask)
 {
   /* Based on code from
    * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
@@ -1279,96 +1278,22 @@ pixbuf_to_hbitmaps_alpha_winxp (GdkPixbuf *pixbuf,
   const uint8_t *indata;
   const uint8_t *inrow;
   uint8_t *colordata, *colorrow, *maskdata, *maskbyte;
-  int width, height, size, i, i_offset, j, j_offset, rowstride;
-  guint maskstride, mask_bit;
-
-  width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
-  height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
-
-  /* The bitmaps are created square */
-  size = MAX (width, height);
-
-  hColorBitmap = create_alpha_bitmap (size, &colordata);
-  if (!hColorBitmap)
-    return FALSE;
-  hMaskBitmap = create_color_bitmap (size, &maskdata, 1);
-  if (!hMaskBitmap)
-    {
-      DeleteObject (hColorBitmap);
-      return FALSE;
-    }
-
-  /* MSDN says mask rows are aligned to "LONG" boundaries */
-  maskstride = (((size + 31) & ~31) >> 3);
-
-  indata = gdk_pixbuf_read_pixels (pixbuf);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-
-  if (width > height)
-    {
-      i_offset = 0;
-      j_offset = (width - height) / 2;
-    }
-  else
-    {
-      i_offset = (height - width) / 2;
-      j_offset = 0;
-    }
-
-  for (j = 0; j < height; j++)
-    {
-      colorrow = colordata + 4*(j+j_offset)*size + 4*i_offset;
-      maskbyte = maskdata + (j+j_offset)*maskstride + i_offset/8;
-      mask_bit = (0x80 >> (i_offset % 8));
-      inrow = indata + (height-j-1)*rowstride;
-      for (i = 0; i < width; i++)
-	{
-	  colorrow[4*i+0] = inrow[4*i+2];
-	  colorrow[4*i+1] = inrow[4*i+1];
-	  colorrow[4*i+2] = inrow[4*i+0];
-	  colorrow[4*i+3] = inrow[4*i+3];
-	  if (inrow[4*i+3] == 0)
-	    maskbyte[0] |= mask_bit;	/* turn ON bit */
-	  else
-	    maskbyte[0] &= ~mask_bit;	/* turn OFF bit */
-	  mask_bit >>= 1;
-	  if (mask_bit == 0)
-	    {
-	      mask_bit = 0x80;
-	      maskbyte++;
-	    }
-	}
-    }
-
-  *color = hColorBitmap;
-  *mask = hMaskBitmap;
-
-  return TRUE;
-}
-
-static gboolean
-pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
-			   HBITMAP   *color,
-			   HBITMAP   *mask)
-{
-  /* Based on code from
-   * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
-   */
-  HBITMAP hColorBitmap, hMaskBitmap;
-  const uint8_t *indata;
-  const uint8_t *inrow;
-  uint8_t *colordata, *colorrow, *maskdata, *maskbyte;
-  int width, height, size, i, i_offset, j, j_offset, rowstride, nc, bmstride;
+  int width, height, size, i, i_offset, j, j_offset, rowstride, bmstride, bpp;
   gboolean has_alpha;
   guint maskstride, mask_bit;
 
   width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
   height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
+  has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
+  bpp = has_alpha ? 4 : 3;
 
   /* The bitmaps are created square */
   size = MAX (width, height);
+  i_offset = (size - width) / 2;
+  j_offset = (size - height) / 2;
 
-  hColorBitmap = create_color_bitmap (size, &colordata, 24);
+  hColorBitmap = has_alpha ? create_alpha_bitmap (size, &colordata)
+                           : create_color_bitmap (size, &colordata, 24);
   if (!hColorBitmap)
     return FALSE;
   hMaskBitmap = create_color_bitmap (size, &maskdata, 1);
@@ -1378,57 +1303,53 @@ pixbuf_to_hbitmaps_normal (GdkPixbuf *pixbuf,
       return FALSE;
     }
 
-  /* rows are always aligned on 4-byte boundaries */
-  bmstride = size * 3;
-  if (bmstride % 4 != 0)
-    bmstride += 4 - (bmstride % 4);
-
   /* MSDN says mask rows are aligned to "LONG" boundaries */
   maskstride = (((size + 31) & ~31) >> 3);
 
+  if (!has_alpha)
+    ZeroMemory (maskdata, maskstride * size);
+
+  /* rows are always aligned on 4-byte boundaries */
+  bmstride = size * bpp;
+  if (bmstride % 4 != 0)
+    bmstride += 4 - (bmstride % 4);
+
   indata = gdk_pixbuf_read_pixels (pixbuf);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  nc = gdk_pixbuf_get_n_channels (pixbuf);
-  has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
-
-  if (width > height)
-    {
-      i_offset = 0;
-      j_offset = (width - height) / 2;
-    }
-  else
-    {
-      i_offset = (height - width) / 2;
-      j_offset = 0;
-    }
 
   for (j = 0; j < height; j++)
     {
-      colorrow = colordata + (j+j_offset)*bmstride + 3*i_offset;
-      maskbyte = maskdata + (j+j_offset)*maskstride + i_offset/8;
-      mask_bit = (0x80 >> (i_offset % 8));
+      colorrow = colordata + (j+j_offset)*bmstride + bpp*i_offset;
       inrow = indata + (height-j-1)*rowstride;
+
+      if (has_alpha)
+        {
+          maskbyte = maskdata + (j+j_offset)*maskstride + i_offset/8;
+          mask_bit = (0x80 >> (i_offset % 8));
+        }
+
       for (i = 0; i < width; i++)
-	{
-	  if (has_alpha && inrow[nc*i+3] < 128)
-	    {
-	      colorrow[3*i+0] = colorrow[3*i+1] = colorrow[3*i+2] = 0;
-	      maskbyte[0] |= mask_bit;	/* turn ON bit */
-	    }
-	  else
-	    {
-	      colorrow[3*i+0] = inrow[nc*i+2];
-	      colorrow[3*i+1] = inrow[nc*i+1];
-	      colorrow[3*i+2] = inrow[nc*i+0];
-	      maskbyte[0] &= ~mask_bit;	/* turn OFF bit */
-	    }
-	  mask_bit >>= 1;
-	  if (mask_bit == 0)
-	    {
-	      mask_bit = 0x80;
-	      maskbyte++;
-	    }
-	}
+        {
+          colorrow[bpp*i+0] = inrow[bpp*i+2];
+          colorrow[bpp*i+1] = inrow[bpp*i+1];
+          colorrow[bpp*i+2] = inrow[bpp*i+0];
+
+          if (!has_alpha)
+            continue;
+
+          colorrow[bpp*i+3] = inrow[bpp*i+3];
+          if (inrow[bpp*i+3] == 0)
+            maskbyte[0] |= mask_bit;   /* turn ON bit */
+          else
+            maskbyte[0] &= ~mask_bit;  /* turn OFF bit */
+
+          mask_bit >>= 1;
+          if (mask_bit == 0)
+            {
+              mask_bit = 0x80;
+              maskbyte++;
+            }
+        }
     }
 
   *color = hColorBitmap;
@@ -1450,10 +1371,7 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
   if (pixbuf == NULL)
     return NULL;
 
-  if (gdk_pixbuf_get_has_alpha (pixbuf))
-    success = pixbuf_to_hbitmaps_alpha_winxp (pixbuf, &ii.hbmColor, &ii.hbmMask);
-  else
-    success = pixbuf_to_hbitmaps_normal (pixbuf, &ii.hbmColor, &ii.hbmMask);
+  success = pixbuf_to_hbitmaps (pixbuf, &ii.hbmColor, &ii.hbmMask);
 
   if (!success)
     return NULL;
