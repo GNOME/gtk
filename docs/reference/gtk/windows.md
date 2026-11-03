@@ -28,6 +28,23 @@ The possible values are:
 `winpointer`
 : Use the Windows Pointer Input Stack API. This is the default.
 
+### GDK_WIN32_PER_MONITOR_HIDPI
+
+By default GTK makes the process Per Monitor v2 DPI aware, so windows are
+rescaled when they are moved between monitors with different scaling. This
+needs Windows 10 version 1703; on older versions GTK uses system DPI awareness.
+Set this variable to `0` to use system DPI awareness everywhere, which keeps
+the scale of the primary monitor.
+
+An application manifest or a compatibility setting that already fixes the
+DPI awareness of the process takes precedence over both.
+
+### GDK_WIN32_DISABLE_HIDPI
+
+If this variable is set, GTK does not change the DPI awareness of the process
+and uses what the application manifest or the user's compatibility settings
+specify.
+
 ## Windows-specific handling of cursors
 
 By default the "system" cursor theme is used. This makes GTK prefer cursors
