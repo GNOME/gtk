@@ -24,6 +24,16 @@
  *
  * The ways a rectangle can be snapped to a grid.
  *
+ * A `GskRectSnap` describes how the 4 edges of a rectangle should be adjusted
+ * to fit a grid - usually the rectangle describes the bounds or clip region
+ * of a render operation and the grid is the pixel grid of a display.
+ *
+ * You can see [some use cases on the GTK blog](https://blogs.gnome.org/gtk/2026/05/28/snapping/).
+ *
+ * Commonly, you will want to use constants such as [const@Gsk.RECT_SNAP_ROUND],
+ * [const@Gsk.RECT_SNAP_GROW], or [const@Gsk.RECT_SNAP_SHRINK], but you can
+ * also construct an individual way to snap using [func@Gsk.rect_snap_new].
+ *
  * Since: 4.24
  */
 typedef unsigned GskRectSnap;
@@ -35,7 +45,8 @@ typedef unsigned GskRectSnap;
  * @bottom: How to snap the bottom edge
  * @left: How to snap the left edge
  *
- * Creates a new way to snap rectangles for the 4 given sides.
+ * Creates a new way to snap rectangles with individual values for the
+ * top, right, bottom, and left side.
  *
  * Returns: a description for how to snap rectangles
  *
