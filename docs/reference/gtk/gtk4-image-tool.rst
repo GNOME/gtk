@@ -105,6 +105,10 @@ the exit code is 1. If the images are identical, it is 0.
 
   Don't write results to stdout.
 
+``--tolerance=NUMBER``
+
+Allow pixel differences of up to ``NUMBER``.
+
 Conversion
 ^^^^^^^^^^
 
