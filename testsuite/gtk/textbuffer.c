@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include "gtk/gtktexttypesprivate.h" /* Private header, for UNKNOWN_CHAR */
 #include "gtk/gtktextbufferprivate.h" /* Private header */
+#include "gtk/gtktextsegmentprivate.h"
 
 static void
 gtk_text_iter_spew (const GtkTextIter *iter, const char *desc)
@@ -1921,6 +1922,135 @@ test_serialize_wrap_mode (void)
   g_assert_finalize_object (buffer);
 }
 
+static void
+test_tag_toggles (gconstpointer data)
+{
+  const char *text = "aé🙂xΩy\nbç🙂zΩw\nc🙂é";
+  const int ranges[][2] = { { 0, 17 }, { 1, 16 }, { 2, 15 }, { 3, 14 }, { 5, 12 } };
+  gboolean add = GPOINTER_TO_INT (data);
+
+  for (guint r = 0; r < G_N_ELEMENTS (ranges); r++)
+    {
+      GtkTextBuffer *buffer = gtk_text_buffer_new (NULL);
+      GtkTextTag *tag = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+      GtkTextTag *other = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+      GtkTextIter start, end;
+
+      gtk_text_buffer_set_text (buffer, text, -1);
+
+      /* Include coincident toggles and ranges starting inside a segment. */
+      for (int i = 0; i < 17; i++)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, &start, i);
+          gtk_text_buffer_get_iter_at_offset (buffer, &end, i + 1);
+          if (i % 3 == 0)
+            gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+          if (i % 4 == 0)
+            gtk_text_buffer_apply_tag (buffer, other, &start, &end);
+        }
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, ranges[r][0]);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, ranges[r][1]);
+      if (add)
+        gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+      else
+        gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+
+      for (int i = 0; i < 17; i++)
+        {
+          gboolean expected = i >= ranges[r][0] && i < ranges[r][1] ? add : i % 3 == 0;
+
+          gtk_text_buffer_get_iter_at_offset (buffer, &start, i);
+          g_assert_cmpint (gtk_text_iter_has_tag (&start, tag), ==, expected);
+          g_assert_cmpint (gtk_text_iter_has_tag (&start, other), ==, i % 4 == 0);
+        }
+
+      check_buffer_contents (buffer, text);
+      g_object_unref (buffer);
+    }
+}
+
+static void
+test_tag_cleanup (void)
+{
+  GtkTextBuffer *buffer = gtk_text_buffer_new (NULL);
+  GtkTextTag *tag = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+  GtkTextTag *kept = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+  GtkTextChildAnchor *anchor;
+  GtkTextMark *left, *right;
+  GtkTextIter start, end;
+  char *before, *after;
+
+  gtk_text_buffer_set_text (buffer, "aé🙂aé🙂aé🙂aé🙂aé🙂aé🙂", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 6);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &start);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 12);
+  left = gtk_text_buffer_create_mark (buffer, NULL, &start, TRUE);
+  right = gtk_text_buffer_create_mark (buffer, NULL, &start, FALSE);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 15);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 18);
+  gtk_text_buffer_apply_tag (buffer, kept, &start, &end);
+
+  /* Removing these toggles merges runs on either side of the boundaries. */
+  for (int i = 0; i < 19; i += 2)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, i);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, i + 1);
+      gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+    }
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  before = gtk_text_buffer_get_slice (buffer, &start, &end, TRUE);
+  gtk_text_buffer_remove_tag (buffer, tag, &start, &end);
+  after = gtk_text_buffer_get_slice (buffer, &start, &end, TRUE);
+  g_assert_cmpstr (after, ==, before);
+  g_assert_cmpint (gtk_text_buffer_get_char_count (buffer), ==, 19);
+
+  for (int i = 0; i < 19; i++)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, i);
+      g_assert_false (gtk_text_iter_has_tag (&start, tag));
+      g_assert_cmpint (gtk_text_iter_has_tag (&start, kept), ==, i >= 15 && i < 18);
+    }
+
+  gtk_text_buffer_get_iter_at_child_anchor (buffer, &start, anchor);
+  g_assert_cmpint (gtk_text_iter_get_offset (&start), ==, 6);
+  gtk_text_buffer_get_iter_at_mark (buffer, &start, left);
+  g_assert_cmpint (gtk_text_iter_get_offset (&start), ==, 12);
+  gtk_text_buffer_insert (buffer, &start, "Ω", -1);
+  gtk_text_buffer_get_iter_at_mark (buffer, &start, left);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, right);
+  g_assert_cmpint (gtk_text_iter_get_offset (&start), ==, 12);
+  g_assert_cmpint (gtk_text_iter_get_offset (&end), ==, 13);
+
+  g_free (before);
+  g_free (after);
+  g_object_unref (buffer);
+}
+
+static void
+test_tag_cleanup_overflow (void)
+{
+  if (g_test_subprocess ())
+    {
+      GtkTextLineSegment first = { 0 };
+      GtkTextLineSegment second = { 0 };
+
+      /* Reach the size check without allocating 2 GiB of text. */
+      gtk_set_debug_flags (gtk_get_debug_flags () & ~GTK_DEBUG_TEXT);
+      first.type = second.type = &gtk_text_char_type;
+      first.byte_count = first.char_count = G_MAXINT;
+      second.byte_count = second.char_count = 1;
+      first.next = &second;
+      gtk_text_char_type.cleanupFunc (&first, NULL);
+      g_assert_not_reached ();
+    }
+
+  g_test_trap_subprocess (NULL, 0, G_TEST_SUBPROCESS_DEFAULT);
+  g_test_trap_assert_failed ();
+  g_test_trap_assert_stderr ("*Merged character segment exceeds the maximum supported size*");
+}
+
 int
 main (int argc, char** argv)
 {
@@ -1938,6 +2068,10 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Get and Set", test_get_set);
   g_test_add_func ("/TextBuffer/Fill and Empty", test_fill_empty);
   g_test_add_func ("/TextBuffer/Tag", test_tag);
+  g_test_add_data_func ("/TextBuffer/Tag toggles/apply", GINT_TO_POINTER (TRUE), test_tag_toggles);
+  g_test_add_data_func ("/TextBuffer/Tag toggles/remove", GINT_TO_POINTER (FALSE), test_tag_toggles);
+  g_test_add_func ("/TextBuffer/Tag cleanup/boundaries", test_tag_cleanup);
+  g_test_add_func ("/TextBuffer/Tag cleanup/overflow", test_tag_cleanup_overflow);
   g_test_add_func ("/TextBuffer/Clipboard", test_clipboard);
   g_test_add_func ("/TextBuffer/Get iter", test_get_iter);
   g_test_add_func ("/TextBuffer/Iter with anchor", test_iter_with_anchor);
