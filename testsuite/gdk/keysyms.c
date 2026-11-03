@@ -152,6 +152,10 @@ test_key_aliases (void)
   const unsigned int *keys;
   unsigned int n;
 
+  keys = gdk_keyval_get_aliases (0, &n);
+  g_assert_true (n == 0);
+  g_assert_true (keys == NULL);
+
   keys = gdk_keyval_get_aliases (GDK_KEY_Return, &n);
   g_assert_true (keys_contains (keys, n, GDK_KEY_Return));
   g_assert_true (keys_contains (keys, n, GDK_KEY_ISO_Enter));

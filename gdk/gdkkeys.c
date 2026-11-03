@@ -1010,9 +1010,10 @@ gdk_keyval_get_aliases (guint  keyval,
   for (unsigned int i = 0; i < G_N_ELEMENTS (aliases); i++)
     {
       if (aliases[i] == 0)
-        start = i + 1;
-
-      if (aliases[i] == keyval)
+        {
+          start = i + 1;
+        }
+      else if (aliases[i] == keyval)
         {
           for (end = i + 1; aliases[end] != 0; end++) ;
 
