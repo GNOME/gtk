@@ -8988,6 +8988,7 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
   GtkTextView *text_view = GTK_TEXT_VIEW (data);
   gboolean need_reset = FALSE;
   gboolean has_selection;
+  gboolean had_selection;
 
   if (mark == gtk_text_buffer_get_insert (buffer))
     {
@@ -9008,9 +9009,10 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
       gtk_text_view_update_handles (text_view);
 
       has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), NULL, NULL);
+      had_selection = gtk_css_node_get_visible (text_view->priv->selection_node);
       gtk_css_node_set_visible (text_view->priv->selection_node, has_selection);
 
-      if (has_selection)
+      if (has_selection || had_selection)
         gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (text_view));
     }
 }
