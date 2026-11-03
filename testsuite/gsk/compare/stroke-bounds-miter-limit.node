@@ -1,0 +1,124 @@
+color {
+  color: black;
+  bounds: -20 -20 200 160;
+}
+
+stroke {
+  path: "p" {
+    "M 10 10 h 20 v 10 h -20 v 10 h 20 v -5 h -11 l 2 -10";
+  }
+  line-width: 10;
+  line-cap: square;
+  miter-limit: 2;
+}
+
+transform {
+  transform: translate(40,0);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.5;
+  }
+}
+
+transform {
+  transform: translate(80,0);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 3;
+  }
+}
+
+transform {
+  transform: translate(120,0);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 4;
+  }
+}
+
+transform {
+  transform: translate(0,40);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 1.6180379887;
+  }
+}
+
+transform {
+  transform: translate(40,40);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.71828182846;
+  }
+}
+
+transform {
+  transform: translate(80,40);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.828427125;
+  }
+}
+
+transform {
+  transform: translate(120,40);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 3.1415926536;
+  }
+}
+
+transform {
+  transform: translate(0,80);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.0625;
+  }
+}
+
+transform {
+  transform: translate(40,80);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.03125;
+  }
+}
+
+transform {
+  transform: translate(80,80);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.015625;
+  }
+}
+
+transform {
+  transform: translate(120,80);
+  child: stroke {
+    path: "p";
+    line-width: 10;
+    line-cap: square;
+    miter-limit: 2.0078125;
+  }
+}
+

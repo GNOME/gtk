@@ -264,6 +264,7 @@ compare_render_tests = [
   'shrink-rounded-border',
   'small-cairo-node-fractional-edge-case',
   'stroke',
+  'stroke-bounds-miter-limit',
   'stroke-clipped',
   'stroke-fractional-translate-gradient',
   'stroke-fractional-translate',

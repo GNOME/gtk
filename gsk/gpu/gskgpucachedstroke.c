@@ -215,10 +215,11 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
   gsize fx, fy, padding;
   cairo_rectangle_int_t area;
   GskGpuImage *image = NULL;
-  graphene_rect_t path_bounds, viewport;
+  graphene_rect_t path_bounds, stroke_bounds, viewport;
   size_t subpixel_scale;
 
-  if (!gsk_path_get_stroke_bounds (path, stroke, &path_bounds))
+  if (!gsk_path_get_bounds (path, &path_bounds) ||
+      !gsk_path_get_stroke_bounds (path, stroke, &stroke_bounds))
     return NULL;
 
   if (color_hint == NULL)
@@ -253,7 +254,7 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
       return g_object_ref (cached->image);
     }
 
-  if (!gsk_rect_snap_to_grid_grow (&path_bounds,
+  if (!gsk_rect_snap_to_grid_grow (&stroke_bounds,
                                    scale,
                                    &GRAPHENE_POINT_INIT (- path_bounds.origin.x + (float) fx / (sx * subpixel_scale),
                                                          - path_bounds.origin.y + (float) fy / (sy * subpixel_scale)),
@@ -289,6 +290,12 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
 
       g_hash_table_insert (priv->stroke_cache, cached, cached);
       gsk_gpu_cached_use ((GskGpuCached *) cached);
+
+      graphene_rect_init (out_rect,
+                          cached->image_offset.x + path_bounds.origin.x - dx,
+                          cached->image_offset.y + path_bounds.origin.y - dy,
+                          gsk_gpu_image_get_width (image) / sx,
+                          gsk_gpu_image_get_height (image) / sy);
     }
   else
     {
@@ -311,6 +318,12 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                                                   area.height);
       if (image == NULL)
         return NULL;
+
+      graphene_rect_init (out_rect,
+                          viewport.origin.x - area.x / sx - dx,
+                          viewport.origin.y - area.y / sy - dy,
+                          gsk_gpu_image_get_width (image) / sx,
+                          gsk_gpu_image_get_height (image) / sy);
     }
 
   gsk_gpu_upload_cairo_into_op (frame,
@@ -326,11 +339,6 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
                                 }, sizeof (StrokeData)),
                                 (GDestroyNotify) stroke_data_free);
 
-  graphene_rect_init (out_rect,
-                      viewport.origin.x - area.x / sx - dx,
-                      viewport.origin.y - area.y / sy - dy,
-                      gsk_gpu_image_get_width (image) / sx,
-                      gsk_gpu_image_get_height (image) / sy);
   gdk_color_init_copy (out_color, color_hint);
 
   return image;
