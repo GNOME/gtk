@@ -308,8 +308,7 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
  *      a single character segment, if possible.
  *
  * Arguments:
- *      segPtr: Pointer to the first of two adjacent segments to
- *              join.
+ *      segPtr: Pointer to the first adjacent character segment to join.
  *      line:   Line containing segments (not used).
  *
  * Results:
@@ -326,32 +325,54 @@ char_segment_split_func (GtkTextLineSegment *seg, int index)
 static GtkTextLineSegment *
 char_segment_cleanup_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 {
-  GtkTextLineSegment *segPtr2, *newPtr;
+  GtkTextLineSegment *end, *current, *newPtr;
+  int byte_count = 0;
+  int char_count = 0;
+  char *dest;
 
   if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (segPtr);
 
-  segPtr2 = segPtr->next;
-  if ((segPtr2 == NULL) || (segPtr2->type != &gtk_text_char_type))
+  if (segPtr->next == NULL || segPtr->next->type != &gtk_text_char_type)
+    return segPtr;
+
+  /* Removing many tag toggles can leave a long run of adjacent character
+   * segments. Merging pairs repeatedly copies an ever-growing prefix.
+   * Count the whole run first, then allocate and copy it exactly once.
+   * Marks, anchors, paintables and tag toggles all end the run.
+   */
+  for (end = segPtr; end != NULL && end->type == &gtk_text_char_type; end = end->next)
     {
-      return segPtr;
+      if (end->byte_count > G_MAXINT - byte_count ||
+          end->char_count > G_MAXINT - char_count)
+        g_error ("Merged character segment exceeds the maximum supported size");
+
+      byte_count += end->byte_count;
+      char_count += end->char_count;
     }
 
-  newPtr =
-    _gtk_char_segment_new_from_two_strings (segPtr->body.chars, 
-					    segPtr->byte_count,
-					    segPtr->char_count,
-                                            segPtr2->body.chars, 
-					    segPtr2->byte_count,
-					    segPtr2->char_count);
+  newPtr = g_malloc (CSEG_SIZE (byte_count));
+  newPtr->type = &gtk_text_char_type;
+  newPtr->next = end;
+  newPtr->byte_count = byte_count;
+  newPtr->char_count = char_count;
+  dest = newPtr->body.chars;
 
-  newPtr->next = segPtr2->next;
+  for (current = segPtr; current != end;)
+    {
+      GtkTextLineSegment *next = current->next;
+
+      memcpy (dest, current->body.chars, current->byte_count);
+      dest += current->byte_count;
+      _gtk_char_segment_free (current);
+      current = next;
+    }
+
+  *dest = '\0';
 
   if (GTK_DEBUG_CHECK (TEXT))
     char_segment_self_check (newPtr);
 
-  _gtk_char_segment_free (segPtr);
-  _gtk_char_segment_free (segPtr2);
   return newPtr;
 }
 

@@ -1639,77 +1639,9 @@ _gtk_text_btree_get_view_size (GtkTextBTree *tree,
  */
 
 typedef struct {
-  GtkTextIter *iters;
-  guint count;
-  guint allocated;
-} IterStack;
-
-static IterStack*
-iter_stack_new (void)
-{
-  IterStack *stack;
-  stack = g_new (IterStack, 1);
-  stack->iters = NULL;
-  stack->count = 0;
-  stack->allocated = 0;
-  return stack;
-}
-
-static void
-iter_stack_push (IterStack         *stack,
-		 const GtkTextIter *iter)
-{
-  stack->count += 1;
-  if (stack->count > stack->allocated)
-    {
-      stack->allocated = stack->count*2;
-      stack->iters = g_realloc (stack->iters,
-                                stack->allocated * sizeof (GtkTextIter));
-    }
-  stack->iters[stack->count-1] = *iter;
-}
-
-static gboolean
-iter_stack_pop (IterStack   *stack,
-		GtkTextIter *iter)
-{
-  if (stack->count == 0)
-    return FALSE;
-  else
-    {
-      stack->count -= 1;
-      *iter = stack->iters[stack->count];
-      return TRUE;
-    }
-}
-
-static void
-iter_stack_free (IterStack *stack)
-{
-  g_free (stack->iters);
-  g_free (stack);
-}
-
-static void
-iter_stack_invert (IterStack *stack)
-{
-  if (stack->count > 0)
-    {
-      guint i = 0;
-      guint j = stack->count - 1;
-      while (i < j)
-        {
-          GtkTextIter tmp;
-
-          tmp = stack->iters[i];
-          stack->iters[i] = stack->iters[j];
-          stack->iters[j] = tmp;
-
-          ++i;
-          --j;
-        }
-    }
-}
+  GtkTextLine *line;
+  GtkTextLineSegment *segment;
+} TagToggle;
 
 static void
 queue_tag_redisplay (GtkTextBTree      *tree,
@@ -1745,7 +1677,9 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
   GtkTextIter iter;
   GtkTextIter start, end;
   GtkTextBTree *tree;
-  IterStack *stack;
+  GArray *toggles = NULL;
+  GtkTextLine *cursor_line = NULL;
+  GtkTextLineSegment **cursor = NULL;
   GtkTextTagInfo *info;
 
   g_return_if_fail (start_orig != NULL);
@@ -1784,7 +1718,6 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
      We need to find them in advance, because
      forward_find_tag_toggle () won't work once we start playing around
      with the tree. */
-  stack = iter_stack_new ();
   iter = start;
 
   /* forward_to_tag_toggle() skips a toggle at the start iterator,
@@ -1796,11 +1729,32 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
       if (gtk_text_iter_compare (&iter, &end) >= 0)
         break;
       else
-        iter_stack_push (stack, &iter);
-    }
+        {
+          GtkTextLineSegment *indexable = _gtk_text_iter_get_indexable_segment (&iter);
+          TagToggle toggle;
 
-  /* We need to traverse the toggles in order. */
-  iter_stack_invert (stack);
+          toggle.line = _gtk_text_iter_get_text_line (&iter);
+          toggle.segment = _gtk_text_iter_get_any_segment (&iter);
+
+          /* Save the toggle itself, rather than an iterator that would
+           * need revalidation after each preceding toggle is removed.
+           * No text or lines change during this operation.
+           */
+          while (toggle.segment != indexable)
+            {
+              if ((toggle.segment->type == &gtk_text_toggle_on_type ||
+                   toggle.segment->type == &gtk_text_toggle_off_type) &&
+                  toggle.segment->body.toggle.info == info)
+                break;
+              toggle.segment = toggle.segment->next;
+            }
+
+          g_assert (toggle.segment != indexable);
+          if (toggles == NULL)
+            toggles = g_array_new (FALSE, FALSE, sizeof (TagToggle));
+          g_array_append_val (toggles, toggle);
+        }
+    }
 
   /*
    * See whether the tag is present at the start of the range.  If
@@ -1847,43 +1801,30 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
    */
 
   cleanupline = start_line;
-  while (iter_stack_pop (stack, &iter))
+  for (guint i = 0; toggles != NULL && i < toggles->len; i++)
     {
-      GtkTextLineSegment *indexable_seg;
-      GtkTextLine *line;
+      TagToggle *toggle = &g_array_index (toggles, TagToggle, i);
+      GtkTextLine *line = toggle->line;
 
-      line = _gtk_text_iter_get_text_line (&iter);
-      seg = _gtk_text_iter_get_any_segment (&iter);
-      indexable_seg = _gtk_text_iter_get_indexable_segment (&iter);
+      seg = toggle->segment;
+      g_assert (seg->body.toggle.info->tag == tag);
 
-      g_assert (seg != NULL);
-      g_assert (indexable_seg != NULL);
-      g_assert (seg != indexable_seg);
-
-      prev = line->segments;
-
-      /* Find the segment that actually toggles this tag. */
-      while (seg != indexable_seg)
+      /* The saved toggles are in buffer order. Walk each line once to
+       * find their predecessors, retaining the link after each removal.
+       * Inserting the start toggle may change that line's links, but
+       * does not invalidate the saved interior toggle segments.
+       */
+      if (cursor_line != line)
         {
-          g_assert (seg != NULL);
-          g_assert (indexable_seg != NULL);
-          g_assert (seg != indexable_seg);
-
-          if ( (seg->type == &gtk_text_toggle_on_type ||
-                seg->type == &gtk_text_toggle_off_type) &&
-               (seg->body.toggle.info == info) )
-            break;
-          else
-            seg = seg->next;
+          cursor_line = line;
+          cursor = &line->segments;
         }
 
-      g_assert (seg != NULL);
-      g_assert (indexable_seg != NULL);
-
-      g_assert (seg != indexable_seg); /* If this happens, then
-                                          forward_to_tag_toggle was
-                                          full of shit. */
-      g_assert (seg->body.toggle.info->tag == tag);
+      while (*cursor != seg)
+        {
+          g_assert (*cursor != NULL);
+          cursor = &(*cursor)->next;
+        }
 
       /* If this happens, when previously tagging we didn't merge
          overlapping tags. */
@@ -1896,26 +1837,11 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
       printf ("deleting %s toggle\n",
               seg->type == &gtk_text_toggle_on_type ? "on" : "off");
 #endif
-      /* Remove toggle segment from the list. */
-      if (prev == seg)
-        {
-          line->segments = seg->next;
-        }
-      else
-        {
-          while (prev->next != seg)
-            {
-              prev = prev->next;
-            }
-          prev->next = seg->next;
-        }
+      /* Remove toggle segment from the list. The link remains valid
+       * until cleanup_line(), after all toggles on this line are done.
+       */
+      *cursor = seg->next;
 
-      /* Inform iterators we've hosed them. This actually reflects a
-         bit of inefficiency; if you have the same tag toggled on and
-         off a lot in a single line, we keep having the rescan from
-         the front of the line. Of course we have to do that to get
-         "prev" anyway, but here we are doing it an additional
-         time. FIXME */
       segments_changed (tree);
 
       /* Update node counts */
@@ -1938,7 +1864,7 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
         }
     }
 
-  iter_stack_free (stack);
+  g_clear_pointer (&toggles, g_array_unref);
 
   /* toggled_on now reflects the toggle state _just before_ the
      end iterator. The end iterator could already have a toggle
