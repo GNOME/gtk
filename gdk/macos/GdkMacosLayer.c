@@ -319,6 +319,18 @@ fromCGRect (const CGRect rect)
   [super setFrame:frame];
 }
 
+-(void)setBounds:(CGRect)bounds
+{
+  if (bounds.size.width != self.bounds.size.width ||
+      bounds.size.height != self.bounds.size.height)
+    {
+      self->_layoutInvalid = TRUE;
+      [self setNeedsLayout];
+    }
+
+  [super setBounds:bounds];
+}
+
 -(void)setOpaqueRegion:(const cairo_region_t *)opaqueRegion
 {
   g_clear_pointer (&self->_opaqueRegion, cairo_region_destroy);
