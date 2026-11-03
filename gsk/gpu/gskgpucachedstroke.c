@@ -253,11 +253,10 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
       return g_object_ref (cached->image);
     }
 
-  viewport = GRAPHENE_RECT_INIT (0, 0, path_bounds.size.width, path_bounds.size.height);
-  if (!gsk_rect_snap_to_grid_grow (&viewport,
+  if (!gsk_rect_snap_to_grid_grow (&path_bounds,
                                    scale,
-                                   &GRAPHENE_POINT_INIT ((float) fx / (sx * subpixel_scale),
-                                                         (float) fy / (sy * subpixel_scale)),
+                                   &GRAPHENE_POINT_INIT (- path_bounds.origin.x + (float) fx / (sx * subpixel_scale),
+                                                         - path_bounds.origin.y + (float) fy / (sy * subpixel_scale)),
                                    &viewport))
     return NULL;
 
@@ -283,16 +282,13 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
       gdk_color_init_copy (&cached->color, color_hint);
       cached->image = g_object_ref (image);
       graphene_rect_inset (&viewport, padding / -sx, padding / -sy);
-      cached->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - area.x / sx,
-                                                  viewport.origin.y - area.y / sy);
+      cached->image_offset = GRAPHENE_POINT_INIT (viewport.origin.x - path_bounds.origin.x - area.x / sx,
+                                                  viewport.origin.y - path_bounds.origin.y - area.y / sy);
 
       ((GskGpuCached *) cached)->pixels = area.width * area.height;
 
       g_hash_table_insert (priv->stroke_cache, cached, cached);
       gsk_gpu_cached_use ((GskGpuCached *) cached);
-
-      viewport.origin.x += path_bounds.origin.x;
-      viewport.origin.y += path_bounds.origin.y;
     }
   else
     {
