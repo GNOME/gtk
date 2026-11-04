@@ -652,12 +652,12 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
     return;
 
   _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display));
-  self->show_on_next_swap = TRUE;
 
   was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
 
   if (!was_mapped)
     {
+      self->show_on_next_swap = TRUE;
       gdk_surface_set_is_mapped (GDK_SURFACE (self), TRUE);
       gdk_surface_request_layout (GDK_SURFACE (self));
       gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
@@ -1015,13 +1015,20 @@ static void
 _gdk_macos_surface_do_delayed_show (GdkMacosSurface *self)
 {
   GdkSurface *surface = (GdkSurface *)self;
+  GdkMacosDisplay *display = GDK_MACOS_DISPLAY (surface->display);
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   self->show_on_next_swap = FALSE;
   [self->window showAndMakeKey:YES];
 
-  _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
+  if (display->activate_nsapp_on_first_show)
+    {
+      display->activate_nsapp_on_first_show = FALSE;
+      [NSApp activateIgnoringOtherApps:YES];
+    }
+
+  _gdk_macos_display_clear_sorting (display);
   gdk_surface_request_motion (surface);
 }
 

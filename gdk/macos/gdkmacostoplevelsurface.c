@@ -343,6 +343,9 @@ _gdk_macos_toplevel_surface_focus (GdkToplevel *toplevel,
   if (GDK_SURFACE_DESTROYED (self))
     return;
 
+  if (GDK_MACOS_SURFACE (self)->show_on_next_swap)
+    return;
+
   nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
   [nswindow makeKeyAndOrderFront:nswindow];
 }
