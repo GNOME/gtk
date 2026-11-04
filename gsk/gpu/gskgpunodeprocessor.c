@@ -1281,6 +1281,24 @@ gsk_gpu_sampler_for_scaling_filter (GskScalingFilter scaling_filter)
     }
 }
 
+static gboolean
+gsk_gpu_scaling_filter_needs_mipmaps (GskScalingFilter scaling_filter)
+{
+  switch (scaling_filter)
+    {
+      case GSK_SCALING_FILTER_LINEAR:
+      case GSK_SCALING_FILTER_NEAREST:
+        return FALSE;
+
+      case GSK_SCALING_FILTER_TRILINEAR:
+        return TRUE;
+
+      default:
+        g_assert_not_reached ();
+        return FALSE;
+    }
+}
+
 /* must be set up with BLEND_ADD to avoid seams */
 static void
 gsk_gpu_node_processor_draw_texture_tiles (GskGpuRenderPass    *self,
@@ -1304,7 +1322,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuRenderPass    *self,
   device = gsk_gpu_frame_get_device (self->frame);
   cache = gsk_gpu_device_get_cache (device);
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
-  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
+  need_mipmap = gsk_gpu_scaling_filter_needs_mipmaps (scaling_filter);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip_bounds))
     return;
   width = gdk_texture_get_width (texture);
@@ -1611,7 +1629,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
-  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
+  need_mipmap = gsk_gpu_scaling_filter_needs_mipmaps (scaling_filter);
   image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
   if (!gsk_gpu_render_pass_snap_rect (self,
                                       &node->bounds,
