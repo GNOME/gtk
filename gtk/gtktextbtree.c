@@ -5576,6 +5576,10 @@ tag_changed_cb (GtkTextTagTable *table,
     {
       /* We only need to queue a redraw, not a relayout */
       BTreeView *view;
+      GtkTextIter start;
+
+      if (!_gtk_text_btree_get_iter_at_first_toggle (tree, &start, tag))
+        return;
 
       view = tree->views;
 
