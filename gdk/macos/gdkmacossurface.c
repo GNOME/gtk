@@ -1011,7 +1011,7 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
   return self->buffer;
 }
 
-static void
+void
 _gdk_macos_surface_do_delayed_show (GdkMacosSurface *self)
 {
   GdkSurface *surface = (GdkSurface *)self;

@@ -127,6 +127,7 @@ void               _gdk_macos_surface_get_root_coords         (GdkMacosSurface  
 GdkMacosBuffer    *_gdk_macos_surface_get_buffer              (GdkMacosSurface      *self);
 void               _gdk_macos_surface_swap_buffers            (GdkMacosSurface      *self,
                                                                const cairo_region_t *damage);
+void               _gdk_macos_surface_do_delayed_show         (GdkMacosSurface      *self);
 
 G_END_DECLS
 
