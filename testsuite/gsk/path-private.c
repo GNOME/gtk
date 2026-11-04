@@ -137,6 +137,7 @@ test_rounded_rect_winding (void)
 
   gsk_path_unref (path2);
   gsk_path_unref (path1);
+  gsk_path_unref (path);
 }
 
 static void
@@ -170,6 +171,7 @@ test_rect_winding (void)
   gsk_path_unref (path3);
   gsk_path_unref (path2);
   gsk_path_unref (path1);
+  gsk_path_unref (path);
 }
 
 static void

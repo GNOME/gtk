@@ -192,6 +192,7 @@ test_texture_save_to_png (void)
   /* libpng has a builtin user limit of 1M pixels per dimension, so we make it 1px too big. */
   texture = red_texture_new (1 * 1000 * 1000 + 1, 1);
   g_assert_true (gdk_texture_save_to_png (texture, "test.png"));
+  g_object_unref (texture);
 }
 
 static void
