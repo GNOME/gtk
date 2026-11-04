@@ -272,11 +272,6 @@ time_spec_parse (GtkCssParser  *parser,
                   gtk_css_parser_skip_whitespace (parser);
                   parser_try_duration (parser, &spec->offset);
                 }
-
-              if (*error == NULL)
-                g_set_error (error,
-                             GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_SYNTAX,
-                             "gpa:states() is deprecated. Use StateChange()");
             }
           else
             return FALSE;
