@@ -1020,6 +1020,10 @@ _gdk_macos_surface_do_delayed_show (GdkMacosSurface *self)
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   self->show_on_next_swap = FALSE;
+
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (self))
+    _gdk_macos_toplevel_surface_attach_to_parent (GDK_MACOS_TOPLEVEL_SURFACE (self));
+
   [self->window showAndMakeKey:YES];
 
   if (display->activate_nsapp_on_first_show)

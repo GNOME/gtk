@@ -689,6 +689,9 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
+  if (!GDK_SURFACE_IS_MAPPED (surface) || GDK_MACOS_SURFACE (self)->show_on_next_swap)
+    return;
+
   if (surface->transient_for != NULL &&
       !GDK_SURFACE_DESTROYED (surface->transient_for))
     {
