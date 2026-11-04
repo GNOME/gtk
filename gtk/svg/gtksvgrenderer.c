@@ -4262,6 +4262,9 @@ generate_layouts (SvgElement            *self,
   print_chunks (self, FALSE);
 #endif
 
+  if (!retval)
+    return FALSE;
+
   dx = dy = 0;
   switch (anchor)
     {

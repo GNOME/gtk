@@ -626,6 +626,7 @@ test_path_segments (void)
 
       g_free (str);
       gsk_path_unref (path);
+      gsk_path_unref (result);
     }
 }
 

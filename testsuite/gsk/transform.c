@@ -556,14 +556,17 @@ test_transform_bounds (void)
   t = gsk_transform_translate (t, &GRAPHENE_POINT_INIT (-50, -50));
   gsk_transform_transform_bounds (t, &bounds, &out);
   g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(0, 0, 100, 100)));
+  gsk_transform_unref (t);
 
   t = gsk_transform_scale (NULL, -1, 1);
   gsk_transform_transform_bounds (t, &bounds, &out);
   g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(-100, 0, 100, 100)));
+  gsk_transform_unref (t);
 
   t = gsk_transform_scale (NULL, -1, -2);
   gsk_transform_transform_bounds (t, &bounds, &out);
   g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(-100, -200, 100, 200)));
+  gsk_transform_unref (t);
 }
 
 #define DEG_TO_RAD(x) ((x) / 180.0 * G_PI)
@@ -1056,6 +1059,8 @@ test_matrix_roundtrip (void)
   g_assert_cmpstr (str, ==, input);
   g_free (str);
 
+  gsk_transform_unref (transform);
+
   input = "matrix3d(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)";
   res = gsk_transform_parse (input, &transform);
   g_assert_true (res);
@@ -1064,6 +1069,8 @@ test_matrix_roundtrip (void)
   str = gsk_transform_to_string (transform);
   g_assert_cmpstr (str, ==, input);
   g_free (str);
+
+  gsk_transform_unref (transform);
 }
 
 static void
