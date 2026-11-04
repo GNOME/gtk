@@ -218,10 +218,21 @@ typedef enum {
  * The actual implementation of each filter is deferred to the
  * rendering pipeline.
  */
+/**
+ * GSK_SCALING_FILTER_BICUBIC:
+ *
+ * Bicubic interpolation along each axis.
+ *
+ * This is an experimental feature, the exact interpolation method has not
+ * been decided yet.
+ *
+ * Since: 4.26
+ */
 typedef enum {
   GSK_SCALING_FILTER_LINEAR,
   GSK_SCALING_FILTER_NEAREST,
-  GSK_SCALING_FILTER_TRILINEAR
+  GSK_SCALING_FILTER_TRILINEAR,
+  GSK_SCALING_FILTER_BICUBIC GDK_AVAILABLE_ENUMERATOR_IN_4_26
 } GskScalingFilter;
 
 /**

@@ -67,9 +67,11 @@ gsk_scaling_filter_to_cairo_filter (GskScalingFilter filter)
       return CAIRO_FILTER_NEAREST;
     case GSK_SCALING_FILTER_TRILINEAR:
       return CAIRO_FILTER_GOOD; /* ??? */
+    case GSK_SCALING_FILTER_BICUBIC:
+      return CAIRO_FILTER_BILINEAR; /* Cairo doesn't do bicubic */
     default:
       g_assert_not_reached ();
-      return CAIRO_FILTER_BILINEAR;
+      return CAIRO_FILTER_GOOD;
   }
 }
 
