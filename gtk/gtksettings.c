@@ -138,6 +138,7 @@ struct _GtkSettings
   gboolean font_size_absolute;
   char *font_family;
   cairo_font_options_t *font_options;
+  GtkCssValue *accent_color;
 };
 
 struct _GtkSettingsClass
@@ -1078,7 +1079,6 @@ gtk_settings_style_provider_get_color (GtkStyleProvider *provider,
 {
   GtkSettings *settings = GTK_SETTINGS (provider);
   GdkRGBA *rgba;
-  GtkCssValue *value;
 
   if (strcmp (name, "accent_color") != 0)
     return NULL;
@@ -1088,11 +1088,16 @@ gtk_settings_style_provider_get_color (GtkStyleProvider *provider,
 
   g_object_get (G_OBJECT (settings), "gtk-accent-color", &rgba, NULL);
 
-  value = gtk_css_color_value_new_from_rgba (rgba);
+  if (settings->accent_color &&
+      !gdk_rgba_equal (rgba, gtk_css_color_value_get_rgba (settings->accent_color)))
+    g_clear_pointer (&settings->accent_color, gtk_css_value_unref);
+
+  if (!settings->accent_color)
+    settings->accent_color = gtk_css_color_value_new_from_rgba (rgba);
 
   gdk_rgba_free (rgba);
 
-  return value;
+  return settings->accent_color;
 }
 
 static void
@@ -1123,6 +1128,7 @@ gtk_settings_finalize (GObject *object)
   g_free (settings->font_family);
 
   g_clear_object (&settings->theme_provider);
+  g_clear_pointer (&settings->accent_color, gtk_css_value_unref);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
