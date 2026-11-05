@@ -227,6 +227,8 @@ gsk_cross_fade_node_new (GskRenderNode *start,
   node->isolates_background = TRUE;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (start) ||
                                    gsk_render_node_contains_subsurface_node (end);
+  node->contains_copy_paste_node = gsk_render_node_contains_copy_paste_node (start) ||
+                                   gsk_render_node_contains_copy_paste_node (end);
   node->contains_paste_node = gsk_render_node_contains_paste_node (start) ||
                               gsk_render_node_contains_paste_node (end);
 
