@@ -32,6 +32,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkapplicationwindowprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkinit.h"
 #include "gtkmain.h"
 #include "gtkicontheme.h"
 #include "gtkbuilder.h"

@@ -49,37 +49,6 @@ G_BEGIN_DECLS
  */
 #define GTK_PRIORITY_RESIZE (G_PRIORITY_HIGH_IDLE + 10)
 
-/* Initialization, exit, mainloop and miscellaneous routines
- */
-
-GDK_AVAILABLE_IN_ALL
-void     gtk_init                 (void);
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_init_check           (void);
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_is_initialized       (void);
-
-#ifdef G_OS_WIN32
-
-/* Variants that are used to check for correct struct packing
- * when building GTK+-using code.
- */
-GDK_AVAILABLE_IN_ALL
-void     gtk_init_abi_check       (int     num_checks,
-                                   size_t  sizeof_GtkWindow,
-                                   size_t  sizeof_GtkBox);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_init_check_abi_check (int     num_checks,
-                                   size_t  sizeof_GtkWindow,
-                                   size_t  sizeof_GtkBox);
-
-#define gtk_init() gtk_init_abi_check (2, sizeof (GtkWindow), sizeof (GtkBox))
-#define gtk_init_check() gtk_init_check_abi_check (2, sizeof (GtkWindow), sizeof (GtkBox))
-
-#endif
-
 GDK_AVAILABLE_IN_ALL
 void              gtk_disable_setlocale    (void);
 
@@ -96,4 +65,3 @@ GtkTextDirection  gtk_get_locale_direction (void);
 
 
 G_END_DECLS
-
