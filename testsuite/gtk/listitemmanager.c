@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include "gtk/gtklistitemmanagerprivate.h"
 #include "gtk/gtklistbaseprivate.h"
+#include "gtk/gtkwidgetprivate.h"
 
 static GListModel *
 create_source_model (guint min_size, guint max_size)
@@ -406,7 +407,9 @@ test_tracker_changes (void)
   g_assert_false (gtk_list_item_tracker_set_position (items, tracker, 1, 2, 3));
   g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 3, 3));
   g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 1, 3, 2));
+  gtk_widget_clear_resize_queued (widget);
   g_assert_true (gtk_list_item_tracker_set_position (items, tracker, 99, 3, 2));
+  g_assert_true (widget->priv->resize_queued);
   g_assert_false (gtk_list_item_tracker_set_position (items, tracker, 3, 3, 2));
 
   gtk_list_item_tracker_free (items, tracker);

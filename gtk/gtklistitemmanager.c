@@ -2018,6 +2018,7 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
     {
       tile = gtk_list_item_manager_get_nth (self, position, NULL);
       tracker->widget = GTK_LIST_ITEM_BASE (tile->widget);
+      gtk_widget_queue_resize (self->widget);
       return TRUE;
     }
 
