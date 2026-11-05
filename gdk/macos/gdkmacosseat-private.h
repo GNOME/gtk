@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 GdkSeat *_gdk_macos_seat_new (GdkMacosDisplay *display);
 
+GdkDevice *_gdk_macos_seat_get_touchpad (GdkMacosSeat *seat);
+
 void _gdk_macos_seat_handle_tablet_tool_event (GdkMacosSeat *seat,
                                                NSEvent      *nsevent);
 
