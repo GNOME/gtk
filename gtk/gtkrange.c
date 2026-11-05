@@ -1847,33 +1847,27 @@ coord_to_value (GtkRange *range,
   double value;
   int     trough_length;
   int     slider_length;
-  graphene_rect_t slider_bounds;
+  GtkCssBoxes slider_css_boxes;
+  const graphene_rect_t *slider_bounds;
 
-  if (!gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds))
-    graphene_rect_init (&slider_bounds, 0, 0, gtk_widget_get_width (priv->trough_widget), gtk_widget_get_height (priv->trough_widget));
+  gtk_css_boxes_init (&slider_css_boxes, priv->slider_widget);
+  slider_bounds = gtk_css_boxes_get_margin_rect (&slider_css_boxes);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       trough_length = gtk_widget_get_width (priv->trough_widget);
-      slider_length = slider_bounds.size.width;
+      slider_length = slider_bounds->size.width;
     }
   else
     {
       trough_length = gtk_widget_get_height (priv->trough_widget);
-      slider_length = slider_bounds.size.height;
+      slider_length = slider_bounds->size.height;
     }
 
   if (trough_length == slider_length)
-    {
-      frac = 1.0;
-    }
+    frac = 1.0;
   else
-    {
-      if (priv->slider_size_fixed)
-        frac = CLAMP (coord / (double) trough_length, 0, 1);
-      else
-        frac = CLAMP (coord / (double) (trough_length - slider_length), 0, 1);
-    }
+    frac = CLAMP (coord / (double) (trough_length - slider_length), 0, 1);
 
   if (should_invert (range))
     frac = 1.0 - frac;
@@ -2073,20 +2067,19 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
             (!primary_warps && button == GDK_BUTTON_MIDDLE)))
     {
       graphene_point_t p;
-      graphene_rect_t slider_bounds;
+      GtkCssBoxes slider_css_boxes;
+      const graphene_rect_t *slider_bounds;
+
+      gtk_css_boxes_init (&slider_css_boxes, priv->slider_widget);
+      slider_bounds = gtk_css_boxes_get_margin_rect (&slider_css_boxes);
 
       if (!gtk_widget_compute_point (priv->trough_widget, widget,
                                      &GRAPHENE_POINT_INIT (priv->slider_x, priv->slider_y),
                                      &p))
         graphene_point_init (&p, priv->slider_x, priv->slider_y);
 
-      /* If we aren't fixed, center on the slider. I.e. if this is not a scale... */
-      if (!priv->slider_size_fixed &&
-          gtk_widget_compute_bounds (priv->slider_widget, priv->slider_widget, &slider_bounds))
-        {
-          p.x += (slider_bounds.size.width  / 2);
-          p.y += (slider_bounds.size.height / 2);
-        }
+      p.x += (slider_bounds->size.width  / 2);
+      p.y += (slider_bounds->size.height / 2);
 
       update_initial_slider_position (range, p.x, p.y);
 
