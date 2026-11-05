@@ -215,17 +215,34 @@ gtk_text_line_display_cache_take_display (GtkTextLineDisplayCache *cache,
 static gboolean
 purge_text_line_display_in_idle (gpointer data)
 {
-  GQueue q = purge_in_idle;
+  gint64 deadline = g_get_monotonic_time () + 1000;
+  guint remaining = MIN (purge_in_idle.length, 64);
+  int remaining_chars = 1024;
 
-  purge_in_idle.head = NULL;
-  purge_in_idle.tail = NULL;
-  purge_in_idle.length = 0;
+  /* We've batched cleanup to a low-priority idle to avoid doing a lot of work
+   * during a frame cycle. However, if we have many lines to cleanup then we
+   * risk blocking the start of the next frame.
+   *
+   * Use a character count to amortize the cost of a monotonic clock read and
+   * set a deadline of 1 msec. We can do another round of cleanup in the next
+   * idle callback (possibly after a frame cycle).
+   */
 
-  while (q.head)
+  while (purge_in_idle.tail != NULL && remaining-- > 0)
     {
-      GtkTextLineDisplay *display = q.head->data;
-      g_queue_unlink (&q, &display->mru_link);
+      GtkTextLineDisplay *display = purge_in_idle.tail->data;
+
+      remaining_chars -= MAX (64, pango_layout_get_character_count (display->layout));
+      g_queue_unlink (&purge_in_idle, &display->mru_link);
       gtk_text_line_display_unref (display);
+
+      if (remaining_chars <= 0)
+        {
+          if (g_get_monotonic_time () >= deadline)
+            break;
+
+          remaining_chars = 1024;
+        }
     }
 
   if (purge_in_idle.head == NULL)
