@@ -428,6 +428,8 @@ gsk_composite_node_new (GskRenderNode *child,
   node->bilevel_opacity = node->fully_opaque;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child) ||
                                    gsk_render_node_contains_subsurface_node (mask);
+  node->contains_copy_paste_node = gsk_render_node_contains_copy_paste_node (child) ||
+                                   gsk_render_node_contains_copy_paste_node (mask);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child) ||
                               gsk_render_node_contains_paste_node (mask);
   node->needs_blending = TRUE;

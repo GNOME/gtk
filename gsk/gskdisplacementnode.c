@@ -456,6 +456,8 @@ gsk_displacement_node_new (const graphene_rect_t  *bounds,
   node->bilevel_opacity = gsk_render_node_is_bilevel_opacity (child);
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (child) ||
                                    gsk_render_node_contains_subsurface_node (displacement);
+  node->contains_copy_paste_node = gsk_render_node_contains_copy_paste_node (child) ||
+                                   gsk_render_node_contains_copy_paste_node (displacement);
   node->contains_paste_node = gsk_render_node_contains_paste_node (child) ||
                               gsk_render_node_contains_paste_node (displacement);
 

@@ -388,6 +388,8 @@ gsk_arithmetic_node_new (const graphene_rect_t *clip,
   node->isolates_background = TRUE;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (first) ||
                                    gsk_render_node_contains_subsurface_node (second);
+  node->contains_copy_paste_node = gsk_render_node_contains_copy_paste_node (first) ||
+                                   gsk_render_node_contains_copy_paste_node (second);
   node->contains_paste_node = gsk_render_node_contains_paste_node (first) ||
                               gsk_render_node_contains_paste_node (second);
 

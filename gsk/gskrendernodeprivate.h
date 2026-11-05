@@ -46,6 +46,7 @@ struct _GskRenderNode
   guint clears_background : 1; /* mostly relevant for tracking opacity */
   guint contains_subsurface_node : 1; /* contains a subsurface node */
   guint contains_paste_node : 1; /* contains a paste node that has no matching copy node */
+  guint contains_copy_paste_node : 1; /* contains a copy or paste node, even inside isolation */
   guint needs_blending : 1; /* This node cannot be drawn with glDisable (GL_BLEND) */
 };
 
@@ -151,6 +152,7 @@ gboolean        gsk_render_node_clears_background       (const GskRenderNode    
 GskCopyMode     gsk_render_node_get_copy_mode           (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_contains_subsurface_node(const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_contains_paste_node     (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_contains_copy_paste_node(const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_needs_diff_with_self    (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_needs_blending          (const GskRenderNode         *node) G_GNUC_PURE;
 
