@@ -4249,9 +4249,40 @@ gboolean
 gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
                                      GtkTextTag  *tag)
 {
+  return gtk_text_iter_forward_to_tag_toggle_with_limit (iter, tag, NULL);
+}
+
+/**
+ * gtk_text_iter_forward_to_tag_toggle_with_limit:
+ * @iter: a `GtkTextIter`
+ * @tag: (nullable): a `GtkTextTag`, or %NULL to find any tag toggle
+ * @limit: (nullable): the exclusive search limit, in the same buffer as @iter
+ *
+ * Moves forward to the next tag toggle before @limit.
+ *
+ * Finds the next start or end of @tag, or of any tag if @tag is %NULL.
+ * Toggles at the initial position of @iter and at @limit are excluded.
+ * If no toggle is found, sets @iter to @limit and returns %FALSE.
+ * If @limit is at or before @iter, returns %FALSE without moving @iter.
+ *
+ * If @limit is %NULL, searches to the end of the buffer, including any
+ * toggle at the end iterator, just like
+ * [method@Gtk.TextIter.forward_to_tag_toggle].
+ *
+ * Returns: whether a matching tag toggle was found
+ *
+ * Since: 4.26
+ */
+gboolean
+gtk_text_iter_forward_to_tag_toggle_with_limit (GtkTextIter       *iter,
+                                                GtkTextTag        *tag,
+                                                const GtkTextIter *limit)
+{
   GtkTextLine *next_line;
   GtkTextLine *current_line;
   GtkTextRealIter *real;
+  GtkTextRealIter *limit_real = NULL;
+  GtkTextIter limit_copy;
 
   g_return_val_if_fail (iter != NULL, FALSE);
 
@@ -4260,6 +4291,19 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
   if (real == NULL)
     return FALSE;
 
+  if (limit != NULL)
+    {
+      limit_copy = *limit;
+      limit_real = gtk_text_iter_make_real (&limit_copy);
+      if (limit_real == NULL)
+        return FALSE;
+
+      g_return_val_if_fail (real->tree == limit_real->tree, FALSE);
+
+      if (gtk_text_iter_compare (iter, &limit_copy) >= 0)
+        return FALSE;
+    }
+
   check_invariants (iter);
 
   if (gtk_text_iter_is_end (iter))
@@ -4267,10 +4311,27 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
   current_line = real->line;
   next_line = _gtk_text_line_next_could_contain_tag (current_line,
-                                                     real->tree, tag);
+                                                     real->tree, tag,
+                                                     limit_real ? limit_real->line : NULL);
 
-  while (_gtk_text_iter_forward_indexable_segment (iter))
+  for (;;)
     {
+      /* Do not walk the segments at or beyond the limit, even when the
+       * next indexable segment is far past it on the same line.
+       */
+      if (limit_real != NULL && real->line == limit_real->line)
+        {
+          ensure_char_offsets (real);
+          ensure_char_offsets (limit_real);
+
+          if (real->segment->char_count - real->segment_char_offset >=
+              limit_real->line_char_offset - real->line_char_offset)
+            goto limit_reached;
+        }
+
+      if (!_gtk_text_iter_forward_indexable_segment (iter))
+        break;
+
       /* If we went forward to a line that couldn't contain a toggle
          for the tag, then skip forward to a line that could contain
          it. This potentially skips huge hunks of the tree, so we
@@ -4279,6 +4340,9 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
         {
           if (next_line == NULL)
             {
+              if (limit_real != NULL)
+                goto limit_reached;
+
               /* End of search. Set to end of buffer. */
               _gtk_text_btree_get_end_iter (real->tree, iter);
               return FALSE;
@@ -4290,8 +4354,13 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
           current_line = real->line;
           next_line = _gtk_text_line_next_could_contain_tag (current_line,
                                                              real->tree,
-                                                             tag);
+                                                             tag,
+                                                             limit_real ? limit_real->line : NULL);
         }
+
+      if (limit_real != NULL && real->line == limit_real->line &&
+          gtk_text_iter_compare (iter, &limit_copy) >= 0)
+        goto limit_reached;
 
       if (gtk_text_iter_toggles_tag (iter, tag))
         {
@@ -4301,6 +4370,9 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
           return TRUE;
         }
     }
+
+  if (limit_real != NULL)
+    goto limit_reached;
 
   /* Check end iterator for tags */
   if (gtk_text_iter_toggles_tag (iter, tag))
@@ -4312,6 +4384,10 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
     }
 
   /* Reached end of buffer */
+  return FALSE;
+
+limit_reached:
+  *iter = limit_copy;
   return FALSE;
 }
 

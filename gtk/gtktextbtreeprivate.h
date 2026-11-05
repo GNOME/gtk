@@ -43,6 +43,8 @@
 
 G_BEGIN_DECLS
 
+#define GTK_TEXT_VALIDATION_CHARS_PER_CHECK 1024
+
 GtkTextBTree  *_gtk_text_btree_new        (GtkTextTagTable *table,
                                            GtkTextBuffer   *buffer);
 void           _gtk_text_btree_ref        (GtkTextBTree    *tree);
@@ -100,6 +102,8 @@ gboolean     _gtk_text_btree_is_valid          (GtkTextBTree      *tree,
 gboolean     _gtk_text_btree_validate          (GtkTextBTree      *tree,
                                                 gpointer           view_id,
                                                 int                max_pixels,
+                                                gint64             deadline,
+                                                int               *remaining_budget,
                                                 int               *y,
                                                 int               *old_height,
                                                 int               *new_height);
@@ -315,7 +319,8 @@ int                 _gtk_text_line_char_to_byte               (GtkTextLine      
                                                                int                  char_offset);
 GtkTextLine    *    _gtk_text_line_next_could_contain_tag     (GtkTextLine         *line,
                                                                GtkTextBTree        *tree,
-                                                               GtkTextTag          *tag);
+                                                               GtkTextTag          *tag,
+                                                               GtkTextLine         *limit);
 GtkTextLine    *    _gtk_text_line_previous_could_contain_tag (GtkTextLine         *line,
                                                                GtkTextBTree        *tree,
                                                                GtkTextTag          *tag);

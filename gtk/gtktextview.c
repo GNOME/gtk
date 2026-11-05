@@ -5006,7 +5006,8 @@ incremental_validate_callback (gpointer data)
 
   DV(g_print(G_STRLOC"\n"));
 
-  gtk_text_layout_validate (text_view->priv->layout, 2000);
+  gtk_text_layout_validate_with_deadline (text_view->priv->layout, 2000,
+                                          g_get_monotonic_time () + 2000);
 
   gtk_text_view_update_adjustments (text_view);
 
