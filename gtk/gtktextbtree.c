@@ -4226,11 +4226,28 @@ node_compare (GtkTextBTreeNode *lhs,
   return 0;
 }
 
+static gboolean
+node_is_after_line (GtkTextBTreeNode *node,
+                    GtkTextLine      *line)
+{
+  GtkTextBTreeNode *ancestor;
+
+  g_assert (node != NULL);
+  g_assert (line != NULL);
+
+  ancestor = line->parent;
+  while (ancestor->level < node->level)
+    ancestor = ancestor->parent;
+
+  return node_compare (node, ancestor) > 0;
+}
+
 /* remember that tag == NULL means "any tag" */
-GtkTextLine*
+GtkTextLine *
 _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
                                        GtkTextBTree *tree,
-                                       GtkTextTag   *tag)
+                                       GtkTextTag   *tag,
+                                       GtkTextLine  *limit)
 {
   GtkTextBTreeNode *node;
   GtkTextTagInfo *info;
@@ -4240,6 +4257,9 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
 
   if (GTK_DEBUG_CHECK (TEXT))
     _gtk_text_btree_check (tree);
+
+  if (line == limit)
+    return NULL;
 
   if (tag == NULL)
     {
@@ -4303,6 +4323,9 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
             {
               node = node->next;
 
+              if (limit != NULL && node_is_after_line (node, limit))
+                return NULL;
+
               if (gtk_text_btree_node_has_tag (node, tag))
                 goto found;
             }
@@ -4336,6 +4359,9 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
 
   g_assert (node != NULL);
 
+  if (limit != NULL && node_is_after_line (node, limit))
+    return NULL;
+
   /* We have to find the first sub-node of this node that contains
    * the target tag.
    */
@@ -4345,6 +4371,9 @@ _gtk_text_line_next_could_contain_tag (GtkTextLine  *line,
       node = node->children.node;
       while (node != NULL)
         {
+          if (limit != NULL && node_is_after_line (node, limit))
+            return NULL;
+
           if (gtk_text_btree_node_has_tag (node, tag))
             break;
           node = node->next;

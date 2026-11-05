@@ -350,6 +350,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
                                               GtkTextTag  *tag);
 
+GDK_AVAILABLE_IN_4_26
+gboolean gtk_text_iter_forward_to_tag_toggle_with_limit (GtkTextIter       *iter,
+                                                         GtkTextTag        *tag,
+                                                         const GtkTextIter *limit);
+
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
                                                GtkTextTag  *tag);

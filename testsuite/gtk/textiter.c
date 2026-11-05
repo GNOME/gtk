@@ -337,6 +337,173 @@ test_forward_to_tag_toggle (void)
 }
 
 static void
+check_bounded_tag_toggle (GtkTextBuffer *buffer,
+                          GtkTextTag    *tag,
+                          int            start_offset,
+                          int            limit_offset)
+{
+  GtkTextIter iter;
+  GtkTextIter limit;
+  GtkTextIter expected;
+  int length = gtk_text_buffer_get_char_count (buffer);
+  int expected_offset = limit_offset < 0 ? length : MAX (start_offset, limit_offset);
+  gboolean found = FALSE;
+
+  for (int offset = start_offset + 1;
+       offset <= length && (limit_offset < 0 || offset < limit_offset);
+       offset++)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &expected, offset);
+      if (gtk_text_iter_toggles_tag (&expected, tag))
+        {
+          expected_offset = offset;
+          found = TRUE;
+          break;
+        }
+    }
+
+  for (int use_bytes = 0; use_bytes < 2; use_bytes++)
+    {
+      gboolean result;
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, start_offset);
+      if (limit_offset >= 0)
+        gtk_text_buffer_get_iter_at_offset (buffer, &limit, limit_offset);
+
+      if (use_bytes)
+        {
+          GtkTextIter check;
+          int line = gtk_text_iter_get_line (&iter);
+          int index = gtk_text_iter_get_line_index (&iter);
+
+          gtk_text_buffer_get_iter_at_line_index (buffer, &iter, line, index);
+          /* Byte-index construction clamps positions inside CRLF. Check a
+           * copy so the search still exercises byte-based iterators.
+           */
+          check = iter;
+          if (gtk_text_iter_get_offset (&check) != start_offset)
+            gtk_text_buffer_get_iter_at_offset (buffer, &iter, start_offset);
+          if (limit_offset >= 0)
+            {
+              line = gtk_text_iter_get_line (&limit);
+              index = gtk_text_iter_get_line_index (&limit);
+              gtk_text_buffer_get_iter_at_line_index (buffer, &limit, line, index);
+              check = limit;
+              if (gtk_text_iter_get_offset (&check) != limit_offset)
+                gtk_text_buffer_get_iter_at_offset (buffer, &limit, limit_offset);
+            }
+        }
+
+      result = gtk_text_iter_forward_to_tag_toggle_with_limit (&iter, tag,
+                                                               limit_offset < 0 ? NULL : &limit);
+      g_assert_cmpint (result, ==, found);
+      g_assert_cmpint (gtk_text_iter_get_offset (&iter), ==, expected_offset);
+      if (limit_offset >= 0)
+        g_assert_cmpint (gtk_text_iter_get_offset (&limit), ==, limit_offset);
+
+      if (limit_offset < 0)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, &iter, start_offset);
+          g_assert_cmpint (gtk_text_iter_forward_to_tag_toggle (&iter, tag), ==, found);
+          g_assert_cmpint (gtk_text_iter_get_offset (&iter), ==, expected_offset);
+        }
+    }
+}
+
+static void
+test_forward_to_tag_toggle_with_limit (void)
+{
+  GtkTextBuffer *buffer = gtk_text_buffer_new (NULL);
+  GtkTextTag *tags[4] = { NULL };
+  GtkTextIter start;
+  GtkTextIter end;
+  int length;
+
+  gtk_text_buffer_set_text (buffer, "aé\r\nb🙂cd\nλefghij", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 6);
+  gtk_text_buffer_create_child_anchor (buffer, &start);
+  length = gtk_text_buffer_get_char_count (buffer);
+
+  for (int i = 1; i < 4; i++)
+    tags[i] = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 4);
+  gtk_text_buffer_apply_tag (buffer, tags[1], &start, &end);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 6);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_apply_tag (buffer, tags[1], &start, &end);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 4);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 9);
+  gtk_text_buffer_apply_tag (buffer, tags[2], &start, &end);
+
+  for (int t = 0; t < 4; t++)
+    for (int a = 0; a <= length; a++)
+      for (int b = -1; b <= length; b++)
+        check_bounded_tag_toggle (buffer, tags[t], a, b);
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  g_assert_false (gtk_text_iter_forward_to_tag_toggle_with_limit (&start, NULL, &start));
+  g_assert_cmpint (gtk_text_iter_get_offset (&start), ==, 0);
+
+  gtk_text_buffer_set_text (buffer, "", 0);
+  check_bounded_tag_toggle (buffer, NULL, 0, 0);
+  check_bounded_tag_toggle (buffer, NULL, 0, -1);
+  g_object_unref (buffer);
+}
+
+static void
+test_forward_to_tag_toggle_with_limit_tree (void)
+{
+  GtkTextBuffer *buffer = gtk_text_buffer_new (NULL);
+  GtkTextTag *tags[3];
+  GtkTextIter start;
+  GtkTextIter end;
+  GString *text = g_string_new (NULL);
+  const int ranges[][2] = { { 2, 7 }, { 200, 203 }, { 900, 1100 }, { 1900, 2048 } };
+  const int positions[] = { 0, 2, 3, 7, 8, 40, 199, 200, 201, 203, 204,
+                            500, 899, 900, 901, 1100, 1500, 1899, 1900, 2047, 2048 };
+
+  for (int i = 0; i < 512; i++)
+    g_string_append (text, "abc\n");
+  gtk_text_buffer_set_text (buffer, text->str, text->len);
+  g_string_free (text, TRUE);
+
+  for (guint i = 0; i < G_N_ELEMENTS (tags); i++)
+    tags[i] = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (ranges); i++)
+    {
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, ranges[i][0]);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, ranges[i][1]);
+      gtk_text_buffer_apply_tag (buffer, tags[0], &start, &end);
+    }
+
+  /* A tag whose root is ahead of some searches and behind others. The
+   * final tag remains unused.
+   */
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1900);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 1901);
+  gtk_text_buffer_apply_tag (buffer, tags[1], &start, &end);
+
+  for (guint i = 0; i < G_N_ELEMENTS (positions); i++)
+    {
+      check_bounded_tag_toggle (buffer, NULL, positions[i], -1);
+      for (guint j = 0; j < G_N_ELEMENTS (positions); j++)
+        check_bounded_tag_toggle (buffer, NULL, positions[i], positions[j]);
+
+      for (guint t = 0; t < G_N_ELEMENTS (tags); t++)
+        {
+          check_bounded_tag_toggle (buffer, tags[t], positions[i], -1);
+          for (guint j = 0; j < G_N_ELEMENTS (positions); j++)
+            check_bounded_tag_toggle (buffer, tags[t], positions[i], positions[j]);
+        }
+    }
+
+  g_object_unref (buffer);
+}
+
+static void
 check_forward_line_end (const char *buffer_text,
                         int          initial_offset,
                         int          result_offset,
@@ -842,6 +1009,8 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Search", test_search);
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
   g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
+  g_test_add_func ("/TextIter/Bounded Tag Toggle", test_forward_to_tag_toggle_with_limit);
+  g_test_add_func ("/TextIter/Bounded Tag Toggle Tree", test_forward_to_tag_toggle_with_limit_tree);
   g_test_add_func ("/TextIter/Forward To Line End", test_forward_to_line_end);
   g_test_add_func ("/TextIter/Word Boundaries", test_word_boundaries);
   g_test_add_func ("/TextIter/Visible Word Boundaries", test_visible_word_boundaries);

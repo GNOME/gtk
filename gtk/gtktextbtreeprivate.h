@@ -315,7 +315,8 @@ int                 _gtk_text_line_char_to_byte               (GtkTextLine      
                                                                int                  char_offset);
 GtkTextLine    *    _gtk_text_line_next_could_contain_tag     (GtkTextLine         *line,
                                                                GtkTextBTree        *tree,
-                                                               GtkTextTag          *tag);
+                                                               GtkTextTag          *tag,
+                                                               GtkTextLine         *limit);
 GtkTextLine    *    _gtk_text_line_previous_could_contain_tag (GtkTextLine         *line,
                                                                GtkTextBTree        *tree,
                                                                GtkTextTag          *tag);
