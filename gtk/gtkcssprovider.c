@@ -2013,6 +2013,8 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 
   /* Next try looking for files in the various theme directories. */
   path = _gtk_css_find_theme (name, variant);
+  if (!path)
+    path = _gtk_css_find_theme (name, NULL);
   if (path)
     {
       char *dir, *resource_file;
