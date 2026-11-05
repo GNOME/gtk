@@ -1262,22 +1262,22 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
   return image;
 }
 
-static gboolean
-gsk_gpu_need_quad_scaling_filter (GskScalingFilter scaling_filter)
+static GskQuadKernel
+gsk_gpu_get_quad_kernel (GskScalingFilter scaling_filter)
 {
   switch (scaling_filter)
     {
       case GSK_SCALING_FILTER_BICUBIC:
-        return TRUE;
+        return GSK_QUAD_KERNEL_CATMULL_ROM;
 
       case GSK_SCALING_FILTER_LINEAR:
       case GSK_SCALING_FILTER_NEAREST:
       case GSK_SCALING_FILTER_TRILINEAR:
-        return FALSE;
+        return GSK_QUAD_KERNEL_LINEAR;
 
       default:
         g_assert_not_reached ();
-        return FALSE;
+        return GSK_QUAD_KERNEL_LINEAR;
     }
 }
 
@@ -1646,7 +1646,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   GskScalingFilter scaling_filter;
   GskGpuSampler sampler;
   graphene_rect_t bounds;
-  gboolean need_mipmap, need_offscreen, need_quad_filter;
+  gboolean need_mipmap, need_offscreen;
+  GskQuadKernel quad_kernel;
 
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
@@ -1659,7 +1660,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
                                       &bounds))
     return;
 
-  need_quad_filter = gsk_gpu_need_quad_scaling_filter (scaling_filter);
+  quad_kernel = gsk_gpu_get_quad_kernel (scaling_filter);
   need_offscreen = image == NULL ||
                    self->modelview != NULL ||
                    self->scale.width != 1 ||
@@ -1737,7 +1738,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   if (!gsk_gpu_image_supports_sampler (image, sampler) ||
       (need_mipmap && (!(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP) ||
                       !gdk_color_state_equal (image_cs, self->ccs))) ||
-      (need_quad_filter && !gdk_color_state_equal (image_cs, self->ccs)))
+      (quad_kernel && !gdk_color_state_equal (image_cs, self->ccs)))
     {
       image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, need_mipmap);
       gdk_color_state_unref (image_cs);
@@ -1751,13 +1752,14 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
   if (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
     gsk_gpu_mipmap_op (self->frame, image);
 
-  if (need_quad_filter)
+  if (quad_kernel)
     {
       gsk_gpu_quad_filter_op (self,
                               self->ccs,
                               &bounds,
                               image,
                               sampler,
+                              quad_kernel,
                               &bounds);
     }
   else

@@ -177,3 +177,8 @@ typedef enum {
   GSK_GPU_OPTIMIZE_PROFILE              = 1 << 11,
 } GskGpuOptimizations;
 
+typedef enum {
+  GSK_QUAD_KERNEL_LINEAR = 0, /* default "unused" setting */
+  GSK_QUAD_KERNEL_CATMULL_ROM,
+  GSK_QUAD_KERNEL_MITCHELL_NETRAVALI,
+} GskQuadKernel;

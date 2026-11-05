@@ -281,6 +281,12 @@ VariationType(
     glsl_string = '((GSK_VARIATION >> {0}u) & 15u)',
     c_flag = '(({0} & 0xF) << {1})'
 ),
+VariationType(
+    type = 'GskQuadKernel',
+    bits = 4,
+    glsl_string = '((GSK_VARIATION >> {0}u) & 15u)',
+    c_flag = '(({0} & 0xF) << {1})'
+),
 ]
 
 def strtobool (val):
