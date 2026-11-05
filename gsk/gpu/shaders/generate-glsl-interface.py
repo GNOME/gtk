@@ -231,8 +231,16 @@ Type(
     pointer = True,
     var_type = VarType.FLOAT,
     size = 4,
-    struct_init = '{0}gdk_color_to_float ({2}, acs, {1}{3});\n'
-                  '{0}{1}{3}[3] *= pass->opacity;'
+    # Vertex data may be write-combined. Do color conversion and opacity
+    # calculations in local memory so we never read back from the buffer.
+    struct_init = '{0}{{\n'
+                  '{0}  float {3}_values[4];\n'
+                  '{0}  gdk_color_to_float ({2}, acs, {3}_values);\n'
+                  '{0}  {1}{3}[0] = {3}_values[0];\n'
+                  '{0}  {1}{3}[1] = {3}_values[1];\n'
+                  '{0}  {1}{3}[2] = {3}_values[2];\n'
+                  '{0}  {1}{3}[3] = {3}_values[3] * pass->opacity;\n'
+                  '{0}}}'
 ),
 ]
 
