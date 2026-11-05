@@ -1,3 +1,280 @@
+Overview of Changes in 4.25.0, xx-xx-xxxx
+=========================================
+
+* A number large performance improvements have been merged.
+  This includes
+  - GSK path caching
+  - GSK frame diffing
+  - The entire GTK action framework
+  - CSS selector parsing and matching
+  - Paragraph layout and various aspects of text handling
+    that depend on line length
+
+* GtkGridView has gained support for sections
+
+* The GtkEmojiChooser has been ported to GtkGridView
+
+* GskBlurNodes have separate X and Y radii
+
+* GtkApplication can handle URLs on macOS
+
+* Bugs fixed:
+  - #3042 Black borders for popvers in lxde
+  - GNOME/nautilus#3614 Double clicking a file that's slightly off screen
+    doesn't open it (Jing Wang)
+  - #5384 Cannot use keyboard shortcut Ctrl+Shift+N to create new folder on non-
+    Latin keyboard layouts
+  - #6719 segfaults when using wintab (Alexia Death)
+  - #7175 [Win32] GTK partially freezes the desktop under specific circumstances
+    in a mixed-DPI setup (Dimitriy Ryazantcev)
+  - #7319 `gtk_drag_icon_get_for_drag` wrong return type (Emmanuele Bassi)
+  - #8305 Warning "Duplicate call ..." with the first click on menu buttons
+    (Benjamin Otte)
+  - #8354 GtkColumnView: sortable column headers expose no AT-SPI action, so
+    sorting is unreachable for assistive technology (Patrick CRESSANT)
+  - #8375 !9958 regression: GTK stuck in loop when opening GtkSettings in
+    inspector (Carlos Garnacho)
+  - #8398 Win32: cursor scale is truncated to an integer, doesn't match Windows'
+    own 150%/175% cursor-size tier (Dimitriy Ryazantcev)
+  - #8407 GtkLabel: set_attributes() does not invalidate the rendered
+    PangoLayout for labels set with set_markup(), once painted (Sean Rowe)
+  - #8416 macos: Glitches during AdwDialog animations (probably broken damage
+    regions)
+  - #8423 Tooltips get randomly clipped on right side on MacOS (Felix Häcker)
+  - #8444 a11y: AT-SPI root GetChildAtIndex answers an out-of-range index with a
+    hidden toplevel and crashes (NULL object path)
+  - #8448 GtkScale nob is off center (Alice Mikhaylenko)
+  - #8451 GtkTextView: Unexpected scrolling when tapping after touch text
+    selection (grorp)
+  - #8455 GTK crashes on launch with floating point exception when wl_output
+    with refresh=0 is encountered (Matthias Clasen)
+  - #8456 Wayland: freeing a GtkMediaFile makes GStreamer eglTerminate() GDK's
+    EGLDisplay (4.24.1 regression) (Benjamin Otte)
+  - #8463 Critical when loading SVG (Matthias Clasen)
+  - #8465 Crash with "gdk_draw_context_frame_stop_throttling: assertion
+    '!frame->throttling_complete' failed" (Benjamin Otte)
+  - #8472 valgrind complaint about cubic (Matthias Clasen)
+  - #8476 Improve GtkSvg debugging
+  - #8478 Theme settings.ini that sets gtk-application-prefer-dark-theme makes
+    GTK reload the theme forever (100% CPU, no window) (Matthias Clasen)
+  - #8488 OSK does not work with mouse click (Carlos Garnacho)
+  - #8493 Hidden list views accumulate obsolete tiles, increasing memory and CPU
+    use
+  - #8499 Theme reload on color-scheme change fails to import CSS, windows
+    become transparent (Matthias Clasen)
+  - #8500 Glitchy drop-shadow render in GL and Vulkan on nightly runtime
+    (Benjamin Otte)
+  - #8502 backdrop-filter: blur() leaves stale pixels when content behind it
+    changes (faetalize)
+  - #8506 GTK4: Accessible text-selection-changed events missing when selection
+    is completely removed
+  - #8507 GTK4: Please expose the "single-line" state for single-line text
+    entries (Emmanuele Bassi)
+  - #8516 GTK Leaks image textures when they are loaded as data-urls
+  - #8517 MacOS: Add URL handler to Gtk.Application (Felix Häcker)
+  - #8519 Thread safety issue in gtk_icon_paintable_load_in_thread() rendering
+    SVG icons (Matthias Clasen)
+  - !8387 gdk: Fix incorrect variable leading to wrong key level in
+    gdk_key_event_matches (Alexander Davydzik)
+  - !10198 Only draw shadows when the display composites alpha (Zhou Qiankang)
+  - !10242 GDK: Add proper frame accounting (Benjamin Otte)
+  - !10313 Some layout things (Sergey Bugaev)
+  - !10335 GSK: Speed up container node diffing (Christian Hergert)
+  - !10340 optimize actions with GtkActionTree (Christian Hergert)
+  - !10357 gdkkeys: Add keyval alias check (Peter Eisenmann)
+  - !10378 columnview: Make sortable headers accessible with Orca (Patrick
+    CRESSANT)
+  - !10380 macos: Implement applicationShouldHandleReopen:hasVisibleWindows:
+    delegate method (Felix Häcker)
+  - !10381 macos: Show/hide GtkWindowButtonsQuartz based on map state instead of
+    realize (Felix Häcker)
+  - !10397 css: one-pass selector match and change calculation (Christian
+    Hergert)
+  - !10401 gtk/gridview: add support for section headers (Christian Hergert)
+  - !10405 win32: Support fractional monitor scale and fix per-monitor-v2 DPI
+    transitions (Dimitriy Ryazantcev)
+  - !10407 emojichooser: port to GtkGridView (Matthias Clasen, Christian
+    Hergert)
+  - !10411 win32: Remove the IME message filter on dispose, not just focus_out
+    (Dimitriy Ryazantcev)
+  - !10426 Add gsk_path_hash() and gsk_path_translatable() (Benjamin Otte)
+  - !10427 gdk: Also consider snap sandbox (Alessandro Astone)
+  - !10428 css: reuse selector counts while building the tree (Christian
+    Hergert)
+  - !10432 Fix the testsuite and stroke bounds (Benjamin Otte)
+  - !10438 Split blur radius into h/vradius (Benjamin Otte)
+  - !10439 svg: color-interpolation-filters is a filter attribute (Matthias
+    Clasen)
+  - !10440 a11y: Return error for getChildAtIndex on the root (Lukáš Tyrychtr)
+  - !10442 Update Norwegian Bokmål translation
+  - !10443 Update Norwegian Bokmål translation
+  - !10445 Fix various issues (Benjamin Otte)
+  - !10450 listbase: Avoid recursive size allocation
+  - !10452 build: Emit warnings for spurious comma use (Benjamin Otte)
+  - !10453 GtkCenterLayout spacing fixes (Sergey Bugaev)
+  - !10454 svg: Some mask optimizations (Matthias Clasen)
+  - !10455 Fix bugs in swipe gesture cancellation handling (grorp)
+  - !10456 Minor syntax and punctuation corrections (Álvar Ibeas)
+  - !10457 Update Slovenian translation (Martin)
+  - !10458 Rephrasing suggestion (Álvar Ibeas)
+  - !10461 Add Serbian (Latin) translation
+  - !10463 array: Fix free size (Sergey Bugaev)
+  - !10467 svg: Flesh out an optimization (Matthias Clasen)
+  - !10470 Update Czech translation (Daniel Rusek)
+  - !10471 shadownode: The radius matches the std deviation (Benjamin Otte)
+  - !10472 Fix warnings found by clang 23 (Benjamin Otte)
+  - !10476 Update German translation
+  - !10479 Add Norwegian Nynorsk translation
+  - !10481 Wintab: Make Wintab input work again, and report pens as device tools
+    (Alexia Death)
+  - !10482 gpu: Change the semantics of get_node_as_image() (Benjamin Otte)
+  - !10483 Update Turkish translation
+  - !10488 Implement get_node_as_image() for a few cases (Benjamin Otte)
+  - !10489 drawcontext: Add empty frames, too (Benjamin Otte)
+  - !10490 Update Georgian translation
+  - !10491 svg: Small refactoring (Matthias Clasen)
+  - !10492 fixedlayout: Mark child transforms nullable (Eugenio Depalo)
+  - !10497 build: Define G_DISABLE_CLEANUP (Matthias Clasen)
+  - !10498 cairo: Fix crash and confusion (Benjamin Otte)
+  - !10500 nodeparser: Don't crash when someone puts text inside a fill/stroke
+    (Benjamin Otte)
+  - !10501 cairo: ABS(ceil()) => ceil(ABS()) (Benjamin Otte)
+  - !10504 Add Portuguese translation
+  - !10506 path builder: Check return values (Matthias Clasen)
+  - !10507 svg: fix regression from c96daa8 (!10454) (Florian "sp1rit"​)
+  - !10508 gsk: Add a test (Matthias Clasen)
+  - !10510 a11y: Expose model button labels to screen readers (Zeth (wearing a
+    Fedora))
+  - !10511 svg: Add a debug flag for errors (Matthias Clasen)
+  - !10512 theme: Hide solid-csd border when maximized or fullscreen (Ignacio
+    Casal Quinteiro)
+  - !10514 emojichooser: use label again and emoji css node (Christian Hergert)
+  - !10515 reset im context when the text changes (Matthias Clasen)
+  - !10516 gskblurutils: Fix background blur threshold (Alice Mikhaylenko)
+  - !10517 Port popover arrow to path nodes and add backdrop-filter support
+    (Alice Mikhaylenko)
+  - !10520 Cosmetics (Matthias Clasen)
+  - !10523 Rework gtk4-rendernode-tool (Benjamin Otte)
+  - !10526 Add French translation
+  - !10527 textview: Handle NULL buffer resets (Eugenio Depalo)
+  - !10528 gdk: Include frame details in frame clock profiler marks (Christian
+    Hergert)
+  - !10530 Update Maori translation
+  - !10531 wayland: Fix off-by-one in keycode loops (Martin Fischer)
+  - !10532 textlayout: Apply the alpha of pre-edit colors (Maxime Allanic)
+  - !10533 svg: Prefer color matrix over component transfer (Matthias Clasen)
+  - !10534 win32: real per-layout display names, cached metadata, activation-
+    free KLID decode (Dimitriy Ryazantcev)
+  - !10535 gsk: Drop erroneous inclusion prevention (Matthias Clasen)
+  - !10538 Update Slovenian translation
+  - !10543 snapshot: Add gtk_snapshot_push_color_matrix2 (Matthias Clasen)
+  - !10544 rendernode tool: Add load-svg (Matthias Clasen)
+  - !10545 Add bounds to component transfer node constructor (Matthias Clasen)
+  - !10546 rendernode tool: Add accent color to icon-load (Matthias Clasen)
+  - !10547 rendernode tool: Fix a critical (Matthias Clasen)
+  - !10548 listitemmanager: Collect removed tiles in unmapped views
+    (CarsonBurke)
+  - !10549 Update Slovenian translation
+  - !10552 gdk: Refresh frame pointer after splicing frame history (Christian
+    Hergert)
+  - !10553 Reshuffle testutils code (Matthias Clasen)
+  - !10554 win32: Make the keymap follow the layout tables like Windows does
+    (Dimitriy Ryazantcev)
+  - !10555 d3dtexture: Get the right handle (Benjamin Otte)
+  - !10556 gsk: Make color-matrix act like clip (Matthias Clasen)
+  - !10557 gpu: Snap before intersecting for offscreens (Benjamin Otte)
+  - !10559 ci: Allow the gnome-os job to fail (Matthias Clasen)
+  - !10561 gsk: Make component-transfer nodes keep clip separate (Matthias
+    Clasen)
+  - !10562 gsk: Make arithmetic nodes keep clip separate (Matthias Clasen)
+  - !10563 gdk: Add gdk_color_apply_color_matrix (Matthias Clasen)
+  - !10564 Revert "ci: Allow the gnome-os job to fail" (Matthias Clasen)
+  - !10565 More rendernode-tool refactoring (Benjamin Otte)
+  - !10567 listitemmanager: Unbind items before releasing them (Eugenio Depalo)
+  - !10568 transform: Better floating point handling (Matthias Clasen)
+  - !10569 css: avoid redundant style updates and cache invalidation (Christian
+    Hergert)
+  - !10570 listitemmanager: skip updates for unchanged tracker ranges (Christian
+    Hergert)
+  - !10571 gsk: Don't skip diffing reused nodes that copy or paste (faetalize)
+  - !10573 listbase: Move focus in scroll_to() when the window is inactive
+    (Corey Berla)
+  - !10574 inspector: Tweak recorder's key rows (Sergey Bugaev)
+  - !10577 Drop xml declarations from ui files (Matthias Clasen)
+  - !10579 testsuite: Drop the clipboard-x11 test (Matthias Clasen)
+  - !10585 svg: Accept color-interpolation-filters on feMergeNode (Matthias
+    Clasen, Sergey Bugaev)
+  - !10587 fill/stroke: Don't return atlas images when sampling them out of
+    bounds (Benjamin Otte)
+  - !10589 gtk/a11y: add profiler marks for AT-SPI state (Christian Hergert)
+  - !10590 wayland: Don't request frames for subsurfaces without a buffer
+    (peteruithoven)
+  - !10591 textview: avoid work for large paragraphs (Christian Hergert)
+  - !10594 color-matrix: Differnetiate between clip and bounds (Benjamin Otte)
+  - !10595 Better stroke bounds (Matthias Clasen)
+  - !10596 cairo: don't double-clip arithmetic nodes (Benjamin Otte)
+  - !10597 css: fix data-image resource leak on textures (Luna)
+  - !10599 action-helper: Drop leaked variant extra refs (Peter Eisenmann)
+  - !10600 Fixes for OSK invocation (Carlos Garnacho)
+  - !10601 svg: Avoid some fills (Matthias Clasen)
+  - !10603 Update Belarusian translation
+  - !10604 Better stroke bounds, again (Matthias Clasen)
+  - !10605 nodeparser: Fix rounded rect printing issue (Benjamin Otte)
+  - !10606 svg: Drop svg_path_classify (Matthias Clasen)
+  - !10607 Update Slovenian translation
+  - !10609 action-tree hash and leak fixes (Christian Hergert)
+  - !10610 snap: Improve docs a bit (Benjamin Otte)
+  - !10611 Improve path classification (Matthias Clasen)
+  - !10612 cssimagerecolor: Fix uninitialized colors in recolor snapshot
+    (LuK1337)
+  - !10613 gsk(opacity): use original value if opaque region hasn't changed
+    (Arjan Molenaar)
+  - !10618 Update Slovenian translation
+  - !10619 win32: Split gdk_win32_display_get_monitor_dpi into per-surface and
+    per-hmonitor forms (Dimitriy Ryazantcev)
+  - !10620 win32: Merge and simplify the pixbuf->HBITMAP converters (Dimitriy
+    Ryazantcev)
+  - !10622 win32: Honor the Accessibility text-size setting in gtk-xft-dpi
+    (Dimitriy Ryazantcev)
+  - !10623 win32: Make the process Per Monitor v2 DPI aware by default (Dimitriy
+    Ryazantcev)
+  - !10628 gtktextview: Send selection change notification for removed selection
+    (Lukáš Tyrychtr)
+  - !10629 Align cached strokes to the path bounds, not the stroke bounds
+    (Benjamin Otte)
+  - !10630 image tool: Add tolerance (Matthias Clasen)
+  - !10631 textbuffer: speed up tag removal (Christian Hergert)
+  - !10632 testsuite: Move path bounds test to flaky (Matthias Clasen)
+  - !10633 gdkkeys: Don't return aliases for keyval zero (g.willems)
+  - !10634 Update Slovenian translation
+  - !10635 inspector: Show the ext-background-effect protocol (Matthias Clasen)
+  - !10639 Update Polish translation
+  - !10641 gsk: Avoid reading colors back from vertex buffers (Christian
+    Hergert)
+  - !10642 gtk/textbtree: Avoid layout invalidation for unused tags (Christian
+    Hergert)
+  - !10644 Make theme switching in the inspector work better (Matthias Clasen)
+  - !10646 gtk/textbuffer: update changed stamp for word-boundary cache
+    (Christian Hergert)
+  - !10647 gtk/listitemmanager: queue_resize even when range is unchanged
+    (Christian Hergert)
+  - !10648 gtk/linecache: restrict cache cleanup to 1 msec (Christian Hergert)
+  - !10654 Handle refcount overflow (Benjamin Otte)
+
+* Translation updates:
+  - Belarusian (Vasil Pupkin)
+  - Czech (Daniel Rusek)
+  - Georgian (Ekaterine Papava)
+  - German (Christian Kirbach)
+  - Maori (Aidan Tuhoro-Bell)
+  - Norwegian Bokmål (Kjartan Maraas)
+  - Norwegian Nynorsk (Roy-Magne Mo)
+  - Polish (Marcel Mrówka)
+  - Portuguese (Hugo Carvalho)
+  - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
+  - Serbian (Miloš Popović)
+
 Overview of Changes in 4.24.1, 01-10-2026
 =========================================
 
