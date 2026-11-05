@@ -4525,6 +4525,8 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
            _gtk_text_btree_get_chars_changed_stamp (get_btree (buffer)))
     {
       clear_log_attr_cache (priv->log_attr_cache);
+      priv->log_attr_cache->chars_changed_stamp =
+        _gtk_text_btree_get_chars_changed_stamp (get_btree (buffer));
     }
 
   cache = priv->log_attr_cache;
