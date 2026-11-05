@@ -4991,6 +4991,8 @@ typedef struct _ValidateState ValidateState;
 struct _ValidateState
 {
   int remaining_pixels;
+  int *remaining_budget;
+  gint64 deadline;
   gboolean in_validation;
   int y;
   int old_height;
@@ -5050,13 +5052,21 @@ gtk_text_btree_node_validate (BTreeView         *view,
             {
               if (ld)
                 state->old_height += ld->height;
-              ld = gtk_text_layout_wrap (view->layout, line, ld);
+              ld = gtk_text_layout_wrap (view->layout, line, ld, state->remaining_budget);
               state->new_height += ld->height;
 
               node_width = MAX (ld->width, node_width);
               node_height += ld->height;
 
               state->remaining_pixels -= ld->height;
+              if (state->remaining_pixels > 0 &&
+                  state->remaining_budget != NULL && *state->remaining_budget <= 0)
+                {
+                  if (g_get_monotonic_time () >= state->deadline)
+                    state->remaining_pixels = 0;
+                  else
+                    *state->remaining_budget = GTK_TEXT_VALIDATION_CHARS_PER_CHECK;
+                }
               if (state->remaining_pixels <= 0)
                 {
                   line = line->next;
@@ -5167,6 +5177,9 @@ gtk_text_btree_node_validate (BTreeView         *view,
  * @view_id: view id
  * @max_pixels: the maximum number of pixels to validate. (No more
  *   than one paragraph beyond this limit will be validated)
+ * @deadline: monotonic time deadline in microseconds, or zero for no deadline
+ * @remaining_budget: remaining character work budget, or NULL for no budget;
+ *   short paragraphs consume a minimum amount of work
  * @y: location to store starting y coordinate of validated region
  * @old_height: location to store old height of validated region
  * @new_height: location to store new height of validated region
@@ -5181,6 +5194,8 @@ gboolean
 _gtk_text_btree_validate (GtkTextBTree *tree,
                          gpointer      view_id,
                          int           max_pixels,
+                         gint64        deadline,
+                         int          *remaining_budget,
                          int          *y,
                          int          *old_height,
                          int          *new_height)
@@ -5197,6 +5212,8 @@ _gtk_text_btree_validate (GtkTextBTree *tree,
       ValidateState state;
 
       state.remaining_pixels = max_pixels;
+      state.remaining_budget = remaining_budget;
+      state.deadline = deadline;
       state.in_validation = FALSE;
       state.y = 0;
       state.old_height = 0;
@@ -5373,7 +5390,7 @@ _gtk_text_btree_validate_line (GtkTextBTree     *tree,
   ld = _gtk_text_line_get_data (line, view_id);
   if (!ld || !ld->valid)
     {
-      gtk_text_layout_wrap (view->layout, line, ld);
+      gtk_text_layout_wrap (view->layout, line, ld, NULL);
       gtk_text_btree_node_check_valid_upward (line->parent, view_id);
     }
 }

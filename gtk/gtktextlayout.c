@@ -973,21 +973,34 @@ void
 gtk_text_layout_validate (GtkTextLayout *layout,
                           int            max_pixels)
 {
+  gtk_text_layout_validate_with_deadline (layout, max_pixels, 0);
+}
+
+void
+gtk_text_layout_validate_with_deadline (GtkTextLayout *layout,
+                                        int            max_pixels,
+                                        gint64         deadline)
+{
   GtkTextBTree *btree;
   int y, old_height, new_height;
+  int remaining_budget = GTK_TEXT_VALIDATION_CHARS_PER_CHECK;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   btree = _gtk_text_buffer_get_btree (layout->buffer);
   while (max_pixels > 0 &&
          _gtk_text_btree_validate (btree,
-                                   layout,  max_pixels,
+                                   layout, max_pixels, deadline,
+                                   deadline != 0 ? &remaining_budget : NULL,
                                    &y, &old_height, &new_height))
     {
       max_pixels -= new_height;
 
       update_layout_size (layout);
       gtk_text_layout_emit_changed (layout, y, old_height, new_height);
+
+      if (deadline != 0 && remaining_budget <= 0)
+        break;
     }
 }
 
@@ -995,7 +1008,8 @@ GtkTextLineData *
 gtk_text_layout_wrap (GtkTextLayout   *layout,
                       GtkTextLine     *line,
                       /* may be NULL */
-                      GtkTextLineData *line_data)
+                      GtkTextLineData *line_data,
+                      int             *remaining_budget)
 {
   GtkTextLineDisplay *display;
   PangoRectangle ink_rect, logical_rect;
@@ -1016,6 +1030,10 @@ gtk_text_layout_wrap (GtkTextLayout   *layout,
   pango_layout_get_pixel_extents (display->layout, &ink_rect, &logical_rect);
   line_data->top_ink = MAX (0, logical_rect.x - ink_rect.x);
   line_data->bottom_ink = MAX (0, logical_rect.x + logical_rect.width - ink_rect.x - ink_rect.width);
+
+  if (remaining_budget != NULL)
+    *remaining_budget -= MAX (64, pango_layout_get_character_count (display->layout));
+
   gtk_text_line_display_unref (display);
 
   return line_data;

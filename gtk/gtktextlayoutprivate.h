@@ -291,10 +291,14 @@ void     gtk_text_layout_validate_yrange (GtkTextLayout *layout,
                                           int            y1_);
 void     gtk_text_layout_validate        (GtkTextLayout *layout,
                                           int            max_pixels);
+void     gtk_text_layout_validate_with_deadline (GtkTextLayout *layout,
+                                               int            max_pixels,
+                                               gint64         deadline);
 
-GtkTextLineData* gtk_text_layout_wrap  (GtkTextLayout   *layout,
-                                        GtkTextLine     *line,
-                                        GtkTextLineData *line_data);
+GtkTextLineData *gtk_text_layout_wrap (GtkTextLayout   *layout,
+                                       GtkTextLine     *line,
+                                       GtkTextLineData *line_data,
+                                       int             *remaining_budget);
 void     gtk_text_layout_changed              (GtkTextLayout     *layout,
                                                int                y,
                                                int                old_height,
