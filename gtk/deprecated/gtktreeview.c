@@ -2482,7 +2482,7 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
   gtk_tree_view_size_allocate_columns (widget);
   gtk_tree_view_size_allocate_drag_column (widget);
 
-  page_size = gtk_adjustment_get_page_size (priv->vadjustment);
+  page_size = gtk_adjustment_get_page_size (priv->hadjustment);
   gtk_adjustment_configure (priv->hadjustment,
                             gtk_adjustment_get_value (priv->hadjustment) +
                             (_gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL ? width - page_size : 0),

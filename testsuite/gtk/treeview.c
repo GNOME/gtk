@@ -423,6 +423,49 @@ test_adjustment_clamp (gconstpointer data)
   g_object_unref (css);
 }
 
+static void
+test_rtl_horizontal_adjustment (void)
+{
+  const int heights[] = { 600, 400, 600 };
+  GtkWidget *view;
+  GtkTreeViewColumn *column;
+  GtkAdjustment *hadjustment, *vadjustment;
+  int minimum, natural;
+
+  view = gtk_tree_view_new ();
+  g_object_ref_sink (view);
+  gtk_widget_set_direction (view, GTK_TEXT_DIR_RTL);
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, "A");
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+  gtk_tree_view_column_set_fixed_width (column, 2000);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+
+  hadjustment = gtk_adjustment_new (125, 0, 2000, 80, 720, 800);
+  vadjustment = gtk_adjustment_new (0, 0, 600, 60, 540, 600);
+  g_object_ref_sink (hadjustment);
+  g_object_ref_sink (vadjustment);
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), hadjustment);
+  gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (view), vadjustment);
+
+  gtk_widget_measure (view, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &minimum, &natural, NULL, NULL);
+  gtk_widget_measure (view, GTK_ORIENTATION_VERTICAL, MAX (800, minimum),
+                      &minimum, &natural, NULL, NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (heights); i++)
+    {
+      gtk_widget_allocate (view, 800, heights[i], -1, NULL);
+      g_assert_cmpfloat (gtk_adjustment_get_value (hadjustment), ==, 125);
+      g_assert_cmpfloat (gtk_adjustment_get_page_size (hadjustment), ==, 800);
+    }
+
+  g_object_unref (view);
+  g_object_unref (hadjustment);
+  g_object_unref (vadjustment);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -445,6 +488,7 @@ main (int    argc,
                         &adjustment_clamp_tests[2], test_adjustment_clamp);
   g_test_add_data_func ("/TreeView/sizing/adjustment-clamp/rtl/overflows",
                         &adjustment_clamp_tests[3], test_adjustment_clamp);
+  g_test_add_func ("/TreeView/sizing/rtl-horizontal-adjustment", test_rtl_horizontal_adjustment);
 
   return g_test_run ();
 }
