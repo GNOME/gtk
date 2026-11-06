@@ -111,7 +111,9 @@ gtk_css_value_ref_inline (GtkCssValue *value)
 {
   GtkCssValueBase *value_base = (GtkCssValueBase *) value;
 
-  value_base->ref_count += 1;
+  value_base->ref_count++;
+  if (G_UNLIKELY (value_base->ref_count == 0))
+    g_error ("refcount overflow");
 
   return value;
 }

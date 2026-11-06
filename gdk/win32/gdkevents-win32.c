@@ -746,6 +746,8 @@ apply_message_filters (GdkDisplay *display,
         }
 
       filter->ref_count++;
+      if (G_UNLIKELY (filter->ref_count == 0))
+        g_error ("refcount overflow");
       result = filter->function (GDK_WIN32_DISPLAY (display), msg, ret_valp, filter->data);
 
       /* get the next node after running the function since the

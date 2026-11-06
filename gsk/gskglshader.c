@@ -1332,6 +1332,8 @@ gsk_shader_args_builder_ref (GskShaderArgsBuilder *builder)
   g_return_val_if_fail (builder != NULL, NULL);
 
   builder->ref_count++;
+  if (G_UNLIKELY (builder->ref_count == 0))
+    g_error ("refcount overflow");
   return builder;
 }
 

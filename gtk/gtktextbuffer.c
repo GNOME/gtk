@@ -3972,6 +3972,8 @@ gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer,
   if (selection_clipboard)
     {
       selection_clipboard->ref_count++;
+      if (G_UNLIKELY (selection_clipboard->ref_count == 0))
+        g_error ("refcount overflow");
     }
   else
     {

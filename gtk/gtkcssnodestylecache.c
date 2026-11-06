@@ -48,7 +48,9 @@ gtk_css_node_style_cache_new (GtkCssStyle *style)
 GtkCssNodeStyleCache *
 gtk_css_node_style_cache_ref (GtkCssNodeStyleCache *cache)
 {
-  cache->ref_count++; 
+  cache->ref_count++;
+  if (G_UNLIKELY (cache->ref_count == 0))
+    g_error ("refcount overflow"); 
 
   return cache;
 }

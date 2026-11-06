@@ -58,6 +58,8 @@ GtkCssVariableValue *
 gtk_css_variable_value_ref (GtkCssVariableValue *self)
 {
   self->ref_count++;
+  if (G_UNLIKELY (self->ref_count == 0))
+    g_error ("refcount overflow");
 
   return self;
 }

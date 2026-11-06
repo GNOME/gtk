@@ -527,6 +527,8 @@ GtkRbTree *
 gtk_rb_tree_ref (GtkRbTree *tree)
 {
   tree->ref_count++;
+  if (G_UNLIKELY (tree->ref_count == 0))
+    g_error ("refcount overflow");
 
   return tree;
 }

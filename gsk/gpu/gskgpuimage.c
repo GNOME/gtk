@@ -53,6 +53,8 @@ gsk_gpu_image_dispose (GObject *object)
     {
       priv->flags &= ~GSK_GPU_IMAGE_TOGGLE_REF;
       G_OBJECT (self)->ref_count++;
+      if (G_UNLIKELY (G_OBJECT (self)->ref_count == 0))
+        g_error ("refcount overflow");
       g_object_remove_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, NULL);
     }
 

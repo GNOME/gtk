@@ -72,6 +72,8 @@ GdkDmabufFormats *
 gdk_dmabuf_formats_ref (GdkDmabufFormats *formats)
 {
   formats->ref_count++;
+  if (G_UNLIKELY (formats->ref_count == 0))
+    g_error ("refcount overflow");
 
   return formats;
 }

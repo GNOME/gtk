@@ -150,6 +150,8 @@ gtk_tree_model_ref_count_ref_node (GtkTreeModel *model,
     }
 
   info->ref_count++;
+  if (G_UNLIKELY (info->ref_count == 0))
+    g_error ("refcount overflow");
 }
 
 static void

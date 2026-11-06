@@ -3456,7 +3456,11 @@ gtk_tree_model_filter_real_ref_node (GtkTreeModel *model,
   elt = iter->user_data2;
 
   elt->ref_count++;
+  if (G_UNLIKELY (elt->ref_count == 0))
+    g_error ("refcount overflow");
   level->ref_count++;
+  if (G_UNLIKELY (level->ref_count == 0))
+    g_error ("refcount overflow");
 
   if (external)
     {

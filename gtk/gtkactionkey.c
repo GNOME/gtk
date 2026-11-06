@@ -94,7 +94,11 @@ gtk_action_key_new (const char *full_name)
   self = g_hash_table_lookup (action_keys, full_name);
 
   if (self != NULL)
-    self->ref_count++;
+    {
+      self->ref_count++;
+      if (G_UNLIKELY (self->ref_count == 0))
+        g_error ("refcount overflow");
+    }
   else
     {
       self = g_new0 (GtkActionKey, 1);
@@ -121,6 +125,8 @@ gtk_action_key_ref (GtkActionKey *self)
 
   G_LOCK (action_keys);
   self->ref_count++;
+  if (G_UNLIKELY (self->ref_count == 0))
+    g_error ("refcount overflow");
   G_UNLOCK (action_keys);
 
   return self;

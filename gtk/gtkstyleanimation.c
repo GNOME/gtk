@@ -48,6 +48,8 @@ GtkStyleAnimation *
 gtk_style_animation_ref (GtkStyleAnimation *animation)
 {
   animation->ref_count++;
+  if (G_UNLIKELY (animation->ref_count == 0))
+    g_error ("refcount overflow");
   return animation;
 }
 

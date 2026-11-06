@@ -78,6 +78,8 @@ gdk_win32_display_add_filter (GdkWin32Display           *display,
       if ((filter->function == function) && (filter->data == data))
         {
           filter->ref_count++;
+          if (G_UNLIKELY (filter->ref_count == 0))
+            g_error ("refcount overflow");
           return;
         }
     }

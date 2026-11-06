@@ -135,6 +135,8 @@ gtk_image_definition_ref (GtkImageDefinition *def)
   GtkImageDefinitionEmpty *empty = (GtkImageDefinitionEmpty *) def;
 
   empty->ref_count++;
+  if (G_UNLIKELY (empty->ref_count == 0))
+    g_error ("refcount overflow");
 
   return def;
 }

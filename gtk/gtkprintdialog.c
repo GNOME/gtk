@@ -105,6 +105,8 @@ GtkPrintSetup *
 gtk_print_setup_ref (GtkPrintSetup *setup)
 {
   setup->ref_count++;
+  if (G_UNLIKELY (setup->ref_count == 0))
+    g_error ("refcount overflow");
 
   return setup;
 }
