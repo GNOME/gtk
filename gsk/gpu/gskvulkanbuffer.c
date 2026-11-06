@@ -108,7 +108,7 @@ gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
                     requirements.alignment,
                     &self->allocation);
 
-  gsk_gpu_buffer_setup (GSK_GPU_BUFFER (self), self->allocation.size);
+  gsk_gpu_buffer_setup (GSK_GPU_BUFFER (self), size);
 
   GSK_VK_CHECK (vkBindBufferMemory, gsk_vulkan_device_get_vk_device (device),
                                     self->vk_buffer,
