@@ -2472,11 +2472,13 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *tmp_list;
+  double old_hvalue;
   double page_size;
 
   /* We allocate the columns first because the width of the
    * tree view (used in updating the adjustments below) might change.
    */
+  old_hvalue = gtk_adjustment_get_value (priv->hadjustment);
   gtk_tree_view_size_allocate_columns (widget);
   gtk_tree_view_size_allocate_drag_column (widget);
 
@@ -2489,6 +2491,9 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
                             width * 0.1,
                             width * 0.9,
                             width);
+
+  if (gtk_adjustment_get_value (priv->hadjustment) != old_hvalue)
+    gtk_tree_view_size_allocate_columns (widget);
 
   page_size = height - gtk_tree_view_get_effective_header_height (tree_view);
   gtk_adjustment_configure (priv->vadjustment,
