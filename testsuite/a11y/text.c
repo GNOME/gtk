@@ -173,12 +173,48 @@ test_text_accessible_text (void)
   g_object_unref (text);
 }
 
+static void
+test_text_get_offset (gconstpointer data)
+{
+  const char *string = data;
+  GtkWidget *text = gtk_text_new ();
+  unsigned int n_chars = g_utf8_strlen (string, -1);
+
+  g_object_ref_sink (text);
+  gtk_editable_set_text (GTK_EDITABLE (text), string);
+  gtk_editable_set_alignment (GTK_EDITABLE (text), 0.5);
+  gtk_widget_measure (text, GTK_ORIENTATION_HORIZONTAL, -1, NULL, NULL, NULL, NULL);
+  gtk_widget_measure (text, GTK_ORIENTATION_VERTICAL, 400, NULL, NULL, NULL, NULL);
+  gtk_widget_allocate (text, 400, 40, -1, NULL);
+
+  for (unsigned int i = 0; i <= n_chars; i++)
+    {
+      graphene_rect_t cursor;
+      graphene_point_t point;
+      unsigned int offset;
+
+      gtk_text_compute_cursor_extents (GTK_TEXT (text), i, &cursor, NULL);
+      point = GRAPHENE_POINT_INIT (cursor.origin.x,
+                                   cursor.origin.y + cursor.size.height / 2);
+
+      g_assert_true (gtk_accessible_text_get_offset (GTK_ACCESSIBLE_TEXT (text),
+                                                     &point, &offset));
+      g_assert_cmpuint (offset, ==, i);
+    }
+
+  g_object_unref (text);
+}
+
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/a11y/text/accessible-text", test_text_accessible_text);
+
+  g_test_add_data_func ("/a11y/text/get-offset/empty", "", test_text_get_offset);
+  g_test_add_data_func ("/a11y/text/get-offset/ascii", "abc def", test_text_get_offset);
+  g_test_add_data_func ("/a11y/text/get-offset/utf8", "aé€😀z", test_text_get_offset);
 
   return g_test_run ();
 }
