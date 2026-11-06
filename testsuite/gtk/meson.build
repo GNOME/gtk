@@ -35,6 +35,7 @@ tests = [
   { 'name': 'calendar' },
   { 'name': 'cellarea' },
   { 'name': 'check-icon-names' },
+  { 'name': 'columnview' },
   { 'name': 'cssprovider' },
   { 'name': 'defaultvalue' },
   { 'name': 'entry' },

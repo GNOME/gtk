@@ -505,9 +505,11 @@ gtk_column_view_allocate (GtkWidget *widget,
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
   int full_width, header_height, min, nat, x, dx;
+  double value;
 
-  x = gtk_adjustment_get_value (self->hadjustment);
+  value = gtk_adjustment_get_value (self->hadjustment);
   full_width = gtk_column_view_allocate_columns (self, width);
+  x = CLAMP (value, 0, MAX (full_width - width, 0));
 
   gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
   if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)) == GTK_SCROLL_MINIMUM)
