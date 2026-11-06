@@ -186,12 +186,16 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
 
   scaled_font = gsk_reload_font (font, scale, CAIRO_HINT_METRICS_DEFAULT, CAIRO_HINT_STYLE_DEFAULT, CAIRO_ANTIALIAS_DEFAULT);
 
-  subpixel_x = (flags & 3) / 4.f;
-  subpixel_y = ((flags >> 2) & 3) / 4.f;
   pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);
 
   if (ink_rect.width == 0 || ink_rect.height == 0)
-    return NULL;
+    {
+      g_object_unref (scaled_font);
+      return NULL;
+    }
+
+  subpixel_x = (flags & 3) / 4.f;
+  subpixel_y = ((flags >> 2) & 3) / 4.f;
 
   origin.x = floor (ink_rect.x * 1.0 / PANGO_SCALE + subpixel_x);
   origin.y = floor (ink_rect.y * 1.0 / PANGO_SCALE + subpixel_y);
