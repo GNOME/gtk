@@ -1,0 +1,2 @@
+url-eof-after-open-paren.css:2:3-25: error: GTK_CSS_PARSER_WARNING_SYNTAX
+url-eof-after-open-paren.css:1:3-2:25: error: GTK_CSS_PARSER_WARNING_SYNTAX
