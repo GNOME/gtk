@@ -176,6 +176,8 @@ gsk_path_ref (GskPath *self)
   g_return_val_if_fail (self != NULL, NULL);
 
   self->ref_count++;
+  if (G_UNLIKELY (self->ref_count == 0))
+    g_error ("refcount overflow");
 
   return self;
 }

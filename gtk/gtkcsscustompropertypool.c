@@ -126,6 +126,8 @@ gtk_css_custom_property_pool_ref (GtkCssCustomPropertyPool *self,
   name = &g_array_index (self->names, GtkCssCustomPropertyName, id - 1);
 
   name->ref_count++;
+  if (G_UNLIKELY (name->ref_count == 0))
+    g_error ("refcount overflow");
 
   return id;
 }

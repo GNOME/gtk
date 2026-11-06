@@ -1541,6 +1541,8 @@ gtk_recent_info_ref (GtkRecentInfo *info)
   g_return_val_if_fail (info->ref_count > 0, NULL);
 
   info->ref_count++;
+  if (G_UNLIKELY (info->ref_count == 0))
+    g_error ("refcount overflow");
 
   return info;
 }

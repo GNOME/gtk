@@ -558,6 +558,8 @@ static GdkSurfaceCache *
 gdk_surface_cache_ref (GdkSurfaceCache *cache)
 {
   cache->ref_count++;
+  if (G_UNLIKELY (cache->ref_count == 0))
+    g_error ("refcount overflow");
 
   return cache;
 }

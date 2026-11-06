@@ -52,6 +52,8 @@ _gtk_css_keyframes_ref (GtkCssKeyframes *keyframes)
   g_return_val_if_fail (keyframes != NULL, NULL);
 
   keyframes->ref_count++;
+  if (G_UNLIKELY (keyframes->ref_count == 0))
+    g_error ("refcount overflow");
 
   return keyframes;
 }

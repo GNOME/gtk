@@ -109,6 +109,8 @@ gdk_frame_timings_ref (GdkFrameTimings *timings)
   g_return_val_if_fail (timings != NULL, NULL);
 
   timings->ref_count++;
+  if (G_UNLIKELY (timings->ref_count == 0))
+    g_error ("refcount overflow");
 
   return timings;
 }

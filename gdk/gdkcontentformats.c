@@ -268,6 +268,8 @@ gdk_content_formats_ref (GdkContentFormats *formats)
   g_return_val_if_fail (formats != NULL, NULL);
 
   formats->ref_count++;
+  if (G_UNLIKELY (formats->ref_count == 0))
+    g_error ("refcount overflow");
 
   return formats;
 }
@@ -659,6 +661,8 @@ gdk_content_formats_builder_ref (GdkContentFormatsBuilder *builder)
   g_return_val_if_fail (builder->ref_count > 0, NULL);
 
   builder->ref_count++;
+  if (G_UNLIKELY (builder->ref_count == 0))
+    g_error ("refcount overflow");
 
   return builder;
 }

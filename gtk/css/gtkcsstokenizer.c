@@ -603,6 +603,8 @@ GtkCssTokenizer *
 gtk_css_tokenizer_ref (GtkCssTokenizer *tokenizer)
 {
   tokenizer->ref_count++;
+  if (G_UNLIKELY (tokenizer->ref_count == 0))
+    g_error ("refcount overflow");
   
   return tokenizer;
 }

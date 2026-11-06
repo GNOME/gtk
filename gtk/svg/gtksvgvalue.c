@@ -51,6 +51,8 @@ svg_value_ref (SvgValue *value)
     return value;
 
   value->ref_count++;
+  if (G_UNLIKELY (value->ref_count == 0))
+    g_error ("refcount overflow");
   return value;
 }
 

@@ -231,6 +231,8 @@ gtk_tree_list_row_sort_keys_ref_key (GtkTreeListRowSortKeys *self,
     {
       cache_key = cache_key_from_key (self, key);
       cache_key->ref_count++;
+      if (G_UNLIKELY (cache_key->ref_count == 0))
+        g_error ("refcount overflow");
       return key;
     }
 

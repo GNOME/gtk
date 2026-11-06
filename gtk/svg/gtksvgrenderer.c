@@ -578,6 +578,8 @@ static FilterResult *
 filter_result_ref (FilterResult *res)
 {
   res->ref_count++;
+  if (G_UNLIKELY (res->ref_count == 0))
+    g_error ("refcount overflow");
   return res;
 }
 

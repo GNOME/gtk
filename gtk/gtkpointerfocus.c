@@ -55,6 +55,8 @@ GtkPointerFocus *
 gtk_pointer_focus_ref (GtkPointerFocus *focus)
 {
   focus->ref_count++;
+  if (G_UNLIKELY (focus->ref_count == 0))
+    g_error ("refcount overflow");
   return focus;
 }
 

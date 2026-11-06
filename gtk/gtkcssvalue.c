@@ -166,6 +166,8 @@ GtkCssValue *
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
   value->ref_count++;
+  if (G_UNLIKELY (value->ref_count == 0))
+    g_error ("refcount overflow");
 
   return value;
 }
