@@ -667,10 +667,16 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
           .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
           .max_lod = 0.0f,
       },
-      [GSK_GPU_SAMPLER_MIPMAP_DEFAULT] = {
+      [GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR] = {
           .filter = VK_FILTER_LINEAR,
           .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
           .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+          .max_lod = VK_LOD_CLAMP_NONE,
+      },
+      [GSK_GPU_SAMPLER_LINEAR_MIPMAP_NEAREST] = {
+          .filter = VK_FILTER_LINEAR,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
           .max_lod = VK_LOD_CLAMP_NONE,
       },
   };

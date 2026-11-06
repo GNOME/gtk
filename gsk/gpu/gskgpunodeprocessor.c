@@ -1293,8 +1293,10 @@ gsk_gpu_sampler_for_scaling_filter (GskScalingFilter scaling_filter)
         return GSK_GPU_SAMPLER_NEAREST;
 
       case GSK_SCALING_FILTER_TRILINEAR:
+        return GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR;
+
       case GSK_SCALING_FILTER_BICUBIC:
-        return GSK_GPU_SAMPLER_MIPMAP_DEFAULT;
+        return GSK_GPU_SAMPLER_LINEAR_MIPMAP_NEAREST;
 
       default:
         g_assert_not_reached ();
@@ -1519,7 +1521,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
     }
 
   if (should_mipmap)
-    sampler = GSK_GPU_SAMPLER_MIPMAP_DEFAULT;
+    sampler = GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR;
   else
     sampler = GSK_GPU_SAMPLER_DEFAULT;
 
