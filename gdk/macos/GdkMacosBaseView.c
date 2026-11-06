@@ -261,6 +261,12 @@
 
   if ([self respondsToSelector: aSelector])
     [self performSelector: aSelector];
+  else
+    /* Not handled here (e.g. cancelOperation: for Escape), let GTK
+     * handle the key event */
+    g_object_set_data (G_OBJECT ([self gdkSurface]),
+                       GIC_FILTER_KEY,
+                       GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
 -(void)insertText:(id)aString replacementRange: (NSRange)replacementRange
