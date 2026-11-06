@@ -448,6 +448,8 @@
     <file alias="icons/scalable/apps/org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
     <file>portland-rose-thumbnail.png</file>
     <file>large-image-thumbnail.png</file>
+    <file>zone-plate-thumbnail.png</file>
+    <file>concentric-rays-thumbnail.png</file>
     <file compressed="true">large-image.png</file>
     <file compressed="true">Moby-Dick.txt</file>
   </gresource>
