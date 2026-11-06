@@ -2,6 +2,8 @@
 
 #include "gskvulkanframeprivate.h"
 
+#include "gskgpucacheprivate.h"
+#include "gskgpucachedprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpuutilsprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -12,6 +14,7 @@
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkgltextureprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #ifdef GDK_WINDOWING_WIN32
 #include "gdk/win32/gdkd3d12textureprivate.h"
@@ -48,6 +51,21 @@ struct _GskVulkanSemaphores
 
 typedef struct _GskVulkanFramePrivate GskVulkanFramePrivate;
 
+#define UPLOAD_BUFFER_CACHE_SIZE (8 * 1024 * 1024)
+#define UPLOAD_BUFFER_CACHE_COUNT 128
+#define UPLOAD_BUFFER_MIN_SIZE (4 * 1024)
+#define UPLOAD_BUFFER_MAX_SIZE (1024 * 1024)
+#define UPLOAD_BUFFER_CLEANUP_TIMEOUT 15
+
+typedef struct
+{
+  GskGpuCached parent;
+
+  GskVulkanFrame *frame;
+  GskGpuBuffer   *buffer;
+  gboolean        in_use;
+} GskVulkanCachedUpload;
+
 struct _GskVulkanFramePrivate
 {
   VkSemaphore vk_acquire_semaphore;
@@ -60,9 +78,88 @@ struct _GskVulkanFramePrivate
 
   VkDescriptorSet vk_globals_descriptor_set;
   gsize           globals_pool_id;
+
+  GPtrArray *upload_buffers;
+  gsize      upload_buffer_bytes;
+  guint      upload_buffer_cleanup_source;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskVulkanFrame, gsk_vulkan_frame, GSK_TYPE_GPU_FRAME)
+
+#ifdef HAVE_SYSPROF
+static guint profiler_upload_allocations_id;
+static guint profiler_upload_reuses_id;
+static guint profiler_upload_cached_bytes_id;
+static gint64 profiler_upload_allocations;
+static gint64 profiler_upload_reuses;
+static gint64 profiler_upload_cached_bytes;
+#endif
+
+static void
+gsk_vulkan_cached_upload_finalize (GskGpuCached *cached)
+{
+  GskVulkanCachedUpload *self = (GskVulkanCachedUpload *) cached;
+  GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self->frame);
+  gsize allocation_size = gsk_vulkan_buffer_get_allocation_size (GSK_VULKAN_BUFFER (self->buffer));
+
+  g_assert (!self->in_use);
+  g_assert (priv->upload_buffer_bytes >= allocation_size);
+
+  priv->upload_buffer_bytes -= allocation_size;
+
+#ifdef HAVE_SYSPROF
+  profiler_upload_cached_bytes -= allocation_size;
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_set_int_counter (profiler_upload_cached_bytes_id, profiler_upload_cached_bytes);
+#endif
+
+  g_ptr_array_remove_fast (priv->upload_buffers, self);
+  g_clear_object (&self->buffer);
+}
+
+static gboolean
+gsk_vulkan_cached_upload_should_collect (GskGpuCached *cached,
+                                         gint64        cache_timeout,
+                                         gint64        timestamp)
+{
+  GskVulkanCachedUpload *self = (GskVulkanCachedUpload *) cached;
+
+  if (self->in_use)
+    return FALSE;
+
+  return gsk_gpu_cached_is_old (cached, cache_timeout, timestamp);
+}
+
+static const GskGpuCachedClass GSK_VULKAN_CACHED_UPLOAD_CLASS =
+{
+  sizeof (GskVulkanCachedUpload),
+  "Vulkan upload buffer",
+  FALSE,
+  gsk_gpu_cached_print_no_stats,
+  gsk_vulkan_cached_upload_finalize,
+  gsk_vulkan_cached_upload_should_collect
+};
+
+static gboolean
+upload_buffer_cleanup_cb (gpointer data)
+{
+  GskVulkanFrame *self = g_object_ref (data);
+  GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self);
+
+  if (gsk_gpu_frame_is_busy (GSK_GPU_FRAME (self)))
+    {
+      g_object_unref (self);
+
+      return G_SOURCE_CONTINUE;
+    }
+
+  priv->upload_buffer_cleanup_source = 0;
+  gsk_gpu_frame_wait (GSK_GPU_FRAME (self));
+  g_object_unref (self);
+
+  return G_SOURCE_REMOVE;
+}
 
 static gboolean
 gsk_vulkan_frame_is_busy (GskGpuFrame *frame)
@@ -142,6 +239,7 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
   GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self);
   GskVulkanDevice *device;
   VkDevice vk_device;
+  guint i;
 
   device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
   vk_device = gsk_vulkan_device_get_vk_device (device);
@@ -160,6 +258,18 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
                                       0);
 
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
+
+  g_clear_handle_id (&priv->upload_buffer_cleanup_source, g_source_remove);
+
+  for (i = 0; i < priv->upload_buffers->len; i++)
+    {
+      GskVulkanCachedUpload *upload = g_ptr_array_index (priv->upload_buffers, i);
+
+      upload->in_use = FALSE;
+    }
+
+  if (priv->upload_buffers->len > 0)
+    gsk_gpu_device_queue_gc (GSK_GPU_DEVICE (device));
 }
 
 static GdkDrawContextFrame *
@@ -411,6 +521,17 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
 }
 
 static void
+gsk_vulkan_frame_dispose (GObject *object)
+{
+  GskVulkanFrame *self = GSK_VULKAN_FRAME (object);
+  GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self);
+
+  g_clear_handle_id (&priv->upload_buffer_cleanup_source, g_source_remove);
+
+  G_OBJECT_CLASS (gsk_vulkan_frame_parent_class)->dispose (object);
+}
+
+static void
 gsk_vulkan_frame_finalize (GObject *object)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (object);
@@ -439,6 +560,11 @@ gsk_vulkan_frame_finalize (GObject *object)
                   priv->vk_fence,
                   NULL);
 
+  while (priv->upload_buffers->len > 0)
+    gsk_gpu_cached_free (g_ptr_array_index (priv->upload_buffers, priv->upload_buffers->len - 1));
+
+  g_clear_pointer (&priv->upload_buffers, g_ptr_array_unref);
+
   G_OBJECT_CLASS (gsk_vulkan_frame_parent_class)->finalize (object);
 }
 
@@ -462,7 +588,19 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->write_texture_vertex_data = gsk_vulkan_frame_write_texture_vertex_data;
   gpu_frame_class->submit = gsk_vulkan_frame_submit;
 
+  object_class->dispose = gsk_vulkan_frame_dispose;
   object_class->finalize = gsk_vulkan_frame_finalize;
+
+#ifdef HAVE_SYSPROF
+  profiler_upload_allocations_id = gdk_profiler_define_int_counter ("vulkan-upload-allocations",
+                                                                    "Upload buffers allocated");
+
+  profiler_upload_reuses_id = gdk_profiler_define_int_counter ("vulkan-upload-reuses",
+                                                               "Upload buffers reused");
+
+  profiler_upload_cached_bytes_id = gdk_profiler_define_int_counter ("vulkan-upload-cached-bytes",
+                                                                     "Cached upload buffer bytes");
+#endif
 }
 
 static void
@@ -473,6 +611,132 @@ gsk_vulkan_frame_init (GskVulkanFrame *self)
   priv->pool_n_sets = 4;
   priv->pool_n_images = 8;
   priv->pool_n_buffers = 8;
+
+  priv->upload_buffers = g_ptr_array_new ();
+}
+
+GskGpuBuffer *
+gsk_vulkan_frame_acquire_upload_buffer (GskVulkanFrame *self,
+                                        gsize           size)
+{
+  GskVulkanFramePrivate *priv = gsk_vulkan_frame_get_instance_private (self);
+  GskVulkanDevice *device;
+  GskVulkanCachedUpload *upload;
+  GskGpuBuffer *buffer;
+  gsize capacity;
+  gsize allocation_size;
+  gboolean cacheable;
+  guint i;
+
+  g_return_val_if_fail (GSK_IS_VULKAN_FRAME (self), NULL);
+  g_return_val_if_fail (size > 0, NULL);
+
+  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self)));
+
+  cacheable = gsk_gpu_frame_should_optimize (GSK_GPU_FRAME (self), GSK_GPU_OPTIMIZE_UPLOAD_REUSE);
+
+  if (cacheable && priv->upload_buffer_cleanup_source == 0)
+    {
+      priv->upload_buffer_cleanup_source =
+        g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE,
+                                    UPLOAD_BUFFER_CLEANUP_TIMEOUT,
+                                    upload_buffer_cleanup_cb,
+                                    self,
+                                    NULL);
+
+      g_source_set_name_by_id (priv->upload_buffer_cleanup_source, "[gtk] Vulkan upload cleanup");
+    }
+
+  cacheable = cacheable && size <= UPLOAD_BUFFER_MAX_SIZE;
+  capacity = size;
+
+  if (cacheable)
+    {
+      for (capacity = UPLOAD_BUFFER_MIN_SIZE; capacity < size; capacity *= 2)
+        ;
+
+      for (i = 0; i < priv->upload_buffers->len; i++)
+        {
+          upload = g_ptr_array_index (priv->upload_buffers, i);
+
+          if (upload->in_use || gsk_gpu_buffer_get_size (upload->buffer) != capacity)
+            continue;
+
+          upload->in_use = TRUE;
+
+          gsk_gpu_cached_use (&upload->parent);
+
+#ifdef HAVE_SYSPROF
+          profiler_upload_reuses++;
+
+          if (GDK_PROFILER_IS_RUNNING)
+            gdk_profiler_set_int_counter (profiler_upload_reuses_id, profiler_upload_reuses);
+#endif
+
+          return g_object_ref (upload->buffer);
+        }
+    }
+
+  buffer = gsk_vulkan_buffer_new_write (device, capacity);
+
+#ifdef HAVE_SYSPROF
+  profiler_upload_allocations++;
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_set_int_counter (profiler_upload_allocations_id, profiler_upload_allocations);
+#endif
+
+  if (!cacheable)
+    return buffer;
+
+  allocation_size = gsk_vulkan_buffer_get_allocation_size (GSK_VULKAN_BUFFER (buffer));
+
+  if (allocation_size > UPLOAD_BUFFER_CACHE_SIZE)
+    return buffer;
+
+  while (priv->upload_buffers->len >= UPLOAD_BUFFER_CACHE_COUNT ||
+         priv->upload_buffer_bytes > UPLOAD_BUFFER_CACHE_SIZE - allocation_size)
+    {
+      guint oldest = G_MAXUINT;
+      gint64 oldest_time = G_MAXINT64;
+
+      for (i = 0; i < priv->upload_buffers->len; i++)
+        {
+          upload = g_ptr_array_index (priv->upload_buffers, i);
+
+          if (!upload->in_use && upload->parent.timestamp < oldest_time)
+            {
+              oldest = i;
+              oldest_time = upload->parent.timestamp;
+            }
+        }
+
+      if (oldest == G_MAXUINT)
+        return buffer;
+
+      gsk_gpu_cached_free (g_ptr_array_index (priv->upload_buffers, oldest));
+    }
+
+  upload = gsk_gpu_cached_new (gsk_gpu_device_get_cache (GSK_GPU_DEVICE (device)),
+                               &GSK_VULKAN_CACHED_UPLOAD_CLASS);
+
+  upload->frame = self;
+  upload->buffer = g_object_ref (buffer);
+  upload->in_use = TRUE;
+
+  gsk_gpu_cached_use (&upload->parent);
+
+  g_ptr_array_add (priv->upload_buffers, upload);
+  priv->upload_buffer_bytes += allocation_size;
+
+#ifdef HAVE_SYSPROF
+  profiler_upload_cached_bytes += allocation_size;
+
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_set_int_counter (profiler_upload_cached_bytes_id, profiler_upload_cached_bytes);
+#endif
+
+  return buffer;
 }
 
 void

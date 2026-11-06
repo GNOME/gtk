@@ -33,6 +33,9 @@ struct _GskVulkanFrameClass
 
 GType                   gsk_vulkan_frame_get_type                       (void);
 
+GskGpuBuffer *          gsk_vulkan_frame_acquire_upload_buffer          (GskVulkanFrame         *self,
+                                                                         gsize                   size);
+
 void                    gsk_vulkan_semaphores_add_wait                  (GskVulkanSemaphores    *self,
                                                                          VkSemaphore             semaphore,
                                                                          uint64_t                semaphore_wait,

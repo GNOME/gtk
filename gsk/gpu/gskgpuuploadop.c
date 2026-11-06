@@ -10,6 +10,7 @@
 #include "gskglimageprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 #endif
 
@@ -147,8 +148,7 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                           area->height,
                           gdk_memory_format_alignment (format));
 
-  *buffer = gsk_vulkan_buffer_new_write (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                         layout.size);
+  *buffer = gsk_vulkan_frame_acquire_upload_buffer (GSK_VULKAN_FRAME (frame), layout.size);
   data = gsk_gpu_buffer_map (*buffer);
 
   draw_func (op, data, &layout);

@@ -161,3 +161,10 @@ gsk_vulkan_buffer_get_vk_buffer (GskVulkanBuffer *self)
   return self->vk_buffer;
 }
 
+gsize
+gsk_vulkan_buffer_get_allocation_size (GskVulkanBuffer *self)
+{
+  g_return_val_if_fail (GSK_IS_VULKAN_BUFFER (self), 0);
+
+  return self->allocation.size;
+}
