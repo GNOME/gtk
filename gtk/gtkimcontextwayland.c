@@ -1389,10 +1389,7 @@ gtk_im_context_wayland_activate_osk_with_event (GtkIMContext *context,
 
   if (zwp_text_input_v3_get_version (global->text_input) >=
       ZWP_TEXT_INPUT_V3_SHOW_INPUT_PANEL_SINCE_VERSION)
-    {
-      zwp_text_input_v3_show_input_panel (global->text_input);
-      commit_state (GTK_IM_CONTEXT_WAYLAND (context));
-    }
+    zwp_text_input_v3_show_input_panel (global->text_input);
   else
     {
       zwp_text_input_v3_enable (global->text_input);
