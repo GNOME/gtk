@@ -1050,10 +1050,10 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
         {
           const char *data = tokenizer->data;
 
-          while (is_whitespace (*data))
+          while (data < tokenizer->end && is_whitespace (*data))
             data++;
 
-          if (*data != '"' && *data != '\'')
+          if (data == tokenizer->end || (*data != '"' && *data != '\''))
             return gtk_css_tokenizer_read_url (tokenizer, token, error);
         }
 
