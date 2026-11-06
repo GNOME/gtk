@@ -7904,14 +7904,9 @@ gtk_text_accessible_text_get_offset (GtkAccessibleText      *self,
                                      unsigned int           *offset)
 {
   int lx;
-  int index;
-  const char *text;
 
   gtk_text_get_layout_offsets (GTK_TEXT (self), &lx, NULL);
-  index = gtk_text_find_position (GTK_TEXT (self), point->x - lx);
-  text = gtk_entry_buffer_get_text (get_buffer (GTK_TEXT (self)));
-
-  *offset = (unsigned int) g_utf8_pointer_to_offset (text, text + index);
+  *offset = gtk_text_find_position (GTK_TEXT (self), point->x - lx);
 
   return TRUE;
 }
