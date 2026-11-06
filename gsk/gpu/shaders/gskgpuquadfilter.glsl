@@ -92,10 +92,10 @@ run (out vec4 color,
   vec2 gy = vec2 (wy[0] + wy[1], wy[2] + wy[3]);
   
   color = vec4(0.0);
-  color += gx[0] * gy[0] * texture (GSK_TEXTURE0, (texel + vec2 (0.5 - wx[0] / gx[0], 0.5 - wy[0] / gy[0])) / size);
-  color += gx[0] * gy[1] * texture (GSK_TEXTURE0, (texel + vec2 (0.5 - wx[0] / gx[0], 1.5 + wy[3] / gy[1])) / size);
-  color += gx[1] * gy[0] * texture (GSK_TEXTURE0, (texel + vec2 (1.5 + wx[3] / gx[1], 0.5 - wy[0] / gy[0])) / size);
-  color += gx[1] * gy[1] * texture (GSK_TEXTURE0, (texel + vec2 (1.5 + wx[3] / gx[1], 1.5 + wy[3] / gy[1])) / size);
+  color += gx[0] * gy[0] * texture (GSK_TEXTURE0, (texel + vec2 (0.5 - wx[0] / gx[0], 0.5 - wy[0] / gy[0])) / size, -0.5);
+  color += gx[0] * gy[1] * texture (GSK_TEXTURE0, (texel + vec2 (0.5 - wx[0] / gx[0], 1.5 + wy[3] / gy[1])) / size, -0.5);
+  color += gx[1] * gy[0] * texture (GSK_TEXTURE0, (texel + vec2 (1.5 + wx[3] / gx[1], 0.5 - wy[0] / gy[0])) / size, -0.5);
+  color += gx[1] * gy[1] * texture (GSK_TEXTURE0, (texel + vec2 (1.5 + wx[3] / gx[1], 1.5 + wy[3] / gy[1])) / size, -0.5);
   position = _pos;
 }
 
