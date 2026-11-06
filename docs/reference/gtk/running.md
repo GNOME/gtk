@@ -549,6 +549,11 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 `profile`
 : Disable profiling support
 
+`upload-reuse`
+: Allocate fresh staging buffers for each upload instead of reusing buffers
+  after frame completion (Vulkan only). Combine with `GSK_DEBUG=staging` to
+  compare fresh and reused staging buffers for all texture uploads.
+
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
 
