@@ -730,10 +730,10 @@ gtk_column_view_set_property (GObject      *object,
       adjustment = g_value_get_object (value);
       if (adjustment == NULL)
         adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      g_object_ref_sink (adjustment);
 
       if (self->hadjustment != adjustment)
         {
+          g_object_ref_sink (adjustment);
           clear_adjustment (self);
 
           self->hadjustment = adjustment;

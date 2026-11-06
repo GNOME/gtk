@@ -151,6 +151,22 @@ test_viewport_changes (gconstpointer data)
   g_object_unref (view);
 }
 
+static void
+test_same_hadjustment (void)
+{
+  GtkWidget *view = create_view (GTK_TEXT_DIR_LTR, 1200);
+  GtkAdjustment *adjustment;
+  gpointer weak;
+
+  adjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (view));
+  weak = adjustment;
+  g_object_add_weak_pointer (G_OBJECT (adjustment), &weak);
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), adjustment);
+
+  g_object_unref (view);
+  g_assert_null (weak);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -181,6 +197,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/columnview/column-changes/rtl", GINT_TO_POINTER (GTK_TEXT_DIR_RTL), test_column_changes);
   g_test_add_data_func ("/columnview/viewport-changes/ltr", GINT_TO_POINTER (GTK_TEXT_DIR_LTR), test_viewport_changes);
   g_test_add_data_func ("/columnview/viewport-changes/rtl", GINT_TO_POINTER (GTK_TEXT_DIR_RTL), test_viewport_changes);
+  g_test_add_func ("/columnview/hadjustment/same", test_same_hadjustment);
   result = g_test_run ();
 
   gtk_style_context_remove_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider));
