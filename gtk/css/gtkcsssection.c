@@ -106,7 +106,7 @@ gtk_css_section_ref (GtkCssSection *section)
 {
   g_return_val_if_fail (section != NULL, NULL);
 
-  section->ref_count += 1;
+  section->ref_count++;
 
   return section;
 }

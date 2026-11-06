@@ -46,7 +46,7 @@ gtk_sort_keys_alloc (const GtkSortKeysClass *klass,
 GtkSortKeys *
 gtk_sort_keys_ref (GtkSortKeys *self)
 {
-  self->ref_count += 1;
+  self->ref_count++;
 
   return self;
 }

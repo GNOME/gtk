@@ -160,7 +160,7 @@ gsk_path_builder_ref (GskPathBuilder *self)
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  self->ref_count += 1;
+  self->ref_count++;
 
   return self;
 }

@@ -557,7 +557,7 @@ gdk_surface_cache_destroy (GdkSurfaceCache *cache)
 static GdkSurfaceCache *
 gdk_surface_cache_ref (GdkSurfaceCache *cache)
 {
-  cache->ref_count += 1;
+  cache->ref_count++;
 
   return cache;
 }

@@ -165,7 +165,7 @@ GtkCssValue *
 {
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
-  value->ref_count += 1;
+  value->ref_count++;
 
   return value;
 }

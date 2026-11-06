@@ -50,7 +50,7 @@ svg_value_ref (SvgValue *value)
   if (svg_value_is_immortal (value))
     return value;
 
-  value->ref_count += 1;
+  value->ref_count++;
   return value;
 }
 

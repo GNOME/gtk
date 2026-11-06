@@ -658,7 +658,7 @@ gdk_content_formats_builder_ref (GdkContentFormatsBuilder *builder)
   g_return_val_if_fail (builder != NULL, NULL);
   g_return_val_if_fail (builder->ref_count > 0, NULL);
 
-  builder->ref_count += 1;
+  builder->ref_count++;
 
   return builder;
 }
