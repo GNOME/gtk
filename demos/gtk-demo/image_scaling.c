@@ -314,7 +314,7 @@ do_image_scaling (GtkWidget *do_widget)
       gtk_widget_set_hexpand (scale, TRUE);
       gtk_box_append (GTK_BOX (box2), scale);
 
-      dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", NULL })), NULL);
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", "Bicubic", NULL })), NULL);
       gtk_widget_set_tooltip_text (dropdown, "Filter");
       gtk_accessible_update_property (GTK_ACCESSIBLE (dropdown),
                                       GTK_ACCESSIBLE_PROPERTY_LABEL, "Filter",
