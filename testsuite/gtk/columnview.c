@@ -167,6 +167,39 @@ test_same_hadjustment (void)
   g_assert_null (weak);
 }
 
+static void
+test_replace_hadjustment (gconstpointer data)
+{
+  GtkWidget *view = create_view (GPOINTER_TO_INT (data), 1200);
+  GtkAdjustment *adjustment;
+
+  allocate_and_check (view, 800, 1200, 0);
+
+  adjustment = gtk_adjustment_new (250, 0, 1200, 80, 720, 800);
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), adjustment);
+  g_assert_true (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (view)) == adjustment);
+  allocate_and_check (view, 800, 1200, 250);
+
+  g_object_unref (view);
+}
+
+static void
+test_reset_hadjustment (gconstpointer data)
+{
+  GtkWidget *view = create_view (GPOINTER_TO_INT (data), 1200);
+  GtkAdjustment *adjustment;
+
+  adjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (view));
+  gtk_adjustment_configure (adjustment, 250, 0, 1200, 80, 720, 800);
+  allocate_and_check (view, 800, 1200, 250);
+
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), NULL);
+  g_assert_nonnull (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (view)));
+  allocate_and_check (view, 800, 1200, 0);
+
+  g_object_unref (view);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -198,6 +231,10 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/columnview/viewport-changes/ltr", GINT_TO_POINTER (GTK_TEXT_DIR_LTR), test_viewport_changes);
   g_test_add_data_func ("/columnview/viewport-changes/rtl", GINT_TO_POINTER (GTK_TEXT_DIR_RTL), test_viewport_changes);
   g_test_add_func ("/columnview/hadjustment/same", test_same_hadjustment);
+  g_test_add_data_func ("/columnview/hadjustment/replace/ltr", GINT_TO_POINTER (GTK_TEXT_DIR_LTR), test_replace_hadjustment);
+  g_test_add_data_func ("/columnview/hadjustment/replace/rtl", GINT_TO_POINTER (GTK_TEXT_DIR_RTL), test_replace_hadjustment);
+  g_test_add_data_func ("/columnview/hadjustment/reset/ltr", GINT_TO_POINTER (GTK_TEXT_DIR_LTR), test_reset_hadjustment);
+  g_test_add_data_func ("/columnview/hadjustment/reset/rtl", GINT_TO_POINTER (GTK_TEXT_DIR_RTL), test_reset_hadjustment);
   result = g_test_run ();
 
   gtk_style_context_remove_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider));

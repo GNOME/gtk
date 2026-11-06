@@ -740,6 +740,8 @@ gtk_column_view_set_property (GObject      *object,
 
           g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_value_changed_cb), self);
 
+          gtk_widget_queue_allocate (GTK_WIDGET (self));
+
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
         }
       break;
