@@ -341,6 +341,131 @@ test_selection_empty (void)
   g_object_unref (g_object_ref_sink (view));
 }
 
+typedef struct
+{
+  GtkTextDirection direction;
+  int content_width;
+} AdjustmentClampTest;
+
+static const AdjustmentClampTest adjustment_clamp_tests[] = {
+  { GTK_TEXT_DIR_LTR, 600 },
+  { GTK_TEXT_DIR_LTR, 1200 },
+  { GTK_TEXT_DIR_RTL, 600 },
+  { GTK_TEXT_DIR_RTL, 1200 },
+};
+
+static void
+test_adjustment_clamp (gconstpointer data)
+{
+  const AdjustmentClampTest *test = data;
+  const int width = 800;
+  GtkWidget *view;
+  GtkTreeViewColumn *columns[2];
+  GtkAdjustment *adjustment;
+  GtkCssProvider *css;
+  int minimum, natural;
+  int offset;
+  double expected_value;
+
+  css = gtk_css_provider_new ();
+  gtk_css_provider_load_from_string (css, "treeview, treeview * { margin: 0; padding: 0; border: 0; }");
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (css),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  view = gtk_tree_view_new ();
+  g_object_ref_sink (view);
+  gtk_widget_set_direction (view, test->direction);
+
+  for (guint i = 0; i < G_N_ELEMENTS (columns); i++)
+    {
+      columns[i] = gtk_tree_view_column_new ();
+      gtk_tree_view_column_set_title (columns[i], i == 0 ? "A" : "B");
+      gtk_tree_view_column_set_sizing (columns[i], GTK_TREE_VIEW_COLUMN_FIXED);
+      gtk_tree_view_column_set_fixed_width (columns[i], test->content_width / 2);
+      gtk_tree_view_append_column (GTK_TREE_VIEW (view), columns[i]);
+    }
+
+  adjustment = gtk_adjustment_new (980, 0, 3000, 80, 720, width);
+  g_object_ref_sink (adjustment);
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), adjustment);
+
+  gtk_widget_measure (view, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &minimum, &natural, NULL, NULL);
+  gtk_widget_measure (view, GTK_ORIENTATION_VERTICAL, MAX (width, minimum),
+                      &minimum, &natural, NULL, NULL);
+  gtk_widget_allocate (view, width, 600, -1, NULL);
+
+  expected_value = MAX (test->content_width - width, 0);
+  g_assert_cmpfloat (gtk_adjustment_get_value (adjustment), ==, expected_value);
+
+  offset = test->direction == GTK_TEXT_DIR_RTL ? width : 0;
+  for (guint i = 0; i < G_N_ELEMENTS (columns); i++)
+    {
+      GtkWidget *button = gtk_tree_view_column_get_button (columns[i]);
+      graphene_rect_t bounds;
+      int column_width = gtk_tree_view_column_get_width (columns[i]);
+
+      if (test->direction == GTK_TEXT_DIR_RTL)
+        offset -= column_width;
+
+      g_assert_true (gtk_widget_compute_bounds (button, view, &bounds));
+      g_assert_cmpfloat_with_epsilon (bounds.origin.x, offset - expected_value, 0.01);
+
+      if (test->direction == GTK_TEXT_DIR_LTR)
+        offset += column_width;
+    }
+
+  g_object_unref (view);
+  g_object_unref (adjustment);
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 GTK_STYLE_PROVIDER (css));
+  g_object_unref (css);
+}
+
+static void
+test_rtl_horizontal_adjustment (void)
+{
+  const int heights[] = { 600, 400, 600 };
+  GtkWidget *view;
+  GtkTreeViewColumn *column;
+  GtkAdjustment *hadjustment, *vadjustment;
+  int minimum, natural;
+
+  view = gtk_tree_view_new ();
+  g_object_ref_sink (view);
+  gtk_widget_set_direction (view, GTK_TEXT_DIR_RTL);
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, "A");
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+  gtk_tree_view_column_set_fixed_width (column, 2000);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+
+  hadjustment = gtk_adjustment_new (125, 0, 2000, 80, 720, 800);
+  vadjustment = gtk_adjustment_new (0, 0, 600, 60, 540, 600);
+  g_object_ref_sink (hadjustment);
+  g_object_ref_sink (vadjustment);
+  gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (view), hadjustment);
+  gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (view), vadjustment);
+
+  gtk_widget_measure (view, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &minimum, &natural, NULL, NULL);
+  gtk_widget_measure (view, GTK_ORIENTATION_VERTICAL, MAX (800, minimum),
+                      &minimum, &natural, NULL, NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (heights); i++)
+    {
+      gtk_widget_allocate (view, 800, heights[i], -1, NULL);
+      g_assert_cmpfloat (gtk_adjustment_get_value (hadjustment), ==, 125);
+      g_assert_cmpfloat (gtk_adjustment_get_page_size (hadjustment), ==, 800);
+    }
+
+  g_object_unref (view);
+  g_object_unref (hadjustment);
+  g_object_unref (vadjustment);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -355,6 +480,15 @@ main (int    argc,
                    test_row_separator_height);
   g_test_add_func ("/TreeView/selection/count", test_selection_count);
   g_test_add_func ("/TreeView/selection/empty", test_selection_empty);
+  g_test_add_data_func ("/TreeView/sizing/adjustment-clamp/ltr/fits",
+                        &adjustment_clamp_tests[0], test_adjustment_clamp);
+  g_test_add_data_func ("/TreeView/sizing/adjustment-clamp/ltr/overflows",
+                        &adjustment_clamp_tests[1], test_adjustment_clamp);
+  g_test_add_data_func ("/TreeView/sizing/adjustment-clamp/rtl/fits",
+                        &adjustment_clamp_tests[2], test_adjustment_clamp);
+  g_test_add_data_func ("/TreeView/sizing/adjustment-clamp/rtl/overflows",
+                        &adjustment_clamp_tests[3], test_adjustment_clamp);
+  g_test_add_func ("/TreeView/sizing/rtl-horizontal-adjustment", test_rtl_horizontal_adjustment);
 
   return g_test_run ();
 }

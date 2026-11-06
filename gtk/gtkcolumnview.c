@@ -505,9 +505,11 @@ gtk_column_view_allocate (GtkWidget *widget,
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
   int full_width, header_height, min, nat, x, dx;
+  double value;
 
-  x = gtk_adjustment_get_value (self->hadjustment);
+  value = gtk_adjustment_get_value (self->hadjustment);
   full_width = gtk_column_view_allocate_columns (self, width);
+  x = CLAMP (value, 0, MAX (full_width - width, 0));
 
   gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
   if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)) == GTK_SCROLL_MINIMUM)
@@ -728,15 +730,17 @@ gtk_column_view_set_property (GObject      *object,
       adjustment = g_value_get_object (value);
       if (adjustment == NULL)
         adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-      g_object_ref_sink (adjustment);
 
       if (self->hadjustment != adjustment)
         {
+          g_object_ref_sink (adjustment);
           clear_adjustment (self);
 
           self->hadjustment = adjustment;
 
           g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_value_changed_cb), self);
+
+          gtk_widget_queue_allocate (GTK_WIDGET (self));
 
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
         }
