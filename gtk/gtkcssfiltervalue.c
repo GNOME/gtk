@@ -1051,7 +1051,6 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
 
               if (mimetype && strcmp (mimetype, "image/svg+xml") != 0)
                 {
-                  g_bytes_unref (bytes);
                   g_set_error (&error,
                                GTK_CSS_PARSER_ERROR,
                                GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
