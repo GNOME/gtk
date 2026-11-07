@@ -264,6 +264,20 @@ gsk_text_node_new2 (PangoFont              *font,
       if (glyphs->glyphs[i].glyph == PANGO_GLYPH_EMPTY)
         continue;
 
+      if (n > 0)
+        {
+          PangoRectangle ink;
+
+          pango_font_get_glyph_extents (font, glyphs->glyphs[i].glyph, &ink, NULL);
+
+          /* skip no-ink glyphs */
+          if (ink.width == 0 || ink.height == 0)
+            {
+              glyph_infos[n - 1].geometry.width += glyphs->glyphs[i].geometry.width;
+              continue;
+            }
+        }
+
       glyph_infos[n] = glyphs->glyphs[i];
 
       if (glyphs->glyphs[i].attr.is_color)
