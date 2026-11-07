@@ -1097,6 +1097,8 @@ _gdk_macos_event_source_new (GdkMacosDisplay *display)
 
   main_thread_run_loop = CFRunLoopGetCurrent ();
 
+  CFRunLoopAddCommonMode (main_thread_run_loop, CFSTR ("_NSMoveTimerRunLoopMode"));
+
   observer = CFRunLoopObserverCreate (NULL, /* default allocator */
                                       kCFRunLoopAllActivities,
                                       true, /* repeats: not one-shot */
