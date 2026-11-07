@@ -380,6 +380,50 @@ test_create_with_items (void)
 }
 
 static void
+test_append_to_section (void)
+{
+  const char *strings[] = { "A", "B", "C", NULL };
+  GtkListItemTracker *tracker;
+  GtkListItemManager *items;
+  GtkStringList *source;
+  GtkNoSelection *selection;
+  GListStore *store;
+  GtkWidget *widget;
+  guint i;
+
+  widget = gtk_window_new ();
+  items = gtk_list_item_manager_new (widget,
+                                     split_simple,
+                                     create_simple_item,
+                                     prepare_simple,
+                                     create_simple_header);
+  g_object_set_data_full (G_OBJECT (widget), "the-items", items, g_object_unref);
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  for (i = 0; i < 3; i++)
+    {
+      source = gtk_string_list_new (strings);
+      g_list_store_append (store, source);
+      g_object_unref (source);
+    }
+  source = g_list_model_get_item (G_LIST_MODEL (store), 1);
+  selection = gtk_no_selection_new (G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (store))));
+  gtk_list_item_manager_set_model (items, GTK_SELECTION_MODEL (selection));
+  gtk_list_item_manager_set_has_sections (items, TRUE);
+  tracker = gtk_list_item_tracker_new (items);
+  gtk_list_item_tracker_set_position (items, tracker, 5, 0, 0);
+  check_list_item_manager (items, widget, &tracker, 1);
+
+  gtk_string_list_append (source, "D");
+  check_list_item_manager (items, widget, &tracker, 1);
+
+  gtk_list_item_tracker_free (items, tracker);
+  g_object_unref (source);
+  g_object_unref (selection);
+  gtk_window_destroy (GTK_WINDOW (widget));
+}
+
+static void
 test_tracker_changes (void)
 {
   const char *strings[] = { "0", "1", "2", NULL };
@@ -889,6 +933,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/listitemmanager/create", test_create);
   g_test_add_func ("/listitemmanager/create_with_items", test_create_with_items);
+  g_test_add_func ("/listitemmanager/append-to-section", test_append_to_section);
   g_test_add_data_func ("/listitemmanager/unmapped", GUINT_TO_POINTER (0), test_unmapped_changes);
   g_test_add_data_func ("/listitemmanager/unmapped/tracker", GUINT_TO_POINTER (1), test_unmapped_changes);
   g_test_add_data_func ("/listitemmanager/unmapped/sections", GUINT_TO_POINTER (2), test_unmapped_changes);
