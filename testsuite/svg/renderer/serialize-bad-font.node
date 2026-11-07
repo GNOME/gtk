@@ -5,7 +5,7 @@ text {
 }
 text {
   font: "Cantarell Bold 31.999px";
-  glyphs: "Bolder,", 268435488 8, "larger";
+  glyphs: "Bolder", 268435500 33, "larger";
   offset: 0 200;
 }
 text {
