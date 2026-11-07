@@ -318,13 +318,16 @@ gtk_flatten_list_model_add_items (GtkFlattenListModel *self,
                                   guint                position,
                                   guint                n)
 {
-  FlattenNode *node;
+  FlattenNode *node = NULL;
   guint added, i;
 
   added = 0;
   for (i = 0; i < n; i++)
     {
-      node = gtk_rb_tree_insert_before (self->items, after);
+      if (node == NULL)
+        node = gtk_rb_tree_insert_before (self->items, after);
+      else
+        node = gtk_rb_tree_insert_after (self->items, node);
       node->model = g_list_model_get_item (self->model, position + i);
       g_signal_connect (node->model,
                         "items-changed",

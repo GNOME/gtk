@@ -268,6 +268,7 @@ test_model_add (void)
 {
   GtkFlattenListModel *flat;
   GListStore *model;
+  GListStore *stores[2];
   
   model = g_list_store_new (G_TYPE_LIST_MODEL);
   flat = new_model (model);
@@ -282,6 +283,18 @@ test_model_add (void)
   assert_model (flat, "1 2 3 4 5 6 7 8 9 10");
   assert_changes (flat, "0+3*, +3*, 4+3*, 7+3*");
 
+  stores[0] = new_store (11, 12, 1);
+  stores[1] = new_store (13, 14, 1);
+  g_list_store_splice (model, 4, 0, (gpointer *) stores, 2);
+  assert_model (flat, "1 2 3 4 5 6 7 8 9 10 11 12 13 14");
+  assert_changes (flat, "10+4*");
+
+  g_list_store_splice (model, 1, 0, (gpointer *) stores, 2);
+  assert_model (flat, "1 2 3 11 12 13 14 4 5 6 7 8 9 10 11 12 13 14");
+  assert_changes (flat, "3+4*");
+
+  g_object_unref (stores[0]);
+  g_object_unref (stores[1]);
   g_object_unref (model);
   g_object_unref (flat);
 }
