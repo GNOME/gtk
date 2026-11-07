@@ -980,13 +980,13 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
             gtk_css_tokenizer_consume_whitespace (tokenizer);
           while (tokenizer->data < tokenizer->end && is_whitespace (*tokenizer->data));
           
-          if (*tokenizer->data == ')')
+          if (tokenizer->data >= tokenizer->end)
             {
-              gtk_css_tokenizer_consume_ascii (tokenizer);
               break;
             }
-          else if (tokenizer->data >= tokenizer->end)
+          else if (*tokenizer->data == ')')
             {
+              gtk_css_tokenizer_consume_ascii (tokenizer);
               break;
             }
           else
