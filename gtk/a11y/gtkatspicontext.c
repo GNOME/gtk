@@ -57,6 +57,7 @@
 #include "gtktextview.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
+#include "gtkaccessiblechildindexprivate.h"
 #include "gtklabel.h"
 
 #include <gio/gio.h>
@@ -395,8 +396,18 @@ static int
 get_index_in (GtkAccessible *parent,
               GtkAccessible *child)
 {
+  int indexed;
+
   if (parent == NULL)
     return -1;
+
+  if (GTK_IS_WIDGET (parent) && GTK_IS_WIDGET (child))
+    {
+      indexed = gtk_widget_get_accessible_child_index (GTK_WIDGET (parent),
+                                                       GTK_WIDGET (child));
+      if (indexed >= 0)
+        return indexed;
+    }
 
   guint res = 0;
   GtkAccessible *candidate;

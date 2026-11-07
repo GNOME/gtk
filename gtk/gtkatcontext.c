@@ -38,6 +38,7 @@
 #include "gtkprivate.h"
 #include "gtktestatcontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkaccessiblechildindexprivate.h"
 
 #include "gtkbutton.h"
 #include "gtktogglebutton.h"
@@ -489,6 +490,9 @@ gtk_at_context_set_accessible_role (GtkATContext      *self,
 
   self->accessible_role = role;
 
+  if (GTK_IS_WIDGET (self->accessible))
+    gtk_widget_update_accessible_child_index (GTK_WIDGET (self->accessible));
+
   g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_ACCESSIBLE_ROLE]);
 }
 
@@ -576,6 +580,10 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
 
   if (self->accessible_parent != parent)
     {
+      if (GTK_IS_WIDGET (self->accessible) &&
+          gtk_widget_get_parent (GTK_WIDGET (self->accessible)) != NULL)
+        gtk_widget_invalidate_accessible_child_index (gtk_widget_get_parent (GTK_WIDGET (self->accessible)));
+
       if (self->accessible_parent != NULL)
         g_object_remove_weak_pointer (G_OBJECT (self->accessible_parent),
                                       (gpointer *) &self->accessible_parent);
@@ -622,6 +630,10 @@ gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
 
   if (self->next_accessible_sibling != sibling)
     {
+      if (GTK_IS_WIDGET (self->accessible) &&
+          gtk_widget_get_parent (GTK_WIDGET (self->accessible)) != NULL)
+        gtk_widget_invalidate_accessible_child_index (gtk_widget_get_parent (GTK_WIDGET (self->accessible)));
+
       if (self->next_accessible_sibling != NULL)
         g_object_remove_weak_pointer (G_OBJECT (self->next_accessible_sibling),
                                       (gpointer *) &self->next_accessible_sibling);
@@ -921,7 +933,11 @@ gtk_at_context_set_accessible_state (GtkATContext       *self,
     res = gtk_accessible_attribute_set_remove (self->states, state);
 
   if (res)
-    self->updated_states |= (1 << state);
+    {
+      self->updated_states |= (1 << state);
+      if (state == GTK_ACCESSIBLE_STATE_HIDDEN && GTK_IS_WIDGET (self->accessible))
+        gtk_widget_update_accessible_child_index (GTK_WIDGET (self->accessible));
+    }
 }
 
 /*< private >
