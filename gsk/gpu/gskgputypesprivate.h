@@ -63,7 +63,8 @@ typedef enum {
   GSK_GPU_SAMPLER_REPEAT,
   GSK_GPU_SAMPLER_REFLECT,
   GSK_GPU_SAMPLER_NEAREST,
-  GSK_GPU_SAMPLER_MIPMAP_DEFAULT,
+  GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR,
+  GSK_GPU_SAMPLER_LINEAR_MIPMAP_NEAREST,
   /* add more */
   GSK_GPU_SAMPLER_N_SAMPLERS
 } GskGpuSampler;
@@ -177,3 +178,8 @@ typedef enum {
   GSK_GPU_OPTIMIZE_PROFILE              = 1 << 11,
 } GskGpuOptimizations;
 
+typedef enum {
+  GSK_QUAD_KERNEL_LINEAR = 0, /* default "unused" setting */
+  GSK_QUAD_KERNEL_CATMULL_ROM,
+  GSK_QUAD_KERNEL_MITCHELL_NETRAVALI,
+} GskQuadKernel;

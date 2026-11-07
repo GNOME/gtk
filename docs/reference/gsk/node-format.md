@@ -783,7 +783,7 @@ The default texture is a 10x10 checkerboard, just like for texture.
 
 Possible values for the filter property are:
 
-    filter: linear | nearest | trilinear
+    filter: linear | nearest | trilinear | bicubic
 
 ### transform
 

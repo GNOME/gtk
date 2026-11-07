@@ -1756,6 +1756,7 @@ static const struct
   { GSK_SCALING_FILTER_LINEAR, "linear" },
   { GSK_SCALING_FILTER_NEAREST, "nearest" },
   { GSK_SCALING_FILTER_TRILINEAR, "trilinear" },
+  { GSK_SCALING_FILTER_BICUBIC, "bicubic" },
 };
 
 static gboolean

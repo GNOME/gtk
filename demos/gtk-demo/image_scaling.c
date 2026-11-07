@@ -114,6 +114,96 @@ open_large_image (GtkWidget *button,
 }
 
 static void
+open_zone_plate (GtkWidget *button,
+                 GtkWidget *demo)
+{
+  const gsize w = 1920;
+  const gsize h = 1080;
+  guint8 *data;
+  gsize y, x;
+  float k;
+  GBytes *bytes;
+  GdkMemoryTextureBuilder *builder;
+  GdkTexture *texture;
+
+  k = 0.5f / MAX (w, h);
+
+  data = g_malloc (w * h);
+  for (y = 0; y < h; y++)
+    {
+      for (x = 0; x < w; x++)
+        {
+          float r = hypotf (2.0f * x - w, 2.0f * y - h);
+          data[y * w + x] = round ((1 + cos (k * r * r)) / 2 * 255);
+        }
+    }
+  bytes = g_bytes_new_take (data, w * h);
+
+  builder = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_bytes (builder, bytes);
+  g_bytes_unref (bytes);
+
+  gdk_memory_texture_builder_set_stride (builder, w);
+  gdk_memory_texture_builder_set_width (builder, w);
+  gdk_memory_texture_builder_set_height (builder, h);
+  gdk_memory_texture_builder_set_format (builder, GDK_MEMORY_G8);
+  texture = gdk_memory_texture_builder_build (builder);
+  g_object_unref (builder);
+
+  g_object_set (G_OBJECT (demo), "texture", texture, NULL);
+  g_object_unref (texture);
+
+}
+
+static void
+open_concentric_rays (GtkWidget *button,
+                      GtkWidget *demo)
+{
+  const gsize w = 1920;
+  const gsize h = 1080;
+#define n 720
+  GskRenderNode *node;
+  GdkTexture *texture;
+  GskColorStop stops[n + 1];
+  GtkSnapshot *snapshot;
+  gsize i;
+
+  snapshot = gtk_snapshot_new ();
+
+  for (i = 0; i < G_N_ELEMENTS (stops); i++)
+    {
+      stops[i].offset = (float) i / (G_N_ELEMENTS (stops) - 1);
+      stops[i].color.red = i % 2;
+      stops[i].color.green = i % 2;
+      stops[i].color.blue = i % 2;
+      stops[i].color.alpha = 1.0;
+    }
+  gtk_snapshot_append_conic_gradient (snapshot,
+                                      &GRAPHENE_RECT_INIT (0, 0, w, h),
+                                      &GRAPHENE_POINT_INIT (w / 2.f, h / 2.f),
+                                      0.0,
+                                      stops,
+                                      G_N_ELEMENTS (stops));
+  /* overlay gray to cover the bad conic gradient impl */
+  gtk_snapshot_append_radial_gradient (snapshot,
+                             &GRAPHENE_RECT_INIT (w / 2.f - n / 8.f, h /2.f - n / 8.f, n / 4.f, n / 4.f),
+                             &GRAPHENE_POINT_INIT (w / 2.f, h / 2.f),
+                             n / 3.f, n / 3.f,
+                             0, 1,
+                             (GskColorStop[2]) { { 0.2, { 0.5, 0.5, 0.5, 1 } }, 
+                                                 { 1, { 0, 0, 0, 0 } } },
+                             2);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  texture = gsk_renderer_render_texture (gtk_native_get_renderer (gtk_widget_get_native (demo)), node, NULL);
+
+  g_object_set (G_OBJECT (demo), "texture", texture, NULL);
+
+  g_object_unref (texture);
+  gsk_render_node_unref (node);
+}
+
+static void
 file_opened (GObject      *source,
              GAsyncResult *result,
              void         *data)
@@ -299,6 +389,22 @@ do_image_scaling (GtkWidget *do_widget)
       g_signal_connect (button, "clicked", G_CALLBACK (open_large_image), widget);
       gtk_box_append (GTK_BOX (box2), button);
 
+      button = gtk_button_new ();
+      gtk_button_set_child (GTK_BUTTON (button),
+                            gtk_image_new_from_resource ("/org/gtk/Demo4/zone-plate-thumbnail.png"));
+      gtk_widget_add_css_class (button, "image-button");
+      gtk_widget_set_tooltip_text (button, "Zone plate");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_zone_plate), widget);
+      gtk_box_append (GTK_BOX (box2), button);
+
+      button = gtk_button_new ();
+      gtk_button_set_child (GTK_BUTTON (button),
+                            gtk_image_new_from_resource ("/org/gtk/Demo4/concentric-rays-thumbnail.png"));
+      gtk_widget_add_css_class (button, "image-button");
+      gtk_widget_set_tooltip_text (button, "Concentric rays");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_concentric_rays), widget);
+      gtk_box_append (GTK_BOX (box2), button);
+
       button = gtk_button_new_from_icon_name ("object-rotate-right-symbolic");
       gtk_widget_set_tooltip_text (button, "Rotate");
       g_signal_connect (button, "clicked", G_CALLBACK (rotate), widget);
@@ -314,7 +420,7 @@ do_image_scaling (GtkWidget *do_widget)
       gtk_widget_set_hexpand (scale, TRUE);
       gtk_box_append (GTK_BOX (box2), scale);
 
-      dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", NULL })), NULL);
+      dropdown = gtk_drop_down_new (G_LIST_MODEL (gtk_string_list_new ((const char *[]){ "Linear", "Nearest", "Trilinear", "Bicubic", NULL })), NULL);
       gtk_widget_set_tooltip_text (dropdown, "Filter");
       gtk_accessible_update_property (GTK_ACCESSIBLE (dropdown),
                                       GTK_ACCESSIBLE_PROPERTY_LABEL, "Filter",

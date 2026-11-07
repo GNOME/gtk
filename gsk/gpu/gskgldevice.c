@@ -172,11 +172,16 @@ gsk_gl_device_setup_samplers (GskGLDevice *self)
       .mag_filter = GL_NEAREST,
       .wrap = GL_CLAMP_TO_EDGE,
     },
-    [GSK_GPU_SAMPLER_MIPMAP_DEFAULT] = {
+    [GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR] = {
       .min_filter = GL_LINEAR_MIPMAP_LINEAR,
       .mag_filter = GL_LINEAR,
       .wrap = GL_CLAMP_TO_EDGE,
-    }
+    },
+    [GSK_GPU_SAMPLER_LINEAR_MIPMAP_NEAREST] = {
+      .min_filter = GL_LINEAR_MIPMAP_NEAREST,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_CLAMP_TO_EDGE,
+    },
   };
   guint i;
 

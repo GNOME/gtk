@@ -32,6 +32,7 @@ gsk_private_gpu_shaders = files([
   'gskgpumask.glsl',
   'gskgpuradialgradient.glsl',
   'gskgpuroundedcolor.glsl',
+  'gskgpuquadfilter.glsl',
   'gskgputexture.glsl',
   'gskgputurbulence.glsl',
 ])

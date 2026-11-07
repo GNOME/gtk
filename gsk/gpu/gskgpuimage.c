@@ -219,7 +219,8 @@ gsk_gpu_image_supports_sampler (GskGpuImage   *self,
           return FALSE;
         return (priv->flags & GSK_GPU_IMAGE_FILTERABLE) != 0; 
 
-      case GSK_GPU_SAMPLER_MIPMAP_DEFAULT:
+      case GSK_GPU_SAMPLER_LINEAR_MIPMAP_LINEAR:
+      case GSK_GPU_SAMPLER_LINEAR_MIPMAP_NEAREST:
         /* Our mipmap algorithm can't deal with this */
         if (priv->shader_op != GDK_SHADER_DEFAULT)
           return FALSE;

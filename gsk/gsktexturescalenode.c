@@ -56,6 +56,25 @@ gsk_texture_scale_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+static cairo_filter_t
+gsk_scaling_filter_to_cairo_filter (GskScalingFilter filter)
+{
+  switch (filter)
+  {
+    case GSK_SCALING_FILTER_LINEAR:
+      return CAIRO_FILTER_BILINEAR;
+    case GSK_SCALING_FILTER_NEAREST:
+      return CAIRO_FILTER_NEAREST;
+    case GSK_SCALING_FILTER_TRILINEAR:
+      return CAIRO_FILTER_GOOD; /* ??? */
+    case GSK_SCALING_FILTER_BICUBIC:
+      return CAIRO_FILTER_BILINEAR; /* Cairo doesn't do bicubic */
+    default:
+      g_assert_not_reached ();
+      return CAIRO_FILTER_GOOD;
+  }
+}
+
 static void
 gsk_texture_scale_node_draw (GskRenderNode *node,
                              cairo_t       *cr,
@@ -65,11 +84,6 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_surface_t *surface;
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
-  cairo_filter_t filters[] = {
-    CAIRO_FILTER_BILINEAR,
-    CAIRO_FILTER_NEAREST,
-    CAIRO_FILTER_GOOD,
-  };
   cairo_t *cr2;
   cairo_surface_t *surface2;
   graphene_rect_t bounds, clip_rect;
@@ -99,7 +113,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
                            gdk_texture_get_height (self->texture) / bounds.size.height);
   cairo_matrix_translate (&matrix, -bounds.origin.x, -bounds.origin.y);
   cairo_pattern_set_matrix (pattern, &matrix);
-  cairo_pattern_set_filter (pattern, filters[self->filter]);
+  cairo_pattern_set_filter (pattern, gsk_scaling_filter_to_cairo_filter (self->filter));
 
   cairo_set_source (cr2, pattern);
   cairo_pattern_destroy (pattern);
