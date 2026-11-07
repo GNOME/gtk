@@ -2955,7 +2955,8 @@ gtk_text_layout_get_line_yrange (GtkTextLayout     *layout,
 void
 gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
                                    const GtkTextIter *iter,
-                                   GdkRectangle      *rect)
+                                   GdkRectangle      *rect,
+                                   gboolean           include_caret)
 {
   PangoRectangle pango_rect;
   GtkTextLine *line;
@@ -2985,6 +2986,19 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   rect->y += PANGO_PIXELS (pango_rect.y) + display->top_margin;
   rect->width = PANGO_PIXELS (pango_rect.width);
   rect->height = PANGO_PIXELS (pango_rect.height);
+
+  if (include_caret)
+    {
+      PangoRectangle caret;
+      int left, right;
+
+      /* Round outward for sloped caret */
+      pango_layout_get_caret_pos (display->layout, byte_index, &caret, NULL);
+      left = PANGO_PIXELS_FLOOR (x_offset + MIN (caret.x, caret.x + caret.width));
+      right = PANGO_PIXELS_CEIL (x_offset + MAX (caret.x, caret.x + caret.width));
+      rect->width = MAX (rect->x + rect->width, right) - MIN (rect->x, left);
+      rect->x = MIN (rect->x, left);
+    }
 
   gtk_text_line_display_unref (display);
 }
@@ -3154,7 +3168,7 @@ gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout *layout,
 {
   GdkRectangle iter_rect;
 
-  gtk_text_layout_get_iter_location (layout, iter, &iter_rect);
+  gtk_text_layout_get_iter_location (layout, iter, &iter_rect, FALSE);
 
   /* If the iter is at least partially above the range, put the iter
    * at the first fully visible line after the range.
