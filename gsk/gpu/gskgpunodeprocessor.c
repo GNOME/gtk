@@ -1752,6 +1752,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
                               image,
                               sampler,
                               quad_kernel,
+                              quad_kernel,
                               &bounds);
     }
   else
