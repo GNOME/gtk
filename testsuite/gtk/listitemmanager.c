@@ -751,6 +751,78 @@ test_lifecycle (void)
   g_hash_table_unref (states);
 }
 
+static void
+retained_grid_setup (GtkSignalListItemFactory *factory,
+                     GtkListItem              *item,
+                     gpointer                  data)
+{
+  GtkWidget *child = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  gtk_widget_set_size_request (child, 100, 100);
+  gtk_list_item_set_child (item, child);
+}
+
+static void
+allocate_retained_grid (GtkWidget *scroller,
+                        int        width,
+                        int        height)
+{
+  int minimum, natural;
+
+  for (guint i = 0; i < 3; i++)
+    {
+      gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &minimum, &natural, NULL, NULL);
+      gtk_widget_measure (scroller, GTK_ORIENTATION_VERTICAL, width, &minimum, &natural, NULL, NULL);
+      gtk_widget_allocate (scroller, width, height, -1, NULL);
+    }
+}
+
+static void
+fractional_value_changed (GtkAdjustment *adjustment,
+                          guint         *changes)
+{
+  (*changes)++;
+}
+
+static void
+test_grid_fractional_adjustment (gconstpointer data)
+{
+  guint flags = GPOINTER_TO_UINT (data);
+  GtkOrientation orientation = flags & 1 ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL;
+  GtkTextDirection direction = flags & 2 ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+  GtkListItemFactory *factory = gtk_signal_list_item_factory_new ();
+  GtkWidget *view, *scroller, *window;
+  GtkAdjustment *adjustment;
+  guint changes = 0;
+
+  g_signal_connect (factory, "setup", G_CALLBACK (retained_grid_setup), NULL);
+  view = gtk_grid_view_new (GTK_SELECTION_MODEL (gtk_no_selection_new (create_source_model (10000, 10000))), factory);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (view), orientation);
+  gtk_widget_set_direction (view, direction);
+  scroller = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), view);
+  window = gtk_window_new ();
+  gtk_window_set_child (GTK_WINDOW (window), scroller);
+  allocate_retained_grid (scroller, 350, 350);
+  adjustment = orientation == GTK_ORIENTATION_VERTICAL
+    ? gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scroller))
+    : gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scroller));
+
+  gtk_adjustment_set_value (adjustment, 5000);
+  allocate_retained_grid (scroller, 350, 350);
+  gtk_adjustment_set_value (adjustment, 5000.25);
+  g_signal_connect (adjustment, "value-changed", G_CALLBACK (fractional_value_changed), &changes);
+  for (guint i = 0; i < 4; i++)
+    {
+      gtk_widget_queue_allocate (view);
+      allocate_retained_grid (scroller, 350, 350);
+      g_assert_cmpfloat (gtk_adjustment_get_value (adjustment), ==, 5000.25);
+      g_assert_cmpuint (changes, ==, 0);
+    }
+  g_signal_handlers_disconnect_by_func (adjustment, fractional_value_changed, &changes);
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 #define N_TRACKERS 3
 #define N_WIDGETS_PER_TRACKER 10
 #define N_RUNS 500
@@ -942,6 +1014,11 @@ main (int argc, char *argv[])
   g_test_add_func ("/listitemmanager/tracker/changes", test_tracker_changes);
   g_test_add_func ("/listitemmanager/lifecycle", test_lifecycle);
   g_test_add_func ("/listitemmanager/exhaustive", test_exhaustive);
+
+  g_test_add_data_func ("/listitemmanager/fractional/horizontal-ltr", GUINT_TO_POINTER (0), test_grid_fractional_adjustment);
+  g_test_add_data_func ("/listitemmanager/fractional/vertical-ltr", GUINT_TO_POINTER (1), test_grid_fractional_adjustment);
+  g_test_add_data_func ("/listitemmanager/fractional/horizontal-rtl", GUINT_TO_POINTER (2), test_grid_fractional_adjustment);
+  g_test_add_data_func ("/listitemmanager/fractional/vertical-rtl", GUINT_TO_POINTER (3), test_grid_fractional_adjustment);
 
   return g_test_run ();
 }
