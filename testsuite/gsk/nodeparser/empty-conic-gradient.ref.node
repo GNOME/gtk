@@ -1,0 +1,5 @@
+conic-gradient {
+  bounds: 0 0 50 50;
+  center: 25 25;
+  stops: 0 color(srgb 0.667 1 0), 1 rgb(255,0,204);
+}
