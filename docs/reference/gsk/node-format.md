@@ -355,7 +355,7 @@ Possible values for the transfer properties are:
 | bounds            | `<rect>`          | 50             | always      |
 | snap              | `<snap>`          | none           | non-default |
 | center            | `<point>`         | 25, 25         | always      |
-| rotation          | `<number>`        | 0              | always      |
+| rotation          | `<number>`        | 0              | non-default |
 | stops             | `<color-stops>`   | 0 #AF0, 1 #F0C | always      |
 | interpolation     | `<color-state>`   | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`    | shorter        | non-default |
@@ -494,10 +494,10 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
 ### isolation
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| child    | `<node>`         | color { }              | always      |
-| message  | `<isolations>`   | all                    | non-default |
+| property  | syntax           | default                | printed     |
+| --------- | ---------------- | ---------------------- | ----------- |
+| child     | `<node>`         | color { }              | always      |
+| isolation | `<isolations>`   | all                    | non-default |
 
 Creates a node like `gsk_isolation_node_new()` with the given properties.
 
