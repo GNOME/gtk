@@ -1228,38 +1228,26 @@ gtk_property_expression_is_static (GtkExpression *expr)
 
 static GObject *
 gtk_property_expression_get_object (GtkPropertyExpression *self,
-                                    gpointer               this)
+                                    gpointer               this,
+                                    GValue                *expr_value)
 {
-  GValue expr_value = G_VALUE_INIT;
   GObject *object;
 
   if (self->expr == NULL)
-    {
-      if (this)
-        return g_object_ref (this);
-      else
-        return NULL;
-    }
+    return this;
 
-  if (!gtk_expression_evaluate (self->expr, this, &expr_value))
+  if (!gtk_expression_evaluate (self->expr, this, expr_value))
     return NULL;
 
-  if (!G_VALUE_HOLDS_OBJECT (&expr_value))
-    {
-      g_value_unset (&expr_value);
-      return NULL;
-    }
+  if (!G_VALUE_HOLDS_OBJECT (expr_value))
+    return NULL;
 
-  object = g_value_dup_object (&expr_value);
-  g_value_unset (&expr_value);
+  object = g_value_get_object (expr_value);
   if (object == NULL)
     return NULL;
 
   if (!G_TYPE_CHECK_INSTANCE_TYPE (object, self->pspec->owner_type))
-    {
-      g_object_unref (object);
-      return NULL;
-    }
+    return NULL;
 
   return object;
 }
@@ -1270,15 +1258,17 @@ gtk_property_expression_evaluate (GtkExpression *expr,
                                   GValue        *value)
 {
   GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+  GValue expr_value = G_VALUE_INIT;
   GObject *object;
 
-  object = gtk_property_expression_get_object (self, this);
-  if (object == NULL)
-    return FALSE;
+  object = gtk_property_expression_get_object (self, this, &expr_value);
+  if (object != NULL)
+    g_object_get_property (object, self->pspec->name, value);
 
-  g_object_get_property (object, self->pspec->name, value);
-  g_object_unref (object);
-  return TRUE;
+  if (G_VALUE_TYPE (&expr_value) != G_TYPE_INVALID)
+    g_value_unset (&expr_value);
+
+  return object != NULL;
 }
 
 typedef struct _GtkPropertyExpressionWatch GtkPropertyExpressionWatch;
@@ -1315,11 +1305,12 @@ gtk_property_expression_watch_notify_cb (GObject                    *object,
 static void
 gtk_property_expression_watch_create_closure (GtkPropertyExpressionWatch *pwatch)
 {
+  GValue expr_value = G_VALUE_INIT;
   GObject *object;
 
-  object = gtk_property_expression_get_object (pwatch->expr, pwatch->this);
+  object = gtk_property_expression_get_object (pwatch->expr, pwatch->this, &expr_value);
   if (object == NULL)
-    return;
+    goto out;
 
   pwatch->closure = g_cclosure_new (G_CALLBACK (gtk_property_expression_watch_notify_cb), pwatch, NULL);
   if (!g_signal_connect_closure_by_id (object,
@@ -1331,7 +1322,9 @@ gtk_property_expression_watch_create_closure (GtkPropertyExpressionWatch *pwatch
       g_assert_not_reached ();
     }
 
-  g_object_unref (object);
+out:
+  if (G_VALUE_TYPE (&expr_value) != G_TYPE_INVALID)
+    g_value_unset (&expr_value);
 }
 
 static void
