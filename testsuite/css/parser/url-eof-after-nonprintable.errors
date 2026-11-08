@@ -1,0 +1,3 @@
+url-eof-after-nonprintable.css:2:21-27: error: GTK_CSS_PARSER_ERROR_SYNTAX
+url-eof-after-nonprintable.css:2:3-27: error: GTK_CSS_PARSER_WARNING_SYNTAX
+url-eof-after-nonprintable.css:1:3-2:27: error: GTK_CSS_PARSER_WARNING_SYNTAX

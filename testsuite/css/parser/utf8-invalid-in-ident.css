@@ -1,0 +1,11 @@
+/* This file and utf8-invalid-in-ident.ref.css are intentionally not
+ * valid UTF-8. The byte 0xE9 after "a" starts a 3-byte UTF-8 sequence,
+ * but the "{" follows it instead of continuation bytes. Make sure your
+ * editor doesn't convert them to UTF-8 when saving. */
+aé{
+  color: inherit;
+}
+
+b {
+  color: inherit;
+}
