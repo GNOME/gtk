@@ -979,7 +979,7 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
     {
       GtkListTile *section = gtk_list_tile_get_previous_skip (tile);
 
-      if (section != NULL && section->type == GTK_LIST_TILE_HEADER)
+      if (section != NULL && gtk_list_tile_is_header (section))
         {
           guint start, end;
           GtkListTile *footer = gtk_list_tile_get_footer (self, section);
