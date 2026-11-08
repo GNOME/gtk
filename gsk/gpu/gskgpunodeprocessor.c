@@ -2493,6 +2493,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
   GskGpuSampler tex_sampler;
   GskRenderNode *child;
   gsize i, n_shadows;
+  float slow_needed;
 
   if (gsk_gpu_render_pass_has_opacity (self))
     {
@@ -2516,13 +2517,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
                                clip.origin.y - node->bounds.size.height + child->bounds.size.height - node->bounds.origin.y + child->bounds.origin.y,
                                clip.size.width + node->bounds.size.width - child->bounds.size.width,
                                clip.size.height + node->bounds.size.height - child->bounds.size.height);
-  if (needed.size.width * needed.size.height > n_shadows * clip.size.width * clip.size.height)
-    {
-      /* We'd need to get more pixels than if we drew each shadow on its own */
-      gsk_gpu_node_processor_add_shadow_node_slow (self, node);
-      return;
-    }
-
+  slow_needed = clip.size.width * clip.size.height;
   for (i = 0; i < n_shadows; i++)
     {
       const GskShadowEntry *shadow = gsk_shadow_node_get_shadow_entry (node, i);
@@ -2534,6 +2529,20 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           gsk_gpu_node_processor_add_shadow_node_slow (self, node);
           return;
         }
+      if (shadow->radius)
+        {
+          graphene_size_t padding;
+          gsk_blur_node_get_padding (&GRAPHENE_SIZE_INIT (shadow->radius, shadow->radius), &padding);
+          slow_needed += (clip.size.width + 2 * padding.width) * (clip.size.height + 2 * padding.height);
+        }
+      else
+        slow_needed += clip.size.width * clip.size.height;
+    }
+  if (needed.size.width * needed.size.height > slow_needed)
+    {
+      /* We'd need to get more pixels than if we drew each shadow on its own */
+      gsk_gpu_node_processor_add_shadow_node_slow (self, node);
+      return;
     }
 
   if (!gsk_rect_snap_to_grid_grow (&needed, &self->scale, &self->offset, &needed))
