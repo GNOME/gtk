@@ -367,6 +367,8 @@ type_name ## _get_type (void) \
 
 /* {{{ GtkExpression internals */
 
+static guint notify_signal_id;
+
 static void
 value_expression_init (GValue *value)
 {
@@ -746,6 +748,8 @@ gtk_expression_get_type (void)
                                      g_intern_static_string ("GtkExpression"),
                                      &event_info, &finfo,
                                      G_TYPE_FLAG_ABSTRACT);
+
+      notify_signal_id = g_signal_lookup ("notify", G_TYPE_OBJECT);
 
       g_once_init_leave (&expression_type__volatile, expression_type);
     }
@@ -1319,8 +1323,8 @@ gtk_property_expression_watch_create_closure (GtkPropertyExpressionWatch *pwatch
 
   pwatch->closure = g_cclosure_new (G_CALLBACK (gtk_property_expression_watch_notify_cb), pwatch, NULL);
   if (!g_signal_connect_closure_by_id (object,
-                                       g_signal_lookup ("notify", G_OBJECT_TYPE (object)),
-                                       g_quark_from_string (pwatch->expr->pspec->name),
+                                       notify_signal_id,
+                                       g_param_spec_get_name_quark (pwatch->expr->pspec),
                                        g_closure_ref (pwatch->closure),
                                        FALSE))
     {
