@@ -8,6 +8,7 @@ demos = files([
   'builder.c',
   'clipboard.c',
   'combobox.c',
+  'compositing.c',
   'constraints.c',
   'constraints_interactive.c',
   'constraints_vfl.c',

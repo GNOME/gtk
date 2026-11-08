@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "gskgradientprivate.h"
 
 GskGradient *
