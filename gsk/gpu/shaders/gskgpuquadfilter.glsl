@@ -55,6 +55,15 @@ get_weights_cubic (float b,
 }
 
 vec4
+get_weights_gaussian (float f)
+{
+  return vec4 ((1.0 - f) * (1.0 - f) * (1.0 - f) / 6.0,
+               (3.0 * f * f * f - 6.0 * f * f + 4.0) / 6.0,
+               (-3.0 * f * f * f + 3.0 * f * f + 3.0 * f + 1.0) / 6.0,
+               f * f * f / 6.0);
+}
+
+vec4
 get_weights (float f,
              uint variation)
 {
@@ -64,6 +73,8 @@ get_weights (float f,
       return get_weights_cubic (0.0, 0.5, f);
     case GSK_QUAD_KERNEL_MITCHELL_NETRAVALI:
       return get_weights_cubic (1.0 / 3.0, 1.0 / 3.0, f);
+    case GSK_QUAD_KERNEL_GAUSSIAN:
+      return get_weights_gaussian (f);
     case GSK_QUAD_KERNEL_LINEAR:
     default:
       return vec4(0.0, f, 1.0 - f, 0.0);

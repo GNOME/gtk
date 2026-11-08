@@ -182,4 +182,5 @@ typedef enum {
   GSK_QUAD_KERNEL_LINEAR = 0, /* default "unused" setting */
   GSK_QUAD_KERNEL_CATMULL_ROM,
   GSK_QUAD_KERNEL_MITCHELL_NETRAVALI,
+  GSK_QUAD_KERNEL_GAUSSIAN,
 } GskQuadKernel;
