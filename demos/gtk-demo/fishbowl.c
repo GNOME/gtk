@@ -12,6 +12,7 @@
 
 #include "nodewidget.h"
 #include "graphwidget.h"
+#include "filter_paintable.h"
 
 const char *const css =
 ".blurred-button {"
@@ -195,6 +196,22 @@ create_graph (void)
   return graph_widget_new ();
 }
 
+static GtkWidget *
+create_blurred_image (void)
+{
+  GdkPaintable *paintable;
+
+  paintable = g_object_new (gtk_filter_paintable_get_type (),
+                            "blur", (float) g_random_double_range (30, 50),
+                            NULL);
+  GtkWidget *w = gtk_image_new_from_paintable (paintable);
+  gtk_image_set_pixel_size (GTK_IMAGE (w), 400);
+
+  g_object_unref (paintable);
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (* create_func) (void);
@@ -203,6 +220,7 @@ static const struct {
   { "Icon",             create_icon,           NULL },
   { "Button",           create_button,         NULL },
   { "Blurred Button",   create_blurred_button, NULL },
+  { "Blurred image",    create_blurred_image,  NULL },
   { "Font Button",      create_font_button,    NULL },
   { "Levelbar",         create_level_bar,      NULL },
   { "Label",            create_label,          NULL },
