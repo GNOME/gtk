@@ -2564,12 +2564,13 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
       graphene_rect_t bounds;
 
       gsk_rect_init_offset (&bounds, &child->bounds, &shadow->offset);
-      if (!gsk_rect_intersection (&bounds, &clip, &bounds) ||
-          !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds))
-        continue;
 
       if (shadow->radius == 0)
         {
+          if (!gsk_rect_intersection (&bounds, &clip, &bounds) ||
+              !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds))
+            continue;
+
           gsk_gpu_colorize_op (self,
                                self->ccs,
                                gsk_gpu_color_states_find (self->ccs, &shadow->color),
@@ -2591,6 +2592,11 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           graphene_size_t padding;
 
           gsk_blur_node_get_padding (&sigma, &padding);
+          graphene_rect_inset_r (&bounds, - padding.width, - padding.height, &bounds);
+          if (!gsk_rect_intersection (&bounds, &clip, &bounds) ||
+              !gsk_rect_snap_to_grid_grow (&bounds, &self->scale, &self->offset, &bounds))
+            continue;
+
           graphene_rect_inset_r (&bounds, - padding.width, - padding.height, &padded_bounds);
           if (!gsk_rect_snap_to_grid_grow (&padded_bounds, &self->scale, &self->offset, &padded_bounds))
             continue;
