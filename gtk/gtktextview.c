@@ -287,7 +287,9 @@ struct _GtkTextViewPrivate
   GtkTextMark *first_para_mark; /* Mark at the beginning of the first onscreen paragraph */
   int first_para_pixels;       /* Offset of top of screen in the first onscreen paragraph */
 
-  guint64 blink_start_time;
+  gint64 blink_start_time;
+  gint64 blink_cycle_start;
+  guint blink_timeout;
   guint blink_tick;
   float cursor_alpha;
 
@@ -464,6 +466,7 @@ static void gtk_text_view_size_allocate        (GtkWidget           *widget,
 static void gtk_text_view_realize              (GtkWidget           *widget);
 static void gtk_text_view_unrealize            (GtkWidget           *widget);
 static void gtk_text_view_map                  (GtkWidget           *widget);
+static void gtk_text_view_unmap                (GtkWidget           *widget);
 static void gtk_text_view_css_changed          (GtkWidget           *widget,
                                                 GtkCssStyleChange   *change);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
@@ -958,6 +961,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->map = gtk_text_view_map;
+  widget_class->unmap = gtk_text_view_unmap;
   widget_class->css_changed = gtk_text_view_css_changed;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->system_setting_changed = gtk_text_view_system_setting_changed;
@@ -5196,6 +5200,14 @@ gtk_text_view_map (GtkWidget *widget)
   gtk_widget_set_cursor_from_name (widget, "text");
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
+  gtk_text_view_check_cursor_blink (GTK_TEXT_VIEW (widget));
+}
+
+static void
+gtk_text_view_unmap (GtkWidget *widget)
+{
+  gtk_text_view_stop_cursor_blink (GTK_TEXT_VIEW (widget));
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
 }
 
 static void
@@ -6292,67 +6304,116 @@ get_cursor_blink_timeout (GtkTextView *text_view)
  * Blink!
  */
 
-typedef struct {
-  guint64 start;
-  guint64 end;
-} BlinkData;
+static gboolean blink_cb         (GtkWidget     *widget,
+                                  GdkFrameClock *clock,
+                                  gpointer       user_data);
+static void     blink_timeout_cb (gpointer       user_data);
 
-static gboolean blink_cb (GtkWidget     *widget,
-                          GdkFrameClock *clock,
-                          gpointer       user_data);
-
-
-static void
-add_blink_timeout (GtkTextView *self,
-                   gboolean     delay)
+static float
+compute_blink (gint64  now,
+               gint64  start,
+               gint64  period,
+               gint64 *next_update)
 {
-  GtkTextViewPrivate *priv = self->priv;
-  BlinkData *data;
-  int blink_time;
+  gint64 elapsed;
+  float phase;
 
-  priv->blink_start_time = g_get_monotonic_time ();
-  priv->cursor_alpha = 1.0;
+  g_assert (period > 0);
+  g_assert (next_update != NULL);
 
-  blink_time = get_cursor_time (self);
-
-  data = g_new (BlinkData, 1);
-  data->start = priv->blink_start_time;
-  if (delay)
-    data->start += blink_time * 1000 / 2;
-  data->end = data->start + blink_time * 1000;
-
-  priv->blink_tick = gtk_widget_add_tick_callback (GTK_WIDGET (self),
-                                                   blink_cb,
-                                                   data,
-                                                   g_free);
-}
-
-static void
-remove_blink_timeout (GtkTextView *self)
-{
-  GtkTextViewPrivate *priv = self->priv;
-
-  if (priv->blink_tick)
+  if (now < start)
     {
-      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->blink_tick);
-      priv->blink_tick = 0;
+      *next_update = start + period / 4;
+      return 1;
+    }
+
+  elapsed = (now - start) % period;
+  phase = elapsed / (float) period;
+
+  if (elapsed < period / 4)
+    {
+      *next_update = now - elapsed + period / 4;
+      return 1;
+    }
+  else if (elapsed < period / 2)
+    {
+      *next_update = 0;
+      return 1 - 4 * (phase - 0.25f);
+    }
+  else if (elapsed < 3 * period / 4)
+    {
+      *next_update = now - elapsed + 3 * period / 4;
+      return 0;
+    }
+  else
+    {
+      *next_update = 0;
+      return 4 * (phase - 0.75f);
     }
 }
 
-static float
-blink_alpha (float phase)
+static void
+set_cursor_alpha (GtkTextView *self,
+                  float        alpha)
 {
-  /* keep it simple, and split the blink cycle evenly
-   * into visible, fading out, invisible, fading in
-   */
-  if (phase < 0.25)
-    return 1;
-  else if (phase < 0.5)
-    return 1 - 4 * (phase - 0.25);
-  else if (phase < 0.75)
-    return 0;
-  else
-    return 4 * (phase - 0.75);
+  if (self->priv->cursor_alpha != alpha)
+    {
+      self->priv->cursor_alpha = alpha;
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+}
+
+static gboolean
+update_cursor_blink (GtkTextView *self)
+{
+  GtkTextViewPrivate *priv = self->priv;
+  gint64 now = g_get_monotonic_time ();
+  gint64 deadline;
+  gint64 next_update;
+  float alpha;
+
+  g_assert (priv->blink_timeout == 0);
+
+  if (!priv->layout || !cursor_blinks (self) || !cursor_visible (self))
+    {
+      set_cursor_alpha (self, 1);
+      return G_SOURCE_REMOVE;
+    }
+
+  deadline = priv->blink_start_time +
+             (gint64) get_cursor_blink_timeout (self) * G_USEC_PER_SEC;
+  if (now >= deadline)
+    {
+      set_cursor_alpha (self, 1);
+      return G_SOURCE_REMOVE;
+    }
+
+  alpha = compute_blink (now, priv->blink_cycle_start,
+                         (gint64) get_cursor_time (self) * 1000,
+                         &next_update);
+  set_cursor_alpha (self, alpha);
+
+  if (next_update == 0)
+    return G_SOURCE_CONTINUE;
+
+  next_update = MIN (next_update, deadline);
+  priv->blink_timeout = g_timeout_add_once ((next_update - now + 999) / 1000,
+                                            blink_timeout_cb, self);
+  gdk_source_set_static_name_by_id (priv->blink_timeout, "[gtk] text view cursor blink");
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+blink_timeout_cb (gpointer user_data)
+{
+  GtkTextView *self = GTK_TEXT_VIEW (user_data);
+
+  self->priv->blink_timeout = 0;
+
+  if (update_cursor_blink (self))
+    self->priv->blink_tick = gtk_widget_add_tick_callback (GTK_WIDGET (self),
+                                                           blink_cb, NULL, NULL);
 }
 
 static gboolean
@@ -6360,50 +6421,42 @@ blink_cb (GtkWidget     *widget,
           GdkFrameClock *clock,
           gpointer       user_data)
 {
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-  GtkTextViewPrivate *priv = text_view->priv;
-  BlinkData *data = user_data;
-  int blink_timeout;
-  int blink_time;
-  guint64 now;
-  float phase;
-  float  alpha;
+  GtkTextView *self = GTK_TEXT_VIEW (widget);
 
-  g_assert (priv->layout);
-  g_assert (cursor_visible (text_view));
+  if (update_cursor_blink (self))
+    return G_SOURCE_CONTINUE;
 
-  blink_timeout = get_cursor_blink_timeout (text_view);
-  blink_time = get_cursor_time (text_view);
+  self->priv->blink_tick = 0;
+  return G_SOURCE_REMOVE;
+}
 
-  now = g_get_monotonic_time ();
+static void
+add_blink_timeout (GtkTextView *self,
+                   gboolean     delay)
+{
+  GtkTextViewPrivate *priv = self->priv;
 
-  if (now > priv->blink_start_time + blink_timeout * 1000000)
+  priv->blink_start_time = g_get_monotonic_time ();
+  priv->blink_cycle_start = priv->blink_start_time;
+  if (delay)
+    priv->blink_cycle_start += (gint64) get_cursor_time (self) * 1000 / 2;
+
+  if (update_cursor_blink (self))
+    priv->blink_tick = gtk_widget_add_tick_callback (GTK_WIDGET (self),
+                                                    blink_cb, NULL, NULL);
+}
+
+static void
+remove_blink_timeout (GtkTextView *self)
+{
+  GtkTextViewPrivate *priv = self->priv;
+
+  g_clear_handle_id (&priv->blink_timeout, g_source_remove);
+  if (priv->blink_tick)
     {
-      /* we've blinked enough without the user doing anything, stop blinking */
-      priv->cursor_alpha = 1.0;
-      remove_blink_timeout (text_view);
-      gtk_widget_queue_draw (widget);
-
-      return G_SOURCE_REMOVE;
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->blink_tick);
+      priv->blink_tick = 0;
     }
-
-  phase = (now - data->start) / (float) (data->end - data->start);
-
-  if (now >= data->end)
-    {
-      data->start = data->end;
-      data->end = data->start + blink_time * 1000;
-    }
-
-  alpha = blink_alpha (phase);
-
-  if (priv->cursor_alpha != alpha)
-    {
-      priv->cursor_alpha = alpha;
-      gtk_widget_queue_draw (widget);
-    }
-
-  return G_SOURCE_CONTINUE;
 }
 
 
@@ -6420,12 +6473,12 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 
   if (cursor_blinks (text_view) && cursor_visible (text_view))
     {
-      if (!priv->blink_tick)
+      if (!priv->blink_tick && !priv->blink_timeout)
         add_blink_timeout (text_view, FALSE);
     }
   else
     {
-      if (priv->blink_tick)
+      if (priv->blink_tick || priv->blink_timeout)
         remove_blink_timeout (text_view);
     }
 }
