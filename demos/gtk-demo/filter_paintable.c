@@ -56,6 +56,9 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
 {
   GtkFilterPaintable *self = GTK_FILTER_PAINTABLE (paintable);
   GskComponentTransfer *identity;
+  graphene_rect_t bounds;
+
+  graphene_rect_init (&bounds, 0, 0, width, height);
 
   identity = gsk_component_transfer_new_identity ();
 
@@ -155,15 +158,18 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
                                           self->alpha_transfer);
 
   if (self->blur != 0)
-    gtk_snapshot_push_blur (snapshot, self->blur);
+    {
+      gtk_snapshot_push_clip (snapshot, &bounds);
+      gtk_snapshot_push_blur (snapshot, self->blur);
+    }
 
-  gtk_snapshot_append_texture (snapshot, self->texture,
-                               &GRAPHENE_RECT_INIT (0, 0,
-                                                    gdk_texture_get_width (self->texture),
-                                                    gdk_texture_get_height (self->texture)));
+  gtk_snapshot_append_texture (snapshot, self->texture, &bounds);
 
   if (self->blur != 0)
-    gtk_snapshot_pop (snapshot);
+    {
+      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
 
   if (!gsk_component_transfer_equal (self->red_transfer, identity) ||
       !gsk_component_transfer_equal (self->green_transfer, identity) ||
