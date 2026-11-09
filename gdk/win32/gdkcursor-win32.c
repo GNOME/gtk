@@ -1415,10 +1415,18 @@ _gdk_win32_display_get_win32hcursor_for_dpi (GdkWin32Display   *display,
   if (cursor_name)
     win32hcursor = gdk_win32hcursor_create_for_name (display, cursor_name);
   else if (texture)
-    win32hcursor = gdk_win32hcursor_create_for_texture (display,
-                                                        texture,
-                                                        gdk_cursor_get_hotspot_x (cursor),
-                                                        gdk_cursor_get_hotspot_y (cursor));
+    {
+      /* Self-virtualize: STCCS(GetDpiForSystem()) around the build. */
+      UINT prev_stccs = display->user32_dpi_funcs.setThreadCursorCreationScaling (
+        display->user32_dpi_funcs.getDpiForSystem ());
+
+      win32hcursor = gdk_win32hcursor_create_for_texture (display,
+                                                          texture,
+                                                          gdk_cursor_get_hotspot_x (cursor),
+                                                          gdk_cursor_get_hotspot_y (cursor));
+
+      display->user32_dpi_funcs.setThreadCursorCreationScaling (prev_stccs);
+    }
   else
     {
       int size = display->cursor_theme_size;

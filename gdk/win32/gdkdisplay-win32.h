@@ -88,6 +88,8 @@ typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
  * Windows 10 Anniversary Update and later.
  * funcAWREFD is AdjustWindowRectExForDpi(), provided by user32.dll on
  * Windows 10 Anniversary Update and later.
+ * funcSTCCS is SetThreadCursorCreationScaling(), provided by user32.dll on
+ * Windows 11 (build 22000) and later.
  * Treat HANDLE as void*, for convenience, since DPI_AWARENESS_CONTEXT is
  * declared using DEFINE_HANDLE.
  */
@@ -98,6 +100,7 @@ typedef HANDLE (WINAPI *funcGTDAC)  (void);
 typedef BOOL (WINAPI *funcADACE) (void *, void *);
 typedef int (WINAPI *funcGSMFD) (int, UINT);
 typedef BOOL (WINAPI *funcAWREFD) (LPRECT, DWORD, BOOL, DWORD, UINT);
+typedef UINT (WINAPI *funcSTCCS) (UINT);
 
 typedef struct _GdkWin32User32DPIFuncs
 {
@@ -108,6 +111,7 @@ typedef struct _GdkWin32User32DPIFuncs
   funcADACE areDACEqual;
   funcGSMFD getSysMetrics;
   funcAWREFD adjustWinRectExForDpi;
+  funcSTCCS setThreadCursorCreationScaling;
 } GdkWin32User32DPIFuncs;
 
 typedef enum {
