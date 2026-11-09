@@ -1239,8 +1239,19 @@ gdk_frame_clock_run_flush_events (GdkFrameClock *self)
 
       g_signal_emit (self, signals[FLUSH_EVENTS], 0);
     }
+}
 
-  gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_BEFORE_PAINT);
+static gboolean
+gdk_frame_clock_needs_frame (GdkFrameClock *self)
+{
+  GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  return (priv->requested & (GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT |
+                             GDK_FRAME_CLOCK_PHASE_UPDATE |
+                             GDK_FRAME_CLOCK_PHASE_LAYOUT |
+                             GDK_FRAME_CLOCK_PHASE_PAINT |
+                             GDK_FRAME_CLOCK_PHASE_AFTER_PAINT)) != 0 ||
+         gdk_frame_clock_is_updating (self);
 }
 
 static void
@@ -1254,16 +1265,8 @@ gdk_frame_clock_run_before_paint (GdkFrameClock *self,
    * they don't get repeated if you freeze/thaw while
    * in them.
    */
-  if (priv->requested & (GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT |
-                         GDK_FRAME_CLOCK_PHASE_UPDATE |
-                         GDK_FRAME_CLOCK_PHASE_LAYOUT |
-                         GDK_FRAME_CLOCK_PHASE_PAINT |
-                         GDK_FRAME_CLOCK_PHASE_AFTER_PAINT) ||
-      gdk_frame_clock_is_updating (self))
-    {
-      priv->requested |= GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT |
-                         GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-    }
+  priv->requested |= GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT |
+                     GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
 
   gdk_frame_clock_begin_frame (self,
                                gdk_frame_clock_compute_frame_time (self, priv->stage_start_time, TRUE),
@@ -1436,27 +1439,55 @@ gdk_frame_clock_run_after_paint (GdkFrameClock *self)
 }
 
 static void
-gdk_frame_clock_run_resume_events (GdkFrameClock *self)
+gdk_frame_clock_run_resume_events (GdkFrameClock *self,
+                                   gboolean       run_frame)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
+
+  g_assert (priv->stage == (run_frame ? GDK_FRAME_STAGE_RESUME_EVENTS : GDK_FRAME_STAGE_FLUSH_EVENTS));
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
     {
       priv->requested &= ~GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
-      gdk_frame_clock_doing_work (self);
+
+      if (run_frame)
+        gdk_frame_clock_doing_work (self);
 
       g_signal_emit (self, signals[RESUME_EVENTS], 0);
     }
 
-  gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_NONE);
+  if (run_frame)
+    {
+      gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_NONE);
+    }
+  else
+    {
+      priv->stage = GDK_FRAME_STAGE_NONE;
+      priv->work_performed = FALSE;
+    }
 }
 
-void
+/*<private>
+ * gdk_frame_clock_frame:
+ * @self: the frame clock
+ *
+ * Flush the event queue and run a frame cycle if needed.
+ *
+ * This function first flushes the event queue. It then checks
+ * if any of the phases for a full frame have been requested
+ * and it needs to run a frame. If so, it increases the frame
+ * counter and runs the update/layout/paint cycle.
+ *
+ * Returns: true if a full cycle was run, false if no frame
+ *   was requested after flushing the event queue
+ */
+gboolean
 gdk_frame_clock_frame (GdkFrameClock *self)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
   gint64 before G_GNUC_UNUSED;
   uint64_t start_time;
+  gboolean run_frame;
 
   before = GDK_PROFILER_CURRENT_TIME;
 
@@ -1466,16 +1497,29 @@ gdk_frame_clock_frame (GdkFrameClock *self)
   start_time = priv->stage_start_time;
 
   gdk_frame_clock_run_flush_events (self);
-  gdk_frame_clock_run_before_paint (self, start_time);
-  gdk_frame_clock_run_update (self);
-  gdk_frame_clock_run_layout (self);
-  gdk_frame_clock_run_paint (self);
-  gdk_frame_clock_run_after_paint (self);
-  gdk_frame_clock_run_resume_events (self);
 
-  gdk_profiler_end_markf (before, "Frameclock cycle",
-                          "clock=%p frame=%" G_GINT64_FORMAT,
-                          self, gdk_frame_clock_get_frame_counter (self));
+  run_frame = gdk_frame_clock_needs_frame (self);
+
+  if (run_frame)
+    {
+      gdk_frame_clock_set_stage (self, GDK_FRAME_STAGE_BEFORE_PAINT);
+      gdk_frame_clock_run_before_paint (self, start_time);
+      gdk_frame_clock_run_update (self);
+      gdk_frame_clock_run_layout (self);
+      gdk_frame_clock_run_paint (self);
+      gdk_frame_clock_run_after_paint (self);
+    }
+
+  gdk_frame_clock_run_resume_events (self, run_frame);
+
+  if (run_frame)
+    gdk_profiler_end_markf (before, "Frameclock cycle",
+                            "clock=%p frame=%" G_GINT64_FORMAT,
+                            self, gdk_frame_clock_get_frame_counter (self));
+  else
+    gdk_profiler_end_markf (before, "Frameclock event cycle", "clock=%p", self);
+
+  return run_frame;
 }
 
 void
