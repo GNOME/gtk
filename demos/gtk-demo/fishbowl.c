@@ -12,6 +12,7 @@
 
 #include "nodewidget.h"
 #include "graphwidget.h"
+#include "filter_paintable.h"
 
 const char *const css =
 ".blurred-button {"
@@ -195,27 +196,44 @@ create_graph (void)
   return graph_widget_new ();
 }
 
+static GtkWidget *
+create_blurred_image (void)
+{
+  GdkPaintable *paintable;
+
+  paintable = g_object_new (gtk_filter_paintable_get_type (),
+                            "blur", (float) g_random_double_range (30, 50),
+                            NULL);
+  GtkWidget *w = gtk_image_new_from_paintable (paintable);
+  gtk_image_set_pixel_size (GTK_IMAGE (w), 400);
+
+  g_object_unref (paintable);
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (* create_func) (void);
   gboolean    (* check) (GtkFishbowl *fb);
 } widget_types[] = {
-  { "Icon",       create_icon,           NULL },
-  { "Button",     create_button,         NULL },
-  { "Blurbutton", create_blurred_button, NULL },
-  { "Fontbutton", create_font_button,    NULL },
-  { "Levelbar",   create_level_bar,      NULL },
-  { "Label",      create_label,          NULL },
-  { "Spinner",    create_spinner,        NULL },
-  { "Spinbutton", create_spinbutton,     NULL },
-  { "Video",      create_video,          NULL },
-  { "Gears",      create_gears,          NULL },
-  { "Switch",     create_switch,         NULL },
-  { "Menubutton", create_menu_button,    NULL },
-  { "Tiger",      create_tiger,          NULL },
-  { "Graph",      create_graph,          NULL },
-  { "Symbolic",   create_symbolic,       NULL },
-  { "SVG",        create_svg,            NULL },
+  { "Icon",             create_icon,           NULL },
+  { "Button",           create_button,         NULL },
+  { "Blurred Button",   create_blurred_button, NULL },
+  { "Blurred image",    create_blurred_image,  NULL },
+  { "Font Button",      create_font_button,    NULL },
+  { "Levelbar",         create_level_bar,      NULL },
+  { "Label",            create_label,          NULL },
+  { "Spinner",          create_spinner,        NULL },
+  { "Spin Button",      create_spinbutton,     NULL },
+  { "Video",            create_video,          NULL },
+  { "Gears",            create_gears,          NULL },
+  { "Switch",           create_switch,         NULL },
+  { "Menu Button",      create_menu_button,    NULL },
+  { "Tiger",            create_tiger,          NULL },
+  { "Graph",            create_graph,          NULL },
+  { "Symbolic Icon",    create_symbolic,       NULL },
+  { "SVG",              create_svg,            NULL },
 };
 
 static int selected_widget_type = -1;
