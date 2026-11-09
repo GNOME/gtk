@@ -1,8 +1,8 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Fishbowl</property>
-    <property name="default-width">400</property>
-    <property name="default-height">400</property>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
     <property name="titlebar">
       <object class="GtkHeaderBar" id="">
         <child type="start">
