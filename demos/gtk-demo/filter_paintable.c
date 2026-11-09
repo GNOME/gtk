@@ -159,14 +159,21 @@ gtk_filter_paintable_snapshot (GdkPaintable *paintable,
 
   if (self->blur != 0)
     {
+      graphene_rect_t padded;
+      float sigma = self->blur / 2;
+
+      graphene_rect_inset_r (&bounds, - 3 * sigma, - 3 * sigma, &padded);
+
       gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_snapshot_push_blur (snapshot, self->blur);
+      gtk_snapshot_push_repeat (snapshot, &padded, &bounds);
     }
 
   gtk_snapshot_append_texture (snapshot, self->texture, &bounds);
 
   if (self->blur != 0)
     {
+      gtk_snapshot_pop (snapshot);
       gtk_snapshot_pop (snapshot);
       gtk_snapshot_pop (snapshot);
     }
