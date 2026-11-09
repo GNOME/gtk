@@ -29,6 +29,7 @@
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkactiontreeprivate.h"
+#include "gtkallocationdetailsprivate.h"
 #include "gtkapplicationprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -2951,6 +2952,8 @@ gtk_widget_real_hide (GtkWidget *widget)
     gtk_widget_unmap (widget);
 
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
+  priv->allocated_x = 0;
+  priv->allocated_y = 0;
   priv->allocated_width = 0;
   priv->allocated_height = 0;
   priv->allocated_baseline = 0;
@@ -3871,43 +3874,6 @@ get_box_padding (GtkCssStyle *style,
   border->right = get_number (style->size->padding_right);
 }
 
-/**
- * gtk_widget_size_allocate:
- * @widget: a widget
- * @allocation: position and size to be allocated to @widget
- * @baseline: the baseline of the child, or -1
- *
- * Allocates widget with a transformation that translates the origin to
- * the position in @allocation.
- *
- * The given allocation must be large enough for the widget's minimum
- * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
- * for querying a minimum size.
- *
- * This function is only used by widget implementations to allocate a size
- * for their direct children.
- *
- * This is a simple form of [method@Gtk.Widget.allocate].
- */
-void
-gtk_widget_size_allocate (GtkWidget           *widget,
-                          const GtkAllocation *allocation,
-                          int                  baseline)
-{
-  GskTransform *transform;
-
-  if (allocation->x || allocation->y)
-    transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (allocation->x, allocation->y));
-  else
-    transform = NULL;
-
-  gtk_widget_allocate (widget,
-                       allocation->width,
-                       allocation->height,
-                       baseline,
-                       transform);
-}
-
 /* translate initial/final into start/end */
 static GtkAlign
 effective_align (GtkAlign         align,
@@ -4154,33 +4120,13 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
     }
 }
 
-/**
- * gtk_widget_allocate:
- * @widget: a widget
- * @width: new width
- * @height: new height
- * @baseline: new baseline, or -1
- * @transform: (transfer full) (nullable): transformation to be applied
- *
- * Assigns size, position, (optionally) a baseline and transform
- * to a child widget.
- *
- * The given allocation must be large enough for the widget's minimum
- * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
- * for querying a minimum size.
- *
- * This function is only used by widget implementations to allocate a size
- * for their direct children.
- *
- * For a version that does not take a transform, see
- * [method@Gtk.Widget.size_allocate].
- */
-void
-gtk_widget_allocate (GtkWidget    *widget,
-                     int           width,
-                     int           height,
-                     int           baseline,
-                     GskTransform *transform)
+static void
+gtk_widget_allocate_internal (GtkWidget                  *widget,
+                              int                         x,
+                              int                         y,
+                              int                         width,
+                              int                         height,
+                              const GtkAllocationDetails *details)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4190,18 +4136,13 @@ gtk_widget_allocate (GtkWidget    *widget,
   gboolean transform_changed;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
-  GskTransform *css_transform;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (baseline >= -1);
+  GskTransform *transform, *css_transform;
+  int baseline;
 
   gtk_widget_push_verify_invariants (widget);
 
   if (!priv->visible && !GTK_IS_ROOT (widget))
-    {
-      gsk_transform_unref (transform);
-      goto out;
-    }
+    goto out;
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
   {
@@ -4265,24 +4206,29 @@ gtk_widget_allocate (GtkWidget    *widget,
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
-  baseline_changed = priv->allocated_baseline != baseline;
-  transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
+  baseline_changed = priv->allocated_baseline != details->baseline;
+  transform_changed = priv->allocated_x != x || priv->allocated_y != y ||
+                      !gsk_transform_equal (priv->allocated_transform, details->transform);
 
   gsk_transform_unref (priv->allocated_transform);
-  priv->allocated_transform = gsk_transform_ref (transform);
+  priv->allocated_transform = gsk_transform_ref (details->transform);
+  priv->allocated_x = x;
+  priv->allocated_y = y;
   priv->allocated_width = width;
   priv->allocated_height = height;
-  priv->allocated_baseline = baseline;
+  priv->allocated_baseline = details->baseline;
 
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    adjusted.x = priv->margin.left;
+    adjusted.x = x + priv->margin.left;
   else
-    adjusted.x = priv->margin.right;
-  adjusted.y = priv->margin.top;
+    adjusted.x = x + priv->margin.right;
+  adjusted.y = y + priv->margin.top;
   adjusted.width = width - priv->margin.left - priv->margin.right;
   adjusted.height = height - priv->margin.top - priv->margin.bottom;
-  if (baseline >= 0)
-    baseline -= priv->margin.top;
+  if (details->baseline >= 0)
+    baseline = details->baseline - priv->margin.top;
+  else
+    baseline = -1;
 
   gtk_widget_adjust_size_allocation (widget, &adjusted, &baseline);
 
@@ -4316,7 +4262,7 @@ gtk_widget_allocate (GtkWidget    *widget,
       origin_x = _gtk_css_position_value_get_x (style->other->transform_origin, adjusted.width);
       origin_y = _gtk_css_position_value_get_y (style->other->transform_origin, adjusted.height);
 
-      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+      transform = gsk_transform_translate (details->transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
       adjusted.x = adjusted.y = 0;
 
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (origin_x, origin_y));
@@ -4324,6 +4270,10 @@ gtk_widget_allocate (GtkWidget    *widget,
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- origin_x, - origin_y));
 
       gsk_transform_unref (css_transform);
+    }
+  else
+    {
+      transform = gsk_transform_ref (details->transform);
     }
 
   adjusted.x += border.left + padding.left;
@@ -4365,14 +4315,14 @@ gtk_widget_allocate (GtkWidget    *widget,
           gtk_layout_manager_allocate (priv->layout_manager, widget,
                                        priv->width,
                                        priv->height,
-                                       baseline);
+                                       priv->baseline);
         }
       else
         {
           GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
                                                         priv->width,
                                                         priv->height,
-                                                        baseline);
+                                                        priv->baseline);
         }
 
       /* Size allocation is god... after consulting god, no further requests or allocations are needed */
@@ -4400,6 +4350,128 @@ gtk_widget_allocate (GtkWidget    *widget,
 
 out:
   gtk_widget_pop_verify_invariants (widget);
+}
+
+/**
+ * gtk_widget_allocate:
+ * @widget: a widget
+ * @width: new width
+ * @height: new height
+ * @baseline: new baseline, or -1
+ * @transform: (transfer full) (nullable): transformation to be applied
+ *
+ * Assigns size, position, (optionally) a baseline and transform
+ * to a child widget.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * For a version that does not take a transform, see
+ * [method@Gtk.Widget.size_allocate].
+ */
+void
+gtk_widget_allocate (GtkWidget    *widget,
+                     int           width,
+                     int           height,
+                     int           baseline,
+                     GskTransform *transform)
+{
+  GtkAllocationDetails details = GTK_ALLOCATION_DETAILS_INIT;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (baseline >= -1);
+
+  details.baseline = baseline;
+  details.transform = g_steal_pointer (&transform);
+
+  gtk_widget_allocate_detailed (widget, 0, 0, width, height, &details);
+
+  gtk_allocation_details_clear (&details);
+}
+
+/**
+ * gtk_widget_allocate_detailed:
+ * @widget: a widget
+ * @x: new x coordinate
+ * @y: new y coordinate
+ * @width: new width
+ * @height: new height
+ * @details: (nullable): details of the allocation
+ *
+ * Assigns size, position, and further details to a child widget.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * The transform given by the details is applied first, before
+ * the `x`, `y`, `width` and `height` arguments are considered.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * Since: 4.26
+ */
+void
+gtk_widget_allocate_detailed (GtkWidget                  *widget,
+                              int                         x,
+                              int                         y,
+                              int                         width,
+                              int                         height,
+                              const GtkAllocationDetails *details)
+{
+  GtkAllocationDetails default_details = GTK_ALLOCATION_DETAILS_INIT;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (details == NULL)
+    details = &default_details;
+
+  gtk_widget_allocate_internal (widget, x, y, width, height, details);
+}
+
+/**
+ * gtk_widget_size_allocate:
+ * @widget: a widget
+ * @allocation: position and size to be allocated to @widget
+ * @baseline: the baseline of the child, or -1
+ *
+ * Allocates widget with a transformation that translates the origin to
+ * the position in @allocation.
+ *
+ * The given allocation must be large enough for the widget's minimum
+ * size, as well as at least 0×0 in size. See [method@Gtk.Widget.measure]
+ * for querying a minimum size.
+ *
+ * This function is only used by widget implementations to allocate a size
+ * for their direct children.
+ *
+ * This is a simple form of [method@Gtk.Widget.allocate].
+ */
+void
+gtk_widget_size_allocate (GtkWidget           *widget,
+                          const GtkAllocation *allocation,
+                          int                  baseline)
+{
+  GtkAllocationDetails details = GTK_ALLOCATION_DETAILS_INIT;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (baseline >= -1);
+
+  details.baseline = baseline;
+
+  gtk_widget_allocate_internal (widget,
+                                allocation->x,
+                                allocation->y,
+                                allocation->width,
+                                allocation->height,
+                                &details);
+
+  gtk_allocation_details_clear (&details);
 }
 
 /**
@@ -11108,11 +11180,19 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
    */
   if (priv->alloc_needed)
     {
-      gtk_widget_allocate (widget,
-                           priv->allocated_width,
-                           priv->allocated_height,
-                           priv->allocated_baseline,
-                           gsk_transform_ref (priv->allocated_transform));
+      GtkAllocationDetails details = GTK_ALLOCATION_DETAILS_INIT;
+
+      details.baseline = priv->allocated_baseline;
+      details.transform = gsk_transform_ref (priv->allocated_transform);
+
+      gtk_widget_allocate_internal (widget,
+                                    priv->allocated_x,
+                                    priv->allocated_y,
+                                    priv->allocated_width,
+                                    priv->allocated_height,
+                                    &details);
+
+      gtk_allocation_details_clear (&details);
     }
   else
     {
