@@ -61,6 +61,7 @@ struct _GtkListItemTracker
 struct _GtkListItemChange
 {
   GHashTable *deleted_items;
+  GtkListItemBase *deleted_focus;
   GQueue recycled_items;
   GQueue recycled_headers;
 };
@@ -71,6 +72,7 @@ static void
 gtk_list_item_change_init (GtkListItemChange *change)
 {
   change->deleted_items = NULL;
+  change->deleted_focus = NULL;
   g_queue_init (&change->recycled_items);
   g_queue_init (&change->recycled_headers);
 }
@@ -95,6 +97,7 @@ gtk_list_item_change_finish (GtkListItemChange *change)
   GtkWidget *widget;
 
   g_clear_pointer (&change->deleted_items, g_hash_table_destroy);
+  g_clear_pointer (&change->deleted_focus, gtk_list_item_change_unparent_item);
 
   while ((widget = g_queue_pop_head (&change->recycled_items)))
     gtk_list_item_change_unparent_item (widget);
@@ -125,6 +128,15 @@ static void
 gtk_list_item_change_release (GtkListItemChange *change,
                               GtkListItemBase   *widget)
 {
+  GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (widget));
+
+  if (parent && gtk_widget_get_focus_child (parent) == GTK_WIDGET (widget))
+    {
+      g_assert (change->deleted_focus == NULL);
+      change->deleted_focus = widget;
+      return;
+    }
+
   if (change->deleted_items == NULL)
     change->deleted_items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, gtk_list_item_change_unparent_item);
 
@@ -139,6 +151,10 @@ gtk_list_item_change_find (GtkListItemChange *change,
                            gpointer           item)
 {
   gpointer result;
+
+  if (change->deleted_focus &&
+      gtk_list_item_base_get_item (change->deleted_focus) == item)
+    return g_steal_pointer (&change->deleted_focus);
 
   if (change->deleted_items && g_hash_table_steal_extended (change->deleted_items, item, NULL, &result))
     return result;
@@ -159,6 +175,18 @@ gtk_list_item_change_get (GtkListItemChange *change,
   result = g_queue_pop_head (&change->recycled_items);
   if (result)
     return result;
+
+  if (change->deleted_items)
+    {
+      GHashTableIter iter;
+
+      g_hash_table_iter_init (&iter, change->deleted_items);
+      if (g_hash_table_iter_next (&iter, NULL, (gpointer *) &result))
+        {
+          g_hash_table_iter_steal (&iter);
+          return result;
+        }
+    }
 
   return NULL;
 }
