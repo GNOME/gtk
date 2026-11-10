@@ -85,7 +85,7 @@ gboolean                gdk_frame_clock_is_in_frame             (GdkFrameClock  
 GdkFrameClockPhase      gdk_frame_clock_get_requested           (GdkFrameClock          *self);
 gsize                   gdk_frame_clock_get_throttling          (GdkFrameClock          *self);
 
-void                    gdk_frame_clock_frame                   (GdkFrameClock          *self);
+gboolean                gdk_frame_clock_frame                   (GdkFrameClock          *self);
 
 void                    gdk_frame_clock_add_frame               (GdkFrameClock          *self,
                                                                  GdkDrawContextFrame    *frame);

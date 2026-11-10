@@ -356,11 +356,12 @@ gdk_frame_clock_source_cb (void *data)
   GdkFrameClockIdle *self = GDK_FRAME_CLOCK_IDLE (data);
   GdkFrameClockIdlePrivate *priv = gdk_frame_clock_idle_get_instance_private (self);
   GdkFrameClock *clock = GDK_FRAME_CLOCK (self);
+  gboolean needs_frame;
 
   priv->source = NULL;
   priv->min_next_frame_time = 0;
 
-  gdk_frame_clock_frame (GDK_FRAME_CLOCK (self));
+  needs_frame = gdk_frame_clock_frame (clock);
 
   /* If there is throttling in the backend layer, then we'll do another
    * update as soon as the backend unthrottles (if there is work to do),
@@ -379,7 +380,9 @@ gdk_frame_clock_source_cb (void *data)
        * receiving "frame drawn" events shortly after losing them, then we should still be in sync.
        */
       uint64_t smooth_cycle_start = priv->smoothed_frame_time_base - priv->smoothed_frame_time_phase;
-      priv->min_next_frame_time = smooth_cycle_start + priv->smoothed_frame_time_period;
+
+      if (needs_frame)
+        priv->min_next_frame_time = smooth_cycle_start + priv->smoothed_frame_time_period;
 
       maybe_start_idle (self, FALSE);
     }
